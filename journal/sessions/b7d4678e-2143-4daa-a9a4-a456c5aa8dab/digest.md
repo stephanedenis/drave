@@ -9781,3 +9781,73 @@ pas  15750 · perte 0.9590 · PPL val 2.583 · 7222 s
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; git status --short too … [88 caractères tronqués]`
+
+  ```
+22:24:20
+HEAD ba815f43
+ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+pas  16600 · perte 0.9704 · PPL val 2.576 · 7599 s
+  ```
+
+- **bash** `{"command": "git show --stat --oneline ba815f43 | head -6; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; pyth … [112 caractères tronqués]`
+
+  ```
+ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-02/README.md                       |  13 +-
+ journal/2026-11-02/apprentissage.md                |   8 +-
+ journal/2026-11-02/attention.md                    |   8 +-
+ journal/2026-11-02/distribue.md                    |   8 +-
+--- checks ---
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (104 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 16 : la 82e porte est validée et comptée ; état vert
+
+- **Hub** : `ba815f43` — **la 82e porte est validée et comptée**, la passe du **19 h 32 (76/5)** est la référence. Le registre (`references-non-regression`) et l'`en-cours` suivent ; la porte est suivie dans `HEAD` (mode 755) et verte.
+- **État** : revue ✅ **570 fiches / 656 JSON / 82 portes**, en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅ (avertissements de claims longs), registre ✅ (seul `nvme_raid` 33 Gio).
+- **Run long N2** : **16 600 / 20 000 pas, PPL val 2,576** — la cible 2,5 reste à 0,076.
+
+La veille continue : fin du run long, intégration des commits du hub, puis le checkpoint de 8 h. Rien de bloquant.
+
+
+## Tour 22
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 17/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 17 : veille — fin du run long et événements
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -2; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-80; git status --short | head -3", "description": "Check the long run and events"}`
+
+  ```
+22:24:35
+ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+pas  16650 · perte 0.9956 · PPL val 2.577 · 7621 s
+ 383833    02:07:57 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+ 713516       01:48 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; git status --short too … [102 caractères tronqués]`

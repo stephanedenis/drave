@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 6.1 h |
-| Tours | 24 |
-| Messages | 581 |
-| Appels d'outils | 658 |
+| Durée | 6.3 h |
+| Tours | 38 |
+| Messages | 624 |
+| Appels d'outils | 673 |
 | Fichiers touchés | 47 |
-| Commandes | 495 |
+| Commandes | 510 |
 | Sous-agents | 0 |
 | Commits | 46 |
 | Compactages de contexte | 2 |
@@ -71,6 +71,34 @@
 **Tour 23** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 24** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 25** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 26** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 27** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 28** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 29** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 31** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 32** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 33** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 34** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 35** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 36** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 37** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 38** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -902,7 +930,336 @@ La suite : corriger `Etat`/`Store` (fenêtre), remesurer oracle + 7B, contre-fic
 
 **Synthèse produite :**
 
-⏵ Round 22 : je lis `Etat`/`empreinte` dans `coeur.py` — l'empreinte est le SHA-256 du canonique, il faut vérifier que `t % 3` n'écrase pas `t` réel dans le canonique
+⏵ Round 22 : l'empreinte est un Merkle des candidats ; `_etat_pw` met `t % 3` dans le candidat — donc `t=3` et `t=0` sont **le même état** et le store les fusionne. C'est la cause
+
+**Cause identifiée** :
+
+- `Etat.empreinte()` = SHA-256 du Merkle des `Candidat`, triés.
+- `_etat_pw(x, y, t)` construit `Candidat("t", {"v": t % 3})` : l'empreinte ne distingue donc **pas** `t=3` de `t=0`, ni `t=4` de `t=1`.
+- Or la porte n'est libre qu'à `t % 3 == 0` : deux états de même position et même `t % 3` mais d'horloge différente devraient être distincts (ils ne le sont pas), et surtout les enfants `saut` retombent sur des empreintes déjà vues → le store ne pousse que **18 états** sur 200 nœuds, `(4,4,1)` n'existe jamais, et l'A* tourne en rond.
+
+**Correction (round 23)** :
+1. `_etat_pw` : `Candidat("t", {"v": t})` (le `t` **réel**, pas `t % 3`) ; `_t_pw` rend le réel ; `_open_pw`/`_libre_pw` gardent `t % 3 == 0`.
+2. Remesurer : `store.etats` doit croître avec les pas, l'oracle doit faire 4 sauts.
+3. Puis le 7B sur le même banc, contre-fiche (la fiche « problème cassé » est fausse), commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Aucun commit ce round (la correction est imminente, elle portera la contre-fiche).
+
+La suite : corriger `_etat_pw`, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 25 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Fix state clock and remeasure window
+
+**Synthèse produite :**
+
+⏵ Round 23 : correction faite — `t` réel dans l'empreinte. `store.etats` passe de 18 à 44 (BFS) / 195 (A*), mais l'A* échoue encore : le défaut restant est la combinaison `score + heuristique` dans `AStar.choisir`
+
+**Mesure après correction** (`_etat_pw` : `Candidat("t", {"v": t})`, `t` réel) :
+
+| stratégie | but | nœuds | états du store | pas/saut/attendre/sonde |
+|---|---|---:|---:|---|
+| BFS | ❌ | 200 | **44** (avant 18) | 76/62/42/20 |
+| A* | ❌ | 200 | **195** (avant 18) | 67/67/65/1 |
+
+- La fusion `t=3 ≡ t=0` est **corrigée** : le store voit maintenant 195 états distincts sur 200 pas (au lieu de 18).
+- L'A* échoue encore : `AStar.choisir` fait `max(score + poids * heuristique)` avec `score_pw = 1/(1+d)` (0..1) et `heuristique_pw = -Manhattan` (−8..0). L'heuristique **domine** et l'A* se comporte comme un greedy sur `-Manhattan` : il ne ferme pas la porte au bon `t % 3`. Le BFS, lui, progresse (44 états) mais n'atteint pas `(4,4)` dans 200 nœuds.
+- Correction suivante : soit normaliser (`score - heuristique` avec un poids cohérent), soit un A* qui maximise `score` et **départage** par `heuristique` (et non l'addition). Puis remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Le correctif `_etat_pw` n'est **pas encore committé** (il ira avec la contre-fiche et l'oracle réparé).
+
+La suite : corriger `AStar.choisir`/l'heuristique, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 26 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Test AStar2 score-first ordering
+
+**Synthèse produite :**
+
+⏵ Round 24 : même un ordre `(score, heuristique)` ne change rien — l'A* et le BFS restent bloqués ; le défaut est plus profond (le `Moteur.boucle` ne pousse pas les enfants `saut` comme attendu)
+
+**Mesure** :
+
+- `AStar` : 200 nœuds, coût 271, 195 états, pas/saut/attendre/sonde = 67/67/65/1, **pas de but**.
+- `AStar2` (score d'abord, heuristique en départage) : **exactement le même** résultat.
+- `BFS` : 200 nœuds, 44 états, pas/saut/attendre/sonde = 76/62/42/20, **pas de but**.
+- Le `store` voit maintenant 195 états (correctif `t` réel OK), mais l'exploration ne converge pas : le budget est consommé à pousser des enfants qui ne mènent pas à `(4,4)`.
+
+**Prochain test (round 25)** : instrumenter `Moteur.boucle` — compter les enfants `saut` poussés, vérifier que `_deplacer_pw` sur `(2,4,t)` donne bien `(4,4,t+1)`, et regarder si la `sonde`/le `store.push` ne jette pas les enfants à cause de `store.ouverts` (le nœud enfant poussé puis popé immédiatement). Ensuite corriger le moteur, remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Toujours aucun commit (le correctif `_etat_pw` + la contre-fiche formeront le prochain fait).
+
+La suite : instrumenter/corriger `Moteur.boucle` (fenêtre), remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 27 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Test saut children and initial state
+- bash — Count pushes and pops in moteur
+- bash — Check Store.pop and boucle node consumption
+
+**Synthèse produite :**
+
+⏵ Round 25 : le `Moteur.boucle` ne pousse les enfants que si `probleme.but(enfant)` est faux **et** `enfant.statut != "settled"` — or `(4,4)` est un but, il est donc marqué `settled` au lieu d'être poussé. Le `while` continue et le budget s'épuise
+
+**Cause finale identifiée** (dans `Moteur.boucle`) :
+
+```python
+if probleme.but(enfant) or enfant.statut == "settled":
+    enfant.statut = "settled"
+    ...
+    if arret_sur_but:
+        trouve = True
+        break
+else:
+    self.store.push(fp, s)
+```
+
+- L'enfant `(4,4,1)` est un **but** : il est marqué `settled`, **pas poussé** dans `ouverts`, mais `trouve = True` **seulement si `arret_sur_but`**. Avec `arret_sur_but=True` (défaut de `DRVM.penser`), la boucle devrait s'arrêter… sauf que `trouve` est mis dans la boucle `for enfant` et le `break` sort de cette boucle, puis le `while` **recommence** et re-choisit un nœud — le `settled` n'arrête pas la boucle externe.
+- Les 201 `push` / 0 `pop` (le `store.ouverts.pop` étant un dict.pop non instrumenté) confirment que le moteur **ne consomme pas** la frontière comme attendu : il empile sans jamais dépiler proprement les buts.
+- Correction : `trouve` doit être testé dans la condition du `while` (il l'est), mais le `break` interne ne suffit pas ; il faut **sortir de la boucle externe** dès qu'un but est trouvé (`while ... and not trouve` doit voir `trouve=True`). Le bug est que `trouve` est réinitialisé/écrasé par la boucle for ou que `store.ouverts.pop` n'est pas celui de `Store`.
+- Autre défaut : `Store.pop()` existe mais `Moteur.boucle` utilise `self.store.ouverts.pop(noeud, None)` directement — cohérent, mais alors le `Store.pop`/`frontier` n'est jamais utilisé par la boucle.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Aucun commit (le diagnostic du moteur est la matière de la contre-fiche).
+
+La suite : corriger `Moteur.boucle` (arrêt sur but réel), remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 28 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Print Moteur.boucle source
+
+**Synthèse produite :**
+
+⏵ Round 26 : le bug est dans `for prop` — après `trouve=True` le `break` ne sort que du `for enfant`, pas du `for prop` ; les autres propositions continuent et le but `settled` n'arrête pas la boucle externe
+
+**Correction** : ajouter `if trouve: break` à la fin du `for prop` (et avant chaque itération), pour que `while ... and not trouve` sorte réellement. Le `settled` du but ne doit pas empêcher son `push` (le but doit être dans `meilleur`/le chemin).
+
+**État** : HEAD `55dcb1c4` ; le correctif `_etat_pw` (t réel) déjà appliqué en arbre, non committé ; T0 sous 4 000 ; revue 570/655. Aucun commit ce round (correctif + contre-fiche iront ensemble).
+
+La suite : appliquer `if trouve: break` dans `Moteur.boucle`, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 29 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Fix boucle break and remeasure
+
+**Synthèse produite :**
+
+⏵ Round 27 : le `break` sur `trouve` ne change rien (BFS 44 états, A* 195, tous deux sans but à 200 nœuds) — le problème est ailleurs : `(4,4,1)` n'est jamais produit par l'exploration
+
+**Mesure** :
+
+- BFS : 200 nœuds, 44 états, pas/saut/attendre/sonde = 76/62/42/20, **pas de but**.
+- A* : 200 nœuds, 195 états, 67/67/65/1, **pas de but**.
+- Le correctif `if trouve: break` n'a **rien changé** : aucun enfant de type `(4,4,*)` n'est jamais produit par l'exploration réelle.
+
+**Prochaine piste (round 28)** : tracer les **empreintes** des enfants `saut` depuis `(2,4,0)` dans le vrai moteur (`store.put(_deplacer_pw(...))`) et vérifier si `(4,4,1)` est poussé puis **écrasé** par un état de même empreinte (le `Candidat("t")` porte maintenant le réel, mais peut-être que `_deplacer_pw` ne met pas `t+1` dans le candidat). Vérifier aussi que le `get`/`put` ne renvoie pas un état dont les candidats ont été mutés.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` (t réel) et `Moteur.boucle` (break) en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : tracer les enfants `saut` réels, corriger, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 30 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Trace saut child and settled handling
+
+**Synthèse produite :**
+
+⏵ Round 28 : l'enfant `saut (2,4,0) → (4,4,1)` est bien un **but** (`but_pw=True`) et `store.put` le voit (`but=True`), mais le moteur ne produit **aucun** `settled` en 200 nœuds — il n'atteint jamais `(2,4,*)` dans son exploration réelle
+
+**Mesure** :
+
+- `saut_pw(_etat_pw(2,4,0))` → `(4,4,1)` avec `but_pw=True` ; `store.put((4,4,1))` → `L.but(...)=True`.
+- `Moteur.boucle(L, BFS, Budget(200), arret_sur_but=True)` → `but=False`, 200 nœuds, `trace.settled = []` (aucun but marqué).
+- Autrement dit, l'exploration **réelle** n'atteint jamais `(2,4,*)` — les 200 pas sont ailleurs. Le problème n'est donc ni l'opérateur, ni le store, ni le `settled` : c'est **la stratégie/le chemin** qui n'explore pas la branche `(0,0)→(0,2)→(0,4)→(2,4)→(4,4)`.
+
+**Prochaine piste (round 29)** : tracer les 200 états visités (positions `(x,y,t)`) pour voir où l'exploration part ; vérifier le `Score`/la `frontier` (le `score_pw` privilégie-t-il une mauvaise direction ?) et l'ordre des enfants (`pas` avant `saut`). Puis corriger la stratégie (BFS par exemple), remesurer, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : tracer les 200 états, corriger, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 31 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Trace visited positions on window
+
+**Synthèse produite :**
+
+⏵ Round 29 : l'exploration ne dépasse jamais `y=3` ; `(2,4)` et `(4,4)` ne sont **jamais** atteints — or `MURS_P` contient `(3,4)`, `(4,1)`, `(4,2)`, et le but `(4,4)` est derrière
+
+**Trace des 200 nœuds** :
+
+- 43 positions distinctes ; `y max = 3` ; `(2,4)` jamais atteint, `(4,4)` jamais atteint.
+- Top : `((3,0),2)` 16×, `((4,0),3)` 15×, `((4,0),2)` 14×, `((1,0),3)` 9×… l'exploration reste **en haut** de la grille et tourne autour de `y=0..3`.
+- Le chemin BFS manuel `(0,0)→(0,2)→(0,4)→(2,4)→(4,4)` passe par `y=4` : il n'est jamais exploré.
+
+**Cause probable** : `MURS_P` contient `(3,4)`, `(4,1)`, `(4,2)` — et `_libre_pw(4,4,t)` teste `(x,y) in MURS_P` ; si `(4,4)` n'y est pas, le blocage vient de `(3,4)`/`(4,2)` qui coupent la colonne 4 et la ligne 4. Il faut vérifier `MURS_P` et la carte de la fenêtre (le but doit être encadré par des cases libres).
+
+**Prochaine action (round 30)** : imprimer `MURS_P` et le chemin de `(2,4)` à `(4,4)` ; corriger la carte (ou `_libre_pw`) pour que `y=4` soit atteignable ; remesurer oracle + 7B ; contre-fiche ; commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : carte/`_libre_pw`, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 32 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Print walls and window map
+
+**Synthèse produite :**
+
+⏵ Round 30 : la carte est saine — le but `(4,4)` est atteignable par `(2,4)→(3,4)` **impossible** car `(3,4)` est un mur ; le vrai chemin est `(2,4)→(2,3)→(3,3)→(4,3)→(4,4)`
+
+**Carte de la fenêtre** (B = but, # = mur) :
+
+```
+y=0  .....
+y=1  ###.#
+y=2  .##.#
+y=3  .#...
+y=4  ...#B
+```
+
+- Le but `(4,4)` est bien libre ; `(3,4)` est un mur ; `(4,3)`, `(3,3)`, `(2,3)`, `(2,4)` sont libres.
+- Le chemin BFS manuel que j'avais pris (`(2,4)→(4,4)` en saut) **traverse `(3,4)`** : `_libre_pw` le refuse (mur), et le `saut` de `(2,4)` vers `(4,4)` saute par-dessus `(3,4)`… ce qui est **autorisé** par `_deplacer_pw` (le saut ne teste que la case d'arrivée) — d'où l'incohérence : mon BFS manuel passait par ce saut, mais le vrai moteur explore autrement.
+- La vraie question reste : pourquoi le moteur ne trouve pas le chemin **légal** `(2,4)→(2,3)→(3,3)→(4,3)→(4,4)` ?
+
+**Prochaine action (round 31)** : tester ce chemin légal en BFS Python pur (sans saut) et vérifier que `_libre_pw` l'autorise ; s'il passe, le défaut est bien dans la stratégie/le score du moteur (pas la carte). Puis corriger, remesurer, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : chemin légal → stratégie, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 33 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check legal path cells on window map
+
+**Synthèse produite :**
+
+⏵ Round 31 : chemin légal vérifié — `(0,1)` est mur, mais `(1,0)` libre ; la suite `(0,0)→(1,0)→(2,0)→(3,0)→(4,0)→(4,1)` est **bloquée** par `(4,1)/(4,2)` ; le vrai chemin est par `(0,2)→(0,4)→(2,4)→(2,3)→(3,3)→(4,3)→(4,4)`
+
+**Conclusion** :
+
+- `_libre_pw` autorise bien tout le chemin `(0,0)→(0,2)→(0,4)→(1,4)→(2,4)→(2,3)→(3,3)→(4,3)→(4,4)` (seul `(0,1)` est mur).
+- Le moteur, lui, explore `y=0` et tourne autour de `(3,0)/(4,0)` : il ne descend jamais par `(0,2)` — non pas parce que la carte l'interdit, mais parce que la **stratégie de score** (`score_pw = 1/(1+Manhattan)`) le pousse vers `x=4` avant `y`, et il se retrouve coincé par les murs `(4,1)/(4,2)`.
+- C'est un défaut de **stratégie/score**, pas de carte ni d'opérateurs.
+
+**Prochaine action (round 32)** : changer l'ordre de préférence (par exemple BFS ou un score qui ne pénalise pas `y`), ou un A* avec l'heuristique correcte, remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : stratégie/score de la fenêtre, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 34 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+**Synthèse produite :**
+
+⏵ Round 32 : le score `score_pw = 1/(1+Manhattan)` pousse vers `x=4` d'abord, où les murs `(4,1)/(4,2)` bloquent ; c'est un défaut de fitness, pas de carte
+
+**Constat** :
+
+- Le chemin légal vers `(4,4)` est `(0,0)→(0,2)→(0,4)→(1,4)→(2,4)→(2,3)→(3,3)→(4,3)→(4,4)`.
+- Le score `score_pw` (Manhattan) **récompense** l'approche de `x=4` avant `y=4` : le moteur part à droite (`(1,0)`, `(2,0)`, `(3,0)`, `(4,0)`) et se retrouve coincé par `(4,1)`/`(4,2)`, puis tourne en `y=0..3` (43 positions, `y_max=3`).
+- Le BFS ne fait pas mieux dans 200 nœuds (44 états) ; l'A* non plus (195 états) — parce que le **score** n'est pas une distance au but utilisable et que l'heuristique `-Manhattan` ne corrige pas assez.
+
+**Corrections à faire (round 33)** :
+1. Un score de fenêtre qui **compte le temps** (`t % 3`) : pénaliser l'attente inutile, récompenser l'arrivée à la porte au bon `t`.
+2. Ou une stratégie BFS pure (sans score) sur la fenêtre : le chemin légal existe, le BFS le trouverait en ~9 pas si la frontière ne le noyait pas.
+3. Remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` (t réel) et `Moteur.boucle` (break) en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : score/stratégie fenêtre, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 35 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Test goal-only score on window
+- bash — Retest goal-only score with fixed harness
+
+**Synthèse produite :**
+
+⏵ Round 33 : même un score « but uniquement » laisse le BFS à 44 états / 200 nœuds — le moteur n'explore pas la frontière comme un BFS (l'ordre `store.ouverts` ou le `pop` est en cause)
+
+**Mesure** :
+
+- `ProblemeFenetre` avec `score = 1.0 si but sinon 0.0` : `but=False`, 200 nœuds, 44 états, `pas` 76 / `saut` 62 / `attendre` 42 / `sonde` 20 — **identique** au score Manhattan.
+- Le score n'est donc pas la cause. Le BFS (`min(store.ouverts, key=seq)`) devrait explorer en **largeur** et atteindre `(4,4)` en ~9 pas. Il ne le fait pas → le défaut est dans `Store.ouverts` (les clés/ordre) ou dans le `pop` du `Moteur.boucle`.
+- Piste précise : `Store.push` fait `self.ouverts.setdefault(empreinte, len(self.ouverts))` ; `Moteur.boucle` fait `self.store.ouverts.pop(noeud, None)`. Si `noeud` (choisi par `BFS`) n'est **pas** la clé de `self.ouverts` (empreinte recalculée/différente), le `pop` ne retire rien et le BFS re-choisit le même nœud en boucle — exactement le symptôme (44 états, 200 pas, `y_max=3`).
+
+**Prochaine action (round 34)** : vérifier que `strategie.choisir` reçoit le même type de clé que `Store.push` (empreinte `str`) et que `pop(noeud)` retire bien ; corriger (`store.pop()` ou clé cohérente) ; remesurer oracle + 7B ; contre-fiche ; commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : cohérence des clés `Store`/`BFS`, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 36 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check BFS key consistency and pop
+
+**Synthèse produite :**
+
+⏵ Round 34 : les clés sont cohérentes (`BFS` rend bien une empreinte `str`, `pop` la retire) — ni le store ni le pop ne sont en cause. Le BFS a juste une frontière trop large pour 200 nœuds
+
+**Mesure** :
+
+- `BFS.choisir` rend `e574cecb…` (une clé `str` de `store.ouverts`) ; `n in ouverts` = True ; `pop` retire bien (`ouverts=0`).
+- Donc `Moteur.boucle` + `Store` + `BFS` sont **cohérents** : le BFS explore réellement en largeur, mais 200 nœuds ne suffisent pas — la grille 5×5 avec 4 opérateurs (dont `saut` de 2) génère une frontière très large, et `(4,4)` est au-delà.
+- La fenêtre n'est donc **pas cassée** au sens du code : c'est un **budget/état-space** trop grand pour 200 nœuds, pas un bug.
+
+**Prochaine action (round 35)** : augmenter le budget (500 ou 1000 nœuds) et vérifier que le BFS/l'oracle atteint `(4,4)` ; si oui, la fiche « problème cassé » est **fausse** et doit devenir « budget insuffisant / espace large ». Puis remesurer le 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : budget 500/1000, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 37 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Test larger budgets on window
+
+**Synthèse produite :**
+
+⏵ Round 35 : le budget change tout — **le BFS atteint le but à 331 nœuds** (52 états) ; l'A* et le Greedy échouent même à 1 000. La fiche « problème cassé » est **fausse** : c'est une question de stratégie/budget
+
+**Mesure** :
+
+| budget | BFS | A* | Greedy |
+|---:|---|---|---|
+| 200 | ❌ 44 états | ❌ 195 | ❌ 195 |
+| 500 | ✅ **331 nœuds, 52 états** | ❌ 495 | ❌ 495 |
+| 1 000 | ✅ 331, 52 | ❌ 995 | ❌ 995 |
+
+- Le **BFS trouve `(4,4)`** en 331 nœuds sur 52 états : le problème est **solvable**, la carte et les opérateurs sont bons.
+- L'**A\*** et le **Greedy** ne trouvent **jamais** : leur critère (`score + heuristique` / `score seul`) les enferme dans la zone `y≤3`. C'est le **fitness** qui est mauvais, pas la fenêtre.
+- Conclusion : la fiche `pensee-porte-fenetre` doit être **corrigée** — « l'oracle échoue donc le problème est cassé » → « l'oracle Manhattan échoue ; le BFS réussit en 331 nœuds ; le 7B doit être mesuré avec un budget ≥ 500 et un meilleur guide ».
+
+**Prochaine action (round 36)** : relancer le banc 7B `porte_fenetre` avec budget **500** (et le `PolitiqueManhattan` remplacé par un oracle BFS) ; consigner le résultat ; **contre-fiche** ; commit du correctif `_etat_pw` + `Moteur.boucle` + `pensee-porte-fenetre` corrigée.
+
+**État** : HEAD `55dcb1c4` ; correctifs en arbre non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 38 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -1000,7 +1357,7 @@ La suite : corriger `Etat`/`Store` (fenêtre), remesurer oracle + 7B, contre-fic
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 455 autres
+- … et 470 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1090,12 +1447,13 @@ La suite : corriger `Etat`/`Store` (fenêtre), remesurer oracle + 7B, contre-fic
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : Error: could not connect to ollama server, run 'ollama serve' to start it --- total 1656188 drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 . drwxr-xr-x. 1 stephane stephane       100 15 oct 09
 - **T1** : > Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","t
 - **T1** : Error: Failed to initialize samplers: std::exception  [ Prompt: 0,0 t/s | Generation: 0,0 t/s ]   Exiting... EXIT=0
 - **T1** : docs/pilotage/en-cours.md:80:- **Fait** : B13 **140/140**, gold **432**, **116 liens** ; **gold neuronal** POS **0,8483**, docs/pilotage/en-cours.md:83:- **Ce qu'elle fait** : cycle **140/140** commit
+- **T35** : [stderr] Traceback (most recent call last):   File "<stdin>", line 16, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 3084, in penser     self.re
 
 ## 6. Commits
 

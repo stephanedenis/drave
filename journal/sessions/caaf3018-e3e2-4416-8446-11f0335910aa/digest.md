@@ -6101,3 +6101,29 @@ compteurs alignés sur la 82e porte validée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-etat.txt <<'EOF'\nÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE\n\nLe compteur disait encore « 82e porte-ressources, à valider » et datait la\nréférence de la passe du 06 h. Elle est v … [414 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-252]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-252", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master ba815f43] ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+ 24 files changed, 907 insertions(+), 95 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuit : cadence de 20 min (test de la borne d'attente)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 1200; date +%H:%M; git log --oneline -3; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" | head -4; echo \"--- état ---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": " … [57 caractères tronqués]`
+
+  ```
+started background job bash-253
+  ```
+
+- **job_output** `{"job_id": "bash-253", "timeout_ms": 1250000, "wait": true}`

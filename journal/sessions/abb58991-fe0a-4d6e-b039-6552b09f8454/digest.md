@@ -14370,3 +14370,656 @@ class Budget:
 … [2765 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Round 22 : je lis `Etat`/`empreinte` dans `coeur.py` — l'empreinte est le SHA-256 du canonique, il faut vérifier que `t % 3` n'écrase pas `t` réel dans le canonique
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"class Etat\" -A 45 tools/pensee/coeur.py; echo '--- canonique ---'; grep -n \"def canonique\" -A 15 tools/pensee/coeur.py; grep -n \"def h\" -A 5 tools/pensee/coeur.py", "description": "Read Etat empreinte and canonique"}`
+
+  ```
+54:class Etat:
+55-    id: str
+56-    parent: str | None
+57-    profondeur: int
+58-    candidats: tuple[Candidat, ...]
+59-    statut: str = "ouvert"
+60-
+61-    def empreinte(self) -> str:
+62-        """Merkle des empreintes des candidats **triées**."""
+63-        feuilles = sorted(c.empreinte() for c in self.candidats)
+64-        return hashlib.sha256(("merkle:" + "|".join(feuilles)).encode("utf-8")).hexdigest()
+65-
+66-    def corps_merkle(self) -> dict:
+67-        return {"type": "etat", "candidats": sorted(c.empreinte() for c in self.candidats)}
+68-
+69-    def vers_dict(self) -> dict:
+70-        return {"id": self.id, "parent": self.parent, "profondeur": self.profondeur,
+71-                "statut": self.statut, "candidats": [c.vers_dict() for c in self.candidats]}
+72-
+73-
+74-@dataclass
+75-class Noeud:
+76-    empreinte: str
+77-    score: float = 0.0
+78-    cout: int = 0
+79-    visites: int = 0
+80-
+81-
+82-@dataclass(frozen=True)
+83-class Arete:
+84-    parent: str
+85-    enfant: str
+86-    operateur: str
+87-    params: dict
+88-    score: float
+89-
+90-
+91-@dataclass
+92-class Decision:
+93-    etat: Etat
+94-    justification: list[str]
+95-    budget_consomme: int
+96-    strategie: str
+
+… [1082 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 22 : l'empreinte est un Merkle des candidats ; `_etat_pw` met `t % 3` dans le candidat — donc `t=3` et `t=0` sont **le même état** et le store les fusionne. C'est la cause
+
+**Cause identifiée** :
+
+- `Etat.empreinte()` = SHA-256 du Merkle des `Candidat`, triés.
+- `_etat_pw(x, y, t)` construit `Candidat("t", {"v": t % 3})` : l'empreinte ne distingue donc **pas** `t=3` de `t=0`, ni `t=4` de `t=1`.
+- Or la porte n'est libre qu'à `t % 3 == 0` : deux états de même position et même `t % 3` mais d'horloge différente devraient être distincts (ils ne le sont pas), et surtout les enfants `saut` retombent sur des empreintes déjà vues → le store ne pousse que **18 états** sur 200 nœuds, `(4,4,1)` n'existe jamais, et l'A* tourne en rond.
+
+**Correction (round 23)** :
+1. `_etat_pw` : `Candidat("t", {"v": t})` (le `t` **réel**, pas `t % 3`) ; `_t_pw` rend le réel ; `_open_pw`/`_libre_pw` gardent `t % 3 == 0`.
+2. Remesurer : `store.etats` doit croître avec les pas, l'oracle doit faire 4 sauts.
+3. Puis le 7B sur le même banc, contre-fiche (la fiche « problème cassé » est fausse), commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Aucun commit ce round (la correction est imminente, elle portera la contre-fiche).
+
+La suite : corriger `_etat_pw`, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 23/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 23 : correction de `_etat_pw` — le candidat `t` porte le `t` réel (plus `t % 3`), la porte reste libre à `t % 3 == 0`
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text(encoding='utf-8')\nold='''def _etat_pw(x: int, y: int, t: int, parent: str | None = None,\n             profondeur: int = 0) -> Etat:\n    return Etat(f\"w{x … [1295 caractères tronqués]`
+
+  ```
+ok
+bfs {'but': False, 'noeuds': 200, 'cout': 342.0, 'appels': 42, 'par_operateur': {'pas': 76, 'saut': 62, 'attendre': 42, 'sonde': 20}} etats 44
+astar {'but': False, 'noeuds': 200, 'cout': 271.0, 'appels': 65, 'par_operateur': {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}} etats 195
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 23 : correction faite — `t` réel dans l'empreinte. `store.etats` passe de 18 à 44 (BFS) / 195 (A*), mais l'A* échoue encore : le défaut restant est la combinaison `score + heuristique` dans `AStar.choisir`
+
+**Mesure après correction** (`_etat_pw` : `Candidat("t", {"v": t})`, `t` réel) :
+
+| stratégie | but | nœuds | états du store | pas/saut/attendre/sonde |
+|---|---|---:|---:|---|
+| BFS | ❌ | 200 | **44** (avant 18) | 76/62/42/20 |
+| A* | ❌ | 200 | **195** (avant 18) | 67/67/65/1 |
+
+- La fusion `t=3 ≡ t=0` est **corrigée** : le store voit maintenant 195 états distincts sur 200 pas (au lieu de 18).
+- L'A* échoue encore : `AStar.choisir` fait `max(score + poids * heuristique)` avec `score_pw = 1/(1+d)` (0..1) et `heuristique_pw = -Manhattan` (−8..0). L'heuristique **domine** et l'A* se comporte comme un greedy sur `-Manhattan` : il ne ferme pas la porte au bon `t % 3`. Le BFS, lui, progresse (44 états) mais n'atteint pas `(4,4)` dans 200 nœuds.
+- Correction suivante : soit normaliser (`score - heuristique` avec un poids cohérent), soit un A* qui maximise `score` et **départage** par `heuristique` (et non l'addition). Puis remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Le correctif `_etat_pw` n'est **pas encore committé** (il ira avec la contre-fiche et l'oracle réparé).
+
+La suite : corriger `AStar.choisir`/l'heuristique, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 24/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 24 : le correctif d'horloge tient (`store.etats` 18→195) ; reste l'A* : `score + heuristique` est une somme incohérente, je passe à `(score, heuristique)` en départage
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.pensee.moteur as M\nfrom tools.pensee.operateurs import DRVM, LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW, PolitiqueManhattan\nfrom tools.pensee.store import Budget\n\n# A* corrigé : le … [667 caractères tronqués]`
+
+  ```
+astar {'but': False, 'noeuds': 200, 'cout': 271.0, 'appels': 65, 'par_operateur': {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}} etats 195
+astar2 {'but': False, 'noeuds': 200, 'cout': 271.0, 'appels': 65, 'par_operateur': {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}} etats 195
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 24 : même un ordre `(score, heuristique)` ne change rien — l'A* et le BFS restent bloqués ; le défaut est plus profond (le `Moteur.boucle` ne pousse pas les enfants `saut` comme attendu)
+
+**Mesure** :
+
+- `AStar` : 200 nœuds, coût 271, 195 états, pas/saut/attendre/sonde = 67/67/65/1, **pas de but**.
+- `AStar2` (score d'abord, heuristique en départage) : **exactement le même** résultat.
+- `BFS` : 200 nœuds, 44 états, pas/saut/attendre/sonde = 76/62/42/20, **pas de but**.
+- Le `store` voit maintenant 195 états (correctif `t` réel OK), mais l'exploration ne converge pas : le budget est consommé à pousser des enfants qui ne mènent pas à `(4,4)`.
+
+**Prochain test (round 25)** : instrumenter `Moteur.boucle` — compter les enfants `saut` poussés, vérifier que `_deplacer_pw` sur `(2,4,t)` donne bien `(4,4,t+1)`, et regarder si la `sonde`/le `store.push` ne jette pas les enfants à cause de `store.ouverts` (le nœud enfant poussé puis popé immédiatement). Ensuite corriger le moteur, remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Toujours aucun commit (le correctif `_etat_pw` + la contre-fiche formeront le prochain fait).
+
+La suite : instrumenter/corriger `Moteur.boucle` (fenêtre), remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 27
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 25/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 25 : je teste `_deplacer_pw`/`saut` et je compte les enfants poussés par le moteur — le blocage semble dans la poussée/le pop des enfants
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.operateurs import (_etat_pw, _xy_pw, _t_pw, _libre_pw, saut_pw, pas_pw,\n                                     attendre, sonde_pw, LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW)\nfrom … [742 caractères tronqués]`
+
+  ```
+saut (2,4,0) -> [((4, 4), 1, True), ((0, 4), 1, True)]
+libre (4,4,0) True libre (4,4,1) True
+racine e574cecb enfants [('pas', 1), ('saut', 2), ('attendre', 1), ('sonde', 0)]
+initial xy t (0, 0) 0
+but initial False
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 25 : les opérateurs élémentaires sont bons (`saut (2,4,0) → (4,4,1)`, but atteignable), mais le moteur ne pousse pas assez d'enfants — je compte poussées vs pops
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.moteur import BFS\nfrom tools.pensee.operateurs import DRVM, LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW, PolitiqueManhattan\nfrom tools.pensee.store import Budget\n# instrumenter  … [673 caractères tronqués]`
+
+  ```
+push 201 pop 0 new etats 0
+store 44 ouverts 29 noeuds 44
+trace 200
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 25 : instrumentation du moteur — 201 `push`, **0 `pop`**, 44 états, 29 ouverts, 200 pas ; le `pop` instrumenté ne compte rien car `Moteur.boucle` fait `store.ouverts.pop(...)` (dict) et non `Store.pop`. Je vérifie la vraie consommation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def pop\" -A 8 tools/pensee/store.py; echo '--- boucle pop ---'; sed -n '110,150p' tools/pensee/moteur.py", "description": "Check Store.pop and boucle node consumption"}`
+
+  ```
+110:    def pop(self) -> str:
+111-        meilleur = self.frontier()[0][2]
+112-        self.ouverts.pop(meilleur, None)
+113-        return meilleur
+114-
+115-    # -- compaction ----------------------------------------------------------
+116-    def chemin(self, empreinte: str) -> list[str]:
+117-        """Le chemin racine → état (la justification). Remonte par les arêtes."""
+118-        chemin = [empreinte]
+--- boucle pop ---
+        while budget.reste() and self.store.ouverts and not trouve:
+            noeud = strategie.choisir(self.store, probleme)
+            etat = self.store.get(noeud)
+            score_noeud = self.store.noeuds[noeud].score
+            if score_noeud > meilleur_score:
+                meilleur, meilleur_score = noeud, score_noeud
+            self.store.ouverts.pop(noeud, None)
+            for prop in strategie.proposer(etat, probleme):
+                if not budget.reste():
+                    break
+                operateur = probleme.operateurs[prop.operateur]
+                enfants = operateur(etat, prop.params)
+                for enfant in enfants:
+                    fp = self.store.put(enfant)
+                    s = probleme.score(enfant)
+            
+… [958 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 25 : le `Moteur.boucle` ne pousse les enfants que si `probleme.but(enfant)` est faux **et** `enfant.statut != "settled"` — or `(4,4)` est un but, il est donc marqué `settled` au lieu d'être poussé. Le `while` continue et le budget s'épuise
+
+**Cause finale identifiée** (dans `Moteur.boucle`) :
+
+```python
+if probleme.but(enfant) or enfant.statut == "settled":
+    enfant.statut = "settled"
+    ...
+    if arret_sur_but:
+        trouve = True
+        break
+else:
+    self.store.push(fp, s)
+```
+
+- L'enfant `(4,4,1)` est un **but** : il est marqué `settled`, **pas poussé** dans `ouverts`, mais `trouve = True` **seulement si `arret_sur_but`**. Avec `arret_sur_but=True` (défaut de `DRVM.penser`), la boucle devrait s'arrêter… sauf que `trouve` est mis dans la boucle `for enfant` et le `break` sort de cette boucle, puis le `while` **recommence** et re-choisit un nœud — le `settled` n'arrête pas la boucle externe.
+- Les 201 `push` / 0 `pop` (le `store.ouverts.pop` étant un dict.pop non instrumenté) confirment que le moteur **ne consomme pas** la frontière comme attendu : il empile sans jamais dépiler proprement les buts.
+- Correction : `trouve` doit être testé dans la condition du `while` (il l'est), mais le `break` interne ne suffit pas ; il faut **sortir de la boucle externe** dès qu'un but est trouvé (`while ... and not trouve` doit voir `trouve=True`). Le bug est que `trouve` est réinitialisé/écrasé par la boucle for ou que `store.ouverts.pop` n'est pas celui de `Store`.
+- Autre défaut : `Store.pop()` existe mais `Moteur.boucle` utilise `self.store.ouverts.pop(noeud, None)` directement — cohérent, mais alors le `Store.pop`/`frontier` n'est jamais utilisé par la boucle.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Aucun commit (le diagnostic du moteur est la matière de la contre-fiche).
+
+La suite : corriger `Moteur.boucle` (arrêt sur but réel), remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 26/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 26 : le `Moteur.boucle` ne sort pas de la boucle externe quand un but est trouvé — `trouve=True` puis `break` interne, mais le `for prop` continue ; je corrige et remesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\n# Correction ciblée : la boucle doit sortir du `for prop` et du `while` dès le but trouvé\nimport inspect, tools.pensee.moteur as M\nsrc=inspect.getsource(M.Moteur.boucle)\nprint(src)\nPY", "descri … [57 caractères tronqués]`
+
+  ```
+def boucle(self, probleme: Probleme, strategie: Strategie, budget: Budget,
+               arret_sur_but: bool = False) -> Decision:
+        racine = self.store.put(probleme.initial())
+        self.store.push(racine, probleme.score(self.store.get(racine)))
+        meilleur = racine
+        meilleur_score = self.store.noeuds[racine].score
+        pas = 0
+        trouve = False
+        while budget.reste() and self.store.ouverts and not trouve:
+            noeud = strategie.choisir(self.store, probleme)
+            etat = self.store.get(noeud)
+            score_noeud = self.store.noeuds[noeud].score
+            if score_noeud > meilleur_score:
+                meilleur, meilleur_score = noeud, score_noeud
+            self.store.ouverts.pop(noeud, None)
+            for prop in strategie.proposer(etat, probleme):
+                if not budget.reste():
+                    break
+                operateur = probleme.operateurs[prop.operateur]
+                enfants = operateur(etat, prop.params)
+                for enfant in enfants:
+                    fp = self.store.put(enfant)
+                    s = probleme.score(enfant)
+                    self.store.edge(noeud, fp, prop.operateur, 
+… [907 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 26 : le bug est dans `for prop` — après `trouve=True` le `break` ne sort que du `for enfant`, pas du `for prop` ; les autres propositions continuent et le but `settled` n'arrête pas la boucle externe
+
+**Correction** : ajouter `if trouve: break` à la fin du `for prop` (et avant chaque itération), pour que `while ... and not trouve` sorte réellement. Le `settled` du but ne doit pas empêcher son `push` (le but doit être dans `meilleur`/le chemin).
+
+**État** : HEAD `55dcb1c4` ; le correctif `_etat_pw` (t réel) déjà appliqué en arbre, non committé ; T0 sous 4 000 ; revue 570/655. Aucun commit ce round (correctif + contre-fiche iront ensemble).
+
+La suite : appliquer `if trouve: break` dans `Moteur.boucle`, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 27/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 27 : j'applique le correctif `if trouve: break` dans `for prop` (et en tête de boucle) puis je remesure la fenêtre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/moteur.py'); t=p.read_text(encoding='utf-8')\nold='''            for prop in strategie.proposer(etat, probleme):\n                if not budget.reste():\n                    break'''\nnew= … [1305 caractères tronqués]`
+
+  ```
+ok
+bfs {'but': False, 'noeuds': 200, 'cout': 342.0, 'appels': 42, 'par_operateur': {'pas': 76, 'saut': 62, 'attendre': 42, 'sonde': 20}} etats 44
+astar {'but': False, 'noeuds': 200, 'cout': 271.0, 'appels': 65, 'par_operateur': {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}} etats 195
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 27 : le `break` sur `trouve` ne change rien (BFS 44 états, A* 195, tous deux sans but à 200 nœuds) — le problème est ailleurs : `(4,4,1)` n'est jamais produit par l'exploration
+
+**Mesure** :
+
+- BFS : 200 nœuds, 44 états, pas/saut/attendre/sonde = 76/62/42/20, **pas de but**.
+- A* : 200 nœuds, 195 états, 67/67/65/1, **pas de but**.
+- Le correctif `if trouve: break` n'a **rien changé** : aucun enfant de type `(4,4,*)` n'est jamais produit par l'exploration réelle.
+
+**Prochaine piste (round 28)** : tracer les **empreintes** des enfants `saut` depuis `(2,4,0)` dans le vrai moteur (`store.put(_deplacer_pw(...))`) et vérifier si `(4,4,1)` est poussé puis **écrasé** par un état de même empreinte (le `Candidat("t")` porte maintenant le réel, mais peut-être que `_deplacer_pw` ne met pas `t+1` dans le candidat). Vérifier aussi que le `get`/`put` ne renvoie pas un état dont les candidats ont été mutés.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` (t réel) et `Moteur.boucle` (break) en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : tracer les enfants `saut` réels, corriger, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 28/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 28 : je trace l'enfant `saut (2,4,0) → (4,4,1)` dans le vrai moteur (`store.put` + `but`) — il devrait être `settled` et arrêter la boucle
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.operateurs import (_etat_pw, _xy_pw, _t_pw, _libre_pw, saut_pw, but_pw,\n                                     LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW)\nfrom tools.pensee.store  … [734 caractères tronqués]`
+
+  ```
+enfants [((4, 4), 1, True), ((0, 4), 1, False)]
+put 193a30a9bb but True empreinte 193a30a9bb
+put 70e528fd64 but False empreinte 70e528fd64
+decision but False noeuds 200 settled []
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 28 : l'enfant `saut (2,4,0) → (4,4,1)` est bien un **but** (`but_pw=True`) et `store.put` le voit (`but=True`), mais le moteur ne produit **aucun** `settled` en 200 nœuds — il n'atteint jamais `(2,4,*)` dans son exploration réelle
+
+**Mesure** :
+
+- `saut_pw(_etat_pw(2,4,0))` → `(4,4,1)` avec `but_pw=True` ; `store.put((4,4,1))` → `L.but(...)=True`.
+- `Moteur.boucle(L, BFS, Budget(200), arret_sur_but=True)` → `but=False`, 200 nœuds, `trace.settled = []` (aucun but marqué).
+- Autrement dit, l'exploration **réelle** n'atteint jamais `(2,4,*)` — les 200 pas sont ailleurs. Le problème n'est donc ni l'opérateur, ni le store, ni le `settled` : c'est **la stratégie/le chemin** qui n'explore pas la branche `(0,0)→(0,2)→(0,4)→(2,4)→(4,4)`.
+
+**Prochaine piste (round 29)** : tracer les 200 états visités (positions `(x,y,t)`) pour voir où l'exploration part ; vérifier le `Score`/la `frontier` (le `score_pw` privilégie-t-il une mauvaise direction ?) et l'ordre des enfants (`pas` avant `saut`). Puis corriger la stratégie (BFS par exemple), remesurer, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : tracer les 200 états, corriger, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 29/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 29 : je trace les positions réelles visitées sur 200 nœuds pour voir où l'exploration part (score/frontier)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom collections import Counter\nfrom tools.pensee.moteur import BFS\nfrom tools.pensee.operateurs import DRVM, LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW, PolitiqueManhattan, _xy_pw, _t_pw\nfrom t … [592 caractères tronqués]`
+
+  ```
+positions distinctes 43
+top [(((3, 0), 2), 16), (((4, 0), 3), 15), (((4, 0), 2), 14), (((2, 0), 1), 9), (((1, 0), 3), 9), (((1, 0), 4), 8), (((2, 0), 2), 7), (((3, 0), 3), 7), (((0, 0), 2), 6), (((3, 1), 3), 6), (((3, 1), 4), 6), (((2, 0), 6), 6)]
+x max 4 y max 3
+atteint (2,4) ? False atteint (4,4) ? False
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 29 : l'exploration ne dépasse jamais `y=3` ; `(2,4)` et `(4,4)` ne sont **jamais** atteints — or `MURS_P` contient `(3,4)`, `(4,1)`, `(4,2)`, et le but `(4,4)` est derrière
+
+**Trace des 200 nœuds** :
+
+- 43 positions distinctes ; `y max = 3` ; `(2,4)` jamais atteint, `(4,4)` jamais atteint.
+- Top : `((3,0),2)` 16×, `((4,0),3)` 15×, `((4,0),2)` 14×, `((1,0),3)` 9×… l'exploration reste **en haut** de la grille et tourne autour de `y=0..3`.
+- Le chemin BFS manuel `(0,0)→(0,2)→(0,4)→(2,4)→(4,4)` passe par `y=4` : il n'est jamais exploré.
+
+**Cause probable** : `MURS_P` contient `(3,4)`, `(4,1)`, `(4,2)` — et `_libre_pw(4,4,t)` teste `(x,y) in MURS_P` ; si `(4,4)` n'y est pas, le blocage vient de `(3,4)`/`(4,2)` qui coupent la colonne 4 et la ligne 4. Il faut vérifier `MURS_P` et la carte de la fenêtre (le but doit être encadré par des cases libres).
+
+**Prochaine action (round 30)** : imprimer `MURS_P` et le chemin de `(2,4)` à `(4,4)` ; corriger la carte (ou `_libre_pw`) pour que `y=4` soit atteignable ; remesurer oracle + 7B ; contre-fiche ; commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : carte/`_libre_pw`, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 32
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 30/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 30 : je vérifie `MURS_P` et la carte — `(3,4)` est un mur qui sépare `(2,4)` de `(4,4)` ; c'est probablement la cause du `y max = 3`
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"^MURS_P\\|^P_BUT\\|^PORTES_MOBILE\\|^MURS \" tools/pensee/operateurs.py; echo '---'; grep -n \"MURS_P = \" -A 8 tools/pensee/operateurs.py | head -12; echo '--- carte fenêtre ---'; python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom t … [258 caractères tronqués]`
+
+  ```
+715:MURS = {(0, 1), (1, 1), (2, 1), (4, 1), (1, 3), (2, 3), (3, 3)}
+795:MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3), (3, 4)}
+797:P_BUT = (4, 4)
+2801:PORTES_MOBILE = ((3, 3), (1, 3))
+---
+795:MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3), (3, 4)}
+796-PORTE = (3, 3)
+797-P_BUT = (4, 4)
+798-
+799-
+800-def _etat_p(x: int, y: int, open_: bool, parent: str | None = None,
+801-            profondeur: int = 0) -> Etat:
+802-    return Etat(f"p{x}:{y}:{int(open_)}", parent, profondeur,
+803-                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+--- carte fenêtre ---
+murs [(0, 1), (1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (3, 4), (4, 1), (4, 2)]
+.....
+###.#
+.##.#
+.#...
+...#B
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 30 : la carte est saine — le but `(4,4)` est atteignable par `(2,4)→(3,4)` **impossible** car `(3,4)` est un mur ; le vrai chemin est `(2,4)→(2,3)→(3,3)→(4,3)→(4,4)`
+
+**Carte de la fenêtre** (B = but, # = mur) :
+
+```
+y=0  .....
+y=1  ###.#
+y=2  .##.#
+y=3  .#...
+y=4  ...#B
+```
+
+- Le but `(4,4)` est bien libre ; `(3,4)` est un mur ; `(4,3)`, `(3,3)`, `(2,3)`, `(2,4)` sont libres.
+- Le chemin BFS manuel que j'avais pris (`(2,4)→(4,4)` en saut) **traverse `(3,4)`** : `_libre_pw` le refuse (mur), et le `saut` de `(2,4)` vers `(4,4)` saute par-dessus `(3,4)`… ce qui est **autorisé** par `_deplacer_pw` (le saut ne teste que la case d'arrivée) — d'où l'incohérence : mon BFS manuel passait par ce saut, mais le vrai moteur explore autrement.
+- La vraie question reste : pourquoi le moteur ne trouve pas le chemin **légal** `(2,4)→(2,3)→(3,3)→(4,3)→(4,4)` ?
+
+**Prochaine action (round 31)** : tester ce chemin légal en BFS Python pur (sans saut) et vérifier que `_libre_pw` l'autorise ; s'il passe, le défaut est bien dans la stratégie/le score du moteur (pas la carte). Puis corriger, remesurer, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : chemin légal → stratégie, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 31/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 31 : je teste le chemin légal `(2,4)→(2,3)→(3,3)→(4,3)→(4,4)` en `pas` pur pour confirmer que la carte n'est pas le blocage
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.operateurs import _etat_pw, _xy_pw, _t_pw, _libre_pw, pas_pw, saut_pw, attendre, but_pw\n# chemin légal en pas : (0,0)->(0,1)? mur ; tester chaque case\nchemin=[(0,0),(0,0)]\nfor  … [276 caractères tronqués]`
+
+  ```
+(0, 0) -> (0, 1) libre False
+(0, 1) -> (0, 2) libre True
+(0, 2) -> (0, 3) libre True
+(0, 3) -> (0, 4) libre True
+(0, 4) -> (1, 4) libre True
+(1, 4) -> (2, 4) libre True
+(2, 4) -> (2, 3) libre True
+(2, 3) -> (3, 3) libre True
+(3, 3) -> (4, 3) libre True
+(4, 3) -> (4, 4) libre True
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 31 : chemin légal vérifié — `(0,1)` est mur, mais `(1,0)` libre ; la suite `(0,0)→(1,0)→(2,0)→(3,0)→(4,0)→(4,1)` est **bloquée** par `(4,1)/(4,2)` ; le vrai chemin est par `(0,2)→(0,4)→(2,4)→(2,3)→(3,3)→(4,3)→(4,4)`
+
+**Conclusion** :
+
+- `_libre_pw` autorise bien tout le chemin `(0,0)→(0,2)→(0,4)→(1,4)→(2,4)→(2,3)→(3,3)→(4,3)→(4,4)` (seul `(0,1)` est mur).
+- Le moteur, lui, explore `y=0` et tourne autour de `(3,0)/(4,0)` : il ne descend jamais par `(0,2)` — non pas parce que la carte l'interdit, mais parce que la **stratégie de score** (`score_pw = 1/(1+Manhattan)`) le pousse vers `x=4` avant `y`, et il se retrouve coincé par les murs `(4,1)/(4,2)`.
+- C'est un défaut de **stratégie/score**, pas de carte ni d'opérateurs.
+
+**Prochaine action (round 32)** : changer l'ordre de préférence (par exemple BFS ou un score qui ne pénalise pas `y`), ou un A* avec l'heuristique correcte, remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : stratégie/score de la fenêtre, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 32/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 32 : le score `score_pw = 1/(1+Manhattan)` pousse vers `x=4` d'abord, où les murs `(4,1)/(4,2)` bloquent ; c'est un défaut de fitness, pas de carte
+
+**Constat** :
+
+- Le chemin légal vers `(4,4)` est `(0,0)→(0,2)→(0,4)→(1,4)→(2,4)→(2,3)→(3,3)→(4,3)→(4,4)`.
+- Le score `score_pw` (Manhattan) **récompense** l'approche de `x=4` avant `y=4` : le moteur part à droite (`(1,0)`, `(2,0)`, `(3,0)`, `(4,0)`) et se retrouve coincé par `(4,1)`/`(4,2)`, puis tourne en `y=0..3` (43 positions, `y_max=3`).
+- Le BFS ne fait pas mieux dans 200 nœuds (44 états) ; l'A* non plus (195 états) — parce que le **score** n'est pas une distance au but utilisable et que l'heuristique `-Manhattan` ne corrige pas assez.
+
+**Corrections à faire (round 33)** :
+1. Un score de fenêtre qui **compte le temps** (`t % 3`) : pénaliser l'attente inutile, récompenser l'arrivée à la porte au bon `t`.
+2. Ou une stratégie BFS pure (sans score) sur la fenêtre : le chemin légal existe, le BFS le trouverait en ~9 pas si la frontière ne le noyait pas.
+3. Remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` (t réel) et `Moteur.boucle` (break) en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : score/stratégie fenêtre, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 33/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 33 : je corrige le score de la fenêtre pour qu'il guide vers `(4,4)` par le chemin légal, puis je remesure le BFS
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\n# Test : un score de fenêtre qui pénalise les murs et l'attente inutile, ou un BFS par profondeur\nfrom tools.pensee.moteur import BFS\nfrom tools.pensee.operateurs import (DRVM, LABYRINTHE_PORTE_F … [734 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 3084, in penser
+    self.resultat = self.moteur.boucle(probleme, strategie, budget,
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                       arret_sur_but=arret_sur_but)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/moteur.py", line 104, in boucle
+    racine = self.store.put(probleme.initial())
+                            ~~~~~~~~~~~~~~~~^^
+TypeError: <lambda>() takes 0 positional arguments but 1 was given
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 33 : le test « score but-only » a échoué sur un détail de lambda (`initial` non lié) ; je corrige le harnais et je reteste
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.moteur import BFS\nfrom tools.pensee.operateurs import (DRVM, LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW,\n                                     PolitiqueManhattan)\nfrom tools.pen … [748 caractères tronqués]`
+
+  ```
+initial Etat(id='w0:0:0', parent=None, profondeur=0, candidats=(Candidat(id='x', corps={'v': 0}, annotation={}, statut='hypothese'), Candidat(id='y', corps={'v': 0}, annotation={}, statut='hypothese'), Candidat(id='t', corps={'v': 0}, annotation={}, statut='hypothese')), statut='ouvert') score init 0.0
+score but-only {'but': False, 'noeuds': 200, 'appels': 42, 'par_operateur': {'pas': 76, 'saut': 62, 'attendre': 42, 'sonde': 20}} etats 44
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 33 : même un score « but uniquement » laisse le BFS à 44 états / 200 nœuds — le moteur n'explore pas la frontière comme un BFS (l'ordre `store.ouverts` ou le `pop` est en cause)
+
+**Mesure** :
+
+- `ProblemeFenetre` avec `score = 1.0 si but sinon 0.0` : `but=False`, 200 nœuds, 44 états, `pas` 76 / `saut` 62 / `attendre` 42 / `sonde` 20 — **identique** au score Manhattan.
+- Le score n'est donc pas la cause. Le BFS (`min(store.ouverts, key=seq)`) devrait explorer en **largeur** et atteindre `(4,4)` en ~9 pas. Il ne le fait pas → le défaut est dans `Store.ouverts` (les clés/ordre) ou dans le `pop` du `Moteur.boucle`.
+- Piste précise : `Store.push` fait `self.ouverts.setdefault(empreinte, len(self.ouverts))` ; `Moteur.boucle` fait `self.store.ouverts.pop(noeud, None)`. Si `noeud` (choisi par `BFS`) n'est **pas** la clé de `self.ouverts` (empreinte recalculée/différente), le `pop` ne retire rien et le BFS re-choisit le même nœud en boucle — exactement le symptôme (44 états, 200 pas, `y_max=3`).
+
+**Prochaine action (round 34)** : vérifier que `strategie.choisir` reçoit le même type de clé que `Store.push` (empreinte `str`) et que `pop(noeud)` retire bien ; corriger (`store.pop()` ou clé cohérente) ; remesurer oracle + 7B ; contre-fiche ; commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : cohérence des clés `Store`/`BFS`, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 36
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 34/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

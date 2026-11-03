@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 6.1 h |
+| Durée | 6.3 h |
 | Tours | 2 |
-| Messages | 333 |
-| Appels d'outils | 338 |
+| Messages | 335 |
+| Appels d'outils | 340 |
 | Fichiers touchés | 22 |
-| Commandes | 249 |
+| Commandes | 250 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*98 appels d'outils.* Actions notables :
+*100 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 62 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Suivi des runs 2 048 (octets constants) et 1 024 long
+⏵ Évaluations : 1 024 à 20 k pas (contrôle) et 2 048 à octets constants
 
 ## 3. Travail accompli
 
@@ -177,7 +177,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 209 autres
+- … et 210 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -288,6 +288,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `[still running after 60000ms; moved to background job bash-245]`
 - **T2** `[still running after 60000ms; moved to background job bash-246]`
 - **T2** `[still running after 60000ms; moved to background job bash-249]`
+- **T2** `[still running after 60000ms; moved to background job bash-250]`
 
 ## 5. Erreurs rencontrées
 

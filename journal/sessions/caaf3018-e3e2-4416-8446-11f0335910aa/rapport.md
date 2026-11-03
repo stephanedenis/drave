@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 6.1 h |
 | Tours | 23 |
-| Messages | 319 |
-| Appels d'outils | 328 |
+| Messages | 321 |
+| Appels d'outils | 330 |
 | Fichiers touchés | 6 |
-| Commandes | 252 |
+| Commandes | 253 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +473,11 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 35 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
-⏵ Le compteur dit encore « 82ᵉ porte à valider » alors qu'elle est verte et comptée. Je vérifie les lignes avant correction.
+⏵ Nuit : cadence de 20 min (test de la borne d'attente)
 
 ## 3. Travail accompli
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 212 autres
+- … et 213 autres
 
 ## 4. Mesures et résultats marquants
 

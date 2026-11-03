@@ -14,9 +14,9 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-02 21:43 EST
-- **Prochaine action** : la passe est **finie** (76/5, intégrée), le README/INDEX sont à jour ;
-  la **veille** des quatre sessions et le **bilan 08 h**.
+- **Heartbeat** : 2026-11-02 22:31 EST
+- **Prochaine action** : la 82e porte est **validée** (`ba815f43`), le README/INDEX et la passe
+  sont à jour ; la **veille** des quatre sessions et le **bilan 08 h** (claim `veille`).
 - **Ressources** : `gpu1`, `cpu1` 8 fils, `ram` 8 Gio ; registre `work/ressources.json`.
 - **Nuit** : consigne `plan-travail` § 10.7 ; quatre sessions productives ; bilan 08 h.
 - **État** : actif
