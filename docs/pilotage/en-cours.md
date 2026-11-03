@@ -91,7 +91,7 @@
   [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
   **capacité propre** (GPU 1) ; **distillation native** : α = 0,9 gagne **0,14–0,18**.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : les mesures du run long et de la capacité, puis fiche et commit.
+- **Prochaine action** : le professeur 60 k distillé à 30 000 pas (fin ~22 h 15).
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 

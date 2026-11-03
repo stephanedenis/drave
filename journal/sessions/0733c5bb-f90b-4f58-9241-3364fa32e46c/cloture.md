@@ -99,3 +99,31 @@
 **Ce qui reste** : la porte propre demande de la **capacité** (le corpus de 3,24 Mo est épuisé) ;
 la production à fenêtre 1 024 demande un **run long** (60 000 pas et plus) pour approcher 2,5 en
 domaine ; le **professeur à fenêtre longue** (distillation) n'est pas tenté.
+
+## 03/11, après-midi — la capacité, le run long et la distillation
+
+**Quatre faits de plus**, tous committés :
+
+- **La capacité sature** sur le corpus propre : 11,47 M → 2 8960 à 1 024 octets (val), 21,65 M →
+  2 8688, 34,3 M → **2 8662**. Rien entre 21,65 et 34,3 M ; la porte < 2,5 reste à 0,37
+  (`ad070205`, fiche `n2-porte-propre` § capacité).
+- **Le run long de production** : 60 000 pas à fenêtre 1 024 (552 Mo) donnent **2,9121** en
+  domaine, **2,5276** à 1 000 et **2,4761** à 2 000 ; au grand corpus **2,3911 / 2,3522**.
+  Chaque doublement des pas vaut **−0,085** en domaine (`36195516`, fiche `n2-production-fenetre`
+  § 2 bis).
+- **La distillation native** (nouveau distillateur, `work/n2ac/distiller_natif.py`) : le
+  professeur long dans un élève 11,47 M à fenêtre 512 donne, à α = 0,9, **3,5090 / 3,2835 /
+  3,1863** contre 3,6452 / 3,4493 / 3,3628 pour l'élève dur — gain **0,14 à 0,18**, qui **croît
+  avec la longueur** ; α = 0,5 dilue le professeur et s'inverse à 1 024 (`43833200`, fiche
+  `n2-distillation-native`).
+- **La distillation de production** : le même professeur dans la recette 512 (34,3 M, même init,
+  mêmes 61,4 Mo) gagne **0,10 partout** en domaine et 0,29 / 0,52 hors domaine — la recette de
+  production devient « professeur 1 024 + élève 512 distillé », 3,0550 pour 61,4 Mo, à 0,14 du run
+  de 552 Mo (`d0c9646a`, fiche `n2-production-fenetre` § 4).
+
+**En cours** : le professeur **60 000 pas** distillé dans la recette 512 à 30 000 pas
+(`work/n2ac/kd2-mix512-30k.pt`, fin attendue ~22 h 15) — le gain de 0,10 tient-il quand les octets
+doublent, et un meilleur professeur donne-t-il un meilleur élève ?
+
+**Commits de la phase** : `ad070205`, `43833200`, `36195516`, `d0c9646a` (+ `a07c99cc`,
+`f1e8007e` pour la réouverture).

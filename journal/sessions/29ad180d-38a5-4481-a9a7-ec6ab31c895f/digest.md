@@ -8061,3 +8061,57 @@ Les limites sont nommées : la version française est elle-même une interpréta
 
 Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page répond 200, les 52 tests passent, la fiche est [`reports/rapport-s-traductions.md`](reports/rapport-s-traductions.md). La fiche de l'arbre et le SVG, de nouveau retirés par un commit L, ont été rétablis. La suite : confirmer les référents sur la page en voyant la source anglaise, puis la rétro-traduction API quand la clé sera là, et les 71 langues de l'UDHR pour un test de référents à plus grande échelle.
 
+
+## Tour 14
+
+### 👤 Utilisateur
+
+continue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"def _marqueur\\|def _role_gp\\|VERBES_FINIS\\|VERBES_LIEU\\|ADVERBES_TEMPS\\|PRON =\\|DET =\\|CONJ\\b\" generateur.py | head -20; echo \"=== marqueur ===\"; sed -n '/def _marqueur/,/def _fin_clause/p' gener … [183 caractères tronqués]`
+
+  ```
+18:DET = set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses "
+23:CONJ = set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant quoique".split())
+26:PRON = set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ca".split())
+28:ADVERBES_TEMPS = set("hier aujourd'hui demain maintenant ici la toujours jamais souvent deja encore tard tot".split())
+46:VERBES_LIEU = set("""
+62:VERBES_FINIS = set("""
+137:            self.cls = "CONJ"
+146:        elif n in CONJ or prefixe in CONJ:
+147:            self.cls = "CONJ"
+163:def _marqueur(utiles: list[Token], i: int) -> str | None:
+190:        if t.cls == "CONJ" and _norm(t.texte) in COORD:
+207:def _role_gp(prep: str, segs: list["Segment"], utiles: list[Token], i: int) -> str:
+227:        if gv is not None and _dernier_mot(gv.texte) in VERBES_LIEU:
+327:            while j < len(utiles) and utiles[j].cls not in ("PONCT", "CONJ", "RELATIF"):
+333:                        and _norm(utiles[j].texte) in ADVERBES_TEMPS):
+352:                        and (_norm(utiles[j].texte) in VERBES_FINIS
+353:                             or _norm(utiles[j].texte) in VERBES_LIEU)):
+360:         
+… [2616 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"SUBORD_SIMPLE\\|SUBORD_QUE\\|SUBORD_ELIDE\\|COORD\" generateur.py | head -8; sed -n '/SUBORD_SIMPLE =/,/^$/p' generateur.py; echo \"=== gold tail ===\"; python3 - <<'PY'\nimport json\nd=json.load(open('donn … [200 caractères tronqués]`
+
+  ```
+24:COORD = set("et ou mais donc or ni car".split())
+33:SUBORD_SIMPLE = {"quand": "temps", "lorsque": "temps", "comme": "cause", "si": "hypothese",
+35:SUBORD_QUE = {"parce": "cause", "bien": "concession", "pendant": "temps", "tandis": "temps",
+39:SUBORD_ELIDE = {"lorsqu": "temps", "puisqu": "cause", "quoiqu": "concession"}
+175:    if prefixe in SUBORD_ELIDE:
+176:        return SUBORD_ELIDE[prefixe]
+177:    if prefixe in SUBORD_SIMPLE:
+178:        return SUBORD_SIMPLE[prefixe]
+SUBORD_SIMPLE = {"quand": "temps", "lorsque": "temps", "comme": "cause", "si": "hypothese",
+                 "puisque": "cause", "quoique": "concession"}
+SUBORD_QUE = {"parce": "cause", "bien": "concession", "pendant": "temps", "tandis": "temps",
+              "afin": "but", "apres": "temps", "avant": "temps", "des": "temps",
+              "alors": "temps", "pour": "but", "sans": "maniere", "encore": "concession"}
+# Les élisions qui portent le subordonnant dans le même jeton (« lorsqu'il », « puisqu'elle »).
+SUBORD_ELIDE = {"lorsqu": "temps", "puisqu": "cause", "quoiqu": "concession"}
+# Verbes de lieu/état : « à la maison » après « rester » est un lieu, pas un destinataire.
+# Copules : « est mon voisin » est un
+… [1588 caractères tronqués]
+  ```
+

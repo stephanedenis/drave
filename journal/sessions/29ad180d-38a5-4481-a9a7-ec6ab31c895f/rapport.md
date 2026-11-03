@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 25.6 h |
-| Tours | 13 |
-| Messages | 378 |
-| Appels d'outils | 369 |
+| Durée | 26.3 h |
+| Tours | 14 |
+| Messages | 382 |
+| Appels d'outils | 372 |
 | Fichiers touchés | 16 |
-| Commandes | 283 |
+| Commandes | 286 |
 | Sous-agents | 0 |
 | Commits | 26 |
 | Compactages de contexte | 1 |
@@ -44,6 +44,8 @@
 **Tour 12** — les svg sortent du cadre, prévoir scrollbar et largeur de page adapté à la largeur d'écran ou fenêtre
 
 **Tour 13** — tu peux aussi valider le sens (et indirectement les référents de syntaxe) en utilisant des traductions.
+
+**Tour 14** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -512,6 +514,14 @@ Les limites sont nommées : la version française est elle-même une interpréta
 Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page répond 200, les 52 tests passent, la fiche est [`reports/rapport-s-traductions.md`](reports/rapport-s-traductions.md). La fiche de l'arbre et le SVG, de nouveau reti
 … [243 caractères tronqués]
 
+### Tour 14 — continue
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Read marker and GN homograph code
+- bash — Read subordinator sets and gold phrase format
+- bash — Read GV branch and verb lexicon
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -577,7 +587,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 243 autres
+- … et 246 autres
 
 ## 4. Mesures et résultats marquants
 

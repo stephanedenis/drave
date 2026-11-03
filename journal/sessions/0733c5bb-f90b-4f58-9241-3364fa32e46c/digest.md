@@ -9172,3 +9172,66 @@ ok
 background job bash-465 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**fenêtre 1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus)\",\n              \"**1 024** = re … [1736 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-471]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-471", "timeout_ms": 180000, "wait": true}`
+
+  ```
+d0c9646a PRODUCTION — LE PROFESSEUR LONG DISTILLÉ DANS LA RECETTE 512 GAGNE 0,10 À BUDGET ÉGAL : 3,0550 / 2,8062 / 2,7015 / 2,6601
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du run de nuit : distillation du professeur 60 k dans la recette 512, 30 000 pas
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_kd_60k.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_kd_60k.sh — le professeur 60 000 pas (fenêtre 1 024) distillé dans la recette 512,\n# 30 000 pas (122 Mo), même init mix-60k. Question : un meilleur professeur donne-t-il un\n# me … [1008 caractères tronqués]`
+
+  ```
+KD 60k professeur lancé pid 2464380
+18:23:13
+0, 274 MiB, 0 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -2 work/n2ac/kd2-mix512-30k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Verify overnight run started"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-473]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-473", "timeout_ms": 420000, "wait": true}`
+
+  ```
+18:30:16
+pas   450 · perte 1.3552 · dure 1.0362 · douce 0.4370 · 210 s
+pas   500 · perte 1.5166 · dure 1.1637 · douce 0.4898 · 233 s
+0, 5200 MiB, 100 %
+1, 1 MiB, 0 %
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture de la phase : récit, plan en pause, état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat >> journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md <<'EOF'\n\n## 03/11, après-midi — la capacité, le run long et la distillation\n\n**Quatre faits de plus**, tous committés :\n\n- **La capacité sature** sur le corpus propre : 11,4 … [2868 caractères tronqués]`
+
+  ```
+plan en pause, état à jour
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  T0 max : 4000 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md docs/pilotage/en-cours.md journal/sessions/ … [1004 caractères tronqués]`
