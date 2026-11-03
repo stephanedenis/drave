@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 25.0 h |
 | Tours | 173 |
-| Messages | 1248 |
-| Appels d'outils | 1016 |
+| Messages | 1250 |
+| Appels d'outils | 1018 |
 | Fichiers touchés | 49 |
-| Commandes | 828 |
+| Commandes | 830 |
 | Sous-agents | 0 |
-| Commits | 106 |
+| Commits | 108 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4550,7 +4550,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 173 — continue avec réparer la fusion
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the fusion implementation
@@ -4563,10 +4563,12 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Check gate thresholds, tests and bloc gate
 - bash — Write fusion repair fiche and state updates
 - bash — Commit fusion repair fact
+- bash — Fix counters and commit state
+- bash — Fix file counter and commit state
 
 **Synthèse produite :**
 
-⏵ J'aligne l'index, le README et la revue, puis je commite la fusion réparée
+⏵ La ligne réelle est `596 / 685` ; je corrige le seul chiffre des fichiers et je commite
 
 ## 3. Travail accompli
 
@@ -4666,7 +4668,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 788 autres
+- … et 790 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4893,4 +4895,6 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --form
 - L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,8226 / 0,8784), LA FUSION DÉGRADE (0,928 / 0,802 / 0,857), 1 REFUS (r353)" 2>&1 | tail -4; ec
 - L — LA FUSION RÉPARÉE : PAR NIVEAU (NEURONAL POS/SYNTAGMES, HEURISTIQUE PRAGMATIQUE) — 0,9309 / 0,8226 / 0,8784 / 0,9954, LE MAXIMUM DES DEUX" 2>&1 | tail -4; e
+- L — COMPTEURS DE L'ÉTAT : 597 FICHES / 685 JSON" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L — COMPTEURS DE L'ÉTAT : 597 FICHES / 685 JSON" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

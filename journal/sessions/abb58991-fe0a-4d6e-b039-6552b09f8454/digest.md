@@ -25867,3 +25867,45 @@ ok
 ⏵ J'aligne l'index, le README et la revue, puis je commite la fusion réparée
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-quatre-modes.md`](rapport-pensee-quatre-modes.md) | **L** **0,9309 neuronal** |\",\n            \"| [`rapport-pens … [866 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3994 mots (budget 4 000)
+  594 fiches → reports/INDEX.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 596 fichiers, le disque en a 597
+ delete mode 100644 docs/schemas/arbre-referents.svg
+ create mode 100644 reports/pensee-quatre-modes-niveau.json
+ create mode 100644 reports/rapport-pensee-fusion-reparee.md
+ delete mode 100644 reports/rapport-s-arbre-referents.md
+EXIT=0
+af335d0d L — LA FUSION RÉPARÉE : PAR NIVEAU (NEURONAL POS/SYNTAGMES, HEURISTIQUE PRAGMATIQUE) — 0,9309 / 0,8226 / 0,8784 / 0,9954, LE MAXIMUM DES DEUX
+  ```
+
+### 🤖 Assistant
+
+⏵ La revue signale le compteur (596/684 → 597/685) : je corrige la ligne et je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='| fichiers / JSON de résultats | **596** / **684** |'\nnew='| fichiers / JSON d … [517 caractères tronqués]`
+
+  ```
+117:| fichiers / JSON de résultats | **596** / **685** | `reports/*.md` / `reports/*.json` |
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 596 fichiers, le disque en a 597
+  T0 max : 3994 mots (budget 4 000)
+	reports/s-banque-validee.json
+
+no changes added to commit (use "git add" and/or "git commit -a")
+EXIT=1
+af335d0d L — LA FUSION RÉPARÉE : PAR NIVEAU (NEURONAL POS/SYNTAGMES, HEURISTIQUE PRAGMATIQUE) — 0,9309 / 0,8226 / 0,8784 / 0,9954, LE MAXIMUM DES DEUX
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError: compteur absent
+  ```
+
+### 🤖 Assistant
+
+⏵ La ligne réelle est `596 / 685` ; je corrige le seul chiffre des fichiers et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='| fichiers / JSON de résultats | **596** / **685** |'\nnew='| fichiers / JSON de résultats | **597** / **685** |'\nassert old in t, 'c … [466 caractères tronqués]`
