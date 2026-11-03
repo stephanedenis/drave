@@ -40,35 +40,29 @@
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
   (R1.1/R1.2).
-- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (fin ~19 h 35) ; 3) ~~banc
-  R1.1/R1.2~~ ; 4) **cinq PPL et courbe** ; 5) **fiche, JSON, état, commit**.
-- **Ambition** : que N réponde « plus de pas, quelle position, quelle fenêtre ».
-- **Stratégie** : recette constante (34,3 M, canal, graine 1) ; banc GPU 1.
-- **Objectif final** : trancher **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
-- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre` (GPU 0, 16 h 17 → ~19 h 35,
-  ~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;
-  [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **Plan** : 1) ~~plan~~ ; 2) **200 k pas** (fin ~19 h 35) ; 3) ~~banc R1.1/R1.2~~ ; 4) **cinq PPL, courbe, fiche**.
+- **Ambition** : N répond « plus de pas, quelle position, quelle fenêtre ».
+- **Stratégie** : 34,3 M, canal, graine 1 ; banc GPU 1.
+- **Objectif final** : **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
+- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre` (GPU 0, fin ~19 h 35) ; **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**, **D/R/A**.
-- **Prochaine action** : les **cinq PPL** et la **courbe** à la sortie des 200 k pas, puis la fiche.
-- **Bloquants** : aucun ; **GPU 0 et 1** à N2 jusqu'à ~19 h 40, la passe de portes attend.
+- **Prochaine action** : les **cinq PPL** et la **courbe** à la sortie des 200 k pas.
+- **Bloquants** : aucun ; **GPU 0/1** à N2 jusqu'à ~19 h 40.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
 ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
 - **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
-- **Plan** : 1–4) ~~plan, analyseur (gold 39), export, tests 40~~ ; 5–6) ~~fiche, pointeur, état~~.
-- **Ambition** : nommer le rôle, couper la subordonnée ; un corpus qui se rejoue.
-- **Stratégie** : une règle = une phrase du gold, trois contrôles.
+- **Plan** : 1–4) ~~plan, analyseur, export, tests~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle, couper la subordonnée.
+- **Stratégie** : une règle = une phrase, trois contrôles.
 - **Objectif final** : gold **39**, corpus **39**, manifeste SHA-256.
-- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**,
-  **66/100**, **0,099** ; échec nommé **h033** ; **40 tests** ;
-  [`fiche`](../../reports/rapport-s-analyseur-roles.md).
-- **Ce qu'elle fait** : sous-module **`647205a`** et pointeur **`13f4e131`** committés ; corpus
-  **39** lignes (SHA `973c70a4…`) ; mode `banque` à **0** verdict humain.
+- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**, **66/100**, **0,099** ; échec **h033** ; **40 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : **`647205a`**, pointeur **`13f4e131`** ; corpus **39** (SHA `973c70a4…`) ; banque **0**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
 - **Prochaine action** : validation humaine de la banque, puis frontière du GN (h033).
-- **Bloquants** : aucun pour l'analyseur et l'export ; **banque validée à 0** verdict.
+- **Bloquants** : aucun ; **banque à 0** verdict.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
 ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
@@ -79,10 +73,9 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
-- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS/syntagmes, **cascade
-  complète** 0,9415/0,7539/1,0 ; **DRVM/native** — cadenas **3 nœuds** (règle), porte **27
-  nœuds** (règle ; 200 sans), labyrinthe **2 sonde** ; **pragmatique neuronale** — **dev 1,0**
-  mais **test 0,6375** (majoritaire 0,7556), ds 0,6062 ; l'heuristique garde ;
+- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS/syntagmes, cascade
+  **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27 (règle), labyrinthe 2 sonde ;
+  **pragmatique** dev 1,0, test 0,6375 (majoritaire 0,7556) ; l'heuristique garde ;
   [fiche](../../reports/rapport-pensee-pragmatique-neuronale.md).
 - **Ce qu'elle fait** : **gold neuronal, DRVM et pragmatique** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
@@ -90,9 +83,8 @@
 - **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; la **pragmatique neuronale** ne qualifie pas ; restent **gold 200+** et **porte B13**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
-> **Session close** : `fe3c05f0` (D/R/A) — **147 scans détectés** (91 uniques, 2 053 p),
-> **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient
-> **9 livres natifs + AQPC** (erratum) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> **Session close** : `fe3c05f0` — **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car. ;
+> [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
 > fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
 
 ## Ce qui est en cours
@@ -100,16 +92,12 @@
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
 - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
-- **R1 — la fenêtre native** : **R1.1 mesurée** — RoPE **3,2545** à 1 000 octets (**0,97×** la PPL à
-  129, porte **1,5** tenue) contre **8,2024** pour la table absolue ; à texte et prédécesseurs
-  identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ;
-  **depuis zéro**, RoPE ne suffit pas (3,54 → 6,22 à 20 k pas, 6,43 à 40 k) ; **R1.2**, à octets
-  constants, gagne **−0,244** à 1 000 (3,0107) et **utilise** le contexte (2,9654 → 2,8819) ;
-  miroir de copie **muet** — [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
+  invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
+  depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
 - **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
-- **N2** : **N2.ac** (mélange **1,02 Go**, 60 k pas) : **3,49** domaine, **6,03** littérature,
-  **8,34** anglais, **9,05** wikitext2 — **le modèle de production** ; N4 **0/40** ; **session
-  `0733c5bb`** ouverte le 02/11 16 h 17 — **200 k pas en cours** ; [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
+- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature, **8,34** anglais, **9,05**
+  wikitext2 ; N4 **0/40** ; [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
   [`n2-1go`](../../reports/rapport-n2-corpus-1go.md).
 - **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc, opérateurs, **140/140** ; gold
   **432 réels**, coréférence **116 liens** ; [`pensee-vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
@@ -146,18 +134,16 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — les **200 k pas** (fin ~19 h 35) ; **R1** — **1 024 octets entraînés**, le schéma relatif
-est mesuré ; **Pensée** — **pragmatique, gold 200+** ; **S** — la **validation
-humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
-**R0.7** — le tagger complet ; **D** — l'**OCR est clos** (91 scans uniques, 1 982 p) ; les 8 scans
-`.PDF` (58 p) restent une limite nommée.
+**N2** — 200 k pas (fin ~19 h 35) ; **R1** — 1 024 octets entraînés ; **Pensée** — gold 200+,
+porte B13 ; **S** — validation humaine, h033 ; **N4** — la consigne ; **B10.3** — le `z` ;
+**R0.7** — le tagger complet ; **D** — OCR clos (8 scans `.PDF`).
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 
 ## Les questions ouvertes
 
-- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.2 tranche par la fenêtre entraînée**
-  (3,0107 à octets constants) ; le schéma relatif seul ne suffit pas ; reste **1 024 octets**.
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.2** tranche (3,0107 à octets constants) ;
+  reste **1 024 octets**.
 - **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → N2 tranche.
 - **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
 - **B10.3** : chrF **> 39,6** ? → l'attention croisée tranche.

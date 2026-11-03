@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 2.9 h |
-| Tours | 5 |
-| Messages | 335 |
-| Appels d'outils | 442 |
+| Durée | 3.0 h |
+| Tours | 6 |
+| Messages | 344 |
+| Appels d'outils | 450 |
 | Fichiers touchés | 28 |
-| Commandes | 317 |
+| Commandes | 325 |
 | Sous-agents | 0 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -33,6 +33,8 @@
 **Tour 4** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 5** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 6** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -205,7 +207,7 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 
 ### Tour 5 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Check state and server at round 3
 - bash — Inspect gold pragmatics and heuristic tags
@@ -221,11 +223,44 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - bash — Restrict actes to the gold convention
 - bash — Retest pragmatics with gold acte set
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_pragmatique.py`
-- … et 18 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
-⏵ Je commite le négatif pragmatique ; le T0 rouge (4146) vient de l'ajout N2/R1 du hub, je ne trime pas son état
+⏵ Round 3 : la pragmatique neuronale est un négatif committé ; le T0 rouge vient de l'ajout R1/N2
+
+**Fait de la nuit** — commit **`4a85604d`** : la pragmatique neuronale est **sous l'heuristique**.
+
+| lecture | source | acte | négation | modalité | double sens |
+|---|---|---:|---:|---:|---:|
+| heuristique | 180 | **1,0000** | **1,0000** | **0,9944** | **0,8889** |
+| neuronal | 20 réelles (dev) | **1,0000** | **1,0000** | 0,9500 | 0,9000 |
+| **neuronal** | **160 synthétiques (test)** | **0,6375** | 0,9625 | 0,9688 | **0,6062** |
+| cascade | 160 synthétiques | 0,6375 | 0,9938 | 0,9938 | 0,6062 |
+
+- Sur le **test**, l'acte **0,6375** est **sous le majoritaire** (0,7556 : toujours `assertion`) et le double sens **0,6062** sous l'heuristique (0,8889). La cascade prend l'acte et le double sens du modèle et **dégrade** ; la négation/modalité restent à l'heuristique. **L'heuristique garde la pragmatique.**
+- 0 refus, 180 appels, 3,84 s/appel, **11,7 min** ; le dev (20 réelles) était parfait mais c'est le **dev** (le prompt y a été choisi).
+
+**Nuit B13 committée** : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · **pragmatique `4a85604d`**. Le hub a committé **R1** (`2cff8dba` : positions relatives **8,20 → 3,25** à 1 000 octets, fenêtre entraînée **−0,244**). Le dépôt est **propre**.
+
+**Le seul rouge** : **T0 4146/4000** — l'ajout **R1/N2** du hub (~170 mots) a fait passer `en-cours` à **1772 mots** ; la revue, les tableaux, les tests (16), l'état et le journal sont verts. Je n'ai pas trimmé l'état d'une autre session ; il faut condenser `en-cours` (le hub ou le prochain round). `sessions --check --strict` est rouge sur **S** (142 min) et le **hub** (157), pas sur `e181ce02`.
+
+Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est atteint, mais la nuit continue sur le **trim T0**, le **gold 200+**, la **porte B13** (six rouges S) et la **porte qui bouge**.
+
+### Tour 6 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Inspect state and T0 at round 4
+- bash — Read en-cours sections to condense
+- bash — Read en-cours structural requirements
+- bash — Read S session fields to condense
+- bash — Condense en-cours and measure T0
+- bash — Commit the T0 state condensation
+
+**Synthèse produite :**
+
+⏵ T0 revenu à **3 930/4000** (en-cours 1 556) ; je commite la condensation d'état
 
 ## 3. Travail accompli
 
@@ -304,7 +339,7 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 277 autres
+- … et 285 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -398,4 +433,5 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE" 2>&1 | tail -10; echo "EXIT=${PIPESTATU
+- ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

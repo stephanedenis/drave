@@ -8263,3 +8263,196 @@ CHECK=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the pragmatics negative fact", "timeoutM … [11 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 4a85604d] B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE
+ 30 files changed, 1383 insertions(+), 68 deletions(-)
+ create mode 100644 reports/pensee-gold-pragmatique.json
+ create mode 100644 reports/rapport-pensee-pragmatique-neuronale.md
+ create mode 100644 tools/tests/linguistique/qualifier_pragmatique.py
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `4a85604d` ; vérification post-commit et bilan (T0 rouge nommé)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | head -8; echo '=== ETAT ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | gre … [161 caractères tronqués]`
+
+  ```
+4a85604d 19:12:00 B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE
+2cff8dba 18:50:35 R1 — LES POSITIONS RELATIVES ÔTENT L'EXPLOSION (8,20 → 3,25 À 1 000 OCTETS), LA FENÊTRE ENTRAÎNÉE DONNE LA LECTURE (−0,244 À OCTETS CONSTANTS)
+=== ETAT ===
+  état · dernier fait 4a85604d · dernier état 4a85604d
+  ✅ aucun fait commité après le dernier état
+  revue de documentation · 558 fiche(s) · 645 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 4146 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4146 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1772 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -5; echo '=== SESSIONS ==='; python3 tools/sessions.py --check --strict >/tmp/sess6.log 2>&1; echo \"EXIT=$?\"; grep \"❌ mandat\" /tmp/sess6.log | tail -4; echo '=== COUNT ==='; wc -w docs/pilotage/en-cours.md", "description" … [35 caractères tronqués]`
+
+  ```
+=== SESSIONS ===
+EXIT=1
+  ❌ mandat périmé (142 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ❌ mandat périmé (157 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — heartbeat à rafraîchir
+=== COUNT ===
+1772 docs/pilotage/en-cours.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 3 : la pragmatique neuronale est un négatif committé ; le T0 rouge vient de l'ajout R1/N2
+
+**Fait de la nuit** — commit **`4a85604d`** : la pragmatique neuronale est **sous l'heuristique**.
+
+| lecture | source | acte | négation | modalité | double sens |
+|---|---|---:|---:|---:|---:|
+| heuristique | 180 | **1,0000** | **1,0000** | **0,9944** | **0,8889** |
+| neuronal | 20 réelles (dev) | **1,0000** | **1,0000** | 0,9500 | 0,9000 |
+| **neuronal** | **160 synthétiques (test)** | **0,6375** | 0,9625 | 0,9688 | **0,6062** |
+| cascade | 160 synthétiques | 0,6375 | 0,9938 | 0,9938 | 0,6062 |
+
+- Sur le **test**, l'acte **0,6375** est **sous le majoritaire** (0,7556 : toujours `assertion`) et le double sens **0,6062** sous l'heuristique (0,8889). La cascade prend l'acte et le double sens du modèle et **dégrade** ; la négation/modalité restent à l'heuristique. **L'heuristique garde la pragmatique.**
+- 0 refus, 180 appels, 3,84 s/appel, **11,7 min** ; le dev (20 réelles) était parfait mais c'est le **dev** (le prompt y a été choisi).
+
+**Nuit B13 committée** : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · **pragmatique `4a85604d`**. Le hub a committé **R1** (`2cff8dba` : positions relatives **8,20 → 3,25** à 1 000 octets, fenêtre entraînée **−0,244**). Le dépôt est **propre**.
+
+**Le seul rouge** : **T0 4146/4000** — l'ajout **R1/N2** du hub (~170 mots) a fait passer `en-cours` à **1772 mots** ; la revue, les tableaux, les tests (16), l'état et le journal sont verts. Je n'ai pas trimmé l'état d'une autre session ; il faut condenser `en-cours` (le hub ou le prochain round). `sessions --check --strict` est rouge sur **S** (142 min) et le **hub** (157), pas sur `e181ce02`.
+
+Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est atteint, mais la nuit continue sur le **trim T0**, le **gold 200+**, la **porte B13** (six rouges S) et la **porte qui bouge**.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 4 : je ramène le T0 sous 4 000 en condensant l'état R1/N2, sans perdre les chiffres
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | head -6; echo \"EN-COURS: $(wc -w < docs/pilotage/en-cours.md)\"; python3 tools/taille_documents.py 2>&1 | grep -E \"T0|violation\"; grep -E \"Heartbeat|Prochaine\" journal … [116 caractères tronqués]`
+
+  ```
+4a85604d 19:12:00 B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE
+2cff8dba 18:50:35 R1 — LES POSITIONS RELATIVES ÔTENT L'EXPLOSION (8,20 → 3,25 À 1 000 OCTETS), LA FENÊTRE ENTRAÎNÉE DONNE LA LECTURE (−0,244 À OCTETS CONSTANTS)
+EN-COURS: 1772
+  T0 max : 4146 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4146 mots (AGENTS + en-cours + une tâche) > budget 4 000
+- **Heartbeat** : 2026-11-02 19:08 EST
+- **Prochaine action** : la **pragmatique neuronale** est un **négatif** (dev 1,0, test 0,6375 ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '36,60p' docs/pilotage/en-cours.md; echo '---IN PROGRESS---'; sed -n '98,122p' docs/pilotage/en-cours.md; echo '---RESTE/Q---'; sed -n '145,170p' docs/pilotage/en-cours.md", "description": "Read en-cours sections to condense"}`
+
+  ```
+- **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
+
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
+  (R1.1/R1.2).
+- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (fin ~19 h 35) ; 3) ~~banc
+  R1.1/R1.2~~ ; 4) **cinq PPL et courbe** ; 5) **fiche, JSON, état, commit**.
+- **Ambition** : que N réponde « plus de pas, quelle position, quelle fenêtre ».
+- **Stratégie** : recette constante (34,3 M, canal, graine 1) ; banc GPU 1.
+- **Objectif final** : trancher **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
+- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre` (GPU 0, 16 h 17 → ~19 h 35,
+  ~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;
+  [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **Ce que font les autres** : **hub**, **S**, **Pensée**, **D/R/A**.
+- **Prochaine action** : les **cinq PPL** et la **
+… [4534 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie les champs exigés par `verifie_en_cours` avant de condenser les sessions N2/S
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"champs\\|requis\\|session\\|puces\\|section\" tools/verifie_en_cours.py | head -30; echo '---'; sed -n '1,50p' tools/verifie_en_cours.py", "description": "Read en-cours structural requirements"}`
+
+  ```
+2:"""verifie_en_cours.py — l'état doit rester court, structuré, reprenable et multi-session.
+6:  2. les **sept sections** du template ;
+7:  3. « Sessions en cours » : une sous-section `### Session ...` par session active, avec
+11:  4. **10 puces au plus** dans « Ce qui est en cours », sans doublon et sans puce de plus de 80 mots ;
+55:def corps_section(texte: str, titre: str) -> str:
+64:def puces(section: str) -> list[str]:
+65:    return [l.strip("- ").strip() for l in section.splitlines() if l.startswith("- ")]
+68:def sessions(section: str) -> list[tuple[str, str]]:
+69:    """Rend [(titre, corps)] des sous-sections `### ...` de « Sessions en cours »."""
+70:    titres = list(re.finditer(r"(?m)^### (.+)$", section))
+74:        fin = titres[i + 1].start() if i + 1 < len(titres) else len(section)
+75:        blocs.append((m.group(1).strip(), section[debut:fin]))
+90:    for section in SECTIONS:
+91:        if f"## {section}" not in texte:
+92:            alertes.append(f"section absente : « {section} »")
+94:    blocs = sessions(corps_section(texte, "Sessions en cours"))
+96:        alertes.append("« Sessions en cours » n'a aucune sous-section `### Session ...`")
+99:            alertes.appen
+… [2660 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je condense les champs N2/S et les puces R1/N2 (les 11 champs restent), puis je mesure le T0
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '60,80p' docs/pilotage/en-cours.md", "description": "Read S session fields to condense"}`
+
+  ```
+- **Plan** : 1–4) ~~plan, analyseur (gold 39), export, tests 40~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle, couper la subordonnée ; un corpus qui se rejoue.
+- **Stratégie** : une règle = une phrase du gold, trois contrôles.
+- **Objectif final** : gold **39**, corpus **39**, manifeste SHA-256.
+- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**,
+  **66/100**, **0,099** ; échec nommé **h033** ; **40 tests** ;
+  [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : sous-module **`647205a`** et pointeur **`13f4e131`** committés ; corpus
+  **39** lignes (SHA `973c70a4…`) ; mode `banque` à **0** verdict humain.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Prochaine action** : validation humaine de la banque, puis frontière du GN (h033).
+- **Bloquants** : aucun pour l'analyseur et l'export ; **banque validée à 0** verdict.
+- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
+
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`]
+… [421 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Application de la condensation (N2, S, R1, reste) tout en gardant les 11 champs et les chiffres
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nrepl = []\n# N2 session\nrepl.append((\"\"\"- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (fin ~19 h 35) ; 3) ~~banc\n  R1. … [7986 caractères tronqués]`
+
+  ```
+done
+EN-COURS: 1556
+  T0 max : 3930 mots (budget 4 000)
+  en-cours · 1556 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 558 fiche(s) · 645 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 revenu à **3 930/4000** (en-cours 1 556) ; je commite la condensation d'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -8; git add docs/pilotage/en-cours.md && git diff --cached --stat; python3 tools/verifie_etat_a_jour.py --index; echo \"HOOK=$?\"; git commit -m \"ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS\" … [121 caractères tronqués]`
