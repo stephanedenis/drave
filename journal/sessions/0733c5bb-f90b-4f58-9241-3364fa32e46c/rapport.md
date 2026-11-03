@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 7.1 h |
+| Durée | 7.8 h |
 | Tours | 2 |
-| Messages | 369 |
-| Appels d'outils | 373 |
-| Fichiers touchés | 24 |
-| Commandes | 275 |
+| Messages | 389 |
+| Appels d'outils | 388 |
+| Fichiers touchés | 25 |
+| Commandes | 285 |
 | Sous-agents | 0 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*133 appels d'outils.* Actions notables :
+*148 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 91 autres
+- … et 101 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction de la fiche production (parties sans chiffres)
+⏵ Rédaction de la fiche « porte 2,5 sur le corpus propre » (prose)
 
 ## 3. Travail accompli
 
@@ -136,6 +136,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/agrege_fenetre.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r12-2048.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-n2-production-fenetre.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-n2-porte-propre.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -179,7 +180,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 235 autres
+- … et 245 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -302,10 +303,12 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `[still running after 60000ms; moved to background job bash-269]`
 - **T2** `[still running after 60000ms; moved to background job bash-273]`
 - **T2** `[still running after 60000ms; moved to background job bash-275]`
+- **T2** `[still running after 60000ms; moved to background job bash-278]`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
-10 sorties en erreur ou divergentes. Les premières :
+11 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md:20686:- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.
 - **T1** : (no output) [exit code: 1]
@@ -317,6 +320,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** : 21:26:35 pas   3950 · perte 0.9907 · PPL val 2.701 · 1684 s pas   8950 · perte 1.0638 · PPL val 2.673 · 4136 s [exit code: 2]
 - **T2** : fiche corrigée 0 [exit code: 1]
 - **T2** : 23:06:53 pas   1300 · perte 1.0420 · PPL val 2.720 · 1436 s [exit code: 2]
+- **T2** : 23:42:44 pas   3250 · perte 1.0465 · PPL val 2.630 · 3570 s [exit code: 2]
 
 ## 6. Commits
 

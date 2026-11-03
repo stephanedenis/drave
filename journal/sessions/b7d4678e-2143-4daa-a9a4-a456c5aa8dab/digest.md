@@ -10638,3 +10638,630 @@ revue de documentation · 573 fiche(s) · 660 JSON · 119 doc(s) · 82 porte(s) 
 log-ok
   ```
 
+### 🤖 Assistant
+
+⏵ Round 24 : la cascade complète tient avec le vrai modèle, état vert
+
+- **L/B13** : `92e3f9b4` — la **cascade complète avec le vrai modèle** sur **180 phrases** : **POS 0,9415 / syntagmes 0,6130 / tête 0,7574 / acte 1,0** (la cascade précédente donnait 0,6088 / 0,7539) : le composite neuronal tient avec le modèle réel.
+- **État** : revue ✅ **573 fiches / 660 JSON / 82 portes**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ (claims longs en avertissement).
+- **N2** : les deux runs continuent (1 h 02 et 46 min), GPU occupés et déclarés.
+
+La veille continue : intégration des commits, suivi des runs, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 25/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 25 : veille — événements et runs
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-65; git status --short | grep -E \"^\\?\\?|^ M\" | head -3; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Check events and runs"}`
+
+  ```
+23:25:16
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+ 713516    01:02:29 /home/stephane/gpu-env/bin/python work/n2ac/e
+ 722257       46:15 /home/stephane/gpu-env/bin/python work/n2ac/e
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`
+
+  ```
+23:26:35
+HEAD 16f3eeb0
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+ 713516    01:03:48 /home/stephane/gpu-env/bin/python work/n2ac/e
+ 722257       47:35 /home/stephane/gpu-env/bin/python work/n2ac/e
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -1; cat >> work/veille/nuit.md <<'EOF'\n\n## 23 h 26 — compteur 573/660 aligné\ … [231 caractères tronqués]`
+
+  ```
+revue de documentation · 573 fiche(s) · 660 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (104 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+log-ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 25 : compteur 573/660 aligné, état vert
+
+- **Hub** : `16f3eeb0` — la **cascade vrai modèle est comptée** : **573 fiches / 660 JSON / 82 portes**, revue ✅, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅.
+- **N2** : les deux runs continuent (1 h 04 et 48 min), GPU occupés et déclarés (claims N2 + veille).
+- **Rien à corriger** : journal ✅, backlog ✅, schémas ✅ ; seul avertissement `nvme_raid` 33 Gio.
+
+La veille reste en attente active des prochains commits (N2/Pensée/hub) et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 26/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cat >> work/veille/bilan-08h.md <<'EOF'\n\n## Faits ajoutés après 22 h (à figer)\n\n- **Fenêtre 2 048** (`c7ef9bc4`) : à octets constants le gain **s'arrête à 1 024** (2,9950 à\n  1 000) ; à 20 000 pas, la 2 048 donne **2,9955 à 128** et **2,6256 à 1 000** ; le run long\n  `rope1024-20k … [1184 caractères tronqués]`
+
+  ```
+bilan-ok
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+ 713516    01:04:07 /home/stephane/gpu-env/bin/python work/n2ac/e
+ 722257       47:54 /home/stephane/gpu-env/bin/python work/n2ac/e
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 26 : le bilan de 8 h est enrichi des faits de la nuit
+
+- **Bilan 8 h** (`work/veille/bilan-08h.md`) complété : fenêtre **2 048** (gain arrêté à 1 024 ; run long **PPL 2,6609**), **B13 fenêtre** (solvable 331 → FIFO 228 → **non discriminante**), **cascade vrai modèle** (POS **0,9415** / syntagmes **0,6130** / tête **0,7574** / acte **1,0**), compteurs **573/660/82**, **82e porte validée**, leçon de l'**index alterné** et claim `veille`.
+- **N2** : les deux runs continuent (1 h 04 et 48 min) ; les GPU restent occupés et déclarés.
+- **État** : revue ✅, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ — rien à corriger.
+
+La veille continue : intégration des prochains commits et **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 32
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 27/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 27 : veille — événements et runs
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-65; git status --short | grep -E \"^\\?\\?|^ M\" | head -3; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Check events and runs"}`
+
+  ```
+23:27:08
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+ 713516    01:04:21 /home/stephane/gpu-env/bin/python work/n2ac/e
+ 722257       48:07 /home/stephane/gpu-env/bin/python work/n2ac/e
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`
+
+  ```
+23:36:43
+HEAD 16f3eeb0
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+ 713516    01:13:56 /home/stephane/gpu-env/bin/python work/n2ac/e
+ 722257       57:42 /home/stephane/gpu-env/bin/python work/n2ac/e
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 27 : phase de calcul, aucun commit depuis 23 h 26
+
+- Les deux runs N2 continuent (1 h 14 et 58 min) ; la fiche 500 de Pensée est toujours en cours ; aucun commit depuis `16f3eeb0`.
+- **État stable** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅ (claims N2 + veille ; `nvme_raid` 33 Gio en limite connue).
+
+La veille reste en attente active des prochains commits (N2/Pensée/hub) et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 28/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 28 : je vérifie l’INDEX des fiches et son actualité
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; head -3 reports/INDEX.md; echo \"--- fiches récentes dans l'INDEX ---\"; for f in cascade fenetre-2048 non-discriminant sto-graines porte-minute; do echo -n \"$f: \"; grep -c \"$f\" reports/INDEX.md; done; echo \"--- dernières fiches ---\"; ls -t reports/rapport-*.md … [64 caractères tronqués]`
+
+  ```
+23:37:07
+# Index des fiches de reports/
+
+> **Généré** par `tools/index_reports.py` — **570 fiches**. Les fichiers
+--- fiches récentes dans l'INDEX ---
+cascade: 8
+fenetre-2048: 0
+non-discriminant: 0
+sto-graines: 1
+porte-minute: 1
+--- dernières fiches ---
+reports/rapport-pensee-cascade-vrai-modele.md
+reports/rapport-n2-production-fenetre.md
+reports/rapport-pensee-porte-fenetre.md
+reports/rapport-n2-r12-2048.md
+reports/rapport-n2-fenetre.md
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "python3 tools/index_reports.py 2>&1 | tail -2; head -3 reports/INDEX.md; git diff --stat reports/INDEX.md; echo \"--- nouvelles fiches ---\"; for f in cascade-vrai fenetre-2048 non-discriminant; do echo -n \"$f: \"; grep -c \"$f\" reports/INDEX.md; done", "description": "Regenerate the  … [15 caractères tronqués]`
+
+  ```
+570 fiches → reports/INDEX.md
+# Index des fiches de reports/
+
+> **Généré** par `tools/index_reports.py` — **570 fiches**. Les fichiers
+--- nouvelles fiches ---
+cascade-vrai: 1
+fenetre-2048: 0
+non-discriminant: 0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "git log --oneline -1; git status --short reports/INDEX.md; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-60; cat >> work/veille/nuit.md <<'EOF'\n\n## 23 h 37 — l'INDEX des fiches est déjà à jour\n\n- `index_reports.py` : **570 fiches** (le compte hors RE … [355 caractères tronqués]`
+
+  ```
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+ 713516    01:15:02 /home/stephane/gpu-env/bin/python work/n
+ 722257       58:49 /home/stephane/gpu-env/bin/python work/n
+log-ok
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Resume session **L/B13** `e181ce02-cd50-488a-a6be-e84b79d40dcc`: read plan/AGENTS/`en-cours`, restore `État : actif` + heartbeat now, run `python3 tools/sessions.py --check --strict`; next action **gold neuronal** (DRVM/native blocked); “Un fait = mesure + contrôle + fiche + en-cours + commit”.
+- Then switch to session **D/R/A** `fe3c05f0-834b-44f2-8739-501865d652c1`: same resumption, then OCR of the CEGEP fund (`tools/ocr_pdf.py --racine CEGEP --deja <N>`) and **session closure**; same fact rule.
+- “as-tu terminé? les gpu et cpu sont tranquilles”.
+- “c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en cours dans les autres terminaux”.
+- Current long-running request: “regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur le fait que les sessions doivent être bien coordonnées et tenir les ressources en usage optimal pour que nos travaux avances dans tous les axes”.
+
+## Key Technical Concepts
+- Drave/DSH multi-session pilotage: one writer of `docs/pilotage/en-cours.md` at a time; plans in `journal/sessions/<id>/plan.md`; heartbeat, perimeters, strict gate.
+- Fact discipline: measure + negative control + fiche in `reports/` + line in `en-cours` + explicit `git add` commit; roadmap line.
+- OCR: `pdftotext` full-text detection vs 2-page heuristic; `pdftoppm`/`tesseract`; 8KB window contamination control.
+- Resource registry/protocol: `tools/ressources.py` (claims, queue, `--actual`, `--check`, `--suggest`, `--autotest`), capacities gpu0/gpu1/cpu0/cpu1/ram/nvme_raid/hdd_data13tb/machine.
+- Gates: `tools/toutes-les-portes.sh`, registry `work/portes/<passe>/registre.txt`; verdict via `awk '$2 != 0'`; known tolerated reds.
+- Budgets: T0 = AGENTS+en-cours+one task doc ≤ 4,000 words; T1 `references-non-regression.md` ≤ 2,500.
+- Git concurrency: shared working tree; avoid `git add -A`; isolated index `GIT_INDEX_FILE=/tmp/index.veille` + `git read-tree HEAD` to dodge `.git/index.lock`.
+- Goals: `goal-01c46f43-f7b7-47b8-95a2-c7d4478f4b5e`, active, round 3/1000, night until 08:00.
+
+## Files and Code
+- `tools/ocr_pdf.py`: added `--liste` (explicit scan worklist), `--ouvriers` (parallel pages, `OMP_THREAD_LIMIT=1`), manifest date fixed; committed.
+- `tools/detecte_scans_pdf.py`: new full-text scan detection + SHA-256 dedup; `--racine`, `--sortie`, `--liste`.
+- `tools/porte-ressources.sh`: new 82nd gate; `--autotest` + `--check`; storage/NUMA warnings non-fatal; green.
+- `tools/ressources.py`: 562-line resource ledger/protocol (autotest 9 cases); untracked initially, committed by hub (`a67dbf00`).
+- `reports/rapport-ocr-cegep.md`: rewritten fiche — 147 scans detected, 91 unique, 60 docs retained, 1,982 p, 4,408,811 chars, splits 53/4/3, 8KB 0 dup (542/2/2), eval 0/40·0/24·0/40; erratum 10 pilot notes = 9 native books + AQPC.
+- `reports/ocr-pdf-cegep.json`: merged manifest (60 docs, 1,982 p, 4,408,811 car, 573 chunks, temps 7,070.5 s, `dispositif.reprise_micropython` 150 dpi/359 p/350,310 car/1,369.5 s).
+- `reports/ocr-pdf-cegep-detection.json`, `reports/ocr-pdf-cegep-contamination.json`: evidence.
+- `work/ocr/`: `scans-uniques.txt` (91), `micro.txt`, `ajoute_micro.py`, `fait_fiche.py`, `cote` logs; `work/veille/nuit.md` = night log.
+- `docs/pilotage/en-cours.md`: central state; currently 1,622 words, 4 sessions, counters **567 fiches / 652 JSON** (disk = 653), “dernière passe 02/11 19 h 32 (81 portes, 76 vertes, 5 rouges ; 4 connues + `porte-tableaux` de passage)”; B13 session/chantier lines say **140/140**, “Ce qui reste” still **138/140**.
+- `docs/pilotage/roadmap.md`: S v4 line current; État paragraph B13 140/140, S **54/55** types/131/131/47/47/gold 55; line 31 next-action still “porte **138/140**”; line 173 next-action “porte 138/140”.
+- `docs/pilotage/chantiers.md`: B13 line set to **138/140** (now stale → 140/140); S line updated to v4.
+- `docs/pilotage/plan-travail.md`: resou
+… [5778 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Resume session **L/B13** `e181ce02-cd50-488a-a6be-e84b79d40dcc`: read plan/AGENTS/`en-cours`, restore `État : actif` + heartbeat now, run `python3 tools/sessions.py --check --strict`; next action **gold neuronal** (DRVM/native blocked); “Un fait = mesure + contrôle + fiche + en-cours + commit”.
+- Then switch to session **D/R/A** `fe3c05f0-834b-44f2-8739-501865d652c1`: same resumption, then OCR of the CEGEP fund (`tools/ocr_pdf.py --racine CEGEP --deja <N>`) and **session closure**; same fact rule.
+- “as-tu terminé? les gpu et cpu sont tranquilles”.
+- “c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en cours dans les autres terminaux”.
+- Current long-running request: “regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur le fait que les sessions doivent être bien coordonnées et tenir les ressources en usage optimal pour que nos travaux avances dans tous les axes”.
+
+## Key Technical Concepts
+- Drave/DSH multi-session pilotage: one writer of `docs/pilotage/en-cours.md` at a time; plans in `journal/sessions/<id>/plan.md`; heartbeat, perimeters, strict gate.
+- Fact discipline: measure + negative control + fiche in `reports/` + line in `en-cours` + explicit `git add` commit; roadmap line.
+- OCR: `pdftotext` full-text detection vs 2-page heuristic; `pdftoppm`/`tesseract`; 8KB window contamination control.
+- Resource registry/protocol: `tools/ressources.py` (claims, queue, `--actual`, `--check`, `--suggest`, `--autotest`), capacities gpu0/gpu1/cpu0/cpu1/ram/nvme_raid/hdd_data13tb/machine.
+- Gates: `tools/toutes-les-portes.sh`, registry `work/portes/<passe>/registre.txt`; verdict via `awk '$2 != 0'`; known tolerated reds.
+- Budgets: T0 = AGENTS+en-cours+one task doc ≤ 4,000 words; T1 `references-non-regression.md` ≤ 2,500.
+- Git concurrency: shared working tree; avoid `git add -A`; isolated index `GIT_INDEX_FILE=/tmp/index.veille` + `git read-tree HEAD` to dodge `.git/index.lock`.
+- Goals: `goal-01c46f43-f7b7-47b8-95a2-c7d4478f4b5e`, active, round 3/1000, night until 08:00.
+
+## Files and Code
+- `tools/ocr_pdf.py`: added `--liste` (explicit scan worklist), `--ouvriers` (parallel pages, `OMP_THREAD_LIMIT=1`), manifest date fixed; committed.
+- `tools/detecte_scans_pdf.py`: new full-text scan detection + SHA-256 dedup; `--racine`, `--sortie`, `--liste`.
+- `tools/porte-ressources.sh`: new 82nd gate; `--autotest` + `--check`; storage/NUMA warnings non-fatal; green.
+- `tools/ressources.py`: 562-line resource ledger/protocol (autotest 9 cases); untracked initially, committed by hub (`a67dbf00`).
+- `reports/rapport-ocr-cegep.md`: rewritten fiche — 147 scans detected, 91 unique, 60 docs retained, 1,982 p, 4,408,811 chars, splits 53/4/3, 8KB 0 dup (542/2/2), eval 0/40·0/24·0/40; erratum 10 pilot notes = 9 native books + AQPC.
+- `reports/ocr-pdf-cegep.json`: merged manifest (60 docs, 1,982 p, 4,408,811 car, 573 chunks, temps 7,070.5 s, `dispositif.reprise_micropython` 150 dpi/359 p/350,310 car/1,369.5 s).
+- `reports/ocr-pdf-cegep-detection.json`, `reports/ocr-pdf-cegep-contamination.json`: evidence.
+- `work/ocr/`: `scans-uniques.txt` (91), `micro.txt`, `ajoute_micro.py`, `fait_fiche.py`, `cote` logs; `work/veille/nuit.md` = night log.
+- `docs/pilotage/en-cours.md`: central state; currently 1,622 words, 4 sessions, counters **567 fiches / 652 JSON** (disk = 653), “dernière passe 02/11 19 h 32 (81 portes, 76 vertes, 5 rouges ; 4 connues + `porte-tableaux` de passage)”; B13 session/chantier lines say **140/140**, “Ce qui reste” still **138/140**.
+- `docs/pilotage/roadmap.md`: S v4 line current; État paragraph B13 140/140, S **54/55** types/131/131/47/47/gold 55; line 31 next-action still “porte **138/140**”; line 173 next-action “porte 138/140”.
+- `docs/pilotage/chantiers.md`: B13 line set to **138/140** (now stale → 140/140); S line updated to v4.
+- `docs/pilotage/plan-travail.md`: resource policy §10, night plan §10.7; S row/§9.2 updated to v4; B13 row/§9 item 3 still **138/140** (stale → 140/140).
+- `docs/pilotage/references-non-regression.md`: new top pass **02/11 19 h 32, 81 portes, 76 vertes, 5 rouges, 1 h 52**, reds listed; T1 now ≤2,500.
+- `docs/methode/portes.md`: line 17 notes 82nd gate `porte-ressources` (81→82).
+- `journal/sessions/fe3c05f0-.../`: `plan.md` État terminé + Résultat, `cloture.md` (OCR 91 scans/60 docs/1,982 p).
+- `journal/2026-11-02/README.md`: night narrative note at 20 h 10; journal_auto preserves notes.
+- `reports/rapport-n2-fenetre.md`: untracked N2 fiche (21:05) linking missing `n2-fenetre.json` → causes `porte-tableaux` red.
+- `reports/b13-porte-140.*`, `reports/pensee-porte-sto.json`, `pensee-porte-bouge.json`: newest Pensée results.
+
+## Errors and Fixes
+- OCR 2-page detection over-classified **807 candidates / 179,426 p** vs **147 true scans / 2,701 p** (5.5×); fixed by full-text detection + explicit list; 9 of 10 pilot “notes” were native books → erratum, pilot corpus archived at `data/corpus_ocr_cegep_pilote-2pages/`.
+- `pdftoppm` 1800 s timeout on MicroPython 359 p (300 dpi); fixed by reprise at **150 dpi**, merged via `work/ocr/ajoute_micro.py`.
+- `.git/index.lock` “Another git process seems to be running”; resolved by waiting for concurrent commit and using `GIT_INDEX_FILE=/tmp/index.veille` + `git read-tree HEAD`.
+- Repeated T0 over-budget (4,002–4,055): trimmed en-cours; **currently 4,007 > 4,000** again (pending ~10-word trim).
+- T1 over-budget (2,503–2,555): moved 82nd-gate note from references to `portes.md`, compressed historical pass blocks; now passes.
+- Counter drifts: 81→82 gates, 560/647→567/653; en-cours JSON still says 652 vs disk 653 (pending).
+- `sessions.py --check --strict` stale heartbeats: refreshed S/hub/N2 plans; hub then made the gate claim-aware (`b1c0bcda`: long mandate + active claim = warning).
+- `porte-tableaux` red (1 s): missing `reports/n2-fenetre.json` for untracked `reports/rapport-n2-fenetre.md`; classified **rouge de passage**, to recheck after N2 commit (still missing).
+- B13 counts moved 134→138→**140/140** (T132/T133 now 2/5); several docs still say 138/140 (pending).
+
+## Pending Jobs
+- Finish night goal until **08:00** (goal stays active; do not mark complete early).
+- Reconcile remaining **B13 138/140 → 140/140** in `en-cours` “Ce qui reste”, `roadmap` B13 next-action line + line 173, `chantiers` B13 line, `plan-travail` B13 row/§9.
+- Update `en-cours` JSON counter **652 → 653**; trim ~10 words for T0 ≤ 4,000.
+- Commit the reconciliation with isolated index; message noting pass verdict + B13 140/140.
+- Recheck `porte-tableaux` after N2 commits `n2-fenetre.json`; if still missing, coordinate/fix link.
+- Continue light tasks: INDEX/README coverage, journal, archives, schemas, backlog, resource checkpoints; run full pass when `machine` free (next pass counts 82).
+- At 08:00: checkpoint registre/sessions/git/pass, bilan, then close goal.
+
+## Current Work
+- Round 3 of night goal at ~21:26 EST. Gate pass finished: **81 gates, 76 green, 5 red**, 1 h 52; `work/portes/passe-1102-19h32/registre.txt`.
+- References and en-cours “dernière passe” updated for the new pass.
+- Just updated S facts to v4 in `roadmap`, `chantiers`, `plan-travail`.
+- Discovered state now B13 **140/140** (`reports/b13-porte-140.json` verdict true, `rapport-b13-porte-140.md`) while several docs still say 138/140.
+- Current checks: `revue_documentation` 567 fiches / 653 JSON (disk), en-cours says 652; T0 4,007 violation; strict warnings only.
+- Working tree includes my modified `references-non-regression.md`, `en-cours.md`, `roadmap.md`, `chantiers.md`, `plan-travail.md`; other sessions’ in-flight files (`rapport-n2-fenetre.md`, S/Pensée reports/tools) must not be staged.
+
+## Next Step
+- Apply the B13 **140/140** reconciliation in `en-cours`, `roadmap` (both occurrences), `chantiers`, `plan-travail`; set JSON counter to **653**; trim ~10 words for T0; run `revue_documentation.py`, `taille_documents.py`, `sessions.py --check --strict`; commit via `GIT_INDEX_FILE=/tmp/index.veille` (read-tree + explicit add), then resume the night watch.
+
+## Critical Context
+- Current time ~**21:26 EST, 2026-11-02**; night shift until **08:00**.
+- Active sessions: hub `536cd5d6`, N2 `0733c5bb` (night R1.2-1024: PPL val **3.0529**, 1,137 s; claim gpu0), S `29ad180d` (gold **55**, 54/55 types, 131/131 rôles, 47/47 compléments, 47 tests, corpus 55 SHA `76accf9d`), Pensée `e181ce02` (B13 **140/140**, porte minute 26, porte mobile/bouge faibles, DRVM rule). D/R/A `fe3c05f0` closed.
+- Claims: N2 `gpu0`+`cpu0 12`+`ram 60`; hub `gpu1`+`cpu1 8`+`ram 8`; S `cpu1 4`+`ram 8`; Pensée `cpu1 4`+`ram 16`; `cpu1` 16/16, ram 92/109; warnings `nvme_raid` 33/34 GB, hub NUMA (`gpu1`+`cpu1`).
+- Known gate reds: `porte-indice` (1027 s), `porte-melange` (123 s), `porte-homeostasie` (exit 2 environmental), `porte-reparti-moteur` (51 s); `porte-greffe` green; `porte-tableaux` transient.
+- 82nd gate `porte-ressources` added but not in the 19 h 32 pass; next pass = **82**.
+- Do not touch main git index if `MM`/staged files from other sessions; use alternate index. Never commit other sessions’ files. “Un fait = mesure + contrôle + fiche + en-cours + commit (git add explicite).”
+- Budget rules: T0 ≤4,000, T1 ≤2,500; en-cours ≤2,000 words (currently 1,622).
+- Night log at `work/veille/nuit.md`; watcher `bash-266` completed.
+- Key commits: `83f78803` OCR closure, `a67dbf00` resource registry, `9a17d0cc` night plan, `a097f650` night récit, `42db89f6` 82nd gate, `20996b87` counters/T1/S heartbeat, `b1c0bcda` claim-aware sessions gate, `efdbbf40` B13 138, `66826ed5` B13 138 alignment, `35ca1461`/`8eab6a7c` Pensée, `3f74fe83` S corpus réel, `c0196b55` N2 night mandate.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Round 28 : INDEX déjà à jour, état stable
+
+- **`index_reports.py`** : **570 fiches** (le compte de l'INDEX hors README/INDEX/historique ; la revue en compte **573** avec les trois fichiers d'infrastructure) ; la fiche `cascade-vrai` y est, les fiches de fenêtre sont sous leurs noms — **aucun diff**, rien à corriger.
+- **Runs N2** : toujours en cours (1 h 15 et 59 min), GPU occupés et déclarés (claims N2 + veille).
+- **État** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅.
+
+La veille reste en attente active des prochains commits (N2/Pensée/hub) et tiendra le **checkpoint de 8 h** (brouillon prêt). Rien de bloquant.
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 29/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 🤖 Assistant
+
+⏵ Round 29 : veille — événements et runs
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -1; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-60; git status --short | grep -E \"^\\?\\?|^ M\" | wc -l; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Check events and runs"}`
+
+  ```
+23:39:47
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+ 713516    01:17:00 /home/stephane/gpu-env/bin/python work/n
+ 722257    01:00:46 /home/stephane/gpu-env/bin/python work/n
+5
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`
+
+  ```
+23:49:26
+HEAD 16f3eeb0
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+ 713516    01:26:39 /home/stephane/gpu-env/bin/python work/n
+ 722257    01:10:25 /home/stephane/gpu-env/bin/python work/n
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 29 : phase de calcul, aucun commit depuis 23 h 26
+
+- Les **deux runs N2** continuent (1 h 27 et 1 h 10) ; la fiche 500 de Pensée est toujours en cours ; aucun commit depuis `16f3eeb0`.
+- **État stable** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅ (claims N2 + veille ; `nvme_raid` 33 Gio en limite connue).
+
+La veille reste en attente active des prochains commits et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 30/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 30 : veille — événements et runs
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -1; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-60; ls -l reports/pensee-porte-fenetre-500.json 2>/dev/null | awk '{print $5, $6, $7, $8}'; git status --short | grep -E \"^\\?\\?|^ M\" | wc -l", "description": "Che … [20 caractères tronqués]`
+
+  ```
+23:49:58
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+ 713516    01:27:11 /home/stephane/gpu-env/bin/python work/n
+ 722257    01:10:57 /home/stephane/gpu-env/bin/python work/n
+3742 2 nov 22:39
+5
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`
+
+  ```
+23:59:50
+HEAD 16f3eeb0
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+ 713516    01:37:03 /home/stephane/gpu-env/bin/python work/n
+ 758133       05:47 /home/stephane/gpu-env/bin/python work/n
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 00 — les runs N2 s'enchaînent\n\n- `722257` fini ; `758133` démarré (5 min) ; `713516` continue (1 h 37). Pas de commit depuis\n  `16f3eeb0` (23 h 26) ; les sessions sont en calcul long.\n- L'état reste vert (573/660/82) ; les claims N2 couv … [97 caractères tronqués]`
+
+  ```
+00:00:03
+ok
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -2; ls journal/2026-11-03/ 2>/dev/null | head; echo \"--- journal 03/11 head ---\"; head -8 journal/2026-11-03/README.md; echo \"--- état ---\"; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Check the day change and jo … [7 caractères tronqués]`
+
+  ```
+journal · 40 jour(s) · 117 session(s) · 1884 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+README.md
+--- journal 03/11 head ---
+# 2026-11-03 — le bilan de 08 h
+
+> **Nuit du 02/11 → 03/11.** Le hub tient le registre, la passe et l'état ; les quatre sessions
+> (N2, S, Pensée/B13, hub) restent productives jusqu'à 08 h. Ce fichier est le point de reprise
+> du matin : il est rempli au fil de la nuit, puis clos au bilan de 08 h.
+> Retour : [l'index du journal](../README.md) · [l'index des sessions](../README.md#sessions).
+
+## 21 h 49 — l'état de la nuit
+--- état ---
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 30 : minuit passé — le journal du 03/11 est en place, état vert
+
+- **00 h 00** : la journée bascule au **03/11** ; `journal/2026-11-03/README.md` (le point de reprise de 8 h) est en place avec son lien vers l'index des sessions — `verifie_journal` ✅ (40 jours, 1 884 liens).
+- **Runs N2** : `713516` continue (1 h 37), `758133` a démarré (6 min) ; pas de commit depuis `16f3eeb0` (23 h 26) — les sessions sont en calcul long.
+- **État** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅.
+
+La veille continue ; elle note le passage de journée dans `work/veille/nuit.md` et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 36
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 31/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 31 : veille — note de journée et attente des prochains commits
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 02 — la journée du 03/11 est ouverte\n\n- Le jour a basculé : `journal/2026-11-03/README.md` (point de reprise de 8 h) est le journal\n  courant ; `verifie_journal` ✅ (40 jours, 1 884 liens). Le hub le remplira au fil de la nuit.\n- Runs N2  … [249 caractères tronqués]`
+
+  ```
+00:00:41
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+ 713516    01:37:54 /home/stephane/gpu-env/bin/python work/n
+ 758133       06:38 /home/stephane/gpu-env/bin/python work/n
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`

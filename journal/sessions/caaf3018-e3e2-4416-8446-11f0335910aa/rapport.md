@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 7.1 h |
-| Tours | 23 |
-| Messages | 332 |
-| Appels d'outils | 341 |
+| Durée | 7.7 h |
+| Tours | 26 |
+| Messages | 350 |
+| Appels d'outils | 352 |
 | Fichiers touchés | 6 |
-| Commandes | 258 |
+| Commandes | 266 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -69,6 +69,12 @@
 **Tour 22** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 **Tour 23** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 25** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 26** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -457,7 +463,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*79 appels d'outils.* Actions notables :
+*81 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +479,54 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 40 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
-⏵ Nuit calme (Pensée publie, l'état suit). Cadence de 40 min pour économiser le contexte.
+⏵ Fil de nuit à jour ; minuteur armé pour 23 h 45
+
+Nuit en bonne forme : N2 a mesuré la fenêtre (3,2545 → 3,0107 → 2,9950), Pensée a publié la cascade au vrai modèle (POS 0,9415, syntagmes 0,6130, tête 0,7574, acte 1,0 sur 180 phrases), l'état est à **573 fiches / 660 JSON**, `en-cours` et la revue sont verts. Le hub de l'autre processus est en veille (`cpu1` 1 fil) avec un bilan prévu à 08 h ; le mien est consigné dans `work/hub-nuit.md`.
+
+J'attends le minuteur de 23 h 45, puis je reprends la veille en cadence longue.
+
+### Tour 24 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check open questions after window result
+
+**Synthèse produite :**
+
+⏵ 23 h 35 : questions ouvertes à jour (N2 close, R1 « reste 1 024 octets »)
+
+La question **N2** est bien tranchée dans l'état (non : 3,1591 ; 2,5 à 1,3–2,7 M pas). La question **R1** dit encore « reste 1 024 octets » alors que la fenêtre de N2 vient de mesurer **2,9950 à 1 024** — c'est le fait de la nuit, son intégration revient à l'écrivain d'état (je ne touche pas `en-cours` pendant son tour). Rien d'autre à corriger ; j'attends le minuteur de 23 h 45.
+
+### Tour 25 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- job_output
+- bash — Start compact night watch loop
+
+**Synthèse produite :**
+
+⏵ Point de veille 23 h 54 : aucun commit nouveau, état vert
+
+Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f3eeb0` (compteur 573/660), état vert, sessions actives sous claim. Je reprends au prochain point.
+
+### Tour 26 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check S session liveness and work
+- bash — Peek at S current activity in digest
+- bash — Confirm S recent commit
+- bash — Check S process, claim, and strict status
+- job_output
+
+**Synthèse produite :**
+
+⏵ S vit (PID 31786, 7 h 41) : elle travaille sans committer, pas de reprise en main.
 
 ## 3. Travail accompli
 
@@ -534,7 +583,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 218 autres
+- … et 226 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -622,6 +671,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T23** `# porte. On exige donc l'égalité de perplexité à 0,1 % près.`
 - **T23** `# A8.0 — la PPL de référence est épinglée (0,1 %). Le modèle est régénéré par la`
 - **T23** `[still running after 60000ms; moved to background job bash-252]`
+- **T26** `» après un adjectif, en fin de phrase). - **Contrôles** : baseline **94/131** (0,718), règles coupées **96/131** (0,733), rôles mélangés **0,109** [0,00 ; 0,23]. - **Corpus réel** re-mesuré : 65,5 % d`
 
 ## 5. Erreurs rencontrées
 

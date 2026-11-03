@@ -7,15 +7,15 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 7.2 h |
-| Tours | 30 |
-| Messages | 665 |
-| Appels d'outils | 652 |
+| Durée | 7.7 h |
+| Tours | 36 |
+| Messages | 696 |
+| Appels d'outils | 667 |
 | Fichiers touchés | 24 |
-| Commandes | 456 |
+| Commandes | 471 |
 | Sous-agents | 0 |
 | Commits | 33 |
-| Compactages de contexte | 0 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -85,6 +85,18 @@
 **Tour 29** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 30** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 31** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 32** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 33** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 34** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 35** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 36** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -832,6 +844,40 @@ La veille continue : intégration des commits, suivi des runs, puis le **checkpo
 
 ### Tour 30 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
+*3 appels d'outils.* Actions notables :
+
+- bash — Check events and runs
+- bash — Wait for the next commit
+- bash — Verify and log the counter alignment
+
+**Synthèse produite :**
+
+⏵ Round 25 : compteur 573/660 aligné, état vert
+
+- **Hub** : `16f3eeb0` — la **cascade vrai modèle est comptée** : **573 fiches / 660 JSON / 82 portes**, revue ✅, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅.
+- **N2** : les deux runs continuent (1 h 04 et 48 min), GPU occupés et déclarés (claims N2 + veille).
+- **Rien à corriger** : journal ✅, backlog ✅, schémas ✅ ; seul avertissement `nvme_raid` 33 Gio.
+
+La veille reste en attente active des prochains commits (N2/Pensée/hub) et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 31 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Update the 8h bilan with the latest facts
+
+**Synthèse produite :**
+
+⏵ Round 26 : le bilan de 8 h est enrichi des faits de la nuit
+
+- **Bilan 8 h** (`work/veille/bilan-08h.md`) complété : fenêtre **2 048** (gain arrêté à 1 024 ; run long **PPL 2,6609**), **B13 fenêtre** (solvable 331 → FIFO 228 → **non discriminante**), **cascade vrai modèle** (POS **0,9415** / syntagmes **0,6130** / tête **0,7574** / acte **1,0**), compteurs **573/660/82**, **82e porte validée**, leçon de l'**index alterné** et claim `veille`.
+- **N2** : les deux runs continuent (1 h 04 et 48 min) ; les GPU restent occupés et déclarés.
+- **État** : revue ✅, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ — rien à corriger.
+
+La veille continue : intégration des prochains commits et **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 32 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
 *2 appels d'outils.* Actions notables :
 
 - bash — Check events and runs
@@ -839,7 +885,76 @@ La veille continue : intégration des commits, suivi des runs, puis le **checkpo
 
 **Synthèse produite :**
 
-⏵ Round 25 : veille — événements et runs
+⏵ Round 27 : phase de calcul, aucun commit depuis 23 h 26
+
+- Les deux runs N2 continuent (1 h 14 et 58 min) ; la fiche 500 de Pensée est toujours en cours ; aucun commit depuis `16f3eeb0`.
+- **État stable** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅ (claims N2 + veille ; `nvme_raid` 33 Gio en limite connue).
+
+La veille reste en attente active des prochains commits (N2/Pensée/hub) et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 33 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check the reports INDEX freshness
+- bash — Regenerate the reports INDEX
+- bash — Confirm the INDEX is current and log
+
+**Synthèse produite :**
+
+⏵ Round 28 : INDEX déjà à jour, état stable
+
+- **`index_reports.py`** : **570 fiches** (le compte de l'INDEX hors README/INDEX/historique ; la revue en compte **573** avec les trois fichiers d'infrastructure) ; la fiche `cascade-vrai` y est, les fiches de fenêtre sont sous leurs noms — **aucun diff**, rien à corriger.
+- **Runs N2** : toujours en cours (1 h 15 et 59 min), GPU occupés et déclarés (claims N2 + veille).
+- **État** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅.
+
+La veille reste en attente active des prochains commits (N2/Pensée/hub) et tiendra le **checkpoint de 8 h** (brouillon prêt). Rien de bloquant.
+
+### Tour 34 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events and runs
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 29 : phase de calcul, aucun commit depuis 23 h 26
+
+- Les **deux runs N2** continuent (1 h 27 et 1 h 10) ; la fiche 500 de Pensée est toujours en cours ; aucun commit depuis `16f3eeb0`.
+- **État stable** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅ (claims N2 + veille ; `nvme_raid` 33 Gio en limite connue).
+
+La veille reste en attente active des prochains commits et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 35 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check events and runs
+- bash — Wait for the next commit
+- bash — Log the new run and time
+- bash — Check the day change and journal
+
+**Synthèse produite :**
+
+⏵ Round 30 : minuit passé — le journal du 03/11 est en place, état vert
+
+- **00 h 00** : la journée bascule au **03/11** ; `journal/2026-11-03/README.md` (le point de reprise de 8 h) est en place avec son lien vers l'index des sessions — `verifie_journal` ✅ (40 jours, 1 884 liens).
+- **Runs N2** : `713516` continue (1 h 37), `758133` a démarré (6 min) ; pas de commit depuis `16f3eeb0` (23 h 26) — les sessions sont en calcul long.
+- **État** : revue ✅ 573/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅.
+
+La veille continue ; elle note le passage de journée dans `work/veille/nuit.md` et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 36 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Log the day change and check runs
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 31 : veille — note de journée et attente des prochains commits
 
 ## 3. Travail accompli
 
@@ -914,7 +1029,7 @@ La veille continue : intégration des commits, suivi des runs, puis le **checkpo
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 416 autres
+- … et 431 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1042,10 +1157,11 @@ La veille continue : intégration des commits, suivi des runs, puis le **checkpo
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : 19:48 /tmp/ocr-pdf-19jav9ag: 453 page(s) 0 [exit code: 1]
 - **T8** : ## 1. Ce qui se vérifie en une commande  | quoi | commande | attendu | |---|---|---| | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) | | 
+- **T33** : 570 fiches → reports/INDEX.md # Index des fiches de reports/  > **Généré** par `tools/index_reports.py` — **570 fiches**. Les fichiers --- nouvelles fiches --- cascade-vrai: 1 fenetre-2048: 0 non-disc
 
 ## 6. Commits
 

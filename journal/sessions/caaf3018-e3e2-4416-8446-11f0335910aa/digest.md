@@ -6266,3 +6266,227 @@ started background job bash-258
   ```
 
 - **job_output** `{"job_id": "bash-258", "timeout_ms": 615000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+### 🤖 Assistant
+
+⏵ J'arrête le chaînage d'attentes ; le minuteur de 40 min me réveillera à 23 h 45.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; git log --oneline -2; python3 tools/sessions.py --status 2>&1 | grep -cE \"actif\"; ls reports/*.json | wc -l", "description": "Compact status at 23h25"}`
+
+  ```
+23:34
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+8
+660
+  ```
+
+### 🤖 Assistant
+
+⏵ 23 h 34 : la cascade B13 au vrai modèle est publiée. Je consigne les faits de nuit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n\n## 23 h 34 — les faits de la deuxième partie de nuit\n\n- **N2** : fenêtre **256 → 1 024** = **3,2545 → 3,0107 → 2,9950** à 1 000 octets ; la production\n  affinée **bat 200 000 pas** (`4527f661`). N2 … [746 caractères tronqués]`
+
+  ```
+ok
+23:34
+  ```
+
+### 🤖 Assistant
+
+⏵ Fil de nuit à jour ; minuteur armé pour 23 h 45
+
+Nuit en bonne forme : N2 a mesuré la fenêtre (3,2545 → 3,0107 → 2,9950), Pensée a publié la cascade au vrai modèle (POS 0,9415, syntagmes 0,6130, tête 0,7574, acte 1,0 sur 180 phrases), l'état est à **573 fiches / 660 JSON**, `en-cours` et la revue sont verts. Le hub de l'autre processus est en veille (`cpu1` 1 fil) avec un bilan prévu à 08 h ; le mien est consigné dans `work/hub-nuit.md`.
+
+J'attends le minuteur de 23 h 45, puis je reprends la veille en cadence longue.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 20/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point rapide et vérification des questions ouvertes après la fenêtre N2
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; sed -n '/^## Les questions ouvertes/,/^## La carte/p' docs/pilotage/en-cours.md; echo \"--- dernier commit ---\"; git log --oneline -1", "description": "Check open questions after window result"}`
+
+  ```
+23:35
+## Les questions ouvertes
+
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.2** tranche (3,0107 à octets constants) ;
+  reste **1 024 octets**.
+- **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → **non** :
+  3,1591 ; le français tient et la largeur progresse ; 2,5 est à **1,3–2,7 M pas**.
+- **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
+- **B10.3** : chrF **> 39,6** ? → l'attention croisée tranche.
+- **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.
+
+## La carte
+--- dernier commit ---
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+  ```
+
+### 🤖 Assistant
+
+⏵ 23 h 35 : questions ouvertes à jour (N2 close, R1 « reste 1 024 octets »)
+
+La question **N2** est bien tranchée dans l'état (non : 3,1591 ; 2,5 à 1,3–2,7 M pas). La question **R1** dit encore « reste 1 024 octets » alors que la fenêtre de N2 vient de mesurer **2,9950 à 1 024** — c'est le fait de la nuit, son intégration revient à l'écrivain d'état (je ne touche pas `en-cours` pendant son tour). Rien d'autre à corriger ; j'attends le minuteur de 23 h 45.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 21/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ J'attends la fin du minuteur de 40 min (23 h 45)
+
+- **job_output** `{"job_id": "bash-258", "timeout_ms": 600000, "wait": true}`
+
+  ```
+23:44
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+--- sessions ---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 102 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 185 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    ·  74 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 122 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+--- état ---
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je remplace les minuteurs par un **veilleur de nuit** qui émet un point toutes les 10 min (une attente par round).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/veille_nuit.sh <<'EOF'\n#!/bin/bash\n# veille_nuit.sh — un point compact toutes les 10 min, pour la nuit du hub.\ncd \"$(dirname \"$0\")/..\"\nfor i in $(seq 1 60); do\n    sleep 600\n    etat=$(python3 tools/verifie_en_cour … [403 caractères tronqués]`
+
+  ```
+started background job bash-262
+  ```
+
+### 🤖 Assistant
+
+⏵ Veilleur de nuit armé ; j'attends son premier point (toutes les 10 min)
+
+- **job_output** `{"job_id": "bash-262", "timeout_ms": 600000, "wait": true}`
+
+  ```
+23:54 · 16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE ES · actifs=8 ·   ✅ état court, structuré, multi-session
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de veille 23 h 54 : aucun commit nouveau, état vert
+
+Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f3eeb0` (compteur 573/660), état vert, sessions actives sous claim. Je reprends au prochain point.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 22/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ S n'a rien committé depuis 20 h 08 : je vérifie qu'elle travaille encore.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; stat -c '%y' journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md | cut -c12-19; git log -1 --format=\"%h %ad %s\" --date=format:\"%H:%M\" -- tools/structures reports/rapport-s-*.md; echo \"--- plan S ---\"; gre … [284 caractères tronqués]`
+
+  ```
+23:55
+23:25:00
+55dcb1c4 22:10 B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B
+--- plan S ---
+- **Heartbeat** : 2026-11-02 20:40 EST
+- **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;
+  puis la **frontière du GN sans auxiliaire** (h033) et un **gold plus large** (voix, causatives).
+--
+--- proc structures ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -c 1200 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md | tr '\\n' ' ' | cut -c1-700", "description": "Peek at S current activity in digest"}`
+
+  ```
+» après un adjectif, en fin de phrase). - **Contrôles** : baseline **94/131** (0,718), règles coupées **96/131** (0,733), rôles mélangés **0,109** [0,00 ; 0,23]. - **Corpus réel** re-mesuré : 65,5 % de GN+GV sur la littérature propre contre 9,1 % pour le mélange ; 8,5 % sur le CEGEP OCR (plancher, multilingue/technique) ; homographes **1 134/28** (suspects, pas erreurs). - **Banque** : 200 phrases / 355 candidats (SHA `43957a3b…` inchangé) ; **corpus de référence** : 55 lignes, SHA `76accf9d…` ; **47 tests**.  **Committé et poussé**  - Sous-module : **`1445e1d`** (v4) et **`00d2a01`** (manifeste) → `drave-structures`. - Principal : **`69bfddba`** → `origin/master` ; pointeur `tools/structure
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --oneline -5; echo \"---\"; git log -1 --format=\"%h %ad %s\" --date=format:\"%H:%M\" 69bfddba 2>/dev/null; git status --short | grep -v journal | head -4", "description": "Confirm S recent commit"}`
+
+  ```
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+8deac6ce B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)
+---
+69bfddba 20:39 S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)
+ M tools/pensee/store.py
+ M tools/tests/linguistique/qualifier_cascade.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+  ```
+
+### 🤖 Assistant
+
+⏵ S est silencieuse depuis 20 h 39 : je vérifie si son processus vit encore.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for p in $(pgrep -f \"bin/dsh\"); do n=$(ls -l /proc/$p/fd 2>/dev/null | grep -c \"29ad180d\"); [ \"$n\" -gt 0 ] && echo \"PID $p tient S ($n fd) : $(ps -o etime= -p $p --no-headers)\"; done; echo \"--- claims ---\"; python3 tools/ress … [208 caractères tronqués]`
+
+  ```
+PID 31786 tient S (1 fd) :    07:41:27
+--- claims ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+--- strict ---
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (196 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (85 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (133 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+### 🤖 Assistant
+
+⏵ S vit (PID 31786, 7 h 41) : elle travaille sans committer, pas de reprise en main.
+
+- **job_output** `{"job_id": "bash-262", "timeout_ms": 600000, "wait": true}`

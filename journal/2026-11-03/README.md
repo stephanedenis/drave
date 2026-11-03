@@ -1,5 +1,28 @@
-# 2026-11-03 — le bilan de 08 h
+# 2026-11-03
 
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-03/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**0 commits** · **3 session(s)** · **0 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 7.8 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 8.5 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 7.8 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
 > **Nuit du 02/11 → 03/11.** Le hub tient le registre, la passe et l'état ; les quatre sessions
 > (N2, S, Pensée/B13, hub) restent productives jusqu'à 08 h. Ce fichier est le point de reprise
 > du matin : il est rempli au fil de la nuit, puis clos au bilan de 08 h.
@@ -33,3 +56,4 @@ Index des sessions : [journal](../README.md#sessions).
 4. **Documentation** : `revue_documentation.py` ; `taille_documents.py` ; `verifie_journal.py`.
 5. **Git** : `git log --oneline --since="2026-11-02 16:00"` ; `git status --short`.
 6. **Remplir** : les quatre sessions (fini/reste), les claims réels, le verdict de la passe, le JSON N2, le README/INDEX, ce qui attend l'humain (validation S, porte B13, gold).
+<!-- /notes -->
