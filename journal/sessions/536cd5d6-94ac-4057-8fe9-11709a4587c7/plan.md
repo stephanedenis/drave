@@ -14,10 +14,9 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-02 20:39 EST
-- **Prochaine action** : la **passe complète** (`work/portes/passe-1102-19h32`, à
-  `porte-indice`, 10 min, rouge connue) ; à son verdict, **intégrer les lignes B13/N2/S**, le
-  registre et l'INDEX ; puis **bilan 08 h**.
+- **Heartbeat** : 2026-11-02 21:43 EST
+- **Prochaine action** : la passe est **finie** (76/5, intégrée), le README/INDEX sont à jour ;
+  la **veille** des quatre sessions et le **bilan 08 h**.
 - **Ressources** : `gpu1`, `cpu1` 8 fils, `ram` 8 Gio ; registre `work/ressources.json`.
 - **Nuit** : consigne `plan-travail` § 10.7 ; quatre sessions productives ; bilan 08 h.
 - **État** : actif

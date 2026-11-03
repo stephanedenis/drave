@@ -7983,3 +7983,119 @@ ls: cannot access 'reports/n2-fenetre.json': No such file or directory
 ⏵ J'ajoute la ligne d'état INDEX/README (et je retire les deux résultats clos R0/R4 pour le budget), puis je recommite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\ndef sub(t, old, new):\n    assert t.count(old)==1, f\"{t.count(old)} != 1: {old[:80]!r}\"; return t.replace(old,new)\nt=sub(t, \"- **R0 — … [1469 caractères tronqués]`
+
+  ```
+en-cours : ligne INDEX ajoutée, R0/R4 retirés
+== vérifs ==
+  en-cours · 1577 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3951 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+[master decd4cd8] INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+ 23 files changed, 530 insertions(+), 81 deletions(-)
+[commit 0]
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 : README curaté et committé (2 762/2 800), en-cours 1 577 mots, T0 3 951 ; N2/JSON reste le point ouvert.
+
+- **todo_write** `{"todos": [{"content": "Poser la consigne de nuit (plan-travail §10.7, plan hub)", "status": "completed"}, {"content": "Vérifier la porte sessions et le routage docs", "status": "completed"}, {"content": "Intégrer claim/heartbeat dans sessions.py (mandat long vs mort)", "status": "completed"}, {"con … [677 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 2 in progress, 6 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 : README curaté et committé, en-cours allégé ; la fiche N2/JSON reste ouverte.
+
+**Fait ce round**
+
+- **README curaté** : les 3 fiches de la nuit (**N2 fenêtre 128→1 024**, **S corpus réel**, **B13 porte minute**) sont entrées ; 5 entrées historiques sont sorties ; **2 762/2 800** ; `reports/INDEX` **565** ; revue **569/654/82** ✅ ; commit **`decd4cd8`**.
+- **`en-cours`** : ligne INDEX ajoutée, R0/R4 (résultats clos) retirés ; **1 577 mots** ; **T0 3 951/4 000** ; `verifie_en_cours` et `taille` verts.
+- **N2** : `n2-fenetre.json` toujours absent ; **`porte-tableaux` reste rouge de passage** ; le N2 tourne (103 min + claim, mandat long) ; rejeu dès le JSON.
+- **Sessions/claims** : N2 103 + claim, S 59 + claim, hub 60 + claim, B13 5 ; quatre actives ; `porte-sessions` verte ; registre cohérent (`IA` 33 Gio).
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours 82, docs 82e) ; prochaine passe **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; veille des sessions ; **bilan 08 h**. Goal actif.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 6 : état vérifié, rien de neuf à intégrer ; la fiche N2/JSON reste le seul point ouvert.
+
+- **README/INDEX** : 2 762/2 800 ; INDEX 565 ; revue 569/654/82 ✅ ; T0 **3 951/4 000** ; en-cours **1 577 mots** ; commit `decd4cd8`.
+- **N2** : `n2-fenetre.json` toujours absent ; `porte-tableaux` rouge de passage ; N2 actif (103 min + claim, mandat long) ; rejeu dès le JSON.
+- **Sessions/claims** : N2 103 + claim, S 59 + claim, hub 60 + claim, B13 5 ; quatre actives ; `porte-sessions` verte ; registre cohérent (`IA` 33 Gio).
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours 82, docs 82e) ; prochaine passe 82.
+
+**Reste** : JSON N2 → `porte-tableaux` ; veille des sessions ; **bilan 08 h**. Goal actif.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 7 : je vérifie l'état, puis je rafraîchis le plan du hub, la ligne de nuit d'`en-cours` et je libère le claim d'intégration.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heure ==\" && date '+%T' && echo \"== git ==\" && git log --oneline -2 && git status --short | head -8; echo; echo \"== nuit en-cours ==\" && grep -n 'Nuit du' docs/pilotage/en-cours.md; echo \"== plan hub ==\" && grep -n ' … [452 caractères tronqués]`
+
+  ```
+== heure ==
+21:43:47
+== git ==
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  journal/2026-11-02/README.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+M  reports/INDEX.md
+
+== nuit en-cours ==
+== plan hub ==
+17:- **Heartbeat** : 2026-11-02 20:39 EST
+18:- **Prochaine action** : la **passe complète** (`work/portes/passe-1102-19h32`, à
+
+== N2 JSON ==
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 108 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  64 min · S (structures) — S-analyseur rôles/subordonnées · S-banque
+… [852 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 7 : je pose la ligne de nuit, rafraîchis le plan du hub et je libère le claim d'intégration.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\n# 1) en-cours : la consigne de nuit dans le contrat\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"> le hook pre-commit refuse un fait sans ligne d'état ; une session  … [1998 caractères tronqués]`

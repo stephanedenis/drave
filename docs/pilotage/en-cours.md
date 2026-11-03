@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 21 h 43 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 21 h 58 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -15,6 +15,8 @@
 > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
 > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
 > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+>
+> **Nuit du 02/11 → 03/11 (08 h)** : les quatre sessions restent productives ; claims dans `work/ressources.json` ; à la fin d'un job, `--release` puis `--claim` du suivant ; si une action attend l'humain, prendre la ligne suivante. Le hub suit la passe et fera le bilan à 08 h.
 
 ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
 
@@ -56,9 +58,10 @@
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
 - **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** ;
-  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde), le labyrinthe 0/1 ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — l'oracle/le 7B échouent (problème à réparer) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
   [B13](../../reports/rapport-b13-porte-140.md), [sto](../../reports/rapport-pensee-porte-sto.md),
   [sto 5/5](../../reports/rapport-pensee-porte-sto-graines.md),
+  [fenêtre](../../reports/rapport-pensee-porte-fenetre.md),
   [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
 - **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
@@ -105,7 +108,7 @@
 |---|---|---|
 | portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **569** / **654** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **570** / **655** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` de passage) | `docs/pilotage/references-non-regression.md` |
 
@@ -117,7 +120,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 140/140 ; sto 5/5 ; mobile/bouge faibles** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 140/140 ; sto 5/5 ; fenêtre à réparer** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.2-1024 en cours** (GPU 0) ; N4 0/4 ; N5 gelé | **N2** : R1.2-1024, fiche ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |

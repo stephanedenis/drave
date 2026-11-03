@@ -12555,3 +12555,147 @@ started background job bash-444
 ⏵ J'attends la mesure de la fenêtre (le JSON remplira la fiche)
 
 - **job_output** `{"job_id": "bash-444", "timeout_ms": 420000, "wait": true}`
+
+  ```
+{"status":"ok"}   271.0,
+   65,
+   1,
+   65,
+   0.0,
+   0
+  ],
+  "aveugle": [
+   false,
+   200,
+   268.0,
+   65,
+   0,
+   65,
+   0.0,
+   0
+  ],
+  "hasard": [
+   false,
+   200,
+   312.0,
+   61,
+   12,
+   61,
+   0.0,
+   0
+  ],
+  "llm_porte_fenetre": [
+   false,
+   200,
+   396.0,
+   53,
+   35,
+   54,
+   97.277,
+   0
+  ],
+  "llm_labyrinthe": [
+   false,
+   200,
+   275.0,
+   64,
+   2,
+   65,
+   36.081,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-porte-fenetre.json
+[stderr]
+
+real	2m13,746s
+user	0m0,451s
+sys	0m0,038s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La fenêtre est **dure** : le 7B échoue (200 nœuds, 35 sonde), le labyrinthe/aveugle/hasard aussi ; l'oracle passe (65 appels, 1 sonde). J'extrais le bilan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-porte-fenetre.json'))\nprint('date',d['date'],'verdict',d['verdict'])\nprint('seuils',json.dumps(d['seuils'],indent=1))\nfor k,v in d['mesures'].items():\n    print(f\"{k:18} but {v['but' … [230 caractères tronqués]`
+
+  ```
+date 2026-11-02 21:42 EST verdict False
+seuils {
+ "oracle_but": false,
+ "oracle_sonde": true,
+ "aveugle_non": true,
+ "hasard_non": true,
+ "llm_but": false,
+ "llm_sonde": true,
+ "labyrinthe_non": true,
+ "aucune_erreur_llm": true,
+ "latence_mesuree": true
+}
+oracle             but False n 200 c 271.0 app 65 sonde 1 attendre 65 lat 0.0 err 0
+aveugle            but False n 200 c 268.0 app 65 sonde 0 attendre 65 lat 0.0 err 0
+hasard             but False n 200 c 312.0 app 61 sonde 12 attendre 61 lat 0.0 err 0
+llm_porte_fenetre  but False n 200 c 396.0 app 53 sonde 35 attendre 54 lat 97.277 err 0
+llm_labyrinthe     but False n 200 c 275.0 app 64 sonde 2 attendre 65 lat 36.081 err 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche « fenêtre » : l'oracle lui-même échoue (200/1) ; le 7B aussi (200/35) ; le problème est à réparer
+
+- **write** `{"content": "# B13 — la fenêtre : l'oracle lui-même échoue (200 nœuds, 1 sonde) ; le 7B aussi (200/35) ; le problème est à réparer\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·\n> **Verdict** : ❌ **la fenêtre n'est pas un test valide** — l'**oracle** (Manhattan) lu … [4624 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-fenetre.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 625d536f..97931769 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -60,9 +60,11 @@
+ - **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
+   ne se rejoue pas), gold **432** ; **gold neuronal** POS/syntagmes, cascade
+   **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27 (règle), labyrinthe 2 sonde ;
++  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
+   **pragmatique** dev 1,0, test 0,6375 (majoritaire 0,7556) ; l'heuristique garde ;
+-  [B13](../../reports/rapport-b13-porte-134.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
+-- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique et porte B13** mesurés ; reprise **16 h 16**.
++  [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
++  [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
++- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, porte B13 et minute** mesurés ; reprise **16 h 16**.
+ - **Ce que font les autres** : **N2**, **S**, **D/
+… [3958 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique l'état « fenêtre : problème cassé (oracle échoue) », puis contrôle et commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, time, re\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-porte-sto-graines.md`](rapport-pensee-porte-sto-graines.md) | **B13** **5/5** |\",\n            \"| [`ra … [2729 caractères tronqués]`
+
+  ```
+ok
+  567 fiches → reports/INDEX.md
+EN-COURS: 1585
+  T0 max : 3959 mots (budget 4 000)
+  en-cours · 1585 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 570 fiche(s) · 655 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 3 959, revue 570/655 ; je commite le fait « fenêtre à réparer »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git reset -q; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_fenetre_drvm.py reports/rapport-pensee-porte-fenetre.md reports/pensee-porte-fenetre.json reports/README.md reports/INDEX.md docs/pilotag … [449 caractères tronqués]`

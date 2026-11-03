@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.4 h |
 | Tours | 13 |
-| Messages | 521 |
-| Appels d'outils | 544 |
+| Messages | 525 |
+| Appels d'outils | 548 |
 | Fichiers touchés | 23 |
-| Commandes | 359 |
+| Commandes | 363 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 0 |
@@ -415,12 +415,16 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 
 ### Tour 13 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check new commits, N2 fiche and runs
 - bash — Wait for a session commit or the N2 JSON
 - bash — Check state after the sto graines commit
 - bash — Wait for the next session event
+- bash — Verify state after the INDEX commit
+- bash — Identify the new JSON and counter state
+- bash — Wait for the Pensée fenêtre fiche/commit
+- bash — Wait for the Pensée commit and check counters
 
 **Synthèse produite :**
 
@@ -498,7 +502,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 319 autres
+- … et 323 autres
 
 ## 4. Mesures et résultats marquants
 

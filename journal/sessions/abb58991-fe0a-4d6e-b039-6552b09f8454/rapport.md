@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.4 h |
+| Durée | 5.5 h |
 | Tours | 15 |
-| Messages | 507 |
-| Appels d'outils | 606 |
-| Fichiers touchés | 46 |
-| Commandes | 444 |
+| Messages | 513 |
+| Appels d'outils | 612 |
+| Fichiers touchés | 47 |
+| Commandes | 449 |
 | Sous-agents | 0 |
-| Commits | 20 |
+| Commits | 23 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -631,16 +631,22 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 
 ### Tour 15 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Add porte_fenetre prompt and test
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py`
 - bash — Run window door qualification
 - job_output
+- bash — Extract window results
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-fenetre.md`
+- bash — Apply window state and checks
+- bash — Commit window problem fact
+- bash — Wait and retry window commit
+- bash — Wait for hub commit and retry window commit
 
 **Synthèse produite :**
 
-⏵ J'attends la mesure de la fenêtre (le JSON remplira la fiche)
+⏵ Le hub commite l'en-cours/le plan/l'INDEX ; j'attends sa libération et je reprends
 
 ## 3. Travail accompli
 
@@ -694,6 +700,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_graines.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto-graines.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-fenetre.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -737,7 +744,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 404 autres
+- … et 409 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -855,4 +862,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

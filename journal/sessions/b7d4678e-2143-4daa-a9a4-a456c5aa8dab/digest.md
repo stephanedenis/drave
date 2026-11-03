@@ -8578,3 +8578,49 @@ c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABY
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 30); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; [ -f reports/n2-fenetre.json ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ls -l reports/n2-fenetre.json … [192 caractères tronqués]`
+
+  ```
+21:42:21
+HEAD decd4cd8
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+json absent
+ 383833    01:25:43 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+ 490049       48:14 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -1; git log --oneline -1", "description": "Verify state after the INDEX commit" … [1 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 654 JSON, le disque en a 655
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (63 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+  ```
+
+- **bash** `{"command": "ls -lt reports/*.json | head -3; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; git status --short docs/pilotage/en-cours.md", "description": "Identify the new JSON and counter state"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane    3723  2 nov 21:42 reports/pensee-porte-fenetre.json
+-rw-r--r--. 1 stephane stephane    2290  2 nov 21:33 reports/pensee-porte-sto-graines.json
+-rw-r--r--. 1 stephane stephane    3648  2 nov 21:25 reports/pensee-porte-sto.json
+108:| fichiers / JSON de résultats | **569** / **654** | `reports/*.md` / `reports/*.json` |
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 20); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; [ -f reports/rapport-pensee-porte-fenetre.md ] && break; done; date \"+%H:%M:%S\"; git log --oneline -2; ls -l reports/rapport-pensee-porte-fenetre.md reports/pens … [167 caractères tronqués]`
+
+  ```
+21:43:12
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+-rw-r--r--. 1 stephane stephane 3723  2 nov 21:42 reports/pensee-porte-fenetre.json
+-rw-------. 1 stephane stephane 4845  2 nov 21:42 reports/rapport-pensee-porte-fenetre.md
+570
+655
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 24); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; git log --oneline -2; echo \"--- compteurs ---\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 tools/revue_documentatio … [106 caractères tronqués]`
