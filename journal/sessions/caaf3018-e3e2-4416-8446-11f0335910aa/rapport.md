@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 19.1 h |
 | Tours | 31 |
-| Messages | 545 |
-| Appels d'outils | 539 |
+| Messages | 550 |
+| Appels d'outils | 544 |
 | Fichiers touchés | 6 |
-| Commandes | 389 |
+| Commandes | 393 |
 | Sous-agents | 0 |
-| Commits | 23 |
+| Commits | 24 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -689,7 +689,7 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 
 ### Tour 31 — la clé est dans le fichier. une session travaille déjà avec le professeur, vérifie ce que tu peux faire sans conflits av … [22 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Locate API key file without exposing it
 - bash — Inventory active professor session and repo
@@ -699,10 +699,15 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - bash — Document concrete key file path
 - bash — Check N2 commit and stale key line
 - bash — Wait for N2 commit to complete
+- bash — Check state after N2 commit
+- bash — Fix key line and JSON counter
+- bash — Commit key availability and documentation
+- bash — Wait for lock and check my files
+- job_output
 
 **Synthèse produite :**
 
-⏵ Le commit N2 est en cours ; j'attends qu'il passe avant de committer ma doc et de corriger l'état.
+⏵ Verrou git (Pensée committe probablement son résultat API). J'attends et je recommite.
 
 ## 3. Travail accompli
 
@@ -759,7 +764,7 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 349 autres
+- … et 353 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -917,6 +922,7 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/methode/portes.md"); t = p.read_text(encoding="utf-8"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-r11.txt <<'EOF' ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE  Les serveurs
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -F work/msg-r11.txt -- docs/pilotage/en-cours.md 2>&1 | tail -4
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 

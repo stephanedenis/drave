@@ -19,7 +19,7 @@
 > **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
 > `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
 > DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
-> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API absente** (à fournir).
+> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API fournie** (`~/.config/drave/deepseek.key`).
 >
 > **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`
 > rejouée verte) ; **82e `porte-ressources`** validée. **N2 et S en pause** (00 h 25 / 20 h 40 ;
@@ -116,7 +116,7 @@
 |---|---|---|
 | portes | **82** (passe du **03/11 04 h 10** : **82, 77/5**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **587** / **676** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **587** / **677** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` **rejouée verte** après la pause N2/S) | `docs/pilotage/references-non-regression.md` |
 

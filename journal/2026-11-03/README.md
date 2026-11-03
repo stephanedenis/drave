@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**48 commits** · **6 session(s)** · **8 thème(s)**
+**49 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| attention | 1 | [attention.md](attention.md) |
+| attention | 2 | [attention.md](attention.md) |
 | distribue | 15 | [distribue.md](distribue.md) |
 | docs | 16 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
@@ -83,6 +83,7 @@
 | 09:20 | `dcbc8b0b` | ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE |
 | 09:23 | `e15618d6` | ÉTAT + JOURNAL — LA RÈGLE 11 A UN BLOCAGE NOMMÉ : LA CLÉ API DEEPSEEK EST ABSENTE |
 | 09:46 | `da2bfc8f` | PORTE HOMEOSTASIE — ELLE RÉGÉNÈRE SON LORA AU LIEU D'ÉCHOUER (VERTE, 10 MIN 07) |
+| 11:22 | `e1c1064d` | NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -196,4 +197,12 @@ plus rafraîchi. GPU au repos.
 - Coût assumé : ~10 min par passe quand le LoRA manque (elle échouait en 0 s avant). Après
   `reparti-moteur`, c'est la **2e rouge connue** retirée : les passes suivantes compteront
   **2 rouges** (`indice`, `melange`).
+
+## 11 h 25 — la clé du professeur est fournie
+
+- Elle est dans **`~/.config/drave/deepseek.key`** (0600, écrite à 11 h 15) ; vérifiée : ping
+  `deepseek-flash` → **OK**. Une session l'utilise déjà : `DEEPSEEK_KEY_FILE=… qualifier_porte_minute_drvm.py`
+  (sortie `reports/pensee-porte-minute-api.json`).
+- L'état ne dit plus « clé API absente » ; la méthode ([`ressources.md`](../../docs/methode/ressources.md))
+  nomme le fichier et la variable. Les professeurs sont débloqués, sur l'API uniquement.
 <!-- /notes -->

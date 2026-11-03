@@ -9467,3 +9467,169 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 
 la clé est dans le fichier. une session travaille déjà avec le professeur, vérifie ce que tu peux faire sans conflits avec les autres sessions
 
+### 🤖 Assistant
+
+⏵ Je cherche le fichier de clé (sans l'afficher), je vérifie l'API, puis j'inventorie la session qui travaille avec le professeur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== variables ===\"; env | grep -iE \"deepseek|dsh_key|key_file\" | sed 's/=.*/=<masqué>/' ; echo \"=== fichiers candidats ===\"; ls -la ~/.config/drave* ~/.deepseek* ~/.dsh* /etc/drave* 2>/dev/null | head; find /home/stephane - … [242 caractères tronqués]`
+
+  ```
+=== variables ===
+=== fichiers candidats ===
+/home/stephane/.config/drave:
+total 4
+drwx------. 1 stephane stephane   24  3 nov 11:15 .
+drwx------. 1 stephane stephane 2642  3 nov 11:15 ..
+-rw-------. 1 stephane stephane   36  3 nov 11:15 deepseek.key
+
+/home/stephane/.dsh:
+total 16
+drwx------. 1 stephane stephane  292  2 nov 15:07 .
+drwx--x---+ 1 stephane stephane 2102  2 nov 15:31 ..
+/home/stephane/.config/drave/deepseek.key
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== sessions ===\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|pause\" | head -6; echo \"=== professeur en cours ===\"; pgrep -af \"enseignant|deepseek|llm/\" | grep -v pgrep | head -5; echo \"=== git … [140 caractères tronqués]`
+
+  ```
+11:22
+=== sessions ===
+    0733c5bb-f90b-4f58 · en pause ·   0 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    29ad180d-38a5-4481 · en pause · 882 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 147 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+      → le **bilan de 08 h** est écrit et committé ; **N2 et S en pause**, **Pensée active** ; la 5e rouge (`porte-sessions`) est close par la pause ; la **validation de la banque S est reportée**. Journée : suivre Pensée, préparer la reprise de N2/S, tenir l'état.
+  ⏰ e181ce02-cd50-488a · actif    · 819 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (147 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+=== professeur en cours ===
+1756640 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 90; DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/t
+… [684 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clé trouvée (`~/.config/drave/deepseek.key`, 0600) et **Pensée l'utilise déjà** pour la porte minute via l'API. Je vérifie l'API et l'état machine.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; stat -c '%a %s %y %n' /home/stephane/.config/drave/deepseek.key | cut -c1-40; echo \"=== CLI ===\"; python3 tools/llm/deepseek.py --help 2>&1 | grep -E \"prompt|json|modele|endpoint\" | head -5; echo \"=== ping (sans afficher la clé) = … [237 caractères tronqués]`
+
+  ```
+600 36 2026-11-03 11:15:29.725613644 -05
+=== CLI ===
+usage: deepseek.py [-h] [--prompt PROMPT] [--system SYSTEM]
+                   [--messages MESSAGES] [--modele MODELE]
+                   [--max-tokens MAX_TOKENS] [--dry-run] [--no-cache] [--json]
+  --prompt PROMPT
+  --messages MESSAGES   JSON d'une liste de messages (prioritaire sur prompt)
+=== ping (sans afficher la clé) ===
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; uptime | cut -c1-45; pgrep -af \"toutes-les-portes|porte-\" | grep -v pgrep | head -3; echo \"=== en-cours : clé ===\"; grep -n \"clé API\\|API absente\\|c … [96 caractères tronqués]`
+
+  ```
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+ 11:22:49  up 20:15,  2 users,  load average:
+1756640 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 90; DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint https://api.deepseek.com --modele deepseek-flash --sortie reports/pensee-porte-minute-api.json 2>&1 | tail -20
+1757055 bash -c cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null; python3 -c " import pathlib,re,datetime p=pathlib.Path('journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md') t=p.read_text(); t=re.sub(r'- \*\*Heartbeat\*\* : .*','- **Heartbeat** : '+datetime.datetime.now().strftime('%Y-%m-%d %H:%M')+' HAE',t); p.write_text(t)"; git add reports/rapport-n2-porte-propre.md reports/n2-porte-propre.json reports/rapport-n2-production-fenetre.md reports/n2-production-fenetre.json reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json reports/n2-capacite-fenetre.json reports/rapport-n2-fenetre.md docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md journal/sess
+… [3113 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'API répond « OK ». N2 vient de reprendre et committe ; Pensée utilise l'API. Je documente la clé (méthode) en attendant le commit, sans toucher à leurs fichiers.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 88,100p docs/methode/ressources.md", "description": "Read DeepSeek section of resources method doc"}`
+
+  ```
+- Ne t'arrête pas parce qu'une échéance est passée : *le temps imparti est un plancher, pas un plafond*
+  ([`mission.md`](mission.md)).
+
+## Les GPU et les professeurs
+
+Les deux GPU sont **exclusivement réservés à Drave** et à ses tâches d'apprentissage. Les **professeurs**
+(annotation, distillation, corpus) passent par l'**API DeepSeek en ligne** — `tools/llm/enseignant.py`
+et `tools/llm/deepseek.py` ; la clé vient de `DEEPSEEK_API_KEY` ou `DEEPSEEK_KEY_FILE`. Aucun serveur
+local (`llama-server`, `ollama`) ne doit tourner : `hauru-gpu-guard` (timer 30 s) les arrête, et
+`porte-ressources` échoue si l'un occupe un GPU.
+
+## Ce qui reste à l'humain
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/methode/ressources.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"(annotation, distillation, corpus) passent par l'**API DeepSeek en ligne** — `tools/llm/enseignant.py`\n … [1177 caractères tronqués]`
+
+  ```
+ressources.md : clé documentée
+     · compteurs : en-cours.md dit 676 JSON, le disque en a 677
+  T0 max : 3999 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit N2 est-il passé ? Je regarde l'état pour corriger la ligne « clé absente », devenue fausse.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; git log --oneline -2; git status --short | grep -v journal | head -6; echo \"=== en-cours clé ===\"; grep -n \"clé API\" docs/pilotage/en-cours.md", "description": "Check N2 commit and stale key line"}`
+
+  ```
+11:23
+da2bfc8f PORTE HOMEOSTASIE — ELLE RÉGÉNÈRE SON LORA AU LIEU D'ÉCHOUER (VERTE, 10 MIN 07)
+e15618d6 ÉTAT + JOURNAL — LA RÈGLE 11 A UN BLOCAGE NOMMÉ : LA CLÉ API DEEPSEEK EST ABSENTE
+ M docs/methode/ressources.md
+M  docs/pilotage/en-cours.md
+A  reports/n2-capacite-fenetre.json
+M  reports/n2-production-fenetre.json
+M  reports/rapport-n2-production-fenetre.md
+M  reports/rapport-n2-r12-2048.md
+=== en-cours clé ===
+22:> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API absente** (à fournir).
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit N2 est en cours ; j'attends qu'il passe avant de committer ma doc et de corriger l'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 15); do [ -e .git/index.lock ] || break; sleep 8; done; date +%H:%M; [ -e .git/index.lock ] && echo \"lock encore\" || echo \"lock libre\"; git log --oneline -2", "description": "Wait for N2 commit to complete"}`
+
+  ```
+11:23
+lock libre
+e1c1064d NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS
+da2bfc8f PORTE HOMEOSTASIE — ELLE RÉGÉNÈRE SON LORA AU LIEU D'ÉCHOUER (VERTE, 10 MIN 07)
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 a committé : **sous 2,5 au grand corpus** (2,4759 / 2,4373). Je corrige la ligne « clé absente » et les compteurs, puis je commite ma doc.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"clé API\\|fichiers / JSON\" docs/pilotage/en-cours.md; echo \"disque: $(ls reports/*.md | wc -l) fiches, $(ls reports/*.json | wc -l) JSON\"; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Check state a … [16 caractères tronqués]`
+
+  ```
+22:> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API absente** (à fournir).
+119:| fichiers / JSON de résultats | **587** / **676** | `reports/*.md` / `reports/*.json` |
+disque: 587 fiches, 677 JSON
+     · compteurs : en-cours.md dit 676 JSON, le disque en a 677
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"les GPU sont réservés à Drave ; **clé API absente** (à fournir).\",\n \"les GPU sont réservés à Drave  … [565 caractères tronqués]`
+
+  ```
+en-cours : clé fournie + compteur 677
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3998 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 11 h 25 — la clé du professeur est fournie\n\n- Elle est dans **`~/.config/drave/deepseek.key … [1356 caractères tronqués]`
+
+  ```
+journal : clé fournie consignée
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Verrou git (Pensée committe probablement son résultat API). J'attends et je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 15); do [ -e .git/index.lock ] || break; sleep 8; done; date +%H:%M; [ -e .git/index.lock ] && echo \"lock encore\" || echo \"lock libre\"; git log --oneline -2; git status --short docs/pilotage/en-cours.md docs/method … [97 caractères tronqués]`

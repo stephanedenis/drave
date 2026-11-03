@@ -9,10 +9,10 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 19.8 h |
 | Tours | 76 |
-| Messages | 543 |
-| Appels d'outils | 480 |
+| Messages | 544 |
+| Appels d'outils | 481 |
 | Fichiers touchés | 16 |
-| Commandes | 351 |
+| Commandes | 352 |
 | Sous-agents | 0 |
 | Commits | 42 |
 | Compactages de contexte | 2 |
@@ -2029,7 +2029,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 
 ### Tour 76 — elancer les mesures B13 via l'API tout de suite
 
-*12 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gold and minute measurement scripts
 - bash — Read B13 measure CLI options
@@ -2040,10 +2040,11 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - bash — Patch measures for API mode and rerun politique
 - bash — Rerun porte-minute measure via API after patch
 - bash — Compare 7B and API B13 measure results
+- bash — Reproduce exact model call from measures
 
 **Synthèse produite :**
 
-⏵ Les deux mesures ont tourné via l'API et écrit leurs JSON ; je compare aux résultats du 7B local.
+⏵ Les JSON API montrent **96 erreurs sur 96 appels** : le pas unitaire marchait, donc quelque chose diffère dans les mesureurs. Je reproduis l'appel exact.
 
 ## 3. Travail accompli
 
@@ -2110,7 +2111,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 311 autres
+- … et 312 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -63,3 +63,39 @@
   `work/n2ac/` — le GPU 0 et le GPU 1 sont **libres**.
 - **Portes** : revue de documentation **verte** aux deux commits (560 fiches / 647 JSON) ; journal,
   en-cours et schémas verts ; la passe complète des 81 portes reste au hub (1 h 46).
+
+---
+
+## Nuit du 02/11 au 03/11 — la fenêtre, de 128 à 2 048, et la production
+
+**Ce qui a été livré** (fiches `rapport-n2-fenetre`, `rapport-n2-r12-2048`,
+`rapport-n2-production-fenetre`, `rapport-n2-porte-propre` ; agrégats `n2-fenetre.json`,
+`n2-r12-2048.json`, `n2-production-fenetre.json`, `n2-porte-propre.json`,
+`n2-capacite-fenetre.json`) :
+
+- **La loi de la fenêtre** à octets constants (20,5 Mo) : à 1 000 octets, 3,2545 (fenêtre 256) →
+  3,0107 (512) → **2,9950** (1 024) → 3,0202 (2 048) ; le **point d'équilibre est 1 024** à ce
+  budget, et il **se déplace avec le budget** (à 246 Mo, 2 048 donne 2,5114 à 4 000 octets).
+- **Le contrôle « même texte »** : chaque modèle sature **exactement à sa fenêtre** — 256 :
+  3,0663 → 3,1411 (il se dégrade au-delà) ; 512 : 2,9068 → 2,8076 ; 1 024 : 2,9197 → 2,7837 ;
+  production 1 024 : 2,7401 → 2,5846. La fenêtre est la borne, et elle est utilisée jusqu'au
+  dernier octet.
+- **La production** : N2.ac affiné avec RoPE et une fenêtre entraînée **écrase** N2.ac et le run
+  de 200 000 pas ; poussé à 30 000 pas (307 Mo), il donne **2,9943** en domaine, **2,6143** à
+  1 000 et passe **sous 2,5** sur la validation du grand corpus (2,4759 / 2,4373). Contrôle depuis
+  zéro : la **fenêtre fait la longueur**, l'**initialisation fait le niveau** (−0,16).
+- **La porte < 2,5 sur le corpus propre** : non atteinte (**2,7856** val, 0,29 manquant), mais la
+  fenêtre est le **seul bras descendant** (2,9726 → 2,7856 quand la fenêtre 128 fait 2,9027 →
+  3,1107), et les deux bras battent la chaîne honnête de N2.h.
+- **La capacité** : la fenêtre paie **à 11,47 M comme à 21,65 M** (−2,7 à 512 octets) — elle n'est
+  pas un luxe de gros modèle.
+- **Le miroir de copie reste muet** (0,0078) et **le coût d'inférence ne quadruple pas** (22 306 →
+  19 405 octets/s de 256 à 2 048, −13 %).
+
+**Commits** : `4527f661` (chiffre de la fenêtre), `c7ef9bc4` (fenêtre 2 048 et point d'équilibre),
+**`e1c1064d`** (la nuit : production, porte propre, capacité). Le précédent cycle : `2cff8dba`,
+`e12c39c1`, `e2227509`.
+
+**Ce qui reste** : la porte propre demande de la **capacité** (le corpus de 3,24 Mo est épuisé) ;
+la production à fenêtre 1 024 demande un **run long** (60 000 pas et plus) pour approcher 2,5 en
+domaine ; le **professeur à fenêtre longue** (distillation) n'est pas tenté.

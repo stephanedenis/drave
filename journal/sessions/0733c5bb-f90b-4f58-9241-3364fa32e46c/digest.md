@@ -7505,3 +7505,44 @@ en-cours · 1629 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null; python3 -c \"\nimport pathlib,re,datetime\np=pathlib.Path('journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md')\nt=p.read_text(); t=re … [3133 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-363]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-363", "timeout_ms": 180000, "wait": true}`
+
+  ```
+e1c1064d NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture de la nuit : plan, récit, vérifications finales
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, datetime\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", f\"- **Heartbeat** : {datetime.date … [3148 caractères tronqués]`
+
+  ```
+plan clos
+  journal · 40 jour(s) · 117 session(s) · 1923 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"- **Prochaine action** : le contrôle depuis zéro, puis la clôture.\",\n              \"- **Close** : nuit termi … [474 caractères tronqués]`
+
+  ```
+état : session close
+    2518    164   T1   2500  docs/pilotage/references-non-regression.md
+  T0 max : 3999 mots (budget 4 000)
+     · docs/pilotage/references-non-regression.md : 2518 mots > budget 2500 (T1)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 676 JSON, le disque en a 677
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nmd = len(list(pathlib.Path(\"reports\").glob(\"*.md\")))\njs = len(list(pathlib.Path(\"reports\").glob(\"*.json\")))\nt = re.su … [1344 caractères tronqués]`

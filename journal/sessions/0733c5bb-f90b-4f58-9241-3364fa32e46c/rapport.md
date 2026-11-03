@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 19.2 h |
 | Tours | 5 |
-| Messages | 510 |
-| Appels d'outils | 489 |
+| Messages | 514 |
+| Appels d'outils | 493 |
 | Fichiers touchés | 25 |
-| Commandes | 363 |
+| Commandes | 366 |
 | Sous-agents | 0 |
-| Commits | 11 |
+| Commits | 12 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -118,7 +118,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 5 — continue
 
-*8 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Read zero control results and 128 arms state
 - bash — Evaluate capacity experiment arms
@@ -128,10 +128,13 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Run closure gates before commit
 - bash — Commit the night's three facts
 - job_output
+- bash — Close the night cycle in plan and récit
+- bash — Mark session closed in state
+- bash — Fix counter and commit night closure
 
 **Synthèse produite :**
 
-⏵ Remplissage du §3 (depuis zéro) et de la section capacité
+⏵ Clôture de la nuit : plan, récit, vérifications finales
 
 ## 3. Travail accompli
 
@@ -207,7 +210,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 323 autres
+- … et 326 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -366,4 +369,5 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - cd /home/stephane/GitHub/Qtrinet && git commit -q -F - -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md <<'MSG' FENÊTRE — LE C
 - cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/r
 - cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null; python3 -c " impor
+- cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") md = len
 

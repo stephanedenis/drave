@@ -14038,3 +14038,64 @@ patché : tools/tests/qualifier_porte_minute_drvm.py
   ```
 
 - **job_output** `{"job_id": "bash-350", "timeout_ms": 900000, "wait": true}`
+
+  ```
+false,
+   200,
+   254.0,
+   96,
+   0,
+   5.178,
+   96
+  ],
+  "llm_labyrinthe": [
+   false,
+   200,
+   254.0,
+   96,
+   0,
+   0.025,
+   96
+  ]
+ }
+}
+écrit : reports/pensee-porte-minute-api.json
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux mesures ont tourné via l'API et écrit leurs JSON ; je compare aux résultats du 7B local.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/pensee-politique-llm*.json reports/pensee-porte-minute*.json 2>&1; echo; python3 - <<'PY'\nimport json, pathlib\nfor a, b in ((\"reports/pensee-politique-llm.json\", \"reports/pensee-politique-llm-api.json\"),\n        … [816 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 6686  3 nov 11:21 reports/pensee-politique-llm-api.json
+-rw-r--r--. 1 stephane stephane 6849  2 nov 18:33 reports/pensee-politique-llm.json
+-rw-r--r--. 1 stephane stephane 3315  3 nov 11:22 reports/pensee-porte-minute-api.json
+-rw-r--r--. 1 stephane stephane 3432  2 nov 19:49 reports/pensee-porte-minute.json
+
+== pensee-politique-llm.json vs pensee-politique-llm-api.json
+
+== pensee-porte-minute.json vs pensee-porte-minute-api.json
+   pensee-porte-minute.json llm_labyrinthe = {'noeuds': 200, 'but': False, 'par_operateur': {'pas': 144, 'saut': 53, 'sonde': 3}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 265.0, 'appels': 95, 'budget': 200, 'politique': 'llm', 'score': 0.25, 'latence_s': 101.615, 'erreurs': 0, 'duree_s': 101.664}
+   pensee-porte-minute-api.json llm_labyrinthe = {'noeuds': 200, 'but': False, 'par_operateur': {'pas': 146, 'saut': 54}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 254.0, 'appels': 96, 'budget': 200, 'politique': 'llm', 'score': 0.25, 'latence_s': 0.025, 'erreurs': 96, 'duree_s': 0.06}
+
+== files ==
+ M tools/tests/qualifier_politique_drvm.py
+ M tools/tests/qualifier_porte_minute_drvm.py
+?? reports/p
+… [68 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les JSON API montrent **96 erreurs sur 96 appels** : le pas unitaire marchait, donc quelque chose diffère dans les mesureurs. Je reproduis l'appel exact.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 120 python3 - <<'PY' 2>&1 | tail -10\nfrom tools.pensee.operateurs import PolitiqueLLM, LABYRINTHE\nfor modele in (\"deepseek-flash\", \"deepseek-chat\"):\n    p = P … [343 caractères tronqués]`
+
+  ```
+deepseek-flash -> None | dernière :  | erreurs : 1 | latence : 0.0
+deepseek-chat -> bas | dernière : bas | erreurs : 0 | latence : 0.0
+  ```
+
