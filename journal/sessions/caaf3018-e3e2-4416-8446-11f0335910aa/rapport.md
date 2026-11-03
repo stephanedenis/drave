@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 21.2 h |
+| Durée | 21.3 h |
 | Tours | 33 |
-| Messages | 579 |
-| Appels d'outils | 571 |
+| Messages | 584 |
+| Appels d'outils | 576 |
 | Fichiers touchés | 6 |
-| Commandes | 415 |
+| Commandes | 419 |
 | Sous-agents | 0 |
-| Commits | 27 |
+| Commits | 28 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -756,7 +756,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 
 ### Tour 33 — continue
 
-*9 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Check N2 under-2.5 integration in state and roadmap
 - bash — Check pilotage mtimes and stale lines
@@ -767,10 +767,14 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - bash — Integrate under-2.5 result in three docs
 - bash — Commit under-2.5 integration
 - job_output
+- bash — Check Pensée result and document dates
+- bash — Read roadmap state paragraph and B13 line
+- bash — Update dates and add API/under-2.5 facts
+- bash — Commit API and under-2.5 facts with dates
 
 **Synthèse produite :**
 
-⏵ Tout est vert (T0 3 999) ; je commite l'intégration du fait N2 dans les trois documents.
+⏵ Je date l'état au 13 h 30 et j'ajoute les deux faits (API /35, fenêtre sous 2,5) à la roadmap.
 
 ## 3. Travail accompli
 
@@ -827,7 +831,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 375 autres
+- … et 379 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -991,4 +995,5 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff --stat docs/methode/ressources.md journal/2026-11-03/README.md; cat > work/msg-cle3.txt <<'EOF' MÉT
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-n2-sous25.txt <<'EOF' ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 

@@ -35,7 +35,7 @@
 | **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat de L** (heuristique/neuronal), la mesure 71 langues |
 | **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR est clos** (limite : 8 scans `.PDF`, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A) |
 
-**État au 03/11 08 h 08.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ;
+**État au 03/11 13 h 30.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ; le **gold neuronal rejoué sur l'API DeepSeek** donne les **mêmes verdicts**, **latence /35** ;
 la **cascade vrai modèle** tient sur **180 phrases** (POS **0,9415**, syntagmes **0,6130**, tête
 **0,7574**, acte **1,0**) mais sur le **gold réel 432** elle donne **0,9065 / 0,4598 / 0,5633 /
 0,9954** — **verdict `false`** ; la **fenêtre B13** est **solvable** (BFS **228** nœuds, FIFO) mais **non
@@ -45,7 +45,7 @@ la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la règle, **0*
 l'heuristique garde. **N2** : la **loi de la fenêtre** à octets constants donne **3,2545 → 3,0107
 → 2,9950** (256/512/1 024 à 1 000 octets), **2,9449** à 2 000 pour 1 024, et la **2 048** s'arrête à
 1 024 ; la **production** (N2.ac + RoPE 512) **bat les 200 k pas** (littérature 5,52, anglais 7,05,
-wikitext2 7,90) ; le run **20 k** de la 2 048 finit à **2,6609** de PPL val ; **R1.1/R1.2** mesurées.
+wikitext2 7,90) ; le run **20 k** de la 2 048 finit à **2,6609** de PPL val ; la **fenêtre 1 024** passe **sous 2,5** au grand corpus (**2,4759 / 2,4373**), la porte **propre** reste **2,7856** ; **R1.1/R1.2** mesurées.
 **S** : **54/55** types, **131/131** rôles, **47/47** compléments, gold **55**. **D/R/A** close (OCR
 CEGEP **91 scans uniques**, 1 982 p). **Passe** : 81 portes, **76/5**, 1 h 52 ; la **82e**
 (`porte-ressources`) est validée ; compteurs **574 fiches / 660 JSON**.
@@ -54,7 +54,7 @@ CEGEP **91 scans uniques**, 1 982 p). **Passe** : 81 portes, **76/5**, 1 h 52 ; 
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-03 08 h 08**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-03 13 h 30**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont

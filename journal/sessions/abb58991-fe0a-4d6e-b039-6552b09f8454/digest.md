@@ -23065,3 +23065,167 @@ data/corpus_mixte_dev.txt
 data/corpus_mixte_litt2.txt
   ```
 
+### 🤖 Assistant
+
+⏵ Je régénère le checkpoint et le DRVM en **CPU** (200 pas, `CUDA_VISIBLE_DEVICES=""`, sortie `/tmp/drave-n0-pont.pt`) — puis je rejoue la parité
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=\"\" PYTHONPATH=. timeout 2400 ~/gpu-env/bin/python tools/entrainer_native.py --device cpu --pas 200 --sortie /tmp/drave-n0-pont.pt --drvm /tmp/drave-n0-pont.drvm 2>&1 | tail -12; echo \"EXIT=$?\"; ls -l /tmp/drave-n0-pont.pt /tmp … [116 caractères tronqués]`
+
+  ```
+started background job bash-736
+  ```
+
+### 🤖 Assistant
+
+⏵ Régénération CPU lancée (`bash-736`, 200 pas) ; je surveille sans bloquer et je vérifie l'état pendant ce temps
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; sleep 45; tail -3 /tmp/*.log 2>/dev/null | head -5; ps -eo pid,etime,pcpu,cmd | grep entrainer_native | grep -v grep | head -2; ls -l /tmp/drave-n0-pont.pt 2>/dev/null || echo 'checkpoint pas encore écrit'", "description": "Monitor C … [47 caractères tronqués]`
+
+  ```
+13:30:00
+-rw-r--r--. 1 stephane stephane 47306271  3 nov 13:30 /tmp/drave-n0-pont.pt
+  ```
+
+### 👤 Utilisateur
+
+background job bash-736 (bash: cd /home/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES="" PYTHONPATH=. timeout 2400 ~/gpu-env/bin/python tools/entrainer_native.py --device cpu --pas 200 --sortie /tmp/drave-n0-pont.pt --drvm /tmp/drave-n0-pont.drvm 2>&1 | tail -12; echo "EXIT=$?"; ls -l /tmp/drave-n0-pont.pt /tmp/drave-n0-pont.drvm 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Le job CPU est fini (exit 0) ; je lis sa sortie puis je rejoue les deux parités sur ce checkpoint frais
+
+- **job_output** `{"job_id": "bash-736"}`
+
+  ```
+"jetons_val": 8192,
+ "tetes": true,
+ "precision_main": 0.285400390625,
+ "precision_early": [
+  0.285888671875,
+  0.279052734375,
+  0.26611328125
+ ],
+ "drvm": "/tmp/drave-n0-pont.drvm",
+ "sha256_drvm": "db74e4b573c16252ea54fc65e3d1527a0c2f8a06aa6a61a51457d0cf23c7dca7",
+ "duree_s": 44.89426851272583
+}
+EXIT=0
+-rw-r--r--. 1 stephane stephane 47283932  3 nov 13:30 /tmp/drave-n0-pont.drvm
+-rw-r--r--. 1 stephane stephane 47306271  3 nov 13:30 /tmp/drave-n0-pont.pt
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -l /tmp/drave-n0-pont.pt /tmp/drave-n0-pont.drvm 2>/dev/null; CUDA_VISIBLE_DEVICES=\"\" PYTHONPATH=. timeout 600 ~/gpu-env/bin/python tools/verifier_parite_native.py 2>&1 | tail -15; echo \"EXIT=$?\"", "description": "Replay native parity on fresh  … [33 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 47283932  3 nov 13:30 /tmp/drave-n0-pont.drvm
+-rw-r--r--. 1 stephane stephane 47306271  3 nov 13:30 /tmp/drave-n0-pont.pt
+'La France est un pays' · top1 False · top5 False · écart max 999.00000
+'Le chat dort sur' · top1 False · top5 False · écart max 999.00000
+'Demain, nous irons' · top1 False · top5 False · écart max 999.00000
+'def addition(a, b):' · top1 False · top5 False · écart max 999.00000
+'Once upon a time' · top1 False · top5 False · écart max 999.00000
+{
+ "top1": 0,
+ "top5": 0,
+ "n": 5
+}
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Checkpoint et DRVM régénérés en **44,9 s CPU** (PPL val mesurée, sha256 noté) ; mais la parité native **échoue** — top1 0/5, top5 0/5, écart 999.0 : quelque chose ne correspond plus
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/verifier_parite_native.py", "description": "Read native parity script logic", "timeoutMs": 60000}`
+
+  ```
+#!/usr/bin/env python3
+"""verifier_parite_native.py — N0.8 : parité Rust natif ↔ Python sur plusieurs prompts.
+
+Le Rust imprime les 5 premiers logits ; ce script les compare à la référence
+PyTorch. Aucun tirage aléatoire : liste de prompts fixe.
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+import re
+import subprocess
+
+import torch
+from tools.native_model import NativeConfig, NativeModel
+
+PROMPTS = [
+    "La France est un pays",
+    "Le chat dort sur",
+    "Demain, nous irons",
+    "def addition(a, b):",
+    "Once upon a time",
+]
+
+
+def reference(modele, p, k=5):
+    ids = torch.tensor([list(p.encode())])
+    with torch.no_grad():
+        logits = modele(ids)["logits"][0, -1]
+    v, i = logits.topk(k)
+    return [(int(i[j]), float(v[j])) for j in range(k)]
+
+
+def rust(chemin, drvm, p, k=5):
+    out = subprocess.run([chemin, "--drvm-forward", drvm, p], capture_output=True, text=True).stdout
+    vals = re.findall(r"octet\s+(\d+).*?logit\s+(-?\d+\.\d+)", out)
+    return [(int(a), float(b)) for a, b in vals[:k]]
+
+
+def main() -> None:
+    ck = torch.load("/tmp/drave-n0-pont.pt", map_location="cpu", weights_only=False)
+    cfg = NativeConfig(**{k: v for k, v in ck["con
+… [1153 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le script compare à un DRVM **codé en dur** (`/tmp/n0-native.drvm`) — celui de la passe d'origine ; je vérifie le binaire Rust et je recopie le DRVM frais au bon nom
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -l drave-core/target/release/drave 2>/dev/null || echo 'binaire absent'; ls -l /tmp/n0-native.drvm 2>/dev/null || echo 'drvm parité absent'; cp /tmp/drave-n0-pont.drvm /tmp/n0-native.drvm && ls -l /tmp/n0-native.drvm; sha256sum /tmp/drave-n0-pont.d … [130 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 3187480 30 oct 08:39 drave-core/target/release/drave
+drvm parité absent
+-rw-r--r--. 1 stephane stephane 47283932  3 nov 13:31 /tmp/n0-native.drvm
+      2 db74e4b573c16252ea54fc65e3d1527a0c2f8a06aa6a61a51457d0cf23c7dca7
+  ```
+
+### 🤖 Assistant
+
+⏵ Binaire présent, DRVM frais copié (même sha256) ; je sauvegarde le JSON de parité existant puis je rejoue
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp reports/native-parite.json /tmp/native-parite.json.bak 2>/dev/null && echo 'backup ok'; CUDA_VISIBLE_DEVICES=\"\" PYTHONPATH=. timeout 600 ~/gpu-env/bin/python tools/verifier_parite_native.py 2>&1 | tail -12; echo \"EXIT=$?\"", "description": "Repl … [55 caractères tronqués]`
+
+  ```
+backup ok
+'La France est un pays' · top1 True · top5 True · écart max 0.00005
+'Le chat dort sur' · top1 True · top5 True · écart max 0.00005
+'Demain, nous irons' · top1 True · top5 True · écart max 0.00003
+'def addition(a, b):' · top1 True · top5 True · écart max 0.00004
+'Once upon a time' · top1 True · top5 True · écart max 0.00005
+{
+ "top1": 5,
+ "top5": 5,
+ "n": 5
+}
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ **Parité native rejouée : 5/5 top-1, 5/5 top-5, écart max 0,00005** sur le checkpoint fraîchement régénéré en CPU — le résultat est enfin reproductible de bout en bout ; je mets à jour la fiche et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, hashlib, time\nd=json.loads(pathlib.Path('reports/native-parite.json').read_text(encoding='utf-8'))\nsha=hashlib.sha256(pathlib.Path('/tmp/drave-n0-pont.drvm').read_bytes()).hexdigest()\nres={'date':'2026-11-03  … [1686 caractères tronqués]`
+
+  ```
+json 1913 {'top1': 5, 'top5': 5, 'n': 5, 'ecart_max': 5.009231567409955e-05}
+  ```
+

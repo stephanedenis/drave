@@ -10067,3 +10067,77 @@ des **blocs** avec leur contrat, leur coût et leur trace — et le contrat de L
 ⏵ Tout est vert (T0 3 999) ; je commite l'intégration du fait N2 dans les trois documents.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-n2-sous25.txt <<'EOF'\nÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373)\n\nN2 avait clos son cycle à 11 h 25 avec un fait majeur qui manquait encore dans\ntrois documents : la fenêtre entraî … [681 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-415]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-415", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 68c1ecc1] ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373)
+ 18 files changed, 534 insertions(+), 53 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point : Pensée a-t-elle publié son résultat API ? Et les dates de la roadmap sont-elles à jour ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; git log --oneline -5; echo \"=== pensée api ===\"; ls -la reports/pensee-porte-minute-api.json 2>/dev/null | cut -c30-70; git log --oneline -1 -- reports/pensee-porte-minute-api.json; echo \"=== roadmap dates ===\"; grep - … [203 caractères tronqués]`
+
+  ```
+13:31
+68c1ecc1 ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373)
+07ec290b PASSE — 82 PORTES SUR MACHINE AU REPOS : 80 VERTES, 2 ROUGES (LES CONNUES)
+61bafd18 BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)
+c2ba64e4 BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000
+5bafefab B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35
+=== pensée api ===
+ne 3340  3 nov 11:39 reports/pensee-porte
+5bafefab B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35
+=== roadmap dates ===
+38:**État au 03/11 08 h 08.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ;
+57:L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-03 08 h 08**.
+3:**Mis à jour : 2026-11-03, 08 h 24 HNE (heure locale, EST).**
+  ```
+
+### 🤖 Assistant
+
+⏵ Pensée a publié : **gold neuronal rejoué sur l'API, mêmes verdicts, latence /35**. Les dates de la roadmap sont périmées ; je mets à jour.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 38,48p docs/pilotage/roadmap.md | cut -c1-170; echo \"=== en-cours B13 ===\"; grep -n \"API\\|latence\\|/35\" docs/pilotage/en-cours.md | head -4 | cut -c1-170", "description": "Read roadmap state paragraph and B13 line"}`
+
+  ```
+**État au 03/11 08 h 08.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ;
+la **cascade vrai modèle** tient sur **180 phrases** (POS **0,9415**, syntagmes **0,6130**, tête
+**0,7574**, acte **1,0**) mais sur le **gold réel 432** elle donne **0,9065 / 0,4598 / 0,5633 /
+0,9954** — **verdict `false`** ; la **fenêtre B13** est **solvable** (BFS **228** nœuds, FIFO) mais **non
+discriminante** (oracle 228, aveugle 215, 7B 238 : tout passe) — c'est le banc qu'il faut réparer ;
+la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la règle, **0** sans) ; la
+**pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556** majoritaire) —
+l'heuristique garde. **N2** : la **loi de la fenêtre** à octets constants donne **3,2545 → 3,0107
+→ 2,9950** (256/512/1 024 à 1 000 octets), **2,9449** à 2 000 pour 1 024, et la **2 048** s'arrête à
+1 024 ; la **production** (N2.ac + RoPE 512) **bat les 200 k pas** (littérature 5,52, anglais 7,05,
+wikitext2 7,90) ; le run **20 k** de la 2 048 finit à **2,6609** de PPL val ; **R1.1/R1.2** mesurées.
+=== en-cours B13 ===
+20:> `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par 
+… [478 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je date l'état au 13 h 30 et j'ajoute les deux faits (API /35, fenêtre sous 2,5) à la roadmap.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/roadmap.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"**État au 03/11 08 h 08.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ;\", … [1383 caractères tronqués]`
+
+  ```
+roadmap + en-cours : 13 h 30, API /35, fenêtre sous 2,5
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 13 h 35 — deux faits majeurs datés\n\n- **N2** : la **fenêtre 1 024** passe **sous 2,5** au g … [1431 caractères tronqués]`
