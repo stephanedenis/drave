@@ -35,10 +35,10 @@ sous-agents pour les tâches bornées.
 
 | session | mandat | chantiers | charge | prochaine action |
 |---|---|---|---|---|
-| **N2 — le natif (à ouvrir)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1,02 Go, 60 k pas) : **3,49** domaine / **6,03** littérature — le modèle de production ; prochaine action : **200 k pas**, puis R1.1/R1.2. **Aucune session active.** |
-| **L/B13 — en pause** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **134/140** (4 S + 2 test périmé), gold **432**, coréférence **116 liens** ; le cycle est committé. Reprise : `e181ce02` (`--resume`), puis **gold neuronal** / **DRVM/native** (bloqué). |
-| **S — les structures (à ouvrir)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus. **Aucune session DSH ; sous-module `tools/structures`.** |
-| **D/R/A — terminé (02/11)** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | 10 corpus, PDF, **OCR CEGEP 91 scans uniques (60 documents, 1 982 p, 4,41 M car.)**, glossaire 355 entrées : **fait et committé** ; **clôture** le 02/11. Restent R1.1/R1.2 (N2) et A2.6 (A) ; les 8 scans `.PDF` sont une limite nommée. |
+| **N2 — le natif (session `0733c5bb`)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1 Go, 60 k pas) : **3,49 / 6,03** — production ; **200 k pas** : val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées** ; fiche + clôture en cours. |
+| **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **134/140** (4 S + 2 test périmé), gold **432**, 116 liens ; **gold neuronal** (POS **0,9415** / syntagmes **0,7539** / acte **1,0**) ; **DRVM/native** règle (**3 nœuds**) ; **pragmatique** test **0,6375** — l'heuristique garde. Prochaine : **gold 200+**, **porte B13**. |
+| **S — les structures (session `29ad180d`)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | **47/47** types, **117/117** rôles, **47/47** compléments, gold **47**, corpus **47** (SHA `f2a0d2fb…`), **43 tests** ; **homographes/lexique**, puis **validation humaine** de la banque (0 verdict). |
+| **D/R/A — terminé (02/11)** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | **OCR CEGEP 91 scans uniques (60 documents, 1 982 p, 4,41 M car.)** ; clôture le 02/11. Restent R1.1/R1.2 (N2) et A2.6 (A) ; les 8 scans `.PDF` sont une limite nommée. |
 
 **Le rôle d'intégration** (le « hub ») : tient `en-cours`, `roadmap`, `chantiers`, ce plan,
 `journal/`, `reports/INDEX.md`, `AGENTS.md`, les compteurs et la revue de documentation. Il ne
@@ -180,19 +180,18 @@ depuis la racine du dépôt.
 
 **Les quatre mandats, dans l'ordre de valeur.**
 
-1. **N2 — le natif (GPU).** Nouvelle session. Lire `AGENTS.md`, `en-cours`, `backlog/N2-distillation.md`.
-   Créer `journal/sessions/<id>/plan.md` (modèle `_modele/plan.md`), réserver `data/`, `tools/corpus*`,
-   `reports/n2-*`, `work/n2*`. Prochaine action : **200 000 pas sur le mélange 1 Go** (N2.ac :
-   3,49 domaine / 6,03 littérature), puis la fenêtre **R1.1/R1.2**. Ne pas toucher aux GPU de
-   l'autre session ; ne pas écrire `en-cours` sans le hub.
-2. **S — les structures (CPU).** Nouvelle session. Lire `docs/theorie/jeux-symboliques.md` et
-   `tools/structures/` (sous-module `heads/fusion`). Réserver `tools/structures/`, ses exports et sa
-   banque. Prochaine action : **analyseur rôles/subordonnées**, puis **export au corpus** ; 19 tests
-   à garder verts. Le sous-module se commit **dans son dépôt** avant de bouger le pointeur.
-3. **L/B13 — la langue et la pensée (CPU).** Reprendre `e181ce02` par `--resume`, puis **remettre
-   `État : actif`** et rafraîchir le heartbeat (07:50 → maintenant). Le cycle **140/140** est
-   committé. Prochaine action : **gold neuronal** (qualifier un modèle local) ; **DRVM/native** est
-   bloqué par l'absence de poids/tagger.
+1. **N2 — le natif (GPU).** **Session `0733c5bb` ouverte.** Lire `AGENTS.md`, `en-cours`,
+   `backlog/N2-distillation.md`. **200 k pas terminés** : val_fr **3,16**, littérature **5,61**,
+   anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées**.
+   Prochaine action : **fiche + état + commit**, puis **clôture**.
+2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
+   et `tools/structures/`. **47/47** types, **117/117** rôles, **47/47** compléments, gold **47**,
+   corpus **47** (SHA `f2a0d2fb…`), **43 tests**. Prochaine action : **homographes/lexique**, puis
+   **validation humaine** ; le sous-module se commit **dans son dépôt** avant le pointeur.
+3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **134/140** (4 S + 2 test
+   périmé), gold **432**, 116 liens ; **gold neuronal** qualifié (POS **0,9415**, syntagmes
+   **0,7539**, acte **1,0**) ; **DRVM/native** par la règle (**3 nœuds**) ; **pragmatique** test
+   **0,6375** — l'heuristique garde. Prochaine action : **gold 200+**, **porte B13**.
 4. **D/R/A — les données (CPU/IO).** **Close le 02/11 à 18 h 45** : OCR du fonds CEGEP —
    **147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;
    fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md). Restent **R1.1/R1.2** (N2) et

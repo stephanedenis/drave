@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 3.5 h |
+| Durée | 3.6 h |
 | Tours | 4 |
-| Messages | 325 |
-| Appels d'outils | 349 |
+| Messages | 342 |
+| Appels d'outils | 367 |
 | Fichiers touchés | 18 |
-| Commandes | 206 |
+| Commandes | 215 |
 | Sous-agents | 0 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -112,7 +112,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 4 — c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en co … [29 caractères tronqués]
 
-*62 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - bash — Current time, recent commits and working tree
 - bash — Session status, strict check and state checks
@@ -128,7 +128,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - edit `docs/pilotage/en-cours.md`
 - edit `docs/pilotage/roadmap.md`
 - bash — Verify roadmap N line
-- … et 36 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
@@ -150,9 +150,9 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
 | `docs/pilotage/en-cours.md` | 0 | 19 |
-| `docs/pilotage/roadmap.md` | 0 | 8 |
-| `docs/pilotage/chantiers.md` | 0 | 4 |
-| `docs/pilotage/plan-travail.md` | 0 | 4 |
+| `docs/pilotage/roadmap.md` | 0 | 10 |
+| `docs/pilotage/chantiers.md` | 0 | 5 |
+| `docs/pilotage/plan-travail.md` | 0 | 6 |
 | `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
 | `journal/2026-11-02/README.md` | 0 | 3 |
 | `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
@@ -201,7 +201,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 166 autres
+- … et 175 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -317,4 +317,5 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - ps -eo pid,etime,pcpu,args | grep -E "git commit|porte-audit|entrainer_moteur|llama-server" | grep -v grep | head -5; echo "--- dernier commit ---"; git log -1 
 - ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E "entrainer|llama-server|porte-|git commit|n2ac" | grep -v grep | head -6; echo "--- gpu ---"; nvidia-smi --que
 - date "+%H:%M:%S"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md; ps -
+- PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS" -m "en-cours : N2 sort des sessions actives ap
 

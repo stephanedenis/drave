@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 3.5 h |
+| Durée | 3.6 h |
 | Tours | 5 |
-| Messages | 200 |
-| Appels d'outils | 213 |
+| Messages | 204 |
+| Appels d'outils | 216 |
 | Fichiers touchés | 9 |
-| Commandes | 150 |
+| Commandes | 153 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 0 |
@@ -180,7 +180,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 5 — tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses
 
-*28 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Check machine load, GPUs, and running work
 - bash — Check WIP freshness and session/gate state
@@ -196,11 +196,28 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - bash — Commit submodule v3
 - bash — Exact v3 measure values and boundary lines
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md`
-- … et 13 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
-⏵ Je regarde l'état machine et les chantiers ouverts pour choisir quoi entreprendre.
+⏵ S v3 poussé : analyseur 47/47 types, 117/117 rôles, corpus 47 ; sous-module et principal à jour.
+
+**Le cycle entrepris**
+
+- **Frontière GN-devant-verbe** : `h033` (« La femme parle ») est corrigé par un lexique de verbes finis ; le GV s'arrête aussi devant un adverbe de temps (« part demain » → GV + GP temps).
+- **Gold porté à 47 phrases** (7 dev, 16 test, 24 holdout en trois vagues ; `h040–h047` écrites après la règle, mesurées une fois).
+- **Mesure** : types **47/47**, rôles **117/117**, compléments **47/47**, couverture **1 309/1 320** (99,2 % ; holdout 605/616, 98,2 %) ; contrôles **80/117**, **82/117**, rôles mélangés **0,109**.
+- **Limite nommée** : les homographes nominaux `h046` (« ferme ») et `h047` (« fait ») sont coupés comme des verbes — le type et le rôle ne le voient pas, la **couverture** oui (0,75 et 0,77).
+- **Corpus** : 47 lignes, SHA `f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2` ; `verifier_corpus.py` le rejoue.
+- **43 tests** verts.
+
+**Commits et push**
+
+- Sous-module : **`90e507b`**, poussé sur `drave-structures` (`647205a..90e507b`).
+- Principal : **`e2227509`** (la clôture N2 a intégré la fiche S v3, le manifeste, le pointeur `90e507b`, la roadmap et l'INDEX), poussé : `origin/master` = `e2227509`.
+- `docs/pilotage/en-cours.md` porte la ligne S v3 (47/47, 117/117, corpus 47, 43 tests) ; T0 repassé sous 4 000.
+
+**En cours, pas à moi** : la **passe complète des portes** du hub (`work/portes/passe-1102-19h32`, `porte-épisodique` en cours) ; ses mises à jour de `docs/pilotage/` sont encore dans l'arbre, et `reports/pensee-porte-minute.json` est en écriture. Je les laisse au hub. Prochaine action S : homographes/lexique, puis validation humaine de la banque.
 
 ## 3. Travail accompli
 
@@ -260,7 +277,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 110 autres
+- … et 113 autres
 
 ## 4. Mesures et résultats marquants
 

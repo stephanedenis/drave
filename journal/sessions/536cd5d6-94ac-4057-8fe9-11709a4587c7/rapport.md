@@ -7,9 +7,9 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 2.2 h |
-| Tours | 6 |
-| Messages | 139 |
+| Durée | 4.3 h |
+| Tours | 7 |
+| Messages | 140 |
 | Appels d'outils | 183 |
 | Fichiers touchés | 12 |
 | Commandes | 147 |
@@ -30,6 +30,8 @@
 **Tour 5** — peut-on controller les fan de dell sans avoir à modifier le bios
 
 **Tour 6** — oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru
+
+**Tour 7** — dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard
 
 ## 2. Déroulé, étape par étape
 
@@ -444,6 +446,8 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 | `system/thermal/hauru-thermal.service` | unité systemd oneshot, au boot |
 | `system/thermal/hauru-thermal.defau
 … [1389 caractères tronqués]
+
+### Tour 7 — dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simu … [102 caractères tronqués]
 
 ## 3. Travail accompli
 

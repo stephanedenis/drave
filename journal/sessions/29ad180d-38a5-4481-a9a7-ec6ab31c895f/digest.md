@@ -4329,3 +4329,95 @@ A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/table_200k.py
 … [4774 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-s-analyseur-roles.md reports/s-banque-structures.json tools/structures docs/pilotage/roadmap.md reports/INDEX.md && echo \"S v3 stagé\" && git diff --cached --stat | tail -12; echo \"=== log ===\"; git log --o … [127 caractères tronqués]`
+
+  ```
+S v3 stagé
+ docs/pilotage/en-cours.md                          |   5 +-
+ docs/pilotage/roadmap.md                           |  29 ++---
+ .../cloture.md                                     |  65 ++++++++++
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md   |   4 +-
+ reports/INDEX.md                                   |   2 +-
+ reports/rapport-s-analyseur-roles.md               | 142 +++++++++++----------
+ reports/s-banque-structures.json                   |   8 +-
+ tools/structures                                   |   2 +-
+ 8 files changed, 165 insertions(+), 92 deletions(-)
+=== log ===
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+=== status ===
+ M docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+M  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+ M journ
+… [293 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo \"=== S files staged ? ===\"; git diff --cached --name-only | grep -E \"rapport-s-analyseur|s-banque|tools/structures|roadmap|INDEX\" ; echo \"=== submodule remote ===\"; git -C tools/structures ls-remote - … [278 caractères tronqués]`
+
+  ```
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+7d5bd08d ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS
+=== S files staged ? ===
+docs/pilotage/roadmap.md
+reports/INDEX.md
+reports/rapport-s-analyseur-roles.md
+reports/s-banque-structures.json
+tools/structures
+=== submodule remote ===
+90e507b486e5fe9adfd2ba54576d99015e49b86f	refs/heads/master
+=== N2 closure en-cours ? ===
+- **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **43 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : **`90e507b`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **0**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 20; git log --oneline -2; echo \"=== staged ===\"; git diff --cached --stat | tail -8; echo \"=== portes ===\"; ps -eo pid,etime,cmd | grep -E \"porte-|toutes-les-portes\" | grep -v grep | head -4; echo \"=== T0 ===\"; python3  … [120 caractères tronqués]`
+
+  ```
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+=== staged ===
+=== portes ===
+ 164359       17:25 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/portes/passe-1102-19h32 bash tools/toutes-les-portes.sh; echo "EXIT=$?"; echo "=== REGISTRE (code != 0) ==="; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo "=== BILAN ==="; tail -1 work/portes/passe-1102-19h32/registre.txt
+ 164366       17:25 bash tools/toutes-les-portes.sh
+ 263672       01:46 python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-minute.json
+ 289500       00:47 timeout 1800 bash tools/porte-episodique.sh
+=== T0 ===
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables
+… [40 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== S dans le commit N2 ===\"; git show --stat --oneline e2227509 | grep -E \"analyseur|s-banque|structures|roadmap|INDEX|en-cours\" ; echo \"=== pointeur HEAD ===\"; git ls-tree HEAD tools/structures; git -C tools/structures  … [244 caractères tronqués]`
+
+  ```
+=== S dans le commit N2 ===
+ docs/pilotage/en-cours.md                          |   5 +-
+ docs/pilotage/roadmap.md                           |  29 ++---
+ reports/INDEX.md                                   |   2 +-
+ reports/rapport-s-analyseur-roles.md               | 142 +++++++++++----------
+ reports/s-banque-structures.json                   |   8 +-
+ tools/structures                                   |   2 +-
+=== pointeur HEAD ===
+160000 commit 90e507b486e5fe9adfd2ba54576d99015e49b86f	tools/structures
+90e507b
+=== status ===
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+?? reports/pensee-porte-minute.json
+?? tools/tests/qualifier_porte_minute_drvm.py
+=== ahead ===
+11
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -8; echo \"exit=${PIPESTATUS[0]}\"; git status -sb | head -2; echo \"=== remote ===\"; git ls-remote --heads origin | head -1", "description": "Push main repository with S v3", "timeoutMs": 300000}`

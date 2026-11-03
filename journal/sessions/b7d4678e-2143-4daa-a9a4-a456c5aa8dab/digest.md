@@ -5143,3 +5143,314 @@ en-cours · 1674 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
 Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
   ```
 
+- **bash** `{"command": "ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md; date \"+%H:%M:%S\"; sed -n '96,155p' docs/pilotage/en-cours.md | grep -n \"N2\\|Pensée\\|Ce qui reste\\|chantiers\\|200 k\" | head; echo \"--- T0 ---\"; python3 tools/taille_documents.py 2>&1 | tail -3; python3 tools/verifie_en_cou … [80 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 12525 19:46:23 docs/pilotage/en-cours.md
+19:46:32
+11:- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature ; **200 k pas** — val_fr
+18:- **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc, opérateurs, **134/140** (4 S + 2 test périmé) ; gold
+34:## Les chantiers et leurs bloquants
+43:| **N — le natif** | **N2, N3, N4** | N2 : **N2.ac 1 Go — 3,49 domaine / 6,03 littérature** ; < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2** : 200 k pas **en cours** (session `0733c5bb`), puis **R1.1/R1.2** ; **N4** |
+51:## Ce qui reste
+53:**N2** — **fiche et clôture du run de 200 k** ; **R1** — 1 024 octets entraînés ; **Pensée** — gold 200+,
+57:- **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+--- T0 ---
+
+  ❌ 1 violation(s) :
+     · T0 : 4055 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ❌ 1 anomalie(s) :
+     · session « Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre » ne dit pas « **Prochaine action** »
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 65, "offset": 38}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+38: ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+39: 
+40: - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+41: - **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
+42:   (R1.1/R1.2).
+43: - **Plan** : 1) ~~plan~~ ; 2) ~~200 k pas~~ ; 3) ~~banc R1.1/R1.2~~ ; 4) **cinq PPL**, courbe,
+44:   fiche + clôture.
+45: - **Ambition** : N répond « plus de pas, quelle position, quelle fenêtre ».
+46: - **Stratégie** : 34,3 M, canal, graine 1 ; banc GPU 1.
+47: - **Objectif final** : **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
+48: - **Ce qu'elle fait** : **200 k pas terminés** ; cinq PPL mesurées — val_fr **3,16**,
+49:   littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (< 2,5 non atteinte) ;
+50:   **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md),
+51:   [`n2-200k`](../../reports/rapport-n2-200k.md).
+52: - **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close
+… [4575 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"Heartbeat\\|^- \\*\\*État\" journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md; echo \"--- status N2 ---\"; python3 tools/sessions.py --status 2>&1 | grep -A1 \"0733c5bb\" | head -3; echo \"--- strict ---\"; python3 tools/sessions.py --check --strict 2>&1 | tail -3" … [47 caractères tronqués]`
+
+  ```
+15:- **Heartbeat** : 2026-11-02 19:46 HAE
+36:- **État** : terminé
+--- status N2 ---
+    0733c5bb-f90b-4f58 · terminé  ·   1 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis la **clôture**.
+--- strict ---
+  ✅ plans cohérents
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export", "old_string": "### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre\n\n- **Id** : `0733c5bb-f90b-4f58- … [1414 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14\n> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A close à\n> 18 h 45** (OCR CEGEP) et **N2 close à 19  … [533 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "> **Sessions closes** : `fe3c05f0` (D/R/A) — **91 scans uniques**, 60 documents, 1 982 p,\n> 4,41 M car. ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),\n> fiche [`ocr-cegep`](../../reports/rapport-ocr-ceg … [494 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.1/R1.2 mesurées** ; N4 0/4 ; N5 gelé | **N2 close** ; la suite est **R1.2 à 1 024 octets entraînés** ;  … [245 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "**R1** — **R1.2 à 1 024 octets entraînés** ; **Pensée** — gold 200+, porte B13 ; **S** — homographes,\nvalidation humaine ; **N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 ; **R0.7** — le\ntagger complet ; **D** — OCR clos (8 sc … [344 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -3; python3 tools/sessions.py --check --strict 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -3", "description": "Re-run all pilotage checks"}`
+
+  ```
+en-cours · 1522 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ plans cohérents
+  revue de documentation · 560 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 647 JSON, le disque en a 648
+  ```
+
+- **bash** `{"command": "ls -lt reports/*.json | head -3; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Identify new JSON and counter line"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane    3489  2 nov 19:46 reports/pensee-porte-minute.json
+-rw-r--r--. 1 stephane stephane    3407  2 nov 19:42 reports/n2-200k.json
+-rw-r--r--. 1 stephane stephane     395  2 nov 19:42 reports/s-banque-structures.json
+105:| fichiers / JSON de résultats | **560** / **647** | `reports/*.md` / `reports/*.json` |
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "sed -i 's/| fichiers \\/ JSON de résultats | \\*\\*560\\*\\* \\/ \\*\\*647\\*\\* |/| fichiers \\/ JSON de résultats | **560** \\/ **648** |/' docs/pilotage/en-cours.md; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Update JSON counter"}`
+
+  ```
+105:| fichiers / JSON de résultats | **560** / **648** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "majoritaire) — l'heuristique garde. **N2** (close à 19 h 46) : le run de **200 k pas** donne val_fr\n**3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — **< 2,5 non atteinte** ;\n**R1.1/R1.2** sont **mesurées**. **S** : **47 … [677 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "ls -l --time-style=+%H:%M:%S docs/pilotage/roadmap.md; sed -n '38,52p' docs/pilotage/roadmap.md | cut -c1-300", "description": "Read current roadmap state paragraph"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 44714 19:43:02 docs/pilotage/roadmap.md
+**État au 02/11 19 h 45.** B13 est à **134/140** (4 S + 2 test périmé ; le 140/140 ne se rejoue
+pas ; gold 432, 116 liens) ; le **gold neuronal** est qualifié (POS **0,9415**, syntagmes
+**0,7539**, acte **1,0**) ; la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la
+règle, **0** sans) ; la **pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556**
+majoritaire) — l'heuristique garde. **N2** : le run de **200 k pas** donne val_fr **3,16**,
+littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — **< 2,5 non atteinte** ;
+**R1.1/R1.2** sont **mesurées**. **S** : rôles **38/39**, **99/100**, **45/45** ; **D/R/A** close
+à 18 h 45 (OCR CEGEP **91 scans uniques**, 1 982 p). Le hub tient la **passe de portes** ; runbook
+dans [`plan-travail.md`](plan-travail.md) § 9.
+
+**La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail m
+
+## L'ordre du jour (car
+… [114 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "docs/pilotage/roadmap.md", "limit": 15, "offset": 38}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+38: **État au 02/11 19 h 45.** B13 est à **134/140** (4 S + 2 test périmé ; le 140/140 ne se rejoue
+39: pas ; gold 432, 116 liens) ; le **gold neuronal** est qualifié (POS **0,9415**, syntagmes
+40: **0,7539**, acte **1,0**) ; la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la
+41: règle, **0** sans) ; la **pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556**
+42: majoritaire) — l'heuristique garde. **N2** : le run de **200 k pas** donne val_fr **3,16**,
+43: littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — **< 2,5 non atteinte** ;
+44: **R1.1/R1.2** sont **mesurées**. **S** : rôles **38/39**, **99/100**, **45/45** ; **D/R/A** close
+45: à 18 h 45 (OCR CEGEP **91 scans uniques**, 1 982 p). Le hub tient la **passe de portes** ; runbook
+46: dans [`plan-travail.md`](plan-travail.md) § 9.
+47: 
+48: **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.sv
+… [449 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "majoritaire) — l'heuristique garde. **N2** (close à 19 h 46) : le run de **200 k pas** donne val_fr\n**3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — **< 2,5 non atteinte** ;\n**R1.1/R1.2** sont **mesurées**. **S** : **47 … [677 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sed -n '38,47p' docs/pilotage/roadmap.md", "description": "Verify roadmap paragraph"}`
+
+  ```
+**État au 02/11 19 h 45.** B13 est à **134/140** (4 S + 2 test périmé ; le 140/140 ne se rejoue
+pas ; gold 432, 116 liens) ; le **gold neuronal** est qualifié (POS **0,9415**, syntagmes
+**0,7539**, acte **1,0**) ; la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la
+règle, **0** sans) ; la **pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556**
+majoritaire) — l'heuristique garde. **N2** (close à 19 h 46) : le run de **200 k pas** donne val_fr
+**3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — **< 2,5 non atteinte** ;
+**R1.1/R1.2** sont **mesurées**. **S** : **47/47** types, **117/117** rôles, **47/47** compléments,
+gold **47** ; **D/R/A** close à 18 h 45 (OCR CEGEP **91 scans uniques**, 1 982 p). Le hub tient la
+**passe de portes** ; runbook dans [`plan-travail.md`](plan-travail.md) § 9.
+  ```
+
+- **bash** `{"command": "grep -n \"S — les structures\" docs/pilotage/chantiers.md | cut -c1-320; echo \"=== plan-travail S ===\"; grep -n \"S — les structures\" docs/pilotage/plan-travail.md | cut -c1-350", "description": "Read current S lines"}`
+
+  ```
+87:| **S — les structures** | quelles structures d'interprétation candidates, et lesquelles un humain valide ? | ✅ **v2** : rôles **38/39** types, **99/100** rôles, **45/45** compléments, gold **39**, corpus **39** (SHA `973c70a4…`), **40 tests** ; banque à **0** verdict | **validation humaine** de la banque, puis **h0
+=== plan-travail S ===
+40:| **S — les structures (session `29ad180d`)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | analyseur **38/39** types, **99/100** rôles, **45/45** compléments, gold **39**, corpus **39** (SHA `973c70a4…`) ; **validation humaine** de la banque (0 verdict), p
+187:2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
+  ```
+
+- **read** `{"file_path": "docs/pilotage/chantiers.md", "limit": 3, "offset": 87}`
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 2, "offset": 40}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md</path>
+<type>file</type>
+<content>
+87: | **S — les structures** | quelles structures d'interprétation candidates, et lesquelles un humain valide ? | ✅ **v2** : rôles **38/39** types, **99/100** rôles, **45/45** compléments, gold **39**, corpus **39** (SHA `973c70a4…`), **40 tests** ; banque à **0** verdict | **validation humaine** de la banque, puis **h033** (GN sans auxiliaire) | L (annotations), D (corpus), B (sens) | L (banque), B (pragmatique), D (corpus) |
+88: | **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160 synthétiques** (POS 0,7544 à 320 phrases, réel 0,7657, exact 0,194, tête 0,510), **attachement tête 1,0/0,966/0,932** ; **coréférence 116 liens, CV 0,847 ± 0,051** ; cascade **0,9415 / 0,7539 / 1,0** ; **pragmatique neuronale test 0,6375** — l'heuristique garde | **gold 200+** ; **porte B13** (134/140) ; la cascade mesurée | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique), N2 (allègement) |
+89: | **D — les données*
+… [505 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+40: | **S — les structures (session `29ad180d`)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | analyseur **38/39** types, **99/100** rôles, **45/45** compléments, gold **39**, corpus **39** (SHA `973c70a4…`) ; **validation humaine** de la banque (0 verdict), puis **h033**. |
+41: | **D/R/A — terminé (02/11)** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | **OCR CEGEP 91 scans uniques (60 documents, 1 982 p, 4,41 M car.)** ; clôture le 02/11. Restent R1.1/R1.2 (N2) et A2.6 (A) ; les 8 scans `.PDF` sont une limite nommée. |
+
+(Showing lines 40-41 of 221. Use offset=42 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/chantiers.md", "new_string": "| **S — les structures** | quelles structures d'interprétation candidates, et lesquelles un humain valide ? | ✅ **v3** : frontière GN-devant-verbe, **47/47** types, **117/117** rôles, **47/47** compléments, gold **47**, corpus **47** (SHA `f … [647 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "| **S — les structures (session `29ad180d`)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | **47/47** types, **117/117** rôles, **47/47** complément … [526 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n \"S — les structures (CPU)\" -A4 docs/pilotage/plan-travail.md | head -8", "description": "Read S runbook item"}`
+
+  ```
+187:2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
+188-   et `tools/structures/` (sous-module `heads/fusion`). Analyseur **38/39** types, **99/100** rôles,
+189-   **45/45** compléments, gold **39**, **40 tests**. Prochaine action : **validation humaine** de la
+190-   banque, puis **h033** ; le sous-module se commit **dans son dépôt** avant le pointeur.
+191-3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **134/140** (4 S + 2 test
+  ```
+
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 5, "offset": 187}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+187: 2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
+188:    et `tools/structures/` (sous-module `heads/fusion`). Analyseur **38/39** types, **99/100** rôles,
+189:    **45/45** compléments, gold **39**, **40 tests**. Prochaine action : **validation humaine** de la
+190:    banque, puis **h033** ; le sous-module se commit **dans son dépôt** avant le pointeur.
+191: 3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **134/140** (4 S + 2 test
+
+(Showing lines 187-191 of 221. Use offset=192 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`\n   et `tools/structures/`. **47/47** types, **117/117** rôles, **47/47** compléments, gold **47**,\n   corpus **47** (SHA `f2a0d2fb… … [577 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/verifie_journal.py 2>&1 | tail -2", "description": "Run all p … [16 caractères tronqués]`
+
+  ```
+en-cours · 1522 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ plans cohérents
+  revue de documentation · 560 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  journal · 39 jour(s) · 117 session(s) · 1856 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "git status --short | head -15; echo \"--- dates ---\"; grep -n \"Mis à jour\" docs/pilotage/en-cours.md; grep -n \"dernière mise à jour\" docs/pilotage/roadmap.md", "description": "Check working tree and dates"}`
+
+  ```
+M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+?? reports/pensee-porte-minute.json
+?? tools/tests/qualifier_porte_minute_drvm.py
+--- dates ---
+3:**Mis à jour : 2026-11-02, 19 h 43 HNE (heure locale, EST).**
+52:L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 19 h 45**.
+  ```
+
+- **bash** `{"command": "sed -i 's/\\*\\*Mis à jour : 2026-11-02, 19 h 43 HNE/**Mis à jour : 2026-11-02, 19 h 55 HNE/' docs/pilotage/en-cours.md; sed -i 's/La dernière mise à jour est le \\*\\*2026-11-02 19 h 45\\*\\*/La dernière mise à jour est le **2026-11-02 19 h 55**/' docs/pilotage/roadmap.md; grep -n \"Mi … [148 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+52:L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 19 h 55**.
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md && git di … [76 caractères tronqués]`
+
+  ```
+en-cours · 1522 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ plans cohérents
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ docs/pilotage/chantiers.md    | 11 +++++-----
+ docs/pilotage/en-cours.md     | 48 +++++++++++++------------------------------
+ docs/pilotage/plan-travail.md | 33 +++++++++++++++--------------
+ docs/pilotage/roadmap.md      | 12 +++++------
+ 4 files changed, 42 insertions(+), 62 deletions(-)
+  ```
+
+- **bash** `{"command": "git commit -m \"PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS\" -m \"en-cours : N2 sort des sessions actives après sa clôture (e12c39c1) et rejoint D/R/A dans le bloc des closes (200 k pas : 3,16 / 5,61 / 7,28 / 8,00 ; R … [442 caractères tronqués]`

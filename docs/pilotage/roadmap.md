@@ -39,17 +39,17 @@
 pas ; gold 432, 116 liens) ; le **gold neuronal** est qualifié (POS **0,9415**, syntagmes
 **0,7539**, acte **1,0**) ; la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la
 règle, **0** sans) ; la **pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556**
-majoritaire) — l'heuristique garde. **N2** : le run de **200 k pas** donne val_fr **3,16**,
-littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — **< 2,5 non atteinte** ;
-**R1.1/R1.2** sont **mesurées**. **S** : rôles **38/39**, **99/100**, **45/45** ; **D/R/A** close
-à 18 h 45 (OCR CEGEP **91 scans uniques**, 1 982 p). Le hub tient la **passe de portes** ; runbook
-dans [`plan-travail.md`](plan-travail.md) § 9.
+majoritaire) — l'heuristique garde. **N2** (close à 19 h 46) : le run de **200 k pas** donne val_fr
+**3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — **< 2,5 non atteinte** ;
+**R1.1/R1.2** sont **mesurées**. **S** : **47/47** types, **117/117** rôles, **47/47** compléments,
+gold **47** ; **D/R/A** close à 18 h 45 (OCR CEGEP **91 scans uniques**, 1 982 p). Le hub tient la
+**passe de portes** ; runbook dans [`plan-travail.md`](plan-travail.md) § 9.
 
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 19 h 45**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 19 h 55**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont

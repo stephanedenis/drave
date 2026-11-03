@@ -4230,3 +4230,126 @@ plan : ['- **Heartbeat** : 2026-11-02 19:46 HAE', '- **État** : terminé']
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"- **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.\n- **Prochaine action** : la **courbe**, … [1493 caractères tronqués]`
+
+  ```
+en-cours : session close
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-177]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-177", "timeout_ms": 180000, "wait": true}`
+
+  ```
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe de vérification finale (documentation, état, journal, schémas, fraîcheur)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; timeout 600 python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"=== état à jour ===\"; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -3; echo \"=== sessions ===\"; python3 tools/sessions.py --check --strict 2>&1 | ta … [277 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 560 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== état à jour ===
+  état · dernier fait e2227509 · dernier état e2227509
+  ✅ aucun fait commité après le dernier état
+=== sessions ===
+  ✅ plans cohérents
+=== en-cours ===
+  en-cours · 1522 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== schémas ===
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+=== budget ===
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"0733c5bb\\|N2\\b\" docs/pilotage/en-cours.md | head -12; echo \"=== R1 ===\"; grep -n \"R1 —\\|R1.1\" docs/pilotage/en-cours.md | head -6; echo \"=== git log ===\"; git log --oneline -6", "description": "Verify final state content and log"}`
+
+  ```
+10:> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A close à
+11:> 18 h 45** (OCR CEGEP) et **N2 close à 19 h 46** (200 k pas) ; restent **le hub**, **S** et
+32:- **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+33:- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+47:- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+66:- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+73:> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md). `0733c5bb` (N2) — **200 k pas**,
+75:> `e12c39c1`, [clôture](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md).
+86:- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature ; **200 k pas** — val_fr
+118:| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.1/R1.2 mesurées** ; N4 0/4 ; N5 gelé | **N2 close** ; la suite est **R1.2 à 1 024 octets entraînés** ; **N4** |
+138:- **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → **non** :
+=== R1 ===
+74:> **3,16 / 5,61 / 7,28 / 8,00**, 
+… [1393 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 71,90p docs/pilotage/en-cours.md; echo \"=== git show résumé ===\"; git show --stat --oneline 2cff8dba | tail -4; git show --stat --oneline e12c39c1 | tail -4; git show --stat --oneline e2227509 | tail -4", "description": "Extract final state l … [23 caractères tronqués]`
+
+  ```
+> **Sessions closes** : `fe3c05f0` (D/R/A) — **91 scans uniques**, 60 documents, 1 982 p,
+> 4,41 M car. ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md). `0733c5bb` (N2) — **200 k pas**,
+> **3,16 / 5,61 / 7,28 / 8,00**, **R1.1/R1.2 mesurées**, **GPU libres** ; commits `2cff8dba` et
+> `e12c39c1`, [clôture](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md).
+
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
+- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-
+… [1776 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle clos : je rends la ligne d'état et les commits
+
+Cycle terminé, mesuré, écrit et committé. Voici l'essentiel.
+
+## Les deux faits du cycle
+
+**1. 200 000 pas sur le mélange 1 Go** (recette N2.ac inchangée, 3 h 10 de GPU 0, 11 410 s) :
+
+| mesure | 60 k | **200 k** | écart |
+|---|---:|---:|---:|
+| validation française (L128) | 3,4902 | **3,1591** | −0,33 |
+| grand corpus (L128) | 3,3565 | **3,0035** | −0,35 |
+| littérature | 6,0283 | **5,6056** | −0,42 |
+| anglais | 8,3352 | **7,2770** | −1,06 |
+| wikitext2 | 9,0525 | **8,0018** | −1,05 |
+| permutation (contrôle) | 215,6 | **181,9** | — |
+
+Le français tient et **la largeur progresse** — mais **la porte 2,5 n'est pas atteinte** : 3,1591 en domaine, et la loi de puissance de la trajectoire (b = 0,0987 sur 20 k–200 k, 0,0894 sur 40 k–200 k, exposant **décroissant**) place 2,5 à **1,3–2,7 M pas**, soit 21 à 44 h de GPU. Surtout, le gain **s'inverse à 512 octets** (+0,14, +0,31 à 1 000) : entraîner plus longtemps sans entraîner plus long **durcit** le verrou de longueur.
+
+**2. R1.1/R1.2 — la fenêtre** (RoPE, 34,3 M, même budget) : la PPL à 1 000 octets passe de **8,2024** à **3,2545** (porte 1,5 tenue à **0,97×** contre 2,33×), avec deux contrôles : à texte et prédécesseurs identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ; et entraîner les positions 0–1279 fait tomber l'explosion à 4,0956. **Mais** depuis une initialisation figée, RoPE se dégrade dès 160 octets et ne se redresse pas à 40 k pas — la platitude vient de l'initialisation, pas du schéma seul. **R1.2 tranche** : à **octets constants**, la fenêtre 512 gagne partout, **−0,244 à 1 000**, et le modèle **utilise** le contexte (2,9654 → 2,8819). Le miroir de copie est muet (0,0078) : la PPL n'est pas la lecture.
+
+Découverte de méthode au passage : **la graine est inerte sous `--init`** (deux lancements, même `sha256_drvm`) — l'« intervalle de graine » ±0,012 de N2.z n'en était pas un, c'était la séquence de décalages de position, précisément ce que RoPE supprime.
+
+## Ma ligne d'état (déjà intégrée par le hub)
+
+> **N2** : N2.ac 1 Go — 3,49 domaine, 6,03 littérature ; **200 k pas** — val_fr **3,1591** (−0,33), grand corpus **3,0035**, littérature **5,6056**, anglais **7,2770**, wikitext2 **8,0018** : **< 2,5 non atteinte** (la loi place 2,5 à **1,3–2,7 M pas**), et le gain **s'inverse à 512 octets** (+0,14) — le compute ne remplace pas une fenêtre entraînée ; N4 0/40.
+>
+> **R1 — la fenêtre native** : R1.1 RoPE **3,2545** à 1 000 octets (table absolue 8,2024), invariant au décalage ; R1.2 à octets constants **3,0107** (−0,244), le contexte est utilisé ; depuis zéro, RoPE ne suffit pas.
+
+## Commits
+
+- **`2cff8dba`** — R1 : les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture.
+- **`e12c39c1`** — N2 : 200 000 pas, 3,1591 en domaine, la porte 2,5 à 1,3–2,7 M pas.
+- **`e2227509`** — clôture (récit `journal/sessions/0733c5bb…/cloture.md`), mandat `dc7f9c56`.
+
+Fiches : [`rapport-n2-200k`](reports/rapport-n2-200k.md) et [`rapport-n2-r11`](reports/rapport-n2-r11.md) ; agrégats `reports/n2-200k.json`, `reports/n2-r11.json` ; le code du banc est archivé dans la session (`code/`).
+
+Portes : revue de documentation **verte**, état à jour, sessions `--strict` vertes, journal, schémas et budget verts. Réservations rendues, **GPU 0 et 1 libres**. Suite désignée : **R1.2 à 1 024 octets entraînés** — c'est la longueur qui recule, pas le compute.
+

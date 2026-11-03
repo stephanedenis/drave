@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 3.6 h |
 | Tours | 1 |
-| Messages | 230 |
-| Appels d'outils | 237 |
+| Messages | 234 |
+| Appels d'outils | 240 |
 | Fichiers touchés | 16 |
-| Commandes | 177 |
+| Commandes | 180 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu es la session N2 (le natif, GPU). Lis AGENTS.md, docs/pilotage/en-cours.md et  docs/pilotage/backlog/N2-distillation. … [578 caractères tronqués]
 
-*237 appels d'outils.* Actions notables :
+*240 appels d'outils.* Actions notables :
 
 - bash — Get session ID and workspace listing
 - read
@@ -41,11 +41,39 @@
 - bash — Inspect drvm config and training log
 - bash — Inspect drave-core and mix corpus
 - bash — Read training script header
-- … et 186 autres
+- … et 189 autres
 
 **Synthèse produite :**
 
-⏵ Clôture : récit de session, plan terminé
+⏵ Cycle clos : je rends la ligne d'état et les commits
+
+Cycle terminé, mesuré, écrit et committé. Voici l'essentiel.
+
+\## Les deux faits du cycle
+
+**1. 200 000 pas sur le mélange 1 Go** (recette N2.ac inchangée, 3 h 10 de GPU 0, 11 410 s) :
+
+| mesure | 60 k | **200 k** | écart |
+|---|---:|---:|---:|
+| validation française (L128) | 3,4902 | **3,1591** | −0,33 |
+| grand corpus (L128) | 3,3565 | **3,0035** | −0,35 |
+| littérature | 6,0283 | **5,6056** | −0,42 |
+| anglais | 8,3352 | **7,2770** | −1,06 |
+| wikitext2 | 9,0525 | **8,0018** | −1,05 |
+| permutation (contrôle) | 215,6 | **181,9** | — |
+
+Le français tient et **la largeur progresse** — mais **la porte 2,5 n'est pas atteinte** : 3,1591 en domaine, et la loi de puissance de la trajectoire (b = 0,0987 sur 20 k–200 k, 0,0894 sur 40 k–200 k, exposant **décroissant**) place 2,5 à **1,3–2,7 M pas**, soit 21 à 44 h de GPU. Surtout, le gain **s'inverse à 512 octets** (+0,14, +0,31 à 1 000) : entraîner plus longtemps sans entraîner plus long **durcit** le verrou de longueur.
+
+**2. R1.1/R1.2 — la fenêtre** (RoPE, 34,3 M, même budget) : la PPL à 1 000 octets passe de **8,2024** à **3,2545** (porte 1,5 tenue à **0,97×** contre 2,33×), avec deux contrôles : à texte et prédécesseurs identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ; et entraîner les positions 0–1279 fait tomber l'explosion à 4,0956. **Mais** depuis une initialisation figée, RoPE se dégrade dès 160 octets et ne se redresse pas à 40 k pas — la platitude vient de l'initialisation, pas du schéma seul. **R1.2 tranche** : à **octets constants**, la fenêtre 512 gagne partout, **−0,244 à 1 000**, et le modèle **utilise** le contexte (2,9654 → 2,8819). Le miroir de copie est muet (0,0078) : la PPL n'est pas la lecture.
+
+Découverte de méthode au passage : **la graine est inerte sous `--init`** (deux lancements, même `sha256_drvm`) — l'« intervalle de graine » ±0,012 de N2.z n'en était pas un, c'était la séquence de décalages de position, précisément ce que RoPE supprime.
+
+\## Ma ligne d'état (déjà intégrée par le hub)
+
+> **N2** : N2.ac 1 Go — 3,49 domaine, 6,03 littérature ; **200 k pas** — val_fr **3,1591** (−0,33), grand corpus **3,0035**, littérature **5,6056**, anglais **7,2770**, wikitext2 **8,0018** : **< 2,5 non atteinte** (la loi place 2,5 à **1,3–2,7 M pas**), et le gain **s'inverse à 512 octets** (+0,14) — le compute ne remplace pas une fenêtre entraînée ; N4 0/40.
+>
+> **R1 — la fenêtre native** : R1.1 RoPE **3
+… [958 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -112,7 +140,7 @@
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 137 autres
+- … et 140 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -200,6 +228,7 @@
 - **T1** `[still running after 60000ms; moved to background job bash-159]`
 - **T1** `[still running after 60000ms; moved to background job bash-173]`
 - **T1** `[still running after 60000ms; moved to background job bash-177]`
+- **T1** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typogly`
 
 ## 5. Erreurs rencontrées
 

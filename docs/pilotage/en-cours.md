@@ -1,16 +1,15 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 19 h 43 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
 > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
 >
 > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
-> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A est
-> close à 18 h 45** (OCR du fonds CEGEP) ; les GPU sont sains ; reprise par
-> `dsh --profile dsh-tui --resume <id>` ; runbook dans
-> [`plan-travail.md`](plan-travail.md) § 9.
+> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A close à
+> 18 h 45** (OCR CEGEP) et **N2 close à 19 h 46** (200 k pas) ; restent **le hub**, **S** et
+> **Pensée** ; les GPU sont libres ; runbook dans [`plan-travail.md`](plan-travail.md) § 9.
 
 ## Sessions en cours
 
@@ -34,27 +33,6 @@
 - **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
 - **Bloquants** : aucun ; la passe tient la machine (GPU libres).
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
-
-### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
-
-- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
-- **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
-  (R1.1/R1.2).
-- **Plan** : 1) ~~plan~~ ; 2) ~~200 k pas~~ ; 3) ~~banc R1.1/R1.2~~ ; 4) **cinq PPL**, courbe,
-  fiche + clôture.
-- **Ambition** : N répond « plus de pas, quelle position, quelle fenêtre ».
-- **Stratégie** : 34,3 M, canal, graine 1 ; banc GPU 1.
-- **Objectif final** : **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
-- **Ce qu'elle fait** : **200 k pas terminés** ; cinq PPL mesurées — val_fr **3,16**,
-  littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (< 2,5 non atteinte) ;
-  **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md),
-  [`n2-200k`](../../reports/rapport-n2-200k.md).
-- **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.
-- **Close** : commits **`2cff8dba`** (R1.1/R1.2) et **`e12c39c1`** (200 k) ; récit
-  [`cloture`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md) ; réservations
-  rendues, **GPU libres**. La suite est **R1.2 à 1 024 octets entraînés**.
-- **Bloquants** : aucun ; **GPU libres**.
-- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
 ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
 
@@ -90,9 +68,11 @@
 - **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; la **pragmatique neuronale** ne qualifie pas ; restent **gold 200+** et **porte B13**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
-> **Session close** : `fe3c05f0` — **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car. ;
-> [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
-> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+> **Sessions closes** : `fe3c05f0` (D/R/A) — **91 scans uniques**, 60 documents, 1 982 p,
+> 4,41 M car. ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md). `0733c5bb` (N2) — **200 k pas**,
+> **3,16 / 5,61 / 7,28 / 8,00**, **R1.1/R1.2 mesurées**, **GPU libres** ; commits `2cff8dba` et
+> `e12c39c1`, [clôture](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md).
 
 ## Ce qui est en cours
 
@@ -122,7 +102,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **560** / **647** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **560** / **648** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -135,7 +115,7 @@ externes** et la **prochaine action**.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 134/140** ; **B10.3 bloquée** |
-| **N — le natif** | **N2, N3, N4** | N2 : **N2.ac 1 Go — 3,49 domaine / 6,03 littérature** ; < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2** : 200 k pas **en cours** (session `0733c5bb`), puis **R1.1/R1.2** ; **N4** |
+| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.1/R1.2 mesurées** ; N4 0/4 ; N5 gelé | **N2 close** ; la suite est **R1.2 à 1 024 octets entraînés** ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
@@ -145,9 +125,9 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — **fiche et clôture du run de 200 k** ; **R1** — 1 024 octets entraînés ; **Pensée** — gold 200+,
-porte B13 ; **S** — validation humaine, h033 ; **N4** — la consigne ; **B10.3** — le `z` ;
-**B13** — porte 134/140 (4 S + 2 test périmé) ; **R0.7** — le tagger complet ; **D** — OCR clos (8 scans `.PDF`).
+**R1** — **R1.2 à 1 024 octets entraînés** ; **Pensée** — gold 200+, porte B13 ; **S** — homographes,
+validation humaine ; **N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 ; **R0.7** — le
+tagger complet ; **D** — OCR clos (8 scans `.PDF`).
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 

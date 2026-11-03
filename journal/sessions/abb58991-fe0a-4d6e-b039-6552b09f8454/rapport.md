@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 3.5 h |
+| Durée | 3.6 h |
 | Tours | 8 |
-| Messages | 381 |
-| Appels d'outils | 485 |
-| Fichiers touchés | 31 |
-| Commandes | 355 |
+| Messages | 384 |
+| Appels d'outils | 488 |
+| Fichiers touchés | 32 |
+| Commandes | 357 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 1 |
@@ -319,7 +319,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 
 ### Tour 8 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Inspect minute door problem and state helpers
 - bash — Read PolitiqueLLM and minute tests
@@ -332,10 +332,13 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py`
 - bash — Run minute door qualification
 - bash — Adjust minute thresholds and rerun
+- bash — Extract minute results from JSON
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md`
+- bash — Apply minute door state and check budgets
 
 **Synthèse produite :**
 
-⏵ Résultat net : LLM porte **26 nœuds/4 sonde/7,2 s**, prompt labyrinthe **200/3/118 s** ; le hasard par chance. J'ajuste le seuil (le hasard est une limite) et je rejoue
+⏵ J'applique l'état « porte minute » (README, INDEX, en-cours, roadmap, plan, journal) et je mesure le T0
 
 ## 3. Travail accompli
 
@@ -374,6 +377,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-134.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/b13-porte-134.json` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -417,7 +421,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 315 autres
+- … et 317 autres
 
 ## 4. Mesures et résultats marquants
 

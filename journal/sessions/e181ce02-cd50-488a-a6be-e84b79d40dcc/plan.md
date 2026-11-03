@@ -15,15 +15,15 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-02 19:32 EST
-- **Prochaine action** : la **porte B13** est mesurée à **134/140** (4 S + 2 test périmé ; le
-  140/140 de 702b368c ne se rejoue pas) ; reprendre le **gold 200+** et la **porte qui bouge**.
+- **Heartbeat** : 2026-11-02 19:50 EST
+- **Prochaine action** : la **porte minute** est ouverte par la règle (**26 nœuds**, 4 sonde ; le
+  labyrinthe échoue) ; reprendre la **porte mobile/stochastique** et le **gold 200+**.
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
 - **État** : actif
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
   (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) **banc anytime** (AUC,
-  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432) ; 11) ~~gold neuronal~~ (tagger 7B local, cascade POS 0,9440) ; 12) ~~syntagmes~~ (BIO 7B, exact 0,6173, tête 0,7606) ; 13) ~~cascade complète~~ (POS 0,9415, syntagmes 0,7539, acte 1,0) ; 14) ~~DRVM/native~~ (cadenas 3 nœuds avec règle, minimal 0 ; porte 27 nœuds avec règle) ; 15) ~~porte DRVM~~ (27 nœuds, 4 sonde) ; 16) ~~pragmatique neuronale~~ (négatif : dev 1,0, test 0,6375) ; 17) ~~porte B13~~ (134/140 : 4 S + 2 test périmé ; le 140/140 ne se rejoue pas).
+  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432) ; 11) ~~gold neuronal~~ (tagger 7B local, cascade POS 0,9440) ; 12) ~~syntagmes~~ (BIO 7B, exact 0,6173, tête 0,7606) ; 13) ~~cascade complète~~ (POS 0,9415, syntagmes 0,7539, acte 1,0) ; 14) ~~DRVM/native~~ (cadenas 3 nœuds avec règle, minimal 0 ; porte 27 nœuds avec règle) ; 15) ~~porte DRVM~~ (27 nœuds, 4 sonde) ; 16) ~~pragmatique neuronale~~ (négatif : dev 1,0, test 0,6375) ; 17) ~~porte B13~~ (134/140 : 4 S + 2 test périmé ; le 140/140 ne se rejoue pas) ; 18) ~~porte minute~~ (26 nœuds, 4 sonde ; le labyrinthe échoue).
 - **Ambition** : faire de Drave un **runtime cognitif** où penser est une **recherche tracée** sur
   des **états pluriels**, avec des opérateurs hétérogènes (neuronaux, classiques, matériel) et des
   décisions justifiables et rejouables.
@@ -46,7 +46,7 @@
   A* 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire ; fiches
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md),
-  [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; fait : **politique DRVM/native** (`PolitiqueLLM` — cadenas 3 nœuds avec règle, porte 27 nœuds avec la règle, 200 sans) ; **pragmatique neuronale** mesurée (négatif : dev 1,0, test 0,6375) ; **porte B13** **134/140** (4 S + 2 test périmé) ; prochain : **gold 200+** et **porte qui bouge**.
+  [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; fait : **politique DRVM/native** (`PolitiqueLLM` — cadenas 3 nœuds avec règle, porte 27 nœuds avec la règle, 200 sans) ; **pragmatique neuronale** mesurée (négatif : dev 1,0, test 0,6375) ; **porte B13** **134/140** (4 S + 2 test périmé) ; **porte minute** **26 nœuds** (4 sonde) ; prochain : **porte mobile/stochastique** et **gold 200+**.
 - **Gold L** : **432 réels + 160 synthétiques + 20** ; POS **0,765**, syntagmes exacts **0,194**/
   **tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;
   **attachement tête 1,0/0,966/0,932** (span 0,323/0,338 ; 29 ambiguës), hasard 0,015 ; **taggers
