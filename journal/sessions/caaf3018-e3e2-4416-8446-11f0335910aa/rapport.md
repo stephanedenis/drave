@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 16.8 h |
+| Durée | 16.9 h |
 | Tours | 28 |
-| Messages | 487 |
-| Appels d'outils | 489 |
+| Messages | 489 |
+| Appels d'outils | 491 |
 | Fichiers touchés | 6 |
-| Commandes | 352 |
+| Commandes | 353 |
 | Sous-agents | 0 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*40 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -608,7 +608,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Append morning resumption to journal
 - bash — Check claims and hub plan
 - bash — Clean stale claims and claim day job
-- … et 21 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
@@ -669,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 312 autres
+- … et 313 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -791,6 +791,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T28** `(il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --bras lora --sauver /tmp/n4/rang4` — le formateur suffixe le bras : cela écrit /tmp/n4/rang4-lora.pt ; /tmp `
 - **T28** `[still running after 60000ms; moved to background job bash-350]`
 - **T28** `[still running after 60000ms; moved to background job bash-352]`
+- **T28** `[still running after 60000ms; moved to background job bash-353]`
 
 ## 5. Erreurs rencontrées
 
@@ -820,4 +821,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/references-non-regression.md"); t = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("tools/porte-homeostasie.sh"); t = p.read_text(encoding="ut
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-j2.txt <<'EOF' JOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUME
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/methode/portes.md"); t = p.read_text(encoding="utf-8"
 

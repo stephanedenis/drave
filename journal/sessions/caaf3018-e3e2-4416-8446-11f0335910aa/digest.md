@@ -8400,3 +8400,23 @@ journal : deux portes consignées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-j2.txt <<'EOF'\nJOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUMENTÉE)\n\nLe fil du 03/11 consigne : porte-reparti-moteur ré-étalonnée à 8,7434 avec la\npreuve (deux régénérations identiques, … [596 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-352]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-352", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 5454ac59] JOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUMENTÉE)
+ 8 files changed, 162 insertions(+), 23 deletions(-)
+=== rouges connues dans les docs ===
+docs/methode/portes.md:15:**77 vertes, 5 rouges** (les 4 connues + `porte-sessions`, mandats N2/S périmés — coordination) ; la liste et le diagnostic sont dans
+docs/pilotage/en-cours.md:20:> (4 connues + `porte-sessions` de coordination, machine au repos) ; la **82e `porte-ressources`**
+docs/pilotage/en-cours.md:34:- **Ce qu'elle fait** : intégration ; **passe 04 h 10 — 82 portes, 77/5** (4 connues +
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/methode/portes.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"**77 vertes, 5 rouges** (les 4 connues + `porte-sessions`, mandats N2/S périmés — coordination) ;\"\nn = \"**77  … [998 caractères tronqués]`

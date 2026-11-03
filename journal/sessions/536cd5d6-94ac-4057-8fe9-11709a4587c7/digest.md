@@ -12332,3 +12332,285 @@ def _cle_env() -> str:
 … [6299 caractères tronqués]
   ```
 
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Original: audit “l'état de toutes les sessions et le pilotage”, then provide a multi-terminal runbook to start/recover other sessions.
+- GPU thermal: “GPU 0 à 87 de3grés et fan à 88%. peut-on améliorer sa ventilation au dela de 88%”.
+- “jai fait le zypper continue toi-même. tu peux me demander le mdp en popup pour les sudo.”
+- “oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru”.
+- “peut-on controller les fan de dell sans avoir à modifier le bios”.
+- “dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard”.
+- “il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.” → keep all sessions productive until 03/11 08:00; report at 08:00.
+- “tiens ta liste de tâches dsh à jour et continue” → keep DSH todo list current and continue.
+- Active goal `goal-63a3e56f-d66e-4e43-8974-db1c692b5e45`, max 1000 rounds, objective: coordinate hub + N2/S/Pensée productively until 03/11 08:00, hold resource ledger, monitor full gate pass, integrate into état/roadmap/journal, produce bilan at 08:00; no session waiting; release/claim at job end; if human-blocked take next line.
+
+## Key Technical Concepts
+- Drave/Qtrinet event-flow AI repo; docs=pilotage, reports=measured results, journal=dated narrative, data=corpus.
+- DSH sessions: `dsh --profile dsh-tui`, `--resume <id>`; hub session `536cd5d6-94ac-4057-8fe9-11709a4587c7` (this session).
+- Hauru: Dell Precision 7910, 2× Xeon E5-2687W v3 (40 threads), NUMA `cpu0`=0-9,20-29 / `cpu1`=10-19,30-39; 125 Gio RAM; 2× Quadro RTX 5000 16 Gio NVLink, both NUMA0; openSUSE Tumbleweed, kernel 7.2.6-1, NVIDIA 580.196.07.
+- Storage: system NVMe 828G (706G free); RAID0 `/home/stephane/IA` 938G (34G free, 97%); HDD `/home/stephane/Data13TB` 11T (1.9T free).
+- Resource ledger `tools/ressources.py` + `work/ressources.json`; `--status/--claim/--release/--check/--suggest/--actual/--autotest` (9 cases); integrated into `sessions.py`.
+- `sessions.py`: plan contract fields, heartbeats (45 min), `--check --strict`, claims-aware “mandat long”; nested `data/` ⊃ `data/structures/` is warning.
+- Gates: `bash tools/toutes-les-portes.sh`, `$JOURNAUX/registre.txt`, verdict via `awk '$2 != 0'`; tolerated reds only in `references-non-regression.md`.
+- T0 context budget = AGENTS + en-cours + one task doc, max 4,000 words; `tools/taille_documents.py`; `tools/revue_documentation.py`; `tools/verifie_journal.py`; `tools/verifie_en_cours.py`.
+- `hauru-thermal.service` active: GPU0 180W cap, Dell fans auto; journal `/var/log/hauru-thermal.log`.
+
+## Files and Code
+- `docs/pilotage/en-cours.md`: 03/11 state, **575 fiches / 661 JSON**, 119 docs, 82 portes; night consigne blockquote added; T0 currently 4,000/4,000 (at limit).
+- `docs/pilotage/references-non-regression.md`: pass 02/11 19h32 = **81 portes, 76 vertes, 5 rouges** (1h52); 4 known reds + `porte-tableaux` transient, documented “rejouée verte à 21 h 57”; 82nd `porte-ressources` next pass.
+- `docs/pilotage/plan-travail.md` §10.7: night consigne (claims table, pass exception, 08h checkpoint); committed `9a17d0cc`.
+- `docs/methode/ressources.md`: routing doc for resource rule; `docs/methode/portes.md` updated with 82nd gate note.
+- `tools/sessions.py`: `sessions_avec_claim()` reads `work/ressources.json`; stale heartbeat with active claim → warning “mandat long … claim actif, heartbeat non exigé”; autotest 6 cases; commit `b1c0bcda`.
+- `tools/porte-ressources.sh`: 82nd gate, autotest 9 cases/registre coherence; green; was accidentally removed by a B13 commit, restored `1cbaff53`.
+- `journal/session
+… [4744 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Original: audit “l'état de toutes les sessions et le pilotage”, then provide a multi-terminal runbook to start/recover other sessions.
+- GPU thermal: “GPU 0 à 87 de3grés et fan à 88%. peut-on améliorer sa ventilation au dela de 88%”.
+- “jai fait le zypper continue toi-même. tu peux me demander le mdp en popup pour les sudo.”
+- “oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru”.
+- “peut-on controller les fan de dell sans avoir à modifier le bios”.
+- “dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard”.
+- “il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.” → keep all sessions productive until 03/11 08:00; report at 08:00.
+- “tiens ta liste de tâches dsh à jour et continue” → keep DSH todo list current and continue.
+- Active goal `goal-63a3e56f-d66e-4e43-8974-db1c692b5e45`, max 1000 rounds, objective: coordinate hub + N2/S/Pensée productively until 03/11 08:00, hold resource ledger, monitor full gate pass, integrate into état/roadmap/journal, produce bilan at 08:00; no session waiting; release/claim at job end; if human-blocked take next line.
+
+## Key Technical Concepts
+- Drave/Qtrinet event-flow AI repo; docs=pilotage, reports=measured results, journal=dated narrative, data=corpus.
+- DSH sessions: `dsh --profile dsh-tui`, `--resume <id>`; hub session `536cd5d6-94ac-4057-8fe9-11709a4587c7` (this session).
+- Hauru: Dell Precision 7910, 2× Xeon E5-2687W v3 (40 threads), NUMA `cpu0`=0-9,20-29 / `cpu1`=10-19,30-39; 125 Gio RAM; 2× Quadro RTX 5000 16 Gio NVLink, both NUMA0; openSUSE Tumbleweed, kernel 7.2.6-1, NVIDIA 580.196.07.
+- Storage: system NVMe 828G (706G free); RAID0 `/home/stephane/IA` 938G (34G free, 97%); HDD `/home/stephane/Data13TB` 11T (1.9T free).
+- Resource ledger `tools/ressources.py` + `work/ressources.json`; `--status/--claim/--release/--check/--suggest/--actual/--autotest` (9 cases); integrated into `sessions.py`.
+- `sessions.py`: plan contract fields, heartbeats (45 min), `--check --strict`, claims-aware “mandat long”; nested `data/` ⊃ `data/structures/` is warning.
+- Gates: `bash tools/toutes-les-portes.sh`, `$JOURNAUX/registre.txt`, verdict via `awk '$2 != 0'`; tolerated reds only in `references-non-regression.md`.
+- T0 context budget = AGENTS + en-cours + one task doc, max 4,000 words; `tools/taille_documents.py`; `tools/revue_documentation.py`; `tools/verifie_journal.py`; `tools/verifie_en_cours.py`.
+- `hauru-thermal.service` active: GPU0 180W cap, Dell fans auto; journal `/var/log/hauru-thermal.log`.
+
+## Files and Code
+- `docs/pilotage/en-cours.md`: 03/11 state, **575 fiches / 661 JSON**, 119 docs, 82 portes; night consigne blockquote added; T0 currently 4,000/4,000 (at limit).
+- `docs/pilotage/references-non-regression.md`: pass 02/11 19h32 = **81 portes, 76 vertes, 5 rouges** (1h52); 4 known reds + `porte-tableaux` transient, documented “rejouée verte à 21 h 57”; 82nd `porte-ressources` next pass.
+- `docs/pilotage/plan-travail.md` §10.7: night consigne (claims table, pass exception, 08h checkpoint); committed `9a17d0cc`.
+- `docs/methode/ressources.md`: routing doc for resource rule; `docs/methode/portes.md` updated with 82nd gate note.
+- `tools/sessions.py`: `sessions_avec_claim()` reads `work/ressources.json`; stale heartbeat with active claim → warning “mandat long … claim actif, heartbeat non exigé”; autotest 6 cases; commit `b1c0bcda`.
+- `tools/porte-ressources.sh`: 82nd gate, autotest 9 cases/registre coherence; green; was accidentally removed by a B13 commit, restored `1cbaff53`.
+- `journal/sessions/536…/plan.md`: hub plan; heartbeat 22:31; next = veille + bilan 08h; claim `veille` cpu1=1 ram=1 eta600; commit `f9a40785`.
+- `journal/2026-11-03/README.md`: 03/11 bilan entry with 21h49 state, “Sessions DSH” table, index link `../README.md#sessions`, 08h checklist; committed (`0bffb215`, `212c23d7`).
+- `reports/INDEX.md`: 567 (regenerated), then other sessions advanced to 575+; `reports/README.md` curated 2,762/2,800 with 3 night fiches added and 5 historical removed; commit `decd4cd8`.
+- `reports/rapport-n2-fenetre.md` + `reports/n2-fenetre.json`: N2 window fiche (128→1024), committed by N2; `porte-tableaux` green.
+- `work/portes/passe-1102-19h32/registre.txt`: full pass logs; `porte-vision` 602s; `porte-sessions` green.
+- `equipment-hauru/system/thermal/`, `/usr/local/bin/hauru-thermal`, `/etc/systemd/system/hauru-thermal.service`, `/etc/default/hauru-thermal`: thermal service, committed/pushed.
+
+## Errors and Fixes
+- En-cours edit failed assertion (`19 h 55` header changed) → did not overwrite active writer; verified current state.
+- `sessions.py --check --strict` false-red on N2/S long runs → added claim-aware “mandat long” handling; autotest + porte green.
+- `porte-tableaux` red (`reports/rapport-n2-fenetre.md → n2-fenetre.json` missing) → N2 created JSON at 21:56; gate re-run green 21:57; references/en-cours updated.
+- T0 overflow 4,011 → removed redundant INDEX line; later small drifts 4,001/4,059/4,000 fixed by counter/line trims.
+- Journal `verifie_journal` red: missing “Sessions DSH” and exact link `../README.md#sessions` → added; green.
+- Git `.git/index.lock` contention with other sessions; retried; commits sometimes taken by other session (`212c23d7`, `589508b2`).
+- Git commit “unable to write new index file” + “repository has been updated” → checked disks (not full); other session committed 575/661; working tree clean.
+- Repeated counter drift (files/JSON) as other sessions add fiches → periodically fix `en-cours` counters and commit; revue green after each.
+
+## Pending Jobs
+- Continue veille until **03/11 08:00**; keep all four sessions productive and claims coherent.
+- At 08:00: produce bilan from checklist in `journal/2026-11-03/README.md` (sessions, claims, pass verdict, git log, remaining human validations).
+- Human validation of S banque (200 phrases/355 candidates, 0 validated) at 08:00; S continues h033/gold meanwhile.
+- B13/Pensée gate B13 waits S; gold 432 true; continue tests.
+- N2: two jobs on GPU0/GPU1 (`r12-1024`, `r12-mix-512-gpu1`); fiche/JSON committed; next controls/closure.
+- 82nd gate `porte-ressources` to be counted in next full pass; pass 19h32 is reference.
+- `reports/README`/`INDEX` may need re-curation as new fiches land; T0 at 4,000 limit.
+
+## Current Work
+- Night watch via repeated `sleep 600` background jobs (`bash-269`, `bash-271`, `bash-273`, now `bash-273` completed 02:24:45) + 10-min checks; last check 02:14 showed all green.
+- Last known commits: `32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL`; `297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE`.
+- Last known state: revue 587/672/82 ✅; T0 4,000/4,000; claims OK; N2 110, S 335, hub 224, B13 272 min (all with active claims; “mandat long”).
+- The 10-min `sleep 600` job `bash-273` just finished at 02:24:45.
+
+## Next Step
+- Immediately after `bash-273`: run the standard 10-min check (`date`, `git log -2`, `sessions.py --status`, `revue_documentation.py`, `taille_documents.py`, `ressources.py --check`); fix any counter drift (files/JSON) by editing `docs/pilotage/en-cours.md`, rerun revue, commit; then start the next `sleep 600` veille job and wait, repeating until 08:00.
+
+## Critical Context
+- Goal remains **active** until the 08:00 bilan; do not mark complete before producing it.
+- Four active sessions and claims: N2 `r12-1024` gpu0/cpu0 12/ram60 + `r12-mix-512-gpu1` gpu1/cpu0 4/ram10; S `analyseur` cpu1 4/ram8; B13 `b13-gold` cpu1 4/ram16; hub `veille` cpu1 1/ram1 (600 min). CPU1 = 10 threads, RAM ~88 GiB, IA 34G free.
+- Pass 02/11 19h32: 81 gates, 76 green, 5 red; 4 tolerated reds (`porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur`); `porte-tableaux` transient resolved; `porte-sessions` green via claims; next pass 82.
+- `en-cours` at T0 4,000/4,000 — any addition requires trimming; counters drift as other sessions add fiches; fix quickly.
+- Other sessions actively commit; use `git commit --only -- <paths>`, expect index.lock/race; never overwrite others’ staged work.
+- Journal link rule is literally `../README.md#sessions`; “Sessions DSH” section required.
+- Human at 08:00 needs: S banque validation, B13 gate results, N2 controls, pass verdict, README/INDEX, claims status.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Je lis l'interface publique de l'adaptateur DeepSeek et les appelants de `LlamaServer` pour brancher l'API sans casser les tests.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== interface DeepSeek ==\" && grep -n 'def ' tools/llm/deepseek.py | head -20; sed -n '170,250p' tools/llm/deepseek.py; echo; echo \"== appelants LlamaServer ==\" && grep -rn 'LlamaServer' --include='*.py' . 2>/dev/null | head … [594 caractères tronqués]`
+
+  ```
+== interface DeepSeek ==
+52:    def __init__(self, message: str, *, code: int | None = None,
+69:    def __str__(self) -> str:
+73:def _cle_env() -> str:
+96:def _cache_cle(modele: str, messages: list[dict], temperature: float,
+104:def _http(url: str, entetes: dict[str, str], corps: bytes, timeout: float) -> dict:
+127:    def __init__(self, cle: str | None = None, base_url: str | None = None,
+145:    def disponible(self) -> bool:
+148:    def _url(self) -> str:
+151:    def _lire_cache(self, cle: str) -> ReponseDeepSeek | None:
+166:    def _ecrire_cache(self, cle: str, r: ReponseDeepSeek) -> None:
+180:    def demande(self, prompt: str | None = None, *, system: str | None = None,
+237:def _main() -> int:
+                "contenu": r.contenu, "modele": r.modele, "usage": r.usage,
+                "raisonnement": r.raisonnement, "latence_s": r.latence_s,
+                "recu_le": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "brut": r.brut,
+            }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        except OSError:
+            # un cache indisponible ne doit pas faire échouer une mesure
+            pass
+
+    # ------------------------------------------------------
+… [5291 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
