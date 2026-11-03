@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 16.7 h |
+| Durée | 16.8 h |
 | Tours | 28 |
-| Messages | 475 |
-| Appels d'outils | 477 |
+| Messages | 484 |
+| Appels d'outils | 486 |
 | Fichiers touchés | 6 |
-| Commandes | 343 |
+| Commandes | 350 |
 | Sous-agents | 0 |
-| Commits | 16 |
+| Commits | 17 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*28 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -608,11 +608,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Append morning resumption to journal
 - bash — Check claims and hub plan
 - bash — Clean stale claims and claim day job
-- … et 12 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ `porte-reparti-moteur` est **verte** après ré-étalonnage. Je mets à jour le registre des rouges connues et je commite.
+⏵ La suggestion de la porte est fausse : `--sauver X.pt` produit `X.pt-lora.pt`. Je corrige la commande (sans rendre la porte auto-génératrice).
 
 ## 3. Travail accompli
 
@@ -669,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 303 autres
+- … et 310 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -779,6 +779,17 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T28** `PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)`
 - **T28** `126:| `porte-reparti-moteur.sh` | 2 s | PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti |`
 - **T28** `[still running after 60000ms; moved to background job bash-343]`
+- **T28** `[still running after 60000ms; moved to background job bash-346]`
+- **T28** `ls: cannot access '/tmp/n4/rang4-lora.pt': No such file or directory`
+- **T28** `-rw-r--r--.   1 stephane stephane 3213280  3 nov 08:59 rang4-lora.pt-adaptateur.pt`
+- **T28** `-rw-r--r--.   1 stephane stephane 3954362  3 nov 09:02 rang4-lora.pt-lora_adaptateur.pt`
+- **T28** `-rw-r--r--.   1 stephane stephane  741925  3 nov 09:00 rang4-lora.pt-lora.pt`
+- **T28** `/tmp/n4/rang4-lora.pt-lora_adaptateur.pt`
+- **T28** `/tmp/n4/rang4-lora.pt-lora.pt`
+- **T28** `/tmp/n4/rang4-lora.pt-adaptateur.pt`
+- **T28** `45:BASE_LORA=${BASE_LORA:-/tmp/n4/rang4-lora.pt}`
+- **T28** `(il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --bras lora --sauver /tmp/n4/rang4` — le formateur suffixe le bras : cela écrit /tmp/n4/rang4-lora.pt ; /tmp `
+- **T28** `[still running after 60000ms; moved to background job bash-350]`
 
 ## 5. Erreurs rencontrées
 
@@ -806,4 +817,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md"); t = p.read_text(encoding="utf
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-jour.txt <<'EOF' JOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURN
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/references-non-regression.md"); t = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("tools/porte-homeostasie.sh"); t = p.read_text(encoding="ut
 

@@ -11987,3 +11987,264 @@ Le plus urgent : **le `docs/pilotage/` écrit par deux sessions** et **le lock g
 
 llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos professeurs. nos GPU sont exclusivent réservés à l'execution de Drave et ses tâches d'apprentissages
 
+### 🤖 Assistant
+
+⏵ Enquête `llama-server` : processus, port, GPU, services, code source et professeurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heure ==\" && date '+%T' && echo \"== processus llama ==\" && ps -eo pid,ppid,etime,pcpu,pmem,cmd | grep -i 'llama' | grep -v grep; echo; echo \"== ports ==\" && ss -ltnp 2>/dev/null | grep -E ':8080|:8081|:8000|:11434|:500 … [712 caractères tronqués]`
+
+  ```
+== heure ==
+08:56:50
+== processus llama ==
+ 110066    2893    15:28:49  292  4.1 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 0 -c 1024 --no-webui
+
+== ports ==
+
+== GPU processus ==
+pid, process_name, used_gpu_memory [MiB]
+110066, llama-server, 366 MiB
+110066, llama-server, 118 MiB
+
+== GPU ==
+0, 38, 34 %, 20.26 W, 370 MiB, 0 %
+1, 33, 33 %, 16.07 W, 122 MiB, 0 %
+
+== services llama ==
+  dsh-subprocess-32123-c534cf63ba3b.scope                                                                                                           loaded    active   running   [systemd-run] /usr/bin/node26 /home/stephane/.local/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess-local/lib/runner.js -- bash -c "cd /home/stephane/GitHub/Qtrinet && (llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 0 -c 1024 --no-webui > /tmp/llama-server-7b-chunks.log 2>&1 &) ; sleep 6; curl -s http://127.0.0.1:18082/health; echo"
+  dsh-subprocess-7293-ea35433dd70c.scope                                                                                                            loaded    
+… [1578 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== code llama ==\" && grep -rn -i 'llama-server\\|llama_server\\|llama\\.cpp\\|llama-cpp\\|llama_server' --include='*.py' --include='*.sh' --include='*.md' --include='*.json' --include='*.yml' --include='*.yaml' --include='*.s … [662 caractères tronqués]`
+
+  ```
+== code llama ==
+./src/bpe_np.py:12:# découpage GPT-2 (approximation fidèle de la regex utilisée par llama.cpp)
+./src/bpe_np.py:13:# Équivalent stdlib de la regex GPT-2/llama.cpp (qui utilise \p{L} et \p{N},
+./reports/rapport-attribution-kv.md:38:Perspective : llama.cpp paie +0,8 % pour son cache int8 à la même longueur. Notre
+./reports/rapport-attribution-kv.md:51:   clés int8 sous celui de llama.cpp (+0,8 %).
+./reports/rapport-placement-bits-kv.md:67:5. **La perspective llama.cpp** : son cache q8_0 coûte +0,8 % à la même longueur.
+./reports/rapport-routage-experts.md:69:justifié par le code de référence : `build_moe_ffn` de llama.cpp met le biais
+./reports/rapport-routage-experts.md:107:Comparaison directe avec **llama.cpp** (`tools/ref_logits.cpp`), mêmes
+./reports/rapport-routage-experts.md:116:| llama.cpp (référence) | **5420,40** | — | — | — |
+./reports/rapport-routage-experts.md:125:| llama.cpp (`llama-perplexity -c 256 --chunks 2`) | **166,85** |
+./reports/rapport-routage-experts.md:129:Les deux moteurs ne suivent pas la même politique de YaRN : llama.cpp applique
+./reports/rapport-routage-experts.md:134:llama.cpp) sans le valider : elle dit que l'écart est de l'ordre de ce
+… [10678 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ `llama-server` trouvé (PID 110066, lancé par une session DSH, port 18082, 366+118 Mio de GPU) : je l'arrête, je désactive les services locaux et j'enquête sur la source + l'API DeepSeek.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== kill llama-server ==\" && kill 110066 2>&1; sleep 3; ps -p 110066 -o pid,cmd 2>&1; echo; echo \"== GPU après ==\" && nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader 2>&1; nvidia-smi --quer … [531 caractères tronqués]`
+
+  ```
+== kill llama-server ==
+    PID CMD
+
+== GPU après ==
+1535416, /home/stephane/gpu-env/bin/python, 13572 MiB
+0, 13576 MiB, 99 %, 86, 176.11 W
+1, 4 MiB, 0 %, 32, 16.51 W
+
+== services user ==
+inactive
+inactive
+inactive
+Failed to mask unit: File '/home/stephane/.config/systemd/user/llama-cpp.service' already exists
+
+== ollama ==
+inactive
+○ ollama.service - Ollama Service
+     Loaded: loaded (/etc/systemd/system/ollama.service; disabled; preset: disabled)
+    Drop-In: /etc/systemd/system/ollama.service.d
+             └─override.conf
+  ```
+
+- **bash** `{"command": "echo \"== autre repo ==\" && ls -la /home/stephane/GitHub/Qtrinet 2>&1 | head -5; readlink -f /home/stephane/GitHub/Qtrinet; git -C /home/stephane/GitHub/Qtrinet rev-parse --show-toplevel 2>&1; git -C /home/stephane/GitHub/Qtrinet status --short 2>&1 | head -5; echo; echo \"== source ll … [697 caractères tronqués]`
+
+  ```
+== autre repo ==
+total 204
+drwxr-xr-x. 1 stephane stephane   660  1 nov 10:50 .
+drwxr-xr-x. 1 stephane stephane  2496  1 nov 10:47 ..
+-rw-r--r--. 1 stephane stephane  9882 29 oct 16:01 AGENTS.md
+drwxr-xr-x. 1 stephane stephane    40 25 sep 15:38 bench
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+
+== source llama/professeur (autre repo) ==
+/home/stephane/GitHub/Qtrinet/src/tiny_model.py:7:Tâche synthétique : un « professeur » (MLP aléatoire figé) étiquette des vecteurs
+/home/stephane/GitHub/Qtrinet/src/tiny_model.py:24:    """Étiquettes produites par un professeur **non linéaire figé**.
+/home/stephane/GitHub/Qtrinet/src/tiny_model.py:26:    ⚠️ Le professeur dépend de `teacher_seed` (constant), PAS de `seed` : sans cela
+/home/stephane/GitHub/Qtrinet/src/tiny_model.py:27:    les jeux d'entraînement et de test auraient deux professeurs différents et
+/home/stephane/GitHub/Qtrinet/reports/rapport-pont-semantique.md:9:**Le professeur est une boîte noire** : on ne prend que son entrée et sa sortie.
+/home/stephane/GitHub/Qtrinet/
+… [6176 caractères tronqués]
+  ```
+
+
+  ```
+On branch master
+Your branch is ahead of 'origin/master' by 20 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   docs/pilotage/en-cours.md
+	modified:   docs/pilotage/roadmap.md
+	modified:   journal/2026-11-02/README.md
+	modified:   journal/2026-11-02/apprentissage.md
+	modified:   journal/2026-11-02/attention.md
+	modified:   journal/2026-11-02/distribue.md
+	modified:   journal/2026-11-02/docs.md
+	modified:   journal/2026-11-02/memoire.md
+	modified:   journal/2026-11-02/mesures.md
+	modified:   journal/2026-11-02/modele.md
+	modified:   journal/2026-11-02/moteur.md
+	modified:   journal/2026-11-02/outils.md
+	modified:   journal/2026-11-02/portes.md
+	modified:   journal/README.md
+	modified:   journal/THEMES.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/digest.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md
+	modified:   journal/sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/digest.md
+	modified:   journal/sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/r
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+== check ==
+  ⚠ mandat long (581 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (629 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+[check 0]
+
+== porte sessions ==
+  ⚠ mandat long (581 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (629 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[porte 0]
+
+== en-cours ==
+# En ce moment
+
+**Mis à jour : 2026-11-03, 00 h 52 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+== heads ==
+# La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+
+> **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+> L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+>
+---
+# Les chantiers — la vision à jour et leurs relations
+
+> **Ce que ce document est.** La **vue d'ensemble des chantiers** : ce que les demandes des
+> 48 dernières heures ont déplacé, l'inventaire élargi (A, B, N, R, **S**, **L**, **D**, B13),
+> leurs **relations** (ce que chacun attend et ce qu'il fournit) et les **tensions** à trancher.
+> Il ne remplace ni la [roadmap](roadmap.md) (l'ordre et les états), ni l'[en-cours](en-cours.md)
+---
+# Le plan de travail — plusieurs sessions sur une même machine
+
+> **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+> passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+> ordre) : **
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+== plan-travail ==
+1:# Le plan de travail — plusieurs sessions sur une même machine
+11:> [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+28:qu'avec un plan (`journal/sessions/<id>/plan.md`) et un territoire réservé.
+30:## 2. Les quatre sessions et le rôle d'intégration
+32:Quatre sessions **de mandat** et **un rôle d'intégration** (porté par la session de pilotage ou
+45:code pas un chantier ; il **intègre** les sections des sessions, met à jour les compteurs, vérifie
+50:diff que la session intègre (AGENTS § 10, `continuite.md` § 2). Le fan-out massif (`workflow`) est
+56:dans le plan de chaque session et se vérifient par `tools/sessions.py --check`.
+
+== chantiers ==
+92:**État au 02/11 21 h 14.** B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432**, coréférence **116 liens** ; **N2.ac**
+
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+On branch master
+Your branch is ahead of 'origin/master' by 68 commits.
+  (use "git push" to publish your local commits)
+
+Changes
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+== code llama ==
+./src/bpe_np.py:12:# découpage GPT-2 (approximation fidèle de la regex utilisée par llama.cpp)
+./src/bpe_np.py:13:# Équivalent stdlib de la regex GPT-2/llama.cpp (qui utilise \p{L} et \p{N},
+./reports/rapport-attribution-kv.md:38:Perspective : llama.cpp paie +0,8 % pour son cache int8 à la même longueur. Notre
+./reports/rapport-attribution-kv.md:51:   clés int8 sous celui de llama.cpp (+0,8 %).
+./reports/rapport-placement-bits-kv.md:67:5. **La perspective llama.cpp** : son cache q8_0 coûte +0,8 % à la même longueur.
+./reports/rapport-routage-experts.md:69:justifié par le code de référence : `build_moe_ffn` de llama.cpp met le biais
+./reports/rapport-routage-experts.md:107:Comparaison directe avec **llama.cpp** (`tools/ref_logits.cpp`), mêmes
+./reports/rapport-routage-experts.md:116:| llama.cpp (référence) | **5420,40** | — | — | — |
+./reports/rapport-routage-experts.md:125:| llama.cpp (`llama-perplexity -c 256 --chunks 2`) | **166,85** |
+./reports/rapport-routage-experts.md:129:Les deux moteurs ne suivent pas la même politique de YaRN : llama.cpp applique
+./reports/rapport-routage-experts.md:134:llama.cpp) sans le valider : elle dit que l'écart est de l'ordre de ce
+… [3958 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ `llama-server` arrêté ; un job Drave occupe GPU0 (13,5 Gio) ; le client DeepSeek existe déjà (`tools/llm/`). Je neutralise les unités et j'inspecte le point d'appel du professeur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== unités llama ==\" && ls -la ~/.config/systemd/user/llama-* 2>&1; mkdir -p ~/.config/systemd/user/disabled && for f in ~/.config/systemd/user/llama-cpp.service ~/.config/systemd/user/llama-embed.service ~/.config/systemd/use … [909 caractères tronqués]`
+
+  ```
+== unités llama ==
+-rw-r--r--. 1 stephane stephane 1166 21 sep 09:13 /home/stephane/.config/systemd/user/llama-cpp.service
+-rw-r--r--. 1 stephane stephane  629 12 sep 19:03 /home/stephane/.config/systemd/user/llama-cpp.service.bak.20260912-190339
+-rw-------. 1 stephane stephane  894 21 sep 09:13 /home/stephane/.config/systemd/user/llama-embed.service
+-rw-------. 1 stephane stephane 1082 21 sep 09:13 /home/stephane/.config/systemd/user/llama-vision.service
+Unit llama-cpp.service does not exist, proceeding anyway.
+Unit llama-embed.service does not exist, proceeding anyway.
+Unit llama-vision.service does not exist, proceeding anyway.
+Created symlink '/home/stephane/.config/systemd/user/llama-cpp.service' → '/dev/null'.
+Created symlink '/home/stephane/.config/systemd/user/llama-embed.service' → '/dev/null'.
+Created symlink '/home/stephane/.config/systemd/user/llama-vision.service' → '/dev/null'.
+llama-cpp.service                                                        masked    disabled
+llama-embed.service                                                      masked    disabled
+llama-vision.service                                                     masked    disabled
+
+== ollama ==
+disab
+… [4253 caractères tronqués]
+  ```
+

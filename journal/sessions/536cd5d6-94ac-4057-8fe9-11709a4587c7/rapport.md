@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 17.4 h |
+| Durée | 17.5 h |
 | Tours | 74 |
-| Messages | 489 |
-| Appels d'outils | 429 |
+| Messages | 491 |
+| Appels d'outils | 432 |
 | Fichiers touchés | 15 |
-| Commandes | 314 |
+| Commandes | 317 |
 | Sous-agents | 0 |
 | Commits | 37 |
 | Compactages de contexte | 1 |
@@ -1942,14 +1942,17 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 74 — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos … [101 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Investigate llama-server process, port, GPU and services
 - bash — Search llama, deepseek and professor references in code
+- bash — Kill llama-server, disable local LLM services
+- bash — Investigate other repo, teacher source and DeepSeek API
+- bash — Disable llama units, inspect teacher endpoints and keys
 
 **Synthèse produite :**
 
-⏵ Enquête `llama-server` : processus, port, GPU, services, code source et professeurs.
+⏵ `llama-server` arrêté ; un job Drave occupe GPU0 (13,5 Gio) ; le client DeepSeek existe déjà (`tools/llm/`). Je neutralise les unités et j'inspecte le point d'appel du professeur.
 
 ## 3. Travail accompli
 
@@ -2015,7 +2018,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 274 autres
+- … et 277 autres
 
 ## 4. Mesures et résultats marquants
 

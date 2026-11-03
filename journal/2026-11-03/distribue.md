@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,14 +18,21 @@
 | 01:28 | `b100996f` | L/B13 — LA PHRASE SIMPLE : r222 ÉCARTÉ, LES PAIRES RESTENT 5/10 (LES JUXTAPOSITIONS PASSENT) | `en-cours.md`, `README.md`, `attention.md` (+17) |
 | 01:31 | `60c438d3` | L/B13 — UN SEUL GV : LES JUXTAPOSITIONS TOMBENT, LES PAIRES RESTENT 5/10 (LA PAIRE THÉMATIQUE MANQUE) | `en-cours.md`, `README.md`, `attention.md` (+14) |
 | 01:34 | `d0589cd3` | L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE | `en-cours.md`, `README.md`, `attention.md` (+15) |
+| 08:56 | `550ca5f2` | PORTE REPARTI-MOTEUR — L'ÉPINGLAGE 9,1748 ÉTAIT UN MODÈLE EN CACHE ; RÉ-ÉTALONNÉE À 8,7434 (VERTE) | `references-non-regression.md`, `README.md`, `attention.md` (+12) |
+
+## Chiffres du jour
+
+`9,1748` · `8,7434`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
 - `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 11.8 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
-- `536cd5d6-94ac-4057-8fe9-11709a4587c7` — Étude des sessions et du pilotage (début 2026-11-02 15:33, 17.4 h) → [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md)
+- `536cd5d6-94ac-4057-8fe9-11709a4587c7` — Étude des sessions et du pilotage (début 2026-11-02 15:33, 17.5 h) → [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md)
 - `abb58991-fe0a-4d6e-b039-6552b09f8454` — Reprise session L/B13 et mise à jour plan (début 2026-11-02 16:15, 9.5 h) → [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md)
 - `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` — Reprise session L/B13 et vérification stricte (début 2026-11-02 16:16, 12.5 h) → [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md)
-- `caaf3018-e3e2-4416-8446-11f0335910aa` — Reprise du hub et passe de portes (début 2026-11-02 16:16, 16.7 h) → [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md)
+- `caaf3018-e3e2-4416-8446-11f0335910aa` — Reprise du hub et passe de portes (début 2026-11-02 16:16, 16.8 h) → [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md)
 
 ## Mesures et rapports touchés
 

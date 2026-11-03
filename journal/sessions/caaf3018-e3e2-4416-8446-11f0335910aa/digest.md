@@ -8214,3 +8214,154 @@ CODE=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/references-non-regression.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"> **Passe précédente — 2026-11-02 à 19 h 32 :**\"\"\"\nn = \"\"\"> **Depuis, `porte-repa … [2014 caractères tronqués]`
+
+  ```
+références : ré-étalonnage consigné
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-343]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-343", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 550ca5f2] PORTE REPARTI-MOTEUR — L'ÉPINGLAGE 9,1748 ÉTAIT UN MODÈLE EN CACHE ; RÉ-ÉTALONNÉE À 8,7434 (VERTE)
+ 15 files changed, 273 insertions(+), 38 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autre rouge réparable : `porte-homeostasie` exige un LoRA dans `/tmp` (effacé au reboot). Je regarde si la porte peut le régénérer elle-même.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 1,45p tools/porte-homeostasie.sh | grep -E \"^M=|^D=|^SNAP=|^IDS=|^PP=|^BASE_LORA=|^T=\" ; echo \"--- existence ---\"; for f in /tmp/n4/rang4-lora.pt; do ls -la \"$f\" 2>/dev/null | cut -c30-60; done; ls -d /tmp/n4 2>/dev/null | … [81 caractères tronqués]`
+
+  ```
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+SNAP=${SNAP:-$HOME/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775}
+BASE_LORA=${BASE_LORA:-/tmp/n4/rang4-lora.pt}
+--- existence ---
+/tmp/n4 absent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; M=models/Qwen2.5-0.5B-Q8_0.gguf; SNAP=$HOME/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775; ls -la \"$M\" 2>/dev/null | cut -c30-60; ls -d \"$SNAP\" 2>/dev/null || echo \ … [184 caractères tronqués]`
+
+  ```
+ne 531068480 25 sep 16:52 model
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775
+--- aide n4_dessin_b ---
+usage: n4_dessin_b.py [-h] [--modele MODELE] [--ids IDS] [--morceaux MORCEAUX]
+                      [--taille TAILLE] [--profondeur PROFONDEUR]
+                      [--train TRAIN] [--rejeu REJEU] [--exclure EXCLURE]
+                      [--val VAL] [--test TEST] [--graine GRAINE]
+                      [--epoques EPOQUES] [--rang RANG] [--alpha ALPHA]
+                      [--pas-adaptateur PAS_ADAPTATEUR] [--pas-lora PAS_LORA]
+                      [--lots LOTS] [--lots-etats LOTS_ETATS]
+                      [--pas-adaptateur-joint PAS_ADAPTATEUR_JOINT]
+                      [--bras BRAS] [--json JSON] [--lora-depart LORA_DEPART]
+                      [--sauver SAUVER] [--etat-moteur ETAT_MOTEUR]
+                      [--hors HORS] [--hors-debut HORS_DEBUT]
+                      [--hors-nom HORS_NOM] [--melanger-rejeu]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ~/gpu-env/bin/python tools/n4_dessin_b.py --help 2>&1 | grep -E \"objectif|sauver|train\" | head -5; echo \"--- essai (max 300 s) ---\"; mkdir -p /tmp/n4; time timeout 300 ~/gpu-env/bin/python tools/n4_dessin_b.py --objectif plein --tr … [168 caractères tronqués]`
+
+  ```
+[--train TRAIN] [--rejeu REJEU] [--exclure EXCLURE]
+                      [--sauver SAUVER] [--etat-moteur ETAT_MOTEUR]
+                      [--objectif {tronque,plein}] [--kl-tronque KL_TRONQUE]
+  --train TRAIN         nombre de morceaux d'entraînement (les premiers :
+                        reprendre un LoRA déjà appris (.pt de --sauver) :
+--- essai (max 300 s) ---
+[still running after 60000ms; moved to background job bash-346]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le LoRA se régénère (test en cours, 300 s max) ; j'attends.
+
+- **job_output** `{"job_id": "bash-346", "timeout_ms": 300000, "wait": true}`
+
+  ```
+| chemin tronqué, tête **empruntée** | — | — | 4,476,128.7883 | 1,761,597.2378 |
+| `adaptateur` | 3 | 411.5626 | 382.4233 | 725.1794 |
+| `lora` | 3 | 7.1569 | 6.7131 | 15.5803 |
+| `lora+adaptateur` | 3 | 7.1569 | 6.7131 | 15.5803 |
+[stderr]
+
+real	3m35,062s
+user	3m4,479s
+sys	0m43,551s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ LoRA régénéré en 3 min 35. Je lance la porte complète pour voir si elle passe maintenant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la /tmp/n4/rang4-lora.pt | cut -c30-60; echo \"--- porte (max 900 s) ---\"; time timeout 900 bash tools/porte-homeostasie.sh 2>&1 | tail -6; echo \"CODE=$?\"", "description": "Run homeostasie gate with regenerated LoRA"}`
+
+  ```
+--- porte (max 900 s) ---
+  ❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt
+     (il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)
+CODE=0
+[stderr]
+ls: cannot access '/tmp/n4/rang4-lora.pt': No such file or directory
+
+real	0m0,007s
+user	0m0,002s
+sys	0m0,006s
+  ```
+
+- **bash** `{"command": "ls -la /tmp/n4/ 2>/dev/null | head; echo \"--- recherche ---\"; find /tmp -maxdepth 3 -name \"*rang4*\" -newermt \"2026-11-03 08:00\" 2>/dev/null | head; find /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work -name \"*rang4*\" -newermt \"2026-11-03 08:00\" 2>/dev/null | head", "descr … [34 caractères tronqués]`
+
+  ```
+total 7732
+drwxr-xr-x.   2 stephane stephane     100  3 nov 09:02 .
+drwxrwxrwt. 126 root     root        4320  3 nov 09:02 ..
+-rw-r--r--.   1 stephane stephane 3213280  3 nov 08:59 rang4-lora.pt-adaptateur.pt
+-rw-r--r--.   1 stephane stephane 3954362  3 nov 09:02 rang4-lora.pt-lora_adaptateur.pt
+-rw-r--r--.   1 stephane stephane  741925  3 nov 09:00 rang4-lora.pt-lora.pt
+--- recherche ---
+/tmp/n4/rang4-lora.pt-lora_adaptateur.pt
+/tmp/n4/rang4-lora.pt-lora.pt
+/tmp/n4/rang4-lora.pt-adaptateur.pt
+  ```
+
+### 🤖 Assistant
+
+⏵ Le formateur sauve **trois** fichiers suffixés, pas le nom attendu par la porte. Je regarde le format attendu.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"sauver\\|bras\" tools/n4_dessin_b.py | head -14; echo \"--- porte : usage de BASE_LORA ---\"; grep -n \"BASE_LORA\\|lora\" tools/porte-homeostasie.sh | head -12", "description": "Inspect save logic and gate LoRA usage"}`
+
+  ```
+40:      --val 30,31 --test 32,20 --epoques 20 --graine 0 --bras adaptateur,lora,lora+adaptateur \
+41:      --sauver /tmp/n4/poids --json /tmp/n4/exec.json
+49:ATTENTION À LA REPRODUCTIBILITÉ (mesuré le 14/10) : le bras `adaptateur` (états précalculés) rend
+50:le MÊME chiffre d'une exécution à l'autre, mais les bras qui rétropropagent à travers les couches
+56:      --bras adaptateur,lora,lora+adaptateur --json /tmp/n4/graine0.json
+245:def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
+246:    """Entraîne UN bras et rend ses perplexités. Chaque bras part du même modèle, de la même
+251:    certaines combinaisons de drapeaux (essai à blanc du 16/10 : sans `--bras`, sans `--accord`),
+283:    avec_lora = "lora" in bras
+288:                  if "adaptateur" in bras else None)
+341:        # ne dépend pas du bras (mêmes poids de départ).
+373:        res = {"bras": bras, "epoque": meilleur[1], "val": meilleur[0],
+461:    # ne dépend pas du bras (mêmes poids de départ).
+496:    res = {"bras": bras, "epoque": meilleur[1], "val": meilleur[0],
+--- porte : usage de BASE_LORA ---
+45:BASE_LORA=${BASE_LORA:-/tmp/n4/rang4-lora.pt}
+51:[ -s "$BASE_LORA" ] || {
+52:    echo "  ❌ le LoRA 
+… [287 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La suggestion de la porte est fausse : `--sauver X.pt` produit `X.pt-lora.pt`. Je corrige la commande (sans rendre la porte auto-génératrice).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-homeostasie.sh\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"    echo '     (il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang  … [1320 caractères tronqués]`
