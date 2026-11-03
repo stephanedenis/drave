@@ -9630,3 +9630,76 @@ from tools.pensee.operateurs import (DRVM, LABYRINTHE_PORTE, P_BUT, REGISTRE_P, 
 … [4065 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Banc « porte minute » : oracle Manhattan (T18), aveugle, hasard, LLM porte vs LLM labyrinthe (contrôle)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_porte_minute_drvm.py — la porte **minute** : la sonde ouvre et passe dans le même pas.\n\nLe problème `LABYRINTHE_PORTE_MINUTE` (registre `REGISTRE_PM`) est la porte `(3,3)` dont la\nsonde ouvre **un tour**. On mesure l'oracle (`PolitiqueManhattan … [6036 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de la porte minute (oracle, aveugle, hasard, LLM porte, LLM labyrinthe)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && curl -s --max-time 3 http://127.0.0.1:18082/health && time python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-minute.json 2>&1 | tail -45", "description": "Run minute door qualification", … [21 caractères tronqués]`
+
+  ```
+{"status":"ok"}   57.0,
+   7,
+   5,
+   0.0,
+   0
+  ],
+  "aveugle": [
+   false,
+   200,
+   483.0,
+   66,
+   61,
+   0.0,
+   0
+  ],
+  "hasard": [
+   true,
+   43,
+   85.0,
+   14,
+   7,
+   0.0,
+   0
+  ],
+  "llm_porte": [
+   true,
+   26,
+   52.0,
+   7,
+   4,
+   7.215,
+   0
+  ],
+  "llm_labyrinthe": [
+   false,
+   200,
+   265.0,
+   95,
+   3,
+   118.174,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-porte-minute.json
+[stderr]
+
+real	2m5,748s
+user	0m0,420s
+sys	0m0,044s
+  ```
+

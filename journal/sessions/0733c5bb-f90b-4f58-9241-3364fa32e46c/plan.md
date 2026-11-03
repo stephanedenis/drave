@@ -12,7 +12,7 @@
   courbe de longueur), R1.1/R1.2 mesurés depuis N2
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `reports/rapport-n2-*`,
   `work/n2*`, `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/`
-- **Heartbeat** : 2026-11-02 19:50 HAE
+- **Heartbeat** : 2026-11-02 19:46 HAE
 - **Objectif final** : trancher la question ouverte de N2 — **les 200 000 pas sur le mélange
   1 Go font-ils passer sous 2,5 sans perdre le français ?** — puis **R1.1/R1.2** : un schéma
   de position **relatif** reproduit-il par construction le gain des positions aléatoires, et
@@ -33,4 +33,4 @@
   est mesuré (3,2545 à 1 000, 3,0107 à octets constants) ; reste le contrôle « depuis zéro ».
 - **Prochaine action** : la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis
   la **clôture**.
-- **État** : actif
+- **État** : terminé

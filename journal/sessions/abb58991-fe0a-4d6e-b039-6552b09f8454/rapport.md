@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 3.5 h |
 | Tours | 8 |
-| Messages | 380 |
-| Appels d'outils | 484 |
+| Messages | 381 |
+| Appels d'outils | 485 |
 | Fichiers touchés | 31 |
-| Commandes | 354 |
+| Commandes | 355 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 1 |
@@ -319,7 +319,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 
 ### Tour 8 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Inspect minute door problem and state helpers
 - bash — Read PolitiqueLLM and minute tests
@@ -331,10 +331,11 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - bash — Read existing porte bench for reuse
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py`
 - bash — Run minute door qualification
+- bash — Adjust minute thresholds and rerun
 
 **Synthèse produite :**
 
-⏵ Mesure de la porte minute (oracle, aveugle, hasard, LLM porte, LLM labyrinthe)
+⏵ Résultat net : LLM porte **26 nœuds/4 sonde/7,2 s**, prompt labyrinthe **200/3/118 s** ; le hasard par chance. J'ajuste le seuil (le hasard est une limite) et je rejoue
 
 ## 3. Travail accompli
 
@@ -416,7 +417,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 314 autres
+- … et 315 autres
 
 ## 4. Mesures et résultats marquants
 

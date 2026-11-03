@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 3.5 h |
 | Tours | 5 |
-| Messages | 196 |
-| Appels d'outils | 209 |
+| Messages | 200 |
+| Appels d'outils | 213 |
 | Fichiers touchés | 9 |
-| Commandes | 146 |
+| Commandes | 150 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 0 |
@@ -180,7 +180,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 5 — tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses
 
-*24 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Check machine load, GPUs, and running work
 - bash — Check WIP freshness and session/gate state
@@ -196,7 +196,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - bash — Commit submodule v3
 - bash — Exact v3 measure values and boundary lines
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md`
-- … et 9 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -260,7 +260,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 106 autres
+- … et 110 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -288,6 +288,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T3** `| [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |`
 - **T5** `0, Quadro RTX 5000, 0 %, 688 MiB, 16384 MiB`
 - **T5** `1, Quadro RTX 5000, 43 %, 966 MiB, 16384 MiB`
+- **T5** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typogly`
 
 ## 5. Erreurs rencontrées
 

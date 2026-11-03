@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 3.5 h |
 | Tours | 4 |
-| Messages | 311 |
-| Appels d'outils | 335 |
+| Messages | 325 |
+| Appels d'outils | 349 |
 | Fichiers touchés | 18 |
-| Commandes | 200 |
+| Commandes | 206 |
 | Sous-agents | 0 |
 | Commits | 6 |
 | Compactages de contexte | 0 |
@@ -112,7 +112,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 4 — c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en co … [29 caractères tronqués]
 
-*48 appels d'outils.* Actions notables :
+*62 appels d'outils.* Actions notables :
 
 - bash — Current time, recent commits and working tree
 - bash — Session status, strict check and state checks
@@ -128,7 +128,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - edit `docs/pilotage/en-cours.md`
 - edit `docs/pilotage/roadmap.md`
 - bash — Verify roadmap N line
-- … et 24 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
@@ -149,7 +149,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 13 |
+| `docs/pilotage/en-cours.md` | 0 | 19 |
 | `docs/pilotage/roadmap.md` | 0 | 8 |
 | `docs/pilotage/chantiers.md` | 0 | 4 |
 | `docs/pilotage/plan-travail.md` | 0 | 4 |
@@ -201,7 +201,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 160 autres
+- … et 166 autres
 
 ## 4. Mesures et résultats marquants
 

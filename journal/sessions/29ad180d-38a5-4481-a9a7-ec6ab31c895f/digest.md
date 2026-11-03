@@ -4240,3 +4240,92 @@ trim + compteurs 560/647
   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; git log --oneline -4; echo \"=== status ===\"; git status --short | head -20; echo \"=== mtime en-cours ===\"; ls -la --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md; echo \"=== sessions ===\" … [126 caractères tronqués]`
+
+  ```
+19:44
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+7d5bd08d ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS
+4a85604d B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE
+2cff8dba R1 — LES POSITIONS RELATIVES ÔTENT L'EXPLOSION (8,20 → 3,25 À 1 000 OCTETS), LA FENÊTRE ENTRAÎNÉE DONNE LA LECTURE (−0,244 À OCTETS CONSTANTS)
+=== status ===
+ M docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/table_200k.py
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+M  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessio
+… [1208 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== en-cours staged S ===\"; git show :docs/pilotage/en-cours.md | sed -n '/### Session `29ad180d/,/### Session `e181ce02/p' | head -30; echo \"=== roadmap S (worktree) ===\"; grep -n \"S — les structures\" docs/pilotage/roadm … [151 caractères tronqués]`
+
+  ```
+=== en-cours staged S ===
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 43~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle et la frontière GN.
+- **Stratégie** : une règle = une phrase, trois contrôles.
+- **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **43 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : **`90e507b`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **0**.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
+- **Bloquants** : aucun ; **banque à 0** verdict.
+- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a
+… [927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git push origin master 2>&1 | tail -5; echo \"exit=${PIPESTATUS[0]}\"; git status -sb | head -2; echo \"=== N2 fiche placeholders ? ===\"; grep -c \"{{\" ../../reports/rapport-n2-200k.md 2>/dev/null || true; echo \"= … [166 caractères tronqués]`
+
+  ```
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   647205a..90e507b  master -> master
+exit=0
+## master...origin/master
+=== N2 fiche placeholders ? ===
+0
+=== main log ===
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+7d5bd08d ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS
+ M docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M journal/README.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/table_200k.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,55p' docs/pilotage/en-cours.md; echo \"=== S->N2 ===\"; sed -n '74,110p' docs/pilotage/en-cours.md", "description": "Read N2/Pensée/D/R/A sections for compression"}`
+
+  ```
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+
+- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+- **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
+  portes** (GPU 1).
+- **Ambition** : un état reprenable, des mandats qui disent la vérité.
+- **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+- **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
+- **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
+  portes en cours** (`porte-bus`, 19 h 37).
+- **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+- **Bloquants** : aucun ; la passe tient la machine (GPU libres).
+- **Journal** : [la session](../../journal/session
+… [4774 caractères tronqués]
+  ```
+

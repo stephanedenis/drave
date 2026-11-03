@@ -50,8 +50,9 @@
   **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md),
   [`n2-200k`](../../reports/rapport-n2-200k.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.
-- **Prochaine action** : la **courbe**, la **fiche + état + commit** du run de 200 k, puis la
-  **clôture**.
+- **Close** : commits **`2cff8dba`** (R1.1/R1.2) et **`e12c39c1`** (200 k) ; récit
+  [`cloture`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md) ; réservations
+  rendues, **GPU libres**. La suite est **R1.2 à 1 024 octets entraînés**.
 - **Bloquants** : aucun ; **GPU libres**.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 

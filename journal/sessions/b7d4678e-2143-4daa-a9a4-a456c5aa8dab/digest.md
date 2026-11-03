@@ -5053,3 +5053,93 @@ Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotag
 … [10163 caractères tronqués]
   ```
 
+- **bash** `{"command": "sed -n '31,45p' docs/pilotage/roadmap.md | cut -c1-400; echo \"=== plan-travail ===\"; sed -n '38,41p' docs/pilotage/plan-travail.md | cut -c1-400; echo \"=== chantiers S/B13 ===\"; sed -n '87,94p' docs/pilotage/chantiers.md | cut -c1-300", "description": "Inspect current roadmap, plan- … [23 caractères tronqués]`
+
+  ```
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF
+| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00 — < 2,5 non atteinte** ; N4 partiel | **N2** : fiche + clôture du 200 k (sessi
+| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 00
+… [4948 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md; ps -eo pid,etime,args | grep -E \"git commit|journal_auto|session_report\" | grep -v grep | head -3; echo \"--- status ---\"; git … [87 caractères tronqués]`
+
+  ```
+19:44:47
+-rw-r--r--. 1 stephane stephane 24550 19:41:40 docs/pilotage/chantiers.md
+-rw-r--r--. 1 stephane stephane 12372 19:43:31 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 17026 19:42:03 docs/pilotage/plan-travail.md
+-rw-r--r--. 1 stephane stephane 44714 19:43:02 docs/pilotage/roadmap.md
+ 228179       01:03 git commit -q -F -
+ 231746       00:37 /usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py --repo /home/stephane/Data13TB/stephane/GitHub/Qtrinet --quiet
+--- status ---
+ M docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/table_200k.py
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+M  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+ M journ
+… [158 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 40); do kill -0 228179 2>/dev/null || break; sleep 2; done; ps -p 228179 >/dev/null && echo \"commit encore en cours\" || echo \"commit fini\"; git log --oneline -2; echo \"--- status ---\"; git status --short | head -12", "description": "Wait for N2 commit and check st … [5 caractères tronqués]`
+
+  ```
+commit fini
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+--- status ---
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/rapport-s-analyseur-roles.md
+ M reports/s-banque-structures.json
+ M tools/structures
+?? tools/tests/qualifier_porte_minute_drvm.py
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -3; python3 tools/sessions.py --check --strict 2>&1 | tail -4; python3 tools/revue_documentation.py 2>&1 | tail -3", "description": "Check state after N2 commit"}`
+
+  ```
+en-cours · 1674 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ❌ 1 violation(s) :
+     · T0 : 4048 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  revue de documentation · 560 fiche(s) · 647 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 60, "offset": 96}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+96: ## Ce qui est en cours
+97: 
+98: - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
+99: - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+100: - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+101: - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
+102:   invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
+103:   depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+104: - **S — le banc de stru
+… [3966 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; la loi place\n  2,5 à **1,3–2,7 M pas**) ; N4 **0/40** ; [`n2-200k`](../../reports/rapport-n2-200k.md),\n  [`n2-canaux`](../../reports/rapport-n2-canal-34m.md) … [1196 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+

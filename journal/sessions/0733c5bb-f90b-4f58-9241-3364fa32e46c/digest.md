@@ -4168,3 +4168,65 @@ revue de documentation · 560 fiche(s) · 647 JSON · 119 doc(s) · 81 porte(s) 
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/table_200k.py work/n2ac/agrege_200k.py journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null; git add reports/rapport-n2-200k.md reports/n2-200k.json docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-336 … [2183 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/table_200k.py
+M  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+A  reports/n2-200k.json
+A  reports/rapport-n2-200k.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-173]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-173", "timeout_ms": 180000, "wait": true}`
+
+  ```
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : récit de session, plan terminé
+
+- **write** `{"content": "# Session `0733c5bb` — N2, le natif : 200 000 pas et la fenêtre\n\n> **Id DSH** : `0733c5bb-f90b-4f58-9241-3364fa32e46c`.\n> **Rôle** : N2 — le natif, GPU (programme N, puis R1.1/R1.2 vus depuis N2).\n> **Mandat** : [`plan.md`](plan.md) · **Journaux** : [le 02/11](../../../journal/2026- … [4435 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nimport re\nt = re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", f\"- **Heartbeat** : {dateti … [1712 caractères tronqués]`
+
+  ```
+plan : ['- **Heartbeat** : 2026-11-02 19:46 HAE', '- **État** : terminé']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M:%S %Z'; python3 tools/verifie_journal.py 2>&1 | tail -3; python3 tools/sessions.py --check --strict 2>&1 | tail -4", "description": "Check clock and journal/session gates"}`
+
+  ```
+2026-11-02 19:46:11 EST
+  journal · 39 jour(s) · 117 session(s) · 1856 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ plans cohérents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 48,54p docs/pilotage/en-cours.md", "description": "Read current session block before closing"}`
+
+  ```
+- **Ce qu'elle fait** : **200 k pas terminés** ; cinq PPL mesurées — val_fr **3,16**,
+  littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (< 2,5 non atteinte) ;
+  **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md),
+  [`n2-200k`](../../reports/rapport-n2-200k.md).
+- **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.
+- **Prochaine action** : la **courbe**, la **fiche + état + commit** du run de 200 k, puis la
+  **clôture**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"- **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.\n- **Prochaine action** : la **courbe**, … [1493 caractères tronqués]`

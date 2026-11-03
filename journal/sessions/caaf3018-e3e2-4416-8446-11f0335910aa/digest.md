@@ -2626,3 +2626,8 @@ porte-audit-drapeaux   ✅                         175 s  ✅ porte audit des dr
 … [330 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Passe en cours : 13 portes vertes, dont `bloc-maths` et les portes GPU
+
+- **job_output** `{"job_id": "bash-108", "timeout_ms": 600000, "wait": true}`
