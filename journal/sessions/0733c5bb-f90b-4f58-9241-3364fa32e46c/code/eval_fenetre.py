@@ -43,6 +43,7 @@ def main() -> None:
     ap.add_argument("point")
     ap.add_argument("--rope", action="store_true")
     ap.add_argument("--val", default="data/wiki_fr/propre")
+    ap.add_argument("--contextes", default="256,512,1000")
     ap.add_argument("--sortie", default=None)
     a = ap.parse_args()
 
@@ -54,15 +55,17 @@ def main() -> None:
 
     val = charger_bytes(f"{a.val}/val.txt")
     ct = torch.tensor(list(pathlib.Path(f"{a.val}/val.canal").read_bytes()), dtype=torch.long)
+    contextes = [int(x) for x in a.contextes.split(",")]
+    maxi = max(contextes)
     res = {"fichier": pathlib.Path(a.point).name,
            "positions": "rope" if a.rope else "absolues",
-           "cible": CIBLE, "ppl": {}}
-    for C in CONTEXTES:
+           "cible": CIBLE, "contextes": contextes, "ppl": {}}
+    for C in contextes:
         tot = n = 0.0
         for k in range(8):
             # fenêtres de 1000 octets, tirées une fois pour toutes : les mêmes pour tous les C
-            x, c = ec.fenetres(val, ct, N_FENETRES, MAX + 1, k * N_FENETRES)
-            x, c = x[:, MAX - C:], c[:, MAX - C:]
+            x, c = ec.fenetres(val, ct, N_FENETRES, maxi + 1, k * N_FENETRES)
+            x, c = x[:, maxi - C:], c[:, maxi - C:]
             with torch.no_grad():
                 logits = m(x[:, :-1], canal=c[:, :-1])["logits"]
             perte = F.cross_entropy(logits.reshape(-1, 256), x[:, 1:].reshape(-1),

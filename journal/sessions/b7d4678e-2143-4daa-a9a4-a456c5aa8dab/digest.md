@@ -9233,3 +9233,145 @@ compteur 656
  M docs/pilotage/en-cours.md
   ```
 
+- **bash** `{"command": "git commit --only -m \"NUIT — LE COMPTEUR SUIT LE JSON N2 (570/656) ; PORTE-TABLEAUX REPASSE VERTE\" -m \"reports/n2-fenetre.json (21 h 56) referme le lien qui faisait échouer porte-tableaux : 2 747 liens résolvent. Le JSON est encore non committé (N2 en cours) ; le compteur du disque p … [127 caractères tronqués]`
+
+  ```
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"git commit|git add|git reset\" | grep -v grep | head -3; ls -l .git/index.lock 2>/dev/null; date \"+%H:%M:%S\"", "description": "Identify the git lock holder"}`
+
+  ```
+693662       00:18 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF' RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)  Le JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué la porte : 1 577 fichiers, 2 747 liens relatifs, tous résolus. L'en-tête et le § 1 le disent désormais : la 5e rouge de la passe du 19 h 32 était un lien de fiche N2 en cours d'écriture, pas une régression — la porte repasse verte dès que le fichier existe. Le compteur JSON de en-cours (655) reste juste pour le dépôt : le 656e fichier est encore non committé par N2. EOF git commit --only -F work/msg-refs.txt -- docs/pilotage/references-non-regression.md 2>&1 | tail -5
+ 693672       00:18 git commit --only -F work/msg-refs.txt -- docs/pilotage/references-non-regression.md
+-rw-r--r--. 1 stephane stephane 358024  2 nov 21:59 .git/index.lock
+21:59:36
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 30); do kill -0 693672 2>/dev/null || break; sleep 2; done; ps -p 693672 >/dev/null && echo \"encore\" || echo \"fini\"; git log --oneline -2; git status --short docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md", "description": "Wait for the referenc … [27 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-392]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-392", "timeout_ms": 120000, "wait": true}`
+
+  ```
+encore
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-392 (bash: for i in $(seq 1 30); do kill -0 693672 2>/dev/null || break; sleep 2; done; ps -p 693672 >/dev/null && echo "encore" || echo "fini"; git log --oneline -2; git status --short docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "ps -p 693672 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -2; ls -l .git/index.lock 2>/dev/null || echo \"pas de lock\"; date \"+%H:%M:%S\"; git status --short docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md", "description": "Che … [26 caractères tronqués]`
+
+  ```
+commit en cours
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+-rw-r--r--. 1 stephane stephane 358024  2 nov 21:59 .git/index.lock
+22:00:54
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 00 — la rouge de passage est rejouée verte ; le compteur reste au dépôt\n\n- `porte-tableaux` **verte** (1 577 fichiers, **2 747 liens**) : le JSON N2 existe depuis 21 h 56.\n- Le hub commite la note de références : « la rouge de passage est … [628 caractères tronqués]`
+
+  ```
+ok
+commit fini
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 52f827a2 | head -6; git checkout -- docs/pilotage/en-cours.md; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict  … [134 caractères tronqués]`
+
+  ```
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+ docs/pilotage/references-non-regression.md         |  5 +-
+ journal/2026-11-02/README.md                       |  7 +-
+ journal/2026-11-02/apprentissage.md                |  2 +-
+ journal/2026-11-02/attention.md                    |  2 +-
+ journal/2026-11-02/distribue.md                    |  2 +-
+110:| fichiers / JSON de résultats | **570** / **655** | `reports/*.md` / `reports/*.json` |
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (81 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 655 JSON, le disque en a 656
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 12 : la rouge de passage est rejouée verte, le compteur suit le dépôt
+
+- **N2** : `reports/n2-fenetre.json` écrit à 21 h 56 (agrégat loi de fenêtre 256/512/1024, même texte, production N2.ac/200k/512). **`porte-tableaux` repasse verte** : 1 577 fichiers, **2 747 liens** résolvent — le 5e rouge de la passe était bien un **lien de fiche en cours d'écriture**, pas une régression.
+- **Hub** : commit `52f827a2` — la note de références dit la rouge rejouée verte (21 h 57). Le compteur JSON d'`en-cours` **reste 655 pour le dépôt** (le 656e fichier est le JSON N2 encore non committé) : j'ai aligné mon passage à 656 et documenté l'écart transitoire — la revue signale 655/656 jusqu'au commit N2.
+- **N2** : le run long est à **13 250 / 20 000 pas, PPL val 2,601** (cible 2,5).
+- **État** : en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅ (claims longs en avertissement), journal ✅, registre ✅ ; revue = le seul écart de compteur transitoire ci-dessus.
+
+La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compteur, puis le checkpoint de 8 h. Rien de bloquant.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 13/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 13 : veille — j’attends le commit N2 ou un nouvel événement
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; git ls-files --error-unmatch reports/n2-fenetre.json >/dev/null 2>&1 && echo \"JSON N2 suivi\" || echo \"JSON N2 non suivi\"; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; git status --short | head -4", "description": "Check events and N2 stat … [4 caractères tronqués]`
+
+  ```
+22:01:20
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+JSON N2 non suivi
+pas  13550 · perte 1.0764 · PPL val 2.597 · 6234 s
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; git ls-files --error-unmatch reports/n2-fenetre.json >/dev/null 2>&1 && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --one … [261 caractères tronqués]`
+
+  ```
+22:03:55
+HEAD 52f827a2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+JSON N2 suivi
+pas  13900 · perte 0.9309 · PPL val 2.594 · 6389 s
+  ```
+
+- **bash** `{"command": "git status --short reports/n2-fenetre.json reports/rapport-n2-fenetre.md 2>/dev/null; ps -eo pid,etime,args | grep -E \"git commit\" | grep -v grep | head -2; git log --oneline -1; date \"+%H:%M:%S\"", "description": "Check N2 staging and commit status"}`
+
+  ```
+A  reports/n2-fenetre.json
+A  reports/rapport-n2-fenetre.md
+ 697833       00:06 bash -c cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && python3 -c " import pathlib,re,datetime p=pathlib.Path('journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md') t=p.read_text() t=re.sub(r'- \*\*Heartbeat\*\* : .*','- **Heartbeat** : '+datetime.datetime.now().strftime('%Y-%m-%d %H:%M')+' HAE',t) p.write_text(t)" && git add reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code && git commit -q -F - <<'MSG' FENÊTRE — LA LOI EST MESURÉE (256 → 1 024) ET LA FENÊTRE BAT LE COMPUTE : N2.ac + RoPE 512 DONNE 3,1588 / 2,9096 / 2,7607 À 128/512/2 000  Dispositif. RoPE, 34,3 M (384/512), lot 8, lr 3e-4, graine 1, canal, seq = fenêtre. À octets constants (20,5 Mo sur data/wiki_fr) : fenêtre 256 (20 000 pas), 512 (5 000 pas), 1 024 (2 500 pas), depuis base-wiki-45m. Sur la production : mix-60k (N2.ac) affiné à 512 (15 000 pas) et à 1 024 (7 500 pas), 61,4 Mo ajoutés = le budg
+… [1723 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 40); do kill -0 697849 2>/dev/null || break; sleep 3; done; ps -p 697849 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -2; echo \"--- N2 suivi ---\"; git ls-files --error-unmatch reports/n2-fenetre.json >/dev/null 2>&1 && echo oui ||  … [183 caractères tronqués]`

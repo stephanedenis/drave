@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.7 h |
-| Tours | 17 |
-| Messages | 567 |
-| Appels d'outils | 582 |
+| Durée | 5.8 h |
+| Tours | 18 |
+| Messages | 578 |
+| Appels d'outils | 590 |
 | Fichiers touchés | 24 |
-| Commandes | 392 |
+| Commandes | 399 |
 | Sous-agents | 0 |
-| Commits | 24 |
+| Commits | 25 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -59,6 +59,8 @@
 **Tour 16** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 17** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -522,7 +524,7 @@ La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, pu
 
 ### Tour 17 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Check events, N2 fiche and journal
 - bash — Wait for a new commit or the N2 JSON
@@ -533,10 +535,34 @@ La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, pu
 - bash — Commit the counter follow-up
 - bash — Identify the git lock holder
 - bash — Wait for the references commit and check files
+- job_output
+- bash — Check the hub commit status
+- bash — Log the counter convention and wait for the hub commit
+- bash — Align en-cours counter with the repo and check
 
 **Synthèse produite :**
 
-⏵ Round 12 : je vérifie les événements et j’attends le commit N2
+⏵ Round 12 : la rouge de passage est rejouée verte, le compteur suit le dépôt
+
+- **N2** : `reports/n2-fenetre.json` écrit à 21 h 56 (agrégat loi de fenêtre 256/512/1024, même texte, production N2.ac/200k/512). **`porte-tableaux` repasse verte** : 1 577 fichiers, **2 747 liens** résolvent — le 5e rouge de la passe était bien un **lien de fiche en cours d'écriture**, pas une régression.
+- **Hub** : commit `52f827a2` — la note de références dit la rouge rejouée verte (21 h 57). Le compteur JSON d'`en-cours` **reste 655 pour le dépôt** (le 656e fichier est le JSON N2 encore non committé) : j'ai aligné mon passage à 656 et documenté l'écart transitoire — la revue signale 655/656 jusqu'au commit N2.
+- **N2** : le run long est à **13 250 / 20 000 pas, PPL val 2,601** (cible 2,5).
+- **État** : en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅ (claims longs en avertissement), journal ✅, registre ✅ ; revue = le seul écart de compteur transitoire ci-dessus.
+
+La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compteur, puis le checkpoint de 8 h. Rien de bloquant.
+
+### Tour 18 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check events and N2 status
+- bash — Wait for the N2 commit or a new commit
+- bash — Check N2 staging and commit status
+- bash — Wait for the N2 fenêtre commit and verify
+
+**Synthèse produite :**
+
+⏵ Round 13 : veille — j’attends le commit N2 ou un nouvel événement
 
 ## 3. Travail accompli
 
@@ -611,7 +637,7 @@ La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, pu
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 352 autres
+- … et 359 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -770,4 +796,5 @@ La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, pu
 - NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS" 2>&1 | tail -4
 - NUIT — LE COMPTEUR SUIT LE JSON N2 (570/656) ; PORTE-TABLEAUX REPASSE VERTE" -m "reports/n2-fenetre.json (21 h 56) referme le lien qui faisait échouer porte-tab
 - ps -eo pid,etime,args | grep -E "git commit|git add|git reset" | grep -v grep | head -3; ls -l .git/index.lock 2>/dev/null; date "+%H:%M:%S"
+- git status --short reports/n2-fenetre.json reports/rapport-n2-fenetre.md 2>/dev/null; ps -eo pid,etime,args | grep -E "git commit" | grep -v grep | head -2; git
 

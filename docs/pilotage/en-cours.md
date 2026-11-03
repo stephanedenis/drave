@@ -72,14 +72,15 @@
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
-- **Rôle** : **N2** — R1.2 à **1 024 octets** et la fenêtre sur le **mélange de production**.
-- **Plan** : R1.2-1024 (2 500 → 20 000 pas) ; mélange affiné à 512 ; fiche + commit par fait.
+- **Rôle** : **N2** — la fenêtre à **1 024** et la fenêtre sur la **production**.
+- **Plan** : 256/512/1 024, production, 2 048 ; fiche par fait.
 - **Ambition** : que la longueur cesse de reculer.
-- **Stratégie** : RoPE, budgets contrôlés, mêmes bancs, contrôles joints.
-- **Objectif final** : une fenêtre 1 024 mesurée, une production qui tient à 1 000 octets.
-- **Ce qu'elle fait** : R1.2-1024 lancée à 19 h 57 (GPU 0) ; les portes gardent le GPU 1.
-- **Ce que font les autres** : **hub** (portes), **S** (analyseur), **Pensée** (B13).
-- **Prochaine action** : les contrôles de R1.2-1024, puis la fiche.
+- **Stratégie** : budgets contrôlés, mêmes bancs, contrôles joints.
+- **Objectif final** : une production qui tient à 1 000 octets.
+- **Ce qu'elle fait** : la **loi de la fenêtre** et la **production** (N2.ac + RoPE 512/1 024) ;
+  **2 048** en cours.
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : **2 048**, puis un point de compute.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
@@ -90,12 +91,15 @@
 ## Ce qui est en cours
 
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
-- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2**
-  **3,0107** (−0,244) à octets constants ; depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2** :
+  la loi à octets constants — 1 000 octets 3,2545 → 3,0107 → **2,9950** (256/512/1 024) —
+  [`fenêtre`](../../reports/rapport-n2-fenetre.md),
+  [`n2-r11`](../../reports/rapport-n2-r11.md).
 - **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; banque à **0**.
-- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à
-  1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
-  [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
+- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (< 2,5 non atteinte ; 1,3–2,7 M pas) ;
+  **la fenêtre bat le compute** : N2.ac + RoPE 512 (1 h) donne **3,1588 / 2,9096 / 2,7607** à
+  128/512/2 000 — [`fenêtre`](../../reports/rapport-n2-fenetre.md),
+  [`n2-200k`](../../reports/rapport-n2-200k.md).
 - **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
   [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
 
@@ -107,7 +111,7 @@
 |---|---|---|
 | portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **570** / **655** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **570** / **656** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` de passage) | `docs/pilotage/references-non-regression.md` |
 
@@ -120,8 +124,8 @@ externes** et la **prochaine action**.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 140/140 ; sto 5/5 ; fenêtre à réparer** ; **B10.3 bloquée** |
-| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.2-1024 en cours** (GPU 0) ; N4 0/4 ; N5 gelé | **N2** : R1.2-1024, fiche ; **N4** |
-| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
+| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; < 2,5 non atteinte (1,3–2,7 M pas) ; N4 0/4 ; N5 gelé | **la fenêtre bat le compute** (N2.ac + RoPE 512 : 2,9096 à 512, 2,7607 à 2 000) ; **2 048** en cours |
+| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **loi de la fenêtre mesurée** (256 → 1 024) ; **2 048** en cours, puis un professeur long à distiller |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 

@@ -61,8 +61,10 @@ def main() -> None:
     train, val = data[:-n_val], data[-n_val:]
     canal_train = canal_data[:-n_val] if canal_data is not None else None
     canal_val = canal_data[-n_val:] if canal_data is not None else None
+    # max_pos = 2 048 suffit pour toute séquence ≤ 2 048 (positions 0…seq−1) et garde le
+    # même schéma de poids que les points de contrôle amont (la table n'est pas utilisée par RoPE).
     cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden, window=a.window,
-                       max_pos=max(2048, a.seq + 1))
+                       max_pos=max(2048, a.seq))
     modele = NativeModelRoPE(cfg).to(a.device)
     if a.init:
         ck = torch.load(a.init, map_location="cpu", weights_only=False)

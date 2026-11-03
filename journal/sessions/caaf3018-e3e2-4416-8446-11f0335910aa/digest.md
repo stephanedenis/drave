@@ -5883,3 +5883,29 @@ A  reports/pensee-porte-fenetre.json
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF'\nRÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)\n\nLe JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué la\nporte : 1 577 fichiers, 2 747 liens  … [506 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-242]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-242", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 52f827a2] RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+ 23 files changed, 308 insertions(+), 50 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict intégré et rejeu consigné. Nuit : cadence de 10 min, surveillance des sessions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date +%H:%M; echo \"=== git ===\"; git log --oneline -3; echo \"=== n2 fichiers ===\"; git status --short | grep -E \"n2-fenetre\" | head -2; echo \"=== sessions ===\"; python3 tools/sessions.py --status 2>&1 | grep -E \"act … [169 caractères tronqués]`
+
+  ```
+started background job bash-243
+  ```
+
+- **job_output** `{"job_id": "bash-243", "timeout_ms": 620000, "wait": true}`

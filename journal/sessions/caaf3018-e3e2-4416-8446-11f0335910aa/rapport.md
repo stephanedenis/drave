@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.7 h |
 | Tours | 23 |
-| Messages | 306 |
-| Appels d'outils | 315 |
+| Messages | 308 |
+| Appels d'outils | 317 |
 | Fichiers touchés | 6 |
-| Commandes | 242 |
+| Commandes | 243 |
 | Sous-agents | 0 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*53 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +473,11 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 26 autres
+- … et 27 autres
 
 **Synthèse produite :**
 
-⏵ Deux accrocs : verrou git (autre commit en cours) et backticks exécutés dans le message. Je réessaie proprement.
+⏵ Verdict intégré et rejeu consigné. Nuit : cadence de 10 min, surveillance des sessions.
 
 ## 3. Travail accompli
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 202 autres
+- … et 203 autres
 
 ## 4. Mesures et résultats marquants
 

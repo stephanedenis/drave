@@ -8573,3 +8573,152 @@ Round: 15/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+### 🤖 Assistant
+
+⏵ Round 15 : veille ; je vérifie le JSON N2, les sessions et le registre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T' && ls -l reports/n2-fenetre.json 2>&1; git log --oneline -1; python3 tools/sessions.py --status 2>&1 | grep -E 'actif' | head -4; python3 tools/ressources.py --status 2>&1 | tail -5", "description": "Minimal night watch ch … [26 caractères tronqués]`
+
+  ```
+21:59:24
+-rw-r--r--. 1 stephane stephane 5573  2 nov 21:56 reports/n2-fenetre.json
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 123 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  79 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  16 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·  16 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le JSON N2 est arrivé (21 h 56) : je rejoue `porte-tableaux` et je clos la rouge de passage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== porte-tableaux ==\" && bash tools/porte-tableaux.sh 2>&1 | tail -4; echo \"[exit ${PIPESTATUS[0]}]\"; echo; echo \"== références (état de passage) ==\" && sed -n '1,12p' docs/pilotage/references-non-regression.md; echo; ech … [179 caractères tronqués]`
+
+  ```
+== porte-tableaux ==
+  ✅ 1577 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2747 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+[exit 0]
+
+== références (état de passage) ==
+# Références de non-régression
+
+> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
+> **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues
+> (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,
+> `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
+> `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) —
+> **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers),
+> dès que le JSON a existé ; aucune régression structurelle.
+> La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
+
+> **Passe précédente — 2026-11-02 à 06 h :** 81 portes, 76 vertes, 5 rouges (`/tmp/portes-…`,
+
+== en-cours ligne passe ==
+112:| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 conn
+… [83 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-tableaux` est **verte** (le JSON N2 a résolu le lien) ; les références le notent déjà. Je mets la ligne d'état à jour.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` de passage) | `docs/pilotage/references-non-regressio … [882 caractères tronqués]`
+
+  ```
+ligne dernière passe mise à jour
+  T0 max : 4001 mots (budget 4 000)
+  ❌ 1 violation(s) :
+
+[commit 128]
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 est à 4 001 : je retire « JSON N2 » de la ligne, puis je réessaie le commit (verrou git d'une autre session).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"4 connues + `porte-tableaux` **rejouée verte à 21 h 57**, JSON N2\"\nassert t.count(old)==1\np.write_text(t.replace(old, \"4 connue … [671 caractères tronqués]`
+
+  ```
+trim fait
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[commit 128]
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le verrou git persiste : je vérifie s'il est actif ou obsolète avant de le retirer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l .git/index.lock 2>&1; echo; ps -eo pid,etime,cmd | grep -E '[g]it (add|commit|status|diff|merge|rebase)' | head -5; echo; lsof .git/index.lock 2>/dev/null | head -3; echo \"[lsof $?]\"; sleep 20; echo \"== après 20 s ==\"; ls - … [139 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 358024  2 nov 21:59 .git/index.lock
+
+ 692956       02:09 bash -c cd /home/stephane/GitHub/Qtrinet && sleep 180; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git log -1 --format='%h %s' | head -1; git add docs/pilotage/en-cours.md; git diff --cached --name-only | grep -c . ; git diff --cached --name-only | grep en-cours || echo 'pas en-cours'; python3 tools/verifie_etat_a_jour.py --index; echo "EXIT=$?"; git commit -m "B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
+ 693662       01:19 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF' RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)  Le JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué la porte : 1 577 fichiers, 2 747 liens relatifs, tous résolus. L'en-tête et le § 1 le disent désormais : la 5e rouge de la passe du 19 h 32 était un lien de fiche N2 en cours d'écriture, pas une régression — la porte repasse verte dès que le fichier existe. Le compteur JSON de en-cours (655) reste juste pour le dé
+… [1033 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le verrou est libéré ; je commite la mise à jour d'état (porte-tableaux verte).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 300 git commit --only -m \"ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2\" -m \"Le JSON n2-fenetre.json existe (21 h 56) ; porte-tableaux : … [349 caractères tronqués]`
+
+  ```
+On branch master
+Your branch is ahead of 'origin/master' by 20 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   docs/pilotage/en-cours.md
+	modified:   docs/pilotage/roadmap.md
+	modified:   journal/2026-11-02/README.md
+	modified:   journal/2026-11-02/apprentissage.md
+	modified:   journal/2026-11-02/attention.md
+	modified:   journal/2026-11-02/distribue.md
+	modified:   journal/2026-11-02/docs.md
+	modified:   journal/2026-11-02/memoire.md
+	modified:   journal/2026-11-02/mesures.md
+	modified:   journal/2026-11-02/modele.md
+	modified:   journal/2026-11-02/moteur.md
+	modified:   journal/2026-11-02/outils.md
+	modified:   journal/2026-11-02/portes.md
+	modified:   journal/README.md
+	modified:   journal/THEMES.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/digest.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md
+	modified:   journal/sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/digest.md
+	modified:   journal/sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/r
+… [18793 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 est à 4 059 (au-dessus) et le commit a échoué ; je retire deux puces closes (Données, R1) et je recommite la ligne d'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n# retirer les deux puces closes, en gardant les autres\nfor prefix in (\"- **Données** :\", \"- **R1 — la fenêtre native** :\"):\n    … [849 caractères tronqués]`

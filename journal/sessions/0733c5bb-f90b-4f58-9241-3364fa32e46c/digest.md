@@ -5238,3 +5238,199 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-225", "timeout_ms": 180000, "wait": true}`
+
+  ```
+22:00:47
+RuntimeError: Error(s) in loading state_dict for NativeModelRoPE:
+	size mismatch for pos.weight: copying a param with shape torch.Size([2048, 384]) from checkpoint, the shape in current model is torch.Size([2049, 384]).
+0, 5646 MiB, 100 %
+1, 122 MiB, 0 %
+ 383833 4314836 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus dat
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de `max_pos` (2 048) et relance du run 2 048
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"work/n2ac/entrainer_rope.py\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"    cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden, window=a.window,\\n                       max_pos= … [868 caractères tronqués]`
+
+  ```
+patché
+relancé pid 695414
+[still running after 60000ms; moved to background job bash-226]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-226", "timeout_ms": 240000, "wait": true}`
+
+  ```
+22:02:26
+  pertes.append(float(perte))
+pas      1 · perte 2.8233 · PPL val 14.313 · 2 s
+0, 5646 MiB, 99 %
+1, 10068 MiB, 100 %
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à l'état : loi de la fenêtre et nouvelle recette de production
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '/^- \\*\\*R1 — la fenêtre/,/^$/p' docs/pilotage/en-cours.md; echo \"=== N2 ===\"; sed -n '/^- \\*\\*N2\\*\\*/,/^$/p' docs/pilotage/en-cours.md; echo \"=== session ===\"; sed -n '/### Session `0733c5bb/,/^$/p' docs/pilotage/en-cours.md | tail - … [60 caractères tronqués]`
+
+  ```
+- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2**
+  **3,0107** (−0,244) à octets constants ; depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; banque à **0**.
+- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à
+  1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
+  [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
+- **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+  [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
+
+=== N2 ===
+- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,0
+… [968 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nn = 0\n\n# 1. R1\nvieux = \"\"\"- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2** … [3743 caractères tronqués]`
+
+  ```
+3 blocs ; compteurs 570/656
+     · ligne de chantier à 3 cellules (4 attendues) : | **N — le natif** | **N2, N3, N4** | **la fenêtre entraînée
+     · ligne de chantier à 3 cellules (4 attendues) : | **R — le lecteur** | **R0.7** | **la loi de la fenêtre est
+  T0 max : 4059 mots (budget 4 000)
+     · T0 : 4059 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | head -20; echo \"=== lignes chantiers ===\"; grep -n \"N — le natif\\|R — le lecteur\" docs/pilotage/en-cours.md", "description": "Inspect budget breakdown and broken table rows"}`
+
+  ```
+budget de contexte · documents chargeables
+    mots lignes  cat budget  document
+    6343    378   T1   9000  docs/pilotage/roadmap.md
+    5999    597 DATÉ      0  docs/implantation/contexte-long.md
+    4858    515   T1   5000  docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+    4085    431 DATÉ      0  docs/implantation/numa-segregation.md
+    3131    294   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2762    180   T1   2800  reports/README.md
+    2446    165   T1   2500  docs/pilotage/references-non-regression.md
+    2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/form
+… [433 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0|AGENTS|en-cours\" | head -5; echo \"=== réparation des lignes ===\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.re … [987 caractères tronqués]`
+
+  ```
+T0 max : 4059 mots (budget 4 000)
+     · T0 : 4059 mots (AGENTS + en-cours + une tâche) > budget 4 000
+=== réparation des lignes ===
+table réparée
+  en-cours · 1720 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"T0\" -B3 -A12 tools/taille_documents.py | head -40", "description": "Read T0 budget composition"}`
+
+  ```
+2-"""taille_documents.py — le budget de contexte et la cohésion des documents.
+3-
+4-Ce que l'outil vérifie :
+5:  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+6-  2. la cohésion minimale : un titre, un résumé en tête, et pour les documents datés un
+7-     « Résumé » + « ne pas charger par défaut » ;
+8-  3. les fiches de résultats trop longues pour être lues d'un bloc (avertissement, pas échec) ;
+9-  4. le classement des plus gros documents, pour voir où le contexte part.
+10-
+11-Les fiches de `reports/` (sauf `reports/README.md`) et le `journal/` sont **hors budget** :
+12-ils ne sont pas chargés automatiquement. Le budget est en **mots** ; l'estimation de tokens
+13-est donnée à titre indicatif (≈ caractères / 4).
+14-
+15-Les **sources de diagrammes** (` ```plantuml `, ` ```mermaid `) sont **rendues, pas lues** :
+16-elles ne comptent pas dans le budget ; le document les porte, la page montre le SVG.
+17-"""
+--
+24-
+25-# (catégorie, budget en mots). Les globs sont résolus dans l'ordre ; le premier match gagne.
+26-BUDGETS: list[tuple[str, str, int]] = [
+27:    ("T0", "AGENTS.md", 1200),
+28:    ("T0", "docs/pilotage/en-cours.md", 2000),
+29-    (
+… [901 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def t0\\|T0 max\\|plus grosse\\|max(\" tools/taille_documents.py | head -10; sed -n '/def t0/,/^def /p' tools/taille_documents.py | head -30", "description": "Read T0 max computation"}`
+
+  ```
+150:    t0 = poids("AGENTS.md") + poids("docs/pilotage/en-cours.md") + max(
+163:    print(f"  T0 max : {t0} mots (budget 4 000)")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 140,170p tools/taille_documents.py", "description": "Read exact T0 formula"}`
+
+  ```
+# T0 : la somme des trois lectures par défaut
+    def poids(rel: str) -> int:
+        q = RACINE / rel
+        return mots_hors_diagrammes(q.read_text(encoding="utf-8", errors="ignore")) if q.exists() else 0
+
+    # Le T0 est « AGENTS + en-cours + UN document de tâche », et le document de tâche est un
+    # T0 (≤ 1 200 mots) : les trois documents `specifiques` ci-dessus sont des T1, avec leur
+    # propre budget. Les compter ici faisait payer 1 579 mots au T0 (organisation-du-depot.md)
+    # au lieu des 1 134 du plus gros T0 — un budget faux de 445 mots, dans le sens qui bloque.
+    agents = [a for a in (RACINE / "docs/methode").glob("*.md") if a.name not in specifiques]
+    t0 = poids("AGENTS.md") + poids("docs/pilotage/en-cours.md") + max(
+        (poids(str(a.relative_to(RACINE))) for a in agents), default=0
+    )
+    if t0 > 4000:
+        violations.append(f"T0 : {t0} mots (AGENTS + en-cours + une tâche) > budget 4 000")
+
+    # classement
+    lignes.sort(reverse=True)
+    print("  budget de contexte · documents chargeables")
+    print(f"  {'mots':>6} {'lignes':>6} {'cat':>4} {'budget':>6}  document")
+    for n, l, rel, cat, budget in lignes[:18]:
+        print(f"  {n:6d} {l:6d} 
+… [284 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\n# R1 : garder le chiffre et le lien\ni = t.index(\"- **R1 — la fenêtre native**\")\nj = t.index(\"\\n- **S — le banc\", i)\nt = … [2171 caractères tronqués]`
+
+  ```
+état compacté
+  T0 max : 4020 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4020 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1646 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"  la loi à octets constants — 1 000 octets 3,2545 → 3,0107 → **2,9950** (fenêtres 256/512/1 024),\n  et le « mê … [1076 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du fait « fenêtre » (loi + production)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && python3 -c \"\nimport pathlib,re,datetime\np=pathlib.Path('journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md')\nt=p.read_text()\nt=re.sub(r'- \ … [2511 caractères tronqués]`

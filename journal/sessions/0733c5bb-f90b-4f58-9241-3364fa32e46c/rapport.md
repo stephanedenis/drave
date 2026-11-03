@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 5.7 h |
+| Durée | 5.8 h |
 | Tours | 2 |
-| Messages | 304 |
-| Appels d'outils | 309 |
+| Messages | 317 |
+| Appels d'outils | 322 |
 | Fichiers touchés | 22 |
-| Commandes | 225 |
+| Commandes | 236 |
 | Sous-agents | 0 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*69 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 39 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
-⏵ Comblement de la fiche avec la production à 1 024
+⏵ Commit du fait « fenêtre » (loi + production)
 
 ## 3. Travail accompli
 
@@ -177,7 +177,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 185 autres
+- … et 196 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -282,6 +282,9 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `[still running after 60000ms; moved to background job bash-222]`
 - **T2** `0, 5646 MiB, 100 %`
 - **T2** `[still running after 60000ms; moved to background job bash-225]`
+- **T2** `[still running after 60000ms; moved to background job bash-226]`
+- **T2** `- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** st`
+- **T2** `[still running after 60000ms; moved to background job bash-236]`
 
 ## 5. Erreurs rencontrées
 
@@ -303,4 +306,5 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/table_200k.py work/n2ac/agrege_200k.py journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null;
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") vieux = """-
 - N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)" && git log --oneline -1; echo "=== run ==="; tail -2 work/n
+- cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && python3 -c " import pathlib,
 

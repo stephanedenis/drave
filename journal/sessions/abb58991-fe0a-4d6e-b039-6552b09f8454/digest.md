@@ -13380,3 +13380,47 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Le hub tient le lock en continu ; j'attends 3 minutes et je reprends le commit (l'en-cours a un vrai changement)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 180; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git log -1 --format='%h %s' | head -1; git add docs/pilotage/en-cours.md; git diff --cached --name-only | grep -c . ; git diff --cached --name-only | grep en-cours || ec … [312 caractères tronqués]`
+
+  ```
+22:01:27
+.git/index.lock
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+30
+pas en-cours
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT2=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le lock est périmé (aucun git actif, des commits du hub ont abouti) ; je vérifie les processus, je le retire et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,cmd | grep \"git \" | grep -v grep | head -3 || true; if ! ps -eo cmd | grep -E \"git (commit|add|reset|read-tree)\" | grep -v grep >/dev/null; then rm -f .git/index.lock && echo 'lock périmé retiré'; fi; ls .git/ind … [477 caractères tronqués]`
+
+  ```
+22:01:36
+ 695570       00:28 timeout 300 git commit --only -m ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2 -m Le JSON n2-fenetre.json existe (21 h 56) ; porte-tableaux : 2 747 liens, 1 577 fichiers, verte à 21 h 57. Les quatre rouges connues restent seules ; prochaine passe 82 portes. -- docs/pilotage/en-cours.md
+ 695571       00:28 git commit --only -m ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2 -m Le JSON n2-fenetre.json existe (21 h 56) ; porte-tableaux : 2 747 liens, 1 577 fichiers, verte à 21 h 57. Les quatre rouges connues restent seules ; prochaine passe 82 portes. -- docs/pilotage/en-cours.md
+ 695977       00:11 bash -c OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ "$NEW" != "$OLD" ] && break; git ls-files --error-unmatch reports/n2-fenetre.json >/dev/null 2>&1 && break; done; date "+%H:%M:%S"; echo "HEAD $(git rev-parse --short HEAD)"; git log --oneline -2; git ls-files --error-unmatch reports/n2-fenetre.json >/dev/null 2>&1 && echo "JSON N2 suivi" || echo "JSON N2 non suivi"; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null
+.git/i
+… [690 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub commite l'en-cours en série (chaque commit ~1 min 30) ; j'attends 4 minutes pour laisser la série finir
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 240; date '+%H:%M:%S'; ps -eo pid,etime,cmd | grep -E \"git (commit|add|reset|read-tree)\" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo 'libre'; git log -1 --format='%h %s' | head -1; if ! ps -eo cmd | grep -E \"git (commit|a … [350 caractères tronqués]`
