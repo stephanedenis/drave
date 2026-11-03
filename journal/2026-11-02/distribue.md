@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,6 +25,7 @@
 | 18:41 | `9250b1c3` | B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE | `moteur-de-pensee.md`, `en-cours.md`, `roadmap.md` (+27) |
 | 18:47 | `aeace14b` | B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT) | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 | 20:04 | `67ec9cd4` | B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3) | `en-cours.md`, `roadmap.md`, `README.md` (+29) |
+| 20:07 | `a67dbf00` | PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE | `plan-travail.md`, `README.md`, `apprentissage.md` (+20) |
 
 ## Chiffres du jour
 

@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 3.9 h |
 | Tours | 9 |
-| Messages | 395 |
-| Appels d'outils | 497 |
-| Fichiers touchés | 32 |
-| Commandes | 366 |
+| Messages | 398 |
+| Appels d'outils | 502 |
+| Fichiers touchés | 33 |
+| Commandes | 367 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 1 |
@@ -364,6 +364,17 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 
 ### Tour 9 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
+*5 appels d'outils.* Actions notables :
+
+- bash — Read politique tests and current S state
+- read
+- edit `/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py`
+- edit `/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py`
+
+**Synthèse produite :**
+
+⏵ Ajout du prompt `porte_mobile` et du test unitaire (7e test)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -390,7 +401,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_syntagmes.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-syntagmes.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_cascade.py` | 1 | 0 |
-| `/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py` | 1 | 1 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_politique_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-cascade.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-politique-llm.md` | 1 | 0 |
@@ -402,6 +413,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 | `/home/stephane/GitHub/Qtrinet/reports/b13-porte-134.json` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -445,7 +457,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 326 autres
+- … et 327 autres
 
 ## 4. Mesures et résultats marquants
 

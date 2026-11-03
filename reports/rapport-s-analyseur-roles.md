@@ -131,7 +131,7 @@ une validation humaine — le statut `reference` le dit, et le mode `banque` res
 
 ## Fichiers
 
-- Sous-module : commit **`90e507b`** (committé **dans son dépôt** avant le pointeur), **43 tests**.
+- Sous-module : commit **`90e507b`** (committé **dans son dépôt** avant le pointeur), **46 tests** aujourd'hui.
 - Gold : `tools/structures/donnees/gold-analyseur.json` ; mesure :
   `tools/structures/donnees/mesure-analyseur.json` ; code : `generateur.py`,
   `mesure_analyseur.py`, `exporter_corpus.py`, `verifier_corpus.py`.

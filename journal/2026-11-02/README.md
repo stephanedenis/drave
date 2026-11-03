@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**179 commits** · **10 session(s)** · **10 thème(s)**
+**180 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 9 | [attention.md](attention.md) |
-| distribue | 17 | [distribue.md](distribue.md) |
+| distribue | 18 | [distribue.md](distribue.md) |
 | docs | 28 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 85 | [mesures.md](mesures.md) |
@@ -220,6 +220,7 @@
 | 19:49 | `a902abea` | PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS |
 | 19:59 | `c0196b55` | N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h) |
 | 20:04 | `67ec9cd4` | B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3) |
+| 20:07 | `a67dbf00` | PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE |
 
 ## Le récit de la journée (écrit à la main)
 

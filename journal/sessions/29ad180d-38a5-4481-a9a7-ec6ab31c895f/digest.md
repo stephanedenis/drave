@@ -4925,3 +4925,40 @@ c0196b551ac06cdbfc7e6f018a4a6924aceff6eb	refs/heads/master
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES\" -m \"S — mesure_corpus.py sur 50 000 lignes et 20 799 phrases CEGEP, 50 000 lignes/phrases propres … [709 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la .git/index.lock 2>/dev/null; ps -eo pid,etime,cmd | grep -E \"git (commit|add|push|read-tree)|index.lock\" | grep -v grep | head -8; echo \"=== log ===\"; git log --oneline -3; echo \"=== status ===\"; git status --short | hea … [63 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 355949  2 nov 20:07 .git/index.lock
+ 337047       01:16 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/ressources.py docs/pilotage/plan-travail.md && timeout 300 git commit --only -m "PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE" -m "Le pilotage réservait les fichiers, pas la machine. tools/ressources.py ajoute un registre consultatif (work/ressources.json) : GPU0/GPU1 (1 job exclusif), cpu0/cpu1 (16 fils utiles, réserve 4, NUMA 0/1), RAM (109 Gio utiles), NVMe système (705 Gio), RAID IA (33 Gio), HDD Data13TB (1,9 Tio) et machine (passe complète exclusive). claim/release/check/suggest/actual ; ce qui ne tient pas va en file et la session prend une autre tâche (jamais en attente). plan-travail.md § 10 porte la politique, l'allocation type (N2 gpu0/cpu0 12, hub gpu1/cpu1 8, S et Pensée cpu1 4+4, CPU1 = 16) et la règle NUMA (GPU sur node 0, CPU seul sur node 1)." -m "Contrôles : autotest 9 cas ; revue_documentation verte ; T0 3 997/4 000 ; en-cours 1 623 mots ; le registre réel des quatre sessions passe --check. Limites : registre consultatif (pas de cgroups) ; le mapping processus→claim n'es
+… [3359 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 30); do if [ ! -e .git/index.lock ]; then echo \"lock libéré après ${i}x5s\"; break; fi; sleep 5; done; ls -la .git/index.lock 2>/dev/null || echo \"pas de verrou\"; git log --oneline -2; git status --short | head -8 … [75 caractères tronqués]`
+
+  ```
+lock libéré après 3x5s
+pas de verrou
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+67ec9cd4 B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat | tail -12; echo \"=== commit ===\"; git commit -m \"S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS\" -m \"mesure_corpus.py : 50 000 lignes et 2 … [610 caractères tronqués]`

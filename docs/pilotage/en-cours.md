@@ -36,12 +36,12 @@
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
 - **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
-- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 45~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 46~~ ; 5–6) ~~fiche, pointeur, état~~.
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
 - **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
-- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; **45 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
-- **Ce qu'elle fait** : **`140feb6`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **0**.
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **46 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **Ce qu'elle fait** : **`97641d5`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **200** phrases / **355** candidats, **0** validée.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
 - **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
 - **Bloquants** : aucun ; **banque à 0** verdict.
@@ -94,7 +94,7 @@
 - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
   invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
   depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
-- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **45 tests** ; corpus **47** structures (SHA `f2a0d2fb…`) ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; **banque validée à 0**.
+- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47** structures (SHA `f2a0d2fb…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; **banque validée à 0**.
 - **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à
   1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
   [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).

@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 3.9 h |
 | Tours | 6 |
-| Messages | 234 |
-| Appels d'outils | 245 |
+| Messages | 237 |
+| Appels d'outils | 248 |
 | Fichiers touchés | 13 |
-| Commandes | 177 |
+| Commandes | 180 |
 | Sous-agents | 0 |
-| Commits | 11 |
+| Commits | 12 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -223,7 +223,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 6 — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
 
-*29 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Inspect CEGEP OCR corpus for real-text measurement
 - bash — Assess OCR text quality and plausible sentence count
@@ -239,7 +239,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - bash — Commit and push corpus measurement submodule
 - bash — Check main state, gate pass, and fiche status
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md`
-- … et 15 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
@@ -307,7 +307,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 137 autres
+- … et 140 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -359,7 +359,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+9 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : === data suivis === count: 0 === reports json exemples === reports/b102bis-corpus-jw.json reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md reports/corpus-genres.json reports/corpus-li
@@ -369,6 +369,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** : #!/usr/bin/env python3 """Produit, pour chaque session DSH, un rapport qui reconstitue son essence et démontre le travail accompli, étape par étape.  Sortie, à côté du digest brut :    journal/session
 - **T5** : === WIP mtimes === -rw-------. 1 stephane stephane 14355 18:49:42 reports/rapport-n2-r11.md -rw-------. 1 stephane stephane 82670 18:52:50 tools/bloc_linguistique.py -rw-------. 1 stephane stephane 11
 - **T5** : {     "version": 2,     "mode": "gold",     "date": "2026-11-02T19:40:35",     "source": "tools/structures/donnees/gold-analyseur.json",     "sortie": "data/structures/banque.jsonl",     "phrases": 47
+- **T6** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
 
 ## 6. Commits
 
@@ -383,4 +384,5 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)" -m "mesure_corpus.py : 50 000 lignes et 20 799 phrases CEGEP, 50
 - S — LA BANQUE DE CANDIDATS RÉELS : 200 PHRASES, 355 CANDIDATS, MANIFESTE SHA-256" -m "candidats_corpus.py : 200 phrases de la littérature propre (filtre 40-200 
 - S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES" -m "S — mesure_corpus.py sur 50 000 lignes
+- S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS" -m "mesure_corpus.py : 50 000 lignes et 20 799 p
 

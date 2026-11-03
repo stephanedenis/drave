@@ -6206,3 +6206,21 @@ docs/pilotage/plan-travail.md | 106 +++++++-
   ```
 
 - **bash** `{"command": "git commit -m \"NUIT — LA COORDINATION DES RESSOURCES EST PUBLIÉE : REGISTRE (9 CAS), CLAIMS ET CONSIGNE ; GPU0 NON DÉCLARÉ\" -m \"tools/ressources.py : registre consultatif des GPU/CPU/RAM/NVMe/HDD et protocole claim/release/file/actual/check (autotest 9 cas). plan-travail § 10 : modèl … [583 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"git (commit|add|status|diff)|session_report|archive_sessions\" | grep -v grep | head -5; ls -l .git/index.lock 2>/dev/null; date \"+%H:%M:%S\"", "description": "Identify the git lock holder"}`
+
+  ```
+335941       01:22 git commit -m S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES -m S — mesure_corpus.py sur 50 000 lignes et 20 799 phrases CEGEP, 50 000 lignes/phrases propres, mélange des mots en contrôle : littérature propre 65,5 % (phrases) / 51,0 % (lignes) de GN+GV contre 9,1 % / 3,8 % pour le mélange ; CEGEP OCR 8,5 % / 3,6 % contre 9,1 % / 3,8 % — au plancher, corpus multilingue/technique, analyseur français. Couverture 0,94/0,89 ; homographes 25/20 799 et 1 064/50 000. Banque de candidats réels : 200 phrases, 355 candidats, manifeste SHA 43957a3b…, sous-module 97641d5 ; fiche reports/rapport-s-corpus-reel.md ; 46 tests. -m N2 — mandat de nuit (R1.2 à 1 024 octets et la fenêtre sur le mélange de production, jusqu'à 08 h) et outil de ressources. État 562 fiches / 648 JSON ; T0 vert.
+ 337047       00:56 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/ressources.py docs/pilotage/plan-travail.md && timeout 300 git commit --only -m "PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE" -m "Le pilotage réservait les fichiers, pas la machine. tools/ressources.p
+… [3604 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 60); do N=$(pgrep -fc \"git commit\" 2>/dev/null || true); [ \"${N:-0}\" -eq 0 ] && break; sleep 3; done; echo \"git commits restants: $(pgrep -fc 'git commit' 2>/dev/null || echo 0)\"; git log --oneline -4; echo \"--- status ---\"; git status --short | head -12; echo \ … [196 caractères tronqués]`

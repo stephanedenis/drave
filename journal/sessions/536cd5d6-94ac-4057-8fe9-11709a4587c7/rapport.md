@@ -9,7 +9,7 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 4.6 h |
 | Tours | 7 |
-| Messages | 159 |
+| Messages | 160 |
 | Appels d'outils | 207 |
 | Fichiers touchés | 13 |
 | Commandes | 167 |
@@ -469,7 +469,51 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 
 **Synthèse produite :**
 
-⏵ Je commite le registre et la politique, sans toucher aux fichiers déjà indexés par les autres sessions.
+⏵ Registre des ressources en place ; le réel montre le gate sur GPU0 et GPU1 au repos.
+
+\# Oui : le pilotage sait maintenant réserver la machine
+
+\## Ce qui est en place
+
+| pièce | rôle |
+|---|---|
+| `tools/ressources.py` | registre des ressources : `--claim`, `--release`, `--check`, `--suggest`, `--actual`, `--autotest` (9 cas) |
+| `docs/pilotage/plan-travail.md` § 10 | la politique : matrice, règle NUMA, protocole, allocation type, stockage, limites |
+| `work/ressources.json` | le registre vivant (ignoré par git) ; les quatre sessions y sont déjà déclarées |
+
+**Commit** : `a67dbf00` sur `master` (Qtrinet). Le hook a ajouté le journal dérivé ; **les fichiers déjà indexés par les autres sessions (`en-cours`, `roadmap`, rapports) n'ont pas été touchés**. L'état est en écriture par les autres sessions (1 623 mots, T0 **3 997/4 000**) : je n'y ai pas ajouté de ligne pour ne pas écraser leur version ; la politique est dans `plan-travail` § 10.
+
+\## Le modèle
+
+| ressource | capacité | NUMA | règle |
+|---|---|---:|---|
+| `gpu0` / `gpu1` | 1 job exclusif, 16 Gio | 0 | une carte, un job ; GPU1 libre pour une éval |
+| `cpu0` | 16 fils utiles (20, réserve 4) | 0 | **fils des GPU** (0-9,20-29) |
+| `cpu1` | 16 fils utiles (20, réserve 4) | 1 | **CPU seul, hub** (10-19,30-39) |
+| `ram` | 109 Gio utiles (125, réserve 16) | — | un job > 80 Gio est machine-exclusif |
+| `nvme_system` | 1 IO lourde, 705 Gio | — | `/`, `/home`, `/FastNVMe` (qui est sur le système, pas le RAID) |
+| `nvme_raid` | 1 IO lourde, **33 Gio** | — | `/home/stephane/IA` — presque plein |
+| `hdd_data13tb` | 1 IO lourde, 1,9 Tio | — | corpus, OCR |
+| `machine` | 1 job exclusif | — | passe complète / mesure globale |
+
+**Règle NUMA** : les deux GPU sont sur le node 0. Un job GPU réserve `cpu0` et se lance avec
+`numactl --cpunodebind=0 --membind=0` (+ `CUDA_VISIBLE_DEVICES=0/1`) ; un job CPU seul va sur
+`cpu1` avec `numactl --cpunodebind=1 --membind=1`.
+
+\## Le protocole
+
+```bash
+python3 tools/ressources.py --status
+python3 tools/ressources.py --claim --session 0733c5bb --job r12-1024 \
+  --res "gpu0=exclusive,cpu0=12,ram=60" --prio 1 --eta 240
+python3 tools/ressources.py --release --session 0733c5bb --job r12-1024
+python3 tools/ressources.py --check        # --strict pour une porte
+python3 tools/ressources.py --suggest      # ce qui est libre
+python3 tools/ressources.py --actual       # le réel vs le registre
+```
+
+Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une autre tâche et la fi
+… [2836 caractères tronqués]
 
 ## 3. Travail accompli
 

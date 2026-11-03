@@ -5854,3 +5854,36 @@ plan-travail maj
 ⏵ Je commite le registre et la politique, sans toucher aux fichiers déjà indexés par les autres sessions.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/ressources.py docs/pilotage/plan-travail.md && timeout 300 git commit --only -m \"PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE\" -m \"Le pilotage réservait les fichiers, pas la machine. t … [1242 caractères tronqués]`
+
+  ```
+[master a67dbf00] PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+ 23 files changed, 1096 insertions(+), 92 deletions(-)
+ create mode 100755 tools/ressources.py
+[commit 0]
+
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+ docs/pilotage/plan-travail.md                      | 106 +++-
+ journal/2026-11-02/README.md                       |  13 +-
+ journal/2026-11-02/apprentissage.md                |   8 +-
+ journal/2026-11-02/attention.md                    |   8 +-
+ journal/2026-11-02/distribue.md                    |  12 +-
+ journal/2026-11-02/docs.md                         |   8 +-
+ journal/2026-11-02/memoire.md                      |   8 +-
+
+== index restant (autres sessions) ==
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+

@@ -10064,3 +10064,38 @@ Round: 7/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+### 🤖 Assistant
+
+⏵ Round 7 : la porte mobile — j'ajoute le prompt `porte_mobile` et son test, puis le banc aux deux positions
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def test_\" tools/tests/test_pensee_politique.py; echo '---'; sed -n '/def test_porte(/,/def test_refus/p' tools/tests/test_pensee_politique.py | head -30; echo '=== STATUS ==='; git log -1 --format='%h %s'; git status --short | head -5", "d … [56 caractères tronqués]`
+
+  ```
+13:    def test_cadenas(self):
+18:    def test_cadenas_variantes(self):
+25:    def test_porte(self):
+32:    def test_labyrinthe(self):
+36:    def test_refus(self):
+41:    def test_serveur_absent(self):
+---
+    def test_porte(self):
+        p = PolitiqueLLM("faux", jeu="porte", transport=lambda *_: "bas")
+        self.assertEqual(p.propose(LABYRINTHE_PORTE.initial(), P_BUT), "bas")
+        invite = p._invite(LABYRINTHE_PORTE.initial(), P_BUT)
+        self.assertIn("porte", invite.lower())
+        self.assertIn("(3,2)", invite)
+
+    def test_labyrinthe(self):
+        p = PolitiqueLLM("faux", transport=lambda *_: "droite")
+        self.assertEqual(p.propose(LABYRINTHE.initial(), L_BUT), "droite")
+
+    def test_refus(self):
+=== STATUS ===
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+  ```
+
