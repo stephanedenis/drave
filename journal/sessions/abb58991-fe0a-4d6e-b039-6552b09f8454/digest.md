@@ -9884,3 +9884,108 @@ tagger complet ; **D** — OCR clos (8 scans `.PDF`).
 journal/2026-11-02/README.md:315:**20 h 02 — la porte minute s'ouvre avec la règle : 26 nœuds, 4 sonde.**
   ```
 
+### 🤖 Assistant
+
+⏵ Je corrige l'heure (19 h 52, pas 20 h 02), les compteurs 561/648 et les prochaines actions ; puis tests/gates
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '69,72p' docs/pilotage/en-cours.md; grep -n \"Mis à jour\" docs/pilotage/en-cours.md; grep -n \"État au 02/11\" docs/pilotage/roadmap.md | head -1; python3 - <<'PY'\nimport pathlib\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.r … [2196 caractères tronqués]`
+
+  ```
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+
+3:**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+38:**État au 02/11 19 h 45.** B13 est à **134/140** (4 S + 2 test périmé ; le 140/140 ne se rejoue
+ok
+EN-COURS: 1635
+  T0 max : 4009 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  en-cours · 1635 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 561 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2687 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 écrit en-cours en parallèle (4 sessions, 1635 mots) ; je trime nos 10 mots, corrige l'heure et commit vite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"porte minute\\|Ce qu'elle fait.*gold neuronal\\|Prochaine action\\|Bloquants.*POS\\|Pensée.*gold\\|B13.*134\\|fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md | head -12; echo '--- ROADMAP ---'; grep -n \"minute 26\\|État au 02/11\"  … [126 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+31:- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+46:- **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
+58:- **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
+61:  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
+63:  [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
+65:- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, porte B13 et minute** mesurés ; reprise **16 h 16**.
+67:- **Prochaine action** : **gold 200+ phrases** ; **porte mobile/stochastique** ; **porte B13** attend S.
+68:- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ; reste **gold 200+**.
+81:- **Prochaine action** : les contrôles de R1.2-1024, puis la fiche.
+105:- **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc, opérateurs, **134/140** (4 S + 2 test périmé) ; gold
+117:| fichiers / JSON de résultats | **561** / **648** | `reports/*.md`
+… [5090 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier trim (Fait concis, bullet 134/140, portes), heures réelles 20 h 01, puis contrôles et commit immédiat
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**\", \"**Mis à jour : 2026-11-02, 20 h 01 HNE (heure locale, EST) … [1310 caractères tronqués]`
+
+  ```
+ok
+EN-COURS: 1603
+  T0 max : 3977 mots (budget 4 000)
+  en-cours · 1603 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2688 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 3977, revue 562/648, état 1603 (4 sessions) ; je commit la porte minute avec l'état courant
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git status --short | head -14; echo '=== ADD ==='; git add reports/rapport-pensee-porte-minute.md reports/pensee-porte-minute.json tools/tests/qualifier_porte_minute_drvm.py reports/README.md reports/INDEX.md docs/pilotage … [266 caractères tronqués]`
+
+  ```
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/structures
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+?? tools/tests/qualifier_porte_minute_drvm.py
+=== ADD ===
+ docs/pilotage/en-cours.md                  |  43 ++++----
+ docs/pilotage/roadmap.md                   |   8 +-
+ reports/INDEX.md                           |   5 +-
+ reports/README.md                          |   2 +-
+ reports/pensee-porte-minute.json           | 155 +++++++++++++++++++++++++++++
+ reports/rapport-pensee-porte-minute.md     | 100 +++++++++++++++++++
+ tools/tests/qualifier_porte_minute_drvm.py | 126 +++++++++++++++++++++++
+ 7 files changed, 409 insertions(+), 30 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+CHECK=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de la porte minute (l'état inclut les sessions N2/S concurrentes ; leurs fiches/plan/tools restent chez eux)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)\" 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"; git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | hea … [70 caractères tronqués]`

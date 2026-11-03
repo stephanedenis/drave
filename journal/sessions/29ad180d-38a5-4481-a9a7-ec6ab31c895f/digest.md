@@ -4615,3 +4615,207 @@ max 50000 cegep lignes 50000 phrases 20799
 compile OK
   ```
 
+- **write** `{"content": "\"\"\"Tests de la mesure sur corpus réel — filtre, statistiques, mélange déterministe.\"\"\"\nimport pathlib\nimport tempfile\nimport unittest\n\nimport mesure_corpus\n\n\nclass TestMesureCorpus(unittest.TestCase):\n    def test_lignes_et_phrases(self):\n        with tempfile.TemporaryD … [1072 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_mesure_corpus.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('README.md')\nt = p.read_text(encoding='utf-8')\nsection = '''\n## La mesure sur corpus réel\n\n```bash\npython3 mesure_corpus.py --max 50000        # 50 000 ligne … [2752 caractères tronqués]`
+
+  ```
+README corpus ajouté
+----------------------------------------------------------------------
+Ran 45 tests in 3.680s
+
+OK
+143:## La mesure sur corpus réel
+162:| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 25 |
+168:OCR**, il est au **plancher du mélange** (8,5 % contre 9,1 %) : ce corpus est **multilingue et
+239:**45 tests** : phrases et alignement des spans, validation + export, statut invalide refusé,
+262:  propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add mesure_corpus.py donnees/mesure-corpus.json tests/test_mesure_corpus.py README.md && git diff --cached --stat && git commit -m \"S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANC … [575 caractères tronqués]`
+
+  ```
+README.md                   |  42 +++++++-
+ donnees/mesure-corpus.json  | 255 ++++++++++++++++++++++++++++++++++++++++++++
+ mesure_corpus.py            | 205 +++++++++++++++++++++++++++++++++++
+ tests/test_mesure_corpus.py |  30 ++++++
+ 4 files changed, 529 insertions(+), 3 deletions(-)
+[master 140feb6] S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)
+ 4 files changed, 529 insertions(+), 3 deletions(-)
+ create mode 100644 donnees/mesure-corpus.json
+ create mode 100644 mesure_corpus.py
+ create mode 100644 tests/test_mesure_corpus.py
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   90e507b..140feb6  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; git log --oneline -3; echo \"=== status ===\"; git status --short | head -12; echo \"=== pass ===\"; ps -eo pid,etime,cmd | grep -E \"toutes-les-portes|porte-\" | grep -v grep | head -3; echo \"=== S fiche compteur === … [144 caractères tronqués]`
+
+  ```
+20:00
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+=== status ===
+MM docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+M  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+ M journal/sessions/MANIFEST.md
+=== pass ===
+ 164359       28:20 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/portes/passe-1102-19h32 bash tools/toutes-les-portes.sh; echo "E
+… [326 caractères tronqués]
+  ```
+
+- **write** `{"content": "# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur **50 000 lignes** et\n> **20 799 phrases** du corpus **CEGEP OCR** (D/R/A, 4,41 M car.) et **50 000** ligne … [5561 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/### Session `29ad180d/,/### Session `e181ce02/p' docs/pilotage/en-cours.md | head -22; echo \"=== compteurs ===\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; echo \"=== roadmap S ===\"; grep -n \"S — les structur … [213 caractères tronqués]`
+
+  ```
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 43~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle et la frontière GN.
+- **Stratégie** : une règle = une phrase, trois contrôles.
+- **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **43 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : **`90e507b`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **0**.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
+- **Bloquants** : aucun ; **banque à 0** verdict.
+- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
+
+### Ses
+… [782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 43~~ ; 5–6) ~~fiche, pointeur, état~~. … [3497 caractères tronqués]`
+
+  ```
+état/roadmap/INDEX corpus ajoutés
+  en-cours · 1666 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4040 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 561 fichiers, le disque en a 562
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"ahead $(git rev-list --count origin/master..HEAD) behind $(git rev-list --count HEAD..origin/master)\"; git push origin master 2>&1 | tail -4; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; echo \"===  … [238 caractères tronqués]`
+
+  ```
+ahead 2 behind 0
+To github.com:stephanedenis/drave.git
+   e2227509..c0196b55  master -> master
+exit=0
+c0196b551ac06cdbfc7e6f018a4a6924aceff6eb	refs/heads/master
+=== sous-module ===
+140feb69d393b7b6ac716d0c705d9ceabed0993a	refs/heads/master
+=== S corpus submodule ===
+140feb6 S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)
+90e507b S — LA FRONTIÈRE DU GN S'ARRÊTE DEVANT LE VERBE : 47/47 TYPES, 117/117 RÔLES ; GOLD 47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo \"=== S corpus dans HEAD ? ===\"; git show HEAD:docs/pilotage/en-cours.md | grep -c \"corpus réel\"; git show HEAD:reports/INDEX.md | grep -c \"rapport-s-corpus-reel\"; git ls-files reports/rapport-s-corpus … [212 caractères tronqués]`
+
+  ```
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+=== S corpus dans HEAD ? ===
+0
+0
+=== status ===
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/structures
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+=== S corpus fiche présente ===
+-rw-------. 1 stephane stephane 5766  2 nov 20:00 reports/rapport-s-corpus-reel.md
+  ```
+
+- **bash** `{"command": "chmod 644 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -10; echo \"=== remotes ===\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads or … [190 caractères tronqués]`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/structures
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+=== remotes ===
+c0196b551ac06cdbfc7e6f018a4a6924aceff6eb	refs/heads/master
+140feb69d393b7b6ac716d0c705d9ceabed0993a	refs/heads/master
+=== tests sous-module ===
+Ran 45 tests in 3.774s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && ls -la donnees/; echo \"=== lignes propres ===\"; python3 - <<'PY'\nimport mesure_corpus, pathlib\nl = mesure_corpus.phrases_texte(pathlib.Path('../../data/corpus_fr_litterature.txt'), 300)\nprint(len(l), \"phrases é … [124 caractères tronqués]`
+
+  ```
+total 56
+drwxr-xr-x. 1 stephane stephane   140  2 nov 19:59 .
+drwxr-xr-x. 1 stephane stephane   346  2 nov 19:56 ..
+-rw-------. 1 stephane stephane 13281  2 nov 19:39 gold-analyseur.json
+-rw-r--r--. 1 stephane stephane 17199  2 nov 19:40 mesure-analyseur.json
+-rw-r--r--. 1 stephane stephane  5059  2 nov 19:59 mesure-corpus.json
+-rw-r--r--. 1 stephane stephane 12115  2 nov 02:10 phrases.json
+=== lignes propres ===
+300 phrases échantillonnées
+90 Au lecteur Cette version électronique reproduit dans son intégralité la version originale.
+27 Cabriolez-vous de la sorte?
+128 "Je suis bien contente qu'on ne fasse pas de cadeau d'anniversaire comme cela!" Mais elle ne se hasarda pas à le dire to
+140 La lecture de ce journal occupa Phileas Fogg jusqu'à trois heures quarante-cinq, et celle du Standard--qui lui succéda--
+59 Une montre de famille, qui vient de mon arrière-grand-père!
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"candidats_corpus.py — une banque de candidats réels : 200 phrases propres → le banc.\n\nLe gold est écrit à la main ; la banque a besoin de phrases **réelles** à valider. Ce script prend\n200 phrases de la littérature propre (filtrées, déterministes), lance … [4163 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/candidats_corpus.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+

@@ -2651,3 +2651,40 @@ porte-coupe            ✅                         140 s    ✅ le coût du pont
 ⏵ 25 portes vertes, y compris `delais` et `flux` (le GPU 1 tient)
 
 - **job_output** `{"job_id": "bash-108", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-gain             ✅                         207 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+### 🤖 Assistant
+
+⏵ Je laisse la passe tourner sans la relire en boucle ; je prépare le protocole de verdict
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== avancement ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; echo \"=== rouges ===\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"=== structure des références ===\"; grep -n \"^#\\|^## \\|^### \"  … [121 caractères tronqués]`
+
+  ```
+=== avancement ===
+26
+=== rouges ===
+=== structure des références ===
+1:# Références de non-régression
+49:## 1. Ce qui se vérifie en une commande
+108:## 2. Les repères imprimés par chaque porte
+148:## 2 bis. Les sous-passes du 2026-10-29 (la passe complète n'a pas été relancée)
+163:## 3. Les trois invariants qui ne sont pas des chiffres
+172:## 4. Où sont les autres chiffres
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe lancée sur le GPU 1 — 26/81 portes, aucune rouge
+
+La passe tourne (`bash-108`, journaux `work/portes/passe-1102-19h32`) : **26 portes passées, 0 rouge**, y compris les plus sensibles au bruit (`delais`, `flux`, `gain`) et les portes GPU (`audit-drapeaux`, `document`, `lecteur`) qui sont bien restées sur le GPU libre.
+
+Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le protocole déjà arrêté — lecture du verdict par `awk '$2 != 0'`, confrontation aux cinq rouges tolérées, rejeu seul de toute autre rouge, puis mise à jour de `references-non-regression.md`, de l'état et du journal, et commit du verdict.
+

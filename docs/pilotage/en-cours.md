@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 20 h 05 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -36,12 +36,12 @@
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
 - **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
-- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 43~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 45~~ ; 5–6) ~~fiche, pointeur, état~~.
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
 - **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
-- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **43 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
-- **Ce qu'elle fait** : **`90e507b`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **0**.
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; **45 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **Ce qu'elle fait** : **`140feb6`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **0**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
 - **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
 - **Bloquants** : aucun ; **banque à 0** verdict.
@@ -58,14 +58,14 @@
 - **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
   ne se rejoue pas), gold **432** ; **gold neuronal** POS/syntagmes, cascade
   **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27 (règle), labyrinthe 2 sonde ;
-  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
+  **porte minute** — **26 nœuds** ;
   **pragmatique** dev 1,0, test 0,6375 (majoritaire 0,7556) ; l'heuristique garde ;
   [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
   [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
-- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, porte B13 et minute** mesurés ; reprise **16 h 16**.
+- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
-- **Prochaine action** : **gold 200+ phrases** ; **porte B13** ; **porte qui bouge**.
-- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; la **pragmatique neuronale** ne qualifie pas ; restent **gold 200+** et **porte B13**.
+- **Prochaine action** : **gold 200+ phrases** ; **porte mobile/stochastique** ; **porte B13** attend S.
+- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ; reste **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
@@ -94,17 +94,13 @@
 - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
   invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
   depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
-- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, gold **47**, **43 tests** ; corpus **47** structures (SHA `f2a0d2fb…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
-- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature ; **200 k pas** — val_fr
-  **3,1591** (−0,33), grand corpus **3,0035**, littérature **5,6056**, anglais **7,2770**, wikitext2
-  **8,0018** : **< 2,5 non atteinte** (la loi place 2,5 à **1,3–2,7 M pas**), et le gain
-  **s'inverse à 512 octets** (+0,14) — le compute ne remplace pas une fenêtre entraînée ; N4
-  **0/40** ; [`n2-200k`](../../reports/rapport-n2-200k.md),
-  [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
-  [`n2-1go`](../../reports/rapport-n2-corpus-1go.md).
-- **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc, opérateurs, **134/140** (4 S + 2 test périmé) ; gold
-  **432 réels**, coréférence **116 liens** ; [`pensee-vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
-  [`pensee-anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
+- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **45 tests** ; corpus **47** structures (SHA `f2a0d2fb…`) ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; **banque validée à 0**.
+- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à
+  1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
+  [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
+- **Pensée — B13** : **134/140** (4 S + 2 test périmé), gold **432**, **116 liens** ; porte minute
+  **26 nœuds** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+  [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
 
 ## Les chiffres de l'état
 
@@ -114,7 +110,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **561** / **648** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **562** / **648** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -127,7 +123,7 @@ externes** et la **prochaine action**.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 134/140 ; minute 26 nœuds** ; **B10.3 bloquée** |
-| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.1/R1.2 mesurées** ; N4 0/4 ; N5 gelé | **N2 close** ; la suite est **R1.2 à 1 024 octets entraînés** ; **N4** |
+| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.2-1024 en cours** (GPU 0) ; N4 0/4 ; N5 gelé | **N2** : R1.2-1024, fiche ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
@@ -137,9 +133,8 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**R1** — **R1.2 à 1 024 octets entraînés** ; **Pensée** — gold 200+, porte B13 ; **S** — homographes,
-validation humaine ; **N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 ; **R0.7** — le
-tagger complet ; **D** — OCR clos (8 scans `.PDF`).
+**R1** — R1.2-1024 (nuit) ; **Pensée** — gold 200+, porte mobile ; **S** — homographes, validation ;
+**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 ; **R0.7** — le tagger ; **D** — OCR clos (8 `.PDF`).
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 

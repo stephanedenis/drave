@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **556 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **558 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -206,6 +206,7 @@
 | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
 | [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
+| [rapport-n2-200k.md](rapport-n2-200k.md) | N2.ae — 200 000 pas sur le mélange 1 Go : −0,33 en domaine, −1,06 en largeur, et la porte 2,5 à un million de pas |
 | [rapport-n2-34m-distille.md](rapport-n2-34m-distille.md) | N2.r — Le 34,3 M distillé : **3,69**, le meilleur modèle de la nuit, et la courbe plate |
 | [rapport-n2-anglais-34m.md](rapport-n2-anglais-34m.md) | N2.w — L'anglais à 34,3 M distillé : 3,77, et 4,18 à 512 octets |
 | [rapport-n2-anglais-distille.md](rapport-n2-anglais-distille.md) | N2.n — La distillation anglaise : 4,42 → 3,94, la chaîne complète sur 204 Mo |
@@ -438,6 +439,7 @@
 | [rapport-pensee-politique-llm.md](rapport-pensee-politique-llm.md) | B13 — la politique DRVM/native : le 7B ouvre le cadenas avec la règle, pas sans |
 | [rapport-pensee-porte-apprise.md](rapport-pensee-porte-apprise.md) | B13 — la porte apprise : la Q-table trouve la porte seule |
 | [rapport-pensee-porte-llm.md](rapport-pensee-porte-llm.md) | B13 — la porte DRVM : la règle dans le prompt l'ouvre (27 nœuds, 4 sonde) |
+| [rapport-pensee-porte-minute.md](rapport-pensee-porte-minute.md) | B13 — la porte minute : la règle l'ouvre (26 nœuds, 4 sonde, 6,4 s) ; le prompt labyrinthe échoue (200, 3, 101,6 s) |
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
 | [rapport-pensee-pragmatique-neuronale.md](rapport-pensee-pragmatique-neuronale.md) | B13 — la pragmatique neuronale : parfaite sur les 20 réelles (dev), sous le majoritaire sur les 160 synthétiques (test) |
 | [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |
@@ -531,6 +533,7 @@
 | [rapport-routeur-confiance.md](rapport-routeur-confiance.md) | B24 — le round-trip M1 améliore la typo, mais coûte les espaces |
 | [rapport-routeur-m1-m2.md](rapport-routeur-m1-m2.md) | B23 — routeur M1→M2 : gagne sur les espaces, perd sur les typos |
 | [rapport-s-analyseur-roles.md](rapport-s-analyseur-roles.md) | S — La frontière du GN s'arrête devant le verbe : 47/47 types, 117/117 rôles, 47 structures au corpus |
+| [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |
 | [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |

@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 3.6 h |
+| Durée | 3.8 h |
 | Tours | 3 |
-| Messages | 120 |
-| Appels d'outils | 149 |
+| Messages | 123 |
+| Appels d'outils | 150 |
 | Fichiers touchés | 2 |
-| Commandes | 108 |
+| Commandes | 109 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -112,7 +112,7 @@ Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs
 
 ### Tour 3 — un des gpu est libre
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check which GPU is free and current load
 - job_output
@@ -121,10 +121,15 @@ Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs
 - bash — Verify CUDA device mapping in venv
 - bash — Prove logical cuda:0 maps to physical GPU 1
 - bash — Run full gate pass on free GPU 1
+- bash — Snapshot pass progress and references structure
 
 **Synthèse produite :**
 
-⏵ 25 portes vertes, y compris `delais` et `flux` (le GPU 1 tient)
+⏵ Passe lancée sur le GPU 1 — 26/81 portes, aucune rouge
+
+La passe tourne (`bash-108`, journaux `work/portes/passe-1102-19h32`) : **26 portes passées, 0 rouge**, y compris les plus sensibles au bruit (`delais`, `flux`, `gain`) et les portes GPU (`audit-drapeaux`, `document`, `lecteur`) qui sont bien restées sur le GPU libre.
+
+Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le protocole déjà arrêté — lecture du verdict par `awk '$2 != 0'`, confrontation aux cinq rouges tolérées, rejeu seul de toute autre rouge, puis mise à jour de `references-non-regression.md`, de l'état et du journal, et commit du verdict.
 
 ## 3. Travail accompli
 
@@ -177,7 +182,7 @@ Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 68 autres
+- … et 69 autres
 
 ## 4. Mesures et résultats marquants
 

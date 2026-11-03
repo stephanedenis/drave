@@ -7,20 +7,22 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 3.7 h |
+| Durée | 3.8 h |
 | Tours | 5 |
-| Messages | 357 |
-| Appels d'outils | 386 |
+| Messages | 375 |
+| Appels d'outils | 405 |
 | Fichiers touchés | 18 |
-| Commandes | 234 |
+| Commandes | 246 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 13 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
 
 - **create** — Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
 - **complete** — Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
+- **create** — Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages
+… [261 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -151,7 +153,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 5 — regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur  … [145 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Survey sessions and repository state
 - bash — Survey CPU, GPU and processes
@@ -165,6 +167,9 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Read current en-cours head and N2 night section
 - bash — Check resource policy references and active commit
 - bash — Wait for N2 night mandate commit
+- bash — Check for an existing night coordination note
+- create_goal
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -185,10 +190,10 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 19 |
+| `docs/pilotage/en-cours.md` | 0 | 21 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/chantiers.md` | 0 | 5 |
-| `docs/pilotage/plan-travail.md` | 0 | 6 |
+| `docs/pilotage/plan-travail.md` | 0 | 7 |
 | `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
 | `journal/2026-11-02/README.md` | 0 | 3 |
 | `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
@@ -237,7 +242,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 194 autres
+- … et 206 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -340,6 +345,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T4** `lieu de 60 000 (×3,33). GPU 0, **11 410 s** (3 h 10), ~57 ms/pas.`
 - **T5** `0, 99 %, 5766 MiB`
 - **T5** `**147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;`
+- **T5** `| `nvme_raid` | 1 IO lourde, **33 Gio libres** | — | `/home/stephane/IA` (RAID0 4×238 G) — presque plein |`
 
 ## 5. Erreurs rencontrées
 
@@ -359,4 +365,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - date "+%H:%M:%S"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md; ps -eo pid,etime,args | grep -E "git commit|session_report|jo
 - OLD=$(git rev-parse HEAD); for i in $(seq 1 45); do sleep 2; NEW=$(git rev-parse HEAD); [ "$NEW" != "$OLD" ] && break; pgrep -f "git commit" >/dev/null || true;
 - grep -n "ressources\|ressource\|claim" docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/roadmap.md journal/sessions/536cd5d6-94ac-4057-8fe9
+- date "+%H:%M:%S"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/roadmap.md tools/ressources.py; ps -eo pid,
+- date "+%H:%M:%S"; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict
+- ps -eo pid,etime,args | grep -E "git commit|session_report|journal_auto|archive_sessions" | grep -v grep | head -4; echo "--- index ---"; git diff --cached --st
 

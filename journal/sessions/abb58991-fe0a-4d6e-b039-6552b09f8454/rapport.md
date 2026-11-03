@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 3.7 h |
+| Durée | 3.8 h |
 | Tours | 8 |
-| Messages | 388 |
-| Appels d'outils | 492 |
+| Messages | 392 |
+| Appels d'outils | 496 |
 | Fichiers touchés | 32 |
-| Commandes | 361 |
+| Commandes | 365 |
 | Sous-agents | 0 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -319,7 +319,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 
 ### Tour 8 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Inspect minute door problem and state helpers
 - bash — Read PolitiqueLLM and minute tests
@@ -335,11 +335,11 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - bash — Extract minute results from JSON
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md`
 - bash — Apply minute door state and check budgets
-- … et 4 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ Je corrige l'heure (19 h 52, pas 20 h 02), les compteurs 561/648 et les prochaines actions ; puis tests/gates
+⏵ Commit de la porte minute (l'état inclut les sessions N2/S concurrentes ; leurs fiches/plan/tools restent chez eux)
 
 ## 3. Travail accompli
 
@@ -422,7 +422,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 321 autres
+- … et 325 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -520,4 +520,5 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE" 2>&1 | tail -10; echo "EXIT=${PIPESTATU
 - ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ" 2>&1 | tail -8; echo "EXIT=${PIP
+- B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"; git log -3
 

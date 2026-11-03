@@ -9,10 +9,10 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 4.5 h |
 | Tours | 7 |
-| Messages | 152 |
-| Appels d'outils | 198 |
+| Messages | 156 |
+| Appels d'outils | 204 |
 | Fichiers touchés | 13 |
-| Commandes | 159 |
+| Commandes | 164 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 0 |
@@ -449,7 +449,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 
 ### Tour 7 — dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simu … [102 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Inspect CPU sockets, NUMA nodes and GPU affinity
 - bash — Inspect NVMe, RAID and mount points
@@ -465,11 +465,11 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - read
 - bash — Append resource coordination policy to plan-travail
 - bash — Read exact plan-travail lines to edit
-- … et 1 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Je relis les passages exacts du plan de travail avant de les modifier.
+⏵ Je vérifie l'état git et les affinités réelles des deux jobs avant de committer la politique.
 
 ## 3. Travail accompli
 
@@ -533,7 +533,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 119 autres
+- … et 124 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -661,7 +661,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 
 ## 5. Erreurs rencontrées
 
-7 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ===== b6a672ec digest (head) ===== # Session DSH — relecture  - identifiant : `b6a672ec-3349-4a4c-9e23-4478aa823170` - dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` - créée : 2026-11-01 
 - **T1** : == uptime == [stderr] uptime: invalid option -- 's' Try 'uptime --help' for more information. [exit code: 1]
@@ -670,6 +670,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - **T2** : == dsh help == Usage: dsh [--profile] <name> [options] [app-args...]        dsh plugin --profile <name> <pnpm-args...>  dsh: boot a DeepSeek Harness profile — an ordered stack of plugin-bundle patch l
 - **T6** : == branche == ## main...origin/main [ahead 24]  M AGENTS.md  M system/maintenance/logs/scrub-data13tb-20260921-164933.log  M system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/JOURNAL.md 
 - **T7** : [stderr] Traceback (most recent call last):   File "<stdin>", line 8, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: 'Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) 
+- **T7** : 20:00 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, 
 
 ## 6. Commits
 

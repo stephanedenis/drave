@@ -5586,3 +5586,208 @@ T0 max : 3918 mots (budget 4 000)
 … [385 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\n\ndef sub(t, old, new, n=1):\n    c=t.count(old); assert c==n, f\"{c} != {n}: {old[:60]!r}\"; return t.replace(old,new)\n\n# §4 : la  … [6597 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "<stdin>", line 5, in sub
+AssertionError: 0 != 1: 'Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) '
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je relis les passages exacts du plan de travail avant de les modifier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'portes lourdes\\|CPU.*2 à 3\\|taille_documents\\|Les portes lourdes une à une' docs/pilotage/plan-travail.md && echo \"---\" && sed -n '100,135p' docs/pilotage/plan-travail.md", "description": "Read exact plan-travail lines  … [9 caractères tronqués]`
+
+  ```
+99:**La mesure.** Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) tournent **une à la
+110:- **CPU** : 2 à 3 gros travaux à la fois (un entraînement 8–16 cœurs, un OCR 1–2, une extraction
+118:  d'état ; la revue de documentation et `taille_documents.py` passent avant chaque commit de
+130:| `python3 tools/taille_documents.py` | les budgets de contexte (T0 ≤ 4 000) | avant chaque commit de clôture |
+216:- **Les portes lourdes une à une** ; les GPU sont partagés.
+---
+fois** ; les portes légères (doc, état, journal) à chaque commit. Le banc R03 est en lecture ;
+deux mesures sur le même corpus se sérialisent.
+
+**Le checkpoint d'intégration** : au moins une fois par jour, le hub relit les plans, met à jour
+la roadmap et l'état, vérifie les compteurs et la revue, et note dans le journal ce qui a bougé.
+
+## 5. Les règles de la machine partagée
+
+- **GPU** : N2 seul sur un GPU ; le second GPU reste libre pour une évaluation ou un sous-agent
+  (16 Go chacun : le 32 B et le professeur n'y tiennent pas).
+- **CPU** : 2 à 3 gros travaux à la fois (un entraînement 8–16 cœurs, un OCR 1–2, une extraction
+  PDF 4–8) ; 40 cœurs, mais la contention disque/compression est réelle.
+- **Disque**
+… [1974 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\n\ndef sub(t, old, new, n=1):\n    c=t.count(old); assert c==n, f\"{c} != {n}: {old[:70]!r}\"; return t.replace(old,new)\n\nt=sub(t, \ … [6672 caractères tronqués]`
+
+  ```
+plan-travail 3349 mots
+  ```
+
+### 🤖 Assistant
+
+⏵ Je mets l'état à jour (lien ressources, budget) et le plan du hub.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && python3 - <<'PY'\nimport pathlib, datetime\nheure=datetime.datetime.now().strftime('%H h %M')\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\ndef sub(t, old, new, n=1):\n    c=t.count(old); assert c==n … [3076 caractères tronqués]`
+
+  ```
+20:00
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "<stdin>", line 5, in sub
+AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, EST).*'
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je relis l'en-tête exact de l'état, puis je réapplique les modifications.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,5p' docs/pilotage/en-cours.md && echo \"---\" && grep -n 'Ambition\\|Stratégie\\|Objectif final\\|Ce qu.elle fait\\|Plan.*roadmap\\|Heartbeat\\|Rôle.*Hub\\|INDEX.md.*runbook\\|Prochaine action.*passe' docs/pilotage/en-cours … [133 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+---
+docs/pilotage/en-cours.md:22:- **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+docs/pilotage/en-cours.md:25:- **Ambition** : un état reprenable, des mandats qui disent la vérité.
+docs/pilotage/en-cours.md:26:- **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+docs/pilotage/en-cours.md:27:- **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
+docs/pilotage/en-cours.md:28:- **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
+docs/pilotage/en-cours.md:31:- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+docs/pilotage/en-cours.md:40:- **Ambition** : nommer le rôle et la frontière GN.
+docs/pilotage/en-cours.md:41:- **Stratégie** : une règle = une phrase, trois contrôles.
+docs/pilotage/en-cours.md:42:- **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
+docs/pilotage/en-cours.md:44:- **Ce qu'elle fait** : **`9
+… [1207 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ D'autres sessions ont repris l'état (il est à 19 h 55) ; je lis l'état réel avant de déclarer les charges.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 110}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+9: > (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+10: > [`plan-travail.md`](plan-travail.md) § 9.
+11: 
+12: ## Sessions en cours
+13: 
+14: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+15: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+16: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+17: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+18: 
+19: ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+20: 
+21: - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-
+… [8059 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== réel ==\" && python3 tools/ressources.py --actual 2>&1 | head -18; echo; echo \"== GPU ==\" && nvidia-smi --query-gpu=index,temperature.gpu,fan.speed,power.draw,power.limit,clocks.sm,clocks_throttle_reasons.sw_thermal_slowd … [87 caractères tronqués]`
+
+  ```
+== réel ==
+  Réel · GPU
+    GPU0 (non réservé) : PID 110066 llama-server (366 MiB) ; PID 327714 /home/stephane/gpu-env/bin/python (5276 MiB) ; PID 331299 ./drave-core/target/release/drave (120 MiB)
+      ⚠ GPU0 utilisé sans réservation
+    GPU1 (non réservé) : PID 110066 llama-server (118 MiB)
+      ⚠ GPU1 utilisé sans réservation
+  Réel · CPU (top 8)
+        PID COMMAND         %CPU %MEM
+     331299 drave            883  0.7
+     110066 llama-server     692  4.0
+     327714 python           100  3.2
+     331705 ps               100  0.0
+      32123 node-MainThread 75.8  0.8
+      31175 node-MainThread 50.1  0.8
+      32694 node-MainThread 49.7  0.8
+     331699 python3         46.1  0.0
+  Réel · stockage
+    nvme_system    705 Gio libres (/)
+    nvme_raid      33 Gio libres (/home/stephane/IA)
+
+== GPU ==
+0, 84, 72 %, 172.96 W, 180.00 W, 1635 MHz, Not Active
+1, 28, 33 %, 16.03 W, 230.00 W, 300 MHz, Not Active
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie l'état git et les affinités réelles des deux jobs avant de committer la politique.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== git status (extrait) ==\" && git status --short | head -25 && echo && echo \"== log ==\" && git log --oneline -5 && echo && echo \"== diff plan-travail ==\" && git diff --stat -- docs/pilotage/plan-travail.md && git diff -- … [120 caractères tronqués]`
+
+  ```
+== git status (extrait) ==
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/pensee-porte-minute.json
+A  reports/rapport-pensee-porte-minute.md
+ M tools/structures
+A  tools/tests/qualifier_porte_minute_drvm.py
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+
+== log ==
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+
+== diff plan-travail ==
+ docs/pilotage/plan-travail.md | 106 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 104 insertions(+), 2 deletions(-)
+diff --git a/docs/pilotage/plan-travail.md b/docs/pilotage/plan-trav
+… [1304 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"== affinités ==\" && for pid in 331299 327714 110066; do echo \"--- PID $pid\"; taskset -pc $pid 2>&1; ps -o pid,psr,pcpu,pmem,comm -p $pid 2>/dev/null | tail -1; done; echo; echo \"== en-cours / budgets ==\" && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/ … [171 caractères tronqués]`
+
+  ```
+== affinités ==
+--- PID 331299
+taskset: failed to get pid 331299's affinity: No such process
+    PID PSR %CPU %MEM COMMAND
+--- PID 327714
+pid 327714's current affinity list: 0-39
+ 327714   5  100  3.2 python
+--- PID 110066
+pid 110066's current affinity list: 0-39
+ 110066  36  683  4.0 llama-server
+
+== en-cours / budgets ==
+  en-cours · 1603 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3977 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+

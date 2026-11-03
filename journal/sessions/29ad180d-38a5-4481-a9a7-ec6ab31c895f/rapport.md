@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 3.8 h |
 | Tours | 6 |
-| Messages | 218 |
-| Appels d'outils | 229 |
-| Fichiers touchés | 11 |
-| Commandes | 163 |
+| Messages | 230 |
+| Appels d'outils | 241 |
+| Fichiers touchés | 13 |
+| Commandes | 173 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -223,7 +223,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 6 — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
 
-*13 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Inspect CEGEP OCR corpus for real-text measurement
 - bash — Assess OCR text quality and plausible sentence count
@@ -238,6 +238,8 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - bash — Add corpus section to README and run tests
 - bash — Commit and push corpus measurement submodule
 - bash — Check main state, gate pass, and fiche status
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md`
+- … et 11 autres
 
 **Synthèse produite :**
 
@@ -260,6 +262,8 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_corpus.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_mesure_corpus.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/candidats_corpus.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -303,7 +307,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 123 autres
+- … et 133 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -351,6 +355,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T6** `168:OCR**, il est au **plancher du mélange** (8,5 % contre 9,1 %) : ce corpus est **multilingue et`
 - **T6** `262:  propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et`
 - **T6** `[master 140feb6] S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)`
+- **T6** `140feb6 S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)`
 
 ## 5. Erreurs rencontrées
 
@@ -376,4 +381,5 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE" -m "La détection sur le texte intégral (pdftotext + pdfinfo, seuil 
 - S — LA FRONTIÈRE DU GN S'ARRÊTE DEVANT LE VERBE : 47/47 TYPES, 117/117 RÔLES ; GOLD 47" -m "Le générateur gagne un lexique de verbes finis (frontière GN) et le 
 - S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)" -m "mesure_corpus.py : 50 000 lignes et 20 799 phrases CEGEP, 50
+- S — LA BANQUE DE CANDIDATS RÉELS : 200 PHRASES, 355 CANDIDATS, MANIFESTE SHA-256" -m "candidats_corpus.py : 200 phrases de la littérature propre (filtre 40-200 
 

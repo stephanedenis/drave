@@ -4630,3 +4630,105 @@ SyntaxError: unterminated string literal (detected at line 7)
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md docs/pilotage/en-cours.md && git commit -q -m \"N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)\" && git log --oneline -1; echo \ … [130 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-198]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-198", "timeout_ms": 180000, "wait": true}`
+
+  ```
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+=== run ===
+pas    350 · perte 1.2663 · PPL val 3.356 · 154 s
+pas    400 · perte 1.2263 · PPL val 3.317 · 176 s
+20:00:54
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du point de croisement 60 k vs 200 k (distances > 127) sur GPU 0
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in \"work/n2w/mix-60k.pt\" \"work/n2ac/mix-200k.pt\"; do echo \"=== $m ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py $m --longueurs 129,160,192,256 --sortie /tmp/x.json 2>&1 | tail -5; done", "descri … [56 caractères tronqués]`
+
+  ```
+=== work/n2w/mix-60k.pt ===
+  L129 : 3.4867
+  L160 : 3.4364
+  L192 : 3.4534
+  L256 : 3.4615
+{"fichier": "mix-60k.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L129": 3.4867, "L160": 3.4364, "L192": 3.4534, "L256": 3.4615}
+=== work/n2ac/mix-200k.pt ===
+  L129 : 3.1612
+  L160 : 3.1035
+  L192 : 3.1172
+  L256 : 3.2047
+{"fichier": "mix-200k.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L129": 3.1612, "L160": 3.1035, "L192": 3.1172, "L256": 3.2047}
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente de la passe de portes ; préparation du run « production + fenêtre »
+
+- **write** `{"content": "#!/usr/bin/env bash\n# chaine_production.sh — la fenêtre sur le MODÈLE DE PRODUCTION (mélange 1 Go).\n#\n# On part de `work/n2w/mix-60k.pt` (N2.ac : 60 000 pas à seq 128, 3,4902 en domaine) et on\n# l'affine avec RoPE sur des séquences longues, à **octets constants** (61,4 Mo = 60 000 × … [1133 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_production.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,cmd --no-headers | grep -E \"[t]outes-les-portes|[p]orte-\" | cut -c1-80 | head -3; echo \"--- 1024 ---\"; tail -1 work/n2ac/rope1024-2.5k.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,no … [59 caractères tronqués]`
+
+  ```
+20:02:05
+ 164359       30:13 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; 
+ 164366       30:13 bash tools/toutes-les-portes.sh
+ 326972       06:38 timeout 1800 bash tools/porte-greffe.sh
+--- 1024 ---
+pas    550 · perte 1.3625 · PPL val 3.252 · 247 s
+0, 5766 MiB, 100 %
+1, 122 MiB, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement production + fenêtre 512 puis 1 024 (octets constants, GPU 1)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_production.sh > work/n2ac/chaine_production.out 2>&1 & echo \"pid $!\"; sleep 45; date '+%H:%M:%S'; tail -2 work/n2ac/mix512-15k.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "descrip … [49 caractères tronqués]`
+
+  ```
+pid 331740
+20:02:58
+0, 5766 MiB, 100 %
+1, 122 MiB, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du banc d'évaluation production (128→2 000, deux validations, OOD, permutation)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"eval_production.py — un point de contrôle sur les deux validations, à toutes les longueurs.\n\nÉtend `eval_200k.py` (qui s'arrête à 512) aux contextes longs et aux modèles RoPE : la même\nmesure, avec le canal, sur les deux validations appariées (français e … [3010 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/eval_production.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- 1024 chaine ---\"; cat work/n2ac/chaine_1024.out; tail -1 work/n2ac/rope1024-2.5k.log; echo \"--- production ---\"; tail -1 work/n2ac/mix512-15k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilizat … [67 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-202]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-202", "timeout_ms": 420000, "wait": true}`

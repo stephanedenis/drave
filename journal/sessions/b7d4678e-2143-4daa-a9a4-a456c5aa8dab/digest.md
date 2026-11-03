@@ -5807,3 +5807,337 @@ ressources · Hauru — registre /home/stephane/Data13TB/stephane/GitHub/Qtrinet
 … [3978 caractères tronqués]
   ```
 
+- **bash** `{"command": "python3 tools/ressources.py --autotest 2>&1 | tail -6; echo \"=== suggest ===\"; python3 tools/ressources.py --suggest 2>&1 | head -15; echo \"=== check strict ===\"; python3 tools/ressources.py --check --strict 2>&1 | tail -6", "description": "Validate the resource tool"}`
+
+  ```
+✅ autotest : 9 cas (claim, conflit, file, admission, check)
+=== suggest ===
+  Libre maintenant : gpu0 libre · gpu1 libre · cpu0 : 16 fils libres · cpu1 : 16 fils libres · ram : 109 Gio libres · nvme_raid : libre, 33 Gio · nvme_system : libre, 705 Gio · hdd_data13tb : libre, 1943 Gio
+  File vide.
+  Règle : si la ressource voulue est prise, prends une tâche compatible plutôt que d'attendre.
+=== check strict ===
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ❌ --strict : les avertissements comptent comme des conflits.
+  ```
+
+- **bash** `{"command": "sed -n '1,20p' docs/pilotage/en-cours.md; echo \"=== N2 nuit ===\"; sed -n '73,100p' docs/pilotage/en-cours.md", "description": "Read current en-cours head and N2 night section"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+
+=== N2 nuit ===
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — R1.2 à **1 024 octets** et la fenêtre sur le **mélange de production**.
+- **Plan** : R1.2-1024 (2 500 → 20 000 pas) ; m
+… [2422 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"ressources\\|ressource\\|claim\" docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/roadmap.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md | head -15; echo \"--- commit? ---\"; ps -eo pid,etime,args | grep -E \"git commit|journal_auto|sessi … [127 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md:126:| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
+docs/pilotage/plan-travail.md:133:| `python3 tools/ressources.py --check` / `--actual` | le registre des ressources (GPU, CPU, RAM, NVMe, HDD) et les processus non déclarés | à chaque checkpoint et avant une passe |
+docs/pilotage/plan-travail.md:220:- **Une ressource se réserve** : `python3 tools/ressources.py --claim ...` (§ 10) ; un GPU, un
+docs/pilotage/plan-travail.md:229:## 10. La coordination des ressources — le registre et le protocole
+docs/pilotage/plan-travail.md:234:[`tools/ressources.py`](../../tools/ressources.py) rend les ressources explicites, les réserve
+docs/pilotage/plan-travail.md:239:| ressource | capacité | NUMA | règle |
+docs/pilotage/plan-travail.md:271:python3 tools/ressources.py --claim --session <id> --job <nom> \
+docs/pilotage/plan-travail.md:275:- **✅ accordé** : la ressource est libre, le job peut démarrer.
+docs/pilotage/plan-travail.md:276:- **⏸ différé** : le claim est **mis en file** ; la session prend une autre tâche (la file est
+docs/pilotage/plan-travail.md:279:- Après le job : `python3 tools/ressources.py --release --session <id> [--job <nom>]
+… [1286 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 40); do kill -0 329003 2>/dev/null || break; sleep 2; done; ps -p 329003 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -2; git status --short | head -10; date \"+%H:%M:%S\"", "description": "Wait for N2 night mandate commit"}`
+
+  ```
+commit fini
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/structures
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+20:00:55
+  ```
+
+- **bash** `{"command": "grep -n \"nuit\\|coordination\\|claim\\|ressources\" docs/pilotage/en-cours.md | head -12; echo \"--- plan-travail diff ---\"; git diff docs/pilotage/plan-travail.md | head -30; echo \"--- en-cours head ---\"; sed -n '1,16p' docs/pilotage/en-cours.md", "description": "Check for an exist … [29 caractères tronqués]`
+
+  ```
+9:> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+14:> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+71:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+158:- Méthode : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
+--- plan-travail diff ---
+diff --git a/docs/pilotage/plan-travail.md b/docs/pilotage/plan-travail.md
+index fe60eb53..3798acbc 100644
+--- a/docs/pilotage/plan-travail.md
++++ b/docs/pilotage/plan-travail.md
+@@ -98,7 +98,8 @@ de `git reset` sur les fichiers d'une autre session.
+ 
+ **La mesure.** Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) tournent **une à la
+ fois** ; les portes légères (doc, état, journal) à chaque commit. Le banc R03 est en lecture ;
+-deux mesures sur le même corpus se sérialisent.
++deux mesures sur le même corpus se sérialisent. La passe complète réserve `machine` (§ 10) :
++aucune autre réservation lourde ne tourne pendant ce temps.
+ 
+ **Le checkpoint d'intégration** : au moins une fois par jour, le hub relit les plans, met à jour
+ la roadmap et l'état, vérifie les compteurs et la revue, et note dans le jo
+… [2230 caractères tronqués]
+  ```
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre too … [303 caractères tronqués]`
+
+> **Objectif** (create) : Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit).
+
+
+  ```
+{"goal":{"id":"goal-01c46f43-f7b7-47b8-95a2-c7d4478f4b5e","revision":1,"objective":"Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/roadmap.md tools/ressources.py; ps -eo pid,etime,args | grep -E \"git commit|session_report|journal_auto\" | grep -v grep | head -2; git status --short | head -10", "de … [51 caractères tronqués]`
+
+  ```
+20:01:34
+-rw-r--r--. 1 stephane stephane 12274 20:01:31 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 22311 20:00:04 docs/pilotage/plan-travail.md
+-rw-r--r--. 1 stephane stephane 44908 20:01:31 docs/pilotage/roadmap.md
+-rw-------. 1 stephane stephane 23038 19:57:11 tools/ressources.py
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/structures
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"=== journal ===\"; python3 tools/verifie_journal.py 2>&1 | tail -2; echo \"=== backlog ===\"; python3 tools/verifie_backlog.py 2>&1 | tail -3; echo \"=== schémas ===\"; python3 tools/verifier_schemas.py 2>&1 | tail -2", "descri … [41 caractères tronqués]`
+
+  ```
+revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 561 fichiers, le disque en a 562
+=== journal ===
+  journal · 39 jour(s) · 117 session(s) · 1858 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== backlog ===
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+=== schémas ===
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "sed -n '229,315p' docs/pilotage/plan-travail.md", "description": "Read the resource coordination policy"}`
+
+  ```
+## 10. La coordination des ressources — le registre et le protocole
+
+**Pourquoi.** Le pilotage réservait les **fichiers** (`sessions.py`) et surveillait les fichiers
+en mouvement (`surveille_sessions.py`), mais pas la **machine** : deux sessions pouvaient lancer
+deux entraînements sur le même GPU, ou saturer le même NVMe, sans le voir. Le registre
+[`tools/ressources.py`](../../tools/ressources.py) rend les ressources explicites, les réserve
+et met en file ce qui ne tient pas.
+
+### 10.1 Le modèle
+
+| ressource | capacité | NUMA | règle |
+|---|---|---:|---|
+| `gpu0` | 1 job exclusif, 16 Gio | 0 | carte du haut (plafonnée 180 W par `hauru-thermal`) |
+| `gpu1` | 1 job exclusif, 16 Gio | 0 | carte du bas ; libre pour une éval |
+| `cpu0` | 16 fils utiles (20, réserve 4) | 0 | 0-9,20-29 ; **fils des GPU** |
+| `cpu1` | 16 fils utiles (20, réserve 4) | 1 | 10-19,30-39 ; **CPU seul, hub** |
+| `ram` | 109 Gio utiles (125, réserve 16) | — | un job > 80 Gio est machine-exclusif |
+| `nvme_system` | 1 IO lourde, 705 Gio libres | — | `/`, `/home`, `/FastNVMe` (attention : `FastNVMe` est sur le système, pas le RAID) |
+| `nvme_raid` | 1 IO lourde, **33 Gio libres** | — | `/home/stephane/IA` (RAID0 4×
+… [3242 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -1; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/plan-travail.md; ps -eo pid,etime,args  … [115 caractères tronqués]`
+
+  ```
+20:02:13
+  ❌ 1 violation(s) :
+     · T0 : 4040 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1666 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+-rw-r--r--. 1 stephane stephane 12274 20:01:31 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 22311 20:00:04 docs/pilotage/plan-travail.md
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 45, "offset": 100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+100:   **8,0018** : **< 2,5 non atteinte** (la loi place 2,5 à **1,3–2,7 M pas**), et le gain
+101:   **s'inverse à 512 octets** (+0,14) — le compute ne remplace pas une fenêtre entraînée ; N4
+102:   **0/40** ; [`n2-200k`](../../reports/rapport-n2-200k.md),
+103:   [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
+104:   [`n2-1go`](../../reports/rapport-n2-corpus-1go.md).
+105: - **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc, opérateurs, **134/140** (4 S + 2 test périmé) ; gold
+106:   **432 réels**, coréférence **116 liens** ; [`pensee-vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+107:   [`pensee-anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
+108: 
+109: ## Les chiffres de l'état
+110: 
+111: > Vérifié par `tools/revue_documentation.py`.
+112: 
+113: | invariant | valeur | contrôle |
+114: |---|---|---|
+115: | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
+116: | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+117: | fichiers / JS
+… [2354 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 18, "offset": 88}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+88: 
+89: ## Ce qui est en cours
+90: 
+91: - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
+92: - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+93: - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+94: - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
+95:   invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
+96:   depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+97: - **S — le banc de stru
+… [1119 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à\n  1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;\n  [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../re … [1173 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.2-1024 en cours** (GPU 0) ; N4 0/4 ; N5 gelé | **N2** : R1.2-1024, fiche ; **N4** |", "old_string": "|  … [250 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sed -i 's/\\*\\*Mis à jour : 2026-11-02, 19 h 55 HNE/**Mis à jour : 2026-11-02, 20 h 05 HNE/; s/| fichiers \\/ JSON de résultats | \\*\\*561\\*\\* \\/ \\*\\*648\\*\\* |/| fichiers \\/ JSON de résultats | **562** \\/ **648** |/' docs/pilotage/en-cours.md; grep -n \"Mis à jour\\|fichiers  … [247 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-11-02, 20 h 05 HNE (heure locale, EST).**
+113:| fichiers / JSON de résultats | **562** / **648** | `reports/*.md` / `reports/*.json` |
+  en-cours · 1632 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 violation(s) :
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "grep -n \"R1.2 à 1 024 octets entraînés\" docs/pilotage/en-cours.md; sed -n '/## Ce qui reste/,/Vue d.ensemble/p' docs/pilotage/en-cours.md", "description": "Read the current Ce qui reste block"}`
+
+  ```
+136:**R1** — **R1.2 à 1 024 octets entraînés** ; **Pensée** — gold 200+, porte mobile/stochastique ; **S** — homographes,
+## Ce qui reste
+
+**R1** — **R1.2 à 1 024 octets entraînés** ; **Pensée** — gold 200+, porte mobile/stochastique ; **S** — homographes,
+validation humaine ; **N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 (4 S + 2 test périmé), minute 26 nœuds ; **R0.7** — le
+tagger complet ; **D** — OCR clos (8 scans `.PDF`).
+
+- **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nold=\"\"\"**R1** — **R1.2 à 1 024 octets entraînés** ; **Pensée** — gold 200+, porte mobile/stochastique ; **S** — homographes,\nvalidation humaine ; **N4** — la consigne ; ** … [628 caractères tronqués]`
+
+  ```
+trim ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 10, "offset": 229}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+229: ## 10. La coordination des ressources — le registre et le protocole
+230: 
+231: **Pourquoi.** Le pilotage réservait les **fichiers** (`sessions.py`) et surveillait les fichiers
+232: en mouvement (`surveille_sessions.py`), mais pas la **machine** : deux sessions pouvaient lancer
+233: deux entraînements sur le même GPU, ou saturer le même NVMe, sans le voir. Le registre
+234: [`tools/ressources.py`](../../tools/ressources.py) rend les ressources explicites, les réserve
+235: et met en file ce qui ne tient pas.
+236: 
+237: ### 10.1 Le modèle
+238: 
+
+(Showing lines 229-238 of 317. Use offset=239 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "[`tools/ressources.py`](../../tools/ressources.py) rend les ressources explicites, les réserve\net met en file ce qui ne tient pas.\n\n> **Consigne de nuit (02/11 20 h → 03/11 08 h).** Une session écrit `en-cours` à la fois ; tout\n> job  … [519 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --autotest 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -1; echo \"--- status -- … [117 caractères tronqués]`
+
+  ```
+✅ autotest : 9 cas (claim, conflit, file, admission, check)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+--- status ---
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/pensee-porte-minute.json
+A  reports/rapport-pensee-porte-minute.md
+ M tools/structures
+A  tools/tests/qualifier_porte_minute_drvm.py
+?? reports/rapport-s-corpus-reel.md
+20:03:40
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 45); do sleep 2; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; echo \"avant $(git rev-parse --short $OLD) · après $(git rev-parse --short HEAD)\"; git log --oneline -2; echo \"--- status ---\"; git status --short | head - … [78 caractères tronqués]`
