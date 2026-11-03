@@ -14,10 +14,11 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-03 08:55 EST
-- **Prochaine action** : le **bilan de 08 h** est écrit et committé ; **N2 et S en pause**,
-  **Pensée active** ; la 5e rouge (`porte-sessions`) est close par la pause ; la **validation
-  de la banque S est reportée**. Journée : suivre Pensée, préparer la reprise de N2/S, tenir l'état.
+- **Heartbeat** : 2026-11-03 13:42 EST
+- **Prochaine action** : la **passe 80/2** est intégrée, la **fenêtre sous 2,5** et l'**API à latence
+  /35** sont dans l'état, la roadmap, chantiers et le backlog N2 ; **Pensée** publie (parité DRVM,
+  gold API) ; **N2 et S en pause** (validation S reportée). Journée : suivre Pensée, tenir l'état,
+  et la **porte propre N2 (0,29)** quand N2 reprend.
 - **Ressources** : `cpu1` 1 fil, `ram` 1 Gio (claim `jour`) ; aucun GPU ; registre à jour, file vide.
 - **Nuit** : consigne `plan-travail` § 10.7 ; quatre sessions productives ; bilan 08 h.
 - **État** : actif

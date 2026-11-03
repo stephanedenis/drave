@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (16)
+## Commits du jour (17)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -24,6 +24,7 @@
 | 08:24 | `5b3d37a8` | ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08 | `en-cours.md`, `roadmap.md`, `README.md` (+10) |
 | 08:52 | `167127c9` | JOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURNÉE | `README.md`, `mesures.md`, `README.md` (+6) |
 | 09:20 | `dcbc8b0b` | ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE | `en-cours.md`, `README.md`, `distribue.md` (+6) |
+| 13:36 | `90f4ee78` | ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON) | `en-cours.md`, `README.md`, `attention.md` (+17) |
 
 ## Chiffres du jour
 

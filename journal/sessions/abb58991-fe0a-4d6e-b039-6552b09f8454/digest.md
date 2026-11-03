@@ -23284,3 +23284,21 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ T0 repassé à 4 001 et lock du hub ; je raccourcis la ligne, j'attends le lock et je refais le commit
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='parité 114/114+5/5 rejouée CPU ;'\nnew='parité 114/114+5/5 (rejouée) ;'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encod … [734 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+.git/index.lock
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+EXIT=1
+f50ad713 BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA PORTE PROPRE RESTE
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub tient encore le lock (`f50ad713`) ; j'attends sa fin, je retire le lock résiduel et je refais le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 12); do sleep 15; if ! pgrep -f \"git commit\" >/dev/null 2>&1; then echo \"libre après $((i*15))s\"; break; fi; done; ls .git/index.lock 2>/dev/null && rm -f .git/index.lock; git add reports/rapport-pensee-parite-drvm-native-rejoue.m … [417 caractères tronqués]`

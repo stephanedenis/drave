@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 21.4 h |
 | Tours | 33 |
-| Messages | 597 |
-| Appels d'outils | 589 |
+| Messages | 601 |
+| Appels d'outils | 593 |
 | Fichiers touchés | 6 |
-| Commandes | 429 |
+| Commandes | 432 |
 | Sous-agents | 0 |
-| Commits | 30 |
+| Commits | 31 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -756,7 +756,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 
 ### Tour 33 — continue
 
-*27 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Check N2 under-2.5 integration in state and roadmap
 - bash — Check pilotage mtimes and stale lines
@@ -772,11 +772,11 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - bash — Update dates and add API/under-2.5 facts
 - bash — Commit API and under-2.5 facts with dates
 - bash — Inspect backlog N2 status and frontier
-- … et 10 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ Le compteur de fiches est en retard d'une (Pensée publie) ; j'aligne et je commite.
+⏵ Verrou git (Pensée committe ses résultats). J'attends et je recommite.
 
 ## 3. Travail accompli
 
@@ -833,7 +833,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 389 autres
+- … et 392 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1000,4 +1000,5 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md"); t = p.read_text(encoding="utf
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-cpt.txt <<'EOF' ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON)  Pensée publie pendant que
+- HUB — PLAN À JOUR : PASSE 80/2, FENÊTRE SOUS 2,5, API /35 ; HEARTBEAT 13 H 42  Le plan du hub était resté à 08 h 55. Il porte maintenant les faits de la journée
 

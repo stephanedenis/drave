@@ -9,8 +9,8 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 21.4 h |
 | Tours | 6 |
-| Messages | 525 |
-| Appels d'outils | 503 |
+| Messages | 526 |
+| Appels d'outils | 504 |
 | Fichiers touchés | 25 |
 | Commandes | 373 |
 | Sous-agents | 0 |
@@ -165,7 +165,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 
 ### Tour 6 — continue
 
-*9 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check current repo and hardware state
 - get_goal
@@ -175,6 +175,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - bash — Reopen plan and state
 - bash — Fix T0 and commit reopening
 - bash — Trim T0 and retry commit after lock
+- job_output
 
 **Synthèse produite :**
 

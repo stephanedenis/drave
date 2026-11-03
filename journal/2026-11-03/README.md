@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**58 commits** · **6 session(s)** · **8 thème(s)**
+**59 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 18 | [distribue.md](distribue.md) |
-| docs | 16 | [docs.md](docs.md) |
+| docs | 17 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -93,6 +93,7 @@
 | 13:29 | `68c1ecc1` | ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373) |
 | 13:31 | `4387f98a` | ÉTAT / ROADMAP / JOURNAL — LA FENÊTRE SOUS 2,5 ET L'API À LATENCE /35, DATÉS 13 H 30 |
 | 13:34 | `f50ad713` | BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA PORTE PROPRE RESTE |
+| 13:36 | `90f4ee78` | ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON) |
 
 ## Le récit de la journée (écrit à la main)
 

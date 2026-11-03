@@ -82,9 +82,9 @@
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
-- **Rôle** : **N2** — la fenêtre et la production.
+- **Rôle** : **N2** — la production et la capacité.
 - **Plan** : fenêtre, production, porte.
-- **Ambition** : la longueur d'abord.
+- **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
 - **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la

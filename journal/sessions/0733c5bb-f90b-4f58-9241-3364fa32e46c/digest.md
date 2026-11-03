@@ -7707,3 +7707,38 @@ c2ba64e4 BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_prod1024_60k.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_prod1024_60k.sh — la production à fenêtre 1 024 poussée à 60 000 pas.\n# De mix1024-30k, +30 000 pas → 491 Mo vus à 1 024 (552 Mo au total avec la base N2.ac).\nset -u\ncd / … [1971 caractères tronqués]`
+
+  ```
+60k lancé pid 2320300
+capacité propre lancée pid 2320301
+13:37:23
+0, 1 MiB, 0 %
+1, 1668 MiB, 97 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, datetime\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", f\"- **Heartbeat** : {datetime.date … [1419 caractères tronqués]`
+
+  ```
+rouvert
+  T0 max : 4002 mots (budget 4 000)
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1632 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ mandat long (954 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nq = pathlib.Path(\"docs/pilotage/en-cours.md\")\ns = q.read_text(encoding=\"utf-8\")\ns = s.replace(\"- **Rôle** : **N2** — la fenêtre et la production.\", \"- **Rôle** : **N2** — la production et la capacité.\")\ns = … [1100 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+f50ad713 BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA PORTE PROPRE RESTE
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nq = pathlib.Path(\"docs/pilotage/en-cours.md\")\ns = q.read_text(encoding=\"utf-8\")\ns = s.replace(\"- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la\\n  **porte propre**, le con … [1091 caractères tronqués]`

@@ -14302,3 +14302,41 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '14,24p' reports/README.md; echo \"---\"; sed -n '1,12p' reports/README.md", "description": "Read reports README table rows for insertion", "timeoutMs": 60000}`
+
+  ```
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
+| [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats |
+| [`rapport-pensee-porte-minute.md`](rapport-pensee-porte-minute.md) | **B13** — la porte minute : 140/140 ; les six attendus S `00d2a01` fixés ; T132/T133 2/5 ; distracteurs r428–r432 |
+| [`rapport-pensee-cascade-reel-432.md`](rapport-pensee-cascade-reel-432.md) | **L** **0,9065** |
+| [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
+| [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
+| [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/
+… [878 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la fiche au README et à l'INDEX, je mets les compteurs à jour et je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) README : la ligne de la fiche\np=pathlib.Path('reports/README.md'); t=p.read_text()\nold=\"| [`rapport-pensee-porte-minute.md`](rapport-pensee-porte-minute.md) | **B13** — la porte minute : 140/ … [2039 caractères tronqués]`
+
+  ```
+README : fiche ajoutée
+  586 fiches → reports/INDEX.md
+    2800    181   T1   2800  reports/README.md
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 589 fiche(s) · 678 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+AssertionError
+  ```
+
