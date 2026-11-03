@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 6.5 h |
 | Tours | 45 |
-| Messages | 650 |
-| Appels d'outils | 685 |
+| Messages | 651 |
+| Appels d'outils | 686 |
 | Fichiers touchés | 47 |
-| Commandes | 521 |
+| Commandes | 522 |
 | Sous-agents | 0 |
-| Commits | 49 |
+| Commits | 50 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1449,14 +1449,15 @@ La suite : committer `Store.push` + banc 500 + contre-fiche ; relancer le 7B sur
 
 ### Tour 45 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Commit Store.push FIFO and window bench
 - bash — Trim T0, wait lock, commit FIFO fix
+- bash — Wait and commit FIFO fix
 
 **Synthèse produite :**
 
-⏵ Round 43 : T0 à 4 004 (dépassement de 4 mots) et lock concurrent ; je condense l'en-cours, j'attends et je commite
+⏵ Round 43 : T0 revenu à 4 000 pile ; le lock concurrent persiste ; j'attends 90 s et je reprends le commit
 
 ## 3. Travail accompli
 
@@ -1554,7 +1555,7 @@ La suite : committer `Store.push` + banc 500 + contre-fiche ; relancer le 7B sur
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 481 autres
+- … et 482 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1701,6 +1702,7 @@ La suite : committer `Store.push` + banc 500 + contre-fiche ; relancer le 7B sur
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE" 2>&1 | tail -8; echo "EXIT=${PIPESTA
+- B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

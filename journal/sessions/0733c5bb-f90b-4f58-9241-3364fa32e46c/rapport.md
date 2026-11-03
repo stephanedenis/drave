@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 6.5 h |
 | Tours | 2 |
-| Messages | 352 |
-| Appels d'outils | 356 |
+| Messages | 356 |
+| Appels d'outils | 360 |
 | Fichiers touchés | 23 |
-| Commandes | 265 |
+| Commandes | 267 |
 | Sous-agents | 0 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*116 appels d'outils.* Actions notables :
+*120 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 79 autres
+- … et 81 autres
 
 **Synthèse produite :**
 
-⏵ Commit du fait « fenêtre 2 048 » et point d'équilibre
+⏵ Préparation du contrôle « production depuis zéro » (mêmes octets ajoutés)
 
 ## 3. Travail accompli
 
@@ -178,7 +178,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 225 autres
+- … et 227 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -297,6 +297,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `2048 (1,25k pas, 20,5 Mo) {'128': 3.4179, '256': 3.2924, '512': 3.145, '1000': 3.0202, '2000': 2.963, '4000': 2.9265}`
 - **T2** `> **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à`
 - **T2** `[still running after 60000ms; moved to background job bash-265]`
+- **T2** `[still running after 60000ms; moved to background job bash-267]`
 
 ## 5. Erreurs rencontrées
 

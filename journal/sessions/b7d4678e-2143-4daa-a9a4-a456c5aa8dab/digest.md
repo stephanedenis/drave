@@ -10055,3 +10055,71 @@ ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 E
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -3; git status --short | head -4; ps -eo pid,etime,args | grep entrainer_r … [107 caractères tronqués]`
+
+  ```
+22:44:19
+HEAD c7ef9bc4
+c7ef9bc4 FENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S'ARRÊTE À 1 024 (2,9950 À 1 000 OCTETS) ; À 20 000 PAS ELLE DONNE 2,9955 À 128 ET 2,6256 À 1 000
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+ 713516       21:32 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 44 — la fenêtre 2 048 : le gain s'arrête à 1 024\n\n- **`c7ef9bc4`** (N2) : à **octets constants**, le gain de la fenêtre **s'arrête à 1 024**\n  (**2,9950** à 1 000 octets) ; la **2 048** à **20 000 pas** donne **2,9955 à 128** et\n  **2,62 … [427 caractères tronqués]`
+
+  ```
+revue de documentation · 571 fiche(s) · 658 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (124 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (61 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 19 : la fenêtre 2 048 s’arrête à 1 024, état vert
+
+- **N2** : `c7ef9bc4` — la **fenêtre 2 048** : à octets constants, le gain **s'arrête à 1 024** (**2,9950** à 1 000 octets) ; à **20 000 pas**, la 2 048 donne **2,9955 à 128** et **2,6256 à 1 000**. La fenêtre double le compute sans rendre le gain marginal — c'est la suite logique de la loi mesurée (256 → 512 → 1 024).
+- **État** : revue ✅ **571 fiches / 658 JSON / 82 portes**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ (claims longs en avertissement).
+- **Ressources** : les deux GPU restent occupés et déclarés (run N2 713516, 21 min ; `llama-server`).
+
+La veille continue : intégration des commits N2/hub, suivi des sessions, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 20/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 20 : veille — je vérifie les événements puis j’attends
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; git status --short | head -3; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-80; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": "Check events … [12 caractères tronqués]`
+
+  ```
+22:44:39
+c7ef9bc4 FENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S'ARRÊTE À 1 024 (2,9950 À 1 000 OCTETS) ; À 20 000 PAS ELLE DONNE 2,9955 À 128 ET 2,6256 À 1 000
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+ 713516       21:52 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+ 722257       05:38 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; git status --short | head -3; ps -eo pid,etime,args | grep entrainer_r … [107 caractères tronqués]`

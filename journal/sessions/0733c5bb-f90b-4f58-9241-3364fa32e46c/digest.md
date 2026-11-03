@@ -5917,3 +5917,41 @@ ok
 ⏵ Commit du fait « fenêtre 2 048 » et point d'équilibre
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md <<'MSG'\nFENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S' … [1877 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-265]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-265", "timeout_ms": 180000, "wait": true}`
+
+  ```
+c7ef9bc4 FENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S'ARRÊTE À 1 024 (2,9950 À 1 000 OCTETS) ; À 20 000 PAS ELLE DONNE 2,9955 À 128 ET 2,6256 À 1 000
+22:44:15
+pas     50 · perte 1.4378 · PPL val 3.842 · 55 s
+pas   1200 · perte 1.0695 · PPL val 2.753 · 1216 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation du contrôle « production depuis zéro » (mêmes octets ajoutés)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_prod_zero.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_prod_zero.sh — la production SANS N2.ac : même recette (RoPE, seq 512) et mêmes octets\n# ajoutés (61,4 Mo = 15 000 pas × 8 × 512 que le fine-tune de production), mais départ d … [821 caractères tronqués]`
+
+  ```
+ok
+22:44:29
+pas     50 · perte 1.4378 · PPL val 3.842 · 55 s
+  ```
+
+- **bash** `{"command": "sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_mix.out; tail -1 work/n2ac/mix2048-3.75k.log; tail -1 work/n2ac/rope2048-12.5k.log", "description": "Wait for production 2048 run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-267]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-267", "timeout_ms": 3400000, "wait": true}`

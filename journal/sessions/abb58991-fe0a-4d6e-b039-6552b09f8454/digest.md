@@ -15518,3 +15518,82 @@ ok
 500 greedy but False noeuds 500 etats 495
   ```
 
+### 🤖 Assistant
+
+⏵ Round 42 : `Store.push` FIFO corrigé — le BFS du moteur atteint **le but à 228 nœuds (37 états)** au budget 500 ; l'A* et le Greedy restent bloqués à 195/495 états
+
+**Mesure après correction** :
+
+| budget | BFS | A* | Greedy |
+|---:|---|---|---|
+| 200 | ❌ 36 états | ❌ 195 | ❌ 195 |
+| 500 | ✅ **228 nœuds, 37 états** | ❌ 495 | ❌ 495 |
+
+- Le `Store.push` faisait `setdefault` : un nœud **re-poussé** gardait son ancien numéro de file, et la frontière du BFS se figeait. Corrigé : un nœud absent prend `self._seq`, puis `self._seq += 1` → **vrai FIFO**.
+- Effet : le BFS du moteur passe de « jamais le but » à **228 nœuds/37 états**, mieux que le BFS manuel (331/52).
+- L'**A\*** et le **Greedy** restent bloqués (495 états) : leur sélection par score (`score + heuristique`) n'est pas un BFS et le fitness Manhattan les égare — ce n'est plus un bug de store mais un **choix de stratégie**.
+
+**État** : HEAD `84182603` ; correctif `Store.push` en arbre, non committé ; T0 3 999 ; revue 570/656 ; banc 500 non committé.
+
+La suite : committer `Store.push` + banc 500 + contre-fiche ; relancer le 7B sur la fenêtre avec l'oracle BFS (228) ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 45
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 43/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 43 : j'ajoute la section `Store.push` FIFO à la fiche, je commite le correctif + le banc 500 + la contre-fiche, puis je relance le 7B sur la fenêtre avec l'oracle BFS
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-pensee-porte-fenetre.md'); t=p.read_text(encoding='utf-8')\nt += \"\"\"\n\n## 9. Store.push FIFO (round 42-43)\n\n`Store.push` faisait `self.ouverts.setdefault(empreinte, len(self … [2383 caractères tronqués]`
+
+  ```
+ok
+  568 fiches → reports/INDEX.md
+  revue de documentation · 571 fiche(s) · 658 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 4004 mots (budget 4 000)
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 43 : T0 à 4 004 (dépassement de 4 mots) et lock concurrent ; je condense l'en-cours, j'attends et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('**fenêtre** — **solvable** (BFS moteur 228 nœuds, 37 états après `Store.push` FIFO) ; l\\'oracle Manhattan échoue par fitness  … [827 caractères tronqués]`
+
+  ```
+en-cours 1626
+  T0 max : 4000 mots (budget 4 000)
+22:44:15
+.git/index.lock
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 43 : T0 revenu à 4 000 pile ; le lock concurrent persiste ; j'attends 90 s et je reprends le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 90; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; ps -eo pid,etime,cmd | grep -E \"git (commit|add)\" | grep -v grep | head -2; git commit -m \"B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 2 … [134 caractères tronqués]`

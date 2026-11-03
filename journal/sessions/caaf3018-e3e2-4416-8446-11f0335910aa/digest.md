@@ -6192,3 +6192,30 @@ Réservations actives :
 ⏵ Claims propres (la passe a expiré d'elle-même). J'attends la fin du minuteur de 20 min.
 
 - **job_output** `{"job_id": "bash-253", "timeout_ms": 620000, "wait": true}`
+
+  ```
+22:44
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+--- sessions ---
+    0733c5bb-f90b-4f58 · actif    ·  41 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 124 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  13 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    ·  61 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+--- état ---
+  ✅ état court, structuré, multi-session et reprenable
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cadence de 20 min : minuteur long puis deux attentes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 1200; date +%H:%M; git log --oneline -2; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" | head -4; echo \"--- état ---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": " … [57 caractères tronqués]`
+
+  ```
+started background job bash-257
+  ```
+
+- **job_output** `{"job_id": "bash-257", "timeout_ms": 615000, "wait": true}`

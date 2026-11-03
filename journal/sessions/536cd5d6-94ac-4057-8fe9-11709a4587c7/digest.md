@@ -9314,3 +9314,63 @@ started background job bash-228
   ```
 
 - **job_output** `{"job_id": "bash-228", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+22:43:58
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 31 : fin de l'attente ; relevé de l'état (sessions, git, revue, registre).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [216 caractères tronqués]`
+
+  ```
+22:44:07
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+== sessions ==
+    0733c5bb-f90b-4f58 · actif    ·  41 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 124 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  13 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    ·  61 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (124 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (61 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 571 fiche(s) · 658 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe
+… [612 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 31 : l'état tient (revue 571/658/82, T0 4 000/4 000 pile) ; B13 a livré sa contre-fiche ; veille.
+
+- **B13** : contre-fiche (BFS atteint le but en 331 nœuds ; l'oracle Manhattan échoue par fitness), commit `84182603`.
+- **Sessions** : N2 41, S 124 + claim, hub 13 + claim `veille`, B13 61 + claim ; quatre actives ; `porte-sessions` verte.
+- **Revue** 571/658/82 ✅ ; **T0 4 000/4 000** (pile) ; registre : cinq claims (hub `veille` `cpu1` 1 / RAM 1).
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 39
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 31/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, fourth", "run_in_background": true}`
+
+  ```
+started background job bash-230
+  ```
+
+- **job_output** `{"job_id": "bash-230", "timeout_ms": 600000, "wait": true}`
