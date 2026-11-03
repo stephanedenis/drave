@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**51 commits** · **6 session(s)** · **8 thème(s)**
+**52 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 3 | [attention.md](attention.md) |
-| distribue | 15 | [distribue.md](distribue.md) |
+| distribue | 16 | [distribue.md](distribue.md) |
 | docs | 16 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
@@ -86,6 +86,7 @@
 | 11:22 | `e1c1064d` | NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS |
 | 11:24 | `bfd51b90` | NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUCTION PASSE SOUS 2,5 AU GRAND CORPUS, LA PORTE PROPRE RESTE À 0,29 |
 | 11:26 | `c4ea6138` | MÉTHODE — LA CLÉ DU PROFESSEUR EST NOMMÉE (FICHIER 0600) ET SON USAGE VÉRIFIÉ |
+| 11:39 | `5bafefab` | B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35 |
 
 ## Le récit de la journée (écrit à la main)
 

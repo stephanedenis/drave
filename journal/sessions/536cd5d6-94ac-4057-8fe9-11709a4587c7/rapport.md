@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 20.1 h |
 | Tours | 76 |
-| Messages | 550 |
-| Appels d'outils | 487 |
+| Messages | 551 |
+| Appels d'outils | 488 |
 | Fichiers touchés | 16 |
-| Commandes | 356 |
+| Commandes | 357 |
 | Sous-agents | 0 |
-| Commits | 43 |
+| Commits | 44 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2029,7 +2029,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 
 ### Tour 76 — elancer les mesures B13 via l'API tout de suite
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gold and minute measurement scripts
 - bash — Read B13 measure CLI options
@@ -2045,10 +2045,11 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - bash — Rerun porte-minute with deepseek-chat
 - bash — Compare API and 7B measure results
 - bash — Commit API measures and state update
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Verdict identique entre 7B et API, API bien plus rapide ; je commite les deux JSON et le correctif des mesureurs.
+⏵ Commit fait (`5bafefab`) mais T0 à 4 031 : je resserre la ligne B13 et je repasse sous budget.
 
 ## 3. Travail accompli
 
@@ -2115,7 +2116,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 316 autres
+- … et 317 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2302,4 +2303,5 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979" -- AGENTS.md; echo "[commit $?]"; git log --oneline -1; echo; echo "== GPU et guard ==" && nvidia-smi --query-compute-
 - BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET" -- AGENTS.md; echo "[commit $?]"; git log --oneline -1
 - B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35" -m "PolitiqueLLM en mode API (deepseek-chat) : porte-minute llm_porte 1,0
+- BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000" -- docs/pilotage/en-cours.md; echo "[commit $?]"
 

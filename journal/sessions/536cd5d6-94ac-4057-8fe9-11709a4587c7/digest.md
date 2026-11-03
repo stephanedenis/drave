@@ -14181,3 +14181,25 @@ background job bash-354 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrine
 ⏵ Verdict identique entre 7B et API, API bien plus rapide ; je commite les deux JSON et le correctif des mesureurs.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.\"\nnew=\"- **Ce qu'elle fait**  … [1411 caractères tronqués]`
+
+  ```
+en-cours : B13 API
+  T0 max : 4031 mots (budget 4 000)
+  ❌ 2 violation(s) :
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[master 5bafefab] B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35
+ 21 files changed, 750 insertions(+), 41 deletions(-)
+ create mode 100644 reports/pensee-politique-llm-api.json
+ create mode 100644 reports/pensee-porte-minute-api.json
+[commit 0]
+5bafefab B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit fait (`5bafefab`) mais T0 à 4 031 : je resserre la ligne B13 et je repasse sous budget.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -4; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; re … [951 caractères tronqués]`

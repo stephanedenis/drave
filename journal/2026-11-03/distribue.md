@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,6 +23,7 @@
 | 09:15 | `ca800b52` | BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS | `AGENTS.md`, `en-cours.md`, `README.md` (+6) |
 | 09:17 | `1c9a37dd` | BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979 | `AGENTS.md`, `README.md`, `attention.md` (+11) |
 | 09:19 | `277dd870` | BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET | `AGENTS.md`, `README.md`, `attention.md` (+12) |
+| 11:39 | `5bafefab` | B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35 | `en-cours.md`, `README.md`, `attention.md` (+18) |
 
 ## Chiffres du jour
 
