@@ -12777,3 +12777,79 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 50 : veille — attente du commit N2
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [105 caractères tronqués]`
+
+  ```
+01:09:17
+HEAD d849b9f1
+d849b9f1 L/B13 — LE LIEN RÉPARÉ : LA PAIRE (SUJET + VERBE) AVANT LA PROXIMITÉ, AUTO 2/5 → 5/5
+10ba0488 ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE
+ 713516    02:46:30 /home/stephane/gpu-env/bin/python w
+ 758133    01:15:14 /home/stephane/gpu-env/bin/python w
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; echo \"--- B13 ---\"; grep -n \"T132\\|voisin\\|lien auto\\|5/5\" docs/pilotage/en-cours.md | head -4; cat >> work/veille/nuit.md <<'E … [393 caractères tronqués]`
+
+  ```
+revue de documentation · 578 fiche(s) · 663 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+--- B13 ---
+60:- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** —
+61:  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 5/5 (réparé) ;
+62:  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **non discriminante** (oracle 228, aveugle 215) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+64:  [sto 5/5](../../reports/rapport-pensee-porte-sto-graines.md),
+log-ok
+  ```
+
+- **bash** `{"command": "ls -t reports/b13-porte-*.json reports/b13-porte-*.md 2>/dev/null | head -3; python3 - <<'PY'\nimport json,glob,os\nfor p in sorted(glob.glob('reports/b13-porte-*.json'), key=os.path.getmtime)[-3:]:\n    d=json.load(open(p))\n    print(p, 'verdict=', d.get('verdict'), '| clés:', [k for  … [251 caractères tronqués]`
+
+  ```
+reports/b13-porte-140.json
+reports/b13-porte-138.json
+reports/b13-porte-134.json
+reports/b13-porte-134.json verdict= False | clés: ['porte']
+reports/b13-porte-138.json verdict= True | clés: ['porte']
+reports/b13-porte-140.json verdict= True | clés: ['porte']
+--- porte b13 ---
+reports/rapport-b13-porte-134.md
+reports/rapport-b13-porte-138.md
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n- **À réconcilier** : l'`en-cours` ligne 60 dit encore « **T132/T133 2/5** » alors que la ligne 61\n  dit « **voisin 5/5 (réparé)** » ; la session ou le hub doit aligner le bilan B13 (la porte\n  `b13-porte-140` reste la dernière mesure, verdict tru … [105 caractères tronqués]`
+
+  ```
+log-ok
+01:09:46
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 50 : le lien est réparé (5/5), une ligne d’état à réconcilier
+
+- **L/B13** : `d849b9f1` — la paire **(sujet + verbe)** passe avant la proximité ; le **lien auto** monte de **2/5 à 5/5** et rejoint le contextuel : le bloc **T132/T133** est réparé côté heuristique. Fiche/JSON comptées (**578 / 663 / 82**).
+- **À réconcilier** : l'`en-cours` ligne 60 dit encore « **T132/T133 2/5** » alors que la ligne 61 dit « **voisin 5/5 (réparé)** » — signalé dans `work/veille/nuit.md` pour la session/le hub (la porte `b13-porte-140` reste la dernière mesure, verdict true).
+- **État** : revue ✅, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ ; runs N2 en cours (2 h 46 et 1 h 15).
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 56
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 51/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 51 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`

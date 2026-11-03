@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 8.9 h |
-| Tours | 153 |
-| Messages | 1048 |
-| Appels d'outils | 860 |
+| Tours | 154 |
+| Messages | 1056 |
+| Appels d'outils | 866 |
 | Fichiers touchés | 48 |
-| Commandes | 686 |
+| Commandes | 692 |
 | Sous-agents | 0 |
-| Commits | 76 |
+| Commits | 77 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -329,6 +329,8 @@
 **Tour 152** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 153** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 154** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3830,7 +3832,39 @@ La suite : **réparer le lien** (critère de paire assertion ↔ question du mê
 
 **Synthèse produite :**
 
-⏵ Round 151 : JSON et fiche écrits (auto 5/5) ; j'aligne index/en-cours/README et je commite le lien réparé
+⏵ Round 151 : lien réparé et committé (`d849b9f1`, 17 fichiers) — auto **5/5**, T0 3 999, revue 578/663
+
+**Fait de la nuit — round 151** : le lien réparé.
+
+| lecture | avant | après |
+|---|---:|---:|
+| **lien automatique** | 2/5 | **5/5** |
+| réponse contextuelle | 5/5 | 5/5 |
+
+- **Critère ajouté** : la **paire** (même sujet **et** même verbe) passe avant la proximité ; la proximité ne sert plus que de **repli** quand aucun verbe ne concorde.
+- **Distracteurs neutralisés** : r428 « Il pleut. », r430 « Elle est partie. », r431 « Ils sont arrivés. » ne sont plus choisis ; le lien retrouve r424, r425, r426.
+- **Contrôle négatif** : sans distracteurs, 5/5 avant comme après — le banc n'était pas le problème, le lien oui.
+- Les 5 paires : r418→r423, r419→r424, r420→r425, r421→r426, r422→r427.
+- Fiche `rapport-pensee-lien-repare.md` ; JSON `pensee-lien-repare.json` ; `miroir.py` (`_verbe`, `trouver_precedente`).
+
+**État** : HEAD `d849b9f1` ; T0 **3 999** ; revue **578/663** verte ; N2 intact ; serveur 7B sain.
+
+La suite : étendre les paires (10, 20), puis la **parité DRVM/native** (cadenas 3, porte 27, labyrinthe 2). Le goal reste **actif**.
+
+### Tour 154 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Inspect real gold questions for pair extension
+- bash — Measure extended pairs with repaired link
+- bash — Measure 10 extended pairs safely
+- bash — Write 10-pair measurement JSON
+- bash — Write 10-pair fiche and state
+- bash — Commit 10-pair measurement
+
+**Synthèse produite :**
+
+⏵ Round 152 : T0 à 4 001 ; je raccourcis la ligne et je commite la mesure des 10 paires
 
 ## 3. Travail accompli
 
@@ -3929,7 +3963,7 @@ La suite : **réparer le lien** (critère de paire assertion ↔ question du mê
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 646 autres
+- … et 652 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4019,7 +4053,7 @@ La suite : **réparer le lien** (critère de paire assertion ↔ question du mê
 
 ## 5. Erreurs rencontrées
 
-7 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : Error: could not connect to ollama server, run 'ollama serve' to start it --- total 1656188 drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 . drwxr-xr-x. 1 stephane stephane       100 15 oct 09
 - **T1** : > Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","t
@@ -4028,6 +4062,7 @@ La suite : **réparer le lien** (critère de paire assertion ↔ question du mê
 - **T35** : [stderr] Traceback (most recent call last):   File "<stdin>", line 16, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 3084, in penser     self.re
 - **T73** : cascade {'pos': {'exactitude': 0.9415, 'exactitude_ferme': 0.9392, 'exactitude_ouvert': 0.9432, 'tokens': 804, 'confusions': {'ADJ': {'ADJ': 52, 'NOUN': 5}, 'ADV': {'ADV': 48}, 'AUX': {'PREP': 3, 'AUX
 - **T148** : date 2026-11-03 00:25 EST verdict False gold {'phrases': 432, 'tokens': 2375} [stderr] Traceback (most recent call last):   File "<stdin>", line 9, in <module> KeyError: 'pos' [exit code: 1]
+- **T154** : r408 'Ne viens-tu pas demain ?'     -> r304   'Viens-tu demain ?'    attendu r424 NON [stderr] Traceback (most recent call last):   File "<stdin>", line 12, in <module> TypeError: unsupported format s
 
 ## 6. Commits
 
@@ -4107,4 +4142,5 @@ La suite : **réparer le lien** (critère de paire assertion ↔ question du mê
 - ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1; python3 tools/revue_documenta
 - ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LE LIEN RÉPARÉ : LA PAIRE (SUJET + VERBE) AVANT LA PROXIMITÉ, AUTO 2/5 → 5/5" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
+- L/B13 — LES 10 PAIRES : 5/10, LA FORME INVERSÉE EST LA LIMITE (r408–r412)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

@@ -21519,3 +21519,143 @@ fiche 2392
 ⏵ Round 151 : JSON et fiche écrits (auto 5/5) ; j'aligne index/en-cours/README et je commite le lien réparé
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 2/5'\nnew=' ; voisin 5/5 (réparé)'\nassert old in t\nt=t.replace(old,new,1)\nt=t.replace('| fichiers / JSON de résultats | * … [1046 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3999 mots (budget 4 000)
+  575 fiches → reports/INDEX.md
+  revue de documentation · 578 fiche(s) · 663 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master d849b9f1] L/B13 — LE LIEN RÉPARÉ : LA PAIRE (SUJET + VERBE) AVANT LA PROXIMITÉ, AUTO 2/5 → 5/5
+ 17 files changed, 401 insertions(+), 48 deletions(-)
+ create mode 100644 reports/pensee-lien-repare.json
+ create mode 100644 reports/rapport-pensee-lien-repare.md
+EXIT=0
+d849b9f1 L/B13 — LE LIEN RÉPARÉ : LA PAIRE (SUJET + VERBE) AVANT LA PROXIMITÉ, AUTO 2/5 → 5/5
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 151 : lien réparé et committé (`d849b9f1`, 17 fichiers) — auto **5/5**, T0 3 999, revue 578/663
+
+**Fait de la nuit — round 151** : le lien réparé.
+
+| lecture | avant | après |
+|---|---:|---:|
+| **lien automatique** | 2/5 | **5/5** |
+| réponse contextuelle | 5/5 | 5/5 |
+
+- **Critère ajouté** : la **paire** (même sujet **et** même verbe) passe avant la proximité ; la proximité ne sert plus que de **repli** quand aucun verbe ne concorde.
+- **Distracteurs neutralisés** : r428 « Il pleut. », r430 « Elle est partie. », r431 « Ils sont arrivés. » ne sont plus choisis ; le lien retrouve r424, r425, r426.
+- **Contrôle négatif** : sans distracteurs, 5/5 avant comme après — le banc n'était pas le problème, le lien oui.
+- Les 5 paires : r418→r423, r419→r424, r420→r425, r421→r426, r422→r427.
+- Fiche `rapport-pensee-lien-repare.md` ; JSON `pensee-lien-repare.json` ; `miroir.py` (`_verbe`, `trouver_precedente`).
+
+**État** : HEAD `d849b9f1` ; T0 **3 999** ; revue **578/663** verte ; N2 intact ; serveur 7B sain.
+
+La suite : étendre les paires (10, 20), puis la **parité DRVM/native** (cadenas 3, porte 27, labyrinthe 2). Le goal reste **actif**.
+
+
+## Tour 154
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 152/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 152 : j'étends les paires au-delà des 5 — je regarde les assertions/questions disponibles dans le gold réel pour en construire 10
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. python3 - <<'PY'\nimport json\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nq=[p for p in ph if '?' in p['texte']]\nprint('questions', len(q))\nfor p in q[:14]: print(' ', p['id'], p['texte'][:44], '| rep', (p … [317 caractères tronqués]`
+
+  ```
+questions 19
+  r010 Tu viens demain ? | rep oui
+  r030 You come tomorrow? | rep yes
+  r304 Viens-tu demain ? | rep oui
+  r314 Do you come tomorrow? | rep yes
+  r408 Ne viens-tu pas demain ? | rep si
+  r409 Ne mange-t-il pas ? | rep si
+  r410 Ne dort-elle pas ? | rep si
+  r411 Ne partent-ils pas ? | rep si
+  r412 Ne lis-tu pas ? | rep si
+  r413 Ne parle-t-elle pas ? | rep si
+  r414 Ne jouent-ils pas ? | rep si
+  r415 Ne chante-t-il pas ? | rep si
+  r416 Ne cours-tu pas ? | rep si
+  r417 Ne rit-elle pas ? | rep si
+--- assertions proches ---
+  r423 Tu viens demain.
+  r424 Il mange.
+  r425 Elle dort.
+  r426 Ils partent.
+  r427 You come tomorrow.
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 152 : le gold a **19 questions** ; les paires possibles sont r408–r417 → r424–r427 (formes inversées) plus r418–r422 ; je mesure le lien réparé sur les 15 paires
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique(); par={p['i … [542 caractères tronqués]`
+
+  ```
+r408 'Ne viens-tu pas demain ?'     -> r304   'Viens-tu demain ?'    attendu r424 NON
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+TypeError: unsupported format string passed to NoneType.__format__
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 152 : sur les paires étendues, r408 « Ne viens-tu pas demain ? » choisit **r304 « Viens-tu demain ? »** (même verbe, plus proche) et non r423 — la paire « assertion ↔ question » a besoin d'un critère de **forme**, pas seulement sujet+verbe
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique(); par={p['i … [530 caractères tronqués]`
+
+  ```
+r408  'Ne viens-tu pas demain ?'     -> r304  'Viens-tu demain ?'    attendu r423 NON
+r409  'Ne mange-t-il pas ?'          -> -     ''                     attendu r424 NON
+r410  'Ne dort-elle pas ?'           -> -     ''                     attendu r425 NON
+r411  'Ne partent-ils pas ?'         -> -     ''                     attendu r426 NON
+r412  'Ne lis-tu pas ?'              -> -     ''                     attendu r427 NON
+r418  'Tu ne viens pas demain ?'     -> r423  'Tu viens demain.'     attendu r423 OK
+r419  'Il ne mange pas ?'            -> r424  'Il mange.'            attendu r424 OK
+r420  'Elle ne dort pas ?'           -> r425  'Elle dort.'           attendu r425 OK
+r421  'Ils ne partent pas ?'         -> r426  'Ils partent.'         attendu r426 OK
+r422  "You don't come tomorrow?"     -> r427  'You come tomorrow.'   attendu r427 OK
+justes 5 / 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 152 : les paires étendues révèlent deux limites — **5/10** seulement : r409–r412 rendent `None` (sujet inversé « mange-t-il ») et r408 choisit r304 ; je fige la mesure avec ses limites
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [1398 caractères tronqués]`
+
+  ```
+json 2422 justes 5 / 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 152 : 10 paires = **5/10** — r418–r422 5/5, r408–r412 0/5 (forme inversée + r408 qui choisit r304) ; j'écris la fiche et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfiche=pathlib.Path('reports/rapport-pensee-lien-10-paires.md')\nfiche.write_text('''# B13 — les 10 paires : 5/10, la forme inversée est la limite (r408–r412)\n\n> **Ligne de roadmap** : **L/B13** · **Date** : 2026-11- … [3154 caractères tronqués]`
+
+  ```
+fiche 2799
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 152 : T0 à 4 001 ; je raccourcis la ligne et je commite la mesure des 10 paires
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, 10 paires 5/10'\nnew=' ; voisin 5/5, 10: 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encoding='utf-8 … [572 caractères tronqués]`

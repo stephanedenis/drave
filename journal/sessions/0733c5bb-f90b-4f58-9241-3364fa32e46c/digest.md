@@ -6437,3 +6437,39 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-301", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-285 (bash: sleep 3600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/rope2048-12.5k.log; tail -1 work/n2ac/mix1024-30k.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-289 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; tail -1 work/n2ac/rope2048-12.5k.log; tail -1 work/n2ac/mix1024-30k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048; grep -E \"ppl_val\" work/n2ac/rope2048-12.5k.pt.json 2>/dev/null", "description": "Check 2048 long completion"}`
+
+  ```
+01:10:11
+rope2048-1.25k fini 22:22:47
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -c 300 work/n2ac/rope2048-12.5k.log; echo; ps -p 713516 -o pid,etime --no-headers 2>/dev/null || echo \"processus 2048 terminé\"", "description": "Inspect 2048 run state"}`
+
+  ```
+89 · PPL val 2.489 · 9731 s
+pas   9650 · perte 0.9598 · PPL val 2.493 · 9781 s
+pas   9700 · perte 0.9578 · PPL val 2.494 · 9832 s
+pas   9750 · perte 1.0045 · PPL val 2.488 · 9882 s
+pas   9800 · perte 1.0308 · PPL val 2.477 · 9933 s
+pas   9850 · perte 0.9618 · PPL val 2.477 · 9984 s
+
+ 713516    02:47:27
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048; cat work/n2ac/chaine_2048_wiki.out", "description": "Wait for 2048 checkpoint"}`

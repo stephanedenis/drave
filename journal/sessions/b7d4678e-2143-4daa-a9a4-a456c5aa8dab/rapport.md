@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 8.8 h |
-| Tours | 55 |
-| Messages | 818 |
-| Appels d'outils | 753 |
+| Durée | 8.9 h |
+| Tours | 56 |
+| Messages | 824 |
+| Appels d'outils | 757 |
 | Fichiers touchés | 25 |
-| Commandes | 535 |
+| Commandes | 539 |
 | Sous-agents | 0 |
 | Commits | 40 |
 | Compactages de contexte | 1 |
@@ -135,6 +135,8 @@
 **Tour 54** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 55** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 56** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1349,13 +1351,32 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 
 ### Tour 55 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Wait for the N2 commit
+- bash — Verify and log the link repair
+- bash — Check the B13 gate count after the link repair
+- bash — Flag the B13 header reconciliation
 
 **Synthèse produite :**
 
-⏵ Round 50 : veille — attente du commit N2
+⏵ Round 50 : le lien est réparé (5/5), une ligne d’état à réconcilier
+
+- **L/B13** : `d849b9f1` — la paire **(sujet + verbe)** passe avant la proximité ; le **lien auto** monte de **2/5 à 5/5** et rejoint le contextuel : le bloc **T132/T133** est réparé côté heuristique. Fiche/JSON comptées (**578 / 663 / 82**).
+- **À réconcilier** : l'`en-cours` ligne 60 dit encore « **T132/T133 2/5** » alors que la ligne 61 dit « **voisin 5/5 (réparé)** » — signalé dans `work/veille/nuit.md` pour la session/le hub (la porte `b13-porte-140` reste la dernière mesure, verdict true).
+- **État** : revue ✅, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ ; runs N2 en cours (2 h 46 et 1 h 15).
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 56 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 51 : veille — attente du prochain commit
 
 ## 3. Travail accompli
 
@@ -1431,7 +1452,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 495 autres
+- … et 499 autres
 
 ## 4. Mesures et résultats marquants
 
