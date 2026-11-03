@@ -7747,3 +7747,215 @@ ok
 … [1495 caractères tronqués]
   ```
 
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nrepls=[\n(\"\"\"- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),\n  invariant au décalage ; **R1.2** à octets constants **3,0 … [1171 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "grep -rn \"138/140\" docs/pilotage/*.md docs/methode/*.md 2>/dev/null | head -5; echo \"--- status ---\"; git status --short | head -12; echo \"--- HEAD ---\"; git log --oneline -2", "description": "Check remaining stale counts and git state"}`
+
+  ```
+--- status ---
+ M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+MM docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+M  docs/pilotage/roadmap.md
+M  journal/2026-11-02/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+--- HEAD ---
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 3; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; git status --short | head -10", "description": "Wait for the staged hub commit", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+HEAD 7d2c0a2d
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+ M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+ M reports/rapport-s-analyseur-roles.md
+ M reports/rapport-s-corpus-reel.md
+ M reports/s-banque-structures.json
+ M tools/structures
+?? reports/rapport-n2-fenetre.md
+  ```
+
+- **bash** `{"command": "grep -n \"82e\\|porte-ressources\" docs/methode/portes.md | head -2; echo \"--- roadmap ---\"; grep -n \"porte 140/140\\|54/55\" docs/pilotage/roadmap.md | head -2; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tai … [171 caractères tronqués]`
+
+  ```
+17:La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), a été ajoutée le
+--- roadmap ---
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase 
+… [2572 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -l --time-style=+%H:%M docs/pilotage/references-non-regression.md; echo \"--- top 30 ---\"; sed -n '1,30p' docs/pilotage/references-non-regression.md; echo \"--- diff vs HEAD ---\"; git diff docs/pilotage/references-non-regression.md | head -40", "description": "Inspect the reference … [29 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 19667 21:28 docs/pilotage/references-non-regression.md
+--- top 30 ---
+# Références de non-régression
+
+> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
+> **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues
+> (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,
+> `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
+> `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) —
+> **rouge de passage** (rejouer après le commit N2) ; aucune régression structurelle.
+> La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
+
+> **Passe précédente — 2026-11-02 à 06 h :** 81 portes, 76 vertes, 5 rouges (`/tmp/portes-…`,
+> effacés au reboot) ; `porte-greffe` à 700 s, **rejouée verte à 1200 s** (délai, pas régression).
+
+> **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+> (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+> `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
+> A
+… [907 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 7d2c0a2d | head -10; echo \"--- refs dans le commit ---\"; git show 7d2c0a2d -- docs/pilotage/references-non-regression.md | head -60; echo \"--- sections ---\"; grep -n \"^##\\|^> \\*\\*Passe\\|^> \\*\\*Dernière\" docs/pilotage/references-non-regression.md | h … [68 caractères tronqués]`
+
+  ```
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+ docs/pilotage/en-cours.md                          |  23 +-
+ docs/pilotage/roadmap.md                           |  10 +-
+ journal/2026-11-02/README.md                       |  23 +-
+ journal/2026-11-02/apprentissage.md                |  10 +-
+ journal/2026-11-02/attention.md                    |  10 +-
+ journal/2026-11-02/distribue.md                    |  10 +-
+ journal/2026-11-02/docs.md                         |  10 +-
+ journal/2026-11-02/memoire.md                      |  10 +-
+ journal/2026-11-02/mesures.md                      |  10 +-
+--- refs dans le commit ---
+--- sections ---
+3:> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
+11:> **Passe précédente — 2026-11-02 à 06 h :** 81 portes, 76 vertes, 5 rouges (`/tmp/portes-…`,
+14:> **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+19:> **Passe précédente — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
+22:> **Passe précédente — 2026-10-31 à 12 h 54 :** 78 portes, 73 vertes, 5 rouges ; `porte-jeux`
+25:> **Passe pré
+… [571 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, re\nt=pathlib.Path('docs/pilotage/references-non-regression.md').read_text(encoding='utf-8')\nparts=re.split(r'(?m)^(## .*)$', t)\nprint('total', len(t.split()))\nfor i in range(1,len(parts),2):\n    print(parts[i][:60], '→', len(parts[i+1].split()), 'm … [240 caractères tronqués]`
+
+  ```
+total 3364
+## 1. Ce qui se vérifie en une commande → 900 mots
+## 2. Les repères imprimés par chaque porte → 1646 mots
+## 2 bis. Les sous-passes du 2026-10-29 (la passe complète n → 150 mots
+## 3. Les trois invariants qui ne sont pas des chiffres → 78 mots
+## 4. Où sont les autres chiffres → 64 mots
+tête (passes + intro) 477
+20996b87 NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI
+42db89f6 NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+2dab14e4 PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE
+  ```
+
+- **bash** `{"command": "sed -n '50,108p' docs/pilotage/references-non-regression.md | head -60; echo \"=== portes.md commandes ===\"; grep -n \"porte-\\|python3 tools\" docs/methode/portes.md | head -12", "description": "Inspect references §1 and portes.md commands"}`
+
+  ```
+## 1. Ce qui se vérifie en une commande
+
+| quoi | commande | attendu |
+|---|---|---|
+| tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
+| toutes les portes | `tools/toutes-les-portes.sh` | **81 portes** ; dernière passe **76 vertes, 5 rouges** (02/11 19 h 32) : les 4 connues + `porte-tableaux` (lien N2 en vol, rejouée après son commit) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
+
+> ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE
+>
+> **1. `porte-tableaux` NE POUVAIT PAS ÉCHOUER.** Elle imprimait ses défauts (❌) puis sortait en **0** ✗ :
+> le `sys.exit(...)` de son bloc Python n'arrêtait que **Python** ✗, et le script ne propageait pas le
+> code ✓. Une porte qui ne peut pas échouer est **pire** qu'une porte absente ✗ — et celle-ci
+> **documente** les tableaux depuis des semaines ✓. Corrigé : `[ $? -eq 0 ] || exit 1` juste après le
+> bloc ✓ (vérifié : elle sort maintenant en **1** sur un tableau cassé ✓✓).
+>
+> **2. ET JE L'A
+… [4801 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -25 reports/historique-passes-portes.md; echo \"...\"; tail -5 reports/historique-passes-portes.md; wc -w reports/historique-passes-portes.md", "description": "Inspect the pass history file"}`
+
+  ```
+# Historique des passes de portes
+
+> **Document daté — dernière vérification : 2026-10-27.** Ce fichier conserve les
+> passes complètes antérieures à la dernière (26/10 14 h 30). Les repères courants
+> sont dans [`docs/pilotage/references-non-regression.md`](../docs/pilotage/references-non-regression.md).
+> Il est **hors du chargement par défaut** : on y va pour retrouver une valeur ou une
+> durée ancienne, pas pour connaître l'état courant.
+
+> **2026-10-11 06 h 30 HAE** (heure lue sur la machine). Ces valeurs sont les **verdicts imprimés
+> par la passe complète des portes** (`tools/toutes-les-portes.sh`, **34 vertes sur
+> 34**, 85 min 8 s). Elles ne sont pas recopiées de mémoire : elles sortent du journal de la
+> passe. **Une modification du chemin d'exécution qui déplace l'un de ces chiffres a changé le
+> calcul** — il faut alors relancer la porte, comprendre, et écrire à côté de l'ancienne valeur
+> (jamais à sa place).
+>
+> Détail complet : `reports/rapport-passe-complete-portes.md`.
+> Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
+> expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
+>
+> **Passe du 2026-10
+… [975 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\nref=pathlib.Path('docs/pilotage/references-non-regression.md')\nt=ref.read_text(encoding='utf-8')\nstart=t.find('> ### ⚠️ DEUX DÉFAUTS DE MESURE')\nend=t.find('## 2. Les repères imprimés par chaque porte')\nassert start>0 and end>start, (start,end)\nblo … [778 caractères tronqués]`
+
+  ```
+bloc déplacé 798 mots ; ref 2592 mots
+
+  ❌ 1 violation(s) :
+     · docs/pilotage/references-non-regression.md : 2592 mots > budget 2500 (T1)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\nref=pathlib.Path('docs/pilotage/references-non-regression.md')\nt=ref.read_text(encoding='utf-8')\nstart=t.find('## 2 bis. Les sous-passes du 2026-10-29')\nend=t.find('## 3. Les trois invariants')\nassert start>0 and end>start, (start,end)\nbloc=t[start … [517 caractères tronqués]`
+
+  ```
+sous-passes déplacées 164 mots ; ref 2428 mots
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "git status --short | head -12; echo \"--- checks ---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -1; git diff --check docs/pilotage/references-non-regression.md docs/pilotag … [69 caractères tronqués]`
+
+  ```
+M  docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+MM docs/pilotage/references-non-regression.md
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+--- checks ---
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (51 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "git commit --only -m \"NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS\" -m \"references-non-regression : la passe du 02/11 19 h 32 (81 portes, 76 vertes, 5 rouges, 1 h 52) remplace la dernière ; les 4 rouges connues + porte-tableaux (lien N2 en … [591 caractères tronqués]`

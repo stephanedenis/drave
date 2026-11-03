@@ -295,3 +295,73 @@ lignes** — `porte-indice` et `porte-melange`. Les **44 autres portes sont vert
 **Ce que ça dit** : les instruments de C3.2 **n'ont cassé aucune porte**. Le GPU, les entrées déplacées, le mode
 `--famille` et l'évaluation optionnelle sont **compatibles avec toutes les mesures de non-régression** — c'est ce que
 la passe devait établir, et c'est établi.
+
+
+## 2026-10-16 — l'audit des 46 portes (récit déplacé des références)
+
+> ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE
+>
+> **1. `porte-tableaux` NE POUVAIT PAS ÉCHOUER.** Elle imprimait ses défauts (❌) puis sortait en **0** ✗ :
+> le `sys.exit(...)` de son bloc Python n'arrêtait que **Python** ✗, et le script ne propageait pas le
+> code ✓. Une porte qui ne peut pas échouer est **pire** qu'une porte absente ✗ — et celle-ci
+> **documente** les tableaux depuis des semaines ✓. Corrigé : `[ $? -eq 0 ] || exit 1` juste après le
+> bloc ✓ (vérifié : elle sort maintenant en **1** sur un tableau cassé ✓✓).
+>
+> **2. ET JE L'AI LUE À TRAVERS `tail` PENDANT HUIT ROUNDS** ✗✗. Ce fichier le dit pourtant noir sur
+> blanc : « ne jamais lire une porte à travers un pipe — le code de sortie devient celui du pipe » ✓.
+> Résultat : **huit commits** sont passés avec un tableau **cassé** dans `docs/archive/cerveau-facultes.md` ✗
+> (un bloc de citation inséré **au milieu** d'un tableau ✓) sans que je m'en aperçoive ✓✗. Corrigé ✓.
+>
+> **3. Et une porte de plus dans la foulée** : `tools/verifier_liens.py` (**308 liens** relatifs
+> vérifiés dans `docs/` et `reports/` ✓) est appelé par `porte-tableaux` ✓ — un document de ce dépôt
+> **est** fait de renvois, et un renvoi mort ne casse rien le jour où on l'écrit : il casse six semaines
+> plus tard ✓.
+>
+> *Trois défauts, trois leçons déjà écrites ici : une vérification doit pouvoir échouer ; on ne lit pas
+> une porte à travers un pipe ; et un renvoi se vérifie à la machine, pas à l'œil.*
+
+> **4. ET UN AUDIT DES 46 PORTES, LE MÊME JOUR** (analyse statique, sans les exécuter ✗) : la question
+> posée par `porte-tableaux` — *combien d'autres portes ne PEUVENT PAS échouer ?* ✗ — a une réponse, et
+> elle est précise ✓ :
+>
+> | famille cherchée | trouvée | verdict |
+> |---|---|---|
+> | heredoc Python avec `sys.exit` **non propagé** | **2** | ✅ **`porte-tableaux`** (corrigée) et **`porte-prechargement`** (corrigée : `rm -f` écrasait le code ✓✗ — elle imprimait « PORTE ROUGE » et sortait en **0** ✗) |
+> | heredoc Python avec `sys.exit` **propagé par l'appelant** | 1 | ✅ `porte-bus-socket` — son helper est appelé en `REP=$(moduler …) \|\| { …; exit 1; }` ✓ : **faux positif** ✓ |
+> | `\|\| true` | 3 | ✅ **légitimes** ✓ : ils portent sur des **extractions** dont le vide est un état valide ✓ (`grep -m1 …`, `mkdir -p`, un comptage ✓), et la vérification vient **après** ✓ |
+> | pipe vers `tail` **dans** une porte | 9 | ✅ **faux positifs** ✓ : ce sont des **extractions de valeur** (`grep … \| tail -1` ✓), pas des affichages de fin — le code de sortie du pipe n'est pas ce que la porte teste ✓ |
+>
+> **Deux vrais défauts sur les 46 portes de l'époque (16/10)**, tous deux **corrigés et vérifiés** ✓✓ — et les autres signaux
+> sont des **faux positifs documentés** ✗✓, ce qui vaut mieux qu'un audit muet ✓. *La leçon vaut pour
+> l'audit lui-même : une détection statique propose, la lecture dispose* ✓.
+>
+> **5. ET L'AUDIT A ÉTÉ POUSSÉ PLUS LOIN, LE MÊME JOUR : chaque porte A-T-ELLE UN CHEMIN D'ÉCHEC ?**
+> Une porte sans `exit 1` ne peut pas dire non ✗ — c'est la même famille, un cran plus haut ✓.
+>
+> | ce qui a été compté | résultat |
+> |---|---|
+> | portes **sans aucun `exit 1-9`** | **0 sur 46** ✓ (chemins d'échec : médiane **6**, min **2**, max **17** ✓✓) |
+> | portes **sans `❌` dans leur propre source** | **1** : `porte-mistral.sh` — **et c'est un faux positif** ✓ : son `exit 1` est précédé de la **dernière ligne** de `compare_logits.py`, qui porte le `❌` ✓✓ (« PORTE DE CORRECTION NON TENUE » ✓) |
+> | comment la passe **compte** | par **code de sortie** ✓ (`code=$?` → `✅` / `❌ code N` ✓✓), pas par marqueur ✗ — donc le récapitulatif est **fiable** ✓ |
+>
+> **Conclusion de l'audit** : la suite est **structurellement saine** ✓ — deux vrais défauts trouvés et
+> corrigés ✓✓, et tous les autres signaux sont des **faux positifs documentés** ✓. *Et une leçon de
+> plus sur ma façon de lire : je comptais les ❌ d'une porte **dans son source** ✗ alors que le marqueur
+> peut venir de l'outil qu'elle appelle ✓ — c'est le **code de sortie** qui fait foi, et la passe le
+> lisait déjà correctement ✓✓.*
+
+
+## 2 bis. Les sous-passes du 2026-10-29 (la passe complète n'a pas été relancée)
+
+Trois sous-passes ciblées, registre lu par `awk '$2 != 0'` :
+
+| sous-passe | portes | vertes | rouges |
+|---|---:|---:|---|
+| CPU (blocs, miroir, docs) | 7 | **7** | 0 |
+| GPU (document, flux, lecteur, pont, topologie) | 5 | **5** | 0 |
+| moyenne (bus, coupe, délais, épisodique, gain, homéostasie, mémoire, mélange, récurrence, registre) | 11 | **10** | 1 tolérée (**`porte-melange`**) |
+| divers 1 (adaptateur, audit, diff, fusion, greffe, harnais, jumeaux, m5, pannes, spéculatif, trace) | 11 | **11** | 0 |
+| divers 2 (c4-retard, cerveau, consolidation, cycle-c2, échange-experts, horloge, mistral, occupations, périphérie, poids-creux, préchargement, profondeur-routée, push-paresseux, réflexe, reparti, sauvegarde, tokenizer, vision) | 19 | **19** | 0 |
+
+**52 passages, 51 vertes, 1 rouge tolérée.** La passe **complète** (52 portes, ~1 h 40) n'a pas
+été relancée : elle reste la règle de clôture, et les sous-passes ne la remplacent pas.

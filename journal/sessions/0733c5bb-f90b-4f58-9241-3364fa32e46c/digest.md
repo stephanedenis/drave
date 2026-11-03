@@ -5116,3 +5116,23 @@ pas   8950 · perte 1.0638 · PPL val 2.673 · 4136 s
 === portes récentes ===
   ```
 
+### 🤖 Assistant
+
+⏵ Préparation des runs 2 048 (wiki sur GPU 1, production sur GPU 0)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_2048_wiki.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_2048_wiki.sh — R1.2 à 2 048 octets (wiki_fr), octets constants puis pas constants.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet || exit 1\nexport PYTHONPATH=. CU … [1681 caractères tronqués]`
+
+  ```
+préparé
+21:26:51
+pas   4000 · perte 0.9977 · PPL val 2.704 · 1705 s
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; ls work/n2ac/mix1024-7.5k.pt 2>/dev/null && echo CHECKPOINT_OK", "description": "Wait for 1024 production checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-220]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-220", "timeout_ms": 1500000, "wait": true}`

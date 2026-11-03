@@ -5278,3 +5278,259 @@ started background job bash-210
   ```
 
 - **job_output** `{"job_id": "bash-210", "timeout_ms": 440000, "wait": true}`
+
+  ```
+21:27:02
+=== passe ===
+82
+porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123 porte-reparti-moteur 1 51 porte-tableaux 1 1 --- 76 vertes, 5 rouges --- 
+=== json n2 ===
+toujours absent
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-108 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/portes/passe-1102-19h32 bash tools/toutes-les-portes.sh; echo "EXIT=$?"; echo "=== REGISTRE (code != 0) ==="; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo "=== BILAN ==="; tail -1 work/portes/passe-1102-19h32/registre.txt) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Verdict de la passe : 81 portes, 76 vertes, 5 rouges — 4 connues + `tableaux` (lien N2 en vol). Je récupère la sortie complète.
+
+- **job_output** `{"job_id": "bash-108", "timeout_ms": 10000}`
+
+  ```
+porte-greffe           ✅                         660 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-harnais-invariants ✅                         127 s  ✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage
+  porte-homeostasie      ❌ code 2                    0 s    ❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt
+  porte-horloge          ✅                          27 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  porte-indice           ❌ code 1                 1027 s    ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, questio
+  porte-jeux             ✅                         115 s    ✅ la porte des jeux tient : 100 % au niveau 4, 33/33 paires invariantes, 0 collision,
+  porte-jumeaux          ✅                          31 s  PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+  porte-lecteur          ✅                           0 s  ✅ porte lecteur verte
+  porte-lecture          ✅                           2 s  ✅ porte lecture verte
+  porte-m5-brouillon     ✅                           0 s    
+… [8865 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dépouillement : 81 portes, 76 vertes, 5 rouges ; `porte-sessions` est **verte**. Je vérifie le lien N2 et l'état des références.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; ls -la reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; ls -la reports/rapport-n2-fenetre.md 2>/dev/null | cut -c1-60; stat -c '%y %n' docs/pilotage/references-non-regression.md; git log --oneline -3; echo \"-- … [165 caractères tronqués]`
+
+  ```
+21:27
+json absent
+-rw-------. 1 stephane stephane 8702  2 nov 21:05 reports/ra
+2026-11-02 21:24:49.523715398 -0500 docs/pilotage/references-non-regression.md
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+335e1737 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+--- n2 plan ---
+- **Heartbeat** : 2026-11-02 19:56 HAE
+  ```
+
+### 🤖 Assistant
+
+⏵ Les références ont été éditées à 21 h 24 par l'autre écrivain ; je lis son intégration et l'état du plan N2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"État\" journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md | head -2; echo \"=== diff références ===\"; git diff docs/pilotage/references-non-regression.md | head -40", "description": "Check N2 plan state and refere … [11 caractères tronqués]`
+
+  ```
+36:- **État** : actif
+=== diff références ===
+diff --git a/docs/pilotage/references-non-regression.md b/docs/pilotage/references-non-regression.md
+index 1b7a39cd..b54a8397 100644
+--- a/docs/pilotage/references-non-regression.md
++++ b/docs/pilotage/references-non-regression.md
+@@ -1,10 +1,15 @@
+ # Références de non-régression
+ 
+-> **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+-> `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+-> connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+-> **`porte-greffe`** à 700 s, **rejouée verte à 1200 s** (un délai, pas une régression). La passe
+-> du 02/11 00 h 03 : 81 portes, 77 vertes, 4 rouges. Journaux durables : `work/portes/`.
++> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
++> **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues
++> (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,
++> `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
++> `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (
+… [1691 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'autre écrivain a déjà intégré le verdict dans l'en-tête. Je vérifie pourquoi `porte-sessions` est passée malgré N2 à 19 h 56.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/sessions.py --check --strict; echo \"EXIT=$?\"; echo \"--- mtime plan n2 ---\"; stat -c '%y' journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md", "description": "Re-run strict sessions check at 21h28"}`
+
+  ```
+⚠ mandat long (92 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (48 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (49 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+EXIT=0
+--- mtime plan n2 ---
+2026-11-02 19:56:32.305134885 -0500
+  ```
+
+### 🤖 Assistant
+
+⏵ L'autre écrivain a ajouté la tolérance « mandat long sous claim » — d'où la porte verte. Je mets à jour le §2 (tableau des repères) et le §1.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"toutes les portes\" docs/pilotage/references-non-regression.md | cut -c1-220; echo \"--- §2 ---\"; grep -n \"passe du 2026-10-11\\|## 2 bis\" docs/pilotage/references-non-regression.md", "description": "Check section 1 row an … [26 caractères tronqués]`
+
+  ```
+55:| toutes les portes | `tools/toutes-les-portes.sh` | **81 portes** ; dernière passe **76 vertes, 5 rouges** (02/11 06 h) — les 4 connues + `porte-greffe` rejouée verte à 1200 s · ⚠ **ne jamais lire une porte à travers
+--- §2 ---
+111:| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-10-11 06:30) |
+149:## 2 bis. Les sous-passes du 2026-10-29 (la passe complète n'a pas été relancée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/maj_table_seule.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Met à jour le §1 et le §2 de references-non-regression.md depuis une passe (sans l'en-tête).\"\"\"\nimport pathlib, re, sys\nd = pathlib.Path(sys.argv[1] if len(sys.ar … [2399 caractères tronqués]`
+
+  ```
+81 portes · 76 vertes · 5 rouges · aperçu work/references.s2.md
+=== diff simulé ===
+3,7c3,12
+< > **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+< > `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+< > connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+< > **`porte-greffe`** à 700 s, **rejouée verte à 1200 s** (un délai, pas une régression). La passe
+< > du 02/11 00 h 03 : 81 portes, 77 vertes, 4 rouges. Journaux durables : `work/portes/`.
+---
+> > **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
+> > **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues
+> > (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,
+> > `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
+> > `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) —
+...
+153
+  ```
+
+### 🤖 Assistant
+
+⏵ Application du §1/§2 (81 lignes) puis commit des références
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 work/maj_table_seule.py --ecrire; echo \"=== revue ===\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"=== git ===\"; git status --short | grep -v \"journal/\" | head -6", "description": "Apply refere … [26 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== git ===
+ M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+MM docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+M  docs/pilotage/roadmap.md
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/maj_table_seule.py", line 8, in <module>
+    for l in (d / "registre.txt").read_text(encoding="utf-8").splitlines():
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 537,
+… [226 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"work/maj_table_seule.py\"); t = p.read_text()\nt = t.replace('d = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else \"work/portes/passe-1102-19h32\")',\n              'args = [a for … [533 caractères tronqués]`
+
+  ```
+corrigé
+81 portes · 76 vertes · 5 rouges · aperçu work/references.s2.md
+références §1+§2 réécrits
+=== revue ===
+  revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== table ===
+111:| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-11-02 19:32) |
+81
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit en attente : l'index contient l'état en cours de l'autre écrivain. Je regarde `portes.md` avant de committer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff docs/methode/portes.md | head -30; echo \"=== en-cours (staged) ===\"; git diff --cached --stat docs/pilotage/ | head", "description": "Inspect portes.md diff and staged state"}`
+
+  ```
+diff --git a/docs/methode/portes.md b/docs/methode/portes.md
+index 3f1ca8c5..754e3993 100644
+--- a/docs/methode/portes.md
++++ b/docs/methode/portes.md
+@@ -14,6 +14,8 @@ Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêt
+ `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 06 h) a donné
+ **76 vertes, 5 rouges** ; la liste et le diagnostic sont dans
+ [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
++La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), a été ajoutée le
++02/11 au soir ; elle sera comptée à la prochaine passe (**81 → 82**).
+ 
+ ## Où est le registre (et comment lire le verdict)
+ 
+=== en-cours (staged) ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --oneline -3; echo \"=== status ===\"; git status --short | grep -v \"journal/\" | head -8; date +%H:%M", "description": "Check recent commits and working tree"}`
+
+  ```
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+=== status ===
+ M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+ M reports/rapport-s-analyseur-roles.md
+ M reports/rapport-s-corpus-reel.md
+ M reports/s-banque-structures.json
+21:28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/methode/portes.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"La dernière passe complète à **81 portes** (02/11 06 h) a donné\\n**76 vertes, 5 rouges** ;\"\nn = \"La dernière … [556 caractères tronqués]`
+
+  ```
+portes.md : dernière passe 19 h 32
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+M  docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+M  docs/pilotage/references-non-regression.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit -m \"RÉFÉRENCES — LE TABLEAU DES REPÈRES PASSE À LA PASSE DU 02/11 19 H 32 (81 PORTES, 76/5)\n\nLes 81 lignes du § 2 sont réécrites depuis les journaux durables\nwork/portes/passe-1102-19h32 : porte, durée, dernière ligne ✅/ … [443 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-221]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-221", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Course git : l'autre écrivain tient `index.lock`. J'attends et je recomite sans toucher à son index.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M:%S; ls -l .git/index.lock 2>/dev/null; pgrep -af \"git (commit|add|merge)\" | grep -v pgrep | head -3; sleep 20; ls -l .git/index.lock 2>/dev/null || echo \"lock libéré\"; git status --short | grep -v journal | head -5", "d … [41 caractères tronqués]`

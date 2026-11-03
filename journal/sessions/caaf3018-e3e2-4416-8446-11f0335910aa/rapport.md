@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.2 h |
+| Durée | 5.3 h |
 | Tours | 23 |
-| Messages | 272 |
-| Appels d'outils | 281 |
+| Messages | 281 |
+| Appels d'outils | 290 |
 | Fichiers touchés | 6 |
-| Commandes | 215 |
+| Commandes | 223 |
 | Sous-agents | 0 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -472,10 +472,12 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Re-run strict sessions check at 21h28
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
+- bash — Apply references sections and verify
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ L'autre écrivain a ajouté la tolérance « mandat long sous claim » — d'où la porte verte. Je mets à jour le §2 (tableau des repères) et le §1.
+⏵ L'autre écrivain committe les références avec mes §1/§2 (worktree) ; j'attends la fin puis je commite `portes.md`.
 
 ## 3. Travail accompli
 
@@ -532,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 175 autres
+- … et 183 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -608,6 +610,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T17** `✅ propre · test : WER ≤ 6% (mesuré 3.0%)`
 - **T18** `--- 3. les tableaux (10 pages × 3 familles)`
 - **T23** `-> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
+- **T23** `[still running after 60000ms; moved to background job bash-221]`
 
 ## 5. Erreurs rencontrées
 
@@ -624,4 +627,5 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40  Les quatre sessions actives écrivent : les compteurs bougent sous le hub. Mis à jour sur
 - PORTES — LE REGISTRE EST DANS \`work/\`, PAS DANS \`/tmp\` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE  Le doc annonçait /tmp/portes-<date> : le script écrit 
 - DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE  tools/ressources.py (écrit cette nuit avec le protocole § 10) n'était référencé ni dans docs/pilotage/R
+- RÉFÉRENCES — LE TABLEAU DES REPÈRES PASSE À LA PASSE DU 02/11 19 H 32 (81 PORTES, 76/5)  Les 81 lignes du § 2 sont réécrites depuis les journaux durables work/p
 

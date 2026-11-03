@@ -7370,3 +7370,161 @@ drwxr-xr-x. 1 stephane stephane      8508 21 oct 13:15 docs
 … [516 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ La passe est déjà intégrée par l'autre session (références 19 h 32, en-cours 82). Je vérifie la revue, les budgets, le registre et la fiche N2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== revue ==\" && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"== taille ==\" && python3 tools/taille_documents.py 2>&1 | grep -E 'T0 max|✅ tous|violation'; echo \"== git ==\" && git log --oneline -3  … [223 caractères tronqués]`
+
+  ```
+== revue ==
+  revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+== taille ==
+  T0 max : 3961 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+== git ==
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+335e1737 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+ M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+MM docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+M  docs/pilotage/roadmap.md
+M  journal/2026-11-02/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+
+== N2 fiche/json ==
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+-rw-------. 1 s
+… [79 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== release hub portes ==\" && python3 tools/ressources.py --release --session 536cd5d6 --job portes 2>&1; echo; echo \"== claim hub integration ==\" && python3 tools/ressources.py --claim --session 536cd5d6 --job integration - … [285 caractères tronqués]`
+
+  ```
+== release hub portes ==
+  ✅ libéré : 1 réservation(s) de 536cd5d6 / portes
+
+== claim hub integration ==
+  ✅ accordé : 536cd5d6 / integration
+
+== check ==
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+
+== status ==
+  hdd_data13tb   io               1        0        1  1942 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / integration : cpu1=2, ram=4 (prio 1, 60 min)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : passe finie (76/5), verdict intégré et vérifié ; claims ajustés ; N2 fiche/JSON en attente.
+
+- **todo_write** `{"todos": [{"content": "Poser la consigne de nuit (plan-travail §10.7, plan hub)", "status": "completed"}, {"content": "Vérifier la porte sessions et le routage docs", "status": "completed"}, {"content": "Intégrer claim/heartbeat dans sessions.py (mandat long vs mort)", "status": "completed"}, {"con … [534 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 2 in progress, 5 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe est finie (76/5), l'intégration vérifiée, les claims ajustés ; il reste la fiche N2/JSON et le bilan.
+
+**Passe complète du 02/11 19 h 32** — `work/portes/passe-1102-19h32`, **1 h 51** :
+
+| résultat | détail |
+|---|---|
+| **76 vertes / 5 rouges** | 81 portes |
+| rouges connues | `porte-indice` (1 027 s), `porte-melange` (123 s), `porte-homeostasie` (environnementale), `porte-reparti-moteur` (51 s) |
+| rouge **de passage** | **`porte-tableaux`** (1 s) : la fiche N2 en cours `reports/rapport-n2-fenetre.md` (8,7 Ko, 21 h 05) renvoie à `n2-fenetre.json`, **pas encore créé** |
+| **`porte-sessions`** | **verte** : le claim N2 actif couvre son heartbeat long (53 min) — le correctif `sessions.py` fonctionne |
+| autres | `porte-vision` 602 s, `porte-sessions` 1 s |
+
+**Intégration** : l'autre session a déjà porté le verdict dans `references-non-regression.md` (19 h 32), `en-cours` (**82 portes**) et `docs/methode/portes.md` (82e `porte-ressources`). Vérifié : **revue 568/653/82** ✅, **T0 3 961/4 000** ✅, références **2 496/2 500**, en-cours **82**, docs **82**.
+
+**Claims** : hub `release portes` → `claim integration` (`cpu1` 2, `ram` 4) ; `--check` ✅. Actifs : N2 `gpu0`/`cpu0` 12, S `cpu1` 4, B13 `cpu1` 4, hub `cpu1` 2 ; CPU1 = **10 fils**, RAM **88 Gio**, IA **33 Gio**.
+
+**Sessions** : N2 80 min + claim (mandat long, couvert) ; S 36 ; B13 11 ; hub 37 ; B13 à **140/140**. Les quatre sont productives ; D/R/A close.
+
+**Ce qui reste** : le **JSON N2** → rejouer `porte-tableaux` (pas une régression, une fiche incomplète) ; puis `reports/INDEX` + `reports/README` (nouvelles fiches N2/S/B13) ; suivi des sessions ; **bilan 08 h**.
+
+Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu'au bilan.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 3 : je vérifie le JSON N2, l'index des fiches et les sessions pour avancer sur l'intégration.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== N2 JSON ==\" && ls -l reports/n2-fenetre.json 2>&1; echo; echo \"== INDEX ==\" && grep -c '^| \\[' reports/INDEX.md 2>/dev/null; wc -w reports/README.md; echo; echo \"== sessions ==\" && python3 tools/sessions.py --status 2 … [307 caractères tronqués]`
+
+  ```
+== N2 JSON ==
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+
+== INDEX ==
+565
+2800 reports/README.md
+
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  93 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  49 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    ·  50 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·   3 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (93 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (49 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+
+== git ==
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 
+… [748 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'INDEX a 3 fiches de retard et `reports/README` est pile à son budget ; je régénère l'INDEX et j'ajuste l'index curaté.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py && echo \"== INDEX ==\" && grep -c '^| \\[' reports/INDEX.md && echo; echo \"== nouvelles fiches dans README ==\" && for f in rapport-n2-fenetre rapport-s-corpus-reel rapport-pensee-porte-minute; do pri … [306 caractères tronqués]`
+
+  ```
+565 fiches → reports/INDEX.md
+== INDEX ==
+565
+
+== nouvelles fiches dans README ==
+rapport-n2-fenetre               0
+rapport-s-corpus-reel            0
+rapport-pensee-porte-minute      0
+
+== README ==
+2800 reports/README.md
+
+== taille ==
+    2800    182   T1   2800  reports/README.md
+  T0 max : 3961 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+

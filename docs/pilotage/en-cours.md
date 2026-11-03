@@ -89,10 +89,9 @@
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
 - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
-- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
-  invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
-  depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
-- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; **banque validée à 0**.
+- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2**
+  **3,0107** (−0,244) à octets constants ; depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; banque à **0**.
 - **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à
   1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
   [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
@@ -130,8 +129,8 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**R1** — R1.2-1024 ; **Pensée** — gold 200+, mobile ; **S** — homographes, validation ;
-**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 140/140 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+**R1** — R1.2-1024 ; **Pensée** — gold 200+ ; **S** — homographes, validation ;
+**N4** — consigne ; **B10.3** — `z` ; **B13** — 140/140 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 

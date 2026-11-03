@@ -7,15 +7,15 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 5.9 h |
-| Tours | 10 |
-| Messages | 191 |
-| Appels d'outils | 253 |
+| Durée | 6.0 h |
+| Tours | 11 |
+| Messages | 201 |
+| Appels d'outils | 257 |
 | Fichiers touchés | 13 |
-| Commandes | 191 |
+| Commandes | 193 |
 | Sous-agents | 0 |
 | Commits | 12 |
-| Compactages de contexte | 0 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -43,6 +43,8 @@
 **Tour 9** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 **Tour 10** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
+
+**Tour 11** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -615,7 +617,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 
 ### Tour 10 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Inspect pass completion, git state, sessions and claims
@@ -624,10 +626,53 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - bash — Locate pass blocks, state rows and gate counts
 - bash — Verify review, budgets, git and N2 fiche JSON
 - bash — Release pass claim, claim integration and check ledger
+- todo_write
 
 **Synthèse produite :**
 
-⏵ La passe est déjà intégrée par l'autre session (références 19 h 32, en-cours 82). Je vérifie la revue, les budgets, le registre et la fiche N2.
+⏵ La passe est finie (76/5), l'intégration vérifiée, les claims ajustés ; il reste la fiche N2/JSON et le bilan.
+
+**Passe complète du 02/11 19 h 32** — `work/portes/passe-1102-19h32`, **1 h 51** :
+
+| résultat | détail |
+|---|---|
+| **76 vertes / 5 rouges** | 81 portes |
+| rouges connues | `porte-indice` (1 027 s), `porte-melange` (123 s), `porte-homeostasie` (environnementale), `porte-reparti-moteur` (51 s) |
+| rouge **de passage** | **`porte-tableaux`** (1 s) : la fiche N2 en cours `reports/rapport-n2-fenetre.md` (8,7 Ko, 21 h 05) renvoie à `n2-fenetre.json`, **pas encore créé** |
+| **`porte-sessions`** | **verte** : le claim N2 actif couvre son heartbeat long (53 min) — le correctif `sessions.py` fonctionne |
+| autres | `porte-vision` 602 s, `porte-sessions` 1 s |
+
+**Intégration** : l'autre session a déjà porté le verdict dans `references-non-regression.md` (19 h 32), `en-cours` (**82 portes**) et `docs/methode/portes.md` (82e `porte-ressources`). Vérifié : **revue 568/653/82** ✅, **T0 3 961/4 000** ✅, références **2 496/2 500**, en-cours **82**, docs **82**.
+
+**Claims** : hub `release portes` → `claim integration` (`cpu1` 2, `ram` 4) ; `--check` ✅. Actifs : N2 `gpu0`/`cpu0` 12, S `cpu1` 4, B13 `cpu1` 4, hub `cpu1` 2 ; CPU1 = **10 fils**, RAM **88 Gio**, IA **33 Gio**.
+
+**Sessions** : N2 80 min + claim (mandat long, couvert) ; S 36 ; B13 11 ; hub 37 ; B13 à **140/140**. Les quatre sont productives ; D/R/A close.
+
+**Ce qui reste** : le **JSON N2** → rejouer `porte-tableaux` (pas une régression, une fiche incomplète) ; puis `reports/INDEX` + `reports/README` (nouvelles fiches N2/S/B13) ; suivi des sessions ; **bilan 08 h**.
+
+Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu'au bilan.
+
+### Tour 11 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check N2 JSON, INDEX, sessions and tableaux gate
+- bash — Regenerate report index and check README entries
+- todo_write
+
+**Synthèse produite :**
+
+⏵ Round 3 : INDEX 565, README 2 800/2 800 ; la fiche N2/JSON reste le point ouvert.
+
+**Fait ce round**
+
+- **`reports/INDEX.md` régénéré** : **565 fiches** (les 3 nouvelles N2/S/B13 incluses) ; `reports/README.md` à **2 800/2 800** (budget pile) — l'ajout curaté des 3 fiches attend le commit N2 et devra retirer 3 entrées anciennes.
+- **Revue** : 568 fiches, 653 JSON, 119 docs, **82 portes** ✅ ; **T0 3 961/4 000** ✅.
+- **N2** : fiche `rapport-n2-fenetre.md` (8,7 Ko) toujours sans `n2-fenetre.json` ; **`porte-tableaux` reste rouge de passage** ; le N2 tourne (93 min + claim, mandat long) ; rejeu après le JSON.
+- **Sessions/claims** : N2 93 + claim, S 49 + claim, hub 50 + claim, B13 3 ; B13 **140/140** ; `porte-sessions` verte — les claims couvrent les heartbeats longs.
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours **82**, docs 82e) ; prochaine passe **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; README curaté ; veille des sessions ; **bilan 08 h**. Goal actif.
 
 ## 3. Travail accompli
 
@@ -691,7 +736,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 151 autres
+- … et 153 autres
 
 ## 4. Mesures et résultats marquants
 

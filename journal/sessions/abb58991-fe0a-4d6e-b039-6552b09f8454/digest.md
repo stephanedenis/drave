@@ -12124,3 +12124,124 @@ EN-COURS: 1600
 ⏵ T0 3 974, revue 568/653 ; je commite la porte stochastique
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -10; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_sto_drvm.py reports/rapport-pensee-porte-sto.md reports/pensee-porte-sto.json reports/README.md reports/INDEX.md docs/pi … [476 caractères tronqués]`
+
+  ```
+M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ journal/2026-11-02/README.md                       |   9 ++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |   2 +-
+ reports/INDEX.md                                   |   3 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-porte-sto.json                      | 165 +++++++++++++++++++++
+ reports/rapport-pensee-porte-sto.md                |  95 ++++++++++++
+ tools/pensee/operateurs.py                         |  11 ++
+ tools/tests/qualifier_porte_sto_drvm.py            | 135 +++++++++++++++++
+ tools/tests/test_pensee_politique.py               |   7 +
+ 11 files changed, 441 insertions(+), 21 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+  ✅ index : aucun fait stagé sans état
+[master 7d2c0a2d] B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+ 33 files change
+… [212 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `7d2c0a2d` ; contrôle post-commit et bilan (porte stochastique : test discriminant)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== CHECKS ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/taille_documents.py 2>&1 | grep -E \"T0\" | head -1; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3  … [229 caractères tronqués]`
+
+  ```
+7d2c0a2d 21:26:40 B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c 21:19:41 ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 21:17:42 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+=== CHECKS ===
+  état · dernier fait 7d2c0a2d · dernier état 7d2c0a2d
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3961 mots (budget 4 000)
+  en-cours · 1587 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+SESS=0
+ M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+ M reports/rapport-s-analyseur-roles.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 11 : la porte **stochastique discrimine** (7B 31/6, labyrinthe 200/3, aveugle 200/61) ; commit `7d2c0a2d`
+
+**Fait de la nuit** — commit **`7d2c0a2d`** : la porte stochastique (80 %, réessai).
+
+| politique | but | nœuds | sonde | latence |
+|---|---|---:|---:|---:|
+| oracle (Manhattan) | ✅ | 28 | 5 | 0 |
+| **aveugle** | ❌ | 200 | 61 | 0 |
+| **hasard** | ✅ | 44 | 7 | 0 |
+| **LLM `porte_sto`** | ✅ | **31** | **6** | **13,0 s** |
+| **LLM `labyrinthe`** | ❌ | 200 | 3 | **182,6 s** |
+| Q-table `PolitiqueAppriseOuverte` | ✅ | — | — | 9 pas, 2 essais |
+
+- **La règle « 80 %, réessaie » fait la différence** : 200 nœuds/sans but (182,6 s) → **31 nœuds/but**, **6 sonde**, 8 appels, 13,0 s. Le 7B **réessaie** et passe.
+- **Le test discrimine** : l'aveugle (200/61) et le labyrinthe (200/3) échouent ; le 7B passe. C'est le premier test de porte qui **sépare** la politique de l'aveugle et du labyrinthe.
+- La **Q-table** (74 états-Q) passe en 9 pas/2 essais ; le **hasard** par chance (44/7) — la limite est nommée.
+
+**État** : T0 **3 961/4 000**, `en-cours` **1 587 mots**, revue **568/653**, **sessions --strict : EXIT=0**. La fiche N2 concurrente `rapport-n2-fenetre.md` garde son lien non résolu (`n2-fenetre.json`) ; S/hub ont encore des modifications (`rapport-s-*`, `portes.md`, `chantiers`, `plan-travail`).
+
+Nuit committée : B13 140 `6532541c` · état `335e1737` · bouge `35ca1461` · heure `8eab6a7c` · **sto `7d2c0a2d`** ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`66826ed5`, N2 `c0196b55`.
+
+La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (`attendre`, `t % 3`), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 12/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 12 : les **cinq graines** de la porte stochastique (le tirage 80 % est aléatoire) ; je mesure 5/5 du 7B avec les contrôles
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_porte_sto_graines.py — la porte **stochastique** sur cinq graines.\n\nLe tirage `random.random() < 0.8` de `sonde_p_sto` n'est pas fixé : une seule exécution ne dit\npas si le 7B passe **5/5**. On rejoue `LABYRINTHE_PORTE_STO` avec `random.seed(0. … [6157 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_graines.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure des cinq graines (5 runs LLM + labyrinthe + contrôles, ≈4 min)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_sto_graines.py && curl -s --max-time 3 http://127.0.0.1:18082/health && time python3 tools/tests/qualifier_porte_sto_graines.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-sto-grain … [101 caractères tronqués]`
+
+  ```
+started background job bash-435
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends les cinq graines (le JSON remplira la fiche)
+
+- **job_output** `{"job_id": "bash-435", "timeout_ms": 420000, "wait": true}`

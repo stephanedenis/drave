@@ -7,10 +7,10 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 5.2 h |
+| Durée | 5.3 h |
 | Tours | 2 |
-| Messages | 292 |
-| Appels d'outils | 299 |
+| Messages | 293 |
+| Appels d'outils | 300 |
 | Fichiers touchés | 22 |
 | Commandes | 220 |
 | Sous-agents | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*59 appels d'outils.* Actions notables :
+*60 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -278,6 +278,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `[still running after 60000ms; moved to background job bash-210]`
 - **T2** `[still running after 60000ms; moved to background job bash-211]`
 - **T2** `[still running after 60000ms; moved to background job bash-216]`
+- **T2** `[still running after 60000ms; moved to background job bash-220]`
 
 ## 5. Erreurs rencontrées
 

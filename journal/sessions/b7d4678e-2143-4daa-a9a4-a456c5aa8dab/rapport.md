@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.2 h |
 | Tours | 8 |
-| Messages | 478 |
-| Appels d'outils | 507 |
+| Messages | 488 |
+| Appels d'outils | 517 |
 | Fichiers touchés | 22 |
-| Commandes | 323 |
+| Commandes | 333 |
 | Sous-agents | 0 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -268,7 +268,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 8 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*35 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - bash — Check pass completion and commits
 - bash — Check running jobs and claims
@@ -284,7 +284,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Check N2 JSON and vision gate
 - bash — Check state after B13 commits
 - bash — Read the final pass verdict
-- … et 17 autres
+- … et 27 autres
 
 **Synthèse produite :**
 
@@ -361,7 +361,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 283 autres
+- … et 293 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -479,12 +479,17 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T8** `docs/pilotage/roadmap.md:34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v4** : règle de contexte des homographes, gold **55** phrases ; analyseur *`
 - **T8** `- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélang`
 - **T8** `- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** st`
+- **T8** `34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v4** : règle de contexte des homographes, gold **55** phrases ; analyseur **54/55** types, **131/131`
+- **T8** `> 449/449 au niveau 4, 11/11 paires, permutation 12/275, livre 10/10, go 9×9 10/10 contre 3/10). Les **deux`
+- **T8** `> est **verte** (504 s, ×0 exact, activité monotone, dominance reproduite). Les références sont stables :`
+- **T8** `> `porte-flux` **60,8135**, `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**,`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : 19:48 /tmp/ocr-pdf-19jav9ag: 453 page(s) 0 [exit code: 1]
+- **T8** : ## 1. Ce qui se vérifie en une commande  | quoi | commande | attendu | |---|---|---| | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) | | 
 
 ## 6. Commits
 
@@ -507,4 +512,5 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS" 2>&1 | tail -5
 - NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI" -m "en-cours : 82 portes (81 à la passe du 02/11 06 h + porte-ressources à
 - NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)" 2>&1 | tail -4
+- NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS" -m "references-non-regression : la passe du 02/11 19 h 32 (81 portes,
 
