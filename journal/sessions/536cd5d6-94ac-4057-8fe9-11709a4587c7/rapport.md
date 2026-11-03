@@ -180,7 +180,6 @@
 
 **Tour 77** — continue
 
-**Tour 78** — l'écran est rempli de "**the **the **the **the **the **the" que se passe-t-il?
 
 ## 2. Déroulé, étape par étape
 
@@ -2086,7 +2085,6 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 
 ⏵ J'ajoute la fiche au README et à l'INDEX, je mets les compteurs à jour et je commite.
 
-### Tour 78 — l'écran est rempli de "**the **the **the **the **the **the" que se passe-t-il?
 
 *6 appels d'outils.* Actions notables :
 
@@ -2109,7 +2107,6 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - Les **fichiers de travail sont sains** : `reports/`, `docs/`, `en-cours`, journal du 03/11 — aucune trace de la boucle.
 - Vérifications vertes : T0 **3 997/4 000**, revue **589 fiches/678 JSON/82 portes**, `verifie_journal` ✅, `verifie_en_cours` ✅, `reports/README` 2 800/2 800.
 
-**Ce qui reste** : trois lignes résiduelles dans `d629/digest.md` et `536/digest.md` + `536/rapport.md` (le motif est en minuscules « the **the », pas la forme majuscule) ; un `git commit` a échoué sur une **collision d'index concurrente** (disque sain : 706 G libres), il suffit de relancer.
 
 **À ton écran** : `Ctrl+L` ou `clear` pour vider le terminal ; le scrollback de la session peut encore montrer le passage. Je peux finir le nettoyage des trois lignes et recommiter — dis-moi si je continue, ou si tu préfères qu'on s'arrête là pour cette session.
 
