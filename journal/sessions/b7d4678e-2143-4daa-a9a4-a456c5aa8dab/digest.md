@@ -12068,3 +12068,71 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 42 : veille — attente du prochain commit
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`
+
+  ```
+00:33:49
+HEAD a29cfd0f
+a29cfd0f L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE
+78463f0c ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (575)
+ 713516    02:11:02 /home/stephane/gpu-env/bin/python w
+ 758133       39:46 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; echo \"--- état réel 432 ---\"; grep -n \"0,9065\\|0,4598\\|0,5633\\|gold réel\\|verdict.*false\" docs/pilotage/en-cours.md docs/pilot … [664 caractères tronqués]`
+
+  ```
+revue de documentation · 575 fiche(s) · 661 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+     · T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+--- état réel 432 ---
+docs/pilotage/en-cours.md:61:  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **gold réel 432 : cascade 0,9065 / 0,4598 / 0,5633 / 0,9954** (verdict false) ;
+docs/pilotage/en-cours.md:126:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold réel 432 (0,9065/0,4598/0,5633/0,9954) ; porte 140/140 ; sto 5/5** ; **B10.3 bloquée** |
+log-ok
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nrepls=[\n (\"**fenêtre** — **non discriminante** (oracle BFS 228, aveugle 215 : tout passe)\",\n  \"**fenêtre** — **non discriminante** (oracle 228, aveugle 215)\"),\n (\"à 20 … [629 caractères tronqués]`
+
+  ```
+trims ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "grep -n \"cascade vrai modèle\" docs/pilotage/roadmap.md; git status --short docs/pilotage/roadmap.md; ls .git/index.lock 2>/dev/null || echo \"pas de lock\"", "description": "Locate the roadmap cascade phrase"}`
+
+  ```
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + 
+… [1821 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "la **cascade vrai modèle** tient sur **180 phrases** (POS **0,9415**, syntagmes **0,6130**, tête\n**0,7574**, acte **1,0**) mais sur le **gold réel 432** elle donne **0,9065 / 0,4598 / 0,5633 /\n0,9954** — **verdict `false`** ;", "old_string": … [121 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "**gold neuronal** (POS **0,9415** ; **cascade vrai modèle** : syntagmes **0,6130**, tête **0,7574**, acte **1,0** ; **gold réel 432 : 0,9065 / 0,4598 / 0,5633 / 0,9954, verdict `false`**)", "old_string": "**gold neuronal** (POS **0,9415** ; ** … [78 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; bash tools/porte-tableaux.sh 2>&1 | tail -2; ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git diff --stat docs/pilotage/en- … [82 caractères tronqués]`
+
+  ```
+revue de documentation · 575 fiche(s) · 661 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ 2771 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-03)
+pas de lock
+ docs/pilotage/en-cours.md | 8 ++++----
+ docs/pilotage/roadmap.md  | 7 ++++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+  ```
+
+- **bash** `{"command": "git commit --only -m \"NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE\" -m \"Sur le gold réel 432, la cascade donne POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954 — verdict false : l'échantillon de 180 phrases (0,9415/0,6130 … [405 caractères tronqués]`

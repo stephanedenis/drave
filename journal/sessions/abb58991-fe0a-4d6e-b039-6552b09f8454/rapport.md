@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 8.3 h |
 | Tours | 149 |
-| Messages | 999 |
-| Appels d'outils | 819 |
+| Messages | 1002 |
+| Appels d'outils | 822 |
 | Fichiers touchés | 48 |
-| Commandes | 648 |
+| Commandes | 651 |
 | Sous-agents | 0 |
-| Commits | 63 |
+| Commits | 65 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3676,7 +3676,7 @@ Je rédige la fiche et je commite.
 
 ### Tour 149 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Write real-gold 432 fiche
 - bash — Commit real-gold 432 cascade fact
@@ -3686,10 +3686,13 @@ Je rédige la fiche et je commite.
 - bash — Retry commit after HEAD moved
 - bash — Inspect en-cours B13 line
 - bash — Update en-cours and commit real-gold fact
+- bash — Check documentation state after commit
+- bash — Shorten en-cours line and commit state
+- bash — Shorten further and commit state
 
 **Synthèse produite :**
 
-⏵ Round 147 : la ligne d'état ne portait que le gold 180 ; j'ajoute le gold réel 432 puis je commite
+⏵ Round 147 : T0 4 010 encore 10 mots de trop ; je raccourcis davantage et je refais le commit (le lock est reparti)
 
 ## 3. Travail accompli
 
@@ -3788,7 +3791,7 @@ Je rédige la fiche et je commite.
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 608 autres
+- … et 611 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3953,4 +3956,6 @@ Je rédige la fiche et je commite.
 - L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
 - L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
 - L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
+- ÉTAT — T0 4 000 : LA LIGNE DU GOLD RÉEL 432 RACCOURCIE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — T0 4 000 : LA LIGNE DU GOLD RÉEL 432 RACCOURCIE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

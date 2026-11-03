@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 8.2 h |
+| Durée | 8.3 h |
 | Tours | 47 |
-| Messages | 762 |
-| Appels d'outils | 711 |
+| Messages | 769 |
+| Appels d'outils | 718 |
 | Fichiers touchés | 24 |
-| Commandes | 501 |
+| Commandes | 506 |
 | Sous-agents | 0 |
-| Commits | 36 |
+| Commits | 37 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1172,9 +1172,16 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 
 ### Tour 47 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Wait for the next commit
+- bash — Verify the real-gold cascade result and log it
+- bash — Trim en-cours under T0
+- bash — Locate the roadmap cascade phrase
+- edit `docs/pilotage/roadmap.md`
+- edit `docs/pilotage/roadmap.md`
+- bash — Verify the real-gold updates
+- bash — Commit the real-gold state update
 
 **Synthèse produite :**
 
@@ -1196,7 +1203,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
 | `docs/pilotage/en-cours.md` | 0 | 28 |
-| `docs/pilotage/roadmap.md` | 0 | 14 |
+| `docs/pilotage/roadmap.md` | 0 | 16 |
 | `docs/pilotage/chantiers.md` | 0 | 6 |
 | `docs/pilotage/plan-travail.md` | 0 | 8 |
 | `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
@@ -1253,7 +1260,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 461 autres
+- … et 466 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1425,4 +1432,5 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON)" -m "La revue signalait en-cours daté du 02/11 alors que le dernier commit est
 - NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE" -m "État au 03/11 00 h 20 : cascade vrai modèle (POS
 - NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE" -m "État au 03/11 00 h 20 : cascade vrai modèle (POS
+- NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE" -m "Sur le gold réel 432, la cascade donne POS 0,9065 / synt
 

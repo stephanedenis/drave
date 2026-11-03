@@ -20530,3 +20530,36 @@ EXIT=1
 ⏵ Round 147 : la ligne d'état ne portait que le gold 180 ; j'ajoute le gold réel 432 puis je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ;'\nnew='  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **gold réel 432 : cas … [517 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+[master a29cfd0f] L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE
+ 16 files changed, 1583 insertions(+), 41 deletions(-)
+ create mode 100644 reports/pensee-gold-reel-cascade.json
+ create mode 100644 reports/rapport-pensee-cascade-reel-432.md
+EXIT=0
+a29cfd0f L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 147 : gold réel 432 committé (`a29cfd0f`, 16 fichiers) ; je vérifie l'état (revue, T0, sessions)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep -E \"T0|en-cours\" | head -2; PYTHONPATH=. ./tools/sessions --check --strict > /tmp/sess-147.log 2>&1; echo \"SESSIONS_EXIT=$?\"; tail -2 /tmp/sess-147. … [122 caractères tronqués]`
+
+  ```
+revue de documentation · 575 fiche(s) · 661 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 4012 mots (budget 4 000)
+     · T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+SESSIONS_EXIT=127
+bash: line 1: ./tools/sessions: No such file or directory
+a29cfd0f L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 147 : T0 à **4 012** mots (budget 4 000) — ma ligne d'état a débordé ; je raccourcis l'en-cours et je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; **gold réel 432 : cascade 0,9065 / 0,4598 / 0,5633 / 0,9954** (verdict false) ;'\nnew=' ; **gold réel 432 : 0,9065 / 0,4598 / 0,563 … [464 caractères tronqués]`
