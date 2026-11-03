@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 9.3 h |
-| Tours | 161 |
-| Messages | 1099 |
-| Appels d'outils | 895 |
+| Durée | 9.4 h |
+| Tours | 162 |
+| Messages | 1109 |
+| Appels d'outils | 903 |
 | Fichiers touchés | 48 |
-| Commandes | 721 |
+| Commandes | 729 |
 | Sous-agents | 0 |
-| Commits | 86 |
+| Commits | 87 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -345,6 +345,8 @@
 **Tour 160** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 161** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 162** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4084,7 +4086,37 @@ La suite : contrainte **thématique** (partager le complément/le temps) ou appr
 
 **Synthèse produite :**
 
-⏵ Round 159 : T0 toujours à 4 001 ; je raccourcis d'un mot et je commite l'état
+⏵ Round 159 : constat « plafond 5/10 » committé (`d0589cd3`, état `297b01cf`) — cinq contraintes de forme, toujours 5/10 ; T0 4 000
+
+**Fait de la nuit — round 159** : la contrainte thématique et le **plafond du lien de surface**.
+
+- **Contrainte ajoutée** : `_adverbes(a)` — adverbes **hors négation** (complément thématique) ; la question et l'antécédent doivent partager le même ensemble.
+- **Résultat** : les 10 paires restent **5/10** — r408 tombe à `None`, r409 → r306, r410 → r308, r411 → r013.
+- **Constat final** : **cinq contraintes de forme** — sujet normalisé, verbe, acte (question→assertion), phrase simple, GV unique, adverbe thématique — **n'ont pas suffi**. Les paires correctes ne sont pas identifiables par la surface ; le lien de surface **plafonne à 5/10** sur ce gold.
+- **Contrôle négatif** : r418–r422 5/5 (rien cassé) ; chaque contrainte a amélioré le **diagnostic** (r222, r344, r390, r354, r304 écartés) sans améliorer le **taux**.
+- **Pistes** : apprendre le lien sur les 5 paires + distracteurs, ou similarité de contenu (vecteurs), ou documenter le plafond.
+- Fiche `rapport-pensee-lien-thematique.md` ; JSON `pensee-lien-thematique.json`.
+
+**État** : HEAD `297b01cf` ; T0 **4 000** ; revue **586/671** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **parité DRVM/native** (cadenas 3, porte 27, labyrinthe 2) — déjà mesurée, à re-vérifier avec l'état actuel, ou apprendre le lien. Le goal reste **actif**.
+
+### Tour 162 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Locate DRVM/native parity benches
+- bash — Read existing DRVM and native parity fiches
+- bash — Check native parity script and DRVM files
+- bash — Try native parity with gpu-env python
+- bash — Run native parity with PYTHONPATH
+- bash — Inspect native parity script inputs
+- bash — Write DRVM/native parity summary fiche
+- bash — Commit DRVM/native parity fact
+
+**Synthèse produite :**
+
+⏵ Round 160 : fiche de parité DRVM/native écrite (114/114 poids, 5/5 prompts, rejouabilité conditionnelle) ; j'aligne index/README et je commite
 
 ## 3. Travail accompli
 
@@ -4183,7 +4215,7 @@ La suite : contrainte **thématique** (partager le complément/le temps) ou appr
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 681 autres
+- … et 689 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4270,6 +4302,8 @@ La suite : contrainte **thématique** (partager le complément/le temps) ou appr
 - **T12** `884-    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_p_sto, "la politique tente la porte (80 %)"),`
 - **T12** `return all(r[1] for r in res), (f"bruit 50–95 % : {sum(1 for r in res if r[1])}/{len(res)} "`
 - **T15** `45:- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mél`
+- **T162** `reports/INDEX.md:550:| [rapport-r44-ocr-pilote.md](rapport-r44-ocr-pilote.md) | R4.4 — l'OCR lit dix pages à 4,48 % de WER, parité 90 %, et la page « photo » tombe à 26,7 % |`
+- **T162** `reports/inventaire-donnees-entrainement.md:90:   **R4.4** (90–97 % de parité, ~3 s/page) — c'est précisément ce pour quoi elle a été construite.`
 
 ## 5. Erreurs rencontrées
 
@@ -4372,4 +4406,5 @@ La suite : contrainte **thématique** (partager le complément/le temps) ou appr
 - L/B13 — UN SEUL GV : LES JUXTAPOSITIONS TOMBENT, LES PAIRES RESTENT 5/10 (LA PAIRE THÉMATIQUE MANQUE)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 
 - L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log
 - ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1; python3 tools/revue_document
+- L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format
 

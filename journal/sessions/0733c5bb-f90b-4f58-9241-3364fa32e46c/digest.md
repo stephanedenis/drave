@@ -6569,3 +6569,70 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-309", "timeout_ms": 300000, "wait": true}`
+
+  ```
+"128": 3.0065,
+   "512": 2.7227,
+   "1000": 2.6118,
+   "2000": 2.5514,
+   "4000": 2.5114
+   "128": 3.3529,
+   "512": 3.0336,
+   "1000": 2.9176,
+   "2000": 2.8676,
+   "4000": 2.8716
+ "permute_fr": 175.3854,
+ "litterature": 5.4669,
+ "anglais": 7.6045,
+ "wikitext2": 8.3758,
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-301 (bash: sleep 2400; echo ---; date '+%H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Complément : 2 048 à 15 000 pas (le meilleur chiffre au long)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"| fenêtre 1 024, 20 000 pas | **164 Mo** | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |\"\"\ … [1627 caractères tronqués]`
+
+  ```
+json mis à jour : 10 sources
+01:40:29
+8 · 6045 s
+pas  13600 · perte 0.9406 · PPL val 2.532 · 6067 s
+pas  13650 · perte 0.9673 · PPL val 2.518 · 6089 s
+pas   1150 · perte 1.1162 · PPL val 3.537 · 272 s
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"20 000 pas\" reports/rapport-n2-r12-2048.md | head -5", "description": "Locate exact table row"}`
+
+  ```
+19:compute** (la même recette à 20 000 pas).
+41:| 256 (20 000 pas) | 3,3696 | 3,2892 | 3,2545 | 3,2459 | 3,2305 |
+57:Même recette (RoPE, 1 024), mais **20 000 pas** — donc **8× plus d'octets** que le run à
+62:| fenêtre 256, 20 000 pas | 20,5 Mo | 3,3696 | 3,2892 | 3,2545 | 3,2459 | 3,2305 |
+63:| **fenêtre 1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"| **fenêtre 1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |\"\nn … [1059 caractères tronqués]`
+
+  ```
+fiche complétée
+64:| fenêtre 2 048, 15 000 pas | 246 Mo | 3,0065 | 2,7227 | **2,6118** | **2,5514** | **2,5114** |
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; tail -c 120 work/n2ac/propre512-8k.log; tail -c 100 work/n2ac/mix1024-30k.log", "description": "Wait for gate 512 run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-313]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-313", "timeout_ms": 1500000, "wait": true}`

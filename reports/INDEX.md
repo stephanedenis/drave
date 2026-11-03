@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **583 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **584 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -447,6 +447,7 @@
 | [rapport-pensee-oubli-total.md](rapport-pensee-oubli-total.md) | B13 — l'oubli total : 0/20, la mémoire est nécessaire |
 | [rapport-pensee-oubli.md](rapport-pensee-oubli.md) | B13 — la mémoire courte : 20/20, 10,0 pas |
 | [rapport-pensee-ouverte.md](rapport-pensee-ouverte.md) | B13 — le curriculum des états `open` : le trou de transfert est comblé |
+| [rapport-pensee-parite-drvm-native.md](rapport-pensee-parite-drvm-native.md) | B13 — la parité DRVM/native : 114/114 poids, 5/5 prompts, rejouable mais checkpoint volatil |
 | [rapport-pensee-partielle.md](rapport-pensee-partielle.md) | B13 — l'observation partielle : 0/20, la mémoire ne suffit pas |
 | [rapport-pensee-periode.md](rapport-pensee-periode.md) | B13 — la période variable : 2–5 pas, la même politique |
 | [rapport-pensee-phase-devine.md](rapport-pensee-phase-devine.md) | B13 — la phase devinée : 10 % de bruit, 0/20 au but 0 |

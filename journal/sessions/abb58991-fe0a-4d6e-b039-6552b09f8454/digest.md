@@ -22442,3 +22442,209 @@ d0589cd3 L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOU
 ⏵ Round 159 : T0 toujours à 4 001 ; je raccourcis d'un mot et je commite l'état
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (max)'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encodin … [551 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 297b01cf] ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+ 16 files changed, 199 insertions(+), 51 deletions(-)
+EXIT=0
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 159 : constat « plafond 5/10 » committé (`d0589cd3`, état `297b01cf`) — cinq contraintes de forme, toujours 5/10 ; T0 4 000
+
+**Fait de la nuit — round 159** : la contrainte thématique et le **plafond du lien de surface**.
+
+- **Contrainte ajoutée** : `_adverbes(a)` — adverbes **hors négation** (complément thématique) ; la question et l'antécédent doivent partager le même ensemble.
+- **Résultat** : les 10 paires restent **5/10** — r408 tombe à `None`, r409 → r306, r410 → r308, r411 → r013.
+- **Constat final** : **cinq contraintes de forme** — sujet normalisé, verbe, acte (question→assertion), phrase simple, GV unique, adverbe thématique — **n'ont pas suffi**. Les paires correctes ne sont pas identifiables par la surface ; le lien de surface **plafonne à 5/10** sur ce gold.
+- **Contrôle négatif** : r418–r422 5/5 (rien cassé) ; chaque contrainte a amélioré le **diagnostic** (r222, r344, r390, r354, r304 écartés) sans améliorer le **taux**.
+- **Pistes** : apprendre le lien sur les 5 paires + distracteurs, ou similarité de contenu (vecteurs), ou documenter le plafond.
+- Fiche `rapport-pensee-lien-thematique.md` ; JSON `pensee-lien-thematique.json`.
+
+**État** : HEAD `297b01cf` ; T0 **4 000** ; revue **586/671** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **parité DRVM/native** (cadenas 3, porte 27, labyrinthe 2) — déjà mesurée, à re-vérifier avec l'état actuel, ou apprendre le lien. Le goal reste **actif**.
+
+
+## Tour 162
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 160/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 160 : je reprends la **parité DRVM/native** — je localise les bancs de la politique LLM (cadenas, porte, labyrinthe) pour re-mesurer l'état actuel
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls tools/tests/ | grep -i \"drvm\\|parite\\|native\" | head -8; echo '---'; grep -rln \"PolitiqueLLM\" tools/tests/ | head -6; echo '---'; grep -rn \"parité\\|parite\" reports/*.md 2>/dev/null | head -5", "description": "Locate DRVM/native parity benc … [25 caractères tronqués]`
+
+  ```
+qualifier_politique_drvm.py
+qualifier_porte_bouge_drvm.py
+qualifier_porte_drvm.py
+qualifier_porte_fenetre_drvm.py
+qualifier_porte_minute_drvm.py
+qualifier_porte_mobile_drvm.py
+qualifier_porte_sto_drvm.py
+---
+tools/tests/__pycache__/qualifier_politique_drvm.cpython-313.pyc
+tools/tests/__pycache__/qualifier_porte_drvm.cpython-313.pyc
+tools/tests/__pycache__/qualifier_porte_mobile_drvm.cpython-313.pyc
+tools/tests/__pycache__/qualifier_porte_bouge_drvm.cpython-313.pyc
+tools/tests/__pycache__/qualifier_porte_sto_drvm.cpython-313.pyc
+tools/tests/__pycache__/qualifier_porte_sto_graines.cpython-313.pyc
+---
+reports/INDEX.md:126:| [rapport-drvm-parite.md](rapport-drvm-parite.md) | N0.3b — DRVM ↔ checkpoint : 114/114 tenseurs identiques |
+reports/INDEX.md:299:| [rapport-native-parite.md](rapport-native-parite.md) | N0.8 — parité native automatisée : 5/5 prompts, écart < 0,0001 |
+reports/INDEX.md:550:| [rapport-r44-ocr-pilote.md](rapport-r44-ocr-pilote.md) | R4.4 — l'OCR lit dix pages à 4,48 % de WER, parité 90 %, et la page « photo » tombe à 26,7 % |
+reports/inventaire-donnees-entrainement.md:90:   **R4.4** (90–97 % de parité, ~3 s/page) — c'est précisément ce pour quoi elle a été construite.
+… [119 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 160 : deux fiches existent (`rapport-drvm-parite.md` 114/114 tenseurs ; `rapport-native-parite.md` 5/5 prompts) — je les relis pour savoir ce qui reste à mesurer
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -28 reports/rapport-drvm-parite.md; echo '=========='; head -28 reports/rapport-native-parite.md", "description": "Read existing DRVM and native parity fiches"}`
+
+  ```
+# N0.3b — DRVM ↔ checkpoint : 114/114 tenseurs identiques
+
+> **Objet.** Vérifier que le DRVM exporté par `tools/native_model.py` restitue **exactement** les
+> tenseurs du checkpoint PyTorch, avant de demander au moteur d'exécuter la passe avant.
+
+## Résultat
+
+| mesure | valeur |
+|---|---:|
+| tenseurs du checkpoint | **114** |
+| tenseurs DRVM | **114** |
+| **identiques octet-à-octet** | **114 / 114** |
+| mauvais | **aucun** |
+
+- Checkpoint : `/tmp/drave-n0-pont.pt` (11 469 192 paramètres).
+- DRVM : `/tmp/drave-n0-pont.drvm`, **114 tenseurs** (pont compris).
+- Chaque tenseur est comparé à `t.detach().cpu().contiguous().numpy().tobytes()`.
+
+## Lecture
+
+- L'export **ne perd aucun tenseur** et **ne change aucun octet** : le DRVM est un **conteneur
+  fidèle** du checkpoint.
+- C'est la **parité des poids**, pas la **parité de perplexité** : `drave-core` lit le DRVM
+  (`--drvm-inspect`) mais n'exécute pas encore la passe avant d'un bloc DRVM.
+- Le pont ajoute **4 tenseurs** (poids, biais, et deux pour la pensée) : 114 au lieu de 110.
+
+## Verdict
+
+==========
+# N0.8 — parité native automatisée : 5/5 prompts, écart < 0,0001
+
+> **Objet.** Le N0.7 ne vérifiait qu’un prompt. Ici, cinq prompts fi
+… [840 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 160 : les deux parités sont **déjà mesurées** — DRVM↔checkpoint **114/114 tenseurs** (poids), natif↔Python **5/5 prompts** (logits, écart < 0,0001) ; je vérifie que le code est toujours là et je fais un essai court
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -l tools/verifier_parite_native.py tools/native_model.py 2>/dev/null; ls /tmp/n0-native.drvm /tmp/drave-n0-pont.drvm 2>/dev/null || echo 'DRVM absents (nettoyés)'; timeout 60 python3 tools/verifier_parite_native.py --aide 2>&1 | head -5 || timeout  … [140 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 9878  1 nov 18:32 tools/native_model.py
+-rw-r--r--. 1 stephane stephane 2367 28 oct 15:45 tools/verifier_parite_native.py
+DRVM absents (nettoyés)
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_parite_native.py", line 14, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 160 : le script exige `torch` (présent dans `~/gpu-env`), les DRVM de `/tmp` ont été nettoyés — je vérifie si le banc peut rejouer la parité native sans GPU
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 90 ~/gpu-env/bin/python tools/verifier_parite_native.py 2>&1 | tail -8; echo \"EXIT=$?\"; ls -l /tmp/*.drvm 2>/dev/null | head -3 || echo 'aucun drvm'; ls reports/ | grep -i \"native\\|drvm\" | head -5", "description": "Try native parity with  … [37 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_parite_native.py", line 15, in <module>
+    from tools.native_model import NativeConfig, NativeModel
+ModuleNotFoundError: No module named 'tools'
+EXIT=0
+drvm-parite.json
+drvm-ppl.json
+drvm-trace.json
+gguf-drvm.json
+native-21m-20k.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 160 : il manquait `PYTHONPATH=.` ; je relance le banc de parité native avec l'environnement correct (CPU, pas de GPU N2)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 120 ~/gpu-env/bin/python tools/verifier_parite_native.py 2>&1 | tail -12; echo \"EXIT=$?\"", "description": "Run native parity with PYTHONPATH", "timeoutMs": 180000}`
+
+  ```
+~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_parite_native.py", line 41, in main
+    ck = torch.load("/tmp/drave-n0-pont.pt", map_location="cpu", weights_only=False)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 1530, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/drave-n0-pont.pt'
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 160 : la parité native est **rejouable** mais son checkpoint `/tmp/drave-n0-pont.pt` a été nettoyé ; je vérifie si le modèle/DRVM peut être régénéré sans GPU et sans toucher N2
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"drave-n0-pont\\|def main\\|argparse\" tools/verifier_parite_native.py | head -8; echo '---'; ls tools/ | grep -i \"pont\\|n0\\|native\" | head -6; echo '---'; ls -l /tmp/*.pt /tmp/*.drvm 2>/dev/null | head -3 || echo 'rien en /tmp'", "descri … [66 caractères tronqués]`
+
+  ```
+40:def main() -> None:
+41:    ck = torch.load("/tmp/drave-n0-pont.pt", map_location="cpu", weights_only=False)
+---
+applique_pont.py
+cache_pont.py
+entrainer_native.py
+entrainer_native_tokens.py
+leviers_pont.py
+native_model.py
+---
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 160 : le banc de parité native est **rejouable** mais dépend d'un checkpoint `/tmp` volatil ; je documente l'état reproductible (114/114 poids, 5/5 prompts) et la condition pour le rejouer
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nres={'date':'2026-11-03 02:30 EST',\n 'objet':\"état reproductible de la parité DRVM/native, mesurée antérieurement\",\n 'poids':{'fiche':'reports/rapport-drvm-parite.md','tenseurs':114,'identiques':114,'mauvais … [4781 caractères tronqués]`
+
+  ```
+json 1383
+fiche 2807
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 160 : fiche de parité DRVM/native écrite (114/114 poids, 5/5 prompts, rejouabilité conditionnelle) ; j'aligne index/README et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-lien-thematique.md`](rapport-pensee-lien-thematique.md) | **L** **5/10** |\",\n            \"| [`rapport-pensee-pa … [720 caractères tronqués]`

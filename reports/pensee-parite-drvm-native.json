@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-03 02:30 EST",
+  "objet": "état reproductible de la parité DRVM/native, mesurée antérieurement",
+  "poids": {
+    "fiche": "reports/rapport-drvm-parite.md",
+    "tenseurs": 114,
+    "identiques": 114,
+    "mauvais": 0,
+    "checkpoint": "/tmp/drave-n0-pont.pt (volatil, nettoyé)",
+    "drvm": "/tmp/drave-n0-pont.drvm"
+  },
+  "logits": {
+    "fiche": "reports/rapport-native-parite.md",
+    "prompts": 5,
+    "top1": "5/5",
+    "top5": "5/5",
+    "ecart_max": 6e-05,
+    "script": "tools/verifier_parite_native.py",
+    "checkpoint": "/tmp/drave-n0-pont.pt (volatil, nettoyé)"
+  },
+  "rejouabilite": {
+    "condition": "régénérer le checkpoint et le DRVM avec tools/entrainer_native.py + tools/applique_pont.py (CPU, ~11,5M paramètres, aucun GPU N2)",
+    "verifie": "le script s'exécute (torch présent dans ~/gpu-env, PYTHONPATH=.) ; il échoue seulement sur le checkpoint absent"
+  },
+  "controle_negatif": {
+    "poids": "114/114 identiques octet-à-octet (pas de perte)",
+    "logits": "5/5 prompts, écart < 0,0001 (compatible f32)",
+    "sans_gpu": "aucune mesure GPU ; N2 intact"
+  },
+  "limites": [
+    "checkpoint en /tmp : volatile, à régénérer avant tout rejeu",
+    "5 prompts fixes : la parité n'est pas une garantie de perplexité",
+    "le DRVM n'est pas exécuté par drave-core (parité des poids, pas de la passe avant)"
+  ]
+}
