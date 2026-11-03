@@ -2499,3 +2499,114 @@ Quand la fenêtre s'ouvre, il lance `bash tools/toutes-les-portes.sh` avec `JOUR
 
 Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs, la fenêtre peut mettre du temps à se stabiliser ; et `porte-sessions` peut rougir en fin de passe sur des heartbeats périmés — c'est structurel, elle se rejoue seule. Rien d'autre ne tourne de mon côté : les budgets sont tenus (en-cours 1 622 mots, T0 3 996), la revue et le hook sont verts, et les trois commits de l'intégration sont en place.
 
+
+## Tour 3
+
+### 👤 Utilisateur
+
+un des gpu est libre
+
+### 🤖 Assistant
+
+⏵ Vérification de la fenêtre réelle, puis bascule du veilleur vers un lancement sur le GPU libre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo \"--- apps ---\"; nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader; echo \"--- charge ---\"; uptime; echo \"-- … [103 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 19:31:07 EST
+0, 1690 MiB, 96 %
+1, 122 MiB, 0 %
+--- apps ---
+35572, /home/stephane/gpu-env/bin/python, 1320 MiB
+110066, llama-server, 366 MiB
+110066, llama-server, 118 MiB
+--- charge ---
+ 19:31:07  up  4:24,  2 users,  load average: 2,79, 3,46, 6,39
+--- n2 ---
+pas 197450 · perte 1.2318 · PPL val 3.097 · 11271 s
+  ```
+
+- **job_output** `{"job_id": "bash-103", "timeout_ms": 3000}`
+
+  ```
+16:48:27 calculs_gpu=3 gpu_max=93% charge=25 fenetre=0/3
+16:50:27 calculs_gpu=3 gpu_max=91% charge=27 fenetre=0/3
+16:52:27 calculs_gpu=3 gpu_max=84% charge=27 fenetre=0/3
+16:54:27 calculs_gpu=2 gpu_max=95% charge=18 fenetre=0/3
+16:56:27 calculs_gpu=3 gpu_max=99% charge=16 fenetre=0/3
+16:58:27 calculs_gpu=3 gpu_max=99% charge=11 fenetre=0/3
+17:00:27 calculs_gpu=3 gpu_max=100% charge=9 fenetre=0/3
+17:02:27 calculs_gpu=4 gpu_max=100% charge=8 fenetre=0/3
+17:04:27 calculs_gpu=3 gpu_max=100% charge=7 fenetre=0/3
+17:06:28 calculs_gpu=3 gpu_max=100% charge=8 fenetre=0/3
+17:08:28 calculs_gpu=3 gpu_max=99% charge=7 fenetre=0/3
+17:10:28 calculs_gpu=3 gpu_max=99% charge=13 fenetre=0/3
+17:12:28 calculs_gpu=3 gpu_max=99% charge=10 fenetre=0/3
+17:14:28 calculs_gpu=3 gpu_max=99% charge=8 fenetre=0/3
+17:16:28 calculs_gpu=3 gpu_max=99% charge=7 fenetre=0/3
+17:18:28 calculs_gpu=3 gpu_max=99% charge=9 fenetre=0/3
+17:20:28 calculs_gpu=3 gpu_max=99% charge=11 fenetre=0/3
+17:22:28 calculs_gpu=3 gpu_max=100% charge=11 fenetre=0/3
+17:24:28 calculs_gpu=3 gpu_max=100% charge=8 fenetre=0/3
+17:26:28 calculs_gpu=3 gpu_max=100% charge=10 fenetre=0/3
+17:28:28 calculs_gpu=3 gpu_max=99% charge=8 fenetre=0/3
+17:30:
+… [3471 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ GPU 1 est libre, GPU 0 finit N2 (197 450/200 000). Je bascule le veilleur et je lance la passe sur le GPU 1.
+
+- **job_kill** `{"job_id": "bash-103", "reason": "Lancement manuel sur le GPU libre (GPU 1) au lieu d'attendre les deux"}`
+
+  ```
+requested cancellation of job bash-103
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -rln \"device_count\" tools/*.py 2>/dev/null | head -3; echo \"---\"; CUDA_VISIBLE_DEVICES=1,0 python3 -c \"import torch; print('devices visibles :', torch.cuda.device_count())\" 2>&1 | tail -1; echo \"--- gpu ---\"; nvidia-smi -- … [127 caractères tronqués]`
+
+  ```
+tools/trace_gpu.py
+---
+ModuleNotFoundError: No module named 'torch'
+--- gpu ---
+0, 1690 MiB, 96 %
+1, 122 MiB, 0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 ~/gpu-env/bin/python -c \"import torch; print('devices:', torch.cuda.device_count()); print('noms:', [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())])\" 2>&1 | tail -3", "description":  … [37 caractères tronqués]`
+
+  ```
+devices: 2
+noms: ['Quadro RTX 5000', 'Quadro RTX 5000']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 ~/gpu-env/bin/python -c \"\nimport torch, time\nx = torch.zeros(200*1024*1024//4, dtype=torch.float32, device='cuda:0')  # 200 Mo\ntorch.cuda.synchronize()\nprint('alloue 200 Mo sur cuda:0')\ntime.sleep(6)\n\"  … [143 caractères tronqués]`
+
+  ```
+0, 1690 MiB
+1, 458 MiB
+alloue 200 Mo sur cuda:0
+  ```
+
+### 🤖 Assistant
+
+⏵ Mappage prouvé (cuda:0 logique → GPU 1 physique) ; lancement de la passe complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/portes/passe-1102-19h32 bash tools/toutes-les-portes.sh; echo \"EXIT=$?\"; echo \"=== REGISTRE (code != 0) ===\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"=== BILAN ===\"; t … [128 caractères tronqués]`
+
+  ```
+started background job bash-108
+  ```
+
+- **job_output** `{"job_id": "bash-108", "timeout_ms": 120000, "wait": true}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 1800 s) ===
+    journaux : work/portes/passe-1102-19h32
+  porte-adaptateur-sortie ✅                          64 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-108", "timeout_ms": 600000, "wait": true}`

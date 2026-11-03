@@ -7,15 +7,15 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 3.0 h |
-| Tours | 6 |
-| Messages | 344 |
-| Appels d'outils | 450 |
-| Fichiers touchés | 28 |
-| Commandes | 325 |
+| Durée | 3.3 h |
+| Tours | 7 |
+| Messages | 370 |
+| Appels d'outils | 473 |
+| Fichiers touchés | 30 |
+| Commandes | 344 |
 | Sous-agents | 0 |
-| Commits | 7 |
-| Compactages de contexte | 0 |
+| Commits | 8 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -35,6 +35,8 @@
 **Tour 5** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 6** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 7** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -249,7 +251,7 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 
 ### Tour 6 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Inspect state and T0 at round 4
 - bash — Read en-cours sections to condense
@@ -257,10 +259,43 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - bash — Read S session fields to condense
 - bash — Condense en-cours and measure T0
 - bash — Commit the T0 state condensation
+- bash — Post-commit T0 and state checks
 
 **Synthèse produite :**
 
-⏵ T0 revenu à **3 930/4000** (en-cours 1 556) ; je commite la condensation d'état
+⏵ Round 4 : le T0 est revenu sous 4 000 (3 930) et la nuit continue
+
+**État remis au vert** — commit **`7d5bd08d`** : `en-cours` passe de **1 772** à **1 556 mots**, T0 de **4 146** à **3 930/4 000**. Les sections N2/S/R1 ont été **condensées sans perdre les chiffres** : N2 200 k pas (fin ~19 h 35), R1.1 **3,2545** vs table absolue **8,2024**, R1.2 **3,0107** (−0,244) ; N2.ac **3,49/6,03/8,34/9,05** ; S **38/39, 99/100, 45/45**, 40 tests, banque 0 ; D **91 scans uniques**, 60 documents, 1 982 p. Les **11 champs**, **7 puces** et **5 questions** sont conservés ; `verifie_en_cours`, `revue_documentation`, tableaux, journal et `verifie_etat_a_jour` sont verts.
+
+**Nuit B13 committée** : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique (négatif) `4a85604d` · état `7d5bd08d`. Le dépôt est **propre** ; le hub a committé R1 (`2cff8dba`).
+
+`sessions --check --strict` reste rouge sur **S** (146 min) et le **hub** (161), pas sur `e181ce02` (heartbeat 19 h 08, valide).
+
+La suite de la nuit : le **gold 200+ phrases**, la **porte B13** (six rouges S : T111, T113–T115, T132–T133) et la **porte qui bouge** (DRVM). Le goal reste **actif**.
+
+### Tour 7 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
+
+*22 appels d'outils.* Actions notables :
+
+- bash — Check submodule history and repo state
+- bash — Create worktree with the previous S submodule
+- bash — Run B13 gate with old S submodule
+- bash — Run B13 gate with current S submodule
+- job_output
+- bash — Check gold/miroir changes and anaphora function
+- bash — Extract old/new failure lines
+- bash — Read anaphora link function
+- bash — Run anaphora test under fixed hash seeds
+- bash — Check the 140/140 commit and gold changes
+- bash — Compare anaphora test in 702 tree vs HEAD
+- bash — Check exact submodule pointers and gold/miroir diffs
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-134.md`
+- bash — Check hub state before B13 report commit
+- … et 7 autres
+
+**Synthèse produite :**
+
+⏵ Index explicite et commit du fait « porte 134/140 » (si le hub n'a pas avancé HEAD)
 
 ## 3. Travail accompli
 
@@ -296,6 +331,8 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-llm.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_pragmatique.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-pragmatique-neuronale.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-134.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/b13-porte-134.json` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -339,7 +376,7 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 285 autres
+- … et 304 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -434,4 +471,5 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE" 2>&1 | tail -10; echo "EXIT=${PIPESTATU
 - ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ" 2>&1 | tail -8; echo "EXIT=${PIP
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **555 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **556 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -67,6 +67,7 @@
 | [rapport-b1110-cartes.md](rapport-b1110-cartes.md) | B11.10 — Cartes et ambiguïtés : le codec lit, le dispatcher devinait |
 | [rapport-b1110b-hybride.md](rapport-b1110b-hybride.md) | B11.10b — l’indice de jeu strippé route les quatre ambiguës |
 | [rapport-b1110c-case.md](rapport-b1110c-case.md) | B11.10c — `E4` lu comme requête de case : l’hybride passe à 4/4 |
+| [rapport-b13-porte-134.md](rapport-b13-porte-134.md) | B13 — la porte est à 134/140 : le 140/140 de 702b368c ne se rejoue pas ; quatre rouges viennent du sous-module S |
 | [rapport-bloc-linguistique.md](rapport-bloc-linguistique.md) | Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |

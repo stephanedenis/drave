@@ -3819,3 +3819,58 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-155", "timeout_ms": 300000, "wait": true}`
+
+  ```
+19:17:59
+pas 182900 · perte 1.1953 · PPL val 3.119 · 10484 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Complément du témoin 60 k avec le transfert « corpus propre » (banc à jour)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_200k.py work/n2w/mix-60k.pt --sortie work/n2ac/eval-mix60.json 2>&1 | tail -20", "description": "Re-run 60k benchmark with clean-corpus transfer"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-156]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-156", "timeout_ms": 240000, "wait": true}`
+
+  ```
+{
+ "fichier": "mix-60k.pt",
+ "params": 34301224,
+ "val_fr_L128": 3.4902,
+ "val_fr_L256": 3.4615,
+ "val_fr_L512": 3.5169,
+ "val_fr_permute": 215.5638,
+ "val_big_L128": 3.3565,
+ "val_big_L256": 3.2716,
+ "val_big_L512": 3.3685,
+ "val_big_permute": 226.8678,
+ "corpus_propre_val": 9.2731,
+ "litterature": 6.0283,
+ "anglais": 8.3352,
+ "wikitext2": 9.0525
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -2 work/n2ac/mix-200k.log; ls work/n2ac/mix-200k.pt 2>/dev/null && echo CHECKPOINT_OK", "description": "Wait for 200k training to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-157]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-157", "timeout_ms": 780000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-157", "timeout_ms": 240000, "wait": true}`

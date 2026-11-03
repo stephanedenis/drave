@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 2.4 h |
-| Tours | 2 |
-| Messages | 262 |
-| Appels d'outils | 282 |
+| Durée | 3.3 h |
+| Tours | 3 |
+| Messages | 268 |
+| Appels d'outils | 287 |
 | Fichiers touchés | 15 |
-| Commandes | 179 |
+| Commandes | 183 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -27,6 +27,8 @@
 **Tour 1** — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours.md. Remets `- **État** : actif` et `- **Heartbeat** : <maintenant>`  dans son plan, puis vérifie `python3 tools/sessions.py --check --strict`. Le cycle 140/140  (gold 432, 116 liens) est committé. Prochaine action : gold neuronal (qualifier un modèle  local) ; DRVM/native est blo … [114 caractères tronqués]
 
 **Tour 2** — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État : actif` et heartbeat maintenant, puis  `sessions.py --check --strict`. Le texte intégral, le PDF, les 20 livres, les 10 notes CEGEP,  le glossaire (355 entrées) et docwatch sont committés. Prochaine action : OCR ~127 scans CEGEP  (`tools/ocr_pdf.py --racine CEGEP --deja <N>`), p … [87 caractères tronqués]
+
+**Tour 3** — as-tu terminé? les gpu et cpu sont tranquilles
 
 ## 2. Déroulé, étape par étape
 
@@ -85,6 +87,26 @@
 **Limites nommées :** 8 scans en `.PDF` (58 p) échappent à `rglob("*.pdf")` ; 31 documents courts (71 p) écartés par `--min-chars 300` ; WER non mesurée (pas de vérité terrain). Restent **R1.1/R1.2** (N2) et **A2.6** (A).
 
 La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) et poursuit le gold neuronal.
+
+### Tour 3 — as-tu terminé? les gpu et cpu sont tranquilles
+
+*5 appels d'outils.* Actions notables :
+
+- job_list
+- bash — Check remaining processes, load and GPU
+- bash — Verify my closure files are committed
+- bash — Confirm commit ancestry and strict state
+- bash — Check whether another session is still committing
+
+**Synthèse produite :**
+
+⏵ État vérifié : D/R/A close, aucun job à moi ; la machine n’est pas tout à fait vide
+
+**Oui, ma part est terminée.** La session D/R/A (`fe3c05f0`) est close et committée — `83f78803` est bien dans l’historique ; plan `État : terminé`, `cloture.md`, fiche, manifeste et état à jour. **Aucun job de moi ne tourne** : les 9 jobs listés sont `completed` ou `killed` (le seul tué était la passe MicroPython à 200 dpi, remplacée par celle à 150 dpi qui a réussi).
+
+**Mais la machine n’est pas complètement tranquille** : une autre session (Pensée/B13) a encore `llama-server` actif (818 % CPU), la porte `porte-audit-drapeaux` tourne depuis ~2 min (timeout 30 min), et des fichiers d’état (`en-cours`, `roadmap`, `chantiers`, `plan-travail`) sont **stagés** par une autre session. Mieux vaut ne pas couper tant que cette porte/ce commit n’a pas fini.
+
+**`sessions.py --check --strict` reste rouge, hors D/R/A** : `29ad180d` (S, heartbeat de 163 min) et `536cd5d6` (hub, 178 min). D/R/A est `terminé` et n’est plus exigé. Si ces deux sessions sont réellement arrêtées, il faut les passer `en pause` (ou rafraîchir leur heartbeat) ; je n’ai pas touché à leurs plans. Je peux le faire si tu veux rendre la porte stricte verte.
 
 ## 3. Travail accompli
 
@@ -150,7 +172,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 139 autres
+- … et 143 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -239,6 +261,8 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** `+1 982 p, 4 408 811 caractères**, 8 Ko 0, éval **0/40 · 0/24 · 0/40** ; le PDF de 359 p`
 - **T2** `+> **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient`
 - **T2** `2 053 p), **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; la détection à deux pages`
+- **T3** `0, 0 %, 1862 MiB`
+- **T3** `1, 45 %, 1014 MiB`
 
 ## 5. Erreurs rencontrées
 
@@ -250,4 +274,6 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 - ps -eo pid,etime,args | grep -E "git commit|git add|pre-commit|archive_sessions|session_report" | grep -v grep | head -8; echo "--- staged now ---"; git diff --
 - DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS" -m
+- ps -eo pid,etime,pcpu,comm,args --sort=-pcpu | grep -E "ocr_pdf|detecte_scans|tesseract|pdftoppm|entrainer|llama-server|porte-|git commit" | grep -v grep | head
+- ps -eo pid,etime,pcpu,args | grep -E "git commit|porte-audit|entrainer_moteur|llama-server" | grep -v grep | head -5; echo "--- dernier commit ---"; git log -1 
 

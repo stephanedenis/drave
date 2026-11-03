@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.5 h |
-| Tours | 2 |
-| Messages | 110 |
-| Appels d'outils | 138 |
+| Durée | 3.3 h |
+| Tours | 3 |
+| Messages | 118 |
+| Appels d'outils | 147 |
 | Fichiers touchés | 2 |
-| Commandes | 103 |
+| Commandes | 108 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -22,6 +22,8 @@
 **Tour 1** — Tu reprends le hub `536cd5d6-94ac-4057-8fe9-11709a4587c7`. Lis son plan, en-cours et  plan-travail §9. Prochaine action : la passe de portes complète  (`bash tools/toutes-les-portes.sh`, ~1 h 46, machine au repos), puis l'intégration des lignes  d'état des sessions ouvertes. Rafraîchis le heartbeat.
 
 **Tour 2** — oui
+
+**Tour 3** — un des gpu est libre
 
 ## 2. Déroulé, étape par étape
 
@@ -108,6 +110,22 @@ Quand la fenêtre s'ouvre, il lance `bash tools/toutes-les-portes.sh` avec `JOUR
 
 Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs, la fenêtre peut mettre du temps à se stabiliser ; et `porte-sessions` peut rougir en fin de passe sur des heartbeats périmés — c'est structurel, elle se rejoue seule. Rien d'autre ne tourne de mon côté : les budgets sont tenus (en-cours 1 622 mots, T0 3 996), la revue et le hook sont verts, et les trois commits de l'intégration sont en place.
 
+### Tour 3 — un des gpu est libre
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Check which GPU is free and current load
+- job_output
+- job_kill
+- bash — Check device count handling and GPU state
+- bash — Verify CUDA device mapping in venv
+- bash — Prove logical cuda:0 maps to physical GPU 1
+- bash — Run full gate pass on free GPU 1
+
+**Synthèse produite :**
+
+⏵ Mappage prouvé (cuda:0 logique → GPU 1 physique) ; lancement de la passe complète
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -159,7 +177,7 @@ Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 63 autres
+- … et 68 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -197,6 +215,9 @@ Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs
 - **T1** `1, 1540 MiB, 95 %`
 - **T2** `0, 1642 MiB, 85 %`
 - **T2** `1, 2334 MiB, 98 %`
+- **T3** `0, 1690 MiB, 96 %`
+- **T3** `1, 122 MiB, 0 %`
+- **T3** `alloue 200 Mo sur cuda:0`
 
 ## 5. Erreurs rencontrées
 

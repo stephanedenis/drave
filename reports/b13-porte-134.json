@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-02 19:31 EST",
+  "ligne": "B13",
+  "sujet": "la porte B13 est à 134/140 : 4 rouges du sous-module S 647205a, 2 rouges d'un test périmé (T132/T133) ; le 140/140 de 702b368c ne se rejoue pas (138/140)",
+  "sous_module": {
+    "702b368c": "3b68143",
+    "courant": "647205a"
+  },
+  "porte": {
+    "702b368c_quick": {
+      "fidelite_lien_auto": {"paires": 5, "justes": 2, "taux": 0.4},
+      "gate_infere": "138/140",
+      "note": "test direct sur l'arbre exact du commit ; la porte complète 702 n'a pas été relancée"
+    },
+    "head_3b68143": {"tenues": 138, "total": 140},
+    "head_647205a": {"tenues": 134, "total": 140}
+  },
+  "attribues_au_sous_module_s": ["T111", "T113", "T114", "T115"],
+  "perimes": ["T132", "T133"],
+  "valeurs_s": {
+    "T111": {"attendu": 0.3649, "mesure": 0.3676, "champ": "tête hybride"},
+    "T113": {"attendu": [0.1966, 0.4568], "mesure": [0.1961, 0.4592], "champ": "F1, tête"},
+    "T114": {"attendu": [0.2122, 0.4314, 602], "mesure": [0.2109, 0.4336, 602], "champ": "F1, tête, appels"},
+    "T115": {"attendu": 0.4098, "mesure": 0.4119, "champ": "tête cascade"}
+  },
+  "anaphora": {
+    "fidelite_lien_auto": {"paires": 5, "justes": 2, "taux": 0.4},
+    "graines": [0, 1, 2, 3, 4, 5],
+    "resultat": "2/5 sur les 6 graines ; identique sur 702b368c, HEAD + 3b68143, HEAD + 647205a",
+    "test_attendu": "5/5"
+  },
+  "verdict": false,
+  "conclusion": "Le 140/140 de 702b368c est périmé : son arbre exact rend 2/5 sur l'anaphora (138/140). Le sous-module S 647205a ajoute quatre rouges déterministes (T111, T113–T115) ; T132/T133 sont une incohérence test/gold indépendante du S et du hash. La porte courante est 134/140.",
+  "limites": [
+    "Le worktree 702b368c n'a pas data/ ; les tests B13 utilisent le gold suivi, et HEAD avec data/ rend le même 2/5.",
+    "La porte complète de 702b368c n'a pas été relancée ; le 138/140 est inféré du test direct (2/5) et de la porte HEAD + 3b68143 (138/140).",
+    "Le 140/140 annoncé a probablement été compté avant la dernière écriture du gold dans le commit ; il n'est pas reproductible.",
+    "Une exécution par porte ; les quatre valeurs du S sont des assertions exactes et déterministes.",
+    "Les quatre attendus doivent être mis à jour par S (son changement de segmentation), pas maquillés ici.",
+    "La porte B13 n'est pas dans references-non-regression.md : c'est une régression au sens de la règle 3."
+  ]
+}
