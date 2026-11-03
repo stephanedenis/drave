@@ -48,9 +48,20 @@ T=${T:-/tmp/porte-homeostasie}
 [ -x "$D" ] || { echo "  ❌ binaire du moteur absent : $D"; exit 2; }
 [ -d "$SNAP" ] || { echo "  ❌ poids PyTorch absents : $SNAP"; exit 2; }
 IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+# LE LORA EST RÉGÉNÉRÉ PAR LA PORTE S'IL MANQUE. Il vivait dans /tmp, effacé au reboot : la porte
+# rougissait sans rien mesurer. Même recette que le balayage (bras `lora` seul, ~1 min 45) ; le
+# formateur suffixe le bras (`--sauver X` écrit `X-lora.pt`), d'où le nom temporaire puis la copie.
+if [ ! -s "$BASE_LORA" ]; then
+    echo "  ($BASE_LORA absent — régénéré par la porte, ~2 min)"
+    mkdir -p "$(dirname "$BASE_LORA")" /tmp/porte-homeostasie-lora 2>/dev/null || true
+    "$PYT" tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --bras lora \
+        --sauver /tmp/porte-homeostasie-lora/rang4 > "${BASE_LORA}.log" 2>&1 || true
+    [ -s /tmp/porte-homeostasie-lora/rang4-lora.pt ] \
+        && cp -f /tmp/porte-homeostasie-lora/rang4-lora.pt "$BASE_LORA"
+fi
 [ -s "$BASE_LORA" ] || {
-    echo "  ❌ le LoRA de référence est absent : $BASE_LORA"
-    echo '     (il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --bras lora --sauver /tmp/n4/rang4` — le formateur suffixe le bras : cela écrit /tmp/n4/rang4-lora.pt ; /tmp est effacé au reboot)'
+    echo "  ❌ le LoRA de référence est absent et n'a pas pu être régénéré : $BASE_LORA"
+    echo "     journal de la régénération : ${BASE_LORA}.log"
     exit 2
 }
 . tools/_corpus.sh

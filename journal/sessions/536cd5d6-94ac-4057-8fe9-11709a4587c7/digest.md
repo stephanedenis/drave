@@ -13599,3 +13599,75 @@ GPU 0/1 **libres** ; la tâche Drave **N4** (`n4_dessin_b`, 13,5 Gio, 99 %, 86 �
 
 Veux-tu que je prépare la clé en fichier `0600` (`~/.config/drave/deepseek.key`) ou tu préfères l'exporter toi-même ?
 
+
+## Tour 75
+
+### 👤 Utilisateur
+
+prépare la clé en fichier
+
+### 🤖 Assistant
+
+⏵ Je cherche la clé DeepSeek dans l'environnement DSH et les fichiers de configuration, sans jamais l'afficher, puis je la range en `0600`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport os, pathlib, re\nH = pathlib.Path.home()\ncands = {}  # source -> clé\ndef add(src, val):\n    val = (val or \"\").strip()\n    if re.fullmatch(r\"sk-[A-Za-z0-9_\\-]{20,}\", val): cands.setdefault(src, val)\n … [2446 caractères tronqués]`
+
+  ```
+sources avec clé : 0
+aucune clé trouvée ; fichier prêt : /home/stephane/.config/drave/deepseek.key 0o600
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier `0600` est prêt ; je configure `DEEPSEEK_KEY_FILE` dans le profil shell et l'environnement systemd, puis je vérifie.
+
+- **bash** `{"command": "set -u\nKEYFILE=/home/stephane/.config/drave/deepseek.key\nls -l \"$KEYFILE\"; ls -ld /home/stephane/.config/drave\n# profil shell (interactif) — sans écraser une ligne existante\nif ! grep -q 'DEEPSEEK_KEY_FILE' /home/stephane/.bashrc 2>/dev/null; then\n  printf '\\n# Drave — clé du pr … [1201 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 0  3 nov 09:36 /home/stephane/.config/drave/deepseek.key
+drwx------. 1 stephane stephane 24  3 nov 09:36 /home/stephane/.config/drave
+~/.bashrc : DEEPSEEK_KEY_FILE ajouté
+
+== environnement.d ==
+DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key
+DSH_KEY_FILE=/home/stephane/.config/drave/deepseek.key
+
+== dry-run avec le fichier (clé vide -> doit rester hors ligne) ==
+{
+ "contenu": "[dry-run] 1 message(s), modèle deepseek-chat ; aucune requête réseau.",
+ "raisonnement": null,
+ "modele": "deepseek-chat",
+ "usage": {},
+ "latence_s": 0.0,
+ "cache": false
+}
+
+== garde-fou et GPU ==
+active
+1639282, /home/stephane/gpu-env/bin/python
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier et l'environnement sont prêts ; il ne manque que la valeur de la clé.
+
+Le fichier est prêt :
+
+- **`~/.config/drave/deepseek.key`** — `0600`, vide pour l'instant ; dossier `~/.config/drave` en `0700`.
+- **`~/.bashrc`** — `DEEPSEEK_KEY_FILE` et `DSH_KEY_FILE` exportés vers ce fichier.
+- **`~/.config/environment.d/90-drave.conf`** — les mêmes variables pour les services systemd.
+- **Dry-run vérifié** : `deepseek-chat`, aucune requête réseau (clé vide → hors ligne, comme prévu).
+- **Garde-fou GPU** toujours actif ; un job Drave (`gpu-env`) tourne sur GPU0, aucun serveur local.
+
+**Il ne manque que la clé.** Colle-la dans le fichier — pas dans le chat, pour qu'elle ne reste pas dans l'historique :
+
+```bash
+cat > ~/.config/drave/deepseek.key <<'EOF'
+sk-...
+EOF
+chmod 600 ~/.config/drave/deepseek.key
+```
+
+Dès qu'elle y est, je lance un appel live de contrôle (`deepseek-chat`, 4 jetons), puis je relance les mesures B13 (« gold neuronal », porte-minute) via l'API, et je vérifie que les résultats restent comparables à ceux du 7B local.
+
+- **ask_user_question** `{"questions": [{"header": "Clé DeepSeek", "id": "cle_paste", "question": "La clé est-elle collée dans ~/.config/drave/deepseek.key ?", "options": [{"label": "Oui, teste l'API maintenant (Recommandé)", "description": "Je lance un appel live de contrôle puis les mesures B13 via l'API."}, {"label": "Pa … [291 caractères tronqués]`

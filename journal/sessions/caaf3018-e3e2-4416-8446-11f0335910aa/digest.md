@@ -9084,3 +9084,195 @@ en-cours mots: 1629
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 09 h 30 — règle 11 : serveurs locaux interdits, mais **clé API absente**\n\n- `llama-server`  … [1595 caractères tronqués]`
+
+  ```
+journal : blocage clé API consigné
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[still running after 60000ms; moved to background job bash-371]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-371", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master e15618d6] ÉTAT + JOURNAL — LA RÈGLE 11 A UN BLOCAGE NOMMÉ : LA CLÉ API DEEPSEEK EST ABSENTE
+ 8 files changed, 144 insertions(+), 16 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Tâche suivante : rendre `porte-homeostasie` **auto-génératrice** (comme reparti). Je teste d'abord la commande corrigée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; rm -f /tmp/n4/rang4-lora.pt; time timeout 600 ~/gpu-env/bin/python tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --bras lora --sauver /tmp/n4/rang4 2>&1 | tail -3; ls -la /tmp/n4/rang4-lora.pt 2>/dev/null | cut -c30-60 || e … [84 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-372]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-372", "timeout_ms": 600000, "wait": true}`
+
+  ```
+| **modèle complet** (référence) | — | — | 7.1787 | 18.4607 |
+| chemin tronqué, tête **empruntée** | — | — | 4,476,128.7883 | 1,761,597.2378 |
+| `lora` | 3 | 7.1569 | 6.7131 | 15.5803 |
+ne 741365  3 nov 09:26 /tmp/n4/
+[stderr]
+
+real	1m42,133s
+user	1m31,513s
+sys	0m23,341s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ LoRA régénéré en 1 min 42 au bon nom. Je lance la porte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; time timeout 1200 bash tools/porte-homeostasie.sh 2>&1 | tail -8; echo \"CODE=$?\"", "description": "Run homeostasie gate with correct LoRA"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-373]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-373", "timeout_ms": 900000, "wait": true}`
+
+  ```
+variantes écrites : ×0, ×0,6, ×1,0 (depuis /tmp/n4/rang4-lora.pt)
+porte de l'homéostasie (E9) — LoRA rang 4, amplitudes ×0 / ×0,6 / ×1,0
+  (×0 : GGUF réécrit — l'export re-quantifie, la comparaison porte sur la mesure)
+  ✅ 1. ×0 rend le modèle de départ (norme 72.1293 contre 72.1312, écart 2.6e-05 = la re-quantification de l'export)
+  ✅ 2. l'activité croît avec l'amplitude : 72.1312 ≤ 73.1445 ≤ 73.1923
+     m32 : ×0,6 -8.33 % · ×1,0 -6.51 %
+     m20 : ×0,6 -15.10 % · ×1,0 -15.74 %
+  ✅ porte tenue (×0 exact · activité monotone · dominance reproduite)
+CODE=0
+[stderr]
+
+real	8m15,995s
+user	74m54,155s
+sys	0m31,923s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-homeostasie` **verte** avec le LoRA régénéré (8 min 16, ×0/×0,6/×1,0). Je la rends auto-génératrice (fallback ~1 min 42).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 30,56p tools/porte-homeostasie.sh", "description": "Read gate header for variable placement"}`
+
+  ```
+# ⚠ Ce qu'elle ne vérifie PAS : que ×0,6 soit l'optimum **universel**. Le balayage a été REFait sur
+# **trois** volumes de rejeu (3, 10 et 20 morceaux — `rapport-e9-homeostasie.md` § 1bis) et la
+# dominance s'y réplique à chaque fois, avec un bénéfice hors-domaine qui GRANDIT avec le rejeu
+# (0,7 point à 3 morceaux, 1,4 point à 20). Restent non mesurés : d'autres corpus, d'autres rangs,
+# d'autres époques. Cette porte vérifie le RÉGLAGE et sa RÈGLE, pas leur universalité.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+P=${P:-python3}
+# LES PARTIES QUI ONT BESOIN DE TORCH passent par l'interpréteur du harnais (le python système ne
+# l'a pas) : c'est la convention des autres portes qui entraînent ou exportent.
+PYT=${PYT:-/home/stephane/gpu-env/bin/python}
+[ -x "$PYT" ] || { echo "  ❌ interpréteur avec torch introuvable : $PYT"; exit 2; }
+SNAP=${SNAP:-$HOME/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775}
+BASE_LORA=${BASE_LORA:-/tmp/n4/rang4-lora.pt}
+T=${T:-/tmp/porte-homeostasie}
+[ -s "$M" ] || { echo "  ❌ modèle absent : $M"; exit 2; }
+[ -x "$D" ] || {
+… [523 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute le fallback dans la porte (régénération auto du LoRA) et je teste la voie complète.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-homeostasie.sh\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}\n[ -s \"$BASE_LORA\" ] || {\n    echo \"  ❌ le LoRA de référ … [1655 caractères tronqués]`
+
+  ```
+fallback ajouté
+syntaxe OK
+LoRA effacé — test complet en fond
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; time timeout 1800 bash tools/porte-homeostasie.sh 2>&1 | tail -10; echo \"CODE=$?\"", "description": "Test gate full fallback path", "run_in_background": true}`
+
+  ```
+started background job bash-376
+  ```
+
+### 🤖 Assistant
+
+⏵ Test complet en fond (~10 min). Je prépare les textes de références et vérifie l'arbre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; git status --short | grep -v journal | head -6; echo \"---\"; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": "Check tree and budgets while test r … [5 caractères tronqués]`
+
+  ```
+09:35
+ M tools/pensee/store.py
+ M tools/porte-homeostasie.sh
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+---
+  T0 max : 3999 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends le test complet de la porte (régénération + mesure).
+
+- **job_output** `{"job_id": "bash-376", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(/tmp/n4/rang4-lora.pt absent — régénéré par la porte, ~2 min)
+  variantes écrites : ×0, ×0,6, ×1,0 (depuis /tmp/n4/rang4-lora.pt)
+porte de l'homéostasie (E9) — LoRA rang 4, amplitudes ×0 / ×0,6 / ×1,0
+  (×0 : GGUF réécrit — l'export re-quantifie, la comparaison porte sur la mesure)
+  ✅ 1. ×0 rend le modèle de départ (norme 72.1293 contre 72.1312, écart 2.6e-05 = la re-quantification de l'export)
+  ✅ 2. l'activité croît avec l'amplitude : 72.1312 ≤ 73.1445 ≤ 73.1923
+     m32 : ×0,6 -8.33 % · ×1,0 -6.51 %
+     m20 : ×0,6 -15.10 % · ×1,0 -15.74 %
+  ✅ porte tenue (×0 exact · activité monotone · dominance reproduite)
+CODE=0
+[stderr]
+
+real	10m7,441s
+user	77m31,492s
+sys	0m55,846s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test complet **vert** : la porte régénère son LoRA (2 min) et passe (10 min 07). Je commite et mets les références à jour.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\n# références : homeostasie auto-générée\np = pathlib.Path(\"docs/pilotage/references-non-regression.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"> **Passe précédente — 2026-11-02 à 19 h 32 :** … [1614 caractères tronqués]`
+
+  ```
+références + portes.md : homeostasie auto-générée, 2 rouges connues
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+SyntaxError: invalid syntax
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-tableaux` échoue avec une SyntaxError — je regarde.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; bash tools/porte-tableaux.sh 2>&1 | tail -12", "description": "Read tables gate error"}`
+
+  ```
+✅ 1601 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2812 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-03)
+  ```
+
+### 🤖 Assistant
+
+⏵ Fausse alerte : j'avais lancé le script bash avec python3. Tout est vert. Je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 09 h 45 — `porte-homeostasie` s'auto-génère (test complet vert, 10 min 07)\n\n- Si le LoRA de … [1730 caractères tronqués]`

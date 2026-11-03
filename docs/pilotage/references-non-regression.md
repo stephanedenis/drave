@@ -15,6 +15,12 @@
 > (écart 0,0000 %). Les passes suivantes compteront **3 rouges connues** (`indice`, `melange`,
 > `homeostasie`). Le pin 9,1748 du 29/10 venait d'un modèle **en cache**, jamais régénéré.
 
+> **Depuis, `porte-homeostasie` est auto-générée** : si le LoRA de référence manque (il vivait dans
+> `/tmp`, effacé au reboot), la porte le **régénère** (bras `lora`, ~1 min 45) au lieu d'échouer, puis
+> mesure. Vérifié le 03/11 : **verte**, `×0` exact, activité monotone, dominance reproduite —
+> **10 min 07** au total. Elle n'est donc plus une rouge environnementale : les passes suivantes
+> compteront **2 rouges connues** (`indice`, `melange`).
+
 > **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env., `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) — **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers), dès que le JSON a existé ; aucune régression structurelle. La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
 
 > **Passe précédente — 2026-11-02 à 06 h :** 81 portes, 76 vertes, 5 rouges (`/tmp/portes-…`,
@@ -45,7 +51,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **82 portes** ; dernière passe **77 vertes, 5 rouges** (03/11 04 h 10) : 4 connues + `porte-sessions` (coord.) ; **depuis, `reparti-moteur` ré-étalonnée verte** · ⚠ **ne jamais lire une porte à travers un `tail`** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **82 portes** ; dernière passe **77 vertes, 5 rouges** (03/11 04 h 10) : 4 connues + `porte-sessions` (coord.) ; **depuis, `reparti-moteur` ré-étalonnée et `homeostasie` auto-générée, vertes** · ⚠ **ne jamais lire une porte à travers un `tail`** |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs

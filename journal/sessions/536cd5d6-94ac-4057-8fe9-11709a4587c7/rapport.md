@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 17.8 h |
-| Tours | 74 |
-| Messages | 519 |
-| Appels d'outils | 457 |
+| Durée | 18.1 h |
+| Tours | 75 |
+| Messages | 523 |
+| Appels d'outils | 460 |
 | Fichiers touchés | 16 |
-| Commandes | 335 |
+| Commandes | 337 |
 | Sous-agents | 0 |
 | Commits | 42 |
 | Compactages de contexte | 2 |
@@ -173,6 +173,8 @@
 **Tour 73** — y a-t-il des conflits possibles entre les sessions parallèles?
 
 **Tour 74** — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos professeurs. nos GPU sont exclusivent réservés à l'execution de Drave et ses tâches d'apprentissages
+
+**Tour 75** — prépare la clé en fichier
 
 ## 2. Déroulé, étape par étape
 
@@ -1989,6 +1991,37 @@ GPU 0/1 **libres** ; la tâche Drave **N4** (`n4_dessin_b`, 13,5 Gio, 99 %, 86 �
 - **Donner la clé DeepSeek** : `export DEEPSEEK_API_KEY=…` (ou un fichier `0600` pointé par `DEEPSEEK_KEY_FILE`, hors dépôt). Sans elle, le dry-run res
 … [450 caractères tronqués]
 
+### Tour 75 — prépare la clé en fichier
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Search DeepSeek key in DSH config, write 0600 key file
+- bash — Configure key file env vars and verify dry-run
+- ask_user_question
+
+**Synthèse produite :**
+
+⏵ Le fichier et l'environnement sont prêts ; il ne manque que la valeur de la clé.
+
+Le fichier est prêt :
+
+- **`~/.config/drave/deepseek.key`** — `0600`, vide pour l'instant ; dossier `~/.config/drave` en `0700`.
+- **`~/.bashrc`** — `DEEPSEEK_KEY_FILE` et `DSH_KEY_FILE` exportés vers ce fichier.
+- **`~/.config/environment.d/90-drave.conf`** — les mêmes variables pour les services systemd.
+- **Dry-run vérifié** : `deepseek-chat`, aucune requête réseau (clé vide → hors ligne, comme prévu).
+- **Garde-fou GPU** toujours actif ; un job Drave (`gpu-env`) tourne sur GPU0, aucun serveur local.
+
+**Il ne manque que la clé.** Colle-la dans le fichier — pas dans le chat, pour qu'elle ne reste pas dans l'historique :
+
+```bash
+cat > ~/.config/drave/deepseek.key <<'EOF'
+sk-...
+EOF
+chmod 600 ~/.config/drave/deepseek.key
+```
+
+Dès qu'elle y est, je lance un appel live de contrôle (`deepseek-chat`, 4 jetons), puis je relance les mesures B13 (« gold neuronal », porte-minute) via l'API, et je vérifie que les résultats restent comparables à ceux du 7B local.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2054,7 +2087,7 @@ GPU 0/1 **libres** ; la tâche Drave **N4** (`n4_dessin_b`, 13,5 Gio, 99 %, 86 �
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 295 autres
+- … et 297 autres
 
 ## 4. Mesures et résultats marquants
 

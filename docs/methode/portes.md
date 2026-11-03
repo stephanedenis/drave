@@ -13,8 +13,8 @@ Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêt
 **1 h 30 – 2 h** sur Hauru (**81 portes** ; certaines entraînent de petits modèles, d'autres utilisent les [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md) ;
 `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **82 portes** (03/11 04 h 10, **machine au repos**, **1 h 40**) a donné
 **77 vertes, 5 rouges** (les 4 connues + `porte-sessions`, mandats N2/S périmés — coordination) ;
-**depuis, `porte-reparti-moteur` est ré-étalonnée et verte** (03/11 : 8,7434, preuve au § 2 des références) :
-les passes suivantes compteront **3 rouges connues** ; la liste et le diagnostic sont dans
+**depuis, `porte-reparti-moteur` est ré-étalonnée et `porte-homeostasie` auto-génère son LoRA** :
+les passes suivantes compteront **2 rouges connues** (`indice`, `melange`) ; la liste et le diagnostic sont dans
 [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
 La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), est **comptée**
 depuis cette passe (**81 → 82**).
