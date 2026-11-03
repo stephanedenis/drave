@@ -198,7 +198,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-30](2026-10-30/modele.md) | `4,09 %` |
 | [2026-10-31](2026-10-31/modele.md) | — |
 | [2026-11-01](2026-11-01/modele.md) | `×17,8` |
-| [2026-11-02](2026-11-02/modele.md) | `1 Go` · `3,5250` |
+| [2026-11-02](2026-11-02/modele.md) | `0,9415` · `0,6130` · `0,7574` · `1 Go` · `3,5250` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification
 

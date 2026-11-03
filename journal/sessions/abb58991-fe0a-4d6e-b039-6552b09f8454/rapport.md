@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 7.1 h |
+| Durée | 7.2 h |
 | Tours | 73 |
-| Messages | 753 |
-| Appels d'outils | 730 |
+| Messages | 754 |
+| Appels d'outils | 731 |
 | Fichiers touchés | 48 |
-| Commandes | 560 |
+| Commandes | 561 |
 | Sous-agents | 0 |
-| Commits | 56 |
+| Commits | 57 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2118,15 +2118,16 @@ La suite : fiche + commit de la cascade 180 ; puis la fonction « la bonne répo
 
 ### Tour 73 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Extract cascade values for fiche
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-cascade-vrai-modele.md`
 - bash — Commit cascade true model fact
+- bash — Fix counter to 573 and commit state
 
 **Synthèse produite :**
 
-⏵ Round 71 : fiche écrite ; j'aligne l'index, l'en-cours et le README, puis je commite la cascade
+⏵ Round 71 : cascade committée (`92e3f9b4`, 28 fichiers) ; il reste le compteur 572 → 573 à aligner
 
 ## 3. Travail accompli
 
@@ -2225,7 +2226,7 @@ La suite : fiche + commit de la cascade 180 ; puis la fonction « la bonne répo
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 520 autres
+- … et 521 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2382,4 +2383,5 @@ La suite : fiche + commit de la cascade 180 ; puis la fonction « la bonne répo
 - ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES" 2>&1 | tail -6; echo "EXIT=${PIPESTATU
+- ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

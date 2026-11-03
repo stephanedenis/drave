@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 7.1 h |
-| Tours | 29 |
-| Messages | 660 |
-| Appels d'outils | 649 |
+| Durée | 7.2 h |
+| Tours | 30 |
+| Messages | 665 |
+| Appels d'outils | 652 |
 | Fichiers touchés | 24 |
-| Commandes | 453 |
+| Commandes | 456 |
 | Sous-agents | 0 |
 | Commits | 33 |
 | Compactages de contexte | 0 |
@@ -83,6 +83,8 @@
 **Tour 28** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 29** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -812,6 +814,24 @@ La veille reste en attente active : elle reprendra à chaque commit (N2/Pensée/
 
 ### Tour 29 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
+*3 appels d'outils.* Actions notables :
+
+- bash — Check events and runs
+- bash — Wait for the next commit
+- bash — Verify state and log the cascade result
+
+**Synthèse produite :**
+
+⏵ Round 24 : la cascade complète tient avec le vrai modèle, état vert
+
+- **L/B13** : `92e3f9b4` — la **cascade complète avec le vrai modèle** sur **180 phrases** : **POS 0,9415 / syntagmes 0,6130 / tête 0,7574 / acte 1,0** (la cascade précédente donnait 0,6088 / 0,7539) : le composite neuronal tient avec le modèle réel.
+- **État** : revue ✅ **573 fiches / 660 JSON / 82 portes**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ (claims longs en avertissement).
+- **N2** : les deux runs continuent (1 h 02 et 46 min), GPU occupés et déclarés.
+
+La veille continue : intégration des commits, suivi des runs, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 30 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
 *2 appels d'outils.* Actions notables :
 
 - bash — Check events and runs
@@ -819,7 +839,7 @@ La veille reste en attente active : elle reprendra à chaque commit (N2/Pensée/
 
 **Synthèse produite :**
 
-⏵ Round 24 : veille — événements et runs
+⏵ Round 25 : veille — événements et runs
 
 ## 3. Travail accompli
 
@@ -894,7 +914,7 @@ La veille reste en attente active : elle reprendra à chaque commit (N2/Pensée/
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 413 autres
+- … et 416 autres
 
 ## 4. Mesures et résultats marquants
 

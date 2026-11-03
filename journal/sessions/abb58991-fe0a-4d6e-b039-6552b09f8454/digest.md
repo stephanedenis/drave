@@ -17158,3 +17158,23 @@ Created file
 ⏵ Round 71 : fiche écrite ; j'aligne l'index, l'en-cours et le README, puis je commite la cascade
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('**B13 : gold 200+ ; porte 140/140 ; sto 5/5 ; fenêtre à réparer**',\n            '**B13 : cascade 0,9415/0,6130/0,7574/1,0 (18 … [1161 caractères tronqués]`
+
+  ```
+ok
+  570 fiches → reports/INDEX.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 572 fichiers, le disque en a 573
+  T0 max : 3995 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 92e3f9b4] L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+ 28 files changed, 4368 insertions(+), 120 deletions(-)
+ create mode 100644 reports/pensee-gold-cascade-200.json
+ create mode 100644 reports/rapport-pensee-cascade-vrai-modele.md
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 71 : cascade committée (`92e3f9b4`, 28 fichiers) ; il reste le compteur 572 → 573 à aligner
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('| fichiers / JSON de résultats | **572** / **660** |','| fichiers / JSON de résultats | **573** / **660** |')\np.write_text(t, … [365 caractères tronqués]`
