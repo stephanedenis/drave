@@ -5681,3 +5681,36 @@ pid 1737843
 
 La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h050`/`h053` ensuite.
 
+
+## Tour 9
+
+### 👤 Utilisateur
+
+pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxique car il manque trop souvent de profondeur et les référents ne semblent pas résolus avant que je tranche
+
+### 🤖 Assistant
+
+⏵ Le retour humain est un résultat : moins de 20 % validé, arrêt sur la profondeur de l'arbre et les référents. Je regarde les verdicts déjà écrits, puis je corrige ces deux bloqueurs avant de redemander une validation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && ls -la donnees/validations.jsonl 2>/dev/null && python3 - <<'PY'\nimport json, collections\np='donnees/validations.jsonl'\ntry:\n    lignes=[json.loads(l) for l in open(p,encoding='utf-8') if l.strip()]\nexcept FileN … [643 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 24500  3 nov 13:24 donnees/validations.jsonl
+142 verdicts 141 candidats distincts 71 phrases
+Counter({'resolu': 71, 'exclu': 60, 'compatible': 10, 'double_sens': 1})
+p001 p001-c2 exclu | 
+p001 p001-c1 resolu | 
+p002 p002-c1 resolu | 
+p002 p002-c2 double_sens | 
+p002 p002-c2 compatible | il est préférable de dire l'homme au téléscope
+p003 p003-c1 resolu | 
+p003 p003-c2 exclu | 
+p004 p004-c1 resolu | 
+p004 p004-c2 compatible | 
+p005 p005-c2 resolu | 
+p005 p005-c1 exclu | 
+p006 p006-c1 resolu | 
+--- notes non vides ---
+p002 p002-c2 compatible | il est préférable de dire l'homme au téléscope
+  ```
+

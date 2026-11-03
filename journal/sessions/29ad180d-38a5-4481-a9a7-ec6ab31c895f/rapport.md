@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 18.2 h |
-| Tours | 8 |
-| Messages | 273 |
-| Appels d'outils | 278 |
+| Durée | 21.6 h |
+| Tours | 9 |
+| Messages | 275 |
+| Appels d'outils | 279 |
 | Fichiers touchés | 13 |
-| Commandes | 204 |
+| Commandes | 205 |
 | Sous-agents | 0 |
 | Commits | 15 |
 | Compactages de contexte | 0 |
@@ -34,6 +34,8 @@
 **Tour 7** — tiens ta liste de tâches dsh à jour et continue
 
 **Tour 8** — prochaine étape?
+
+**Tour 9** — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxique car il manque trop souvent de profondeur et les référents ne semblent pas résolus avant que je tranche
 
 ## 2. Déroulé, étape par étape
 
@@ -336,6 +338,16 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h050`/`h053` ensuite.
 
+### Tour 9 — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxiq … [105 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Inspect partial human validations and notes
+
+**Synthèse produite :**
+
+⏵ Le retour humain est un résultat : moins de 20 % validé, arrêt sur la profondeur de l'arbre et les référents. Je regarde les verdicts déjà écrits, puis je corrige ces deux bloqueurs avant de redemander une validation.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -398,7 +410,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 164 autres
+- … et 165 autres
 
 ## 4. Mesures et résultats marquants
 

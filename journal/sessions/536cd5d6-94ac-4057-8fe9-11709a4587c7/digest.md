@@ -14494,3 +14494,30 @@ journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
 ⏵ Le commit est passé (`1032ed74`), mais 4 fichiers de journal de session contiennent encore la trace ; je la retire précisément.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nfiles = [\n \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md\",\n \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\",\n \"journal/sessions/536cd5d6-94ac-4057-8f … [1360 caractères tronqués]`
+
+  ```
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md 3828763 -> 3828763
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md 737853 -> 737853
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md 817823 -> 817822
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md 151945 -> 151943
+
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md
+(vide = propre)
+
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[master 00bb1fa9] JOURNAUX DE SESSION — TRACES DE LA BOUCLE DE GÉNÉRATION RETIRÉES (4 FICHIERS)
+ 14 files changed, 71 insertions(+), 23 deletions(-)
+[commit 0]
+00bb1fa9 JOURNAUX DE SESSION — TRACES DE LA BOUCLE DE GÉNÉRATION RETIRÉES (4 FICHIERS)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ `536` est propre ; il reste les deux fichiers `d629` (une très longue ligne). Je les nettoie par filtrage de lignes et je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in (\"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md\",\n          \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\"):\n    p = pathlib.Path(f); t = p.read_t … [984 caractères tronqués]`

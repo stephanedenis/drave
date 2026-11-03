@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 22.3 h |
 | Tours | 78 |
-| Messages | 565 |
-| Appels d'outils | 498 |
+| Messages | 566 |
+| Appels d'outils | 499 |
 | Fichiers touchés | 17 |
-| Commandes | 366 |
+| Commandes | 367 |
 | Sous-agents | 0 |
-| Commits | 48 |
+| Commits | 49 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2088,17 +2088,18 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 
 ### Tour 78 — l'écran est rempli de "**the **the **the **the **the **the" que se passe-t-il?
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check files for degeneration traces and current state
 - bash — Clean degenerate journal lines, complete fiche integration, commit
 - bash — Check disk space, git index and d629 journal
 - bash — Remove remaining degenerate lines and retry commit
 - bash — Remove degenerate loop traces from session journals
+- bash — Clean d629 session journals and commit
 
 **Synthèse produite :**
 
-⏵ Le commit est passé (`1032ed74`), mais 4 fichiers de journal de session contiennent encore la trace ; je la retire précisément.
+⏵ `536` est propre ; il reste les deux fichiers `d629` (une très longue ligne). Je les nettoie par filtrage de lignes et je commite.
 
 ## 3. Travail accompli
 
@@ -2166,7 +2167,7 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 326 autres
+- … et 327 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2358,4 +2359,5 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAL DE SESSION NETTOYÉ" -m "La fiche rapporte-pensee-gold-api.md documente le disposi
 - B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAUX DE SESSION NETTOYÉS" -m "La fiche rapporte-pensee-gold-api.md documente le dispo
 - JOURNAUX DE SESSION — TRACES DE LA BOUCLE DE GÉNÉRATION RETIRÉES (4 FICHIERS)" -- journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md journal/sessio
+- JOURNAUX D629 — LES LIGNES DE LA BOUCLE DE GÉNÉRATION SONT RETIRÉES" -- journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md journal/sessions/d629d7d
 
