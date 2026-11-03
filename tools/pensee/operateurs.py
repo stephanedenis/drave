@@ -134,6 +134,18 @@ class PolitiqueLLM(Politique):
                     "la porte si tu réponds bas. Une fois la porte ouverte, va en (4,4). "
                     f"Position : ({x},{y}). Porte ouverte : {ouvert}. But : (4,4). "
                     "Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.")
+        if self.jeu == "porte_mobile":
+            x, y = _xy_pmob(etat)
+            d = _d_pmob(etat)
+            px, py = PORTES_MOBILE[d]
+            ouvert = "oui" if _open_pmob(etat) else "non"
+            murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS_P - set(PORTES_MOBILE)))
+            return ("Tu es la politique d'un moteur de recherche dans une grille 5x5. "
+                    "x va vers la droite, y vers le bas. "
+                    f"Murs : {murs}. La porte mobile est en ({px},{py}) ; depuis une case "
+                    "voisine, la sonde l'ouvre si tu vises sa direction. Une fois ouverte, "
+                    f"va en (4,4). Position : ({x},{y}). Porte ouverte : {ouvert}. But : (4,4). "
+                    "Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.")
         x, y = _xy_l(etat)
         murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS))
         return ("Tu es la politique d'un moteur de recherche dans une grille 5x5. "

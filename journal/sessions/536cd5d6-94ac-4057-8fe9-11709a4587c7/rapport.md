@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 4.9 h |
-| Tours | 8 |
-| Messages | 166 |
-| Appels d'outils | 219 |
+| Durée | 5.0 h |
+| Tours | 9 |
+| Messages | 171 |
+| Appels d'outils | 225 |
 | Fichiers touchés | 13 |
-| Commandes | 171 |
+| Commandes | 175 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -39,6 +39,8 @@
 **Tour 7** — dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard
 
 **Tour 8** — il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.
+
+**Tour 9** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -524,7 +526,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 
 ### Tour 8 — il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécan … [191 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - get_goal
 - job_list
@@ -535,10 +537,54 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - bash — Add night policy and update state for the night
 - bash — Check state writer and gate pass progress
 - bash — Update hub plan and commit night policy
+- bash — Wait for the full gate pass to finish
+- bash — Check state, sessions and resource ledger
 
 **Synthèse produite :**
 
-⏵ La passe est à `porte-indice` (10 min, rouge connue) ; je mets le plan du hub à jour, je commite la consigne de nuit et je lance la surveillance.
+⏵ Goal de nuit actif : quatre sessions, une passe, un registre, bilan à 08 h.
+
+\# C'est parti pour la nuit
+
+**Goal** : `goal-63a3e56f-d66e-4e43-8974-db1c692b5e45`, actif jusqu'au **03/11 08 h 00**. La consigne de nuit est dans [`plan-travail.md` § 10.7](../plan-travail.md) (commit **`9a17d0cc`**) ; le registre des ressources est dans `work/ressources.json` (commit de l'outil : **`a67dbf00`**).
+
+\## Les quatre sessions et leurs claims
+
+| session | ce qu'elle fait cette nuit | claim |
+|---|---|---|
+| **N2** `0733c5bb` | R1.2-1024 sur GPU0, puis contrôles + fiche | `gpu0`, `cpu0` 12, `ram` 60 |
+| **hub** `536cd5d6` | passe complète, intégration, registre, bilan 08 h | `gpu1`, `cpu1` 8, `ram` 8 |
+| **S** `29ad180d` | banque **200 phrases / 355 candidats** (0 validée) ; homographes/lexique, **h033**, gold élargi | `cpu1` 4, `ram` 8 |
+| **Pensée** `e181ce02` | gold **200+**, porte mobile/stochastique ; la porte B13 attend S | `cpu1` 4, `ram` 16 |
+| **D/R/A** `fe3c05f0` | **close** (OCR CEGEP livré) ; place `cpu1` 2 libre si on la rouvre | — |
+
+`cpu1` = 8 + 4 + 4 = **16 fils** (le maximum utile) ; `ram` = 92 Gio ; `gpu0`/`gpu1` réservés. Le registre passe `--check` ; les seuls avertissements sont **`IA` à 33 Gio** et le croisement GPU/cpu1 des portes (CPU-first, assumé).
+
+\## Ce qui tourne à 20 h 26
+
+- **Passe complète** : lancée à **19 h 32**, `work/portes/passe-1102-19h32`, `CUDA_VISIBLE_DEVICES=1,0`. Elle est à **`porte-indice`** (10 min, rouge connue, timeout 1800) ; le job `bash-172` attend son verdict. Elle partage GPU0 avec N2 (ralentissement assumé) ; les passes suivantes seront **partielles `gpu1`/`cpu1`**, et une complète réservera **`machine`**.
+- **N2** : R1.2-1024 sur GPU0 (le run est la priorité de la nuit).
+- **S** : la banque est passée à 200 phrases / 355 candidats (0 validée) ; la suite technique est h033/gold ; **la validation humaine t'attend à 08 h**.
+- **Pensée** : gold 200+, porte mobile ; la porte B13 attend la banque S.
+- **llama-server** : service partagé (683 % CPU, 118/366 Mio), non pinné ; il faudra le borner ou le déclarer comme service de fond.
+- **GPU1** : peu chargé (28 °C, 16 W) ; c'est là que devraient aller les prochaines portes.
+
+\## L'état est en écriture par S — je ne l'écrase pas
+
+À **20 h 22**, la session S a mis `en-cours` à jour (1 625 mots, **T0 3 999/4 000**) : sa section, la banque 200/355, la roadmap et les rapports sont **indexés par elle**. La consigne de nuit est donc dans **`plan-travail` § 10.7** (committée) et dans
+… [1483 caractères tronqués]
+
+### Tour 9 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Inspect current git, state and pass progress
+- bash — Check sessions, resource claims and GPU state
+- job_list
+
+**Synthèse produite :**
+
+⏵ Round 1 : j'inspecte l'état réel (passe, git, sessions, registre) avant d'agir.
 
 ## 3. Travail accompli
 
@@ -602,7 +648,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 131 autres
+- … et 135 autres
 
 ## 4. Mesures et résultats marquants
 

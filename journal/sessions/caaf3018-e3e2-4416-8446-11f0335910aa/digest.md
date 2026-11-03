@@ -4022,3 +4022,134 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-159", "timeout_ms": 120000, "wait": true}`
+
+  ```
+lun 02 nov 2026 20:28:04 EST
+=== passe ===
+31
+porte-horloge 0 27
+porte-indice 1 1027
+porte-homeostasie 2 0
+porte-indice 1 1027
+=== git ===
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+M  reports/INDEX.md
+M  reports/README.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-indice` est tombée (1, 1 027 s) — rouge tolérée. Je fabrique l'extracteur du tableau des repères pour l'intégration du verdict.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/table_references.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Extrait le tableau des repères d'une passe : porte, durée, dernière ligne ✅/❌, code.\"\"\"\nimport pathlib, re, sys\nd = pathlib.Path(sys.argv[1] if len(sys.argv) >  … [1073 caractères tronqués]`
+
+  ```
+| porte | durée | code | dernière ligne |
+|---|---:|---|---|
+| `porte-adaptateur-sortie.sh` | 64 s | ✅ | ✅ porte tenue (écriture fidèle · invariant · effet · refus) |
+| `porte-audit-drapeaux.sh` | 175 s | ✅ | ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun |
+| `porte-b1110-hybride.sh` | 0 s | ✅ | PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case |
+| `porte-balayage.sh` | 0 s | ✅ | ✅ porte balayage verte |
+| `porte-bloc-code.sh` | 11 s | ✅ | ✅ porte bloc code verte |
+| `porte-bloc-linguistique.sh` | 12 s | ✅ | ✅ porte bloc linguistique verte |
+| `porte-bloc-maths.sh` | 1 s | ✅ | ✅ porte bloc maths verte |
+| `porte-bloc-tableaux.sh` | 2 s | ✅ | ✅ porte bloc tableaux verte |
+| `porte-budget.sh` | 48 s | ✅ | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |
+| `porte-bus.sh` | 81 s | ✅ | ✅ le canal diffusé par fichier change la région du milieu |
+| `porte-bus-socket.sh` | 93 s | ✅ | ✅ le bus du pilote agit (113.0068 -> 148.9144) |
+| `porte-c4-retard.sh` | 30 s | ✅ | PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne |
+| `porte-cerveau.sh` | 7 s | ✅ | ✅ po
+… [777 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je rafraîchis le heartbeat du hub dans son plan (mon fichier), sans toucher aux fichiers en cours d'édition
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"Heartbeat\" journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md; stat -c '%y' journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md", "description": "Read current hub plan heartbeat"}`
+
+  ```
+17:- **Heartbeat** : 2026-11-02 20:26 EST
+2026-11-02 20:26:51.149565477 -0500
+  ```
+
+### 🤖 Assistant
+
+⏵ Fil de nuit à jour ; j'attends la fin de la passe sans churner l'état tenu par l'autre écrivain
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n\n## 20 h 30 — points de coordination\n\n- L'**autre écrivain d'état** (même session `536cd5d6`, autre processus) tient `en-cours`,\n  `plan-travail`, `roadmap` et le plan du hub (heartbeat 20 h 26) ; i … [845 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:28:57 EST
+36
+porte-m5-brouillon 0 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"---\"; tail -6 work/portes/passe-1102-19h32/registre.txt", "description": "List reds and last gates"}`
+
+  ```
+porte-homeostasie 2 0
+porte-indice 1 1027
+---
+porte-indice 1 1027
+porte-jeux 0 115
+porte-jumeaux 0 31
+porte-lecteur 0 0
+porte-lecture 0 2
+porte-m5-brouillon 0 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de l'état en cours d'édition par l'autre écrivain (lecture seule) pour préparer le rapport
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '/^## Ce qui est en cours/,/^## Les chiffres/p' docs/pilotage/en-cours.md | head -30", "description": "Read in-progress section of live state"}`
+
+  ```
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
+- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
+  invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
+  depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests
+… [770 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '/^## Les questions ouvertes/,/^## La carte/p' docs/pilotage/en-cours.md; echo \"=== ce qui reste ===\"; sed -n '/^## Ce qui reste/,/^## Les questions/p' docs/pilotage/en-cours.md", "description": "Read questions and remaining s … [8 caractères tronqués]`
+
+  ```
+## Les questions ouvertes
+
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.2** tranche (3,0107 à octets constants) ;
+  reste **1 024 octets**.
+- **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → **non** :
+  3,1591 ; le français tient et la largeur progresse ; 2,5 est à **1,3–2,7 M pas**.
+- **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
+- **B10.3** : chrF **> 39,6** ? → l'attention croisée tranche.
+- **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.
+
+## La carte
+=== ce qui reste ===
+## Ce qui reste
+
+**R1** — R1.2-1024 (nuit) ; **Pensée** — gold 200+, porte mobile ; **S** — homographes, validation ;
+**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 ; **R0.7** — le tagger ; **D** — OCR clos (8 `.PDF`).
+
+- **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+
+## Les questions ouvertes
+  ```
+
+### 🤖 Assistant
+
+⏵ Pause de 14 min pendant `porte-melange` (805 s) — je reprendrai au réveil du minuteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 840; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt", "description": "Timer 14 min then  … [20 caractères tronqués]`

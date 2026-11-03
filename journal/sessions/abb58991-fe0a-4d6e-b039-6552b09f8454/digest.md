@@ -10480,3 +10480,42 @@ M docs/pilotage/en-cours.md
 … [316 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Commit bloqué par `.git/index.lock` d'une session concurrente ; je vérifie le processus et je réessaie
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls -l .git/index.lock 2>/dev/null; ps -eo pid,etime,cmd | grep -E \"git (commit|add|status|push)|journal\" | grep -v grep | head -5; git log -1 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '--- STATUS ---'; git status --short  … [176 caractères tronqués]`
+
+  ```
+20:27:27
+-rw-r--r--. 1 stephane stephane 356261  2 nov 20:26 .git/index.lock
+   1403    05:20:29 /usr/lib/systemd/systemd-journald
+ 410246       00:36 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, datetime p=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md'); t=p.read_text() h=datetime.datetime.now().strftime('%H:%M') t=t.replace('- **Heartbeat** : 2026-11-02 19:50 EST', f'- **Heartbeat** : 2026-11-02 {h} EST') t=t.replace("""- **Prochaine action** : la **passe de portes** est **en cours** (`porte-bus`, 19 h 37 ; GPU   libres) ; à son verdict, **intégrer les lignes B13/N2/S** et mettre `en-cours` à jour. La   sous-passe documentaire (8 portes) rend **7/8** : `porte-bloc-maths` rouge sur le seul critère   de **coût** (×8,31 pour ×4), **vert seul** trois fois (×4,24 / ×2,84 / ×4,12) — bruit de   charge, pas régression.""", """- **Prochaine action** : la **passe complète** (`work/portes/passe-1102-19h32`, à   `porte-indice`, 10 min, rouge connue) ; à son verdict, **intégrer les lignes B13/N2/S**, le   registre et l'INDEX ; puis **bilan 08 h**.""") t=t.replace("9) **passe de portes**.", "9) **passe de portes** 
+… [2926 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub tient le lock (commit `--only` du plan-travail) ; j'attends sa libération puis je reprends le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 45; date '+%H:%M:%S'; ls -l .git/index.lock 2>/dev/null || echo 'lock libre'; ps -p 410271,410270 -o pid,etime,cmd 2>/dev/null | head -3; git log -1 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '--- STATUS ---'; git status --short | head  … [78 caractères tronqués]`
+
+  ```
+20:29:26
+lock libre
+    PID     ELAPSED CMD
+9a17d0cc 20:26:51 PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+--- STATUS ---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Lock libéré (hub `9a17d0cc`) ; je reprends le commit mobile (l'index garde mes 11 fichiers)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff --cached --stat | tail -8; python3 tools/verifie_etat_a_jour.py --index; echo \"HOOK=$?\"; git diff --cached --check; echo \"CHECK=$?\"; git commit -m \"B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME  … [281 caractères tronqués]`

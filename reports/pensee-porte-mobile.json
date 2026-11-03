@@ -1,0 +1,294 @@
+{
+  "date": "2026-11-02 20:18 EST",
+  "modele": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+  "endpoint": "http://127.0.0.1:18082",
+  "probleme": {
+    "nom": "labyrinthe_porte_mobile",
+    "portes": [
+      [
+        3,
+        3
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "but": [
+      4,
+      4
+    ],
+    "regle": "depuis une case voisine, la sonde ouvre la porte si la politique vise sa direction",
+    "budget": 200
+  },
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeux": [
+      "porte_mobile",
+      "labyrinthe"
+    ],
+    "contrainte": "grammaire GBNF, quatre directions"
+  },
+  "mesures": {
+    "0": {
+      "oracle": {
+        "noeuds": 29,
+        "but": true,
+        "par_operateur": {
+          "pas": 13,
+          "saut": 11,
+          "sonde": 5
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 60.0,
+        "appels": 7,
+        "budget": 27,
+        "politique": "manhattan",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.005
+      },
+      "aveugle": {
+        "noeuds": 200,
+        "but": false,
+        "par_operateur": {
+          "pas": 100,
+          "saut": 39,
+          "sonde": 61
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 483.0,
+        "appels": 66,
+        "budget": 200,
+        "politique": "aveugle",
+        "score": 0.25,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.034
+      },
+      "hasard": {
+        "noeuds": 45,
+        "but": true,
+        "par_operateur": {
+          "pas": 23,
+          "saut": 15,
+          "sonde": 7
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 88.0,
+        "appels": 14,
+        "budget": 44,
+        "politique": "hasard",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.008
+      },
+      "llm_porte_mobile": {
+        "noeuds": 200,
+        "but": false,
+        "par_operateur": {
+          "pas": 144,
+          "saut": 53,
+          "sonde": 3
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 265.0,
+        "appels": 95,
+        "budget": 200,
+        "politique": "llm",
+        "score": 0.25,
+        "latence_s": 228.842,
+        "erreurs": 0,
+        "duree_s": 228.903
+      },
+      "llm_labyrinthe": {
+        "noeuds": 200,
+        "but": false,
+        "par_operateur": {
+          "pas": 144,
+          "saut": 53,
+          "sonde": 3
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 265.0,
+        "appels": 95,
+        "budget": 200,
+        "politique": "llm",
+        "score": 0.25,
+        "latence_s": 143.981,
+        "erreurs": 0,
+        "duree_s": 144.057
+      }
+    },
+    "1": {
+      "oracle": {
+        "noeuds": 29,
+        "but": true,
+        "par_operateur": {
+          "pas": 14,
+          "saut": 10,
+          "sonde": 5
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 59.0,
+        "appels": 7,
+        "budget": 27,
+        "politique": "manhattan",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.005
+      },
+      "aveugle": {
+        "noeuds": 26,
+        "but": true,
+        "par_operateur": {
+          "pas": 14,
+          "saut": 10,
+          "sonde": 2
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 44.0,
+        "appels": 7,
+        "budget": 25,
+        "politique": "aveugle",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.004
+      },
+      "hasard": {
+        "noeuds": 28,
+        "but": true,
+        "par_operateur": {
+          "pas": 14,
+          "saut": 10,
+          "sonde": 4
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 54.0,
+        "appels": 7,
+        "budget": 26,
+        "politique": "hasard",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.005
+      },
+      "llm_porte_mobile": {
+        "noeuds": 28,
+        "but": true,
+        "par_operateur": {
+          "pas": 14,
+          "saut": 10,
+          "sonde": 4
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 54.0,
+        "appels": 7,
+        "budget": 27,
+        "politique": "llm",
+        "score": 1.0,
+        "latence_s": 14.425,
+        "erreurs": 0,
+        "duree_s": 14.431
+      },
+      "llm_labyrinthe": {
+        "noeuds": 29,
+        "but": true,
+        "par_operateur": {
+          "pas": 14,
+          "saut": 10,
+          "sonde": 5
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 59.0,
+        "appels": 7,
+        "budget": 27,
+        "politique": "llm",
+        "score": 1.0,
+        "latence_s": 17.095,
+        "erreurs": 0,
+        "duree_s": 17.101
+      }
+    }
+  },
+  "apprise": {
+    "episodes": 1000,
+    "etats_q": 170,
+    "seule_0": {
+      "but": true,
+      "pas": 8
+    },
+    "seule_1": {
+      "but": true,
+      "pas": 8
+    }
+  },
+  "seuils": {
+    "oracle_0": true,
+    "oracle_1": true,
+    "aveugle_0_non": true,
+    "aveugle_1_non": false,
+    "llm_0": false,
+    "llm_1": true,
+    "llm_sonde_0": true,
+    "llm_sonde_1": true,
+    "labyrinthe_1_non": false,
+    "llm_mieux_labyrinthe_1": false,
+    "apprise_0": true,
+    "apprise_1": true,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": false,
+  "limites": [
+    "La porte mobile a deux positions ; (1,3) est dans un mur du labyrinthe : c'est la position qui discrimine le prompt.",
+    "Le hasard peut ouvrir une porte ; le contrôle propre est l'aveugle et le labyrinthe (surtout à (1,3)).",
+    "L'A* explore ; le nombre de nœuds dépend du tie-breaking ; le but et la sonde sont les mesures.",
+    "La Q-table `PolitiqueAppriseMobile` (1000 épisodes) est la référence sans A* (porte T31) ; elle n'est pas le LLM.",
+    "La latence inclut la file du serveur ; CPU seulement ; une graine, température 0."
+  ]
+}

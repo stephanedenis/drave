@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 4.2 h |
-| Tours | 4 |
-| Messages | 170 |
-| Appels d'outils | 216 |
+| Tours | 5 |
+| Messages | 184 |
+| Appels d'outils | 230 |
 | Fichiers touchés | 6 |
-| Commandes | 159 |
+| Commandes | 172 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -31,6 +31,8 @@
 **Tour 3** — un des gpu est libre
 
 **Tour 4** — Es-tu en attente active d'une tache et ressource? tu doi pouvoir prendre de petites tâches indépendantes si tu cherches bien. Tiens-toi occuppé toute la nuit. je reviens vers 8h demain. je m'attends à ce que les sessions soient bien coordonnées et que le temps de chaque session soit bien utilisé jusqu'à mon retour.
+
+**Tour 5** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -140,7 +142,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 
 ### Tour 4 — Es-tu en attente active d'une tache et ressource? tu doi pouvoir prendre de petites tâches indépendantes si tu cherches  … [196 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create night goal and snapshot pass and sessions
@@ -156,11 +158,35 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - bash — Check backlog graph and actual resource usage
 - bash — Check reports index freshness
 - bash — Check for live edits by other writer
-- … et 47 autres
+- … et 55 autres
 
 **Synthèse produite :**
 
-⏵ Attente courte de la fin de `porte-indice` et du commit de l'autre écrivain
+⏵ Passe à 36/81 (2 rouges tolérées), minuteur armé ; l'état est tenu par l'autre écrivain
+
+Point de situation à 20 h 31, avant la reprise automatique au réveil du minuteur :
+
+- **Passe** : 36 portes, **34 vertes**, 2 rouges **tolérées** (`porte-indice` 1 027 s code 1, `porte-homeostasie` code 2). `porte-melange` (805 s) est en cours ; prochaines lourdes : `poids-creux`, `profondeur-routee`, `vision`.
+- **Coordination** : l'autre écrivain d'état tient `en-cours`/`roadmap`/`plan-travail` et vient de rafraîchir le plan du hub (20 h 26) ; je ne committe pas ses fichiers pendant son tour. Je garde la passe, ses références et les docs de méthode.
+- **Fait depuis 20 h** : `portes.md` corrigé (registre dans `work/`, pas `/tmp`) + dérogation « un seul GPU libre » ; `tools/ressources.py` entré dans le routage ; extracteur du tableau des repères prêt (`work/table_references.py`) ; fil de nuit et brouillon du rapport de 8 h dans `work/hub-nuit.md`.
+- **Sessions** : N2 (GPU 0, R1.2-1024 de nuit), S (banque à valider, homographes), Pensée (gold 200+, porte mobile), D/R/A close. Claims cohérents, `ressources --check` vert.
+
+Je reprends dans ~14 min pour `porte-melange`, puis je déroule jusqu'au verdict et à l'intégration des références.
+
+### Tour 5 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check pass progress and repo state at round start
+- job_output
+- bash — Read melange red reason and current gate
+- bash — Note melange red and current count
+- bash — Run light checks after night commit
+- bash — Generate partial reference table
+
+**Synthèse produite :**
+
+⏵ Tableau des repères généré au fil de la passe (à figer au verdict)
 
 ## 3. Travail accompli
 
@@ -217,7 +243,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 119 autres
+- … et 132 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -280,6 +306,13 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T4** `| `porte-reflexe.sh` | 106 s | ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit |`
 - **T4** `| `porte-reparti-moteur.sh` | 0 s | PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %) |`
 - **T4** `[still running after 60000ms; moved to background job bash-159]`
+- **T4** `| `porte-c4-retard.sh` | 30 s | ✅ | PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne |`
+- **T4** `| `porte-coupe.sh` | 140 s | ✅ | ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit pour couper |`
+- **T4** `| `porte-jeux.sh` | 115 s | ✅ | ✅ la porte des jeux tient : 100 % au niveau 4, 33/33 paires invariantes, 0 collision, |`
+- **T4** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typogly`
+- **T4** `- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47** st`
+- **T4** `[still running after 60000ms; moved to background job bash-166]`
+- **T5** `| `porte-mistral.sh` | 26 s | ✅ | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 |`
 
 ## 5. Erreurs rencontrées
 

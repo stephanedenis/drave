@@ -6186,3 +6186,62 @@ porte-horloge 0 27
 ⏵ La passe est à `porte-indice` (10 min, rouge connue) ; je mets le plan du hub à jour, je commite la consigne de nuit et je lance la surveillance.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\np=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md'); t=p.read_text()\nh=datetime.datetime.now().strftime('%H:%M')\nt=t.replace('- **Heartbeat** : 2026-11-02 19:5 … [2081 caractères tronqués]`
+
+  ```
+hub plan à jour 20:26
+== commit plan-travail (seul) ==
+[master 9a17d0cc] PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+ 24 files changed, 921 insertions(+), 102 deletions(-)
+[commit 0]
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance la surveillance de la passe et je vérifie l'état des quatre sessions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while kill -0 164366 2>/dev/null; do sleep 60; done; echo \"=== PASSE FINIE $(date -Is) ===\"; tail -4 work/portes/passe-1102-19h32/registre.txt; echo \"--- verdict (code != 0)\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.t … [109 caractères tronqués]`
+
+  ```
+started background job bash-172
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== en-cours ==\" && python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"== budget ==\" && python3 tools/taille_documents.py 2>&1 | grep -E 'T0 max|violation|✅ tous'; echo \"== sessions ==\" && python3 tools/sessions.py -- … [184 caractères tronqués]`
+
+  ```
+== en-cours ==
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+== budget ==
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+== sessions ==
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · actif    ·  33 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis la **clôture**.
+    0b0a6a0d-05f5-4308 · terminé  · 2154 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 4228 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 3399 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la sess
+… [302 caractères tronqués]
+  ```
+
+- **todo_write** `{"todos": [{"content": "Poser la consigne de nuit (plan-travail, en-cours, plan hub)", "status": "completed"}, {"content": "Surveiller la passe complète work/portes/passe-1102-19h32 (à porte-indice)", "status": "in_progress"}, {"content": "Intégrer le verdict de la passe (références, état, roadmap,  … [310 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 1 in progress, 1 completed.
+  ```
+

@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 4.2 h |
 | Tours | 9 |
-| Messages | 411 |
-| Appels d'outils | 515 |
+| Messages | 413 |
+| Appels d'outils | 517 |
 | Fichiers touchés | 35 |
-| Commandes | 377 |
+| Commandes | 379 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -364,7 +364,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 
 ### Tour 9 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Read politique tests and current S state
 - read
@@ -380,11 +380,11 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-mobile.md`
 - bash — Read exact state lines for mobile updates
 - bash — Apply mobile state updates and check budgets
-- … et 3 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Commit bloqué par `.git/index.lock` d'une session concurrente ; je vérifie le processus et je réessaie
+⏵ Lock libéré (hub `9a17d0cc`) ; je reprends le commit mobile (l'index garde mes 11 fichiers)
 
 ## 3. Travail accompli
 
@@ -470,7 +470,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 337 autres
+- … et 339 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -572,5 +572,6 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ" 2>&1 | tail -8; echo "EXIT=${PIP
 - B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"; git log -3
+- B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT" 2>&1 
 - B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT" 2>&1 
 

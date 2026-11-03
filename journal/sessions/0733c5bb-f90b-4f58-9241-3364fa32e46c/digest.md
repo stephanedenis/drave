@@ -4798,3 +4798,66 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-205", "timeout_ms": 300000, "wait": true}`
+
+  ```
+"ppl": {
+  "val_fr": {
+   "128": 3.3878,
+   "256": 3.2542,
+   "512": 3.1098,
+   "1000": 2.995,
+   "2000": 2.9449
+  },
+  "val_big": {
+   "128": 3.7164,
+   "256": 3.5606,
+   "512": 3.4157,
+   "1000": 3.3064,
+   "2000": 3.2826
+  }
+ },
+ "permute_fr": 215.1536,
+ "litterature": 6.1179,
+ "anglais": 9.6864,
+ "wikitext2": 10.5612,
+ "corpus_propre": 8.1879
+}
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles « même texte » du modèle 1 024 et comparaison à 2 000 octets
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/rope1024-2.5k.pt --rope --contextes 256,512,1024,2000 --sortie work/n2ac/queue-rope1024.json 2>&1 | tail -6; echo \"=== 512 à 2000 ===\"; PYTHONPATH=. CUDA_VI … [231 caractères tronqués]`
+
+  ```
+contexte  256 · PPL des 128 derniers octets 2.9197
+  contexte  512 · PPL des 128 derniers octets 2.8125
+  contexte 1024 · PPL des 128 derniers octets 2.7847
+  contexte 2000 · PPL des 128 derniers octets 2.7837
+{"fichier": "rope1024-2.5k.pt", "positions": "rope", "cible": 128, "contextes": [256, 512, 1024, 2000], "ppl": {"256": 2.9197, "512": 2.8125, "1024": 2.7847, "2000": 2.7837}}
+=== 512 à 2000 ===
+  L1000 : 3.0107
+  L2000 : 2.9728
+{"fichier": "rope512-5k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L1000": 3.0107, "L2000": 2.9728}
+  ```
+
+### 🤖 Assistant
+
+⏵ Complément : la fenêtre 256 à 2 000 octets et son contrôle « même texte »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/rope-20k.pt --rope --longueurs 1000,2000 --sortie /tmp/x.json 2>&1 | tail -3; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_fenetr … [200 caractères tronqués]`
+
+  ```
+L1000 : 3.2545
+  L2000 : 3.2459
+{"fichier": "rope-20k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L1000": 3.2545, "L2000": 3.2459}
+  contexte  256 · PPL des 128 derniers octets 3.0663
+  contexte  512 · PPL des 128 derniers octets 3.1392
+  contexte 1000 · PPL des 128 derniers octets 3.1413
+  contexte 2000 · PPL des 128 derniers octets 3.1411
+{"fichier": "rope-20k.pt", "positions": "rope", "cible": 128, "contextes": [256, 512, 1000, 2000], "ppl": {"256": 3.0663, "512": 3.1392, "1000": 3.1413, "2000": 3.1411}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/rope512-5k.pt --rope --contextes 256,512,1000,2000 --sortie work/n2ac/queue-rope512-2000.json 2>&1 | tail -5; echo \"--- runs ---\"; date '+%H:%M:%S'; tail -1 … [121 caractères tronqués]`

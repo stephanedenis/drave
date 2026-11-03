@@ -6646,3 +6646,34 @@ Created file
   ```
 
 - **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -3 work/portes/passe-1102-19h32/registre.txt; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"--- HEAD ---\"; git log --oneline -3; echo \"--- status ---\"; git status --sh … [65 caractères tronqués]`
+
+  ```
+20:28:57
+36 work/portes/passe-1102-19h32/registre.txt
+porte-lecteur 0 0
+porte-lecture 0 2
+porte-m5-brouillon 0 0
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+--- HEAD ---
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+--- status ---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 50); do sleep 3; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -3; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools … [222 caractères tronqués]`

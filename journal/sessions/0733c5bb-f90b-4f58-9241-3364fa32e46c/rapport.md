@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 4.2 h |
+| Durée | 4.3 h |
 | Tours | 2 |
-| Messages | 268 |
-| Appels d'outils | 275 |
-| Fichiers touchés | 19 |
-| Commandes | 206 |
+| Messages | 272 |
+| Appels d'outils | 279 |
+| Fichiers touchés | 20 |
+| Commandes | 209 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*35 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 17 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ Contrôles « même texte » du modèle 1 024 et comparaison à 2 000 octets
+⏵ Préparation de la fenêtre 2 048 (wiki et production)
 
 ## 3. Travail accompli
 
@@ -131,6 +131,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_1024.sh` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_production.sh` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/eval_production.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_2048.sh` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -174,7 +175,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 166 autres
+- … et 169 autres
 
 ## 4. Mesures et résultats marquants
 
