@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 3.3 h |
-| Tours | 3 |
-| Messages | 268 |
-| Appels d'outils | 287 |
-| Fichiers touchés | 15 |
-| Commandes | 183 |
+| Durée | 3.5 h |
+| Tours | 4 |
+| Messages | 311 |
+| Appels d'outils | 335 |
+| Fichiers touchés | 18 |
+| Commandes | 200 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -29,6 +29,8 @@
 **Tour 2** — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État : actif` et heartbeat maintenant, puis  `sessions.py --check --strict`. Le texte intégral, le PDF, les 20 livres, les 10 notes CEGEP,  le glossaire (355 entrées) et docwatch sont committés. Prochaine action : OCR ~127 scans CEGEP  (`tools/ocr_pdf.py --racine CEGEP --deja <N>`), p … [87 caractères tronqués]
 
 **Tour 3** — as-tu terminé? les gpu et cpu sont tranquilles
+
+**Tour 4** — c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en cours dans les autres terminaux
 
 ## 2. Déroulé, étape par étape
 
@@ -108,6 +110,30 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 **`sessions.py --check --strict` reste rouge, hors D/R/A** : `29ad180d` (S, heartbeat de 163 min) et `536cd5d6` (hub, 178 min). D/R/A est `terminé` et n’est plus exigé. Si ces deux sessions sont réellement arrêtées, il faut les passer `en pause` (ou rafraîchir leur heartbeat) ; je n’ai pas touché à leurs plans. Je peux le faire si tu veux rendre la porte stricte verte.
 
+### Tour 4 — c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en co … [29 caractères tronqués]
+
+*48 appels d'outils.* Actions notables :
+
+- bash — Current time, recent commits and working tree
+- bash — Session status, strict check and state checks
+- bash — Inspect active session plans and heartbeats
+- bash — Check active processes and GPU state
+- read
+- bash — Check N2 200k evaluation progress
+- bash — Read roadmap and plan-travail lines
+- edit `docs/pilotage/en-cours.md`
+- edit `docs/pilotage/en-cours.md`
+- edit `docs/pilotage/en-cours.md`
+- edit `docs/pilotage/en-cours.md`
+- edit `docs/pilotage/en-cours.md`
+- edit `docs/pilotage/roadmap.md`
+- bash — Verify roadmap N line
+- … et 24 autres
+
+**Synthèse produite :**
+
+⏵ Passe de pilotage : je relève l’état réel des quatre sessions et des compteurs avant d’écrire
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -123,12 +149,15 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 7 |
-| `docs/pilotage/roadmap.md` | 0 | 3 |
-| `docs/pilotage/chantiers.md` | 0 | 1 |
-| `docs/pilotage/plan-travail.md` | 0 | 2 |
+| `docs/pilotage/en-cours.md` | 0 | 13 |
+| `docs/pilotage/roadmap.md` | 0 | 8 |
+| `docs/pilotage/chantiers.md` | 0 | 4 |
+| `docs/pilotage/plan-travail.md` | 0 | 4 |
 | `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
 | `journal/2026-11-02/README.md` | 0 | 3 |
+| `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
+| `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 1 |
+| `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -172,7 +201,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 143 autres
+- … et 160 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -263,6 +292,16 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** `2 053 p), **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; la détection à deux pages`
 - **T3** `0, 0 %, 1862 MiB`
 - **T3** `1, 45 %, 1014 MiB`
+- **T4** `→ la **passe de portes** complète, **reportée** — mesuré à 16 h 32 : GPU 0 à **92 %** (N2, 1 650 MiB) et GPU 1 à **84 %** (`entrainer_rope.py`, 1 300 MiB), charge **24** ; le doc `portes.md` interdit `
+- **T4** `0, 0 %, 928 MiB`
+- **T4** `1, 0 %, 122 MiB`
+- **T4** `33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)**`
+- **T4** `36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art.,`
+- **T4** `111:[N2] lasts 4 days and is 30% complete and is colored in #b26a00`
+- **T4** `N2.aa avait montré qu'à 40 Mo vus, un corpus 5,6× plus grand ne fait pas apprendre plus — il fait`
+- **T4** `de `data/wiki_fr/propre` (186 Mo) et `data/wiki_big/propre` (831 Mo) ; canal concaténé ; le`
+- **T4** `découpage interne réserve les 5 % finaux à la validation d'entraînement.`
+- **T4** `lieu de 60 000 (×3,33). GPU 0, **11 410 s** (3 h 10), ~57 ms/pas.`
 
 ## 5. Erreurs rencontrées
 
@@ -276,4 +315,6 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS" -m
 - ps -eo pid,etime,pcpu,comm,args --sort=-pcpu | grep -E "ocr_pdf|detecte_scans|tesseract|pdftoppm|entrainer|llama-server|porte-|git commit" | grep -v grep | head
 - ps -eo pid,etime,pcpu,args | grep -E "git commit|porte-audit|entrainer_moteur|llama-server" | grep -v grep | head -5; echo "--- dernier commit ---"; git log -1 
+- ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E "entrainer|llama-server|porte-|git commit|n2ac" | grep -v grep | head -6; echo "--- gpu ---"; nvidia-smi --que
+- date "+%H:%M:%S"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md; ps -
 

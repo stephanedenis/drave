@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 1.4 h |
-| Tours | 4 |
-| Messages | 172 |
-| Appels d'outils | 185 |
+| Durée | 3.5 h |
+| Tours | 5 |
+| Messages | 196 |
+| Appels d'outils | 209 |
 | Fichiers touchés | 9 |
-| Commandes | 127 |
+| Commandes | 146 |
 | Sous-agents | 0 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -26,6 +26,8 @@
 **Tour 3** — commit l'ensemble
 
 **Tour 4** — push
+
+**Tour 5** — tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses
 
 ## 2. Déroulé, étape par étape
 
@@ -176,6 +178,30 @@ Prochaine action S inchangée : **validation humaine de la banque**, puis fronti
 
 Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je pousse.
 
+### Tour 5 — tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses
+
+*24 appels d'outils.* Actions notables :
+
+- bash — Check machine load, GPUs, and running work
+- bash — Check WIP freshness and session/gate state
+- todo_write
+- bash — Reproduce GN boundary failures
+- bash — Locate constants and GN loop
+- bash — Add finite-verb GN boundary and test examples
+- bash — Add GV time-adverb break and measure
+- bash — Add holdout3 and measure
+- bash — Add GN boundary tests and rerun suite/measure
+- bash — Update submodule README for v3
+- bash — Export 47-phrase gold corpus and verify
+- bash — Commit submodule v3
+- bash — Exact v3 measure values and boundary lines
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md`
+- … et 9 autres
+
+**Synthèse produite :**
+
+⏵ Je regarde l'état machine et les chantiers ouverts pour choisir quoi entreprendre.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -188,7 +214,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_analyseur.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/verifier_corpus.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 7 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
 
@@ -234,7 +260,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 87 autres
+- … et 106 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -260,10 +286,12 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T3** `8 lots × 16 fenêtres. Le **témoin** est le point N2.z (`base-34m-canal.pt`), repassé dans le`
 - **T3** `| [rapport-pensee-hasard.md](rapport-pensee-hasard.md) | B13 — le hasard variable : 20–60 %, 20/20 à chaque taux |`
 - **T3** `| [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |`
+- **T5** `0, Quadro RTX 5000, 0 %, 688 MiB, 16384 MiB`
+- **T5** `1, Quadro RTX 5000, 43 %, 966 MiB, 16384 MiB`
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : === data suivis === count: 0 === reports json exemples === reports/b102bis-corpus-jw.json reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md reports/corpus-genres.json reports/corpus-li
@@ -271,6 +299,8 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** : p001 dev [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "<stdin>", line 6, in <genexpr> TypeError: list indices must be integers or slices, not str [exit code
 - **T1** : 57048   57032       02:18 00:00:00  0.0 S    /bin/sh .git/hooks/pre-commit   59838   57048       01:05 00:00:47 73.3 R    python3 tools/session_report.py --quiet === io === PID 59838     ELAPSED     T
 - **T1** : #!/usr/bin/env python3 """Produit, pour chaque session DSH, un rapport qui reconstitue son essence et démontre le travail accompli, étape par étape.  Sortie, à côté du digest brut :    journal/session
+- **T5** : === WIP mtimes === -rw-------. 1 stephane stephane 14355 18:49:42 reports/rapport-n2-r11.md -rw-------. 1 stephane stephane 82670 18:52:50 tools/bloc_linguistique.py -rw-------. 1 stephane stephane 11
+- **T5** : {     "version": 2,     "mode": "gold",     "date": "2026-11-02T19:40:35",     "source": "tools/structures/donnees/gold-analyseur.json",     "sortie": "data/structures/banque.jsonl",     "phrases": 47
 
 ## 6. Commits
 
@@ -281,4 +311,5 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES" -m "La fiche reports/rapport-s-analyseur-roles.md, le manifeste reports/s-banqu
 - ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE" -m "Le compteur passe à 552 fiches / 639 JSON après l'intégration de la fiche S et
 - D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE" -m "La détection sur le texte intégral (pdftotext + pdfinfo, seuil 
+- S — LA FRONTIÈRE DU GN S'ARRÊTE DEVANT LE VERBE : 47/47 TYPES, 117/117 RÔLES ; GOLD 47" -m "Le générateur gagne un lexique de verbes finis (frontière GN) et le 
 

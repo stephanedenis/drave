@@ -1,0 +1,181 @@
+{
+ "entrainement": {
+  "modele": "drave-n0",
+  "parametres": 34301224,
+  "corpus": "data/wiki_mix/propre/train.txt",
+  "octets": 1017487092,
+  "pas": 200000,
+  "seq": 128,
+  "lot": 8,
+  "lr": 0.0003,
+  "graine": 1,
+  "perte_finale": 1.204762578010559,
+  "ppl_val": 2.9801252139128414,
+  "jetons_val": 8192,
+  "tetes": true,
+  "precision_main": 0.674072265625,
+  "precision_early": [
+   0.609130859375,
+   0.661865234375,
+   0.671630859375
+  ],
+  "drvm": "work/n2ac/mix-200k.drvm",
+  "sha256_drvm": "bec5470e1e2d8d8909b5b31e13d3608b1655631d62f5a1e12d40a0269ab16a75",
+  "duree_s": 11410.567405223846
+ },
+ "eval_200k": {
+  "fichier": "mix-200k.pt",
+  "params": 34301224,
+  "val_fr_L128": 3.1591,
+  "val_fr_L256": 3.2047,
+  "val_fr_L512": 3.6577,
+  "val_fr_permute": 181.9082,
+  "val_big_L128": 3.0035,
+  "val_big_L256": 3.0298,
+  "val_big_L512": 3.4878,
+  "val_big_permute": 199.8597,
+  "corpus_propre_val": 9.1262,
+  "litterature": 5.6056,
+  "anglais": 7.277,
+  "wikitext2": 8.0018
+ },
+ "courbe_200k": {
+  "fichier": "mix-200k.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "absolues",
+  "L128": 3.1591,
+  "L256": 3.2047,
+  "L512": 3.6577,
+  "L1000": 8.2262
+ },
+ "courbe_60k": {
+  "fichier": "mix-60k.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "absolues",
+  "L128": 3.4902,
+  "L256": 3.4615,
+  "L512": 3.5169,
+  "L1000": 7.9201
+ },
+ "trajectoire": {
+  "journal": "work/n2ac/mix-200k.log",
+  "points": 4001,
+  "dernier_pas": 200000,
+  "ppl_finale": 3.103,
+  "ajustement": {
+   "depuis": 40000,
+   "a": 9.233779,
+   "b": 0.089408
+  },
+  "pas_pour_cible": 2221318,
+  "trajectoire": [
+   [
+    10000,
+    4.646
+   ],
+   [
+    20000,
+    3.993
+   ],
+   [
+    30000,
+    3.781
+   ],
+   [
+    40000,
+    3.626
+   ],
+   [
+    50000,
+    3.525
+   ],
+   [
+    60000,
+    3.39
+   ],
+   [
+    70000,
+    3.428
+   ],
+   [
+    80000,
+    3.339
+   ],
+   [
+    90000,
+    3.331
+   ],
+   [
+    100000,
+    3.292
+   ],
+   [
+    110000,
+    3.303
+   ],
+   [
+    120000,
+    3.28
+   ],
+   [
+    130000,
+    3.202
+   ],
+   [
+    140000,
+    3.231
+   ],
+   [
+    150000,
+    3.152
+   ],
+   [
+    160000,
+    3.178
+   ],
+   [
+    170000,
+    3.17
+   ],
+   [
+    180000,
+    3.142
+   ],
+   [
+    190000,
+    3.114
+   ],
+   [
+    200000,
+    3.103
+   ]
+  ]
+ },
+ "eval_60k": {
+  "fichier": "mix-60k.pt",
+  "params": 34301224,
+  "val_fr_L128": 3.4902,
+  "val_fr_L256": 3.4615,
+  "val_fr_L512": 3.5169,
+  "val_fr_permute": 215.5638,
+  "val_big_L128": 3.3565,
+  "val_big_L256": 3.2716,
+  "val_big_L512": 3.3685,
+  "val_big_permute": 226.8678,
+  "corpus_propre_val": 9.2731,
+  "litterature": 6.0283,
+  "anglais": 8.3352,
+  "wikitext2": 9.0525
+ },
+ "dispositif": {
+  "corpus": "data/wiki_mix/propre/train.txt (1 017 487 092 octets)",
+  "commande": "CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 200000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --positions-aleatoires 384 --sortie work/n2ac/mix-200k.pt --drvm work/n2ac/mix-200k.drvm",
+  "temoin": "work/n2w/mix-60k.pt (N2.ac, 60 000 pas, recette identique)",
+  "mestre": "work/n2ac/eval_200k.py puis work/n2ac/eval_longueurs.py",
+  "controles": [
+   "permutation des octets de validation (ordre détruit)",
+   "deux validations appariées (fr, grand corpus)",
+   "60 000 premiers pas identiques à N2.ac (perte 1,2569 vs 1,2579)"
+  ]
+ }
+}

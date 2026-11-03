@@ -3790,3 +3790,453 @@ local 647205a · ## master...origin/master
 
 Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je pousse.
 
+
+## Tour 5
+
+### 👤 Utilisateur
+
+tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses
+
+### 🤖 Assistant
+
+⏵ Je regarde l'état machine et les chantiers ouverts pour choisir quoi entreprendre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; uptime; echo \"=== GPU ===\"; nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total --format=csv,noheader 2>/dev/null || echo \"nvidia-smi indisponible\"; echo \"=== processes lourds ===\"; ps - … [113 caractères tronqués]`
+
+  ```
+19:35:46
+ 19:35:46  up  4:28,  2 users,  load average: 5,87, 4,96, 6,27
+=== GPU ===
+0, Quadro RTX 5000, 0 %, 688 MiB, 16384 MiB
+1, Quadro RTX 5000, 43 %, 966 MiB, 16384 MiB
+=== processes lourds ===
+    PID     ELAPSED %CPU %MEM CMD
+ 110066    02:07:46  813  4.0 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 0 -c 1024 --no-webui
+ 180053       00:18  131  1.3 /home/stephane/gpu-env/bin/python -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --lr 3e-4 --graine 1 --pas 200 --eval-tous 200 --sortie /tmp/porte-audit-drapeaux/lognormal --poids-lognormaux
+ 178585       01:21  105  1.2 /home/stephane/gpu-env/bin/python work/n2ac/eval_200k.py work/n2ac/mix-200k.pt --sortie work/n2ac/eval-mix200.json
+  32123    03:20:15 72.9  0.8 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+ 180352       00:00 68.7  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; uptime; echo "=== GPU ==="; nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total --format=csv,noheader 2>/dev/null || echo "nvidia-smi indispo
+… [1274 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== WIP mtimes ===\"; ls -la --time-style=+%H:%M:%S tools/bloc_linguistique.py tools/tests/linguistique/test_bloc_linguistique.py tools/tests/linguistique/qualifier_syntagmes.py reports/rapport-n2-r11.md 2>/dev/null; echo \"== … [256 caractères tronqués]`
+
+  ```
+=== WIP mtimes ===
+-rw-------. 1 stephane stephane 14355 18:49:42 reports/rapport-n2-r11.md
+-rw-------. 1 stephane stephane 82670 18:52:50 tools/bloc_linguistique.py
+-rw-------. 1 stephane stephane 11704 17:36:52 tools/tests/linguistique/qualifier_syntagmes.py
+-rw-r--r--. 1 stephane stephane  8884 18:50:42 tools/tests/linguistique/test_bloc_linguistique.py
+=== sessions ===
+sessions · plans de mandat
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  46 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → la mesure des cinq PPL du run de 200 k à sa sortie, puis fiche + état + commit ; le contrôle depuis zéro ; la clôture.
+    0b0a6a0d-05f5-4308 · terminé  · 2101 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 4175 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 3346 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'arc
+… [690 caractères tronqués]
+  ```
+
+- **todo_write** `{"todos": [{"content": "Reproduire h033 et cartographier la frontière GN/verbe", "status": "in_progress"}, {"content": "Ajouter la règle de frontière GN-devant-verbe-fin (lexique assumé)", "status": "pending"}, {"content": "Écrire un holdout3 après la règle et mesurer types/rôles/contrôles", "status … [296 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git status -sb | head -2; python3 - <<'PY'\nimport generateur\nfor t in [\"La femme parle à son fils.\",\n          \"Le chat dort sur le canapé.\",\n          \"Une belle maison.\",\n          \"Le petit chat noir d … [345 caractères tronqués]`
+
+  ```
+## master...origin/master
+La femme parle à son fils.
+    La femme parle[GN:agent] | à son fils[GP:destinataire]
+Le chat dort sur le canapé.
+    Le chat dort[GN:agent] | sur le canapé[GP:lieu]
+Une belle maison.
+    Une belle maison[GN:agent]
+Le petit chat noir dort.
+    Le petit chat noir[GN:agent] | dort[GV:predicat]
+La voisine arrive.
+    La voisine arrive[GN:agent]
+Le train part demain.
+    Le train part demain[GN:agent]
+Le roi Louis parle.
+    Le roi Louis parle[GN:agent]
+La femme médecin parle.
+    La femme médecin parle[GN:agent]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"VERBES_LIEU\\|while j < len(utiles) and utiles\\[j\\].cls in (\\\"DET\\\"\" generateur.py | head; sed -n '40,70p' generateur.py", "description": "Locate constants and GN loop"}`
+
+  ```
+46:VERBES_LIEU = set("""
+175:        if gv is not None and _dernier_mot(gv.texte) in VERBES_LIEU:
+267:            while j < len(utiles) and utiles[j].cls in ("DET", "PRON", "MOT") and mots < 3:
+# Verbes de lieu/état : « à la maison » après « rester » est un lieu, pas un destinataire.
+# Copules : « est mon voisin » est un GV attributif, pas un GV « est » + un GN.
+COPULES = set("""
+est sont etait etaient sera seront serait seraient semble semblent parait paraissent
+reste restent devient deviennent
+""".split())
+VERBES_LIEU = set("""
+reste restes restons restez restent suis es est sommes etes sont etais etait etions etiez etaient
+vais vas va allons allez vont allais allait allions alliez allaient
+habite habites habitons habitez habitent vivais vivait vivions viviez vivaient vis vit vivons vivez vivent
+viens vient venons venez viennent venais venait venions veniez venaient
+pars part partons partez partent partais partait partions partiez partaient
+arrive arrives arrivons arrivez arrivent arrivais arrivait arrivions arriviez arrivaient
+entre entres entrons entrez entrent entrais entrait entrions entriez entraient
+sors sort sortons sortez sortent sortais sortait sortions sortiez sortaient
+… [604 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('generateur.py')\nt = p.read_text(encoding='utf-8')\najout = '''\n# Verbes conjugués fréquents : un GN ne les avale pas (« La femme parle »).\n# Lexique assumé, pa … [4652 caractères tronqués]`
+
+  ```
+règle GN-devant-verbe ajoutée
+La femme parle à son fils.
+    La femme[GN:agent] | parle[GV:predicat] | à son fils[GP:destinataire]
+Le chat dort sur le canapé.
+    Le chat[GN:agent] | dort[GV:predicat] | sur le canapé[GP:lieu]
+Une belle maison.
+    Une belle maison[GN:agent]
+Le petit chat noir dort.
+    Le petit chat noir[GN:agent] | dort[GV:predicat]
+La voisine arrive.
+    La voisine[GN:agent] | arrive[GV:predicat]
+Le train part demain.
+    Le train[GN:agent] | part demain[GV:predicat]
+Le roi Louis parle.
+    Le roi Louis[GN:agent] | parle[GV:predicat]
+La femme médecin parle.
+    La femme médecin[GN:agent] | parle[GV:predicat]
+La petite ferme est belle.
+    La petite[GN:agent] | ferme est belle[GV:predicat]
+Le simple fait surprend.
+    Le simple[GN:agent] | fait surprend[GV:predicat]
+Le grand lit est dur.
+    Le grand[GN:agent] | lit est dur[GV:predicat]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('generateur.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"\"\"        while j < len(utiles) and utiles[j].cls in (\"PRON\", \"AUX\", \"MOT\"):\n         … [670 caractères tronqués]`
+
+  ```
+GV s'arrête avant un adverbe de temps
+  gold · 39 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    16  16/16      1.00  38/38    16/16  
+  global     39  39/39      1.00 100/100   45/45  
+  contrôle · baseline 64/100 (0.64) · règles coupées 67/100 (0.67) · rôles mélangés 0.10 [0.00, 0.22]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+=== tests ===
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 40 tests in 3.667s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np = Path('donnees/gold-analyseur.json')\nd = json.loads(p.read_text(encoding='utf-8'))\nd['note'] = (\"Gold de l'analyseur. split=dev : les 7 phrases du banc.  … [2182 caractères tronqués]`
+
+  ```
+47 phrases
+  gold · 47 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    24  24/24      0.98  55/55    18/18  
+  global     47  47/47      0.99 117/117   47/47  
+  contrôle · baseline 80/117 (0.68) · règles coupées 82/117 (0.70) · rôles mélangés 0.11 [0.00, 0.23]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('tests/test_generateur.py')\nt = p.read_text(encoding='utf-8')\najout = '''\n\nclass TestFrontiereGN(unittest.TestCase):\n    \"\"\"Le GN s'arrête devant un verbe  … [2349 caractères tronqués]`
+
+  ```
+tests frontière ajoutés
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 43 tests in 3.760s
+
+OK
+  gold · 47 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    24  24/24      0.98  55/55    18/18  
+  global     47  47/47      0.99 117/117   47/47  
+  contrôle · baseline 80/117 (0.68) · règles coupées 82/117 (0.70) · rôles mélangés 0.11 [0.00, 0.23]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('README.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"\"\"- **passif et copule** : « a été écrite par Marie » rend le GN sujet **patient** et `par` **ag … [4374 caractères tronqués]`
+
+  ```
+README v3
+113:- **frontière du GN** : le GN s'arrête devant un **verbe conjugué** fréquent (« La femme parle » →
+129:Le **gold** (`donnees/gold-analyseur.json`) porte **47 phrases** en trois découpages :
+206:**43 tests** : phrases et alignement des spans, validation + export, statut invalide refusé,
+221:- **v3** : **frontière du GN** devant un verbe conjugué et **frontière du GV** devant un adverbe
+222:  de temps ; le **gold de 47 phrases** (7 dev, 16 test, 24 holdout en trois vagues), `mesure_analyseur.py`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 exporter_corpus.py --mode gold && python3 verifier_corpus.py ../../data/structures/banque.jsonl && cat ../../data/structures/banque-manifest.json; echo \"=== STATUS SOUS-MODULE ===\"; git status --short", "de … [54 caractères tronqués]`
+
+  ```
+✅ 47 ligne(s) sur 47 phrase(s) · mode gold → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-manifest.json
+     sha256 : f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2
+  ✅ ../../data/structures/banque.jsonl · empreinte, comptes, spans et restitution vérifiés
+{
+ "version": 2,
+ "mode": "gold",
+ "date": "2026-11-02T19:40:35",
+ "source": "tools/structures/donnees/gold-analyseur.json",
+ "sortie": "data/structures/banque.jsonl",
+ "phrases": 47,
+ "candidats_acceptes": 47,
+ "sha256": "f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2",
+ "note": "structures de référence, sans jugement humain — `statut: reference` ; spans vérifiés."
+}
+=== STATUS SOUS-MODULE ===
+ M README.md
+ M donnees/gold-analyseur.json
+ M donnees/mesure-analyseur.json
+ M generateur.py
+ M tests/test_generateur.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add generateur.py donnees/gold-analyseur.json donnees/mesure-analyseur.json README.md tests/test_generateur.py && git diff --cached --stat && git commit -m \"S — LA FRONTIÈRE DU GN S'ARRÊTE DEVANT LE VERBE : 47/4 … [625 caractères tronqués]`
+
+  ```
+README.md                     |  40 ++++---
+ donnees/gold-analyseur.json   | 143 ++++++++++++++++++++++++-
+ donnees/mesure-analyseur.json | 239 +++++++++++++++++++++++++++++++++++-------
+ generateur.py                 |  58 ++++++++++
+ tests/test_generateur.py      |  33 +++++-
+ 5 files changed, 456 insertions(+), 57 deletions(-)
+[master 90e507b] S — LA FRONTIÈRE DU GN S'ARRÊTE DEVANT LE VERBE : 47/47 TYPES, 117/117 RÔLES ; GOLD 47
+ 5 files changed, 456 insertions(+), 57 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nr=json.load(open('donnees/mesure-analyseur.json'))\nprint(json.dumps({k:r[k] for k in ('phrases','par_split','global','controles')}, ensure_ascii=False, indent=1))\nfor x in r['lignes'] … [220 caractères tronqués]`
+
+  ```
+{
+ "phrases": 47,
+ "par_split": {
+  "dev": {
+   "phrases": 7,
+   "types_ok": 7,
+   "couverture": 1.0,
+   "octets_couverts": 229,
+   "octets_or": 229,
+   "roles_justes": 22,
+   "roles_total": 22,
+   "complements_justes": 10,
+   "complements_total": 10,
+   "types_taux": 1.0,
+   "couverture_globale": 1.0,
+   "roles_taux": 1.0,
+   "complements_taux": 1.0
+  },
+  "test": {
+   "phrases": 16,
+   "types_ok": 16,
+   "couverture": 1.0,
+   "octets_couverts": 475,
+   "octets_or": 475,
+   "roles_justes": 40,
+   "roles_total": 40,
+   "complements_justes": 19,
+   "complements_total": 19,
+   "types_taux": 1.0,
+   "couverture_globale": 1.0,
+   "roles_taux": 1.0,
+   "complements_taux": 1.0
+  },
+  "holdout": {
+   "phrases": 24,
+   "types_ok": 24,
+   "couverture": 0.9801,
+   "octets_couverts": 605,
+   "octets_or": 616,
+   "roles_justes": 55,
+   "roles_total": 55,
+   "complements_justes": 18,
+   "complements_total": 18,
+   "types_taux": 1.0,
+   "couverture_globale": 0.9821,
+   "roles_taux": 1.0,
+   "complements_taux": 1.0
+  }
+ },
+ "global": {
+  "phrases": 47,
+  "types_ok": 47,
+  "couverture": 0.9898,
+  "octets_couverts": 1309,
+  "octets_or": 1320,
+  "roles_justes": 117,
+  "roles_total": 117,
+  "compleme
+… [565 caractères tronqués]
+  ```
+
+- **write** `{"content": "# S — La frontière du GN s'arrête devant le verbe : 47/47 types, 117/117 rôles, 47 structures au corpus\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **47 phrases**\n> (7 `dev`, 16 `test`, 24 `holdout` en trois vagues), la structure de base retrouv … [9027 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md", "limit": 40}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+1: # S — L'analyseur nomme les rôles : 99/100, 38/39 types, et 39 structures au corpus
+2: 
+3: > **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **39 phrases**
+4: > (7 `dev`, 16 `test`, 16 `holdout`), la structure de base retrouve la **séquence de types
+5: > 38/39** (97,4 %), les **rôles 99/100** (99 %), les **compléments 45/45**, et couvre
+6: > **1 156/1 161 octets** (99,6 %). L'échec est **nommé** : « La femme parle » est lu comme un
+7: > GN, le verbe est avalé. Le corpus de référence sort : **39 lignes**, SHA-256
+8: > `973c70a4126896b8557d803b940f58d1f6d1fe1d172cdb7b9abce9671cd7db71`.
+9: 
+10: ## Le dispositif
+11: 
+12: - **Gold** : [`tools/structures/donnees/gold-analyseur.json`](../tools/structures/donnees/gold-analyseur.json),
+13:   **39 phrases** : **7 `dev`** (les phrases du banc, référence écrite à la main), **16 `test`**
+14:   (écrites **avant** les règles de rôles/subordonnées) et **16 `holdout`** (écrites **après**,
+15:   mesurées une fois ; aucun attendu n'est modifié après la mesure). Chaque phrase porte sa suite
+16
+… [1661 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md", "offset": 40, "limit": 110}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+40: - `à` **but** devant un infinitif, **destinataire** sinon, **lieu** après un verbe de lieu ;
+41: - `par` **agent** après un passif, **moyen** sinon ; le GN sujet du passif devient **patient** ;
+42: - subordonnées : `quand / dès que / pendant que` → **temps**, `parce que / puisque / comme` →
+43:   **cause**, `si / s'il` → **hypothèse**, `bien que` → **concession**, `afin que` → **but**,
+44:   `sans que` → **manière** ; la complétive après un verbe reste **contenu**, la relative après un
+45:   nom **qualité** ;
+46: - copule : « est mon voisin » reste un **GV** attributif au lieu de se couper en « est » + GN.
+47: 
+48: ## Les contrôles négatifs
+49: 
+50: | contrôle | ce qu'il fait | résultat |
+51: |---|---|---:|
+52: | **baseline** | rôle constant par type (GN=agent, GV=predicat, GP=lieu, SUB=contenu, REL=qualite) | **64/100** (0,64) |
+53: | **règles coupées** | `structure(roles=False)` : mêmes segments, rôles par défaut | **66/100** (0,66) |
+54: | **rôles mélangés** | 200 permutations des rôles attendus des compléments | **0,099** [0,00 ; 0,22] |
+55: | **span
+… [5520 caractères tronqués]
+  ```
+
+- **write** `{"content": "# S — La frontière du GN s'arrête devant le verbe : 47/47 types, 117/117 rôles, 47 structures au corpus\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **47 phrases**\n> (7 `dev`, 16 `test`, 24 `holdout` en trois vagues), la structure de base retrouv … [9027 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp data/structures/banque-manifest.json reports/s-banque-structures.json && python3 -m json.tool reports/s-banque-structures.json | head -14; echo \"=== README S ===\"; grep -n \"rapport-s-analyseur-roles\" reports/README.md reports/ … [171 caractères tronqués]`
+
+  ```
+{
+    "version": 2,
+    "mode": "gold",
+    "date": "2026-11-02T19:40:35",
+    "source": "tools/structures/donnees/gold-analyseur.json",
+    "sortie": "data/structures/banque.jsonl",
+    "phrases": 47,
+    "candidats_acceptes": 47,
+    "sha256": "f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2",
+    "note": "structures de r\u00e9f\u00e9rence, sans jugement humain \u2014 `statut: reference` ; spans v\u00e9rifi\u00e9s."
+}
+=== README S ===
+reports/INDEX.md:533:| [rapport-s-analyseur-roles.md](rapport-s-analyseur-roles.md) | S — L'analyseur nomme les rôles : 99/100, 38/39 types, et 39 structures au corpus |
+=== extrait README ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '54,74p' docs/pilotage/en-cours.md; echo \"=== S bullet ===\"; grep -n -A1 \"S — le banc de structures\" docs/pilotage/en-cours.md; echo \"=== roadmap S ===\"; grep -n \"S — les structures\\|État au 02/11\\|dernière mise à jou … [102 caractères tronqués]`
+
+  ```
+- **Bloquants** : aucun ; **GPU libres**.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur, export, tests~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle, couper la subordonnée.
+- **Stratégie** : une règle = une phrase, trois contrôles.
+- **Objectif final** : gold **39**, corpus **39**, manifeste SHA-256.
+- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**, **66/100**, **0,099** ; échec **h033** ; **40 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : **`647205a`**, pointeur **`13f4e131`** ; corpus **39** (SHA `973c70a4…`) ; banque **0**.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Prochaine action** : validation humaine de la banque, puis frontière du GN (h
+… [1404 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -4 docs/pilotage/en-cours.md; date '+%H:%M'; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 tools/verifie_en_cours.py 2>&1 | tail -3", "description": "Current en-cours header and word count"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 19 h 45 HNE (heure locale, EST).**
+
+19:42
+120:| fichiers / JSON de résultats | **559** / **646** | `reports/*.md` / `reports/*.json` |
+  en-cours · 1637 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"**Mis à jour : 2026-11-02, 19 h 45 HNE (heure locale, EST).**\",\n              \"**Mis à jour : 20 … [4151 caractères tronqués]`
+
+  ```
+état/roadmap/INDEX v3
+  en-cours · 1644 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4018 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 560 fiche(s) · 647 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 559 fichiers, le disque en a 560
+     · compteurs : en-cours.md dit 646 JSON, le disque en a 647
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"\"\"> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h … [1733 caractères tronqués]`
+
+  ```
+trim + compteurs 560/647
+  en-cours · 1674 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4048 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 560 fiche(s) · 647 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+

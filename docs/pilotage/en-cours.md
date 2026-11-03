@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 19 h 31 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 19 h 43 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -28,11 +28,11 @@
 - **Ambition** : un état reprenable, des mandats qui disent la vérité.
 - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
-- **Ce qu'elle fait** : intégration ; **porte stricte réparée** ; sous-passe doc. **7/8**.
-- **Ce que font les autres** : **N2**, **S**, **Pensée**, **D/R/A**.
-- **Prochaine action** : **passe reportée** — deux GPU à N2, charge **24** ; la tenir
-  machine libre.
-- **Bloquants** : aucun.
+- **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
+  portes en cours** (`porte-bus`, 19 h 37).
+- **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+- **Bloquants** : aucun ; la passe tient la machine (GPU libres).
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
@@ -40,28 +40,33 @@
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
   (R1.1/R1.2).
-- **Plan** : 1) ~~plan~~ ; 2) **200 k pas** (fin ~19 h 35) ; 3) ~~banc R1.1/R1.2~~ ; 4) **cinq PPL, courbe, fiche**.
+- **Plan** : 1) ~~plan~~ ; 2) ~~200 k pas~~ ; 3) ~~banc R1.1/R1.2~~ ; 4) **cinq PPL**, courbe,
+  fiche + clôture.
 - **Ambition** : N répond « plus de pas, quelle position, quelle fenêtre ».
 - **Stratégie** : 34,3 M, canal, graine 1 ; banc GPU 1.
 - **Objectif final** : **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
-- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre` (GPU 0, fin ~19 h 35) ; **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md).
-- **Ce que font les autres** : **hub**, **S**, **Pensée**, **D/R/A**.
-- **Prochaine action** : les **cinq PPL** et la **courbe** à la sortie des 200 k pas.
-- **Bloquants** : aucun ; **GPU 0/1** à N2 jusqu'à ~19 h 40.
+- **Ce qu'elle fait** : **200 k pas terminés** ; cinq PPL mesurées — val_fr **3,16**,
+  littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (< 2,5 non atteinte) ;
+  **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md),
+  [`n2-200k`](../../reports/rapport-n2-200k.md).
+- **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.
+- **Prochaine action** : la **courbe**, la **fiche + état + commit** du run de 200 k, puis la
+  **clôture**.
+- **Bloquants** : aucun ; **GPU libres**.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
 ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
 - **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
-- **Plan** : 1–4) ~~plan, analyseur, export, tests~~ ; 5–6) ~~fiche, pointeur, état~~.
-- **Ambition** : nommer le rôle, couper la subordonnée.
+- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 43~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
-- **Objectif final** : gold **39**, corpus **39**, manifeste SHA-256.
-- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**, **66/100**, **0,099** ; échec **h033** ; **40 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
-- **Ce qu'elle fait** : **`647205a`**, pointeur **`13f4e131`** ; corpus **39** (SHA `973c70a4…`) ; banque **0**.
+- **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **43 tests** ; [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : **`90e507b`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **0**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
-- **Prochaine action** : validation humaine de la banque, puis frontière du GN (h033).
+- **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
 - **Bloquants** : aucun ; **banque à 0** verdict.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
@@ -96,9 +101,13 @@
 - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
   invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
   depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
-- **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
-- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature, **8,34** anglais, **9,05**
-  wikitext2 ; N4 **0/40** ; [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
+- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, gold **47**, **43 tests** ; corpus **47** structures (SHA `f2a0d2fb…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
+- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature ; **200 k pas** — val_fr
+  **3,1591** (−0,33), grand corpus **3,0035**, littérature **5,6056**, anglais **7,2770**, wikitext2
+  **8,0018** : **< 2,5 non atteinte** (la loi place 2,5 à **1,3–2,7 M pas**), et le gain
+  **s'inverse à 512 octets** (+0,14) — le compute ne remplace pas une fenêtre entraînée ; N4
+  **0/40** ; [`n2-200k`](../../reports/rapport-n2-200k.md),
+  [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
   [`n2-1go`](../../reports/rapport-n2-corpus-1go.md).
 - **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc, opérateurs, **134/140** (4 S + 2 test périmé) ; gold
   **432 réels**, coréférence **116 liens** ; [`pensee-vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
@@ -112,7 +121,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **559** / **646** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **560** / **647** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -135,7 +144,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — 200 k pas (fin ~19 h 35) ; **R1** — 1 024 octets entraînés ; **Pensée** — gold 200+,
+**N2** — **fiche et clôture du run de 200 k** ; **R1** — 1 024 octets entraînés ; **Pensée** — gold 200+,
 porte B13 ; **S** — validation humaine, h033 ; **N4** — la consigne ; **B10.3** — le `z` ;
 **B13** — porte 134/140 (4 S + 2 test périmé) ; **R0.7** — le tagger complet ; **D** — OCR clos (8 scans `.PDF`).
 
@@ -145,7 +154,8 @@ porte B13 ; **S** — validation humaine, h033 ; **N4** — la consigne ; **B10.
 
 - **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.2** tranche (3,0107 à octets constants) ;
   reste **1 024 octets**.
-- **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → N2 tranche.
+- **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → **non** :
+  3,1591 ; le français tient et la largeur progresse ; 2,5 est à **1,3–2,7 M pas**.
 - **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
 - **B10.3** : chrF **> 39,6** ? → l'attention croisée tranche.
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.

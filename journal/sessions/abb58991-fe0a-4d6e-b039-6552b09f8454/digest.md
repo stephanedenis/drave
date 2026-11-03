@@ -9265,3 +9265,368 @@ EN-COURS: 1593
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-b13-porte-134.md reports/b13-porte-134.json reports/README.md reports/INDEX.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md journal/sessions/e181ce02-cd50-488a-a6be … [462 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md                         |   6 +-
+ docs/pilotage/en-cours.md                          |  17 +--
+ docs/pilotage/plan-travail.md                      |   2 +-
+ docs/pilotage/roadmap.md                           |   8 +-
+ journal/2026-11-02/README.md                       |  10 ++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  11 +-
+ reports/INDEX.md                                   |   3 +-
+ reports/README.md                                  |   2 +-
+ reports/b13-porte-134.json                         |  42 ++++++++
+ reports/rapport-b13-porte-134.md                   | 114 +++++++++++++++++++++
+ 10 files changed, 191 insertions(+), 24 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+CHECK=0
+  ✅ index : aucun fait stagé sans état
+[master 9f1f4869] B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+ 30 files changed, 1339 insertions(+), 104 deletions(-)
+ create mode 100644 reports/b13-porte-134.json
+ create mode 100644 reports/rapport-b13-porte-134.md
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `9f1f4869` ; contrôle post-commit et bilan de la porte B13
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | head -5; echo '=== CHECKS ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/taille_documents.py 2>&1 | grep -E \"T0\" | head -1; python3 tools/verifie_en_cou … [303 caractères tronqués]`
+
+  ```
+9f1f4869 19:34:08 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+7d5bd08d 19:16:43 ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS
+=== CHECKS ===
+  état · dernier fait 9f1f4869 · dernier état 9f1f4869
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3967 mots (budget 4 000)
+  en-cours · 1593 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 559 fiche(s) · 646 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== SESSIONS ===
+EXIT=1
+  ❌ mandat périmé (46 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — heartbeat à rafraîchir
+  ❌ mandat périmé (164 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ❌ mandat périmé (179 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — heartbeat à rafraîchir
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 : la porte B13 est mesurée à **134/140** (4 S + 2 test périmé) ; le 140/140 ne se rejoue pas
+
+**Fait de la nuit** — commit **`9f1f4869`** : la porte B13 est à **134/140**.
+
+| arbre | sous-module | anaphora | 4 tests S | porte |
+|---|---|---|---:|---:|
+| `702b368c` (celui du 140/140) | `3b68143` | **2/5** | passent | **138/140** |
+| HEAD | `3b68143` | 2/5 | passent | **138/140** |
+| HEAD | `647205a` (courant) | 2/5 | **échouent** | **134/140** |
+
+- **Le 140/140 de `702b368c` est périmé** : son arbre exact (son sous-module `3b68143`, son gold) rend `fidelite_lien_auto` **2/5** — la porte y serait **138/140**. Le compte n'était pas rejouable.
+- **Quatre rouges viennent du sous-module S `647205a`** : T111, T113–T115 (les valeurs exactes 0,3676 / 0,1961-0,4592 / 0,2109-0,4336 / 0,4119 ; l'ancien `3b68143` les passe). C'est un **désaccord d'attendus**, pas une régression du modèle : S doit les mettre à jour.
+- **Deux rouges sont un test périmé** : T132/T133 attendent 5/5, la fonction rend **2/5** de façon déterministe — sur l'arbre `702b368c`, avec les deux sous-modules et sur **6 graines**. Ni le S, ni le hash, ni `data/` : une incohérence test/gold à corriger.
+
+**État** : T0 **3967/4000**, `en-cours` **1593 mots**, revue **559/646**, tableaux/journal/état verts, dépôt **propre**. Le plan est à 19 h 32 (valide). `sessions --strict` reste rouge sur **N2** (46 min), **S** (164) et le **hub** (179), pas sur `e181ce02`.
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · **porte B13 `9f1f4869`** ; le hub a committé R1 (`2cff8dba`).
+
+La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4 attendus) + **anaphora** (T132/T133). Le goal reste **actif**.
+
+
+## Tour 8
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 6 : la porte qui bouge — j'inspecte `LABYRINTHE_PORTE_MINUTE`, le prompt et l'oracle
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git status --short | head -4; grep -n \"PORTE_MINUTE\" tools/pensee/operateurs.py | head -10; echo '---'; grep -n \"def _etat_p\\|def _open_p\\|def _sonde_p\\|def _pas_p\\|def _attendre\" tools/pensee/operateurs.py | head  … [69 caractères tronqués]`
+
+  ```
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+969:LABYRINTHE_PORTE_MINUTE = Probleme(
+3061:           "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",
+---
+750:def _etat_p(x: int, y: int, open_: bool, parent: str | None = None,
+762:def _open_p(e: Etat) -> bool:
+2431:def _etat_pp(x: int, y: int, open_: bool, t: int, parent: str | None = None,
+2443:def _open_pp(e: Etat) -> bool:
+2590:def _etat_pb(x: int, y: int, open_: bool, t: int, parent: str | None = None,
+2602:def _open_pb(e: Etat) -> bool:
+2754:def _etat_pmob(x: int, y: int, open_: bool, d: int, parent: str | None = None,
+2766:def _open_pmob(e: Etat) -> bool:
+2922:def _etat_pw(x: int, y: int, t: int, parent: str | None = None,
+2938:def _open_pw(e: Etat) -> bool:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"class PolitiqueLLM\" -A 60 tools/pensee/operateurs.py | head -75; echo '=== T19 ==='; grep -n \"MINUTE\\|minute\" tools/pensee/autotest.py | head -12", "description": "Read PolitiqueLLM and minute tests"}`
+
+  ```
+84:class PolitiqueLLM(Politique):
+85-    """La politique **DRVM/native** : un modèle local décide le pas.
+86-
+87-    Le conteneur `DRVM` l'appelle comme les autres politiques ; le modèle ne rend qu'un mot
+88-    de direction, contraint par une grammaire GBNF. Le **coût réel** (latence cumulée) est
+89-    mesuré à côté du coût symbolique du registre. `transport` est injectable pour tester le
+90-    contrat sans modèle ; en production, il interroge `llama-server` en CPU.
+91-    """
+92-
+93-    nom = "llm"
+94-
+95-    def __init__(self, modele: str, endpoint: str = "http://127.0.0.1:18082",
+96-                 jeu: str = "labyrinthe", variante: str = "regle", timeout: int = 120,
+97-                 transport=None):
+98-        super().__init__()
+99-        self.modele = str(modele)
+100-        self.endpoint = endpoint.rstrip("/")
+101-        self.jeu = jeu
+102-        self.variante = variante
+103-        self.timeout = timeout
+104-        self.transport = transport or self._post
+105-        self.latence = 0.0
+106-        self.erreurs = 0
+107-        self.derniere = ""
+108-
+109-    def _grammaire(self) -> str:
+110-        if self.jeu == "cadenas":
+111-            return 'root ::= "avant" 
+… [2988 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du problème minute (fenêtre, sonde, attendre) et des portes T18/T19
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '960,1010p' tools/pensee/operateurs.py; echo '=== ETAT_PW ==='; sed -n '2915,2995p' tools/pensee/operateurs.py", "description": "Read minute problem and window state"}`
+
+  ```
+return [_etat_p(nx, ny, _open_p(e), e.empreinte(), e.profondeur + 1)]
+
+
+REGISTRE_PM = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_pf, "un pas ; la porte est fermée"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_pf, "un saut ; la porte est fermée"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_pm, "la porte s'ouvre un tour, la sonde passe"),
+})
+
+LABYRINTHE_PORTE_MINUTE = Probleme(
+    nom="labyrinthe_porte_minute",
+    initial=lambda: _etat_p(0, 0, False),
+    operateurs={n: o.applique for n, o in REGISTRE_PM.operateurs.items()},
+    but=but_p,
+    heuristique=heuristique_p,
+    score=score_p,
+)
+
+
+class PolitiqueAppriseAleatoire(PolitiqueApprise):
+    """La Q-table de la porte **aléatoire** : à chaque pas, la porte saute avec p = 0,2."""
+
+    nom = "aleatoire"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma, eps=eps)
+        self.p_saut = p_saut
+
+    def _cle(self, e: Etat) -> tuple:
+        return _xy_pmob(e)[0], _xy_pmob(e)[1], _open_pmob(e), _d_pmob
+… [3174 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '370,405p' tools/pensee/autotest.py", "description": "Read T18/T19 minute tests"}`
+
+  ```
+ok = b["but"] and b["par_operateur"].get("sonde", 0) > 0
+    return ok, (f"porte fermée : {b['noeuds']} nœuds/but, "
+                f"sonde {b['par_operateur'].get('sonde', 0)}")
+
+
+def t18_minute() -> tuple[bool, str]:
+    """La porte à un tour : la sonde ouvre et passe dans le même pas."""
+    from .operateurs import (DRVM, LABYRINTHE_PORTE_MINUTE, REGISTRE_PM,
+                             PolitiqueManhattan)
+    d = DRVM(REGISTRE_PM, PolitiqueManhattan())
+    d.penser(LABYRINTHE_PORTE_MINUTE, AStar(), Budget(200))
+    b = d.instantane()
+    ok = b["but"] and b["par_operateur"].get("sonde", 0) > 0
+    return ok, (f"porte minute : {b['noeuds']} nœuds/but, "
+                f"sonde {b['par_operateur'].get('sonde', 0)}")
+
+
+def t19_minute_apprise() -> tuple[bool, str]:
+    """La Q-table sur la porte minute : elle apprend l'ouverture-passage."""
+    from .operateurs import (DRVM, LABYRINTHE_PORTE_MINUTE, REGISTRE_PM,
+                             PolitiqueApprise)
+    p = PolitiqueApprise(episodes=200, graine=0)
+    p.apprendre()
+    d = DRVM(REGISTRE_PM, p)
+    d.penser(LABYRINTHE_PORTE_MINUTE, AStar(), Budget(200))
+    b = d.instantane()
+    ok = b["but"] and b["par_operateur"].get("
+… [365 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte « minute » n'a pas le temps dans l'état ; la **mobile** (`PORTES_MOBILE`) est la vraie porte qui bouge ; j'inspecte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"MOBILE\\|mobile\" tools/pensee/operateurs.py | head -25; echo '=== TESTS ==='; grep -n \"mobile\" tools/pensee/autotest.py | head -10", "description": "Find mobile door problem and tests"}`
+
+  ```
+994:        door = PORTES_MOBILE[d]
+1045:    px, py = PORTES_MOBILE[d]
+1071:        if ouvre and not o and (nx, ny) == PORTES_MOBILE[d]:
+1143:        if ouvre and not o and (nx, ny) == PORTES_MOBILE[d]:
+1233:        o2 = o or ((nx, ny) == PORTES_MOBILE[d])
+2154:        door = PORTES_MOBILE[self.phase]
+2455:    if (x, y) == PORTES_MOBILE[d]:
+2457:    if (x, y) in PORTES_MOBILE:
+2492:    open_ = _open_pp(e) or ((x + dx, y + dy) == PORTES_MOBILE[_d_phase(t)])
+2540:        if ouvre and not o and (nx, ny) == PORTES_MOBILE[d]:
+2614:    if (x, y) == PORTES_MOBILE[d]:
+2616:    if (x, y) in PORTES_MOBILE:
+2651:    open_ = _open_pb(e) or ((x + dx, y + dy) == PORTES_MOBILE[_d_bouge(t)])
+2704:        if ouvre and not o and (nx, ny) == PORTES_MOBILE[d]:
+2748:# --------------------------------------------------------------------------- porte mobile
+2751:PORTES_MOBILE = ((3, 3), (1, 3))
+2777:    if (x, y) == PORTES_MOBILE[d]:
+2779:    if (x, y) in PORTES_MOBILE:
+2808:    return (x + dx, y + dy) == PORTES_MOBILE[d]
+2812:    """La politique ouvre la porte **mobile** si elle la vise, puis avance."""
+2841:    "pas": Operateur("pas", "symbolique", 1.0, pas_pmob, "un pas ; la porte mobile reste fermée"
+… [851 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte mobile a deux positions ((3,3) et (1,3)) ; j'inspecte le registre, l'oracle Q-table et T31
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '2748,2870p' tools/pensee/operateurs.py", "description": "Read mobile door problem, registry, oracle"}`
+
+  ```
+# --------------------------------------------------------------------------- porte mobile
+
+
+PORTES_MOBILE = ((3, 3), (1, 3))
+
+
+def _etat_pmob(x: int, y: int, open_: bool, d: int, parent: str | None = None,
+               profondeur: int = 0) -> Etat:
+    return Etat(f"m{x}:{y}:{int(open_)}:{d}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+                 Candidat("open", {"v": bool(open_)}), Candidat("d", {"v": int(d)})))
+
+
+def _xy_pmob(e: Etat) -> tuple[int, int]:
+    dd = {c.id: c.corps["v"] for c in e.candidats}
+    return int(dd["x"]), int(dd["y"])
+
+
+def _open_pmob(e: Etat) -> bool:
+    return bool(next(c.corps["v"] for c in e.candidats if c.id == "open"))
+
+
+def _d_pmob(e: Etat) -> int:
+    return int(next(c.corps["v"] for c in e.candidats if c.id == "d"))
+
+
+def _libre_pmob(x: int, y: int, open_: bool, d: int) -> bool:
+    if not (0 <= x < 5 and 0 <= y < 5):
+        return False
+    if (x, y) == PORTES_MOBILE[d]:
+        return open_
+    if (x, y) in PORTES_MOBILE:
+        return True            # l'autre porte est libre
+    return (x, y) not in MURS_P
+
+
+def _deplacer_pmob(e: Etat, dx: int, dy: int, profondeur: int = 1,
+             
+… [2780 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '520,560p' tools/pensee/autotest.py; echo '=== POST/GRAM ==='; sed -n '109,160p' tools/pensee/operateurs.py", "description": "Read mobile test and PolitiqueLLM transport"}`
+
+  ```
+lignes = executer()
+    bruits = sum(1 for l in lignes if l["sto_but"])
+    stables = sum(1 for l in lignes if l["stable_but"])
+    return (bruits == len(lignes) and stables == len(lignes) and len(lignes) == 5,
+            f"graines : {bruits}/5 bruits, {stables}/5 stables")
+
+
+def t31_mobile() -> tuple[bool, str]:
+    """La porte mobile : deux positions, A* et politique seule réussissent aux deux."""
+    from .moteur import AStar
+    from .operateurs import (DRVM, LABYRINTHE_PORTE_MOBILE_0, LABYRINTHE_PORTE_MOBILE_1,
+                             REGISTRE_PMOB, PolitiqueAppriseMobile, PolitiqueManhattan,
+                             seule_mobile)
+    from .store import Budget
+    buts = []
+    for lab in (LABYRINTHE_PORTE_MOBILE_0, LABYRINTHE_PORTE_MOBILE_1):
+        d = DRVM(REGISTRE_PMOB, PolitiqueManhattan())
+        d.penser(lab, AStar(), Budget(200))
+        buts.append(d.instantane()["but"])
+    p = PolitiqueAppriseMobile(episodes=1000, graine=0)
+    p.apprendre()
+    s0 = seule_mobile(p, 0)
+    s1 = seule_mobile(p, 1)
+    return (all(buts) and s0[0] and s1[0]), (
+        f"mobile : A* {sum(buts)}/2, seule {s0}/{s1} ({len(p.q)} états-Q)")
+
+
+def t32_mobile_graines() -> tuple[bo
+… [3598 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La minute est la porte de la suite ; je copie le banc porte (T18 : Manhattan) et je mesure le 7B sur `LABYRINTHE_PORTE_MINUTE`
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,140p' tools/tests/qualifier_porte_drvm.py", "description": "Read existing porte bench for reuse"}`
+
+  ```
+#!/usr/bin/env python3
+"""qualifier_porte_drvm.py — la porte DRVM avec sa règle **dans le prompt**.
+
+L'ancien prompt du labyrinthe ne décrivait pas la porte : le 7B échouait (200 nœuds, 3 appels,
+sans but). Ici la politique `jeu="porte"` reçoit les murs du labyrinthe-porte, la porte `(3,3)`
+et la règle « depuis (3,2), la sonde ouvre la porte si tu réponds bas ». On mesure l'oracle,
+l'aveugle, le hasard et le LLM sur le même `DRVM` (budget 200, A*).
+
+    python3 tools/tests/qualifier_porte_drvm.py --endpoint http://127.0.0.1:18082 \
+        --sortie reports/pensee-porte-llm.json
+
+Le serveur est sur CPU (`-ngl 0`) : les GPU de N2 restent intacts.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import subprocess
+import sys
+import time
+
+RACINE = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(RACINE))
+sys.path.insert(0, str(RACINE / "tools/tests/linguistique"))
+from qualifier_neuronal import _sante, demarrer_serveur  # noqa: E402
+from tools.pensee.moteur import AStar  # noqa: E402
+from tools.pensee.operateurs import (DRVM, LABYRINTHE_PORTE, P_BUT, REGISTRE_P,  # noqa: E402
+                                     PolitiqueAveugle, Polit
+… [4065 caractères tronqués]
+  ```
+

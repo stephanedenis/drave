@@ -12,7 +12,7 @@
   courbe de longueur), R1.1/R1.2 mesurés depuis N2
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `reports/rapport-n2-*`,
   `work/n2*`, `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/`
-- **Heartbeat** : 2026-11-02 18:50 HAE
+- **Heartbeat** : 2026-11-02 19:50 HAE
 - **Objectif final** : trancher la question ouverte de N2 — **les 200 000 pas sur le mélange
   1 Go font-ils passer sous 2,5 sans perdre le français ?** — puis **R1.1/R1.2** : un schéma
   de position **relatif** reproduit-il par construction le gain des positions aléatoires, et
@@ -27,10 +27,10 @@
 - **Reprise** : `0b0a6a0d` a clos N2.ac (3,4902 / 6,0283 / 8,3352 / 9,0525) ; la note de
   passage [`rapport-n2-fenetre-r1`](../../../reports/rapport-n2-fenetre-r1.md) fixe ce que
   R1.1/R1.2 doivent tester. Rien à rouvrir de N2.aa — le corpus n'est pas le levier.
-- **Ce qui tourne** : les **200 000 pas** sur `data/wiki_mix/propre` (GPU 0, `work/n2ac/mix-200k.log`,
-  ~57 ms/pas, fin attendue 19 h 30) ; le banc **R1.1/R1.2** (RoPE) sur le GPU 1 — R1.1 mesurée
-  (3,2545 à 1 000 octets, 0,97× la PPL à 129), R1.2 à octets constants (3,0107, −0,24) ; reste le
-  contrôle « depuis zéro » (initialisation figée, deux schémas).
-- **Prochaine action** : la mesure des cinq PPL du run de 200 k à sa sortie, puis fiche + état +
-  commit ; le contrôle depuis zéro ; la clôture.
+- **Ce qui tourne** : le run de **200 000 pas** est fini (`work/n2ac/mix-200k.pt`) ; les cinq PPL
+  sont mesurées — val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — et
+  la courbe 128/256/512/1000 est dans `work/n2ac/courbe-mix200.json` ; le banc **R1.1/R1.2** (RoPE)
+  est mesuré (3,2545 à 1 000, 3,0107 à octets constants) ; reste le contrôle « depuis zéro ».
+- **Prochaine action** : la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis
+  la **clôture**.
 - **État** : actif

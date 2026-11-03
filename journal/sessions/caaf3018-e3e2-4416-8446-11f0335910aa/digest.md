@@ -2610,3 +2610,19 @@ started background job bash-108
   ```
 
 - **job_output** `{"job_id": "bash-108", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-audit-drapeaux   ✅                         175 s  ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  porte-bloc-code        ✅                          11 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          12 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          48 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          81 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          93 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          30 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynch
+… [330 caractères tronqués]
+  ```
+

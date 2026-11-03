@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 3.3 h |
-| Tours | 7 |
-| Messages | 370 |
-| Appels d'outils | 473 |
-| Fichiers touchés | 30 |
-| Commandes | 344 |
+| Durée | 3.5 h |
+| Tours | 8 |
+| Messages | 380 |
+| Appels d'outils | 484 |
+| Fichiers touchés | 31 |
+| Commandes | 354 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 1 |
@@ -37,6 +37,8 @@
 **Tour 6** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 7** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 8** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -275,7 +277,7 @@ La suite de la nuit : le **gold 200+ phrases**, la **porte B13** (six rouges S :
 
 ### Tour 7 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check submodule history and repo state
 - bash — Create worktree with the previous S submodule
@@ -291,11 +293,48 @@ La suite de la nuit : le **gold 200+ phrases**, la **porte B13** (six rouges S :
 - bash — Check exact submodule pointers and gold/miroir diffs
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-134.md`
 - bash — Check hub state before B13 report commit
-- … et 7 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ Index explicite et commit du fait « porte 134/140 » (si le hub n'a pas avancé HEAD)
+⏵ Round 5 : la porte B13 est mesurée à **134/140** (4 S + 2 test périmé) ; le 140/140 ne se rejoue pas
+
+**Fait de la nuit** — commit **`9f1f4869`** : la porte B13 est à **134/140**.
+
+| arbre | sous-module | anaphora | 4 tests S | porte |
+|---|---|---|---:|---:|
+| `702b368c` (celui du 140/140) | `3b68143` | **2/5** | passent | **138/140** |
+| HEAD | `3b68143` | 2/5 | passent | **138/140** |
+| HEAD | `647205a` (courant) | 2/5 | **échouent** | **134/140** |
+
+- **Le 140/140 de `702b368c` est périmé** : son arbre exact (son sous-module `3b68143`, son gold) rend `fidelite_lien_auto` **2/5** — la porte y serait **138/140**. Le compte n'était pas rejouable.
+- **Quatre rouges viennent du sous-module S `647205a`** : T111, T113–T115 (les valeurs exactes 0,3676 / 0,1961-0,4592 / 0,2109-0,4336 / 0,4119 ; l'ancien `3b68143` les passe). C'est un **désaccord d'attendus**, pas une régression du modèle : S doit les mettre à jour.
+- **Deux rouges sont un test périmé** : T132/T133 attendent 5/5, la fonction rend **2/5** de façon déterministe — sur l'arbre `702b368c`, avec les deux sous-modules et sur **6 graines**. Ni le S, ni le hash, ni `data/` : une incohérence test/gold à corriger.
+
+**État** : T0 **3967/4000**, `en-cours` **1593 mots**, revue **559/646**, tableaux/journal/état verts, dépôt **propre**. Le plan est à 19 h 32 (valide). `sessions --strict` reste rouge sur **N2** (46 min), **S** (164) et le **hub** (179), pas sur `e181ce02`.
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · **porte B13 `9f1f4869`** ; le hub a committé R1 (`2cff8dba`).
+
+La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4 attendus) + **anaphora** (T132/T133). Le goal reste **actif**.
+
+### Tour 8 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Inspect minute door problem and state helpers
+- bash — Read PolitiqueLLM and minute tests
+- bash — Read minute problem and window state
+- bash — Read T18/T19 minute tests
+- bash — Find mobile door problem and tests
+- bash — Read mobile door problem, registry, oracle
+- bash — Read mobile test and PolitiqueLLM transport
+- bash — Read existing porte bench for reuse
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py`
+- bash — Run minute door qualification
+
+**Synthèse produite :**
+
+⏵ Mesure de la porte minute (oracle, aveugle, hasard, LLM porte, LLM labyrinthe)
 
 ## 3. Travail accompli
 
@@ -333,6 +372,7 @@ La suite de la nuit : le **gold 200+ phrases**, la **porte B13** (six rouges S :
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-pragmatique-neuronale.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-134.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/b13-porte-134.json` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -376,7 +416,7 @@ La suite de la nuit : le **gold 200+ phrases**, la **porte B13** (six rouges S :
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 304 autres
+- … et 314 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -452,6 +492,7 @@ La suite de la nuit : le **gold 200+ phrases**, la **porte B13** (six rouges S :
 - **T5** `52:  **tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;`
 - **T5** `~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;`
 - **T5** `identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ;`
+- **T8** `"""Le bruit variable : la politique entraînée à 80 % tient de 50 % à 95 %."""`
 
 ## 5. Erreurs rencontrées
 

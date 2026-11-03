@@ -3874,3 +3874,297 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-157", "timeout_ms": 240000, "wait": true}`
+
+  ```
+19:34:21
+ "duree_s": 11410.567405223846
+}
+work/n2ac/mix-200k.pt
+CHECKPOINT_OK
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ 200 k pas terminés (3 h 10) ; mesure des cinq PPL et de la courbe
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat work/n2ac/mix-200k.pt.json; echo \"=== eval lancée ===\"; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python work/n2ac/eval_200k.py work/n2ac/mix-200k.pt --sortie w … [334 caractères tronqués]`
+
+  ```
+{
+ "modele": "drave-n0",
+ "parametres": 34301224,
+ "corpus": "data/wiki_mix/propre/train.txt",
+ "octets": 1017487092,
+ "pas": 200000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.204762578010559,
+ "ppl_val": 2.9801252139128414,
+ "jetons_val": 8192,
+ "tetes": true,
+ "precision_main": 0.674072265625,
+ "precision_early": [
+  0.609130859375,
+  0.661865234375,
+  0.671630859375
+ ],
+ "drvm": "work/n2ac/mix-200k.drvm",
+ "sha256_drvm": "bec5470e1e2d8d8909b5b31e13d3608b1655631d62f5a1e12d40a0269ab16a75",
+ "duree_s": 11410.567405223846
+}
+=== eval lancée ===
+pid 178584
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/eval-mix200.json 2>/dev/null; tail -6 work/n2ac/eval-mix200.log", "description": "Read 200k evaluation results"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-159]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-159", "timeout_ms": 420000, "wait": true}`
+
+  ```
+19:41:30
+{
+ "fichier": "mix-200k.pt",
+ "params": 34301224,
+ "val_fr_L128": 3.1591,
+ "val_fr_L256": 3.2047,
+ "val_fr_L512": 3.6577,
+ "val_fr_permute": 181.9082,
+ "val_big_L128": 3.0035,
+ "val_big_L256": 3.0298,
+ "val_big_L512": 3.4878,
+ "val_big_permute": 199.8597,
+ "corpus_propre_val": 9.1262,
+ "litterature": 5.6056,
+ "anglais": 7.277,
+ "wikitext2": 8.0018
+}
+}
+  L128 : 3.1591
+  L256 : 3.2047
+  L512 : 3.6577
+  L1000 : 8.2262
+{"fichier": "mix-200k.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L128": 3.1591, "L256": 3.2047, "L512": 3.6577, "L1000": 8.2262}
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesures 200 k en main ; calcul de la loi et de la trajectoire
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 work/n2ac/trajectoire.py work/n2ac/mix-200k.log --depuis 40000 --cible 2.5 --sortie work/n2ac/traj-200k.json | head -14; echo \"=== table ===\"; python3 work/n2ac/table_200k.py", "description": "Compute compute law and comparison table"}`
+
+  ```
+{
+ "journal": "work/n2ac/mix-200k.log",
+ "points": 4001,
+ "dernier_pas": 200000,
+ "ppl_finale": 3.103,
+ "ajustement": {
+  "depuis": 40000,
+  "a": 9.233779,
+  "b": 0.089408
+ },
+ "pas_pour_cible": 2221318,
+ "trajectoire": [
+  [
+   10000,
+=== table ===
+| mesure | 60 000 pas (N2.ac) | **200 000 pas** | écart |
+|---|---:|---:|---:|
+| validation française (L128) | 3.4902 | **3.1591** | -0.3311 |
+| validation française (L256) | 3.4615 | **3.2047** | -0.2568 |
+| validation française (L512) | 3.5169 | **3.6577** | +0.1408 |
+| validation du grand corpus (L128) | 3.3565 | **3.0035** | -0.3530 |
+| validation du grand corpus (L512) | 3.3685 | **3.4878** | +0.1193 |
+| littérature (jamais vue) | 6.0283 | **5.6056** | -0.4227 |
+| anglais (jamais vu) | 8.3352 | **7.2770** | -1.0582 |
+| wikitext2 (jamais vu) | 9.0525 | **8.0018** | -1.0507 |
+| corpus propre du dépôt (transfert) | 9.2731 | **9.1262** | -0.1469 |
+| permutation (contrôle) | 215.5638 | **181.9082** | -33.6556 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 work/n2ac/trajectoire.py work/n2ac/mix-200k.log --depuis 20000 --cible 2.5 | python3 -c \"\nimport json,sys; d=json.load(sys.stdin)\nprint('loi 20k-200k : a=%.4f b=%.4f · pas pour 2,5 = %d' % (d['ajustement']['a'], d['ajustement']['b'], d['pas … [431 caractères tronqués]`
+
+  ```
+loi 20k-200k : a=10.2983 b=0.0987 · pas pour 2,5 = 1692867
+trajectoire 10k : [[10000, 4.646], [20000, 3.993], [30000, 3.781], [40000, 3.626], [50000, 3.525], [60000, 3.39], [70000, 3.428], [80000, 3.339], [90000, 3.331], [100000, 3.292], [110000, 3.303], [120000, 3.28], [130000, 3.202], [140000, 3.231], [150000, 3.152], [160000, 3.178], [170000, 3.17], [180000, 3.142], [190000, 3.114], [200000, 3.103]]
+prédit 200k avec la loi 40k-200k : 3.100
+pas pour 2,5 depuis 200k (loi 40k) : 2.74 M
+pas pour 2,5 depuis 200k (loi 20k) : 1.27 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -E \"^pas +(60000|100000|150000) ·\" work/n2ac/mix-200k.log; echo \"=== 60k run ===\"; grep -E \"^pas +(60000|100000) ·\" work/n2w/mix-60k.log; echo \"=== précision ===\"; python3 -c \"\nimport json\na=json.load(open('work/n2w/mix-60k.pt.json')); … [391 caractères tronqués]`
+
+  ```
+pas 60000 · perte 1.2569 · PPL val 3.390 · 3376 s
+pas 100000 · perte 1.0690 · PPL val 3.292 · 5690 s
+pas 150000 · perte 1.3536 · PPL val 3.152 · 8603 s
+=== 60k run ===
+pas 60000 · perte 1.2579 · PPL val 3.480 · 3221 s
+=== précision ===
+60k  precision 0.6416 early [0.5764, 0.6221, 0.6379]
+200k precision 0.6741 early [0.6091, 0.6619, 0.6716]
+duree 60k 3223 200k 11411
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche N2.ae (200 000 pas)
+
+- **write** `{"content": "# N2.ae — 200 000 pas sur le mélange 1 Go : −0,33 en domaine, −1,06 en largeur, et la porte 2,5 à un million de pas\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : à recette constante (34,3 M,\n> canal, positions aléatoires), passer de **60 000** à **200 000 pas** … [8840 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-200k.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2w/mix-60k.pt --longueurs 128,256,512,1000 --sortie work/n2ac/courbe-mix60.json 2>&1 | tail -5; echo \"=== agregat ===\"; python3 - <<'PY'\nimport json, pathlib … [1594 caractères tronqués]`
+
+  ```
+L128 : 3.4902
+  L256 : 3.4615
+  L512 : 3.5169
+  L1000 : 7.9201
+{"fichier": "mix-60k.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L128": 3.4902, "L256": 3.4615, "L512": 3.5169, "L1000": 7.9201}
+=== agregat ===
+  reports/n2-200k.json · 6 source(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-200k.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"Sur la validation française, le 200 k vaut 3,1591 / 3,2047 / 3,6577 à 128/256/512 et **8,2262 à\n1 000 octets** (le  … [1734 caractères tronqués]`
+
+  ```
+ok
+0
+=== longueurs 128/512 ===
+7.9201 8.2262
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls reports/*.md | wc -l; ls reports/*.json | wc -l; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\n\n# 1. horodatage\nt = t.replace(\"**Mis à jour : 2026-11-02, 18 h 25 HNE (heur … [4381 caractères tronqués]`
+
+  ```
+560
+647
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 21, in <module>
+AssertionError
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"N2\" docs/pilotage/en-cours.md | sed -n 1,20p", "description": "Locate current N2 lines"}`
+
+  ```
+10:> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A est
+33:- **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+34:- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+38:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+41:- **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
+50:  **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md) ; fiche N2 en cours.
+67:- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+86:- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+104:- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature, **8,34** anglais, **9,05**
+133:| **N — le natif** | **N2, N3, N4** | N2 : **N2.ac 1 Go — 3,49 domaine / 6,03 littérature** ; < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2** : 200 k pas **en cours** (session `0733c5bb`), puis **R1.1/R1.2** ; **N4** |
+143:**N2** — **fiche et clôture du run de 200 k** ; **R1** — 1 024 octets entraînés ; **Pensée** — gold 200+,
+153:- **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre
+… [28 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 44,52p docs/pilotage/en-cours.md; echo \"---\"; sed -n 102,108p docs/pilotage/en-cours.md; echo \"---\"; sed -n 120,128p docs/pilotage/en-cours.md", "description": "Read exact current blocks to edit"}`
+
+  ```
+fiche + clôture.
+- **Ambition** : N répond « plus de pas, quelle position, quelle fenêtre ».
+- **Stratégie** : 34,3 M, canal, graine 1 ; banc GPU 1.
+- **Objectif final** : **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
+- **Ce qu'elle fait** : **200 k pas terminés** ; cinq PPL mesurées — val_fr **3,16**,
+  littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (< 2,5 non atteinte) ;
+  **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md) ; fiche N2 en cours.
+- **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.
+- **Prochaine action** : la **courbe**, la **fiche + état + commit** du run de 200 k, puis la
+---
+  depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
+- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature, **8,34** anglais, **9,05**
+  wikitext2 ; **200 k pas** — val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitex
+… [726 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nn = 0\n\nvieux = \"\"\"- **N2** : **N2.ac** 1 Go — **3,49** domaine, **6,03** littérature, **8,34** anglais, **9,05**\n  wikitext2  … [2999 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 23, in <module>
+AssertionError
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 37,55p docs/pilotage/en-cours.md; echo \"=== mtime ===\"; stat -c '%y' docs/pilotage/en-cours.md", "description": "Re-read session block after concurrent edit"}`
+
+  ```
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
+  (R1.1/R1.2).
+- **Plan** : 1) ~~plan~~ ; 2) ~~200 k pas~~ ; 3) ~~banc R1.1/R1.2~~ ; 4) **cinq PPL**, courbe,
+  fiche + clôture.
+- **Ambition** : N répond « plus de pas, quelle position, quelle fenêtre ».
+- **Stratégie** : 34,3 M, canal, graine 1 ; banc GPU 1.
+- **Objectif final** : **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
+- **Ce qu'elle fait** : **200 k pas terminés** ; cinq PPL mesurées — val_fr **3,16**,
+  littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (< 2,5 non atteinte) ;
+  **R1.1/R1.2 mesurées** ; [`n2-r11`](../../reports/rapport-n2-r11.md) ; fiche N2 en cours.
+- **Ce que font les autres** : **hub**, **S**, **Pensée** ; **D/R/A close**.
+- **Prochaine action** : la **courbe**, la **fiche + état + commit** du run de 200 k, puis la
+  **clôture**.
+- **Bloquants** : aucun ; **GPU libres**.
+- **Journal** : [la session](../../journal/sessio
+… [92 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\navant = t\n# 1. la puce N2 : chiffres précis + fiche + l'inversion à 512\nt = re.sub(r\"- \\*\\*N2\\*\\* : \\*\\*N2\\.ac\\*\\*  … [1634 caractères tronqués]`
+
+  ```
+modifié : True | n2-200k présent : 2
+  en-cours · 1683 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+124:| fichiers / JSON de résultats | **559** / **646** | `reports/*.md` / `reports/*.json` |
+560
+647
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -t reports/*.md | head -3; ls -t reports/*.json | head -3; python3 - <<'PY'\nimport pathlib, subprocess\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nmd = len(list(pathlib.Path(\"reports\").glob(\"*.md\")))\ … [406 caractères tronqués]`
+
+  ```
+reports/INDEX.md
+reports/rapport-n2-200k.md
+reports/rapport-s-analyseur-roles.md
+reports/n2-200k.json
+reports/s-banque-structures.json
+reports/b13-porte-134.json
+compteurs : 560 647 | modifié : False
+[stderr]
+ls: write error: Broken pipe
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 600 python3 tools/revue_documentation.py 2>&1 | tail -8", "description": "Review before 200k commit"}`
+
+  ```
+revue de documentation · 560 fiche(s) · 647 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/table_200k.py work/n2ac/agrege_200k.py journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null; git add reports/rapport-n2-200k.md reports/n2-200k.json docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-336 … [2183 caractères tronqués]`
