@@ -10519,3 +10519,83 @@ MM journal/2026-11-02/distribue.md
 ⏵ Lock libéré (hub `9a17d0cc`) ; je reprends le commit mobile (l'index garde mes 11 fichiers)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff --cached --stat | tail -8; python3 tools/verifie_etat_a_jour.py --index; echo \"HOOK=$?\"; git diff --cached --check; echo \"CHECK=$?\"; git commit -m \"B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME  … [281 caractères tronqués]`
+
+  ```
+reports/INDEX.md                                   |   5 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-porte-mobile.json                   | 294 ++++++++++++++
+ reports/rapport-pensee-porte-mobile.md             | 103 +++++
+ tools/pensee/operateurs.py                         |  12 +
+ tools/tests/qualifier_porte_mobile_drvm.py         | 153 ++++++++
+ tools/tests/test_pensee_politique.py               |  11 +
+ 31 files changed, 690 insertions(+), 900 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md:6023: new blank line at EOF.
+CHECK=2
+  ✅ index : aucun fait stagé sans état
+[master 2fad8e8d] B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT
+ 32 files changed, 1086 insertions(+), 104 deletions(-)
+ create mode 100644 reports/pensee-porte-mobile.json
+ create mode 100644 reports/rapport-pensee-porte-mobile.md
+ create mode 100644 tools/tests/qualifier_porte_mobile_drvm.py
+EXIT=0
+2fad8e8d 20:29:59 B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COM
+… [167 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `2fad8e8d` ; contrôle post-commit (le hub avait laissé des journaux stagés, dont un blank line)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | head -6; echo '=== CHECKS ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/taille_documents.py 2>&1 | grep -E \"T0|violation\" | head -2; python3 tools/veri … [370 caractères tronqués]`
+
+  ```
+2fad8e8d 20:29:59 B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT
+9a17d0cc 20:26:51 PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+=== CHECKS ===
+  état · dernier fait 2fad8e8d · dernier état 2fad8e8d
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3999 mots (budget 4 000)
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== SESSIONS ===
+EXIT=0
+=== DIFF CHECK ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 7 : la porte mobile est un **test faible** (le 7B échoue à (3,3), l'aveugle passe à (1,3)) ; commit `2fad8e8d`
+
+**Fait de la nuit** — commit **`2fad8e8d`** : la porte mobile.
+
+| porte | oracle | aveugle | hasard | LLM `porte_mobile` | LLM `labyrinthe` |
+|---|---|---|---|---|---|
+| **(3,3)** | 29/5 ✅ | 200/61 ❌ | 45/7 ✅ | **200/3 ❌, 228,8 s** | 200/3 ❌, 144,0 s |
+| **(1,3)** | 29/5 ✅ | **26/2 ✅** | 28/4 ✅ | **28/4 ✅, 14,4 s** | 29/5 ✅, 17,1 s |
+
+- **À (3,3), le 7B échoue** (200 nœuds, 3 sonde, 228,8 s, sans but) — le prompt `porte_mobile` ne suffit pas ; l'aveugle échoue aussi (200/61), l'oracle et la Q-table passent.
+- **À (1,3), tout le monde passe** : l'aveugle (26/2), le hasard (28/4), le LLM (28/4), le labyrinthe (29/5) — le test **ne discrimine ni la position ni la règle**. La Q-table (`PolitiqueAppriseMobile`, 1000 épisodes) passe **les deux** en 8 pas ; c'est la référence robuste.
+- Verdict ❌ : le mobile est un test faible ; la suite propre est la **porte stochastique** ou la **fenêtre temporelle**.
+
+**État** : T0 **3 999/4 000**, `en-cours` **1 625 mots**, revue **563/649**, **sessions --strict : EXIT=0**, dépôt **propre** (`git diff --check` vide). Le commit a absorbé les journaux stagés du hub (lock `index.lock` d'un commit concurrent, attendu puis repris).
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · B13 `9f1f4869` · minute `67ec9cd4` · **mobile `2fad8e8d`**. Les autres : S `3f74fe83` (corpus réel **65,5 % propre / 8,5 % CEGEP**, banque **200 phrases/355 candidats**), hub `a67dbf00`/`2bbd45e2`/`9a17d0cc` (ressources, nuit), N2 `c0196b55` (R1.2 1 024).
+
+La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le **gold 200+**, la **porte B13** (les 4 attendus du S). Le goal reste **actif**.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

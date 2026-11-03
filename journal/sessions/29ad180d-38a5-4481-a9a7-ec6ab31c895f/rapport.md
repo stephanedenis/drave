@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 3.9 h |
-| Tours | 6 |
-| Messages | 239 |
-| Appels d'outils | 249 |
+| Durée | 4.3 h |
+| Tours | 7 |
+| Messages | 243 |
+| Appels d'outils | 252 |
 | Fichiers touchés | 13 |
-| Commandes | 181 |
+| Commandes | 183 |
 | Sous-agents | 0 |
 | Commits | 12 |
 | Compactages de contexte | 0 |
@@ -30,6 +30,8 @@
 **Tour 5** — tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses
 
 **Tour 6** — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
+
+**Tour 7** — tiens ta liste de tâches dsh à jour et continue
 
 ## 2. Déroulé, étape par étape
 
@@ -265,6 +267,14 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - Le **GPU** est à N2 (mandat de nuit R1.2 à 1 024 octets, jusqu'à 08 h) et à la passe de portes ; le **CPU** était à S, d'où le registre `tools/ressources.py` du hub (`a67dbf00`) — on peut maintenant réserver explicitement.
 - Prochaine action S : **validation humaine des 200 phrases** de la banque (le serveur les charge), puis **homographes/lexique** (`ferme`, `fait`, `lit`) et filtre langue/genre.
 
+### Tour 7 — tiens ta liste de tâches dsh à jour et continue
+
+*3 appels d'outils.* Actions notables :
+
+- todo_write
+- bash — Add homograph context rule and test examples
+- bash — Add surprend to lexicon and retest homographs
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -327,7 +337,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 141 autres
+- … et 143 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.2 h |
-| Tours | 5 |
-| Messages | 184 |
-| Appels d'outils | 230 |
+| Durée | 4.3 h |
+| Tours | 12 |
+| Messages | 212 |
+| Appels d'outils | 245 |
 | Fichiers touchés | 6 |
-| Commandes | 172 |
+| Commandes | 186 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -33,6 +33,20 @@
 **Tour 4** — Es-tu en attente active d'une tache et ressource? tu doi pouvoir prendre de petites tâches indépendantes si tu cherches bien. Tiens-toi occuppé toute la nuit. je reviens vers 8h demain. je m'attends à ce que les sessions soient bien coordonnées et que le temps de chaque session soit bien utilisé jusqu'à mon retour.
 
 **Tour 5** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 6** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 7** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 8** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 9** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 10** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 11** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 12** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -186,7 +200,107 @@ Je reprends dans ~14 min pour `porte-melange`, puis je déroule jusqu'au verdict
 
 **Synthèse produite :**
 
-⏵ Tableau des repères généré au fil de la passe (à figer au verdict)
+⏵ 40/81 portes (35 vertes, 3 rouges tolérées) ; minuteur pour la suite
+
+La passe avance : **40 portes, 35 vertes, 3 rouges toutes tolérées** (`indice`, `melange`, `homeostasie`) ; `porte-greffe`, `porte-jeux`, `porte-bloc-maths`, `porte-flux`, `porte-delais` sont vertes. L'**extracteur du tableau des repères** est généré au fil de l'eau (`work/table-references.md`, 40 lignes) — il servira à réécrire le § 2 de `references-non-regression.md` au verdict.
+
+Après le commit de nuit de l'autre écrivain : revue ✅ (563 fiches / 649 JSON), `en-cours` 1 625 mots ✅, T0 3 999 ✅, `sessions --check --strict` 0 ✅, journal ✅. Rien à corriger.
+
+Minuteur de 14 min armé (`bash-166`) : je reprends vers 20 h 45 pour `poids-creux` / `profondeur-routee` / `vision`, puis je fige le verdict et les références.
+
+### Tour 6 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check pass and repo state at round 2
+- job_output
+- bash — Check plan heartbeat ages
+- bash — Check S session liveness
+- bash — Check references mtime and pass progress
+- bash — Prepare references header template
+
+**Synthèse produite :**
+
+⏵ 51/81 portes, 3 rouges toutes tolérées ; en-tête des références prêt
+
+Passe à **51 portes, 48 vertes, 3 rouges tolérées** (`indice`, `melange`, `homeostasie`). Modèle d'en-tête des références écrit (`work/entete-references.txt`) : il ne reste qu'à remplacer `{vertes}/{rouges}/{duree}/{liste}` au verdict.
+
+Surveillance : S est **vivante** (digest 20 h 30) mais son plan n'a pas bougé depuis 19 h 42 — son heartbeat sera périmé (45 min) vers 20 h 35 ; N2 est à 19 h 56. Si `porte-sessions` rougit en fin de passe, ce sera une **rouge de coordination** (plans non rafraîchis pendant une passe de 1 h 45), pas une régression de code : je la nommerai et la rejouerai après rafraîchissement.
+
+### Tour 7 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Compact status check
+
+**Synthèse produite :**
+
+⏵ 54/81 portes, index propre, Pensée vient de committer sa porte mobile
+
+Passe à **54 portes, 51 vertes, 3 rouges tolérées**. Index git propre (le commit de nuit de l'autre écrivain est passé), Pensée vient de committer `2fad8e8d` (porte mobile : le 7B échoue à (3,3), passe à (1,3) comme l'aveugle). Rien à corriger de mon côté ; j'attends les dernières lourdes (`poids-creux`, `profondeur-routee`, `vision`) avant de figer le verdict.
+
+### Tour 8 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check pass and reference drift
+
+**Synthèse produite :**
+
+⏵ 56/81 portes, aucune dérive sur `coupe`/`gain`/`flux`
+
+Passe à **56 portes, 53 vertes, 3 rouges tolérées** ; les repères déjà passés (`coupe` +0,52/+17,09, `gain` 29,0206→1297,5437, `flux` 4,45e-3) sont **identiques** aux références — pas de dérive. Prochaines lourdes : `poids-creux`, `profondeur-routee`, `vision`.
+
+### Tour 9 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check OCR gates prerequisites
+- bash — Verify N2 numbers in reports and pass status
+
+**Synthèse produite :**
+
+⏵ 57/81 ; chiffres N2/R1 vérifiés dans les fiches (3,1591 / 5,6056 ; 8,2024→3,2545)
+
+Les chiffres de l'état sont **confirmés par les fiches** : N2.ae 3,1591 domaine / 3,0035 grand corpus / 5,6056 littérature / 7,2770 anglais / 8,0018 wikitext2 ; R1.1 8,2024 → 3,2545. Passe à **57 portes, 54 vertes, 3 rouges tolérées** ; les prérequis des portes OCR (`work/r44/*`) sont présents.
+
+### Tour 10 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check pass, current gate, heartbeat ages
+
+**Synthèse produite :**
+
+⏵ 57/81, `occupation-elagage` en cours ; heartbeats N2 19 h 56 et S 19 h 50 (risque de rouge de coordination)
+
+Passe à **57 portes, 54 vertes, 3 rouges tolérées**, `porte-occupation-elagage` en cours. Projection : fin vers **21 h 00–21 h 10** ; à cette heure, N2 (heartbeat 19 h 56) et S (19 h 50) auront des plans périmés (>45 min) alors que leurs digests sont actifs — `porte-sessions` rougira donc probablement, et ce sera une **rouge de coordination**, pas de code : je la nommerai et la rejouerai après rafraîchissement, sans toucher aux plans des sessions.
+
+### Tour 11 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Quick pass and commit check
+- bash — Read live diff of references doc
+- bash — Check new resources gate and state counter
+
+**Synthèse produite :**
+
+⏵ 82ᵉ porte née pendant la passe : `porte-ressources` validée verte (9 cas + registre cohérent)
+
+`tools/porte-ressources.sh` existe depuis 20 h 32 et passe : **autotest 9/9, registre cohérent**, les avertissements `nvme_raid` (33 Gio) et NUMA étant affichés sans être fatals. Ma passe, elle, a capturé **81 portes** à 19 h 32 : elle ne comptera pas cette 82ᵉ, ce que l'autre écrivain a déjà noté dans les références (« la prochaine passe la comptera : 81 → 82 »).
+
+Conséquence pour mon intégration : j'écrirai « **passe du 02/11 19 h 32 : 81 portes** » et je laisserai la note de la 82ᵉ intacte, en repatchant le texte au-dessus de leur édition (relecture juste avant). Passe à **57 portes, 54 vertes, 3 rouges tolérées**.
+
+### Tour 12 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Paced status check with short pause
+
+**Synthèse produite :**
+
+⏵ Rythme de nuit : un point par minute (pause courte intégrée) pour économiser le contexte
 
 ## 3. Travail accompli
 
@@ -243,7 +357,7 @@ Je reprends dans ~14 min pour `porte-melange`, puis je déroule jusqu'au verdict
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 132 autres
+- … et 146 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -313,12 +427,15 @@ Je reprends dans ~14 min pour `porte-melange`, puis je déroule jusqu'au verdict
 - **T4** `- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47** st`
 - **T4** `[still running after 60000ms; moved to background job bash-166]`
 - **T5** `| `porte-mistral.sh` | 26 s | ✅ | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 |`
+- **T6** `3f74fe83 20:08 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
+- **T8** `✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon e`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 21, in <module> AssertionError: (0, '> **État au 02/11 16 h 09.** B13 est à **140/140** (gold 432') [exit code: 1]
+- **T7** : 20:32 portes=54 porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123  porte-n3-service 0 5 2fad8e8d B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'
 
 ## 6. Commits
 

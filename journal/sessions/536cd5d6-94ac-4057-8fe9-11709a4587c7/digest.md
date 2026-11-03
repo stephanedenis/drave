@@ -6245,3 +6245,195 @@ sessions · plans de mandat
 Updated todo list: 4 pending, 1 in progress, 1 completed.
   ```
 
+### 🤖 Assistant
+
+⏵ Goal de nuit actif : quatre sessions, une passe, un registre, bilan à 08 h.
+
+# C'est parti pour la nuit
+
+**Goal** : `goal-63a3e56f-d66e-4e43-8974-db1c692b5e45`, actif jusqu'au **03/11 08 h 00**. La consigne de nuit est dans [`plan-travail.md` § 10.7](../plan-travail.md) (commit **`9a17d0cc`**) ; le registre des ressources est dans `work/ressources.json` (commit de l'outil : **`a67dbf00`**).
+
+## Les quatre sessions et leurs claims
+
+| session | ce qu'elle fait cette nuit | claim |
+|---|---|---|
+| **N2** `0733c5bb` | R1.2-1024 sur GPU0, puis contrôles + fiche | `gpu0`, `cpu0` 12, `ram` 60 |
+| **hub** `536cd5d6` | passe complète, intégration, registre, bilan 08 h | `gpu1`, `cpu1` 8, `ram` 8 |
+| **S** `29ad180d` | banque **200 phrases / 355 candidats** (0 validée) ; homographes/lexique, **h033**, gold élargi | `cpu1` 4, `ram` 8 |
+| **Pensée** `e181ce02` | gold **200+**, porte mobile/stochastique ; la porte B13 attend S | `cpu1` 4, `ram` 16 |
+| **D/R/A** `fe3c05f0` | **close** (OCR CEGEP livré) ; place `cpu1` 2 libre si on la rouvre | — |
+
+`cpu1` = 8 + 4 + 4 = **16 fils** (le maximum utile) ; `ram` = 92 Gio ; `gpu0`/`gpu1` réservés. Le registre passe `--check` ; les seuls avertissements sont **`IA` à 33 Gio** et le croisement GPU/cpu1 des portes (CPU-first, assumé).
+
+## Ce qui tourne à 20 h 26
+
+- **Passe complète** : lancée à **19 h 32**, `work/portes/passe-1102-19h32`, `CUDA_VISIBLE_DEVICES=1,0`. Elle est à **`porte-indice`** (10 min, rouge connue, timeout 1800) ; le job `bash-172` attend son verdict. Elle partage GPU0 avec N2 (ralentissement assumé) ; les passes suivantes seront **partielles `gpu1`/`cpu1`**, et une complète réservera **`machine`**.
+- **N2** : R1.2-1024 sur GPU0 (le run est la priorité de la nuit).
+- **S** : la banque est passée à 200 phrases / 355 candidats (0 validée) ; la suite technique est h033/gold ; **la validation humaine t'attend à 08 h**.
+- **Pensée** : gold 200+, porte mobile ; la porte B13 attend la banque S.
+- **llama-server** : service partagé (683 % CPU, 118/366 Mio), non pinné ; il faudra le borner ou le déclarer comme service de fond.
+- **GPU1** : peu chargé (28 °C, 16 W) ; c'est là que devraient aller les prochaines portes.
+
+## L'état est en écriture par S — je ne l'écrase pas
+
+À **20 h 22**, la session S a mis `en-cours` à jour (1 625 mots, **T0 3 999/4 000**) : sa section, la banque 200/355, la roadmap et les rapports sont **indexés par elle**. La consigne de nuit est donc dans **`plan-travail` § 10.7** (committée) et dans le **plan du hub** ; la ligne « Nuit » d'`en-cours` sera ajoutée au prochain moment calme, sans casser sa version (un seul écrivain d'état à la fois).
+
+**Ce que le hub fait pendant la nuit** :
+
+1. attend le verdict de la passe (`registre.txt`), puis **intègre** : références de non-régression, `en-cours`, roadmap, journal, commit ;
+2. suit `sessions.py --status`, les plans, les fiches et `git status` ; rafraîchit son heartbeat ; à la fin d'un job d'une session, `--release` et admission de la file ;
+3. tient les portes légères (doc, état, journal) et régénère `reports/INDEX.md` après les nouvelles fiches ;
+4. **bilan à 08 h** : sessions, claims réels, verdict de la passe, `git log`, ce qui reste.
+
+## À 08 h, ce que tu trouveras
+
+- Le **verdict de la passe** (81 portes, rouges connues ou nouvelle rouge) et son intégration.
+- **N2** : R1.2-1024 + contrôles + fiche ; **S** : banque 200/355 prête pour ta validation, h033/gold ; **Pensée** : gold 200+, porte mobile ; **hub** : état/roadmap/INDEX à jour.
+- **D/R/A** close ; la place `cpu1` 2 libre si tu veux rouvrir un job D (OCR/corpus).
+- Le **registre** : qui a tenu quoi, ce qui a été libéré, ce qui est resté en file.
+- `IA` toujours à **33 Gio** : pas de gros write dessus ; `Data13TB` a 1,9 Tio.
+
+Les fichiers des autres sessions sont restés **indexés chez elles** ; mes commits n'ont pris que `plan-travail` + le journal dérivé. Le goal continue ; je reprends le fil au prochain cycle et je te fais le point à 08 h.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 1 : j'inspecte l'état réel (passe, git, sessions, registre) avant d'agir.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heure ==\" && date '+%F %T' && echo \"== git log ==\" && git log --oneline -6 && echo && echo \"== git status (début) ==\" && git status --short | head -20 && echo && echo \"== en-cours entête ==\" && sed -n '1,4p' docs/pil … [217 caractères tronqués]`
+
+  ```
+== heure ==
+2026-11-02 20:30:48
+== git log ==
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+
+== git status (début) ==
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+MM journal/README.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e4
+… [527 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== sessions ==\" && python3 tools/sessions.py --status 2>&1 | grep -E 'actif|en cours|en pause|périmé' | head -8; echo; echo \"== check strict ==\" && python3 tools/sessions.py --check --strict 2>&1 | tail -5; echo \"[exit $?] … [330 caractères tronqués]`
+
+  ```
+== sessions ==
+    0733c5bb-f90b-4f58 · actif    ·  35 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    29ad180d-38a5-4481 · actif    ·  41 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·   5 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·   7 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+
+== check strict ==
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+[exit 0]
+
+== registre ==
+  hdd_data13tb   io               1        0        1  1942 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, ram=8 (prio 1, 110 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+   
+… [160 caractères tronqués]
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-172 [bash] running — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while kill -0 164366 2>/dev/null; do sleep 60; done; echo "=== PASSE FINIE $(date -Is) ==="; tail -4 work/portes/passe-1102-19h32/registre.txt; echo "--- verdict (code != 0)"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo "=== FIN ==="
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 : je corrige la porte sessions (« fichiers proches » ne doit pas être un échec strict) et je surveille la passe.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py", "offset": 276, "limit": 18}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py</path>
+<type>file</type>
+<content>
+276:     print("autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, "
+277:           "pause sans heartbeat exigé, réservation imbriquée avertie sans refus")
+278:     return 0
+279: 
+280: 
+281: MODELE = """# Plan de session — <id>
+282: 
+283: > **Mandat vivant.** Écris ce fichier **avant** `en-cours`, mets-le à jour à chaque cycle,
+284: > et passe `État : en pause` (arrêt) ou `État : terminé` (retrait) quand elle s'arrête.
+285: 
+286: - **Session** : `<id>`
+287: - **Rôle** : <chantier / programme>
+288: - **Périmètre** : <A8.0, R13, ...>
+289: - **Fichiers réservés** : `tools/...`, `reports/...`
+290: - **Heartbeat** : <AAAA-MM-JJ HH:MM HAE>
+291: - **Prochaine action** : <une action nommée>
+292: - **État** : actif (ou `en pause` / `terminé`)
+293: """
+
+(Showing lines 276-293 of 332. Use offset=294 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== commits récents ==\" && for c in 2bbd45e2 76862005 a097f650 3f74fe83; do git show --stat --oneline $c | head -4; echo; done", "description": "Review recent commits from other sessions"}`
+
+  ```
+== commits récents ==
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+ docs/methode/ressources.md                         |   5 +
+ docs/pilotage/README.md                            |   5 +-
+ journal/2026-11-02/README.md                       |  13 +-
+
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+ docs/methode/portes.md                             |  12 +-
+ journal/2026-11-02/README.md                       |   7 +-
+ journal/2026-11-02/apprentissage.md                |   2 +-
+
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+ journal/2026-11-02/README.md                       |  23 ++-
+ journal/2026-11-02/apprentissage.md                |   8 +-
+ journal/2026-11-02/attention.md                    |   8 +-
+
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+ docs/pilotage/en-cours.md                          |  8 +-
+ docs/pilotage/roadmap.md                           |  2 +-
+ journal/2026-11-02/README.md                       |  5 +-
+  ```
+
+### 👤 Utilisateur
+
+tiens ta liste de tâches dsh à jour et continue
+

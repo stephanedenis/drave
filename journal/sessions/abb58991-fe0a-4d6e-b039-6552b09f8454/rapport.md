@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 4.2 h |
-| Tours | 9 |
-| Messages | 413 |
-| Appels d'outils | 517 |
+| Durée | 4.3 h |
+| Tours | 10 |
+| Messages | 416 |
+| Appels d'outils | 518 |
 | Fichiers touchés | 35 |
-| Commandes | 379 |
+| Commandes | 380 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 1 |
@@ -41,6 +41,8 @@
 **Tour 8** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 9** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 10** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -364,7 +366,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 
 ### Tour 9 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Read politique tests and current S state
 - read
@@ -380,11 +382,30 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-mobile.md`
 - bash — Read exact state lines for mobile updates
 - bash — Apply mobile state updates and check budgets
-- … et 5 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Lock libéré (hub `9a17d0cc`) ; je reprends le commit mobile (l'index garde mes 11 fichiers)
+⏵ Round 7 : la porte mobile est un **test faible** (le 7B échoue à (3,3), l'aveugle passe à (1,3)) ; commit `2fad8e8d`
+
+**Fait de la nuit** — commit **`2fad8e8d`** : la porte mobile.
+
+| porte | oracle | aveugle | hasard | LLM `porte_mobile` | LLM `labyrinthe` |
+|---|---|---|---|---|---|
+| **(3,3)** | 29/5 ✅ | 200/61 ❌ | 45/7 ✅ | **200/3 ❌, 228,8 s** | 200/3 ❌, 144,0 s |
+| **(1,3)** | 29/5 ✅ | **26/2 ✅** | 28/4 ✅ | **28/4 ✅, 14,4 s** | 29/5 ✅, 17,1 s |
+
+- **À (3,3), le 7B échoue** (200 nœuds, 3 sonde, 228,8 s, sans but) — le prompt `porte_mobile` ne suffit pas ; l'aveugle échoue aussi (200/61), l'oracle et la Q-table passent.
+- **À (1,3), tout le monde passe** : l'aveugle (26/2), le hasard (28/4), le LLM (28/4), le labyrinthe (29/5) — le test **ne discrimine ni la position ni la règle**. La Q-table (`PolitiqueAppriseMobile`, 1000 épisodes) passe **les deux** en 8 pas ; c'est la référence robuste.
+- Verdict ❌ : le mobile est un test faible ; la suite propre est la **porte stochastique** ou la **fenêtre temporelle**.
+
+**État** : T0 **3 999/4 000**, `en-cours` **1 625 mots**, revue **563/649**, **sessions --strict : EXIT=0**, dépôt **propre** (`git diff --check` vide). Le commit a absorbé les journaux stagés du hub (lock `index.lock` d'un commit concurrent, attendu puis repris).
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · B13 `9f1f4869` · minute `67ec9cd4` · **mobile `2fad8e8d`**. Les autres : S `3f74fe83` (corpus réel **65,5 % propre / 8,5 % CEGEP**, banque **200 phrases/355 candidats**), hub `a67dbf00`/`2bbd45e2`/`9a17d0cc` (ressources, nuit), N2 `c0196b55` (R1.2 1 024).
+
+La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le **gold 200+**, la **porte B13** (les 4 attendus du S). Le goal reste **actif**.
+
+### Tour 10 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -470,7 +491,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 339 autres
+- … et 340 autres
 
 ## 4. Mesures et résultats marquants
 

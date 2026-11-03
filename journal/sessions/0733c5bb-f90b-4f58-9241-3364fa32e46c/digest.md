@@ -4861,3 +4861,38 @@ L1000 : 3.2545
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/rope512-5k.pt --rope --contextes 256,512,1000,2000 --sortie work/n2ac/queue-rope512-2000.json 2>&1 | tail -5; echo \"--- runs ---\"; date '+%H:%M:%S'; tail -1 … [121 caractères tronqués]`
+
+  ```
+contexte  256 · PPL des 128 derniers octets 2.9068
+  contexte  512 · PPL des 128 derniers octets 2.8119
+  contexte 1000 · PPL des 128 derniers octets 2.8073
+  contexte 2000 · PPL des 128 derniers octets 2.8076
+{"fichier": "rope512-5k.pt", "positions": "rope", "cible": 128, "contextes": [256, 512, 1000, 2000], "ppl": {"256": 2.9068, "512": 2.8119, "1000": 2.8073, "2000": 2.8076}}
+--- runs ---
+20:30:21
+pas   1500 · perte 1.1785 · PPL val 2.873 · 742 s
+pas   7600 · perte 1.1916 · PPL val 2.799 · 1455 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation de la fenêtre 2 048 (wiki et production)
+
+- **write** `{"content": "#!/usr/bin/env bash\n# chaine_2048.sh — R1.2 poussé à 2 048 octets, puis la production à la même fenêtre.\n#\n#   1. wiki_fr, RoPE, seq 2 048 / fenêtre 2 048, 1 250 pas = 20,5 Mo (octets constants avec\n#      R1.1 et R1.2) — depuis base-wiki-45m\n#   2. + 11 250 pas depuis ce point = 1 … [1512 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_2048.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; tail -1 work/n2ac/mix512-15k.log; echo \"--- 1024 ---\"; tail -1 work/n2ac/rope1024-20k.log; echo \"--- portes ---\"; ps -eo pid,etime,cmd --no-headers | grep -c \"[p]orte-\"", "descrip … [47 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-209]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-209", "timeout_ms": 780000, "wait": true}`

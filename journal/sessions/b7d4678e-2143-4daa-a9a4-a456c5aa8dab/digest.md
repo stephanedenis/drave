@@ -6677,3 +6677,173 @@ MM journal/2026-11-02/distribue.md
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 50); do sleep 3; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -3; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools … [222 caractères tronqués]`
+
+  ```
+HEAD 9a17d0cc
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+--- checks ---
+  revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 9a17d0cc | head -20; echo \"=== nuit dans plan-travail ===\"; grep -n \"BILAN 08\\|nuit du 02/11\\|Nuit du 02/11\\|08 h\" docs/pilotage/plan-travail.md docs/pilotage/en-cours.md | head -10; echo \"=== journal nuit ===\"; grep -n \"20 h 2\\|20 h 3\" journal/2026 … [79 caractères tronqués]`
+
+  ```
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+ docs/pilotage/plan-travail.md                      |  25 ++
+ journal/2026-11-02/README.md                       |  22 +-
+ journal/2026-11-02/apprentissage.md                |   8 +-
+ journal/2026-11-02/attention.md                    |   8 +-
+ journal/2026-11-02/distribue.md                    |  11 +-
+ journal/2026-11-02/docs.md                         |   8 +-
+ journal/2026-11-02/memoire.md                      |   8 +-
+ journal/2026-11-02/mesures.md                      |   8 +-
+ journal/2026-11-02/modele.md                       |   8 +-
+ journal/2026-11-02/moteur.md                       |   8 +-
+ journal/2026-11-02/outils.md                       |   8 +-
+ journal/2026-11-02/portes.md                       |   8 +-
+ journal/README.md                                  |   8 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  46 +++
+ .../rapport.md                                     |  17 +-
+ .../536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md | 165 ++++++++
+ .../536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md   |  14 +-
+ .../rapport.md                                     |  24 +-
+ jou
+… [566 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '326,350p' docs/pilotage/plan-travail.md; echo \"=== note 20 h 10 ? ===\"; grep -n \"20 h 10\\|la nuit s'organise\" journal/2026-11-02/README.md | head -3", "description": "Read the night plan and check my note"}`
+
+  ```
+### 10.7 La nuit du 02/11 → 03/11 (08 h)
+
+**Consigne.** Les quatre sessions actives restent productives jusqu'à 08 h ; aucune n'attend.
+Les claims actifs (02/11 20 h) :
+
+| session | claim | remarque |
+|---|---|---|
+| N2 `0733c5bb` | `gpu0`, `cpu0` 12, `ram` 60 | R1.2-1024 en cours ; node 0 |
+| hub `536cd5d6` | `gpu1`, `cpu1` 8, `ram` 8 | passe de portes ; node 1 |
+| S `29ad180d` | `cpu1` 4, `ram` 8 | homographes/lexique, h033, gold |
+| Pensée `e181ce02` | `cpu1` 4, `ram` 16 | gold 200+, porte mobile |
+| D/R/A `fe3c05f0` | close | place `cpu1` 2 libre si on la rouvre |
+
+**La passe complète en cours** (`work/portes/passe-1102-19h32`, lancée 19 h 32 avec
+`CUDA_VISIBLE_DEVICES=1,0`) est une **exception** : elle partage GPU0 avec N2 (ralentissement
+assumé) et doit finir. Les passes suivantes : partielles sur `gpu1` + `cpu1` ; complètes sur
+`machine` exclusive, après libération de N2/S/Pensée. Le hub suit `registre.txt` et `--actual`.
+
+**Le hub** : `--status` / `--actual` / `--check` du registre, `sessions.py --status`,
+`surveille_sessions.py`, `git status` ; intégration des fiches B13/N2/S, état/roadmap, INDEX,
+références de non-régression ; heartbeat à chaque cycle. **Les sessions** : 
+… [314 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls tools/porte-ressources.sh 2>/dev/null || echo \"pas de porte-ressources\"; git show --stat --oneline 76862005 | head -8; echo \"--- pass ---\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; echo \"--- rouges ---\"; awk '$2 != 0' w … [106 caractères tronqués]`
+
+  ```
+pas de porte-ressources
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+ docs/methode/portes.md                             |  12 +-
+ journal/2026-11-02/README.md                       |   7 +-
+ journal/2026-11-02/apprentissage.md                |   2 +-
+ journal/2026-11-02/attention.md                    |   2 +-
+ journal/2026-11-02/distribue.md                    |   5 +-
+ journal/2026-11-02/docs.md                         |   2 +-
+ journal/2026-11-02/memoire.md                      |   2 +-
+--- pass ---
+46 work/portes/passe-1102-19h32/registre.txt
+porte-n3-generation 0 8
+porte-n3-placement 0 5
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+  ```
+
+- **bash** `{"command": "head -30 tools/porte-budget.sh; echo \"=== portes.md ===\"; grep -n \"porte-\\|registre\\|work/portes\" docs/methode/portes.md | head -12", "description": "Read gate conventions and portes doc"}`
+
+  ```
+#!/bin/bash
+# porte-budget.sh — C10 : le BUDGET D'OCTETS par lien, déclaré et vérifié.
+#
+# POURQUOI UN BUDGET SE VÉRIFIE AU PREMIER FLUX, ET PAS AU DÉMARRAGE. La taille d'un flux
+# n'est pas une propriété du mode : elle dépend de l'ACTIVITÉ réelle (listes par blocs :
+# 1 951 octets à 97,7 % d'activité, 1 096 à 50 % — mesuré). Un contrôle au démarrage ne
+# pourrait donc comparer qu'à une valeur nominale inventée. Ici, le budget se compare à ce
+# qui PASSE, et le dépassement ARRÊTE l'exécution en le disant, au pas où il survient.
+#
+# Ce que la porte verrouille :
+#   1. un budget GÉNÉREUX ne change RIEN au résultat (le lien déclaré est celui qui passe) ;
+#   2. un budget INSUFFISANT arrête l'exécution, nomme le lien, le dépassement et le pas,
+#      sort en code 6, et **ne rend aucune perplexité** — jamais un résultat partiel ;
+#   3. l'absence de budget ne change rien (le défaut) : c'est la porte de non-régression.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+. tools/_corpus.sh    # régénère le corpus si /tmp a été effacé (redémarrage)
+LIMITE=${LIMITE:-48}
+PORT=${PORT:-$
+… [1552 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-ressources.sh — le registre des ressources tient : autotest et cohérence.\n#\n# POURQUOI CETTE PORTE EXISTE. Le registre `tools/ressources.py` est consultatif : il n'empêche\n# pas un job de tourner, il rend le conflit visible. Une porte doit vérifier ce qui est\n#  … [1173 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-ressources.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x tools/porte-ressources.sh; bash tools/porte-ressources.sh; echo \"[exit $?]\"; echo \"--- comptage portes ---\"; ls tools/porte-*.sh | wc -l", "description": "Test the resource gate"}`
+
+  ```
+=== PORTE RESSOURCES — REGISTRE, CLAIMS, COHÉRENCE ===
+  ✅ autotest : 9 cas (claim, conflit, file, admission, check)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals
+✅ porte ressources verte : autotest 9 cas et registre cohérent
+[exit 0]
+--- comptage portes ---
+82
+  ```
+
+- **read** `{"file_path": "docs/pilotage/references-non-regression.md", "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Références de non-régression
+2: 
+3: > **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+4: > `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+5: > connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+6: > **`porte-greffe`** à 700 s, **rejouée verte à 1200 s** (un délai, pas une régression). La passe
+7: > du 02/11 00 h 03 : 81 portes, 77 vertes, 4 rouges. Journaux durables : `work/portes/`.
+8: 
+9: > **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+10: > (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+
+(Showing lines 1-10 of 178. Use offset=11 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/references-non-regression.md", "new_string": "# Références de non-régression\n\n> **82e porte — 2026-11-02 20 h 30.** `porte-ressources` vérifie l'**autotest** du registre\n> (`tools/ressources.py`, 9 cas) et sa **cohérence** (aucune ressource sur-réservée) ; elle est\n> … [430 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add tools/porte-ressources.sh docs/pilotage/references-non-regression.md; git diff --cached --stat; git commit -m \"NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS\" 2>&1 |  … [87 caractères tronqués]`

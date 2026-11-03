@@ -4153,3 +4153,402 @@ porte-m5-brouillon 0 0
 ⏵ Pause de 14 min pendant `porte-melange` (805 s) — je reprendrai au réveil du minuteur
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 840; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt", "description": "Timer 14 min then  … [20 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-166]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Brouillon du rapport de 8 h (sera complété par le verdict de la passe)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n\n## Rapport de 8 h — brouillon (à compléter)\n\n**Ce que la nuit a produit**\n- **Passe complète** : à remplir (X vertes / Y rouges, durée, logs `work/portes/passe-1102-19h32`).\n- **N2** : 200 k pas → … [975 caractères tronqués]`
+
+  ```
+ok
+lun 02 nov 2026 20:30:41 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 36/81 (2 rouges tolérées), minuteur armé ; l'état est tenu par l'autre écrivain
+
+Point de situation à 20 h 31, avant la reprise automatique au réveil du minuteur :
+
+- **Passe** : 36 portes, **34 vertes**, 2 rouges **tolérées** (`porte-indice` 1 027 s code 1, `porte-homeostasie` code 2). `porte-melange` (805 s) est en cours ; prochaines lourdes : `poids-creux`, `profondeur-routee`, `vision`.
+- **Coordination** : l'autre écrivain d'état tient `en-cours`/`roadmap`/`plan-travail` et vient de rafraîchir le plan du hub (20 h 26) ; je ne committe pas ses fichiers pendant son tour. Je garde la passe, ses références et les docs de méthode.
+- **Fait depuis 20 h** : `portes.md` corrigé (registre dans `work/`, pas `/tmp`) + dérogation « un seul GPU libre » ; `tools/ressources.py` entré dans le routage ; extracteur du tableau des repères prêt (`work/table_references.py`) ; fil de nuit et brouillon du rapport de 8 h dans `work/hub-nuit.md`.
+- **Sessions** : N2 (GPU 0, R1.2-1024 de nuit), S (banque à valider, homographes), Pensée (gold 200+, porte mobile), D/R/A close. Claims cohérents, `ressources --check` vert.
+
+Je reprends dans ~14 min pour `porte-melange`, puis je déroule jusqu'au verdict et à l'intégration des références.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Reprise de nuit : état réel de la passe et des sessions avant d'agir
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; tail -3 work/portes/passe-1102-19h32/registre.txt; echo \"=== git ===\"; git log --oneline -3; gi … [119 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:30:52 EST
+=== passe ===
+38
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+porte-m5-brouillon 0 0
+porte-melange 1 123
+porte-memoire 0 10
+=== git ===
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/pensee-porte-mobile.json
+A  reports/rapport-pensee-porte-mobile.md
+  ```
+
+- **job_output** `{"job_id": "bash-166", "timeout_ms": 5000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ 38 portes : 35 vertes, 3 rouges — toutes les trois tolérées. Je note et je vérifie le motif de `melange`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== melange ===\"; tail -5 work/portes/passe-1102-19h32/porte-melange.log; echo \"=== prochaine ===\"; ls -t work/portes/passe-1102-19h32/*.log | head -1", "description": "Read melange red reason and current gate"}`
+
+  ```
+=== melange ===
+    capture d'état    : position(s) [1470] (depuis la fin d'une invite de 1471 jetons) écrite(s) dans /tmp/tmp.dlodauMtT6/etatA
+    capture d'état    : position(s) [1470] (depuis la fin d'une invite de 1471 jetons) écrite(s) dans /tmp/tmp.dlodauMtT6/etatB
+=== 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+  ❌ l'état de A ne rend pas le code de A dans une
+     invite qui n'en contient aucun : le mélange ne pourrait rien dire
+=== prochaine ===
+work/portes/passe-1102-19h32/porte-mistral.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n- 20 h 31 : `porte-melange` **1** (123 s) — rouge tolérée connue (« l'état de A ne rend pas le\n  code de A »). 38 portes : **35 vertes, 3 rouges, toutes tolérées** (indice, melange, homeostasie).\nEOF\ … [120 caractères tronqués]`
+
+  ```
+ok
+lun 02 nov 2026 20:31:16 EST
+39
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles légers après le commit de nuit de l'autre écrivain
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== revue ===\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"=== T0 ===\"; python3 tools/taille_documents.py 2>&1 | grep \" … [256 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+  T0 max : 3999 mots (budget 4 000)
+=== sessions ===
+code=0
+=== journal ===
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Tableau des repères généré au fil de la passe (à figer au verdict)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 work/table_references.py > work/table-references.md; head -6 work/table-references.md; echo \"...\"; tail -3 work/table-references.md; date; wc -l < work/portes/passe-1102-19h32/registre.txt", "description": "Generate partial r … [16 caractères tronqués]`
+
+  ```
+| porte | durée | code | dernière ligne |
+|---|---:|---|---|
+| `porte-adaptateur-sortie.sh` | 64 s | ✅ | ✅ porte tenue (écriture fidèle · invariant · effet · refus) |
+| `porte-audit-drapeaux.sh` | 175 s | ✅ | ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun |
+| `porte-b1110-hybride.sh` | 0 s | ✅ | PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case |
+| `porte-balayage.sh` | 0 s | ✅ | ✅ porte balayage verte |
+...
+| `porte-mistral.sh` | 26 s | ✅ | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 |
+
+40 portes
+lun 02 nov 2026 20:31:29 EST
+40
+  ```
+
+### 🤖 Assistant
+
+⏵ 40/81 portes (35 vertes, 3 rouges tolérées) ; minuteur pour la suite
+
+La passe avance : **40 portes, 35 vertes, 3 rouges toutes tolérées** (`indice`, `melange`, `homeostasie`) ; `porte-greffe`, `porte-jeux`, `porte-bloc-maths`, `porte-flux`, `porte-delais` sont vertes. L'**extracteur du tableau des repères** est généré au fil de l'eau (`work/table-references.md`, 40 lignes) — il servira à réécrire le § 2 de `references-non-regression.md` au verdict.
+
+Après le commit de nuit de l'autre écrivain : revue ✅ (563 fiches / 649 JSON), `en-cours` 1 625 mots ✅, T0 3 999 ✅, `sessions --check --strict` 0 ✅, journal ✅. Rien à corriger.
+
+Minuteur de 14 min armé (`bash-166`) : je reprends vers 20 h 45 pour `poids-creux` / `profondeur-routee` / `vision`, puis je fige le verdict et les références.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ État réel au round 2 : passe, minuteur, sessions, index git
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; tail -3 work/portes/passe-1102-19h32/registre.txt; echo \"=== git ===\"; git log --oneline -2; gi … [106 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:31:40 EST
+=== passe ===
+42
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+porte-mistral 0 26
+porte-n3-cache 0 6
+porte-n3-composition 0 6
+=== git ===
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/pensee-porte-mobile.json
+A  reports/rapport-pensee-porte-mobile.md
+  ```
+
+- **job_output** `{"job_id": "bash-166", "timeout_ms": 3000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Surveillance des heartbeats des plans (le seuil est 45 min)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for s in 0733c5bb-f90b-4f58-9241-3364fa32e46c 29ad180d-38a5-4481-a9a7-ec6ab31c895f e181ce02-cd50-488a-a6be-e84b79d40dcc 536cd5d6-94ac-4057-8fe9-11709a4587c7; do printf \"%s  \" \"$(stat -c '%y' journal/sessions/$s/plan.md | cut -c12-19 … [126 caractères tronqués]`
+
+  ```
+19:56:32  - **Heartbeat** : 2026-11-02 19:56 HAE
+19:42:37  - **Heartbeat** : 2026-11-02 19:50 EST
+20:24:24  - **Heartbeat** : 2026-11-02 20:24 EST
+20:26:51  - **Heartbeat** : 2026-11-02 20:26 EST
+lun 02 nov 2026 20:31:51 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ S n'a pas rafraîchi son plan depuis 19 h 42 ; je vérifie si elle travaille encore
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; stat -c '%y %n' journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/* 2>/dev/null; echo \"--- processus S ---\"; pgrep -af \"structures\\|analyseur\\|banque\" | grep -v pgrep | head -5; echo \"--- commit S ---\"; git log --oneline -1 … [251 caractères tronqués]`
+
+  ```
+2026-11-02 20:30:03.434023492 -0500 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+2026-11-02 19:42:37.588830764 -0500 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+2026-11-02 20:31:12.705630462 -0500 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+2026-11-02 20:11:07.728370673 -0500 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/session.v4.jsonl.zstd
+--- processus S ---
+--- commit S ---
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+3f74fe83 20:08 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+  ```
+
+### 🤖 Assistant
+
+⏵ S est vivante (digest 20 h 30) mais n'a pas rafraîchi son plan. Je vérifie qui touche aux références et je prépare l'en-tête.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; stat -c '%y %n' docs/pilotage/references-non-regression.md docs/methode/portes.md; git log -1 --format=\"%h %ad %s\" --date=format:\"%H:%M\" -- docs/pilotage/references-non-regression.md; echo \"--- passe ---\"; date; wc -l < work/port … [144 caractères tronqués]`
+
+  ```
+2026-11-02 15:57:02.240367006 -0500 docs/pilotage/references-non-regression.md
+2026-11-02 20:17:44.507443280 -0500 docs/methode/portes.md
+2dab14e4 16:03 PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE
+--- passe ---
+lun 02 nov 2026 20:32:08 EST
+47
+porte-n3-placement 0 5
+porte-n3-pont 0 4
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation de l'en-tête des références (placeholders) et suivi de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/entete-references.txt <<'EOF'\n> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, {vertes} vertes, {rouges}\n> rouges**, **{duree}** (journaux durables `work/portes/passe-1102-19h32`, lus par\n> `awk '$2 !=  … [542 caractères tronqués]`
+
+  ```
+modèle d'en-tête écrit dans work/entete-references.txt
+lun 02 nov 2026 20:32:29 EST
+51
+porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123
+  ```
+
+### 🤖 Assistant
+
+⏵ 51/81 portes, 3 rouges toutes tolérées ; en-tête des références prêt
+
+Passe à **51 portes, 48 vertes, 3 rouges tolérées** (`indice`, `melange`, `homeostasie`). Modèle d'en-tête des références écrit (`work/entete-references.txt`) : il ne reste qu'à remplacer `{vertes}/{rouges}/{duree}/{liste}` au verdict.
+
+Surveillance : S est **vivante** (digest 20 h 30) mais son plan n'a pas bougé depuis 19 h 42 — son heartbeat sera périmé (45 min) vers 20 h 35 ; N2 est à 19 h 56. Si `porte-sessions` rougit en fin de passe, ce sera une **rouge de coordination** (plans non rafraîchis pendant une passe de 1 h 45), pas une régression de code : je la nommerai et la rejouerai après rafraîchissement.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point compact : passe, heartbeats, git
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; n=$(wc -l < work/portes/passe-1102-19h32/registre.txt); echo \"portes=$n\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | tr '\\n' ' '; echo; tail -1 work/portes/passe-1102-19h32/registre.txt; git log --oneline … [88 caractères tronqués]`
+
+  ```
+20:32
+portes=54
+porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123 
+porte-n3-service 0 5
+2fad8e8d B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ 54/81 portes, index propre, Pensée vient de committer sa porte mobile
+
+Passe à **54 portes, 51 vertes, 3 rouges tolérées**. Index git propre (le commit de nuit de l'autre écrivain est passé), Pensée vient de committer `2fad8e8d` (porte mobile : le 7B échoue à (3,3), passe à (1,3) comme l'aveugle). Rien à corriger de mon côté ; j'attends les dernières lourdes (`poids-creux`, `profondeur-routee`, `vision`) avant de figer le verdict.
+
+
+## Tour 8
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Passe et dérive des repères (flux, coupe, gain) vs références
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; n=$(wc -l < work/portes/passe-1102-19h32/registre.txt); echo \"portes=$n\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | tr '\\n' ' '; echo; tail -1 work/portes/passe-1102-19h32/registre.txt; grep -h \"60.81\\ … [236 caractères tronqués]`
+
+  ```
+20:32
+portes=56
+porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123 
+porte-n3-sparsite-compte 0 4
+  ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon e
+  fenêtre 32 : défaut(4) 29.0206 · 0 puits 1297.5437 · 24 puits 27.4439
+  ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439
+  ```
+
+### 🤖 Assistant
+
+⏵ 56/81 portes, aucune dérive sur `coupe`/`gain`/`flux`
+
+Passe à **56 portes, 53 vertes, 3 rouges tolérées** ; les repères déjà passés (`coupe` +0,52/+17,09, `gain` 29,0206→1297,5437, `flux` 4,45e-3) sont **identiques** aux références — pas de dérive. Prochaines lourdes : `poids-creux`, `profondeur-routee`, `vision`.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Vue proactive : les portes OCR dépendent-elles de fichiers que D/R/A a déplacés ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; head -30 tools/porte-ocr.sh | grep -E \"data/|work/|/tmp|python|tesseract\" | head -8; echo \"=== ocr-scans ===\"; grep -E \"data/|work/|/tmp|python\" tools/porte-ocr-scans.sh | head -8; echo \"=== fichiers cités ===\"; for f in $(grep … [222 caractères tronqués]`
+
+  ```
+python3 tools/mesurer_ocr.py --porte --sans-ecrire
+=== ocr-scans ===
+if [ ! -s work/r44/scans/manifeste.json ]; then
+    python3 tools/simuler_scan.py --pages 10 --test 10 > "$J/corpus.log" 2>&1 || {
+if [ ! -s work/r44/colonnes/manifeste.json ]; then
+    python3 tools/fabriquer_colonnes.py --pages 10 > /dev/null 2>&1 || exit 1
+if [ ! -s work/r44/tables/manifeste.json ]; then
+    python3 tools/fabriquer_tables.py --pages 10 > /dev/null 2>&1 || exit 1
+python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte > "$J/scans.log" 2>&1
+python3 tools/mesurer_colonnes.py --porte > "$J/colonnes.log" 2>&1
+=== fichiers cités ===
+OK work/r44/colonnes/manifeste.json
+OK work/r44/scans/manifeste.json
+OK work/r44/tables/manifeste.json
+  ```
+
+### 🤖 Assistant
+
+⏵ QA des chiffres N2 dans l'état, et avancement de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; n=$(wc -l < work/portes/passe-1102-19h32/registre.txt); echo \"portes=$n\"; tail -1 work/portes/passe-1102-19h32/registre.txt; echo \"=== N2 200k ===\"; head -8 reports/rapport-n2-200k.md; echo \"=== R1 ===\"; head -5 repo … [86 caractères tronqués]`
+
+  ```
+20:33
+portes=57
+porte-n3-sparsite 0 4
+=== N2 200k ===
+# N2.ae — 200 000 pas sur le mélange 1 Go : −0,33 en domaine, −1,06 en largeur, et la porte 2,5 à un million de pas
+
+> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : à recette constante (34,3 M,
+> canal, positions aléatoires), passer de **60 000** à **200 000 pas** sur le mélange de **1,02 Go**
+> fait baisser la PPL partout — **3,1591** en validation française (contre 3,4902, **−0,33**),
+> **3,0035** sur le grand corpus (−0,35), **5,6056** en littérature (−0,42), **7,2770** en anglais
+> (−1,06), **8,0018** sur wikitext2 (−1,05) — **sans perdre le français**. La porte **< 2,5 n'est
+> pas atteinte** : la PPL de domaine est à **3,16**, et la loi de puissance mesurée sur la
+=== R1 ===
+# R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture
+
+> **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : à recette N2 (34,3 M, canal,
+> 20 000 pas depuis `base-wiki-45m`), remplacer la position **absolue** par un **RoPE** fait passer
+> la PPL à 1 000 octets de **8,2024** à **3,2545** : la **porte R1.1** (1 000 octets dans un
+  ```
+

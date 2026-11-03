@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.2 h |
+| Durée | 4.3 h |
 | Tours | 6 |
-| Messages | 401 |
-| Appels d'outils | 432 |
-| Fichiers touchés | 19 |
-| Commandes | 269 |
+| Messages | 410 |
+| Appels d'outils | 441 |
+| Fichiers touchés | 21 |
+| Commandes | 275 |
 | Sous-agents | 0 |
-| Commits | 16 |
+| Commits | 17 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -192,7 +192,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 6 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check gate pass, commits and tree
 - bash — Check running jobs and resource claims
@@ -206,6 +206,9 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - job_output
 - bash — Check pass progress and commits
 - bash — Wait for hub commit and verify state
+- bash — Read the hub's night plan commit
+- bash — Read the night plan and check my note
+- … et 7 autres
 
 **Synthèse produite :**
 
@@ -236,6 +239,8 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 1 |
 | `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 1 |
 | `work/veille/nuit.md` | 1 | 0 |
+| `tools/porte-ressources.sh` | 1 | 0 |
+| `docs/pilotage/references-non-regression.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -279,7 +284,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 229 autres
+- … et 235 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -387,6 +392,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T5** `3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
 - **T5** `19:> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
 - **T5** `> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
+- **T6** `# 1 951 octets à 97,7 % d'activité, 1 096 à 50 % — mesuré). Un contrôle au démarrage ne`
 
 ## 5. Erreurs rencontrées
 
@@ -412,4 +418,5 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - NUIT — LA COORDINATION DES RESSOURCES EST PUBLIÉE : REGISTRE (9 CAS), CLAIMS ET CONSIGNE ; GPU0 NON DÉCLARÉ" -m "tools/ressources.py : registre consultatif des 
 - for i in $(seq 1 60); do N=$(pgrep -fc "git commit" 2>/dev/null || true); [ "${N:-0}" -eq 0 ] && break; sleep 3; done; echo "git commits restants: $(pgrep -fc '
 - NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT" 2>&1 | tail -6
+- NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS" 2>&1 | tail -5
 

@@ -5023,3 +5023,16 @@ exit=0
 - Le **GPU** est à N2 (mandat de nuit R1.2 à 1 024 octets, jusqu'à 08 h) et à la passe de portes ; le **CPU** était à S, d'où le registre `tools/ressources.py` du hub (`a67dbf00`) — on peut maintenant réserver explicitement.
 - Prochaine action S : **validation humaine des 200 phrases** de la banque (le serveur les charge), puis **homographes/lexique** (`ferme`, `fait`, `lit`) et filtre langue/genre.
 
+
+## Tour 7
+
+### 👤 Utilisateur
+
+tiens ta liste de tâches dsh à jour et continue
+
+- **todo_write** `{"todos": [{"content": "S v3 : frontière GN-devant-verbe, gold 47, 46 tests, corpus 47 — committé/poussé", "status": "completed"}, {"content": "Mesure sur corpus réel (50k lignes, 20 799 phrases CEGEP, 50k propres) + contrôle du mélange", "status": "completed"}, {"content": "Banque de candidats réel … [623 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 1 in progress, 3 completed.
+  ```
+
