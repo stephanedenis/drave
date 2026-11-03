@@ -7,19 +7,26 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 3.6 h |
-| Tours | 1 |
-| Messages | 234 |
-| Appels d'outils | 240 |
-| Fichiers touchés | 16 |
-| Commandes | 180 |
+| Durée | 3.8 h |
+| Tours | 2 |
+| Messages | 253 |
+| Appels d'outils | 260 |
+| Fichiers touchés | 17 |
+| Commandes | 198 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
+
+## Objectifs déclarés
+
+- **create** — Session N2 (0733c5bb), cycle de nuit jusqu'à 2026-11-03 08 h : (1) R1.2 à 1 024 octets entraînés — comparer à octets constants et à pas constants, contrôles « même texte » et miroir de copie, fiche + JSON + commit ; (2) la fenêtre sur le modèle de production (mélange 1 Go) — affiner mix-60k avec une
+… [431 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — Tu es la session N2 (le natif, GPU). Lis AGENTS.md, docs/pilotage/en-cours.md et  docs/pilotage/backlog/N2-distillation.md. Ton id est dans `printenv DSH_SESSION_ID` ; crée  journal/sessions/<id>/plan.md avec `python3 tools/sessions.py --modele` (les onze champs,  État : actif, heartbeat maintenant), puis réserve `data/`, `tools/corpus*`, `reports/n2-*`,  `work/n2*`. Prochaine action : 200 000 pas … [298 caractères tronqués]
+
+**Tour 2** — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
 ## 2. Déroulé, étape par étape
 
@@ -75,6 +82,30 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 > **R1 — la fenêtre native** : R1.1 RoPE **3
 … [958 caractères tronqués]
 
+### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
+
+*20 appels d'outils.* Actions notables :
+
+- bash — Check active sessions status
+- bash — Check recent commits and hardware state
+- bash — Check which gates use GPU and which device
+- bash — Check running gate processes
+- create_goal
+- bash — Reopen session plan for the night cycle
+- write `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_1024.sh`
+- bash — Launch 1024-window training chain
+- bash — Read state header and closed sessions block
+- bash — Add night session section to state
+- bash — Fix typo and check budget/review
+- bash — Condense section and fix counters
+- bash — Trim header duplication and recheck gates
+- bash — Read required session fields
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ Réouverture dans l'état (session active de nuit) et commit du mandat
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -97,6 +128,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/table_200k.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-n2-200k.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_1024.sh` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -140,7 +172,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 140 autres
+- … et 158 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -229,6 +261,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** `[still running after 60000ms; moved to background job bash-173]`
 - **T1** `[still running after 60000ms; moved to background job bash-177]`
 - **T1** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typogly`
+- **T2** `→ la **passe de portes** est **en cours** (`porte-bus`, 19 h 37 ; GPU libres) ; à son verdict, **intégrer les lignes B13/N2/S** et mettre `en-cours` à jour. La sous-passe documentaire (8 portes) rend `
+- **T2** `0, 490 MiB, 0 %`
+- **T2** `1, 122 MiB, 0 %`
+- **T2** `0, 5766 MiB, 100 %`
+- **T2** `[still running after 60000ms; moved to background job bash-198]`
 
 ## 5. Erreurs rencontrées
 
@@ -248,4 +285,5 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r11.md reports/n2-r11.json docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-336
 - cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/table_200k.py work/n2ac/agrege_200k.py journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null;
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") vieux = """-
+- N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)" && git log --oneline -1; echo "=== run ==="; tail -2 work/n
 

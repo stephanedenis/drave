@@ -9765,3 +9765,122 @@ seuils {
 limites ["Le hasard ouvre la porte par chance (43 nœuds, 7 sonde) ; l'aveugle et le prompt labyrinthe échouent (200 nœuds, 3 sonde) : le contrôle propre est l'aveugle et le labyrinthe.", 'La minute discrimine la règle ; le test suivant est la porte **mobile** (deux positions) ou **stochastique**.', 'La latence inclut la file du serveur ; CPU seulement.', 'Une seule graine de serveur, température 0, grammaire.']
   ```
 
+### 🤖 Assistant
+
+⏵ Fiche « porte minute » : la règle ouvre en 26 nœuds/4 sonde ; le labyrinthe échoue en 200/3/101,6 s
+
+- **write** `{"content": "# B13 — la porte minute : la règle l'ouvre (26 nœuds, 4 sonde, 6,4 s) ; le prompt labyrinthe échoue (200, 3, 101,6 s)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·\n> **Verdict** : ✅ **la porte minute s'ouvre avec la règle** — avec le prompt `porte` (l … [5743 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique l'état « porte minute » (README, INDEX, en-cours, roadmap, plan, journal) et je mesure le T0
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, time\n# README/INDEX\np=pathlib.Path('reports/README.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-b13-porte-134.md`](rapport-b13-porte-134.md) | **B13** porte **134/140** |\",\n            \"|  … [5172 caractères tronqués]`
+
+  ```
+ok 2026-11-02 19:50 EST
+  558 fiches → reports/INDEX.md
+EN-COURS: 1544
+  T0 max : 3918 mots (budget 4 000)
+  en-cours · 1544 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 560 fichiers, le disque en a 561
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état a changé sous mes doigts (N2 a ajouté une fiche/état) ; je vérifie le commit N2 et je m'aligne
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | head -10; echo '--- NEW REPORTS ---'; ls -t reports/*.md | head -3; ls -t reports/*.json | head -3; echo '--- EN-COURS MINUTE ---'; grep -n \"porte minute … [165 caractères tronqués]`
+
+  ```
+19:51:54
+a902abea 19:49:32 PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 19:46:23 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 19:43:43 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? tools/tests/qualifier_porte_minute_drvm.py
+--- NEW REPORTS ---
+reports/INDEX.md
+reports/README.md
+reports/rapport-pensee-porte-minute.md
+reports/pensee-porte-minute.json
+reports/n2-200k.json
+reports/s-banque-structures.json
+--- EN-COURS MINUTE ---
+63:  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
+107:| fichiers / JSON de résultats | **560** / **648** | `reports/*.md` / `reports/*.json` |
+--- DIFF STAT ---
+ docs/pilotage/en-cours.md | 8 +++++---
+ docs/pilotage/roadmap.md  | 4 ++--
+ reports/INDEX.md          | 4 +++-
+ reports/README.md         | 2 +-
+ 4 files changed, 11 in
+… [94 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a committé l'état (HEAD `a902abea`) ; mes changements sont par-dessus. Je vérifie le diff, le plan et les compteurs
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/README.md reports/INDEX.md | head -90; echo '=== PLAN ==='; grep -n \"Prochaine action\\|porte minute\\|18)\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -6;  … [252 caractères tronqués]`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 625d536f..97931769 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -60,9 +60,11 @@
+ - **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
+   ne se rejoue pas), gold **432** ; **gold neuronal** POS/syntagmes, cascade
+   **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27 (règle), labyrinthe 2 sonde ;
++  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
+   **pragmatique** dev 1,0, test 0,6375 (majoritaire 0,7556) ; l'heuristique garde ;
+-  [B13](../../reports/rapport-b13-porte-134.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
+-- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique et porte B13** mesurés ; reprise **16 h 16**.
++  [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
++  [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
++- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, porte B13 et minute** mesurés ; reprise **16 h 16**.
+ - **Ce que font les autres** : **N2**, **S**, **D/
+… [19056 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alignement sur le HEAD du hub : je corrige compteurs (561/648), heures réelles (19 h 50), prochaine action et le reste
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"Prochaine action\\|Bloquants\\|Ce qui reste\" docs/pilotage/en-cours.md | head -5; sed -n '/## Ce qui reste/,/## Les questions/p' docs/pilotage/en-cours.md | head -10; echo '--- TIMESTAMPS ---'; grep -n \"20 h 02\" docs/pilotage/en-cours.md  … [132 caractères tronqués]`
+
+  ```
+33:- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+34:- **Bloquants** : aucun ; la passe tient la machine (GPU libres).
+48:- **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
+49:- **Bloquants** : aucun ; **banque à 0** verdict.
+69:- **Prochaine action** : **gold 200+ phrases** ; **porte B13** ; **porte qui bouge**.
+## Ce qui reste
+
+**R1** — **R1.2 à 1 024 octets entraînés** ; **Pensée** — gold 200+, porte B13 ; **S** — homographes,
+validation humaine ; **N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 ; **R0.7** — le
+tagger complet ; **D** — OCR clos (8 scans `.PDF`).
+
+- **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+
+## Les questions ouvertes
+--- TIMESTAMPS ---
+journal/2026-11-02/README.md:315:**20 h 02 — la porte minute s'ouvre avec la règle : 26 nœuds, 4 sonde.**
+  ```
+

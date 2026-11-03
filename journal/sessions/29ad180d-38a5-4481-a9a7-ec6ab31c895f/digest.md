@@ -4421,3 +4421,197 @@ e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -8; echo \"exit=${PIPESTATUS[0]}\"; git status -sb | head -2; echo \"=== remote ===\"; git ls-remote --heads origin | head -1", "description": "Push main repository with S v3", "timeoutMs": 300000}`
+
+  ```
+To github.com:stephanedenis/drave.git
+   d2fc26c6..e2227509  master -> master
+exit=0
+## master...origin/master
+M  docs/pilotage/chantiers.md
+=== remote ===
+e2227509febf47d561fd975a09ba743e53ebbe52	refs/heads/master
+  ```
+
+### 🤖 Assistant
+
+⏵ S v3 poussé : analyseur 47/47 types, 117/117 rôles, corpus 47 ; sous-module et principal à jour.
+
+**Le cycle entrepris**
+
+- **Frontière GN-devant-verbe** : `h033` (« La femme parle ») est corrigé par un lexique de verbes finis ; le GV s'arrête aussi devant un adverbe de temps (« part demain » → GV + GP temps).
+- **Gold porté à 47 phrases** (7 dev, 16 test, 24 holdout en trois vagues ; `h040–h047` écrites après la règle, mesurées une fois).
+- **Mesure** : types **47/47**, rôles **117/117**, compléments **47/47**, couverture **1 309/1 320** (99,2 % ; holdout 605/616, 98,2 %) ; contrôles **80/117**, **82/117**, rôles mélangés **0,109**.
+- **Limite nommée** : les homographes nominaux `h046` (« ferme ») et `h047` (« fait ») sont coupés comme des verbes — le type et le rôle ne le voient pas, la **couverture** oui (0,75 et 0,77).
+- **Corpus** : 47 lignes, SHA `f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2` ; `verifier_corpus.py` le rejoue.
+- **43 tests** verts.
+
+**Commits et push**
+
+- Sous-module : **`90e507b`**, poussé sur `drave-structures` (`647205a..90e507b`).
+- Principal : **`e2227509`** (la clôture N2 a intégré la fiche S v3, le manifeste, le pointeur `90e507b`, la roadmap et l'INDEX), poussé : `origin/master` = `e2227509`.
+- `docs/pilotage/en-cours.md` porte la ligne S v3 (47/47, 117/117, corpus 47, 43 tests) ; T0 repassé sous 4 000.
+
+**En cours, pas à moi** : la **passe complète des portes** du hub (`work/portes/passe-1102-19h32`, `porte-épisodique` en cours) ; ses mises à jour de `docs/pilotage/` sont encore dans l'arbre, et `reports/pensee-porte-minute.json` est en écriture. Je les laisse au hub. Prochaine action S : homographes/lexique, puis validation humaine de la banque.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
+
+### 🤖 Assistant
+
+⏵ Non, rien de bloquant : je n'attends que la passe de portes du hub. J'entreprends la mesure de l'analyseur sur le corpus CEGEP réel, en CPU.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== corpus CEGEP ===\"; ls -la data/corpus_ocr_cegep/ 2>/dev/null | head; du -sh data/corpus_ocr_cegep 2>/dev/null; for f in data/corpus_ocr_cegep/train.txt data/corpus_ocr_cegep/val.txt data/corpus_ocr_cegep/test.txt; do [ -f … [256 caractères tronqués]`
+
+  ```
+=== corpus CEGEP ===
+total 4356
+drwxr-xr-x. 1 stephane stephane      48  2 nov 16:31 .
+drwxr-xr-x. 1 stephane stephane    2664  2 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane   10524  2 nov 18:06 test.txt
+-rw-r--r--. 1 stephane stephane 4430959  2 nov 18:33 train.txt
+-rw-r--r--. 1 stephane stephane   12536  2 nov 17:27 val.txt
+4,3M	data/corpus_ocr_cegep
+data/corpus_ocr_cegep/train.txt 4430959 octets 108298 lignes
+data/corpus_ocr_cegep/val.txt 12536 octets 299 lignes
+data/corpus_ocr_cegep/test.txt 10524 octets 207 lignes
+=== échantillon ===
+document%20de%20revision_pages_12a15_5421
+@
+®
+©
+@
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 500 5000 50000; do echo \"=== ligne $n ===\"; sed -n \"${n},$((n+4))p\" data/corpus_ocr_cegep/train.txt | cut -c1-180; done; echo \"=== stats mots ===\"; python3 - <<'PY'\nfrom collections import Counter\nimport re\nt=open(' … [775 caractères tronqués]`
+
+  ```
+=== ligne 500 ===
+le participe passé ne s'accorde pas. S'il n’y a pas de CD, le participe passé |
+ne. £'accotde ouf
+
+2. Accorde, s’il y a lieu, le participe passé.
+a) L’ourse a mangé
+=== ligne 5000 ===
+appelée justifiante ou sécable), l'espace fine (aussi appelée quart de cadratin) et l'espace insécable.
+Leur emploi ainsi que la façon de les obtenir dans Word sont indiqués sous la prochaine rubrique.
+
+Le tableau ci-dessous indique les règles à respecter selon l'Office de la langue française pour la
+rédaction de textes français. Pour la rédaction de textes anglais, d'autres règles s'appliquent.
+=== ligne 50000 ===
+
+39
+
+these objects may be in a measure attained;
+
+=== stats mots ===
+lignes non vides 108298
+longueur moyenne 39.1284972945022
+lignes plausibles 71056
+[(5, 7576), (10, 1863), (15, 289), (0, 250), (20, 19), (25, 2), (30, 1)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/corpus_fr_litterature.txt data/corpus_fr.txt data/corpus_fr_train.txt 2>/dev/null; for f in data/corpus_fr_litterature.txt data/corpus_fr.txt; do [ -f \"$f\" ] && echo \"$f $(wc -c < \"$f\") octets $(grep -c . \"$f\") lig … [170 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 17031747 17 oct 18:26 data/corpus_fr_litterature.txt
+-rw-r--r--. 1 stephane stephane  4402195 28 oct 12:45 data/corpus_fr_train.txt
+-rw-r--r--. 1 stephane stephane  4633889 17 oct 15:01 data/corpus_fr.txt
+data/corpus_fr_litterature.txt 17031747 octets 277246 lignes
+data/corpus_fr.txt 4633889 octets 47755 lignes
+=== extrait propre ===
+Au lecteur
+
+  Cette version électronique reproduit dans son intégralité
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesure_corpus.py — l'analyseur sur du texte réel : couverture, structure, et le contrôle du mélange.\n\nLe gold mesure la justesse sur 47 phrases écrites à la main. Ce script mesure autre chose : ce que\nl'analyseur **fait** sur des lignes réelles, sans gol … [7091 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_corpus.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && time python3 mesure_corpus.py --max 20000", "description": "Measure analyzer on 20k CEGEP and clean lines", "timeoutMs": 600000}`
+
+  ```
+corpus réels · 20000 lignes CEGEP · 20000 lignes propres · 12.83 s
+  corpus     seg/ligne   GN+GV  sans GV   couv.  homogr. lignes homogr.
+  cegep           1.97   3.6%    0.4%    0.94       10              8
+  propre          4.32  50.8%   10.8%    0.89      217            215
+  melange         2.07   3.9%    0.5%    0.94       11             11
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-corpus.json
+[stderr]
+
+real	0m12,896s
+user	0m12,824s
+sys	0m0,071s
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesure_corpus.py — l'analyseur sur du texte réel : lignes, phrases, et le contrôle du mélange.\n\nLe gold mesure la justesse sur 47 phrases écrites à la main. Ce script mesure autre chose : ce que\nl'analyseur **fait** sur du texte réel, sans gold — la part … [8547 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_corpus.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && time python3 mesure_corpus.py --max 20000", "description": "Measure on lines and sentences, 20k each", "timeoutMs": 600000}`
+
+  ```
+corpus réels · 20000 lignes CEGEP · 20000 phrases CEGEP · 35.84 s
+  lignes
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           1.97   3.6%    0.4%    0.94       10               8
+  propre          4.32  50.8%   10.8%    0.89      217             215
+  melange         2.07   3.9%    0.5%    0.94       11              11
+  phrases
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           3.24   8.4%    0.8%    0.94       24              24
+  propre          6.89  65.5%    8.0%    0.89      388             381
+  melange         4.11   9.3%    0.4%    0.93       23              23
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-corpus.json
+[stderr]
+
+real	0m35,911s
+user	0m35,795s
+sys	0m0,104s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && time python3 mesure_corpus.py --max 50000 --sortie donnees/mesure-corpus-50k.json", "description": "Measure on 50k units for stability", "timeoutMs": 600000}`
+
+  ```
+corpus réels · 50000 lignes CEGEP · 20799 phrases CEGEP · 59.74 s
+  lignes
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           1.96   3.6%    0.5%    0.94       18              15
+  propre          4.33  51.0%   10.2%    0.89      553             550
+  melange         2.07   3.8%    0.5%    0.94       18              18
+  phrases
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           3.25   8.5%    0.8%    0.94       25              25
+  propre          6.93  65.5%    8.0%    0.89     1064            1035
+  melange         4.11   9.1%    0.4%    0.93       22              22
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-corpus.json
+[stderr]
+
+real	0m59,824s
+user	0m59,654s
+sys	0m0,166s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('mesure_corpus.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"def afficher(r: dict) -> None:\", \"def afficher(r: dict, chemin: pathlib.Path = SORTIE) -> … [660 caractères tronqués]`
+
+  ```
+max 50000 cegep lignes 50000 phrases 20799
+compile OK
+  ```
+

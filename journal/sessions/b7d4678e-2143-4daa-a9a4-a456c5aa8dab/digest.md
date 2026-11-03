@@ -5454,3 +5454,356 @@ en-cours · 1522 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
   ```
 
 - **bash** `{"command": "git commit -m \"PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS\" -m \"en-cours : N2 sort des sessions actives après sa clôture (e12c39c1) et rejoint D/R/A dans le bloc des closes (200 k pas : 3,16 / 5,61 / 7,28 / 8,00 ; R … [442 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master a902abea] PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+ 28 files changed, 798 insertions(+), 163 deletions(-)
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -3; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py --head 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2", "description": … [37 caractères tronqués]`
+
+  ```
+en-cours · 1544 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ plans cohérents
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 560 fichiers, le disque en a 561
+  état · dernier fait a902abea · dernier état a902abea
+  ✅ aucun fait commité après le dernier état
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "git status --short | head -8; echo \"--- HEAD ---\"; git log --oneline -3; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|terminé\" | head -6", "description": "Check final tree and session status"}`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? tools/tests/qualifier_porte_minute_drvm.py
+--- HEAD ---
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+--- sessions ---
+    0733c5bb-f90b-4f58 · terminé  ·   5 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    0b0a6a0d-05f5-4308 · terminé  · 2116 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+    0b69f616-5c75-4c34 · terminé  · 4190 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+    22e518ee-81b8-4081 · terminé  · 3361 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+    29ad180d-38a5-4481 · actif    ·   1 min · S (structures) — S-analyseur 
+… [266 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md; ps -eo pid,etime,args | grep -E \"git commit|session_report|journal_auto\" | grep -v grep | head -3; git status --short | head -8", "description": "Check active writer and commit state"}`
+
+  ```
+19:51:30
+-rw-r--r--. 1 stephane stephane 11491 19:50:38 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 44812 19:50:38 docs/pilotage/roadmap.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? tools/tests/qualifier_porte_minute_drvm.py
+  ```
+
+- **bash** `{"command": "sed -n '1,20p' docs/pilotage/en-cours.md; echo \"...\"; grep -n \"fichiers / JSON\\|Session close\\|Sessions closes\" docs/pilotage/en-cours.md; echo \"--- sessions count ---\"; grep -c \"^### Session\" docs/pilotage/en-cours.md; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "descr … [54 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+> [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+> [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A close à
+> 18 h 45** (OCR CEGEP) et **N2 close à 19 h 46** (200 k pas) ; restent **le hub**, **S** et
+> **Pensée** ; les GPU sont libres ; runbook dans [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+
+...
+73:> **Sessions closes** : `fe3c05f0` (D/R/A) — **91 scans uniques**, 60 documents, 1 982 p,
+107:| fichier
+… [234 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"porte-minute\\|porte minute\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md | head; echo \"--- diff en-cours vs HEAD ---\"; git diff docs/pilotage/en-cours.md | head -40", "description": "Check whether en-cours references the new Pensée result"}`
+
+  ```
+docs/pilotage/en-cours.md:63:  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
+docs/pilotage/en-cours.md:65:  [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
+--- diff en-cours vs HEAD ---
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 625d536f..97931769 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -60,9 +60,11 @@
+ - **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
+   ne se rejoue pas), gold **432** ; **gold neuronal** POS/syntagmes, cascade
+   **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27 (règle), labyrinthe 2 sonde ;
++  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
+   **pragmatique** dev 1,0, test 0,6375 (majoritaire 0,7556) ; l'heuristique garde ;
+-  [B13](../../reports/rapport-b13-porte-134.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
+-- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique et porte B13** mesurés ; reprise **16 h 16**.
++  [B13](../../reports/rapport-b13-porte-134.md), [minut
+… [1714 caractères tronqués]
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 45); do sleep 2; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; pgrep -f \"git commit\" >/dev/null || true; done; echo \"avant $OLD\"; echo \"après $(git rev-parse HEAD)\"; git log --oneline -2; git status --short | head -6", "d … [71 caractères tronqués]`
+
+  ```
+avant a902abea26fc97944d055aa55321bbb5a17d26a3
+après a902abea26fc97944d055aa55321bbb5a17d26a3
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"--- HEAD ---\"; git log --oneline -1; echo \"--- état des fichiers - … [82 caractères tronqués]`
+
+  ```
+✅ plans cohérents
+  en-cours · 1544 mots · 7 sections · 3 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 561 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 560 fichiers, le disque en a 561
+--- HEAD ---
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+--- état des fichiers ---
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? tools/tests/qualifier_porte_minute_drvm.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Pilotage consolidé et committé ; un seul flux reste ouvert, celui de la session Pensée
+
+**Oui — le pilotage est à jour, concis et committé** (`a902abea`), avec la porte stricte verte.
+
+**Ce qui a été aligné**
+- **Sessions** : N2 (`0733c5bb`) est **close** et sort des sessions actives ; elle rejoint D/R/A dans le bloc des closes. Il reste **3 sessions actives** : le hub, **S** (`29ad180d`) et **Pensée** (`e181ce02`).
+- **N2** : 200 k pas — **3,16 / 5,61 / 7,28 / 8,00**, **< 2,5 non atteinte** (2,5 estimée à 1,3–2,7 M pas) ; **R1.1/R1.2 mesurées** ; la suite est **R1.2 à 1 024 octets entraînés**, pas un autre schéma.
+- **S** : passé à **v3** partout — **47/47** types, **117/117** rôles, **47/47** compléments, gold **47**, corpus **47** (`f2a0d2fb…`), **43 tests** ; prochaine action homographes/lexique, puis validation humaine.
+- **Pensée** : **134/140**, gold neuronal (POS **0,9415**, syntagmes **0,7539**), DRVM par la règle, pragmatique **0,6375** (l'heuristique garde) ; prochaine action **gold 200+**, porte B13.
+- **D/R/A** : close, OCR CEGEP **91 scans uniques**, 60 documents, 1 982 p.
+- **Concision** : `en-cours` à **1 544 mots**, **3 sessions**, 7 sections, 5 questions ; **T0 repassé sous 4 000** ; compteurs **560 fiches / 648 JSON** au commit.
+- **Plans** : heartbeats de N2/S/hub rafraîchis pendant la passe (sessions vivantes), puis N2 s'est close elle-même ; `sessions.py --check --strict` → **plans cohérents**.
+
+**Un seul flux est encore dans l'arbre de travail, et il n'est pas à moi** : la session **Pensée** vient d'intégrer la **« porte minute »** (26 nœuds par la règle, labyrinthe 200/3) dans `en-cours`/`roadmap`, avec sa fiche et son JSON encore **non committés**. C'est pour cela que la revue sur l'arbre de travail signale **561 fiches pour 560 annoncées** — le commit de cette session remettra le compteur à **561/648**. Le tree committé, lui, est cohérent ; strict, T0, journal et en-cours sont verts.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur le fait que les sessions doivent être bien cootrdonnnées et tenir les ressources en usage optimal pour que nos travaux avances dans tous les axes
+
+### 🤖 Assistant
+
+⏵ Prise de service de nuit : je relève l’état des sessions et des ressources avant de poser la consigne
+
+- **bash** `{"command": "date \"+%Y-%m-%d %H:%M:%S %Z\"; echo \"--- HEAD ---\"; git log --oneline -5; echo \"--- status ---\"; git status --short | head -12; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|terminé|en pause|périmé\" | head -8", "description": "Survey sessions … [23 caractères tronqués]`
+
+  ```
+2026-11-02 19:58:25 EST
+--- HEAD ---
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+7d5bd08d ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS
+--- status ---
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ ? tools/structures
+?? reports/pensee-porte-minute.json
+?? reports/rapport-pensee-porte-minute.md
+?? tools/ressources.py
+?? tools/tests/qualifier_porte_minute_drvm.py
+--- sessions ---
+    0733c5bb-f90b-4f58 · actif    ·   2 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    0b0a6a0d-05f5-4308 · terminé  · 2123 min · N2.
+… [900 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"--- charge ---\"; uptime; echo \"--- gpu ---\"; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader 2>/dev/null; echo \"--- top ---\"; ps -eo pid,etime,pcpu,comm,args --sort=-pcpu | head -6 | cut -c1-130", "description": "Survey CPU, GPU and processes"}`
+
+  ```
+--- charge ---
+ 19:58:25  up  4:51,  2 users,  load average: 19,88, 16,59, 13,87
+--- gpu ---
+0, 99 %, 5766 MiB
+1, 0 %, 122 MiB
+--- top ---
+    PID     ELAPSED %CPU COMMAND         COMMAND
+ 110066    02:30:25  710 llama-server    llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --
+ 328471       00:01  285 drave           ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt  Divisio
+ 327714       01:33  102 python          /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propr
+ 328088       00:56  100 python3         python3 mesure_corpus.py --max 50000 --sortie donnees/mesure-corpus-50k.json
+  32123    03:42:54 75.3 node-MainThread node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+  ```
+
+- **bash** `{"command": "wc -l tools/ressources.py; sed -n '1,80p' tools/ressources.py", "description": "Inspect the new resources tool"}`
+
+  ```
+562 tools/ressources.py
+#!/usr/bin/env python3
+"""ressources.py — le registre des ressources de Hauru et le protocole de claim.
+
+Pourquoi. Le pilotage réservait des **fichiers** (`sessions.py`) et surveillait les
+**fichiers en mouvement** (`surveille_sessions.py`), mais pas la **machine** : deux
+sessions pouvaient lancer deux entraînements sur le même GPU, ou saturer le même
+NVMe, sans le voir. Ce registre rend les ressources explicites, les réserve et met
+en file ce qui ne tient pas — pour éviter les attentes inutiles et les simultanéités
+intenses.
+
+Capacités (Hauru, 2026-11-02) :
+  gpu0 / gpu1 : 1 job exclusif, 16 Gio de VRAM, NUMA 0 (0-9,20-29)
+  cpu0        : 20 fils (0-9,20-29), réserve 4 → 16 fils utilisables
+  cpu1        : 20 fils (10-19,30-39), réserve 4 → 16 fils utilisables
+  ram         : 125 Gio, réserve 16 → 109 Gio utilisables
+  nvme_system : 1 IO lourde, / (Fanxiang 1 To : /, /home, /FastNVMe)
+  nvme_raid   : 1 IO lourde, /home/stephane/IA (RAID0 4× NVMe, ~33 Gio libres)
+  hdd_data13tb: 1 IO lourde, /home/stephane/Data13TB (HDD 10,9 To)
+  machine     : 1 job exclusif global (passe complète des portes, mesure globale)
+
+Le registre vit dans `work/ressources.json` (ign
+… [2456 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"Heartbeat\\|^- \\*\\*État\\|Prochaine action\" journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md | head; echo \"--- Pensée ---\"; python3 tools/sessions.py --status 2>&1 | grep -A1 \"e181ce02\" | head -3; grep -n \"Heartbeat\\|^- \\*\\*État\" journal/sessions/e181c … [96 caractères tronqués]`
+
+  ```
+15:- **Heartbeat** : 2026-11-02 19:56 HAE
+34:- **Prochaine action** : la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis
+36:- **État** : actif
+--- Pensée ---
+    e181ce02-cd50-488a · actif    ·   9 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+      → la **porte minute** est ouverte par la règle (**26 nœuds**, 4 sonde ; le labyrinthe échoue) ; reprendre la **porte mobile/stochastique** et le **gold 200+**.
+18:- **Heartbeat** : 2026-11-02 19:50 EST
+22:- **État** : actif
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --status 2>&1 | head -40; echo \"=== actual ===\"; python3 tools/ressources.py --actual 2>&1 | head -30; echo \"=== check ===\"; python3 tools/ressources.py --check 2>&1 | tail -5", "description": "Read resource registry status"}`
+
+  ```
+ressources · Hauru — registre /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ressources.json
+  ressource      type      capacité  utilisé    libre  détail
+  gpu0           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16        0       16  réserve 4 fils
+  cpu1           cpu             16        0       16  réserve 4 fils
+  ram            ram            109        0      109  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1943 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Aucune réservation active.
+=== actual ===
+  Réel · GPU
+    GPU0 (non réservé) : PID 110066 llama-server (366 MiB) ; PID 327714 /home/stephane/gpu-env/bin/python (5276 MiB) ; PID 328471 ./drave-core/target/release/drave (120 MiB)
+      ⚠ GPU0 utilisé sans réservation
+    GPU1 (non réservé) : PID 110066 llama-server (118 MiB)
+      ⚠ GPU1 util
+… [662 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"## 10\\|ressources\\|Claim\\|claim\" docs/pilotage/plan-travail.md | head -20; echo \"--- strict ---\"; python3 tools/sessions.py --check --strict 2>&1 | tail -6; echo \"--- en-cours N2 ---\"; grep -n \"0733c5bb\\|N2\" docs/pilotage/en-cours.md | head -8", "description": "Chec … [52 caractères tronqués]`
+
+  ```
+--- strict ---
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+--- en-cours N2 ---
+10:> 16 h 21 ; **D/R/A close** (18 h 45), **N2** close à 19 h 46 (200 k pas) puis **rouverte** à
+11:> 19 h 56 pour la **nuit** ; restent **le hub**, **S**, **Pensée** et **N2** ; runbook dans
+32:- **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+33:- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+47:- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+68:- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+73:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+75:- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+  ```
+
+- **bash** `{"command": "ls -l --time-style=+%H:%M:%S tools/ressources.py work/ressources.json 2>/dev/null; git status --short tools/ressources.py; echo \"--- plan-travail tail ---\"; tail -45 docs/pilotage/plan-travail.md", "description": "Check resource tool provenance and policy section"}`
+
+  ```
+-rw-------. 1 stephane stephane 23038 19:57:11 tools/ressources.py
+?? tools/ressources.py
+--- plan-travail tail ---
+| voir les mandats | `python3 tools/sessions.py --status` |
+| vérifier les mandats | `python3 tools/sessions.py --check --strict` |
+| voir les fichiers en mouvement | `python3 tools/surveille_sessions.py` |
+
+**Les quatre mandats, dans l'ordre de valeur.**
+
+1. **N2 — le natif (GPU).** **Session `0733c5bb` ouverte.** Lire `AGENTS.md`, `en-cours`,
+   `backlog/N2-distillation.md`. **200 k pas terminés** : val_fr **3,16**, littérature **5,61**,
+   anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées**.
+   Prochaine action : **fiche + état + commit**, puis **clôture**.
+2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
+   et `tools/structures/`. **47/47** types, **117/117** rôles, **47/47** compléments, gold **47**,
+   corpus **47** (SHA `f2a0d2fb…`), **43 tests**. Prochaine action : **homographes/lexique**, puis
+   **validation humaine** ; le sous-module se commit **dans son dépôt** avant le pointeur.
+3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **134/140**
+… [1948 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def cmd_\\|add_argument\\|def main\\|autotest\" tools/ressources.py | head -40; sed -n '80,180p' tools/ressources.py", "description": "Read resource tool commands and ledger logic"}`
+
+  ```
+34:  python3 tools/ressources.py --autotest
+261:def cmd_status(chemin: pathlib.Path, ledger: dict) -> int:
+303:def cmd_claim(chemin: pathlib.Path, ledger: dict, args) -> int:
+366:def cmd_release(chemin: pathlib.Path, ledger: dict, args) -> int:
+387:def cmd_check(chemin: pathlib.Path, ledger: dict, strict: bool) -> int:
+405:def cmd_suggest(chemin: pathlib.Path, ledger: dict) -> int:
+430:def cmd_actual(chemin: pathlib.Path, ledger: dict) -> int:
+482:def autotest() -> int:
+515:            print("  ❌ autotest : " + " · ".join(mauvais))
+520:        print(f"  ✅ autotest : {len(cas)} cas (claim, conflit, file, admission, check)")
+524:def main(argv=None) -> int:
+527:    ap.add_argument("--ledger", default=str(LEDGER))
+528:    ap.add_argument("--status", action="store_true")
+529:    ap.add_argument("--claim", action="store_true")
+530:    ap.add_argument("--release", action="store_true")
+531:    ap.add_argument("--check", action="store_true")
+532:    ap.add_argument("--strict", action="store_true")
+533:    ap.add_argument("--suggest", action="store_true")
+534:    ap.add_argument("--actual", action="store_true")
+535:    ap.add_argument("--autotest", action="store_true")
+536:    ap.add_argumen
+… [3978 caractères tronqués]
+  ```
+

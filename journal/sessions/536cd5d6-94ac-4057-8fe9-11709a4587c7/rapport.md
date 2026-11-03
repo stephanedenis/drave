@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 4.3 h |
+| Durée | 4.5 h |
 | Tours | 7 |
-| Messages | 140 |
-| Appels d'outils | 183 |
-| Fichiers touchés | 12 |
-| Commandes | 147 |
+| Messages | 152 |
+| Appels d'outils | 198 |
+| Fichiers touchés | 13 |
+| Commandes | 159 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 0 |
@@ -449,6 +449,28 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 
 ### Tour 7 — dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simu … [102 caractères tronqués]
 
+*15 appels d'outils.* Actions notables :
+
+- bash — Inspect CPU sockets, NUMA nodes and GPU affinity
+- bash — Inspect NVMe, RAID and mount points
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py`
+- bash — Run resource ledger autotest and status
+- bash — Claim the four sessions and hub in a demo ledger
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py`
+- bash — Test machine claim, IO conflict, status and check
+- bash — Release all demo claims and verify machine admission
+- bash — Show actual GPU/CPU/disk load versus empty ledger
+- bash — Check plan-travail word budget
+- bash — Inspect document budget definitions
+- read
+- bash — Append resource coordination policy to plan-travail
+- bash — Read exact plan-travail lines to edit
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Je relis les passages exacts du plan de travail avant de les modifier.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -467,6 +489,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 | `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/MESURES-2026-11-02.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/README.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py` | 1 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -510,7 +533,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 107 autres
+- … et 119 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -638,7 +661,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ===== b6a672ec digest (head) ===== # Session DSH — relecture  - identifiant : `b6a672ec-3349-4a4c-9e23-4478aa823170` - dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` - créée : 2026-11-01 
 - **T1** : == uptime == [stderr] uptime: invalid option -- 's' Try 'uptime --help' for more information. [exit code: 1]
@@ -646,6 +669,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - **T1** : == commits 'portes/passe' aujourd'hui == 20194fb1 B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133 4f7631aa DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA)
 - **T2** : == dsh help == Usage: dsh [--profile] <name> [options] [app-args...]        dsh plugin --profile <name> <pnpm-args...>  dsh: boot a DeepSeek Harness profile — an ordered stack of plugin-bundle patch l
 - **T6** : == branche == ## main...origin/main [ahead 24]  M AGENTS.md  M system/maintenance/logs/scrub-data13tb-20260921-164933.log  M system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/JOURNAL.md 
+- **T7** : [stderr] Traceback (most recent call last):   File "<stdin>", line 8, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: 'Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) 
 
 ## 6. Commits
 

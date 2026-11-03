@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 3.6 h |
-| Tours | 5 |
-| Messages | 204 |
-| Appels d'outils | 216 |
-| Fichiers touchés | 9 |
-| Commandes | 153 |
+| Durée | 3.8 h |
+| Tours | 6 |
+| Messages | 218 |
+| Appels d'outils | 229 |
+| Fichiers touchés | 11 |
+| Commandes | 163 |
 | Sous-agents | 0 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -28,6 +28,8 @@
 **Tour 4** — push
 
 **Tour 5** — tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses
+
+**Tour 6** — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
 
 ## 2. Déroulé, étape par étape
 
@@ -219,6 +221,28 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 **En cours, pas à moi** : la **passe complète des portes** du hub (`work/portes/passe-1102-19h32`, `porte-épisodique` en cours) ; ses mises à jour de `docs/pilotage/` sont encore dans l'arbre, et `reports/pensee-porte-minute.json` est en écriture. Je les laisse au hub. Prochaine action S : homographes/lexique, puis validation humaine de la banque.
 
+### Tour 6 — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Inspect CEGEP OCR corpus for real-text measurement
+- bash — Assess OCR text quality and plausible sentence count
+- bash — Locate clean French corpus for contrast
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_corpus.py`
+- bash — Measure analyzer on 20k CEGEP and clean lines
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_corpus.py`
+- bash — Measure on lines and sentences, 20k each
+- bash — Measure on 50k units for stability
+- bash — Fix output path, canonicalize 50k JSON
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_mesure_corpus.py`
+- bash — Add corpus section to README and run tests
+- bash — Commit and push corpus measurement submodule
+- bash — Check main state, gate pass, and fiche status
+
+**Synthèse produite :**
+
+⏵ Non, rien de bloquant : je n'attends que la passe de portes du hub. J'entreprends la mesure de l'analyseur sur le corpus CEGEP réel, en CPU.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -234,6 +258,8 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 7 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_corpus.py` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_mesure_corpus.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -277,7 +303,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 113 autres
+- … et 123 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -306,6 +332,25 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T5** `0, Quadro RTX 5000, 0 %, 688 MiB, 16384 MiB`
 - **T5** `1, Quadro RTX 5000, 43 %, 966 MiB, 16384 MiB`
 - **T5** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typogly`
+- **T6** `cegep           1.97   3.6%    0.4%    0.94       10              8`
+- **T6** `propre          4.32  50.8%   10.8%    0.89      217            215`
+- **T6** `melange         2.07   3.9%    0.5%    0.94       11             11`
+- **T6** `cegep           1.97   3.6%    0.4%    0.94       10               8`
+- **T6** `propre          4.32  50.8%   10.8%    0.89      217             215`
+- **T6** `melange         2.07   3.9%    0.5%    0.94       11              11`
+- **T6** `cegep           3.24   8.4%    0.8%    0.94       24              24`
+- **T6** `propre          6.89  65.5%    8.0%    0.89      388             381`
+- **T6** `melange         4.11   9.3%    0.4%    0.93       23              23`
+- **T6** `cegep           1.96   3.6%    0.5%    0.94       18              15`
+- **T6** `propre          4.33  51.0%   10.2%    0.89      553             550`
+- **T6** `melange         2.07   3.8%    0.5%    0.94       18              18`
+- **T6** `cegep           3.25   8.5%    0.8%    0.94       25              25`
+- **T6** `propre          6.93  65.5%    8.0%    0.89     1064            1035`
+- **T6** `melange         4.11   9.1%    0.4%    0.93       22              22`
+- **T6** `162:| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 25 |`
+- **T6** `168:OCR**, il est au **plancher du mélange** (8,5 % contre 9,1 %) : ce corpus est **multilingue et`
+- **T6** `262:  propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et`
+- **T6** `[master 140feb6] S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)`
 
 ## 5. Erreurs rencontrées
 
@@ -330,4 +375,5 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE" -m "Le compteur passe à 552 fiches / 639 JSON après l'intégration de la fiche S et
 - D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE" -m "La détection sur le texte intégral (pdftotext + pdfinfo, seuil 
 - S — LA FRONTIÈRE DU GN S'ARRÊTE DEVANT LE VERBE : 47/47 TYPES, 117/117 RÔLES ; GOLD 47" -m "Le générateur gagne un lexique de verbes finis (frontière GN) et le 
+- S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)" -m "mesure_corpus.py : 50 000 lignes et 20 799 phrases CEGEP, 50
 

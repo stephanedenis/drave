@@ -7,10 +7,10 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 3.5 h |
+| Durée | 3.6 h |
 | Tours | 3 |
-| Messages | 119 |
-| Appels d'outils | 148 |
+| Messages | 120 |
+| Appels d'outils | 149 |
 | Fichiers touchés | 2 |
 | Commandes | 108 |
 | Sous-agents | 0 |
@@ -112,7 +112,7 @@ Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs
 
 ### Tour 3 — un des gpu est libre
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Check which GPU is free and current load
 - job_output
@@ -124,7 +124,7 @@ Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs
 
 **Synthèse produite :**
 
-⏵ Passe en cours : 13 portes vertes, dont `bloc-maths` et les portes GPU
+⏵ 25 portes vertes, y compris `delais` et `flux` (le GPU 1 tient)
 
 ## 3. Travail accompli
 

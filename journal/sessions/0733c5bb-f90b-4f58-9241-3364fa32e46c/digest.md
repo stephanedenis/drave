@@ -4353,3 +4353,280 @@ Fiches : [`rapport-n2-200k`](reports/rapport-n2-200k.md) et [`rapport-n2-r11`](r
 
 Portes : revue de documentation **verte**, état à jour, sessions `--strict` vertes, journal, schémas et budget verts. Réservations rendues, **GPU 0 et 1 libres**. Suite désignée : **R1.2 à 1 024 octets entraînés** — c'est la longueur qui recule, pas le compute.
 
+
+## Tour 2
+
+### 👤 Utilisateur
+
+vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état des autres sessions avant de reprendre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; python3 tools/sessions.py --status 2>&1 | head -30", "description": "Check active sessions status"}`
+
+  ```
+2026-11-02 19:55 EST
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · terminé  ·  10 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis la **clôture**.
+    0b0a6a0d-05f5-4308 · terminé  · 2121 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 4195 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 3366 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    29ad180d-38a5-4481 · actif    ·   6 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+      → **validation humaine de la banque** (le mode `banque` est à 0 verdict) ; puis la **frontière du GN sans auxiliaire*
+… [2005 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log --oneline -12; echo \"=== GPU ===\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo \"=== RAM ===\"; free -g | sed -n 2p", "description": "Check recent commits and hardware state"}`
+
+  ```
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+7d5bd08d ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS
+4a85604d B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE
+2cff8dba R1 — LES POSITIONS RELATIVES ÔTENT L'EXPLOSION (8,20 → 3,25 À 1 000 OCTETS), LA FENÊTRE ENTRAÎNÉE DONNE LA LECTURE (−0,244 À OCTETS CONSTANTS)
+aeace14b B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)
+9250b1c3 B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE
+83f78803 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PIL
+… [382 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de l'usage GPU des portes (le hub lance la passe complète)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -l \"CUDA_VISIBLE_DEVICES\" tools/porte-*.sh | head -20; echo \"=== combien ===\"; grep -l \"CUDA_VISIBLE_DEVICES\" tools/porte-*.sh | wc -l; echo \"=== quels device ===\"; grep -h \"CUDA_VISIBLE_DEVICES=\" tools/porte-*.sh | sort | uniq -c | hea … [64 caractères tronqués]`
+
+  ```
+tools/porte-r13-bpe.sh
+=== combien ===
+1
+=== quels device ===
+      2 PYTHONPATH=. CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0} "$PY" -m tools.entrainer_native_tokens \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ps -eo pid,etime,cmd --no-headers | grep -E \"[t]outes-les-portes|[p]orte-\" | cut -c1-120 | head -8; echo \"=== jobs GPU ===\"; ps -eo pid,etime,cmd --no-headers | grep -E \"[p]ython.*cuda|[p]ython.*torch\" | cut -c1-100 | head -5", "description": "C … [29 caractères tronqués]`
+
+  ```
+164359       24:13 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/p
+ 164366       24:13 bash tools/toutes-les-portes.sh
+ 326972       00:37 timeout 1800 bash tools/porte-greffe.sh
+ 326973       00:37 bash tools/porte-greffe.sh
+ 326987       00:37 bash tools/porte-greffe.sh
+=== jobs GPU ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise : objectif de nuit et mandat réouvert
+
+- **create_goal** `{"objective": "Session N2 (0733c5bb), cycle de nuit jusqu'à 2026-11-03 08 h : (1) R1.2 à 1 024 octets entraînés — comparer à octets constants et à pas constants, contrôles « même texte » et miroir de copie, fiche + JSON + commit ; (2) la fenêtre sur le modèle de production (mélange 1 Go) — affiner m … [473 caractères tronqués]`
+
+> **Objectif** (create) : Session N2 (0733c5bb), cycle de nuit jusqu'à 2026-11-03 08 h : (1) R1.2 à 1 024 octets entraînés — comparer à octets constants et à pas constants, contrôles « même texte » et miroir de copie, fiche + JSON + commit ; (2) la fenêtre sur le modèle de production (mélange 1 Go) — affiner mix-60k avec une fenêtre de 512 entraînée, mesurer 128/512/1 000/2 000 contre N2.ac, fiche + commit ; (3) si le temps le permet, un point de plus sur la loi de compute (300–400 k pas) ou la capacité ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales. Rendre à 08 h la ligne d'état et les hashes.
+
+
+  ```
+{"goal":{"id":"goal-55b01e7d-d2e4-41ba-a43a-82d810df1670","revision":1,"objective":"Session N2 (0733c5bb), cycle de nuit jusqu'à 2026-11-03 08 h : (1) R1.2 à 1 024 octets entraînés — comparer à octets constants et à pas constants, contrôles « même texte » et miroir de copie, fiche + JSON + commit ; (2) la fenêtre sur le modèle de production (mélange 1 Go) — affiner mix-60k avec une fenêtre de 512 entraînée, mesurer 128/512/1 000/2 000 contre N2.ac, fiche + commit ; (3) si le temps le permet, un point de plus sur la loi de compute (300–400 k pas) ou la capacité ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales. Rendre à 08 h la ligne d'état et les hashes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nimport re\nt = re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", f\"- **Heartbeat** : {dateti … [1332 caractères tronqués]`
+
+  ```
+['- **Heartbeat** : 2026-11-02 19:56 HAE', '- **État** : actif']
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de R1.2 à 1 024 octets (chaîne 2 500 puis 17 500 pas, GPU 0)
+
+- **write** `{"content": "#!/usr/bin/env bash\n# chaine_1024.sh — R1.2 à 1 024 octets : deux budgets dans la MÊME trajectoire.\n#\n#   1. 2 500 pas × 8 × 1 024 = 20,5 Mo vus — les mêmes octets que R1.1 et R1.2-512\n#   2. + 17 500 pas depuis ce point = 20 000 pas (4× les octets, comme R1.2-512)\n#\n# RoPE, fenêt … [1250 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_1024.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_1024.sh > work/n2ac/chaine_1024.out 2>&1 & echo \"pid $!\"; sleep 50; date '+%H:%M:%S'; tail -2 work/n2ac/rope1024-2.5k.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "L … [34 caractères tronqués]`
+
+  ```
+pid 327711
+19:57:42
+  pertes.append(float(perte))
+pas      1 · perte 2.8303 · PPL val 14.092 · 1 s
+0, 5766 MiB, 100 %
+1, 122 MiB, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Réouverture dans l'état (session active de nuit) et commit du mandat
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 1,16p docs/pilotage/en-cours.md; echo \"...\"; sed -n 69,78p docs/pilotage/en-cours.md", "description": "Read state header and closed sessions block"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+> [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+> [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A close à
+> 18 h 45** (OCR CEGEP) et **N2 close à 19 h 46** (200 k pas) ; restent **le hub**, **S** et
+> **Pensée** ; les GPU sont libres ; runbook dans [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+...
+- **Prochaine action** : **gold 200+ phrases** ; **porte B13** ; **porte qui bouge**.
+- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; la **pragmatique neuronale** ne qualifie pas ; restent **gold 200+** et **porte B13**.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+> **Sessions closes** : `fe3c05f0` (D/R/A) — **91 scans uniques**, 60
+… [404 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\n\n# 1. l'en-tête : N2 reprend pour la nuit\nvieux = \"\"\"> 18 h 45** (OCR CEGEP) et **N2 close à 19 h 46** (200 k pas) ; restent * … [2770 caractères tronqués]`
+
+  ```
+en-cours : session de nuit ajoutée
+  en-cours · 1752 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"- **Ce qu'elle fait** : R1.2-1024 lancée à 19 h 57 (GPU 0) ; noykau des portes du hub : GPU 1.\",\n              \" … [366 caractères tronqués]`
+
+  ```
+corrigé : True
+  T0 max : 4128 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4128 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 560 fichiers, le disque en a 561
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\ndebut = t.index(\"### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit\")\nfin = t.index(\"> **Sessions closes** :\ … [1451 caractères tronqués]`
+
+  ```
+section condensée ; compteurs : 561 648
+  T0 max : 4032 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4032 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 561 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14\n> et 16 h 21 — N2 … [1069 caractères tronqués]`
+
+  ```
+en-tête condensé
+  T0 max : 4005 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4005 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 561 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · session « Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024 » ne dit pas « **Objectif final** »
+     · session « Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024 » ne dit pas « **Ce que font les autres** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"Objectif final\\|Ce que font les autres\\|CHAMPS\\|ne dit pas\" tools/verifie_en_cours.py | head -12; echo \"...\"; grep -n \"def verifier_session\\|attendus\\|obligatoires\" -A12 tools/verifie_en_cours.py | head -24", "description": "Read r … [24 caractères tronqués]`
+
+  ```
+8:     **Id**, **Rôle**, **Plan**, **Ambition**, **Stratégie**, **Objectif final**,
+9:     **Ce qu'elle fait**, **Ce que font les autres**, **Prochaine action**, **Bloquants** et
+35:CHAMPS_SESSION = (
+41:    "**Objectif final**",
+43:    "**Ce que font les autres**",
+100:        for champ in CHAMPS_SESSION:
+102:                alertes.append(f"session « {titre} » ne dit pas « {champ} »")
+...
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 33,50p tools/verifie_en_cours.py", "description": "Read mandatory session field list"}`
+
+  ```
+"La carte",
+]
+CHAMPS_SESSION = (
+    "**Id**",
+    "**Rôle**",
+    "**Plan**",
+    "**Ambition**",
+    "**Stratégie**",
+    "**Objectif final**",
+    "**Ce qu'elle fait**",
+    "**Ce que font les autres**",
+    "**Prochaine action**",
+    "**Bloquants**",
+    "**Journal**",
+)
+CHANTIERS = ("**A — le moteur**", "**B — l'intelligence**", "**N — le natif**", "**R — le lecteur**")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '/^## La carte/,$p' docs/pilotage/en-cours.md", "description": "Read the map section"}`
+
+  ```
+## La carte
+
+- **Méthode** : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
+  [résultats](../methode/resultats.md) · [portes](../methode/portes.md) · **plan** :
+  [roadmap](roadmap.md) · [backlog](backlog/index.md) · [graphe](backlog/dependances.md) ·
+  [carte](../theorie/carte.md) · **preuves** : [reports/](../../reports/) ·
+  [journal/](../../journal/).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\ndebut = t.index(\"### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit\")\nfin = t.index(\"> **Sessions closes** :\ … [2088 caractères tronqués]`
+
+  ```
+section 11 champs + carte condensée
+  en-cours · 1652 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4026 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4026 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\n# 1. la note des sessions closes : deux lignes au lieu de quatre\ni = t.index(\"> **Sessions closes** :\")\nj = t.index(\"\\n\\n\", … [1646 caractères tronqués]`
+
+  ```
+T0 max : 4026 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4026 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1652 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 561 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  File "<stdin>", line 7
+    t = t[:i] + ("> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP (91 scans, 60 documents, 1 982 p,
+                 ^
+SyntaxError: unterminated string literal (detected at line 7)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\ni = t.index(\"> **Sessions closes** :\")\nj = t.index(\"\\n\\n\", i)\nbloc = \"\"\"> **Session close** : `fe3c05f0` (D/R/A) — OCR C … [1528 caractères tronqués]`
+
+  ```
+état allégé : 1622 mots dans le fichier
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md docs/pilotage/en-cours.md && git commit -q -m \"N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)\" && git log --oneline -1; echo \ … [130 caractères tronqués]`

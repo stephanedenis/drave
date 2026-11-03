@@ -2631,3 +2631,23 @@ porte-audit-drapeaux   ✅                         175 s  ✅ porte audit des dr
 ⏵ Passe en cours : 13 portes vertes, dont `bloc-maths` et les portes GPU
 
 - **job_output** `{"job_id": "bash-108", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-coupe            ✅                         140 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-cycle-c2         ✅                         154 s    ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe ·
+  porte-deepseek         ✅                           1 s    ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 6.98 s → 10.28 s (+3.3 s ≈ 50 ms × 64 pas)
+  porte-diff-couche      ✅                          18 s    ✅ le contrat est tenu : la divergence commence à la couche 1, premier jeton tracé
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-echange-experts  ✅                          63 s    PORTE TENUE
+  porte-episodique       ✅                         180 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          23 s    mod
+… [206 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ 25 portes vertes, y compris `delais` et `flux` (le GPU 1 tient)
+
+- **job_output** `{"job_id": "bash-108", "timeout_ms": 600000, "wait": true}`

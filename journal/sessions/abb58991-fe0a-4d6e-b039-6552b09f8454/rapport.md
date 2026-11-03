@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 3.6 h |
+| Durée | 3.7 h |
 | Tours | 8 |
-| Messages | 384 |
-| Appels d'outils | 488 |
+| Messages | 388 |
+| Appels d'outils | 492 |
 | Fichiers touchés | 32 |
-| Commandes | 357 |
+| Commandes | 361 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 1 |
@@ -319,7 +319,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 
 ### Tour 8 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Inspect minute door problem and state helpers
 - bash — Read PolitiqueLLM and minute tests
@@ -335,10 +335,11 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - bash — Extract minute results from JSON
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md`
 - bash — Apply minute door state and check budgets
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ J'applique l'état « porte minute » (README, INDEX, en-cours, roadmap, plan, journal) et je mesure le T0
+⏵ Je corrige l'heure (19 h 52, pas 20 h 02), les compteurs 561/648 et les prochaines actions ; puis tests/gates
 
 ## 3. Travail accompli
 
@@ -421,7 +422,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 317 autres
+- … et 321 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -498,6 +499,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - **T5** `~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;`
 - **T5** `identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ;`
 - **T8** `"""Le bruit variable : la politique entraînée à 80 % tient de 50 % à 95 %."""`
+- **T8** `| [rapport-n2-anglais-distille.md](rapport-n2-anglais-distille.md) | N2.n — La distillation anglaise : 4,42 → 3,94, la chaîne complète sur 204 Mo |`
 
 ## 5. Erreurs rencontrées
 

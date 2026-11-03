@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 3.6 h |
-| Tours | 4 |
-| Messages | 342 |
-| Appels d'outils | 367 |
+| Durée | 3.7 h |
+| Tours | 5 |
+| Messages | 357 |
+| Appels d'outils | 386 |
 | Fichiers touchés | 18 |
-| Commandes | 215 |
+| Commandes | 234 |
 | Sous-agents | 0 |
-| Commits | 7 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -31,6 +31,8 @@
 **Tour 3** — as-tu terminé? les gpu et cpu sont tranquilles
 
 **Tour 4** — c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en cours dans les autres terminaux
+
+**Tour 5** — regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur le fait que les sessions doivent être bien cootrdonnnées et tenir les ressources en usage optimal pour que nos travaux avances dans tous les axes
 
 ## 2. Déroulé, étape par étape
 
@@ -112,7 +114,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 4 — c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en co … [29 caractères tronqués]
 
-*80 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - bash — Current time, recent commits and working tree
 - bash — Session status, strict check and state checks
@@ -128,11 +130,45 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - edit `docs/pilotage/en-cours.md`
 - edit `docs/pilotage/roadmap.md`
 - bash — Verify roadmap N line
-- … et 50 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ Passe de pilotage : je relève l’état réel des quatre sessions et des compteurs avant d’écrire
+⏵ Pilotage consolidé et committé ; un seul flux reste ouvert, celui de la session Pensée
+
+**Oui — le pilotage est à jour, concis et committé** (`a902abea`), avec la porte stricte verte.
+
+**Ce qui a été aligné**
+- **Sessions** : N2 (`0733c5bb`) est **close** et sort des sessions actives ; elle rejoint D/R/A dans le bloc des closes. Il reste **3 sessions actives** : le hub, **S** (`29ad180d`) et **Pensée** (`e181ce02`).
+- **N2** : 200 k pas — **3,16 / 5,61 / 7,28 / 8,00**, **< 2,5 non atteinte** (2,5 estimée à 1,3–2,7 M pas) ; **R1.1/R1.2 mesurées** ; la suite est **R1.2 à 1 024 octets entraînés**, pas un autre schéma.
+- **S** : passé à **v3** partout — **47/47** types, **117/117** rôles, **47/47** compléments, gold **47**, corpus **47** (`f2a0d2fb…`), **43 tests** ; prochaine action homographes/lexique, puis validation humaine.
+- **Pensée** : **134/140**, gold neuronal (POS **0,9415**, syntagmes **0,7539**), DRVM par la règle, pragmatique **0,6375** (l'heuristique garde) ; prochaine action **gold 200+**, porte B13.
+- **D/R/A** : close, OCR CEGEP **91 scans uniques**, 60 documents, 1 982 p.
+- **Concision** : `en-cours` à **1 544 mots**, **3 sessions**, 7 sections, 5 questions ; **T0 repassé sous 4 000** ; compteurs **560 fiches / 648 JSON** au commit.
+- **Plans** : heartbeats de N2/S/hub rafraîchis pendant la passe (sessions vivantes), puis N2 s'est close elle-même ; `sessions.py --check --strict` → **plans cohérents**.
+
+**Un seul flux est encore dans l'arbre de travail, et il n'est pas à moi** : la session **Pensée** vient d'intégrer la **« porte minute »** (26 nœuds par la règle, labyrinthe 200/3) dans `en-cours`/`roadmap`, avec sa fiche et son JSON encore **non committés**. C'est pour cela que la revue sur l'arbre de travail signale **561 fiches pour 560 annoncées** — le commit de cette session remettra le compteur à **561/648**. Le tree committé, lui, est cohérent ; strict, T0, journal et en-cours sont verts.
+
+### Tour 5 — regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur  … [145 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Survey sessions and repository state
+- bash — Survey CPU, GPU and processes
+- bash — Inspect the new resources tool
+- bash — Check N2 reopening and Pensée status
+- bash — Read resource registry status
+- bash — Check resource policy, strict state and N2 in en-cours
+- bash — Check resource tool provenance and policy section
+- bash — Read resource tool commands and ledger logic
+- bash — Validate the resource tool
+- bash — Read current en-cours head and N2 night section
+- bash — Check resource policy references and active commit
+- bash — Wait for N2 night mandate commit
+
+**Synthèse produite :**
+
+⏵ Prise de service de nuit : je relève l’état des sessions et des ressources avant de poser la consigne
 
 ## 3. Travail accompli
 
@@ -201,7 +237,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 175 autres
+- … et 194 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -302,6 +338,8 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T4** `de `data/wiki_fr/propre` (186 Mo) et `data/wiki_big/propre` (831 Mo) ; canal concaténé ; le`
 - **T4** `découpage interne réserve les 5 % finaux à la validation d'entraînement.`
 - **T4** `lieu de 60 000 (×3,33). GPU 0, **11 410 s** (3 h 10), ~57 ms/pas.`
+- **T5** `0, 99 %, 5766 MiB`
+- **T5** `**147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;`
 
 ## 5. Erreurs rencontrées
 
@@ -318,4 +356,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E "entrainer|llama-server|porte-|git commit|n2ac" | grep -v grep | head -6; echo "--- gpu ---"; nvidia-smi --que
 - date "+%H:%M:%S"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md; ps -
 - PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS" -m "en-cours : N2 sort des sessions actives ap
+- date "+%H:%M:%S"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md; ps -eo pid,etime,args | grep -E "git commit|session_report|jo
+- OLD=$(git rev-parse HEAD); for i in $(seq 1 45); do sleep 2; NEW=$(git rev-parse HEAD); [ "$NEW" != "$OLD" ] && break; pgrep -f "git commit" >/dev/null || true;
+- grep -n "ressources\|ressource\|claim" docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/roadmap.md journal/sessions/536cd5d6-94ac-4057-8fe9
 

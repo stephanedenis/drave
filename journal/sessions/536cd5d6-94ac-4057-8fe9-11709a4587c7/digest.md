@@ -5279,3 +5279,310 @@ Le delta de 14 °C à puissance égale (avant le plafond) reste la meilleure pre
 
 **Après un reboot** : `systemctl is-enabled hauru-thermal.service` doit rester `enabled` ; le service réapplique 180 W automatiquement. Vérifie avec `/usr/local/bin/hauru-thermal status`.
 
+
+## Tour 7
+
+### 👤 Utilisateur
+
+dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard
+
+### 🤖 Assistant
+
+⏵ Je vérifie la topologie NUMA, les NVMe et la charge réelle avant de proposer le coordinateur.
+
+- **bash** `{"command": "echo \"== CPU ==\" && lscpu | grep -E 'Model name|Socket|Core|Thread|NUMA|CPU\\(s\\)' | head -12; echo; echo \"== NUMA ==\" && for n in /sys/devices/system/node/node*/cpulist; do echo \"$n = $(cat $n)\"; done; echo; echo \"== GPU topo ==\" && nvidia-smi topo -m 2>/dev/null | head -6; ec … [112 caractères tronqués]`
+
+  ```
+== CPU ==
+CPU(s):                                  40
+On-line CPU(s) list:                     0-39
+Model name:                              Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               2
+CPU(s) scaling MHz:                      75%
+NUMA node(s):                            2
+NUMA node0 CPU(s):                       0-9,20-29
+NUMA node1 CPU(s):                       10-19,30-39
+
+== NUMA ==
+/sys/devices/system/node/node0/cpulist = 0-9,20-29
+/sys/devices/system/node/node1/cpulist = 10-19,30-39
+
+== GPU topo ==
+	[4mGPU0	GPU1	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	NV1	0-9,20-29	0		N/A
+GPU1	NV1	 X 	0-9,20-29	0		N/A
+
+Legend:
+
+
+== RAM ==
+               total        used        free      shared  buff/cache   available
+Mem:             125          18          58           3          53         107
+Swap:             62           0          62
+  ```
+
+- **bash** `{"command": "echo \"== disques ==\" && lsblk -d -o NAME,SIZE,MODEL,TRAN,ROTA 2>/dev/null | head -20; echo; echo \"== RAID ==\" && cat /proc/mdstat 2>/dev/null; echo; echo \"== montages ==\" && findmnt -t btrfs,ext4,xfs -o TARGET,SOURCE,SIZE,USED,AVAIL 2>/dev/null | head -15; echo; echo \"== NVMe ==\ … [153 caractères tronqués]`
+
+  ```
+== disques ==
+NAME      SIZE MODEL                  TRAN ROTA
+sda      10,9T WDC WD120EFGX-68CPHN0  sas     1
+nvme0n1 238,5G Patriot M.2 P320 256GB nvme    0
+nvme1n1 238,5G Patriot M.2 P320 256GB nvme    0
+nvme3n1 238,5G Patriot M.2 P320 256GB nvme    0
+nvme4n1 238,5G Patriot M.2 P320 256GB nvme    0
+nvme2n1 931,5G Fanxiang S660 1TB      nvme    0
+
+== RAID ==
+Personalities : [raid0] 
+md0 : active raid0 nvme1n1[2] nvme0n1[0] nvme4n1[3] nvme3n1[1]
+      999706624 blocks super 1.2 512k chunks
+      
+unused devices: <none>
+
+== montages ==
+TARGET                      SOURCE                             SIZE   USED  AVAIL
+/                           /dev/nvme2n1p2[/@]                 828G 120,9G 705,5G
+├─/.snapshots               /dev/nvme2n1p2[/@snapshots]        828G 120,9G 705,5G
+├─/home                     /dev/nvme2n1p2[/@home]             828G 120,9G 705,5G
+│ ├─/home/stephane/FastNVMe /dev/nvme2n1p2[/@FastNVMe]         828G 120,9G 705,5G
+│ ├─/home/stephane/IA       /dev/md0                         937,4G 894,4G  33,4G
+│ └─/home/stephane/Data13TB /dev/mapper/system-root[/@/home]  10,9T   8,9T   1,9T
+├─/opt                      /dev/nvme2n1p2[/@opt]              828G 120,9G 705,5G
+├─/
+… [434 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La topologie est claire (GPU sur NUMA 0, CPU1 libre, RAID `IA` à 33 Gio). J'écris le registre de ressources.
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py", "content": "#!/usr/bin/env python3\n\"\"\"ressources.py — le registre des ressources de Hauru et le protocole de claim.\n\nPourquoi. Le pilotage réservait des **fichiers** (`sessions.py`) et surveillait les\n**fichi … [24079 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Je teste le registre : autotest, puis une allocation simulée des quatre sessions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/ressources.py --autotest; echo \"[exit $?]\"; echo; echo \"== status réel ==\" && python3 tools/ressources.py --status | head -20", "description": "Run resource ledger autotest and status"}`
+
+  ```
+✅ autotest : 9 cas (claim, conflit, file, admission, check)
+[exit 0]
+
+== status réel ==
+ressources · Hauru — registre /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ressources.json
+  ressource      type      capacité  utilisé    libre  détail
+  gpu0           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16        0       16  réserve 4 fils
+  cpu1           cpu             16        0       16  réserve 4 fils
+  ram            ram            109        0      109  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1943 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Aucune réservation active.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je simule l'allocation des quatre sessions + le hub + la passe de portes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=/tmp/demo-ressources.json && rm -f \"$L\" && python3 tools/ressources.py --ledger \"$L\" --claim --session n2 --job train --res \"gpu0=exclusive,cpu0=12,ram=60,nvme_raid=heavy:20\" --prio 1 --eta 240 && python3 tools/ressources.py  … [550 caractères tronqués]`
+
+  ```
+✅ accordé : n2 / train
+     ⚠ nvme_raid : 33 Gio libres seulement
+  ✅ accordé : e181ce02 / b13
+     ⚠ nvme_raid : 33 Gio libres seulement
+  ✅ accordé : s / roles
+     ⚠ nvme_raid : 33 Gio libres seulement
+  ✅ accordé : fe3c05f0 / ocr
+     ⚠ nvme_raid : 33 Gio libres seulement
+  ✅ accordé : hub / etat
+     ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+### 🤖 Assistant
+
+⏵ Je réduis le bruit des avertissements, puis je teste la passe globale et la file.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py", "old_string": "    for r in (\"nvme_raid\", \"nvme_system\", \"hdd_data13tb\"):\n        if libre_go(r) < 40:\n            warns.append(f\"{r} : {libre_go(r)} Gio libres seulement\")\n    return errs, warns", "new_s … [215 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=/tmp/demo-ressources.json && echo \"== passe globale ==\" && python3 tools/ressources.py --ledger \"$L\" --claim --session hub --job portes --res \"machine=exclusive\" --prio 1 --eta 110 && echo && echo \"== écriture IA supplémenta … [495 caractères tronqués]`
+
+  ```
+== passe globale ==
+  ⏸ différé : hub / portes
+     · machine exclusive : des réservations sont déjà actives
+     → placé en file (position 1) ; prends une autre tâche ou attends la libération.
+
+== écriture IA supplémentaire ==
+  ⏸ différé : fe3c05f0 / corpus
+     · nvme_raid : IO lourde déjà réservée
+     · nvme_raid : 20 Gio demandés + 20 déjà réservés > 33 Gio libres
+     → placé en file (position 2) ; prends une autre tâche ou attends la libération.
+     ⚠ nvme_raid : 33 Gio libres seulement
+
+== status ==
+ressources · Hauru — registre /tmp/demo-ressources.json
+  ressource      type      capacité  utilisé    libre  détail
+  gpu0           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16       12        4  réserve 4 fils
+  cpu1           cpu             16       16        0  réserve 4 fils
+  ram            ram            109      104        5  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        1        0  33 Gio libres · 20 Gio réservés
+  hdd_data13tb   io            
+… [1044 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie l'admission après libération, puis je montre l'écart entre le registre réel et les processus en cours.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=/tmp/demo-ressources.json && echo \"== release n2 ==\" && python3 tools/ressources.py --ledger \"$L\" --release --session n2 && echo && echo \"== release des autres ==\" && for s in e181ce02 s fe3c05f0 hub; do python3 tools/ressour … [353 caractères tronqués]`
+
+  ```
+== release n2 ==
+  ✅ libéré : 1 réservation(s) de n2
+  ▶ admis : fe3c05f0 / corpus
+
+== release des autres ==
+  ✅ libéré : 1 réservation(s) de e181ce02
+  ✅ libéré : 1 réservation(s) de s
+  ✅ libéré : 2 réservation(s) de fe3c05f0
+  ✅ libéré : 1 réservation(s) de hub
+  ▶ admis : hub / portes
+
+== status final ==
+  gpu0           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16        0       16  réserve 4 fils
+  cpu1           cpu             16        0       16  réserve 4 fils
+  ram            ram            109        0      109  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1943 Gio libres · 0 Gio réservés
+  machine        global           1        1        0  passe complète
+
+  Réservations actives :
+    · hub / portes : machine=exclusive (prio 1, 110 min)
+== check final ==
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+[
+… [7 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== réel vs registre ==\" && python3 tools/ressources.py --actual 2>&1 | head -22", "description": "Show actual GPU/CPU/disk load versus empty ledger"}`
+
+  ```
+== réel vs registre ==
+  Réel · GPU
+    GPU0 (non réservé) : PID 110066 llama-server (366 MiB) ; PID 327524 [No data] (120 MiB)
+      ⚠ GPU0 utilisé sans réservation
+    GPU1 (non réservé) : PID 110066 llama-server (118 MiB)
+      ⚠ GPU1 utilisé sans réservation
+  Réel · CPU (top 8)
+        PID COMMAND         %CPU %MEM
+     327524 drave <defunct>  887  0.0
+     110066 llama-server     714  4.0
+     327714 python           106  3.1
+      32123 node-MainThread 75.2  0.8
+      31175 node-MainThread 49.6  0.8
+      32694 node-MainThread 48.9  0.7
+     328007 bash            48.1  0.0
+     328031 python3         46.1  0.0
+  Réel · stockage
+    nvme_system    705 Gio libres (/)
+    nvme_raid      33 Gio libres (/home/stephane/IA)
+    hdd_data13tb   1943 Gio libres (/home/stephane/Data13TB)
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie le budget du plan de travail avant d'y ajouter la politique de ressources.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E 'plan-travail|T0 max|violation' ; echo; grep -n 'plan-travail' tools/taille_documents.py | head", "description": "Check plan-travail word budget"}`
+
+  ```
+T0 max : 3918 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'BUDGET\\|budgets\\|T1\\|T0' tools/taille_documents.py | head -30 && echo \"---\" && sed -n '1,80p' tools/taille_documents.py", "description": "Inspect document budget definitions"}`
+
+  ```
+5:  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+26:BUDGETS: list[tuple[str, str, int]] = [
+27:    ("T0", "AGENTS.md", 1200),
+28:    ("T0", "docs/pilotage/en-cours.md", 2000),
+29:    ("T1", "docs/methode/organisation-du-depot.md", 1800),
+30:    ("T1", "docs/methode/modularisation.md", 1600),
+31:    ("T1", "docs/methode/relations-humaines.md", 1400),
+32:    ("T0", "docs/methode/*.md", 1200),
+33:    ("T1", "docs/README.md", 1000),
+34:    ("T1", "docs/theorie/carte.md", 1100),
+35:    ("T1", "docs/theorie/synthese/index.md", 2000),
+36:    ("T1", "docs/theorie/synthese/0*.md", 2000),
+37:    ("T1", "docs/pilotage/roadmap.md", 9000),
+38:    ("T1", "docs/theorie/glossaire.md", 1500),
+39:    ("T1", "docs/theorie/glossaire/0*.md", 5000),
+40:    ("T1", "docs/theorie/glossaire/1*.md", 5000),
+41:    ("T1", "docs/theorie/glossaire/README.md", 2000),
+42:    ("T1", "docs/schemas/README.md", 1500),
+44:    ("T1", "reports/README.md", 2800),
+45:    ("T1", "README.md", 3500),
+46:    ("T1", "REPRISE.md", 2000),
+47:    ("T1", "docs/pilotage/utilisation.md", 2500),
+48:    ("T1", "docs/pilotage/references-non-regression.md", 2500),
+49:    ("T1", "docs/implanta
+… [3890 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la politique de ressources au plan de travail (matrice, protocole, allocation).
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md", "offset": 200, "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+200: **Le premier prompt (à coller dans chaque terminal).**
+201: 
+202: > Tu es la session `<rôle>`. Lis `AGENTS.md`, `docs/pilotage/en-cours.md` et **seulement** le
+203: > document de ta tâche. Crée (ou reprends) `journal/sessions/<id>/plan.md` avec les onze champs,
+204: > réserve ton territoire, puis exécute la prochaine action nommée ci-dessus. Un fait = mesure +
+205: > contrôle négatif + fiche + `en-cours` + commit (`git add` explicite). Ne touche pas à
+206: > `en-cours`, `roadmap`, `chantiers`, `AGENTS` sans le hub. À la fin du cycle, rends ta ligne
+207: > d'état et le hash du commit.
+208: 
+209: **Les pièges.**
+210: 
+211: - **Ne pas écrire `en-cours` à deux.** Le hook refuse un fait sans état, pas deux écrivains : c'est
+212:   la discipline (ou le hub) qui évite la course.
+213: - **`git add` explicite**, jamais `-A` : deux sessions sur le même arbre ; l'index alterné
+214:   (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture.
+215: - **Committer avant de rebooter** : le reboot du 02/11 a laissé 67 fichiers non committés.
+216: - **Les portes lourdes une à une
+… [385 caractères tronqués]
+  ```
+

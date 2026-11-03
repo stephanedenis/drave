@@ -2,14 +2,12 @@
 
 **Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
 
-> **État courant, pas histoire** : une sous-section par **session active**. Méthode :
-> [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
-> [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
 >
-> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
-> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A close à
-> 18 h 45** (OCR CEGEP) et **N2 close à 19 h 46** (200 k pas) ; restent **le hub**, **S** et
-> **Pensée** ; les GPU sont libres ; runbook dans [`plan-travail.md`](plan-travail.md) § 9.
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
 
 ## Sessions en cours
 
@@ -60,19 +58,33 @@
 - **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
   ne se rejoue pas), gold **432** ; **gold neuronal** POS/syntagmes, cascade
   **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27 (règle), labyrinthe 2 sonde ;
+  **porte minute** — la règle l'ouvre (**26 nœuds**, 4 sonde), le labyrinthe échoue (200, 3) ;
   **pragmatique** dev 1,0, test 0,6375 (majoritaire 0,7556) ; l'heuristique garde ;
-  [B13](../../reports/rapport-b13-porte-134.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
-- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique et porte B13** mesurés ; reprise **16 h 16**.
+  [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
+  [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
+- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, porte B13 et minute** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
 - **Prochaine action** : **gold 200+ phrases** ; **porte B13** ; **porte qui bouge**.
 - **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; la **pragmatique neuronale** ne qualifie pas ; restent **gold 200+** et **porte B13**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
-> **Sessions closes** : `fe3c05f0` (D/R/A) — **91 scans uniques**, 60 documents, 1 982 p,
-> 4,41 M car. ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
-> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md). `0733c5bb` (N2) — **200 k pas**,
-> **3,16 / 5,61 / 7,28 / 8,00**, **R1.1/R1.2 mesurées**, **GPU libres** ; commits `2cff8dba` et
-> `e12c39c1`, [clôture](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md).
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — R1.2 à **1 024 octets** et la fenêtre sur le **mélange de production**.
+- **Plan** : R1.2-1024 (2 500 → 20 000 pas) ; mélange affiné à 512 ; fiche + commit par fait.
+- **Ambition** : que la longueur cesse de reculer.
+- **Stratégie** : RoPE, budgets contrôlés, mêmes bancs, contrôles joints.
+- **Objectif final** : une fenêtre 1 024 mesurée, une production qui tient à 1 000 octets.
+- **Ce qu'elle fait** : R1.2-1024 lancée à 19 h 57 (GPU 0) ; les portes gardent le GPU 1.
+- **Ce que font les autres** : **hub** (portes), **S** (analyseur), **Pensée** (B13).
+- **Prochaine action** : les contrôles de R1.2-1024, puis la fiche.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+
+> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP (91 scans, 60 documents, 1 982 p,
+> 4,41 M car.) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
 
 ## Ce qui est en cours
 
@@ -102,7 +114,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **560** / **648** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **561** / **648** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -114,7 +126,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 134/140** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 134/140 ; minute 26 nœuds** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.1/R1.2 mesurées** ; N4 0/4 ; N5 gelé | **N2 close** ; la suite est **R1.2 à 1 024 octets entraînés** ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -143,8 +155,6 @@ tagger complet ; **D** — OCR clos (8 scans `.PDF`).
 
 ## La carte
 
-- **Méthode** : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
-  [résultats](../methode/resultats.md) · [portes](../methode/portes.md) · **plan** :
-  [roadmap](roadmap.md) · [backlog](backlog/index.md) · [graphe](backlog/dependances.md) ·
-  [carte](../theorie/carte.md) · **preuves** : [reports/](../../reports/) ·
-  [journal/](../../journal/).
+- Méthode : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
+  [résultats](../methode/resultats.md) · [portes](../methode/portes.md) · plan : [roadmap](roadmap.md) ·
+  [backlog](backlog/index.md) · preuves : [reports/](../../reports/) · [journal/](../../journal/).
