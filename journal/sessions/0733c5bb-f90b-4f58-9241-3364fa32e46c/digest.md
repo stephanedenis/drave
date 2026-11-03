@@ -9235,3 +9235,231 @@ plan en pause, état à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md docs/pilotage/en-cours.md journal/sessions/ … [1004 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-475]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-475", "timeout_ms": 180000, "wait": true}`
+
+  ```
+39ff662c N2 — PHASE DU 03/11 CLOSE : CAPACITÉ SATURÉE, 60 000 PAS À 2,9121, DISTILLATION NATIVE +0,10 À BUDGET ÉGAL
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"=== fraîcheur ===\"; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -1; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; echo \"=== T0 == … [356 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 598 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== fraîcheur ===
+  ✅ aucun fait commité après le dernier état
+=== en-cours ===
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+  T0 max : 4000 mots (budget 4 000)
+=== commits du jour ===
+39ff662c N2 — PHASE DU 03/11 CLOSE : CAPACITÉ SATURÉE, 60 000 PAS À 2,9121, DISTILLATION NATIVE +0,10 À BUDGET ÉGAL
+d0c9646a PRODUCTION — LE PROFESSEUR LONG DISTILLÉ DANS LA RECETTE 512 GAGNE 0,10 À BUDGET ÉGAL : 3,0550 / 2,8062 / 2,7015 / 2,6601
+36195516 RUN LONG — 60 000 PAS À FENÊTRE 1 024 : 2,9121 EN DOMAINE, 2,5276 À 1 000, ET 2,3911 / 2,3522 AU GRAND CORPUS
+43833200 DISTILLATION NATIVE — LE PROFESSEUR LONG PAIE À FORTE DOUCEUR : α = 0,9 DONNE 3,5090 / 3,2835 / 3,1863 CONTRE 3,6452 / 3,4493 / 3,3628 POUR L'ÉLÈVE DUR
+ad070205 PORTE PROPRE — LA CAPACITÉ SATURE : 2,8960 (11,47 M) → 2,8688 (21,65 M) → 2,8662 (34,3 M) À 1 024 OCTETS
+fc58dc06 ÉTAT — N2 ROUVERTE POUR LE RUN LONG À 1 024 (03/11 13 H 38) ; HEARTBEAT 13 H 45
+f1e8007e ÉTAT — LA SESSION N2 REPREND : RUN LON
+… [457 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase close (session en pause, un run en vol) — je rends les résultats et les commits
+
+La phase « continue » est mesurée, écrite et committée. Quatre faits de plus aujourd'hui, tous avec fiche, JSON, ligne d'état et commit.
+
+## Les quatre faits
+
+**1. La capacité sature sur le corpus propre** — trois tailles, même recette (RoPE, fenêtre 512, init aléatoire identique, 33 Mo), val à 1 024 octets :
+
+| capacité | 1 024 octets (val) |
+|---|---:|
+| 11,47 M | 2,8960 |
+| 21,65 M | 2,8688 |
+| **34,3 M** | **2,8662** |
+
+Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni les pas (3,24 Mo vus dix fois), ni la capacité ne ferment la porte < 2,5** (il reste 0,37) : la suite est un corpus propre plus large, ou la distillation.
+
+**2. Le run long de production** — 60 000 pas à fenêtre 1 024 (552 Mo) : **2,9121** en domaine à 128, **2,5276** à 1 000, **2,4761** à 2 000 ; au grand corpus **2,3911 / 2,3522** ; littérature 5,13, anglais 6,20, wikitext2 6,79. Chaque doublement des pas vaut **−0,085** en domaine — loi géométrique, la même à toutes les longueurs. À 128 octets il reste 0,41 au-dessus de 2,5, soit ≈ 2 M de pas.
+
+**3. La distillation native** (nouveau distillateur `work/n2ac/distiller_natif.py`) — le professeur long dans un élève 11,47 M à fenêtre 512, même init, mêmes 33 Mo :
+
+| élève 11,47 M / 512 | 128 | 512 | 1 024 |
+|---|---:|---:|---:|
+| dur (α = 0) | 3,6452 | 3,4493 | 3,3628 |
+| α = 0,5 | 3,5861 | 3,4330 | 3,3819 |
+| **α = 0,9** | **3,5090** | **3,2835** | **3,1863** |
+
+**La douceur forte est la bonne cible** (mélanger dilue le professeur) et le gain **croît avec la longueur** (−0,18 à 1 024) alors que l'élève ne voit que 512 octets. Coût : **+25 % par pas** (259 contre 208 ms), pas ×2 comme le laissait croire un premier run sous contention.
+
+**4. La distillation de production** — le même professeur distillé dans la recette 512 (34,3 M, même init, mêmes 61,4 Mo que l'affinage dur) : **3,0550 / 2,8062 / 2,7015 / 2,6601** contre 3,1588 / 2,9096 / 2,8018 / 2,7607, soit **−0,10 partout** en domaine et **−0,29 / −0,52** hors domaine. La recette de production devient « professeur 1 024 + élève 512 distillé » : **9× moins d'octets** que le run de 552 Mo pour 0,14 de PPL.
+
+## Ma ligne d'état
+
+> **N2** — 1 024 = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** (3,0550).
+> **porte propre** : 2,8662 à 34,3 M, **capacité saturée** ; il reste 0,37.
+
+## Commits
+
+- **`ad070205`** — la capacité sature (2,8960 → 2,8662).
+- **`43833200`** — distillation native : α = 0,9 gagne 0,14–0,18.
+- **`36195516`** — run long : 60 000 pas, 2,9121, 2,3911/2,3522 au grand corpus.
+- **`d0c9646a`** — production : le professeur distillé gagne 0,10 à budget égal.
+- **`39ff662c`** — clôture de la phase.
+
+## Ce qui tourne et ce qui reste
+
+**En vol** : le professeur 60 000 pas distillé dans la recette 512 à 30 000 pas (`work/n2ac/kd2-mix512-30k.pt`, fin ~22 h 15) — le gain de 0,10 tient-il quand les octets doublent ? Mesure à la reprise.
+
+**Reste** : la porte propre par un corpus plus large (le corpus de 3,24 Mo est épuisé) ; le run de ~2 M de pas pour 2,5 en domaine à 128 ; l'exploration de α et T.
+
+**Portes** : revue de documentation verte, état à jour et frais, en-cours vert (T0 = 4 000), journal vert, 598 fiches / 685 JSON. Session **en pause**, GPU 0 au run en vol, GPU 1 libre.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Reprise du round : état du run en vol et du dépôt
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M'; echo \"=== run ===\"; cat work/n2ac/kd60k.out 2>/dev/null; ls work/n2ac/kd2-mix512-30k.pt 2>/dev/null && echo OK; tail -c 60 work/n2ac/kd2-mix512-30k.log; echo \"=== GPU ===\"; nvidia-smi --query-gpu=index,memory.used,utilizati … [146 caractères tronqués]`
+
+  ```
+2026-11-03 18:32
+=== run ===
+850 · perte 1.3689 · dure 1.0803 · douce 0.4277 · 397 s
+=== GPU ===
+0, 5200 MiB, 100 %
+1, 1 MiB, 0 %
+=== git ===
+39ff662c N2 — PHASE DU 03/11 CLOSE : CAPACITÉ SATURÉE, 60 000 PAS À 2,9121, DISTILLATION NATIVE +0,10 À BUDGET ÉGAL
+d0c9646a PRODUCTION — LE PROFESSEUR LONG DISTILLÉ DANS LA RECETTE 512 GAGNE 0,10 À BUDGET ÉGAL : 3,0550 / 2,8062 / 2,7015 / 2,6601
+f92c183b S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS, « LES » → « IT » RETROUVÉ ; SOURCE ANGLAISE DANS LA PAGE
+  ```
+
+### 🤖 Assistant
+
+⏵ Complément 2 048 « mêmes pas » lancé sur le GPU 1 (20 000 pas)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_2048_20k.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_2048_20k.sh — le complément 2 048 « mêmes pas » : 20 000 pas, comme le run 1 024 / 20 000.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet || exit 1\nexport PYTHONPA … [831 caractères tronqués]`
+
+  ```
+2048-20k lancé pid 2469146
+[still running after 60000ms; moved to background job bash-478]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-478", "timeout_ms": 300000, "wait": true}`
+
+  ```
+18:37:52
+pas    250 · perte 1.2395 · PPL val 3.250 · 254 s
+0, 5200 MiB, 100 %
+1, 9950 MiB, 99 %
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit des chiffres des fiches contre les JSON (pendant les runs)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\ndef L(f):\n    p = pathlib.Path(f)\n    return json.loads(p.read_text()) if p.exists() else None\nprint(\"== production (val_fr) ==\")\nfor nom, f in ((\"N2.ac\", \"work/n2ac/eval-mix60.json\"), (\"200k\", \"wor … [1283 caractères tronqués]`
+
+  ```
+== production (val_fr) ==
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+KeyError: 'ppl'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\ndef L(f):\n    p = pathlib.Path(f)\n    return json.loads(p.read_text()) if p.exists() else None\ndef valfr(d):\n    if not d: return None\n    if \"ppl\" in d: return d[\"ppl\"][\"val_fr\"]\n    return {k.repla … [1384 caractères tronqués]`
+
+  ```
+== production (val_fr) ==
+  N2.ac        {'128': 3.4902, '256': 3.4615, '512': 3.5169} | lit 6.0283 | en 8.3352 | wt2 9.0525
+  200k         {'128': 3.1591, '256': 3.2047, '512': 3.6577} | lit 5.6056 | en 7.277 | wt2 8.0018
+  512 15k      {'128': 3.1588, '256': 3.043, '512': 2.9096, '1000': 2.8018, '2000': 2.7607} | lit 5.5247 | en 7.0507 | wt2 7.9023
+  1024 7.5k    {'128': 3.1489, '256': 3.0488, '512': 2.9103, '1000': 2.7858, '2000': 2.7342} | lit 5.5173 | en 7.1904 | wt2 7.9521
+  2048 3.75k   {'128': 3.1862, '256': 3.0739, '512': 2.9325, '1000': 2.798, '2000': 2.7372} | lit 5.5485 | en 7.2908 | wt2 8.0135
+  1024 30k     {'128': 2.9943, '256': 2.8569, '512': 2.7221, '1000': 2.6143, '2000': 2.5628} | lit 5.3122 | en 6.5118 | wt2 7.1544
+  1024 60k     {'128': 2.9121, '256': 2.7716, '512': 2.6341, '1000': 2.5276, '2000': 2.4761} | lit 5.1254 | en 6.2043 | wt2 6.7874
+  KD 15k       {'128': 3.055, '256': 2.9328, '512': 2.8062, '1000': 2.7015, '2000': 2.6601} | lit 5.4309 | en 6.7639 | wt2 7.3816
+  zero 15k     {'128': 3.3184, '512': 3.0709, '1000': 2.9588, '2000': 2.9213} | lit 5.7295 | en 7.6921 | wt2 8.3665
+== distillation 11,47 M ==
+  dur    3.6452 3.4493 3.3628
+  a0.5   3.5861 3.433
+… [143 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de sortie sur les deux modèles de production (miroir et saturation de fenêtre)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in kd-mix512-15k mix1024-60k; do echo \"=== $m miroir ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/mirroir_copie.py work/n2ac/$m.pt --rope --sortie work/n2ac/miroir-$m.json 2>&1 | tail -3; echo \"=== $m même texte == … [276 caractères tronqués]`
+
+  ```
+=== kd-mix512-15k miroir ===
+  d= 300 · justesse 0.0000
+  d= 400 · justesse 0.0000
+{"fichier": "kd-mix512-15k.pt", "positions": "rope", "fenetre": 512, "contexte": 512, "code": "K7Q2M9XA4B1Z8W3C", "distances": {"16": 0.0, "64": 0.0, "128": 0.0, "200": 0.0, "240": 0.0, "255": 0.0078, "300": 0.0, "400": 0.0}}
+=== kd-mix512-15k même texte ===
+  contexte  256 · PPL des 128 derniers octets 2.6335
+  contexte  512 · PPL des 128 derniers octets 2.5292
+  contexte 1000 · PPL des 128 derniers octets 2.5230
+  contexte 2000 · PPL des 128 derniers octets 2.5240
+{"fichier": "kd-mix512-15k.pt", "positions": "rope", "cible": 128, "contextes": [256, 512, 1000, 2000], "ppl": {"256": 2.6335, "512": 2.5292, "1000": 2.523, "2000": 2.524}}
+=== mix1024-60k miroir ===
+  d= 300 · justesse 0.0000
+  d= 400 · justesse 0.0000
+{"fichier": "mix1024-60k.pt", "positions": "rope", "fenetre": 1024, "contexte": 512, "code": "K7Q2M9XA4B1Z8W3C", "distances": {"16": 0.0, "64": 0.0, "128": 0.0, "200": 0.0, "240": 0.0, "255": 0.0078, "300": 0.0, "400": 0.0}}
+=== mix1024-60k même texte ===
+[still running after 60000ms; moved to background job bash-481]
+The command keeps running in the background. You will be notified when i
+… [69 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-481", "timeout_ms": 300000, "wait": true}`
+
+  ```
+contexte  256 · PPL des 128 derniers octets 2.4752
+  contexte  512 · PPL des 128 derniers octets 2.3822
+  contexte 1000 · PPL des 128 derniers octets 2.3430
+  contexte 2000 · PPL des 128 derniers octets 2.3461
+{"fichier": "mix1024-60k.pt", "positions": "rope", "cible": 128, "contextes": [256, 512, 1000, 2000], "ppl": {"256": 2.4752, "512": 2.3822, "1000": 2.343, "2000": 2.3461}}
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des contrôles de sortie aux fiches et commit du complément
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-production-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"- **le hors domaine suit** : anglais 6,51 → **6,20**, wikitext2 7,15 → **6,79**, littérature\n  5,31 → … [2282 caractères tronqués]`
+
+  ```
+contrôles ajoutés
+json : 18 sources
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** (3,0550).\",\n              \"le compute à 128 : 3,1591/8,2 … [1288 caractères tronqués]`

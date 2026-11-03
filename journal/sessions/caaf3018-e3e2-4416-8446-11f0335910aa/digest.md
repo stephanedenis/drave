@@ -10523,3 +10523,223 @@ The command keeps running in the background. You will be notified when it finish
 
 Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand elles tomberont, sans toucher à leurs fichiers.
 
+
+## Tour 34
+
+### 👤 Utilisateur
+
+fais-moi un plan pour la nuit et aligle le dossier pilotage pour que toutes les sessions soient productives et sans conflits
+
+### 🤖 Assistant
+
+⏵ Je fais l'inventaire réel (sessions, claims, GPU, ETA N2, état de Pensée/S) avant d'écrire le plan de nuit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== sessions ===\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|pause|termin\" | head -6; echo \"=== claims ===\"; python3 tools/ressources.py --status 2>&1 | sed -n '/Réservations/,$p' | head -7; echo … [308 caractères tronqués]`
+
+  ```
+18:37
+=== sessions ===
+    0733c5bb-f90b-4f58 · en pause ·   8 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    0b0a6a0d-05f5-4308 · terminé  · 3483 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+    0b69f616-5c75-4c34 · terminé  · 5557 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+    22e518ee-81b8-4081 · terminé  · 4728 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+  ⏰ 29ad180d-38a5-4481 · actif    ·  83 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 296 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+=== claims ===
+  Réservations actives :
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / jour : cpu1=1, ram=1 (prio 2, 600 min)
+=== GPU ===
+0, 5200 MiB, 100 %
+1, 9950 MiB, 100 %
+=== N2 run ===
+work/n2ac/kd2-mix512-30k.log
+work/n2ac/rope2048-20k.log
+pas  1400 · perte 1.2791 · dure 1.0379 · do
+… [80 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== commits récents ===\"; git log --oneline -6; echo \"=== pensée en cours ===\"; git status --short | grep -v journal | head -8; echo \"=== plan-travail sections ===\"; grep -n \"^## \" docs/pilotage/plan-travail.md | tail -6" … [70 caractères tronqués]`
+
+  ```
+=== commits récents ===
+39ff662c N2 — PHASE DU 03/11 CLOSE : CAPACITÉ SATURÉE, 60 000 PAS À 2,9121, DISTILLATION NATIVE +0,10 À BUDGET ÉGAL
+d0c9646a PRODUCTION — LE PROFESSEUR LONG DISTILLÉ DANS LA RECETTE 512 GAGNE 0,10 À BUDGET ÉGAL : 3,0550 / 2,8062 / 2,7015 / 2,6601
+f92c183b S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS, « LES » → « IT » RETROUVÉ ; SOURCE ANGLAISE DANS LA PAGE
+36195516 RUN LONG — 60 000 PAS À FENÊTRE 1 024 : 2,9121 EN DOMAINE, 2,5276 À 1 000, ET 2,3911 / 2,3522 AU GRAND CORPUS
+76a54a2d L — COMPTEURS DE L'ÉTAT : 597 FICHES / 685 JSON
+af335d0d L — LA FUSION RÉPARÉE : PAR NIVEAU (NEURONAL POS/SYNTAGMES, HEURISTIQUE PRAGMATIQUE) — 0,9309 / 0,8226 / 0,8784 / 0,9954, LE MAXIMUM DES DEUX
+=== pensée en cours ===
+MM docs/pilotage/roadmap.md
+MM docs/schemas/README.md
+D  docs/schemas/arbre-referents.svg
+MM reports/INDEX.md
+D  reports/rapport-s-arbre-referents.md
+D  reports/rapport-s-traductions.md
+ M tools/pensee/store.py
+MM tools/structures
+=== plan-travail sections ===
+107:## 5. Les règles de la machine partagée
+123:## 6. La surveillance
+142:## 7. La balance, et les bascules
+155:## 8. La mise en route
+163:## 9. Reprise après le reboot du 02
+… [105 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire complet avant le plan : N2 (run en cours + phase close), S (rouverte), L/B13, état et compteurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -8; echo \"=== N2 run ===\"; tail -1 work/n2ac/kd2-mix512-30k.log 2>/dev/null; ps -eo etime,args | grep entrainer | grep -v grep | cut -c1-110 | h … [242 caractères tronqués]`
+
+  ```
+18:38
+    0733c5bb-f90b-4f58 · en pause ·   8 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  83 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 296 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+      → la **passe 80/2** est intégrée, la **fenêtre sous 2,5** et l'**API à latence /35** sont dans l'état, la roadmap, chantiers et le backlog N2 ; **Pensée** publie (parité DRVM, gold API) ; **N2 et S en pause** (validation S reportée). Journée : suivre Pensée, tenir l'état, et la **porte propre N2 (0,29)** quand N2 reprend.
+  ⏰ e181ce02-cd50-488a · actif    · 1255 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (296 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (1255 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+=== N2 run ===
+pas  1500 · perte 1.2904 · dure 
+… [793 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis les prochaines actions de S et L, et l'état du budget, pour que le plan de nuit soit réel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== S ===\"; grep -E \"Prochaine action|État\" -A2 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md | head -6; echo \"=== L/B13 ===\"; grep -E \"Prochaine action|État\" -A2 journal/sessions/e181ce02-cd50-488a-a6be-e … [381 caractères tronqués]`
+
+  ```
+=== S ===
+- **Prochaine action** : **arbre réel** (parent/enfant, profondeur) + **couche de référents**
+  (antécédents proposés et résolus avant le verdict), puis **reprise de la validation** des 200
+  phrases ; `h050`/`h053` ensuite.
+- **État** : actif
+- **Reprise** : 2026-11-03 13 h 55 ; le retour humain (arrêt de la validation : arbre trop
+  plat, référents non résolus) ouvre le cycle arbre/référents ; la banque partielle garde
+=== L/B13 ===
+- **Prochaine action** : la **porte B13** est à **140/140** (6 S fixés ; T132/T133 2/5) ; la **porte qui bouge** est un **test faible** (l'aveugle/labyrinthe passent) ;
+  reprendre la **porte stochastique/fenêtre** et le **gold 200+**.
+- **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
+- **État** : actif
+- **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
+  stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
+=== N2 ===
+- **Prochaine action** : la **fiche + état + commit** du run de 200 k sont faits (fiche fenêtre
+  `rapport-n2-fenetre` + JSON committés) ; le contrôle depuis zéro et la clôture restent, à la
+  repri
+… [273 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie la taille de `plan-travail.md` (budget T1) et sa fin avant d'écrire le §11 de la nuit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/taille_documents.py 2>&1 | grep -E \"plan-travail|roadmap|chantiers|T0 max\"; echo \"---\"; tail -8 docs/pilotage/plan-travail.md | cut -c1-140; echo \"=== §9 tête ===\"; sed -n 160,170p docs/pilotage/plan-travail.md | cu … [64 caractères tronqués]`
+
+  ```
+6629    384   T1   9000  docs/pilotage/roadmap.md
+  T0 max : 4004 mots (budget 4 000)
+---
+assumé) et doit finir. Les passes suivantes : partielles sur `gpu1` + `cpu1` ; complètes sur
+`machine` exclusive, après libération de N2/S/Pensée. Le hub suit `registre.txt` et `--actual`.
+
+**Le hub** : `--status` / `--actual` / `--check` du registre, `sessions.py --status`,
+`surveille_sessions.py`, `git status` ; intégration des fiches B13/N2/S, état/roadmap, INDEX,
+références de non-régression ; heartbeat à chaque cycle. **Les sessions** : `--release` en fin
+de job, `--claim` du suivant ; si une action attend l'humain (validation S), prendre la ligne
+suivante. **Checkpoint 08 h** : registre, sessions, `git log`, verdict de la passe, bilan.
+=== §9 tête ===
+3. **Premier checkpoint** : le hub intègre les quatre sections, met à jour la roadmap et note le
+   journal. Ensuite, chaque session suit la cadence du § 4.
+
+## 9. Reprise après le reboot du 02/11 15 h 06 — ouvrir ou reprendre
+
+**L'état au 02/11 16 h 09.** Deux sessions sont **en pause** (`e181ce02` L/B13, `fe3c05f0` D/R/A) ;
+leurs cycles sont committés. Deux chantiers n'ont **pas** de session : **N2** (GPU) et **S**
+(sous-module `tools/str
+… [194 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le plan de nuit dans `plan-travail.md` (§11), puis j'aligne l'état (T0 est à 4 004, à ramener sous 4 000).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 26,41p docs/pilotage/en-cours.md | cut -c1-150", "description": "Read hub section of state"}`
+
+  ```
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+
+- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+- **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
+  portes** (GPU 1).
+- **Ambition** : un état reprenable, des mandats qui disent la vérité.
+- **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+- **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
+- **Ce qu'elle fait** : intégration ; **passe 04 h 10 — 82 portes, 77/5** (4 connues +
+  `porte-sessions` de coordination) ; INDEX/README ; **bilan de 08 h**.
+- **Ce que font les autres** : **N2**, **S** (en pause), **Pensée**.
+- **Prochaine action** : le **bilan de 08 h** est écrit ; clôture ; la passe **82** stable.
+- **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
+- **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le §11 « plan de nuit » dans `plan-travail.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> docs/pilotage/plan-travail.md <<'EOF'\n\n## 11. La nuit du 03/11 → 04/11 — le plan, et les conflits qu'il évite\n\n**L'état au 03/11 18 h 45.** **N2** a clos sa phase (60 000 pas à 1 024 : **2,9121** ; **2,3911 /\n2,3522** au gr … [4692 caractères tronqués]`
+
+  ```
+§9 : état au 03/11 18 h 45, renvoi au §11
+  T0 max : 4000 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le §11 est écrit. Je vérifie les budgets et je mets l'état du hub au réel (passe 80/2, nuit).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/taille_documents.py 2>&1 | grep -E \"plan-travail|T0 max|violation\" | head -4; echo \"=== hub section ===\"; sed -n 26,42p docs/pilotage/en-cours.md | grep -E \"Ce qu'elle fait|Ce que font|Prochaine|Plan\" | cut -c1-160" … [55 caractères tronqués]`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+=== hub section ===
+- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
+- **Ce qu'elle fait** : intégration ; **passe 04 h 10 — 82 portes, 77/5** (4 connues +
+- **Ce que font les autres** : **N2**, **S** (en pause), **Pensée**.
+- **Prochaine action** : le **bilan de 08 h** est écrit ; clôture ; la passe **82** stable.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,\\n  p … [1230 caractères tronqués]`
+
+  ```
+hub : passe 80/2, nuit, autres sessions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4010 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 010 : je resserre la section hub pour revenir sous 4 000.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\" ; 8–9) **intégration,\\n  portes** ; 10) **plan de nuit** (§ 11).\",\n \" ; 8–9) **intégration, porte … [802 caractères tronqués]`
+
+  ```
+hub resserré
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4001 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"INDEX/README ; **plan de\\n  nuit § 11**.\"\nn = \"INDEX/README ; **plan de\\n  nuit**.\"\nassert t.count(o)  … [264 caractères tronqués]`
+
+  ```
+§11 retiré (déjà au Plan)
+  T0 max : 3999 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+

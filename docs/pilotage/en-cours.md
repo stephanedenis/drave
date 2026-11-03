@@ -47,11 +47,11 @@
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
 - **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
-- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 (2 manqués) ; **page `/paragraphes`** ; **52 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md).
-- **Ce qu'elle fait** : **`644ad3d`** ; page **`/paragraphes`** (source anglaise) ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **142/81/65**.
+- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md).
+- **Ce qu'elle fait** : **`230d03a`** ; page **`/paragraphes`** ; corpus **60** ; banque **200/355**, **142/81/65**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
 - **Prochaine action** : **confirmer les référents sur `/paragraphes`** (source anglaise), puis la rétro-traduction
-  API quand la clé ; h050/h053.
+  API quand la clé ; le nom après un adjectif hors lexique.
 - **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents ; la banque
   partielle reste archivée.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
@@ -101,8 +101,8 @@
 
 ## Ce qui est en cours
 
-- **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
-- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** (3,0550).
+- **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
+- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** ; **copie 0,0078**.
 - **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
 
@@ -114,7 +114,7 @@
 |---|---|---|
 | portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **598** / **685** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **599** / **685** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) | `docs/pilotage/references-non-regression.md` |
 

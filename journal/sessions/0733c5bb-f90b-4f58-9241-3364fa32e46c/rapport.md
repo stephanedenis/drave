@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 26.3 h |
-| Tours | 6 |
-| Messages | 687 |
-| Appels d'outils | 642 |
+| Durée | 26.4 h |
+| Tours | 7 |
+| Messages | 700 |
+| Appels d'outils | 653 |
 | Fichiers touchés | 27 |
-| Commandes | 475 |
+| Commandes | 483 |
 | Sous-agents | 0 |
-| Commits | 22 |
+| Commits | 23 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -39,6 +39,8 @@
 **Tour 5** — continue
 
 **Tour 6** — continue
+
+**Tour 7** — <goal_round> Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identi … [912 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -165,7 +167,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 
 ### Tour 6 — continue
 
-*148 appels d'outils.* Actions notables :
+*149 appels d'outils.* Actions notables :
 
 - bash — Check current repo and hardware state
 - get_goal
@@ -181,11 +183,66 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - bash — Commit state and check runs
 - bash — Check disk space and git index state
 - bash — Check inodes and git index health
-- … et 98 autres
+- … et 99 autres
 
 **Synthèse produite :**
 
-⏵ Clôture de la phase : récit, plan en pause, état
+⏵ Phase close (session en pause, un run en vol) — je rends les résultats et les commits
+
+La phase « continue » est mesurée, écrite et committée. Quatre faits de plus aujourd'hui, tous avec fiche, JSON, ligne d'état et commit.
+
+\## Les quatre faits
+
+**1. La capacité sature sur le corpus propre** — trois tailles, même recette (RoPE, fenêtre 512, init aléatoire identique, 33 Mo), val à 1 024 octets :
+
+| capacité | 1 024 octets (val) |
+|---|---:|
+| 11,47 M | 2,8960 |
+| 21,65 M | 2,8688 |
+| **34,3 M** | **2,8662** |
+
+Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni les pas (3,24 Mo vus dix fois), ni la capacité ne ferment la porte < 2,5** (il reste 0,37) : la suite est un corpus propre plus large, ou la distillation.
+
+**2. Le run long de production** — 60 000 pas à fenêtre 1 024 (552 Mo) : **2,9121** en domaine à 128, **2,5276** à 1 000, **2,4761** à 2 000 ; au grand corpus **2,3911 / 2,3522** ; littérature 5,13, anglais 6,20, wikitext2 6,79. Chaque doublement des pas vaut **−0,085** en domaine — loi géométrique, la même à toutes les longueurs. À 128 octets il reste 0,41 au-dessus de 2,5, soit ≈ 2 M de pas.
+
+**3. La distillation native** (nouveau distillateur `work/n2ac/distiller_natif.py`) — le professeur long dans un élève 11,47 M à fenêtre 512, même init, mêmes 33 Mo :
+
+| élève 11,47 M / 512 | 128 | 512 | 1 024 |
+|---|---:|---:|---:|
+| dur (α = 0) | 3,6452 | 3,4493 | 3,3628 |
+| α = 0,5 | 3,5861 | 3,4330 | 3,3819 |
+| **α = 0,9** | **3,5090** | **3,2835** | **3,1863** |
+
+**La douceur forte est la bonne cible** (mélanger dilue le professeur) et le gain **croît avec la longueur** (−0,18 à 1 024) alors que l'élève ne voit que 512 octets. Coût : **+25 % par pas** (259 contre 208 ms), pas ×2 comme le laissait croire un premier run sous contention.
+
+**4. La distillation de production** — le même professeur distillé dans la recette 512 (34,3 M, même init, mêmes 61,4 Mo que l'affinage dur) : **3,0550 / 2,8062 / 2,7015 / 2,6601** contre 3,1588 / 2,9096 / 2,8018 / 2,7607, soit **−0,10 partout** en domaine et **−0,29 / −0,52** hors domaine. La recette de production devient « professeur 1 024 + élève 512 distillé » : **9× moins d'octets** que le run de 552 Mo pour 0,14 de PPL.
+
+\## Ma ligne d'état
+
+> **N2** — 1 024 = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** (3,0550).
+> **porte propre** : 2,8662 à 34,3 M, **capacité saturée** ; il reste 0,37.
+
+\## Commits
+
+- **`ad070205`** 
+… [896 caractères tronqués]
+
+### Tour 7 — <goal_round> Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 … [1192 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Check overnight distillation run and repo state
+- bash — Launch 2048 same-steps run
+- job_output
+- bash — Cross-check fiche numbers against JSONs
+- bash — Audit numbers with mixed formats
+- bash — Run output mirror and same-text controls on production models
+- bash — Add output controls to production fiche
+- bash — Commit output controls complement
+
+**Synthèse produite :**
+
+⏵ Ajout des contrôles de sortie aux fiches et commit du complément
 
 ## 3. Travail accompli
 
@@ -263,7 +320,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 435 autres
+- … et 443 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -391,7 +448,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 
 ## 5. Erreurs rencontrées
 
-22 sorties en erreur ou divergentes. Les premières :
+23 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md:20686:- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.
 - **T1** : (no output) [exit code: 1]
@@ -433,4 +490,5 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-33
+- cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 

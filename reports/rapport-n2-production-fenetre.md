@@ -117,6 +117,12 @@ elle est la même à toutes les longueurs. Conséquences :
 - **le hors domaine suit** : anglais 6,51 → **6,20**, wikitext2 7,15 → **6,79**, littérature
   5,31 → **5,13** ; le corpus propre transféré passe de 9,37 à **9,03**.
 
+**Les deux contrôles de sortie**, sur ce modèle : le « même texte » sature **exactement à 1 024**
+(2,4752 → 2,3822 → **2,3430** → 2,3461 à contexte 256/512/1 000/2 000 : il n'utilise pas les
+octets au-delà de sa fenêtre), et le **miroir de copie reste muet** — justesse **0,0078** au
+mieux, comme à toutes les tailles de la nuit. À 552 Mo vus, la PPL de queue est à **2,34** et la
+restitution n'existe **toujours pas** : la perplexité et la lecture restent deux choses.
+
 ## 3. Le contrôle depuis zéro
 
 Même recette (RoPE, seq 512, **61,4 Mo**) et **même budget d'octets ajoutés**, mais départ depuis
@@ -163,6 +169,9 @@ Le professeur à fenêtre 1 024 (mélange, 30 000 pas) distillé dans la recette
 
 **Le coût** : le professeur est évalué à chaque pas (+25–30 % par pas) ; à budget de temps
 constant, l'élève voit ~26 Mo au lieu de 33 (≈ −0,02 de PPL), le gain net reste **~+0,08**.
+
+**Contrôles de sortie** : le « même texte » de l'élève distillé sature à **512**, sa fenêtre
+(2,6335 → 2,5292 → 2,5230 → 2,5240), et le miroir de copie reste muet (0,0078).
 
 ## Ce qui pourrait le rendre faux
 

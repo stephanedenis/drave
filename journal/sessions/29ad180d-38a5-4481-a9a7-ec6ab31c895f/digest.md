@@ -8115,3 +8115,418 @@ SUBORD_ELIDE = {"lorsqu": "temps", "puisqu": "cause", "quoiqu": "concession"}
 … [1588 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '315,395p' generateur.py; echo \"=== VERBES_FINIS ===\"; sed -n '/VERBES_FINIS = set/,/\"\"\".split())/p' generateur.py | head -30", "description": "Read GV branch and verb lexicon"}`
+
+  ```
+continue
+        marqueur = _marqueur(utiles, i)
+        if marqueur:
+            # « parce qu'elle est fatiguée », « bien qu'il soit tard » : la subordonnée
+            # commence au subordonnant et va jusqu'à la ponctuation ou la coordination.
+            j = _fin_clause(utiles, i + 1)
+            segs.append(Segment(t.debut, utiles[j - 1].fin, texte[t.debut:utiles[j - 1].fin],
+                                "SUB", marqueur, 1))
+            i = j
+            continue
+        if t.cls == "RELATIF":
+            j, vu_verbe = i + 1, False
+            while j < len(utiles) and utiles[j].cls not in ("PONCT", "CONJ", "RELATIF"):
+                if utiles[j].cls == "PRON" and vu_verbe:
+                    break
+                if utiles[j].cls == "AUX" and vu_verbe:
+                    break
+                if (utiles[j].cls == "MOT" and vu_verbe
+                        and _norm(utiles[j].texte) in ADVERBES_TEMPS):
+                    break
+                vu_verbe = vu_verbe or utiles[j].cls == "MOT"
+                j += 1
+            # « que » après un verbe est un complément, après un nom une relative.
+            precedent = segs[-1].type if segs else None
+            if _norm(t.t
+… [4972 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\n# 1) les adjectifs et les adverbes de « si … que »\nt=t.replace('ADVERBES_TEMPS = set(\"hier aujourd\\'hui demain  … [6312 caractères tronqués]`
+
+  ```
+générateur v6 : adjectifs, demeure, si fort que, fin de GN
+Le chien crie si fort que la maison tremble. -> [('Le chien crie', 'GN', 'agent'), ('si fort que la maison tremble', 'SUB', 'contenu')]
+S'il pleut, je reste. -> [("S'il pleut", 'SUB', 'hypothese'), ('je reste', 'GV', 'predicat')]
+Le triste fait demeure. -> [('Le triste fait', 'GN', 'agent'), ('demeure', 'GV', 'predicat')]
+Le grand lit. -> [('Le grand lit', 'GN', 'agent')]
+La vieille porte. -> [('La vieille porte', 'GN', 'agent')]
+Le chat fait des bonds. -> [('Le chat', 'GN', 'agent'), ('fait', 'GV', 'predicat'), ('des bonds', 'GP', 'theme')]
+Le chat dort. -> [('Le chat', 'GN', 'agent'), ('dort', 'GV', 'predicat')]
+La petite ferme est belle. -> [('La petite ferme', 'GN', 'agent'), ('est belle', 'GV', 'predicat')]
+Le simple fait surprend. -> [('Le simple fait', 'GN', 'agent'), ('surprend', 'GV', 'predicat')]
+Une demeure. -> [('Une demeure', 'GN', 'agent')]
+Le petit chat noir dort. -> [('Le petit chat noir', 'GN', 'agent'), ('dort', 'GV', 'predicat')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"chante chantes chantent chantons chantez chantais chantait chantaient\",\n            \"chante chant … [513 caractères tronqués]`
+
+  ```
+Le chien crie si fort que la maison tremble. -> [('Le chien', 'GN', 'agent'), ('crie', 'GV', 'predicat'), ('si fort que la maison tremble', 'SUB', 'contenu')]
+La vieille ferme demeure. -> [('La vieille ferme', 'GN', 'agent'), ('demeure', 'GV', 'predicat')]
+Le chat fait des bonds. -> [('Le chat', 'GN', 'agent'), ('fait', 'GV', 'predicat'), ('des bonds', 'GP', 'theme')]
+Le triste fait demeure. -> [('Le triste fait', 'GN', 'agent'), ('demeure', 'GV', 'predicat')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"_si_intensif\\|un GV\\|while j < len(utiles)\" generateur.py | head -12; echo \"=== GV ===\"; sed -n '/# PRON\\/AUX\\/MOT/,/i = j/p' generateur.py | head -30", "description": "Check whether GV while patch a … [8 caractères tronqués]`
+
+  ```
+60:# Copules : « est mon voisin » est un GV attributif, pas un GV « est » + un GN.
+184:def _si_intensif(utiles: list[Token], i: int) -> bool:
+225:    while j < len(utiles):
+250:    « de son projet » (thème, après un GV), « à manger » (but, infinitif) de « à Marie »
+366:            while j < len(utiles) and utiles[j].cls not in ("PONCT", "CONJ", "RELATIF"):
+389:            while j < len(utiles) and utiles[j].cls in ("DET", "PRON", "MOT") and mots < 3:
+430:            while j < len(utiles) and utiles[j].cls not in ("PONCT", "CONJ"):
+440:        # PRON/AUX/MOT : un GV — mais il s'arrête avant un subordonnant (« il travaille afin »).
+442:        while j < len(utiles) and utiles[j].cls in ("PRON", "AUX", "MOT"):
+=== GV ===
+        # PRON/AUX/MOT : un GV — mais il s'arrête avant un subordonnant (« il travaille afin »).
+        j = i
+        while j < len(utiles) and utiles[j].cls in ("PRON", "AUX", "MOT"):
+            if j > i and _marqueur(utiles, j):
+                break
+            if (j > i and utiles[j].cls == "MOT"
+                    and _norm(utiles[j].texte) in ADVERBES_TEMPS):
+                break
+            j += 1
+        if j == i:
+            j = i + 1
+        # copule + 
+… [575 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace('''        j = i\n        while j < len(utiles) and utiles[j].cls in (\"PRON\", \"AUX\", \"MOT\"):\n   … [736 caractères tronqués]`
+
+  ```
+Le chien crie si fort que la maison tremble. -> [('Le chien', 'GN', 'agent'), ('crie si fort', 'GV', 'predicat'), ('que la maison tremble', 'SUB', 'consequence')]
+Je reste si tu viens. -> [('Je reste', 'GV', 'predicat'), ('si tu viens', 'SUB', 'hypothese')]
+Si tu viens, je reste. -> [('Si tu viens', 'SUB', 'hypothese'), ('je reste', 'GV', 'predicat')]
+Le chat fait des bonds. -> [('Le chat', 'GN', 'agent'), ('fait', 'GV', 'predicat'), ('des bonds', 'GP', 'theme')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np=Path('donnees/gold-analyseur.json'); d=json.loads(p.read_text(encoding='utf-8'))\nprint(\"phrases\", len(d[\"phrases\"]))\nfor x in d[\"phrases\"]:\n    if x … [193 caractères tronqués]`
+
+  ```
+phrases 55
+{
+ "id": "h050",
+ "split": "holdout",
+ "texte": "Le triste fait demeure.",
+ "attendus": [
+  [
+   "Le triste fait",
+   "GN",
+   "agent"
+  ],
+  [
+   "demeure",
+   "GV",
+   "predicat"
+  ]
+ ]
+}
+{
+ "id": "h053",
+ "split": "holdout",
+ "texte": "Le grand lit.",
+ "attendus": [
+  [
+   "Le grand lit",
+   "GN",
+   "agent"
+  ]
+ ]
+}
+note: Gold de l'analyseur. split=dev : les 7 phrases du banc. split=test : 16 phrases écrites AVANT les règles. split=holdout : 32 phrases en quatre vagues — h024-h031 (première règle, h024 a révélé « est m
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np=Path('donnees/gold-analyseur.json'); d=json.loads(p.read_text(encoding='utf-8'))\nnouvelles = [\n {\"id\":\"h056\",\"split\":\"holdout\",\"texte\":\"Le chien … [1563 caractères tronqués]`
+
+  ```
+gold 60 phrases
+  gold · 60 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    37  37/37      1.00  80/80    21/21  
+  global     60  60/60      1.00 142/142   50/50  
+  contrôle · baseline 102/142 (0.72) · règles coupées 104/142 (0.73) · rôles mélangés 0.10 [0.00, 0.24]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 -m unittest discover -s tests 2>&1 | tail -15", "description": "Run tests after v6 analyzer changes"}`
+
+  ```
+AssertionError: 60 != 55
+
+======================================================================
+FAIL: test_spans_et_vocabulaire (test_generateur.TestGold.test_spans_et_vocabulaire)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_generateur.py", line 189, in test_spans_et_vocabulaire
+    self.assertIn(role, self.ROLES, (p["id"], role))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'consequence' not found in {'qualite', 'theme', 'maniere', 'possession', 'source', 'destinataire', 'concession', 'temps', 'contenu', 'instrument', 'lieu', 'patient', 'but', 'cause', 'hypothese', 'agent', 'complement', 'predicat', 'attribut'} : ('h056', 'consequence')
+
+----------------------------------------------------------------------
+Ran 52 tests in 4.237s
+
+FAILED (failures=3)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"55\\|ROLES =\\|limites_nommees\\|h050\\|h053\\|consequence\\|def test_\" tests/test_generateur.py | head -50", "description": "Locate test expectations to update for v6"}`
+
+  ```
+8:    def test_segments_alignes(self):
+22:    def test_relative_deux_lectures(self):
+29:    def test_role_pour(self):
+35:    def test_gp_deux_lectures(self):
+40:    def test_une_seule_variation(self):
+59:    def test_de_possession_ou_theme(self):
+65:    def test_avec_instrument_ou_attribut(self):
+76:    def test_a_but_ou_lieu(self):
+81:    def test_passif_sujet_patient_et_agent(self):
+86:    def test_copule_attribut_dans_le_gv(self):
+91:    def test_regles_coupees_rendent_les_defauts(self):
+103:    def test_temps(self):
+109:    def test_cause(self):
+115:    def test_concession_et_hypothese(self):
+121:    def test_but_et_maniere(self):
+127:    def test_completive_reste_contenu(self):
+138:    def test_gn_s_arrete_avant_le_verbe(self):
+146:    def test_gv_s_arrete_avant_l_adverbe(self):
+152:    def test_homographe_nominal_resolu_par_le_contexte(self):
+161:    def test_limites_nommees_du_contexte(self):
+176:    ROLES = {"agent", "patient", "predicat", "possession", "theme", "instrument", "attribut",
+180:    def test_spans_et_vocabulaire(self):
+192:    def test_mesure_bat_les_controles(self):
+196:        self.assertEqual(g["phrases"], 55)
+210:    def test_complement_apres_verbe(self):
+2
+… [96 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '138,210p' tests/test_generateur.py", "description": "Read v4 limit tests and measure test"}`
+
+  ```
+def test_gn_s_arrete_avant_le_verbe(self):
+        self.assertEqual(self._types("La femme parle à son fils."), ["GN", "GV", "GP"])
+        self.assertEqual(self._types("Le chat dort sur le canapé."), ["GN", "GV", "GP"])
+        self.assertEqual(self._types("La voisine arrive."), ["GN", "GV"])
+        self.assertEqual(self._types("Le roi Louis parle."), ["GN", "GV"])
+        self.assertEqual(self._types("Le petit chat noir dort."), ["GN", "GV"])
+        self.assertEqual(self._types("Une belle maison."), ["GN"])
+
+    def test_gv_s_arrete_avant_l_adverbe(self):
+        segs = generateur.structure("Le train part demain.")
+        self.assertEqual([s["type"] for s in segs], ["GN", "GV", "GP"])
+        self.assertEqual(segs[-1]["role"], "temps")
+        self.assertEqual(segs[-1]["texte"].strip(), "demain")
+
+    def test_homographe_nominal_resolu_par_le_contexte(self):
+        # « ferme » est un nom : le suivant « est » (auxiliaire) le dit ; le GN va jusqu'au nom.
+        segs = generateur.structure("La petite ferme est belle.")
+        self.assertEqual([s["type"] for s in segs], ["GN", "GV"])
+        self.assertEqual(segs[0]["texte"], "La petite ferme")
+        self.assertEqual(segs[1]["
+… [2538 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('tests/test_generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace('''    def test_limites_nommees_du_contexte(self):\n        # Nom après adjectif en fin de  … [2798 caractères tronqués]`
+
+  ```
+tests v6
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 55 tests in 4.236s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && time python3 mesure_corpus.py --max 50000 2>&1 | tail -20", "description": "Re-run 50k corpus measure after v6 changes", "timeoutMs": 180000}`
+
+  ```
+corpus réels · 50000 lignes CEGEP · 20799 phrases CEGEP · 59.05 s
+  lignes
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           1.94   3.6%    0.5%    0.94       21              18
+  propre          4.11  51.0%   10.3%    0.88      596             592
+  melange         2.04   3.8%    0.5%    0.94       20              20
+  phrases
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           3.21   8.5%    0.8%    0.94       28              28
+  propre          6.69  65.5%    8.0%    0.88     1184            1150
+  melange         4.03   9.1%    0.4%    0.93       23              23
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-corpus.json
+[stderr]
+
+real	0m59,128s
+user	0m58,922s
+sys	0m0,166s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"54/55\\|131/131\\|47/47\\|55 phrases\\|52 tests\\|51,0\\|65,5\\|578\\|1 134\\|h050\\|h053\\|v4\\|v5\" README.md | head -30", "description": "Locate README figures to update for v6"}`
+
+  ```
+132:Le **gold** (`donnees/gold-analyseur.json`) porte **55 phrases** en trois découpages :
+137:vague 4 sont `h050` (« fait » suivi d'un verbe hors lexique) et `h053` (« lit » après un adjectif,
+163:| ligne | propre | 51,0 % | 10,2 % | 0,89 | 578 |
+166:| phrase | propre | 65,5 % | 8,0 % | 0,89 | 1 134 |
+169:**Ce que ça dit.** Sur la **littérature propre**, l'analyseur trouve un GN+GV dans **65,5 %** des
+174:compte aussi : la ligne coupe les phrases (3,6 % contre 51,0 %), la phrase reconstruite double le
+304:**52 tests** : phrases et alignement des spans, validation + export, statut invalide refusé,
+323:- **v4** : **règle de contexte** des homographes (un mot du lexique de verbes est un nom si le
+324:  suivant est un auxiliaire ou un verbe) ; le **gold de 55 phrases** (7 dev, 16 test, 32 holdout
+325:  en quatre vagues), `mesure_analyseur.py` (types 54/55, rôles 131/131, compléments 47/47,
+328:  `h050` (« fait » suivi d'un verbe hors lexique) et `h053` (« lit » après un adjectif, en fin de
+329:  phrase). La **mesure sur corpus réel** ajoute le contraste : 65,5 % de GN+GV sur la littérature
+333:- **v5** : **arbre parent/enfant** (`profondeur`, `parent`) et **référents proposés** depuis
+… [3 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '128,175p' README.md; echo \"=== tests/état ===\"; sed -n '300,340p' README.md", "description": "Read README sections to update"}`
+
+  ```
+python3 mesure_analyseur.py                 # écrit donnees/mesure-analyseur.json
+python3 mesure_analyseur.py --json          # la même chose sur stdout
+```
+
+Le **gold** (`donnees/gold-analyseur.json`) porte **55 phrases** en trois découpages :
+**dev** (les 7 phrases du banc), **test** (16 phrases écrites avant les règles) et **holdout**
+(32 phrases en quatre vagues, dont la dernière — h048–h055 — écrite après la règle de contexte
+des homographes et mesurée une fois). Pour chaque phrase, la suite de segments (texte, type,
+rôle) ; les spans se calculent par sous-chaîne, dans l'ordre. Les **deux échecs nommés** de la
+vague 4 sont `h050` (« fait » suivi d'un verbe hors lexique) et `h053` (« lit » après un adjectif,
+en fin de phrase).
+
+La mesure rend trois chiffres — **types** (séquence exacte), **couverture** des octets du gold par
+un segment généré du même type, **rôles** (le segment généré qui recouvre le segment d'or a-t-il le
+bon rôle) — et **trois contrôles** : une **baseline** à rôle constant par type, les **règles
+coupées**, et des **rôles mélangés** (200 permutations). Un score de rôle sans ces contrôles ne
+prouve rien.
+
+## La mesure sur corpus réel
+
+```bash
+python3 mesure_cor
+… [4639 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '175,190p' README.md", "description": "Read corpus text after table"}`
+
+  ```
+taux. Conséquence pour la banque : **filtrer la langue et le genre, segmenter en phrases** avant
+d'analyser ; le CEGEP brut n'est pas un corpus français.
+
+
+
+## L'arbre et les référents
+
+`construire_arbre()` donne à chaque segment un **père** et une **profondeur** réelle : le GV
+principal est la racine, les GN ses enfants, et les GP/REL/SUB s'accrochent au plus proche segment
+à gauche (GN, GP ou GV). L'indentation (`niveau`) devient cette profondeur — plus un niveau plat
+par type. `referents()` propose, pour chaque pronom/possessif, les antécédents à gauche (GN, tête
+de GP, noms propres de la phrase) puis ceux du **contexte** (les phrases précédentes) ; ce n'est
+pas une résolution, c'est la liste que l'humain tranche. `arbre_svg.py` rend les deux visibles :
+les nœuds par profondeur, les arêtes de l'arbre, et les flèches pointillées des référents vers
+leur antécédent.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"Le **gold** (`donnees/gold-analyseur.json`) porte **55 phrases** en trois découpages :\\n**dev** (les 7  … [5022 caractères tronqués]`
+
+  ```
+README v6
+
+OK
+[master 230d03a] S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES
+ 6 files changed, 486 insertions(+), 218 deletions(-)
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   644ad3d..230d03a  master -> master
+230d03a
+  ```
+
+- **write** `{"content": "# S — Les trois limites de la v4 sont fermées : h050, h053 et « si fort que » ; 60/60 types, 142/142 rôles\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : les trois limites nommées du\n> cycle précédent sont **fermées**. `h050` (« le triste **fait** demeure ») et ` … [5432 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-limites-v6.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\n# fiche corpus\np=Path('reports/rapport-s-corpus-reel.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 578 | 575 |\", \"| ligne | propre  … [6732 caractères tronqués]`
+
+  ```
+fiches/état/roadmap/plan/index v6
+  ❌ 1 violation(s) :
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 599 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1634 mots · 7 sections · 4 session(s) · 4 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== status ===
+ M docs/pilotage/en-cours.md
+MM docs/pilotage/roadmap.md
+D  docs/schemas/arbre-referents.svg
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+D  reports/rapport-s-arbre-referents.md
+ M reports/rapport-s-corpus-reel.md
+D  reports/rapport-s-traductions.md
+MM tools/structures
+?? docs/schemas/arbre-referents.svg
+?? reports/rapport-s-arbre-referents.md
+?? reports/rapport-s-banque-partielle.md
+?? reports/rapport-s-limites-v6.md
+39ff662c N2 — PHASE DU 03/11 CLOSE : CAPACITÉ SATURÉE, 60 000 PAS À 2,9121, DISTILLATION NATIVE +0,10 À BUDGET ÉGAL
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"**60/60**, rôles **142/142**, compléments **50/50** ;\", \"**60/60**, rôles **142/142** ;\")\nt=t.replace … [549 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+=== S files ===
+ M docs/pilotage/en-cours.md
+MM docs/pilotage/roadmap.md
+MM docs/schemas/README.md
+D  docs/schemas/arbre-referents.svg
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+MM reports/INDEX.md
+D  reports/rapport-s-arbre-referents.md
+ M reports/rapport-s-corpus-reel.md
+D  reports/rapport-s-traductions.md
+MM tools/structures
+?? docs/schemas/arbre-referents.svg
+?? reports/rapport-s-arbre-referents.md
+?? reports/rapport-s-banque-partielle.md
+?? reports/rapport-s-limites-v6.md
+?? reports/rapport-s-traductions.md
+=== lignes index ===
+reports/INDEX.md:3
+docs/schemas/README.md:1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-s-analyseur-roles.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"**Le protocole, sans le cacher**\", \"**Les deux limites sont fermées en v6** (le nom après ad … [1282 caractères tronqués]`
+
+  ```
+fiche v4 : limites fermées en v6
+ docs/pilotage/en-cours.md                          |  10 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |   5 +-
+ reports/INDEX.md                                   |   1 +
+ reports/rapport-s-analyseur-roles.md               |   5 +-
+ reports/rapport-s-banque-partielle.md              | 110 +++++++++++++++++++++
+ reports/rapport-s-corpus-reel.md                   |  16 +--
+ reports/rapport-s-limites-v6.md                    |  78 +++++++++++++++
+ reports/rapport-s-traductions.md                   |   2 +-
+ tools/structures                                   |   2 +-
+ 10 files changed, 211 insertions(+), 20 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES\" -m \"h050 (le nom après adjectif devant un verbe), h053 (le nom après adjec … [756 caractères tronqués]`

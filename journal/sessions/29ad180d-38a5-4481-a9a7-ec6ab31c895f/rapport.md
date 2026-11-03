@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 26.3 h |
+| Durée | 26.4 h |
 | Tours | 14 |
-| Messages | 382 |
-| Appels d'outils | 372 |
-| Fichiers touchés | 16 |
-| Commandes | 286 |
+| Messages | 402 |
+| Appels d'outils | 392 |
+| Fichiers touchés | 17 |
+| Commandes | 305 |
 | Sous-agents | 0 |
-| Commits | 26 |
+| Commits | 28 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -516,11 +516,23 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 
 ### Tour 14 — continue
 
-*3 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Read marker and GN homograph code
 - bash — Read subordinator sets and gold phrase format
 - bash — Read GV branch and verb lexicon
+- bash — Implement v6 analyzer fixes and test phrases
+- bash — Add crier verb and retest v6 phrases
+- bash — Check whether GV while patch applied
+- bash — Allow si intensifier in GV and retest
+- bash — Inspect gold h050/h053 phrases
+- bash — Add v6 gold phrases and measure
+- bash — Run tests after v6 analyzer changes
+- bash — Locate test expectations to update for v6
+- bash — Read v4 limit tests and measure test
+- bash — Update tests for v6 and run
+- bash — Re-run 50k corpus measure after v6 changes
+- … et 9 autres
 
 ## 3. Travail accompli
 
@@ -544,6 +556,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-banque-partielle.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-arbre-referents.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-traductions.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-limites-v6.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -587,7 +600,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 246 autres
+- … et 265 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -672,6 +685,28 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T12** `50:- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** ; `
 - **T13** `50:- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** (r`
 - **T13** `- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** (resp`
+- **T14** `cegep           1.94   3.6%    0.5%    0.94       21              18`
+- **T14** `propre          4.11  51.0%   10.3%    0.88      596             592`
+- **T14** `melange         2.04   3.8%    0.5%    0.94       20              20`
+- **T14** `cegep           3.21   8.5%    0.8%    0.94       28              28`
+- **T14** `propre          6.69  65.5%    8.0%    0.88     1184            1150`
+- **T14** `melange         4.03   9.1%    0.4%    0.93       23              23`
+- **T14** `163:| ligne | propre | 51,0 % | 10,2 % | 0,89 | 578 |`
+- **T14** `169:**Ce que ça dit.** Sur la **littérature propre**, l'analyseur trouve un GN+GV dans **65,5 %** des`
+- **T14** `174:compte aussi : la ligne coupe les phrases (3,6 % contre 51,0 %), la phrase reconstruite double le`
+- **T14** `329:  phrase). La **mesure sur corpus réel** ajoute le contraste : 65,5 % de GN+GV sur la littérature`
+- **T14** `| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 21 |`
+- **T14** `| ligne | propre | 51,0 % | 10,2 % | 0,89 | 578 |`
+- **T14** `| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 19 |`
+- **T14** `| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 28 |`
+- **T14** `| phrase | propre | 65,5 % | 8,0 % | 0,89 | 1 134 |`
+- **T14** `| phrase | mélange | 9,1 % | 0,4 % | 0,93 | 23 |`
+- **T14** `**Ce que ça dit.** Sur la **littérature propre**, l'analyseur trouve un GN+GV dans **65,5 %** des`
+- **T14** `phrases contre **9,1 %** pour les mots mélangés : le signal est la **langue**. Sur le **CEGEP`
+- **T14** `OCR**, il est au **plancher du mélange** (8,5 % contre 9,1 %) : ce corpus est **multilingue et`
+- **T14** `compte aussi : la ligne coupe les phrases (3,6 % contre 51,0 %), la phrase reconstruite double le`
+- **T14** `phrase). La **mesure sur corpus réel** ajoute le contraste : 65,5 % de GN+GV sur la littérature`
+- **T14** `propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et`
 
 ## 5. Erreurs rencontrées
 
@@ -717,4 +752,6 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS" -m "Le viewBox est calculé depuis le niveau le plus large, les je
 - S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS PAR L'ANGLAIS, « LES » → « IT » RETROUVÉ" -m "Les trois paragraphes français sont co
 - S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS, « LES » → « IT » RETROUVÉ ; SOURCE ANGLAISE DANS LA PAGE" -m "Les trois paragraphes
+- S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
+- S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
 

@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 12.5 h |
-| Tours | 82 |
-| Messages | 940 |
-| Appels d'outils | 821 |
+| Durée | 26.4 h |
+| Tours | 83 |
+| Messages | 948 |
+| Appels d'outils | 826 |
 | Fichiers touchés | 25 |
-| Commandes | 603 |
+| Commandes | 606 |
 | Sous-agents | 0 |
 | Commits | 40 |
 | Compactages de contexte | 1 |
@@ -22,6 +22,8 @@
 - **create** — Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
 - **complete** — Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
 - **create** — Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages
+… [261 caractères tronqués]
+- **complete** — Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages
 … [261 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -189,6 +191,8 @@
 **Tour 81** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 82** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 83** — où en est-on
 
 ## 2. Déroulé, étape par étape
 
@@ -1885,6 +1889,39 @@ La veille continue : elle suit le commit N2, la fin des tests Pensée et le **ch
 
 ⏵ Round 77 : veille — attente du commit N2 et de la fin des tests Pensée
 
+### Tour 83 — où en est-on
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check the current state and the new GPU rule
+- bash — Gather the current state, sessions and last passes
+- get_goal
+- update_goal
+- bash — Check the Pensée session and the last pass details
+
+**Synthèse produite :**
+
+⏵ Bilan : la nuit est terminée, le goal est clos — voici où on en est le 03/11 à 18 h 36
+
+\## La nuit (02/11 20 h → 03/11 08 h) — ce qu'elle a donné
+
+- **La cible < 2,5 est atteinte** : la production 1 024 prolongée sur le mélange (**30 000 pas**) finit à **PPL val 2,4828**, contre **3,16** pour le run de 200 000 pas et 2,66 pour la 2 048 ; son **contrôle depuis zéro** (init figée) donne **2,9000** — l'écart ~0,42 mesure la part de l'init/fenêtre. Le jour a enchaîné : phase du 03/11 close (60 000 pas à 2,9121), **professeur long distillé +0,10 à budget égal** (3,0550 / 2,8062 / 2,7015 / 2,6601).
+- **La 82e porte est comptée** : la passe du **11 h 30** donne **82 portes, 80 vertes, 2 rouges** (1 h 48) — les deux rouges sont les **connues structurelles** (`porte-indice` 821 s, `porte-melange` 102 s) ; `porte-homeostasie`, `porte-reparti-moteur`, `porte-sessions`, `porte-tableaux` et `porte-ressources` sont **vertes**. La passe de 19 h 32 (81, 76/5) reste la référence de la nuit.
+- **B13** : la cascade sur le **gold réel 432** est **`true`** (0,9065 / 0,4598 / 0,5633 / 0,9954) avec les seuils **du contrat** (0,90/0,45/0,55/0,50 — le `false` venait des seuils du gold 180) ; **parité DRVM/native 114/114** (5/5 prompts, rejouable, checkpoint volatil) ; le lien heuristique passe à **5/5 sur 5 paires** mais plafonne à **5/10 sur 10** (la paire thématique manque) ; la fenêtre B13 est **non discriminante**.
+- **S** : v4 (54/55 types, 131/131 rôles, 47/47 compléments, gold 55) ; le jour, la **traduction contrôle le sens** (14/14 référents anaphoriques, « les » → « it »).
+- **Ressources** : registre tenu toute la nuit (claims/release, GPU1 non déclaré couvert puis libéré, S bloqué sur la validation humaine → claim libéré) ; la **règle 11** est appliquée — **GPU réservés à Drave, aucun serveur local** (`porte-ressources` verte, le `llama-server` a disparu).
+
+\## L'état actuel
+
+- **598 fiches / 685 JSON / 82 portes** ; revue, en-cours, T0 (sous 4 000), T1 (2 428), porte stricte, journal, tableaux et `porte-ressources` : **verts**.
+- **Sessions** : **N2 en pause** (sa phase du 03/11 est close), **S actif** (traduction/banque), **Pensée actif** (B13), **hub actif** ; les claims sont cohérents.
+- **Le goal de la nuit est marqué complete** : la fenêtre 20 h → 08 h est passée, la passe complète a tourné (82/80/2), l'état est tenu et les résultats consignés (`work/veille/bilan-08h.md`, journal du 03/11, commits).
+
+\## Ce qui reste ouvert (le jour)
+
+- **N2** : la clôture de la se
+… [266 caractères tronqués]
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1959,7 +1996,7 @@ La veille continue : elle suit le commit N2, la fin des tests Pensée et le **ch
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 563 autres
+- … et 566 autres
 
 ## 4. Mesures et résultats marquants
 

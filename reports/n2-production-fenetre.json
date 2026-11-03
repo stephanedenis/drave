@@ -304,5 +304,73 @@
   "perte_finale": 0.9833623170852661,
   "duree_s": 6548.174042463303,
   "corpus": "data/wiki_mix/propre/train.txt"
+ },
+ "meme_texte_prod_1024_60k": {
+  "fichier": "mix1024-60k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1000,
+   2000
+  ],
+  "ppl": {
+   "256": 2.4752,
+   "512": 2.3822,
+   "1000": 2.343,
+   "2000": 2.3461
+  }
+ },
+ "miroir_prod_1024_60k": {
+  "fichier": "mix1024-60k.pt",
+  "positions": "rope",
+  "fenetre": 1024,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0,
+   "64": 0.0,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0078,
+   "300": 0.0,
+   "400": 0.0
+  }
+ },
+ "meme_texte_kd_512": {
+  "fichier": "kd-mix512-15k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1000,
+   2000
+  ],
+  "ppl": {
+   "256": 2.6335,
+   "512": 2.5292,
+   "1000": 2.523,
+   "2000": 2.524
+  }
+ },
+ "miroir_kd_512": {
+  "fichier": "kd-mix512-15k.pt",
+  "positions": "rope",
+  "fenetre": 512,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0,
+   "64": 0.0,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0078,
+   "300": 0.0,
+   "400": 0.0
+  }
  }
 }
