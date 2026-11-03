@@ -6775,3 +6775,121 @@ en-cours mots: 1627
 ⏵ 01 h 38 : Pensée enchaîne les fiches. Je passe à des rounds de 20 min (deux attentes alternées).
 
 - **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -2 work/veille-nuit.log; git log --oneline -1 | cut -c1-70", "description": "Read watch at 01h58"}`
+
+  ```
+01:58
+01:47 · 32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/ · actifs=8 ·   ✅ état court, structuré, multi-s
+01:57 · 32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/ · actifs=8 ·   ✅ état court, structuré, multi-s
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, R
+  ```
+
+### 🤖 Assistant
+
+⏵ 01 h 58 : parité DRVM/native 114/114 poids, 5/5 prompts — le blocage de Pensée tombe. Round de 20 min.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -2 work/veille-nuit.log; python3 tools/sessions.py --status 2>&1 | grep -cE \"actif\"", "description": "Read watch at 02h18"}`
+
+  ```
+02:18
+02:07 · 32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/ · actifs=8 ·   ✅ état court, structuré, multi-s
+02:17 · 32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/ · actifs=8 ·   ✅ état court, structuré, multi-s
+8
+  ```
+
+### 🤖 Assistant
+
+⏵ 02 h 18 : pas de nouveau commit depuis 01 h 47, veille normale. Round de 20 min.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -1 work/veille-nuit.log; git log --oneline -1 | cut -c1-70; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": "Read watch at 02h38"}`
+
+  ```
+02:38
+02:37 · 32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/ · actifs=8 ·   ✅ état court, structuré, multi-s
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, R
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ 02 h 38 : calme depuis 50 min. Je vérifie que les processus de session vivent toujours.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for s in 0733c5bb 29ad180d e181ce02 536cd5d6; do n=0; for p in $(pgrep -f \"bin/dsh\"); do c=$(ls -l /proc/$p/fd 2>/dev/null | grep -c \"$s\"); n=$((n+c)); done; echo \"$s : $n fd\"; done; echo \"--- gpu ---\"; nvidia-smi --query-gpu=i … [125 caractères tronqués]`
+
+  ```
+0733c5bb : 1 fd
+29ad180d : 1 fd
+e181ce02 : 0 fd
+536cd5d6 : 1 fd
+--- gpu ---
+0, 5646 MiB, 99 %
+1, 122 MiB, 0 %
+02:38
+  ```
+
+### 🤖 Assistant
+
+⏵ Pensée n'a plus de processus détenteur (0 fd) : je vérifie si sa session s'est arrêtée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -af \"bin/dsh\" | wc -l; ps -o etime=,args= -p 31175,31786,32123,32694,33009 2>/dev/null | cut -c1-80; echo \"--- pensée ---\"; stat -c '%y' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | cut -c12-19; grep -E \ … [246 caractères tronqués]`
+
+  ```
+8
+   10:24:58 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   10:24:06 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   10:23:24 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   10:22:38 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   10:22:27 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+--- pensée ---
+02:17:22
+- **Heartbeat** : 2026-11-02 21:43 EST
+- **État** : actif
+32d695ab 01:42 L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT
+  ```
+
+### 🤖 Assistant
+
+⏵ Pensée vivante (digest 02 h 17, commit 01 h 42) ; le fd manquant n'est pas une preuve. Veille.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`

@@ -10394,3 +10394,394 @@ started background job bash-265
   ```
 
 - **job_output** `{"job_id": "bash-265", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+01:43:16
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 47 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+01:43:24
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+d0589cd3 L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  78 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 303 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 192 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 240 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (78 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (303 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 587 fiche(s) · 672 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohér
+… [248 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L/B13 : la contrainte thématique — cinq contraintes de forme, toujours 5/10, le lien de surface plafonne ; état vert.
+
+- **Commits** `d0589cd3` / `297b01cf` ; revue **587/672/82** ✅ ; **T0 4 000/4 000**.
+- **Sessions** : N2 78 + claim, S 303 + claim, hub 192 + claim `veille`, B13 240 + claim ; quatre actives.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 55
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 47/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, twentieth", "run_in_background": true}`
+
+  ```
+started background job bash-267
+  ```
+
+- **job_output** `{"job_id": "bash-267", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+01:53:41
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 48 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+01:53:49
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  89 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 314 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 203 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 251 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (89 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (314 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 587 fiche(s) · 672 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabu
+… [236 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L/B13 : parité DRVM/native — 114/114 poids, 5/5 prompts, rejouable mais checkpoint volatil ; état vert.
+
+- **Commit** `32d695ab` ; revue **587/672/82** ✅ ; **T0 4 000/4 000**.
+- **Sessions** : N2 89 + claim, S 314 + claim, hub 203 + claim `veille`, B13 251 + claim ; quatre actives.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 56
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 48/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, twenty-first", "run_in_background": true}`
+
+  ```
+started background job bash-269
+  ```
+
+- **job_output** `{"job_id": "bash-269", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+02:04:04
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 49 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+02:04:11
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  99 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 324 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 213 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 261 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (99 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (324 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 587 fiche(s) · 672 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabu
+… [236 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 49 : veille ; état inchangé (revue 587/672, T0 4 000, claims OK, quatre sessions actives).
+
+- **Sessions** : N2 99 + claim, S 324 + claim, hub 213 + claim `veille`, B13 261 + claim.
+- **Git** : `32d695ab` ; pas de nouveau commit depuis.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 57
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 49/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, twenty-second", "run_in_background": true}`
+
+  ```
+started background job bash-271
+  ```
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+02:14:25
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 50 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+02:14:32
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 110 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 335 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 224 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 272 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (110 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (335 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 587 fiche(s) · 672 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocab
+… [237 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 50 : veille ; état inchangé (revue 587/672, T0 4 000, claims OK, quatre sessions actives).
+
+- **Sessions** : N2 110 + claim, S 335 + claim, hub 224 + claim `veille`, B13 272 + claim.
+- **Git** : `32d695ab` ; pas de nouveau commit depuis.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 58
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 50/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, twenty-third", "run_in_background": true}`
+
+  ```
+started background job bash-273
+  ```
+
+- **job_output** `{"job_id": "bash-273", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+02:24:45
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 51 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+02:24:53
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 120 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 345 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 234 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 282 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (120 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (345 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 587 fiche(s) · 672 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocab
+… [237 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 51 : veille ; état inchangé (revue 587/672, T0 4 000, claims OK, quatre sessions actives).
+
+- **Sessions** : N2 120 + claim, S 345 + claim, hub 234 + claim `veille`, B13 282 + claim.
+- **Git** : `32d695ab` ; pas de nouveau commit depuis.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 59
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 51/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, twenty-fourth", "run_in_background": true}`
+
+  ```
+started background job bash-275
+  ```
+
+- **job_output** `{"job_id": "bash-275", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+02:35:05
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 52 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+02:35:12
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 130 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 355 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 244 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 292 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (130 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (355 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 587 fiche(s) · 672 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocab
+… [237 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 52 : veille ; état inchangé (revue 587/672, T0 4 000, claims OK, quatre sessions actives).
+
+- **Sessions** : N2 130 + claim, S 355 + claim, hub 244 + claim `veille`, B13 292 + claim.
+- **Git** : `32d695ab` ; pas de nouveau commit depuis.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 60
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 52/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, twenty-fifth", "run_in_background": true}`
+
+  ```
+started background job bash-277
+  ```
+
+- **job_output** `{"job_id": "bash-277", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+02:45:26
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 53 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+02:45:32
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 141 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 366 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 255 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 303 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (141 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (366 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 672 JSON, le disque en a 673
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont 
+… [118 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état dit 672 JSON, le disque en a 673 ; je corrige et je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '672' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nassert t.count('672')==1, t.count('672')\np.write_text(t.replace('672','673'))\nprint('672 -> 67 … [388 caractères tronqués]`

@@ -6636,3 +6636,228 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-313", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/propre512-8k.pt 2>/dev/null && echo OK512; tail -c 120 work/n2ac/propre512-8k.log; tail -c 90 work/n2ac/propre128-32k.log 2>/dev/null; tail -c 90 work/n2ac/mix1024-30k.log", "description": "Poll gate and production runs" … [1 caractères tronqués]`
+
+  ```
+01:51:50
+.384 · 940 s
+pas   4750 · perte 0.9419 · PPL val 3.429 · 949 s
+pas   4800 · perte 0.9485 · PPL val 3.392 · 959 s
+e 0.9733 · PPL val 2.507 · 6754 s
+pas  15200 · perte 1.0933 · PPL val 2.516 · 6776 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre512-8k.pt 2>/dev/null && echo OK512; tail -c 100 work/n2ac/prepropre128-32k.log 2>/dev/null; tail -c 80 work/n2ac/propre128-32k.log 2>/dev/null", "description": "Wait for  … [21 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-315]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-315", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre512-8k.pt 2>/dev/null && echo OK512; grep -E \"ppl_val\" work/n2ac/propre512-8k.pt.json 2>/dev/null; tail -c 80 work/n2ac/prepropre128-32k.log 2>/dev/null; tail -c 80 work/n2ac/propr … [65 caractères tronqués]`
+
+  ```
+02:03:00
+propre512-8k fini 02:01:51
+work/n2ac/propre512-8k.pt
+OK512
+ "ppl_val": 3.363862704237594,
+12 · PPL val 4.373 · 62 s
+pas   1050 · perte 1.4152 · PPL val 4.378 · 65 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation du bras 512 sur le corpus propre (val) et préparation du test
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. python3 tools/canal_structure.py --entree data/corpus_propre/test.txt --sortie data/corpus_propre/test.canal 2>&1 | tail -1; mkdir -p /tmp/propre_test && cp data/corpus_propre/test.txt /tmp/propre_test/val.txt && cp data/corpus_propre/tes … [327 caractères tronqués]`
+
+  ```
+180224 octets de canal · data/corpus_propre/test.canal
+  L128 : 2.9726
+  L256 : 2.8988
+  L512 : 2.8443
+  L1024 : 2.7856
+{"fichier": "propre512-8k.pt", "val": "data/corpus_propre", "positions": "rope", "L128": 2.9726, "L256": 2.8988, "L512": 2.8443, "L1024": 2.7856}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --val /tmp/propre_test --longueurs 128,512,1024 --sortie work/n2ac/eval-propre512-test.json 2>&1 | tail -4", "description": "Evaluate … [36 caractères tronqués]`
+
+  ```
+L128 : 3.0649
+  L512 : 2.8875
+  L1024 : 2.8566
+{"fichier": "propre512-8k.pt", "val": "/tmp/propre_test", "positions": "rope", "L128": 3.0649, "L512": 2.8875, "L1024": 2.8566}
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre128-32k.pt 2>/dev/null && echo OK128; tail -c 80 work/n2ac/mix1024-30k.log", "description": "Wait for gate 128 arm"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-319]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-319", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-313 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; tail -c 120 work/n2ac/propre512-8k.log; tail -c 100 work/n2ac/mix1024-30k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-315 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre512-8k.pt 2>/dev/null && echo OK512; tail -c 100 work/n2ac/prepropre128-32k.log 2>/dev/null; tail -c 80 work/n2ac/propre128-32k.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre128-32k.pt 2>/dev/null && echo OK128; tail -c 90 work/n2ac/mix1024-30k.log; ls work/n2ac/mix1024-30k.pt 2>/dev/null && echo OKPROD", "description": "Poll gate and production completi … [4 caractères tronqués]`
+
+  ```
+02:14:56
+propre512-8k fini 02:01:51
+e 1.0496 · PPL val 2.489 · 8127 s
+pas  18300 · perte 0.9682 · PPL val 2.491 · 8149 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre128-32k.pt 2>/dev/null && echo OK128; tail -c 90 work/n2ac/mix1024-30k.log; ls work/n2ac/mix1024-30k.pt 2>/dev/null && echo OKPROD", "description": "Wait for gate 128 and … [17 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-321]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-321", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre128-32k.pt 2>/dev/null && echo OK128; tail -c 90 work/n2ac/mix1024-30k.log; ls work/n2ac/mix1024-30k.pt 2>/dev/null && echo OKPROD", "description": "Poll both runs"}`
+
+  ```
+02:26:07
+propre512-8k fini 02:01:51
+e 1.1004 · PPL val 2.477 · 8813 s
+pas  19850 · perte 0.9055 · PPL val 2.469 · 8836 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre128-32k.pt 2>/dev/null && echo OK128; grep -c \"pas \" work/n2ac/propre128-32k.log; tail -c 80 work/n2ac/propre128-32k.log", "description": "Wait and check gate 128 comple … [6 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-323]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-323", "timeout_ms": 600000, "wait": true}`
+
+  ```
+02:36:11
+propre512-8k fini 02:01:51
+propre128-32k fini 02:33:47
+work/n2ac/propre128-32k.pt
+OK128
+641
+f90206c12eb863bd43e886d0cf35c845d1ec0cfad936",
+ "duree_s": 1910.5735611915588
+}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-319 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_porte.out; ls work/n2ac/propre128-32k.pt 2>/dev/null && echo OK128; tail -c 80 work/n2ac/mix1024-30k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Les deux bras de la porte sont prêts ; évaluation comparée sur le corpus propre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre128-32k.pt --rope --val data/corpus_propre --longueurs 128,256,512,1024 --sortie work/n2ac/eval-propre128-val.json 2>&1 | tail -5; PYTHONPATH=. CUDA_V … [392 caractères tronqués]`
+
+  ```
+L128 : 2.9027
+  L256 : 2.9034
+  L512 : 3.0464
+  L1024 : 3.1107
+{"fichier": "propre128-32k.pt", "val": "data/corpus_propre", "positions": "rope", "L128": 2.9027, "L256": 2.9034, "L512": 3.0464, "L1024": 3.1107}
+  L128 : 3.015
+  L512 : 3.1104
+  L1024 : 3.1876
+{"fichier": "propre128-32k.pt", "val": "/tmp/propre_test", "positions": "rope", "L128": 3.015, "L512": 3.1104, "L1024": 3.1876}
+ "ppl_val": 3.450012500010037,
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du contrôle « production depuis zéro » (GPU 1) et rédaction de la fiche porte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_prod_zero.sh 1 > work/n2ac/chaine_prod_zero.out 2>&1 & echo \"prod-zero lancé pid $!\"; date '+%H:%M:%S'; tail -c 80 work/n2ac/mix1024-30k.log; ls work/n2ac/mix1024-30k.pt 2>/dev/null && echo OKPROD", "description": "Launch … [34 caractères tronqués]`
+
+  ```
+prod-zero lancé pid 855944
+02:36:45
+� PPL val 2.481 · 9433 s
+pas  21250 · perte 1.0120 · PPL val 2.481 · 9455 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-porte-propre.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"{{VERDICT}}\", \"\"\"la porte **< 2,5 n'est pas atteinte** : le meilleur point est **2,7856** en\n> valida … [2975 caractères tronqués]`
+
+  ```
+fiche porte remplie ; placeholders : 2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ('work/n2ac/propre512-8k.pt.json','work/n2ac/propre128-32k.pt.json'):\n    d=json.load(open(f)); print(f.split('/')[-1], 'precision_main', round(d['precision_main'],4), 'pas', d['pas'])\"", "description": "Get prec … [28 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+    d=json.load(open(f)); print(f.split('/')[-1], 'precision_main', round(d['precision_main'],4), 'pas', d['pas'])
+                                                                          ~^^^^^^^^^^^^^^^^^^
+KeyError: 'precision_main'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-porte-propre.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\\nPrécision top-1 (tête principale) : fenêtre 128 **{{P128}}**, fenêtre 512 **{{P512}}**.\", \"\")\nvieux … [2251 caractères tronqués]`
+
+  ```
+placeholders : 0
+   reports/n2-porte-propre.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -i 's/même budgb d.octets/même budget d octets/' reports/n2-porte-propre.json && grep -c \"budgb\" reports/n2-porte-propre.json; date '+%H:%M:%S'; tail -c 80 work/n2ac/mix1024-30k.log; ls work/n2ac/mix1024-30k.pt 2>/dev/null && echo OKPROD", "desc … [46 caractères tronqués]`
+
+  ```
+0
+02:37:16
+� PPL val 2.480 · 9478 s
+pas  21350 · perte 0.9315 · PPL val 2.481 · 9500 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 720; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/mix1024-30k.pt 2>/dev/null && echo OKPROD; cat work/n2ac/chaine_prod1024_long.out; tail -c 80 work/n2ac/mix512-zero-15k.log 2>/dev/null", "description": "Wait for production 30k completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-330]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-330", "timeout_ms": 720000, "wait": true}`

@@ -13417,3 +13417,321 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 63 : veille — attente du prochain commit
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`
+
+  ```
+01:43:56
+HEAD 32d695ab
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+ 758133    01:49:53 /home/stephane/gpu-env/bin/python w
+ 830877       08:11 /home/stephane/gpu-env/bin/python w
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; cat >> work/veille/nuit.md <<'EOF'\n\n## 01 h 43 — la parité DRVM/native : 114/114 poids, 5/5 prompts, rejouable\n\n- **`32d695ab`** ( … [533 caractères tronqués]`
+
+  ```
+revue de documentation · 587 fiche(s) · 672 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+log-ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 63 : la parité DRVM/native tient (114/114 poids, 5/5 prompts)
+
+- **L/B13** : `32d695ab` — la **parité DRVM/native** est mesurée : **114/114 poids**, **5/5 prompts**, **rejouable** ; réserve : le **checkpoint est volatil**. Le DRVM/native tient donc la parité, à condition de stabiliser le checkpoint — consigné au journal de veille et au bilan. Fiche/JSON comptées (**587 / 672 / 82**).
+- **N2** : `758133` (1 h 49) et `830877` (8 min) continuent ; les fiches fenêtre/2 048 sont en cours (`n2-r12-2048.json` modifié).
+- **État** : revue ✅, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 69
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 64/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 64 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`
+
+  ```
+01:53:42
+HEAD 32d695ab
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+ 758133    01:59:39 /home/stephane/gpu-env/bin/python w
+ 830877       17:57 /home/stephane/gpu-env/bin/python w
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 64 : phase de calcul, aucun commit depuis 01 h 43
+
+- Les runs N2 continuent (`758133` 1 h 59, `830877` 18 min) et les fiches fenêtre/2 048 sont en cours de mise à jour ; le L/B13 prépare probablement la stabilisation du checkpoint DRVM.
+- **État stable** : revue ✅ 587/672/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅, registre ✅.
+- Le bilan de 8 h (`work/veille/bilan-08h.md`) porte déjà les faits de la nuit ; le journal du 03/11 est en place.
+
+La veille reste en attente active des prochains commits et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 70
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 65/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2; echo \"--- derniers logs ---\"; ls -t work/n2ac/*.log | head -2; tail -1 $(ls -t work/n2ac/*.log | head -1) 2>/dev/null; date \"+%H:%M:%S\"", "description": "Check the N2 runs' details and progress"}`
+
+  ```
+758133    01:59:50 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --seq 1024 --window 1024 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2ac/mix1024-7.5k.pt --pas 22500 --sortie work/n2ac/mix1024-30k.pt --drvm work/n2ac/mix1024-30k.drvm
+ 830877       18:08 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/corpus_propre/train.txt --canal data/corpus_propre/train.canal --seq 512 --window 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2j/base-wiki-45m.pt --pas 8000 --sortie work/n2ac/propre512-8k.pt --drvm work/n2ac/propre512-8k.drvm
+--- derniers logs ---
+work/n2ac/propre512-8k.log
+work/n2ac/mix1024-30k.log
+pas   5450 · perte 0.9141 · PPL val 3.465 · 1081 s
+01:53:53
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 01 h 54 — les deux runs N2 : production 1 024 prolongée et corpus propre 512\n\n- **`758133`** : `mix1024-30k` — init `mix1024-7.5k`, **22 500 pas de plus**, seq/window 1 024,\n  sur le mélange ; 2 h 00 de calcul (démarré ~23 h 54).\n- **`830877` … [548 caractères tronqués]`
+
+  ```
+log-ok
+01:54:02
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 65 : les deux runs N2 identifiés — production 1 024 prolongée et corpus propre 512
+
+- **`758133`** : `mix1024-30k` — la **production 1 024 prolongée** de **22 500 pas** depuis `mix1024-7.5k`, sur le mélange (2 h 00 de calcul).
+- **`830877`** : `propre512-8k` — le **corpus propre**, seq 512, 8 000 pas, init base-wiki-45m ; **PPL val 3,465 à 5 450 pas** (le corpus propre est plus dur).
+- Les deux GPU restent occupés et déclarés (claims N2 + veille) ; les résultats sont notés au journal de veille et au bilan de 8 h.
+- **État** : revue ✅ 587/672/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 71
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 66/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 66 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`
+
+  ```
+02:03:41
+HEAD 32d695ab
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+ 758133    02:09:38 /home/stephane/gpu-env/bin/python w
+ 842470       01:49 /home/stephane/gpu-env/bin/python w
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+  ```
+
+- **bash** `{"command": "grep -n \"parité\\|114\\|plafond\\|surface\" docs/pilotage/en-cours.md | head -4; echo \"--- roadmap ---\"; grep -n \"parité\\|114/114\\|plafonne\" docs/pilotage/roadmap.md | head -3; echo \"--- état ---\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_co … [82 caractères tronqués]`
+
+  ```
+61:  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 5/5, parité 114/114+5/5 ;
+--- roadmap ---
+33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 000 octets, fenêtre **−0,244**) ; la suite : **1 024 octets entraînés** ; R2/R3 attendent N5/N4 |
+77:3. ~~N0.3b — la parité de [perplexité](../theorie/glossaire/entrees/perplexite.md) DRVM ↔ [GGUF](../theorie/glossaire/entrees/gguf.md)~~ **close** : conversion **68,1917 / 92,1875**, natif **4,6585 / 18,6394**.
+345:  (langues et maîtres), C3.2 (familles), N0.3b (parité DRVM ↔ GGUF), B12.10 (intégration, négatif).
+--- état ---
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 66 : la parité est dans l’état, le plafond 5/10 reste à inscrire
+
+- **État des faits** : l'`en-cours` porte la **parité DRVM/native 114/114 + 5/5** (ligne B13) ; le **plafond du lien de surface (5/10)** n'y est pas encore — la ligne est tendue par T0, le hub l'ajoutera à son prochain passage (signalé au bilan).
+- **Runs N2** : `758133` (mix1024-30k, 2 h 09) continue ; `830877` (propre512-8k) est fini, un nouveau run a démarré (1 min) ; les fiches fenêtre/2 048 sont en cours.
+- **État** : revue ✅ 587/672/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 72
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 67/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 67 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`
+
+  ```
+02:13:31
+HEAD 32d695ab
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+ 758133    02:19:28 /home/stephane/gpu-env/bin/python w
+ 842470       11:40 /home/stephane/gpu-env/bin/python w
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+  ```
+
+- **bash** `{"command": "tail -1 work/n2ac/mix1024-30k.log 2>/dev/null; tail -1 work/n2ac/propre512-8k.log 2>/dev/null; ls -t work/n2ac/*.log | head -3; echo \"--- gpu ---\"; nvidia-smi --query-gpu=index,utilization.gpu,temperature.gpu --format=csv,noheader 2>/dev/null; python3 tools/ressources.py --check 2>&1  … [69 caractères tronqués]`
+
+  ```
+pas  18150 · perte 1.0329 · PPL val 2.494 · 8082 s
+}
+work/n2ac/propre128-32k.log
+work/n2ac/mix1024-30k.log
+work/n2ac/propre512-8k.log
+--- gpu ---
+0, 99 %, 85
+1, 85 %, 71
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 02 h 13 — la barre des 2,5 est franchie (PPL 2,494)\n\n- **`mix1024-30k`** : **PPL val 2,494 < 2,5** à **18 150 / 22 500 pas** (8 082 s) — la cible que\n  le run de 200 k n'atteignait pas (3,16) est **battue** par la production 1 024 prolongée su … [669 caractères tronqués]`
+
+  ```
+log-ok
+02:13:45
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 67 : la barre des 2,5 est franchie — PPL 2,494 pour la production 1 024 prolongée
+
+- **Le fait de la nuit** : `mix1024-30k` atteint **PPL val 2,494 < 2,5** à **18 150 / 22 500 pas** (2 h 14) — la cible que le run de **200 k** n'atteignait pas (**3,16**) est **battue** par la production 1 024 prolongée sur le mélange. Final à confirmer à la fin du run (~30 min), fiche/commit N2 à suivre.
+- **Nouveau run** : `propre128-32k` — corpus **propre**, fenêtre 128, **32 000 pas** (PID 842470), la session explore aussi la longueur sur le corpus propre.
+- **Ressources** : GPU 99 % / 85 %, 85/71 °C ; registre cohérent ; les deux cartes occupées et déclarées.
+- **État** : revue ✅ 587/672/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+Le résultat est consigné au journal de veille et au bilan de 8 h ; la veille suit le final et le commit N2. Rien de bloquant.
+
+
+## Tour 73
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 68/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 68 : veille — je suis le final du run à 2,494 et le commit N2
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/mix1024-30k.log 2>/dev/null; ps -eo pid,etime,args | … [136 caractères tronqués]`
+
+  ```
+02:23:26
+HEAD 32d695ab
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+pas  19450 · perte 1.0319 · PPL val 2.475 · 8658 s
+ 758133    02:29:23 /home/stephane/gpu-env/bin/python w
+ 842470       21:34 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 02 h 23 — la barre tient : PPL val 2,475 à 19 450 pas\n\n- `mix1024-30k` : **PPL val 2,475** à 19 450 / 22 500 pas — la cible < 2,5 tient et s'améliore ;\n  le final est à ~3 000 pas. Le run du corpus propre (`propre128-32k`, 21 min) continue.\nE … [82 caractères tronqués]`
+
+  ```
+log-ok
+02:23:32
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 68 : la barre tient — PPL 2,475 à 19 450 pas
+
+- **`mix1024-30k`** : **PPL val 2,475** à **19 450 / 22 500 pas** — la cible **< 2,5 tient** et s'améliore (2,494 → 2,475) ; le final est à ~3 000 pas (~20 min). La production 1 024 prolongée bat décidément le run de 200 k (3,16).
+- **Corpus propre** : `propre128-32k` continue (21 min) ; les deux GPU restent occupés et déclarés.
+- **État** : aucun nouveau commit depuis `32d695ab` ; revue ✅ 587/672/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille suit le final et le commit N2 (fiche/JSON), puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 74
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 69/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 69 : veille — je suis la fin du run et le commit N2
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/mix1024-30k.log 2>/dev/null; ps -eo pid,etime,args | … [128 caractères tronqués]`
+
+  ```
+02:33:12
+HEAD 32d695ab
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+pas  20800 · perte 0.8801 · PPL val 2.474 · 9256 s
+ 758133    02:39:09 /home/stephane/gpu-env/bin/python w
+ 842470       31:21 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/mix1024-30k.log 2>/dev/null; ps -eo pid,etime,args | … [132 caractères tronqués]`
+
+  ```
+02:42:47
+HEAD 32d695ab
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+297b01cf ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE
+pas  22100 · perte 0.9868 · PPL val 2.470 · 9831 s
+ 758133    02:48:44 /home/stephane/gpu-env/bin/python w
+ 855949       06:01 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -2 work/n2ac/mix1024-30k.log 2>/dev/null; ps -eo pid,etime,args | … [140 caractères tronqués]`

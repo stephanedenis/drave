@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 9.5 h |
+| Durée | 10.4 h |
 | Tours | 2 |
-| Messages | 434 |
-| Appels d'outils | 426 |
+| Messages | 459 |
+| Appels d'outils | 448 |
 | Fichiers touchés | 25 |
-| Commandes | 313 |
+| Commandes | 330 |
 | Sous-agents | 0 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*186 appels d'outils.* Actions notables :
+*208 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 127 autres
+- … et 144 autres
 
 **Synthèse produite :**
 
-⏵ Complément : 2 048 à 15 000 pas (le meilleur chiffre au long)
+⏵ Lancement du contrôle « production depuis zéro » (GPU 1) et rédaction de la fiche porte
 
 ## 3. Travail accompli
 
@@ -180,7 +180,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 273 autres
+- … et 290 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -308,7 +308,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ## 5. Erreurs rencontrées
 
-12 sorties en erreur ou divergentes. Les premières :
+17 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md:20686:- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.
 - **T1** : (no output) [exit code: 1]
@@ -322,6 +322,9 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** : 23:06:53 pas   1300 · perte 1.0420 · PPL val 2.720 · 1436 s [exit code: 2]
 - **T2** : 23:42:44 pas   3250 · perte 1.0465 · PPL val 2.630 · 3570 s [exit code: 2]
 - **T2** : 01:10:11 rope2048-1.25k fini 22:22:47 [exit code: 2]
+- **T2** : 02:14:56 propre512-8k fini 02:01:51 e 1.0496 · PPL val 2.489 · 8127 s pas  18300 · perte 0.9682 · PPL val 2.491 · 8149 s [exit code: 2]
+- **T2** : 02:26:07 propre512-8k fini 02:01:51 e 1.1004 · PPL val 2.477 · 8813 s pas  19850 · perte 0.9055 · PPL val 2.469 · 8836 s [exit code: 2]
+- **T2** : prod-zero lancé pid 855944 02:36:45 � PPL val 2.481 · 9433 s pas  21250 · perte 1.0120 · PPL val 2.481 · 9455 s [exit code: 2]
 
 ## 6. Commits
 

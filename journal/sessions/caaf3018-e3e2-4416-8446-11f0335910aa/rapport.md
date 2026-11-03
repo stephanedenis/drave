@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 9.4 h |
+| Durée | 10.4 h |
 | Tours | 26 |
-| Messages | 374 |
-| Appels d'outils | 377 |
+| Messages | 385 |
+| Appels d'outils | 388 |
 | Fichiers touchés | 6 |
-| Commandes | 280 |
+| Commandes | 285 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -516,7 +516,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 26 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Check S session liveness and work
 - bash — Peek at S current activity in digest
@@ -532,11 +532,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Silent 10-hour timer for alternation
 - bash — Read first watch line
 - bash — Read watch log after silent wait
-- … et 6 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ 01 h 38 : Pensée enchaîne les fiches. Je passe à des rounds de 20 min (deux attentes alternées).
+⏵ Pensée vivante (digest 02 h 17, commit 01 h 42) ; le fd manquant n'est pas une preuve. Veille.
 
 ## 3. Travail accompli
 
@@ -593,7 +593,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 240 autres
+- … et 245 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -685,6 +685,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T26** `> de types 54/55** (98,2 %), les **rôles 131/131** (100 %), les **compléments 47/47**, et couvre`
 - **T26** `| **global** | **55** | **54/55** (98,2 %) | **1 466/1 475** (99,4 %) | **131/131** (100 %) | **47/47** |`
 - **T26** `> **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur des`
+- **T26** `0, 5646 MiB, 99 %`
 
 ## 5. Erreurs rencontrées
 
