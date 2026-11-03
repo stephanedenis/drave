@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 24.4 h |
 | Tours | 11 |
-| Messages | 344 |
-| Appels d'outils | 340 |
+| Messages | 346 |
+| Appels d'outils | 341 |
 | Fichiers touchés | 15 |
-| Commandes | 256 |
+| Commandes | 257 |
 | Sous-agents | 0 |
 | Commits | 22 |
 | Compactages de contexte | 1 |
@@ -420,7 +420,7 @@ La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents 
 
 ### Tour 11 — quel page web utiliser pour la suite?
 
-*14 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Inspect bank server routes and UI
 - bash — Read server data model and routes
@@ -436,10 +436,17 @@ La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents 
 - bash — Inspect L commit deletion of S fiche
 - bash — Restore SVG, index, schema reference after L deletion
 - bash — Commit page and restore S files
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Je vérifie les pages du serveur pour répondre précisément, et j'ouvre la page de validation des paragraphes avec l'arbre et les référents.
+⏵ La page est en ligne : `http://127.0.0.1:8765/paragraphes`, avec les trois paragraphes, l'arbre SVG et les référents à trancher.
+
+Pour la suite, la page à utiliser est **http://127.0.0.1:8765/paragraphes**. Le serveur tourne (pid 2414252) et répond 200 sur la page comme sur `/api/paragraphes`. Elle affiche les trois paragraphes complets d'Alice : le contexte en encadré, la cible colorée par segment, l'arbre SVG avec la profondeur réelle et les flèches pointillées des référents, puis les référents sous forme de listes déroulantes — « Elle → Alice » est présélectionné quand Alice est un candidat — et enfin les lectures candidates avec les quatre verdicts. La bonne séquence est de trancher d'abord les référents, puis la structure : le verdict enregistre les deux dans `donnees/paragraphes-validations.jsonl`, et le lien « exporter les verdicts » télécharge ce journal en NDJSON. Le banc de phrases d'origine reste sur `/`, avec son propre journal.
+
+Le serveur a été relancé après l'ajout de la page et les 51 tests passent. Le sous-module est poussé en `0422a8c` et le principal en `08418b55`. Au passage, le commit L avait supprimé la fiche S et le SVG de l'arbre ; je les ai rétablis dans ce commit, avec la ligne de l'index des schémas et celle de l'INDEX des fiches.
+
+Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l'échantillon de paragraphes complets, puis nous reprendrons l'export complet de la banque. Les limites `h050`/`h053` restent après. Si le serveur s'arrête, il se relance avec `cd tools/structures && python3 serveur.py` puis la même adresse.
 
 ## 3. Travail accompli
 
@@ -505,7 +512,7 @@ La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 216 autres
+- … et 217 autres
 
 ## 4. Mesures et résultats marquants
 

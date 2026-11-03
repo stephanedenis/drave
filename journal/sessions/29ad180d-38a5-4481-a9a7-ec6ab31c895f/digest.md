@@ -7500,3 +7500,45 @@ SVG/INDEX/schémas rétablis
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add docs/schemas/arbre-referents.svg reports/rapport-s-arbre-referents.md docs/schemas/README.md reports … [848 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          | 13 +--
+ docs/pilotage/roadmap.md                           |  2 +-
+ docs/schemas/README.md                             |  1 +
+ docs/schemas/arbre-referents.svg                   | 30 +++++++
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |  5 +-
+ reports/INDEX.md                                   |  1 +
+ reports/rapport-s-arbre-referents.md               | 95 ++++++++++++++++++++++
+ tools/structures                                   |  2 +-
+ 8 files changed, 139 insertions(+), 10 deletions(-)
+ 26 files changed, 548 insertions(+), 65 deletions(-)
+ create mode 100644 docs/schemas/arbre-referents.svg
+ create mode 100644 reports/rapport-s-arbre-referents.md
+08418b55 S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS, VERDICT ; LE BANC PEUT REPRENDRE
+43637b48 L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -3; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; echo \"=== page ===\"; curl -s -o /dev/null -w \"GET /paragrap … [288 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   2b3595c1..08418b55  master -> master
+exit=0
+08418b55efe35f7c72948b6060cb4e4f6ef05cf9	refs/heads/master
+0422a8c3b9f6b73c83314d9473a74864d08cb9a7	refs/heads/master
+=== page ===
+GET /paragraphes 200
+GET /api/paragraphes 200
+2414252 python3 serveur.py --port 8765
+  ```
+
+### 🤖 Assistant
+
+⏵ La page est en ligne : `http://127.0.0.1:8765/paragraphes`, avec les trois paragraphes, l'arbre SVG et les référents à trancher.
+
+Pour la suite, la page à utiliser est **http://127.0.0.1:8765/paragraphes**. Le serveur tourne (pid 2414252) et répond 200 sur la page comme sur `/api/paragraphes`. Elle affiche les trois paragraphes complets d'Alice : le contexte en encadré, la cible colorée par segment, l'arbre SVG avec la profondeur réelle et les flèches pointillées des référents, puis les référents sous forme de listes déroulantes — « Elle → Alice » est présélectionné quand Alice est un candidat — et enfin les lectures candidates avec les quatre verdicts. La bonne séquence est de trancher d'abord les référents, puis la structure : le verdict enregistre les deux dans `donnees/paragraphes-validations.jsonl`, et le lien « exporter les verdicts » télécharge ce journal en NDJSON. Le banc de phrases d'origine reste sur `/`, avec son propre journal.
+
+Le serveur a été relancé après l'ajout de la page et les 51 tests passent. Le sous-module est poussé en `0422a8c` et le principal en `08418b55`. Au passage, le commit L avait supprimé la fiche S et le SVG de l'arbre ; je les ai rétablis dans ce commit, avec la ligne de l'index des schémas et celle de l'INDEX des fiches.
+
+Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l'échantillon de paragraphes complets, puis nous reprendrons l'export complet de la banque. Les limites `h050`/`h053` restent après. Si le serveur s'arrête, il se relance avec `cd tools/structures && python3 serveur.py` puis la même adresse.
+

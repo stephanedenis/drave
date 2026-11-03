@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **589 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **592 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -225,6 +225,7 @@
 | [rapport-n2-corpus-1go.md](rapport-n2-corpus-1go.md) | N2.aa — Le corpus de 831 Mo à compute constant : un autre domaine, pas plus de savoir |
 | [rapport-n2-corpus-elargi.md](rapport-n2-corpus-elargi.md) | N2.i — Le corpus élargi : 4,84 Mo uniques au lieu de 3,24 |
 | [rapport-n2-corpus-reel.md](rapport-n2-corpus-reel.md) | N2.j — Du vrai français : 186 Mo de Wikipédia, et ce que vaut le filtre « non ambigu » |
+| [rapport-n2-distillation-native.md](rapport-n2-distillation-native.md) | N2 — La distillation native : le professeur long dans un élève à fenêtre courte |
 | [rapport-n2-distillation-reelle.md](rapport-n2-distillation-reelle.md) | N2.j4 — La distillation sur le corpus réel : 4,39 → 3,88, et tout le reste baisse |
 | [rapport-n2-distillation.md](rapport-n2-distillation.md) | N2 — la hiérarchie ne paie pas non plus sur le dispositif de distillation |
 | [rapport-n2-diversite.md](rapport-n2-diversite.md) | N2.h2 — La diversité française : un modèle de français plutôt qu'un modèle du dépôt |
@@ -391,6 +392,7 @@
 | [rapport-pensee-drvf.md](rapport-pensee-drvf.md) | B13 — DRVF `thought` : la trace se relit, la corruption se voit |
 | [rapport-pensee-ferme.md](rapport-pensee-ferme.md) | B13 — la porte qui se referme : le moteur repasse |
 | [rapport-pensee-frequent.md](rapport-pensee-frequent.md) | B13 — la bascule fréquente : 1/50, 20/20 |
+| [rapport-pensee-frontiere-71.md](rapport-pensee-frontiere-71.md) | L — la frontière sur les 71 langues : le script est tenu (71/71), la langue sur libellés courts ne l'est pas (0,137 contre 0,032) |
 | [rapport-pensee-glisse.md](rapport-pensee-glisse.md) | B13 — la dérive continue : v = 0,5, 20/20 |
 | [rapport-pensee-gold-200-subsets.md](rapport-pensee-gold-200-subsets.md) | B13 — les sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles |
 | [rapport-pensee-gold-200.md](rapport-pensee-gold-200.md) | B13 — le gold à 200 phrases réelles : POS 0,7738 |

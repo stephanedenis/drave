@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**79 commits** · **6 session(s)** · **9 thème(s)**
+**80 commits** · **6 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 23 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 6 | [memoire.md](memoire.md) |
-| mesures | 11 | [mesures.md](mesures.md) |
+| mesures | 12 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 9 | [portes.md](portes.md) |
@@ -115,6 +115,7 @@
 | 16:24 | `2ae69e5c` | JOURNAUX — LES TROIS DERNIÈRES LIGNES DE LA BOUCLE RETIRÉES (COMMIT SANS HOOK POUR NE PAS RÉGÉNÉRER) |
 | 16:26 | `2b3595c1` | S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE |
 | 16:34 | `43637b48` | L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE) |
+| 16:38 | `08418b55` | S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS, VERDICT ; LE BANC PEUT REPRENDRE |
 
 ## Le récit de la journée (écrit à la main)
 

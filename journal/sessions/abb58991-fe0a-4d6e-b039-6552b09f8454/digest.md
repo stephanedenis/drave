@@ -24585,3 +24585,117 @@ VARIANTES = {
 }
   ```
 
+### 🤖 Assistant
+
+⏵ Je regarde la structure exacte (`langues`, `concepts`) et le constructeur de profils de langue pour la mesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nd=json.loads(pathlib.Path('tools/jeux/lexique_multilingue.json').read_text(encoding='utf-8'))\nprint('langues', len(d['langues']), d['langues'][:8])\nprint('concepts', type(d['concepts']).__name__, len(d['concep … [397 caractères tronqués]`
+
+  ```
+langues 71 ['ar', 'bn', 'ca', 'cs', 'da', 'de', 'el', 'en']
+concepts dict 35
+exemple concept jeu.morpion -> {"qid": "Q210339", "qids": ["Q210339"], "labels": {"ar": ["لعبة اكس-او"], "ca": ["tres en ratlla"], "cs": ["piskvorky"], "da": ["kryds og bolle"], "de": ["tic-tac-toe"], "en": ["tic-tac-toe"], "eo": ["tiktakto"], "es": ["tres en raya"], "et": ["trips-traps-trull"], "eu": ["hiruko artzain-joko"], "fa
+=== profils de langue ===
+1486:    h = Heuristique(profils=profils)
+1555:    h = Heuristique(profils=profils)
+  ```
+
+### 🤖 Assistant
+
+⏵ Je repère le format des profils de langue (`_score_profil`, `_trigrammes`) et comment `Heuristique` les reçoit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"profils\" tools/bloc_linguistique.py | head -12; echo '=== _trigrammes/_score_profil ==='; grep -n \"def _trigrammes\\|def _score_profil\" -A 12 tools/bloc_linguistique.py | head -30; echo '=== Heuristique init ==='; sed -n '390,420p' tools/ … [100 caractères tronqués]`
+
+  ```
+139:# --------------------------------------------------------------------------- profils de langue
+156:def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30),
+159:    """Construit des profils de trigrammes par langue et un jeu de test tenu à l'écart.
+171:    profils: dict[str, dict] = {}
+181:        profils[langue] = {
+187:    return profils, tests
+197:def detecter_langue(texte: str, profils: dict[str, dict] | None = None,
+200:    if profils:
+202:        scores = {langue: _score_profil(tri, p["trigrammes"]) for langue, p in profils.items()}
+395:    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+398:        self.profils = profils
+406:        langue, conf, _ = detecter_langue(texte, self.profils, indice)
+=== _trigrammes/_score_profil ===
+146:def _trigrammes(texte: str) -> list[str]:
+147-    t = _normaliser(texte)
+148-    return [t[i:i + 3] for i in range(max(0, len(t) - 2))]
+149-
+150-
+151-def _profil(texte: str, top: int = 200) -> dict[str, int]:
+152-    c = collections.Counter(_trigrammes(texte))
+153-    return dict(c.most_common(top))
+154-
+155-
+156-def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30)
+… [2236 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je construis le banc de la frontière sur les 71 langues : script (graphème) et langue (LOO par trigrammes) contre la classe majoritaire — le POS n'est pas mesurable sur ces langues
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/qualifier_frontiere_71.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"qualifier_frontiere_71.py — la frontière heuristique sur les 71 langues du dépôt.\n\nLe contrat de L (docs/theorie/contrat-bloc-langue.md) demande une mesur … [6948 caractères tronqués]`
+
+  ```
+{"langues": 71, "concepts": 35, "labels": 1487}
+script {'justes': 71, 'total': 71, 'taux': 1.0, 'duree_s': 0.0078, 'duree_par_langue_ms': 0.11}
+langue {'justes': 203, 'total': 1486, 'taux': 0.1366, 'baseline': 0.0316}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure : **script 71/71 (1,0 ; 0,11 ms/langue)** mais **langue 203/1 486 = 0,137** contre une classe majoritaire à 0,032 — la frontière est nette ; j'écris la fiche
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nd=json.loads(pathlib.Path('reports/pensee-frontiere-71.json').read_text(encoding='utf-8'))\nfiche=pathlib.Path('reports/rapport-pensee-frontiere-71.md')\nfiche.write_text(f'''# L — la frontière sur les 71 langue … [5890 caractères tronqués]`
+
+  ```
+fiche 3932
+  T0 max : 3994 mots (budget 4 000)
+  592 fiches → reports/INDEX.md
+     · compteurs : en-cours.md dit 594 fichiers, le disque en a 595
+     · compteurs : en-cours.md dit 682 JSON, le disque en a 683
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 78, in <module>
+AssertionError: bullet L absent
+  ```
+
+### 🤖 Assistant
+
+⏵ La ligne L a été réécrite par une autre session ; je la retrouve et je l'ajoute au bon endroit, avec le compteur 595/683
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"bloc langue\\|L —\\|## Ce qui est en cours\" -A 6 docs/pilotage/en-cours.md | head -20; echo '---'; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Locate current L state area"}`
+
+  ```
+104:## Ce qui est en cours
+105-
+106-- **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
+107-- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
+108-- **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
+109-
+110-## Les chiffres de l'état
+---
+118:| fichiers / JSON de résultats | **594** / **682** | `reports/*.md` / `reports/*.json` |
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la ligne L et je compacte le bilan de 08 h pour rester sous 4 000 (T0 3 994)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '24,30p' docs/pilotage/en-cours.md", "description": "Read bilan line exact text"}`
+
+  ```
+> **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`
+> rejouée verte) ; **82e `porte-ressources`** validée. **N2 et S en pause** (00 h 25 / 20 h 40 ;
+> claims libérés) ; **B13** et **hub** actifs. Détail : [`journal/2026-11-03`](../../journal/2026-11-03/README.md).
+
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+
+- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='''> **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`\n> rejouée verte) ; **82e `porte-res … [1514 caractères tronqués]`

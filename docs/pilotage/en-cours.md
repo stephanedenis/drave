@@ -21,9 +21,7 @@
 > DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
 > (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API fournie** (`~/.config/drave/deepseek.key`).
 >
-> **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`
-> rejouée verte) ; **82e `porte-ressources`** validée. **N2 et S en pause** (00 h 25 / 20 h 40 ;
-> claims libérés) ; **B13** et **hub** actifs. Détail : [`journal/2026-11-03`](../../journal/2026-11-03/README.md).
+> **Bilan de 08 h** : 82 portes, 77/5 ; N2/S en pause ; B13 et hub actifs ; [journal](../../journal/2026-11-03/README.md).
 
 ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
 
@@ -106,6 +104,7 @@
 - **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
 - **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
 - **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
+- **L — le bloc langue** : contrat écrit ; **frontière 71 langues : script 1,0, langue 0,137 (baseline 0,032)**.
 
 ## Les chiffres de l'état
 
@@ -115,7 +114,7 @@
 |---|---|---|
 | portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **594** / **682** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **595** / **683** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) | `docs/pilotage/references-non-regression.md` |
 

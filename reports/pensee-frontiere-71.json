@@ -1,0 +1,320 @@
+{
+  "date": "2026-11-03 16:39 EST",
+  "lexique": "tools/jeux/lexique_multilingue.json",
+  "langues": 71,
+  "concepts": 35,
+  "labels": 1487,
+  "script": {
+    "justes": 71,
+    "total": 71,
+    "taux": 1.0,
+    "duree_s": 0.0078,
+    "duree_par_langue_ms": 0.11
+  },
+  "langue": {
+    "justes": 203,
+    "total": 1486,
+    "taux": 0.1366,
+    "classe_majoritaire": "zh",
+    "baseline": 0.0316,
+    "duree_s": 0.385,
+    "duree_par_label_ms": 0.259,
+    "detail": []
+  },
+  "par_langue": {
+    "ar": {
+      "labels": 30,
+      "justes": 11
+    },
+    "bn": {
+      "labels": 20,
+      "justes": 4
+    },
+    "ca": {
+      "labels": 31,
+      "justes": 3
+    },
+    "cs": {
+      "labels": 31,
+      "justes": 2
+    },
+    "da": {
+      "labels": 27,
+      "justes": 3
+    },
+    "de": {
+      "labels": 36,
+      "justes": 7
+    },
+    "el": {
+      "labels": 22,
+      "justes": 7
+    },
+    "en": {
+      "labels": 37,
+      "justes": 6
+    },
+    "eo": {
+      "labels": 33,
+      "justes": 10
+    },
+    "es": {
+      "labels": 35,
+      "justes": 3
+    },
+    "et": {
+      "labels": 25,
+      "justes": 2
+    },
+    "eu": {
+      "labels": 22,
+      "justes": 6
+    },
+    "fa": {
+      "labels": 26,
+      "justes": 4
+    },
+    "fi": {
+      "labels": 32,
+      "justes": 16
+    },
+    "fr": {
+      "labels": 38,
+      "justes": 6
+    },
+    "gl": {
+      "labels": 16,
+      "justes": 0
+    },
+    "he": {
+      "labels": 24,
+      "justes": 6
+    },
+    "hi": {
+      "labels": 16,
+      "justes": 0
+    },
+    "hr": {
+      "labels": 15,
+      "justes": 0
+    },
+    "hu": {
+      "labels": 26,
+      "justes": 6
+    },
+    "id": {
+      "labels": 20,
+      "justes": 2
+    },
+    "is": {
+      "labels": 14,
+      "justes": 0
+    },
+    "it": {
+      "labels": 30,
+      "justes": 5
+    },
+    "ja": {
+      "labels": 31,
+      "justes": 5
+    },
+    "ka": {
+      "labels": 14,
+      "justes": 2
+    },
+    "kk": {
+      "labels": 9,
+      "justes": 2
+    },
+    "ko": {
+      "labels": 28,
+      "justes": 4
+    },
+    "lt": {
+      "labels": 15,
+      "justes": 0
+    },
+    "lv": {
+      "labels": 21,
+      "justes": 1
+    },
+    "mk": {
+      "labels": 19,
+      "justes": 2
+    },
+    "ms": {
+      "labels": 16,
+      "justes": 0
+    },
+    "mt": {
+      "labels": 4,
+      "justes": 0
+    },
+    "nb": {
+      "labels": 28,
+      "justes": 1
+    },
+    "nl": {
+      "labels": 34,
+      "justes": 2
+    },
+    "nn": {
+      "labels": 16,
+      "justes": 4
+    },
+    "pl": {
+      "labels": 32,
+      "justes": 4
+    },
+    "pt": {
+      "labels": 33,
+      "justes": 1
+    },
+    "ro": {
+      "labels": 19,
+      "justes": 0
+    },
+    "ru": {
+      "labels": 36,
+      "justes": 4
+    },
+    "sk": {
+      "labels": 23,
+      "justes": 0
+    },
+    "sl": {
+      "labels": 30,
+      "justes": 2
+    },
+    "sq": {
+      "labels": 21,
+      "justes": 4
+    },
+    "sr": {
+      "labels": 41,
+      "justes": 4
+    },
+    "sv": {
+      "labels": 31,
+      "justes": 3
+    },
+    "sw": {
+      "labels": 11,
+      "justes": 3
+    },
+    "ta": {
+      "labels": 17,
+      "justes": 13
+    },
+    "th": {
+      "labels": 18,
+      "justes": 7
+    },
+    "tr": {
+      "labels": 29,
+      "justes": 2
+    },
+    "uk": {
+      "labels": 33,
+      "justes": 2
+    },
+    "ur": {
+      "labels": 14,
+      "justes": 0
+    },
+    "vi": {
+      "labels": 26,
+      "justes": 6
+    },
+    "zh": {
+      "labels": 47,
+      "justes": 0
+    },
+    "af": {
+      "labels": 20,
+      "justes": 2
+    },
+    "am": {
+      "labels": 4,
+      "justes": 0
+    },
+    "az": {
+      "labels": 15,
+      "justes": 1
+    },
+    "be": {
+      "labels": 23,
+      "justes": 3
+    },
+    "bs": {
+      "labels": 18,
+      "justes": 0
+    },
+    "cy": {
+      "labels": 14,
+      "justes": 4
+    },
+    "ga": {
+      "labels": 12,
+      "justes": 2
+    },
+    "hy": {
+      "labels": 16,
+      "justes": 2
+    },
+    "km": {
+      "labels": 3,
+      "justes": 0
+    },
+    "ky": {
+      "labels": 2,
+      "justes": 0
+    },
+    "lo": {
+      "labels": 1,
+      "justes": 0
+    },
+    "mn": {
+      "labels": 10,
+      "justes": 0
+    },
+    "ne": {
+      "labels": 10,
+      "justes": 0
+    },
+    "pa": {
+      "labels": 5,
+      "justes": 0
+    },
+    "si": {
+      "labels": 4,
+      "justes": 0
+    },
+    "so": {
+      "labels": 6,
+      "justes": 0
+    },
+    "uz": {
+      "labels": 13,
+      "justes": 0
+    },
+    "yo": {
+      "labels": 3,
+      "justes": 0
+    },
+    "zu": {
+      "labels": 6,
+      "justes": 2
+    }
+  },
+  "controle_negatif": {
+    "script": "le script est le niveau fort ; une erreur signalerait une langue à écriture mixte",
+    "langue": "le taux doit dépasser la classe majoritaire (0.0316) pour être utile ; en dessous, la détection est du hasard déguisé",
+    "frontiere": "le CPU tient le script ; la langue sur des libellés courts n'est pas fiable — c'est le résidu pour le réseau ou l'indice"
+  },
+  "limites": [
+    "POS non mesuré : le gold POS est FR/EN, les 71 langues n'en ont pas",
+    "libellés courts (quelques mots) : la détection de langue y est défavorisée",
+    "les écritures de chaque langue sont une table (à relire)"
+  ]
+}

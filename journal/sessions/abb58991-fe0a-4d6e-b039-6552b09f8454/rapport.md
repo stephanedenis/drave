@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 24.4 h |
 | Tours | 169 |
-| Messages | 1195 |
-| Appels d'outils | 975 |
+| Messages | 1200 |
+| Appels d'outils | 980 |
 | Fichiers touchés | 49 |
-| Commandes | 791 |
+| Commandes | 796 |
 | Sous-agents | 0 |
-| Commits | 102 |
+| Commits | 103 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4398,17 +4398,22 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 169 — continue
 
-*5 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Locate 71-language lexicon data
 - bash — Inspect lexicon JSON structure and language list
 - bash — Inspect lexicon concepts and profile builder
 - bash — Read profiles format and heuristic init
+- bash — Build and run 71-language frontier bench
+- bash — Write frontier fiche and update state/roadmap
+- bash — Locate current L state area
+- bash — Read bilan line exact text
+- bash — Commit 71-language frontier fact
 
 **Synthèse produite :**
 
-⏵ Je repère le format des profils de langue (`_score_profil`, `_trigrammes`) et comment `Heuristique` les reçoit
+⏵ J'ajoute la ligne L et je compacte le bilan de 08 h pour rester sous 4 000 (T0 3 994)
 
 ## 3. Travail accompli
 
@@ -4508,7 +4513,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 751 autres
+- … et 756 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4731,4 +4736,5 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
 - L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --fo
+- L — LA FRONTIÈRE SUR LES 71 LANGUES : SCRIPT 71/71 (1,0), LANGUE 0,137 CONTRE 0,032" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
 

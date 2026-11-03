@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,6 +19,7 @@
 | 14:02 | `4f1de240` | L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE | `en-cours.md`, `roadmap.md`, `README.md` (+21) |
 | 14:05 | `48d79ff3` | L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ | `en-cours.md`, `README.md`, `attention.md` (+16) |
 | 16:26 | `2b3595c1` | S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE | `en-cours.md`, `roadmap.md`, `README.md` (+26) |
+| 16:38 | `08418b55` | S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS, VERDICT ; LE BANC PEUT REPRENDRE | `en-cours.md`, `roadmap.md`, `README.md` (+23) |
 
 ## Chiffres du jour
 
