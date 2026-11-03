@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 21.7 h |
+| Durée | 21.8 h |
 | Tours | 9 |
-| Messages | 292 |
-| Appels d'outils | 296 |
+| Messages | 295 |
+| Appels d'outils | 298 |
 | Fichiers touchés | 14 |
-| Commandes | 220 |
+| Commandes | 221 |
 | Sous-agents | 0 |
 | Commits | 18 |
 | Compactages de contexte | 0 |
@@ -340,7 +340,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 
 ### Tour 9 — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxiq … [105 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Inspect partial human validations and notes
 - bash — Stop bank server and export partial validated bank
@@ -356,11 +356,30 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - bash — Trim S state to T0 budget
 - bash — Final trim and check S files for commit
 - bash — Stage partial bank fact in alternate index
-- … et 4 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Le retour humain est un résultat : moins de 20 % validé, arrêt sur la profondeur de l'arbre et les référents. Je regarde les verdicts déjà écrits, puis je corrige ces deux bloqueurs avant de redemander une validation.
+⏵ C'est un résultat, pas un échec : la banque s'arrête, et le pourquoi est mesuré et nommé. Je passe à l'arbre réel puis aux référents avant de te redemander quoi que ce soit.
+
+**Le fait, tel qu'il est**
+
+- **142 verdicts sur 71 phrases** ; **81 lectures acceptées sur 65 phrases** (71 `resolu`, 10 `compatible`, 1 `double sens`), **60 `exclu`** ; export partiel **81 lignes**, SHA `2d27b712…`, spans et restitution vérifiés.
+- Ton retour est cité verbatim dans la fiche : « il manque trop souvent de profondeur » et « les référents ne semblent pas résolus avant que je tranche ».
+- Ce que l'outil montrait : **277/369 candidats** de profondeur maximale **1** (82 de 2, 10 de 0) et **170/207 phrases** avec un pronom/possessif — **371 formes, 0 antécédent proposé**. La note p002 (« l'homme au télescope ») est conservée.
+- La banque est **partielle**, pas fausse ; `donnees/validations.jsonl` garde tout. Le serveur est arrêté.
+
+**Committé et poussé**
+
+- Sous-module **`51b6aaf`** : validations, `mesure_arbre.py`, `mesure-arbre.json`, README.
+- Principal **`727c4860`** : fiche [`banque partielle`](reports/rapport-s-banque-partielle.md), manifeste, état, roadmap, plan actif ; `origin/master` à jour.
+- **47 tests** restent verts ; la règle 11 est respectée côté S (aucun serveur local, `llm.py` → API DeepSeek).
+
+**La prochaine étape, dans cet ordre**
+
+1. **Arbre réel** : `parent`/`enfants`/`profondeur` explicites dans le générateur, rendu indenté — et mesure de la profondeur sur les 200 phrases (le chiffre actuel est 75 % à 1).
+2. **Référents** : proposer les antécédents des pronoms/possessifs (GN, sujet, tête de GP), les faire **résoudre avant** le verdict de structure, et les enregistrer avec le verdict.
+3. Ensuite seulement, **reprise de la validation** des 200 phrases sur l'outil corrigé, puis export de la banque complète ; `h050`/`h053` restent les limites de l'analyseur, après.
 
 ## 3. Travail accompli
 
@@ -425,7 +444,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 180 autres
+- … et 181 autres
 
 ## 4. Mesures et résultats marquants
 

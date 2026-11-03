@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 21.7 h |
+| Durée | 21.8 h |
 | Tours | 165 |
-| Messages | 1152 |
-| Appels d'outils | 940 |
+| Messages | 1156 |
+| Appels d'outils | 944 |
 | Fichiers touchés | 48 |
-| Commandes | 760 |
+| Commandes | 764 |
 | Sous-agents | 0 |
-| Commits | 95 |
+| Commits | 97 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4230,15 +4230,18 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 165 — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour r … [763 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Check gold pair order for link bench
 - bash — Verify original link bench definition
 - bash — Add forward link and measure both directions
+- bash — Write two-direction link correction fiche
+- bash — Commit two-direction link correction
+- bash — Read current en-cours line and HEAD
 
 **Synthèse produite :**
 
-⏵ Le banc d'origine ne fait que **5 paires précédentes** (5/5) ; mon extension de 10 paires comparait le lien à 5 paires où l'assertion est **après** la question. Je construis le lien **avant** (miroir) et je mesure les deux sens
+⏵ La ligne réelle est `voisin 5/5, parité …` ; je corrige en `voisin 5/5 arr.+av.`, je passe le compteur à 591/680 et je commite
 
 ## 3. Travail accompli
 
@@ -4337,7 +4340,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 720 autres
+- … et 724 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4539,4 +4542,6 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git show 
+- L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}
+- L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}
 

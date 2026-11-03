@@ -6000,3 +6000,56 @@ en-cours S banque HEAD: 3
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ\" -m \"La validation humaine s'arrête après 142 verdicts/71 phrases : 81 le … [590 caractères tronqués]`
+
+  ```
+[master 727c4860] S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ
+ 14 files changed, 312 insertions(+), 35 deletions(-)
+ create mode 100644 reports/rapport-s-banque-partielle.md
+ create mode 100644 reports/s-banque-validee.json
+727c4860 S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ
+229c5bf1 L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -4; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; echo \"=== S HEAD ===\"; git show HEAD:reports/rapport-s-banqu … [136 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   69bfddba..727c4860  master -> master
+exit=0
+727c48609d1c8f6e71ab405d6072d16fdf328c8b	refs/heads/master
+51b6aaf3171aea43db852877767bb2b3e449a38c	refs/heads/master
+=== S HEAD ===
+# S — La banque s'arrête à 81 lectures / 65 phrases : l'arbre manque de profondeur, les référents ne sont pas résolus
+
+160000 commit 51b6aaf3171aea43db852877767bb2b3e449a38c	tools/structures
+  ```
+
+- **todo_write** `{"todos": [{"content": "Banque : 142 verdicts/71 phrases, 81 lectures/65, arrêt humain mesuré (arbre 1, référents 0) — committé/poussé", "status": "completed"}, {"content": "Fiche banque partielle, manifeste, état, roadmap, plan actif — committés/poussés", "status": "completed"}, {"content": "Arbre  … [472 caractères tronqués]`
+
+  ```
+Updated todo list: 3 pending, 1 in progress, 2 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est un résultat, pas un échec : la banque s'arrête, et le pourquoi est mesuré et nommé. Je passe à l'arbre réel puis aux référents avant de te redemander quoi que ce soit.
+
+**Le fait, tel qu'il est**
+
+- **142 verdicts sur 71 phrases** ; **81 lectures acceptées sur 65 phrases** (71 `resolu`, 10 `compatible`, 1 `double sens`), **60 `exclu`** ; export partiel **81 lignes**, SHA `2d27b712…`, spans et restitution vérifiés.
+- Ton retour est cité verbatim dans la fiche : « il manque trop souvent de profondeur » et « les référents ne semblent pas résolus avant que je tranche ».
+- Ce que l'outil montrait : **277/369 candidats** de profondeur maximale **1** (82 de 2, 10 de 0) et **170/207 phrases** avec un pronom/possessif — **371 formes, 0 antécédent proposé**. La note p002 (« l'homme au télescope ») est conservée.
+- La banque est **partielle**, pas fausse ; `donnees/validations.jsonl` garde tout. Le serveur est arrêté.
+
+**Committé et poussé**
+
+- Sous-module **`51b6aaf`** : validations, `mesure_arbre.py`, `mesure-arbre.json`, README.
+- Principal **`727c4860`** : fiche [`banque partielle`](reports/rapport-s-banque-partielle.md), manifeste, état, roadmap, plan actif ; `origin/master` à jour.
+- **47 tests** restent verts ; la règle 11 est respectée côté S (aucun serveur local, `llm.py` → API DeepSeek).
+
+**La prochaine étape, dans cet ordre**
+
+1. **Arbre réel** : `parent`/`enfants`/`profondeur` explicites dans le générateur, rendu indenté — et mesure de la profondeur sur les 200 phrases (le chiffre actuel est 75 % à 1).
+2. **Référents** : proposer les antécédents des pronoms/possessifs (GN, sujet, tête de GP), les faire **résoudre avant** le verdict de structure, et les enregistrer avec le verdict.
+3. Ensuite seulement, **reprise de la validation** des 200 phrases sur l'outil corrigé, puis export de la banque complète ; `h050`/`h053` restent les limites de l'analyseur, après.
+

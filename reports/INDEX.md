@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **586 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **588 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -418,6 +418,7 @@
 | [rapport-pensee-lien-auto-fixe.md](rapport-pensee-lien-auto-fixe.md) | B13 — le lien automatique réparé : 5/5 après le réordonnancement |
 | [rapport-pensee-lien-auto.md](rapport-pensee-lien-auto.md) | B13 — le lien automatique : 0/5, le sujet ne suffit pas |
 | [rapport-pensee-lien-coref.md](rapport-pensee-lien-coref.md) | B13 — la coréférence comme lien : 62/116, la moitié des antécédents retrouvés |
+| [rapport-pensee-lien-deux-sens.md](rapport-pensee-lien-deux-sens.md) | B13 — contre-fiche : le « plafond 5/10 » était un artefact — 5/5 en arrière, 4/5 en avant (9/10) |
 | [rapport-pensee-lien-gv.md](rapport-pensee-lien-gv.md) | B13 — un seul GV : les juxtapositions tombent, les paires restent 5/10 |
 | [rapport-pensee-lien-inverse.md](rapport-pensee-lien-inverse.md) | B13 — la forme inversée : `_sujet` réparé, `_verbe` reste aveugle, les 10 paires restent 5/10 |
 | [rapport-pensee-lien-repare.md](rapport-pensee-lien-repare.md) | B13 — le lien réparé : la paire (sujet + verbe) avant la proximité, auto 2/5 → 5/5 |

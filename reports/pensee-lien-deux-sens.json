@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-03 13:45 EST",
+  "objet": "correction du « plafond 5/10 » : les 10 paires se répartissent en 5 arrière et 5 avant",
+  "constat": "les 5 paires r408-r412 ont l'assertion APRÈS la question (pos 417 > 407) : le lien arrière ne peut pas les trouver par construction ; le 0/5 était attendu, pas une limite du lien",
+  "mesures": {
+    "arriere_5_paires": {
+      "paires": 5,
+      "justes": 5,
+      "taux": 1.0
+    },
+    "avant_5_paires": {
+      "paires": 5,
+      "justes": 4,
+      "taux": 0.8
+    },
+    "contextuel": {
+      "paires": 5,
+      "justes": 5.0,
+      "taux": 1.0
+    }
+  },
+  "detail_avant": [
+    {
+      "question": "r408",
+      "assertion": "r423",
+      "question_avant": true,
+      "trouve": "r423",
+      "juste": true,
+      "langue_question": "fr",
+      "langue_assertion": "fr"
+    },
+    {
+      "question": "r409",
+      "assertion": "r424",
+      "question_avant": true,
+      "trouve": "r424",
+      "juste": true,
+      "langue_question": "fr",
+      "langue_assertion": "fr"
+    },
+    {
+      "question": "r410",
+      "assertion": "r425",
+      "question_avant": true,
+      "trouve": "r425",
+      "juste": true,
+      "langue_question": "fr",
+      "langue_assertion": "fr"
+    },
+    {
+      "question": "r411",
+      "assertion": "r426",
+      "question_avant": true,
+      "trouve": "r426",
+      "juste": true,
+      "langue_question": "fr",
+      "langue_assertion": "fr"
+    },
+    {
+      "question": "r412",
+      "assertion": "r427",
+      "question_avant": true,
+      "trouve": null,
+      "juste": false,
+      "langue_question": "fr",
+      "langue_assertion": "en"
+    }
+  ],
+  "echec_unique": {
+    "paire": "r412 → r427",
+    "raison": "paire croisée fr/en du gold : « Ne lis-tu pas ? » (fr) → « You come tomorrow. » (en) ; sujet « tu » ≠ « You », verbe « lis » ≠ « come »"
+  },
+  "controle_negatif": {
+    "arriere_sur_avant": "0/5 par construction (assertion après la question)",
+    "avant_sur_arriere": "0/5 par construction (assertion avant la question)",
+    "contextuel": "5/5 — la difficulté est le sens du lien, pas la réponse"
+  },
+  "conclusion": "le lien de surface ne plafonne pas à 5/10 : il fait 5/5 en arrière et 4/5 en avant (9/10 au total) ; la 10e paire est un défaut du gold (croisée fr/en)"
+}

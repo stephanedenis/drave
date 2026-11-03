@@ -284,6 +284,54 @@ def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict |
     return repli
 
 
+def trouver_suivante(question: dict, phrases: list[dict], bloc=None) -> dict | None:
+    """Le lien **avant** : la phrase suivante de la paire (même sujet, verbe, adverbe).
+
+    Miroir de `trouver_precedente` : r408 « Ne viens-tu pas demain ? » est suivi de r423
+    « Tu viens demain. » — l'assertion vient **après** la question dans le gold. Le lien
+    arrière ne peut pas la trouver par construction ; celui-ci regarde devant.
+    """
+    bloc = bloc or bl.Heuristique()
+    a = bloc.analyser(question["texte"], question["langue"])
+    sujet = _sujet(a)
+    verbe = _verbe(a)
+    if not sujet:
+        return None
+    idx = next((i for i, p in enumerate(phrases) if p.get("id") == question.get("id")), -1)
+    acte_q = _acte(a)
+    repli = None
+    for p in (phrases[idx + 1:] if 0 <= idx < len(phrases) - 1 else []):
+        b = bloc.analyser(p["texte"], p["langue"])
+        s = _sujet(b)
+        if not (s and _normaliser_egal(s, sujet)):
+            continue
+        if acte_q == "question" and _acte(b) != "assertion":
+            continue
+        if acte_q == "question" and not _simple(b):
+            continue
+        if acte_q == "question" and (_adverbes(b) ^ _adverbes(a)):
+            continue
+        v = _verbe(b)
+        if verbe and v and _normaliser_egal(v, verbe):
+            return p
+        if repli is None:
+            repli = p
+    return repli
+
+
+def fidelite_lien_avant(phrases: list[dict], bloc=None) -> dict:
+    """Le taux de paires (question, assertion suivante) retrouvées par le lien avant."""
+    paires = [(f"r{408 + k}", f"r{423 + k}") for k in range(5)]
+    par_id = {p["id"]: p for p in phrases}
+    justes = 0
+    for qid, pid in paires:
+        if qid not in par_id or pid not in par_id:
+            continue
+        tr = trouver_suivante(par_id[qid], phrases, bloc)
+        justes += bool(tr and tr["id"] == pid)
+    return {"paires": len(paires), "justes": justes, "taux": round(justes / max(1, len(paires)), 4)}
+
+
 def _normaliser_egal(a: str, b: str) -> bool:
     n = lambda s: " ".join(str(s).lower().split())
     return n(a) == n(b)
