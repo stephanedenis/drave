@@ -12683,3 +12683,48 @@ trim ok
   ```
 
 - **bash** `{"command": "ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git status --short docs/pilotage/en-cours.md; git commit --only -m \"NUIT — T0 REVIENT SOUS 4 000 : LA LIGNE CACHE/VOISIN RESSERRÉE\" -m \"La ligne du gold réel + cache + voisin 2/5 dépassait T0 de 2 mots ; (seuils ...) → (…) et «  … [227 caractères tronqués]`
+
+  ```
+pas de lock
+MM docs/pilotage/en-cours.md
+[master 3a4dd4af] NUIT — T0 REVIENT SOUS 4 000 : LA LIGNE CACHE/VOISIN RESSERRÉE
+ 16 files changed, 175 insertions(+), 42 deletions(-)
+ create mode 100644 journal/2026-11-03/distribue.md
+3a4dd4af NUIT — T0 REVIENT SOUS 4 000 : LA LIGNE CACHE/VOISIN RESSERRÉE
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 01 h 02 — T0 resserré après le voisin 2/5\n\n- Commit **`3a4dd4af`** : la ligne du gold réel (cache + voisin 2/5) est resserrée — **T0 sous\n  4 000**. Le fait T132/T133 (`c41528b7`) : **lien auto 2/5, lien contextuel 5/5** sur les\n  distracteur … [142 caractères tronqués]`
+
+  ```
+log-ok
+01:02:41
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 48 : le contexte tranche le voisin (5/5 contre 2/5), T0 resserré
+
+- **L/B13** : `c41528b7` — sur les distracteurs **r428–r432**, le **lien auto** donne **2/5**, le **lien contextuel 5/5** : le contexte tranche la bonne réponse contre le voisin (bloc **T132/T133**). Fiche/JSON comptées (**577 / 662 / 82**).
+- **T0** : la ligne du gold réel (cache + voisin) dépassait de 2 mots ; resserrée et committée (`3a4dd4af`), **T0 sous 4 000**.
+- **État** : revue ✅, en-cours ✅, T1 2 428, porte stricte ✅, tableau ✅ ; runs N2 en cours (2 h 37 et 1 h 06).
+
+La veille continue : suivi des fiches N2, des runs et du **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 54
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 49/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 49 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`

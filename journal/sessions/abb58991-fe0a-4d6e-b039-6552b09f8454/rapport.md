@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 8.8 h |
 | Tours | 152 |
-| Messages | 1041 |
-| Appels d'outils | 855 |
+| Messages | 1042 |
+| Appels d'outils | 856 |
 | Fichiers touchés | 48 |
-| Commandes | 681 |
+| Commandes | 682 |
 | Sous-agents | 0 |
-| Commits | 74 |
+| Commits | 75 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3785,7 +3785,7 @@ La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, di
 
 ### Tour 152 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Locate anaphora neighbor bench
 - read
@@ -3795,10 +3795,11 @@ La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, di
 - bash — Write neighbor fiche and state line
 - bash — Commit neighbor-answer fact
 - bash — Shorten state and commit
+- bash — Final shorten and commit state
 
 **Synthèse produite :**
 
-⏵ Round 150 : « la bonne réponse, pas le voisin » committé (`c41528b7`, 17 fichiers) ; il reste T0 à 4 004 (4 mots de trop) — je raccourcis et je commite l'état
+⏵ Round 150 : T0 encore à 4 002 ; je retire 3 mots de la ligne et je commite l'état (le lock a libéré)
 
 ## 3. Travail accompli
 
@@ -3897,7 +3898,7 @@ La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, di
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 641 autres
+- … et 642 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4073,4 +4074,5 @@ La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, di
 - ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 5/5 (DISTRACTEURS r428–r432)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --for
 - ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1; python3 tools/revue_documenta
+- ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

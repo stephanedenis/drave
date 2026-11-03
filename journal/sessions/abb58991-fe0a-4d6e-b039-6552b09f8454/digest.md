@@ -21391,3 +21391,20 @@ c41528b7 L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 
 ⏵ Round 150 : « la bonne réponse, pas le voisin » committé (`c41528b7`, 17 fichiers) ; il reste T0 à 4 004 (4 mots de trop) — je raccourcis et je commite l'état
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 2/5 vs 5/5**'\nnew=' ; voisin 2/5**'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encoding='utf-8')\nprint('ok') … [368 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4002 mots (budget 4 000)
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+EXIT=1
+c41528b7 L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 5/5 (DISTRACTEURS r428–r432)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : T0 encore à 4 002 ; je retire 3 mots de la ligne et je commite l'état (le lock a libéré)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 2/5**'\nnew=' ; voisin 2/5'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encoding='utf-8')\nprint('ok')\nPY\npyt … [471 caractères tronqués]`
