@@ -40,6 +40,17 @@ class TestPolitiqueLLM(unittest.TestCase):
         self.assertIn("(1,3)", invite)
         self.assertNotIn("(1,3),", invite)
 
+    def test_porte_bouge(self):
+        from tools.pensee.operateurs import _etat_pb
+
+        p = PolitiqueLLM("faux", jeu="porte_bouge", transport=lambda *_: "bas")
+        etat = _etat_pb(0, 0, False, 3)
+        self.assertEqual(p.propose(etat, P_BUT), "bas")
+        invite = p._invite(etat, P_BUT)
+        self.assertIn("porte bouge", invite.lower())
+        self.assertIn("(1,3)", invite)
+        self.assertIn("phase", invite)
+
     def test_labyrinthe(self):
         p = PolitiqueLLM("faux", transport=lambda *_: "droite")
         self.assertEqual(p.propose(LABYRINTHE.initial(), L_BUT), "droite")

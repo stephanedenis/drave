@@ -1,0 +1,172 @@
+{
+  "date": "2026-11-02 21:16 EST",
+  "modele": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+  "endpoint": "http://127.0.0.1:18082",
+  "probleme": {
+    "nom": "labyrinthe_porte_bouge",
+    "portes": [
+      [
+        3,
+        3
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "but": [
+      4,
+      4
+    ],
+    "phase": "t % 6, porte selon _d_bouge(t) (période 3)",
+    "regle": "depuis une case voisine, la sonde ouvre la porte du moment",
+    "budget": 200
+  },
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeux": [
+      "porte_bouge",
+      "labyrinthe"
+    ],
+    "contrainte": "grammaire GBNF, quatre directions"
+  },
+  "apprise": {
+    "classe": "PolitiqueAppriseBouge",
+    "episodes": 1000,
+    "etats_q": 236,
+    "seule_but": true,
+    "seule_pas": 10
+  },
+  "mesures": {
+    "oracle": {
+      "noeuds": 28,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 5
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 58.0,
+      "appels": 7,
+      "budget": 26,
+      "politique": "manhattan",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.004
+    },
+    "aveugle": {
+      "noeuds": 25,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 2
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 43.0,
+      "appels": 7,
+      "budget": 24,
+      "politique": "aveugle",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.004
+    },
+    "hasard": {
+      "noeuds": 27,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 4
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 53.0,
+      "appels": 7,
+      "budget": 25,
+      "politique": "hasard",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.004
+    },
+    "llm_porte_bouge": {
+      "noeuds": 25,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 2
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 43.0,
+      "appels": 7,
+      "budget": 24,
+      "politique": "llm",
+      "score": 1.0,
+      "latence_s": 13.433,
+      "erreurs": 0,
+      "duree_s": 13.438
+    },
+    "llm_labyrinthe": {
+      "noeuds": 28,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 5
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 58.0,
+      "appels": 7,
+      "budget": 26,
+      "politique": "llm",
+      "score": 1.0,
+      "latence_s": 13.312,
+      "erreurs": 0,
+      "duree_s": 13.318
+    }
+  },
+  "seuils": {
+    "oracle_but": true,
+    "oracle_sonde": true,
+    "aveugle_non": false,
+    "hasard_non": false,
+    "apprise_but": true,
+    "llm_but": true,
+    "llm_sonde": true,
+    "labyrinthe_non": false,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": false,
+  "limites": [
+    "La porte bouge toutes les 3 pas (t % 6) ; le prompt donne la phase et la porte.",
+    "Le hasard peut ouvrir une porte ; le contrôle propre est l'aveugle et le labyrithe.",
+    "La Q-table `PolitiqueAppriseBouge` (1000 épisodes, T34) est la référence sans A* ; elle passe 5/5.",
+    "L'A* explore ; le nombre de nœuds dépend du tie-breaking ; le but et la sonde sont les mesures.",
+    "La latence inclut la file du serveur ; CPU seulement ; une graine, température 0."
+  ]
+}

@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.8 h |
+| Durée | 5.0 h |
 | Tours | 8 |
-| Messages | 449 |
-| Appels d'outils | 478 |
+| Messages | 456 |
+| Appels d'outils | 485 |
 | Fichiers touchés | 22 |
-| Commandes | 300 |
+| Commandes | 305 |
 | Sous-agents | 0 |
 | Commits | 19 |
 | Compactages de contexte | 0 |
@@ -268,7 +268,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 8 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Check pass completion and commits
 - bash — Check running jobs and claims
@@ -276,6 +276,11 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Check GPU thermal, load and disk
 - bash — Log resource and thermal checkpoint
 - job_output
+- bash — Check pass current gate
+- bash — Diagnose the new porte-tableaux red
+- bash — Inspect the broken n2-fenetre link
+- bash — Log the transient red
+- bash — Check pass near completion
 
 **Synthèse produite :**
 
@@ -352,7 +357,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 260 autres
+- … et 265 autres
 
 ## 4. Mesures et résultats marquants
 

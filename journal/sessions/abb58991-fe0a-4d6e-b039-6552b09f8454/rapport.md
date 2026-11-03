@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 4.9 h |
+| Durée | 5.0 h |
 | Tours | 12 |
-| Messages | 462 |
-| Appels d'outils | 567 |
-| Fichiers touchés | 39 |
-| Commandes | 416 |
+| Messages | 474 |
+| Appels d'outils | 579 |
+| Fichiers touchés | 41 |
+| Commandes | 425 |
 | Sous-agents | 0 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -498,15 +498,27 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 
 ### Tour 12 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Find 138 in chantiers and plan-travail
 - bash — Align chantiers/plan-travail to 140 and check
 - bash — Commit B13 140 state alignment
+- bash — Inspect stochastic and window door availability
+- bash — Read STO problem, registry and policies
+- bash — Read moving door t34 and state helpers
+- bash — Add porte_bouge prompt and check phases
+- bash — Add porte_bouge test and run
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_bouge_drvm.py`
+- bash — Run moving door qualification
+- job_output
+- bash — Extract moving door results
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-bouge.md`
+- bash — Apply moving door state and checks
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ État à 566 (fiche N2 concurrente), puis commit de l'alignement ; j'enchaîne sur la porte stochastique/fenêtre
+⏵ T0 3 996, revue 567/652 ; le lien cassé est la fiche N2 concurrente. Je commite la porte qui bouge
 
 ## 3. Travail accompli
 
@@ -553,6 +565,8 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 | `/home/stephane/GitHub/Qtrinet/reports/b13-porte-138.json` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/pensee/autotest.py` | 0 | 2 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/miroir.py` | 0 | 1 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_bouge_drvm.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-bouge.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -596,7 +610,7 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 376 autres
+- … et 385 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -677,6 +691,11 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - **T9** `3f74fe83 20:08:57 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
 - **T9** `3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
 - **T9** `410246       00:36 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, datetime p=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md`
+- **T12** `558:    """Le bruit variable : la politique entraînée à 80 % tient de 50 % à 95 %."""`
+- **T12** `567:    return all(r[1] for r in res), (f"bruit 50–95 % : {sum(1 for r in res if r[1])}/{len(res)} "`
+- **T12** `"sonde": Operateur("sonde", "neuronal", 5.0, sonde_p_sto, "la politique tente la porte (80 %)"),`
+- **T12** `884-    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_p_sto, "la politique tente la porte (80 %)"),`
+- **T12** `return all(r[1] for r in res), (f"bruit 50–95 % : {sum(1 for r in res if r[1])}/{len(res)} "`
 
 ## 5. Erreurs rencontrées
 
@@ -703,4 +722,5 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]
 - ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT" 2>&1 | tail -6; echo 
 

@@ -6843,3 +6843,122 @@ porte-prechargement 0 175
 ⏵ La 82e porte-ressources est verte ; j'attends la fin de la passe pour intégrer son verdict.
 
 - **job_output** `{"job_id": "bash-172", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 : porte sessions/claims au vert, 82e porte verte ; la passe finit ses dernières portes.
+
+**Liste DSH** : 3 faites · 2 en cours (passe, sessions) · 2 en attente (intégration du verdict, bilan 08 h).
+
+**Fait ce round**
+
+- **`sessions.py` lit le registre** : le N2 tourne depuis 53 min (R1.2-1024) et son heartbeat de plan était périmé → avec le claim `0733c5bb` actif, c'est un **mandat long** (avertissement), plus une erreur stricte ; un mandat **sans claim** reste rouge. Autotest **6 cas** ; `porte-sessions` verte ; commit **`b1c0bcda`**.
+- **82e porte `porte-ressources`** : testée verte (autotest 9 cas, registre cohérent, avertissements stockage/NUMA non fatals). Le fichier est encore `??` : l'autre session le commitera ; l'`en-cours` dit déjà **82 portes**.
+- **Revue** : 564 fiches, 650 JSON, 119 docs, **82 portes** — ✅. **T0** : **3 984/4 000** — ✅.
+- **État et sessions** : S 6 min, hub 7, Pensée 7, N2 53 + claim ; quatre actives, D/R/A close. Le registre des ressources tient les quatre claims.
+
+**La passe** : à `porte-prechargement`/`porte-profondeur`, il reste ~15 portes dont `porte-vision` (~9 min) ; `porte-sessions` passera avec le claim N2. Le job `bash-172` attend la fin ; le prochain round intégrera le verdict (références, `en-cours`, roadmap, journal, commit).
+
+**Goal actif**. Prochain round : verdict de la passe → intégration → suivi des sessions → bilan 08 h.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 2 : je vérifie si la passe est finie et je relève l'état des quatre sessions avant d'intégrer.
+
+- **job_output** `{"job_id": "bash-172", "timeout_ms": 120000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heure ==\" && date '+%T' && echo \"== passe ==\" && tail -6 work/portes/passe-1102-19h32/registre.txt 2>/dev/null && echo \"--- rouges\" && awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt 2>/dev/null && echo \"--- f … [464 caractères tronqués]`
+
+  ```
+== heure ==
+21:15:47
+== passe ==
+porte-sessions 0 1
+porte-speculatif 0 70
+porte-tableaux 1 1
+porte-tokenizer-kimi 0 8
+porte-topologie 0 100
+porte-trace 0 28
+--- rouges
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+porte-reparti-moteur 1 51
+porte-tableaux 1 1
+--- fin
+porte-trace 0 28
+    PID     ELAPSED COMMAND
+ 164366    01:43:55 bash
+
+== git ==
+335e1737 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+6532541c B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432)
+66826ed5 NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)
+efdbbf40 B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT
+ M docs/methode/portes.md
+ M reports/rapport-s-analyseur-roles.md
+ M reports/rapport-s-corpus-reel.md
+ M reports/s-banque-structures.json
+ M tools/pensee/operateurs.py
+ M tools/structures
+ M tools/tests/test_pensee_politique.py
+?? reports/rapport-n2-fenetre.md
+
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  80 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext
+… [977 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe a une **nouvelle rouge** : `porte-tableaux` (1 s). Je lis son journal et les docs modifiés avant d'intégrer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== log porte-tableaux ==\" && tail -30 work/portes/passe-1102-19h32/porte-tableaux.log 2>/dev/null; echo; echo \"== diff docs/methode/portes.md ==\" && git diff -- docs/methode/portes.md | head -60; echo; echo \"== docs modifi … [194 caractères tronqués]`
+
+  ```
+== log porte-tableaux ==
+  ✅ 1572 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2718 examinés) :
+     reports/rapport-n2-fenetre.md → n2-fenetre.json
+
+== diff docs/methode/portes.md ==
+diff --git a/docs/methode/portes.md b/docs/methode/portes.md
+index 3f1ca8c5..754e3993 100644
+--- a/docs/methode/portes.md
++++ b/docs/methode/portes.md
+@@ -14,6 +14,8 @@ Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêt
+ `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 06 h) a donné
+ **76 vertes, 5 rouges** ; la liste et le diagnostic sont dans
+ [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
++La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), a été ajoutée le
++02/11 au soir ; elle sera comptée à la prochaine passe (**81 → 82**).
+ 
+ ## Où est le registre (et comment lire le verdict)
+ 
+
+== docs modifiés porteurs de tableaux ==
+ M docs/methode/portes.md
+  ```
+

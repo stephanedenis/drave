@@ -11527,3 +11527,315 @@ EN-COURS: 1610
 ⏵ État à 566 (fiche N2 concurrente), puis commit de l'alignement ; j'enchaîne sur la porte stochastique/fenêtre
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('| fichiers / JSON de résultats | **565** / **651** |','| fichiers / JSON de résultats | **566** / **651** |')\np.write_text(t, … [434 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 566 fiche(s) · 651 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ docs/pilotage/chantiers.md    | 8 ++++----
+ docs/pilotage/en-cours.md     | 2 +-
+ docs/pilotage/plan-travail.md | 5 ++---
+ 3 files changed, 7 insertions(+), 8 deletions(-)
+  ✅ index : aucun fait stagé sans état
+[master 335e1737] ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+ 20 files changed, 236 insertions(+), 43 deletions(-)
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ État aligné partout (revue 566/651 verte) ; j'inspecte la porte **stochastique** (`_etat_pb`) et la **fenêtre** (`_etat_pw`/`attendre`) pour choisir le test suivant
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"PORTE_BRUIT\\|PORTE_FENETRE\\|REGISTRE_PB\\|REGISTRE_PW\\|_etat_pb\\|_etat_pw\\|def attendre\\|LABYRINTHE_PORTE_STO\" tools/pensee/operateurs.py | head -20; echo '=== PROBLEMES ==='; grep -n \"PROBLEMES\" -A 20 tools/pensee/operateurs.py | t … [186 caractères tronqués]`
+
+  ```
+887:LABYRINTHE_PORTE_STO = Probleme(
+2602:def _etat_pb(x: int, y: int, open_: bool, t: int, parent: str | None = None,
+2641:    return [_etat_pb(nx, ny, o, t + 1, e.empreinte(), e.profondeur + profondeur)]
+2681:REGISTRE_PB = Registre({
+2689:    initial=lambda: _etat_pb(0, 0, False, 0),
+2690:    operateurs={n: o.applique for n, o in REGISTRE_PB.operateurs.items()},
+2751:        e = _etat_pb(cle[0], cle[1], cle[2], cle[3])
+2934:def _etat_pw(x: int, y: int, t: int, parent: str | None = None,
+2965:    return [_etat_pw(nx, ny, t + 1, e.empreinte(), e.profondeur + profondeur)]
+2976:def attendre(e: Etat, _p: dict | None = None) -> list[Etat]:
+2978:    return [_etat_pw(x, y, t + 1, e.empreinte(), e.profondeur + 1)]
+2995:    return [_etat_pw(nx, ny, t + 1, e.empreinte(), e.profondeur + 1)]
+3012:REGISTRE_PW = Registre({
+3019:LABYRINTHE_PORTE_FENETRE = Probleme(
+3021:    initial=lambda: _etat_pw(0, 0, 0),
+3022:    operateurs={n: o.applique for n, o in REGISTRE_PW.operateurs.items()},
+3071:           "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
+3074:           "LABYRINTHE_PORTE_FENETRE", "REGISTRE_PW"]
+=== PROBLEMES ===
+=== TESTS ===
+350:    """La politique seule 
+… [794 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ `LABYRINTHE_PORTE_STO` (887) et `LABYRINTHE_PORTE_FENETRE` (3019) existent ; j'inspecte le sto, son registre et la Q-table pour choisir le test
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '860,930p' tools/pensee/operateurs.py; echo '=== REGISTRE_PSTO ==='; grep -n \"REGISTRE_PSTO\" -A 12 tools/pensee/operateurs.py | head -20; echo '=== T33 ==='; sed -n '555,575p' tools/pensee/autotest.py; echo '=== POLITIQUES ==='; grep -n \"cla … [108 caractères tronqués]`
+
+  ```
+if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    x, y = _xy_p(e)
+    open_ = _open_p(e)
+    if (x, y) == (3, 2) and direction == "bas":
+        if random.random() < 0.8:
+            open_ = True
+        else:
+            return [_etat_p(x, y, open_, e.empreinte(), e.profondeur)]
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, open_):
+        return []
+    return [_etat_p(nx, ny, open_, e.empreinte(), e.profondeur + 1)]
+
+
+REGISTRE_PSTO = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_p, "un pas ; la porte reste fermée"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_p, "un saut ; la porte reste fermée"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_p_sto, "la politique tente la porte (80 %)"),
+})
+
+LABYRINTHE_PORTE_STO = Probleme(
+    nom="labyrinthe_porte_sto",
+    initial=lambda: _etat_p(0, 0, False),
+    operateurs={n: o.applique for n, o in REGISTRE_PSTO.operateurs.items()},
+    but=but_p,
+    heuristique=heuristique_p,
+    score=score_p,
+)
+
+
+# -------------
+… [6111 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le t34 « porte qui bouge » existe (`LABYRINTHE_PORTE_BOUGE`, `REGISTRE_PB`, `PolitiqueAppriseBouge`) ; j'inspecte son état/phase et je décide du prompt LLM
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '580,610p' tools/pensee/autotest.py; echo '=== ETAT_PB ==='; sed -n '2600,2700p' tools/pensee/operateurs.py; echo '=== BOUGE ==='; grep -n \"LABYRINTHE_PORTE_BOUGE\\|def seule_bouge\\|def _d_bouge\\|class PolitiqueAppriseBouge\" tools/pensee/op … [70 caractères tronqués]`
+
+  ```
+p = PolitiqueAppriseBouge(episodes=1000, graine=0)
+    p.apprendre()
+    ok, pas = seule_bouge(p)
+    return (b["but"] and ok), (f"porte bouge : A* {b['noeuds']} nœuds/but, "
+                               f"seule but/{pas} pas ({len(p.q)} états-Q)")
+
+
+def t35_bouge_graines() -> tuple[bool, str]:
+    """La porte qui bouge sur 5 graines : 5/5 buts en 10 pas."""
+    from .graines import executer_bouge
+    lignes = executer_bouge()
+    buts = sum(1 for l in lignes if l["but"])
+    return buts == len(lignes) and len(lignes) == 5, (
+        f"bouge graines : {buts}/5 buts, pas {[l['pas'] for l in lignes]}")
+
+
+def t36_periode() -> tuple[bool, str]:
+    """La période variable : la politique entraînée à 3 pas tient de 2 à 5 pas."""
+    from .operateurs import PolitiqueAppriseBouge, seule_bouge
+    p = PolitiqueAppriseBouge(episodes=1000, graine=0)
+    p.apprendre()
+    res = []
+    for per in (2, 3, 4, 5):
+        p.periode = per
+        ok, pas = seule_bouge(p)
+        res.append((per, ok, pas))
+    return all(r[1] for r in res), (f"périodes 2–5 : {sum(1 for r in res if r[1])}/4 "
+                                   f"buts, pas {[r[2] for r in res]}")
+
+
+def t37_phase() -> tuple[bool, str]:
+… [3454 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte qui bouge (`t34`) est le test suivant : phase t%6, porte (3,3)/(1,3), Q-table 5/5. J'ajoute le prompt `porte_bouge` et le banc
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text(encoding='utf-8')\nold='''        x, y = _xy_l(etat)\n        murs = \", \".join(f\"({a},{b})\" for a, b in sorted(MURS))\n        return (\"Tu es la politiq … [1650 caractères tronqués]`
+
+  ```
+prompt porte_bouge ok
+0 Tu es la politique d'un moteur de recherche dans une grille 5x5. x va vers la droite, y vers le bas. Murs : (0,1), (1,1), (1,2), (2,1), (2,2), (3,4), (4,1), (4,2). La porte bouge : la phase t est 0 (t
+3 Tu es la politique d'un moteur de recherche dans une grille 5x5. x va vers la droite, y vers le bas. Murs : (0,1), (1,1), (1,2), (2,1), (2,2), (3,4), (4,1), (4,2). La porte bouge : la phase t est 3 (t
+6 Tu es la politique d'un moteur de recherche dans une grille 5x5. x va vers la droite, y vers le bas. Murs : (0,1), (1,1), (1,2), (2,1), (2,2), (3,4), (4,1), (4,2). La porte bouge : la phase t est 0 (t
+  ```
+
+### 🤖 Assistant
+
+⏵ Prompt `porte_bouge` OK (phase t, porte (3,3)/(1,3)) ; j'ajoute le test et le banc (Q-table `PolitiqueAppriseBouge` en référence)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_pensee_politique.py'); t=p.read_text(encoding='utf-8')\nold='''    def test_labyrinthe(self):'''\nnew='''    def test_porte_bouge(self):\n        from tools.pensee.operateurs import _e … [653 caractères tronqués]`
+
+  ```
+test ok
+Ran 8 tests in 0.001s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc « porte qui bouge » : oracle Manhattan, Q-table (`PolitiqueAppriseBouge`, 5/5), aveugle, hasard, LLM `porte_bouge` vs labyrinthe
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_porte_bouge_drvm.py — la porte **qui bouge** : la phase t%6, porte (3,3)/(1,3).\n\n`LABYRINTHE_PORTE_BOUGE` (registre `REGISTRE_PB`) : la porte est en `(3,3)` ou `(1,3)` selon\nla phase `t % 6` (`_d_bouge(t)`), le pas avance l'horloge, la sonde ou … [6729 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_bouge_drvm.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de la porte qui bouge (5 politiques + Q-table, ≈3 min)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_bouge_drvm.py && curl -s --max-time 3 http://127.0.0.1:18082/health && time python3 tools/tests/qualifier_porte_bouge_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-bouge.json  … [92 caractères tronqués]`
+
+  ```
+started background job bash-422
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la mesure « porte qui bouge » (le JSON remplira la fiche)
+
+- **job_output** `{"job_id": "bash-422", "timeout_ms": 420000, "wait": true}`
+
+  ```
+{"status":"ok"}   58.0,
+   7,
+   5,
+   0.0,
+   0
+  ],
+  "aveugle": [
+   true,
+   25,
+   43.0,
+   7,
+   2,
+   0.0,
+   0
+  ],
+  "hasard": [
+   true,
+   27,
+   53.0,
+   7,
+   4,
+   0.0,
+   0
+  ],
+  "llm_porte_bouge": [
+   true,
+   25,
+   43.0,
+   7,
+   2,
+   13.433,
+   0
+  ],
+  "llm_labyrinthe": [
+   true,
+   28,
+   58.0,
+   7,
+   5,
+   13.312,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-porte-bouge.json
+[stderr]
+
+real	0m27,149s
+user	0m0,397s
+sys	0m0,023s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte qui bouge est **non discriminante** : aveugle (25/2), hasard (27/4), LLM (25/2) et labyrinthe (28/5) passent tous ; j'extrais le bilan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-porte-bouge.json'))\nprint('date',d['date'],'verdict',d['verdict'])\nprint('seuils',json.dumps(d['seuils'],indent=1))\nprint('apprise',d['apprise'])\nfor k,v in d['mesures'].items():\n    … [216 caractères tronqués]`
+
+  ```
+date 2026-11-02 21:16 EST verdict False
+seuils {
+ "oracle_but": true,
+ "oracle_sonde": true,
+ "aveugle_non": false,
+ "hasard_non": false,
+ "apprise_but": true,
+ "llm_but": true,
+ "llm_sonde": true,
+ "labyrinthe_non": false,
+ "aucune_erreur_llm": true,
+ "latence_mesuree": true
+}
+apprise {'classe': 'PolitiqueAppriseBouge', 'episodes': 1000, 'etats_q': 236, 'seule_but': True, 'seule_pas': 10}
+oracle             but True n 28 c 58.0 app 7 sonde 5 lat 0.0 err 0
+aveugle            but True n 25 c 43.0 app 7 sonde 2 lat 0.0 err 0
+hasard             but True n 27 c 53.0 app 7 sonde 4 lat 0.0 err 0
+llm_porte_bouge    but True n 25 c 43.0 app 7 sonde 2 lat 13.433 err 0
+llm_labyrinthe     but True n 28 c 58.0 app 7 sonde 5 lat 13.312 err 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche « porte qui bouge » : le 7B passe (25/2) mais l'aveugle (25/2) et le labyrinthe (28/5) aussi ; test faible
+
+- **write** `{"content": "# B13 — la porte qui bouge : le 7B la passe (25 nœuds, 2 sonde) comme l'aveugle (25/2) et le labyrinthe (28/5) ; test non discriminant\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·\n> **Verdict** : ❌ **la porte qui bouge ne qualifie pas la politique**  … [5032 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-bouge.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique l'état « porte bouge test faible », l'index et le README, puis je contrôle et commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, time, re\n# README row\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-b13-porte-140.md`](rapport-b13-porte-140.md) | **B13** **140/140** |\",\n            \"| [`rappor … [3579 caractères tronqués]`
+
+  ```
+ok
+  564 fiches → reports/INDEX.md
+EN-COURS: 1622
+  T0 max : 3996 mots (budget 4 000)
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 567 fiche(s) · 652 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2726 examinés) :
+     reports/rapport-n2-fenetre.md → n2-fenetre.json
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 3 996, revue 567/652 ; le lien cassé est la fiche N2 concurrente. Je commite la porte qui bouge
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -12; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_bouge_drvm.py reports/rapport-pensee-porte-bouge.md reports/pensee-porte-bouge.json reports/README.md reports/INDEX.md d … [510 caractères tronqués]`

@@ -7421,3 +7421,58 @@ ok
   ```
 
 - **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"--- courant ---\"; ps -eo pid,etime,args | grep -E \"porte-.*\\.sh|drave\" | grep -v grep | head -3 | c … [54 caractères tronqués]`
+
+  ```
+21:12:17
+78 work/portes/passe-1102-19h32/registre.txt
+porte-tableaux 1 1
+porte-tokenizer-kimi 0 8
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+porte-reparti-moteur 1 51
+porte-tableaux 1 1
+--- courant ---
+ 635721       00:49 timeout 1800 bash tools/porte-topologie.sh
+ 635722       00:49 bash tools/porte-topologie.sh
+ 642206       00:10 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur 50661 --ctx 256 --thr
+  ```
+
+- **bash** `{"command": "tail -20 work/portes/passe-1102-19h32/porte-tableaux.log 2>/dev/null; echo \"--- référence ---\"; grep -rn \"porte-tableaux\" docs/pilotage/references-non-regression.md | head -3", "description": "Diagnose the new porte-tableaux red"}`
+
+  ```
+✅ 1572 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2718 examinés) :
+     reports/rapport-n2-fenetre.md → n2-fenetre.json
+--- référence ---
+59:> **1. `porte-tableaux` NE POUVAIT PAS ÉCHOUER.** Elle imprimait ses défauts (❌) puis sortait en **0** ✗ :
+71:> vérifiés dans `docs/` et `reports/` ✓) est appelé par `porte-tableaux` ✓ — un document de ce dépôt
+79:> posée par `porte-tableaux` — *combien d'autres portes ne PEUVENT PAS échouer ?* ✗ — a une réponse, et
+  ```
+
+- **bash** `{"command": "ls -l reports/n2-fenetre* reports/rapport-n2-fenetre* 2>/dev/null; echo \"--- liens ---\"; grep -n \"n2-fenetre\\|json\" reports/rapport-n2-fenetre.md | head -8; echo \"--- git ---\"; git log --oneline -2 -- reports/rapport-n2-fenetre.md", "description": "Inspect the broken n2-fenetre l … [5 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 8702  2 nov 21:05 reports/rapport-n2-fenetre.md
+-rw-r--r--. 1 stephane stephane 2836  1 nov 23:20 reports/rapport-n2-fenetre-r1.md
+--- liens ---
+137:- Mesures : [`n2-fenetre.json`](n2-fenetre.json) ; fiches amont
+--- git ---
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 12 — la passe avance, une rouge « de passage »\n\n- **Passe 78/81** : `porte-tableaux` sort **1** en 1 s — un lien relatif ne résout pas :\n  `reports/rapport-n2-fenetre.md` → `n2-fenetre.json`. La fiche a été écrite à **21 h 05**, elle est\ … [542 caractères tronqués]`
+
+  ```
+ok
+-rw-------. 1 stephane stephane 8702 21:05 reports/rapport-n2-fenetre.md
+15:- **Heartbeat** : 2026-11-02 19:56 HAE
+  ```
+
+- **job_output** `{"job_id": "bash-266", "timeout_ms": 300000, "wait": true}`

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 21 h 27 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 21 h 45 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -58,9 +58,10 @@
 - **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold
   neuronal** POS/syntagmes, cascade **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27,
   labyrinthe 2 ; **porte minute** — **26 nœuds** ; **porte mobile** — (3,3) **échoue**, (1,3)
-  passe (28/4) ; l'aveugle/labyrinthe aussi ; **pragmatique** 0,6375 ; l'heuristique garde ;
+  passe (28/4) ; **porte bouge** — 25/2 mais l'aveugle (25/2) et le labyrinthe (28/5) aussi :
+  test faible ; **pragmatique** 0,6375 ; l'heuristique garde ;
   [B13](../../reports/rapport-b13-porte-138.md), [minute](../../reports/rapport-pensee-porte-minute.md),
-  [mobile](../../reports/rapport-pensee-porte-mobile.md),
+  [mobile](../../reports/rapport-pensee-porte-mobile.md), [bouge](../../reports/rapport-pensee-porte-bouge.md),
   [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
 - **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
@@ -98,7 +99,7 @@
 - **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à
   1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
   [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
-- **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile **test faible** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+- **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
   [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
 
 ## Les chiffres de l'état
@@ -109,7 +110,7 @@
 |---|---|---|
 | portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **566** / **651** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **567** / **652** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -121,7 +122,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 140/140 ; minute 26, mobile test faible** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 140/140 ; minute 26, mobile/bouge faibles** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.2-1024 en cours** (GPU 0) ; N4 0/4 ; N5 gelé | **N2** : R1.2-1024, fiche ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |

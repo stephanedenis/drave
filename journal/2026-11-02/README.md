@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**193 commits** · **10 session(s)** · **10 thème(s)**
+**194 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 9 | [attention.md](attention.md) |
 | distribue | 26 | [distribue.md](distribue.md) |
-| docs | 29 | [docs.md](docs.md) |
+| docs | 30 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 87 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
@@ -26,13 +26,13 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 4.9 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 5.0 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 4.4 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
-| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 5.5 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
-| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 4.9 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 5.7 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 5.0 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 4.8 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
+| `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 5.0 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
 | `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 4.9 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 46.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 44.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
@@ -234,6 +234,7 @@
 | 20:55 | `efdbbf40` | B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT |
 | 20:59 | `66826ed5` | NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT) |
 | 21:07 | `6532541c` | B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432) |
+| 21:10 | `335e1737` | ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -364,4 +365,13 @@ Les quatre tests exacts (T111, T113, T114, T115) attendaient les F1 de l'ancien 
 2/5, indépendant du sous-module et du hash). Fiche
 [`b13-porte-138`](../../reports/rapport-b13-porte-138.md), JSON
 [`b13-porte-138.json`](../../reports/b13-porte-138.json).
+
+**21 h 16 — la porte qui bouge : le 7B la passe, mais l'aveugle et le labyrinthe aussi.**
+
+Le 7B, avec le prompt `porte_bouge` (la phase t % 6 et la porte du moment), passe en **25 nœuds,
+2 sonde, 13,4 s** ; mais l'aveugle (25/2), le hasard (27/4) et le labyrinthe (28/5) passent
+**aussi**. L'oracle 28/5 ; la Q-table `PolitiqueAppriseBouge` 236 états-Q, 10 pas. La phase dans
+le prompt ne change rien : test faible. Fiche
+[`pensee-porte-bouge`](../../reports/rapport-pensee-porte-bouge.md), JSON
+[`pensee-porte-bouge.json`](../../reports/pensee-porte-bouge.json).
 <!-- /notes -->
