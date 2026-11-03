@@ -6,8 +6,8 @@
 > sans contention. Rouges : les **4 connues** (`porte-indice` 834 s,
 > `porte-melange` 102 s, `porte-homeostasie` env.,
 > `porte-reparti-moteur` 2 s — pin 9,1748 non reproduit, à trancher)
-> + **`porte-sessions`** (mandats N2/S périmés, claims libérés : rouge de **coordination**, pas de code —
-> rejouer après reprise ou mise en pause). `porte-tableaux` **verte** (page 03/11), `porte-ressources`
+> + **`porte-sessions`** (mandats N2/S périmés : rouge de **coordination**, pas de code —
+> **rejouée verte à 08 h 10** après leur mise en pause). `porte-tableaux` **verte** (page 03/11), `porte-ressources`
 > **verte** (82e comptée). La 82e porte entre donc dans le compte.
 >
 > **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env., `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) — **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers), dès que le JSON a existé ; aucune régression structurelle. La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
@@ -26,26 +26,10 @@
 > **Passe précédente — 2026-10-31 à 12 h 54 :** 78 portes, 73 vertes, 5 rouges ; `porte-jeux`
 > (vraie régression, corrigée `2edb3079`) et les structurelles connues ; détail : historique.
 
-> **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
-> mêmes structurelles connues, **aucune régression**. Journaux : `/tmp/portes-1029-20h23` ;
-> historique : [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
-
 > **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
 > les invariants qui ne sont pas des chiffres. Les mesures de campagne (perplexités,
 > budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :
 > ce fichier ne porte que ce qu'une **porte** vérifie.
-
-> **Passe précédente — 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 48 min**) — la passe
-> finale du sprint 24 h. `porte-indice` **843 s** et `porte-melange` **112 s** restent les deux
-> rouges structurelles, avec les mêmes diagnostics ; **aucune régression**. Journaux :
-> `/tmp/portes-1027-12h45`.
-
-> **Passe précédente — 2026-10-26 à 14 h 30** (**49 portes, 2 rouges**, **1 h 34**) — clôture de **B9** :
-> `porte-deepseek` et `porte-jeux` (**106 s**, 449/449 au niveau 4) **vertes** ; les rouges sont
-> `porte-indice` (861 s) et `porte-melange` (107 s). Références stables : `porte-flux` **60,8135**,
-> `porte-pont` **+2,81 / +25,35 %**, `porte-coupe` **+0,52 → +17,09 %**, `porte-gain` **29,0206 →
-> 1297,5437**, `porte-topologie` **42,5477**, `porte-vision` **559 s**, `porte-poids-creux` **319 s**.
-> Journaux `/tmp/portes-b9-1026-12h55`.
 
 > **Historique des passes** : les passes antérieures au 26/10 14 h 30, dont celle du
 > 25/10 04 h 51, sont conservées dans

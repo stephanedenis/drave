@@ -11647,3 +11647,62 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nfor prefix in (\"- **Données** :\", \"- **R1 — la fenêtre native** :\"):\n    i=t.find(prefix); assert i!=-1, prefix\n    j=t.find(\"\\n- … [2310 caractères tronqués]`
+
+  ```
+puces closes retirées
+  en-cours · 1617 mots · 7 sections · 4 session(s) · 3 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3991 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  revue de documentation · 587 fiche(s) · 674 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[master b6c8246b] BILAN DE 08 H — N2 ET S EN PAUSE, LA PASSE 82/77/5 EST LA RÉFÉRENCE, L'ÉTAT EST AU 03/11 08 H 08
+ 16 files changed, 415 insertions(+), 51 deletions(-)
+[commit 0]
+b6c8246b BILAN DE 08 H — N2 ET S EN PAUSE, LA PASSE 82/77/5 EST LA RÉFÉRENCE, L'ÉTAT EST AU 03/11 08 H 08
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bilan est committé (`b6c8246b`) ; une violation de budget reste dans `taille_documents` ; je la lis et la corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -8", "description": "Read the remaining document budget violation", "timeoutMs": 120000}`
+
+  ```
+1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 3991 mots (budget 4 000)
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · docs/pilotage/references-non-regression.md : 2551 mots > budget 2500 (T1)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md", "limit": 50}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Références de non-régression
+2: 
+3: > **Dernière passe complète — 2026-11-03 à 04 h 10 :** **82 portes, 77 vertes, 5 rouges**,
+4: > **1 h 40** (journaux durables `work/portes/passe-0303-04h10`). **Machine au repos** : les deux
+5: > GPU libres (N2 avait fini son run de nuit), claims des sessions libérés — la passe est **propre**,
+6: > sans contention. Rouges : les **4 connues** (`porte-indice` 834 s,
+7: > `porte-melange` 102 s, `porte-homeostasie` env.,
+8: > `porte-reparti-moteur` 2 s — pin 9,1748 non reproduit, à trancher)
+9: > + **`porte-sessions`** (mandats N2/S périmés, claims libérés : rouge de **coordination**, pas de code —
+10: > rejouer après reprise ou mise en pause). `porte-tableaux` **verte** (page 03/11), `porte-ressources`
+11: > **verte** (82e comptée). La 82e porte entre donc dans le compte.
+12: >
+13: > **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie`
+… [3069 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nold=\"> + **`porte-sessions`** (mandats N2/S périmés, claims libérés : rouge de **coordination**, pas de code —\\n> rejo … [1444 caractères tronqués]`

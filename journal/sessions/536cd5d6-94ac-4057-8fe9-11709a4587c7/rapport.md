@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 16.7 h |
 | Tours | 72 |
-| Messages | 472 |
-| Appels d'outils | 415 |
+| Messages | 475 |
+| Appels d'outils | 418 |
 | Fichiers touchés | 15 |
-| Commandes | 303 |
+| Commandes | 305 |
 | Sous-agents | 0 |
-| Commits | 31 |
+| Commits | 32 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1848,7 +1848,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 72 — est que le dossier de pilotage est à jour avec les bons états des sessions dsh en cours
 
-*14 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Audit pilotage vs active DSH session plans
 - read
@@ -1862,10 +1862,12 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
 - bash — Write 08h bilan, trim state, verify and commit
+- bash — Read the remaining document budget violation
+- bash — Resolve porte-sessions red and trim references
 
 **Synthèse produite :**
 
-Je passe N2 et S en pause (arrêt constaté) et je mets l'état au 03/11 08 h.
+⏵ Le bilan est committé (`b6c8246b`) ; une violation de budget reste dans `taille_documents` ; je la lis et la corrige.
 
 ## 3. Travail accompli
 
@@ -1931,7 +1933,7 @@ Je passe N2 et S en pause (arrêt constaté) et je mets l'état au 03/11 08 h.
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 263 autres
+- … et 265 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2105,4 +2107,5 @@ Je passe N2 et S en pause (arrêt constaté) et je mets l'état au 03/11 08 h.
 - ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (575)" -- docs/pilotage/en-cours.md; echo "[commit $?]"
 - ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)" -- docs/pilotage/en-cours.md; echo "[commit $?]"
 - BILAN DE 08 H — N2 ET S EN PAUSE, LA PASSE 82/77/5 EST LA RÉFÉRENCE, L'ÉTAT EST AU 03/11 08 H 08" -m "N2 (00 h 25) et S (20 h 40) sont arrêtés : plans en pause,
+- RÉFÉRENCES — porte-sessions REJOUÉE VERTE APRÈS LA MISE EN PAUSE DE N2/S ; TROIS PASSES ANCIENNES SORTENT" -m "La 5e rouge de la passe du 04 h 10 était de coord
 

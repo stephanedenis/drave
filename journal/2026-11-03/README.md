@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**31 commits** · **5 session(s)** · **6 thème(s)**
+**32 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 10 | [distribue.md](distribue.md) |
-| docs | 12 | [docs.md](docs.md) |
+| docs | 13 | [docs.md](docs.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -63,6 +63,7 @@
 | 02:45 | `18493fb9` | ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673) |
 | 05:53 | `2280ca7d` | PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES, 5 ROUGES (4 CONNUES + SESSIONS) |
 | 07:16 | `a219c844` | JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACHINE AU REPOS |
+| 08:14 | `b6c8246b` | BILAN DE 08 H — N2 ET S EN PAUSE, LA PASSE 82/77/5 EST LA RÉFÉRENCE, L'ÉTAT EST AU 03/11 08 H 08 |
 
 ## Le récit de la journée (écrit à la main)
 
