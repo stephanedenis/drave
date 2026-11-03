@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 17.0 h |
+| Durée | 17.1 h |
 | Tours | 28 |
-| Messages | 492 |
-| Appels d'outils | 493 |
+| Messages | 505 |
+| Appels d'outils | 504 |
 | Fichiers touchés | 6 |
-| Commandes | 354 |
+| Commandes | 365 |
 | Sous-agents | 0 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*44 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -608,11 +608,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Append morning resumption to journal
 - bash — Check claims and hub plan
 - bash — Clean stale claims and claim day job
-- … et 23 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
-⏵ AGENTS.md a changé : **règle 11** — GPU réservés à Drave, professeurs par l'API DeepSeek, jamais `llama-server`. Je vérifie l'application et les budgets.
+⏵ Verrou git : un autre commit est en cours. J'attends et je recommite.
 
 ## 3. Travail accompli
 
@@ -669,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 314 autres
+- … et 325 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -822,4 +822,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("tools/porte-homeostasie.sh"); t = p.read_text(encoding="ut
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-j2.txt <<'EOF' JOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUME
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/methode/portes.md"); t = p.read_text(encoding="utf-8"
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-r11.txt <<'EOF' ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE  Les serveurs
 

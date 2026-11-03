@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 17.7 h |
+| Durée | 17.8 h |
 | Tours | 74 |
-| Messages | 514 |
-| Appels d'outils | 455 |
+| Messages | 516 |
+| Appels d'outils | 456 |
 | Fichiers touchés | 16 |
-| Commandes | 334 |
+| Commandes | 335 |
 | Sous-agents | 0 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1942,7 +1942,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 74 — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos … [101 caractères tronqués]
 
-*28 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Investigate llama-server process, port, GPU and services
 - bash — Search llama, deepseek and professor references in code
@@ -1958,7 +1958,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - bash — Test operateurs import, inspect gate and equipment repo
 - bash — Find class name, run pensee tests, check git status
 - bash — Run politique test, verify class and inspect gate/system tree
-- … et 12 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -2029,7 +2029,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 294 autres
+- … et 295 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2214,4 +2214,5 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT" -m "PolitiqueLLM passe de llama-server (18082) à l'API 
 - BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS" -- AGENTS.md docs/pilotage/en-cours.md; echo "[commit $?]"; git log --onel
 - BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979" -- AGENTS.md; echo "[commit $?]"; git log --oneline -1; echo; echo "== GPU et guard ==" && nvidia-smi --query-compute-
+- BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET" -- AGENTS.md; echo "[commit $?]"; git log --oneline -1
 
