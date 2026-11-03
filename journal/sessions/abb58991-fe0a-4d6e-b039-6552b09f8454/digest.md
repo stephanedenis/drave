@@ -23919,3 +23919,140 @@ AssertionError: 0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; vo
 ⏵ La ligne réelle est `voisin 9/9, parité … (rejouée, --drvm)` ; je corrige au bon format et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='voisin 9/9, parité 114/114+5/5 (rejouée, --drvm)'\nnew='voisin 9/9 appris, parité 114/114+5/5 (--drvm)'\nassert old in t, 'ligne absen … [1130 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3997 mots (budget 4 000)
+  589 fiches → reports/INDEX.md
+  revue de documentation · 592 fiche(s) · 681 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 11 files changed, 415 insertions(+), 15 deletions(-)
+ create mode 100644 reports/pensee-lien-appris.json
+ create mode 100644 reports/rapport-pensee-lien-appris.md
+ create mode 100644 tools/tests/linguistique/qualifier_lien_appris.py
+EXIT=0
+0f9164b4 L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : trois faits bouclés — banc de parité corrigé (`--drvm`), lien à **9/9**, et **lien appris 9/9** (perceptron LOO, hasard 0,10, surface seule 2/9)
+
+**1. Le banc de parité prend `--drvm`** (commit `48d79ff3`).
+- `verifier_parite_native.py` accepte `--checkpoint`, `--drvm`, `--binaire`, `--sortie` ; plus de chemin `/tmp/n0-native.drvm` codé en dur.
+- Rejoué : **5/5 top-1, 5/5 top-5**, écart max **0,00005**.
+
+**2. Le lien sans la paire croisée : 9/9** (commit `87e2e5a9`).
+- La paire r412→r427 est **croisée fr/en** (« Ne lis-tu pas ? » → « You come tomorrow. ») : écartée du banc (`croisees_ecartees: 1`).
+- **5/5 arrière + 4/4 avant = 9/9 (1,0)** ; le contexte reste 5/5.
+
+**3. Le lien appris : perceptron LOO 9/9** (commit `0f9164b4`).
+- Traits : sujet normalisé, verbe, adverbe, acte question→assertion, phrase simple, proximité.
+- **Leave-one-out** sur les 9 paires : **9/9 (1,0)** — la paire testée n'est jamais vue à l'entraînement.
+- **Contrôles négatifs** : hasard (poids aléatoires, 50 graines) **0,10** ; surface seule (sujet + proximité) **2/9**. Le verbe, l'adverbe, l'acte et la phrase simple portent bien.
+- Limites : 9 paires (LOO fragile) ; seuls les **poids** sont appris, les traits sont choisis à la main.
+
+**État** : T0 **3 997** ; revue verte (**592 fiches / 681 JSON**) ; HEAD `0f9164b4` ; hook état ✅ ; N2 intact ; serveur local arrêté (règle 11 respectée).
+
+**Reste au goal** : rien de bloquant — l'objectif (régénérer + rejouer la parité, reprendre le lien, vérifier l'état) est **couvert**. Je peux clôturer ce goal de continuation au prochain round si tu n'as pas d'ajout ; sinon il reste **actif** pour étendre les paires ou apprendre les traits.
+
+
+## Tour 167
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 3 : vérification finale de l'objectif — je contrôle les trois items, la règle 11 (pas de serveur local), l'état et les fichiers non committés
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo '=== rule 11 : enseignant API + pas de serveur local ==='; ls -l tools/llm/enseignant.py 2>/dev/null | awk '{print $5, $9}'; pgrep -af \"llama-server|ollama\" | head -3 || echo 'aucun serveur local'; echo; echo '=== etat ==='; p … [389 caractères tronqués]`
+
+  ```
+14:12:12
+=== rule 11 : enseignant API + pas de serveur local ===
+5492 tools/llm/enseignant.py
+2355881 bash -c cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo '=== rule 11 : enseignant API + pas de serveur local ==='; ls -l tools/llm/enseignant.py 2>/dev/null | awk '{print $5, $9}'; pgrep -af "llama-server|ollama" | head -3 || echo 'aucun serveur local'; echo; echo '=== etat ==='; python3 tools/taille_documents.py 2>&1 | grep T0 | head -1; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; echo '=== commits ==='; git log --oneline -4; echo '=== non committés ==='; git status --porcelain | head -8
+
+=== etat ===
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== commits ===
+0f9164b4 L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9
+87e2e5a9 L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)
+48d79ff3 L/
+… [466 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les trois items sont vérifiés (parité 5/5, lien 9/9, lien appris 9/9), l'état est vert et la règle 11 respectée ; je relis le goal et je le clôture
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-6eef5e3d-3262-4e08-8605-f8a67477276b","revision":1,"objective":"Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite).","phase":"active","roundsStarted":3,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-6eef5e3d-3262-4e08-8605-f8a67477276b", "revision": 1}`
+
+> **Objectif** (complete) : Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite).
+
+
+  ```
+{"goal":{"id":"goal-6eef5e3d-3262-4e08-8605-f8a67477276b","revision":2,"objective":"Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite).","phase":"complete","roundsStarted":3,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Goal de continuation clos : parité rejouée en CPU, lien corrigé à 9/9, lien appris 9/9 — message de clôture
+
+**Objectif atteint.** Les trois items du goal de continuation sont faits, mesurés, écrits et committés.
+
+**1. Checkpoint + DRVM régénérés en CPU, parité rejouée** (commit `229c5bf1`).
+- `entrainer_native.py --device cpu --pas 200` : **44,9 s**, `CUDA_VISIBLE_DEVICES=""`, aucun GPU N2.
+- Checkpoint `/tmp/drave-n0-pont.pt` (47 306 271 o) ; DRVM `/tmp/drave-n0-pont.drvm` (47 283 932 o, `sha256 db74e4b5…`).
+- Parité Rust ↔ Python : **5/5 top-1, 5/5 top-5, écart max 0,00005**.
+- **Contrôle négatif** : avant copie du DRVM au nom comparé, **0/5 et écart 999** (mesuré) — le banc échoue proprement, il ne passe pas par hasard.
+- Fiche `reports/rapport-pensee-parite-drvm-native-rejoue.md` ; JSON `reports/pensee-parite-drvm-native-rejoue.json`.
+
+**2. Le lien corrigé : le « plafond 5/10 » était un artefact** (commits `4f1de240`, `87e2e5a9`).
+- Les 5 paires r408–r412 ont l'assertion **après** la question : le lien arrière ne pouvait pas les voir par construction.
+- **5/5 arrière + 4/4 avant = 9/9 (1,0)** — la paire r412→r427 est **croisée fr/en** (« Ne lis-tu pas ? » → « You come tomorrow. ») et écartée comme défaut du gold.
+- Nouveau `trouver_suivante` (miroir) + `fidelite_lien_avant` dans `miroir.py`.
+- Fiche `reports/rapport-pensee-lien-deux-sens.md`.
+
+**3. Le lien appris : perceptron de rang, LOO 9/9** (commit `0f9164b4`).
+- 6 traits (sujet normalisé, verbe, adverbe, acte, phrase simple, proximité), **leave-one-out** sur les 9 paires : **9/9**.
+- **Contrôles négatifs** : hasard (50 graines) **0,10** ; surface seule **2/9**. Les traits portent bien.
+- Fiche `reports/rapport-pensee-lien-appris.md` ; banc `tools/tests/linguistique/qualifier_lien_appris.py`.
+
+**4. État vérifié.**
+- T0 **3 997** mots ; revue documentation verte (**592 fiches / 681 JSON**) ; `verifie_en_cours` ✅ ; `verifie_journal` ✅ ; hook état ✅ (`dernier fait = dernier état`).
+- **Règle 11 respectée** : aucun `llama-server`/`ollama` actif ; `tools/llm/enseignant.py` présent (API DeepSeek) ; N2 intact.
+- HEAD `0f9164b4` ; deux fiches de parité et trois fiches de lien ajoutées.
+
+**À relire / faire ensuite.**
+- **Fichiers non committés d'autres sessions** : `docs/pilotage/roadmap.md`, `tools/pensee/store.py`, `tools/structures`, `tools/tests/qualifier_porte_fenetre_drvm.py`, et trois rapports non suivis (`pensee-porte-fenetre-500.json`, `rapport-s-banque-partielle.md`, `s-banque-validee.json`). Je ne les ai pas touchés ; à relire avant commit.
+- **Concurrence git** : le hub commite `en-cours`/journal en continu ; deux de mes commits ont emporté des fichiers stagés par lui (`d255588d` notamment). Les faits eux-mêmes sont dans `229c5bf1`, `4f1de240`, `48d79ff3`, `87e2e5a9`, `0f9164b4`.
+- **Checkpoint volatile** : `/tmp` sera nettoyé ; rerégénérer (44,9 s CPU) avant tout rejeu de la parité.
+- **Paire croisée** : décider si r412→r427 est corrigée dans le gold ou reste écartée.
+- **Étendre les paires** (20/50) pour stabiliser la LOO du lien appris.
+
+Le goal est **clos** ; j'attends ta prochaine instruction.
+

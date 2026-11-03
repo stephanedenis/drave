@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 21.9 h |
-| Tours | 166 |
-| Messages | 1167 |
-| Appels d'outils | 953 |
+| Durée | 22.0 h |
+| Tours | 167 |
+| Messages | 1174 |
+| Appels d'outils | 956 |
 | Fichiers touchés | 48 |
-| Commandes | 773 |
+| Commandes | 774 |
 | Sous-agents | 0 |
 | Commits | 101 |
 | Compactages de contexte | 3 |
@@ -24,6 +24,8 @@
 - **complete** — Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas touch
 … [77 caractères tronqués]
 - **create** — Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git ad
+… [13 caractères tronqués]
+- **complete** — Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git ad
 … [13 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -359,6 +361,8 @@
 **Tour 165** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 1/1000  Continue working toward the objective in this … [483 caractères tronqués]
 
 **Tour 166** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 2/1000  Continue working toward the objective in this … [483 caractères tronqués]
+
+**Tour 167** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 3/1000  Continue working toward the objective in this … [483 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4283,7 +4287,66 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 **Synthèse produite :**
 
-⏵ La ligne réelle est `voisin 9/9, parité … (rejouée, --drvm)` ; je corrige au bon format et je commite
+⏵ Round 2 : trois faits bouclés — banc de parité corrigé (`--drvm`), lien à **9/9**, et **lien appris 9/9** (perceptron LOO, hasard 0,10, surface seule 2/9)
+
+**1. Le banc de parité prend `--drvm`** (commit `48d79ff3`).
+- `verifier_parite_native.py` accepte `--checkpoint`, `--drvm`, `--binaire`, `--sortie` ; plus de chemin `/tmp/n0-native.drvm` codé en dur.
+- Rejoué : **5/5 top-1, 5/5 top-5**, écart max **0,00005**.
+
+**2. Le lien sans la paire croisée : 9/9** (commit `87e2e5a9`).
+- La paire r412→r427 est **croisée fr/en** (« Ne lis-tu pas ? » → « You come tomorrow. ») : écartée du banc (`croisees_ecartees: 1`).
+- **5/5 arrière + 4/4 avant = 9/9 (1,0)** ; le contexte reste 5/5.
+
+**3. Le lien appris : perceptron LOO 9/9** (commit `0f9164b4`).
+- Traits : sujet normalisé, verbe, adverbe, acte question→assertion, phrase simple, proximité.
+- **Leave-one-out** sur les 9 paires : **9/9 (1,0)** — la paire testée n'est jamais vue à l'entraînement.
+- **Contrôles négatifs** : hasard (poids aléatoires, 50 graines) **0,10** ; surface seule (sujet + proximité) **2/9**. Le verbe, l'adverbe, l'acte et la phrase simple portent bien.
+- Limites : 9 paires (LOO fragile) ; seuls les **poids** sont appris, les traits sont choisis à la main.
+
+**État** : T0 **3 997** ; revue verte (**592 fiches / 681 JSON**) ; HEAD `0f9164b4` ; hook état ✅ ; N2 intact ; serveur local arrêté (règle 11 respectée).
+
+**Reste au goal** : rien de bloquant — l'objectif (régénérer + rejouer la parité, reprendre le lien, vérifier l'état) est **couvert**. Je peux clôturer ce goal de continuation au prochain round si tu n'as pas d'ajout ; sinon il reste **actif** pour étendre les paires ou apprendre les traits.
+
+### Tour 167 — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour r … [763 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Final objective verification
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Goal de continuation clos : parité rejouée en CPU, lien corrigé à 9/9, lien appris 9/9 — message de clôture
+
+**Objectif atteint.** Les trois items du goal de continuation sont faits, mesurés, écrits et committés.
+
+**1. Checkpoint + DRVM régénérés en CPU, parité rejouée** (commit `229c5bf1`).
+- `entrainer_native.py --device cpu --pas 200` : **44,9 s**, `CUDA_VISIBLE_DEVICES=""`, aucun GPU N2.
+- Checkpoint `/tmp/drave-n0-pont.pt` (47 306 271 o) ; DRVM `/tmp/drave-n0-pont.drvm` (47 283 932 o, `sha256 db74e4b5…`).
+- Parité Rust ↔ Python : **5/5 top-1, 5/5 top-5, écart max 0,00005**.
+- **Contrôle négatif** : avant copie du DRVM au nom comparé, **0/5 et écart 999** (mesuré) — le banc échoue proprement, il ne passe pas par hasard.
+- Fiche `reports/rapport-pensee-parite-drvm-native-rejoue.md` ; JSON `reports/pensee-parite-drvm-native-rejoue.json`.
+
+**2. Le lien corrigé : le « plafond 5/10 » était un artefact** (commits `4f1de240`, `87e2e5a9`).
+- Les 5 paires r408–r412 ont l'assertion **après** la question : le lien arrière ne pouvait pas les voir par construction.
+- **5/5 arrière + 4/4 avant = 9/9 (1,0)** — la paire r412→r427 est **croisée fr/en** (« Ne lis-tu pas ? » → « You come tomorrow. ») et écartée comme défaut du gold.
+- Nouveau `trouver_suivante` (miroir) + `fidelite_lien_avant` dans `miroir.py`.
+- Fiche `reports/rapport-pensee-lien-deux-sens.md`.
+
+**3. Le lien appris : perceptron de rang, LOO 9/9** (commit `0f9164b4`).
+- 6 traits (sujet normalisé, verbe, adverbe, acte, phrase simple, proximité), **leave-one-out** sur les 9 paires : **9/9**.
+- **Contrôles négatifs** : hasard (50 graines) **0,10** ; surface seule **2/9**. Les traits portent bien.
+- Fiche `reports/rapport-pensee-lien-appris.md` ; banc `tools/tests/linguistique/qualifier_lien_appris.py`.
+
+**4. État vérifié.**
+- T0 **3 997** mots ; revue documentation verte (**592 fiches / 681 JSON**) ; `verifie_en_cours` ✅ ; `verifie_journal` ✅ ; hook état ✅ (`dernier fait = dernier état`).
+- **Règle 11 respectée** : aucun `llama-server`/`ollama` actif ; `tools/llm/enseignant.py` présent (API DeepSeek) ; N2 intact.
+- HEAD `0f9164b4` ; deux fiches de parité et trois fiches de lien ajoutées.
+
+**À relire / faire ensuite.**
+- **Fichiers non committés d'autres sessions** : `docs/pilotage/roadmap.md`, `tools/pensee/store.py`, `tools/structures`, `tools/tests/qualifier_porte_fenetre_drvm.py`, et trois rapports non suivis (`pensee-porte-fenetre-500.json`, `rapport-s-banque-partielle.md`, `s-banque-validee.json`). J
+… [618 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -4382,7 +4445,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 733 autres
+- … et 734 autres
 
 ## 4. Mesures et résultats marquants
 

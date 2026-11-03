@@ -7905,3 +7905,208 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-383", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; tail -c 70 work/n2ac/propre-2165m-512z.log 2>/dev/null; tail -c 70 work/n2ac/propre-3430m-512z.log 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Poll capacity arms"}`
+
+  ```
+14:15:51
+propre-1147m-512z fini 13:49:38
+propre-2165m-512z fini 14:10:07
+d46ab7a5f0d4d5a654fbcfa8d17a1ad445",
+ "duree_s": 1224.5282440185547
+}
+l 3.781 · 330 s
+pas   1800 · perte 1.1212 · PPL val 3.820 · 339 s
+095 s
+pas   4750 · perte 0.9775 · PPL val 2.464 · 2117 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluations des bras capacité déjà terminés (11,47 M et 21,65 M)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in propre-1147m-512z propre-2165m-512z; do echo \"=== $m val ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/$m.pt --rope --val data/corpus_propre --longueurs 128,512,1024 --sortie work/n2ac/ … [100 caractères tronqués]`
+
+  ```
+=== propre-1147m-512z val ===
+  L512 : 2.926
+  L1024 : 2.896
+{"fichier": "propre-1147m-512z.pt", "val": "data/corpus_propre", "positions": "rope", "L128": 3.0475, "L512": 2.926, "L1024": 2.896}
+=== propre-2165m-512z val ===
+  L512 : 2.9059
+  L1024 : 2.8688
+{"fichier": "propre-2165m-512z.pt", "val": "data/corpus_propre", "positions": "rope", "L128": 3.0123, "L512": 2.9059, "L1024": 2.8688}
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-3430m-512z.pt 2>/dev/null && echo OK34", "description": "Wait for 34.3M capacity arm"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-386]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-386", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-381 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-*-512z.pt 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-383 (bash: sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; tail -c 60 work/n2ac/prepropre-2165m-512z.log 2>/dev/null; tail -c 60 work/n2ac/propre-2165m-512z.log 2>/dev/null; tail -c 60 work/n2ac/propre-3430m-512z.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-3430m-512z.pt 2>/dev/null && echo OK34; tail -c 80 work/n2ac/mix1024-60k.log", "description": "Direct poll of 34.3M arm"}`
+
+  ```
+14:27:27
+propre-1147m-512z fini 13:49:38
+propre-2165m-512z fini 14:10:07
+� PPL val 2.446 · 2806 s
+pas   6350 · perte 1.0227 · PPL val 2.443 · 2828 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -2 work/n2ac/propre-3430m-512z.log 2>/dev/null; date '+%H:%M:%S'; ps -eo pid,etime,cmd --no-headers | grep \"[e]ntrainer_rope\" | cut -c1-95", "description": "Check 34.3M capacity arm progress"}`
+
+  ```
+pas   5450 · perte 0.9845 · PPL val 3.552 · 1033 s
+pas   5500 · perte 0.9836 · PPL val 3.600 · 1043 s
+14:27:35
+2320304       50:52 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data
+2354094       17:27 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data
+  ```
+
+### 👤 Utilisateur
+
+background job bash-379 (bash: sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-*-512z.pt 2>/dev/null; tail -1 work/n2ac/mix1024-60k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-3430m-512z.pt 2>/dev/null && echo OK34", "description": "Wait for 34.3M capacity completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-389]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-389", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-386 (bash: sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-3430m-512z.pt 2>/dev/null && echo OK34) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-3430m-512z.pt 2>/dev/null && echo OK34; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Poll 34.3M capacity arm"}`
+
+  ```
+14:38:45
+propre-1147m-512z fini 13:49:38
+propre-2165m-512z fini 14:10:07
+propre-3430m-512z fini 14:35:26
+work/n2ac/propre-3430m-512z.pt
+OK34
+471 s
+pas   7850 · perte 1.0013 · PPL val 2.437 · 3494 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation du bras 34,3 M et synthèse capacité
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre-3430m-512z.pt --rope --val data/corpus_propre --longueurs 128,512,1024 --sortie work/n2ac/eval-propre-3430m-512z-val.json 2>&1 | tail -4", "descripti … [35 caractères tronqués]`
+
+  ```
+L128 : 3.0075
+  L512 : 2.9172
+  L1024 : 2.8662
+{"fichier": "propre-3430m-512z.pt", "val": "data/corpus_propre", "positions": "rope", "L128": 3.0075, "L512": 2.9172, "L1024": 2.8662}
+  ```
+
+### 🤖 Assistant
+
+⏵ Section « la capacité ne ferme pas la porte » dans la fiche
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-porte-propre.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"## Lecture\"\nneuf = \"\"\"## La capacité ne ferme pas la porte non plus\n\nTrois tailles, **même recette** (RoP … [1813 caractères tronqués]`
+
+  ```
+section capacité ajoutée à la fiche porte
+json mis à jour : 10 clés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"reports/rapport-n2-porte-propre.md\")\nt = p.read_text(encoding=\"utf-8\")\n# le verdict : ajouter la capacité\nvieux = \"\"\"> Les deux bras battent la chaîne honnête de N2.h (val **3,0904**, t … [1305 caractères tronqués]`
+
+  ```
+compteurs 592 681
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-porte-propre.md reports/n2-porte-propre.json doc … [1268 caractères tronqués]`
+
+  ```
+revue de documentation · 592 fiche(s) · 681 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+0f9164b4 L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9
+[stderr]
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/n2-porte-propre.json
+     · reports/rapport-n2-porte-propre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -c \"2,8662\" docs/pilotage/en-cours.md; git log --oneline -3 | cat; git diff --stat HEAD -- docs/pilotage/en-cours.md", "description": "Check whether state line is already committed"}`
+
+  ```
+0
+0f9164b4 L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9
+87e2e5a9 L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)
+48d79ff3 L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep T0; sed -n '/### Session `0733c5bb/,/^- \\*\\*Journal/p' docs/pilotage/en-cours.md | head -22; echo \"=== R1 ===\"; sed -n '/^- \\*\\*R1 — la fenêtre/,/^- \\*\\*S —/p' docs/pilotage/en-cours.md", "descript … [52 caractères tronqués]`
+
+  ```
+T0 max : 3997 mots (budget 4 000)
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — le run long de production et la capacité sur le corpus propre.
+- **Plan** : run long à 1 024, capacité ; fiche par fait.
+- **Ambition** : la longueur et la capacité.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
+- **Objectif final** : la production qui tient au long.
+- **Ce qu'elle fait** : la nuit est committée (4 fiches : [`fenêtre`](../../reports/rapport-n2-fenetre.md),
+  [`2 048`](../../reports/rapport-n2-r12-2048.md), [`production`](../../reports/rapport-n2-production-fenetre.md),
+  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
+  **capacité propre** (GPU 1) lancés à 13 h 37.
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : les mesures du run long et de la capacité, puis fiche et commit.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+=== R1 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"R1\\|fenêtre native\\|porte propre\" docs/pilotage/en-cours.md | head -8", "description": "Locate R1 line in state"}`
+
+  ```
+130:| **N — le natif** | **N2, N3, N4** | N2 : **fenêtre 1 024 — 2,4759 / 2,4373 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; N4 0/4 ; N5 gelé | **la fenêtre bat le compute** (N2.ac + RoPE 512 : 2,9096 à 512, 2,7607 à 2 000) ; **2 048** en cours |
+140:**R1** — R1.2-1024 ; **Pensée** — gold 200+ ; **S** — homographes, validation ;
+147:- **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"| **N — le natif** | **N2, N3, N4** | N2 : **fenêtre 1 024 — 2,4759 / 2,4373 au grand corpus (sous 2,5)** ; porte pro … [1887 caractères tronqués]`

@@ -7,7 +7,10 @@
 > la fenêtre 512 fait **2,9726 → 2,8443 → 2,7856** de 128 à 1 024 octets, quand la fenêtre 128
 > fait **2,9027 → 3,0464 → 3,1107** : elle gagne à courte longueur, puis elle est **0,33
 > derrière** à 1 024.
-> Les deux bras battent la chaîne honnête de N2.h (val **3,0904**, test **3,1960**).
+> Les deux bras battent la chaîne honnête de N2.h (val **3,0904**, test **3,1960**). Et la
+> **capacité ne ferme pas la porte** : à fenêtre 512, init aléatoire et 33 Mo vus, 11,47 M donne
+> 2,8960 à 1 024 octets, 21,65 M 2,8688, 34,3 M **2,8662** — elle **sature** à 21,65 M et laisse
+> encore **0,37**.
 
 ## La question
 
@@ -42,6 +45,28 @@ fourni, PPL par longueur :
 | N2.h, chaîne honnête (référence) | 3,0904 | — | — | — | 3,1960 | — | — |
 | **porte** | **2,5** | | | | | | |
 
+
+## La capacité ne ferme pas la porte non plus
+
+Trois tailles, **même recette** (RoPE, fenêtre 512, **init aléatoire identique**, graine 1,
+**33 Mo vus**), sur le corpus propre :
+
+| capacité | val 128 | val 512 | val 1 024 |
+|---|---:|---:|---:|
+| 11,47 M (224/288) | 3,0475 | 2,9260 | 2,8960 |
+| 21,65 M (296/416) | **3,0123** | **2,9059** | 2,8688 |
+| 34,3 M (384/512) | 3,0075 | 2,9172 | **2,8662** |
+
+**La capacité sature.** De 11,47 à 21,65 M, elle gagne 0,035 / 0,020 / 0,027 (128 / 512 /
+1 024 octets) ; de 21,65 à 34,3 M, elle ne gagne **plus rien** (−0,005, +0,011, −0,003 — dans le
+bruit). À 34,3 M et 33 Mo vus, la porte reste à **0,37** (2,8662 contre 2,5). Pour situer :
+l'affinage depuis `base-wiki-45m` (même taille, même budget) donne 2,7856 — l'initialisation wiki
+vaut **0,08** sur ce corpus, pas plus.
+
+**Donc, sur ce corpus : ni les pas (3,24 Mo vus dix fois), ni la capacité (saturée à 21,65 M) ne
+ferment la porte.** Il reste deux leviers, tous deux hors de ce cycle : **un corpus propre plus
+large** (le corpus actuel est épuisé) ou **une distillation depuis un professeur à fenêtre
+longue** (la note de passage N2 → R1 le demandait déjà).
 
 ## Lecture
 

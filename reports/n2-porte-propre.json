@@ -88,5 +88,29 @@
    "val et test disjoints (0 % de fuite, N2.h)",
    "même budget d octets pour les deux bras"
   ]
+ },
+ "capacite_1147m": {
+  "fichier": "propre-1147m-512z.pt",
+  "val": "data/corpus_propre",
+  "positions": "rope",
+  "L128": 3.0475,
+  "L512": 2.926,
+  "L1024": 2.896
+ },
+ "capacite_2165m": {
+  "fichier": "propre-2165m-512z.pt",
+  "val": "data/corpus_propre",
+  "positions": "rope",
+  "L128": 3.0123,
+  "L512": 2.9059,
+  "L1024": 2.8688
+ },
+ "capacite_3430m": {
+  "fichier": "propre-3430m-512z.pt",
+  "val": "data/corpus_propre",
+  "positions": "rope",
+  "L128": 3.0075,
+  "L512": 2.9172,
+  "L1024": 2.8662
  }
 }
