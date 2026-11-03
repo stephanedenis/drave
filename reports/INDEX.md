@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **593 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **594 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -393,6 +393,7 @@
 | [rapport-pensee-ferme.md](rapport-pensee-ferme.md) | B13 — la porte qui se referme : le moteur repasse |
 | [rapport-pensee-frequent.md](rapport-pensee-frequent.md) | B13 — la bascule fréquente : 1/50, 20/20 |
 | [rapport-pensee-frontiere-71.md](rapport-pensee-frontiere-71.md) | L — la frontière sur les 71 langues : le script est tenu (71/71), la langue sur libellés courts ne l'est pas (0,137 contre 0,032) |
+| [rapport-pensee-fusion-reparee.md](rapport-pensee-fusion-reparee.md) | L — la fusion réparée : par niveau (neuronal POS/syntagmes, heuristique pragmatique) — 0,9309 / 0,8226 / 0,8784 / 0,9954, le maximum des deux |
 | [rapport-pensee-glisse.md](rapport-pensee-glisse.md) | B13 — la dérive continue : v = 0,5, 20/20 |
 | [rapport-pensee-gold-200-subsets.md](rapport-pensee-gold-200-subsets.md) | B13 — les sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles |
 | [rapport-pensee-gold-200.md](rapport-pensee-gold-200.md) | B13 — le gold à 200 phrases réelles : POS 0,7738 |

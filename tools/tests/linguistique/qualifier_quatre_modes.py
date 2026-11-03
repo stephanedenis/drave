@@ -28,8 +28,9 @@ import time
 RACINE = pathlib.Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(RACINE))
 
-from tools.bloc_linguistique import (Cascade, Heuristique, NeuronalLLMChunks,
-                                     NeuronalLLMCompose, NeuronalLLMPOS, Parallele)
+from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,
+                                     NeuronalLLMChunks, NeuronalLLMCompose,
+                                     NeuronalLLMPOS, Parallele)
 from tools.llm.deepseek import DeepSeek
 from tools.tests.linguistique.evaluer_gold import evaluer_bloc
 from tools.tests.linguistique.qualifier_cascade import _sources, charger
@@ -67,6 +68,10 @@ def main() -> None:
         "neuronal": compose,
         "parallele": Parallele([h, compose], priorite_syntagme="confiance"),
         "cascade": Cascade(h, compose, seuil=a.seuil, priorite_syntagme="confiance"),
+        "parallele_niveau": Parallele([h, compose], priorite_syntagme="confiance",
+                                      priorite_par_niveau=PRIORITE_NIVEAU),
+        "cascade_niveau": Cascade(h, compose, seuil=a.seuil, priorite_syntagme="confiance",
+                                  priorite_par_niveau=PRIORITE_NIVEAU),
     }
     t0 = time.perf_counter()
     mesures = {}
@@ -86,6 +91,11 @@ def main() -> None:
                             mesures["neuronal"]["all"]["pos"]["exactitude"]) - 0.001,
         "cascade": mesures["cascade"]["all"]["pos"]["exactitude"]
                    >= mesures["heuristique"]["all"]["pos"]["exactitude"] - 0.001,
+        "parallele_niveau": mesures["parallele_niveau"]["all"]["pos"]["exactitude"]
+                            >= max(mesures["heuristique"]["all"]["pos"]["exactitude"],
+                                   mesures["neuronal"]["all"]["pos"]["exactitude"]) - 0.001,
+        "cascade_niveau": mesures["cascade_niveau"]["all"]["pos"]["exactitude"]
+                          >= mesures["neuronal"]["all"]["pos"]["exactitude"] - 0.001,
         "aucun_refus": len(refus) == 0,
     }
     resultat = {

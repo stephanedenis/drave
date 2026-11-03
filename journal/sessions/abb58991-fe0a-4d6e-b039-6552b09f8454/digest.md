@@ -25583,3 +25583,287 @@ r030 You come tomorrow?
 phrases avec différence 46
   ```
 
+### 🤖 Assistant
+
+⏵ Le repli (l'heuristique quand le neuronal ne segmente pas) ajoute 46 phrases de faux syntagmes ; je passe la fusion par niveau en **strict** (la source choisie par niveau, sans repli) et je re-mesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text(encoding='utf-8')\nold='''    if priorite_par_niveau:\n        par_niveau: dict[str, set[str]] = collections.defaultdict(set)\n        for e in meilleures.va … [1968 caractères tronqués]`
+
+  ```
+ok
+COMPILE_OK
+heuristique {'pos': 0.7394, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+neuronal {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+parallele_niveau {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade_niveau {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Session L/B13 night run. Original goal `goal-781186f0-1fb6-48ba-af64-5c056d667196` (verbatim): "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque." — marked **complete** at round 161 (revision 2, `activation: disarmed`); `resume` refused from phase "complete".
+- User then said **"continue"**. New goal created: `goal-6eef5e3d-3262-4e08-8605-f8a67477276b` (revision 1, active, max 1000 rounds): "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)."
+- Currently round 1/1000 of new goal.
+
+## Key Technical Concepts
+- Drave/Qtrinet conventions: `docs/` state/concepts, `reports/` measured fiches+JSON, `journal/` dated narrative, one writer for `en-cours`, roadmap line per fact, gates, **explicit `git add`**, `git diff --check`, T0 budget ≤ 4000 words, `en-cours` ≤ 2000 words, hook `verifie_etat_a_jour.py` refuses facts without an `en-cours` line staged with them.
+- AGENTS.md rule 11 (new): GPUs exclusively reserved for Drave; **professeurs must use DeepSeek API** (`tools/llm/enseignant.py`), never a local `llama-server`/`ollama`.
+- LOCAL 7B `llama-server` at `http://127.0.0.1:18082` is now **STOPPED** (health check failed); N2 GPUs untouched throughout.
+- Torch available: `~/gpu-env/bin/python` → torch 2.11.0+cu130; must use `PYTHONPATH=.` and `CUDA_VISIBLE_DEVICES=""`.
+- Gold réel `tools/tests/linguistique/gold_reel.json`: 432 phrases (r001…r432), 2375 mots, 228 fr / 204 en. Order matters: r408–r417 questions (pos 407–416), r423–r427 assertions (pos 417–421), r428–r432 distractors (pos 422–426), r418–r422 questions (pos 427–431).
+- `fidelite_lien_auto` uses only 5 pairs (r418–r422 → r423–r427), all **preceding** (assertion before question).
+- Link repairs in `tools/tests/linguistique/miroir.py`: `_sujet` (normalizes inverted subject: last hyphen segment), `_verbe` (first hyphen segment), `_acte` (pragmatique/acte), `_simple` (no SUB and no `;`), `_adverbes` (ADV excluding `NEGATIONS`), `trouver_precedente` (backward: pair sujet+verbe > acte question→assertion > simple > adverb match, fallback subject-only).
+- Commits serialized by a concurrent "hub" session; `.git/index.lock` and `HEAD` races recur.
+
+## Files and Code
+- `tools/tests/linguistique/miroir.py`: link logic. **Just added** `trouver_suivante(question, phrases, bloc=None)` (mirror forward link: scans `phrases[idx+1:]`, same filters) and `fidelite_lien_avant(phrases, bloc=None)` (5 pairs r408–r412 → r423–r427). Full file compiles; `fidelite_lien_auto` = 5/5, `fidelite_contextuelle` = 5/5.
+- `tools/tests/linguistique/qualifier_cascade.py`: cascade bench; has `--gold-reel`, adaptive thresholds (gold 180: 0.94/0.60/0.75/0.60; gold réel 432: 0.90/0.45/0.55/0.50), `p.get("source")` fix, `appels_note`.
+- `tools/verifier_parite_native.py`: 5 fixed prompts; **hardcodes** `/tmp/drave-n0-pont.pt` and `/tmp/n0-native.drvm`; writes `reports/native-parite.json`.
+- `tools/entrainer_native.py`: `--device` default `cuda` (must pass `--device cpu`); `--corpus data/corpus_fr.txt` (4.6 MB, exists), `--pas`, `--sortie`, `--drvm`, `--graine`, `--dim`.
+- `tools/applique_pont.py`: applies semantic bridge (`pont_semantique.npz`).
+- `reports/rapport-pensee-parite-drvm-native-rejoue.md` + `reports/pensee-parite-drvm-native-rejoue.json`: the replay fact (commit `229c5bf1`).
+- `reports/native-parite.json`: raw parity output: 5/5, 5/5, écart max ~0.00005.
+- `reports/rapport-pensee-cascade-vrai-mo
+… [4830 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Session L/B13 night run. Original goal `goal-781186f0-1fb6-48ba-af64-5c056d667196` (verbatim): "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque." — marked **complete** at round 161 (revision 2, `activation: disarmed`); `resume` refused from phase "complete".
+- User then said **"continue"**. New goal created: `goal-6eef5e3d-3262-4e08-8605-f8a67477276b` (revision 1, active, max 1000 rounds): "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)."
+- Currently round 1/1000 of new goal.
+
+## Key Technical Concepts
+- Drave/Qtrinet conventions: `docs/` state/concepts, `reports/` measured fiches+JSON, `journal/` dated narrative, one writer for `en-cours`, roadmap line per fact, gates, **explicit `git add`**, `git diff --check`, T0 budget ≤ 4000 words, `en-cours` ≤ 2000 words, hook `verifie_etat_a_jour.py` refuses facts without an `en-cours` line staged with them.
+- AGENTS.md rule 11 (new): GPUs exclusively reserved for Drave; **professeurs must use DeepSeek API** (`tools/llm/enseignant.py`), never a local `llama-server`/`ollama`.
+- LOCAL 7B `llama-server` at `http://127.0.0.1:18082` is now **STOPPED** (health check failed); N2 GPUs untouched throughout.
+- Torch available: `~/gpu-env/bin/python` → torch 2.11.0+cu130; must use `PYTHONPATH=.` and `CUDA_VISIBLE_DEVICES=""`.
+- Gold réel `tools/tests/linguistique/gold_reel.json`: 432 phrases (r001…r432), 2375 mots, 228 fr / 204 en. Order matters: r408–r417 questions (pos 407–416), r423–r427 assertions (pos 417–421), r428–r432 distractors (pos 422–426), r418–r422 questions (pos 427–431).
+- `fidelite_lien_auto` uses only 5 pairs (r418–r422 → r423–r427), all **preceding** (assertion before question).
+- Link repairs in `tools/tests/linguistique/miroir.py`: `_sujet` (normalizes inverted subject: last hyphen segment), `_verbe` (first hyphen segment), `_acte` (pragmatique/acte), `_simple` (no SUB and no `;`), `_adverbes` (ADV excluding `NEGATIONS`), `trouver_precedente` (backward: pair sujet+verbe > acte question→assertion > simple > adverb match, fallback subject-only).
+- Commits serialized by a concurrent "hub" session; `.git/index.lock` and `HEAD` races recur.
+
+## Files and Code
+- `tools/tests/linguistique/miroir.py`: link logic. **Just added** `trouver_suivante(question, phrases, bloc=None)` (mirror forward link: scans `phrases[idx+1:]`, same filters) and `fidelite_lien_avant(phrases, bloc=None)` (5 pairs r408–r412 → r423–r427). Full file compiles; `fidelite_lien_auto` = 5/5, `fidelite_contextuelle` = 5/5.
+- `tools/tests/linguistique/qualifier_cascade.py`: cascade bench; has `--gold-reel`, adaptive thresholds (gold 180: 0.94/0.60/0.75/0.60; gold réel 432: 0.90/0.45/0.55/0.50), `p.get("source")` fix, `appels_note`.
+- `tools/verifier_parite_native.py`: 5 fixed prompts; **hardcodes** `/tmp/drave-n0-pont.pt` and `/tmp/n0-native.drvm`; writes `reports/native-parite.json`.
+- `tools/entrainer_native.py`: `--device` default `cuda` (must pass `--device cpu`); `--corpus data/corpus_fr.txt` (4.6 MB, exists), `--pas`, `--sortie`, `--drvm`, `--graine`, `--dim`.
+- `tools/applique_pont.py`: applies semantic bridge (`pont_semantique.npz`).
+- `reports/rapport-pensee-parite-drvm-native-rejoue.md` + `reports/pensee-parite-drvm-native-rejoue.json`: the replay fact (commit `229c5bf1`).
+- `reports/native-parite.json`: raw parity output: 5/5, 5/5, écart max ~0.00005.
+- `reports/rapport-pensee-cascade-vrai-modele.md` (commit `92e3f9b4`), `reports/rapport-pensee-cascade-reel-432.md` (`a29cfd0f`), `reports/rapport-pensee-seuils-gold-reel.md` (`328872b9`), `reports/rapport-pensee-parite-drvm-native.md` (`32d695ab`).
+- Link fiches: `rapport-pensee-bonne-reponse-voisin.md` (`c41528b7`), `rapport-pensee-lien-repare.md` (`d849b9f1`), `rapport-pensee-lien-10-paires.md` (`70bbe1b5`), `rapport-pensee-lien-inverse.md` (`f7a53e2a`), `rapport-pensee-lien-verbe.md` (`3917780c`), `rapport-pensee-lien-acte.md` (`fcd0dc55`), `rapport-pensee-lien-sujet.md` (`9938083e`), `rapport-pensee-lien-simple.md` (`b100996f`), `rapport-pensee-lien-gv.md` (`60c438d3`), `rapport-pensee-lien-thematique.md` (`d0589cd3`).
+- `docs/pilotage/en-cours.md`: line 69 currently `cascade 0,9415 / 0,6130 / 0,7575 / 1,0 (180) ; réel 432 : … (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 5/5, parité 114/114+5/5 (rejouée) ;`; counter line 119 `**587** / **677**` (my last edit to 588/678 may have been overwritten by hub). Currently `M` (modified by another session) — do not touch while hub writes.
+
+## Errors and Fixes
+- `update_goal resume` on completed goal → `Error: cannot resume goal ... from phase "complete"; expected active or paused or blocked`. Fixed by `create_goal` (new goal `goal-6eef5e3d…`).
+- First native replay: `ModuleNotFoundError: No module named 'tools'` → need `PYTHONPATH=.`; then `FileNotFoundError: /tmp/drave-n0-pont.pt` → regenerated.
+- First replay after regeneration: **0/5, écart 999** because script hardcodes `/tmp/n0-native.drvm` which was cleaned. `cp /tmp/drave-n0-pont.drvm /tmp/n0-native.drvm` (same sha256 `db74e4b573c16252ea54fc65e3d1527a0c2f8a06aa6a61a51457d0cf23c7dca7`) → **5/5**.
+- `git commit` refused: `fatal: Unable to create '.git/index.lock': File exists` — hub concurrency; wait, sometimes `rm -f .git/index.lock` when no `git commit` process.
+- `⛔ commit refusé : un fait sans ligne d'état` — caused by `git add` failing on hub lock so `en-cours` never staged; re-`git add` + commit fixed.
+- `cannot lock ref 'HEAD': is at … but expected …` — hub moved HEAD between add and commit; re-run commit.
+- Commit `d255588d` accidentally committed the hub's staged journal (19 journal files) under my message, **not** my files; my fact landed later in `229c5bf1`.
+- Earlier wrong conclusion "plafond 5/10": my 10-pair extension included 5 pairs (r408–r412) whose assertion is **after** the question, so backward `trouver_precedente` cannot find them by construction. Correct valid measure = **5/5** on the 5 preceding pairs.
+
+## Pending Jobs
+- (none) — background jobs all finished (`bash-736`, `bash-753`).
+
+## Current Work
+- Implementing/measuring the **forward link** (`trouver_suivante` / `fidelite_lien_avant`) to correct the "plafond 5/10" and cover the r408–r412 pairs. Just measured: r408→r423 ✅, r409→r424 ✅, r410→r425 ✅, r411→r426 ✅, **r412→None ❌**; `avant = 4/5 (0.8)`, `arriere = 5/5 (1.0)`.
+- r412 « Ne lis-tu pas ? » fails because its expected pair r427 is « You come tomorrow. » (English, different subject/verb) — a cross-lingual mismatch, not a link bug.
+
+## Next Step
+- Diagnose r412→r427 (cross-lingual: `tu`/`lis` vs `You`/`come`), decide whether the forward-link bench is 4/5 "valid" (r412 out-of-scope) or needs a cross-lingual feature; then write the **contre-fiche** correcting "plafond 5/10" (valid measure 5/5 backward; 4/5 or 5/5 forward), update `docs/pilotage/en-cours.md`, and commit explicitly.
+
+## Critical Context
+- Objective item 1 (parity replay) **done**: CPU regeneration 44.9 s (`entrainer_native.py --device cpu --pas 200`), checkpoint 47 306 271 B, DRVM 47 283 932 B sha256 `db74e4b5…`, parity **5/5 top-1, 5/5 top-5, écart max 0,00005**, N2 untouched; commit `229c5bf1`.
+- Objective item 2 (link learning) **in progress**: the honest finding is the 5 preceding pairs are 5/5 after repairs; the 10-pair "5/10" was an ill-formed extension. Forward link measured 4/5 (r412 cross-lingual).
+- Objective item 3 (state check): T0 3996–4000, revue 590/679, hook `✅ aucun fait commité après le dernier état` at `229c5bf1`; `en-cours` currently modified by hub.
+- Key numbers: cascade gold 180 = POS 0,9415 / synt 0,6130 / tête 0,7574 / acte 1,0; gold réel 432 = 0,9065 / 0,4598 / 0,5633 / 0,9954 (seuils 0,90/0,45/0,55/0,50 → true); neuronal seul 0,8392 and acte 0,0; heuristique 0,7394.
+- B13 door: 140/140 (`6532541c`); doors bouge `35ca1461`, sto `7d2c0a2d`, sto 5/5 `c4903bc9`, fenêtre `55dcb1c4`, contre-fiche `84182603`, FIFO `8deac6ce`, non discriminant `19038f08`.
+- Other sessions are actively committing (HEAD moved through `07ec290b`, `68c1ecc1`, `f50ad713`, `a07c99cc`, `1c9f58dc`, `c66a2eef`, `d255588d`, `229c5bf1`); journal files and `en-cours` may be theirs — do not blindly `git add` them.
+- Rule: never touch N2 GPUs; CPU only; `CUDA_VISIBLE_DEVICES=""` for all torch runs.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ **Fusion réparée** : 0,9309 / 0,8226 / 0,8784 / 0,9954 — exactement le maximum des deux sources ; je vérifie les seuils, les tests du contrat et la porte du bloc
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-niveau.json'))\nprint('seuils', d['seuils'])\nprint('refus', d['refus'], 'appels', d['appels'], 'api', d['api'])\nprint('latence', d['latence_s'], 'duree', d['duree_totale_s' … [333 caractères tronqués]`
+
+  ```
+seuils {'heuristique': True, 'neuronal': True, 'parallele': False, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': False}
+refus 1 appels {'pos': 429, 'syntagmes': 429} api {'appels': 858, 'tokens': 254341, 'latence_s': 803.7759999999992}
+latence {'moyenne': 0.001, 'mediane': 0.001} duree 2.3
+=== tests du contrat ===
+Ran 16 tests in 0.064s
+
+OK
+=== porte bloc ===
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 🤖 Assistant
+
+⏵ Seuils : `parallele_niveau` et `cascade_niveau` **passent** (l'ancien parallèle échoue), tests 16/16 OK, porte du bloc verte ; j'écris la fiche de la fusion réparée
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nfiche=pathlib.Path('reports/rapport-pensee-fusion-reparee.md')\nfiche.write_text('''# L — la fusion réparée : par niveau (neuronal POS/syntagmes, heuristique pragmatique) — 0,9309 / 0,8226 / 0,8784 / 0,9954, le  … [6141 caractères tronqués]`
+
+  ```
+fiche 4744
+ok
+  T0 max : 3994 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ J'aligne l'index, le README et la revue, puis je commite la fusion réparée
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-quatre-modes.md`](rapport-pensee-quatre-modes.md) | **L** **0,9309 neuronal** |\",\n            \"| [`rapport-pens … [866 caractères tronqués]`

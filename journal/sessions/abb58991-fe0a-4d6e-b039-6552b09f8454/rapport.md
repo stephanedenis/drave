@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 25.0 h |
 | Tours | 173 |
-| Messages | 1244 |
-| Appels d'outils | 1013 |
+| Messages | 1248 |
+| Appels d'outils | 1016 |
 | Fichiers touchés | 49 |
-| Commandes | 825 |
+| Commandes | 828 |
 | Sous-agents | 0 |
-| Commits | 105 |
+| Commits | 106 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4550,7 +4550,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 173 — continue avec réparer la fusion
 
-*8 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the fusion implementation
@@ -4560,10 +4560,13 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Skip overlap removal in per-level fusion and re-run
 - bash — Debug fusion label differences
 - bash — Strict per-level fusion and re-measure
+- bash — Check gate thresholds, tests and bloc gate
+- bash — Write fusion repair fiche and state updates
+- bash — Commit fusion repair fact
 
 **Synthèse produite :**
 
-⏵ Le repli (l'heuristique quand le neuronal ne segmente pas) ajoute 46 phrases de faux syntagmes ; je passe la fusion par niveau en **strict** (la source choisie par niveau, sans repli) et je re-mesure
+⏵ J'aligne l'index, le README et la revue, puis je commite la fusion réparée
 
 ## 3. Travail accompli
 
@@ -4663,7 +4666,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 785 autres
+- … et 788 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4889,4 +4892,5 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L — LA FRONTIÈRE SUR LES 71 LANGUES : SCRIPT 71/71 (1,0), LANGUE 0,137 CONTRE 0,032" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
 - L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --form
 - L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,8226 / 0,8784), LA FUSION DÉGRADE (0,928 / 0,802 / 0,857), 1 REFUS (r353)" 2>&1 | tail -4; ec
+- L — LA FUSION RÉPARÉE : PAR NIVEAU (NEURONAL POS/SYNTAGMES, HEURISTIQUE PRAGMATIQUE) — 0,9309 / 0,8226 / 0,8784 / 0,9954, LE MAXIMUM DES DEUX" 2>&1 | tail -4; e
 

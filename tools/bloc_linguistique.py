@@ -1324,10 +1324,27 @@ def _supprimer_chevauchements(etiquettes: list[Etiquette],
     return sorted(gardees, key=lambda e: (e.debut, e.fin, e.niveau))
 
 
+# La priorité **par niveau** de la fusion : le neuronal tient POS/syntagmes/tête,
+# l'heuristique tient phrase/pragmatique/discours/document. C'est la réparation de la
+# fusion : les deux sources ne concourent plus par confiance sur les mêmes niveaux.
+PRIORITE_NIVEAU = {
+    "graphème": "heuristique", "morphème": "heuristique", "mot": "heuristique",
+    "pos": "neuronal", "syntagme": "neuronal", "phrase": "heuristique",
+    "pragmatique": "heuristique", "discours": "heuristique", "document": "heuristique",
+}
+
+
 def _fusion(a: Annotation, b: Annotation, source: str,
-            priorite_syntagme: str = "heuristique") -> Annotation:
+            priorite_syntagme: str = "heuristique",
+            priorite_par_niveau: dict | None = None) -> Annotation:
     """Fusion déterministe : la meilleure confiance par (niveau, span, type) ; les candidats
-    sont réunis ; la langue/le script vont à la meilleure confiance."""
+    sont réunis ; la langue/le script vont à la meilleure confiance.
+
+    Si `priorite_par_niveau` est donné, la fusion choisit **la source par niveau** (le
+    neuronal pour POS/syntagmes, l'heuristique pour la pragmatique) au lieu de faire
+    concourir les deux par confiance — c'est la réparation mesurée par la porte des quatre
+    modes : l'ancienne fusion rendait 0,928/0,802/0,857, sous le neuronal seul.
+    """
     meilleures: dict[tuple, Etiquette] = {}
     for e in a.etiquettes + b.etiquettes:
         cle = (e.niveau, e.debut, e.fin, e.type, e.source)
@@ -1335,7 +1352,17 @@ def _fusion(a: Annotation, b: Annotation, source: str,
             meilleures[cle] = e
         else:
             meilleures[cle].candidats = sorted(set(meilleures[cle].candidats) | set(e.candidats))
-    etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
+    if priorite_par_niveau:
+        # Choix **strict** par niveau : la source désignée, sans repli. Le repli (prendre
+        # l'autre source quand la première n'a rien) ajoutait 46 phrases de syntagmes
+        # heuristiques faux — 0,8069 au lieu de 0,8226 : il est retiré. Les niveaux absents
+        # du dict gardent toutes les sources.
+        choisis = dict(priorite_par_niveau)
+        etiquettes = [e for e in meilleures.values()
+                      if e.niveau not in choisis or e.source == choisis[e.niveau]]
+        # La source est choisie par niveau : plus d'arbitrage de chevauchement à faire.
+    else:
+        etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
     if a.langue != "und" and (b.langue == "und" or a.langue == b.langue):
         lg, script = a.langue, a.script
     else:
@@ -1358,17 +1385,19 @@ class Parallele:
     nom = "parallele"
 
     def __init__(self, blocs: Sequence[BlocLinguistique],
-                 priorite_syntagme: str = "heuristique"):
+                 priorite_syntagme: str = "heuristique",
+                 priorite_par_niveau: dict | None = None):
         if len(blocs) != 2:
             raise ValueError("le parallèle attend exactement deux blocs")
         self.blocs = list(blocs)
         self.priorite_syntagme = priorite_syntagme
+        self.priorite_par_niveau = priorite_par_niveau
 
     def analyser(self, texte: str, langue: str | None = None,
                  contexte: str | None = None) -> Annotation:
         a = self.blocs[0].analyser(texte, langue, contexte)
         b = self.blocs[1].analyser(texte, langue, contexte)
-        return _fusion(a, b, self.nom, self.priorite_syntagme)
+        return _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
 
 
 class Cascade:
@@ -1378,12 +1407,14 @@ class Cascade:
 
     def __init__(self, heuristique: BlocLinguistique, neuronal: BlocLinguistique,
                  seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique"),
-                 priorite_syntagme: str = "heuristique"):
+                 priorite_syntagme: str = "heuristique",
+                 priorite_par_niveau: dict | None = None):
         self.h = heuristique
         self.n = neuronal
         self.seuil = seuil
         self.niveaux = niveaux
         self.priorite_syntagme = priorite_syntagme
+        self.priorite_par_niveau = priorite_par_niveau
         self.appels_neuronal = 0
 
     def analyser(self, texte: str, langue: str | None = None,
@@ -1397,7 +1428,7 @@ class Cascade:
             return a
         self.appels_neuronal += 1
         b = self.n.analyser(texte, langue, contexte)
-        fusion = _fusion(a, b, self.nom, self.priorite_syntagme)
+        fusion = _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
         fusion.trace.append({"etape": "cascade", "residuel": residuel, "appel_neuronal": True,
                              "seuil": self.seuil})
         return fusion

@@ -7729,3 +7729,44 @@ bfc6084a L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,82
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| fichiers / JSON de résultats | **596** / **684** |\", \"| fichiers / JSON de résultats | **596** / **68 … [1316 caractères tronqués]`
+
+  ```
+compteur 685
+  revue de documentation · 596 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ docs/pilotage/en-cours.md                          |   6 +-
+ docs/schemas/arbre-referents.svg                   |  30 ++++++
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |   5 +-
+ reports/rapport-s-arbre-referents.md               | 101 +++++++++++++++++++++
+ tools/structures                                   |   2 +-
+ 5 files changed, 138 insertions(+), 6 deletions(-)
+ create mode 100644 docs/schemas/arbre-referents.svg
+ create mode 100644 reports/rapport-s-arbre-referents.md
+ef530713 S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -3; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; curl -s -o /dev/null -w \"page %{http_code}\\n\" http://127.0. … [243 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   08418b55..ef530713  master -> master
+exit=0
+ef530713fcc5fa03d704e8b6838406479f19674c	refs/heads/master
+4d3a3ca2db994ec6bb1eba54b6b0f7937a67779c	refs/heads/master
+page 200
+css 200
+2430607 python3 serveur.py --port 8765
+  ```
+
+### 🤖 Assistant
+
+⏵ Les SVG restent dans leur cadre, la page s'adapte à la fenêtre et l'arbre défile dans son cadre.
+
+Le débordement venait du `viewBox` fixe de 1 020 px : l'arbre du troisième paragraphe allait jusqu'à 1 097,5 px, et les jetons des référents poussaient encore plus loin. Le `viewBox` est maintenant **calculé** à partir du niveau le plus large, des jetons et du contexte : 1 020 × 550 pour l'exemple, 1 398 × 550 pour a002 et 1 613 × 550 pour a003. Un test vérifie sur les trois paragraphes que chaque rectangle — nœuds, jetons, contexte — reste dans le cadre.
+
+La page est **responsive**. Le header, la légende et le main sont bornés à 1 180 px, centrés, et le corps ne déborde plus horizontalement ; les longues phrases passent à la ligne. L'arbre garde sa largeur naturelle et **défile horizontalement** dans son propre cadre, avec une barre de défilement fine, quand la fenêtre est plus étroite : le SVG ne sort plus de la carte, il se parcourt. Le banc de phrases d'origine profite des mêmes règles.
+
+Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `http://127.0.0.1:8765/paragraphes` (un Ctrl+F5 si le CSS est resté en cache). Les 52 tests passent, le sous-module est poussé en `4d3a3ca` et le principal en `ef530713`. La fiche et le SVG, de nouveau retirés par un commit L, ont été rétablis au passage. Il reste à valider les trois paragraphes sur cette page.
+

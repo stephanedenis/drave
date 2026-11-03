@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 24.9 h |
+| Durée | 25.0 h |
 | Tours | 12 |
-| Messages | 358 |
-| Appels d'outils | 352 |
+| Messages | 360 |
+| Appels d'outils | 353 |
 | Fichiers touchés | 15 |
-| Commandes | 268 |
+| Commandes | 269 |
 | Sous-agents | 0 |
 | Commits | 24 |
 | Compactages de contexte | 1 |
@@ -452,7 +452,7 @@ Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l
 
 ### Tour 12 — les svg sortent du cadre, prévoir scrollbar et largeur de page adapté à la largeur d'écran ou fenêtre
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Measure SVG content bounds and CSS widths
 - bash — Read CSS layout and SVG layout code
@@ -465,6 +465,17 @@ Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l
 - bash — Update fiche/state for responsive frame fix
 - bash — Inspect L deletions, counters, pointer
 - bash — Commit responsive frame fix and restore S files
+- bash — Push frame fix and verify live page
+
+**Synthèse produite :**
+
+⏵ Les SVG restent dans leur cadre, la page s'adapte à la fenêtre et l'arbre défile dans son cadre.
+
+Le débordement venait du `viewBox` fixe de 1 020 px : l'arbre du troisième paragraphe allait jusqu'à 1 097,5 px, et les jetons des référents poussaient encore plus loin. Le `viewBox` est maintenant **calculé** à partir du niveau le plus large, des jetons et du contexte : 1 020 × 550 pour l'exemple, 1 398 × 550 pour a002 et 1 613 × 550 pour a003. Un test vérifie sur les trois paragraphes que chaque rectangle — nœuds, jetons, contexte — reste dans le cadre.
+
+La page est **responsive**. Le header, la légende et le main sont bornés à 1 180 px, centrés, et le corps ne déborde plus horizontalement ; les longues phrases passent à la ligne. L'arbre garde sa largeur naturelle et **défile horizontalement** dans son propre cadre, avec une barre de défilement fine, quand la fenêtre est plus étroite : le SVG ne sort plus de la carte, il se parcourt. Le banc de phrases d'origine profite des mêmes règles.
+
+Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `http://127.0.0.1:8765/paragraphes` (un Ctrl+F5 si le CSS est resté en cache). Les 52 tests passent, le sous-module est poussé en `4d3a3ca` et le principal en `ef530713`. La fiche et le SVG, de nouveau retirés par un commit L, ont été rétablis au passage. Il reste à valider les trois paragraphes sur cette page.
 
 ## 3. Travail accompli
 
@@ -530,7 +541,7 @@ Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 228 autres
+- … et 229 autres
 
 ## 4. Mesures et résultats marquants
 
