@@ -34,9 +34,6 @@
 > **Passe précédente — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
 > (journaux `/tmp/portes-1031-n2d`) : mêmes rouges ; `porte-ocr` (48 s) était verte.
 
-> **Passe précédente — 2026-10-31 à 12 h 54 :** 78 portes, 73 vertes, 5 rouges ; `porte-jeux`
-> (vraie régression, corrigée `2edb3079`) et les structurelles connues ; détail : historique.
-
 > **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
 > les invariants qui ne sont pas des chiffres. Les mesures de campagne (perplexités,
 > budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :

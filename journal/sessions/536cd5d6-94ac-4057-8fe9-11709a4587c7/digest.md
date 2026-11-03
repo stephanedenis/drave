@@ -14203,3 +14203,25 @@ en-cours : B13 API
 ⏵ Commit fait (`5bafefab`) mais T0 à 4 031 : je resserre la ligne B13 et je repasse sous budget.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -4; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; re … [951 caractères tronqués]`
+
+  ```
+❌ 2 violation(s) :
+     · docs/pilotage/references-non-regression.md : 2518 mots > budget 2500 (T1)
+     · T0 : 4031 mots (AGENTS + en-cours + une tâche) > budget 4 000
+en-cours : ligne B13 resserrée
+  T0 max : 4020 mots (budget 4 000)
+  ❌ 2 violation(s) :
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[master c2ba64e4] BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000
+ 7 files changed, 39 insertions(+), 13 deletions(-)
+[commit 0]
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux dépassements : références à 2 518/2 500 et T0 à 4 020. J'enlève une passe ancienne et je resserre les questions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) références : sortir la passe du 31/10 12 h 54 (historique la garde)\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nmarker=\"> **Passe précédente — 2026-10-31 à 1 … [1447 caractères tronqués]`

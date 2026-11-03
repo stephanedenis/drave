@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 20.1 h |
+| Durée | 20.2 h |
 | Tours | 76 |
-| Messages | 551 |
-| Appels d'outils | 488 |
+| Messages | 552 |
+| Appels d'outils | 489 |
 | Fichiers touchés | 16 |
-| Commandes | 357 |
+| Commandes | 358 |
 | Sous-agents | 0 |
-| Commits | 44 |
+| Commits | 45 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2029,7 +2029,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 
 ### Tour 76 — elancer les mesures B13 via l'API tout de suite
 
-*20 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gold and minute measurement scripts
 - bash — Read B13 measure CLI options
@@ -2045,11 +2045,11 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - bash — Rerun porte-minute with deepseek-chat
 - bash — Compare API and 7B measure results
 - bash — Commit API measures and state update
-- … et 1 autres
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Commit fait (`5bafefab`) mais T0 à 4 031 : je resserre la ligne B13 et je repasse sous budget.
+⏵ Deux dépassements : références à 2 518/2 500 et T0 à 4 020. J'enlève une passe ancienne et je resserre les questions.
 
 ## 3. Travail accompli
 
@@ -2116,7 +2116,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 317 autres
+- … et 318 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2304,4 +2304,5 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET" -- AGENTS.md; echo "[commit $?]"; git log --oneline -1
 - B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35" -m "PolitiqueLLM en mode API (deepseek-chat) : porte-minute llm_porte 1,0
 - BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000" -- docs/pilotage/en-cours.md; echo "[commit $?]"
+- BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)" -- docs/pilotage/references-non-regression.md docs/pilotage/en-cours
 

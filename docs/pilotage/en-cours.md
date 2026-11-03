@@ -146,10 +146,8 @@ externes** et la **prochaine action**.
 
 ## Les questions ouvertes
 
-- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.2** tranche (3,0107 à octets constants) ;
-  reste **1 024 octets**.
-- **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → **non** :
-  3,1591 ; le français tient et la largeur progresse ; 2,5 est à **1,3–2,7 M pas**.
+- **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
+- **N2** : les **200 k pas** sous **2,5** ? → **non** : 3,1591 ; 2,5 est à **1,3–2,7 M pas**.
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.
 
 ## La carte
