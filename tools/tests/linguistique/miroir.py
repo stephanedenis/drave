@@ -215,6 +215,15 @@ def _simple(a: bl.Annotation) -> bool:
     return not any(e.niveau == "syntagme" and e.type in ("SUB",) for e in a.etiquettes)
 
 
+NEGATIONS = {"ne", "n'", "pas", "plus", "jamais", "rien", "personne"}
+
+
+def _adverbes(a: bl.Annotation) -> set[str]:
+    """Les adverbes **hors négation** (le complément thématique de la paire)."""
+    return {e.valeur.lower() for e in a.etiquettes
+            if e.niveau == "pos" and e.type == "ADV" and e.valeur.lower() not in NEGATIONS}
+
+
 def _acte(a: bl.Annotation) -> str:
     """L'acte pragmatique de l'annotation (assertion par défaut)."""
     return next((e.valeur for e in a.etiquettes
@@ -262,6 +271,10 @@ def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict |
         if acte_q == "question" and _acte(b) != "assertion":
             continue
         if acte_q == "question" and not _simple(b):
+            continue
+        # Paire thématique : même complément (adverbe hors négation) — « demain » rapproche
+        # r423 de r408, pas r306 « Il ne vient pas. ».
+        if acte_q == "question" and (_adverbes(b) ^ _adverbes(a)):
             continue
         v = _verbe(b)
         if verbe and v and _normaliser_egal(v, verbe):

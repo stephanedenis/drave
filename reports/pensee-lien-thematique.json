@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-03 02:20 EST",
+  "apres_contrainte_thematique": {
+    "paires": 10,
+    "justes": 5,
+    "taux": 0.5
+  },
+  "detail": [
+    {
+      "question": "r408",
+      "texte": "Ne viens-tu pas demain ?",
+      "attendu": "r423",
+      "trouve": null,
+      "texte_trouve": null,
+      "juste": false
+    },
+    {
+      "question": "r409",
+      "texte": "Ne mange-t-il pas ?",
+      "attendu": "r424",
+      "trouve": "r306",
+      "texte_trouve": "Il ne vient pas.",
+      "juste": false
+    },
+    {
+      "question": "r410",
+      "texte": "Ne dort-elle pas ?",
+      "attendu": "r425",
+      "trouve": "r308",
+      "texte_trouve": "Marie lit. Elle aime les livres.",
+      "juste": false
+    },
+    {
+      "question": "r411",
+      "texte": "Ne partent-ils pas ?",
+      "attendu": "r426",
+      "trouve": "r013",
+      "texte_trouve": "Ils ont acheté une maison.",
+      "juste": false
+    },
+    {
+      "question": "r412",
+      "texte": "Ne lis-tu pas ?",
+      "attendu": "r427",
+      "trouve": null,
+      "texte_trouve": null,
+      "juste": false
+    },
+    {
+      "question": "r418",
+      "texte": "Tu ne viens pas demain ?",
+      "attendu": "r423",
+      "trouve": "r423",
+      "texte_trouve": "Tu viens demain.",
+      "juste": true
+    },
+    {
+      "question": "r419",
+      "texte": "Il ne mange pas ?",
+      "attendu": "r424",
+      "trouve": "r424",
+      "texte_trouve": "Il mange.",
+      "juste": true
+    },
+    {
+      "question": "r420",
+      "texte": "Elle ne dort pas ?",
+      "attendu": "r425",
+      "trouve": "r425",
+      "texte_trouve": "Elle dort.",
+      "juste": true
+    },
+    {
+      "question": "r421",
+      "texte": "Ils ne partent pas ?",
+      "attendu": "r426",
+      "trouve": "r426",
+      "texte_trouve": "Ils partent.",
+      "juste": true
+    },
+    {
+      "question": "r422",
+      "texte": "You don't come tomorrow?",
+      "attendu": "r427",
+      "trouve": "r427",
+      "texte_trouve": "You come tomorrow.",
+      "juste": true
+    }
+  ],
+  "constat": "la contrainte ADV hors négation ne restaure pas les 5 paires ; r408 tombe à None (l'adverbe de r423 est 'demain', celui de r408 aussi — mais l'antécédent candidat n'en a pas)",
+  "conclusion": "CINQ contraintes de forme n'ont pas suffi : sujet normalisé, verbe, acte, phrase simple, un seul GV, ADV. Les 5 paires correctes ne sont pas identifiables par la surface ; il faut apprendre le lien ou une contrainte sémantique.",
+  "pistes": [
+    "apprendre le lien sur les 5 paires (positif) et les distracteurs (négatif)",
+    "contrainte de similarité de contenu (vecteurs) entre question et antécédent",
+    "ou documenter que le lien de surface plafonne à 5/10 sur ce gold"
+  ]
+}

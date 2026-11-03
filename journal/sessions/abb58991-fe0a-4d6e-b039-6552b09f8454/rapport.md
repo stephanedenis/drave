@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 9.3 h |
-| Tours | 160 |
-| Messages | 1092 |
-| Appels d'outils | 890 |
+| Tours | 161 |
+| Messages | 1098 |
+| Appels d'outils | 894 |
 | Fichiers touchés | 48 |
-| Commandes | 716 |
+| Commandes | 720 |
 | Sous-agents | 0 |
-| Commits | 84 |
+| Commits | 85 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -343,6 +343,8 @@
 **Tour 159** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 160** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 161** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4056,7 +4058,32 @@ La suite : exiger **un seul GV** (pas de point-virgule) dans l'antécédent, ou 
 
 **Synthèse produite :**
 
-⏵ Round 158 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite la contrainte « un seul GV »
+⏵ Round 158 : « un seul GV » committé (`60c438d3`, 17 fichiers) — juxtapositions écartées, paires **5/10**, T0 4 000
+
+**Fait de la nuit — round 158** : la contrainte « un seul GV ».
+
+- **Contrainte ajoutée** : `_simple(a)` renvoie False si le texte contient `;` (juxtaposition = deux propositions). r344 « Le chat mange ; il dort. », r390 « La cloche sonne ; elle appelle. », r354 « Marie et Paul dansent ; ils s'amusent. » sont **écartés**.
+- **Résultat** : les 10 paires restent **5/10** — le lien prend maintenant **n'importe quelle phrase simple** au bon sujet+verbe : r409 → **r306** « Il ne vient pas. », r410 → **r308** « Marie lit. Elle aime les livres. », r411 → **r190** « Ils arrivent demain. ».
+- **Conclusion** : chaque contrainte de forme (sujet normalisé, verbe, acte, phrase simple, un seul GV) améliore le **diagnostic** sans améliorer le **taux** — les 5 paires correctes ne sont pas identifiables par la seule surface ; il faut une contrainte **thématique** (complément, temps) ou **apprendre** le lien.
+- **Contrôle négatif** : r418–r422 5/5 (rien cassé), juxtapositions écartées (contrainte efficace), r408–r412 0/5.
+- Fiche `rapport-pensee-lien-gv.md` ; JSON `pensee-lien-gv.json`.
+
+**État** : HEAD `60c438d3` ; T0 **4 000** ; revue **585/670** verte ; N2 intact ; serveur 7B sain.
+
+La suite : contrainte **thématique** (partager le complément/le temps) ou apprendre le lien ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+### Tour 161 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Compare adverbs in pair vs distractor
+- bash — Add thematic adverb constraint and measure
+- bash — Freeze thematic constraint final measurement
+- bash — Commit thematic ceiling fact
+
+**Synthèse produite :**
+
+⏵ Round 159 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite le constat « plafond 5/10 »
 
 ## 3. Travail accompli
 
@@ -4155,7 +4182,7 @@ La suite : exiger **un seul GV** (pas de point-virgule) dans l'antécédent, ou 
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 676 autres
+- … et 680 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4342,4 +4369,5 @@ La suite : exiger **un seul GV** (pas de point-virgule) dans l'antécédent, ou 
 - L/B13 — LE SUJET INVERSÉ NORMALISÉ : LES PAIRES RESTENT 5/10, LE LIEN CHOISIT HORS PAIRE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h 
 - L/B13 — LA PHRASE SIMPLE : r222 ÉCARTÉ, LES PAIRES RESTENT 5/10 (LES JUXTAPOSITIONS PASSENT)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format=
 - L/B13 — UN SEUL GV : LES JUXTAPOSITIONS TOMBENT, LES PAIRES RESTENT 5/10 (LA PAIRE THÉMATIQUE MANQUE)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 
+- L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log
 
