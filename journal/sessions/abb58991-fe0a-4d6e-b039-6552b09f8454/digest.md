@@ -11839,3 +11839,59 @@ EN-COURS: 1622
 ⏵ T0 3 996, revue 567/652 ; le lien cassé est la fiche N2 concurrente. Je commite la porte qui bouge
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -12; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_bouge_drvm.py reports/rapport-pensee-porte-bouge.md reports/pensee-porte-bouge.json reports/README.md reports/INDEX.md d … [510 caractères tronqués]`
+
+  ```
+M docs/methode/portes.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ journal/2026-11-02/README.md                       |  10 ++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |   4 +-
+ reports/INDEX.md                                   |   3 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-porte-bouge.json                    | 172 +++++++++++++++++++++
+ reports/rapport-pensee-porte-bouge.md              |  90 +++++++++++
+ tools/pensee/operateurs.py                         |  14 ++
+ tools/tests/qualifier_porte_bouge_drvm.py          | 137 ++++++++++++++++
+ tools/tests/test_pensee_politique.py               
+… [537 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `35ca1461` ; contrôle post-commit et bilan (porte qui bouge : test faible)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== CHECKS ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/taille_documents.py 2>&1 | grep -E \"T0\" | head -1; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3  … [225 caractères tronqués]`
+
+  ```
+35ca1461 21:17:42 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+335e1737 21:10:04 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+6532541c 21:07:02 B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432)
+=== CHECKS ===
+  état · dernier fait 35ca1461 · dernier état 35ca1461
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3996 mots (budget 4 000)
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+SESS=0
+ M docs/methode/portes.md
+ M reports/rapport-s-analyseur-roles.md
+ M reports/rapport-s-corpus-reel.md
+ M reports/s-banque-structures.json
+ M tools/structures
+?? reports/rapport-n2-fenetre.md
+  ```
+
+### 🤖 Assistant
+
+⏵ L'heure d'état 21 h 45 est dans le futur (commit à 21 h 17) : je corrige à 21 h 17 et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/en-cours.md','docs/pilotage/roadmap.md'):\n    p=pathlib.Path(f); t=p.read_text(encoding='utf-8')\n    t=t.replace('21 h 45','21 h 17')\n    p.write_text(t,encoding='utf-8')\np=pathlib.Path('j … [562 caractères tronqués]`

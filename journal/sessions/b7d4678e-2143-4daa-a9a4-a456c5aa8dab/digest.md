@@ -7476,3 +7476,27 @@ ok
   ```
 
 - **job_output** `{"job_id": "bash-266", "timeout_ms": 300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -3 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; ps -eo pid,etime,args | grep -E \"porte-.*\\.sh\" | grep -v grep | head -2 | cut -c1-100", "description": "Che … [25 caractères tronqués]`
+
+  ```
+21:17:54
+80 work/portes/passe-1102-19h32/registre.txt
+porte-tokenizer-kimi 0 8
+porte-topologie 0 100
+porte-trace 0 28
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+porte-reparti-moteur 1 51
+porte-tableaux 1 1
+ 654374       04:18 timeout 1800 bash tools/porte-vision.sh
+ 654375       04:18 bash tools/porte-vision.sh
+  ```
+
+- **job_output** `{"job_id": "bash-266", "timeout_ms": 300000, "wait": true}`

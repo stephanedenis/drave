@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.9 h |
+| Durée | 5.1 h |
 | Tours | 23 |
-| Messages | 261 |
-| Appels d'outils | 271 |
+| Messages | 265 |
+| Appels d'outils | 275 |
 | Fichiers touchés | 6 |
-| Commandes | 207 |
+| Commandes | 210 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -457,19 +457,20 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
 - job_output
 - bash — Ten-minute timer with pass status
 - bash — Ten-minute timer to pass completion
+- bash — Read tables gate failure details
+- bash — Diagnose broken N2 link
+- bash — Wait for pass end and N2 JSON
 
 **Synthèse produite :**
 
-⏵ 73/81 : les **quatre** rouges connues sont là (`indice`, `melange`, `reparti-moteur`, `homeostasie`), aucune surprise
-
-`porte-reparti-moteur` est tombée (code 1, 51 s) — c'est la quatrième rouge **tolérée** attendue. Passe à **73 portes, 69 vertes, 4 rouges connues**. Restent `sauvegarde-modele`, `sessions`, `speculatif`, `tableaux`, `tokenizer-kimi`, `topologie`, `trace`, `vision` (559 s).
+⏵ `porte-tableaux` a vu une fiche N2 **en cours d'écriture** (liée à un JSON pas encore produit) : rouge de chantier en vol, pas régression. J'attends le JSON.
 
 ## 3. Travail accompli
 
@@ -526,7 +527,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 167 autres
+- … et 170 autres
 
 ## 4. Mesures et résultats marquants
 

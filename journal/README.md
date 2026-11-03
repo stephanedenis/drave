@@ -140,7 +140,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a4eaa4c8` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 38 | 0 | 0 | [rapport](sessions/a4eaa4c8-11e2-4ca3-bcb1-b28919cb601a/rapport.md) |
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
-| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 5.0 h | 12 | 579 | 41 | 15 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
+| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 5.1 h | 12 | 581 | 41 | 16 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
 | `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
 | `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 5.0 h | 8 | 485 | 22 | 19 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |
@@ -153,7 +153,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |
 | `c3d0f0bd` | Chantier inactif à examiner | 2026-10-29 14:37 | 18.7 h | 5 | 551 | 26 | 32 | [rapport](sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
-| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 4.9 h | 23 | 271 | 6 | 5 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
+| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 5.1 h | 23 | 275 | 6 | 5 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
 | `cf0456ab` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | 8 | 343 | 27 | 11 | [rapport](sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
 | `d093c795` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 40 | 0 | 0 | [rapport](sessions/d093c795-b4c9-4270-bea8-e2673f86057b/rapport.md) |

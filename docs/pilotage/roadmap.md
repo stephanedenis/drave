@@ -35,7 +35,7 @@
 | **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat de L** (heuristique/neuronal), la mesure 71 langues |
 | **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR est clos** (limite : 8 scans `.PDF`, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A) |
 
-**État au 02/11 21 h 45.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ; le **gold neuronal** est qualifié (POS **0,9415**, syntagmes
+**État au 02/11 21 h 17.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ; le **gold neuronal** est qualifié (POS **0,9415**, syntagmes
 **0,7539**, acte **1,0**) ; la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la
 règle, **0** sans) ; la **pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556**
 majoritaire) — l'heuristique garde. **N2** (close à 19 h 46) : le run de **200 k pas** donne val_fr

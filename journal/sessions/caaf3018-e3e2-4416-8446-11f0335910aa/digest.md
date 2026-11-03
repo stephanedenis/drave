@@ -5230,3 +5230,40 @@ started background job bash-207
   ```
 
 - **job_output** `{"job_id": "bash-207", "timeout_ms": 620000, "wait": true}`
+
+  ```
+21:19:41
+80
+porte-topologie 0 100
+porte-trace 0 28
+porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123 porte-reparti-moteur 1 51 porte-tableaux 1 1 
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-tableaux` est ROUGE — cinquième rouge, non tolérée. Je lis le diagnostic.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat work/portes/passe-1102-19h32/porte-tableaux.log | head -30", "description": "Read tables gate failure details"}`
+
+  ```
+✅ 1572 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2718 examinés) :
+     reports/rapport-n2-fenetre.md → n2-fenetre.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Lien cassé dans une fiche N2 fraîchement ajoutée : je diagnostique avant de corriger.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la reports/n2-fenetre.json reports/rapport-n2-fenetre.md 2>&1 | head; echo \"--- commit de la fiche ---\"; git log -1 --format=\"%h %ad %s\" --date=format:\"%H:%M\" -- reports/rapport-n2-fenetre.md; echo \"--- liens dans la fiche - … [236 caractères tronqués]`
+
+  ```
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+-rw-------. 1 stephane stephane 8702  2 nov 21:05 reports/rapport-n2-fenetre.md
+--- commit de la fiche ---
+--- liens dans la fiche ---
+137:- Mesures : [`n2-fenetre.json`](n2-fenetre.json) ; fiches amont
+--- json ailleurs ---
+  ```
+

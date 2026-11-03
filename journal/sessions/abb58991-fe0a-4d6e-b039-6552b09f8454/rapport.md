@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.0 h |
+| Durée | 5.1 h |
 | Tours | 12 |
-| Messages | 474 |
-| Appels d'outils | 579 |
+| Messages | 476 |
+| Appels d'outils | 581 |
 | Fichiers touchés | 41 |
-| Commandes | 425 |
+| Commandes | 427 |
 | Sous-agents | 0 |
-| Commits | 15 |
+| Commits | 16 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -498,7 +498,7 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 
 ### Tour 12 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Find 138 in chantiers and plan-travail
 - bash — Align chantiers/plan-travail to 140 and check
@@ -514,11 +514,11 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - bash — Extract moving door results
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-bouge.md`
 - bash — Apply moving door state and checks
-- … et 1 autres
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ T0 3 996, revue 567/652 ; le lien cassé est la fiche N2 concurrente. Je commite la porte qui bouge
+⏵ L'heure d'état 21 h 45 est dans le futur (commit à 21 h 17) : je corrige à 21 h 17 et je commite
 
 ## 3. Travail accompli
 
@@ -610,7 +610,7 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 385 autres
+- … et 387 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -723,4 +723,5 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]
 - ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT" 2>&1 | tail -6; echo 
+- ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %ad %s' --date=fo
 

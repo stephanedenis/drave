@@ -6962,3 +6962,30 @@ index 3f1ca8c5..754e3993 100644
  M docs/methode/portes.md
   ```
 
+### 🤖 Assistant
+
+⏵ La rouge `porte-tableaux` vient de la fiche N2 en cours (`rapport-n2-fenetre.md` → JSON absent) ; je vérifie et j'attends la fin de la passe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== fiche N2 ==\" && ls -l reports/rapport-n2-fenetre.md reports/n2-fenetre.json 2>&1; echo; sed -n '1,12p' reports/rapport-n2-fenetre.md 2>/dev/null; echo; echo \"== lien ==\" && grep -n 'n2-fenetre.json' reports/rapport-n2-fe … [200 caractères tronqués]`
+
+  ```
+== fiche N2 ==
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+-rw-------. 1 stephane stephane 8702  2 nov 21:05 reports/rapport-n2-fenetre.md
+
+# N2/R1 — La fenêtre entraînée, de 128 à 1 024 : elle gagne où elle sert, et elle bat 200 000 pas
+
+> **Lignes de roadmap** : **R1** (la fenêtre native) et **N2** (le modèle de production) ·
+> **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur des
+> séquences longues avec RoPE abaisse la PPL là où la fenêtre sert — à **1 000 octets**,
+> 3,2545 (fenêtre 256) → 3,0107 (512) → **2,9950** (1 024) ; à **2 000**, 3,2459 → 2,9728 →
+> **2,9449** — et à courte longueur l'ordre **s'inverse** (128 : 3,3399 pour 512 contre 3,3878
+> pour 1 024) : la fenêtre longue échange du **démarrage à froid** contre de la **profondeur**.
+> Le contrôle « même texte » le tranche : **chaque modèle sature exactement à sa fenêtre** —
+> fenêtre 256 : 3,0663 → 3,1411 (il **se dégrade** au-delà de 256) ; 512 : 2,9068 → 2,8076 ;
+> 1 024 : 2,9197 → **2,7837**, et 1 024 = 2 000 au millième. Sur le **modèle de production**,
+> affiner N2.ac avec RoPE et 512 octets pendant **61,4 Mo** (le budget même de N2.ac) le bat
+… [196 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-172", "timeout_ms": 600000, "wait": true}`
