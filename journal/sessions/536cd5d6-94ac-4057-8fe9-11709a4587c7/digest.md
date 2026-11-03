@@ -14467,3 +14467,30 @@ MM journal/2026-11-03/moteur.md
 ⏵ Disque sain (706 G libres) ; l'échec était une collision d'index concurrente. Il reste 3 lignes dégénérées dans le journal `d629` ; je les retire et je recommite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nfor f in (\"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md\",\n          \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\"):\n    p = pathlib.Path(f); t = p.re … [1733 caractères tronqués]`
+
+  ```
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md 64996 -> 64996 lignes
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md 12362 -> 12362 lignes
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+(vide = propre)
+
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+
+[master 1032ed74] B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAUX DE SESSION NETTOYÉS
+ 14 files changed, 117 insertions(+), 31 deletions(-)
+[commit 0]
+1032ed74 B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAUX DE SESSION NETTOYÉS
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit est passé (`1032ed74`), mais 4 fichiers de journal de session contiennent encore la trace ; je la retire précisément.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nfiles = [\n \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md\",\n \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\",\n \"journal/sessions/536cd5d6-94ac-4057-8f … [1360 caractères tronqués]`

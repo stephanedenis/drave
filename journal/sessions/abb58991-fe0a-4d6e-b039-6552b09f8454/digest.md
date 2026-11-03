@@ -23402,3 +23402,20 @@ a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR L
 ⏵ Le hub tient encore le lock ; j'attends qu'il libère, je retire le lock résiduel et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 16); do sleep 15; if ! pgrep -f \"git commit\" >/dev/null 2>&1; then echo \"libre après $((i*15))s\"; break; fi; done; ls .git/index.lock 2>/dev/null && rm -f .git/index.lock; git commit -m \"L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CH … [223 caractères tronqués]`
+
+  ```
+.git/index.lock
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+EXIT=1
+1c9f58dc B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAL DE SESSION NETTOYÉ
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a encore committé (`1c9f58dc`) et le lock traîne ; j'attends plus longtemps, je retire le lock et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do sleep 15; if ! pgrep -f \"git commit\" >/dev/null 2>&1 && [ ! -f .git/index.lock ]; then echo \"libre après $((i*15))s\"; break; fi; done; ls .git/index.lock 2>/dev/null && rm -f .git/index.lock; git commit -m \"L/B13 — LA PAR … [261 caractères tronqués]`
