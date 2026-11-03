@@ -9276,3 +9276,194 @@ SyntaxError: invalid syntax
 ⏵ Fausse alerte : j'avais lancé le script bash avec python3. Tout est vert. Je commite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 09 h 45 — `porte-homeostasie` s'auto-génère (test complet vert, 10 min 07)\n\n- Si le LoRA de … [1730 caractères tronqués]`
+
+  ```
+journal : homeostasie consignée
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[still running after 60000ms; moved to background job bash-380]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-380", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master da2bfc8f] PORTE HOMEOSTASIE — ELLE RÉGÉNÈRE SON LORA AU LIEU D'ÉCHOUER (VERTE, 10 MIN 07)
+ 19 files changed, 392 insertions(+), 42 deletions(-)
+ create mode 100644 journal/2026-11-03/memoire.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la reprise : 2 rouges connues restantes. Je lance les contrôles de clôture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; echo \"=== T0 ===\"; python3 tools/taille_documents.py 2>&1 | grep \ … [367 caractères tronqués]`
+
+  ```
+09:47
+=== revue ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+  T0 max : 3999 mots (budget 4 000)
+=== sessions ===
+code=0
+=== journal ===
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== schémas ===
+     sources et images relatives.
+=== git ===
+da2bfc8f PORTE HOMEOSTASIE — ELLE RÉGÉNÈRE SON LORA AU LIEU D'ÉCHOUER (VERTE, 10 MIN 07)
+e15618d6 ÉTAT + JOURNAL — LA RÈGLE 11 A UN BLOCAGE NOMMÉ : LA CLÉ API DEEPSEEK EST ABSENTE
+dcbc8b0b ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est vert après la reprise. État de la matinée.
+
+**Depuis « continue » — ce qui a été fait**
+
+- **Règle 11 vérifiée** : `llama-server` tué, `ollama` désactivé, `hauru-gpu-guard` (timer 30 s) actif, `porte-ressources` verte avec son **contrôle GPU réel** (aucun serveur local). AGENTS et T0 sous budget (T0 3 999).
+- **Blocage nommé** : `DEEPSEEK_API_KEY`/`DSH_API_KEY` **absentes**, aucun fichier de clé — avec les serveurs locaux interdits, les **nouveaux appels professeur sont bloqués** (le cache du 26/10 couvre les prompts déjà vus). Consolidé dans `en-cours` et le journal ; les chantiers sans professeur continuent. La conséquence est dite aussi dans les bloquants de Pensée (7B local interdit → API ou DRVM natif).
+- **`porte-reparti-moteur` : verte.** L'épinglage 9,1748 ne se reproduisait pas (8,7434 des deux côtés) ; deux régénérations identiques, modèle effacé, code et corpus inchangés depuis le 8/10 → le pin venait d'un **modèle en cache**. Ré-étalonné à 8,7434 avec la preuve.
+- **`porte-homeostasie` : verte et auto-générée.** Elle régénère son LoRA s'il manque (1 min 45) puis mesure ; test complet de bout en bout : **10 min 07**, `×0` exact, activité monotone, dominance reproduite. Les passes suivantes ne compteront plus que **2 rouges connues** (`indice`, `melange`) au lieu de 4.
+- **Sédimentation** : les 6 fichiers laissés par N2 à sa pause sont committés (3 fiches + 2 JSON + mise à jour) ; Pensée, active, garde les siens.
+- **Validation S reportée** (ta décision) : S reste en pause, la validation en dernier à la reprise.
+
+**Contrôles** : revue ✅ · `en-cours` ✅ · T0 3 999 ✅ · `sessions --check --strict` 0 ✅ · journal ✅ · schémas ✅ · backlog ✅. Dernier commit `da2bfc8f`.
+
+**Ce qui attend** : 1) une **clé API DeepSeek** (variable ou fichier 0600) pour débloquer les professeurs ; 2) la validation de la banque S, un autre jour ; 3) la reprise de N2/S quand tu voudras. Si tu veux, je lance une **passe propre** pour confirmer le verdict à **80/2** (elle prend ~1 h 50, machine réservée).
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 23/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Objectif de nuit atteint (rapport écrit, état vert) : je lis le goal et je le clôture.
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-88b10965-3fd1-4a98-b327-a3923f75e06c","revision":2,"objective":"Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.","phase":"active","roundsStarted":23,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-88b10965-3fd1-4a98-b327-a3923f75e06c", "revision": 2}`
+
+> **Objectif** (complete) : Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.
+
+
+  ```
+{"goal":{"id":"goal-88b10965-3fd1-4a98-b327-a3923f75e06c","revision":3,"objective":"Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.","phase":"complete","roundsStarted":23,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Objectif de nuit clôturé — bilan final.
+
+**La nuit est close, l'objectif est atteint.** Le rapport de 8 h est écrit dans `journal/2026-11-03/README.md` (commit `a219c844`, complété à 08 h 50 et 09 h 45), et le fil détaillé reste dans `work/hub-nuit.md`.
+
+**Les deux passes, intégrées**
+- **02/11 19 h 32** : 81 portes, **76 vertes / 5 rouges**, 1 h 52, sur le GPU 1 pendant que N2 tenait le GPU 0. Les 4 rouges connues + `porte-tableaux` (lien d'une fiche N2 en cours) — **rejouée verte** à 21 h 57.
+- **03/11 04 h 10, machine au repos** : **82 portes, 77 vertes, 5 rouges, 1 h 40** (`work/portes/passe-0303-04h10`). La 82ᵉ porte `porte-ressources` est comptée et verte ; 4 connues + `porte-sessions` (plans N2/S périmés : coordination, **close ensuite** par la pause). L'en-tête, le § 1 et le **§ 2 des références réécrit en 82 lignes** depuis les journaux sont committés (`0713f4e6`), ainsi que `portes.md`.
+
+**Les faits des sessions, dans l'état**
+- **N2** : 200 k pas → 3,1591 ; R1.1 3,2545 ; fenêtre 256→1 024 = 3,2545 → 3,0107 → **2,9950** ; 2,6256 à 1 000 sur 20 000 pas. Les 6 fichiers laissés à la pause sont committés (`19eacae6`).
+- **S** : gold 55, types 54/55, rôles 131/131, compléments 47/47 ; corpus réel 65,5 % propre contre 9,1 % mélangé ; banque 200/355. **Validation reportée** sur ta décision.
+- **Pensée** : 140/140 ; gold réel 432 (POS 0,9065, acte 0,9954) ; **parité DRVM/native 114/114 poids, 5/5 prompts** ; fenêtre non discriminante.
+- **D/R/A** : close à 18 h 45 (147 scans, 60 documents, 1 982 p).
+
+**Ce que j'ai corrigé en plus**
+- `portes.md` : registre dans `work/` et non `/tmp`, procédure « un seul GPU libre ».
+- `porte-reparti-moteur` : épinglage 9,1748 venu d'un modèle en cache ; **ré-étalonné à 8,7434 avec la preuve** → **verte** (`550ca5f2`).
+- `porte-homeostasie` : la suggestion exécutait sa commande, puis était fausse (bras suffixé) ; elle **régénère maintenant son LoRA** et passe — test complet **10 min 07**, verte (`da2bfc8f`). Il ne reste que **2 rouges connues** (`indice`, `melange`).
+- Règle 11 vérifiée (serveurs locaux tués, `hauru-gpu-guard` actif, contrôle GPU dans `porte-ressources`) ; **clé API DeepSeek absente**, bloquant consolidé dans l'état (`e15618d6`).
+
+**Vérifié** (dernier passage à 09 h 47) : revue ✅, `en-cours` ✅, T0 3 999/4 000, `sessions --check --strict` 0, journal ✅, schémas ✅, backlog ✅.
+
+**À toi** : fournir la **clé API DeepSeek** (variable ou fichier 0600) pour débloquer les professeurs ; la validation de la banque S quand tu voudras ; la reprise de N2/S. Si tu veux le verdict définitif, je peux lancer une **passe propre** qui devrait donner **80/2** (~1 h 50, machine réservée) — elle n'est pas lancée.
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+background job bash-272 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 36000; echo "minuteur 10 h terminé") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Minuteur de nuit terminé — je récupère sa sortie et je nettoie les tâches de fond restantes.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 5000}`
+
+  ```
+minuteur 10 h terminé
+[status: completed, exit code: 0]
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-2 [bash] killed — grep -rl "536cd5d6-94ac-4057-8fe9-11709a4587c7" . 2>/dev/null | head -20
+bash-72 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/verifie_etat_a_jour.py --index; echo "HOOK=$?"; git commit -m "ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+
+Le hub intègre les quatre mandats rouverts après le reboot du 02/11 15 h 06
+(N2 0733c5bb à 16 h 17, S 29ad180d à 16 h 19, Pensée e181ce02 à 16 h 16,
+D/R/A fe3c05f0 à 16 h 21) : cinq sections d'état, heartbeat rafraîchi,
+roadmap remise au réel. Budgets tenus : en-cours 1 625 mots (≤ 2 000),
+T0 3 999 (≤ 4 000), revue de documentation verte.
+
+Porte sessions : le strict sortait en 1 avec 0 erreur et 4 avertissements
+(« fichiers proches », data/ ⊃ data/structures/) — l'imbrication d'un
+territoire partagé est le régime normal ; le strict ne refuse plus que les
+quatre classes documentées (champs, identifiants, périmètres, heartbeats).
+Autotest étendu : une réservation imbriquée est avertie sans refus." 2>&1 | tail -20; echo "COMMIT=$?"
+bash-87 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git add docs/pilotage/en-cours
+… [29554 caractères tronqués]
+  ```
+
+- **job_kill** `{"job_id": "bash-271", "reason": "Veille de nuit terminée avec l'objectif ; plus utile"}`
+
+  ```
+job bash-271 had already finished [status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-271 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; bash work/veille_nuit.sh) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Plus aucune tâche de fond — la nuit est entièrement close.
+
+Les deux minuteurs de la nuit sont terminés : `bash-272` (minuteur muet de 10 h, sortie « minuteur 10 h terminé ») et `bash-271` (veille qui écrivait un point toutes les 10 min dans `work/veille-nuit.log`). Il ne reste **aucun job en cours**.
+
+Le bilan reste celui de la clôture : les deux passes sont intégrées (81 portes 76/5 puis **82 portes 77/5 sur machine au repos**), les faits des quatre sessions sont dans l'état et le journal du 03/11, N2 et S sont en pause (fichiers de N2 committés), et les portes réparées laissent **2 rouges connues** (`indice`, `melange`). Tout est vert : revue, `en-cours`, T0 3 999, `sessions --check --strict`, journal, schémas, backlog.
+
+Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeurs (bloquant consolidé dans `en-cours`), et la **validation de la banque S** quand tu voudras. Si tu veux le verdict définitif à **80/2**, je peux lancer la passe propre — elle n'est pas lancée.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+la clé est dans le fichier. une session travaille déjà avec le professeur, vérifie ce que tu peux faire sans conflits avec les autres sessions
+

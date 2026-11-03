@@ -95,7 +95,24 @@ la fenêtre**, pas en rabotant la longueur.
 
 ## 3. Le contrôle depuis zéro
 
-{{TABLE_ZERO}}
+Même recette (RoPE, seq 512, **61,4 Mo**) et **même budget d'octets ajoutés**, mais départ depuis
+une **initialisation aléatoire figée** (`init_figee.pt`) au lieu de N2.ac :
+
+| départ (61,4 Mo à 512) | octets totaux | 128 | 512 | 1 000 | 2 000 | litt. | angl. | wt2 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| **N2.ac** (témoin) | 61 Mo | 3,4902 | 3,5169 | 7,9201 | 12,4065 | 6,0283 | 8,3352 | 9,0525 |
+| **depuis zéro** | 61 Mo | 3,3184 | 3,0709 | 2,9588 | 2,9213 | 5,7295 | 7,6921 | 8,3665 |
+| **affinage de N2.ac** | 122 Mo | **3,1588** | **2,9096** | **2,8018** | **2,7607** | **5,5247** | **7,0507** | **7,9023** |
+
+**La recette fait la moitié du travail, l'initialisation l'autre.** Depuis une initialisation
+aléatoire, la recette RoPE + fenêtre 512 donne **3,3184** en domaine (−0,17 sur N2.ac, pour
+61 Mo) et **2,9213** à 2 000 octets ; l'affinage de N2.ac ajoute **−0,16** en domaine et −0,19 en
+anglais. Autrement dit : **le gain de longueur vient de la fenêtre** (le modèle depuis zéro
+descend déjà de 3,32 à 2,92), et **l'initialisation apporte le niveau de domaine** — pas la
+propriété de longueur. C'est exactement ce qu'il fallait séparer.
+
+Réserve : l'initialisation figée est un tirage aléatoire unique ; un autre tirage déplacerait le
+niveau de quelques centièmes, pas la pente.
 
 ## Ce qui pourrait le rendre faux
 

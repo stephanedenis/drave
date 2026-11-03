@@ -95,6 +95,23 @@ Le modèle à 1 024 (20 k pas) : 2,9197 → 2,8125 → **2,7847** → 2,7837 au 
 2 000 — il gagne jusqu'à **1 024** et s'arrête (**1 024 = 2 000**). Le modèle à 2 048 n'a pas été
 contrôlé de la même façon faute de temps de banc ; c'est une limite nommée.
 
+## 3 bis. La fenêtre paie à toutes les capacités testées
+
+La note de passage N2 → R1 demandait de refaire R1.1/R1.2 « au moins à 21,65 M et 34,3 M ». Les
+deux bras RoPE ont été entraînés **depuis une initialisation aléatoire identique**, à **octets
+constants** (33 Mo), fenêtre 512 (8 000 pas) contre fenêtre 128 (32 000 pas) :
+
+| capacité | fenêtre 512 : 128 / 512 / 1 024 | fenêtre 128 : 128 / 512 / 1 024 |
+|---|---|---|
+| **11,47 M** | 3,6452 / **3,4493** / **3,3628** | **3,5979** / 6,1680 / 7,2446 |
+| **21,65 M** | 3,5312 / **3,3145** / **3,2104** | **3,4494** / 6,1580 / 7,6361 |
+
+Le motif est **le même à toutes les tailles** : à 128 octets la fenêtre courte gagne de 0,05 à
+0,08 ; dès 512 elle perd **2,7** (11,47 M) et **2,8** (21,65 M). La fenêtre n'est donc **pas un
+luxe de gros modèle** : elle est la condition pour que la longueur existe, du plus petit au plus
+grand. Les niveaux absolus ne se comparent pas d'une taille à l'autre (les bras 34,3 M partent
+d'un modèle déjà entraîné, ceux-ci de zéro) ; c'est le **contraste fenêtre** qui est mesuré ici.
+
 ## 4. Le miroir de copie reste muet
 
 Sur tous les modèles de la nuit, la justesse de copie à distance est **0,0078** au mieux (le

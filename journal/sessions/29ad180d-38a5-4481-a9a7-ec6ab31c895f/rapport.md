@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 4.4 h |
-| Tours | 7 |
-| Messages | 269 |
-| Appels d'outils | 277 |
+| Durée | 18.2 h |
+| Tours | 8 |
+| Messages | 273 |
+| Appels d'outils | 278 |
 | Fichiers touchés | 13 |
-| Commandes | 203 |
+| Commandes | 204 |
 | Sous-agents | 0 |
 | Commits | 15 |
 | Compactages de contexte | 0 |
@@ -32,6 +32,8 @@
 **Tour 6** — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
 
 **Tour 7** — tiens ta liste de tâches dsh à jour et continue
+
+**Tour 8** — prochaine étape?
 
 ## 2. Déroulé, étape par étape
 
@@ -308,6 +310,32 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 **Liste DSH** : les 7 tâches du cycle sont terminées ; restent **`h050`/`h053`** (lexique élargi ou règle de fin de phrase) et la **validation humaine des 200 phrases** de la banque. L'arbre porte encore les mises à jour du hub en cours (portes/état) ; je n'y ai pas touché.
 
+### Tour 8 — prochaine étape?
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Start the structures bank server and verify load
+
+**Synthèse produite :**
+
+⏵ Le banc est lancé : 207 phrases, 369 candidats. La prochaine étape est la **validation humaine**, puis l'export de la banque validée.
+
+**Tout de suite : valider la banque**
+
+- Le serveur tourne sur **http://127.0.0.1:8765** (`pid 1737843`, log `/tmp/structures-serveur.log`).
+- Il charge les **7 phrases du banc** (avec leur référence écrite à la main) + les **200 phrases réelles** de la littérature (355 candidats) ; **0 validation** pour l'instant.
+- Conseil : valider d'abord les **7 phrases du banc** (elles ont une référence, on peut comparer), puis un **premier lot de 20 phrases réelles** — les verdicts s'écrivent dans `donnees/validations.jsonl` (append-only).
+- Ensuite, je fais l'export `python3 exporter_corpus.py --mode banque` → `data/structures/banque-validee.jsonl` + manifeste, avec la fiche : combien de `resolu`/`compatible`/`double_sens`/`exclu`, l'accord avec la référence, les spans vérifiés, et les limites (200 phrases, un seul valideur).
+
+**En parallèle, côté S (CPU)**
+
+- **Filtre langue/genre + segmentation en phrases** : c'est la leçon de la mesure corpus — le CEGEP OCR est au plancher du mélange (8,5 % contre 9,1 %) parce qu'il est multilingue/technique et coupé en lignes. Filtrer le français, reconstruire les phrases, puis refaire le taux de GN+GV : c'est le préalable à une banque issue de l'OCR.
+- **`h050`/`h053`** (verbe suivant hors lexique, nom après adjectif en fin de phrase) : petit raffinement, à mesurer sur une nouvelle vague sans retoucher le gold.
+
+**Règle 11 (AGENTS mis à jour)** : le chemin LLM de S (`llm.py`) passe bien par l'**API DeepSeek** ; S n'utilise **aucun serveur local**. Le `llama-server` 7B qui tourne encore (port 18082) est celui de **Pensée** : la règle le déclasse pour les professeurs — le hub/Pensée doit le couper et passer par `tools/llm/enseignant.py`. Les GPU restent à Drave (`porte-ressources`, `hauru-gpu-guard`).
+
+La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h050`/`h053` ensuite.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -370,7 +398,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 163 autres
+- … et 164 autres
 
 ## 4. Mesures et résultats marquants
 

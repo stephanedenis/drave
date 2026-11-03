@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 18.1 h |
-| Tours | 75 |
-| Messages | 523 |
-| Appels d'outils | 460 |
+| Durée | 19.8 h |
+| Tours | 76 |
+| Messages | 543 |
+| Appels d'outils | 480 |
 | Fichiers touchés | 16 |
-| Commandes | 337 |
+| Commandes | 351 |
 | Sous-agents | 0 |
 | Commits | 42 |
 | Compactages de contexte | 2 |
@@ -175,6 +175,8 @@
 **Tour 74** — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos professeurs. nos GPU sont exclusivent réservés à l'execution de Drave et ses tâches d'apprentissages
 
 **Tour 75** — prépare la clé en fichier
+
+**Tour 76** — elancer les mesures B13 via l'API tout de suite
 
 ## 2. Déroulé, étape par étape
 
@@ -1993,34 +1995,55 @@ GPU 0/1 **libres** ; la tâche Drave **N4** (`n4_dessin_b`, 13,5 Gio, 99 %, 86 �
 
 ### Tour 75 — prépare la clé en fichier
 
-*3 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Search DeepSeek key in DSH config, write 0600 key file
 - bash — Configure key file env vars and verify dry-run
 - ask_user_question
+- bash — Test DeepSeek API live and PolitiqueLLM step
+- bash — Check key locations and fix PolitiqueLLM test call
+- bash — Retry key check, live API and professor step
+- bash — Test professor step and a second live call
+- bash — Final professor step via DeepSeek API
+- bash — Professor step with target tuple, verify cache, models, GPU
+- todo_write
 
 **Synthèse produite :**
 
-⏵ Le fichier et l'environnement sont prêts ; il ne manque que la valeur de la clé.
+⏵ Tout est en place : API live, professeur opérationnel, GPU libres et garde-fou actif.
 
-Le fichier est prêt :
+\## L'API DeepSeek est en ligne — et le professeur aussi
 
-- **`~/.config/drave/deepseek.key`** — `0600`, vide pour l'instant ; dossier `~/.config/drave` en `0700`.
-- **`~/.bashrc`** — `DEEPSEEK_KEY_FILE` et `DSH_KEY_FILE` exportés vers ce fichier.
-- **`~/.config/environment.d/90-drave.conf`** — les mêmes variables pour les services systemd.
-- **Dry-run vérifié** : `deepseek-chat`, aucune requête réseau (clé vide → hors ligne, comme prévu).
-- **Garde-fou GPU** toujours actif ; un job Drave (`gpu-env`) tourne sur GPU0, aucun serveur local.
+- **Clé** : `~/.config/drave/deepseek.key` — `0600`, 35 caractères (`sk-…`), dossier `0700` ; `DEEPSEEK_KEY_FILE` et `DSH_KEY_FILE` exportés dans `~/.bashrc` et `~/.config/environment.d/90-drave.conf`. Jamais affichée, jamais dans le dépôt.
+- **Appel live de contrôle** : « ok » — **15 jetons, 1,12 s** ; second appel : « Le chat dort. » (17 jetons) ; modèle servi : `deepseek-flash`.
+- **Professeur** : `PolitiqueLLM` propose **« bas »** depuis l'état initial vers (4,4) — **0,91 s, 0 erreur** ; cache DeepSeek : **914 entrées**.
+- **GPU** : **libres**, aucun serveur local ; `hauru-gpu-guard` actif (timer 30 s) ; modèles locaux des professeurs retirés (2,5 G restants = Qwen 0,5B de référence + vision).
+- **Règle inscrite** : `AGENTS.md` n° 11, `docs/methode/ressources.md`, `porte-ressources` (contrôle GPU) et `equipment-hauru/system/gpu/`.
+- **Commits** : `9d626b63` (code, porte, règle), `277dd870` (budgets), `bb94b17` (equipment-hauru).
 
-**Il ne manque que la clé.** Colle-la dans le fichier — pas dans le chat, pour qu'elle ne reste pas dans l'historique :
+\## Ce qui change pour la suite
 
-```bash
-cat > ~/.config/drave/deepseek.key <<'EOF'
-sk-...
-EOF
-chmod 600 ~/.config/drave/deepseek.key
-```
+Les mesures B13 (« gold neuronal », porte-minute) tournaient sur le **Qwen2.5-7B local** ; elles passeront par **`deepseek-flash`**. Ce n'est pas le même professeur : les chiffres seront **rejouables et comparables entre eux**, mais pas directement aux anciens — il faudra le dire dans la fiche. Je peux lancer ce rerun maintenant (quelques appels, cache activé), ou d'abord vérifier sur un petit banc que le comportement du professeur reste dans les mêmes bornes.
 
-Dès qu'elle y est, je lance un appel live de contrôle (`deepseek-chat`, 4 jetons), puis je relance les mesures B13 (« gold neuronal », porte-minute) via l'API, et je vérifie que les résultats restent comparables à ceux du 7B local.
+Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **attendre que la session B13 le fasse** avec sa propre clé et son plan ?
+
+### Tour 76 — elancer les mesures B13 via l'API tout de suite
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Locate B13 gold and minute measurement scripts
+- bash — Read B13 measure CLI options
+- bash — Run B13 politique measure via DeepSeek API
+- bash — Run B13 porte-minute measure via DeepSeek API
+- job_output
+- bash — Inspect local model check in B13 measures
+- bash — Patch measures for API mode and rerun politique
+- bash — Rerun porte-minute measure via API after patch
+- bash — Compare 7B and API B13 measure results
+
+**Synthèse produite :**
+
+⏵ Les deux mesures ont tourné via l'API et écrit leurs JSON ; je compare aux résultats du 7B local.
 
 ## 3. Travail accompli
 
@@ -2087,7 +2110,7 @@ Dès qu'elle y est, je lance un appel live de contrôle (`deepseek-chat`, 4 jeto
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 297 autres
+- … et 311 autres
 
 ## 4. Mesures et résultats marquants
 

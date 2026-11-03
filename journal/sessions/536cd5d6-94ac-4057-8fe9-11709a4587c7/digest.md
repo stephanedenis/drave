@@ -13671,3 +13671,370 @@ chmod 600 ~/.config/drave/deepseek.key
 Dès qu'elle y est, je lance un appel live de contrôle (`deepseek-chat`, 4 jetons), puis je relance les mesures B13 (« gold neuronal », porte-minute) via l'API, et je vérifie que les résultats restent comparables à ceux du 7B local.
 
 - **ask_user_question** `{"questions": [{"header": "Clé DeepSeek", "id": "cle_paste", "question": "La clé est-elle collée dans ~/.config/drave/deepseek.key ?", "options": [{"label": "Oui, teste l'API maintenant (Recommandé)", "description": "Je lance un appel live de contrôle puis les mesures B13 via l'API."}, {"label": "Pa … [291 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"cle_paste","selected":["Oui, teste l'API maintenant (Recommandé)"]}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Clé reçue ; je teste l'API en live puis un pas de `PolitiqueLLM` (le professeur) sur le labyrinthe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path.home()/\".config/drave/deepseek.key\"\nv = p.read_text().strip()\nprint(\"clé :\", \"présente\" if v else \"ABSENTE\", \"| longueur\", len(v), \"| préfixe\", v[:3], \"| permissions\" … [815 caractères tronqués]`
+
+  ```
+clé : ABSENTE | longueur 0 | préfixe  | permissions 0o600
+
+== appel live ==
+ERREUR : clé absente : exporter DEEPSEEK_API_KEY (ou DSH_API_KEY), ou utiliser --dry-run
+
+== PolitiqueLLM (professeur) sur le labyrinthe ==
+pas proposé : None | dernière réponse : erreur: AttributeError: 'function' object has no attribute 'candidats' | erreurs : 1 | latence : 0.0 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier est toujours **vide** (0 octet) : la clé n'a pas été collée au bon endroit, ou pas encore. Je vérifie les emplacements et je corrige le petit bug d'appel du test.
+
+- **bash** `{"command": "echo \"== fichier attendu ==\"; ls -l /home/stephane/.config/drave/deepseek.key 2>&1; echo; echo \"== autres emplacements possibles ==\"; find /home/stephane /root -maxdepth 7 \\( -name 'deepseek.key' -o -name 'deepseek*key*' -o -name '*dsh*key*' -o -name '*deepseek*.env' \\) 2>/dev/nul … [623 caractères tronqués]`
+
+  ```
+== fichier attendu ==
+-rw-------. 1 stephane stephane 0  3 nov 09:36 /home/stephane/.config/drave/deepseek.key
+
+== autres emplacements possibles ==
+/home/stephane/.config/drave/deepseek.key
+
+== clé éventuelle dans le presse-papiers ? (non : jamais) ==
+== PolitiqueLLM avec initial() ==
+pas : None | dernière : erreur: TypeError: 'function' object is not subscriptable | erreurs : 1
+  ```
+
+### 🤖 Assistant
+
+⏵ La clé n'est **pas** dans le fichier (0 octet) : il n'y a aucun autre `deepseek.key` sur la machine. Le test `PolitiqueLLM` corrigé (`initial()`/`but()`) échoue donc sur « clé absente ».
+
+**Le fichier est toujours vide.** C'est la seule raison pour laquelle l'API ne répond pas — le reste est prêt (fichier `0600`, `DEEPSEEK_KEY_FILE` dans `.bashrc` et `environment.d`, adaptateur et professeur branchés, garde-fou GPU actif).
+
+Peux-tu relancer exactement ceci dans **ton** terminal ? (le `~` du shell peut différer selon la session)
+
+```bash
+cat > /home/stephane/.config/drave/deepseek.key <<'EOF'
+sk-...
+EOF
+chmod 600 /home/stephane/.config/drave/deepseek.key
+wc -c /home/stephane/.config/drave/deepseek.key   # doit afficher > 20
+```
+
+Si tu préfères ne pas passer par le chat : tu peux aussi la déposer dans n'importe quel fichier hors dépôt et me donner le **chemin** seulement — je la copierai en `0600` sans l'afficher.
+
+- **ask_user_question** `{"questions": [{"header": "Clé DeepSeek", "id": "cle_paste2", "question": "Le fichier ~/.config/drave/deepseek.key est toujours vide — que préfères-tu ?", "options": [{"label": "Je la colle avec la commande exacte ci-dessus (Recommandé)", "description": "Tu relances le bloc cat/chmod dans un termina … [316 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"cle_paste2","selected":[],"custom":"j'ai mis la clé. réessaie"}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvelle vérification du fichier et test live de l'API et du professeur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path.home()/\".config/drave/deepseek.key\"\nv = p.read_text().strip()\nprint(\"clé :\", \"présente\" if v else \"ABSENTE\", \"| longueur\", len(v), \"| préfixe\", v[:3], \"| perms\", oct( … [794 caractères tronqués]`
+
+  ```
+clé : présente | longueur 35 | préfixe sk- | perms 0o600
+
+== appel live ==
+{
+ "contenu": "ok",
+ "raisonnement": null,
+ "modele": "deepseek-flash",
+ "usage": {
+  "prompt_tokens": 14,
+  "completion_tokens": 1,
+  "total_tokens": 15,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  },
+  "prompt_cache_hit_tokens": 0,
+  "prompt_cache_miss_tokens": 14
+ },
+ "latence_s": 1.12,
+ "cache": false
+}
+
+== PolitiqueLLM (professeur) ==
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+TypeError: but_l() missing 1 required positional argument: 'e'
+  ```
+
+### 🤖 Assistant
+
+⏵ L'API répond (`ok`, 15 jetons, 1,12 s) ; le test du professeur avait juste le mauvais appel de `but` — je corrige et je termine le pas.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 180 python3 - <<'PY' 2>&1 | tail -8\nfrom tools.pensee.operateurs import PolitiqueLLM, LABYRINTHE\netat = LABYRINTHE.initial()\nbut = LABYRINTHE.but_l(etat)\np = Pol … [593 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+AttributeError: 'Probleme' object has no attribute 'but_l'
+
+== porte deepseek en live (2 prompts) ==
+{
+ "contenu": "Le chat dort.",
+ "raisonnement": null,
+ "modele": "deepseek-flash",
+ "usage": {
+  "prompt_tokens": 13,
+  "completion_tokens": 4,
+  "total_tokens": 17,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 180 python3 - <<'PY' 2>&1 | tail -6\nfrom tools.pensee.operateurs import PolitiqueLLM, LABYRINTHE\netat = LABYRINTHE.initial()\nbut = LABYRINTHE.but(etat)\np = Polit … [323 caractères tronqués]`
+
+  ```
+état : Etat(id='l0:0', parent=None, profondeur=0, candidats=(Candidat(id='x', corps={'v': 0}, annotation={}, statut='hypothese'), Candidat(id='y', corps={'v': 0}, annotation={}, statut='hypothese')), statut='ouvert') | but : False
+pas proposé : None | dernière réponse : erreur: TypeError: 'bool' object is not subscriptable | erreurs : 1 | latence : 0.0 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 180 python3 - <<'PY' 2>&1 | tail -5\nfrom tools.pensee.operateurs import PolitiqueLLM, LABYRINTHE\netat = LABYRINTHE.initial()\np = PolitiqueLLM(jeu=\"labyrinthe\")\ … [504 caractères tronqués]`
+
+  ```
+pas proposé : bas | dernière réponse : bas | erreurs : 0 | latence : 0.91 s
+
+== cache ==
+914
+== modèles restants ==
+2,5G	models
+== GPU ==
+  ```
+
+### 🤖 Assistant
+
+⏵ L'API est en ligne et le professeur propose un pas correct : je clôture.
+
+- **todo_write** `{"todos": [{"content": "Enquêter llama-server (processus, port, GPU, source)", "status": "completed"}, {"content": "Tuer llama-server et libérer les GPU", "status": "completed"}, {"content": "Masquer les unités llama, désactiver ollama", "status": "completed"}, {"content": "Basculer le professeur Po … [479 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 9 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est en place : API live, professeur opérationnel, GPU libres et garde-fou actif.
+
+## L'API DeepSeek est en ligne — et le professeur aussi
+
+- **Clé** : `~/.config/drave/deepseek.key` — `0600`, 35 caractères (`sk-…`), dossier `0700` ; `DEEPSEEK_KEY_FILE` et `DSH_KEY_FILE` exportés dans `~/.bashrc` et `~/.config/environment.d/90-drave.conf`. Jamais affichée, jamais dans le dépôt.
+- **Appel live de contrôle** : « ok » — **15 jetons, 1,12 s** ; second appel : « Le chat dort. » (17 jetons) ; modèle servi : `deepseek-flash`.
+- **Professeur** : `PolitiqueLLM` propose **« bas »** depuis l'état initial vers (4,4) — **0,91 s, 0 erreur** ; cache DeepSeek : **914 entrées**.
+- **GPU** : **libres**, aucun serveur local ; `hauru-gpu-guard` actif (timer 30 s) ; modèles locaux des professeurs retirés (2,5 G restants = Qwen 0,5B de référence + vision).
+- **Règle inscrite** : `AGENTS.md` n° 11, `docs/methode/ressources.md`, `porte-ressources` (contrôle GPU) et `equipment-hauru/system/gpu/`.
+- **Commits** : `9d626b63` (code, porte, règle), `277dd870` (budgets), `bb94b17` (equipment-hauru).
+
+## Ce qui change pour la suite
+
+Les mesures B13 (« gold neuronal », porte-minute) tournaient sur le **Qwen2.5-7B local** ; elles passeront par **`deepseek-flash`**. Ce n'est pas le même professeur : les chiffres seront **rejouables et comparables entre eux**, mais pas directement aux anciens — il faudra le dire dans la fiche. Je peux lancer ce rerun maintenant (quelques appels, cache activé), ou d'abord vérifier sur un petit banc que le comportement du professeur reste dans les mêmes bornes.
+
+Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **attendre que la session B13 le fasse** avec sa propre clé et son plan ?
+
+
+## Tour 76
+
+### 👤 Utilisateur
+
+elancer les mesures B13 via l'API tout de suite
+
+### 🤖 Assistant
+
+⏵ Je localise les mesures B13 (« gold neuronal », porte-minute) et leurs scripts avant de les relancer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== tests B13 ==\" && ls tools/tests/ | grep -iE 'pensee|gold|minute|fenetre|drvm' | head -20; echo; echo \"== portes B13 ==\" && ls tools/porte-* 2>/dev/null | grep -iE 'pensee|gold|minute|drvm' | head -20; echo; echo \"== Pol … [801 caractères tronqués]`
+
+  ```
+== tests B13 ==
+qualifier_politique_drvm.py
+qualifier_porte_bouge_drvm.py
+qualifier_porte_drvm.py
+qualifier_porte_fenetre_drvm.py
+qualifier_porte_minute_drvm.py
+qualifier_porte_mobile_drvm.py
+qualifier_porte_sto_drvm.py
+test_pensee_politique.py
+
+== portes B13 ==
+
+== PolitiqueLLM appelée ==
+./tools/tests/qualifier_politique_drvm.py
+./tools/tests/qualifier_porte_drvm.py
+./tools/tests/qualifier_porte_minute_drvm.py
+./tools/tests/test_pensee_politique.py
+./tools/tests/qualifier_porte_mobile_drvm.py
+./tools/tests/qualifier_porte_bouge_drvm.py
+./tools/tests/qualifier_porte_sto_drvm.py
+./tools/tests/qualifier_porte_sto_graines.py
+./tools/tests/qualifier_porte_fenetre_drvm.py
+./tools/pensee/operateurs.py
+
+== fiches B13 récentes ==
+rapport-pensee-parite-drvm-native.md
+pensee-parite-drvm-native.json
+rapport-pensee-lien-thematique.md
+pensee-lien-thematique.json
+rapport-pensee-lien-gv.md
+pensee-lien-gv.json
+rapport-pensee-lien-simple.md
+pensee-lien-simple.json
+rapport-pensee-lien-sujet.md
+pensee-lien-sujet.json
+rapport-pensee-lien-acte.md
+pensee-lien-acte.json
+rapport-pensee-lien-verbe.md
+pensee-lien-verbe.json
+rapport-pensee-lien-inverse.md
+
+== journal B13 code ==
+digest.md
+plan.md
+rapport.md
+… [1126 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis les options des deux mesureurs B13 puis je les lance via l'API, en sorties séparées pour ne pas écraser les résultats du 7B.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 30 python3 tools/tests/qualifier_politique_drvm.py --help 2>&1 | head -20; echo \"---\"; timeout 30 python3 tools/tests/qualifier_porte_minute_drvm.py --help 2>&1 | head -20", "description": "Read B13 measure CLI options", "t … [18 caractères tronqués]`
+
+  ```
+usage: qualifier_politique_drvm.py [-h] [--modele MODELE]
+                                   [--endpoint ENDPOINT] [--port PORT]
+                                   [--demarrer] [--sortie SORTIE]
+
+qualifier_politique_drvm.py — la politique **DRVM/native** : un vrai modèle
+dans le DRVM. Le conteneur `DRVM` exécute les problèmes de B13 (cadenas
+linéaire, labyrinthe 5×5, porte) avec quatre politiques : l'**oracle**
+(Manhattan/Cadenas), le **contrôle négatif** (aveugle), le **hasard** (graine
+0) et le **modèle local** (`PolitiqueLLM`, Qwen2.5-7B-Instruct, grammaire
+GBNF). On mesure le but, les nœuds, le coût du registre, les appels et la
+**latence réelle**. python3 tools/tests/qualifier_politique_drvm.py --endpoint
+http://127.0.0.1:18082 --sortie reports/pensee-politique-llm.json Le serveur
+est sur CPU (`-ngl 0`) : les GPU de N2 restent intacts.
+
+options:
+  -h, --help           show this help message and exit
+  --modele MODELE
+  --endpoint ENDPOINT
+  --port PORT
+  --demarrer
+---
+usage: qualifier_porte_minute_drvm.py [-h] [--modele MODELE]
+                                      [--endpoint ENDPOINT] [--port PORT]
+                                      [--demarrer] [--sortie SORTIE]
+
+qualif
+… [794 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance les deux mesures en tâche de fond, endpoint API (sans `--demarrer` : aucun serveur local).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_politique_drvm.py --endpoint https://api.deepseek.com --modele deepseek-flash --sortie reports/pensee-politique-llm-api.json 2>&1  … [100 caractères tronqués]`
+
+  ```
+started background job bash-346
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint https://api.deepseek.com --modele deepseek-flash --sortie reports/pensee-porte-minute-api.json 2>& … [105 caractères tronqués]`
+
+  ```
+started background job bash-347
+  ```
+
+- **job_output** `{"job_id": "bash-346", "timeout_ms": 600000, "wait": true}`
+
+  ```
+modèle absent : deepseek-flash
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-347", "timeout_ms": 600000, "wait": true}`
+
+  ```
+modèle absent : deepseek-flash
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-346 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_politique_drvm.py --endpoint https://api.deepseek.com --modele deepseek-flash --sortie reports/pensee-politique-llm-api.json 2>&1 | tail -25) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-347 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint https://api.deepseek.com --modele deepseek-flash --sortie reports/pensee-porte-minute-api.json 2>&1 | tail -25) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Les deux mesureurs refusent `deepseek-flash` : ils vérifient un fichier GGUF local. Je regarde ce contrôle et je l'adapte pour un endpoint API.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -B2 -A8 'modele absent\\|modele_absent\\|absent' tools/tests/qualifier_politique_drvm.py tools/tests/qualifier_porte_minute_drvm.py | head -50", "description": "Inspect local model check in B13 measures", "timeoutMs": 60000}`
+
+  ```
+tools/tests/qualifier_politique_drvm.py-55-    modele = pathlib.Path(args.modele)
+tools/tests/qualifier_politique_drvm.py-56-    if not modele.exists():
+tools/tests/qualifier_politique_drvm.py:57:        raise SystemExit(f"modèle absent : {modele}")
+tools/tests/qualifier_politique_drvm.py-58-    endpoint = args.endpoint or f"http://127.0.0.1:{args.port}"
+tools/tests/qualifier_politique_drvm.py-59-    proc = None
+tools/tests/qualifier_politique_drvm.py-60-    if not _sante(endpoint):
+tools/tests/qualifier_politique_drvm.py-61-        if not args.demarrer:
+tools/tests/qualifier_politique_drvm.py:62:            raise SystemExit(f"serveur absent sur {endpoint} — relancer avec --demarrer")
+tools/tests/qualifier_politique_drvm.py-63-        proc = demarrer_serveur(modele, args.port, pathlib.Path("/tmp/qualifier-drvm-serveur.log"))
+tools/tests/qualifier_politique_drvm.py-64-    try:
+tools/tests/qualifier_politique_drvm.py-65-        mesures = {}
+tools/tests/qualifier_politique_drvm.py-66-        cadenas = (
+tools/tests/qualifier_politique_drvm.py-67-            ("oracle", PolitiqueCadenas()),
+tools/tests/qualifier_politique_drvm.py-68-            ("aveugle", PolitiqueCadenasAveugle()),
+to
+… [1771 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je rends les deux mesureurs « API-aware » (pas de fichier GGUF ni de `/health` local quand l'endpoint est `api.deepseek.com`), puis je relance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor nom in (\"tools/tests/qualifier_politique_drvm.py\", \"tools/tests/qualifier_porte_minute_drvm.py\"):\n    p = pathlib.Path(nom); t = p.read_text()\n    old = \"\"\"    modele = pathlib.Path(args … [1173 caractères tronqués]`
+
+  ```
+started background job bash-349
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 90; DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint https://api.deepseek.com --modele deepseek-flash --sortie reports/pensee-porte-minute-ap … [116 caractères tronqués]`
+
+  ```
+started background job bash-350
+  ```
+
+- **job_output** `{"job_id": "bash-349", "timeout_ms": 900000, "wait": true}`
+
+  ```
+patché : tools/tests/qualifier_politique_drvm.py
+patché : tools/tests/qualifier_porte_minute_drvm.py
+
+== relance politique (API) ==
+   0
+  ],
+  "llm": [
+   false,
+   200,
+   0,
+   2.655,
+   96
+  ]
+ }
+}
+écrit : reports/pensee-politique-llm-api.json
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-350", "timeout_ms": 900000, "wait": true}`

@@ -135,6 +135,30 @@
   "wikitext2": 7.1544,
   "corpus_propre": 9.3679
  },
+ "prod_zero_512": {
+  "fichier": "mix512-zero-15k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.3184,
+    "512": 3.0709,
+    "1000": 2.9588,
+    "2000": 2.9213
+   },
+   "val_big": {
+    "128": 3.1764,
+    "512": 2.9208,
+    "1000": 2.8386,
+    "2000": 2.8156
+   }
+  },
+  "permute_fr": 180.5795,
+  "litterature": 5.7295,
+  "anglais": 7.6921,
+  "wikitext2": 8.3665,
+  "corpus_propre": 9.791
+ },
  "meme_texte_512": {
   "fichier": "mix512-15k.pt",
   "positions": "rope",

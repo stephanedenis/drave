@@ -116,7 +116,7 @@
 |---|---|---|
 | portes | **82** (passe du **03/11 04 h 10** : **82, 77/5**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **587** / **674** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **587** / **676** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` **rejouée verte** après la pause N2/S) | `docs/pilotage/references-non-regression.md` |
 

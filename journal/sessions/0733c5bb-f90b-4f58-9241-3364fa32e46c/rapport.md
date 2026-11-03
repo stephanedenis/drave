@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 11.8 h |
-| Tours | 4 |
-| Messages | 500 |
-| Appels d'outils | 481 |
+| Durée | 19.2 h |
+| Tours | 5 |
+| Messages | 510 |
+| Appels d'outils | 489 |
 | Fichiers touchés | 25 |
-| Commandes | 356 |
+| Commandes | 363 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -31,6 +31,8 @@
 **Tour 3** — background job bash-354 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_prod_zero.out work/n2ac/cap2165.out work/n2ac/cap1147.out 2>/dev/null; ls work/n2ac/mix512-zero-15k.pt 2>/dev/null && echo OKZERO) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 **Tour 4** — background job bash-356 (bash: cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/mix512-zero-15k.pt --rope --longueurs 128,512,1000,2000 --sortie work/n2ac/eval-mix512-zero-15k.json 2>&1 | grep -E '"(128|512|1000|2000)"|litterature|anglais|wikitext2|permute_fr') finished [status: completed, exit code: 0]. Read its ou … [21 caractères tronqués]
+
+**Tour 5** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -114,6 +116,23 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 4 — background job bash-356 (bash: cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/pyt … [301 caractères tronqués]
 
+### Tour 5 — continue
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Read zero control results and 128 arms state
+- bash — Evaluate capacity experiment arms
+- bash — Fill zero control and capacity sections
+- bash — Update state with zero control and capacity
+- bash — Inspect budget violation detail
+- bash — Run closure gates before commit
+- bash — Commit the night's three facts
+- job_output
+
+**Synthèse produite :**
+
+⏵ Remplissage du §3 (depuis zéro) et de la section capacité
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -188,7 +207,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 316 autres
+- … et 323 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -346,4 +365,5 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - cd /home/stephane/GitHub/Qtrinet && git commit -q -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md -F - <<'MSG' FENÊTRE — LE C
 - cd /home/stephane/GitHub/Qtrinet && git commit -q -F - -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md <<'MSG' FENÊTRE — LE C
 - cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/r
+- cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null; python3 -c " impor
 

@@ -1,0 +1,45 @@
+{
+ "cap-2165m-512": {
+  "fichier": "cap-2165m-512.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.5312,
+  "L512": 3.3145,
+  "L1024": 3.2104
+ },
+ "cap-2165m-128": {
+  "fichier": "cap-2165m-128.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.4494,
+  "L512": 6.158,
+  "L1024": 7.6361
+ },
+ "cap-1147m-512": {
+  "fichier": "cap-1147m-512.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.6452,
+  "L512": 3.4493,
+  "L1024": 3.3628
+ },
+ "cap-1147m-128": {
+  "fichier": "cap-1147m-128.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.5979,
+  "L512": 6.168,
+  "L1024": 7.2446
+ },
+ "dispositif": {
+  "capacites": [
+   "11,47 M (224/288)",
+   "21,65 M (296/416)"
+  ],
+  "recette": "RoPE, depuis une init aléatoire identique, 33 Mo vus par bras",
+  "bras": [
+   "fenêtre 512, 8 000 pas",
+   "fenêtre 128, 32 000 pas"
+  ]
+ }
+}
