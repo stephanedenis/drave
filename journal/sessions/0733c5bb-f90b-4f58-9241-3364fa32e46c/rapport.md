@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 4.3 h |
+| Durée | 4.5 h |
 | Tours | 2 |
-| Messages | 273 |
-| Appels d'outils | 280 |
+| Messages | 276 |
+| Appels d'outils | 283 |
 | Fichiers touchés | 20 |
-| Commandes | 209 |
+| Commandes | 210 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*40 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,7 +100,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 21 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
@@ -175,7 +175,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 169 autres
+- … et 170 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -273,6 +273,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `[still running after 60000ms; moved to background job bash-203]`
 - **T2** `[still running after 60000ms; moved to background job bash-205]`
 - **T2** `[still running after 60000ms; moved to background job bash-209]`
+- **T2** `[still running after 60000ms; moved to background job bash-210]`
 
 ## 5. Erreurs rencontrées
 

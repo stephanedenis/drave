@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.4 h |
-| Tours | 19 |
-| Messages | 236 |
-| Appels d'outils | 255 |
+| Durée | 4.5 h |
+| Tours | 23 |
+| Messages | 257 |
+| Appels d'outils | 267 |
 | Fichiers touchés | 6 |
-| Commandes | 196 |
+| Commandes | 205 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -61,6 +61,14 @@
 **Tour 18** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 **Tour 19** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -396,6 +404,70 @@ La porte n'est pas pendue : `mesurer_colonnes.py --porte` calcule depuis 3 min �
 
 ### Tour 19 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
+*3 appels d'outils.* Actions notables :
+
+- bash — Write and dry-run references patcher
+- bash — Fix and rerun references patcher
+- bash — Verify section 1 patch and pass progress
+
+**Synthèse produite :**
+
+⏵ Patcheur prêt : en-tête + §1 + §2 se réécrivent au verdict en une commande
+
+Le patcheur `work/maj_references.py` est testé : à 59 portes il produit déjà l'en-tête (« dernière passe 19 h 32, 56 vertes, 3 rouges, 1 h 03 »), la bascule de l'ancienne en « passe précédente », la ligne du §1 et le tableau du §2. Au verdict, il ne restera qu'à le relancer avec `--ecrire` — après contrôle de la mtime du fichier, au cas où l'autre écrivain l'aurait touché.
+
+Passe à **59 portes, 56 vertes, 3 rouges tolérées** ; `ocr-scans` est à l'étape des tableaux.
+
+### Tour 20 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Paced check of ocr-scans tables step
+
+**Synthèse produite :**
+
+⏵ `ocr-scans` toujours sur les tableaux (étape 3 commencée à 20 h 40)
+
+Passe à **59 portes, 56 vertes, 3 rouges tolérées** ; `ocr-scans` calcule les tableaux (10 pages × 3 familles), la porte précédente ayant pris 3 min sur les colonnes. Rien à corriger ; verdict toujours projeté vers 21 h 10-21 h 15.
+
+### Tour 21 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check ocr-scans process liveness
+
+**Synthèse produite :**
+
+⏵ `ocr-scans` verte à 448 s — 60/81 portes, 57 vertes
+
+La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 vertes, 3 rouges tolérées**. Restent `poids-creux`, `profondeur-routee`, `vision` et une quinzaine de courtes ; verdict toujours vers 21 h 10.
+
+### Tour 22 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Paced pass check
+- job_output
+
+**Synthèse produite :**
+
+⏵ 61/81 portes (58 vertes, 3 tolérées) ; `ocr` verte en 49 s
+
+`porte-ocr` est verte (49 s) après `ocr-scans` (448 s). Passe à **61 portes, 58 vertes, 3 rouges tolérées**. Je continue le point régulier jusqu'aux trois dernières lourdes (`poids-creux`, `profondeur-routee`, `vision`), puis j'applique le verdict aux références.
+
+### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Quick pass check before pacing test
+- bash — Five-minute timer with pass status
+- job_output
+- bash — Ten-minute timer with pass status
+
+**Synthèse produite :**
+
+⏵ La cadence longue fonctionne (5 min) ; je passe à 10 min par round
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -451,7 +523,7 @@ La porte n'est pas pendue : `mesurer_colonnes.py --porte` calcule depuis 3 min �
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 156 autres
+- … et 165 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -529,10 +601,11 @@ La porte n'est pas pendue : `mesurer_colonnes.py --porte` calcule depuis 3 min �
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 21, in <module> AssertionError: (0, '> **État au 02/11 16 h 09.** B13 est à **140/140** (gold 432') [exit code: 1]
 - **T7** : 20:32 portes=54 porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123  porte-n3-service 0 5 2fad8e8d B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'
+- **T19** : === aperçu en-tête === [stderr] Traceback (most recent call last):   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/maj_references.py", line 36, in <module>     > **{h} h {m:02d}** (journa
 
 ## 6. Commits
 

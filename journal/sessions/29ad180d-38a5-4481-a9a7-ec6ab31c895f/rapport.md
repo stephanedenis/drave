@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 4.4 h |
 | Tours | 7 |
-| Messages | 266 |
-| Appels d'outils | 275 |
+| Messages | 269 |
+| Appels d'outils | 277 |
 | Fichiers touchés | 13 |
-| Commandes | 202 |
+| Commandes | 203 |
 | Sous-agents | 0 |
 | Commits | 15 |
 | Compactages de contexte | 0 |
@@ -269,7 +269,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 7 — tiens ta liste de tâches dsh à jour et continue
 
-*26 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - todo_write
 - bash — Add homograph context rule and test examples
@@ -285,7 +285,28 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md`
 - read
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md`
-- … et 11 autres
+- … et 12 autres
+
+**Synthèse produite :**
+
+⏵ Liste DSH à jour ; cycle v4 poursuivi et poussé : 54/55 types, 131/131 rôles, 55 structures.
+
+**Ce qui a été fait**
+
+- **Règle de contexte v4** : un mot du lexique de verbes est un **nom** si le suivant est un auxiliaire ou un verbe — `h046` (« la petite ferme est ») et `h047` (« le simple fait surprend ») sont corrigés.
+- **Holdout4 écrit après la règle** (`h048–h055`, mesuré une fois) : **54/55 types** (98,2 %), **131/131 rôles**, **47/47 compléments**, couverture **1 466/1 475** (99,4 % ; holdout 762/771, 98,8 %).
+- **Limites nommées** : `h050` (« fait » suivi d'un verbe **hors lexique**) et `h053` (« lit » après un adjectif, en fin de phrase).
+- **Contrôles** : baseline **94/131** (0,718), règles coupées **96/131** (0,733), rôles mélangés **0,109** [0,00 ; 0,23].
+- **Corpus réel** re-mesuré : 65,5 % de GN+GV sur la littérature propre contre 9,1 % pour le mélange ; 8,5 % sur le CEGEP OCR (plancher, multilingue/technique) ; homographes **1 134/28** (suspects, pas erreurs).
+- **Banque** : 200 phrases / 355 candidats (SHA `43957a3b…` inchangé) ; **corpus de référence** : 55 lignes, SHA `76accf9d…` ; **47 tests**.
+
+**Committé et poussé**
+
+- Sous-module : **`1445e1d`** (v4) et **`00d2a01`** (manifeste) → `drave-structures`.
+- Principal : **`69bfddba`** → `origin/master` ; pointeur `tools/structures` = `00d2a01`.
+- Fiches : [`analyseur v4`](reports/rapport-s-analyseur-roles.md) et [`corpus réel`](reports/rapport-s-corpus-reel.md) ; état **564 fiches / 650 JSON**, 82 portes, T0 vert.
+
+**Liste DSH** : les 7 tâches du cycle sont terminées ; restent **`h050`/`h053`** (lexique élargi ou règle de fin de phrase) et la **validation humaine des 200 phrases** de la banque. L'arbre porte encore les mises à jour du hub en cours (portes/état) ; je n'y ai pas touché.
 
 ## 3. Travail accompli
 
@@ -349,7 +370,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 162 autres
+- … et 163 autres
 
 ## 4. Mesures et résultats marquants
 

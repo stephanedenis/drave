@@ -7024,3 +7024,33 @@ log mis à jour
   ```
 
 - **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"--- HEAD ---\"; git log --oneline -3; echo \"--- status ---\"; git status --sh … [65 caractères tronqués]`
+
+  ```
+20:47:45
+63 work/portes/passe-1102-19h32/registre.txt
+porte-pannes 0 47
+porte-peripherie 0 14
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+--- HEAD ---
+69bfddba S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)
+20996b87 NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI
+42db89f6 NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+--- status ---
+MM docs/methode/portes.md
+MM docs/pilotage/en-cours.md
+MM docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+  ```
+
+- **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`

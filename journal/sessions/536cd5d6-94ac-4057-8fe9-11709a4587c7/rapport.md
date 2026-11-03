@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 5.0 h |
+| Durée | 5.3 h |
 | Tours | 9 |
-| Messages | 175 |
-| Appels d'outils | 231 |
+| Messages | 181 |
+| Appels d'outils | 241 |
 | Fichiers touchés | 13 |
-| Commandes | 178 |
+| Commandes | 184 |
 | Sous-agents | 0 |
-| Commits | 11 |
+| Commits | 12 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -576,7 +576,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 
 ### Tour 9 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Inspect current git, state and pass progress
 - bash — Check sessions, resource claims and GPU state
@@ -587,10 +587,16 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - bash — Check sessions gate, new resource doc and pass
 - bash — Run documentation review and budgets after new resource doc
 - job_output
+- bash — Identify new gate and document budget violation
+- bash — Check reports index budget and resource gate content
+- bash — Re-run documentation review and check pass status
+- bash — Locate sessions.py strict check lines
+- bash — Add claim-aware mandate check and test sessions gate
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ La porte sessions passe (le cas `data/` / `data/structures/` est bien un avertissement). Je vérifie la revue et j'attends la passe.
+⏵ La porte sessions est verte avec le claim du N2 ; je commite et je vérifie la passe.
 
 ## 3. Travail accompli
 
@@ -654,7 +660,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 138 autres
+- … et 144 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -807,4 +813,5 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - feat(thermal): plafonne le GPU 0 à 180 W et documente les ventilateurs Dell sans BIOS" -m "Le GPU 0 throttle à 87 °C (SW Thermal Slowdown) alors que le GPU 1 re
 - PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE" -m "Le pilotage réservait les fichiers, pas la machine. tools/ressources.py ajoute
 - PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H" -m "Consigne § 10.7 : N2 gpu0/cpu0 12, hub gpu1/cpu1 8, S et Pensée cpu1 4+4 
+- PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE" -m "Le N2 tourne depuis 53 min (R1.2-1024) et son heartbeat 
 

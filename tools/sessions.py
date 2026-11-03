@@ -14,10 +14,14 @@ strict sortait en 1 avec **0 erreur et 4 avertissements**. `en-cours` reste la
 seule source de l'état : ce plan est le **contrat de travail** qui le précède.
 Une session arrêtée (reboot, panne) passe à `État : en pause` : elle reste dans
 l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+Un **mandat long** (run GPU, OCR) est couvert par un **claim actif** dans
+`work/ressources.json` : le heartbeat n'est pas exigé ; le registre distingue le
+mandat long du mandat mort.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 import tempfile
@@ -151,12 +155,24 @@ def depuis_en_cours(racine: Path) -> int:
     print(f"  {n} plan(s) créé(s) à confirmer ; les sessions les complètent, elles ne sont pas actives.")
     return 0
 
+def sessions_avec_claim(racine: Path) -> set[str]:
+    """Les sessions qui ont un claim actif dans work/ressources.json."""
+    chemin = racine / "work/ressources.json"
+    if not chemin.exists():
+        return set()
+    try:
+        data = json.loads(chemin.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    return {str(c.get("session", "")) for c in data.get("claims", []) if c.get("session")}
+
 
 def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
     erreurs: list[str] = []
     avertissements: list[str] = []
     plans = decouvrir(racine)
     actifs = [p for p in plans if p["etat"] in ACTIFS]
+    claims = sessions_avec_claim(racine)
     vus: dict[str, str] = {}
     for p in plans:
         manquants = [c for c in CHAMPS if c not in p["champs"]]
@@ -174,8 +190,12 @@ def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
         vus[p["id"]] = str(p["chemin"])
     for i, a in enumerate(actifs):
         if a["age"] is not None and a["age"] > PEREMPTION_MIN:
-            msg = f"mandat périmé ({a['age']:.0f} min) : {a['id']} — heartbeat à rafraîchir"
-            (erreurs if strict else avertissements).append(msg)
+            if any(a["id"].startswith(c) for c in claims):
+                avertissements.append(
+                    f"mandat long ({a['age']:.0f} min) : {a['id']} — claim actif, heartbeat non exigé")
+            else:
+                msg = f"mandat périmé ({a['age']:.0f} min) : {a['id']} — heartbeat à rafraîchir"
+                (erreurs if strict else avertissements).append(msg)
         for b in actifs[i + 1:]:
             commun = sorted(set(a["perimetre"]) & set(b["perimetre"]))
             if commun:
@@ -254,6 +274,18 @@ def autotest() -> int:
         assert not e, e
         e, _ = verifier(r, strict=True)
         assert not e, e
+        # un mandat long couvert par un claim actif n'est pas périmé, même en strict
+        (r / "work").mkdir(exist_ok=True)
+        (r / "work/ressources.json").write_text(
+            json.dumps({"claims": [{"session": "a"}], "queue": []}), encoding="utf-8")
+        (d / "plan.md").write_text(
+            "# Plan\n\n- **Session** : `a`\n- **Rôle** : test\n- **Périmètre** : A8.0\n"
+            "- **Fichiers réservés** : `tools/a.py`\n- **Heartbeat** : 2026-10-30 11:00 HAE\n"
+            "- **Prochaine action** : finir\n- **État** : actif\n", encoding="utf-8")
+        e, w = verifier(r, strict=True)
+        assert not e, e
+        assert any("mandat long" in x for x in w), w
+        (r / "work/ressources.json").unlink()
         # une réservation IMBRIQUÉE (data/ ⊃ data/structures/) est un avertissement,
         # pas un refus strict : le territoire partagé est le régime normal
         frais = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -274,7 +306,7 @@ def autotest() -> int:
         assert not e, e
         assert any("proches" in x for x in w), w
     print("autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, "
-          "pause sans heartbeat exigé, réservation imbriquée avertie sans refus")
+          "pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus")
     return 0
 
 

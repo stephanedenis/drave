@@ -5466,3 +5466,61 @@ docs/pilotage/en-cours.md            |  27 +++---
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)\" -m \"Le GN ne s'arrête plus devant « ferme »/« fait » quand le suivant est un auxiliaire ou u … [633 caractères tronqués]`
+
+  ```
+[master 69bfddba] S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)
+ 30 files changed, 984 insertions(+), 205 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -4; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; echo \"=== S HEAD ===\"; git show HEAD:reports/rapport-s-analy … [183 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   3f74fe83..69bfddba  master -> master
+exit=0
+69bfddbacf567d3d3561f02ba0d92015760bb04a	refs/heads/master
+00d2a015d2f7448db8324a4b25796312abffa83d	refs/heads/master
+=== S HEAD ===
+# S — Le contexte tranche les homographes : 54/55 types, 131/131 rôles, 55 structures au corpus
+
+160000 commit 00d2a015d2f7448db8324a4b25796312abffa83d	tools/structures
+=== status ===
+MM docs/methode/portes.md
+MM docs/pilotage/en-cours.md
+MM docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+  ```
+
+- **todo_write** `{"todos": [{"content": "S v3 : frontière GN-devant-verbe, gold 47, 46 tests, corpus 47 — committé/poussé", "status": "completed"}, {"content": "Mesure sur corpus réel (50k lignes, 20 799 phrases CEGEP, 50k propres) + contrôle du mélange", "status": "completed"}, {"content": "Banque de candidats réel … [730 caractères tronqués]`
+
+  ```
+Updated todo list: 2 pending, 0 in progress, 7 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Liste DSH à jour ; cycle v4 poursuivi et poussé : 54/55 types, 131/131 rôles, 55 structures.
+
+**Ce qui a été fait**
+
+- **Règle de contexte v4** : un mot du lexique de verbes est un **nom** si le suivant est un auxiliaire ou un verbe — `h046` (« la petite ferme est ») et `h047` (« le simple fait surprend ») sont corrigés.
+- **Holdout4 écrit après la règle** (`h048–h055`, mesuré une fois) : **54/55 types** (98,2 %), **131/131 rôles**, **47/47 compléments**, couverture **1 466/1 475** (99,4 % ; holdout 762/771, 98,8 %).
+- **Limites nommées** : `h050` (« fait » suivi d'un verbe **hors lexique**) et `h053` (« lit » après un adjectif, en fin de phrase).
+- **Contrôles** : baseline **94/131** (0,718), règles coupées **96/131** (0,733), rôles mélangés **0,109** [0,00 ; 0,23].
+- **Corpus réel** re-mesuré : 65,5 % de GN+GV sur la littérature propre contre 9,1 % pour le mélange ; 8,5 % sur le CEGEP OCR (plancher, multilingue/technique) ; homographes **1 134/28** (suspects, pas erreurs).
+- **Banque** : 200 phrases / 355 candidats (SHA `43957a3b…` inchangé) ; **corpus de référence** : 55 lignes, SHA `76accf9d…` ; **47 tests**.
+
+**Committé et poussé**
+
+- Sous-module : **`1445e1d`** (v4) et **`00d2a01`** (manifeste) → `drave-structures`.
+- Principal : **`69bfddba`** → `origin/master` ; pointeur `tools/structures` = `00d2a01`.
+- Fiches : [`analyseur v4`](reports/rapport-s-analyseur-roles.md) et [`corpus réel`](reports/rapport-s-corpus-reel.md) ; état **564 fiches / 650 JSON**, 82 portes, T0 vert.
+
+**Liste DSH** : les 7 tâches du cycle sont terminées ; restent **`h050`/`h053`** (lexique élargi ou règle de fin de phrase) et la **validation humaine des 200 phrases** de la banque. L'arbre porte encore les mises à jour du hub en cours (portes/état) ; je n'y ai pas touché.
+

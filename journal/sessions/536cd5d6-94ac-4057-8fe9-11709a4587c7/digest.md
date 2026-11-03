@@ -6505,3 +6505,267 @@ porte-n3-sparsite 0 4
   ```
 
 - **job_output** `{"job_id": "bash-172", "wait": true, "timeout_ms": 600000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux dérives documentaires à corriger : l'état dit 81 portes pour 82, et un budget est dépassé. Je regarde lequel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== portes ==\" && ls tools/porte-*.sh | wc -l && ls tools/porte-*.sh | grep -i 'ress' ; echo \"== statut porte-ressources ==\" && git status --short tools/porte-ressources.sh 2>&1; echo; echo \"== ligne portes en-cours ==\" && … [204 caractères tronqués]`
+
+  ```
+== portes ==
+82
+tools/porte-push-paresseux.sh
+tools/porte-ressources.sh
+== statut porte-ressources ==
+D  tools/porte-ressources.sh
+?? tools/porte-ressources.sh
+
+== ligne portes en-cours ==
+110:| portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
+
+== taille détail ==
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 3984 mots (budget 4 000)
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== reports README ==\" && wc -w reports/README.md && echo \"== nouvelle fiche ==\" && git diff --cached --stat reports/README.md 2>/dev/null; git diff --stat reports/README.md 2>/dev/null; echo; echo \"== porte-ressources ==\" … [129 caractères tronqués]`
+
+  ```
+== reports README ==
+2799 reports/README.md
+== nouvelle fiche ==
+ reports/README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+== porte-ressources ==
+#!/bin/bash
+# porte-ressources.sh — le registre des ressources tient : autotest et cohérence.
+#
+# POURQUOI CETTE PORTE EXISTE. Le registre `tools/ressources.py` est consultatif : il n'empêche
+# pas un job de tourner, il rend le conflit visible. Une porte doit vérifier ce qui est
+# vérifiable sans la machine : le code du registre (autotest des 9 cas : claim, conflit, file,
+# admission, check) et la cohérence du registre courant (aucune ressource sur-réservée).
+#
+# CE QU'ELLE NE VÉRIFIE PAS : le réel (processus GPU non déclarés, charge CPU, espace disque) —
+# c'est `--actual`, informatif, et le mapping processus→claim reste manuel. Les avertissements
+# de stockage (RAID à 33 Gio) et de NUMA (un GPU avec des fils sur cpu1) restent VISIBLES mais
+# ne font pas échouer la porte : ce sont des limites nommées, pas des régressions.
+#
+# Usage : tools/porte-ressources.sh
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE RESSOURCES — REGISTRE, CLAIMS, COHÉRENCE ==="
+if ! python3 tools/ressources.py --autotest; then
+    echo "  ❌ autotest
+… [33 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état dit déjà 82 portes et le budget est repassé (T0 3 984) ; je relance la revue pour confirmer, puis je laisse la passe finir.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== revue (2e) ==\" && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -6; echo \"[revue ${PIPESTATUS[0]}]\"; echo; echo \"== passe ==\" && tail -3 work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo; echo  … [281 caractères tronqués]`
+
+  ```
+== revue (2e) ==
+  revue de documentation · 564 fiche(s) · 650 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[revue 0]
+
+== passe ==
+porte-ocr 0 49
+porte-pannes 0 47
+porte-peripherie 0 14
+
+== porte-ressources statut ==
+D  tools/porte-ressources.sh
+?? tools/porte-ressources.sh
+
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  50 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    29ad180d-38a5-4481 · actif    ·   6 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·   7 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·   7 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat périmé (50 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — heartbeat à rafraîchir
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte sessions voit le N2 périmé à 50 min alors que son run tourne : j'ajoute la lecture du registre pour distinguer un mandat long d'un mandat mort.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py", "offset": 10, "limit": 22}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py", "offset": 148, "limit": 55}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py</path>
+<type>file</type>
+<content>
+10: restent des **avertissements**, même en strict : l'imbrication est le régime
+11: normal d'un territoire partagé, et une porte qui échoue sur toute imbrication
+12: est rouge dès qu'une session réserve un sous-dossier — mesuré le 02/11, le
+13: strict sortait en 1 avec **0 erreur et 4 avertissements**. `en-cours` reste la
+14: seule source de l'état : ce plan est le **contrat de travail** qui le précède.
+15: Une session arrêtée (reboot, panne) passe à `État : en pause` : elle reste dans
+16: l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+17: """
+18: from __future__ import annotations
+19: 
+20: import argparse
+21: import re
+22: import sys
+23: import tempfile
+24: from datetime import datetime
+25: from pathlib import Path
+26: 
+27: RACINE = Path(__file__).resolve().parents[1]
+28: SESSIONS = "journal/sessions"
+29: ETAT = "docs/pilotage/en-cours.md"
+30: CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+31:           "prochaine action", "état")
+
+(Showing lines 10-31 of 332. Use offset=32 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py</path>
+<type>file</type>
+<content>
+148: """, encoding="utf-8")
+149:         n += 1
+150:         print(f"  + {chemin.relative_to(racine)}")
+151:     print(f"  {n} plan(s) créé(s) à confirmer ; les sessions les complètent, elles ne sont pas actives.")
+152:     return 0
+153: 
+154: 
+155: def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
+156:     erreurs: list[str] = []
+157:     avertissements: list[str] = []
+158:     plans = decouvrir(racine)
+159:     actifs = [p for p in plans if p["etat"] in ACTIFS]
+160:     vus: dict[str, str] = {}
+161:     for p in plans:
+162:         manquants = [c for c in CHAMPS if c not in p["champs"]]
+163:         if manquants:
+164:             erreurs.append(f"{p['chemin']} : champ(s) manquant(s) — {', '.join(manquants)}")
+165:         if p["etat"] not in ETATS_CONNUS:
+166:             erreurs.append(f"{p['chemin']} : état inconnu {p['etat']!r}")
+167:         if p["etat"] in A_CONFIRMER:
+168:             (erreurs if strict else avertissements).append(
+169:                 f"plan à confirmer : {p['id']} — la session doit le compléter")
+170:         if p["age"
+… [1883 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'return 1 if e or\\|w_strict\\|fichiers proches\\|def verifier\\|def main' tools/sessions.py", "description": "Locate sessions.py strict check lines"}`
+
+  ```
+155:def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
+188:                        avertissements.append(f"fichiers proches : {fa} ({a['id']}) / {fb} ({b['id']})")
+296:def main() -> int:
+324:        # heartbeats) ; « fichiers proches » reste un avertissement — sinon quatre
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py", "offset": 236, "limit": 50}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py", "offset": 296, "limit": 37}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py</path>
+<type>file</type>
+<content>
+236:         (b / "plan.md").write_text(
+237:             "# Plan\n\n- **Session** : `b`\n- **Rôle** : test\n- **Périmètre** : A8.0\n"
+238:             "- **Fichiers réservés** : `tools/b.py`\n- **Heartbeat** : 2026-10-30 11:00 HAE\n"
+239:             "- **Prochaine action** : finir\n- **État** : actif\n", encoding="utf-8")
+240:         e, _ = verifier(r)
+241:         assert any("recouvrant" in x for x in e), e
+242:         (b / "plan.md").unlink()
+243:         (d / "plan.md").write_text(
+244:             "# Plan\n\n- **Session** : `a`\n- **Rôle** : test\n- **Heartbeat** : 2026-10-30 11:00 HAE\n"
+245:             "- **État** : actif\n", encoding="utf-8")
+246:         e, _ = verifier(r)
+247:         assert any("manquant" in x for x in e), e
+248:         # une session arrêtée passe en pause : plus de heartbeat exigé, même en strict
+249:         (d / "plan.md").write_text(
+250:             "# Plan\n\n- **Session** : `a`\n- **Rôle** : test\n- **Périmètre** : A8.0\n"
+251:             "- **Fichiers réservés** : `tools/a.py`\n- **Heartbeat** : 2026-10-30 11:00 HAE\n"
+252:            
+… [1971 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py</path>
+<type>file</type>
+<content>
+296: def main() -> int:
+297:     ap = argparse.ArgumentParser(description=__doc__)
+298:     ap.add_argument("--racine", default=str(RACINE))
+299:     ap.add_argument("--status", action="store_true")
+300:     ap.add_argument("--check", action="store_true")
+301:     ap.add_argument("--strict", action="store_true")
+302:     ap.add_argument("--modele", action="store_true")
+303:     ap.add_argument("--autotest", action="store_true")
+304:     ap.add_argument("--depuis-en-cours", action="store_true",
+305:                     help="crée des plans à confirmer depuis les sections de en-cours")
+306:     a = ap.parse_args()
+307:     if a.modele:
+308:         print(MODELE)
+309:         return 0
+310:     if a.autotest:
+311:         return autotest()
+312:     r = Path(a.racine).resolve()
+313:     if a.depuis_en_cours:
+314:         return depuis_en_cours(r)
+315:     if a.check:
+316:         e, w = verifier(r, strict=a.strict)
+317:         for x in w:
+318:             print(f"  ⚠ {x}")
+319:         for x in e:
+320:             print(f"  ❌ {x}")
+321:         if not e and not w:
+322:            
+… [561 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'intègre le registre à la porte sessions : un claim actif couvre un heartbeat long, un mandat mort reste rouge.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/sessions.py'); t=p.read_text()\ndef sub(t, old, new, n=1):\n    c=t.count(old); assert c==n, f\"{c} != {n}: {old[:70]!r}\"; return t.replace(old,new)\n\nt=sub(t, \"import argpar … [3961 caractères tronqués]`
+
+  ```
+sessions.py modifié
+== autotest ==
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+== check strict ==
+  ⚠ mandat long (53 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+== porte ==
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ⚠ mandat long (53 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[porte 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte sessions est verte avec le claim du N2 ; je commite et je vérifie la passe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/sessions.py && timeout 300 git commit --only -m \"PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE\" -m \"Le N2 tourne depuis 53 min (R1.2-1024) et son heartbeat de plan … [822 caractères tronqués]`

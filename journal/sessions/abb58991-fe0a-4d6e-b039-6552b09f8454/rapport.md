@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 4.4 h |
+| Durée | 4.6 h |
 | Tours | 10 |
-| Messages | 425 |
-| Appels d'outils | 527 |
+| Messages | 430 |
+| Appels d'outils | 534 |
 | Fichiers touchés | 37 |
-| Commandes | 385 |
+| Commandes | 391 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 1 |
@@ -407,7 +407,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 
 ### Tour 10 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gate four expected values
 - read
@@ -418,10 +418,16 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - bash — Apply B13 138 state updates and check budgets
 - bash — Get gate result and fix future hours
 - job_output
+- bash — Check S submodule and update five values
+- bash — Rerun B13 gate with five S values
+- bash — Update fiche/JSON/state to five S values
+- bash — Fix remaining 134 mentions and read gate result
+- bash — Fix final 134 mentions in state
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ J'attends le verdict de la porte (log encore vide) et j'aligne l'état 134→138 resté sur la roadmap
+⏵ La porte est à 137 : T110 (segmenteur) a aussi bougé avec le S `00d2a01` ; je l'aligne et relance (138 attendu)
 
 ## 3. Travail accompli
 
@@ -509,7 +515,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 345 autres
+- … et 351 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -4896,3 +4896,29 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-209", "timeout_ms": 780000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-209", "timeout_ms": 180000, "wait": true}`
+
+  ```
+20:43:44
+pas  11700 · perte 0.9764 · PPL val 2.777 · 2265 s
+--- 1024 ---
+pas   3350 · perte 1.0780 · PPL val 2.802 · 1575 s
+--- portes ---
+3
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; tail -1 work/n2ac/mix1024-7.5k.log 2>/dev/null; echo \"--- 1024 ---\"; tail -1 work/n2ac/rope1024-20k.log", "description": "Wait for production 512 checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-210]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-210", "timeout_ms": 900000, "wait": true}`
