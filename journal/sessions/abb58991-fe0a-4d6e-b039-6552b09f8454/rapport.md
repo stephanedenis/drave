@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 9.5 h |
-| Tours | 163 |
-| Messages | 1116 |
-| Appels d'outils | 907 |
+| Durée | 21.3 h |
+| Tours | 164 |
+| Messages | 1126 |
+| Appels d'outils | 917 |
 | Fichiers touchés | 48 |
-| Commandes | 731 |
+| Commandes | 738 |
 | Sous-agents | 0 |
 | Commits | 87 |
 | Compactages de contexte | 3 |
@@ -23,6 +23,8 @@
 … [77 caractères tronqués]
 - **complete** — Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas touch
 … [77 caractères tronqués]
+- **create** — Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git ad
+… [13 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -351,6 +353,8 @@
 **Tour 162** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 163** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 164** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -4178,6 +4182,25 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **
 … [897 caractères tronqués]
 
+### Tour 164 — continue
+
+*10 appels d'outils.* Actions notables :
+
+- update_goal
+- bash — Resume goal and inspect state
+- create_goal
+- bash — Inspect native checkpoint generation scripts
+- bash — Read entrainer_native args and data
+- bash — Check corpus_fr.txt availability
+- bash — Regenerate checkpoint and DRVM on CPU
+- bash — Monitor CPU regeneration progress
+- job_output
+- bash — Replay native parity on fresh checkpoint
+
+**Synthèse produite :**
+
+⏵ Le job CPU est fini (exit 0) ; je lis sa sortie puis je rejoue les deux parités sur ce checkpoint frais
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4275,7 +4298,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 691 autres
+- … et 698 autres
 
 ## 4. Mesures et résultats marquants
 

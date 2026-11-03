@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 21.0 h |
-| Tours | 32 |
-| Messages | 567 |
-| Appels d'outils | 561 |
+| Durée | 21.2 h |
+| Tours | 33 |
+| Messages | 579 |
+| Appels d'outils | 571 |
 | Fichiers touchés | 6 |
-| Commandes | 406 |
+| Commandes | 415 |
 | Sous-agents | 0 |
-| Commits | 26 |
+| Commits | 27 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -91,6 +91,8 @@
 **Tour 31** — la clé est dans le fichier. une session travaille déjà avec le professeur, vérifie ce que tu peux faire sans conflits avec les autres sessions
 
 **Tour 32** — background job bash-398 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=0,1 JOURNAUX=work/portes/passe-0303-11h30 bash tools/toutes-les-portes.sh; echo "EXIT=$?"; awk '$2 != 0' work/portes/passe-0303-11h30/registre.txt; tail -1 work/portes/passe-0303-11h30/registre.txt) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+**Tour 33** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -725,7 +727,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 
 ### Tour 32 — background job bash-398 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=0,1 JOURNAUX=wor … [259 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Compute pass duration and check file mtimes
@@ -734,10 +736,41 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - bash — Apply references and read state counters
 - bash — Align state and portes.md with 80/2 pass
 - bash — Commit 80/2 pass integration
+- bash — Clean pass claim and run closing checks
 
 **Synthèse produite :**
 
-⏵ Application, puis alignement de `en-cours` et `portes.md`.
+⏵ Passe 80/2 intégrée et contrôles verts — bilan.
+
+**La passe propre a donné exactement le 80/2 prévu** : **82 portes, 80 vertes, 2 rouges, 1 h 48**, machine au repos (GPU libres, seuls des claims CPU). Les 2 rouges sont les **connues structurelles** : `porte-indice` (821 s) et `porte-melange` (102 s). Les deux rouges réparées sont bien vertes : `porte-homeostasie` **495 s** (LoRA régénéré) et `porte-reparti-moteur` **3 s** (ré-étalonnée à 8,7434) ; `porte-sessions` verte (N2/S en pause), `porte-tableaux` et `porte-ressources` vertes. Journaux durables : `work/portes/passe-0303-11h30`.
+
+**Intégré et committé** (`07ec290b`) : `references-non-regression.md` (en-tête + **§ 2 réécrit en 82 lignes**), `en-cours` (82 / **80-2**), `portes.md` (11 h 30, 1 h 48), journal du 03/11.
+
+**La clé** : `~/.config/drave/deepseek.key` (0600), ping `deepseek-flash` → **OK** ; l'état ne dit plus « clé absente » et `ressources.md` documente le fichier et `DEEPSEEK_KEY_FILE` (`c4ea6138`). Pensée s'en sert déjà pour la porte minute (sortie `reports/pensee-porte-minute-api.json`) — je n'ai touché ni `tools/pensee/`, ni `reports/pensee-*`, ni `reports/n2-*`.
+
+**Ce que j'ai évité** : les fichiers de Pensée (active sur l'API), ceux de N2 (clos à 11 h 25), et `en-cours` pendant les commits des autres écrivains (relu juste avant chaque écriture). Le claim `machine` de la passe a été purgé de la file.
+
+**Contrôles** : revue ✅ · `en-cours` ✅ · T0 **3 993**/4 000 · `sessions --check --strict` 0 · journal ✅ · schémas ✅ · backlog ✅.
+
+**Ce qui peut suivre, sans conflit** : laisser N2/S en pause ou les reprendre quand tu veux (S : validation reportée), suivre le qualifier de Pensée sur l'API, et, si utile, une nouvelle passe de référence après le prochain cycle — la prochaine doit rester à **80/2** ou mieux.
+
+### Tour 33 — continue
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Check N2 under-2.5 integration in state and roadmap
+- bash — Check pilotage mtimes and stale lines
+- bash — Locate roadmap N row and agenda item
+- bash — Read full N row of roadmap
+- bash — Check chantiers N section
+- bash — Read chantiers N paragraph
+- bash — Integrate under-2.5 result in three docs
+- bash — Commit under-2.5 integration
+- job_output
+
+**Synthèse produite :**
+
+⏵ Tout est vert (T0 3 999) ; je commite l'intégration du fait N2 dans les trois documents.
 
 ## 3. Travail accompli
 
@@ -794,7 +827,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 366 autres
+- … et 375 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -957,4 +990,5 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff --stat docs/methode/ressources.md journal/2026-11-03/README.md; cat > work/msg-cle3.txt <<'EOF' MÉT
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-n2-sous25.txt <<'EOF' ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 
 

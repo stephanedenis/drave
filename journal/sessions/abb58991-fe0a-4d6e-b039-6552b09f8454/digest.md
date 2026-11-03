@@ -22802,3 +22802,266 @@ The goal is marked complete and this autonomous run is ending. Write the closing
 - **Fichiers non committés** dans l'arbre : `reports/n2-r12-2048.json`, `reports/rapport-n2-fenetre.md`, `reports/rapport-n2-r12-2048.md`, `tools/pensee/store.py`, `tools/tests/qualifier_porte_fenetre_drvm.py` — je ne les ai pas touchés dans cette session ; à relire avant tout commit (ils peuvent venir d'une autre session).
 - **Ce qui pourrait rendre les chiffres faux** : gold réel écrit par le même auteur que le banc ; seuils recalibrés au plancher (marge mince) ; 429 appels pour 432 phrases = effet de cache documenté, pas des phrases vides ; 5 prompts de parité ne valent pas une perplexité.
 
+
+## Tour 164
+
+### 👤 Utilisateur
+
+continue
+
+### 👤 Utilisateur
+
+<system-reminder>
+Updated instructions from: AGENTS.md
+
+This file changed after it was loaded. Use the following content instead of the previously loaded instructions from this file.
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Goal réarmé (reprise) ; je vérifie l'état, le serveur local et le chemin de régénération du checkpoint
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-781186f0-1fb6-48ba-af64-5c056d667196", "revision": 2}`
+
+  ```
+Error: cannot resume goal "goal-781186f0-1fb6-48ba-af64-5c056d667196" from phase "complete"; expected active or paused or blocked
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git log -1 --format='%h %s'; git status --porcelain | head -8; echo '--- serveur local ---'; curl -s --max-time 3 http://127.0.0.1:18082/health || echo 'serveur 18082 arrêté'; echo; echo '--- python/torch ---'; ls -l tools/entrainer_ … [207 caractères tronqués]`
+
+  ```
+13:28:46
+07ec290b PASSE — 82 PORTES SUR MACHINE AU REPOS : 80 VERTES, 2 ROUGES (LES CONNUES)
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+MM journal/2026-11-03/distribue.md
+MM journal/2026-11-03/docs.md
+MM journal/2026-11-03/memoire.md
+MM journal/2026-11-03/mesures.md
+MM journal/2026-11-03/modele.md
+MM journal/2026-11-03/moteur.md
+--- serveur local ---
+serveur 18082 arrêté
+
+--- python/torch ---
+-rwxr-xr-x. 1 stephane stephane 2995  5 oct 10:44 tools/applique_pont.py
+-rw-r--r--. 1 stephane stephane 6547  1 nov 18:39 tools/entrainer_native.py
+torch 2.11.0+cu130
+  ```
+
+### 🤖 Assistant
+
+⏵ Goal complet non réarmable ; je crée le goal de continuation puis j'inspecte la régénération CPU du checkpoint
+
+- **create_goal** `{"objective": "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit ex … [55 caractères tronqués]`
+
+> **Objectif** (create) : Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite).
+
+
+  ```
+{"goal":{"id":"goal-6eef5e3d-3262-4e08-8605-f8a67477276b","revision":1,"objective":"Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -30 tools/entrainer_native.py; echo '=== applique_pont ==='; head -25 tools/applique_pont.py; echo '=== cuda refs ==='; grep -n \"cuda\\|device\" tools/entrainer_native.py tools/applique_pont.py | head -8", "description": "Inspect native checkpoi … [43 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""entrainer_native.py — entraînement de base de `drave-n0`.
+
+Ce n'est que le **prochain octet** : les pertes locales, les têtes précoces, la
+pensée et le pont viendront après. Le but est de mesurer la PPL du modèle natif
+et de produire un DRVM lisible par le moteur.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import pathlib
+import random
+import time
+
+import torch
+import torch.nn.functional as F
+
+from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+from tools.vdc import departs_vdc
+
+
+def charger(chemin: str) -> torch.Tensor:
+    b = pathlib.Path(chemin).read_bytes()
+    if len(b) < 100_000:
+        raise SystemExit(f"{chemin} : corpus trop court")
+    return torch.tensor(list(b), dtype=torch.long)
+
+
+=== applique_pont ===
+#!/usr/bin/env python3
+"""applique_pont.py — le pont s'applique à N'IMPORTE QUELLE trace, langue inconnue.
+
+Le pont est un artefact : trois matrices ajustées une fois (`pont_semantique.npz`),
+et une application qui tient en trois lignes :
+
+    abstrait = (plongee · W0) · Pᵀ + moy
+
+`plongee` est la représentation du jeton à la COUCHE 0 — donc n'importe quel texte,
+dans n'importe quelle lan
+… [1259 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouveau goal créé (`goal-6eef5e3d`) ; le script d'entraînement est en `--device cuda` par défaut — je le force en CPU et je regarde son interface
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '55,110p' tools/entrainer_native.py; echo '=== data dispo ==='; ls -l data/ 2>/dev/null | head -6; ls -l data/corpus* data/*.txt 2>/dev/null | head -5", "description": "Read entrainer_native args and data", "timeoutMs": 60000}`
+
+  ```
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+    ap.add_argument("--pas", type=int, default=200)
+    ap.add_argument("--seq", type=int, default=128)
+    ap.add_argument("--lot", type=int, default=8)
+    ap.add_argument("--lr", type=float, default=3e-4)
+    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--sortie", default="/tmp/drave-n0.pt")
+    ap.add_argument("--drvm", default="/tmp/drave-n0.drvm")
+    ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--dim", type=int, default=224, help="d_model (224 = 11,47 M ; 296 = 21,65 M)")
+    ap.add_argument("--expert-hidden", type=int, default=288,
+                    help="largeur d'un expert (288 ; 416 pour 21,65 M)")
+    ap.add_argument("--positions-aleatoires", type=int, default=0,
+                    help="décalage de position tiré dans [0, N] à chaque pas (0 = positions fixes)")
+    ap.add_argument("--canal", default=None, help="fichier de classes de structure (1 par octet)")
+    ap.add_argument("--init", default=None,
+                    help="checkpoint de départ (poids seuls, pour un curriculum)")
+    ap.add_argument("--te
+… [2809 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le script attend `data/corpus_fr.txt` ; je vérifie le corpus puis je lance une régénération **CPU** courte (checkpoint + DRVM)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -l data/corpus_fr.txt 2>/dev/null || echo 'corpus_fr.txt absent'; ls data/*.txt 2>/dev/null | head -8", "description": "Check corpus_fr.txt availability", "timeoutMs": 60000}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 4633889 17 oct 15:01 data/corpus_fr.txt
+data/corpus_en.txt
+data/corpus_en_val.txt
+data/corpus_fr_litterature.txt
+data/corpus_fr_train.txt
+data/corpus_fr.txt
+data/corpus_fr_val.txt
+data/corpus_mixte_dev.txt
+data/corpus_mixte_litt2.txt
+  ```
+

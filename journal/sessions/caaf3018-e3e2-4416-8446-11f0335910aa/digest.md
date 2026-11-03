@@ -9908,3 +9908,162 @@ en-cours + portes.md : passe 11 h 30
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 13 h 20 — la passe propre du 03/11 : **80 vertes, 2 rouges**\n\n- **82 portes, 80 vertes, 2 r … [1670 caractères tronqués]`
+
+  ```
+journal : passe 80/2 consignée
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[still running after 60000ms; moved to background job bash-406]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-406", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 07ec290b] PASSE — 82 PORTES SUR MACHINE AU REPOS : 80 VERTES, 2 ROUGES (LES CONNUES)
+ 18 files changed, 306 insertions(+), 101 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict consigné (`07ec290b`). Je nettoie le claim de la passe et je fais les contrôles de clôture.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path(\"work/ressources.json\"); d = json.loads(p.read_text())\navant = len(d.get(\"queue\", []))\nd[\"queue\"] = [q for q in d.get(\"queue\", []) if q.get(\"job\") != \"passe-0303-11h … [492 caractères tronqués]`
+
+  ```
+file : 1 → 0
+=== checks ===
+sessions=0
+     sources et images relatives.
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+=== N2 sous 2,5 dans l'état ? ===
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe 80/2 intégrée et contrôles verts — bilan.
+
+**La passe propre a donné exactement le 80/2 prévu** : **82 portes, 80 vertes, 2 rouges, 1 h 48**, machine au repos (GPU libres, seuls des claims CPU). Les 2 rouges sont les **connues structurelles** : `porte-indice` (821 s) et `porte-melange` (102 s). Les deux rouges réparées sont bien vertes : `porte-homeostasie` **495 s** (LoRA régénéré) et `porte-reparti-moteur` **3 s** (ré-étalonnée à 8,7434) ; `porte-sessions` verte (N2/S en pause), `porte-tableaux` et `porte-ressources` vertes. Journaux durables : `work/portes/passe-0303-11h30`.
+
+**Intégré et committé** (`07ec290b`) : `references-non-regression.md` (en-tête + **§ 2 réécrit en 82 lignes**), `en-cours` (82 / **80-2**), `portes.md` (11 h 30, 1 h 48), journal du 03/11.
+
+**La clé** : `~/.config/drave/deepseek.key` (0600), ping `deepseek-flash` → **OK** ; l'état ne dit plus « clé absente » et `ressources.md` documente le fichier et `DEEPSEEK_KEY_FILE` (`c4ea6138`). Pensée s'en sert déjà pour la porte minute (sortie `reports/pensee-porte-minute-api.json`) — je n'ai touché ni `tools/pensee/`, ni `reports/pensee-*`, ni `reports/n2-*`.
+
+**Ce que j'ai évité** : les fichiers de Pensée (active sur l'API), ceux de N2 (clos à 11 h 25), et `en-cours` pendant les commits des autres écrivains (relu juste avant chaque écriture). Le claim `machine` de la passe a été purgé de la file.
+
+**Contrôles** : revue ✅ · `en-cours` ✅ · T0 **3 993**/4 000 · `sessions --check --strict` 0 · journal ✅ · schémas ✅ · backlog ✅.
+
+**Ce qui peut suivre, sans conflit** : laisser N2/S en pause ou les reprendre quand tu veux (S : validation reportée), suivre le qualifier de Pensée sur l'API, et, si utile, une nouvelle passe de référence après le prochain cycle — la prochaine doit rester à **80/2** ou mieux.
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Je vérifie que le résultat N2 « sous 2,5 » est bien intégré à l'état et à la roadmap, puis je prends la suite sans conflit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== en-cours : N2 ===\"; grep -n \"2,4759\\|2,4373\\|sous 2,5\\|2,5\" docs/pilotage/en-cours.md | head -4; echo \"=== roadmap : N ===\"; grep -n \"2,4759\\|2,4373\\|sous 2,5\\|2 048\\|fenêtre\" docs/pilotage/roadmap … [190 caractères tronqués]`
+
+  ```
+13:28
+=== en-cours : N2 ===
+108:- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
+132:| **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; < 2,5 non atteinte (1,3–2,7 M pas) ; N4 0/4 ; N5 gelé | **la fenêtre bat le compute** (N2.ac + RoPE 512 : 2,9096 à 512, 2,7607 à 2 000) ; **2 048** en cours |
+150:- **N2** : les **200 k pas** sous **2,5** ? → **non** : 3,1591 ; 2,5 est à **1,3–2,7 M pas**.
+=== roadmap : N ===
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **c
+… [3238 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vrai manque : la **question N2** et la **ligne N de la roadmap** ne portent pas encore le « sous 2,5 » de la fenêtre. Je vérifie que personne n'est en train de les écrire.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; stat -c '%y' docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md | cut -c12-19; date +%H:%M; git log --oneline -2; echo \"=== question N2 ===\"; sed -n 148,152p docs/pilotage/en-cours.md; echo \"=== ligne N ro … [142 caractères tronqués]`
+
+  ```
+13:18:09
+08:23:43
+21:25:35
+13:28
+07ec290b PASSE — 82 PORTES SUR MACHINE AU REPOS : 80 VERTES, 2 ROUGES (LES CONNUES)
+61bafd18 BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)
+=== question N2 ===
+
+- **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
+- **N2** : les **200 k pas** sous **2,5** ? → **non** : 3,1591 ; 2,5 est à **1,3–2,7 M pas**.
+- **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.
+
+=== ligne N roadmap ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"^| \\*\\*N — le natif\" docs/pilotage/roadmap.md | cut -c1-260; echo \"=== ordre du jour N2 ===\"; grep -n \"N2 — la distillation\" -A4 docs/pilotage/roadmap.md | cut -c1-160 | head -8", "description": "Locate roadmap N row a … [16 caractères tronqués]`
+
+  ```
+32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k p
+=== ordre du jour N2 ===
+72:2. **N2 — la distillation** (en cours) : **N2.ac** (mélange **1,02 Go**, 60 k pas) : **3,49** en
+73-   domaine, **6,03** en littérature, **8,34** en anglais, **9,05** sur wikitext2 — **le modèle de
+74-   production**. La porte < 2,5 reste à **0,5** ; prochaine action : **200 k pas** sur le mélange,
+75-   puis **R1.1/R1.2**. La **diversité française** ramène la littérature à **3,85** (N2.h) ; les
+76-   **positions aléatoires** font passer 256 octets de **14,11** à **3,25**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 32p docs/pilotage/roadmap.md | cut -c1-1200; echo \"...\"; sed -n 32p docs/pilotage/roadmap.md | rev | cut -c1-400 | rev", "description": "Read full N row of roadmap"}`
+
+  ```
+| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00 — < 2,5 non atteinte** ; N4 partiel | **N2** : **en pause** (00 h 25) ; fiche/JSON committés ; reste la **clôture** ; **R1.1/R1.2 mesurées** ; **N4** |
+...
+e/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00 — < 2,5 non atteinte** ; N4 partiel | **N2** : **en pause** (00 h 25) ; fiche/JSON committés ; reste la **clôture** ; **R1.1/R1.2 mesurées** ; **N4** |
+  ```
+
+### 🤖 Assistant
+
+⏵ J'aligne les trois documents sur le fait : la fenêtre 1 024 passe **sous 2,5** au grand corpus.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"2,5\\|200 k pas\\|fenêtre\" docs/pilotage/chantiers.md | head -6 | cut -c1-180", "description": "Check chantiers N section"}`
+
+  ```
+93:(1 Go) est le modèle de production ; **N2** : 200 k pas (val_fr **3,16** / littérature **5,61** / anglais
+122:4. **N → R1, R2, R3 ; B10.3 → R5.** La fenêtre native, la mémoire et la restitution attendent N2
+145:- **Le chemin du natif** : `D → N2 → R1 → R2 → R3` — le corpus, le modèle, la fenêtre, la mémoire,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 90,98p docs/pilotage/chantiers.md | cut -c1-160", "description": "Read chantiers N paragraph"}`
+
+  ```
+| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta + **DRVF `thought`** + **banc
+
+**État au 02/11 21 h 14.** B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432**, coréférence **116 liens** ; **N2.ac**
+(1 Go) est le modèle de production ; **N2** : 200 k pas (val_fr **3,16** / littérature **5,61** / anglais
+**7,28** / wikitext2 **8,00**) ; **R1.1/R1.2** mesurées ; **Pensée**, **N2** et **S** sont **ouvertes**,
+**D/R/A** **close** à 18 h 45.
+
+**Deux remarques d'inventaire.** (1) **S** et **L** ne sont pas des sous-produits de B : ce sont
+des **blocs** avec leur contrat, leur coût et leur trace — et le contrat de L est précisément ce
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique les trois corrections (état, roadmap, chantiers) et je vérifie les budgets.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\n# 1) en-cours : question N2 + ligne N des chantiers\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"- **N2** : les **200 k pas** sous **2,5** ? → **n … [3659 caractères tronqués]`
+
+  ```
+état, roadmap, chantiers : fenêtre sous 2,5 intégrée
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est vert (T0 3 999) ; je commite l'intégration du fait N2 dans les trois documents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-n2-sous25.txt <<'EOF'\nÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373)\n\nN2 avait clos son cycle à 11 h 25 avec un fait majeur qui manquait encore dans\ntrois documents : la fenêtre entraî … [681 caractères tronqués]`
