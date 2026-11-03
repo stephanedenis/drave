@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 9.1 h |
-| Tours | 157 |
-| Messages | 1076 |
-| Appels d'outils | 880 |
+| Durée | 9.2 h |
+| Tours | 158 |
+| Messages | 1081 |
+| Appels d'outils | 883 |
 | Fichiers touchés | 48 |
-| Commandes | 706 |
+| Commandes | 709 |
 | Sous-agents | 0 |
-| Commits | 81 |
+| Commits | 82 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -337,6 +337,8 @@
 **Tour 156** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 157** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 158** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3968,7 +3970,31 @@ La suite : ajouter le critère **acte** (assertion ↔ question) dans `trouver_p
 
 **Synthèse produite :**
 
-⏵ Round 155 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite le critère acte
+⏵ Round 155 : critère acte committé (`fcd0dc55`, 20 fichiers) — **5/10**, T0 4 000, revue 582/667
+
+**Fait de la nuit — round 155** : le critère acte.
+
+- **Critère ajouté** : une **question** se lie à une **assertion**, jamais à une autre question — c'est ce qui écarte r304 « Viens-tu demain ? » pour r408.
+- **Résultat inchangé** : les 10 paires restent **5/10** (r418–r422 5/5, r408–r412 0/5).
+- **Le blocage a changé de nature** : `_sujet` rend le **mot entier** (`viens-tu`, `dort-elle`, `partent-ils`, `lis-tu`) au lieu du pronom ; seul r409 (« mange-t-il » → `il`) est normalisé. r408 tombe de r304 à `None` — le critère écarte la mauvaise question sans trouver la bonne assertion.
+- **Contrôle négatif** : r418–r422 5/5 (le critère ne casse rien) ; r408–r412 0/5 (la normalisation manque).
+- Fiche `rapport-pensee-lien-acte.md` ; JSON `pensee-lien-acte.json`.
+
+**État** : HEAD `fcd0dc55` ; T0 **4 000** ; revue **582/667** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **normaliser le sujet inversé** (dernier segment quel que soit le nombre de segments + table de pronoms), re-mesurer ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+### Tour 158 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Normalize inverted subject last segment
+- bash — Freeze subject normalization measurement
+- bash — Commit subject normalization fact
+
+**Synthèse produite :**
+
+⏵ Round 156 : T0 à 4 002 après la ligne ; je raccourcis, j'aligne index/README et je commite la normalisation du sujet
 
 ## 3. Travail accompli
 
@@ -4067,7 +4093,7 @@ La suite : ajouter le critère **acte** (assertion ↔ question) dans `trouver_p
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 666 autres
+- … et 669 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4251,4 +4277,5 @@ La suite : ajouter le critère **acte** (assertion ↔ question) dans `trouver_p
 - L/B13 — _VERBE RÉPARÉ POUR L'INVERSION : LES PAIRES RESTENT 5/10, LE REPLI SUJET-SEUL TROMPE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format=
 - ÉTAT — T0 4 000 : LIGNE DU VERBE INVERSÉ RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LE CRITÈRE ACTE : QUESTION → ASSERTION, LES 10 PAIRES RESTENT 5/10, LE SUJET INVERSÉ N'EST PAS NORMALISÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; 
+- L/B13 — LE SUJET INVERSÉ NORMALISÉ : LES PAIRES RESTENT 5/10, LE LIEN CHOISIT HORS PAIRE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h 
 

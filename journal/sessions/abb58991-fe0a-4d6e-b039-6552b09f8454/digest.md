@@ -22025,3 +22025,92 @@ ok
 ⏵ Round 155 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite le critère acte
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10, acte'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encodin … [950 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  579 fiches → reports/INDEX.md
+  revue de documentation · 582 fiche(s) · 667 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master fcd0dc55] L/B13 — LE CRITÈRE ACTE : QUESTION → ASSERTION, LES 10 PAIRES RESTENT 5/10, LE SUJET INVERSÉ N'EST PAS NORMALISÉ
+ 20 files changed, 625 insertions(+), 63 deletions(-)
+ create mode 100644 reports/pensee-lien-acte.json
+ create mode 100644 reports/rapport-pensee-lien-acte.md
+EXIT=0
+fcd0dc55 L/B13 — LE CRITÈRE ACTE : QUESTION → ASSERTION, LES 10 PAIRES RESTENT 5/10, LE SUJET INVERSÉ N'EST PAS NORMALISÉ
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 155 : critère acte committé (`fcd0dc55`, 20 fichiers) — **5/10**, T0 4 000, revue 582/667
+
+**Fait de la nuit — round 155** : le critère acte.
+
+- **Critère ajouté** : une **question** se lie à une **assertion**, jamais à une autre question — c'est ce qui écarte r304 « Viens-tu demain ? » pour r408.
+- **Résultat inchangé** : les 10 paires restent **5/10** (r418–r422 5/5, r408–r412 0/5).
+- **Le blocage a changé de nature** : `_sujet` rend le **mot entier** (`viens-tu`, `dort-elle`, `partent-ils`, `lis-tu`) au lieu du pronom ; seul r409 (« mange-t-il » → `il`) est normalisé. r408 tombe de r304 à `None` — le critère écarte la mauvaise question sans trouver la bonne assertion.
+- **Contrôle négatif** : r418–r422 5/5 (le critère ne casse rien) ; r408–r412 0/5 (la normalisation manque).
+- Fiche `rapport-pensee-lien-acte.md` ; JSON `pensee-lien-acte.json`.
+
+**État** : HEAD `fcd0dc55` ; T0 **4 000** ; revue **582/667** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **normaliser le sujet inversé** (dernier segment quel que soit le nombre de segments + table de pronoms), re-mesurer ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+
+## Tour 158
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 156/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 156 : je normalise le sujet inversé — coupe sur le **dernier** segment quel que soit le nombre de segments (`viens-tu` → `tu`, `mange-t-il` → `il`)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''    for e in a.etiquettes:\n        if e.niveau == \"pos\" and e.type in (\"NOUN\", \"VERB\") and \"-\" in e.valeur:\n      … [1439 caractères tronqués]`
+
+  ```
+ok
+sujets :
+  r408 Ne viens-tu pas demain ? | sujet tu | verbe viens
+  r409 Ne mange-t-il pas ? | sujet il | verbe mange
+  r410 Ne dort-elle pas ? | sujet elle | verbe dort
+  r411 Ne partent-ils pas ? | sujet ils | verbe partent
+  r412 Ne lis-tu pas ? | sujet tu | verbe lis
+r408  'Ne viens-tu pas demain ?'     -> r222  'Si tu viens, nous partirons.' attendu r423 NON
+r409  'Ne mange-t-il pas ?'          -> r344  'Le chat mange ; il dort.' attendu r424 NON
+r410  'Ne dort-elle pas ?'           -> r227  "Pendant qu'il dort, elle lit." attendu r425 NON
+r411  'Ne partent-ils pas ?'         -> r354  "Marie et Paul dansent ; ils s'amusent." attendu r426 NON
+r412  'Ne lis-tu pas ?'              -> r270  'Quand tu veux, nous partons.' attendu r427 NON
+r418  'Tu ne viens pas demain ?'     -> r423  'Tu viens demain.'         attendu r423 OK
+r419  'Il ne mange pas ?'            -> r424  'Il mange.'                attendu r424 OK
+r420  'Elle ne dort pas ?'           -> r425  'Elle dort.'               attendu r425 OK
+r421  'Ils ne partent pas ?'         -> r426  'Ils partent.'             attendu r426 OK
+r422  "You don't come tomorrow?"     -> r427  'You come tomorrow.'       attendu r427 OK
+jus
+… [10 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 156 : sujet inversé normalisé (« viens-tu » → `tu`) ; les paires restent **5/10** — le lien trouve maintenant des phrases au sujet+verbe corrects mais **hors paire** (r222, r344, r227, r354, r270) ; je fige ce fait
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [4681 caractères tronqués]`
+
+  ```
+json 2557 justes 5
+fiche 2797
+ok
+  T0 max : 4002 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 156 : T0 à 4 002 après la ligne ; je raccourcis, j'aligne index/README et je commite la normalisation du sujet
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (sujet ok)'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,en … [940 caractères tronqués]`

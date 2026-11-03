@@ -193,7 +193,7 @@ def _sujet(a: bl.Annotation) -> str | None:
     for e in a.etiquettes:
         if e.niveau == "pos" and e.type in ("NOUN", "VERB") and "-" in e.valeur:
             morceaux = e.valeur.split("-")
-            if len(morceaux) >= 3:
+            if len(morceaux) >= 2:
                 return morceaux[-1]
     for e in a.etiquettes:
         if e.niveau == "syntagme" and e.type == "GN":
