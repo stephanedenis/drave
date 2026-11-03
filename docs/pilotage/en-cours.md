@@ -79,22 +79,20 @@
 - **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute/mobile ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ; reste **gold 200+** ; les expériences **7B locales** sont **interdites** (règle 11) — la professeure passe par l'**API DeepSeek** ou le **DRVM natif**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
-### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
-- **Rôle** : **N2** — la production et la capacité.
-- **Plan** : fenêtre, production, porte.
+- **Rôle** : **N2** — le run long de production et la capacité sur le corpus propre.
+- **Plan** : run long à 1 024, capacité ; fiche par fait.
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
-- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la
-  **porte propre**, le contrôle depuis zéro ; **trois fiches de nuit** ([`fenêtre`](../../reports/rapport-n2-fenetre.md),
-  [`2 048`](../../reports/rapport-n2-r12-2048.md), [`porte propre`](../../reports/rapport-n2-porte-propre.md),
-  [`production`](../../reports/rapport-n2-production-fenetre.md)) + JSON.
+- **Ce qu'elle fait** : la nuit est committée (4 fiches : [`fenêtre`](../../reports/rapport-n2-fenetre.md),
+  [`2 048`](../../reports/rapport-n2-r12-2048.md), [`production`](../../reports/rapport-n2-production-fenetre.md),
+  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
+  **capacité propre** (GPU 1) lancés à 13 h 37.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; les **6
-  fichiers de la nuit sont committés par le hub** (3 fiches + 2 JSON + la mise à jour de la
-  fenêtre) ; à la reprise : contrôle depuis zéro, clôture.
+- **Prochaine action** : les mesures du run long et de la capacité, puis fiche et commit.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 

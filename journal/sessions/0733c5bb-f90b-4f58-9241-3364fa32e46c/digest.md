@@ -7742,3 +7742,55 @@ Another git process seems to be running in this repository, or the lock file may
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nq = pathlib.Path(\"docs/pilotage/en-cours.md\")\ns = q.read_text(encoding=\"utf-8\")\ns = s.replace(\"- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la\\n  **porte propre**, le con … [1091 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-373]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-373", "timeout_ms": 180000, "wait": true}`
+
+  ```
+a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0|violation\" ; sed -n '/### Session `0733c5bb/,/^- \\*\\*Journal/p' docs/pilotage/en-cours.md | head -24", "description": "Read current session block and T0"}`
+
+  ```
+T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — la production et la capacité.
+- **Plan** : fenêtre, production, porte.
+- **Ambition** : la longueur et la capacité.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
+- **Objectif final** : la production qui tient au long.
+- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la
+  **porte propre**, le contrôle depuis zéro ; **trois fiches de nuit** ([`fenêtre`](../../reports/rapport-n2-fenetre.md),
+  [`2 048`](../../reports/rapport-n2-r12-2048.md), [`porte propre`](../../reports/rapport-n2-porte-propre.md),
+  [`production`](../../reports/rapport-n2-production-fenetre.md)) + JSON.
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; les **6
+  fichiers de la nuit sont committés par le hub** (3 fiches + 2 JSO
+… [200 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\ni = t.index(\"### Session `0733c5bb\")\nj = t.index(\"\\n\\n\", t.index(\"- **Journal**\", i))\nneuf = \"\"\"### Session `0733c5bb- … [1407 caractères tronqués]`
+
+  ```
+bloc réécrit
+  T0 max : 3980 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG'\nÉTAT — LA SESSION N2 REPREND : RUN LONG À 1 024 ET CAPACITÉ PROPRE LANCÉS, T0 À 3 980\n\nLe bloc de session est réécrit pour la phase du 03/11 (les quatre fi … [350 caractères tronqués]`

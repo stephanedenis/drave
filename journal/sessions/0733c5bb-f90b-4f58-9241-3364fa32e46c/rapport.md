@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 21.4 h |
+| Durée | 21.5 h |
 | Tours | 6 |
-| Messages | 526 |
-| Appels d'outils | 504 |
+| Messages | 530 |
+| Appels d'outils | 508 |
 | Fichiers touchés | 25 |
-| Commandes | 373 |
+| Commandes | 376 |
 | Sous-agents | 0 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -165,7 +165,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 
 ### Tour 6 — continue
 
-*10 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Check current repo and hardware state
 - get_goal
@@ -176,6 +176,9 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - bash — Fix T0 and commit reopening
 - bash — Trim T0 and retry commit after lock
 - job_output
+- bash — Read current session block and T0
+- bash — Rewrite session block compactly
+- bash — Commit state and check runs
 
 **Synthèse produite :**
 
@@ -255,7 +258,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 333 autres
+- … et 336 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -417,4 +420,5 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") md = len
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib q = pathlib.Path("docs/pilotage/en-cours.md") s = q.read_text(encoding="utf-8") s = s.replac
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib q = pathlib.Path("docs/pilotage/en-cours.md") s = q.read_text(encoding="utf-8") s = s.replac
+- cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG' ÉTAT — LA SESSION N2 REPREND : 
 

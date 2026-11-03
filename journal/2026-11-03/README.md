@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**59 commits** · **6 session(s)** · **8 thème(s)**
+**60 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 18 | [distribue.md](distribue.md) |
-| docs | 17 | [docs.md](docs.md) |
+| docs | 18 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -24,7 +24,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 21.4 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 21.5 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 18.2 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 22.1 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 | `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 21.4 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
@@ -94,6 +94,7 @@
 | 13:31 | `4387f98a` | ÉTAT / ROADMAP / JOURNAL — LA FENÊTRE SOUS 2,5 ET L'API À LATENCE /35, DATÉS 13 H 30 |
 | 13:34 | `f50ad713` | BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA PORTE PROPRE RESTE |
 | 13:36 | `90f4ee78` | ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON) |
+| 13:38 | `a07c99cc` | N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE |
 
 ## Le récit de la journée (écrit à la main)
 

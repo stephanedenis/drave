@@ -10411,3 +10411,24 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Verrou git (Pensée committe ses résultats). J'attends et je recommite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 15); do [ -e .git/index.lock ] || break; sleep 8; done; date +%H:%M; [ -e .git/index.lock ] && echo \"lock encore\" || echo \"lock libre\"; git log --oneline -2", "description": "Wait for git lock release"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-432]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-432", "timeout_ms": 120000, "wait": true}`
+
+  ```
+13:40
+lock libre
+a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE
+90f4ee78 ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 a rouvert (run long à 1 024) : le GPU va reprendre. Je commite mon plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md; git commit --only -m \"HUB — PLAN À JOUR : PASSE 80/2, FENÊTRE SOUS 2,5, API /35 ; HEARTBEAT 13 H 42\n\nLe plan du hub était resté à 08 h 55. Il porte ma … [413 caractères tronqués]`

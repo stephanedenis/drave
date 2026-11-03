@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 21.4 h |
 | Tours | 164 |
-| Messages | 1135 |
-| Appels d'outils | 926 |
+| Messages | 1140 |
+| Appels d'outils | 931 |
 | Fichiers touchés | 48 |
-| Commandes | 747 |
+| Commandes | 752 |
 | Sous-agents | 0 |
-| Commits | 90 |
+| Commits | 92 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4184,7 +4184,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 164 — continue
 
-*19 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and inspect state
@@ -4200,11 +4200,11 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Check Rust binary and copy fresh DRVM
 - bash — Replay native parity with fresh DRVM
 - bash — Write replayed native parity JSON
-- … et 5 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Le hub tient encore le lock (`f50ad713`) ; j'attends sa fin, je retire le lock résiduel et je refais le commit
+⏵ Le hub tient encore le lock ; j'attends qu'il libère, je retire le lock résiduel et je commite
 
 ## 3. Travail accompli
 
@@ -4303,7 +4303,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 707 autres
+- … et 712 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4498,4 +4498,6 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
+- L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -
+- L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -
 

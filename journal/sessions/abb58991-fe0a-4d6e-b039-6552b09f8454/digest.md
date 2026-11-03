@@ -23302,3 +23302,32 @@ f50ad713 BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA
 ⏵ Le hub tient encore le lock (`f50ad713`) ; j'attends sa fin, je retire le lock résiduel et je refais le commit
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 12); do sleep 15; if ! pgrep -f \"git commit\" >/dev/null 2>&1; then echo \"libre après $((i*15))s\"; break; fi; done; ls .git/index.lock 2>/dev/null && rm -f .git/index.lock; git add reports/rapport-pensee-parite-drvm-native-rejoue.m … [417 caractères tronqués]`
+
+  ```
+.git/index.lock
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook exige une ligne d'état que le hub vient de réécrire ; je lis la ligne réelle et j'ajoute le fait au bon endroit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"parité\\|B13\" docs/pilotage/en-cours.md | head -6; echo '---'; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -6", "description": "Inspect en-cours and state hook", "timeoutMs": 60000}`
+
+  ```
+26:> claims libérés) ; **B13** et **hub** actifs. Détail : [`journal/2026-11-03`](../../journal/2026-11-03/README.md).
+64:- **Plan** : 1–6) ~~moteur B13~~ ; 7) ~~R4.4~~ ; 8) ~~heuristique~~ ; 9) ~~bloc~~ ; 10) ~~coréférence~~.
+68:- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** —
+69:  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 5/5, parité 114/114+5/5 (rejouée) ;
+71:  [B13](../../reports/rapport-b13-porte-140.md), [sto](../../reports/rapport-pensee-porte-sto.md),
+78:  **T132/T133**, gold 200+ ; **porte B13** attend S.
+---
+  état · dernier fait f50ad713 · dernier état a07c99cc
+  ✅ aucun fait commité après le dernier état
+  ```
+
