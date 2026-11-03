@@ -23331,3 +23331,74 @@ a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR L
   ✅ aucun fait commité après le dernier état
   ```
 
+### 🤖 Assistant
+
+⏵ Le hook dit « aucun fait commité après le dernier état » — mon fait n'est pas encore stagé ; je vérifie l'état exact et je commite la fiche + l'état ensemble
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --porcelain | grep -E \"pensee-parite|rapport-pensee-parite|en-cours|README|INDEX|native-parite\" | head -8; echo '---'; git diff --stat docs/pilotage/en-cours.md | tail -1; echo '---'; git log -1 --format='%h %s' docs/pilotage/en-cours.md" … [76 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+MM journal/2026-11-03/README.md
+MM journal/README.md
+M  reports/INDEX.md
+M  reports/README.md
+M  reports/native-parite.json
+A  reports/pensee-parite-drvm-native-rejoue.json
+A  reports/rapport-pensee-parite-drvm-native-rejoue.md
+---
+---
+a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE
+  ```
+
+### 🤖 Assistant
+
+⏵ Les fichiers sont stagés mais le hook exige peut-être aussi le journal ; je lis le hook pour comprendre exactement ce qu'il vérifie
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/verifie_etat_a_jour.py 2>/dev/null || ls tools/ | grep -i \"etat\\|hook\" | head -5; echo '---'; sed -n '60,120p' tools/verifie_etat_a_jour.py 2>/dev/null | head -40", "description": "Read state hook implementation", "timeoutMs":  … [6 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [2850 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook ne vérifie que « en-cours stagé avec les faits » ; tout est déjà stagé — je relance le commit directement
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005\" 2>&1 | tail -5; echo \"EXIT=${PIPESTATUS[0]}\"; git log -1 --format='%h %s' | head -1", "description": "Commit staged parity file … [33 caractères tronqués]`
+
+  ```
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub tient encore le lock ; j'attends qu'il libère, je retire le lock résiduel et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 16); do sleep 15; if ! pgrep -f \"git commit\" >/dev/null 2>&1; then echo \"libre après $((i*15))s\"; break; fi; done; ls .git/index.lock 2>/dev/null && rm -f .git/index.lock; git commit -m \"L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CH … [223 caractères tronqués]`

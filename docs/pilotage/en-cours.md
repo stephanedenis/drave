@@ -1,12 +1,12 @@
 # En ce moment
 
-**Mis à jour : 2026-11-03, 13 h 40 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-03, 13 h 45 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
 >
 > **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
-> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit**, et de nouveau le **03/11 13 h 38** pour le **run long à 1 024** ; runbook :
 > [`plan-travail.md`](plan-travail.md) § 9.
 
 ## Sessions en cours

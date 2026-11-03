@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 21.4 h |
 | Tours | 33 |
-| Messages | 603 |
-| Appels d'outils | 595 |
+| Messages | 607 |
+| Appels d'outils | 599 |
 | Fichiers touchés | 6 |
-| Commandes | 433 |
+| Commandes | 436 |
 | Sous-agents | 0 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -756,7 +756,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 
 ### Tour 33 — continue
 
-*33 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - bash — Check N2 under-2.5 integration in state and roadmap
 - bash — Check pilotage mtimes and stale lines
@@ -772,11 +772,11 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - bash — Update dates and add API/under-2.5 facts
 - bash — Commit API and under-2.5 facts with dates
 - bash — Inspect backlog N2 status and frontier
-- … et 14 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ N2 a rouvert (run long à 1 024) : le GPU va reprendre. Je commite mon plan.
+⏵ Le run long N2 occupe les deux GPU (100 %/97 %) : je reste sur des tâches légères. Je précise la réouverture de N2 dans l'état.
 
 ## 3. Travail accompli
 
@@ -833,7 +833,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 393 autres
+- … et 396 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1002,4 +1002,5 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-cpt.txt <<'EOF' ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON)  Pensée publie pendant que
 - HUB — PLAN À JOUR : PASSE 80/2, FENÊTRE SOUS 2,5, API /35 ; HEARTBEAT 13 H 42  Le plan du hub était resté à 08 h 55. Il porte maintenant les faits de la journée
 - HUB — PLAN À JOUR : PASSE 80/2, FENÊTRE SOUS 2,5, API /35 ; HEARTBEAT 13 H 42  Le plan du hub était resté à 08 h 55. Il porte maintenant les faits de la journée
+- ÉTAT — N2 ROUVERTE POUR LE RUN LONG À 1 024 (03/11 13 H 38) ; HEARTBEAT 13 H 45  Le bandeau de reprise disait « rouverte pour la nuit » : N2 a rouvert le 03/11 
 

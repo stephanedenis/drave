@@ -7794,3 +7794,58 @@ bloc réécrit
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG'\nÉTAT — LA SESSION N2 REPREND : RUN LONG À 1 024 ET CAPACITÉ PROPRE LANCÉS, T0 À 3 980\n\nLe bloc de session est réécrit pour la phase du 03/11 (les quatre fi … [350 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-376]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-376", "timeout_ms": 180000, "wait": true}`
+
+  ```
+f1e8007e ÉTAT — LA SESSION N2 REPREND : RUN LONG À 1 024 ET CAPACITÉ PROPRE LANCÉS, T0 À 3 980
+13:42:12
+0, 5280 MiB, 99 %
+1, 1668 MiB, 97 %
+pas    250 · perte 0.9853 · PPL val 2.479 · 111 s
+pas   3350 · perte 1.2096 · PPL val 3.841 · 323 s
+[stderr]
+fatal: repository has been updated, but unable to write
+new index file. Check that disk is not full and quota is
+not exceeded, and then "git restore --staged :/" to recover.
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte disque sur le dépôt — vérification immédiate
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && df -h . /tmp | head -4; echo \"=== git ===\"; git status --short | head -5; ls -la .git/index.lock 2>/dev/null; echo \"=== work size ===\"; du -sh work/n2ac 2>/dev/null", "description": "Check disk space and git index state"}`
+
+  ```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/system-root   11T  9,0T  2,0T  83% /home/stephane/Data13TB
+tmpfs                     63G  7,7G   56G  13% /tmp
+=== git ===
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+MM journal/2026-11-03/distribue.md
+MM journal/2026-11-03/docs.md
+MM journal/2026-11-03/memoire.md
+=== work size ===
+5,5G	work/n2ac
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && df -i . | head -2; echo \"=== test git ===\"; git log --oneline -2 | cat; git status --porcelain > /dev/null && echo \"index OK\" || echo \"index KO\"", "description": "Check inodes and git index health"}`
+
+  ```
+Filesystem              Inodes IUsed IFree IUse% Mounted on
+/dev/mapper/system-root      0     0     0     - /home/stephane/Data13TB
+=== test git ===
+f1e8007e ÉTAT — LA SESSION N2 REPREND : RUN LONG À 1 024 ET CAPACITÉ PROPRE LANCÉS, T0 À 3 980
+a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE
+index OK
+  ```
+

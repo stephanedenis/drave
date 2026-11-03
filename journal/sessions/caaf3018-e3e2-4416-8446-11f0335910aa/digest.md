@@ -10432,3 +10432,57 @@ a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR L
 ⏵ N2 a rouvert (run long à 1 024) : le GPU va reprendre. Je commite mon plan.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md; git commit --only -m \"HUB — PLAN À JOUR : PASSE 80/2, FENÊTRE SOUS 2,5, API /35 ; HEARTBEAT 13 H 42\n\nLe plan du hub était resté à 08 h 55. Il porte ma … [413 caractères tronqués]`
+
+  ```
+MM journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+[still running after 60000ms; moved to background job bash-433]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-433", "timeout_ms": 120000, "wait": true}`
+
+  ```
+reports/rapport-pensee-gold-api.md
+	reports/rapport-pensee-parite-drvm-native-rejoue.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit n'a rien trouvé à committer : je vérifie si le plan a déjà été emporté par un autre commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log -1 --format=\"%h %s\" -- journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md; echo \"---\"; git diff HEAD -- journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md | head -12; echo \"--- HEAD plan heartbeat --- … [144 caractères tronqués]`
+
+  ```
+a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE
+---
+--- HEAD plan heartbeat ---
+- **Heartbeat** : 2026-11-03 13:42 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 a rouvert : je vérifie que l'état le dit, puis je te fais le point.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; grep -n \"60 000\\|rouverte\\|run long\" docs/pilotage/en-cours.md | head -3 | cut -c1-170; echo \"=== GPU ===\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo \"=== checks ===\"; pyt … [163 caractères tronqués]`
+
+  ```
+13:42
+8:> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+9:> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+85:- **Rôle** : **N2** — le run long de production et la capacité sur le corpus propre.
+=== GPU ===
+0, 5280 MiB, 100 %
+1, 1668 MiB, 97 %
+=== checks ===
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3980 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run long N2 occupe les deux GPU (100 %/97 %) : je reste sur des tâches légères. Je précise la réouverture de N2 dans l'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"**N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :\",\n \"**N2** close à 19 h 46 pu … [1003 caractères tronqués]`
