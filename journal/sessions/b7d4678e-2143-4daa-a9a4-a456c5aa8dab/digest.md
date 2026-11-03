@@ -9126,3 +9126,87 @@ MM journal/2026-11-02/docs.md
   ```
 
 - **bash** `{"command": "git status --short journal/2026-11-03/README.md; export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add journal/2026-11-03/README.md; git commit -m \"NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS\" 2>&1 | tail -4", "description": "Commit the 03/11 jour … [35 caractères tronqués]`
+
+  ```
+M journal/2026-11-03/README.md
+  ✅ index : aucun fait stagé sans état
+[master 212c23d7] NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+ 21 files changed, 493 insertions(+), 50 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 11 : lien du journal 03/11 réparé, état vert
+
+- **Le hub a ouvert le journal du 03/11** (« le bilan de 08 h » : état de 21 h 49, sessions, point de reprise). `verifie_journal` était rouge : le README du jour n'avait pas le lien `../README.md#sessions` exigé. **Corrigé** (commit `212c23d7`) — journal ✅ (40 jours, 1 884 liens).
+- **N2** : la fiche fenêtre reste non committée, `n2-fenetre.json` absent ; le run `rope1024-20k` est à **~12 400 / 20 000 pas, PPL val 2,62** — la cible 2,5 approche.
+- **État** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, puis le checkpoint de 8 h. Rien de bloquant.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 12/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 12 : je vérifie les événements et j’attends le commit N2
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git status --short reports/rapport-n2-fenetre.md 2>/dev/null; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; python3 tools/verifie_journal.py 2>&1 | tail -1", "description": "Ch … [34 caractères tronqués]`
+
+  ```
+21:55:17
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+a49c63dc NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+json absent
+?? reports/rapport-n2-fenetre.md
+pas  12700 · perte 1.0470 · PPL val 2.621 · 5857 s
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; [ -f reports/n2-fenetre.json ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ls -l reports/n2-fenetre.json … [162 caractères tronqués]`
+
+  ```
+21:57:06
+HEAD 212c23d7
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+-rw-r--r--. 1 stephane stephane 5573  2 nov 21:56 reports/n2-fenetre.json
+pas  12950 · perte 1.0609 · PPL val 2.620 · 5969 s
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -3; echo \"--- statut ---\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json 2>/dev/null; ls -l reports/n2-fenetre.json reports/rapport-n2-fenetre.md 2>/dev/null; echo \"--- json aperçu ---\"; python3 - <<'PY'\nimport jso … [214 caractères tronqués]`
+
+  ```
+✅ 1577 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2747 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+--- statut ---
+?? reports/n2-fenetre.json
+?? reports/rapport-n2-fenetre.md
+-rw-r--r--. 1 stephane stephane 5573  2 nov 21:56 reports/n2-fenetre.json
+-rw-------. 1 stephane stephane 9137  2 nov 21:56 reports/rapport-n2-fenetre.md
+--- json aperçu ---
+clés: ['loi_fenetre_256', 'loi_fenetre_512', 'loi_fenetre_1024', 'meme_texte_256', 'meme_texte_512', 'meme_texte_1024', 'production_n2ac', 'production_200k', 'production_512', 'production_512_meme_texte']
+dispositif runs: ['R1.1', 'R1.2-512', 'R1.2-1024', 'R1.2-1024-long', 'prod-512', 'prod-1024']
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 57 — le JSON N2 arrive, `porte-tableaux` repasse verte\n\n- **`reports/n2-fenetre.json`** écrit à 21 h 56 (5 573 octets) : agrégat des runs\n  (loi de fenêtre 256/512/1024, même texte, production N2.ac/200k/512, R1.1/R1.2-1024-long).\n- **`p … [521 caractères tronqués]`
+
+  ```
+revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 655 JSON, le disque en a 656
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; git log --oneline -2; echo \"--- compteurs ---\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 tools/revue_documentatio … [286 caractères tronqués]`

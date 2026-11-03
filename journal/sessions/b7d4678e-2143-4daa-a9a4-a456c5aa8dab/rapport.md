@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.6 h |
-| Tours | 16 |
-| Messages | 556 |
-| Appels d'outils | 573 |
+| Durée | 5.7 h |
+| Tours | 17 |
+| Messages | 563 |
+| Appels d'outils | 578 |
 | Fichiers touchés | 24 |
-| Commandes | 383 |
+| Commandes | 388 |
 | Sous-agents | 0 |
 | Commits | 22 |
 | Compactages de contexte | 0 |
@@ -57,6 +57,8 @@
 **Tour 15** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 16** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -510,7 +512,27 @@ La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le co
 
 **Synthèse produite :**
 
-⏵ Round 11 : je vérifie les événements puis j’attends le commit N2
+⏵ Round 11 : lien du journal 03/11 réparé, état vert
+
+- **Le hub a ouvert le journal du 03/11** (« le bilan de 08 h » : état de 21 h 49, sessions, point de reprise). `verifie_journal` était rouge : le README du jour n'avait pas le lien `../README.md#sessions` exigé. **Corrigé** (commit `212c23d7`) — journal ✅ (40 jours, 1 884 liens).
+- **N2** : la fiche fenêtre reste non committée, `n2-fenetre.json` absent ; le run `rope1024-20k` est à **~12 400 / 20 000 pas, PPL val 2,62** — la cible 2,5 approche.
+- **État** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, puis le checkpoint de 8 h. Rien de bloquant.
+
+### Tour 17 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check events, N2 fiche and journal
+- bash — Wait for a new commit or the N2 JSON
+- bash — Verify the tableaux gate and N2 JSON
+- bash — Log the N2 JSON and tableaux green, check counters
+- bash — Wait for the N2 commit and verify counters
+
+**Synthèse produite :**
+
+⏵ Round 12 : je vérifie les événements et j’attends le commit N2
 
 ## 3. Travail accompli
 
@@ -585,7 +607,7 @@ La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le co
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 343 autres
+- … et 348 autres
 
 ## 4. Mesures et résultats marquants
 

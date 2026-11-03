@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.5 h |
+| Durée | 5.7 h |
 | Tours | 23 |
-| Messages | 294 |
-| Appels d'outils | 303 |
+| Messages | 303 |
+| Appels d'outils | 312 |
 | Fichiers touchés | 6 |
-| Commandes | 232 |
+| Commandes | 240 |
 | Sous-agents | 0 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +473,11 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 16 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ Attente de 10 min (veille JSON/rejeu en fond)
+⏵ Deux accrocs : verrou git (autre commit en cours) et backticks exécutés dans le message. Je réessaie proprement.
 
 ## 3. Travail accompli
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 192 autres
+- … et 200 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -637,4 +637,5 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - RÉFÉRENCES — LE TABLEAU DES REPÈRES PASSE À LA PASSE DU 02/11 19 H 32 (81 PORTES, 76/5)  Les 81 lignes du § 2 sont réécrites depuis les journaux durables work/p
 - PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE  Le doc disait encore « la passe du 02/11 06 h » ; la passe complète du soir 
 - PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE  La suggestion « il vient du balayage : \`tools/n4_dessin_b.py ...\` » était écrite entre guillemets D
+- RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)  Le JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué 
 

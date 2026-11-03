@@ -5170,3 +5170,55 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-222", "timeout_ms": 300000, "wait": true}`
+
+  ```
+21:53:05
+mix512-15k fini 20:54:07
+mix1024-7.5k fini 21:50:49
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-220 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; ls work/n2ac/mix1024-7.5k.pt 2>/dev/null && echo CHECKPOINT_OK) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-222", "timeout_ms": 240000, "wait": true}`
+
+  ```
+"ppl": {
+  "val_fr": {
+   "128": 3.1489,
+   "256": 3.0488,
+   "512": 2.9103,
+   "1000": 2.7858,
+   "2000": 2.7342
+  },
+  "val_big": {
+   "128": 3.0548,
+   "256": 2.8966,
+   "512": 2.7659,
+   "1000": 2.661,
+   "2000": 2.6258
+  }
+ },
+ "permute_fr": 197.5268,
+ "litterature": 5.5173,
+ "anglais": 7.1904,
+ "wikitext2": 7.9521,
+ "corpus_propre": 9.7158
+}
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comblement de la fiche avec la production à 1 024
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\nfor k, v in ((\"{{P128}}\", \"3,1489\"), (\"{{P256}}\", \"3,0488\"), (\"{{P512}}\", \"2,9103\"),\n             (\"{{P1000}}\",  … [1712 caractères tronqués]`
+
+  ```
+placeholders restants : 0
+  reports/n2-fenetre.json · 15 source(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_2048_wiki.sh 1 > work/n2ac/chaine_2048_wiki.out 2>&1 & echo \"2048 wiki lancé pid $!\"; sleep 40; date '+%H:%M:%S'; tail -2 work/n2ac/rope2048-1.25k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu  … [71 caractères tronqués]`

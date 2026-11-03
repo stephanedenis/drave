@@ -24,3 +24,12 @@
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 6,2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 
 Index des sessions : [journal](../README.md#sessions).
+
+## 08 h 00 — le bilan (à remplir au réveil)
+
+1. **Sessions** : `python3 tools/sessions.py --status` ; `--check --strict` (les claims couvrent les mandats longs) ; `surveille_sessions.py`.
+2. **Registre** : `python3 tools/ressources.py --status` ; `--check` ; `--actual`.
+3. **Passe** : `awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt` (76/5) ; `bash tools/porte-tableaux.sh` (JSON N2) ; `bash tools/porte-sessions.sh`.
+4. **Documentation** : `revue_documentation.py` ; `taille_documents.py` ; `verifie_journal.py`.
+5. **Git** : `git log --oneline --since="2026-11-02 16:00"` ; `git status --short`.
+6. **Remplir** : les quatre sessions (fini/reste), les claims réels, le verdict de la passe, le JSON N2, le README/INDEX, ce qui attend l'humain (validation S, porte B13, gold).

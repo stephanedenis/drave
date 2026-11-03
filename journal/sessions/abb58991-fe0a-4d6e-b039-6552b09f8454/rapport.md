@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.6 h |
+| Durée | 5.7 h |
 | Tours | 15 |
-| Messages | 530 |
-| Appels d'outils | 625 |
+| Messages | 535 |
+| Appels d'outils | 630 |
 | Fichiers touchés | 47 |
-| Commandes | 462 |
+| Commandes | 467 |
 | Sous-agents | 0 |
-| Commits | 32 |
+| Commits | 36 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -631,7 +631,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 
 ### Tour 15 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Add porte_fenetre prompt and test
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py`
@@ -647,11 +647,11 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - bash — Wait, rebase en-cours on hub, commit window
 - bash — Clear stale lock and commit window
 - bash — Wait for hub git timeout and commit
-- … et 9 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Le hub a repris le lock pendant mon `git add` ; j'attends et je stage l'en-cours puis je commite
+⏵ Le hub tient le lock en continu ; j'attends 3 minutes et je reprends le commit (l'en-cours a un vrai changement)
 
 ## 3. Travail accompli
 
@@ -749,7 +749,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 422 autres
+- … et 427 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -880,4 +880,8 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT2=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"; unset GIT_INDEX_FILE
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
 

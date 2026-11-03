@@ -13178,3 +13178,126 @@ python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage 
 … [426 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Le hook appelle `verifie_etat_a_jour --index` ; je lance l'outil seul pour voir ce qui bloque exactement
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py --index; echo \"EXIT=$?\"; echo '---'; python3 tools/verifie_etat_a_jour.py --index 2>&1 | head -20", "description": "Run state index check verbosely"}`
+
+  ```
+❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+---
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook ne voit pas l'en-cours dans l'index ; je vérifie l'état git du fichier et je le stage explicitement
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short docs/pilotage/en-cours.md; git diff --cached --name-only | grep -c . ; git add -f docs/pilotage/en-cours.md; git diff --cached --name-only | grep en-cours; python3 tools/verifie_etat_a_jour.py --index; echo \"EXIT=$?\"; git commit - … [210 caractères tronqués]`
+
+  ```
+30
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT2=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ L'en-cours est déjà committé par le hub (donc non stagé) ; le hook exige qu'il soit dans l'index. Je fais un vrai changement (compteurs/heure), je le stage et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('| fichiers / JSON de résultats | **569** / **654** |','| fichiers / JSON de résultats | **570** / **655** |')\nt=t.replace('** … [353 caractères tronqués]`
+
+  ```
+ok
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a repris le lock pendant mon `git add` ; j'attends et je stage l'en-cours puis je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 45; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; ps -eo pid,etime,cmd | grep -E \"git (commit|add|reset)\" | grep -v grep | head -2; git add -f docs/pilotage/en-cours.md && echo 'add ok'; git diff --cached --name-only | … [308 caractères tronqués]`
+
+  ```
+21:54:57
+.git/index.lock
+ 687792       01:30 bash -c git status --short journal/2026-11-03/README.md; export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add journal/2026-11-03/README.md; git commit -m "NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS" 2>&1 | tail -4
+ 687816       01:30 git commit -m NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT2=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub utilise un index séparé mais un commit bloque toujours `.git/index.lock` ; j'attends sa fin
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 120; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; ps -eo pid,etime,cmd | grep -E \"git (commit|add|read-tree)\" | grep -v grep | head -2; git add -f docs/pilotage/en-cours.md && echo 'add ok'; git diff --cached --name-o … [316 caractères tronqués]`
+
+  ```
+21:57:17
+lock libre
+add ok
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT2=1
+  ```
+

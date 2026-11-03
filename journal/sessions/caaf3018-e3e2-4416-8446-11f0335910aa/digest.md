@@ -5744,3 +5744,75 @@ ok
 ⏵ Attente de 10 min (veille JSON/rejeu en fond)
 
 - **job_output** `{"job_id": "bash-230", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de 21 h 57
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; ls reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git log --oneline -2; echo \"--- état ---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"", "des … [35 caractères tronqués]`
+
+  ```
+21:57
+reports/n2-fenetre.json
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+--- état ---
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3990 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le JSON N2 est arrivé — la veille rejoue `porte-tableaux`
+
+- **job_output** `{"job_id": "bash-230", "timeout_ms": 120000, "wait": true}`
+
+  ```
+(no new output)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat work/portes/tableaux-rejeu.log; echo \"=== json ===\"; ls -la reports/n2-fenetre.json | cut -c1-60; echo \"=== commit ? ===\"; git log --oneline -1 -- reports/n2-fenetre.json reports/rapport-n2-fenetre.md; git status --short | grep … [93 caractères tronqués]`
+
+  ```
+✅ 1577 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2747 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+REJEU code=0 à 21:57:26 — json présent
+=== json ===
+-rw-r--r--. 1 stephane stephane 5573  2 nov 21:56 reports/n2
+=== commit ? ===
+?? reports/n2-fenetre.json
+?? reports/rapport-n2-fenetre.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Rejeu **vert** (2 747 liens, 1 577 fichiers) — je consigne le rejeu dans l'en-tête des références.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; stat -c '%y' docs/pilotage/references-non-regression.md | cut -c12-19; sed -n 3,10p docs/pilotage/references-non-regression.md", "description": "Read current references header before patching"}`
+
+  ```
+21:29:55
+> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
+> **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues
+> (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,
+> `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
+> `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) —
+> **rouge de passage** (rejouer après le commit N2) ; aucune régression structurelle.
+> La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/references-non-regression.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"\"\"— **rouge de passage** (rejouer après le commit N2) ; aucune régression structure … [646 caractères tronqués]`
+
+  ```
+NON TROUVÉ : — **rouge de passage** (rejouer après le commit N2 0
+patché : + `porte-tableaux` (lien N2 en vol, rejouée après 
+     · compteurs : en-cours.md dit 655 JSON, le disque en a 656
+  ```
+
