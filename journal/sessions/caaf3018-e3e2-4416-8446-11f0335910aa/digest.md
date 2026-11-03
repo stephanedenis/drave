@@ -8914,3 +8914,100 @@ en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejo
 CODE=0
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --format=\"%h %ad %s\" --date=format:\"%H:%M\" -3 -- AGENTS.md; echo \"---\"; git log --oneline -3; echo \"--- en-cours : règle 11 ? ---\"; grep -n \"llama-server\\|DeepSeek\\|GPU sont\\|API\" docs/pilotage/en-cours.md | head - … [71 caractères tronqués]`
+
+  ```
+1c9a37dd 09:17 BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979
+ca800b52 09:15 BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS
+9d626b63 09:13 GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT
+---
+1c9a37dd BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979
+ca800b52 BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS
+9d626b63 GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT
+--- en-cours : règle 11 ? ---
+19:> **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
+20:> `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
+21:> DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
+22:> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave (la N4 a tourné sur GPU0).
+  ```
+
+### 🤖 Assistant
+
+⏵ La règle 11 est déjà intégrée (serveurs tués, état et budgets à jour). Je vérifie l'ensemble et l'impact sur Pensée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== checks ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 tools/sessions.py --check --strict >/dev/ … [368 caractères tronqués]`
+
+  ```
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3979 mots (budget 4 000)
+sessions=0
+=== pensée : llama-server ? ===
+26:  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432) ; 11) ~~gold neuronal~~ (tagger 7B local, cascade POS 0,9440) ; 12) ~~syntagmes~~ (BIO 7B, exact 0,6173, tête 0,7606) ; 13) ~~cascade complète~~ (POS 0,9415, syntagmes 0,7539, acte 1,0) ; 14) ~~DRVM/native~~ (cadenas 3 nœuds avec règle, minimal 0 ; porte 27 nœuds avec règle) ; 15) ~~porte DRVM~~ (27 nœuds, 4 sonde) ; 16) ~~pragmatique neuronale~~ (négatif : dev 1,0, test 0,6375) ; 17) ~~porte B13~~ (134/140 : 6 S fixés + 2 test périmé ; le 140/140 ne se rejoue pas) ; 18) ~~porte minute~~ (26 nœuds, 4 sonde ; le labyrinthe échoue) ; 19) ~~porte mobile~~ (2/2 mais l'aveugle/labyrinthe passent ; test faible) ; 20) ~~porte B13 138~~ (6 S fixés ; T132/T133 restent).
+41-- **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
+57-- **Bloquants** : aucun ; **banqu
+… [16 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '/### Session `e181ce02/,/^### /p' docs/pilotage/en-cours.md | head -26", "description": "Read Pensée section of state"}`
+
+  ```
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
+- **Plan** : 1–6) ~~moteur B13~~ ; 7) ~~R4.4~~ ; 8) ~~heuristique~~ ; 9) ~~bloc~~ ; 10) ~~coréférence~~.
+- **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
+- **Stratégie** : v0 petit et mesuré.
+- **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** —
+  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 5/5, parité 114/114+5/5 ;
+  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **non discriminante** (oracle 228, aveugle 215) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+  [B13](../../reports/rapport-b13-porte-140.md), [sto](../../reports/rapport
+… [879 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la contrainte de la règle 11 aux bloquants de Pensée (7B local interdit) et je vérifie le journal.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute/mobile ; la **pragmatique neuronale** ne quali … [785 caractères tronqués]`
+
+  ```
+en-cours : blocage 7B local ajouté
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+=== journal : règle 11 ? ===
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-r11.txt <<'EOF'\nÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE\n\nLes serveurs locaux sont interdits (règle 11 : GPU réservés à Drave, professeurs par\nl'API DeepSeek, garde-fou hauru-gpu-guard + porte- … [364 caractères tronqués]`
+
+  ```
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Verrou git : un autre commit est en cours. J'attends et je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 12); do [ -e .git/index.lock ] || break; sleep 10; done; [ -e .git/index.lock ] && echo \"lock encore\" || echo \"lock libre\"; git log --oneline -2", "description": "Wait for git lock release"}`
+
+  ```
+lock libre
+277dd870 BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET
+1c9a37dd BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -c \"expériences \\*\\*7B locales\\*\\*\" docs/pilotage/en-cours.md; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; git status --short docs/pilotage/en-cours.md", "description": "Verify blocker survived and budget"}`
+
+  ```
+1
+  T0 max : 3999 mots (budget 4 000)
+ M docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -F work/msg-r11.txt -- docs/pilotage/en-cours.md 2>&1 | tail -4", "description": "Commit rule-11 Pensée blocker"}`

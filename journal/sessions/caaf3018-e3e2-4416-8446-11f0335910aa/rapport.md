@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 17.1 h |
 | Tours | 28 |
-| Messages | 505 |
-| Appels d'outils | 504 |
+| Messages | 508 |
+| Appels d'outils | 507 |
 | Fichiers touchés | 6 |
-| Commandes | 365 |
+| Commandes | 367 |
 | Sous-agents | 0 |
-| Commits | 20 |
+| Commits | 21 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*55 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -608,7 +608,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Append morning resumption to journal
 - bash — Check claims and hub plan
 - bash — Clean stale claims and claim day job
-- … et 34 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
@@ -669,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 325 autres
+- … et 327 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -792,6 +792,8 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T28** `[still running after 60000ms; moved to background job bash-350]`
 - **T28** `[still running after 60000ms; moved to background job bash-352]`
 - **T28** `[still running after 60000ms; moved to background job bash-353]`
+- **T28** `[still running after 60000ms; moved to background job bash-367]`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
@@ -823,4 +825,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-j2.txt <<'EOF' JOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUME
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/methode/portes.md"); t = p.read_text(encoding="utf-8"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-r11.txt <<'EOF' ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE  Les serveurs
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -F work/msg-r11.txt -- docs/pilotage/en-cours.md 2>&1 | tail -4
 

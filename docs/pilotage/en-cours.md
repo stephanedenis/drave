@@ -76,7 +76,7 @@
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
 - **Prochaine action** : **gold 432 réel (0,9954)** ; **DRVM/native 114/114+5/5** ; la suite :
   **T132/T133**, gold 200+ ; **porte B13** attend S.
-- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute/mobile ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ; reste **gold 200+**.
+- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute/mobile ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ; reste **gold 200+** ; les expériences **7B locales** sont **interdites** (règle 11) — la professeure passe par l'**API DeepSeek** ou le **DRVM natif**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024

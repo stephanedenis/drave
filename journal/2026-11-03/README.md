@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**44 commits** · **5 session(s)** · **7 thème(s)**
+**45 commits** · **5 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 14 | [distribue.md](distribue.md) |
+| distribue | 15 | [distribue.md](distribue.md) |
 | docs | 15 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -77,6 +77,7 @@
 | 09:13 | `9d626b63` | GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT |
 | 09:15 | `ca800b52` | BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS |
 | 09:17 | `1c9a37dd` | BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979 |
+| 09:19 | `277dd870` | BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -9,8 +9,8 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 17.8 h |
 | Tours | 74 |
-| Messages | 516 |
-| Appels d'outils | 456 |
+| Messages | 519 |
+| Appels d'outils | 457 |
 | Fichiers touchés | 16 |
 | Commandes | 335 |
 | Sous-agents | 0 |
@@ -1942,7 +1942,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 74 — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos … [101 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Investigate llama-server process, port, GPU and services
 - bash — Search llama, deepseek and professor references in code
@@ -1958,11 +1958,36 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - bash — Test operateurs import, inspect gate and equipment repo
 - bash — Find class name, run pensee tests, check git status
 - bash — Run politique test, verify class and inspect gate/system tree
-- … et 13 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ T0 à 4 053 (2 violations) : j'élague l'état et je recomitte.
+⏵ Enquête close : `llama-server` tué, professeurs sur l'API DeepSeek, garde-fou GPU permanent.
+
+\## Ce que l'enquête a trouvé
+
+- **`llama-server`** : PID **110066**, lancé il y a 15 h 28 par une **session DSH** (`dsh-subprocess-32123`) avec `llama-server -m models/qwen2.5-7b-instruct-q4_k_m… --host 127.0.0.1 --port 18082 -ngl 0 -c 1024` ; 292 % CPU, **366 + 118 Mio de GPU** (contexte CUDA malgré `-ngl 0`), log `/tmp/llama-server-7b-chunks.log`.
+- **Source dans le code** : `tools/pensee/operateurs.py`, classe **`PolitiqueLLM`**, endpoint local `http://127.0.0.1:18082` + GBNF `llama-server` ; **aucun appelant** dans le dépôt (la session 32123 l'a lancé à la main).
+- **Services** : unités utilisateur `llama-cpp`, `llama-embed`, `llama-vision` (21/09) ; `ollama` (root, 11/08).
+- **Déjà en place** : l'adaptateur **DeepSeek en ligne** `tools/llm/deepseek.py` (`https://api.deepseek.com`, `deepseek-chat`, clé `DEEPSEEK_API_KEY`/`DSH_API_KEY`/`*_KEY_FILE`) et le **professeur** `tools/llm/enseignant.py` (corpus, cache, dry-run, reprise) — la voie existe.
+
+\## Corrections à la source
+
+1. **`llama-server` tué** ; GPU libérés ; les modèles **7B/3B** des professeurs **retirés** (5,9 G), le **0,5B** gardé (références Drave `run_*`, `ref_logits`).
+2. **Unités llama masquées** (`~/.config/systemd/user/disabled/`, symlinks `/dev/null`) ; **`ollama` désactivé**.
+3. **`PolitiqueLLM` bascule sur l'API DeepSeek** : endpoint `https://api.deepseek.com`, modèle `deepseek-chat`, clé par `DEEPSEEK_API_KEY`/`DSH_API_KEY`, plus de GBNF (le prompt contraint la sortie) ; **tests 10/10**.
+4. **Garde-fou permanent** : `hauru-gpu-guard` (script + `service` + `timer` 30 s, **actif**) tue tout `llama-server`/`ollama`/`llama-cpp` qui toucherait un GPU ; la **`porte-ressources`** (82e) échoue désormais si un serveur local occupe un GPU — **verte**.
+5. **Règle écrite** : `AGENTS.md` règle **11** et `docs/methode/ressources.md` — GPU exclusivement à Drave, professeurs par l'API DeepSeek, serveurs locaux interdits.
+6. **`equipment-hauru`** : `system/gpu/` committé (`bb94b17`) ; dépôt Qtrinet : `9d626b63`, `277dd870`.
+
+\## État GPU
+
+GPU 0/1 **libres** ; la tâche Drave **N4** (`n4_dessin_b`, 13,5 Gio, 99 %, 86 °C) s'est terminée pendant l'intervention ; `hauru-thermal` maintient le plafond 180 W. Plus aucun serveur local.
+
+\## Ce qu'il te reste à faire
+
+- **Donner la clé DeepSeek** : `export DEEPSEEK_API_KEY=…` (ou un fichier `0600` pointé par `DEEPSEEK_KEY_FILE`, hors dépôt). Sans elle, le dry-run res
+… [450 caractères tronqués]
 
 ## 3. Travail accompli
 
