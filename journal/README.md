@@ -105,7 +105,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `4e86f5e2` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 37 | 0 | 0 | [rapport](sessions/4e86f5e2-cc8e-43d7-8be0-ba9622de2dc7/rapport.md) |
 | `4f3e8570` | Configuration RAID0 NVMe pour modèles IA | 2026-10-12 15:30 | 25.5 h | 13 | 822 | 41 | 57 | [rapport](sessions/4f3e8570-3d81-41e0-a055-1002702a6959/rapport.md) |
 | `5185ccb1` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 17:03 | 0.4 h | 1 | 123 | 9 | 0 | [rapport](sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md) |
-| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 9.0 h | 48 | 331 | 13 | 29 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
+| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 9.1 h | 49 | 334 | 13 | 29 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
 | `54621513` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.7 h | 1 | 78 | 4 | 0 | [rapport](sessions/54621513-76ae-401e-87df-a5084cacb359/rapport.md) |
 | `564fbe3a` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:07 | 0.1 h | 1 | 35 | 0 | 0 | [rapport](sessions/564fbe3a-a859-4b3b-bd17-4da73a2f4e22/rapport.md) |
 | `56879594` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 29 | 0 | 0 | [rapport](sessions/56879594-1434-4e34-83cc-de42cdf192a1/rapport.md) |
@@ -141,10 +141,10 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a4eaa4c8` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 38 | 0 | 0 | [rapport](sessions/a4eaa4c8-11e2-4ca3-bcb1-b28919cb601a/rapport.md) |
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
-| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 8.3 h | 149 | 822 | 48 | 65 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
+| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 8.4 h | 150 | 829 | 48 | 67 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
 | `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
-| `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 8.3 h | 48 | 720 | 24 | 37 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |
+| `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 8.4 h | 49 | 722 | 24 | 37 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |
 | `b80df26d` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:52 | 0.3 h | 1 | 43 | 2 | 0 | [rapport](sessions/b80df26d-3dc3-49ea-98b8-fa5a7e0c4cdf/rapport.md) |
 | `bbc0b8e2` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.2 h | 2 | 52 | 2 | 3 | [rapport](sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) |
 | `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 222.5 h | 205 | 9050 | 220 | 706 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |

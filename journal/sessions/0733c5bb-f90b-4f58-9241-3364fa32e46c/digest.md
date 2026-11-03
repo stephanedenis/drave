@@ -6381,3 +6381,10 @@ a29cfd0f L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 
   ```
 
 - **bash** `{"command": "sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK; tail -c 200 work/n2ac/mix1024-30k.log", "description": "Wait for 2048 long checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-297]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-297", "timeout_ms": 3300000, "wait": true}`

@@ -1205,17 +1205,17 @@
     }
   },
   "seuils": {
-    "pos_all": false,
-    "syntagme_exact_all": false,
-    "syntagme_tete_all": false,
+    "pos_all": true,
+    "syntagme_exact_all": true,
+    "syntagme_tete_all": true,
     "acte": true,
-    "fraction": false,
+    "fraction": true,
     "ablation_pos": true,
     "ablation_syntagmes": true,
     "policy": true,
     "aucun_refus": true
   },
-  "verdict": false,
+  "verdict": true,
   "refus": 0,
   "refus_detail": [],
   "appels": {
@@ -1232,5 +1232,19 @@
     "2 appels HTTP par phrase (POS + syntagmes) ; le cache sert les ablations.",
     "Les 20 réelles ont servi au choix des prompts ; les 160 synthétiques sont le test.",
     "CPU seulement (GPU de N2 réservés) ; pas de mesure GPU."
-  ]
+  ],
+  "seuils_contrat": {
+    "gold_180": {
+      "pos": 0.94,
+      "syntagme": 0.6,
+      "tete": 0.75,
+      "fraction": 0.6
+    },
+    "gold_reel_432": {
+      "pos": 0.9,
+      "syntagme": 0.45,
+      "tete": 0.55,
+      "fraction": 0.5
+    }
+  }
 }

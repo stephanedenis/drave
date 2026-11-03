@@ -10040,3 +10040,10 @@ started background job bash-253
   ```
 
 - **job_output** `{"job_id": "bash-253", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+00:40:49
+[status: completed, exit code: 0]
+  ```
+

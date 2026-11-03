@@ -6628,3 +6628,22 @@ started background job bash-272
 ⏵ Dispositif en place : veille fichier (`bash-271`) + minuteur muet (`bash-272`), en alternance.
 
 - **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -3 work/veille-nuit.log 2>/dev/null || echo \"pas encore de ligne\"; git log --oneline -1", "description": "Read first watch line"}`
+
+  ```
+00:37
+00:37 · e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCAD · actifs=7 ·   ✅ état court, structuré, multi-s
+e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE
+  ```
+
+### 🤖 Assistant
+
+⏵ 00 h 37 : le gold réel 432 est intégré. J'alterne sur le minuteur muet.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`

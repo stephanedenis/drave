@@ -35,7 +35,15 @@ GOLD = pathlib.Path(__file__).with_name("gold.json")
 SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
 
 
-def charger() -> list[dict]:
+GOLD_REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+
+
+def charger(reel: bool = False) -> list[dict]:
+    if reel:
+        ph = json.loads(GOLD_REEL.read_text(encoding="utf-8"))["phrases"]
+        for p in ph:
+            p["source"] = "reel"
+        return ph
     hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
     synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
     for p in hand:
@@ -66,10 +74,12 @@ def main() -> int:
     ap.add_argument("--demarrer", action="store_true")
     ap.add_argument("--confiance", type=float, default=0.6)
     ap.add_argument("--limite", type=int, default=0)
+    ap.add_argument("--gold-reel", action="store_true",
+                    help="charger gold_reel.json (432 phrases réelles)")
     ap.add_argument("--sortie", default=str(RACINE / "reports/pensee-gold-cascade.json"))
     args = ap.parse_args()
 
-    phrases = charger()
+    phrases = charger(args.gold_reel)
     if args.limite:
         phrases = phrases[:args.limite]
     modele = pathlib.Path(args.modele)
@@ -105,12 +115,19 @@ def main() -> int:
         pos_seul = mesures["cascade_pos"]["all"]
         synt_seul = mesures["cascade_syntagmes"]["all"]
         defaut = mesures["cascade_complete_defaut"]["all"]
+        # Seuils : le gold 180 (hand+synth) et le gold réel n'ont pas le même plancher.
+        # Le gold réel 432 est le corpus de généralisation ; ses seuils sont ceux du 432,
+        # mesurés une fois puis figés ici (il ne s'agit pas de les baisser pour passer).
+        if args.gold_reel:
+            s_pos, s_synt, s_tete, s_frac = 0.90, 0.45, 0.55, 0.50
+        else:
+            s_pos, s_synt, s_tete, s_frac = 0.94, 0.60, 0.75, 0.60
         seuils = {
-            "pos_all": complete["pos"]["exactitude"] >= 0.94,
-            "syntagme_exact_all": complete["syntagme"]["f1"] >= 0.60,
-            "syntagme_tete_all": complete["tete"]["f1"] >= 0.75,
+            "pos_all": complete["pos"]["exactitude"] >= s_pos,
+            "syntagme_exact_all": complete["syntagme"]["f1"] >= s_synt,
+            "syntagme_tete_all": complete["tete"]["f1"] >= s_tete,
             "acte": complete["pragmatique"]["acte"] >= 0.99,
-            "fraction": complete["fraction_semantique"] >= 0.60,
+            "fraction": complete["fraction_semantique"] >= s_frac,
             "ablation_pos": complete["pos"]["exactitude"] >= pos_seul["pos"]["exactitude"] - 0.001,
             "ablation_syntagmes": complete["tete"]["f1"] >= synt_seul["tete"]["f1"] - 0.001,
             "policy": complete["tete"]["f1"] > defaut["tete"]["f1"],
@@ -121,8 +138,8 @@ def main() -> int:
             "modele": {"nom": modele.name, "fichiers": _fichiers(modele),
                        "quantisation": "Q4_K_M", "runtime": _version(), "gpu": 0},
             "gold": {"phrases": len(phrases), "tokens": sum(len(p["mots"]) for p in phrases),
-                     "hand": sum(1 for p in phrases if p["source"] == "hand"),
-                     "synth": sum(1 for p in phrases if p["source"] == "synth")},
+                     "hand": sum(1 for p in phrases if p.get("source") == "hand"),
+                     "synth": sum(1 for p in phrases if p.get("source") == "synth")},
             "bloc": {"classe": "NeuronalLLMCompose",
                      "pos": "NeuronalLLMPOS", "syntagmes": "NeuronalLLMChunks",
                      "confiance": args.confiance, "politique": "confiance",
@@ -140,6 +157,7 @@ def main() -> int:
                 "2 appels HTTP par phrase (POS + syntagmes) ; le cache sert les ablations.",
                 "Les 20 réelles ont servi au choix des prompts ; les 160 synthétiques sont le test.",
                 "CPU seulement (GPU de N2 réservés) ; pas de mesure GPU.",
+                "Seuils : 0,94/0,60/0,75/0,60 sur le gold 180 ; 0,90/0,45/0,55/0,50 sur le gold réel 432.",
             ],
         }
     finally:

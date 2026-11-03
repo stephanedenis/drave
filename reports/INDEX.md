@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **572 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **573 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -475,6 +475,7 @@
 | [rapport-pensee-seuil-fin.md](rapport-pensee-seuil-fin.md) | B13 — le seuil fin : × 0,4 réussit, × 0,45 échoue (non monotone) |
 | [rapport-pensee-seuil-graines.md](rapport-pensee-seuil-graines.md) | B13 — le seuil sur 5 graines : le seuil est ~0,4 |
 | [rapport-pensee-seuil.md](rapport-pensee-seuil.md) | B13 — le seuil d'oubli : dans (0,2 ; 0,5] |
+| [rapport-pensee-seuils-gold-reel.md](rapport-pensee-seuils-gold-reel.md) | B13 — les seuils du gold réel : 0,90 / 0,45 / 0,55 / 0,50, le verdict passe à true |
 | [rapport-pensee-seule.md](rapport-pensee-seule.md) | B13 — la politique seule : 8 pas, 15/15 buts, sans A* |
 | [rapport-pensee-shaping.md](rapport-pensee-shaping.md) | B13 — le reward shaping : il ne suffit pas, la politique seule échoue encore |
 | [rapport-pensee-si.md](rapport-pensee-si.md) | B13 — la règle du `si` : 29/29, la dernière règle de surface |
