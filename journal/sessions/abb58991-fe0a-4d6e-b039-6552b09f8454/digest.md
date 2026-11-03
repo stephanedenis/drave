@@ -12699,3 +12699,80 @@ EN-COURS: 1585
 ⏵ T0 3 959, revue 570/655 ; je commite le fait « fenêtre à réparer »
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git reset -q; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_fenetre_drvm.py reports/rapport-pensee-porte-fenetre.md reports/pensee-porte-fenetre.json reports/README.md reports/INDEX.md docs/pilotag … [449 caractères tronqués]`
+
+  ```
+reports/INDEX.md                                   |   3 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-porte-fenetre.json                  | 165 +++++++++++++++++++++
+ reports/rapport-pensee-porte-fenetre.md            |  85 +++++++++++
+ tools/pensee/operateurs.py                         |  13 ++
+ tools/tests/qualifier_porte_fenetre_drvm.py        | 129 ++++++++++++++++
+ tools/tests/test_pensee_politique.py               |  10 ++
+ 11 files changed, 423 insertions(+), 10 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Lock concurrent ; j'attends 20 s et je reprends le commit (11 fichiers stagés)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,cmd | grep -E \"git (commit|add)\" | grep -v grep | head -2; sleep 20; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git diff --cached --stat | tail -3; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200  … [164 caractères tronqués]`
+
+  ```
+21:45:07
+ 679739       00:18 timeout 300 git commit --only -m NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES -m en-cours : ligne de nuit (claims, release/claim, pas d'attente, bilan 08 h). Plan hub : heartbeat 21 h 43, passe finie, veille + bilan. INDEX 565 régénéré. -- docs/pilotage/en-cours.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md reports/INDEX.md
+ 679740       00:18 git commit --only -m NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES -m en-cours : ligne de nuit (claims, release/claim, pas d'attente, bilan 08 h). Plan hub : heartbeat 21 h 43, passe finie, veille + bilan. INDEX 565 régénéré. -- docs/pilotage/en-cours.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md reports/INDEX.md
+.git/index.lock
+ tools/tests/qualifier_porte_fenetre_drvm.py        | 129 ++++++++++++++++
+ tools/tests/test_pensee_politique.py               |  10 ++
+ 12 files changed, 428 insertions(+), 14 deletions(-)
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stal
+… [10 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub commite l'en-cours/le plan/l'INDEX ; j'attends sa libération et je reprends
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 30; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git log -1 --format='%h %s' | head -1; git diff --cached --stat | tail -3; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS … [140 caractères tronqués]`
+
+  ```
+21:46:04
+.git/index.lock
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+ tools/tests/qualifier_porte_fenetre_drvm.py        | 129 ++++++++++++++++
+ tools/tests/test_pensee_politique.py               |  10 ++
+ 12 files changed, 428 insertions(+), 14 deletions(-)
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub enchaîne (README/INDEX) ; j'attends encore et je reprends le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 40; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; ps -eo pid,etime,cmd | grep -E \"git (commit|add)\" | grep -v grep | head -2; git log -1 --format='%h %s' | head -1; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (2 … [174 caractères tronqués]`
+
+  ```
+21:46:49
+.git/index.lock
+ 681695       00:00 timeout 300 git commit --only -m ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE -- docs/pilotage/en-cours.md
+ 681696       00:00 git commit --only -m ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE -- docs/pilotage/en-cours.md
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+  ```
+

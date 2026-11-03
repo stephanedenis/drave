@@ -98,7 +98,6 @@
   [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
 - **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
   [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
-- **INDEX** : `reports/README` **2 762/2 800** (3 fiches de la nuit entrées, 5 historiques sorties) ; `reports/INDEX` **565** ; revue **569/654** ; `porte-tableaux` rouge sur le JSON N2 absent.
 
 ## Les chiffres de l'état
 

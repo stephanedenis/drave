@@ -8624,3 +8624,75 @@ c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABY
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 24); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; git log --oneline -2; echo \"--- compteurs ---\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 tools/revue_documentatio … [106 caractères tronqués]`
+
+  ```
+21:46:34
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+--- compteurs ---
+111:| fichiers / JSON de résultats | **570** / **655** | `reports/*.md` / `reports/*.json` |
+  revue de documentation · 570 fiche(s) · 655 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "sed -n '1,18p' docs/pilotage/en-cours.md; echo \"--- N2 ---\"; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-80", "description": "Confirm the night consigne and N2 status"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 21 h 58 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+>
+--- N2 ---
+json absent
+ 383833    01:30:02 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+ 490049       52:33 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+  ```
+
+- **bash** `{"command": "grep -n \"claim\\|consigne\\|nuit\\|ressources\" docs/pilotage/en-cours.md | head -8; echo \"--- hub section ---\"; sed -n '/### Session `536cd5d6/,/### Session/p' docs/pilotage/en-cours.md | head -22", "description": "Locate the night consigne in en-cours"}`
+
+  ```
+9:> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+14:> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+19:> **Nuit du 02/11 → 03/11 (08 h)** : les quatre sessions restent productives ; claims dans `work/ressources.json` ; à la fin d'un job, `--release` puis `--claim` du suivant ; si une action attend l'humain, prendre la ligne suivante. Le hub suit la passe et fera le bilan à 08 h.
+72:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+97:  1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
+101:- **INDEX** : `reports/README` **2 762/2 800** (3 fiches de la nuit entrées, 5 historiques sorties) ; `reports/INDEX` **565** ; revue **569/654** ; `porte-tableaux` rouge sur le JSON N2 absent.
+109:| portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
+135:**N4** — consigne ; **B10.3** — `z` ; **B13** — 140/140 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+--- hub section ---
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+
+- **Id** : `536cd5d6-94ac-4057-8fe9-11
+… [1109 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 18, "offset": 90}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+90: ## Ce qui est en cours
+91: 
+92: - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+93: - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2**
+94:   **3,0107** (−0,244) à octets constants ; depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
+95: - **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; banque à **0**.
+96: - **N2** : **200 k pas** — **3,
+… [724 caractères tronqués]
+  ```
+

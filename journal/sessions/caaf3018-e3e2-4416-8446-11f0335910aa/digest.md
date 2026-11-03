@@ -5700,3 +5700,31 @@ started background job bash-230
 ⏵ Veille armée ; je bloque 10 min dessus pour donner du temps aux sessions
 
 - **job_output** `{"job_id": "bash-230", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de 21 h 50 : JSON N2, sessions, état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; ls reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git log --oneline -3; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|pause\" | head -6; echo \"--- check ---\"; python3  … [116 caractères tronqués]`
+
+  ```
+21:47
+json absent
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+--- sessions ---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 111 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  67 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·   4 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·   4 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (111 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat long (67 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non ex
+… [26 caractères tronqués]
+  ```
+

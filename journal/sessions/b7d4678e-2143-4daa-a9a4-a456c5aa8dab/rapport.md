@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.4 h |
+| Durée | 5.5 h |
 | Tours | 13 |
-| Messages | 525 |
-| Appels d'outils | 548 |
+| Messages | 532 |
+| Appels d'outils | 555 |
 | Fichiers touchés | 23 |
-| Commandes | 363 |
+| Commandes | 367 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 0 |
@@ -415,7 +415,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 
 ### Tour 13 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check new commits, N2 fiche and runs
 - bash — Wait for a session commit or the N2 JSON
@@ -425,6 +425,12 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 - bash — Identify the new JSON and counter state
 - bash — Wait for the Pensée fenêtre fiche/commit
 - bash — Wait for the Pensée commit and check counters
+- bash — Confirm the night consigne and N2 status
+- bash — Locate the night consigne in en-cours
+- read
+- edit `docs/pilotage/en-cours.md`
+- bash — Verify state after hub-section fix
+- bash — Wait for the hub commit before fixing en-cours
 
 **Synthèse produite :**
 
@@ -445,7 +451,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 23 |
+| `docs/pilotage/en-cours.md` | 0 | 24 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/chantiers.md` | 0 | 6 |
 | `docs/pilotage/plan-travail.md` | 0 | 7 |
@@ -502,7 +508,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 323 autres
+- … et 327 autres
 
 ## 4. Mesures et résultats marquants
 

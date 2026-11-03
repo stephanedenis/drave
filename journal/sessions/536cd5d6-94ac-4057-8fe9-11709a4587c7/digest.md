@@ -8099,3 +8099,27 @@ ls: cannot access 'reports/n2-fenetre.json': No such file or directory
 ⏵ Round 7 : je pose la ligne de nuit, rafraîchis le plan du hub et je libère le claim d'intégration.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\n# 1) en-cours : la consigne de nuit dans le contrat\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"> le hook pre-commit refuse un fait sans ligne d'état ; une session  … [1998 caractères tronqués]`
+
+  ```
+en-cours + plan hub à jour
+== vérifs ==
+  en-cours · 1637 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4011 mots (budget 4 000)
+  ❌ 1 violation(s) :
+
+  567 fiches → reports/INDEX.md
+
+[master 12970a4e] NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+ 23 files changed, 438 insertions(+), 65 deletions(-)
+[commit 0]
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 a dépassé de 11 mots (4 011) : je retire la ligne INDEX redondante d'`en-cours` et je libère le claim d'intégration.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"- **INDEX** : `reports/README` **2 762/2 800** (3 fiches de la nuit entrées, 5 historiques sorties) ; `reports/INDEX` **565** ; rev … [867 caractères tronqués]`

@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 6.2 h |
 | Tours | 15 |
-| Messages | 218 |
-| Appels d'outils | 266 |
+| Messages | 219 |
+| Appels d'outils | 267 |
 | Fichiers touchés | 13 |
-| Commandes | 201 |
+| Commandes | 202 |
 | Sous-agents | 0 |
-| Commits | 15 |
+| Commits | 16 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -742,14 +742,15 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 15 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Inspect state, hub plan, N2 JSON, sessions and claims
 - bash — Add night line, refresh hub plan and commit index
+- bash — Trim state line, commit, release hub integration claim
 
 **Synthèse produite :**
 
-⏵ Round 7 : je pose la ligne de nuit, rafraîchis le plan du hub et je libère le claim d'intégration.
+⏵ Le T0 a dépassé de 11 mots (4 011) : je retire la ligne INDEX redondante d'`en-cours` et je libère le claim d'intégration.
 
 ## 3. Travail accompli
 
@@ -813,7 +814,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 161 autres
+- … et 162 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -971,4 +972,5 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT" -m "README 2 762/
 - INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT" -m "README 2 762/
 - NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES" -m "en-cours : ligne de nuit (claims, release/claim, pas d'attente, 
+- ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE" -- docs/pilotage/en-cours.md; echo "[commit $?]"; echo; echo "== 
 
