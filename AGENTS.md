@@ -12,10 +12,9 @@
 **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
 réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
 
-Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
-les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
-**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
-volonté** des événements.
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
 
 
 ## 2. Les règles non négociables

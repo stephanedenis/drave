@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 16.9 h |
+| Durée | 17.0 h |
 | Tours | 28 |
-| Messages | 490 |
-| Appels d'outils | 492 |
+| Messages | 492 |
+| Appels d'outils | 493 |
 | Fichiers touchés | 6 |
-| Commandes | 353 |
+| Commandes | 354 |
 | Sous-agents | 0 |
 | Commits | 19 |
 | Compactages de contexte | 0 |
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*43 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -608,11 +608,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Append morning resumption to journal
 - bash — Check claims and hub plan
 - bash — Clean stale claims and claim day job
-- … et 22 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
-⏵ Matinée intégrée (passe 82, N2 committée, reparti verte). Je reprends la veille en cadence de 30 min.
+⏵ AGENTS.md a changé : **règle 11** — GPU réservés à Drave, professeurs par l'API DeepSeek, jamais `llama-server`. Je vérifie l'application et les budgets.
 
 ## 3. Travail accompli
 
@@ -669,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 313 autres
+- … et 314 autres
 
 ## 4. Mesures et résultats marquants
 
