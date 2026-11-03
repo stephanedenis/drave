@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 21.7 h |
 | Tours | 9 |
-| Messages | 283 |
-| Appels d'outils | 287 |
+| Messages | 289 |
+| Appels d'outils | 293 |
 | Fichiers touchés | 14 |
-| Commandes | 211 |
+| Commandes | 217 |
 | Sous-agents | 0 |
-| Commits | 16 |
+| Commits | 17 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -340,7 +340,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 
 ### Tour 9 — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxiq … [105 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Inspect partial human validations and notes
 - bash — Stop bank server and export partial validated bank
@@ -351,6 +351,12 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - bash — Read current S state/roadmap/INDEX
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-banque-partielle.md`
 - read
+- bash — Get date, counts, and en-cours list
+- bash — Update plan/state/roadmap/INDEX for partial bank and recheck
+- bash — Trim S state to T0 budget
+- bash — Final trim and check S files for commit
+- bash — Stage partial bank fact in alternate index
+- … et 1 autres
 
 **Synthèse produite :**
 
@@ -419,7 +425,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 171 autres
+- … et 177 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -529,4 +535,5 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN (SHA 43957a3b INCHANGÉ)" -m "La banque de 200 phrases / 355 candidats est identique (sha256 43957a3b…) ; seu
 - S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)" -m "Le GN ne s'arrête plus devant « ferme »/« fait » quand le sui
 - S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES / 65 PHRASES ; L'ARRÊT HUMAIN EST MESURÉ (ARBRE 1, RÉFÉRENTS 0)" -m "La validation humaine s'arrête : arbre 
+- S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ" -m "La validation humaine s'arrête après 142 
 

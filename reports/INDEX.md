@@ -561,6 +561,7 @@
 | [rapport-routeur-m1-m2.md](rapport-routeur-m1-m2.md) | B23 — routeur M1→M2 : gagne sur les espaces, perd sur les typos |
 | [rapport-s-analyseur-roles.md](rapport-s-analyseur-roles.md) | S — Le contexte tranche les homographes : 54/55 types, 131/131 rôles, 55 structures au corpus |
 | [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |
+| [rapport-s-banque-partielle.md](rapport-s-banque-partielle.md) | S — La banque s'arrête à 81 lectures / 65 phrases : l'arbre manque de profondeur, les référents ne sont pas résolus |
 | [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |

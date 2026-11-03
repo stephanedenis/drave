@@ -23449,3 +23449,52 @@ background job bash-753 (bash: cd /home/stephane/GitHub/Qtrinet && for i in $(se
 ⏵ Le `HEAD` a bougé pendant le commit (hub : `c66a2eef`) ; les fichiers sont restés stagés — je relance le commit immédiatement
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --porcelain | grep -E \"pensee-parite|rapport-pensee-parite|en-cours|INDEX|README|native-parite\" | head -8; echo '---'; git commit -m \"L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005 … [159 caractères tronqués]`
+
+  ```
+M  journal/2026-11-03/README.md
+M  journal/README.md
+ M reports/native-parite.json
+?? reports/pensee-parite-drvm-native-rejoue.json
+?? reports/rapport-pensee-parite-drvm-native-rejoue.md
+---
+  ✅ index : aucun fait stagé sans état
+[master d255588d] L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+ 19 files changed, 249 insertions(+), 72 deletions(-)
+EXIT=0
+d255588d L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `d255588d` passé, mais je dois vérifier qu'il contient bien les deux nouveaux fichiers et la ligne d'état (le statut montrait `??`)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git show --stat --oneline d255588d | head -25; echo '=== status ==='; git status --porcelain | grep -E \"pensee-parite|rapport-pensee-parite|en-cours\" | head -5; echo '=== en-cours dans le commit ? ==='; git show --name-only --format='' d255588d | gr … [105 caractères tronqués]`
+
+  ```
+d255588d L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+ journal/2026-11-03/README.md                       | 13 ++--
+ journal/2026-11-03/attention.md                    |  8 +--
+ journal/2026-11-03/distribue.md                    |  8 +--
+ journal/2026-11-03/docs.md                         |  8 +--
+ journal/2026-11-03/memoire.md                      | 11 +--
+ journal/2026-11-03/mesures.md                      |  8 +--
+ journal/2026-11-03/modele.md                       |  8 +--
+ journal/2026-11-03/moteur.md                       |  8 +--
+ journal/2026-11-03/portes.md                       |  8 +--
+ journal/README.md                                  |  8 +--
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md | 17 +++++
+ .../rapport.md                                     | 12 ++--
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md | 79 ++++++++++++++++++++++
+ .../rapport.md                                     | 30 +++++---
+ .../536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md | 21 ++++++
+ .../rapport.md                                     | 18 ++++-
+ journal/sessions/MANIFEST.md                       |  6 +-
+ .../abb58991-fe0a
+… [347 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit a emporté le journal du hub mais **pas mes fichiers** (le hub avait stagé le journal) ; je récupère mes trois fichiers + l'état et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add reports/pensee-parite-drvm-native-rejoue.json reports/rapport-pensee-parite-drvm-native-rejoue.md reports/native-parite.json reports/INDEX.md reports/README.md docs/pilotage/en-cours.md && git status --porcelain | grep -E \"pensee-parite|rappo … [318 caractères tronqués]`

@@ -7874,3 +7874,10 @@ pas   1750 · perte 0.9239 · PPL val 2.463 · 780 s
   ```
 
 - **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-*-512z.pt 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Wait for 21.65M capacity run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-381]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-381", "timeout_ms": 1800000, "wait": true}`

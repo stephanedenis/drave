@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-03 13:35 EST",
+  "rejoue": true,
+  "objet": "parité native rejouée sur un checkpoint régénéré à neuf en CPU (aucun GPU N2)",
+  "checkpoint": {
+    "chemin": "/tmp/drave-n0-pont.pt",
+    "octets": 47306271,
+    "regeneration": "entrainer_native.py --device cpu --pas 200 (44,9 s, graine 1)"
+  },
+  "drvm": {
+    "chemin": "/tmp/drave-n0-pont.drvm",
+    "octets": 47283932,
+    "sha256": "db74e4b573c16252ea54fc65e3d1527a0c2f8a06aa6a61a51457d0cf23c7dca7",
+    "copie_parite": "/tmp/n0-native.drvm (même sha256)"
+  },
+  "resultat": {
+    "top1": 5,
+    "top5": 5,
+    "n": 5,
+    "ecart_max": 5.009231567409955e-05
+  },
+  "prompts": [
+    {
+      "prompt": "La France est un pays",
+      "top1": true,
+      "top5": true,
+      "ecart_max": 4.685592651387793e-05
+    },
+    {
+      "prompt": "Le chat dort sur",
+      "top1": true,
+      "top5": true,
+      "ecart_max": 5.009231567409955e-05
+    },
+    {
+      "prompt": "Demain, nous irons",
+      "top1": true,
+      "top5": true,
+      "ecart_max": 3.034210205044019e-05
+    },
+    {
+      "prompt": "def addition(a, b):",
+      "top1": true,
+      "top5": true,
+      "ecart_max": 3.665695190413487e-05
+    },
+    {
+      "prompt": "Once upon a time",
+      "top1": true,
+      "top5": true,
+      "ecart_max": 4.52423095707033e-05
+    }
+  ],
+  "controle_negatif": {
+    "avant_copie": "le script compare à /tmp/n0-native.drvm codé en dur ; sans ce fichier, 0/5 et écart 999 (mesuré)",
+    "apres_copie": "5/5 top-1, 5/5 top-5, écart 0,00005 — la parité ne dépend pas du hasard",
+    "sans_gpu": "CPU seulement, CUDA_VISIBLE_DEVICES=\"\" ; N2 intact"
+  },
+  "limites": [
+    "le checkpoint et le DRVM vivent dans /tmp : à régénérer avant tout rejeu (44,9 s CPU)",
+    "5 prompts fixes : parité de logits, pas de perplexité",
+    "le script code en dur /tmp/n0-native.drvm (à corriger pour un usage général)"
+  ]
+}

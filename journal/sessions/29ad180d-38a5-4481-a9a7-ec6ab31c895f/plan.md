@@ -13,17 +13,18 @@
 - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
 - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
   `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
-- **Heartbeat** : 2026-11-02 20:40 EST
-- **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;
-  puis la **frontière du GN sans auxiliaire** (h033) et un **gold plus large** (voix, causatives).
-- **État** : en pause
-- **Arrêt constaté** : dernier heartbeat 2026-11-02 20 h 40 ; plus de claim actif ; reprise
-  possible quand la session rouvre (analyseur 54/55 types, 131/131 rôles, banque 200/355).
+- **Heartbeat** : 2026-11-03 13:55 EST
+- **Prochaine action** : **arbre réel** (parent/enfant, profondeur) + **couche de référents**
+  (antécédents proposés et résolus avant le verdict), puis **reprise de la validation** des 200
+  phrases ; `h050`/`h053` ensuite.
+- **État** : actif
+- **Reprise** : 2026-11-03 13 h 55 ; le retour humain (arrêt de la validation : arbre trop
+  plat, référents non résolus) ouvre le cycle arbre/référents ; la banque partielle garde
+  142 verdicts / 81 lectures / 65 phrases.
 
-- **Plan** : 1) ~~plan de session et réservation~~ ; 2) ~~analyseur rôles/subordonnées~~ (gold 39
-  phrases, mesure + trois contrôles) ; 3) ~~export au corpus~~ (schéma `statut` + mode gold +
-  manifeste) ; 4) ~~tests : 19 verts + 21 nouveaux = 40~~ ; 5) ~~fiche, manifeste, pointeur~~ ;
-  6) ~~ligne d'état~~ (écrite le 02/11 16 h 52 sur demande humaine).
+- **Plan** : 1–4) ~~plan, analyseur (gold 55), export, tests 47~~ ; 5–6) ~~fiche, pointeur,
+  état~~ ; 7) **banque partielle** (142 verdicts / 81 lectures / 65 phrases, arrêt humain) ;
+  8) **arbre + référents** (prochain cycle).
 - **Ambition** : que le banc ne soit plus un générateur de candidats seulement **typés** mais un
   analyseur qui **nomme le rôle** et **coupe la subordonnée** — et que la banque sorte du banc
   vers le corpus avec une empreinte qui se rejoue.

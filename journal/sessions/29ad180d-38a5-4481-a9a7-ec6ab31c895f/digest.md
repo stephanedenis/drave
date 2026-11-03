@@ -5793,3 +5793,168 @@ serveur arrêté
 }
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('README.md'); t=p.read_text(encoding='utf-8')\nsection='''\n## La banque partielle (arrêt humain, 03/11)\n\nLa validation humaine s'est arrêtée à **142 verdicts sur  … [1752 caractères tronqués]`
+
+  ```
+README banque partielle
+[master 51b6aaf] S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES / 65 PHRASES ; L'ARRÊT HUMAIN EST MESURÉ (ARBRE 1, RÉFÉRENTS 0)
+ 4 files changed, 287 insertions(+)
+ create mode 100644 donnees/mesure-arbre.json
+ create mode 100644 donnees/validations.jsonl
+ create mode 100644 mesure_arbre.py
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   00d2a01..51b6aaf  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp data/structures/banque-validee-manifest.json reports/s-banque-validee.json && python3 -m json.tool reports/s-banque-validee.json | head -12; echo \"=== comptes disque ===\"; ls reports/*.md | wc -l; ls reports/*.json | wc -l; echo … [199 caractères tronqués]`
+
+  ```
+{
+    "version": 2,
+    "mode": "banque",
+    "date": "2026-11-03T13:53:55",
+    "source": "tools/structures/donnees",
+    "sortie": "data/structures/banque-validee.jsonl",
+    "phrases": 65,
+    "candidats_acceptes": 81,
+    "sha256": "2d27b712269735d01ad091303f76bfba34cf491d7775c84c2cc63ad460297525",
+    "note": "verdicts du banc (`resolu`, `compatible`, `double_sens`) ; le dernier verdict d'un candidat gagne ; spans v\u00e9rifi\u00e9s."
+}
+=== comptes disque ===
+589
+679
+=== en-cours compteurs ===
+117:| fichiers / JSON de résultats | **589** / **678** | `reports/*.md` / `reports/*.json` |
+=== main log ===
+c66a2eef JOURNAUX D629 — LES LIGNES DE LA BOUCLE DE GÉNÉRATION SONT RETIRÉES
+00bb1fa9 JOURNAUX DE SESSION — TRACES DE LA BOUCLE DE GÉNÉRATION RETIRÉES (4 FICHIERS)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/### Session `29ad180d/,/### Session `e181ce02/p' docs/pilotage/en-cours.md | head -20; echo \"=== bullet ===\"; grep -n \"S — le banc de structures\" docs/pilotage/en-cours.md; echo \"=== roadmap ===\"; grep -n \"S — les str … [164 caractères tronqués]`
+
+  ```
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 55), export, tests 47~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle et la frontière GN.
+- **Stratégie** : une règle = une phrase, trois contrôles.
+- **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
+- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **47 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **Ce qu'elle fait** : **`00d2a01`** ; corpus **55** (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats, **0** validée.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée
+… [1423 caractères tronqués]
+  ```
+
+- **write** `{"content": "# S — La banque s'arrête à 81 lectures / 65 phrases : l'arbre manque de profondeur, les référents ne sont pas résolus\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : la validation humaine s'est\n> arrêtée après **142 verdicts sur 71 phrases** : **81 lectures accept … [5900 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-banque-partielle.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — S, les structures (analyser, banquer, exporter)
+2: 
+3: > **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+5: > [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+6: > Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+7: > `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+8: > précède ; sa section S y est **écrite** le 02/11 16 h 52 sur demande humaine, et le hub relit.
+9: 
+10: - **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+11: - **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+12:   pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+13: - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+14: - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+15:   `reports/s-banque-*` ; `j
+… [1322 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; ls reports/*.md | wc -l; ls reports/*.json | wc -l; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; echo \"=== en cours section ===\"; grep -n \"## Ce qui est en cours\" docs/pilotage/en-cours.md; se … [143 caractères tronqués]`
+
+  ```
+2026-11-03 13:55 EST
+590
+679
+117:| fichiers / JSON de résultats | **589** / **678** | `reports/*.md` / `reports/*.json` |
+=== en cours section ===
+103:## Ce qui est en cours
+## Ce qui est en cours
+
+- **S — en pause** : analyseur **54/55**, **131/131** rôles, **47/47** compléments ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **0** validée.
+- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
+- **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
+
+## Les chiffres de l'état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\n# plan de session : reprise\np=Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Heartbeat** : 2026-11-02 20:40 EST\" … [6483 caractères tronqués]`
+
+  ```
+plan/état/roadmap/INDEX banque partielle
+  en-cours · 1669 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ❌ 1 violation(s) :
+     · T0 : 4039 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 590 fiche(s) · 679 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ⚠ mandat long (973 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046 … [2141 caractères tronqués]`
+
+  ```
+trim S
+  en-cours · 1643 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4013 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Ce qu'elle fait** : **`51b6aaf`** ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **142** ver … [1312 caractères tronqués]`
+
+  ```
+· 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 590 fiche(s) · 679 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== S files ===
+MM docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+M  reports/INDEX.md
+ M tools/structures
+?? reports/rapport-s-banque-partielle.md
+?? reports/s-banque-validee.json
+101
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add reports/rapport-s-banque-partielle.md reports/s-banque-validee.json reports/INDEX.md docs/pilotage/e … [233 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          |  14 +--
+ docs/pilotage/roadmap.md                           |   2 +-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |  21 ++--
+ reports/INDEX.md                                   |   1 +
+ reports/rapport-s-banque-partielle.md              | 110 +++++++++++++++++++++
+ reports/s-banque-validee.json                      |  11 +++
+ tools/structures                                   |   2 +-
+ 7 files changed, 142 insertions(+), 19 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ\" -m \"La validation humaine s'arrête après 142 verdicts/71 phrases : 81 le … [555 caractères tronqués]`
