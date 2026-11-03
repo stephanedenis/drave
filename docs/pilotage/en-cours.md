@@ -27,15 +27,14 @@
 
 - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
 - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
-- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
-  portes** (GPU 1).
+- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration, portes**, **plan de nuit**.
 - **Ambition** : un état reprenable, des mandats qui disent la vérité.
 - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
-- **Ce qu'elle fait** : intégration ; **passe 04 h 10 — 82 portes, 77/5** (4 connues +
-  `porte-sessions` de coordination) ; INDEX/README ; **bilan de 08 h**.
-- **Ce que font les autres** : **N2**, **S** (en pause), **Pensée**.
-- **Prochaine action** : le **bilan de 08 h** est écrit ; clôture ; la passe **82** stable.
+- **Ce qu'elle fait** : intégration ; **passe 11 h 30 — 82 portes, 80/2** ; INDEX/README ; **plan de
+  nuit**.
+- **Ce que font les autres** : **N2** (run kd2, GPU), **S** (arbre), **Pensée** (portes).
+- **Prochaine action** : tenir l'**état**, intégrer les faits ; **passe** si GPU libres ; **bilan 08 h**.
 - **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
@@ -91,7 +90,7 @@
   [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
   **capacité propre** (GPU 1) ; **distillation native** : α = 0,9 gagne **0,14–0,18**.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : le professeur 60 k distillé à 30 000 pas (fin ~22 h 15).
+- **Prochaine action** : professeur 60 k distillé (fin ~22 h 15).
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
@@ -102,7 +101,7 @@
 ## Ce qui est en cours
 
 - **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
-- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** ; **copie 0,0078**.
+- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** ; copie 0,0078.
 - **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
 

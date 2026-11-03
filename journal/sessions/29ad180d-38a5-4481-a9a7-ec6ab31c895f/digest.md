@@ -8530,3 +8530,14 @@ fiche v4 : limites fermées en v6
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES\" -m \"h050 (le nom après adjectif devant un verbe), h053 (le nom après adjec … [756 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at c4ea82e653c5896187874d6fb41af1836fcc9987 but expected 39ff662c884435f0faaf9080413749ca782c54b0
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+To github.com:stephanedenis/drave.git
+   f92c183b..c4ea82e6  master -> master
+exit=0
+c4ea82e653c5896187874d6fb41af1836fcc9987	refs/heads/master
+  ```
+

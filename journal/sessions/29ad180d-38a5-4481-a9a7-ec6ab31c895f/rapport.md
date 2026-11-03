@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 26.4 h |
+| Durée | 26.5 h |
 | Tours | 14 |
-| Messages | 402 |
-| Appels d'outils | 392 |
+| Messages | 403 |
+| Appels d'outils | 393 |
 | Fichiers touchés | 17 |
-| Commandes | 305 |
+| Commandes | 306 |
 | Sous-agents | 0 |
 | Commits | 28 |
 | Compactages de contexte | 1 |
@@ -516,7 +516,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 
 ### Tour 14 — continue
 
-*23 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Read marker and GN homograph code
 - bash — Read subordinator sets and gold phrase format
@@ -532,7 +532,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - bash — Read v4 limit tests and measure test
 - bash — Update tests for v6 and run
 - bash — Re-run 50k corpus measure after v6 changes
-- … et 9 autres
+- … et 10 autres
 
 ## 3. Travail accompli
 
@@ -600,7 +600,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 265 autres
+- … et 266 autres
 
 ## 4. Mesures et résultats marquants
 

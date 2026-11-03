@@ -9463,3 +9463,33 @@ json : 18 sources
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** (3,0550).\",\n              \"le compute à 128 : 3,1591/8,2 … [1288 caractères tronqués]`
+
+  ```
+état : copie muette
+  T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · chemin mort : docs/pilotage/plan-travail.md:368 → tools/{sessions,ressources,index_reports,surveille_sessions}.py
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-483]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-483", "timeout_ms": 180000, "wait": true}`
+
+  ```
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** ; **copie 0,0078**.\",\n              \"le compute à 128 :  … [465 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+

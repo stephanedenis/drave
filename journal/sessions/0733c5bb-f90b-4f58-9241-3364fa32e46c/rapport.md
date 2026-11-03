@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 26.4 h |
+| Durée | 26.5 h |
 | Tours | 7 |
-| Messages | 700 |
-| Appels d'outils | 653 |
+| Messages | 703 |
+| Appels d'outils | 656 |
 | Fichiers touchés | 27 |
-| Commandes | 483 |
+| Commandes | 486 |
 | Sous-agents | 0 |
-| Commits | 23 |
+| Commits | 25 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -229,7 +229,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 7 — <goal_round> Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 … [1192 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Check overnight distillation run and repo state
 - bash — Launch 2048 same-steps run
@@ -239,6 +239,9 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Run output mirror and same-text controls on production models
 - bash — Add output controls to production fiche
 - bash — Commit output controls complement
+- bash — Trim T0 after complement
+- bash — Commit T0 fix and check review
+- bash — Retry T0 fix commit after lock
 
 **Synthèse produite :**
 
@@ -320,7 +323,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 443 autres
+- … et 446 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -491,4 +494,6 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-33
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
+- cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG' ÉTAT — T0 REVENU À 3 994 APRÈS 
+- cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 40); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q 
 

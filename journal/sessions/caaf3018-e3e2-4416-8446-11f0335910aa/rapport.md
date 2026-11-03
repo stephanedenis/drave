@@ -9,8 +9,8 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 26.4 h |
 | Tours | 34 |
-| Messages | 623 |
-| Appels d'outils | 614 |
+| Messages | 624 |
+| Appels d'outils | 615 |
 | Fichiers touchés | 6 |
 | Commandes | 451 |
 | Sous-agents | 0 |
@@ -796,7 +796,7 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 
 ### Tour 34 — fais-moi un plan pour la nuit et aligle le dossier pilotage pour que toutes les sessions soient productives et sans conf … [4 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Inventory sessions, claims, GPU, N2 run
 - bash — Recent commits, Pensée work, plan-travail sections
@@ -812,7 +812,7 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 - bash — Read roadmap N/S/L rows and state date
 - bash — Read N row action and state paragraph
 - bash — Check mtimes and end of state paragraph
-- … et 1 autres
+- … et 2 autres
 
 **Synthèse produite :**
 

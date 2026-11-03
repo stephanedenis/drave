@@ -162,10 +162,10 @@ supprimer).
 
 ## 9. Reprise après le reboot du 02/11 15 h 06 — ouvrir ou reprendre
 
-**L'état au 02/11 16 h 09.** Deux sessions sont **en pause** (`e181ce02` L/B13, `fe3c05f0` D/R/A) ;
-leurs cycles sont committés. Deux chantiers n'ont **pas** de session : **N2** (GPU) et **S**
-(sous-module `tools/structures`). Le hub `536cd5d6` tient l'état, la roadmap et l'index ; les GPU
-sont revenus sains.
+**L'état au 03/11 18 h 45.** **N2** a clos sa phase (60 000 pas à 1 024 : **2,9121** ; **2,3911 /
+2,3522** au grand corpus) mais un run tourne encore (`kd2-mix512-30k`) ; **S** a repris sur
+l'**arbre des référents** ; **L/B13** publie sur l'**API** ; **D/R/A** est close. Le **plan de la
+nuit** et les conflits évités sont au **§ 11** ; le hub `536cd5d6` tient l'état.
 
 **Le principe.** Un terminal = une session = un `plan.md` = un territoire. Une seule session écrit
 `en-cours` à la fois ; les autres **proposent** leur ligne au hub. Toutes les commandes se lancent
@@ -349,3 +349,42 @@ assumé) et doit finir. Les passes suivantes : partielles sur `gpu1` + `cpu1` ; 
 références de non-régression ; heartbeat à chaque cycle. **Les sessions** : `--release` en fin
 de job, `--claim` du suivant ; si une action attend l'humain (validation S), prendre la ligne
 suivante. **Checkpoint 08 h** : registre, sessions, `git log`, verdict de la passe, bilan.
+
+## 11. La nuit du 03/11 → 04/11 — le plan, et les conflits qu'il évite
+
+**L'état au 03/11 18 h 45.** **N2** a clos sa phase (60 000 pas à 1 024 : **2,9121** ; **2,3911 /
+2,3522** au grand corpus ; distillation native **+0,10** à budget égal) mais **un run tourne
+encore** (`kd2-mix512-30k`, les deux GPU à 100 %, fin vers 22 h 40). **S** a repris à 13 h 55 sur
+l'**arbre des référents** ; **L/B13** publie (fusion réparée sur l'API, **/35**) ; **D/R/A** est
+close. Le **roster** de la nuit : N2 (GPU), S (CPU), L/B13 (CPU + API), le hub (pilotage).
+
+**Qui fait quoi, avec quoi, et quand il s'arrête.**
+
+| session | territoire | tâche de la nuit | ressource | livrable | arrêt |
+|---|---|---|---|---|---|
+| **N2** `0733c5bb` | `reports/n2-*`, `work/n2ac/`, `data/` | finir `kd2`, mesurer et committer ; puis le **contrôle depuis zéro** et la **clôture** ; ensuite **la porte propre (0,29)** | `gpu0`+`gpu1` exclusifs (fin du run), `cpu0` 12, `ram` 60 | fiche + JSON + état + commit | run fini, fiche committée, ou limite nommée |
+| **S** `29ad180d` | `tools/structures/`, `docs/schemas/arbre-referents.svg`, `reports/s-*` | **arbre réel + couche de référents**, puis la **validation des 200 phrases**, puis `h050`/`h053` | `cpu1` 4, `ram` 8 | fiches + tests verts + commit | validation faite ou report nommé |
+| **L/B13** `e181ce02` | `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pensee-*` | **porte stochastique/fenêtre** (test faible), **gold 200+**, **T132/T133** ; professeurs par l'**API** | `cpu1` 4, `ram` 16 | fiches + commit | porte franchie ou négatif nommé |
+| **hub** `536cd5d6` | `docs/pilotage/`, `journal/` (hors sessions), `reports/README.md`, `reports/INDEX.md`, `tools/{sessions,ressources,index_reports,surveille_sessions}.py` | tenir l'**état** (un écrivain à la fois), intégrer chaque fait, surveiller heartbeats et claims ; **passe complète** quand les GPU sont libres ; **bilan 08 h** | `cpu1` 1, `ram` 1 | état/roadmap/journal à jour ; verdict de passe | bilan de 08 h écrit et committé |
+
+**Les conflits, et comment ils sont évités.**
+
+- **GPU** : N2 **seul** sur les deux cartes jusqu'à la fin du run ; S, L et le hub n'y touchent
+  pas. La **passe** attend que N2 rende les cartes — ou tourne sur `gpu1` seule si N2 n'en tient
+  qu'une (dérogation de [`portes.md`](../methode/portes.md)).
+- **État** : le hub `536cd5d6` tient le tour d'écriture ; les autres **proposent** leur ligne
+  (fait + chiffre + fiche + JSON) et ne touchent pas `en-cours`/`roadmap`/`chantiers`.
+- **Fichiers** : S seule sur `docs/schemas/arbre-referents.svg` et `reports/s-*` ; L seule sur
+  `tools/pensee/` ; N2 seule sur `reports/n2-*` et `work/n2ac/` ; le hub ne prend que ses
+  fichiers réservés. Un fichier hors territoire se **signale**, ne se corrige pas en silence.
+- **Professeur** : **API DeepSeek** uniquement (`DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key`) ;
+  aucun `llama-server`/`ollama` (règle 11, `hauru-gpu-guard`, `porte-ressources`).
+- **Claims** : chaque session `--claim` son travail de nuit et `--release` en fin de job. Le run
+  `kd2-mix512-30k` **tourne sans claim** : N2 le déclare à la reprise (le hub le signale).
+- **Disque** : `IA` à **33 Gio** — aucun nouveau gros modèle ; corpus et checkpoints sur `Data13TB`.
+
+**La cadence.** Un cycle = un fait mesuré + fiche + JSON + ligne d'état **proposée** + commit.
+Checkpoints du hub : **22 h**, **00 h**, **04 h**, **08 h** (bilan). Une session qui attend
+l'humain prend la ligne suivante : on ne bloque jamais. **Le bilan de 08 h** tient en quatre
+lignes : ce que chaque session a livré (fiche + commit), le verdict de la passe si elle a tourné,
+les claims réels, et ce qui attend l'humain (validation S, clé API déjà fournie).

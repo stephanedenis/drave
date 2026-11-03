@@ -10743,3 +10743,63 @@ hub resserré
   ✅ état court, structuré, multi-session et reprenable
   ```
 
+### 🤖 Assistant
+
+⏵ T0 à 3 999. J'aligne maintenant la roadmap (N2 clos, S/L de nuit) et `chantiers.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; grep -n \"^| \\*\\*N — le natif\\|^| \\*\\*S —\\|^| \\*\\*L —\" docs/pilotage/roadmap.md | cut -c1-240; echo \"=== État au ===\"; grep -n \"État au 03/11\" docs/pilotage/roadmap.md | cut -c1-120", "description": "Read road … [31 caractères tronqués]`
+
+  ```
+18:40
+32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — prod
+34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v6** : h050, h053 et « si fort que » **fermés**, gold **60** (vague 5) ; **60/60** types, **142/142** rôles, **50/50** compléments, couvertu
+35:| **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) 
+=== État au ===
+38:**État au 03/11 13 h 30.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ; le **gold neuron
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 32p docs/pilotage/roadmap.md | rev | cut -c1-300 | rev; echo \"=== état 38-50 ===\"; sed -n 38,50p docs/pilotage/roadmap.md | cut -c1-170", "description": "Read N row action and state paragraph"}`
+
+  ```
+: val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; reste la **porte propre (0,29)** ; **N4** |
+=== état 38-50 ===
+**État au 03/11 13 h 30.** B13 est à **140/140** (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ; le **gold neuronal rejoué sur l'API DeepSeek** donne les **mêmes verd
+la **cascade vrai modèle** tient sur **180 phrases** (POS **0,9415**, syntagmes **0,6130**, tête
+**0,7574**, acte **1,0**) mais sur le **gold réel 432** elle donne **0,9065 / 0,4598 / 0,5633 /
+0,9954** — **verdict `false`** ; la **fenêtre B13** est **solvable** (BFS **228** nœuds, FIFO) mais **non
+discriminante** (oracle 228, aveugle 215, 7B 238 : tout passe) — c'est le banc qu'il faut réparer ;
+la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la règle, **0** sans) ; la
+**pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556** majoritaire) —
+l'heuristique garde. **N2** : la **loi de la fenêtre** à octets constants donne **3,2545 → 3,0107
+→ 2,9950** (256/512/1 024 à 1 00
+… [531 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; stat -c '%y' docs/pilotage/roadmap.md docs/pilotage/en-cours.md docs/pilotage/chantiers.md | cut -c12-19; date +%H:%M; sed -n 51,56p docs/pilotage/roadmap.md | cut -c1-160", "description": "Check mtimes and end of state paragraph"}`
+
+  ```
+18:38:37
+18:40:05
+13:29:26
+18:40
+(`porte-ressources`) est validée ; compteurs **574 fiches / 660 JSON**.
+
+**La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher
+
+## L'ordre du jour (carpe diem)
+  ```
+
+### 🤖 Assistant
+
+⏵ La roadmap est en cours d'édition par un autre écrivain (18 h 38) : je ne la touche pas. J'ajoute la note au journal et je commite le plan (§11) + l'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 18 h 45 — le plan de la nuit est écrit (plan-travail § 11)\n\n- **Quatre rôles** : **N2** (GP … [2043 caractères tronqués]`
+
+  ```
+journal : plan de nuit consigné
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[still running after 60000ms; moved to background job bash-451]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-451", "timeout_ms": 120000, "wait": true}`
