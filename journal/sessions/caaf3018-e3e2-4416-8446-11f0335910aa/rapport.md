@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 21.3 h |
+| Durée | 21.4 h |
 | Tours | 33 |
-| Messages | 591 |
-| Appels d'outils | 583 |
+| Messages | 597 |
+| Appels d'outils | 589 |
 | Fichiers touchés | 6 |
-| Commandes | 424 |
+| Commandes | 429 |
 | Sous-agents | 0 |
-| Commits | 29 |
+| Commits | 30 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -756,7 +756,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 
 ### Tour 33 — continue
 
-*21 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Check N2 under-2.5 integration in state and roadmap
 - bash — Check pilotage mtimes and stale lines
@@ -772,11 +772,11 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - bash — Update dates and add API/under-2.5 facts
 - bash — Commit API and under-2.5 facts with dates
 - bash — Inspect backlog N2 status and frontier
-- … et 5 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ T0 est à 4 000 pile ; je touche l'état par l'horodatage (neutre) et je commite la fiche avec sa ligne d'état.
+⏵ Le compteur de fiches est en retard d'une (Pensée publie) ; j'aligne et je commite.
 
 ## 3. Travail accompli
 
@@ -833,7 +833,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 384 autres
+- … et 389 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -999,4 +999,5 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-n2-sous25.txt <<'EOF' ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md"); t = p.read_text(encoding="utf
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-cpt.txt <<'EOF' ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON)  Pensée publie pendant que
 

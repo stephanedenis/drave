@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 21.3 h |
+| Durée | 21.4 h |
 | Tours | 164 |
-| Messages | 1134 |
-| Appels d'outils | 925 |
+| Messages | 1135 |
+| Appels d'outils | 926 |
 | Fichiers touchés | 48 |
-| Commandes | 746 |
+| Commandes | 747 |
 | Sous-agents | 0 |
-| Commits | 89 |
+| Commits | 90 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4184,7 +4184,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 164 — continue
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and inspect state
@@ -4200,11 +4200,11 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Check Rust binary and copy fresh DRVM
 - bash — Replay native parity with fresh DRVM
 - bash — Write replayed native parity JSON
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ T0 repassé à 4 001 et lock du hub ; je raccourcis la ligne, j'attends le lock et je refais le commit
+⏵ Le hub tient encore le lock (`f50ad713`) ; j'attends sa fin, je retire le lock résiduel et je refais le commit
 
 ## 3. Travail accompli
 
@@ -4303,7 +4303,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 706 autres
+- … et 707 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4495,6 +4495,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log
 - ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1; python3 tools/revue_document
 - L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format
+- L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
 

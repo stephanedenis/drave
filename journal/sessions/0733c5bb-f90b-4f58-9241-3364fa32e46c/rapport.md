@@ -7,20 +7,24 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 19.2 h |
-| Tours | 5 |
-| Messages | 516 |
-| Appels d'outils | 494 |
+| Durée | 21.4 h |
+| Tours | 6 |
+| Messages | 525 |
+| Appels d'outils | 503 |
 | Fichiers touchés | 25 |
-| Commandes | 367 |
+| Commandes | 373 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 14 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
 
 - **create** — Session N2 (0733c5bb), cycle de nuit jusqu'à 2026-11-03 08 h : (1) R1.2 à 1 024 octets entraînés — comparer à octets constants et à pas constants, contrôles « même texte » et miroir de copie, fiche + JSON + commit ; (2) la fenêtre sur le modèle de production (mélange 1 Go) — affiner mix-60k avec une
 … [431 caractères tronqués]
+- **edit** — Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 
+… [442 caractères tronqués]
+- **resume** — Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 
+… [442 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -33,6 +37,8 @@
 **Tour 4** — background job bash-356 (bash: cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/mix512-zero-15k.pt --rope --longueurs 128,512,1000,2000 --sortie work/n2ac/eval-mix512-zero-15k.json 2>&1 | grep -E '"(128|512|1000|2000)"|litterature|anglais|wikitext2|permute_fr') finished [status: completed, exit code: 0]. Read its ou … [21 caractères tronqués]
 
 **Tour 5** — continue
+
+**Tour 6** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -157,6 +163,23 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 **4. La fenêtre paie à toute
 … [1692 caractères tronqués]
 
+### Tour 6 — continue
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Check current repo and hardware state
+- get_goal
+- update_goal
+- bash — Check state presence of my session
+- bash — Launch long production run and capacity on clean corpus
+- bash — Reopen plan and state
+- bash — Fix T0 and commit reopening
+- bash — Trim T0 and retry commit after lock
+
+**Synthèse produite :**
+
+⏵ Objectif réarmé ; réouverture du mandat et lancement du run long + capacité
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -231,7 +254,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 327 autres
+- … et 333 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -391,4 +414,6 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/r
 - cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null; python3 -c " impor
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") md = len
+- cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib q = pathlib.Path("docs/pilotage/en-cours.md") s = q.read_text(encoding="utf-8") s = s.replac
+- cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib q = pathlib.Path("docs/pilotage/en-cours.md") s = q.read_text(encoding="utf-8") s = s.replac
 

@@ -14264,3 +14264,41 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 
 **Conclusion pour la B13** : le professeur en ligne reproduit les verdicts du 7B sur la porte-minute et la politique ; il est bien plus rapide et ne touche pas aux GPU. La fiche B13 peut désormais citer `deepseek-chat` comme professeur de référence, avec la réserve du changement de modèle (les chiffres ne sont comparables qu'entre passes API). Veux-tu que je rédige la fiche de synthèse `rapport-pensee-gold-api.md` (méthode, contrôle négatif, ce qui pourrait la rendre fausse) et que je la commite ?
 
+
+## Tour 77
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Je rédige la fiche de synthèse `rapport-pensee-gold-api.md` (dispositif, résultats, contrôles, limites) puis je l'intègre aux compteurs et je commite.
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-api.md", "content": "# Le gold neuronal sur l'API DeepSeek — mêmes verdicts, trente-cinq fois plus vite\n\n> **Question** : le professeur **en ligne** (`deepseek-chat`) reproduit-il les verdicts du\n> Qwen2.5- … [3454 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-api.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== README B13 ==\" && grep -n 'B13\\|pensee' reports/README.md | head -10; echo; echo \"== taille README ==\" && python3 tools/taille_documents.py 2>&1 | grep -E 'reports/README|T0 max|violation'; echo; echo \"== index ==\" && … [205 caractères tronqués]`
+
+  ```
+== README B13 ==
+20:| [`rapport-pensee-porte-minute.md`](rapport-pensee-porte-minute.md) | **B13** — la porte minute : 140/140 ; les six attendus S `00d2a01` fixés ; T132/T133 2/5 ; distracteurs r428–r432 |
+21:| [`rapport-pensee-cascade-reel-432.md`](rapport-pensee-cascade-reel-432.md) | **L** **0,9065** |
+22:| [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
+23:| [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
+24:| [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
+25:| [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |
+26:| [`rapport-pensee-anaphore-bilan.md`](rapport-pensee-anaphore-bilan.md) | **B13** — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures, **109/109** |
+27:| [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
+28:| [`rapport-pensee-courbe20.md`](rapp
+… [1371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '14,24p' reports/README.md; echo \"---\"; sed -n '1,12p' reports/README.md", "description": "Read reports README table rows for insertion", "timeoutMs": 60000}`

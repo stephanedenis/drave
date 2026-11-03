@@ -7637,3 +7637,73 @@ Fiches : [`rapport-n2-fenetre`](reports/rapport-n2-fenetre.md), [`rapport-n2-r12
 
 **Portes** : revue de documentation verte, état à jour, en-cours et journal verts, T0 à 3 998. Une seule rouge, **hors de mon périmètre** : `docs/pilotage/references-non-regression.md` à 2 518 mots (budget 2 500) — au hub de couper.
 
+
+## Tour 6
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Reprise : état du dépôt, objectif, et relance de la file « jamais en attente »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M'; git log --oneline -6 | cat; echo \"=== GPU ===\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo \"=== sessions actives ===\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" |  … [65 caractères tronqués]`
+
+  ```
+2026-11-03 13:36
+4387f98a ÉTAT / ROADMAP / JOURNAL — LA FENÊTRE SOUS 2,5 ET L'API À LATENCE /35, DATÉS 13 H 30
+68c1ecc1 ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373)
+07ec290b PASSE — 82 PORTES SUR MACHINE AU REPOS : 80 VERTES, 2 ROUGES (LES CONNUES)
+61bafd18 BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)
+c2ba64e4 BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000
+5bafefab B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35
+=== GPU ===
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+=== sessions actives ===
+  ⏰ 536cd5d6-94ac-4057 · actif    · 281 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 953 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (281 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (953 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-55b01e7d-d2e4-41ba-a43a-82d810df1670","revision":1,"objective":"Session N2 (0733c5bb), cycle de nuit jusqu'à 2026-11-03 08 h : (1) R1.2 à 1 024 octets entraînés — comparer à octets constants et à pas constants, contrôles « même texte » et miroir de copie, fiche + JSON + commit ; (2) la fenêtre sur le modèle de production (mélange 1 Go) — affiner mix-60k avec une fenêtre de 512 entraînée, mesurer 128/512/1 000/2 000 contre N2.ac, fiche + commit ; (3) si le temps le permet, un point de plus sur la loi de compute (300–400 k pas) ou la capacité ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales. Rendre à 08 h la ligne d'état et les hashes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-55b01e7d-d2e4-41ba-a43a-82d810df1670", "revision": 1, "action": "edit", "objective": "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation … [548 caractères tronqués]`
+
+> **Objectif** (edit) : Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes.
+
+
+  ```
+{"goal":{"id":"goal-55b01e7d-d2e4-41ba-a43a-82d810df1670","revision":2,"objective":"Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-55b01e7d-d2e4-41ba-a43a-82d810df1670", "revision": 2}`
+
+> **Objectif** (resume) : Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes.
+
+
+  ```
+{"goal":{"id":"goal-55b01e7d-d2e4-41ba-a43a-82d810df1670","revision":3,"objective":"Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Objectif réarmé ; réouverture du mandat et lancement du run long + capacité
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -c \"0733c5bb\" docs/pilotage/en-cours.md; grep -n \"Sessions closes\\|0733c5bb\" docs/pilotage/en-cours.md | head -4; python3 tools/taille_documents.py 2>&1 | grep T0", "description": "Check state presence of my session"}`
+
+  ```
+3
+82:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+84:- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+99:- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+  T0 max : 4000 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_prod1024_60k.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_prod1024_60k.sh — la production à fenêtre 1 024 poussée à 60 000 pas.\n# De mix1024-30k, +30 000 pas → 491 Mo vus à 1 024 (552 Mo au total avec la base N2.ac).\nset -u\ncd / … [1971 caractères tronqués]`

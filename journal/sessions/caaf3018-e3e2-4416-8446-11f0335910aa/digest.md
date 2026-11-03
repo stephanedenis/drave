@@ -10278,3 +10278,92 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-424", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: repository has been updated, but unable to write
+new index file. Check that disk is not full and quota is
+not exceeded, and then "git restore --staged :/" to recover.
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Git n'a pas pu écrire l'index : disque plein ? Je vérifie l'espace et l'état du dépôt.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; df -h . /tmp /home 2>/dev/null | head -5; echo \"=== git ===\"; git log --oneline -2; git status --short | head -6; echo \"=== taille .git ===\"; du -sh .git 2>/dev/null", "description": "Check disk space and git state"}`
+
+  ```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/system-root   11T  9,0T  2,0T  83% /home/stephane/Data13TB
+tmpfs                     63G  7,7G   56G  13% /tmp
+/dev/nvme2n1p2           828G  121G  706G  15% /home
+=== git ===
+f50ad713 BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA PORTE PROPRE RESTE
+4387f98a ÉTAT / ROADMAP / JOURNAL — LA FENÊTRE SOUS 2,5 ET L'API À LATENCE /35, DATÉS 13 H 30
+MM docs/pilotage/backlog/N2-distillation.md
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+MM journal/2026-11-03/distribue.md
+MM journal/2026-11-03/docs.md
+MM journal/2026-11-03/memoire.md
+=== taille .git ===
+138M	.git
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit est passé (`f50ad713`) ; l'index n'a pas pu être réécrit. Je le resynchronise et je vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git restore --staged :/ 2>&1 | tail -2; echo \"=== status ===\"; git status --short | head -8; echo \"=== HEAD ===\"; git show --stat --oneline f50ad713 | head -4; echo \"=== écriture index test ===\"; touch /tmp/test-index && git add  … [187 caractères tronqués]`
+
+  ```
+=== status ===
+ M reports/INDEX.md
+ M reports/native-parite.json
+ M tools/pensee/store.py
+ ? tools/structures
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-parite-drvm-native-rejoue.json
+?? reports/pensee-porte-fenetre-500.json
+?? reports/rapport-pensee-gold-api.md
+=== HEAD ===
+f50ad713 BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA PORTE PROPRE RESTE
+ docs/pilotage/backlog/N2-distillation.md           |  20 +--
+ docs/pilotage/en-cours.md                          |   6 +-
+ journal/2026-11-03/README.md                       |   5 +-
+=== écriture index test ===
+index OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Index récupéré, commit `f50ad713` intact, écriture OK. Je vérifie l'ensemble.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 tools/verifie_backlog.py 2>&1 | tail -1; python3 tool … [100 caractères tronqués]`
+
+  ```
+13:36
+     · compteurs : en-cours.md dit 588 fichiers, le disque en a 589
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4000 mots (budget 4 000)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  état · dernier fait f50ad713 · dernier état f50ad713
+  ✅ aucun fait commité après le dernier état
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compteur de fiches est en retard d'une (Pensée publie) ; j'aligne et je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; echo \"disque: $(ls reports/*.md | wc -l) fiches, $(ls reports/*.json | wc -l) JSON\"; python3 - <<'PY'\nimport pathlib, re\nm = pathlib.Path(\"reports\").glob(\"*.md\"); f = len(l … [583 caractères tronqués]`
+
+  ```
+119:| fichiers / JSON de résultats | **588** / **678** | `reports/*.md` / `reports/*.json` |
+disque: 589 fiches, 678 JSON
+compteurs : 589 / 678
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 4000 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-cpt.txt <<'EOF'\nÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON)\n\nPensée publie pendant que le hub tient l'état : sa fiche API et ses JSON ont porté\nle disque à 589 fiches / 678 JSON, la revue le signalait. Aligné. … [367 caractères tronqués]`
