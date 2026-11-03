@@ -9,13 +9,13 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 17.5 h |
 | Tours | 74 |
-| Messages | 491 |
-| Appels d'outils | 432 |
+| Messages | 496 |
+| Appels d'outils | 435 |
 | Fichiers touchés | 15 |
-| Commandes | 317 |
+| Commandes | 319 |
 | Sous-agents | 0 |
 | Commits | 37 |
-| Compactages de contexte | 1 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -1942,17 +1942,20 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 74 — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos … [101 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Investigate llama-server process, port, GPU and services
 - bash — Search llama, deepseek and professor references in code
 - bash — Kill llama-server, disable local LLM services
 - bash — Investigate other repo, teacher source and DeepSeek API
 - bash — Disable llama units, inspect teacher endpoints and keys
+- read
+- bash — Read DeepSeek adapter interface and operateurs tests
+- bash — Inspect DeepSeek API, LlamaServer callers and model usage
 
 **Synthèse produite :**
 
-⏵ `llama-server` arrêté ; un job Drave occupe GPU0 (13,5 Gio) ; le client DeepSeek existe déjà (`tools/llm/`). Je neutralise les unités et j'inspecte le point d'appel du professeur.
+⏵ Je lis l'interface publique de l'adaptateur DeepSeek et les appelants de `LlamaServer` pour brancher l'API sans casser les tests.
 
 ## 3. Travail accompli
 
@@ -2018,7 +2021,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 277 autres
+- … et 279 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2146,7 +2149,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ## 5. Erreurs rencontrées
 
-10 sorties en erreur ou divergentes. Les premières :
+11 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ===== b6a672ec digest (head) ===== # Session DSH — relecture  - identifiant : `b6a672ec-3349-4a4c-9e23-4478aa823170` - dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` - créée : 2026-11-01 
 - **T1** : == uptime == [stderr] uptime: invalid option -- 's' Try 'uptime --help' for more information. [exit code: 1]
@@ -2158,6 +2161,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T7** : 20:00 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, 
 - **T8** : plan-travail 10.7 ajouté [stderr] Traceback (most recent call last):   File "<stdin>", line 40, in <module>   File "<stdin>", line 37, in sub AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 19 h 5
 - **T10** : == revue ==   revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulai
+- **T74** : == deepseek.py interface == import urllib.request from dataclasses import dataclass, field  RACINE = pathlib.Path(__file__).resolve().parents[2] CACHE_DEFAUT = RACINE / "data" / "deepseek" / "cache" B
 
 ## 6. Commits
 

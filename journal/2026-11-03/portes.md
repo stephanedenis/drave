@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 07:16 | `a219c844` | JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACHINE AU REPOS | `README.md`, `attention.md`, `distribue.md` (+9) |
 | 08:16 | `0b53a31c` | RÉFÉRENCES — porte-sessions REJOUÉE VERTE APRÈS LA MISE EN PAUSE DE N2/S ; TROIS PASSES ANCIENNES SORTENT | `references-non-regression.md`, `README.md`, `docs.md` (+4) |
 | 08:18 | `f73a73f1` | ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S) | `en-cours.md`, `README.md`, `attention.md` (+9) |
+| 09:02 | `aba77b17` | PORTE HOMEOSTASIE — LA SUGGESTION DE RÉGÉNÉRATION ÉTAIT FAUSSE (BRAS ET SUFFIXE) | `README.md`, `attention.md`, `distribue.md` (+12) |
 
 ## Sessions actives ce jour
 

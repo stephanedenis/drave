@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**38 commits** · **5 session(s)** · **6 thème(s)**
+**39 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | docs | 15 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 4 | [portes.md](portes.md) |
+| portes | 5 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -70,6 +70,7 @@
 | 08:50 | `19eacae6` | N2 — LES SIX FICHIERS DE LA NUIT COMMITTÉS PAR LE HUB APRÈS LA PAUSE |
 | 08:52 | `167127c9` | JOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURNÉE |
 | 08:56 | `550ca5f2` | PORTE REPARTI-MOTEUR — L'ÉPINGLAGE 9,1748 ÉTAIT UN MODÈLE EN CACHE ; RÉ-ÉTALONNÉE À 8,7434 (VERTE) |
+| 09:02 | `aba77b17` | PORTE HOMEOSTASIE — LA SUGGESTION DE RÉGÉNÉRATION ÉTAIT FAUSSE (BRAS ET SUFFIXE) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -153,4 +154,16 @@ plus rafraîchi. GPU au repos.
   jour de la fenêtre) ; le hub les a committés (`19eacae6`) avec leur ligne d'état. Pensée,
   **active**, garde ses fichiers en cours (le hub n'y touche pas).
 - **Compteurs** : 587 fiches / 674 JSON, revue verte ; `en-cours` 1 625 mots ; T0 3 996.
+
+## 09 h 10 — deux portes réparées après la passe 82
+
+- **`porte-reparti-moteur` : verte.** L'épinglage 9,1748 ne se reproduisait pas (8,7434 des deux
+  côtés, écart nul) ; mesure : deux régénérations identiques, modèle effacé, code et corpus
+  inchangés depuis le 8/10 — le pin venait d'un **modèle en cache jamais régénéré**. Ré-étalonnée
+  à 8,7434 avec la preuve (`550ca5f2`) : la porte tient, et les passes suivantes ne compteront
+  plus que **3 rouges connues** (indice, melange, homeostasie).
+- **`porte-homeostasie` : la suggestion était fausse.** `--sauver /tmp/n4/rang4-lora.pt` écrit en
+  réalité `rang4-lora.pt-<bras>.pt` (trois fichiers) ; la porte attend un fichier unique. Vérifié
+  en régénérant (3 min 35). La suggestion dit maintenant `--bras lora --sauver /tmp/n4/rang4`
+  (`aba77b17`) ; la porte reste tolérée rouge (/tmp effacé au reboot).
 <!-- /notes -->

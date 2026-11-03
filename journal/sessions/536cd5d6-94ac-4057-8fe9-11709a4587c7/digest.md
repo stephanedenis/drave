@@ -12248,3 +12248,87 @@ disab
 … [4253 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ `llama-server` tué, unités llama masquées, ollama désactivé ; le code source est `tools/pensee/operateurs.py` (endpoint local 18082). Je lis la classe et l'adaptateur DeepSeek.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "limit": 50, "offset": 85}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py</path>
+<type>file</type>
+<content>
+85:     """La politique **DRVM/native** : un modèle local décide le pas.
+86: 
+87:     Le conteneur `DRVM` l'appelle comme les autres politiques ; le modèle ne rend qu'un mot
+88:     de direction, contraint par une grammaire GBNF. Le **coût réel** (latence cumulée) est
+89:     mesuré à côté du coût symbolique du registre. `transport` est injectable pour tester le
+90:     contrat sans modèle ; en production, il interroge `llama-server` en CPU.
+91:     """
+92: 
+93:     nom = "llm"
+94: 
+95:     def __init__(self, modele: str, endpoint: str = "http://127.0.0.1:18082",
+96:                  jeu: str = "labyrinthe", variante: str = "regle", timeout: int = 120,
+97:                  transport=None):
+98:         super().__init__()
+99:         self.modele = str(modele)
+100:         self.endpoint = endpoint.rstrip("/")
+101:         self.jeu = jeu
+102:         self.variante = variante
+103:         self.timeout = timeout
+104:         self.transport = transport or self._post
+105:         self.latence = 0.0
+106:         self.erreurs = 0
+107:         self.derniere = ""
+108: 
+109:     d
+… [1731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== deepseek.py interface ==\" && sed -n '40,170p' tools/llm/deepseek.py; echo; echo \"== tests operateurs ==\" && grep -rn 'LlamaServer\\|operateurs' tools/tests tools/pensee 2>/dev/null | head -15; echo; echo \"== n4 process  … [316 caractères tronqués]`
+
+  ```
+== deepseek.py interface ==
+import urllib.request
+from dataclasses import dataclass, field
+
+RACINE = pathlib.Path(__file__).resolve().parents[2]
+CACHE_DEFAUT = RACINE / "data" / "deepseek" / "cache"
+BASE_DEFAUT = "https://api.deepseek.com"
+MODELE_DEFAUT = "deepseek-chat"
+
+
+class ErreurDeepSeek(Exception):
+    """Une erreur de l'API, avec la possibilité de réessayer."""
+
+    def __init__(self, message: str, *, code: int | None = None,
+                 reessayable: bool = False) -> None:
+        super().__init__(message)
+        self.code = code
+        self.reessayable = reessayable
+
+
+@dataclass
+class ReponseDeepSeek:
+    contenu: str
+    modele: str
+    usage: dict = field(default_factory=dict)
+    raisonnement: str | None = None
+    latence_s: float = 0.0
+    cache: bool = False
+    brut: dict | None = None
+
+    def __str__(self) -> str:
+        return self.contenu
+
+
+def _cle_env() -> str:
+    """La clé, sans jamais l'écrire : variable d'environnement ou fichier 0600.
+
+    `DEEPSEEK_API_KEY` / `DSH_API_KEY` d'abord ; sinon `DEEPSEEK_KEY_FILE` /
+    `DSH_KEY_FILE` (un fichier dont la première ligne est la clé). Le fichier
+    doit être hors du dépôt et lisible par l'utilisateur seu
+… [6299 caractères tronqués]
+  ```
+

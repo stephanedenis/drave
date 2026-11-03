@@ -8365,3 +8365,38 @@ drwxrwxrwt. 126 root     root        4320  3 nov 09:02 ..
 ⏵ La suggestion de la porte est fausse : `--sauver X.pt` produit `X.pt-lora.pt`. Je corrige la commande (sans rendre la porte auto-génératrice).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-homeostasie.sh\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"    echo '     (il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang  … [1320 caractères tronqués]`
+
+  ```
+suggestion corrigée : --bras lora + nom suffixé
+syntaxe OK
+  ❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt
+     (il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --bras lora --sauver /tmp/n4/rang4` — le formateur suffixe le bras : cela écrit /tmp/n4/rang4-lora.pt ; /tmp est effacé au reboot)
+[still running after 60000ms; moved to background job bash-350]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-350", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master aba77b17] PORTE HOMEOSTASIE — LA SUGGESTION DE RÉGÉNÉRATION ÉTAIT FAUSSE (BRAS ET SUFFIXE)
+ 15 files changed, 475 insertions(+), 40 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux portes réparées. Je consigne dans le journal et fais le point de la matinée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v journal | head -5; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 09 h 10 — deux portes réparées après la passe … [1145 caractères tronqués]`
+
+  ```
+M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+journal : deux portes consignées
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-j2.txt <<'EOF'\nJOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUMENTÉE)\n\nLe fil du 03/11 consigne : porte-reparti-moteur ré-étalonnée à 8,7434 avec la\npreuve (deux régénérations identiques, … [596 caractères tronqués]`
