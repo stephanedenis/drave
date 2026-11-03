@@ -12136,3 +12136,48 @@ pas de lock
   ```
 
 - **bash** `{"command": "git commit --only -m \"NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE\" -m \"Sur le gold réel 432, la cascade donne POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954 — verdict false : l'échantillon de 180 phrases (0,9415/0,6130 … [405 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master e670b4c7] NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE
+ 13 files changed, 185 insertions(+), 32 deletions(-)
+ create mode 100644 journal/2026-11-03/mesures.md
+e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 40 — le gold réel 432 est au registre\n\n- Commit **`e670b4c7`** : la **roadmap** et l'**en-cours** portent la **cascade sur le gold réel\n  432** (POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954, **verdict false**) **et**\n  l'éch … [263 caractères tronqués]`
+
+  ```
+log-ok
+00:36:29
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 42 : le gold réel 432 est au registre — la cascade tient, le verdict est false
+
+- **L/B13** : `a29cfd0f` puis **`e670b4c7`** — sur le **gold réel 432**, la cascade donne **POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954**, **verdict `false`** : le composite tient (l'acte à 0,9954) mais **ne qualifie pas le gold complet** ; l'échantillon de 180 phrases (0,9415 / 0,6130 / 0,7574 / 1,0) **ne généralise pas**. C'est le contrôle négatif explicite du résultat de 21 h 25.
+- **État** : la roadmap et l'en-cours portent les deux chiffres et le verdict ; T0 resserré sous 4 000 ; revue ✅ **575 / 661 / 82**, tableau ✅ 2 771 liens, journal ✅ (mesures du 03/11).
+- **Runs N2** : `713516` (2 h 11) et `758133` (40 min) continuent, GPU occupés et déclarés.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 43/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 43 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`

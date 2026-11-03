@@ -6322,3 +6322,62 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-292", "timeout_ms": 3300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/mix1024-30k.log", "description": "Check 2048 long completion"}`
+
+  ```
+00:36:18
+rope2048-1.25k fini 22:22:47
+pas   4950 · perte 1.0545 · PPL val 2.572 · 2234 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -la work/n2ac/rope2048-12.5k.log work/n2ac/rope2048-12.5k.pt 2>/dev/null; ps -eo pid,etime,cmd --no-headers | grep \"[e]ntrainer_rope\" | cut -c1-110; dmesg 2>/dev/null | tail -3", "description": "Check whether 2048 long run died"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 8894  3 nov 00:36 work/n2ac/rope2048-12.5k.log
+ 713516    02:13:40 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre
+ 758133       42:24 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/propr
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -c 400 work/n2ac/rope2048-12.5k.log; echo; echo \"--- lignes ---\"; grep -c \"pas \" work/n2ac/rope2048-12.5k.log", "description": "Read raw tail of 2048 log"}`
+
+  ```
+L val 2.535 · 7604 s
+pas   7550 · perte 1.0267 · PPL val 2.519 · 7655 s
+pas   7600 · perte 1.0295 · PPL val 2.523 · 7705 s
+pas   7650 · perte 1.0383 · PPL val 2.532 · 7756 s
+pas   7700 · perte 0.9562 · PPL val 2.526 · 7807 s
+pas   7750 · perte 1.0335 · PPL val 2.517 · 7857 s
+pas   7800 · perte 0.9620 · PPL val 2.515 · 7908 s
+pas   7850 · perte 0.9748 · PPL val 2.526 · 7959 s
+
+--- lignes ---
+158
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log --oneline -12 | cat; echo \"=== sessions ===\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -5", "description": "Review other sessions activity"}`
+
+  ```
+e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE
+a29cfd0f L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE
+78463f0c ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (575)
+534f9d6d ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661)
+3026dc6a NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE
+589508b2 NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON)
+8133ee1e ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+92e3f9b4 L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+8deac6ce B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)
+=== sessions ===
+    0733c5bb-f90b-4f58 · actif    ·  12 min · 
+… [668 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK; tail -c 200 work/n2ac/mix1024-30k.log", "description": "Wait for 2048 long checkpoint"}`

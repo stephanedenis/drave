@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 8.3 h |
-| Tours | 47 |
-| Messages | 769 |
-| Appels d'outils | 718 |
+| Tours | 48 |
+| Messages | 773 |
+| Appels d'outils | 720 |
 | Fichiers touchés | 24 |
-| Commandes | 506 |
+| Commandes | 508 |
 | Sous-agents | 0 |
 | Commits | 37 |
 | Compactages de contexte | 1 |
@@ -119,6 +119,8 @@
 **Tour 46** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 47** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 48** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1172,7 +1174,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 
 ### Tour 47 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Wait for the next commit
 - bash — Verify the real-gold cascade result and log it
@@ -1182,10 +1184,27 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - edit `docs/pilotage/roadmap.md`
 - bash — Verify the real-gold updates
 - bash — Commit the real-gold state update
+- bash — Log the real-gold commit
 
 **Synthèse produite :**
 
-⏵ Round 42 : veille — attente du prochain commit
+⏵ Round 42 : le gold réel 432 est au registre — la cascade tient, le verdict est false
+
+- **L/B13** : `a29cfd0f` puis **`e670b4c7`** — sur le **gold réel 432**, la cascade donne **POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954**, **verdict `false`** : le composite tient (l'acte à 0,9954) mais **ne qualifie pas le gold complet** ; l'échantillon de 180 phrases (0,9415 / 0,6130 / 0,7574 / 1,0) **ne généralise pas**. C'est le contrôle négatif explicite du résultat de 21 h 25.
+- **État** : la roadmap et l'en-cours portent les deux chiffres et le verdict ; T0 resserré sous 4 000 ; revue ✅ **575 / 661 / 82**, tableau ✅ 2 771 liens, journal ✅ (mesures du 03/11).
+- **Runs N2** : `713516` (2 h 11) et `758133` (40 min) continuent, GPU occupés et déclarés.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 48 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 43 : veille — attente du prochain commit
 
 ## 3. Travail accompli
 
@@ -1260,7 +1279,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 466 autres
+- … et 468 autres
 
 ## 4. Mesures et résultats marquants
 

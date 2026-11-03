@@ -20563,3 +20563,20 @@ a29cfd0f L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 
 ⏵ Round 147 : T0 à **4 012** mots (budget 4 000) — ma ligne d'état a débordé ; je raccourcis l'en-cours et je commite l'état
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; **gold réel 432 : cascade 0,9065 / 0,4598 / 0,5633 / 0,9954** (verdict false) ;'\nnew=' ; **gold réel 432 : 0,9065 / 0,4598 / 0,563 … [464 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4010 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 147 : T0 4 010 encore 10 mots de trop ; je raccourcis davantage et je refais le commit (le lock est reparti)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; **gold réel 432 : 0,9065 / 0,4598 / 0,5633 / 0,9954** (false) ;'\nnew=' ; **réel 432 : 0,9065/0,4598/0,5633/0,9954** ;'\nassert old … [526 caractères tronqués]`
