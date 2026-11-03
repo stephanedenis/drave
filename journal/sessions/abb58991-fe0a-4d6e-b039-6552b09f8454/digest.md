@@ -10268,3 +10268,63 @@ journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
 ⏵ J'attends la mesure mobile (2 portes × 5 politiques) ; l'état HEAD est à 3 997/4 000
 
 - **job_output** `{"job_id": "bash-369", "timeout_ms": 480000, "wait": true}`
+
+  ```
+{"status":"ok"}  "1": {
+   "oracle": [
+    true,
+    29,
+    59.0,
+    7,
+    5,
+    0.0,
+    0
+   ],
+   "aveugle": [
+    true,
+    26,
+    44.0,
+    7,
+    2,
+    0.0,
+    0
+   ],
+   "hasard": [
+    true,
+    28,
+    54.0,
+    7,
+    4,
+    0.0,
+    0
+   ],
+   "llm_porte_mobile": [
+    true,
+    28,
+    54.0,
+    7,
+    4,
+    14.425,
+    0
+   ],
+   "llm_labyrinthe": [
+    true,
+    29,
+    59.0,
+    7,
+    5,
+    17.095,
+    0
+   ]
+  }
+ }
+}
+écrit : reports/pensee-porte-mobile.json
+[stderr]
+
+real	6m45,120s
+user	0m0,906s
+sys	0m0,074s
+[status: completed, exit code: 0]
+  ```
+

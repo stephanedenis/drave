@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 4.0 h |
 | Tours | 4 |
-| Messages | 130 |
-| Appels d'outils | 161 |
-| Fichiers touchés | 2 |
-| Commandes | 119 |
+| Messages | 145 |
+| Appels d'outils | 182 |
+| Fichiers touchés | 3 |
+| Commandes | 134 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -140,7 +140,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 
 ### Tour 4 — Es-tu en attente active d'une tache et ressource? tu doi pouvoir prendre de petites tâches indépendantes si tu cherches  … [196 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create night goal and snapshot pass and sessions
@@ -153,10 +153,14 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - bash — Read resource coordination protocol section 10
 - bash — Detect hub session processes
 - bash — Check pass progress and resource registry
+- bash — Check backlog graph and actual resource usage
+- bash — Check reports index freshness
+- bash — Check for live edits by other writer
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ Je vérifie s'il y a deux processus hub (même session) et où en est la passe
+⏵ Vérification et commit de la correction de `portes.md`
 
 ## 3. Travail accompli
 
@@ -166,6 +170,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 |---|---|---|
 | `docs/pilotage/en-cours.md` | 0 | 12 |
 | `tools/sessions.py` | 0 | 5 |
+| `docs/methode/portes.md` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -209,7 +214,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 79 autres
+- … et 94 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -254,6 +259,12 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T4** `3f74fe83 02/11 20:08 Stéphane S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
 - **T4** `de **coût** (×8,31 pour ×4), **vert seul** trois fois (×4,24 / ×2,84 / ×4,12) — bruit de`
 - **T4** `| `nvme_raid` | 1 IO lourde, **33 Gio libres** | — | `/home/stephane/IA` (RAID0 4×238 G) — presque plein |`
+- **T4** `# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)`
+- **T4** `> **littérature propre** (17 M car.), l'analyseur trouve un **GN et un GV** dans **65,5 %** des`
+- **T4** `> phrases propres contre **9,1 %** quand les mots sont mélangés — le signal est la **langue**. Sur`
+- **T4** `> le CEGEP OCR, il est au **plancher du mélange** : **8,5 %** contre **9,1 %**. Le corpus CEGEP`
+- **T4** `> que le corpus n'est pas. L'unité compte : la ligne coupe les phrases (3,6 % contre 51,0 %).`
+- **T4** `[still running after 60000ms; moved to background job bash-134]`
 
 ## 5. Erreurs rencontrées
 
@@ -266,4 +277,5 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE  Le hub intègre les quatre mandats rouverts après le reboot d
 - PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8  La passe complète n'est pas lancée : à 16 h 32, GPU 0 à 92 % (N2 200 k pas
 - ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40  Les quatre sessions actives écrivent : les compteurs bougent sous le hub. Mis à jour sur
+- PORTES — LE REGISTRE EST DANS \`work/\`, PAS DANS \`/tmp\` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE  Le doc annonçait /tmp/portes-<date> : le script écrit 
 

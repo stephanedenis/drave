@@ -18,7 +18,9 @@ Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêt
 ## Où est le registre (et comment lire le verdict)
 
 Le registre n'est **pas** à la racine : il est écrit dans le dossier des journaux, par défaut
-`/tmp/portes-<date>-<heure>/registre.txt` (variable `JOURNAUX`). Chaque ligne vaut :
+`work/portes-<MMJJ>-<HHhMM>/registre.txt` (variable `JOURNAUX`). **`/tmp` est effacé au reboot** :
+pour une passe dont on veut garder les journaux (le cas normal), nommer un dossier durable —
+`JOURNAUX=work/portes/<nom>`. Chaque ligne vaut :
 
 ```
 nom-de-la-porte   code-de-sortie   durée-en-secondes
@@ -27,7 +29,7 @@ nom-de-la-porte   code-de-sortie   durée-en-secondes
 On lit le verdict **par le code**, jamais par les marqueurs `✅`/`❌` du source, jamais à travers un tube :
 
 ```bash
-JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement
+JOURNAUX=work/portes/passe-1102-19h32   # le dossier affiché au lancement
 awk '$2 != 0' "$JOURNAUX/registre.txt"
 ```
 
@@ -54,6 +56,12 @@ la passe complète reste la règle de fin de cycle.
 - **Les portes et une mesure GPU ne cohabitent pas** : lancer un modèle qui occupe 28 Go de VRAM pendant une passe
   [fait](../theorie/glossaire/entrees/fait-mesure-projete-deduit.md) attendre ou échouer les portes qui utilisent les cartes (`porte-audit-drapeaux`, `porte-vision`,
   `porte-*moteur`). Faire la passe **seule**, puis les mesures.
+- **Un seul GPU libre (dérogation mesurée).** Si une session tient `gpu0` et que `gpu1` est libre, la passe
+  peut tourner sur la carte libre : `CUDA_VISIBLE_DEVICES=<libre>,<occupé>` place la carte **libre en device 0
+  logique** — on le vérifie à la mémoire (`nvidia-smi` doit voir monter la carte libre) — donc les portes qui
+  appellent `cuda` ne touchent pas l'entraînement. C'est une **dérogation nommée** à la règle § 10 de
+  [`plan-travail.md`](../pilotage/plan-travail.md) (la passe complète réserve `machine`) : elle ne vaut que si le
+  verdict est lu avec la réserve des portes de temps — la charge CPU de l'autre session reste.
 - **Les portes de temps** (`porte-delais`, `porte-flux`, `porte-topologie`) mesurent des latences : les lancer
   seules si un chiffre de temps doit être **interprété**. La passe complète est faite pour le **verdict**, pas pour
   le chronomètre.

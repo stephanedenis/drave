@@ -6355,3 +6355,270 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/READ
   ```
 
 - **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add journal/2026-11-02/README.md; git diff --cached --stat; git commit -m \"NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT\" 2>&1 | tail -6", "description": "Commit the night journal not … [47 caractères tronqués]`
+
+  ```
+journal/2026-11-02/README.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+  ✅ index : aucun fait stagé sans état
+[master a097f650] NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+ 25 files changed, 807 insertions(+), 98 deletions(-)
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- pass ---\"; wc -l work/portes/passe-1102-19h32/registre.txt 2>/dev/null; tail -3 work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo \"--- échecs ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt 2>/dev/null | tail -5; echo \"--- HEAD  … [148 caractères tronqués]`
+
+  ```
+20:15:34
+--- pass ---
+30 work/portes/passe-1102-19h32/registre.txt
+porte-harnais-invariants 0 127
+porte-homeostasie 2 0
+porte-horloge 0 27
+--- échecs ---
+porte-homeostasie 2 0
+--- HEAD ---
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+--- status ---
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+  ```
+
+- **bash** `{"command": "grep -n \"homeostasie\\|rouge\\|tolér\" docs/pilotage/references-non-regression.md | head -15; echo \"--- 4 connues ---\"; sed -n '1,40p' docs/pilotage/references-non-regression.md", "description": "Check known tolerated gate failures"}`
+
+  ```
+3:> **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+4:> `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+5:> connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+7:> du 02/11 00 h 03 : 81 portes, 77 vertes, 4 rouges. Journaux durables : `work/portes/`.
+9:> **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+10:> (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+11:> `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
+14:> **Passe précédente — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
+15:> (journaux `/tmp/portes-1031-n2d`) : mêmes rouges ; `porte-ocr` (48 s) était verte.
+17:> **Passe précédente — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+19:> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
+24:> **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+33:> **Passe précédente — 2026-10-27 à 14 h 33** (**4
+… [3053 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -4 work/n2ac/rope1024-2.5k.log 2>/dev/null; echo \"--- pensÉe mobile ---\"; ls -l reports/pensee-porte-mobile.json 2>/dev/null; tail -3 work/ports/* 2>/dev/null | head; echo \"--- claims age ---\"; python3 - <<'PY'\nimport json, datetime\ntry:\n    d=json.load(open('work/ressources … [494 caractères tronqués]`
+
+  ```
+pas   2300 · perte 1.2563 · PPL val 2.958 · 1038 s
+pas   2350 · perte 1.1653 · PPL val 2.973 · 1062 s
+pas   2400 · perte 1.1834 · PPL val 2.956 · 1086 s
+pas   2450 · perte 1.1330 · PPL val 2.945 · 1110 s
+--- pensÉe mobile ---
+--- claims age ---
+0733c5bb r12-1024 None
+536cd5d6 portes None
+29ad180d analyseur None
+e181ce02 b13-gold None
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -1; echo \"--- HEAD ---\"; git log --oneline -3; echo \"--- index principal --- … [81 caractères tronqués]`
+
+  ```
+revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+--- HEAD ---
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+--- index principal ---
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Veille de nuit en place : consigne publiée, registre vivant, quatre sessions coordonnées
+
+**Le mot est passé et il est appliqué.** La consigne de coordination est publiée dans [`plan-travail.md`](docs/pilotage/plan-travail.md) § 10 (commit `a67dbf00`) : une seule session écrit `en-cours` à la fois ; **claim avant job lourd, `--release` après** ; `--actual` à chaque checkpoint ; les tâches légères remplissent les ressources libres ; la passe complète réserve `machine` ; **chaque axe garde une prochaine action**. Le récit de nuit est ouvert dans le [journal du 02/11](journal/2026-11-02/README.md) (commit `a097f650`).
+
+**Ce que font les autres sessions (20 h 15)**
+- **Hub** : **passe complète des portes** lancee à 19 h 32 (`work/portes/passe-1102-19h32`) — **30/81** portes, la seule rouge pour l'instant est `porte-homeostasie` (environnementale connue).
+- **N2** : **R1.2-1024** de nuit sur `gpu0` — **2 450/2 500 pas**, PPL de validation **2,945** ; la fiche suivra.
+- **S** : corpus réel mesuré et committé (`3f74fe83`) — **65,5 % propre / 8,5 % CEGEP**, contrôle du mélange au plancher, banque **200 phrases / 355 candidats** ; prochaine : homographes, validation humaine.
+- **Pensée** : porte minute ouverte (**26 nœuds**), passe maintenant à la **porte mobile** ; prochaine : gold 200+.
+- **D/R/A** : close (OCR CEGEP, 91 scans uniques).
+
+**Le registre des ressources est vivant** (`tools/ressources.py`, autotest 9 cas) : **N2** tient `gpu0` (240 min), le **hub** `gpu1` + portes, **S** et **Pensée** `cpu1` (4+4) — `cpu1` à **16/16**, `ram` 92/109, `nvme_raid` 33 Gio. `--actual` signale encore le service LLM et `drave` sur `gpu0` sans claim (le mapping processus→claim reste manuel) et un avertissement NUMA sur le claim du hub (`gpu1` + `cpu1`).
+
+**État** : revue documentaire ✅ (562 fiches / 648 JSON), `en-cours` 1 623 mots, T0 ✅, porte stricte ✅ (un seul avertissement de périmètres proches). La veille continue : j'intégrerai le verdict des portes, tiendrai compteurs/état/journal au fil des commits, et prendrai les tâches légères (INDEX, archives, liens, backlog, porte-ressources) **sans gêner** les runs, jusqu'à 8 h.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round de nuit : je relève les portes, les sessions et le registre avant d’agir
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- pass ---\"; wc -l work/portes/passe-1102-19h32/registre.txt 2>/dev/null; tail -2 work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo \"--- HEAD ---\"; git … [126 caractères tronqués]`
+
+  ```
+20:16:48
+--- pass ---
+30 work/portes/passe-1102-19h32/registre.txt
+porte-homeostasie 2 0
+porte-horloge 0 27
+--- rouges ---
+porte-homeostasie 2 0
+--- HEAD ---
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+67ec9cd4 B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+--- status ---
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"toutes-les-portes|porte-|entrainer|llama-server|qualifier|mesure\" | grep -v grep | head -6 | cut -c1-130; echo \"--- ressources ---\"; python3 tools/ressources.py --status 2>&1 | grep -A6 \"Réservations\"; python3 tools/ressources.py  … [81 caractères tronqués]`
+
+  ```
+110066    02:48:48  650 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 
+ 383833       00:10  126 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --ca
+ 331743       14:35  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/propre/train.txt --c
+ 348819       05:32  0.2 python3 tools/tests/qualifier_porte_mobile_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pen
+ 348710       05:32  0.0 bash -c cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_mobile_drvm
+ 164359       44:56  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/portes
+--- ressources ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, ram=8 (prio 1, 110 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+  ```
+
+- **bash** `{"command": "tail -3 work/n2ac/rope1024-2.5k.log 2>/dev/null; echo \"--- nouveau run ---\"; ps -o pid,etime,args -p 383833 | tail -1 | cut -c1-260; echo \"--- portes script ---\"; grep -n \"registre\\|JOURNAUX\\|porte-\\*\\|for \" tools/toutes-les-portes.sh | head -12", "description": "Check N2 next … [30 caractères tronqués]`
+
+  ```
+"sha256_drvm": "211d6c18b392f6d2323aae9be716d62552fe5b0791b1ecd4400d1177ba61da12",
+ "duree_s": 1137.1934051513672
+}
+--- nouveau run ---
+ 383833       00:40 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --seq 1024 --window 1024 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2a
+--- portes script ---
+13:#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+17:#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+32:JOURNAUX=${JOURNAUX:-work/portes-$(date +%m%d-%Hh%M)}
+33:mkdir -p "$JOURNAUX"
+35:portes=$(ls tools/porte-*.sh | sort)
+38:    for f in $FILTRE; do
+39:        for g in $portes; do
+52:echo "    journaux : $JOURNAUX"
+53:for g in $portes; do
+55:    j="$JOURNAUX/$nom.log"
+75:    printf '%s %s %s\n' "$nom" "$code" "$dt" >> "$JOURNAUX/registre.txt"
+78:echo "--- $vertes vertes, $rouges rouges ---" | tee -a "$JOURNAUX/registre.txt"
+  ```
+
+- **bash** `{"command": "sed -n '180,260p' tools/ressources.py; echo \"---\"; sed -n '387,430p' tools/ressources.py", "description": "Read claim expiry and check logic"}`
+
+  ```
+warns: list[str] = []
+    res = claim["res"]
+    actifs = ledger["claims"]
+
+    if "machine" in res:
+        if actifs:
+            errs.append("machine exclusive : des réservations sont déjà actives")
+    elif any("machine" in c["res"] for c in actifs):
+        errs.append("machine exclusive en cours : aucune autre réservation")
+
+    for r, v in res.items():
+        kind = RESSOURCES[r]["kind"]
+        if kind == "gpu":
+            n = sum(1 for c in actifs if r in c["res"])
+            if n >= 1:
+                errs.append(f"{r} : déjà réservé (1 job exclusif à la fois)")
+        elif kind == "cpu":
+            total = sum(int(c["res"].get(r, 0)) for c in actifs) + int(v)
+            if total > utile(r):
+                errs.append(f"{r} : {total} fils > {utile(r)} utilisables (réserve {RESSOURCES[r]['reserve']})")
+        elif kind == "ram":
+            total = sum(int(c["res"].get(r, 0)) for c in actifs) + int(v)
+            if total > utile(r):
+                errs.append(f"{r} : {total} Gio > {utile(r)} utilisables (réserve {RESSOURCES[r]['reserve']})")
+        elif kind == "io":
+            mode = str(v).split(":", 1)[0]
+            if mode == "heavy":
+                n = s
+… [3987 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== S v2 restes ===\"; grep -rn \"38/39\\|99/100\\|45/45\\|gold 39\\|40 tests\\|973c70a4\" docs/pilotage/*.md docs/implantation/*.md 2>/dev/null | head -10; echo \"=== OCR pilote ===\"; grep -rn \"10 notes\\|1 596\\|~127\\|2,52 M\" docs/pilotage/*.md docs/theorie/*.md 2>/dev/null … [161 caractères tronqués]`
+
+  ```
+=== S v2 restes ===
+=== OCR pilote ===
+=== 140/140 ===
+docs/pilotage/en-cours.md:58:- **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines
+… [1932 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -20 work/n2ac/rope1024-2.5k.log 2>/dev/null | tail -12; echo \"--- reports récents ---\"; ls -lt reports/*.md reports/*.json | head -6; echo \"--- commits ---\"; git log --oneline -3", "description": "Read N2 R1.2-1024 final result and newest reports"}`
+
+  ```
+"graine": 1,
+ "window": 1024,
+ "positions": "rope",
+ "init": "work/n2j/base-wiki-45m.pt",
+ "perte_finale": 1.1366527080535889,
+ "ppl_val": 3.0529490651744413,
+ "jetons_val": 65536,
+ "tetes": true,
+ "drvm": "work/n2ac/rope1024-2.5k.drvm",
+ "sha256_drvm": "211d6c18b392f6d2323aae9be716d62552fe5b0791b1ecd4400d1177ba61da12",
+ "duree_s": 1137.1934051513672
+}
+--- reports récents ---
+-rw-r--r--. 1 stephane stephane    6584  2 nov 20:18 reports/pensee-porte-mobile.json
+-rw-r--r--. 1 stephane stephane   75231  2 nov 20:15 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane    9369  2 nov 20:05 reports/rapport-s-analyseur-roles.md
+-rw-r--r--. 1 stephane stephane    5863  2 nov 20:05 reports/rapport-s-corpus-reel.md
+-rw-r--r--. 1 stephane stephane   23125  2 nov 19:50 reports/README.md
+-rw-------. 1 stephane stephane    5967  2 nov 19:50 reports/rapport-pensee-porte-minute.md
+--- commits ---
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+[stderr]
+ls:
+… [25 caractères tronqués]
+  ```
+

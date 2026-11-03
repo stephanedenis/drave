@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 4.0 h |
-| Tours | 5 |
-| Messages | 385 |
-| Appels d'outils | 416 |
-| Fichiers touchés | 18 |
-| Commandes | 255 |
+| Tours | 6 |
+| Messages | 399 |
+| Appels d'outils | 430 |
+| Fichiers touchés | 19 |
+| Commandes | 267 |
 | Sous-agents | 0 |
 | Commits | 16 |
 | Compactages de contexte | 0 |
@@ -35,6 +35,8 @@
 **Tour 4** — c'est le temps de s'assurer que le pilotage est bien a jour et concis afin que tout soit optimal avec les sessions en cours dans les autres terminaux
 
 **Tour 5** — regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur le fait que les sessions doivent être bien cootrdonnnées et tenir les ressources en usage optimal pour que nos travaux avances dans tous les axes
+
+**Tour 6** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -153,7 +155,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 5 — regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur  … [145 caractères tronqués]
 
-*42 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - bash — Survey sessions and repository state
 - bash — Survey CPU, GPU and processes
@@ -169,11 +171,43 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Wait for N2 night mandate commit
 - bash — Check for an existing night coordination note
 - create_goal
-- … et 25 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
-⏵ Prise de service de nuit : je relève l’état des sessions et des ressources avant de poser la consigne
+⏵ Veille de nuit en place : consigne publiée, registre vivant, quatre sessions coordonnées
+
+**Le mot est passé et il est appliqué.** La consigne de coordination est publiée dans [`plan-travail.md`](docs/pilotage/plan-travail.md) § 10 (commit `a67dbf00`) : une seule session écrit `en-cours` à la fois ; **claim avant job lourd, `--release` après** ; `--actual` à chaque checkpoint ; les tâches légères remplissent les ressources libres ; la passe complète réserve `machine` ; **chaque axe garde une prochaine action**. Le récit de nuit est ouvert dans le [journal du 02/11](journal/2026-11-02/README.md) (commit `a097f650`).
+
+**Ce que font les autres sessions (20 h 15)**
+- **Hub** : **passe complète des portes** lancee à 19 h 32 (`work/portes/passe-1102-19h32`) — **30/81** portes, la seule rouge pour l'instant est `porte-homeostasie` (environnementale connue).
+- **N2** : **R1.2-1024** de nuit sur `gpu0` — **2 450/2 500 pas**, PPL de validation **2,945** ; la fiche suivra.
+- **S** : corpus réel mesuré et committé (`3f74fe83`) — **65,5 % propre / 8,5 % CEGEP**, contrôle du mélange au plancher, banque **200 phrases / 355 candidats** ; prochaine : homographes, validation humaine.
+- **Pensée** : porte minute ouverte (**26 nœuds**), passe maintenant à la **porte mobile** ; prochaine : gold 200+.
+- **D/R/A** : close (OCR CEGEP, 91 scans uniques).
+
+**Le registre des ressources est vivant** (`tools/ressources.py`, autotest 9 cas) : **N2** tient `gpu0` (240 min), le **hub** `gpu1` + portes, **S** et **Pensée** `cpu1` (4+4) — `cpu1` à **16/16**, `ram` 92/109, `nvme_raid` 33 Gio. `--actual` signale encore le service LLM et `drave` sur `gpu0` sans claim (le mapping processus→claim reste manuel) et un avertissement NUMA sur le claim du hub (`gpu1` + `cpu1`).
+
+**État** : revue documentaire ✅ (562 fiches / 648 JSON), `en-cours` 1 623 mots, T0 ✅, porte stricte ✅ (un seul avertissement de périmètres proches). La veille continue : j'intégrerai le verdict des portes, tiendrai compteurs/état/journal au fil des commits, et prendrai les tâches légères (INDEX, archives, liens, backlog, porte-ressources) **sans gêner** les runs, jusqu'à 8 h.
+
+### Tour 6 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Check gate pass, commits and tree
+- bash — Check running jobs and resource claims
+- bash — Check N2 next run and gate pass mechanics
+- bash — Read claim expiry and check logic
+- bash — Audit stale facts in state documentation
+- bash — Read N2 R1.2-1024 final result and newest reports
+- bash — Watch for the gate pass completion
+- bash — Read Pensée mobile result and pass progress
+- write `work/veille/nuit.md`
+- job_output
+
+**Synthèse produite :**
+
+⏵ Round de nuit : je relève les portes, les sessions et le registre avant d’agir
 
 ## 3. Travail accompli
 
@@ -199,6 +233,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
 | `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 1 |
 | `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 1 |
+| `work/veille/nuit.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -242,7 +277,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 215 autres
+- … et 227 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -348,6 +383,8 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T5** `| `nvme_raid` | 1 IO lourde, **33 Gio libres** | — | `/home/stephane/IA` (RAID0 4×238 G) — presque plein |`
 - **T5** `335941       01:22 git commit -m S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES -m S — mesure_corpus.py sur 50 000 lignes et 20 79`
 - **T5** `3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
+- **T5** `19:> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
+- **T5** `> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
 
 ## 5. Erreurs rencontrées
 

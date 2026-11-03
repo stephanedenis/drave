@@ -7,9 +7,9 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 4.6 h |
-| Tours | 7 |
-| Messages | 160 |
+| Durée | 4.7 h |
+| Tours | 8 |
+| Messages | 161 |
 | Appels d'outils | 207 |
 | Fichiers touchés | 13 |
 | Commandes | 167 |
@@ -32,6 +32,8 @@
 **Tour 6** — oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru
 
 **Tour 7** — dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard
+
+**Tour 8** — il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.
 
 ## 2. Déroulé, étape par étape
 
@@ -514,6 +516,8 @@ python3 tools/ressources.py --actual       # le réel vs le registre
 
 Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une autre tâche et la fi
 … [2836 caractères tronqués]
+
+### Tour 8 — il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécan … [191 caractères tronqués]
 
 ## 3. Travail accompli
 

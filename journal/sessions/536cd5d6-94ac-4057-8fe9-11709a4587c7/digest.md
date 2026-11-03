@@ -5985,3 +5985,10 @@ Les quatre claims sont actifs dans `work/ressources.json` ; `--status` les montr
 montre le réel. Les sessions peuvent les libérer avec `--release` ; le hub peut ajouter la ligne
 d'état « Ressources » quand il reprend l'écriture de `en-cours`.
 
+
+## Tour 8
+
+### 👤 Utilisateur
+
+il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.
+

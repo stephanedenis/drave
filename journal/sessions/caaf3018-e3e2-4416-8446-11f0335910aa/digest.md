@@ -2840,3 +2840,539 @@ e12c39c1 02/11 19:43 Stéphane N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 
 … [1234 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Un autre écrivain tient l'état (commits PILOTAGE 19 h 49–20 h 07). Je lis son état avant de toucher quoi que ce soit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== mon plan.md ===\"; sed -n 1,22p journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md; echo \"=== mtime ===\"; stat -c '%y %n' journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md docs/pilotage/en-cours.md", … [57 caractères tronqués]`
+
+  ```
+=== mon plan.md ===
+# Plan de session — le hub, la reprise après reboot
+
+> **Mandat vivant.** Ouvert le 2026-11-02 15 h 50 HNE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `536cd5d6-94ac-4057-8fe9-11709a4587c7`
+- **Rôle** : **Hub** — intégration, état, roadmap, chantiers, journal, compteurs ; reprise après le
+  reboot du 02/11 15 h 06 ; remise à zéro de la sédimentation ; runbook multi-terminaux.
+- **Périmètre** : pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal
+  (hors `sessions/<id>/`), `reports/README.md`, `reports/INDEX.md`, outillage de pilotage.
+- **Fichiers réservés** : `docs/pilotage/`, `journal/` (hors `sessions/<id>/`),
+  `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
+  `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
+  `journal/sessions/536cd5d6-…/`.
+- **Heartbeat** : 2026-11-02 19:50 EST
+- **Prochaine action** : la **passe de por
+… [530 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"^## \" docs/pilotage/plan-travail.md; echo \"=== ressources (extrait) ===\"; sed -n '/## 5\\./,/## 6\\./p' docs/pilotage/plan-travail.md | head -50", "description": "Read updated plan-travail sections"}`
+
+  ```
+15:## 1. Où ce plan se situe
+30:## 2. Les quatre sessions et le rôle d'intégration
+53:## 3. Les territoires — qui écrit quoi
+78:## 4. La cadence et l'écriture de l'état
+107:## 5. Les règles de la machine partagée
+123:## 6. La surveillance
+142:## 7. La balance, et les bascules
+155:## 8. La mise en route
+163:## 9. Reprise après le reboot du 02/11 15 h 06 — ouvrir ou reprendre
+229:## 10. La coordination des ressources — le registre et le protocole
+=== ressources (extrait) ===
+## 5. Les règles de la machine partagée
+
+- **GPU** : N2 seul sur un GPU ; le second GPU reste libre pour une évaluation ou un sous-agent
+  (16 Go chacun : le 32 B et le professeur n'y tiennent pas).
+- **CPU** : 2 à 3 gros travaux à la fois (un entraînement 8–16 cœurs, un OCR 1–2, une extraction
+  PDF 4–8) ; 40 cœurs, mais la contention disque/compression est réelle. Les fils se réservent
+  par socket (§ 10) : `cpu0` pour les GPU, `cpu1` pour le CPU seul.
+- **Disque** : `Data13TB` a 2,0 To ; `IA` est à **34 Go libres** — **aucun nouveau gros modèle**
+  sans supprimer (le DeepSeek 341 Go et les artefacts 122 Go sont les postes à revoir). Les
+  `work/` de session restent dans `work/<session>/`, jamais à la racine.
+-
+… [398 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du nouveau §10 (protocole de coordination des ressources) avant d'agir cette nuit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '229,340p' docs/pilotage/plan-travail.md", "description": "Read resource coordination protocol section 10"}`
+
+  ```
+## 10. La coordination des ressources — le registre et le protocole
+
+**Pourquoi.** Le pilotage réservait les **fichiers** (`sessions.py`) et surveillait les fichiers
+en mouvement (`surveille_sessions.py`), mais pas la **machine** : deux sessions pouvaient lancer
+deux entraînements sur le même GPU, ou saturer le même NVMe, sans le voir. Le registre
+[`tools/ressources.py`](../../tools/ressources.py) rend les ressources explicites, les réserve
+et met en file ce qui ne tient pas.
+
+> **Consigne de nuit (02/11 20 h → 03/11 08 h).** Une session écrit `en-cours` à la fois ; tout
+> job lourd **réserve** (`--claim`) et **libère** (`--release`) ; `--actual` à chaque checkpoint
+> dénonce les usages non déclarés ; les tâches légères (portes doc, liens, compteurs, journal,
+> backlog) remplissent les ressources libres ; la passe complète réserve `machine`. Chaque axe
+> garde une **prochaine action** : aucun axe ne s'arrête pendant qu'un autre tourne.
+
+### 10.1 Le modèle
+
+| ressource | capacité | NUMA | règle |
+|---|---|---:|---|
+| `gpu0` | 1 job exclusif, 16 Gio | 0 | carte du haut (plafonnée 180 W par `hauru-thermal`) |
+| `gpu1` | 1 job exclusif, 16 Gio | 0 | carte du bas ; libre pour une éval |
+… [3898 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie s'il y a deux processus hub (même session) et où en est la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for p in $(pgrep -f \"bin/dsh\"); do n=$(ls -l /proc/$p/fd 2>/dev/null | grep -c \"536cd5d6\"); [ \"$n\" -gt 0 ] && echo \"PID $p tient le hub ($n fd) : $(ps -o etime=,args= -p $p --no-headers | cut -c1-80)\"; done; echo \"--- tous les … [89 caractères tronqués]`
+
+  ```
+PID 7293 tient le hub (1 fd) :    04:41:41 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+--- tous les dsh ---
+8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; echo \"=== ressources ===\"; python3 tools/res … [97 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:14:39 EST
+=== passe ===
+30
+porte-homeostasie 2 0
+porte-homeostasie 2 0
+porte-horloge 0 27
+=== ressources ===
+ressources · Hauru — registre /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ressources.json
+  ressource      type      capacité  utilisé    libre  détail
+  gpu0           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16       12        4  réserve 4 fils
+  cpu1           cpu             16       16        0  réserve 4 fils
+  ram            ram            109       92       17  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1943 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, ram=8 (prio 1, 110 min)
+    · 29ad180d / analyseur : cpu1=4, ram
+… [79 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le protocole §10 est déjà écrit et ma passe y est réservée (`gpu1`). Je prends les tâches légères sans toucher l'état tenu par l'autre écrivain.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== backlog ===\"; timeout 180 python3 tools/verifie_backlog.py 2>&1 | tail -12; echo \"=== ressources --actual ===\"; timeout 120 python3 tools/ressources.py --actual 2>&1 | tail -20", "description": "Check backlog graph and ac … [21 caractères tronqués]`
+
+  ```
+=== backlog ===
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+=== ressources --actual ===
+  Réel · GPU
+    GPU0 (réservé) : PID 110066 llama-server (366 MiB) ; PID 327714 /home/stephane/gpu-env/bin/python (5276 MiB) ; PID 381725 ./drave-core/target/release/drave (120 MiB)
+    GPU1 (réservé) : PID 110066 llama-server (118 MiB) ; PID 331743 /home/stephane/gpu-env/bin/python (2992 MiB)
+  Réel · CPU (top 8)
+        PID COMMAND         %CPU %MEM
+     381725 drave           1190  0.9
+     110066 llama-server     652  4.0
+     331743 python           100 13.1
+     327714 python           100  3.2
+     382737 python3         87.1  0.4
+      32123 node-MainThread 76.5  0.8
+      32694 node-MainThread 50.6  0.8
+      31175 node-MainThread 50.2  0.8
+  Réel · stockage
+    nvme_system    705 Gio libres (/)
+    nvme_raid      33 Gio libres (/home/stephane/IA)
+    hdd_data13tb   1943 Gio libres (/home/stephane/Data13TB)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== index reports ===\"; timeout 180 python3 tools/index_reports.py 2>&1 | tail -8; echo \"=== fraicheur INDEX ===\"; stat -c '%y %n' reports/INDEX.md reports/README.md; ls -lat reports/*.md | head -3", "description": "Check rep … [22 caractères tronqués]`
+
+  ```
+=== index reports ===
+  559 fiches → reports/INDEX.md
+=== fraicheur INDEX ===
+2026-11-02 20:15:12.948463188 -0500 reports/INDEX.md
+2026-11-02 19:50:38.304403326 -0500 reports/README.md
+-rw-r--r--. 1 stephane stephane 75231  2 nov 20:15 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane  9369  2 nov 20:05 reports/rapport-s-analyseur-roles.md
+-rw-r--r--. 1 stephane stephane  5863  2 nov 20:05 reports/rapport-s-corpus-reel.md
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+### 🤖 Assistant
+
+⏵ Je regarde si l'état a des modifications en cours (pour ne pas écraser l'autre écrivain)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; git status --short; echo \"=== diff en-cours (s'il y en a) ===\"; git diff --stat docs/pilotage/ | head; echo \"=== mtimes ===\"; stat -c '%y %n' docs/pilotage/en-cours.md docs/pilotage/plan-travail.md reports/INDEX.md 2>/dev/nul … [58 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:15:32 EST
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+MM journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+MM journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+MM journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+MM journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md
+MM journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+MM journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/r
+… [377 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Une préparation de commit est en cours chez l'autre écrivain ; je lis les mandats de nuit des sessions (lecture seule)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== N2 mandat de nuit ===\"; git show -s --format=%B c0196b55 | head -25; echo \"=== N2 cloture ===\"; git show -s --format=%B e2227509 | head -12", "description": "Read N2 night mandate and closure messages"}`
+
+  ```
+=== N2 mandat de nuit ===
+N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+
+=== N2 cloture ===
+N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+
+Le cycle est mesuré, écrit, committé : deux fiches (n2-200k, n2-r11), deux agrégats JSON,
+le code du banc archivé dans la session, l'état à jour (N2, R1, chantier N, question N2
+tranchée) et les compteurs au disque. Les réservations data/, tools/corpus*, reports/n2-*,
+reports/rapport-n2-*, work/n2ac/ sont rendues ; les deux GPU sont libres.
+
+Récit : journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md.
+Suite désignée : R1.2 à 1 024 octets entraînés (la longueur est le seul axe qui recule),
+puis la longueur comme levier de la porte < 2,5.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== S corpus réel ===\"; head -12 reports/rapport-s-corpus-reel.md; echo; echo \"=== Pensée porte minute ===\"; head -10 reports/rapport-pensee-porte-minute.md", "description": "Read S corpus and Pensée report heads"}`
+
+  ```
+=== S corpus réel ===
+# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur **50 000 lignes** et
+> **20 799 phrases** du corpus **CEGEP OCR** (D/R/A, 4,41 M car.) et **50 000** lignes/phrases de
+> **littérature propre** (17 M car.), l'analyseur trouve un **GN et un GV** dans **65,5 %** des
+> phrases propres contre **9,1 %** quand les mots sont mélangés — le signal est la **langue**. Sur
+> le CEGEP OCR, il est au **plancher du mélange** : **8,5 %** contre **9,1 %**. Le corpus CEGEP
+> est **multilingue et technique** (les scans anglais de réseaux et d'algorithmique) et
+> l'analyseur est **français** : ce n'est pas une mesure du français OCR, c'est une mesure de ce
+> que le corpus n'est pas. L'unité compte : la ligne coupe les phrases (3,6 % contre 51,0 %).
+
+## Le dispositif
+
+=== Pensée porte minute ===
+# B13 — la porte minute : la règle l'ouvre (26 nœuds, 4 sonde, 6,4 s) ; le prompt labyrinthe échoue (200, 3, 101,6 s)
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·
+> **Verdict** : ✅ **la porte minute s'ouvre avec la règle** — avec 
+… [426 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la cohérence des réservations et de l'avancement de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== ressources --check ===\"; timeout 120 python3 tools/ressources.py --check 2>&1 | tail -15; echo \"=== suggest ===\"; timeout 120 python3 tools/ressources.py --suggest 2>&1 | tail -12", "description": "Check resource registry … [32 caractères tronqués]`
+
+  ```
+=== ressources --check ===
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+=== suggest ===
+  Libre maintenant : cpu0 : 4 fils libres · cpu1 : 0 fils libres · ram : 17 Gio libres · nvme_raid : libre, 33 Gio · nvme_system : libre, 705 Gio · hdd_data13tb : libre, 1943 Gio
+  File vide.
+  Règle : si la ressource voulue est prise, prends une tâche compatible plutôt que d'attendre.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; tail -1 work/portes/passe-1102-19h32/registre.txt; echo \"=== git ===\"; git log --oneline -2; gi … [101 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:16:08 EST
+=== passe ===
+30
+porte-homeostasie 2 0
+porte-horloge 0 27
+=== git ===
+a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+ M reports/INDEX.md
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? tools/tests/qualifier_porte_mobile_drvm.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles légers sur l'état que l'autre écrivain vient de committer, et autotest du registre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== revue ===\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo \"=== T0 ===\"; python3 tools/taille_documents.py 2>&1 | grep \" … [168 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+  T0 max : 3997 mots (budget 4 000)
+=== sessions ===
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+code=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== autotest ressources ===\"; timeout 120 python3 tools/ressources.py --autotest 2>&1 | tail -5; echo \"=== porte en cours ===\"; ls -t work/portes/passe-1102-19h32/*.log | head -1; tail -2 \"$(ls -t work/portes/passe-1102-19h3 … [90 caractères tronqués]`
+
+  ```
+=== autotest ressources ===
+  ✅ autotest : 9 cas (claim, conflit, file, admission, check)
+=== porte en cours ===
+work/portes/passe-1102-19h32/porte-indice.log
+    capture d'état    : position(s) [1469] écrite(s) dans /tmp/tmp.sWuzfGFXjc/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est vert après le commit de l'autre écrivain. Je tiens un journal de nuit et je surveille les portes déjà passées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat work/portes/passe-1102-19h32/registre.txt | head -35; echo \"=== schemas ===\"; timeout 180 python3 tools/verifier_schemas.py 2>&1 | tail -4", "description": "List completed gates and verify schemas"}`
+
+  ```
+porte-adaptateur-sortie 0 64
+porte-audit-drapeaux 0 175
+porte-b1110-hybride 0 0
+porte-balayage 0 0
+porte-bloc-code 0 11
+porte-bloc-linguistique 0 12
+porte-bloc-maths 0 1
+porte-bloc-tableaux 0 2
+porte-budget 0 48
+porte-bus 0 81
+porte-bus-socket 0 93
+porte-c4-retard 0 30
+porte-cerveau 0 7
+porte-consolidation 0 70
+porte-coupe 0 140
+porte-cycle-c2 0 154
+porte-deepseek 0 1
+porte-delais 0 21
+porte-diff-couche 0 18
+porte-document 0 6
+porte-echange-experts 0 63
+porte-episodique 0 180
+porte-etat 0 0
+porte-flux 0 23
+porte-fusion 0 8
+porte-gain 0 207
+porte-greffe 0 660
+porte-harnais-invariants 0 127
+porte-homeostasie 2 0
+porte-horloge 0 27
+=== schemas ===
+  schémas · 458 document(s) · 66 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -rln \"journal/2026\\|THEMES.md\" tools/*.py 2>/dev/null | head -5; echo \"---\"; ls journal/2026-11-03 2>/dev/null || echo \"pas de dossier 03/11\"; echo \"---\"; ls tools/ | grep -i \"journal\\|recit\\|archive\" | head", "descri … [68 caractères tronqués]`
+
+  ```
+tools/journal_auto.py
+tools/session_report.py
+tools/surveille_sessions.py
+tools/verifie_journal.py
+---
+pas de dossier 03/11
+---
+archive_sessions.py
+journal_auto.py
+verifie_journal.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Petite tâche réelle : le chemin par défaut du registre dans `portes.md` contredit le script. Je vérifie et je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"JOURNAUX\\|/tmp/portes\\|work/portes\" docs/methode/portes.md tools/toutes-les-portes.sh docs/pilotage/references-non-regression.md | head -12", "description": "Compare documented and actual registry path"}`
+
+  ```
+docs/methode/portes.md:21:`/tmp/portes-<date>-<heure>/registre.txt` (variable `JOURNAUX`). Chaque ligne vaut :
+docs/methode/portes.md:30:JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement
+docs/methode/portes.md:31:awk '$2 != 0' "$JOURNAUX/registre.txt"
+docs/methode/portes.md:63:- Le journal de chaque porte est conservé dans `$JOURNAUX/<porte>.log` : en [cas](../theorie/glossaire/entrees/cas.md) de rouge, `tail -15` sur ce fichier
+tools/toutes-les-portes.sh:17:#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+tools/toutes-les-portes.sh:32:JOURNAUX=${JOURNAUX:-work/portes-$(date +%m%d-%Hh%M)}
+tools/toutes-les-portes.sh:33:mkdir -p "$JOURNAUX"
+tools/toutes-les-portes.sh:52:echo "    journaux : $JOURNAUX"
+tools/toutes-les-portes.sh:55:    j="$JOURNAUX/$nom.log"
+tools/toutes-les-portes.sh:75:    printf '%s %s %s\n' "$nom" "$code" "$dt" >> "$JOURNAUX/registre.txt"
+tools/toutes-les-portes.sh:78:echo "--- $vertes vertes, $rouges rouges ---" | tee -a "$JOURNAUX/registre.txt"
+tools/toutes-les-portes.sh:83:        tail -6 "$JOURNAUX/$nom.log" | sed 's/^/    /'
+  ```
+
+- **read** `{"file_path": "docs/methode/portes.md", "limit": 40, "offset": 14}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md</path>
+<type>file</type>
+<content>
+14: `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 06 h) a donné
+15: **76 vertes, 5 rouges** ; la liste et le diagnostic sont dans
+16: [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
+17: 
+18: ## Où est le registre (et comment lire le verdict)
+19: 
+20: Le registre n'est **pas** à la racine : il est écrit dans le dossier des journaux, par défaut
+21: `/tmp/portes-<date>-<heure>/registre.txt` (variable `JOURNAUX`). Chaque ligne vaut :
+22: 
+23: ```
+24: nom-de-la-porte   code-de-sortie   durée-en-secondes
+25: ```
+26: 
+27: On lit le verdict **par le code**, jamais par les marqueurs `✅`/`❌` du source, jamais à travers un tube :
+28: 
+29: ```bash
+30: JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement
+31: awk '$2 != 0' "$JOURNAUX/registre.txt"
+32: ```
+33: 
+34: Une porte **verte** a le code `0`. Une porte **rouge** a un code non nul (`1` échec, `124` borne dépassée).
+35: 
+36: ## Les rouges connues
+37: 
+38: Les rouges **tolérées** sont celles list
+… [813 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du chemin du registre (le doc dit `/tmp`, le script écrit `work/`) et ajout de la procédure « un seul GPU libre »
+
+- **edit** `{"file_path": "docs/methode/portes.md", "old_string": "Le registre n'est **pas** à la racine : il est écrit dans le dossier des journaux, par défaut\n`/tmp/portes-<date>-<heure>/registre.txt` (variable `JOURNAUX`). Chaque ligne vaut :", "new_string": "Le registre n'est **pas** à la racine : il est é … [292 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/methode/portes.md", "old_string": "```bash\nJOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement\nawk '$2 != 0' \"$JOURNAUX/registre.txt\"\n```", "new_string": "```bash\nJOURNAUX=work/portes/passe-1102-19h32   # le dossier affiché au lancement\nawk '$2 != 0' \"$JOU … [27 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "docs/methode/portes.md", "limit": 18, "offset": 52}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md</path>
+<type>file</type>
+<content>
+52: la passe complète reste la règle de fin de cycle.
+53: 
+54: ## Ne pas fausser la passe
+55: 
+56: - **Les portes et une mesure GPU ne cohabitent pas** : lancer un modèle qui occupe 28 Go de VRAM pendant une passe
+57:   [fait](../theorie/glossaire/entrees/fait-mesure-projete-deduit.md) attendre ou échouer les portes qui utilisent les cartes (`porte-audit-drapeaux`, `porte-vision`,
+58:   `porte-*moteur`). Faire la passe **seule**, puis les mesures.
+59: - **Les portes de temps** (`porte-delais`, `porte-flux`, `porte-topologie`) mesurent des latences : les lancer
+60:   seules si un chiffre de temps doit être **interprété**. La passe complète est faite pour le **verdict**, pas pour
+61:   le chronomètre.
+62: - **Les portes de données** (`porte-diff-couche`) vérifient un **[contrat](../theorie/glossaire/entrees/contrat.md)**, pas un temps : deux exécutions
+63:   identiques doivent donner un flux **identique** (la reproductibilité), et une divergence doit être **nommée**
+64:   ([couche](../theorie/glossaire/entrees/couche.md), [jeton](../theorie/glossaire/entrees/jeton.md), neur
+… [389 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/methode/portes.md", "new_string": "- **Les portes et une mesure GPU ne cohabitent pas** : lancer un modèle qui occupe 28 Go de VRAM pendant une passe\n  [fait](../theorie/glossaire/entrees/fait-mesure-projete-deduit.md) attendre ou échouer les portes qui utilisent les cartes (`po … [1609 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification et commit de la correction de `portes.md`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep -E \"portes.md|T0 max\"; echo \"=== index git ===\"; git status --short | head -12", "description": "Check doc fix and git index state"}`
+
+  ```
+revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3997 mots (budget 4 000)
+=== index git ===
+ M docs/methode/portes.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls .git/hooks/ | grep -v sample; echo \"---\"; head -20 .git/hooks/pre-commit 2>/dev/null", "description": "Inspect git pre-commit hook"}`
+
+  ```
+pre-commit
+---
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.hub-nuit; git read-tree HEAD; git add docs/methode/portes.md; git commit -m \"PORTES — LE REGISTRE EST DANS \\`work/\\`, PAS DANS \\`/tmp\\` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE\n\nLe doc annon … [651 caractères tronqués]`
