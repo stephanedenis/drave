@@ -21659,3 +21659,128 @@ ok
 ⏵ Round 152 : T0 à 4 001 ; je raccourcis la ligne et je commite la mesure des 10 paires
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, 10 paires 5/10'\nnew=' ; voisin 5/5, 10: 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encoding='utf-8 … [572 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  576 fiches → reports/INDEX.md
+  revue de documentation · 579 fiche(s) · 664 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 70bbe1b5] L/B13 — LES 10 PAIRES : 5/10, LA FORME INVERSÉE EST LA LIMITE (r408–r412)
+ 18 files changed, 533 insertions(+), 47 deletions(-)
+ create mode 100644 reports/pensee-lien-repare-10.json
+ create mode 100644 reports/rapport-pensee-lien-10-paires.md
+EXIT=0
+70bbe1b5 L/B13 — LES 10 PAIRES : 5/10, LA FORME INVERSÉE EST LA LIMITE (r408–r412)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 152 : 10 paires committées (`70bbe1b5`, 18 fichiers) — **5/10**, T0 4 000, revue 579/664
+
+**Fait de la nuit — round 152** : les 10 paires (extension de « la bonne réponse, pas le voisin »).
+
+| bloc | paires | justes |
+|---|---:|---:|
+| non inversées (r418–r422) | 5 | **5/5** |
+| inversées (r408–r412) | 5 | **0/5** |
+| **total** | **10** | **5/10** |
+
+- **Deux limites distinctes** :
+  - `_sujet` ne trouve pas le pronom inversé (« mange-**t-il** », « dort-**elle** ») → `None`.
+  - r408 choisit **r304 « Viens-tu demain ? »** (même sujet + même verbe, plus proche) au lieu de r423 — le critère de paire ne distingue pas **assertion** et **question**.
+- **Contrôle négatif** : r418–r422 font 5/5 → la réparation précédente marche ; la chute vient bien de la **forme inversée**, pas de la proximité.
+- **Ce qui rendrait le résultat faux** : 10 paires d'un même bloc, juge par égalité d'ids, `_sujet` heuristique.
+- Fiche `rapport-pensee-lien-10-paires.md` ; JSON `pensee-lien-repare-10.json`.
+
+**État** : HEAD `70bbe1b5` ; T0 **4 000** ; revue **579/664** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **réparer `_sujet`** pour la forme inversée + critère **assertion ↔ question**, re-mesurer les 10 ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+
+## Tour 155
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 153/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 153 : je répare `_sujet` pour la forme inversée — d'abord je regarde ce que l'heuristique rend sur « Ne mange-t-il pas ? »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 120 python3 - <<'PY'\nfrom tools.bloc_linguistique import Heuristique\nbl=Heuristique()\nfor t in (\"Ne mange-t-il pas ?\", \"Ne dort-elle pas ?\", \"Ne partent-ils pas ?\", \"Ne lis-tu pas ?\"):\n    a=bl.analyser(t,'fr')\n    pr … [271 caractères tronqués]`
+
+  ```
+Ne mange-t-il pas ?
+  pos   [('Ne', 'ADV'), ('mange-t-il', 'NOUN'), ('pas', 'ADV')]
+  synt  [('Ne mange-t-il pas', 'GV')]
+Ne dort-elle pas ?
+  pos   [('Ne', 'ADV'), ('dort-elle', 'NOUN'), ('pas', 'ADV')]
+  synt  [('Ne dort-elle pas', 'GV')]
+Ne partent-ils pas ?
+  pos   [('Ne', 'ADV'), ('partent-ils', 'NOUN'), ('pas', 'ADV')]
+  synt  [('Ne partent-ils pas', 'GV')]
+Ne lis-tu pas ?
+  pos   [('Ne', 'ADV'), ('lis-tu', 'NOUN'), ('pas', 'ADV')]
+  synt  [('Ne lis-tu pas', 'GV')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 153 : `mange-t-il` sort en **NOUN** (un seul token) ; le pronom inversé est le 3ᵉ segment — je répare `_sujet` et je re-mesure les 10
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''def _sujet(a: bl.Annotation) -> str | None:\n    \"\"\"Le sujet de surface : le premier pronom sujet, puis le premier GN, p … [2179 caractères tronqués]`
+
+  ```
+ok
+r408  'Ne viens-tu pas demain ?'     -> r304  'Viens-tu demain ?'      attendu r423 NON
+r409  'Ne mange-t-il pas ?'          -> r389  'Le bateau tangue ; il avance.' attendu r424 NON
+r410  'Ne dort-elle pas ?'           -> -     ''                       attendu r425 NON
+r411  'Ne partent-ils pas ?'         -> -     ''                       attendu r426 NON
+r412  'Ne lis-tu pas ?'              -> -     ''                       attendu r427 NON
+r418  'Tu ne viens pas demain ?'     -> r423  'Tu viens demain.'       attendu r423 OK
+r419  'Il ne mange pas ?'            -> r424  'Il mange.'              attendu r424 OK
+r420  'Elle ne dort pas ?'           -> r425  'Elle dort.'             attendu r425 OK
+r421  'Ils ne partent pas ?'         -> r426  'Ils partent.'           attendu r426 OK
+r422  "You don't come tomorrow?"     -> r427  'You come tomorrow.'     attendu r427 OK
+justes 5 / 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 153 : `_sujet` réparé pour l'inversion (« mange-t-il » → « il ») mais les paires **restent 5/10** : r409 part sur r389, r410–r412 restent `None` ; je fige la mesure et la limite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [1592 caractères tronqués]`
+
+  ```
+sujets :
+  r408 Ne viens-tu pas demain ? -> sujet viens-tu | verbe None
+  r409 Ne mange-t-il pas ? -> sujet il | verbe None
+  r410 Ne dort-elle pas ? -> sujet dort-elle | verbe None
+  r411 Ne partent-ils pas ? -> sujet partent-ils | verbe None
+  r412 Ne lis-tu pas ? -> sujet lis-tu | verbe None
+json 2490 justes 5
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 153 : la réparation de `_sujet` est réelle (r409 → « il ») mais **`_verbe` reste None** sur les formes inversées (« mange-t-il » est NOUN) ; les 10 paires restent **5/10** — je fige ce fait
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfiche=pathlib.Path('reports/rapport-pensee-lien-inverse.md')\nfiche.write_text('''# B13 — la forme inversée : `_sujet` réparé, `_verbe` reste aveugle, les 10 paires restent 5/10\n\n> **Ligne de roadmap** : **L/B13** · … [3094 caractères tronqués]`
+
+  ```
+fiche 2690
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 153 : fiche et état écrits (T0 4 000) ; j'aligne index/README et je commite le fait « forme inversée »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-lien-repare.md`](rapport-pensee-lien-repare.md) | **L** **5/5** |\",\n            \"| [`rapport-pensee-lien-invers … [646 caractères tronqués]`

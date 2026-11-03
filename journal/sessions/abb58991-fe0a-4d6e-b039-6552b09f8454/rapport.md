@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 8.9 h |
-| Tours | 154 |
-| Messages | 1056 |
-| Appels d'outils | 866 |
+| Durée | 9.0 h |
+| Tours | 155 |
+| Messages | 1063 |
+| Appels d'outils | 871 |
 | Fichiers touchés | 48 |
-| Commandes | 692 |
+| Commandes | 697 |
 | Sous-agents | 0 |
-| Commits | 77 |
+| Commits | 78 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -331,6 +331,8 @@
 **Tour 153** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 154** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 155** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3864,7 +3866,40 @@ La suite : étendre les paires (10, 20), puis la **parité DRVM/native** (cadena
 
 **Synthèse produite :**
 
-⏵ Round 152 : T0 à 4 001 ; je raccourcis la ligne et je commite la mesure des 10 paires
+⏵ Round 152 : 10 paires committées (`70bbe1b5`, 18 fichiers) — **5/10**, T0 4 000, revue 579/664
+
+**Fait de la nuit — round 152** : les 10 paires (extension de « la bonne réponse, pas le voisin »).
+
+| bloc | paires | justes |
+|---|---:|---:|
+| non inversées (r418–r422) | 5 | **5/5** |
+| inversées (r408–r412) | 5 | **0/5** |
+| **total** | **10** | **5/10** |
+
+- **Deux limites distinctes** :
+  - `_sujet` ne trouve pas le pronom inversé (« mange-**t-il** », « dort-**elle** ») → `None`.
+  - r408 choisit **r304 « Viens-tu demain ? »** (même sujet + même verbe, plus proche) au lieu de r423 — le critère de paire ne distingue pas **assertion** et **question**.
+- **Contrôle négatif** : r418–r422 font 5/5 → la réparation précédente marche ; la chute vient bien de la **forme inversée**, pas de la proximité.
+- **Ce qui rendrait le résultat faux** : 10 paires d'un même bloc, juge par égalité d'ids, `_sujet` heuristique.
+- Fiche `rapport-pensee-lien-10-paires.md` ; JSON `pensee-lien-repare-10.json`.
+
+**État** : HEAD `70bbe1b5` ; T0 **4 000** ; revue **579/664** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **réparer `_sujet`** pour la forme inversée + critère **assertion ↔ question**, re-mesurer les 10 ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+### Tour 155 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Inspect heuristic annotation of inverted forms
+- bash — Repair inverted subject and measure 10 pairs
+- bash — Freeze inverted-subject measurement
+- bash — Write inverted-form fiche and state
+- bash — Commit inverted-form fact
+
+**Synthèse produite :**
+
+⏵ Round 153 : fiche et état écrits (T0 4 000) ; j'aligne index/README et je commite le fait « forme inversée »
 
 ## 3. Travail accompli
 
@@ -3963,7 +3998,7 @@ La suite : étendre les paires (10, 20), puis la **parité DRVM/native** (cadena
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 652 autres
+- … et 657 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4143,4 +4178,5 @@ La suite : étendre les paires (10, 20), puis la **parité DRVM/native** (cadena
 - ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LE LIEN RÉPARÉ : LA PAIRE (SUJET + VERBE) AVANT LA PROXIMITÉ, AUTO 2/5 → 5/5" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
 - L/B13 — LES 10 PAIRES : 5/10, LA FORME INVERSÉE EST LA LIMITE (r408–r412)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE AVEUGLE, LES 10 PAIRES RESTENT 5/10" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s'
 

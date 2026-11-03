@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **576 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **577 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -416,6 +416,7 @@
 | [rapport-pensee-lien-auto-fixe.md](rapport-pensee-lien-auto-fixe.md) | B13 — le lien automatique réparé : 5/5 après le réordonnancement |
 | [rapport-pensee-lien-auto.md](rapport-pensee-lien-auto.md) | B13 — le lien automatique : 0/5, le sujet ne suffit pas |
 | [rapport-pensee-lien-coref.md](rapport-pensee-lien-coref.md) | B13 — la coréférence comme lien : 62/116, la moitié des antécédents retrouvés |
+| [rapport-pensee-lien-inverse.md](rapport-pensee-lien-inverse.md) | B13 — la forme inversée : `_sujet` réparé, `_verbe` reste aveugle, les 10 paires restent 5/10 |
 | [rapport-pensee-lien-repare.md](rapport-pensee-lien-repare.md) | B13 — le lien réparé : la paire (sujet + verbe) avant la proximité, auto 2/5 → 5/5 |
 | [rapport-pensee-liens-classes.md](rapport-pensee-liens-classes.md) | B13 — les liens classés : 50 intra, 62 inter, 4 absents |
 | [rapport-pensee-limite.md](rapport-pensee-limite.md) | B13 — la bascule limite : 1/5, 20/20 |

@@ -6473,3 +6473,10 @@ pas   9850 · perte 0.9618 · PPL val 2.477 · 9984 s
   ```
 
 - **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048; cat work/n2ac/chaine_2048_wiki.out", "description": "Wait for 2048 checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-304]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-304", "timeout_ms": 1500000, "wait": true}`

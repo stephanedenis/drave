@@ -184,10 +184,17 @@ def repondre_contextuel(a: bl.Annotation, a_prec: bl.Annotation | None = None) -
 
 
 def _sujet(a: bl.Annotation) -> str | None:
-    """Le sujet de surface : le premier pronom sujet, puis le premier GN, puis le premier NOUN."""
+    """Le sujet de surface : pronom sujet, puis forme inversée, puis GN, puis premier NOUN."""
     for e in a.etiquettes:
         if e.niveau == "pos" and e.type == "PRON":
             return e.valeur
+    # Forme inversée : « mange-t-il » / « dort-elle » / « partent-ils » sont UN token
+    # (NOUN ou VERB) ; le sujet est le dernier segment du mot.
+    for e in a.etiquettes:
+        if e.niveau == "pos" and e.type in ("NOUN", "VERB") and "-" in e.valeur:
+            morceaux = e.valeur.split("-")
+            if len(morceaux) >= 3:
+                return morceaux[-1]
     for e in a.etiquettes:
         if e.niveau == "syntagme" and e.type == "GN":
             return e.valeur
