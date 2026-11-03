@@ -8869,3 +8869,246 @@ Round: 18/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+### 🤖 Assistant
+
+⏵ Round 18 : veille ; l'état est stable, le N2 a ses deux fichiers stagés, le reste est vert.
+
+- **N2** : fiche + JSON stagés (`A`), heartbeat 4 min ; commit N2 attendu.
+- **Sessions** : S 87 + claim, hub 24, B13 24 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 996/4 000** ✅ ; registre ✅ (IA 33 Gio).
+- **Passe** : 76/5 ; la 5e rouge (`porte-tableaux`) est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 27
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 19/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 19 : veille ; le N2 a stagé ses deux fichiers, le reste est vert et inchangé.
+
+- **N2** : fiche + JSON **stagés** (`A`), heartbeat 4 min ; commit N2 attendu.
+- **Sessions** : S 87 + claim, hub 24, B13 24 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 996/4 000** ✅ ; registre ✅ (IA 33 Gio).
+- **Passe** : 76/5 ; la 5e rouge (`porte-tableaux`) est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 20/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 20 : veille ; aucun changement depuis le round 19 (N2 stagé, état vert).
+
+- **N2** : fiche + JSON **stagés**, heartbeat 4 min ; commit N2 attendu.
+- **Sessions** : S 87 + claim, hub 24, B13 24 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 996/4 000** ✅ ; registre ✅ (IA 33 Gio).
+- **Passe** : 76/5 ; la 5e rouge (`porte-tableaux`) est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 21/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 21 : je vérifie si N2 a committé sa fiche/JSON et si l'état est toujours vert.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== N2 ==\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -5;  … [233 caractères tronqués]`
+
+  ```
+22:08:39
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+== N2 ==
+A  reports/n2-fenetre.json
+A  reports/rapport-n2-fenetre.md
+== sessions ==
+    0733c5bb-f90b-4f58 · actif    ·   6 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  89 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  26 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·  26 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (89 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, v
+… [133 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 21 : veille ; N2 n'a pas encore committé (fichiers stagés), l'état est vert.
+
+- **N2** : fiche + JSON **stagés** (`A`), heartbeat 6 min ; commit attendu.
+- **Sessions** : S 89 + claim, hub 26, B13 26 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅.
+- **Passe** : 76/5 ; la 5e rouge (`porte-tableaux`) est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 22/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 22 : veille ; état inchangé depuis le round 21 (N2 stagé, revue/T0 verts).
+
+- **N2** : fiche + JSON **stagés**, heartbeat 6 min ; commit attendu.
+- **Sessions** : S 89 + claim, hub 26, B13 26 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅.
+- **Passe** : 76/5 ; la 5e rouge (`porte-tableaux`) est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 23/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 23 : veille ; rien de neuf (N2 stagé, état vert, revue/T0 verts).
+
+- **N2** : fiche + JSON **stagés** ; commit attendu.
+- **Sessions** : S 89 + claim, hub 26, B13 26 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h** (~10 h). Goal actif.
+
+
+## Tour 32
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 24/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 24 : veille ; état inchangé (N2 stagé, revue/T0 verts, 08 h dans ~10 h).
+
+- **N2** : fiche + JSON **stagés** ; commit attendu.
+- **Sessions** : S 89 + claim, hub 26, B13 26 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 25/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 25 : veille ; état inchangé ; les claims S/B13 arrivent à leur eta (90 min) et les sessions restent actives.
+
+- **N2** : fiche + JSON **stagés** ; commit attendu.
+- **Sessions** : S 89 + claim, hub 26, B13 26 ; quatre actives ; `porte-sessions` verte.
+- **Claims** : S `analyseur` et B13 `b13-gold` à leur eta (90 min) ; à re-claim si les jobs continuent.
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 26/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 26 : veille longue ; je passe en attente de 10 minutes entre les vérifications pour laisser les sessions travailler.
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause", "run_in_background": true}`
+
+  ```
+started background job bash-222
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 26 : la veille passe en attente de 10 minutes (job `bash-222`) ; je reprendrai la vérification ensuite.
+
+- **N2** : fiche + JSON **stagés** ; commit attendu.
+- **Sessions** : S 89 + claim, hub 26, B13 26 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 27/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

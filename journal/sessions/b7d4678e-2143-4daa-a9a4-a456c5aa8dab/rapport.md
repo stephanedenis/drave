@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.8 h |
-| Tours | 18 |
-| Messages | 582 |
-| Appels d'outils | 594 |
+| Durée | 5.9 h |
+| Tours | 19 |
+| Messages | 588 |
+| Appels d'outils | 598 |
 | Fichiers touchés | 24 |
-| Commandes | 403 |
+| Commandes | 407 |
 | Sous-agents | 0 |
 | Commits | 27 |
 | Compactages de contexte | 0 |
@@ -61,6 +61,8 @@
 **Tour 17** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 18** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -553,7 +555,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 
 ### Tour 18 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check events and N2 status
 - bash — Wait for the N2 commit or a new commit
@@ -563,10 +565,31 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - bash — Wait for the hub commit and check the N2 staged state
 - bash — Check the N2 fenêtre state line and staged files
 - bash — Wait for the N2 fact commit
+- bash — Verify state after the N2 fenêtre commit
+- bash — Consign the N2 fenêtre fact in the night log and bilan
 
 **Synthèse produite :**
 
-⏵ Round 13 : veille — j’attends le commit N2 ou un nouvel événement
+⏵ Round 13 : le fait N2/R1 est committé — la fenêtre entraînée bat 200 000 pas
+
+**Le fait de la nuit est entré** (`4527f661`) :
+- **Loi de la fenêtre** à octets constants : à 1 000 octets **3,2545 (256) → 3,0107 (512) → 2,9950 (1 024)** ; à 2 000 : **3,2459 → 2,9728 → 2,9449** ; à 128 l'ordre s'inverse (la longueur échange du démarrage à froid contre de la profondeur).
+- **Contrôle « même texte »** : chaque modèle sature **exactement** à sa fenêtre (256 se dégrade au-delà ; 1 024 = 2 000 au millième).
+- **Production** : **N2.ac + RoPE 512** (61,4 Mo) **bat le run de 200 000 pas** — littérature **6,03 → 5,52**, anglais **8,34 → 7,05**, wikitext2 **9,05 → 7,90** ; la 1 024 donne 3,1489/2,9103/2,7342 mais +0,14 en anglais.
+- **`porte-tableaux` verte** dans l'arbre committé : la cinquième rouge de la passe est **close** ; compteurs **570 fiches / 656 JSON** ; revue, en-cours, T0, T1 et stricte ✅.
+
+**Ce qui continue** : le run long `rope1024-20k` est à **14 600 / 20 000 pas, PPL 2,591** (cible 2,5) ; les claims tiennent (N2 `gpu0`+`gpu1`, hub, S, Pensée). Le journal de bord et le brouillon du **bilan de 8 h** portent le fait. La veille continue jusqu'au checkpoint.
+
+### Tour 19 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events and the long run
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 14 : veille — je vérifie les événements et j’attends le run long
 
 ## 3. Travail accompli
 
@@ -641,7 +664,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 363 autres
+- … et 367 autres
 
 ## 4. Mesures et résultats marquants
 

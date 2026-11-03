@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.7 h |
+| Durée | 5.9 h |
 | Tours | 23 |
-| Messages | 308 |
-| Appels d'outils | 317 |
+| Messages | 313 |
+| Appels d'outils | 322 |
 | Fichiers touchés | 6 |
-| Commandes | 243 |
+| Commandes | 247 |
 | Sous-agents | 0 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*60 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +473,11 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 27 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
-⏵ Verdict intégré et rejeu consigné. Nuit : cadence de 10 min, surveillance des sessions.
+⏵ Cadence de nuit : 10 min, puis point
 
 ## 3. Travail accompli
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 203 autres
+- … et 207 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -619,6 +619,8 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T23** `(il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)`
 - **T23** `[still running after 60000ms; moved to background job bash-229]`
 - **T23** `[still running after 60000ms; moved to background job bash-242]`
+- **T23** `# porte. On exige donc l'égalité de perplexité à 0,1 % près.`
+- **T23** `# A8.0 — la PPL de référence est épinglée (0,1 %). Le modèle est régénéré par la`
 
 ## 5. Erreurs rencontrées
 

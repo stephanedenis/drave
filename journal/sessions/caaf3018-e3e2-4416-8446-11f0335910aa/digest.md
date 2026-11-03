@@ -5909,3 +5909,21 @@ started background job bash-243
   ```
 
 - **job_output** `{"job_id": "bash-243", "timeout_ms": 620000, "wait": true}`
+
+  ```
+22:11
+=== git ===
+4527f661 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+=== n2 fichiers ===
+=== sessions ===
+    0733c5bb-f90b-4f58 · actif    ·   8 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  91 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  28 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·  28 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+=== état ===
+  ✅ état court, structuré, multi-session et reprenable
+[status: completed, exit code: 0]
+  ```
+

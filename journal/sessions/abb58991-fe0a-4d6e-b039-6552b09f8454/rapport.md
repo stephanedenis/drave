@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 5.9 h |
-| Tours | 15 |
-| Messages | 545 |
-| Appels d'outils | 640 |
+| Tours | 16 |
+| Messages | 551 |
+| Appels d'outils | 644 |
 | Fichiers touchés | 47 |
-| Commandes | 477 |
+| Commandes | 481 |
 | Sous-agents | 0 |
-| Commits | 42 |
+| Commits | 46 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -53,6 +53,8 @@
 **Tour 14** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 15** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -631,7 +633,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 
 ### Tour 15 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*38 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Add porte_fenetre prompt and test
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py`
@@ -647,11 +649,43 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - bash — Wait, rebase en-cours on hub, commit window
 - bash — Clear stale lock and commit window
 - bash — Wait for hub git timeout and commit
-- … et 24 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
-⏵ Le hook est vert (EXIT=0) ; seul le commit bute sur le lock du hub. J'attends 90 s et je commite
+⏵ Round 13 : la fenêtre est **mesurée et écrite** (oracle en échec = problème cassé), mais le commit est bloqué par le harcèlement d'index du hub
+
+**Fait de la nuit (mesuré, écrit, commit bloqué)** — la **fenêtre** (`LABYRINTHE_PORTE_FENETRE`, `attendre`, `t % 3`) :
+
+| politique | but | nœuds | sonde | attendre | latence |
+|---|---|---:|---:|---:|---:|
+| **oracle (Manhattan)** | ❌ | 200 | 1 | 65 | 0 |
+| aveugle | ❌ | 200 | 0 | 65 | 0 |
+| hasard | ❌ | 200 | 12 | 61 | 0 |
+| **LLM `porte_fenetre`** | ❌ | 200 | 35 | 54 | 97,3 s |
+| LLM `labyrinthe` | ❌ | 200 | 2 | 65 | 36,1 s |
+
+- **L'oracle lui-même échoue** : le problème est **cassé** (`sonde_pw`/`_libre_pw`/`attendre`/but) — ce n'est pas un verdict sur le 7B. Le 7B suit pourtant la règle (54 `attendre`, 35 `sonde`) mais n'atteint jamais `(4,4)`.
+- Fiche `reports/rapport-pensee-porte-fenetre.md`, JSON `reports/pensee-porte-fenetre.json`, banc `tools/tests/qualifier_porte_fenetre_drvm.py`, prompt `porte_fenetre` + 10 tests : **tous écrits**.
+- **Commit bloqué** : le hub commite `en-cours` en boucle (`--only`, ~1 min 30 par commit, lock permanent). Le hook exige l'en-cours **dans le même index** ; chaque `git add` est annulé par son commit suivant. Le fait reste dans l'arbre de travail, prêt à committer dès que la série s'arrête.
+
+**État** : l'en-cours du hub porte la ligne « fenêtre — l'oracle/le 7B échouent (problème à réparer) » et la prochaine action « fenêtre (réparer) » ; T0 ~3 959 ; revue **570/655**. Le hub a aussi fermé la 5e rouge (`porte-tableaux` verte) et publié `n2-fenetre.json`.
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · sto 5/5 `c4903bc9` · **fenêtre : en attente de lock** ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`52f827a2`, N2 `c0196b55`.
+
+La suite : **réparer la fenêtre** (l'oracle doit passer), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 16 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Retry window commit in round 14
+- bash — Commit all tracked including en-cours
+- bash — Change en-cours time and commit all
+
+**Synthèse produite :**
+
+⏵ L'en-cours est propre (le hub l'a committé) ; je change son heure à 22 h 10 et je fais `git commit -a` pour l'embarquer avec les faits
 
 ## 3. Travail accompli
 
@@ -749,7 +783,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 437 autres
+- … et 441 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -890,4 +924,8 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT2=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

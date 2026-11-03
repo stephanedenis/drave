@@ -58,6 +58,16 @@ class TestPolitiqueLLM(unittest.TestCase):
         self.assertIn("80 %", invite)
         self.assertIn("réessaie", invite)
 
+    def test_porte_fenetre(self):
+        from tools.pensee.operateurs import _etat_pw
+
+        p = PolitiqueLLM("faux", jeu="porte_fenetre", transport=lambda *_: "bas")
+        etat = _etat_pw(0, 0, 1)
+        self.assertEqual(p.propose(etat, P_BUT), "bas")
+        invite = p._invite(etat, P_BUT)
+        self.assertIn("t % 3", invite)
+        self.assertIn("attends", invite)
+
     def test_labyrinthe(self):
         p = PolitiqueLLM("faux", transport=lambda *_: "droite")
         self.assertEqual(p.propose(LABYRINTHE.initial(), L_BUT), "droite")

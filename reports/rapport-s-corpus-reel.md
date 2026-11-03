@@ -28,12 +28,12 @@
 
 | unité | corpus | GN+GV | sans GV | couverture | homographes | unités homographes |
 |---|---|---:|---:|---:|---:|---:|
-| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 18 | 15 |
-| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 553 | 550 |
-| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 18 | 18 |
-| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 25 | 25 |
-| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 064 | 1 035 |
-| phrase | mélange | 9,1 % | 0,4 % | 0,93 | 22 | 22 |
+| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 21 | 18 |
+| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 578 | 575 |
+| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 19 | 19 |
+| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 28 | 28 |
+| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 134 | 1 104 |
+| phrase | mélange | 9,1 % | 0,4 % | 0,93 | 23 | 23 |
 
 ## Les contrôles
 
@@ -64,16 +64,18 @@ alimenter la banque tel quel.
   titres, les tableaux et les formules sont exclus — le taux ne vaut pas pour eux.
 - **Le corpus propre est de la littérature** (genre unique) ; le CEGEP est un mélange
   anglais/technique/français. Le contraste mesure surtout la **langue**, pas la qualité OCR.
-- **Les homographes** dépendent du lexique de verbes : 25 sur 20 799 phrases CEGEP, 1 064 sur
-  50 000 propres ; le chiffre propre est plus haut parce qu'il y a plus de GN nominaux.
+- **Les homographes** dépendent du lexique de verbes : 28 sur 20 799 phrases CEGEP, 1 134 sur
+  50 000 propres ; le chiffre propre est plus haut parce qu'il y a plus de GN nominaux. C'est un
+  décompte de **suspects** (GN finissant sur un mot du lexique), pas une erreur : la règle de
+  contexte v4 en résout une partie par le mot suivant.
 - **Le mélange** garde les mots et la ponctuation : il teste l'ordre, pas le vocabulaire ; un
   analyseur qui ne lit que les déterminants aurait le même plancher.
 
 ## Le miroir entrée/sortie
 
 - **entrée** : surface → structure, mesurée par GN+GV, la couverture et les rôles ;
-- **sortie** : le **corpus de référence** de 47 structures (`data/structures/banque.jsonl`,
-  SHA `f2a0d2fb…`) et son `verifier_corpus.py` — l'analyseur lit, le corpus se restitue.
+- **sortie** : le **corpus de référence** de 55 structures (`data/structures/banque.jsonl`,
+  SHA `76accf9d…`) et son `verifier_corpus.py` — l'analyseur lit, le corpus se restitue.
 
 Le corpus réel **n'est pas exporté** : la prochaine étape est une **banque de candidats** filtrée
 par langue et segmentée en phrases, à valider par un humain. La fluidité (un GN+GV) n'est pas la
@@ -81,8 +83,9 @@ fidélité (le rôle juste).
 
 ## Fichiers
 
-- Sous-module : commits **`140feb6`** (mesure) et **`97641d5`** (banque), `mesure_corpus.py`,
-  `candidats_corpus.py`, `donnees/mesure-corpus.json`, `donnees/phrases_generees.json`, **46 tests**.
+- Sous-module : commits **`140feb6`** (mesure), **`97641d5`** (banque) et **`00d2a01`** (v4),
+  `mesure_corpus.py`, `candidats_corpus.py`, `donnees/mesure-corpus.json`,
+  `donnees/phrases_generees.json`, **47 tests**.
 - Mesure : `python3 mesure_corpus.py --max 50000` (60 s CPU) ;
   `donnees/mesure-corpus.json` (50 000 lignes, 20 799 phrases CEGEP, 50 000 propres).
 - Fiche : celle-ci ; état et roadmap S mis à jour.
@@ -92,5 +95,5 @@ fidélité (le rôle juste).
 1. **Filtrer langue et genre** (français détecté, prose), **segmenter en phrases** avant
    l'analyse ;
 2. ~~banque de candidats~~ (**200 phrases, 355 candidats**) → validation humaine ;
-3. **homographes/lexique** (ferme, fait, lit) : le contexte tranche ;
-4. le corpus de référence (47 structures) reste le test de structure pour N2/R1.
+3. ~~homographes/lexique~~ (règle de contexte v4) ; restent `h050` et `h053` ;
+4. le corpus de référence (55 structures) reste le test de structure pour N2/R1.

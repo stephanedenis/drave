@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 5.9 h |
 | Tours | 2 |
-| Messages | 326 |
-| Appels d'outils | 331 |
+| Messages | 329 |
+| Appels d'outils | 334 |
 | Fichiers touchés | 22 |
-| Commandes | 245 |
+| Commandes | 246 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*91 appels d'outils.* Actions notables :
+*94 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 59 autres
+- … et 60 autres
 
 **Synthèse produite :**
 
-⏵ Édition nette de l'état (le chiffre du contrôle, sans dépasser T0)
+⏵ Suivi des runs 2 048 (octets constants) et 1 024 long
 
 ## 3. Travail accompli
 
@@ -177,7 +177,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 205 autres
+- … et 206 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -286,6 +286,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** st`
 - **T2** `[still running after 60000ms; moved to background job bash-236]`
 - **T2** `[still running after 60000ms; moved to background job bash-245]`
+- **T2** `[still running after 60000ms; moved to background job bash-246]`
 
 ## 5. Erreurs rencontrées
 

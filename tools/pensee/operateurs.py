@@ -146,6 +146,19 @@ class PolitiqueLLM(Politique):
                     "voisine, la sonde l'ouvre si tu vises sa direction. Une fois ouverte, "
                     f"va en (4,4). Position : ({x},{y}). Porte ouverte : {ouvert}. But : (4,4). "
                     "Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.")
+        if self.jeu == "porte_fenetre":
+            x, y = _xy_pw(etat)
+            t = _t_pw(etat)
+            ouvert = "oui" if _open_pw(etat) else "non"
+            murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS_P))
+            return ("Tu es la politique d'un moteur de recherche dans une grille 5x5. "
+                    "x va vers la droite, y vers le bas. "
+                    f"Murs : {murs}. La porte (3,3) n'est libre que lorsque t % 3 == 0 ; "
+                    "l'horloge avance à chaque pas (pas, saut ou attente). Depuis (3,2), "
+                    "réponds bas quand t % 3 == 0, sinon attends. Une fois la porte franchie, "
+                    f"va en (4,4). Position : ({x},{y}). t % 3 : {t}. Porte ouverte : {ouvert}. "
+                    "But : (4,4). Réponds uniquement par droite, gauche, bas ou haut. "
+                    "Ne propose pas un mur.")
         if self.jeu == "porte_sto":
             x, y = _xy_p(etat)
             ouvert = "oui" if _open_p(etat) else "non"

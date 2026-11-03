@@ -5592,3 +5592,31 @@ error: pathspec '-' did not match any file(s) known to git
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -q -F - -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md <<'MSG'\nFENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS\n\nLe conte … [1487 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-245]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-245", "timeout_ms": 180000, "wait": true}`
+
+  ```
+4527f661 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Suivi des runs 2 048 (octets constants) et 1 024 long
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; tail -1 work/n2ac/rope2048-12.5k.log 2>/dev/null; tail -1 work/n2ac/rope1024-20k.log", "description": "Wait for 2048 equal-bytes checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-246]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-246", "timeout_ms": 1500000, "wait": true}`

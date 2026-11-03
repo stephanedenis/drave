@@ -9447,3 +9447,89 @@ pas  14200 · perte 1.0014 · PPL val 2.603 · 6522 s
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; git status --short reports/n2-fenetre.json | grep -q '^A' || break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; gi … [187 caractères tronqués]`
+
+  ```
+22:09:18
+HEAD 4527f661
+4527f661 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+pas  14600 · perte 1.0734 · PPL val 2.591 · 6713 s
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; echo \"--- N2 fiche ---\"; head -12 reports/rapport-n2-fenetre.md", "descri … [51 caractères tronqués]`
+
+  ```
+revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (89 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+--- N2 fiche ---
+# N2/R1 — La fenêtre entraînée, de 128 à 1 024 : elle gagne où elle sert, et elle bat 200 000 pas
+
+> **Lignes de roadmap** : **R1** (la fenêtre native) et **N2** (le modèle de production) ·
+> **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur des
+> séquences longues avec RoPE abaisse la PPL là où la fenêtre sert — à **1 000 octets**,
+> 3,2545 (fenêtre 256) → 3,0107 (512) → **2,9950** (1 024) ; à **2 000**, 3,2459 → 2,9728 →
+> **2,9449** — et à courte longueur l'ordre **s'inverse** (128 : 3,3399 pour 512 contre 3,3878
+> pour 1 024) : la fenêtre longue échange du **démarrage à fro
+… [406 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 09 — la fenêtre bat 200 000 pas (fait N2/R1, commit 4527f661)\n\n- **Loi de la fenêtre** à octets constants (20,5 Mo) : à 1 000 octets **3,2545 (256) → 3,0107\n  (512) → 2,9950 (1 024)** ; à 2 000 : **3,2459 → 2,9728 → 2,9449** ; à 128 l'ord … [1449 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+4527f661 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 13 : le fait N2/R1 est committé — la fenêtre entraînée bat 200 000 pas
+
+**Le fait de la nuit est entré** (`4527f661`) :
+- **Loi de la fenêtre** à octets constants : à 1 000 octets **3,2545 (256) → 3,0107 (512) → 2,9950 (1 024)** ; à 2 000 : **3,2459 → 2,9728 → 2,9449** ; à 128 l'ordre s'inverse (la longueur échange du démarrage à froid contre de la profondeur).
+- **Contrôle « même texte »** : chaque modèle sature **exactement** à sa fenêtre (256 se dégrade au-delà ; 1 024 = 2 000 au millième).
+- **Production** : **N2.ac + RoPE 512** (61,4 Mo) **bat le run de 200 000 pas** — littérature **6,03 → 5,52**, anglais **8,34 → 7,05**, wikitext2 **9,05 → 7,90** ; la 1 024 donne 3,1489/2,9103/2,7342 mais +0,14 en anglais.
+- **`porte-tableaux` verte** dans l'arbre committé : la cinquième rouge de la passe est **close** ; compteurs **570 fiches / 656 JSON** ; revue, en-cours, T0, T1 et stricte ✅.
+
+**Ce qui continue** : le run long `rope1024-20k` est à **14 600 / 20 000 pas, PPL 2,591** (cible 2,5) ; les claims tiennent (N2 `gpu0`+`gpu1`, hub, S, Pensée). Le journal de bord et le brouillon du **bilan de 8 h** portent le fait. La veille continue jusqu'au checkpoint.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 14/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 14 : veille — je vérifie les événements et j’attends le run long
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; git status --short | head -4; echo \"--- run long ---\"; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; echo \"--- N2 json ---\"; git ls-files --error-unmatch reports/n2-fenetre.json >/dev/null 2>&1 && echo \"suivi\" || echo \"non suivi\"; pyth … [97 caractères tronqués]`
+
+  ```
+22:09:48
+4527f661 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+--- run long ---
+pas  14650 · perte 0.9144 · PPL val 2.598 · 6735 s
+--- N2 json ---
+suivi
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; git status --short | h … [72 caractères tronqués]`

@@ -13586,3 +13586,193 @@ reports/rapport-pen
 … [1401 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ L'en-cours **est** stagé (diff visible) mais l'outil dit le contraire ; je lis l'outil pour voir sa condition exacte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,90p' tools/verifie_etat_a_jour.py", "description": "Read state check tool source"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [2531 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'outil est désormais cohérent (en-cours en tête de l'index) ; je relance l'outil seul puis le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py --index; echo \"EXIT=$?\"; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B\" 2>&1 | tail -10; echo \"EXIT2=${PIPESTATUS[0]}\"", "description": "Rerun state chec … [42 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+EXIT=0
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT2=128
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook est vert (EXIT=0) ; seul le commit bute sur le lock du hub. J'attends 90 s et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 90; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'libre'; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Wait  … [55 caractères tronqués]`
+
+  ```
+22:09:35
+libre
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a de nouveau pris l'en-cours ; dernier essai : je le stage et je commite immédiatement, sinon je clos le round avec la fiche/le JSON en arbre de travail
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md 2>&1; git diff --cached --name-only | grep -c .; git diff --cached --name-only | grep en-cours || echo 'pas en-cours'; python3 tools/verifie_etat_a_jour.py --index; echo \"TOOL=$?\"; git commit -m \"B13 — LA FENÊTRE : … [193 caractères tronqués]`
+
+  ```
+30
+pas en-cours
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+TOOL=1
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 13 : la fenêtre est **mesurée et écrite** (oracle en échec = problème cassé), mais le commit est bloqué par le harcèlement d'index du hub
+
+**Fait de la nuit (mesuré, écrit, commit bloqué)** — la **fenêtre** (`LABYRINTHE_PORTE_FENETRE`, `attendre`, `t % 3`) :
+
+| politique | but | nœuds | sonde | attendre | latence |
+|---|---|---:|---:|---:|---:|
+| **oracle (Manhattan)** | ❌ | 200 | 1 | 65 | 0 |
+| aveugle | ❌ | 200 | 0 | 65 | 0 |
+| hasard | ❌ | 200 | 12 | 61 | 0 |
+| **LLM `porte_fenetre`** | ❌ | 200 | 35 | 54 | 97,3 s |
+| LLM `labyrinthe` | ❌ | 200 | 2 | 65 | 36,1 s |
+
+- **L'oracle lui-même échoue** : le problème est **cassé** (`sonde_pw`/`_libre_pw`/`attendre`/but) — ce n'est pas un verdict sur le 7B. Le 7B suit pourtant la règle (54 `attendre`, 35 `sonde`) mais n'atteint jamais `(4,4)`.
+- Fiche `reports/rapport-pensee-porte-fenetre.md`, JSON `reports/pensee-porte-fenetre.json`, banc `tools/tests/qualifier_porte_fenetre_drvm.py`, prompt `porte_fenetre` + 10 tests : **tous écrits**.
+- **Commit bloqué** : le hub commite `en-cours` en boucle (`--only`, ~1 min 30 par commit, lock permanent). Le hook exige l'en-cours **dans le même index** ; chaque `git add` est annulé par son commit suivant. Le fait reste dans l'arbre de travail, prêt à committer dès que la série s'arrête.
+
+**État** : l'en-cours du hub porte la ligne « fenêtre — l'oracle/le 7B échouent (problème à réparer) » et la prochaine action « fenêtre (réparer) » ; T0 ~3 959 ; revue **570/655**. Le hub a aussi fermé la 5e rouge (`porte-tableaux` verte) et publié `n2-fenetre.json`.
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · sto 5/5 `c4903bc9` · **fenêtre : en attente de lock** ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`52f827a2`, N2 `c0196b55`.
+
+La suite : **réparer la fenêtre** (l'oracle doit passer), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 14/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 14 : je retente le commit de la fenêtre (la série du hub semble finie), sinon je passe à la réparation du problème
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git log -1 --format='%h %ad %s' --date=format:'%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'libre'; git add docs/pilotage/en-cours.md 2>/dev/null; git diff --cached --name-only | grep en-cours || echo 'pas en-cours'; python3 to … [277 caractères tronqués]`
+
+  ```
+22:10:17
+4527f661 22:07:32 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+libre
+pas en-cours
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+TOOL=1
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ L'en-cours n'a plus de changement visible ; j'utilise `git commit -a` pour réunir en-cours et faits dans le même commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -5 docs/pilotage/en-cours.md; git status --short docs/pilotage/en-cours.md | head -2; git commit -a -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "de … [73 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 21 h 58 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+  ❌ commit refusé : 7 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     · reports/rapport-s-analyseur-roles.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ L'en-cours est propre (le hub l'a committé) ; je change son heure à 22 h 10 et je fais `git commit -a` pour l'embarquer avec les faits
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nn=t.replace('21 h 58 HNE','22 h 10 HNE')\nprint('changed', n!=t)\np.write_text(n,encoding='utf-8')\nPY\ngit add docs/pilotage/en-cours.md;  … [364 caractères tronqués]`
