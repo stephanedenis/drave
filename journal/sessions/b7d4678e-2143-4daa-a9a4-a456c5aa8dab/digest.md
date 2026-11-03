@@ -9851,3 +9851,40 @@ MM journal/2026-11-02/attention.md
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; git status --short too … [102 caractères tronqués]`
+
+  ```
+22:33:40
+HEAD f9a40785
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+}
+  ```
+
+- **bash** `{"command": "ps -p 383833 >/dev/null && echo \"run encore\" || echo \"run fini\"; tail -14 work/n2ac/rope1024-20k.log 2>/dev/null | head -10; echo \"--- claims ---\"; python3 tools/ressources.py --status 2>&1 | grep -A8 \"Réservations\"; git show --stat --oneline f9a40785 | head -5", "description":  … [46 caractères tronqués]`
+
+  ```
+run fini
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "window": 1024,
+ "positions": "rope",
+ "init": "work/n2ac/rope1024-2.5k.pt",
+ "perte_finale": 1.0205986499786377,
+ "ppl_val": 2.66090749837826,
+ "jetons_val": 65536,
+ "tetes": true,
+--- claims ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ journal/2026-11-02/README.md                       |  13 +-
+ journal/2026-11-02/apprentissage.md                |   8 +-
+ journal/2026-11-02/attention.md                    |   8 +-
+ journal/2026-11-02/distribue.md                    |   8 +-
+  ```
+

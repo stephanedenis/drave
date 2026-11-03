@@ -442,7 +442,7 @@
 | [rapport-pensee-politique-llm.md](rapport-pensee-politique-llm.md) | B13 — la politique DRVM/native : le 7B ouvre le cadenas avec la règle, pas sans |
 | [rapport-pensee-porte-apprise.md](rapport-pensee-porte-apprise.md) | B13 — la porte apprise : la Q-table trouve la porte seule |
 | [rapport-pensee-porte-bouge.md](rapport-pensee-porte-bouge.md) | B13 — la porte qui bouge : le 7B la passe (25 nœuds, 2 sonde) comme l'aveugle (25/2) et le labyrinthe (28/5) ; test non discriminant |
-| [rapport-pensee-porte-fenetre.md](rapport-pensee-porte-fenetre.md) | B13 — la fenêtre : l'oracle lui-même échoue (200 nœuds, 1 sonde) ; le 7B aussi (200/35) ; le problème est à réparer |
+| [rapport-pensee-porte-fenetre.md](rapport-pensee-porte-fenetre.md) | B13 — la fenêtre : contre-fiche — le BFS atteint le but en 331 nœuds ; l'oracle Manhattan et le Greedy échouent par fitness, pas la fenêtre |
 | [rapport-pensee-porte-llm.md](rapport-pensee-porte-llm.md) | B13 — la porte DRVM : la règle dans le prompt l'ouvre (27 nœuds, 4 sonde) |
 | [rapport-pensee-porte-minute.md](rapport-pensee-porte-minute.md) | B13 — la porte minute : la règle l'ouvre (26 nœuds, 4 sonde, 6,4 s) ; le prompt labyrinthe échoue (200, 3, 101,6 s) |
 | [rapport-pensee-porte-mobile.md](rapport-pensee-porte-mobile.md) | B13 — la porte mobile : le 7B échoue à (3,3) (200 nœuds, 3 sonde) et passe à (1,3) comme l'aveugle (26/2) et le labyrinthe (29/5) ; test non discriminant |

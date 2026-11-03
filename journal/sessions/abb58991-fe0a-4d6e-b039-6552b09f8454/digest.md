@@ -15023,3 +15023,117 @@ Round: 34/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+### 🤖 Assistant
+
+⏵ Round 34 : je vérifie que `BFS.choisir` et `Moteur.boucle` utilisent la même clé d'empreinte et que le `pop` retire bien le nœud choisi
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.moteur import BFS, Moteur\nfrom tools.pensee.operateurs import LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW, PolitiqueManhattan\nfrom tools.pensee.store import Budget\nm=Moteur()\n# … [578 caractères tronqués]`
+
+  ```
+racine e574cecb ouverts ['e574cecba8230df103f0cf9b1da5f6dc747799c481226ab9fdf2f729917aa7ac']
+choisi e574cecb dans ouverts True type str
+clés ouverts types {'str'}
+apres pop 0 n encore la ? False
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 34 : les clés sont cohérentes (`BFS` rend bien une empreinte `str`, `pop` la retire) — ni le store ni le pop ne sont en cause. Le BFS a juste une frontière trop large pour 200 nœuds
+
+**Mesure** :
+
+- `BFS.choisir` rend `e574cecb…` (une clé `str` de `store.ouverts`) ; `n in ouverts` = True ; `pop` retire bien (`ouverts=0`).
+- Donc `Moteur.boucle` + `Store` + `BFS` sont **cohérents** : le BFS explore réellement en largeur, mais 200 nœuds ne suffisent pas — la grille 5×5 avec 4 opérateurs (dont `saut` de 2) génère une frontière très large, et `(4,4)` est au-delà.
+- La fenêtre n'est donc **pas cassée** au sens du code : c'est un **budget/état-space** trop grand pour 200 nœuds, pas un bug.
+
+**Prochaine action (round 35)** : augmenter le budget (500 ou 1000 nœuds) et vérifier que le BFS/l'oracle atteint `(4,4)` ; si oui, la fiche « problème cassé » est **fausse** et doit devenir « budget insuffisant / espace large ». Puis remesurer le 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; correctifs `_etat_pw` et `Moteur.boucle` en arbre, non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : budget 500/1000, remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 37
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 35/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 35 : je relance le BFS et l'oracle avec un budget de 500 puis 1 000 nœuds pour voir si `(4,4)` est atteint — si oui, la fiche « problème cassé » est fausse
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.moteur import BFS, AStar, Greedy\nfrom tools.pensee.operateurs import DRVM, LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW, PolitiqueManhattan\nfrom tools.pensee.store import Budget\n … [391 caractères tronqués]`
+
+  ```
+200 bfs but False noeuds 200 etats 44
+200 astar but False noeuds 200 etats 195
+200 greedy but False noeuds 200 etats 195
+500 bfs but True noeuds 331 etats 52
+500 astar but False noeuds 500 etats 495
+500 greedy but False noeuds 500 etats 495
+1000 bfs but True noeuds 331 etats 52
+1000 astar but False noeuds 1000 etats 995
+1000 greedy but False noeuds 1000 etats 995
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 35 : le budget change tout — **le BFS atteint le but à 331 nœuds** (52 états) ; l'A* et le Greedy échouent même à 1 000. La fiche « problème cassé » est **fausse** : c'est une question de stratégie/budget
+
+**Mesure** :
+
+| budget | BFS | A* | Greedy |
+|---:|---|---|---|
+| 200 | ❌ 44 états | ❌ 195 | ❌ 195 |
+| 500 | ✅ **331 nœuds, 52 états** | ❌ 495 | ❌ 495 |
+| 1 000 | ✅ 331, 52 | ❌ 995 | ❌ 995 |
+
+- Le **BFS trouve `(4,4)`** en 331 nœuds sur 52 états : le problème est **solvable**, la carte et les opérateurs sont bons.
+- L'**A\*** et le **Greedy** ne trouvent **jamais** : leur critère (`score + heuristique` / `score seul`) les enferme dans la zone `y≤3`. C'est le **fitness** qui est mauvais, pas la fenêtre.
+- Conclusion : la fiche `pensee-porte-fenetre` doit être **corrigée** — « l'oracle échoue donc le problème est cassé » → « l'oracle Manhattan échoue ; le BFS réussit en 331 nœuds ; le 7B doit être mesuré avec un budget ≥ 500 et un meilleur guide ».
+
+**Prochaine action (round 36)** : relancer le banc 7B `porte_fenetre` avec budget **500** (et le `PolitiqueManhattan` remplacé par un oracle BFS) ; consigner le résultat ; **contre-fiche** ; commit du correctif `_etat_pw` + `Moteur.boucle` + `pensee-porte-fenetre` corrigée.
+
+**État** : HEAD `55dcb1c4` ; correctifs en arbre non committés ; T0 sous 4 000 ; revue 570/655.
+
+La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 38
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 36/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 36 : contre-fiche — la fenêtre n'est **pas** cassée : le BFS l'atteint en 331 nœuds ; l'oracle Manhattan et le Greedy échouent par fitness. Je corrige la fiche et je commite les trois correctifs
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-pensee-porte-fenetre.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"l'oracle lui-même échoue (200 nœuds, 1 sonde) ; le 7B aussi (200/35) ; le problème est à réparer\",\n     … [2445 caractères tronqués]`
+
+  ```
+fiche/json mis à jour
+  567 fiches → reports/INDEX.md
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3999 mots (budget 4 000)
+[stderr]
+<stdin>:23: SyntaxWarning: invalid escape sequence '\*'
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 36 : contre-fiche écrite (BFS 331/52, A*/Greedy 1000/995) ; je commite les correctifs `_etat_pw` (t réel) + `Moteur.boucle` (break) + la fiche corrigée
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('**fenêtre** — l\\'oracle/le 7B échouent (problème à réparer) ;',\n            '**fenêtre** — **solvable** (BFS 331 nœuds, 52 é … [807 caractères tronqués]`

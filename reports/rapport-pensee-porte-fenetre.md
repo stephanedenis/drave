@@ -1,11 +1,11 @@
-# B13 — la fenêtre : l'oracle lui-même échoue (200 nœuds, 1 sonde) ; le 7B aussi (200/35) ; le problème est à réparer
+# B13 — la fenêtre : contre-fiche — le BFS atteint le but en 331 nœuds ; l'oracle Manhattan et le Greedy échouent par fitness, pas la fenêtre
 
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·
-> **Verdict** : ❌ **la fenêtre n'est pas un test valide** — l'**oracle** (Manhattan) lui-même
+> **Verdict** : ✅❌ **contre-fiche** — la fenêtre **est solvable** (BFS : 331 nœuds, 52 états) ; l'**oracle** (Manhattan) et le Greedy
 > échoue : 200 nœuds, 1 sonde, 65 appels, sans but ; le 7B `porte_fenetre` échoue aussi (200
 > nœuds, 35 sonde, 97,3 s) ; le labyrinthe (200/2), l'aveugle (200/0) et le hasard (200/12)
-> échouent. **Aucune politique ne passe** : le problème (`LABYRINTHE_PORTE_FENETRE`,
-> `REGISTRE_PW`, `attendre`, `t % 3`) est à **réparer** avant d'être un test.
+> échouent. **Le problème est solvable** : le BFS l'atteint à 331 nœuds ; l'A*/le Greedy échouent par **fitness** (score + heuristique),
+> pas par carte. Les correctifs `_etat_pw` (t réel) et `Moteur.boucle` (break) sont dans ce commit.
 >
 > **Dispositif** : [`qualifier_porte_fenetre_drvm.py`](../tools/tests/qualifier_porte_fenetre_drvm.py) ;
 > [`operateurs.py`](../tools/pensee/operateurs.py) (`LABYRINTHE_PORTE_FENETRE`, `REGISTRE_PW`,
@@ -83,3 +83,20 @@ suffit-il, et le test discrimine-t-il ?
 - [`tools/tests/test_pensee_politique.py`](../tools/tests/test_pensee_politique.py) — 10 tests
   (le prompt fenêtre : `t % 3`, l'attente).
 - [`pensee-porte-fenetre.json`](pensee-porte-fenetre.json) — les mesures, les seuils, les limites.
+
+
+## 8. Contre-fiche (2026-11-02, round 36)
+
+La conclusion « le problème est cassé » était **fausse**. Mesures :
+
+| budget | BFS | A* | Greedy |
+|---:|---|---|---|
+| 200 | ❌ 44 états | ❌ 195 | ❌ 195 |
+| 500 | ✅ **331 nœuds, 52 états** | ❌ 495 | ❌ 495 |
+| 1 000 | ✅ 331, 52 | ❌ 995 | ❌ 995 |
+
+- **Le BFS trouve `(4,4)`** en 331 nœuds : la carte, les opérateurs et `attendre` sont bons.
+- L'**A\*/Greedy** échouent : `score_pw = 1/(1+Manhattan)` et `heuristique_pw = -Manhattan` les
+  enferment dans `y ≤ 3` (les murs `(4,1)/(4,2)` bloquent la colonne 4).
+- **Correctifs** : `_etat_pw` porte le `t` **réel** (18→44/195 états) ; `Moteur.boucle` sort sur
+  `trouve` dans `for prop`. Le banc 7B doit être relancé avec **budget 500** et un guide BFS.

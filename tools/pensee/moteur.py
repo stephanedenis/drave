@@ -115,7 +115,7 @@ class Moteur:
                 meilleur, meilleur_score = noeud, score_noeud
             self.store.ouverts.pop(noeud, None)
             for prop in strategie.proposer(etat, probleme):
-                if not budget.reste():
+                if not budget.reste() or trouve:
                     break
                 operateur = probleme.operateurs[prop.operateur]
                 enfants = operateur(etat, prop.params)
@@ -138,5 +138,7 @@ class Moteur:
                     budget.compter(1)  # un nœud, pas une proposition
                     if not budget.reste() or trouve:
                         break
+                if trouve:
+                    break
         return Decision(self.store.get(meilleur), self.store.chemin(meilleur),
                         budget.consomme, strategie.nom)

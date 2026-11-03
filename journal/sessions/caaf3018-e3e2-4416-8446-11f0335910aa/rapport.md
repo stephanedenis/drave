@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 6.1 h |
+| Durée | 6.3 h |
 | Tours | 23 |
-| Messages | 321 |
-| Appels d'outils | 330 |
+| Messages | 325 |
+| Appels d'outils | 334 |
 | Fichiers touchés | 6 |
-| Commandes | 253 |
+| Commandes | 256 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*72 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +473,11 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 36 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
-⏵ Nuit : cadence de 20 min (test de la borne d'attente)
+⏵ Claims propres (la passe a expiré d'elle-même). J'attends la fin du minuteur de 20 min.
 
 ## 3. Travail accompli
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 213 autres
+- … et 216 autres
 
 ## 4. Mesures et résultats marquants
 

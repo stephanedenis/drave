@@ -2971,9 +2971,10 @@ def seule_mobile(p: PolitiqueAppriseMobile, d: int, max_pas: int = 200) -> tuple
 
 def _etat_pw(x: int, y: int, t: int, parent: str | None = None,
              profondeur: int = 0) -> Etat:
-    return Etat(f"w{x}:{y}:{t % 3}", parent, profondeur,
+    # l'horloge est le `t` RÉEL : `t % 3` fusionnait t=3 et t=0 dans la même empreinte.
+    return Etat(f"w{x}:{y}:{t}", parent, profondeur,
                 (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
-                 Candidat("t", {"v": t % 3})))
+                 Candidat("t", {"v": t})))
 
 
 def _xy_pw(e: Etat) -> tuple[int, int]:

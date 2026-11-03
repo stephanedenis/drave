@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 6.3 h |
 | Tours | 38 |
-| Messages | 624 |
-| Appels d'outils | 673 |
+| Messages | 626 |
+| Appels d'outils | 675 |
 | Fichiers touchés | 47 |
-| Commandes | 510 |
+| Commandes | 512 |
 | Sous-agents | 0 |
-| Commits | 46 |
+| Commits | 47 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1261,6 +1261,15 @@ La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et l
 
 ### Tour 38 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
+*2 appels d'outils.* Actions notables :
+
+- bash — Update fiche with contre-fiche
+- bash — Commit window contre-fiche and fixes
+
+**Synthèse produite :**
+
+⏵ Round 36 : contre-fiche écrite (BFS 331/52, A*/Greedy 1000/995) ; je commite les correctifs `_etat_pw` (t réel) + `Moteur.boucle` (break) + la fiche corrigée
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1357,7 +1366,7 @@ La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 470 autres
+- … et 472 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1503,4 +1512,5 @@ La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et l
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE" 2>&1 | tail -8; echo "EXIT=${PIPESTA
 

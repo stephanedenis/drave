@@ -9260,3 +9260,46 @@ ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 E
 ⏵ Round 29 : le hub est à 48 min sans claim (la porte sessions va le voir périmé) ; je rafraîchis son plan et je prends un claim de veille.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\np=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md'); t=p.read_text()\nt=t.replace('- **Heartbeat** : 2026-11-02 21:43 EST', '- **Heartbeat** : 2026-11-02 22:31 E … [1104 caractères tronqués]`
+
+  ```
+plan hub à jour
+  ✅ accordé : 536cd5d6 / veille
+
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+
+  ⚠ mandat long (49 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[exit 0]
+
+[master f9a40785] HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ 24 files changed, 1295 insertions(+), 99 deletions(-)
+[commit 0]
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 29 : hub en veille propre (plan 22 h 31, claim `cpu1` 1 / RAM 1), `porte-sessions` verte ; 82e porte validée.
+
+- **82e porte** : validée et comptée (`ba815f43`) ; la passe de 19 h 32 est la référence.
+- **Hub** : plan rafraîchi, claim `veille` accordé, commit `f9a40785` ; `porte-sessions` verte.
+- **Sessions** : N2 28, S 111 + claim, hub 49 + claim, B13 49 + claim ; quatre actives.
+- **Revue** 570/656/82 ✅ ; **T0 3 999/4 000** ✅ ; `porte-tableaux` verte.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille (10 min) ; **bilan 08 h**. Goal actif.
+
+
+## Tour 38
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 30/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

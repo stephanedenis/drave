@@ -161,5 +161,24 @@
     "Le hasard peut tomber sur t % 3 == 0 ; le contrôle propre est l'aveugle et le labyrinthe.",
     "L'A* explore ; le nombre de nœuds dépend du tie-breaking ; le but et la sonde sont les mesures.",
     "La latence inclut la file du serveur ; CPU seulement ; une graine, température 0."
-  ]
+  ],
+  "contre_fiche": {
+    "date": "2026-11-02 22:20",
+    "bfs_budget_500": {
+      "but": true,
+      "noeuds": 331,
+      "etats": 52
+    },
+    "astar_budget_1000": {
+      "but": false,
+      "noeuds": 1000,
+      "etats": 995
+    },
+    "greedy_budget_1000": {
+      "but": false,
+      "noeuds": 1000,
+      "etats": 995
+    },
+    "verdict": "la fenêtre est solvable ; le fitness (score+heuristique) est le défaut"
+  }
 }

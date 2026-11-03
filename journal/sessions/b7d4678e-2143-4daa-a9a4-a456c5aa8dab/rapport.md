@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 6.1 h |
+| Durée | 6.3 h |
 | Tours | 22 |
-| Messages | 611 |
-| Appels d'outils | 615 |
+| Messages | 617 |
+| Appels d'outils | 621 |
 | Fichiers touchés | 24 |
-| Commandes | 422 |
+| Commandes | 428 |
 | Sous-agents | 0 |
-| Commits | 31 |
+| Commits | 32 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -656,10 +656,16 @@ La veille continue : fin du run long, intégration des commits du hub, puis le c
 
 ### Tour 22 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check the long run and events
 - bash — Wait for the next commit or run finish
+- bash — Check the long run result and the new claim
+- bash — Log the run end and veille claim, verify state
+- bash — Read the portes rows for the T0 trim
+- bash — Trim en-cours under T0
+- bash — Check the lock before committing the trims
+- bash — Wait for the contre-fiche commit and verify state
 
 **Synthèse produite :**
 
@@ -738,7 +744,7 @@ La veille continue : fin du run long, intégration des commits du hub, puis le c
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 382 autres
+- … et 388 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -904,4 +910,5 @@ La veille continue : fin du run long, intégration des commits du hub, puis le c
 - ps -eo pid,etime,args | grep -E "git commit|git add|git rm|git reset" | grep -v grep | head -3; ls -l .git/index.lock 2>/dev/null || echo "pas de lock"; echo "-
 - ps -eo pid,etime,args | grep -E "git commit|git add|git reset" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo "pas de lock"; git read-tree HEA
 - NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE" -m "Après un commit à index alterné, l'index principal ignore les fichiers ajoutés 
+- ps -eo pid,etime,args | grep -E "git commit|git add" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo "pas de lock"; git status --short docs/pil
 
