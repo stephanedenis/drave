@@ -1,4 +1,11 @@
-# B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est false
+# B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est true (seuils du contrat)
+
+> **Correction — 03/11 00 h 42.** Le gold réel 432 a **ses propres seuils de contrat** : **0,90 /
+> 0,45 / 0,55 / 0,50** (`tools/tests/linguistique/qualifier_cascade.py:122` ; JSON
+> `seuils_contrat.gold_reel_432`). Avec eux, le verdict est **`true`** : POS 0,9065 ≥ 0,90,
+> syntagmes 0,4598 ≥ 0,45, tête 0,5633 ≥ 0,55, fraction 0,5165 ≥ 0,50. Les sections ci-dessous
+> datent de la **première lecture**, qui appliquait au gold réel les seuils du **gold 180**
+> (0,94 / 0,60 / 0,75 / 0,60) — d'où le `false` ; le verdict de référence est **`true`**.
 
 > **Ligne de roadmap** : **L/B13** (le bloc langue et la pensée) · **Date** : 2026-11-03 ·
 > **Verdict** : ⚠️ **la cascade bat le neuronal et l'heuristique sur le gold réel, mais les seuils

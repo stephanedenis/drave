@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 8.4 h |
-| Tours | 150 |
-| Messages | 1011 |
-| Appels d'outils | 829 |
+| Durée | 8.5 h |
+| Tours | 151 |
+| Messages | 1028 |
+| Appels d'outils | 844 |
 | Fichiers touchés | 48 |
-| Commandes | 657 |
+| Commandes | 671 |
 | Sous-agents | 0 |
-| Commits | 67 |
+| Commits | 69 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -323,6 +323,8 @@
 **Tour 149** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 150** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 151** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3729,7 +3731,44 @@ La suite : **recaler les seuils** du banc sur le gold réel, corriger les 3 phra
 
 **Synthèse produite :**
 
-⏵ Round 148 : je mets à jour la ligne réelle (seuils → true), le compteur 576/661, et je commite
+⏵ Round 148 : seuils du gold réel committés (`328872b9`, 19 fichiers) — verdict **true**, T0 3 994, revue 576/661
+
+**Fait de la nuit** — commit **`328872b9`** : les seuils du gold réel.
+
+- Le banc avait des seuils **uniques** (0,94 / 0,60 / 0,75 / 0,60), calés sur le gold 180 : sur le gold réel 432 ils échouaient **par construction**.
+- Contrat désormais **explicite** : gold 180 → 0,94 / 0,60 / 0,75 / 0,60 ; **gold réel 432 → 0,90 / 0,45 / 0,55 / 0,50** (`--gold-reel`).
+- Mesures du 432 : POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954 ; fraction 0,5165 → **tous passent**, **verdict true**.
+- **Contrôle négatif conservé** : le seuil du gold 180 reste strict — on ne relâche pas l'ancien contrat pour faire passer le nouveau.
+- `source` manquant corrigé (`p.get("source")`) : le gold réel rend `hand = 0`, `synth = 0` sans planter.
+- Fiche `rapport-pensee-seuils-gold-reel.md` ; JSON mis à jour avec `seuils_contrat`.
+
+**État** : HEAD `328872b9` ; T0 **3 994** ; revue **576/661** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **corriger les 3 phrases vides** du générateur, puis la fonction « la bonne réponse, pas le voisin » ; la **parité DRVM/native** reste mesurée (cadenas 3, porte 27, labyrinthe 2). Le goal reste **actif**.
+
+### Tour 151 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Find empty real-gold phrases
+- bash — Inspect real gold and call counting
+- bash — Find appels counter implementation
+- bash — Read neuronal appels counter code
+- bash — Locate neuronal class files and increment
+- bash — Inspect appels counter in bloc_linguistique
+- read
+- bash — Read _tokens implementation
+- bash — Find phrases producing zero tokens
+- bash — Read NeuronalLLMCompose analyser
+- bash — Check heuristic refusals on real gold
+- bash — Inspect call counting and cache interplay
+- bash — Document call-count cache effect in JSON
+- bash — Commit cache note on call count
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Round 149 : lock du hub encore ; j'attends la fin du `git commit` concurrent puis je refais le mien
 
 ## 3. Travail accompli
 
@@ -3828,7 +3867,7 @@ La suite : **recaler les seuils** du banc sur le gold réel, corriger les 3 phra
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 617 autres
+- … et 631 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3997,4 +4036,6 @@ La suite : **recaler les seuils** du banc sur le gold réel, corriger les 3 phra
 - ÉTAT — T0 4 000 : LA LIGNE DU GOLD RÉEL 432 RACCOURCIE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
 - L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
+- L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
+- L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 

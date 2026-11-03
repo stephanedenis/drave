@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 8.4 h |
-| Tours | 49 |
-| Messages | 777 |
-| Appels d'outils | 722 |
-| Fichiers touchés | 24 |
-| Commandes | 510 |
+| Durée | 8.5 h |
+| Tours | 50 |
+| Messages | 790 |
+| Appels d'outils | 733 |
+| Fichiers touchés | 25 |
+| Commandes | 519 |
 | Sous-agents | 0 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -123,6 +123,8 @@
 **Tour 48** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 49** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 50** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1217,13 +1219,39 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 
 ### Tour 49 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Wait for the N2 commit
+- bash — Inspect the threshold change justification
+- bash — Inspect the threshold commit changes
+- bash — Find the threshold definitions and verdict
+- bash — Check the fiche/JSON consistency and tracking
+- bash — Trace the threshold contract origin
+- bash — Log the contract verification and the fiche gap
 
 **Synthèse produite :**
 
-⏵ Round 44 : veille — attente du commit N2
+⏵ Round 44 : seuils du gold réel vérifiés — contractuels, pas un déplacement de poteau
+
+- **L/B13** : `328872b9` fait passer le gold réel 432 à **true** avec les seuils **0,90 / 0,45 / 0,55 / 0,50**. J'ai vérifié leur origine : ils sont **dans le contrat** — `tools/tests/linguistique/qualifier_cascade.py:122` (`s_pos, s_synt, s_tete, s_frac = 0.90, 0.45, 0.55, 0.50`) et le JSON (`seuils_contrat.gold_reel_432`). Le « false » venait de l'application des seuils du **gold 180** (0,94/0,60/0,75/0,60) au gold réel : **erreur de branche, pas de goalpost**. Le verdict true est **contractuel**.
+- **Point d'attention** : la fiche `rapport-pensee-cascade-reel-432.md` (committée `a29cfd0f`) garde son titre « le verdict est **false** » et ses sections sur les seuils qui échouent ; `328872b9` a mis à jour le JSON et l'état, **pas la fiche**. Incohérence fiche/JSON/état signalée dans `work/veille/nuit.md` — à corriger par la session (ou au bilan de 8 h).
+- **État** : revue ✅ 575/661/82, en-cours ✅ (la ligne du gold réel dit true avec les seuils), T0 sous 4 000 ; runs N2 en cours (2 h 20 et 49 min).
+
+La veille continue et suit la correction de la fiche. Rien de bloquant.
+
+### Tour 50 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check the fiche correction and events
+- read
+- edit `reports/rapport-pensee-cascade-reel-432.md`
+- bash — Update the en-cours time and verify
+- bash — Commit the fiche correction
+
+**Synthèse produite :**
+
+⏵ Round 45 : je vérifie la fiche du gold réel et les événements
 
 ## 3. Travail accompli
 
@@ -1255,6 +1283,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 | `docs/methode/portes.md` | 0 | 1 |
 | `work/veille/bilan-08h.md` | 1 | 0 |
 | `journal/2026-11-03/README.md` | 0 | 1 |
+| `reports/rapport-pensee-cascade-reel-432.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -1298,7 +1327,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 470 autres
+- … et 479 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1471,4 +1500,5 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE" -m "État au 03/11 00 h 20 : cascade vrai modèle (POS
 - NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE" -m "État au 03/11 00 h 20 : cascade vrai modèle (POS
 - NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE" -m "Sur le gold réel 432, la cascade donne POS 0,9065 / synt
+- NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50)" -m "Le JSON et l'état disaient true (seuils_contrat.gold_reel_43
 

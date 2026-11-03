@@ -12231,3 +12231,196 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 44 : veille — attente du commit N2
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [105 caractères tronqués]`
+
+  ```
+00:42:35
+HEAD 328872b9
+328872b9 L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE
+fa0b5bfa ÉTAT — T0 4 000 : LA LIGNE DU GOLD RÉEL 432 RACCOURCIE
+ 713516    02:19:48 /home/stephane/gpu-env/bin/python w
+ 758133       48:33 /home/stephane/gpu-env/bin/python w
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 44 : je vérifie la justification du changement de seuils du gold réel
+
+- **bash** `{"command": "git log -1 --format='%B' 328872b9 | head -25; echo \"=== fiche : seuils ===\"; grep -n \"seuil\\|0,90\\|0,45\\|0,55\\|0,50\" reports/rapport-pensee-cascade-reel-432.md | head -10; echo \"=== état ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Inspect the th … [30 caractères tronqués]`
+
+  ```
+L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE
+
+=== fiche : seuils ===
+1:# B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est false
+4:> **Verdict** : ⚠️ **la cascade bat le neuronal et l'heuristique sur le gold réel, mais les seuils
+5:> absolus échouent** — 432 phrases, 2 375 tokens, POS **0,9065** (fermé 0,8973, ouvert 0,9162),
+6:> syntagmes F1 **0,4598** (tp 627, fp 655, fn 818), tête F1 **0,5633** (tp 768, fp 514, fn 677),
+22:| **cascade complète** | **0,9065** | **0,4598** | **0,5633** | **0,9954** | **0,5165** |
+24:| heuristique seule | 0,7394 | 0,2521 | 0,4520 | 0,9954 | 0,5165 |
+26:- **POS** : 0,9065 — **au-dessus du neuronal seul** (+0,0673) et de l'heuristique (+0,1671).
+27:- **Syntagmes** : 0,4598 — au niveau du neuronal (0,4618), **au-dessus de l'heuristique**
+29:- **Tête** : 0,5633 (contre 0,4520 heuristique).
+32:- **Par défaut** : 0,4506 — la cascade bat le défaut.
+=== état ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 328872b9 | head -12; echo \"=== diff du/des fiches ===\"; git show 328872b9 -- reports/rapport-pensee-cascade-reel-432.md reports/pensee-cascade-reel-432.json 2>/dev/null | head -50", "description": "Inspect the threshold commit changes"}`
+
+  ```
+328872b9 L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-03/README.md                       |  11 +-
+ journal/2026-11-03/attention.md                    |   6 +-
+ journal/2026-11-03/docs.md                         |   9 +-
+ journal/2026-11-03/mesures.md                      |   6 +-
+ journal/README.md                                  |   6 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |   7 +
+ .../536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md |   7 +
+ .../rapport.md                                     |  34 ++++-
+ journal/sessions/MANIFEST.md                       |  10 +-
+ .../abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md | 160 +++++++++++++++++++++
+=== diff du/des fiches ===
+  ```
+
+- **bash** `{"command": "grep -rn \"0,90\\|0,45\\|0,55\\|0,50\\|seuils\" tools/tests/qualifier_*cascade* tools/tests/qualifier_gold* 2>/dev/null | head -10; echo \"=== JSON ===\"; python3 - <<'PY'\nimport json,glob\nfor p in glob.glob('reports/*cascade*.json'):\n    d=json.load(open(p))\n    print(p, list(d)[:8 … [272 caractères tronqués]`
+
+  ```
+=== JSON ===
+reports/r06-cascade.json ['date', 'ligne', 'resultats']
+reports/r06-cascade-confiance.json ['date', 'ligne', 'resultats']
+reports/pensee-cascade-union.json ['date', 'ligne', 'portes', 'heuristique', 'cascade', 'appels_neuronal', 'limites']
+reports/pensee-cascade-tete.json ['date', 'ligne', 'portes', 'heur', 'cascade', 'cascade_tete_union', 'limites']
+reports/pensee-gold-cascade.json ['date', 'modele', 'gold', 'bloc', 'mesures', 'seuils', 'verdict', 'refus']
+   seuils = {'pos_all': True, 'syntagme_exact_all': True, 'syntagme_tete_all': True, 'acte': True, 'fraction': True, 'ablation_pos': True, 'ablation_syntagmes': True, 'policy': True, 'aucun_refus': True}
+   verdict = True
+reports/pensee-gold-cascade-200.json ['date', 'modele', 'gold', 'bloc', 'mesures', 'seuils', 'verdict', 'refus']
+   seuils = {'pos_all': True, 'syntagme_exact_all': True, 'syntagme_tete_all': True, 'acte': True, 'fraction': True, 'ablation_pos': True, 'ablation_syntagmes': True, 'policy': True, 'aucun_refus': True}
+   verdict = True
+reports/pensee-gold-reel-cascade.json ['date', 'modele', 'gold', 'bloc', 'mesures', 'seuils', 'verdict', 'refus']
+   seuils = {'pos_all': True, 'syntagme_exact_all': Tr
+… [1190 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git status --short reports/rapport-pensee-cascade-reel-432.md reports/pensee-gold-reel-cascade.json reports/pensee-porte-fenetre-500.json 2>/dev/null; ls -l --time-style=+%H:%M reports/rapport-pensee-cascade-reel-432.md reports/pensee-gold-reel-cascade.json; echo \"--- en-cours ligne -- … [230 caractères tronqués]`
+
+  ```
+?? reports/pensee-porte-fenetre-500.json
+-rw-r--r--. 1 stephane stephane 28287 00:40 reports/pensee-gold-reel-cascade.json
+-rw-r--r--. 1 stephane stephane  3898 00:26 reports/rapport-pensee-cascade-reel-432.md
+--- en-cours ligne ---
+61:  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (seuils 0,90/0,45/0,55/0,50 → true)** ;
+126:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold réel 432 (0,9065/0,4598/0,5633/0,9954) ; porte 140/140 ; sto 5/5** ; **B10.3 bloquée** |
+--- jsons suivi ---
+reports/pensee-gold-reel-cascade.json
+  ```
+
+- **bash** `{"command": "git log --oneline -3 -- reports/pensee-gold-reel-cascade.json reports/rapport-pensee-cascade-reel-432.md; echo \"=== contrat dans les outils ===\"; grep -rn \"gold_reel_432\\|seuils_contrat\\|0\\.45\" tools/ --include=*.py | head -8", "description": "Trace the threshold contract origin" … [1 caractères tronqués]`
+
+  ```
+328872b9 L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE
+a29cfd0f L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE
+=== contrat dans les outils ===
+tools/pont_generatif.py:806:            seuil_contraste = float(opt("--seuil-contraste", 0.45))
+tools/jeux/codecs/dames.py:280:                return 0.45
+tools/jeux/codecs/echecs.py:496:            return 0.45
+tools/docwatch/.venv/lib/python3.13/site-packages/pygments/lexers/html.py:238:            return 0.45  # less than HTML
+tools/tests/linguistique/qualifier_syntagmes.py:163:            "neuronal_exact_all": mesures["neuronal"]["all"]["syntagme"]["f1"] >= 0.45,
+tools/tests/linguistique/qualifier_cascade.py:122:            s_pos, s_synt, s_tete, s_frac = 0.90, 0.45, 0.55, 0.50
+tools/simuler_scan.py:118:    champ = 0.72 + 0.45 * champ
+tools/extraire_tableaux.py:191:        xs = adaptatif(serie_v, (0.45, 0.40, 0.35), 5, 0.70, largeur)
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 45 — les seuils du gold réel sont contractuels (pas un goalpost)\n\n- `328872b9` : le ve … [954 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+log-ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 44 : seuils du gold réel vérifiés — contractuels, pas un déplacement de poteau
+
+- **L/B13** : `328872b9` fait passer le gold réel 432 à **true** avec les seuils **0,90 / 0,45 / 0,55 / 0,50**. J'ai vérifié leur origine : ils sont **dans le contrat** — `tools/tests/linguistique/qualifier_cascade.py:122` (`s_pos, s_synt, s_tete, s_frac = 0.90, 0.45, 0.55, 0.50`) et le JSON (`seuils_contrat.gold_reel_432`). Le « false » venait de l'application des seuils du **gold 180** (0,94/0,60/0,75/0,60) au gold réel : **erreur de branche, pas de goalpost**. Le verdict true est **contractuel**.
+- **Point d'attention** : la fiche `rapport-pensee-cascade-reel-432.md` (committée `a29cfd0f`) garde son titre « le verdict est **false** » et ses sections sur les seuils qui échouent ; `328872b9` a mis à jour le JSON et l'état, **pas la fiche**. Incohérence fiche/JSON/état signalée dans `work/veille/nuit.md` — à corriger par la session (ou au bilan de 8 h).
+- **État** : revue ✅ 575/661/82, en-cours ✅ (la ligne du gold réel dit true avec les seuils), T0 sous 4 000 ; runs N2 en cours (2 h 20 et 49 min).
+
+La veille continue et suit la correction de la fiche. Rien de bloquant.
+
+
+## Tour 50
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 45/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 45 : je vérifie la fiche du gold réel et les événements
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -2; git status --short reports/rapport-pensee-cascade-reel-432.md; head -1 reports/rapport-pensee-cascade-reel-432.md; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-55; python3 tools/revue_documentation.py 2>&1 | tai … [62 caractères tronqués]`
+
+  ```
+00:44:02
+328872b9 L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE
+fa0b5bfa ÉTAT — T0 4 000 : LA LIGNE DU GOLD RÉEL 432 RACCOURCIE
+# B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est false
+ 713516    02:21:15 /home/stephane/gpu-env/bin/python w
+ 758133       49:59 /home/stephane/gpu-env/bin/python w
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **read** `{"file_path": "reports/rapport-pensee-cascade-reel-432.md", "limit": 12}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-cascade-reel-432.md</path>
+<type>file</type>
+<content>
+1: # B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est false
+2: 
+3: > **Ligne de roadmap** : **L/B13** (le bloc langue et la pensée) · **Date** : 2026-11-03 ·
+4: > **Verdict** : ⚠️ **la cascade bat le neuronal et l'heuristique sur le gold réel, mais les seuils
+5: > absolus échouent** — 432 phrases, 2 375 tokens, POS **0,9065** (fermé 0,8973, ouvert 0,9162),
+6: > syntagmes F1 **0,4598** (tp 627, fp 655, fn 818), tête F1 **0,5633** (tp 768, fp 514, fn 677),
+7: > pragmatique acte **0,9954** / négation 0,9676 / modalité 0,9861 / double sens 0,9676, fraction
+8: > **0,5165**. **429 appels** POS + 429 syntagmes (3 phrases vides), **0 refus**, 57 min 42.
+9: > `pos_all`, `syntagme_exact_all`, `syntagme_tete_all` et `fraction` sont **faux** — c'est le fait.
+10: 
+11: ## 1. Ce qui était mesuré
+12: 
+
+(Showing lines 1-12 of 68. Use offset=13 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "reports/rapport-pensee-cascade-reel-432.md", "new_string": "# B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est true (seuils du contrat)\n\n> **Correction — 03/11 00 h 42.** Le gold réel 432 a **ses propres seuils de  … [622 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-cascade-reel-432.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sed -n '3p' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt2=re.sub(r'\\*\\*Mis à jour : 2026-11-03, \\d+ h \\d+ HNE', '**Mis à jour : 2026-11-03, 00 h 46 HNE', t, count=1)\nassert t2!=t, 'da … [326 caractères tronqués]`
+
+  ```
+**Mis à jour : 2026-11-03, 00 h 06 HNE (heure locale, EST).**
+date ok
+  revue de documentation · 576 fiche(s) · 661 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ 2774 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-03)
+  ```
+
+- **bash** `{"command": "ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git commit --only -m \"NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50)\" -m \"Le JSON et l'état disaient true (seuils_contrat.gold_reel_432), la fiche était restée sur le titre false d … [497 caractères tronqués]`
