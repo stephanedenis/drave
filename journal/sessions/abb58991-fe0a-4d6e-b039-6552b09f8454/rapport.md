@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 24.3 h |
-| Tours | 168 |
-| Messages | 1189 |
-| Appels d'outils | 970 |
+| Durée | 24.4 h |
+| Tours | 169 |
+| Messages | 1195 |
+| Appels d'outils | 975 |
 | Fichiers touchés | 49 |
-| Commandes | 787 |
+| Commandes | 791 |
 | Sous-agents | 0 |
 | Commits | 102 |
 | Compactages de contexte | 3 |
@@ -27,6 +27,8 @@
 … [13 caractères tronqués]
 - **complete** — Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git ad
 … [13 caractères tronqués]
+- **create** — Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + 
+… [97 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -365,6 +367,8 @@
 **Tour 167** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 3/1000  Continue working toward the objective in this … [483 caractères tronqués]
 
 **Tour 168** — consulte le dossier pilotage pour prendre un chantier
+
+**Tour 169** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -4371,7 +4375,40 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 **Synthèse produite :**
 
-⏵ T0 à 3 986 ✅ ; la revue signale le compteur de documents (119 → 120, le contrat) ; je corrige et je commite
+⏵ Chantier **L — le bloc langue** pris et premier livrable committé : le **contrat de substitution** (`43637b48`) ; voici le point
+
+**Chantier choisi : L — le bloc langue** (roadmap : « surface, heuristique CPU + neuronal, contrat, cascade, pragmatique » ; prochaine action : « le contrat de L, la mesure 71 langues »). C'est le chantier libre le plus proche de mon mandat (bloc linguistique), non bloqué, et son premier livrable était explicitement « à écrire ».
+
+**Livré : le contrat de substitution** (`docs/theorie/contrat-bloc-langue.md`, commit `43637b48`, revue verte).
+
+- **L'interface** : `BlocLinguistique.analyser(texte, langue=None, contexte=None) -> Annotation` — la même sortie pour tous les modes, c'est ce qui rend la substitution possible.
+- **La sortie** : `Annotation` (texte, langue, script, étiquettes, refus, trace, coût, unités sémantiques, fraction, source, contexte) et `Etiquette` (niveau, type, valeur, offsets, source, confiance, candidats, langue, script, meta).
+- **Les 9 niveaux réels** : `NIVEAUX = (graphème, morphème, mot, pos, syntagme, phrase, discours, pragmatique, document)` ; sources `heuristique | neuronal | humain`.
+- **Les 4 modes réels** : `Heuristique` ; `NeuronalLLM*` (POS, chunks, pragmatique, composite) ; `Parallele` (deux blocs, fusion explicite, priorité nommée) ; `Cascade` (seuil 0,6, résidu, `appels_neuronal`).
+- **Le refus** (`RefusNeuronal`) : refuser, ne pas inventer — un refus est un fait.
+- **La trace et le coût** : chaque étape, `octets/tokens/durée`, et le coût par unité de calcul.
+- **La porte** : un tableau identique par mode sur les golds 180 et 432, avec le contrôle négatif « une heuristique rapide mais fausse coûte plus qu'un appel réseau ».
+- **Les limites nommées** : heuristique FR/EN-centrée ; neuronal via API DeepSeek ou DRVM (pas de 7B local, règle 11) ; pragmatique neuronale non qualifiante (0,6375).
+
+**État** : T0 **3 986** ; revue **594 fiches / 682 JSON / 120 docs** verte ; HEAD `43637b48`.
+
+**Prochaine action de L** : la **mesure 71 langues** (la frontière) — couverture × précision par unité de calcul sur les 71 langues du dépôt, avec le contrôle « heuristique fausse ». Je peux l'attaquer tout de suite si tu veux rester sur L.
+
+**À relire** : mon commit `43637b48` a emporté, avec le contrat, **deux suppressions déjà stagées par une autre session** (`docs/schemas/arbre-referents.svg`, `reports/rapport-s-arbre-referents.md`). Je ne les ai pas décidées — à vérifier avant de considérer le commit propre.
+
+### Tour 169 — continue
+
+*5 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Locate 71-language lexicon data
+- bash — Inspect lexicon JSON structure and language list
+- bash — Inspect lexicon concepts and profile builder
+- bash — Read profiles format and heuristic init
+
+**Synthèse produite :**
+
+⏵ Je repère le format des profils de langue (`_score_profil`, `_trigrammes`) et comment `Heuristique` les reçoit
 
 ## 3. Travail accompli
 
@@ -4471,7 +4508,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 747 autres
+- … et 751 autres
 
 ## 4. Mesures et résultats marquants
 

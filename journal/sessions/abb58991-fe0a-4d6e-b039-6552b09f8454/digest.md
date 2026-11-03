@@ -24472,3 +24472,116 @@ AssertionError: bilan 08h absent
 ⏵ T0 à 3 986 ✅ ; la revue signale le compteur de documents (119 → 120, le contrat) ; je corrige et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='| documents de `docs/` | **119** (hors archive et README) |'\nnew='| documents de `docs/` | **120** (hors archive et README) |'\nasser … [592 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 594 fiche(s) · 682 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3986 mots (budget 4 000)
+ 26 files changed, 936 insertions(+), 194 deletions(-)
+ delete mode 100644 docs/schemas/arbre-referents.svg
+ create mode 100644 docs/theorie/contrat-bloc-langue.md
+ delete mode 100644 reports/rapport-s-arbre-referents.md
+EXIT=0
+43637b48 L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier **L — le bloc langue** pris et premier livrable committé : le **contrat de substitution** (`43637b48`) ; voici le point
+
+**Chantier choisi : L — le bloc langue** (roadmap : « surface, heuristique CPU + neuronal, contrat, cascade, pragmatique » ; prochaine action : « le contrat de L, la mesure 71 langues »). C'est le chantier libre le plus proche de mon mandat (bloc linguistique), non bloqué, et son premier livrable était explicitement « à écrire ».
+
+**Livré : le contrat de substitution** (`docs/theorie/contrat-bloc-langue.md`, commit `43637b48`, revue verte).
+
+- **L'interface** : `BlocLinguistique.analyser(texte, langue=None, contexte=None) -> Annotation` — la même sortie pour tous les modes, c'est ce qui rend la substitution possible.
+- **La sortie** : `Annotation` (texte, langue, script, étiquettes, refus, trace, coût, unités sémantiques, fraction, source, contexte) et `Etiquette` (niveau, type, valeur, offsets, source, confiance, candidats, langue, script, meta).
+- **Les 9 niveaux réels** : `NIVEAUX = (graphème, morphème, mot, pos, syntagme, phrase, discours, pragmatique, document)` ; sources `heuristique | neuronal | humain`.
+- **Les 4 modes réels** : `Heuristique` ; `NeuronalLLM*` (POS, chunks, pragmatique, composite) ; `Parallele` (deux blocs, fusion explicite, priorité nommée) ; `Cascade` (seuil 0,6, résidu, `appels_neuronal`).
+- **Le refus** (`RefusNeuronal`) : refuser, ne pas inventer — un refus est un fait.
+- **La trace et le coût** : chaque étape, `octets/tokens/durée`, et le coût par unité de calcul.
+- **La porte** : un tableau identique par mode sur les golds 180 et 432, avec le contrôle négatif « une heuristique rapide mais fausse coûte plus qu'un appel réseau ».
+- **Les limites nommées** : heuristique FR/EN-centrée ; neuronal via API DeepSeek ou DRVM (pas de 7B local, règle 11) ; pragmatique neuronale non qualifiante (0,6375).
+
+**État** : T0 **3 986** ; revue **594 fiches / 682 JSON / 120 docs** verte ; HEAD `43637b48`.
+
+**Prochaine action de L** : la **mesure 71 langues** (la frontière) — couverture × précision par unité de calcul sur les 71 langues du dépôt, avec le contrôle « heuristique fausse ». Je peux l'attaquer tout de suite si tu veux rester sur L.
+
+**À relire** : mon commit `43637b48` a emporté, avec le contrat, **deux suppressions déjà stagées par une autre session** (`docs/schemas/arbre-referents.svg`, `reports/rapport-s-arbre-referents.md`). Je ne les ai pas décidées — à vérifier avant de considérer le commit propre.
+
+
+## Tour 169
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Je crée le goal L et je localise les données des 71 langues pour concevoir la mesure de frontière
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fai … [139 caractères tronqués]`
+
+> **Objectif** (create) : Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11).
+
+
+  ```
+{"goal":{"id":"goal-71199637-ae7f-453f-9253-fa2d7f879154","revision":1,"objective":"Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/jeux/construire_lexique_multilingue.py; echo '=== données ==='; find donnees data -maxdepth 2 -iname \"*lexique*\" -o -maxdepth 2 -iname \"*multilingue*\" 2>/dev/null | head -8; ls donnees/ 2>/dev/null | head", "description": "Loc … [50 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""construire_lexique_multilingue.py — le lexique des jeux, en 53 langues.
+
+CE QUE CE SCRIPT FAIT, ET POURQUOI IL EST SÉPARÉ. Le lexique multilingue est une
+**donnée** (des libellés) et non une règle : on le construit une fois depuis
+Wikidata, on le versionne, et la porte n'a plus besoin du réseau. Le script est
+donc un **outil de construction**, pas un outil de mesure : il écrit
+`tools/jeux/lexique_multilingue.json`, que `lexique_multilingue.py` charge.
+
+LA SOURCE. Les libellés viennent de **Wikidata** (`wbgetentities`,
+`props=labels`), donc de la licence **CC0** ; les identifiants sont ceux des
+articles Wikipédia anglais, lus par `pageprops`. Les concepts sont volontairement
+**peu nombreux et stables** (pièces, rangs, couleurs, enseignes, noms de jeux,
+notions de maîtres) : un libellé faux serait pire qu'un libellé absent, et la
+couverture est mesurée, pas supposée.
+
+CE QUI EST MANUEL. Les verbes (« joue », « prend », « passe ») ne sont pas des
+entités Wikidata : le lexique multilingue ne les invente pas. Les surfaces
+multilingues sont donc des **mots-clés** (pièce + cases, rang + enseigne), et la
+grammaire reste FR/EN. C'est un choix du contrat, écrit dans
+… [645 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le lexique multilingue est écrit par le constructeur ; je vérifie le fichier et la liste complète des 71 langues pour la mesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -l tools/jeux/lexique_multilingue.json 2>/dev/null; python3 - <<'PY'\nimport json, pathlib, re\np=pathlib.Path('tools/jeux/lexique_multilingue.json')\nif not p.exists():\n    print('absent'); raise SystemExit\nd=json.loads(p.read_text(encoding='utf … [385 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 56071 26 oct 09:02 tools/jeux/lexique_multilingue.json
+cles ['version', 'source', 'date', 'langues', 'variantes', 'concepts']
+type dict taille 7
+exemple version -> 1
+LANGUES = ["ar", "bn", "ca", "cs", "da", "de", "el", "en", "eo", "es", "et", "eu",
+           "fa", "fi", "fr", "gl", "he", "hi", "hr", "hu", "id", "is", "it", "ja",
+           "ka", "kk", "ko", "lt", "lv", "mk", "ms", "mt", "nb", "nl", "nn", "pl",
+           "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "sw", "ta", "th", "tr",
+           "uk", "ur", "vi", "zh",
+           # deuxième vague : 19 langues, pour « le plus de langues possibles »
+           "af", "am", "az", "be", "bs", "cy", "ga", "hy", "km", "ky", "lo", "mn",
+           "ne", "pa", "si", "so", "uz", "yo", "zu"]
+
+# Les variantes d'écriture sont fusionnées dans la langue de base : le chinois
+# simplifié, le portugais du Brésil et le serbe latin doivent être lus comme la
+# même langue, pas comme trois langues de plus.
+VARIANTES = {
+    "zh": ["zh-hans", "zh-cn", "zh-sg", "zh-hant"],
+    "pt": ["pt-br"],
+    "sr": ["sr-ec", "sr-el"],
+}
+  ```
+

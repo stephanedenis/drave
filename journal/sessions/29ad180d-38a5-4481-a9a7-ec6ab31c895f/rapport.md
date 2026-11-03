@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 24.3 h |
+| Durée | 24.4 h |
 | Tours | 11 |
-| Messages | 336 |
-| Appels d'outils | 332 |
+| Messages | 344 |
+| Appels d'outils | 340 |
 | Fichiers touchés | 15 |
-| Commandes | 248 |
+| Commandes | 256 |
 | Sous-agents | 0 |
-| Commits | 20 |
+| Commits | 22 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -420,7 +420,7 @@ La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents 
 
 ### Tour 11 — quel page web utiliser pour la suite?
 
-*6 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Inspect bank server routes and UI
 - bash — Read server data model and routes
@@ -428,6 +428,14 @@ La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents 
 - bash — Read server tests to extend
 - bash — Add paragraph routes and data to server
 - bash — Read bank page header for style reuse
+- bash — Create paragraph page, export, test
+- bash — Commit paragraph page and push submodule
+- bash — Relaunch server and verify paragraph page
+- bash — Update state for paragraph page and check
+- bash — Inspect divergent main state and fiche history
+- bash — Inspect L commit deletion of S fiche
+- bash — Restore SVG, index, schema reference after L deletion
+- bash — Commit page and restore S files
 
 **Synthèse produite :**
 
@@ -497,7 +505,7 @@ La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 208 autres
+- … et 216 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -614,4 +622,6 @@ La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents 
 - S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ" -m "La validation humaine s'arrête après 142 
 - S — L'ARBRE A UNE PROFONDEUR ET LES RÉFÉRENTS SONT PROPOSÉS : 99 CANDIDATS À ≥3, 294/371 FORMES ; SVG ALICE" -m "construire_arbre() donne un père et une profond
 - S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE" -m "construire_arbre() donne un père et une profondeur réelle : 359 candidats, 37 de prof
+- S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS ET VERDICT ; 51 TESTS" -m "Le serveur sert /paragraphes : les trois paragraphes complets (contexte, cible, antécéden
+- S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS, VERDICT ; LE BANC PEUT REPRENDRE" -m "Le serveur sert /paragraphes : les trois paragraphes complets (contexte, cibl
 

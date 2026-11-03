@@ -8693,3 +8693,10 @@ pas  1100 · perte 1.2491 · dure 1.0523 · douce 0.3154 · 479 s
   ```
 
 - **bash** `{"command": "sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; cat work/n2ac/prod60k.out 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Wait for 60k production completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-436]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-436", "timeout_ms": 2700000, "wait": true}`

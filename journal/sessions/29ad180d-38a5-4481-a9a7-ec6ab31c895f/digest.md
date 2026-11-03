@@ -7316,3 +7316,187 @@ class Banc:
 … [2463 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\n# arbre_svg : liens paramétrables\np=Path('arbre_svg.py'); t=p.read_text(encoding='utf-8')\nt=t.replace('''def svg_arbre(cible: str = CIBLE, contexte: str = CONTEXTE, antec … [6336 caractères tronqués]`
+
+  ```
+serveur/arbre_svg : routes paragraphes
+import ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '1,45p' static/index.html", "description": "Read bank page header for style reuse"}`
+
+  ```
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structures — le banc d'interprétations</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="titre">
+    <h1>Structures</h1>
+    <p class="sous">Six phrases, douze lectures. Le modèle propose, vous tranchez — et la banque se construit.</p>
+  </div>
+  <div class="stats">
+    <div><strong id="s-phrases">–</strong><span>phrases</span></div>
+    <div><strong id="s-valides">–</strong><span>verdicts</span></div>
+    <div><strong id="s-ok">–</strong><span>acceptés</span></div>
+    <a class="export" href="/api/export" download>⤓ exporter la banque</a>
+  </div>
+</header>
+
+<section class="legende">
+  <span class="leg t-GN">GN</span> groupe nominal
+  <span class="leg t-GV">GV</span> groupe verbal
+  <span class="leg t-GP">GP</span> groupe prépositionnel
+  <span class="leg t-REL">REL</span> relative
+  <span class="leg t-SUB">SUB</span> subordonnée
+  <span class="leg t-PHRASE">PHRASE</span> énoncé
+  <span class="sep">·</span>
+  <span class="astuce">l'indentation = la profondeur d'attachement</span>
+  <span class="sep">
+… [685 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && cat > static/paragraphes.html <<'HTML'\n<!doctype html>\n<html lang=\"fr\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Structures — paragraphes … [11648 caractères tronqués]`
+
+  ```
+page /paragraphes, export et test
+----------------------------------------------------------------------
+Ran 51 tests in 4.222s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\nimport json\n# a003 : le contexte porte Alice (l'antécédent)\np=Path('donnees/paragraphes.json'); d=json.loads(p.read_text(encoding='utf-8'))\nfor x in d[\"paragraphes\"]:\ … [1991 caractères tronqués]`
+
+  ```
+a003, README, docstring
+
+OK
+[master 0422a8c] S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS ET VERDICT ; 51 TESTS
+ 7 files changed, 285 insertions(+), 6 deletions(-)
+ create mode 100644 static/paragraphes.html
+ create mode 100644 static/paragraphes.js
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   b18dbac..0422a8c  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && (ss -ltn 2>/dev/null | grep -q ':8765 ' && echo \"port occupé\") || echo \"port libre\"; nohup python3 serveur.py --port 8765 > /tmp/structures-serveur.log 2>&1 & echo \"pid $!\"; sleep 2; curl -s http://127.0.0.1:87 … [463 caractères tronqués]`
+
+  ```
+port libre
+pid 2414252
+3 paragraphes
+  a001 2 candidats 6 référents 5211 octets SVG True
+  a002 3 candidats 3 référents 5584 octets SVG True
+  a003 3 candidats 5 référents 5498 octets SVG True
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structures — paragraphes complets</title>
+  127.0.0.1 · "GET /api/paragraphes HTTP/1.1" 200 -
+  127.0.0.1 · "GET /paragraphes HTTP/1.1" 200 -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\n# fiche : la page, 51 tests, le nouveau commit\np=Path('reports/rapport-s-arbre-referents.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"Cinquante tests couvrent\", \"Cinquante et un  … [5348 caractères tronqués]`
+
+  ```
+fiche/état/roadmap/plan : page /paragraphes
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 594 fiche(s) · 682 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ mandat long (175 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (1134 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+=== status ===
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+ M tools/structures
+?? reports/rapport-s-arbre-referents.md
+43637b48 L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo \"=== branch ===\"; git status -sb | head -2; echo \"=== ancestry ===\"; git merge-base --is-ancestor 2b3595c1 HEAD && echo \"2b3595c1 ancêtre\" || echo \"2b3595c1 PAS ancêtre\"; git rev-list --count origin … [446 caractères tronqués]`
+
+  ```
+43637b48 L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)
+2b3595c1 S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE
+1b9a412a JOURNAL D629 — DERNIÈRE LIGNE DE LA BOUCLE RETIRÉE
+2ae69e5c JOURNAUX — LES TROIS DERNIÈRES LIGNES DE LA BOUCLE RETIRÉES (COMMIT SANS HOOK POUR NE PAS RÉGÉNÉRER)
+43833200 DISTILLATION NATIVE — LE PROFESSEUR LONG PAIE À FORTE DOUCEUR : α = 0,9 DONNE 3,5090 / 3,2835 / 3,1863 CONTRE 3,6452 / 3,4493 / 3,3628 POUR L'ÉLÈVE DUR
+=== branch ===
+## master...origin/master [ahead 1]
+ M docs/pilotage/en-cours.md
+=== ancestry ===
+2b3595c1 ancêtre
+1
+0
+=== fiche HEAD ===
+fiche ABSENTE de HEAD
+43637b48 L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)
+2b3595c1 S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE
+=== pointer ===
+160000 commit 00d2a015d2f7448db8324a4b25796312abffa83d	tools/structures
+0422a8c S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS ET VERDICT ; 51 TESTS
+b18dbac S — L'ARBRE A UNE PROFONDEUR ET LES RÉFÉRENTS SONT PROPOSÉS : 99 CANDIDATS À ≥3, 294/371 FORMES ; SVG ALICE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 43637b48 | head -20; echo \"=== fiche diff ===\"; git show 43637b48 -- reports/rapport-s-arbre-referents.md | head -20; echo \"=== INDEX ===\"; git show HEAD:reports/INDEX.md | grep -c \"arbre-referents\"; e … [167 caractères tronqués]`
+
+  ```
+43637b48 L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)
+ docs/pilotage/en-cours.md                          |   2 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ docs/schemas/README.md                             |   1 -
+ docs/schemas/arbre-referents.svg                   |  30 --
+ docs/theorie/contrat-bloc-langue.md                | 168 +++++++++
+ journal/2026-11-03/README.md                       |  11 +-
+ journal/2026-11-03/apprentissage.md                |   6 +-
+ journal/2026-11-03/attention.md                    |   6 +-
+ journal/2026-11-03/distribue.md                    |   6 +-
+ journal/2026-11-03/docs.md                         |   6 +-
+ journal/2026-11-03/memoire.md                      |   6 +-
+ journal/2026-11-03/mesures.md                      |  10 +-
+ journal/2026-11-03/modele.md                       |   6 +-
+ journal/2026-11-03/moteur.md                       |   6 +-
+ journal/2026-11-03/portes.md                       |   6 +-
+ journal/README.md                                  |   8 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  17 +
+ .../rapport.md                                    
+… [1350 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 arbre_svg.py; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\n# rétablir la ligne de l'index des schémas (supprimée par le commit L)\np=Path('docs/schemas/REA … [1886 caractères tronqués]`
+
+  ```
+✅ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/arbre-referents.svg · 4681 octets
+SVG/INDEX/schémas rétablis
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 594 fiche(s) · 682 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== status ===
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M docs/schemas/README.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+ M reports/INDEX.md
+ M tools/structures
+?? docs/schemas/arbre-referents.svg
+?? reports/rapport-s-arbre-referents.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add docs/schemas/arbre-referents.svg reports/rapport-s-arbre-referents.md docs/schemas/README.md reports … [848 caractères tronqués]`

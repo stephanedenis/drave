@@ -49,12 +49,13 @@
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
 - **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
-- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **50 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md).
-- **Ce qu'elle fait** : **`b18dbac`** ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **142/81/65**.
+- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** ; **51 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md).
+- **Ce qu'elle fait** : **`0422a8c`** ; page **`/paragraphes`** ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **142/81/65**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
-- **Prochaine action** : **UI serveur** (arbre, référents, contexte, résolution avant verdict),
-  puis **banque de paragraphes** et revalidation ; h050/h053.
-- **Bloquants** : **banque suspendue** : la page n'affiche pas encore l'arbre/les référents.
+- **Prochaine action** : **valider sur `/paragraphes`** (référents puis structure), puis étendre
+  les paragraphes ; h050/h053.
+- **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents ; la banque
+  partielle reste archivée.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
 ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
@@ -102,7 +103,7 @@
 
 ## Ce qui est en cours
 
-- **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371** ; prochaine : UI.
+- **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
 - **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
 - **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
 
