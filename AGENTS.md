@@ -10,7 +10,7 @@
 ## 1. La vision (l'essentiel)
 
 **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
-réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
 
 Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
 les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
@@ -55,10 +55,9 @@ volonté** des événements.
     sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
     → [`docs/methode/continuite.md`](docs/methode/continuite.md)
 
-11. **Les GPU sont exclusivement réservés à Drave** et à ses tâches d'apprentissage ; les
-    **professeurs** passent par l'**API DeepSeek en ligne** (`tools/llm/enseignant.py`,
-    `tools/llm/deepseek.py`), jamais par un serveur local (`llama-server`, `ollama`).
-    Garde-fous : `hauru-gpu-guard` (timer 30 s) et `porte-ressources` (contrôle GPU).
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek en ligne** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
     → [`docs/methode/ressources.md`](docs/methode/ressources.md)
 
 ## 3. Routage : lire le document de sa tâche, pas les autres

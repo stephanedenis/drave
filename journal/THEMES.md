@@ -241,6 +241,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-31](2026-10-31/moteur.md) | — |
 | [2026-11-01](2026-11-01/moteur.md) | — |
 | [2026-11-02](2026-11-02/moteur.md) | — |
+| [2026-11-03](2026-11-03/moteur.md) | — |
 
 ### `mesures` — Campagnes et mesures
 

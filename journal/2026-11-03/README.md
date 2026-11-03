@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**41 commits** · **5 session(s)** · **6 thème(s)**
+**42 commits** · **5 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,6 +16,7 @@
 | docs | 15 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
 | portes | 6 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -73,6 +74,7 @@
 | 09:02 | `aba77b17` | PORTE HOMEOSTASIE — LA SUGGESTION DE RÉGÉNÉRATION ÉTAIT FAUSSE (BRAS ET SUFFIXE) |
 | 09:04 | `5454ac59` | JOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUMENTÉE) |
 | 09:06 | `842654cc` | PORTES — DEPUIS LE RÉ-ÉTALONNAGE, TROIS ROUGES CONNUES AU LIEU DE QUATRE |
+| 09:13 | `9d626b63` | GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT |
 
 ## Le récit de la journée (écrit à la main)
 

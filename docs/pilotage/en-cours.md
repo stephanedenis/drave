@@ -21,11 +21,9 @@
 > DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
 > (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave (la N4 a tourné sur GPU0).
 >
-> **Bilan de 08 h (03/11)** : la passe de **04 h 10** a rendu **82 portes, 77 vertes, 5 rouges**
-> (4 connues + `porte-sessions` de coordination, machine au repos) ; la **82e `porte-ressources`**
-> est validée. **N2 et S sont en pause** (derniers heartbeats 00 h 25 / 20 h 40 ; claims libérés) ;
-> le **B13** et le **hub** restent actifs. La suite : une passe **82** stable ; détail dans
-> [`journal/2026-11-03`](../../journal/2026-11-03/README.md).
+> **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`
+> rejouée verte) ; **82e `porte-ressources`** validée. **N2 et S en pause** (00 h 25 / 20 h 40 ;
+> claims libérés) ; **B13** et **hub** actifs. Détail : [`journal/2026-11-03`](../../journal/2026-11-03/README.md).
 
 ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
 

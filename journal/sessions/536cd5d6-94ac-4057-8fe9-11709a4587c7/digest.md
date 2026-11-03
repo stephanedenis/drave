@@ -13105,3 +13105,47 @@ bb94b17 feat(gpu): hauru-gpu-guard — les GPU sont exclusivement réservés à 
 ⏵ Modèles professeurs retirés, garde-fou dans equipment-hauru (`bb94b17`) ; j'inscris l'état et je vérifie.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"> **Bilan de 08 h (03/11)** : la passe de **04 h 10** a rendu **82 portes, 77 vertes, 5 rouges**\"\nnew=\"> **Serveurs locaux arrêt … [2002 caractères tronqués]`
+
+  ```
+en-cours : serveurs locaux + questions resserrées
+  T0 max : 4053 mots (budget 4 000)
+  ❌ 2 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 587 fiche(s) · 674 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+
+[master 9d626b63] GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT
+ 18 files changed, 609 insertions(+), 58 deletions(-)
+[commit 0]
+9d626b63 GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 053 (2 violations) : j'élague l'état et je recomitte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -6; echo \"---\"; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"\"\"> **Bilan de 08 h (03/11)** : la passe de **04 h 10** a rendu * … [1087 caractères tronqués]`
+
+  ```
+avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 2 violation(s) :
+     · AGENTS.md : 1243 mots > budget 1200 (T0)
+     · T0 : 4053 mots (AGENTS + en-cours + une tâche) > budget 4 000
+---
+bilan resserré
+  budget de contexte · documents chargeables
+  T0 max : 4026 mots (budget 4 000)
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+  ❌ 2 violation(s) :
+     · AGENTS.md : 1243 mots > budget 1200 (T0)
+     · T0 : 4026 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('AGENTS.md'); t=p.read_text()\nold=\"\"\"Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des  … [1892 caractères tronqués]`

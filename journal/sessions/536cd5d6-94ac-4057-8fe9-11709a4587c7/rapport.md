@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 17.7 h |
 | Tours | 74 |
-| Messages | 510 |
-| Appels d'outils | 452 |
+| Messages | 512 |
+| Appels d'outils | 454 |
 | Fichiers touchés | 16 |
-| Commandes | 331 |
+| Commandes | 333 |
 | Sous-agents | 0 |
-| Commits | 39 |
+| Commits | 40 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1942,7 +1942,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 74 — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos … [101 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Investigate llama-server process, port, GPU and services
 - bash — Search llama, deepseek and professor references in code
@@ -1958,11 +1958,11 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - bash — Test operateurs import, inspect gate and equipment repo
 - bash — Find class name, run pensee tests, check git status
 - bash — Run politique test, verify class and inspect gate/system tree
-- … et 9 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ Modèles professeurs retirés, garde-fou dans equipment-hauru (`bb94b17`) ; j'inscris l'état et je vérifie.
+⏵ T0 à 4 053 (2 violations) : j'élague l'état et je recomitte.
 
 ## 3. Travail accompli
 
@@ -2029,7 +2029,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 291 autres
+- … et 293 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2212,4 +2212,5 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -m "L'état et la roadmap disent la même chose : N2 (00 h 25) et S (20 h 40) sont en pause 
 - feat(gpu): hauru-gpu-guard — les GPU sont exclusivement réservés à Drave, les professeurs passent par l'API DeepSeek" 2>&1 | tail -3; git log --oneline -1
 - GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT" -m "PolitiqueLLM passe de llama-server (18082) à l'API 
+- BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS" -- AGENTS.md docs/pilotage/en-cours.md; echo "[commit $?]"; git log --onel
 
