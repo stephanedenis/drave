@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-03, 00 h 52 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-03, 08 h 08 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -16,7 +16,11 @@
 > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
 > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
 >
-> **Nuit du 02/11 → 03/11 (08 h)** : les quatre sessions restent productives ; claims dans `work/ressources.json` ; à la fin d'un job, `--release` puis `--claim` du suivant ; si une action attend l'humain, prendre la ligne suivante. Le hub suit la passe et fera le bilan à 08 h.
+> **Bilan de 08 h (03/11)** : la passe de **04 h 10** a rendu **82 portes, 77 vertes, 5 rouges**
+> (4 connues + `porte-sessions` de coordination, machine au repos) ; la **82e `porte-ressources`**
+> est validée. **N2 et S sont en pause** (derniers heartbeats 00 h 25 / 20 h 40 ; claims libérés) ;
+> le **B13** et le **hub** restent actifs. La suite : une passe **82** stable ; détail dans
+> [`journal/2026-11-03`](../../journal/2026-11-03/README.md).
 
 ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
 
@@ -27,10 +31,10 @@
 - **Ambition** : un état reprenable, des mandats qui disent la vérité.
 - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
-- **Ce qu'elle fait** : intégration ; **passe close — 81 portes, 76 vertes, 5 rouges, 1 h 52** ;
-  INDEX/README ; **bilan de 8 h**.
-- **Ce que font les autres** : **N2**, **S**, **Pensée**.
-- **Prochaine action** : intégrer les lignes B13/N2/S ; tenir le **bilan de 8 h**.
+- **Ce qu'elle fait** : intégration ; **passe 04 h 10 — 82 portes, 77/5** (4 connues +
+  `porte-sessions` de coordination) ; INDEX/README ; **bilan de 08 h**.
+- **Ce que font les autres** : **N2**, **S** (en pause), **Pensée**.
+- **Prochaine action** : le **bilan de 08 h** est écrit ; clôture ; la passe **82** stable.
 - **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
@@ -45,7 +49,8 @@
 - **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **47 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
 - **Ce qu'elle fait** : **`00d2a01`** ; corpus **55** (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats, **0** validée.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
-- **Prochaine action** : **h050/h053**, puis validation humaine de la banque.
+- **Prochaine action** : **en pause** (dernier heartbeat 20 h 40 ; claim libéré) ; à la reprise :
+  h050/h053, puis validation humaine de la banque.
 - **Bloquants** : aucun ; **banque à 0** verdict.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
@@ -66,7 +71,8 @@
   [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
 - **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
-- **Prochaine action** : **gold 200+** ; **porte stochastique/fenêtre** ; **porte B13** attend S.
+- **Prochaine action** : **gold 432 réel (0,9954)** ; **DRVM/native 114/114+5/5** ; la suite :
+  **T132/T133**, gold 200+ ; **porte B13** attend S.
 - **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute/mobile ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ; reste **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -81,7 +87,8 @@
 - **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la
   **porte propre**, le contrôle depuis zéro.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : le contrôle depuis zéro, puis la clôture.
+- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; fiche/JSON
+  `rapport-n2-fenetre` committés ; à la reprise : contrôle depuis zéro, clôture.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
@@ -91,12 +98,6 @@
 
 ## Ce qui est en cours
 
-- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
-- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (2,5114 à 4 000) ;
-  **la porte 2,5 sur le corpus propre n'est pas atteinte**
-  (2,7856 val, 0,29 manquant) mais la fenêtre est le **seul bras descendant** —
-  [`porte`](../../reports/rapport-n2-porte-propre.md),
-  [`2048`](../../reports/rapport-n2-r12-2048.md).
 - **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
 - **N2** : **la fenêtre 1 024 est la recette de production** — 30 000 pas : **2,9943** à 128,
   **2,6143** à 1 000, **2,5628** à 2 000 (**sous 2,5** au grand corpus) ; le compute à fenêtre 128

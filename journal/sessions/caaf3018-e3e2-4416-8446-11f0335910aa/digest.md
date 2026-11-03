@@ -7650,3 +7650,91 @@ bilan inséré dans le journal du 03/11
 ⏵ Bilan inséré et journal vert ; je le commite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-bilan.txt <<'EOF'\nJOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACHINE AU REPOS\n\nLe bloc « notes » du 03/11 porte le bilan du hub : la passe du 02/11 19 h 32\n(81 portes, 76/5, GPU 1, porte-t … [524 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-318]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-318", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master a219c844] JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACHINE AU REPOS
+ 12 files changed, 379 insertions(+), 17 deletions(-)
+ create mode 100644 journal/2026-11-03/portes.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles finaux avant le rapport de 8 h.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; echo \"=== T0 ===\"; python3 tools/taille_documents.py 2>&1 | grep \ … [301 caractères tronqués]`
+
+  ```
+07:18
+=== revue ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+  T0 max : 3996 mots (budget 4 000)
+=== journal ===
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== git ===
+a219c844 JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACHINE AU REPOS
+2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES, 5 ROUGES (4 CONNUES + SESSIONS)
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+10
+=== passe ===
+--- 77 vertes, 5 rouges ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est vert ; je vérifie le goal avant de clore.
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-88b10965-3fd1-4a98-b327-a3923f75e06c","revision":1,"objective":"Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.","phase":"active","roundsStarted":22,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Objectif atteint : passes intégrées, état vert, rapport écrit et committé. Je clôture le goal.
+
+- **update_goal** `{"goal_id": "goal-88b10965-3fd1-4a98-b327-a3923f75e06c", "revision": 1, "action": "complete"}`
+
+  ```
+Error: complete and blocked require a direct human turn or the current goal round
+  ```
+
+### 🤖 Assistant
+
+⏵ Le goal est désarmé (pas de tour humain pour le clore) ; je laisse donc le rapport de 8 h, qui vaut bilan.
+
+**Bilan de la nuit — 02/11 20 h → 03/11 07 h 20**
+
+**Deux passes complètes, deux verdicts**
+- **02/11 19 h 32** : 81 portes, **76 vertes / 5 rouges**, 1 h 52, lancée sur le **GPU 1** pendant que N2 tenait le GPU 0. Les 4 rouges connues + `porte-tableaux` (lien d'une fiche N2 en cours d'écriture) — **rejouée verte à 21 h 57** dès que le JSON est apparu.
+- **03/11 04 h 10** : **machine au repos** (deux GPU libres, claims rendus), **82 portes, 77 vertes, 5 rouges, 1 h 40** — la première passe qui compte la **82ᵉ porte** (`porte-ressources`, verte). 4 rouges connues + **`porte-sessions`** (plans N2/S périmés sans claim : **coordination**, pas de code). Journaux `work/portes/passe-0303-04h10`.
+
+**Ce que les sessions ont livré pendant la nuit**
+- **N2** : 200 k pas → **3,1591** ; R1.1 **3,2545** ; fenêtre 256→1 024 = **3,2545 → 3,0107 → 2,9950** ; à 20 000 pas, **2,6256** à 1 000 — la porte 2,5 se rapproche.
+- **S** : gold **55**, types **54/55**, rôles **131/131**, compléments **47/47** ; corpus réel **65,5 %** propre contre 9,1 % mélangé ; CEGEP OCR **8,5 %** (plancher) ; banque **200/355**.
+- **Pensée** : **140/140** ; gold réel 432 (POS **0,9065**, acte **0,9954**) ; **parité DRVM/native 114/114 poids, 5/5 prompts** ; fenêtre **non discriminante** (oracle 228, aveugle 215, 7B 238).
+- **D/R/A** : close le 02/11 à 18 h 45 (147 scans, 60 documents, 1 982 p).
+
+**Corrections du hub** : `portes.md` (registre dans `work/`, pas `/tmp` ; procédure « un seul GPU libre ») ; `references` **§2 réécrit en 82 lignes** et en-têtes des deux passes ; `porte-homeostasie` dont le message **exécutait** sa commande (backticks) ; `ressources.py` entré dans le routage ; compteurs alignés (587 fiches / 674 JSON).
+
+**État à 8 h** : `en-cours` 1 625 mots ✅, T0 3 996 ✅, revue ✅, journal ✅, schémas ✅, backlog ✅, `en-cours`/`roadmap`/`références` verts. Le rapport complet est dans `journal/2026-11-03/README.md` (commit `a219c844`) et le fil de nuit dans `work/hub-nuit.md`.
+
+**Trois décisions t'attendent**
+1. **Valider la banque S** (mode `banque` à 0 verdict) — c'est son blocage nommé.
+2. **Trancher `porte-reparti-moteur`** : PPL entier = réparti = 8,7434, écart nul, mais l'épinglage 9,1748 ne se reproduit pas ; je ne l'ai pas touché pour ne pas masquer une dérive non expliquée.
+3. **Committer ou laisser finir** les fichiers en cours de N2 (3) et Pensée (2) — 10 fichiers modifiés, non committés à 7 h 20.
+
+**Coordination** : `sessions --check --strict` sort en 1 (plans N2 00 h 25 et S 20 h 40 périmés sans claim) alors que les sessions vivent — à rafraîchir ou à passer en pause. Trois autres sessions reprises tournaient en parallèle (dont un second hub) ; l'incident « 82ᵉ porte emportée par un commit à index alterné » a été corrigé et **la leçon est consignée** dans `plan-travail.md` §4 (`git read-tree HEAD` après un commit à index alterné).
+

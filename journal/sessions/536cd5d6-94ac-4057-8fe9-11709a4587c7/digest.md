@@ -11427,3 +11427,223 @@ veille 10 min
 [status: completed, exit code: 0]
   ```
 
+
+## Tour 72
+
+### 👤 Utilisateur
+
+est que le dossier de pilotage est à jour avec les bons états des sessions dsh en cours
+
+### 🤖 Assistant
+
+⏵ Audit du pilotage : je compare `docs/pilotage/` aux plans et aux états réels des sessions DSH.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heure ==\" && date '+%F %T' && echo \"== check strict ==\" && python3 tools/sessions.py --check --strict 2>&1 | tail -8; echo \"[exit $?]\"; echo; echo \"== sections en-cours ==\" && grep -n '^### Session' docs/pilotage/en- … [513 caractères tronqués]`
+
+  ```
+== heure ==
+2026-11-03 08:08:16
+== check strict ==
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (577 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (625 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ❌ mandat périmé (463 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — heartbeat à rafraîchir
+  ❌ mandat périmé (688 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+[exit 0]
+
+== sections en-cours ==
+21:### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+37:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+52:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+73:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+
+== en-cours maj ==
+# En ce moment
+
+**Mis à jour : 2026-11-03, 00 h 52 HNE (heure locale, EST).**
+
+
+== plans actifs ==
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab
+… [1083 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit : non, N2 et S sont périmés sans claim, l'état date de 00 h 52 et le bilan de 08 h manque ; je corrige.
+
+**Non, pas complètement.** L'ossature est verte — 4 sections dans `en-cours`, 4 plans, revue 587/674/82, T0 3 999, journal ✅, claims hub/B13 — mais les **états** ne suivent plus :
+
+| session | plan | heartbeat | claim | verdict |
+|---|---|---|---|---|
+| **N2** `0733c5bb` | `actif` | 00 h 25 (**463 min**) | **aucun** | ❌ **périmé** ; session arrêtée (fiche/JSON committés, R1.2-mix) |
+| **S** `29ad180d` | `actif` | 20 h 40 (**688 min**) | **aucun** | ❌ **périmé** ; session arrêtée (banque 200/355, 0 validée) |
+| **B13** `e181ce02` | `actif` | 21 h 43 (**625 min**) | `b13-gold` | ⚠ « mandat long » ; claim de la nuit, plan non suivi (gold 432 true, DRVM 114/114, porte-minute) |
+| **Hub** `536cd5d6` | `actif` | 22 h 31 (**577 min**) | `veille` | ⚠ « mandat long » ; **bilan de 08 h non écrit** |
+
+- `sessions.py --check --strict` **échoue** sur N2/S : la porte sessions serait rouge.
+- `en-cours` daté **00 h 52** ; `journal/2026-11-03` a la checklist mais pas le bilan ; roadmap/chantiers/plan-travail/références s'arrêtent aux résultats de la nuit.
+
+**Corrections en cours** : N2/S passent `État : en pause` (arrêt constaté, reprise possible), `en-cours` au 03/11 08 h avec leurs résultats, plan B13 rafraîchi, hub → bilan 08 h, alignement roadmap/chantiers/plan-travail/références, `sessions.py`/`porte-sessions` verts, commit.
+
+**Question** : le B13 et le hub sont-ils encore ouverts dans leurs terminaux, ou je les passe aussi en pause ? (Le N2 et le S semblent arrêtés ; leurs claims ne sont plus actifs.)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — N2, le natif : 200 000 pas et la fenêtre
+2: 
+3: > **Mandat ouvert** le 2026-11-02 16 h 20 HAE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ N2) —
+5: > la session reprend le programme **N2** (le natif, GPU) après la clôture de `0b0a6a0d`.
+6: > Le heartbeat est celui de l'état.
+7: 
+8: - **Session** : `0733c5bb-f90b-4f58-9241-3364fa32e46c`
+9: - **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre
+10:   native (R1.1/R1.2 côté N2), les fiches et les contrôles négatifs.
+11: - **Périmètre** : N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2,
+12:   courbe de longueur), R1.1/R1.2 mesurés depuis N2
+13: - **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `reports/rapport-n2-*`,
+14:   `work/n2*`, `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/`
+15: - **Heartbeat** : 2026-11-03 00:25 HAE
+16: - **Objectif final** : trancher la question ouverte de N2 — **les 200 000 pas sur le mélange
+17:   1 Go font-ils passer s
+… [1729 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — S, les structures (analyser, banquer, exporter)
+2: 
+3: > **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+5: > [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+6: > Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+7: > `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+8: > précède ; sa section S y est **écrite** le 02/11 16 h 52 sur demande humaine, et le hub relit.
+9: 
+10: - **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+11: - **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+12:   pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+13: - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+14: - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+15:   `reports/s-banque-*` ; `j
+… [3841 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Je passe N2 et S en pause (arrêt constaté) et je mets l'état au 03/11 08 h.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md", "old_string": "- **Prochaine action** : la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis\n  la **clôture**.\n- **État** : actif", "new_string": "- … [412 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "old_string": "- **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;\n  puis la **frontière du GN sans auxiliaire** (h033) et un  … [484 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== check ==\" && python3 tools/sessions.py --check --strict 2>&1 | tail -6; echo \"[check $(python3 tools/sessions.py --check --strict >/dev/null 2>&1; echo $?)]\"; echo; echo \"== porte sessions ==\" && bash tools/porte-sessi … [219 caractères tronqués]`
+
+  ```
+== check ==
+  ⚠ mandat long (581 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (629 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+[check 0]
+
+== porte sessions ==
+  ⚠ mandat long (581 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (629 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[porte 0]
+
+== en-cours ==
+# En ce moment
+
+**Mis à jour : 2026-11-03, 00 h 52 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 
+… [7136 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "offset": 100, "limit": 70}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+100: - **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+101: - **N2** : **la fenêtre 1 024 est la recette de production** — 30 000 pas : **2,9943** à 128,
+102:   **2,6143** à 1 000, **2,5628** à 2 000 (**sous 2,5** au grand corpus) ; le compute à fenêtre 128
+103:   (200 k pas) donne 3,1591 et 8,2262 —
+104:   [`production`](../../reports/rapport-n2-production-fenetre.md),
+105:   [`n2-200k`](../../reports/rapport-n2-200k.md).
+106: - **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+107:   [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
+108: 
+109: ## Les chiffres de l'état
+110: 
+111: > Vérifié par `tools/r
+… [3487 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "**Mis à jour : 2026-11-03, 08 h 08 HNE (heure locale, EST).**", "old_string": "**Mis à jour : 2026-11-03, 00 h 52 HNE (heure locale, EST).**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "> **Bilan de 08 h (03/11)** : la passe de **04 h 10** a rendu **82 portes, 77 vertes, 5 rouges**\n> (4 connues + `porte-sessions` de coordination, machine au repos) ; la **82e `porte-ressources` … [557 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Ce qu'elle fait** : intégration ; **passe 04 h 10 — 82 portes, 77/5** (4 connues +\n  `porte-sessions` de coordination) ; INDEX/README ; **bilan de 08 h**.\n- **Ce que font les autres** : ** … [423 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Prochaine action** : **en pause** (dernier heartbeat 20 h 40 ; claim libéré) ; à la reprise :\n  h050/h053, puis validation humaine de la banque.", "old_string": "- **Prochaine action** : ** … [52 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Prochaine action** : **gold 432 réel (0,9954)** ; **DRVM/native 114/114+5/5** ; la suite :\n  **T132/T133**, gold 200+ ; **porte B13** attend S.", "old_string": "- **Prochaine action** : **g … [71 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; fiche/JSON\n  `rapport-n2-fenetre` committés ; à la reprise : contrôle depuis zéro, clôture.", "old_string": "- … [67 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nfor prefix in (\"- **Données** :\", \"- **R1 — la fenêtre native** :\"):\n    i=t.find(prefix); assert i!=-1, prefix\n    j=t.find(\"\\n- … [2310 caractères tronqués]`

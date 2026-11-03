@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-03** | [2026-11-03/README.md](2026-11-03/README.md) | [attention](2026-11-03/attention.md) · [distribue](2026-11-03/distribue.md) · [docs](2026-11-03/docs.md) · [mesures](2026-11-03/mesures.md) · [modele](2026-11-03/modele.md) |
+| **2026-11-03** | [2026-11-03/README.md](2026-11-03/README.md) | [attention](2026-11-03/attention.md) · [distribue](2026-11-03/distribue.md) · [docs](2026-11-03/docs.md) · [mesures](2026-11-03/mesures.md) · [modele](2026-11-03/modele.md) · [portes](2026-11-03/portes.md) |
 | **2026-11-02** | [2026-11-02/README.md](2026-11-02/README.md) | [apprentissage](2026-11-02/apprentissage.md) · [attention](2026-11-02/attention.md) · [distribue](2026-11-02/distribue.md) · [docs](2026-11-02/docs.md) · [memoire](2026-11-02/memoire.md) · [mesures](2026-11-02/mesures.md) · [modele](2026-11-02/modele.md) · [moteur](2026-11-02/moteur.md) · [outils](2026-11-02/outils.md) · [portes](2026-11-02/portes.md) |
 | **2026-11-01** | [2026-11-01/README.md](2026-11-01/README.md) | [apprentissage](2026-11-01/apprentissage.md) · [attention](2026-11-01/attention.md) · [distribue](2026-11-01/distribue.md) · [docs](2026-11-01/docs.md) · [memoire](2026-11-01/memoire.md) · [mesures](2026-11-01/mesures.md) · [modele](2026-11-01/modele.md) · [moteur](2026-11-01/moteur.md) · [nuit-n2](2026-11-01/nuit-n2.md) · [outils](2026-11-01/outils.md) · [portes](2026-11-01/portes.md) |
 | **2026-10-31** | [2026-10-31/README.md](2026-10-31/README.md) | [apprentissage](2026-10-31/apprentissage.md) · [distribue](2026-10-31/distribue.md) · [docs](2026-10-31/docs.md) · [memoire](2026-10-31/memoire.md) · [mesures](2026-10-31/mesures.md) · [modele](2026-10-31/modele.md) · [moteur](2026-10-31/moteur.md) · [portes](2026-10-31/portes.md) |
@@ -105,7 +105,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `4e86f5e2` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 37 | 0 | 0 | [rapport](sessions/4e86f5e2-cc8e-43d7-8be0-ba9622de2dc7/rapport.md) |
 | `4f3e8570` | Configuration RAID0 NVMe pour modèles IA | 2026-10-12 15:30 | 25.5 h | 13 | 822 | 41 | 57 | [rapport](sessions/4f3e8570-3d81-41e0-a055-1002702a6959/rapport.md) |
 | `5185ccb1` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 17:03 | 0.4 h | 1 | 123 | 9 | 0 | [rapport](sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md) |
-| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 13.3 h | 71 | 401 | 13 | 30 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
+| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 16.7 h | 72 | 415 | 15 | 31 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
 | `54621513` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.7 h | 1 | 78 | 4 | 0 | [rapport](sessions/54621513-76ae-401e-87df-a5084cacb359/rapport.md) |
 | `564fbe3a` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:07 | 0.1 h | 1 | 35 | 0 | 0 | [rapport](sessions/564fbe3a-a859-4b3b-bd17-4da73a2f4e22/rapport.md) |
 | `56879594` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 29 | 0 | 0 | [rapport](sessions/56879594-1434-4e34-83cc-de42cdf192a1/rapport.md) |
@@ -154,7 +154,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |
 | `c3d0f0bd` | Chantier inactif à examiner | 2026-10-29 14:37 | 18.7 h | 5 | 551 | 26 | 32 | [rapport](sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
-| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 15.0 h | 27 | 446 | 6 | 13 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
+| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 15.0 h | 27 | 449 | 6 | 13 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
 | `cf0456ab` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | 8 | 343 | 27 | 11 | [rapport](sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
 | `d093c795` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 40 | 0 | 0 | [rapport](sessions/d093c795-b4c9-4270-bea8-e2673f86057b/rapport.md) |

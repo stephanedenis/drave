@@ -16,7 +16,9 @@
 - **Heartbeat** : 2026-11-02 20:40 EST
 - **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;
   puis la **frontière du GN sans auxiliaire** (h033) et un **gold plus large** (voix, causatives).
-- **État** : actif
+- **État** : en pause
+- **Arrêt constaté** : dernier heartbeat 2026-11-02 20 h 40 ; plus de claim actif ; reprise
+  possible quand la session rouvre (analyseur 54/55 types, 131/131 rôles, banque 200/355).
 
 - **Plan** : 1) ~~plan de session et réservation~~ ; 2) ~~analyseur rôles/subordonnées~~ (gold 39
   phrases, mesure + trois contrôles) ; 3) ~~export au corpus~~ (schéma `statut` + mode gold +

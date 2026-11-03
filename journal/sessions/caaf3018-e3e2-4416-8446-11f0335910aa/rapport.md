@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 15.0 h |
 | Tours | 27 |
-| Messages | 444 |
-| Appels d'outils | 446 |
+| Messages | 448 |
+| Appels d'outils | 449 |
 | Fichiers touchés | 6 |
-| Commandes | 318 |
+| Commandes | 319 |
 | Sous-agents | 0 |
 | Commits | 13 |
 | Compactages de contexte | 0 |
@@ -542,7 +542,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 27 — background job bash-290 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -fc "toutes-les-portes.sh" || t … [954 caractères tronqués]
 
-*35 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Gather evidence of session liveness
@@ -558,11 +558,33 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Patch portes.md and run checks
 - bash — Commit clean pass integration
 - bash — Record clean pass verdict in night notes
-- … et 11 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Bilan inséré et journal vert ; je le commite.
+⏵ Le goal est désarmé (pas de tour humain pour le clore) ; je laisse donc le rapport de 8 h, qui vaut bilan.
+
+**Bilan de la nuit — 02/11 20 h → 03/11 07 h 20**
+
+**Deux passes complètes, deux verdicts**
+- **02/11 19 h 32** : 81 portes, **76 vertes / 5 rouges**, 1 h 52, lancée sur le **GPU 1** pendant que N2 tenait le GPU 0. Les 4 rouges connues + `porte-tableaux` (lien d'une fiche N2 en cours d'écriture) — **rejouée verte à 21 h 57** dès que le JSON est apparu.
+- **03/11 04 h 10** : **machine au repos** (deux GPU libres, claims rendus), **82 portes, 77 vertes, 5 rouges, 1 h 40** — la première passe qui compte la **82ᵉ porte** (`porte-ressources`, verte). 4 rouges connues + **`porte-sessions`** (plans N2/S périmés sans claim : **coordination**, pas de code). Journaux `work/portes/passe-0303-04h10`.
+
+**Ce que les sessions ont livré pendant la nuit**
+- **N2** : 200 k pas → **3,1591** ; R1.1 **3,2545** ; fenêtre 256→1 024 = **3,2545 → 3,0107 → 2,9950** ; à 20 000 pas, **2,6256** à 1 000 — la porte 2,5 se rapproche.
+- **S** : gold **55**, types **54/55**, rôles **131/131**, compléments **47/47** ; corpus réel **65,5 %** propre contre 9,1 % mélangé ; CEGEP OCR **8,5 %** (plancher) ; banque **200/355**.
+- **Pensée** : **140/140** ; gold réel 432 (POS **0,9065**, acte **0,9954**) ; **parité DRVM/native 114/114 poids, 5/5 prompts** ; fenêtre **non discriminante** (oracle 228, aveugle 215, 7B 238).
+- **D/R/A** : close le 02/11 à 18 h 45 (147 scans, 60 documents, 1 982 p).
+
+**Corrections du hub** : `portes.md` (registre dans `work/`, pas `/tmp` ; procédure « un seul GPU libre ») ; `references` **§2 réécrit en 82 lignes** et en-têtes des deux passes ; `porte-homeostasie` dont le message **exécutait** sa commande (backticks) ; `ressources.py` entré dans le routage ; compteurs alignés (587 fiches / 674 JSON).
+
+**État à 8 h** : `en-cours` 1 625 mots ✅, T0 3 996 ✅, revue ✅, journal ✅, schémas ✅, backlog ✅, `en-cours`/`roadmap`/`références` verts. Le rapport complet est dans `journal/2026-11-03/README.md` (commit `a219c844`) et le fil de nuit dans `work/hub-nuit.md`.
+
+**Trois décisions t'attendent**
+1. **Valider la banque S** (mode `banque` à 0 verdict) — c'est son blocage nommé.
+2. **Trancher `porte-reparti-moteur`** : PPL entier = réparti = 8,7434, écart nul, mais l'épinglage 9,1748 ne se reproduit pas ; je ne l'ai pas touché pour ne pas masquer une dérive non expliquée.
+3. **Committer ou laisser finir** les fichiers en cours de N2 (3) et Pensée (2) — 10 fichiers modifiés
+… [469 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -619,7 +641,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 278 autres
+- … et 279 autres
 
 ## 4. Mesures et résultats marquants
 
