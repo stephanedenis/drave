@@ -13867,3 +13867,194 @@ def seule_mobile(p: PolitiqueAppriseMobile, d: int, max_pas: int = 200) -> tuple
 … [2455 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Le code de la fenêtre est lu (état t % 3, `_libre_pw`, `attendre`) ; je trace l'A* de l'oracle pour voir où il se perd
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.moteur import AStar\nfrom tools.pensee.operateurs import DRVM, LABYRINTHE_PORTE_FENETRE, REGISTRE_PW, PolitiqueManhattan\nfrom tools.pensee.store import Budget\nd=DRVM(REGISTRE_PW … [310 caractères tronqués]`
+
+  ```
+{'but': False, 'noeuds': 200, 'cout': 271.0, 'appels': 65, 'par_operateur': {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}}
+chemin n/a
+  ```
+
+### 🤖 Assistant
+
+⏵ L'oracle épuise le budget (pas 67, saut 67, attendre 65) ; je teste la **reachability** du but en BFS pour distinguer « problème cassé » de « A* mal réglé »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.operateurs import _etat_pw, _xy_pw, _t_pw, attendre, pas_pw, saut_pw\nfrom collections import deque\ndep=(0,0,0); vus={dep}; q=deque([(dep,0)]); but=None\nops=[('pas',pas_pw),('sa … [619 caractères tronqués]`
+
+  ```
+reachable (4, (4, 4, 1)) vus 45
+murs [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (3, 0), (3, 1), (3, 2), (3, 3), (3, 4), (4, 0), (4, 1), (4, 2), (4, 3), (4, 4)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le but **est** atteignable en 4 pas (BFS) : le problème n'est pas cassé, c'est l'A* qui se perd. Je lis l'A* et son heuristique
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"class AStar\" -A 45 tools/pensee/moteur.py | head -55; echo '--- heuristique_pw ---'; grep -n \"def heuristique_pw\\|def score_pw\\|def but_pw\" -A 4 tools/pensee/operateurs.py", "description": "Read AStar and window heuristic"}`
+
+  ```
+62:class AStar(Strategie):
+63-    nom = "astar"
+64-
+65-    def __init__(self, poids_heuristique: float = 1.0):
+66-        self.poids = poids_heuristique
+67-
+68-    def choisir(self, store, probleme):
+69-        return max(store.ouverts,
+70-                   key=lambda f: (store.noeuds[f].score + self.poids * probleme.heuristique(store.etats[f]),
+71-                                  -store.ouverts[f]))
+72-
+73-
+74-class MCTSLite(Strategie):
+75-    nom = "mcts"
+76-
+77-    def __init__(self, c: float = 1.4, graine: int = 0):
+78-        self.c = c
+79-        self.rng = __import__("random").Random(graine)
+80-
+81-    def choisir(self, store, probleme):
+82-        def ucb(f):
+83-            n = store.noeuds[f]
+84-            visites = max(1, n.visites)
+85-            return n.score + self.c * math.sqrt(math.log(1 + len(store.etats)) / visites)
+86-        return max(store.ouverts, key=lambda f: (ucb(f), -store.ouverts[f]))
+87-
+88-    def proposer(self, etat, probleme):
+89-        """Un seul opérateur, mais **applicable** : un opérateur sans enfant n'est pas un coup."""
+90-        applicables = [nom for nom in sorted(probleme.operateurs)
+91-                       if probleme.operateurs[nom]
+… [1055 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'heuristique de la fenêtre est `-Manhattan` et `score_pw` vaut `1/(1+d)` : dans un `max`, l'heuristique domine. Je teste l'A* avec plusieurs poids
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.moteur import AStar\nfrom tools.pensee.operateurs import DRVM, LABYRINTHE_PORTE_FENETRE, REGISTRE_PW, PolitiqueManhattan\nfrom tools.pensee.store import Budget\nfor poids in (1.0, … [355 caractères tronqués]`
+
+  ```
+poids 1.0: but False n 200 c 271.0 app 65 ops {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}
+poids 0.5: but False n 200 c 271.0 app 65 ops {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}
+poids 0.1: but False n 200 c 271.0 app 65 ops {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}
+poids 0.0: but False n 200 c 271.0 app 65 ops {'pas': 67, 'saut': 67, 'attendre': 65, 'sonde': 1}
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic fenêtre : le but est atteignable en 4 pas (BFS), mais l'A* épuise 200 nœuds ; le défaut est dans l'A*/DRVM, pas dans le problème
+
+**Diagnostic du round 15** (sans commit, en cours d'analyse) :
+
+- **BFS sur `LABYRINTHE_PORTE_FENETRE`** : le but `(4,4)` est **atteignable en 4 pas** (état `(4,4,1)`, 45 états visités). Le problème n'est donc **pas cassé** — l'oracle devrait passer.
+- **A* de l'oracle** : 200 nœuds, coût 271, 65 appels, `pas` 67 / `saut` 67 / `attendre` 65 / `sonde` 1, **sans but**. Et le résultat est **identique pour tous les poids d'heuristique** (1.0, 0.5, 0.1, 0.0) : le blocage ne vient pas de l'heuristique.
+- Piste : `AStar.choisir` fait `score + poids * heuristique` avec `score_pw = 1/(1+d)` et `heuristique_pw = -Manhattan` ; sur ce problème l'exploration semble ne jamais fermer la porte `(3,3)` au bon `t % 3`. Le défaut est dans la mécanique A*/DRVM (ou l'état `t % 3` qui ne mémorise pas le vrai `t`), pas dans le problème.
+- La fiche `pensee-porte-fenetre` doit donc être **corrigée** : le verdict « problème cassé » est **faux** ; c'est l'A* qui échoue. Je le note pour le prochain fait avant de committer quoi que ce soit.
+
+**État** : HEAD `55dcb1c4` (fenêtre committée, 36 fichiers) ; l'en-cours est à 22 h 10 ; T0 sous 4 000 ; revue 570/655. Aucun nouveau commit ce round : le diagnostic doit être vérifié (l'état `t % 3` est peut-être la cause réelle) avant d'écrire une contre-fiche.
+
+La suite : corriger le diagnostic (état `t % 3` vs vrai `t`, ou A*), puis la fenêtre ; le gold 200+ ; la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 16/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 16 : je trace le chemin BFS de 4 pas et les premiers pas de l'A* pour trouver où il diverge
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.operateurs import _etat_pw, _xy_pw, _t_pw, attendre, pas_pw, saut_pw, but_pw, LABYRINTHE_PORTE_FENETRE as L, REGISTRE_PW\nfrom collections import deque\ndep=(0,0,0); vus={dep:None … [1131 caractères tronqués]`
+
+  ```
+BFS but (4, 4, 1) longueur 4
+  (0, 0, 0) --saut--> (0, 2, 1)
+  (0, 2, 1) --saut--> (0, 4, 2)
+  (0, 4, 2) --saut--> (2, 4, 0)
+  (2, 4, 0) --saut--> (4, 4, 1)
+manhattan (0,0,0) -> droite
+manhattan (2,3,0) -> droite
+manhattan (3,2,0) -> bas
+manhattan (2,2,0) -> droite
+manhattan (3,3,0) -> droite
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 16 : le chemin BFS est 4 **sauts** ; le `PolitiqueManhattan` ne propose que droite/bas (jamais saut) ; l'A* tourne à vide — le problème est l'oracle/the strategie, pas la fenêtre
+
+**Diagnostic (suite du round 15)** :
+
+- **Chemin BFS** vers `(4,4)` : **4 sauts** — `(0,0,0) → (0,2,1) → (0,4,2) → (2,4,0) → (4,4,1)`. Le but est atteignable en 4 coups d'opérateur `saut`.
+- **`PolitiqueManhattan`** : elle ne propose que `droite`/`bas` (jamais `saut`) ; la `sonde` ne sert que via l'opérateur dédié (1 appel). L'A* explore donc `pas`/`saut`/`attendre` (67/67/65) sans jamais trouver la séquence de 4 sauts, et épuise 200 nœuds.
+- **Conclusion** : le problème n'est **pas** cassé ; c'est l'**oracle** (la politique Manhattan) qui ne sait pas sauter, et l'A* qui n'explore pas la bonne branche. La fiche `pensee-porte-fenetre` (« l'oracle échoue donc le problème est cassé ») est **fausse** dans sa conclusion : il faut la corriger en « l'oracle Manhattan ne couvre pas `saut` ».
+- **La correction juste** : un oracle qui essaie les quatre opérateurs (ou un `PolitiqueSaut`/BFS), puis le 7B sur le même banc. La fenêtre redevient un test potentiellement valide.
+
+Aucun commit ce round (pas de fait nouveau) : le diagnostic doit produire une contre-fiche + un oracle corrigé avant toute mesure. HEAD `55dcb1c4` (fenêtre, 36 fichiers) ; en-cours 22 h 10 ; T0 sous 4 000.
+
+La suite : **corriger l'oracle de la fenêtre** (4 opérateurs/BFS), remesurer l'oracle puis le 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 17/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 17 : le diagnostic est clair — l'oracle Manhattan ignore `saut`, le chemin BFS est 4 sauts. Je corrige l'oracle (politique 4 opérateurs) puis je remesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"class PolitiqueManhattan\\|class PolitiqueAveugle\\|class PolitiqueHasard\\|class Politique\" tools/pensee/operateurs.py | head -8; echo '---'; grep -n \"class PolitiqueManhattan\" -A 12 tools/pensee/operateurs.py; echo '---'; grep -n \"clas … [94 caractères tronqués]`
+
+  ```
+39:class Politique:
+52:class PolitiqueManhattan(Politique):
+68:class PolitiqueAveugle(Politique):
+84:class PolitiqueLLM(Politique):
+224:class PolitiqueHasard(Politique):
+360:class PolitiqueApprise(Politique):
+423:class PolitiqueAppriseMinute(PolitiqueApprise):
+440:class PolitiqueAppriseShaping(PolitiqueAppriseMinute):
+---
+52:class PolitiqueManhattan(Politique):
+53-    """Le double : choisit la direction qui rapproche le plus (Manhattan)."""
+54-
+55-    nom = "manhattan"
+56-
+57-    def propose(self, etat, but):
+58-        x, y = _xy(etat)
+59-        bx, by = but
+60-        dx, dy = bx - x, by - y
+61-        if abs(dx) >= abs(dy) and dx != 0:
+62-            return "droite" if dx > 0 else "gauche"
+63-        if dy != 0:
+64-            return "bas" if dy > 0 else "haut"
+---
+68:class PolitiqueAveugle(Politique):
+69-    """Le contrôle négatif : propose la direction **opposée** au but."""
+70-
+71-    nom = "aveugle"
+72-
+73-    def propose(self, etat, but):
+74-        x, y = _xy(etat)
+75-        bx, by = but
+76-        dx, dy = bx - x, by - y
+77-        if abs(dx) >= abs(dy) and dx != 0:
+78-            return "gauche" if dx > 0 else "droite"
+  ```
+

@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.9 h |
-| Tours | 19 |
-| Messages | 591 |
-| Appels d'outils | 601 |
+| Durée | 6.0 h |
+| Tours | 20 |
+| Messages | 601 |
+| Appels d'outils | 609 |
 | Fichiers touchés | 24 |
-| Commandes | 410 |
+| Commandes | 416 |
 | Sous-agents | 0 |
-| Commits | 28 |
+| Commits | 31 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -63,6 +63,8 @@
 **Tour 18** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 19** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -582,17 +584,44 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 
 ### Tour 19 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check events and the long run
 - bash — Wait for the next commit
 - bash — Investigate the resource gate tracking
 - bash — Compare the restored gate with the committed original
 - bash — Restore the resource gate in git
+- bash — Check state after the gate restoration
 
 **Synthèse produite :**
 
-⏵ Round 14 : veille — je vérifie les événements et j’attends le run long
+⏵ Round 14 : la 82e porte restaurée, état vert
+
+**Ce que j'ai attrapé**
+- Le commit concurrent **`efdbbf40`** (B13 138/140) avait **supprimé `tools/porte-ressources.sh`** de l'arbre — la course d'index (reset + add d'une autre session) l'a emportée. Le fichier restait sur le disque, identique à l'original.
+- **Restaurée à l'identique** (`42db89f6`), mode 755, commit **`1cbaff53`** : l'arbre committé repasse à **82 portes**, la porte est verte (autotest 9 cas, registre cohérent). Leçon consignée : les commits concurrents passent par l'**index alterné** ou `--only`, jamais par un `git reset` partagé (plan-travail § 8).
+
+**Fait de la fenêtre** : `55dcb1c4` — **B13 fenêtre : l'oracle échoue (200 nœuds)**, le problème est à réparer, pas le 7B (résultat négatif utile, en-cours suivi).
+
+**État** : revue ✅ **570 fiches / 656 JSON / 82 portes**, en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅ (claims longs en avertissement), 82 portes sur le disque **et dans l'arbre**.
+
+**Run long N2** : ~15 050 / 20 000 pas, **PPL val 2,594** — la cible 2,5 reste à 0,09. La veille continue jusqu'au bilan de 8 h.
+
+### Tour 20 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check gate integrity and events
+- bash — Check the lock and unstage the gate deletion
+- bash — Sync the main index to HEAD
+- bash — Locate the index pitfalls in plan-travail
+- read
+- edit `docs/pilotage/plan-travail.md`
+- bash — Commit the index hygiene lesson
+
+**Synthèse produite :**
+
+⏵ Round 15 : veille — intégrité de la 82e porte et événements
 
 ## 3. Travail accompli
 
@@ -612,7 +641,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 | `docs/pilotage/en-cours.md` | 0 | 24 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/chantiers.md` | 0 | 6 |
-| `docs/pilotage/plan-travail.md` | 0 | 7 |
+| `docs/pilotage/plan-travail.md` | 0 | 8 |
 | `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
 | `journal/2026-11-02/README.md` | 0 | 4 |
 | `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
@@ -667,7 +696,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 370 autres
+- … et 376 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -830,4 +859,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - git status --short | head -15; echo "--- commit en cours ? ---"; ps -eo pid,etime,args | grep -E "git commit|session_report|archive" | grep -v grep | head -2; e
 - for i in $(seq 1 40); do kill -0 698627 2>/dev/null || break; sleep 3; done; ps -p 698627 >/dev/null && echo "commit en cours" || echo "commit fini"; git log --
 - NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE" -m "Le commit concurrent efdbbf40 (B13 138/140) a supprimé tools/porte-ressources
+- ps -eo pid,etime,args | grep -E "git commit|git add|git rm|git reset" | grep -v grep | head -3; ls -l .git/index.lock 2>/dev/null || echo "pas de lock"; echo "-
+- ps -eo pid,etime,args | grep -E "git commit|git add|git reset" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo "pas de lock"; git read-tree HEA
+- NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE" -m "Après un commit à index alterné, l'index principal ignore les fichiers ajoutés 
 

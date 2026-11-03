@@ -213,7 +213,11 @@ depuis la racine du dépôt.
 - **Ne pas écrire `en-cours` à deux.** Le hook refuse un fait sans état, pas deux écrivains : c'est
   la discipline (ou le hub) qui évite la course.
 - **`git add` explicite**, jamais `-A` : deux sessions sur le même arbre ; l'index alterné
-  (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture.
+  (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture. **Après un commit à index alterné,
+  resynchroniser l'index principal** (`git read-tree HEAD`, sans toucher à l'arbre) : sinon
+  l'index principal ignore les fichiers ajoutés et un `git add -A` d'une autre session les
+  **supprime** — mesuré cette nuit : `tools/porte-ressources.sh` (82e porte) emporté par un
+  commit B13, puis restauré.
 - **Committer avant de rebooter** : le reboot du 02/11 a laissé 67 fichiers non committés.
 - **Les portes lourdes une à une** ; les GPU sont partagés.
 - **Une ressource se réserve** : `python3 tools/ressources.py --claim ...` (§ 10) ; un GPU, un

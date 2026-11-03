@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 6.0 h |
-| Tours | 17 |
-| Messages | 558 |
-| Appels d'outils | 649 |
+| Tours | 20 |
+| Messages | 566 |
+| Appels d'outils | 651 |
 | Fichiers touchés | 47 |
-| Commandes | 486 |
+| Commandes | 488 |
 | Sous-agents | 0 |
 | Commits | 46 |
 | Compactages de contexte | 2 |
@@ -57,6 +57,12 @@
 **Tour 16** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 17** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -721,7 +727,66 @@ La suite : **réparer la fenêtre** (l'oracle doit passer avant le 7B), le **gol
 
 **Synthèse produite :**
 
-⏵ L'heuristique de la fenêtre est `-Manhattan` et `score_pw` vaut `1/(1+d)` : dans un `max`, l'heuristique domine. Je teste l'A* avec plusieurs poids
+⏵ Diagnostic fenêtre : le but est atteignable en 4 pas (BFS), mais l'A* épuise 200 nœuds ; le défaut est dans l'A*/DRVM, pas dans le problème
+
+**Diagnostic du round 15** (sans commit, en cours d'analyse) :
+
+- **BFS sur `LABYRINTHE_PORTE_FENETRE`** : le but `(4,4)` est **atteignable en 4 pas** (état `(4,4,1)`, 45 états visités). Le problème n'est donc **pas cassé** — l'oracle devrait passer.
+- **A* de l'oracle** : 200 nœuds, coût 271, 65 appels, `pas` 67 / `saut` 67 / `attendre` 65 / `sonde` 1, **sans but**. Et le résultat est **identique pour tous les poids d'heuristique** (1.0, 0.5, 0.1, 0.0) : le blocage ne vient pas de l'heuristique.
+- Piste : `AStar.choisir` fait `score + poids * heuristique` avec `score_pw = 1/(1+d)` et `heuristique_pw = -Manhattan` ; sur ce problème l'exploration semble ne jamais fermer la porte `(3,3)` au bon `t % 3`. Le défaut est dans la mécanique A*/DRVM (ou l'état `t % 3` qui ne mémorise pas le vrai `t`), pas dans le problème.
+- La fiche `pensee-porte-fenetre` doit donc être **corrigée** : le verdict « problème cassé » est **faux** ; c'est l'A* qui échoue. Je le note pour le prochain fait avant de committer quoi que ce soit.
+
+**État** : HEAD `55dcb1c4` (fenêtre committée, 36 fichiers) ; l'en-cours est à 22 h 10 ; T0 sous 4 000 ; revue 570/655. Aucun nouveau commit ce round : le diagnostic doit être vérifié (l'état `t % 3` est peut-être la cause réelle) avant d'écrire une contre-fiche.
+
+La suite : corriger le diagnostic (état `t % 3` vs vrai `t`, ou A*), puis la fenêtre ; le gold 200+ ; la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 18 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — BFS path and Manhattan proposals on window
+
+**Synthèse produite :**
+
+⏵ Round 16 : le chemin BFS est 4 **sauts** ; le `PolitiqueManhattan` ne propose que droite/bas (jamais saut) ; l'A* tourne à vide — le problème est l'oracle/the strategie, pas la fenêtre
+
+**Diagnostic (suite du round 15)** :
+
+- **Chemin BFS** vers `(4,4)` : **4 sauts** — `(0,0,0) → (0,2,1) → (0,4,2) → (2,4,0) → (4,4,1)`. Le but est atteignable en 4 coups d'opérateur `saut`.
+- **`PolitiqueManhattan`** : elle ne propose que `droite`/`bas` (jamais `saut`) ; la `sonde` ne sert que via l'opérateur dédié (1 appel). L'A* explore donc `pas`/`saut`/`attendre` (67/67/65) sans jamais trouver la séquence de 4 sauts, et épuise 200 nœuds.
+- **Conclusion** : le problème n'est **pas** cassé ; c'est l'**oracle** (la politique Manhattan) qui ne sait pas sauter, et l'A* qui n'explore pas la bonne branche. La fiche `pensee-porte-fenetre` (« l'oracle échoue donc le problème est cassé ») est **fausse** dans sa conclusion : il faut la corriger en « l'oracle Manhattan ne couvre pas `saut` ».
+- **La correction juste** : un oracle qui essaie les quatre opérateurs (ou un `PolitiqueSaut`/BFS), puis le 7B sur le même banc. La fenêtre redevient un test potentiellement valide.
+
+Aucun commit ce round (pas de fait nouveau) : le diagnostic doit produire une contre-fiche + un oracle corrigé avant toute mesure. HEAD `55dcb1c4` (fenêtre, 36 fichiers) ; en-cours 22 h 10 ; T0 sous 4 000.
+
+La suite : **corriger l'oracle de la fenêtre** (4 opérateurs/BFS), remesurer l'oracle puis le 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 19 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Read oracle policies
+
+**Synthèse produite :**
+
+⏵ Round 17 : confirmation — `PolitiqueManhattan` ne propose que les 4 directions (jamais `saut`) ; l'oracle ne peut pas trouver le chemin de 4 sauts. Je vais corriger l'oracle, pas le problème
+
+**Constat (vérifié dans le code)** :
+
+- `PolitiqueManhattan.propose` renvoie `droite`/`gauche`/`bas`/`haut` — **jamais** `saut`. Le chemin BFS de la fenêtre est **4 sauts** : `(0,0) → (0,2) → (0,4) → (2,4) → (4,4)`.
+- L'A* explore donc `pas`/`saut`/`attendre` (67/67/65) sans politique pour le guider et épuise le budget (200 nœuds). Ce n'est **pas** un problème cassé : c'est l'**oracle** qui est incomplet.
+
+**Correction à faire (round 18)** :
+1. Ajouter un oracle `PolitiqueSaut` (ou une politique 4 opérateurs : pas, saut, attendre, sonde) qui essaie le `saut` quand la direction est bloquée — ou un oracle BFS hors A*.
+2. Remesurer : l'oracle doit passer (4 sauts) ; puis le 7B `porte_fenetre` sur le même banc.
+3. **Corriger la fiche** `pensee-porte-fenetre` : remplacer « l'oracle échoue donc le problème est cassé » par « l'oracle Manhattan ne couvre pas `saut` » — c'est le contrôle négatif qui manquait.
+4. Commit de la contre-fiche + de l'oracle.
+
+**État** : HEAD `55dcb1c4` (fenêtre), en-cours 22 h 10, T0 sous 4 000, revue 570/655. Aucun fait nouveau ce round (diagnostic seul, pas de commit).
+
+La suite : oracle 4 opérateurs → mesure oracle + 7B → contre-fiche → commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 20 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -819,7 +884,7 @@ La suite : **réparer la fenêtre** (l'oracle doit passer avant le 7B), le **gol
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 446 autres
+- … et 448 autres
 
 ## 4. Mesures et résultats marquants
 

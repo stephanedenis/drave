@@ -9573,3 +9573,145 @@ identique
   ```
 
 - **bash** `{"command": "chmod 755 tools/porte-ressources.sh; export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add tools/porte-ressources.sh; git diff --cached --stat; git commit -m \"NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE\" -m \"Le commit concurrent efdbbf … [409 caractères tronqués]`
+
+  ```
+tools/porte-ressources.sh | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+  ✅ index : aucun fait stagé sans état
+[master 1cbaff53] NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+ 20 files changed, 322 insertions(+), 33 deletions(-)
+ create mode 100755 tools/porte-ressources.sh
+--- vérif ---
+100755 blob 497941c0598562b67f4508faa050624ee724206b	tools/porte-ressources.sh
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+55dcb1c4 B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 12 — la 82e porte avait été emportée par une course d'index\n\n- Le commit concurrent **efdbbf40** (B13 138/140) a **supprimé** `tools/porte-ressources.sh` de\n  l'arbre : la course d'index (reset + add d'une autre session) l'a emporté. Le f … [731 caractères tronqués]`
+
+  ```
+revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (95 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+82
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 14 : la 82e porte restaurée, état vert
+
+**Ce que j'ai attrapé**
+- Le commit concurrent **`efdbbf40`** (B13 138/140) avait **supprimé `tools/porte-ressources.sh`** de l'arbre — la course d'index (reset + add d'une autre session) l'a emportée. Le fichier restait sur le disque, identique à l'original.
+- **Restaurée à l'identique** (`42db89f6`), mode 755, commit **`1cbaff53`** : l'arbre committé repasse à **82 portes**, la porte est verte (autotest 9 cas, registre cohérent). Leçon consignée : les commits concurrents passent par l'**index alterné** ou `--only`, jamais par un `git reset` partagé (plan-travail § 8).
+
+**Fait de la fenêtre** : `55dcb1c4` — **B13 fenêtre : l'oracle échoue (200 nœuds)**, le problème est à réparer, pas le 7B (résultat négatif utile, en-cours suivi).
+
+**État** : revue ✅ **570 fiches / 656 JSON / 82 portes**, en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅ (claims longs en avertissement), 82 portes sur le disque **et dans l'arbre**.
+
+**Run long N2** : ~15 050 / 20 000 pas, **PPL val 2,594** — la cible 2,5 reste à 0,09. La veille continue jusqu'au bilan de 8 h.
+
+
+## Tour 20
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 15/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 15 : veille — intégrité de la 82e porte et événements
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; echo \"--- porte 82 ---\"; git ls-tree HEAD tools/porte-ressources.sh; git status --short tools/porte-ressources.sh; ls tools/porte-*.sh | wc -l; echo \"--- run ---\"; tail -1 work/n2ac/rope1024-20k.log; echo \"--- status ---\"; git status --sho … [64 caractères tronqués]`
+
+  ```
+22:15:03
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+55dcb1c4 B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B
+4527f661 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+--- porte 82 ---
+100755 blob 497941c0598562b67f4508faa050624ee724206b	tools/porte-ressources.sh
+D  tools/porte-ressources.sh
+?? tools/porte-ressources.sh
+82
+--- run ---
+pas  15350 · perte 0.9732 · PPL val 2.582 · 7045 s
+--- status ---
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"git commit|git add|git rm|git reset\" | grep -v grep | head -3; ls -l .git/index.lock 2>/dev/null || echo \"pas de lock\"; echo \"--- restore staged ---\"; git restore --staged tools/porte-ressources.sh 2>&1; git status --short tools/porte-ressources.sh … [105 caractères tronqués]`
+
+  ```
+pas de lock
+--- restore staged ---
+tools/porte-ressources.sh
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"git commit|git add|git reset\" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git read-tree HEAD; echo \"--- index synchronisé ---\"; git status --short | grep -E \"^D|^A\" | head -5; git ls-files tools/porte-ressource … [74 caractères tronqués]`
+
+  ```
+pas de lock
+--- index synchronisé ---
+tools/porte-ressources.sh
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+  ```
+
+- **bash** `{"command": "grep -n \"index alterné\\|GIT_INDEX_FILE\\|Les pièges\\|git reset\" docs/pilotage/plan-travail.md | head -8; echo \"--- extrait ---\"; sed -n '/Les pièges/,/Quand une session finit/p' docs/pilotage/plan-travail.md | head -20", "description": "Locate the index pitfalls in plan-travail"}`
+
+  ```
+94:fichiers partagés, l'**index alterné** (`GIT_INDEX_FILE=/tmp/index.<session> git read-tree HEAD`
+97:de `git reset` sur les fichiers d'une autre session.
+211:**Les pièges.**
+215:- **`git add` explicite**, jamais `-A` : deux sessions sur le même arbre ; l'index alterné
+216:  (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture.
+--- extrait ---
+**Les pièges.**
+
+- **Ne pas écrire `en-cours` à deux.** Le hook refuse un fait sans état, pas deux écrivains : c'est
+  la discipline (ou le hub) qui évite la course.
+- **`git add` explicite**, jamais `-A` : deux sessions sur le même arbre ; l'index alterné
+  (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture.
+- **Committer avant de rebooter** : le reboot du 02/11 a laissé 67 fichiers non committés.
+- **Les portes lourdes une à une** ; les GPU sont partagés.
+- **Une ressource se réserve** : `python3 tools/ressources.py --claim ...` (§ 10) ; un GPU, un
+  NVMe ou une passe globale ne se partagent pas par accident.
+- **Le sous-module `docwatch`** se commit dans son dépôt, puis le pointeur dans le superprojet.
+
+**Quand une session finit.** Elle passe `État : terminé`, écrit sa `cloture.md` si le rapport
+  ```
+
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 6, "offset": 213}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+213: - **Ne pas écrire `en-cours` à deux.** Le hook refuse un fait sans état, pas deux écrivains : c'est
+214:   la discipline (ou le hub) qui évite la course.
+215: - **`git add` explicite**, jamais `-A` : deux sessions sur le même arbre ; l'index alterné
+216:   (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture.
+217: - **Committer avant de rebooter** : le reboot du 02/11 a laissé 67 fichiers non committés.
+218: - **Les portes lourdes une à une** ; les GPU sont partagés.
+
+(Showing lines 213-218 of 347. Use offset=219 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "- **`git add` explicite**, jamais `-A` : deux sessions sur le même arbre ; l'index alterné\n  (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture. **Après un commit à index alterné,\n  resynchroniser l'index principal** (`git read-tre … [425 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; git add docs/pilotage/plan-travail.md; git diff --cached --stat; git commit -m \"NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE … [413 caractères tronqués]`
