@@ -12955,3 +12955,53 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 53 : veille — attente du prochain commit
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`
+
+  ```
+01:18:13
+HEAD 3917780c
+3917780c L/B13 — _VERBE RÉPARÉ POUR L'INVERSION : LES PAIRES RESTENT 5/10, LE REPLI SUJET-SEUL TROMPE
+f7a53e2a L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE AVEUGLE, LES 10 PAIRES RESTENT 5/10
+ 713516    02:55:25 /home/stephane/gpu-env/bin/python w
+ 758133    01:24:10 /home/stephane/gpu-env/bin/python w
+ M docs/pilotage/en-cours.md
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; cat >> work/veille/nuit.md <<'EOF'\n\n## 01 h 18 — _VERBE réparé pour l'inversion : les paires restent 5/10\n\n- **`3917780c`** (L/B13 … [331 caractères tronqués]`
+
+  ```
+revue de documentation · 581 fiche(s) · 666 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+log-ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 53 : _VERBE réparé, les 10 paires restent 5/10
+
+- **L/B13** : `3917780c` — la réparation `_VERBE` pour l'inversion tient, mais les **10 paires restent 5/10** ; le **repli sujet-seul trompe** (il choisit le mauvais voisin). La limite du lien heuristique est cernée : sujet, verbe, inversion — trois passes, le test reste à **5/10**. Fiche/JSON comptées (**581 / 666 / 82**).
+- **État** : revue ✅, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ ; runs N2 en cours (2 h 55 et 1 h 24), GPU occupés et déclarés.
+- Le hub a l'`en-cours` en cours d'édition (ligne 60 à réconcilier) ; signalé.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 59
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 54/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 54 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`

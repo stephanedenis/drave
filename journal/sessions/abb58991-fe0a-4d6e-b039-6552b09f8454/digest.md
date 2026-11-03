@@ -21873,3 +21873,23 @@ ok
 ⏵ Round 154 : T0 à 4 002 ; je raccourcis la ligne, j'aligne index/README et je commite la réparation `_verbe`
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (verbe ok)'\nnew=' ; voisin 5/5, inversé 5/10 (verbe)'\nassert old in t\nt=t.replace(old,new,1)\np.write_t … [950 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4001 mots (budget 4 000)
+  578 fiches → reports/INDEX.md
+  revue de documentation · 581 fiche(s) · 666 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 3917780c] L/B13 — _VERBE RÉPARÉ POUR L'INVERSION : LES PAIRES RESTENT 5/10, LE REPLI SUJET-SEUL TROMPE
+ 16 files changed, 386 insertions(+), 31 deletions(-)
+ create mode 100644 reports/pensee-lien-verbe.json
+ create mode 100644 reports/rapport-pensee-lien-verbe.md
+EXIT=0
+3917780c L/B13 — _VERBE RÉPARÉ POUR L'INVERSION : LES PAIRES RESTENT 5/10, LE REPLI SUJET-SEUL TROMPE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 154 : `_verbe` réparé et committé (`3917780c`) ; T0 à 4 001 — je raccourcis d'un mot et je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (verbe)'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encod … [506 caractères tronqués]`

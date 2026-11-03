@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 9.0 h |
 | Tours | 156 |
-| Messages | 1068 |
-| Appels d'outils | 874 |
+| Messages | 1069 |
+| Appels d'outils | 875 |
 | Fichiers touchés | 48 |
-| Commandes | 700 |
+| Commandes | 701 |
 | Sous-agents | 0 |
-| Commits | 79 |
+| Commits | 80 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3925,15 +3925,16 @@ La suite : **réparer `_verbe`** pour la forme inversée (premier segment du tok
 
 ### Tour 156 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Repair _verbe for inversion and measure
 - bash — Freeze _verbe repair measurement
 - bash — Commit _verbe repair fact
+- bash — Shorten state and commit
 
 **Synthèse produite :**
 
-⏵ Round 154 : T0 à 4 002 ; je raccourcis la ligne, j'aligne index/README et je commite la réparation `_verbe`
+⏵ Round 154 : `_verbe` réparé et committé (`3917780c`) ; T0 à 4 001 — je raccourcis d'un mot et je commite l'état
 
 ## 3. Travail accompli
 
@@ -4032,7 +4033,7 @@ La suite : **réparer `_verbe`** pour la forme inversée (premier segment du tok
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 660 autres
+- … et 661 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4214,4 +4215,5 @@ La suite : **réparer `_verbe`** pour la forme inversée (premier segment du tok
 - L/B13 — LES 10 PAIRES : 5/10, LA FORME INVERSÉE EST LA LIMITE (r408–r412)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE AVEUGLE, LES 10 PAIRES RESTENT 5/10" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s'
 - L/B13 — _VERBE RÉPARÉ POUR L'INVERSION : LES PAIRES RESTENT 5/10, LE REPLI SUJET-SEUL TROMPE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format=
+- ÉTAT — T0 4 000 : LIGNE DU VERBE INVERSÉ RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

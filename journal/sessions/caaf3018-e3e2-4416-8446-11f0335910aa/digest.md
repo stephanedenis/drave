@@ -6704,3 +6704,37 @@ e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D
 ⏵ 01 h 07 : T0 maintenu à 4 000 (l'état est saturé, l'écrivain rabote). Alternance.
 
 - **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -1 work/veille-nuit.log; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"", "description": "Read watch line at 01h17"}`
+
+  ```
+01:17
+01:17 · f7a53e2a L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE · actifs=8 ·   ✅ état court, structuré, multi-s
+  T0 max : 4001 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 001 (1 mot de trop) : je vérifie si c'est une violation et où.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/taille_documents.py 2>&1 | tail -4; echo \"--- en-cours ---\"; python3 -c \"\nimport pathlib,re\nt=pathlib.Path('docs/pilotage/en-cours.md').read_text()\nprint('en-cours mots:', len(re.findall(r'\\S+',t)))\"", "descriptio … [33 caractères tronqués]`
+
+  ```
+· 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+--- en-cours ---
+en-cours mots: 1627
+  ```
+
+### 🤖 Assistant
+
+⏵ 01 h 17 : T0 à 4 001 (1 mot de trop). L'écrivain rabote ; je revérifie dans 10 min avant d'intervenir.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
