@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 21.9 h |
 | Tours | 166 |
-| Messages | 1164 |
-| Appels d'outils | 950 |
+| Messages | 1167 |
+| Appels d'outils | 953 |
 | Fichiers touchés | 48 |
-| Commandes | 770 |
+| Commandes | 773 |
 | Sous-agents | 0 |
-| Commits | 100 |
+| Commits | 101 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4270,17 +4270,20 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 166 — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour r … [763 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Fix verifier args and re-run parity
 - bash — Exclude cross-lingual pair and measure
 - bash — Commit verifier argument fix
 - bash — Add state line and commit verifier fix
 - bash — Commit cross-pair exclusion correction
+- bash — Build and run learned link perceptron LOO
+- bash — Write learned link fiche and state
+- bash — Commit learned link fact
 
 **Synthèse produite :**
 
-⏵ Banc de parité commité (`48d79ff3`) ; je corrige maintenant le lien (paire croisée écartée → 9/9) dans la fiche, le JSON, l'en-cours et le README
+⏵ La ligne réelle est `voisin 9/9, parité … (rejouée, --drvm)` ; je corrige au bon format et je commite
 
 ## 3. Travail accompli
 
@@ -4379,7 +4382,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 730 autres
+- … et 733 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4586,4 +4589,5 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s
 - L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s
 - L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
 

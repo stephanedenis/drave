@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (21)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -28,6 +28,7 @@
 | 11:43 | `61bafd18` | BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES) | `en-cours.md`, `references-non-regression.md`, `README.md` (+12) |
 | 13:44 | `1c9f58dc` | B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAL DE SESSION NETTOYÉ | `en-cours.md`, `README.md`, `attention.md` (+18) |
 | 13:46 | `1032ed74` | B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAUX DE SESSION NETTOYÉS | `README.md`, `attention.md`, `distribue.md` (+11) |
+| 14:07 | `87e2e5a9` | L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0) | `en-cours.md`, `README.md`, `attention.md` (+15) |
 
 ## Chiffres du jour
 
@@ -52,6 +53,7 @@
 - [reports/rapport-pensee-gold-api.md](../../reports/rapport-pensee-gold-api.md)
 - [reports/rapport-pensee-lien-10-paires.md](../../reports/rapport-pensee-lien-10-paires.md)
 - [reports/rapport-pensee-lien-acte.md](../../reports/rapport-pensee-lien-acte.md)
+- [reports/rapport-pensee-lien-deux-sens.md](../../reports/rapport-pensee-lien-deux-sens.md)
 - [reports/rapport-pensee-lien-gv.md](../../reports/rapport-pensee-lien-gv.md)
 - [reports/rapport-pensee-lien-inverse.md](../../reports/rapport-pensee-lien-inverse.md)
 - [reports/rapport-pensee-lien-repare.md](../../reports/rapport-pensee-lien-repare.md)

@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**71 commits** · **6 session(s)** · **8 thème(s)**
+**72 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 6 | [attention.md](attention.md) |
-| distribue | 20 | [distribue.md](distribue.md) |
+| distribue | 21 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
@@ -106,6 +106,7 @@
 | 13:59 | `727c4860` | S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ |
 | 14:02 | `4f1de240` | L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE |
 | 14:05 | `48d79ff3` | L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ |
+| 14:07 | `87e2e5a9` | L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0) |
 
 ## Le récit de la journée (écrit à la main)
 

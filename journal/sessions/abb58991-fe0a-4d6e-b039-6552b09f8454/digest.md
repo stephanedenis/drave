@@ -23874,3 +23874,48 @@ EXIT=0
 ⏵ Banc de parité commité (`48d79ff3`) ; je corrige maintenant le lien (paire croisée écartée → 9/9) dans la fiche, le JSON, l'en-cours et le README
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique()\n … [3067 caractères tronqués]`
+
+  ```
+mesures {'arriere': {'paires': 5, 'justes': 5, 'taux': 1.0}, 'avant': {'paires': 4, 'justes': 4, 'croisees_ecartees': 1, 'taux': 1.0}, 'total': {'paires': 9, 'justes': 9, 'taux': 1.0}}
+ok
+  T0 max : 3997 mots (budget 4 000)
+  588 fiches → reports/INDEX.md
+  revue de documentation · 591 fiche(s) · 680 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ index : aucun fait stagé sans état
+[master 87e2e5a9] L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)
+ 18 files changed, 96 insertions(+), 35 deletions(-)
+EXIT=0
+87e2e5a9 L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)
+  ```
+
+### 🤖 Assistant
+
+⏵ Lien à **9/9** (5/5 arrière + 4/4 avant) ; pour l'item « apprentissage », je construis un perceptron de rang LOO sur les mêmes traits et je le compare aux règles à la main
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/qualifier_lien_appris.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"qualifier_lien_appris.py — le lien **appris** : perceptron de rang, LOO sur 9 paires.\n\nLes règles à la main (sujet normalisé, verbe, adverbe, acte, phrase  … [6343 caractères tronqués]`
+
+  ```
+{"paires": 9, "justes": 9, "taux": 1.0, "hasard_moyen": 0.1, "surface_seule": 2}
+  ```
+
+### 🤖 Assistant
+
+⏵ **Lien appris : perceptron LOO 9/9**, hasard 0,1, surface seule 2/9 — l'apprentissage retrouve les règles ; j'écris la fiche et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nd=json.loads(pathlib.Path('reports/pensee-lien-appris.json').read_text(encoding='utf-8'))\nfiche=pathlib.Path('reports/rapport-pensee-lien-appris.md')\nfiche.write_text('''# B13 — le lien appris : perceptron de  … [3116 caractères tronqués]`
+
+  ```
+fiche 2557
+  T0 max : 3997 mots (budget 4 000)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 61, in <module>
+AssertionError: 0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 9/9, parité 114/114+5/5 (rejouée,
+  ```
+
+### 🤖 Assistant
+
+⏵ La ligne réelle est `voisin 9/9, parité … (rejouée, --drvm)` ; je corrige au bon format et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='voisin 9/9, parité 114/114+5/5 (rejouée, --drvm)'\nnew='voisin 9/9 appris, parité 114/114+5/5 (--drvm)'\nassert old in t, 'ligne absen … [1130 caractères tronqués]`

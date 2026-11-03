@@ -1,0 +1,140 @@
+{
+  "date": "2026-11-03 14:09 EST",
+  "paires": 9,
+  "justes": 9,
+  "taux": 1.0,
+  "hasard_moyen": 0.1,
+  "surface_seule": 2,
+  "traits": [
+    "même sujet",
+    "même verbe",
+    "même adverbe",
+    "acte q→a",
+    "phrase simple",
+    "1/(1+rang)"
+  ],
+  "detail": [
+    {
+      "question": "r418",
+      "attendu": "r423",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.805
+      ]
+    },
+    {
+      "question": "r419",
+      "attendu": "r424",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.755
+      ]
+    },
+    {
+      "question": "r420",
+      "attendu": "r425",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.76
+      ]
+    },
+    {
+      "question": "r421",
+      "attendu": "r426",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.76
+      ]
+    },
+    {
+      "question": "r422",
+      "attendu": "r427",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.76
+      ]
+    },
+    {
+      "question": "r408",
+      "attendu": "r423",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.76
+      ]
+    },
+    {
+      "question": "r409",
+      "attendu": "r424",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.76
+      ]
+    },
+    {
+      "question": "r410",
+      "attendu": "r425",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.76
+      ]
+    },
+    {
+      "question": "r411",
+      "attendu": "r426",
+      "juste": true,
+      "poids": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -0.76
+      ]
+    }
+  ],
+  "controle_negatif": {
+    "hasard": "0.1000 de justesse moyenne sur 50 graines",
+    "surface_seule": "2/9 — le sujet seul ne suffit pas",
+    "regle_main": "9/9 (mesure du round précédent)"
+  }
+}
