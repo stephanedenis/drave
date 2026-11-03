@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 25.1 h |
+| Durée | 25.3 h |
 | Tours | 6 |
-| Messages | 637 |
-| Appels d'outils | 601 |
+| Messages | 655 |
+| Appels d'outils | 615 |
 | Fichiers touchés | 27 |
-| Commandes | 445 |
+| Commandes | 457 |
 | Sous-agents | 0 |
-| Commits | 18 |
+| Commits | 20 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -165,7 +165,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 
 ### Tour 6 — continue
 
-*107 appels d'outils.* Actions notables :
+*121 appels d'outils.* Actions notables :
 
 - bash — Check current repo and hardware state
 - get_goal
@@ -181,11 +181,11 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - bash — Commit state and check runs
 - bash — Check disk space and git index state
 - bash — Check inodes and git index health
-- … et 69 autres
+- … et 80 autres
 
 **Synthèse produite :**
 
-⏵ Distillation du professeur de production dans la recette 512 (comparaison directe à l'affinage dur)
+⏵ Complément § « run long » et loi du compute à 1 024
 
 ## 3. Travail accompli
 
@@ -263,7 +263,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 405 autres
+- … et 417 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -391,7 +391,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 
 ## 5. Erreurs rencontrées
 
-21 sorties en erreur ou divergentes. Les premières :
+22 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md:20686:- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.
 - **T1** : (no output) [exit code: 1]
@@ -429,4 +429,6 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; for i in $(seq 1 20);
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") vieux = 
 - cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/distiller_natif.py work/n2ac/chaine_kd.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && python
+- cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-production-fenetre.md re
+- cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 

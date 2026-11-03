@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 25.0 h |
+| Durée | 25.1 h |
 | Tours | 173 |
-| Messages | 1250 |
-| Appels d'outils | 1018 |
+| Messages | 1254 |
+| Appels d'outils | 1021 |
 | Fichiers touchés | 49 |
-| Commandes | 830 |
+| Commandes | 831 |
 | Sous-agents | 0 |
 | Commits | 108 |
 | Compactages de contexte | 4 |
@@ -32,6 +32,8 @@
 - **complete** — Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + 
 … [97 caractères tronqués]
 - **create** — Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le
+… [115 caractères tronqués]
+- **complete** — Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le
 … [115 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -4550,7 +4552,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 173 — continue avec réparer la fusion
 
-*13 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Read the fusion implementation
@@ -4565,10 +4567,44 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Commit fusion repair fact
 - bash — Fix counters and commit state
 - bash — Fix file counter and commit state
+- bash — Final verification for fusion repair goal
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ La ligne réelle est `596 / 685` ; je corrige le seul chiffre des fichiers et je commite
+⏵ Goal « réparer la fusion » clos : la fusion par niveau rend **0,9309 / 0,8226 / 0,8784 / 0,9954**, le maximum des deux sources
+
+**Objectif atteint.** La fusion du bloc langue ne dégrade plus : elle choisit la source **par niveau** et rend exactement le meilleur des deux blocs.
+
+**1. Le diagnostic** (mesuré, pas supposé).
+- L'ancienne fusion (`_supprimer_chevauchements`) triait les étiquettes par **confiance** : l'heuristique met 0,92 sur les classes fermées, le tagger neuronal 0,6 → l'heuristique gagnait la POS et la segmentation même quand elle avait tort.
+- Résultat : parallèle et cascade **0,928 / 0,802 / 0,857**, sous le neuronal seul **0,9309 / 0,8226 / 0,8784**.
+
+**2. La réparation** (`tools/bloc_linguistique.py`).
+- `PRIORITE_NIVEAU` : le **neuronal** tient `pos` et `syntagme` ; l'**heuristique** tient `graphème`, `morphème`, `mot`, `phrase`, `pragmatique`, `discours`, `document`.
+- `_fusion(..., priorite_par_niveau=...)` filtre **par source et par niveau** ; `Parallele` et `Cascade` acceptent la priorité.
+- Les sources ne concourent plus : elles se **substituent** niveau par niveau.
+
+**3. Les résultats (même gold 432, même passe).**
+
+| mode | POS | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|
+| heuristique | 0,7394 | 0,2524 | 0,4516 | **0,9954** |
+| neuronal | 0,9309 | 0,8226 | 0,8784 | 0,0 |
+| **fusion par niveau** | **0,9309** | **0,8226** | **0,8784** | **0,9954** |
+
+**4. Les contrôles négatifs.**
+- **L'ancienne fusion**, mesurée dans la même passe : 0,928 / 0,802 / 0,857 — le « avant » qui prouve la réparation.
+- **Le repli rejeté** : prendre les syntagmes heuristiques quand le neuronal ne segmente pas donnait **0,9331 / 0,8069 / 0,8704** — la POS +0,0022, mais les syntagmes **−0,0157** (46 phrases fausses). Rejeté : la fusion **stricte** par niveau est meilleure.
+- **Seuils de la porte** : `parallele_niveau` et `cascade_niveau` **passent** (l'ancien `parallele` échouait) ; **tests du contrat 16/16** ; **porte du bloc linguistique verte**.
+- **1 refus** (`r353`) reste ouvert.
+
+**Concret** : commit `af335d0d` (le fait) + `76a54a2d` (les compteurs) ; fiche `reports/rapport-pensee-fusion-reparee.md` ; JSON `reports/pensee-quatre-modes-niveau.json` ; banc `tools/tests/linguistique/qualifier_quatre_modes.py`.
+**État** : T0 **3 994** ; revue **597 fiches / 685 JSON / 120 docs** verte ; hook état ✅ ; règle 11 respectée (API DeepSeek, cache, aucun serveur local, aucun GPU N2).
+
+**À relire / faire ensuite.**
+- **La pragmatique neuronale** : le 
+… [647 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -4668,7 +4704,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 790 autres
+- … et 791 autres
 
 ## 4. Mesures et résultats marquants
 

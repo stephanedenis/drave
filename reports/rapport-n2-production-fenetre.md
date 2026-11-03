@@ -5,8 +5,9 @@
 > et le run de 200 000 pas ; **1 024 est la meilleure au long** (2,7342 à 2 000 octets) et **512 la
 > meilleure hors domaine** (anglais 7,05, wikitext2 7,90), **2 048 ne paie pas** (3 750 pas
 > seulement). En poussant la fenêtre 1 024 à **30 000 pas (307 Mo)**, le modèle de production
-> atteint **2,9943** en domaine à 128 octets, **2,6143** à 1 000, **2,5628** à 2 000, et il passe
-> **sous 2,5 sur la validation du grand corpus** (2,4759 à 1 000, 2,4373 à 2 000) — une première
+> atteint **2,9121** en domaine à 128 octets (60 000 pas, 552 Mo), **2,5276** à 1 000, **2,4761** à
+> 2 000, et il passe
+> **sous 2,5 sur la validation du grand corpus** (2,3911 à 1 000, 2,3522 à 2 000) — une première
 > pour un modèle natif, **obtenue par la fenêtre et non en rabotant la longueur**. Le même compute
 > à fenêtre 128 (200 k pas, 205 Mo) donne 3,1591 à 128 et **8,2262** à 1 000 : la fenêtre n'est pas
 > un raffinement, c'est la condition pour que le compute serve au-delà de 128 octets.
@@ -92,6 +93,29 @@ Et le fait le plus net : sur la **validation du grand corpus**, ce modèle passe
 mesure sur le corpus propre, fiche [`n2-porte-propre`](rapport-n2-porte-propre.md)) mais c'est la
 première fois qu'un modèle natif passe 2,5 sur une validation tenue à part, et il le fait **avec
 la fenêtre**, pas en rabotant la longueur.
+
+## 2 bis. Le run long : 60 000 pas à fenêtre 1 024
+
+La recette de production poussée une fois de plus (30 000 → **60 000 pas**, **552 Mo** au total) :
+
+| fenêtre 1 024, pas | octets totaux | 128 | 512 | 1 000 | 2 000 | litt. | angl. | wt2 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 7 500 | 122 Mo | 3,1489 | 2,9103 | 2,7858 | 2,7342 | 5,5173 | 7,1904 | 7,9521 |
+| 30 000 | 307 Mo | 2,9943 | 2,7221 | 2,6143 | 2,5628 | 5,3122 | 6,5118 | 7,1544 |
+| **60 000** | **552 Mo** | **2,9121** | **2,6341** | **2,5276** | **2,4761** | **5,1254** | **6,2043** | **6,7874** |
+| écart 30 k → 60 k | | −0,082 | −0,088 | −0,087 | −0,087 | −0,187 | −0,308 | −0,367 |
+
+**Chaque doublement des pas vaut ~−0,085 en domaine** (le pas de 7 500 à 30 000, ×4, valait
+−0,155 ; celui de 30 000 à 60 000, ×2, vaut −0,082) : c'est une loi **géométrique** en pas, et
+elle est la même à toutes les longueurs. Conséquences :
+
+- **à 1 000 et 2 000 octets, le modèle est largement sous 2,5** sur la validation du grand corpus
+  (**2,3911** et **2,3522**) et à **2,53 / 2,48** sur la validation française ;
+- **à 128 octets, il reste 0,41 au-dessus de 2,5** en domaine : à −0,082 par doublement, il
+  faudrait **5 doublements** (≈ **2 M de pas**) — la même classe de prix que la recette à fenêtre
+  128 (1,3–2,7 M), mais avec un modèle qui, lui, **sait lire** au-delà de 128 octets ;
+- **le hors domaine suit** : anglais 6,51 → **6,20**, wikitext2 7,15 → **6,79**, littérature
+  5,31 → **5,13** ; le corpus propre transféré passe de 9,37 à **9,03**.
 
 ## 3. Le contrôle depuis zéro
 

@@ -66,7 +66,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 |---|---|---|---|---|---|---|---|---|
 | `00221850` | Outillage de présentation de documentation | 2026-10-27 11:34 | 4.9 h | 6 | 529 | 38 | 25 | [rapport](sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md) |
 | `04ed1834` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 42 | 0 | 0 | [rapport](sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/rapport.md) |
-| `0733c5bb` | Session N2 : plan et réservations | 2026-11-02 16:14 | 25.1 h | 6 | 601 | 27 | 18 | [rapport](sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) |
+| `0733c5bb` | Session N2 : plan et réservations | 2026-11-02 16:14 | 25.3 h | 6 | 615 | 27 | 20 | [rapport](sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) |
 | `0b0a6a0d` | Continue session work | 2026-10-31 17:17 | 45.3 h | 20 | 1565 | 11 | 88 | [rapport](sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) |
 | `0b2c86eb` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:29 | 1.5 h | 1 | 128 | 5 | 0 | [rapport](sessions/0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630/rapport.md) |
 | `0b69f616` | Continue AI coding session | 2026-10-30 21:46 | 0.3 h | 1 | 200 | 6 | 0 | [rapport](sessions/0b69f616-5c75-4c34-b97a-ae05564812af/rapport.md) |
@@ -141,7 +141,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a4eaa4c8` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 38 | 0 | 0 | [rapport](sessions/a4eaa4c8-11e2-4ca3-bcb1-b28919cb601a/rapport.md) |
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
-| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 25.0 h | 173 | 1018 | 49 | 108 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
+| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 25.1 h | 173 | 1021 | 49 | 108 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
 | `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
 | `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 12.5 h | 82 | 821 | 25 | 40 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |

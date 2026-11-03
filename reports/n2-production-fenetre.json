@@ -237,5 +237,31 @@
    "miroir de copie",
    "affinage vs depuis zéro"
   ]
+ },
+ "prod_1024_60k": {
+  "fichier": "mix1024-60k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 2.9121,
+    "256": 2.7716,
+    "512": 2.6341,
+    "1000": 2.5276,
+    "2000": 2.4761
+   },
+   "val_big": {
+    "128": 2.754,
+    "256": 2.6072,
+    "512": 2.4895,
+    "1000": 2.3911,
+    "2000": 2.3522
+   }
+  },
+  "permute_fr": 165.9129,
+  "litterature": 5.1254,
+  "anglais": 6.2043,
+  "wikitext2": 6.7874,
+  "corpus_propre": 9.0299
  }
 }

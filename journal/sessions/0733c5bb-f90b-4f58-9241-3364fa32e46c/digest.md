@@ -8773,3 +8773,195 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-442", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-434 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; tail -c 50 work/n2ac/mix1024-60k.log; tail -c 60 work/n2ac/kd-mix512-15k.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E \"ppl_val\" work/n2ac/mix1024-60k.pt.json 2>/dev/null; tail -c 55 work/n2ac/kd-mix512-15k.log", "description": "Check 60k completion … [9 caractères tronqués]`
+
+  ```
+17:17:49
+ perte 1.0360 · dure 0.9466 · douce 0.1809 · 3163 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -2 work/n2ac/mix1024-60k.log; date '+%H:%M:%S'; ps -eo pid,etime,cmd --no-headers | grep \"[e]ntrainer_rope\" | cut -c1-60", "description": "Read 60k log tail and process state"}`
+
+  ```
+pas  29300 · perte 1.0434 · PPL val 2.378 · 13018 s
+pas  29350 · perte 0.9100 · PPL val 2.384 · 13040 s
+17:17:53
+2320304    03:41:10 /home/stephane/gpu-env/bin/python work/n
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E \"ppl_val|duree_s\" work/n2ac/mix1024-60k.pt.json 2>/dev/null", "description": "Wait for 60k checkpoint save"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-445]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-436 (bash: sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; cat work/n2ac/prod60k.out 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E \"ppl_val|duree_s\" work/n2ac/mix1024-60k.pt.json 2>/dev/null", "description": "Poll 60k checkpoint"}`
+
+  ```
+17:19:00
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E \"ppl_val\" work/n2ac/mix1024-60k.pt.json 2>/dev/null", "description": "Wait a bit more for 60k save"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-447]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-447", "timeout_ms": 420000, "wait": true}`
+
+  ```
+17:26:03
+mix1024-60k fini 17:22:31
+work/n2ac/mix1024-60k.pt
+OK60
+ "ppl_val": 2.4038261088297856,
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-438 (bash: sleep 2400; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E "ppl_val|duree_s" work/n2ac/mix1024-60k.pt.json 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-440 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E "ppl_val" work/n2ac/mix1024-60k.pt.json 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-445 (bash: sleep 480; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E "ppl_val|duree_s" work/n2ac/mix1024-60k.pt.json 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Évaluation du run long (60 000 pas à 1 024) et du prix de la porte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/mix1024-60k.pt --rope --longueurs 128,256,512,1000,2000 --sortie work/n2ac/eval-mix1024-60k.json 2>&1 | grep -E '\"(128|256|512|1000|2000)\"|litterature|an … [95 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-448]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-448", "timeout_ms": 300000, "wait": true}`
+
+  ```
+"128": 2.9121,
+   "256": 2.7716,
+   "512": 2.6341,
+   "1000": 2.5276,
+   "2000": 2.4761
+   "128": 2.754,
+   "256": 2.6072,
+   "512": 2.4895,
+   "1000": 2.3911,
+   "2000": 2.3522
+ "permute_fr": 165.9129,
+ "litterature": 5.1254,
+ "anglais": 6.2043,
+ "wikitext2": 6.7874,
+ "corpus_propre": 9.0299
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Complément § « run long » et loi du compute à 1 024
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-production-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"## 3. Le contrôle depuis zéro\"\nneuf = \"\"\"## 2 bis. Le run long : 60 000 pas à fenêtre 1 024\n\nLa rec … [2090 caractères tronqués]`
+
+  ```
+§2 bis ajouté
+json : 12 sources
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-production-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"le modèle de production\n> atteint **2,9943** en domaine à 128 octets, **2,6143** à 1 000, **2,5628**  … [661 caractères tronqués]`
+
+  ```
+verdict mis à jour
+17:29:32
+ perte 1.1620 · dure 1.0976 · douce 0.1793 · 3883 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"  **2,6143** à 1 000, **2,5628** à 2 000 (**sous 2,5** au grand corpus) ;\"\"\",\n              \"\"\"  **2 … [903 caractères tronqués]`
+
+  ```
+compteurs 597 685
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 597 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-production-fenetre.md reports/n2-production-fenetre.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/rapport-n2-production-fenetre.md re … [1198 caractères tronqués]`
+
+  ```
+76a54a2d L — COMPTEURS DE L'ÉTAT : 597 FICHES / 685 JSON
+[stderr]
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/n2-production-fenetre.json
+     · reports/rapport-n2-production-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -c \"2,9121\" docs/pilotage/en-cours.md; git diff --stat HEAD -- docs/pilotage/en-cours.md; grep -n \"60 000 pas\" docs/pilotage/en-cours.md | head -2", "description": "Check if state numbers are committed"}`
+
+  ```
+0
+91:  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"la fenêtre 1 024 est la recette\" -A3 docs/pilotage/en-cours.md | head -6", "description": "Read current N2 line"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"N2\" docs/pilotage/en-cours.md | head -8", "description": "Locate N2 lines in state"}`
+
+  ```
+9:> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit**, et de nouveau le **03/11 13 h 38** pour le **run long à 1 024** ; runbook :
+24:> **Bilan de 08 h** : 82 portes, 77/5 ; N2/S en pause ; B13 et hub actifs ; [journal](../../journal/2026-11-03/README.md).
+37:- **Ce que font les autres** : **N2**, **S** (en pause), **Pensée**.
+39:- **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
+52:- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+75:- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+81:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité
+84:- **Rôle** : **N2** — le run long de production et la capacité sur le corpus propre.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '/^## Ce qui est en cours/,/^## /p' docs/pilotage/en-cours.md | head -14; echo \"=== chantiers N ===\"; grep -n \"N — le natif\" docs/pilotage/en-cours.md", "description": "Read in-progress section and N row"}`
+
+  ```
+## Ce qui est en cours
+
+- **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
+- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
+- **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
+- **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
+
+## Les chiffres de l'état
+=== chantiers N ===
+130:| **N — le natif** | **N2, N3, N4** | N2 : **fenêtre 1 024 — 2,4759 / 2,4373 au grand corpus (sous 2,5)** ; porte propre 2,7856, **capacité saturée** (2,8662 à 34,3 M) ; N4 0/4 ; N5 gelé | **la fenêtre** (N2.ac + RoPE 512 : 2,9096 à 512, 2,7607 à 2 000) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus)\",\n              \"la **f … [1686 caractères tronqués]`

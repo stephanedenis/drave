@@ -25909,3 +25909,96 @@ AssertionError: compteur absent
 ⏵ La ligne réelle est `596 / 685` ; je corrige le seul chiffre des fichiers et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='| fichiers / JSON de résultats | **596** / **685** |'\nnew='| fichiers / JSON de résultats | **597** / **685** |'\nassert old in t, 'c … [466 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 597 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3994 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 76a54a2d] L — COMPTEURS DE L'ÉTAT : 597 FICHES / 685 JSON
+ 18 files changed, 83 insertions(+), 34 deletions(-)
+EXIT=0
+76a54a2d L — COMPTEURS DE L'ÉTAT : 597 FICHES / 685 JSON
+  ```
+
+### 🤖 Assistant
+
+⏵ La fusion réparée et l'état sont committés (`af335d0d`, `76a54a2d`) ; je vérifie l'état final et je clôture le goal
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep T0 | head -1; python3 tools/revue_documentation.py 2> … [193 caractères tronqués]`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  état · dernier fait af335d0d · dernier état 76a54a2d
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---
+76a54a2d L — COMPTEURS DE L'ÉTAT : 597 FICHES / 685 JSON
+af335d0d L — LA FUSION RÉPARÉE : PAR NIVEAU (NEURONAL POS/SYNTAGMES, HEURISTIQUE PRAGMATIQUE) — 0,9309 / 0,8226 / 0,8784 / 0,9954, LE MAXIMUM DES DEUX
+ef530713 S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS
+--- non committés ---
+ M docs/schemas/README.md
+ M tools/pensee/store.py
+ M tools/structures
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? docs/schemas/arbre-referents.svg
+?? reports/pensee-porte-fenetre-500.json
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-0af1b8bf-ee48-490a-913d-93b89f281f14","revision":1,"objective":"Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le gold 432, fiche + contrôle négatif + en-cours + commit explicite ; pas de GPU N2, pas de serveur local (règle 11).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-0af1b8bf-ee48-490a-913d-93b89f281f14", "revision": 1}`
+
+> **Objectif** (complete) : Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le gold 432, fiche + contrôle négatif + en-cours + commit explicite ; pas de GPU N2, pas de serveur local (règle 11).
+
+
+  ```
+{"goal":{"id":"goal-0af1b8bf-ee48-490a-913d-93b89f281f14","revision":2,"objective":"Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le gold 432, fiche + contrôle négatif + en-cours + commit explicite ; pas de GPU N2, pas de serveur local (règle 11).","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Goal « réparer la fusion » clos : la fusion par niveau rend **0,9309 / 0,8226 / 0,8784 / 0,9954**, le maximum des deux sources
+
+**Objectif atteint.** La fusion du bloc langue ne dégrade plus : elle choisit la source **par niveau** et rend exactement le meilleur des deux blocs.
+
+**1. Le diagnostic** (mesuré, pas supposé).
+- L'ancienne fusion (`_supprimer_chevauchements`) triait les étiquettes par **confiance** : l'heuristique met 0,92 sur les classes fermées, le tagger neuronal 0,6 → l'heuristique gagnait la POS et la segmentation même quand elle avait tort.
+- Résultat : parallèle et cascade **0,928 / 0,802 / 0,857**, sous le neuronal seul **0,9309 / 0,8226 / 0,8784**.
+
+**2. La réparation** (`tools/bloc_linguistique.py`).
+- `PRIORITE_NIVEAU` : le **neuronal** tient `pos` et `syntagme` ; l'**heuristique** tient `graphème`, `morphème`, `mot`, `phrase`, `pragmatique`, `discours`, `document`.
+- `_fusion(..., priorite_par_niveau=...)` filtre **par source et par niveau** ; `Parallele` et `Cascade` acceptent la priorité.
+- Les sources ne concourent plus : elles se **substituent** niveau par niveau.
+
+**3. Les résultats (même gold 432, même passe).**
+
+| mode | POS | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|
+| heuristique | 0,7394 | 0,2524 | 0,4516 | **0,9954** |
+| neuronal | 0,9309 | 0,8226 | 0,8784 | 0,0 |
+| **fusion par niveau** | **0,9309** | **0,8226** | **0,8784** | **0,9954** |
+
+**4. Les contrôles négatifs.**
+- **L'ancienne fusion**, mesurée dans la même passe : 0,928 / 0,802 / 0,857 — le « avant » qui prouve la réparation.
+- **Le repli rejeté** : prendre les syntagmes heuristiques quand le neuronal ne segmente pas donnait **0,9331 / 0,8069 / 0,8704** — la POS +0,0022, mais les syntagmes **−0,0157** (46 phrases fausses). Rejeté : la fusion **stricte** par niveau est meilleure.
+- **Seuils de la porte** : `parallele_niveau` et `cascade_niveau` **passent** (l'ancien `parallele` échouait) ; **tests du contrat 16/16** ; **porte du bloc linguistique verte**.
+- **1 refus** (`r353`) reste ouvert.
+
+**Concret** : commit `af335d0d` (le fait) + `76a54a2d` (les compteurs) ; fiche `reports/rapport-pensee-fusion-reparee.md` ; JSON `reports/pensee-quatre-modes-niveau.json` ; banc `tools/tests/linguistique/qualifier_quatre_modes.py`.
+**État** : T0 **3 994** ; revue **597 fiches / 685 JSON / 120 docs** verte ; hook état ✅ ; règle 11 respectée (API DeepSeek, cache, aucun serveur local, aucun GPU N2).
+
+**À relire / faire ensuite.**
+- **La pragmatique neuronale** : le composite ne la rend pas (acte 0,0) ; l'heuristique la tient — c'est la prochaine action de L.
+- **Le refus `r353`** : le nommer et le traiter.
+- **`PRIORITE_NIVEAU` par défaut** : le passer en défaut des portes (pas seulement du banc) après une passe complète.
+- **Concurrence git** : mes commits ont encore emporté des suppressions déjà stagées par S (`arbre-referents`) ; `arbre-referents.svg` est réapparu non suivi. À vérifier avec S.
+- **Fichiers non committés d'autres sessions** : `docs/schemas/README.md`, `tools/pensee/store.py`, `tools/structures`, `tools/tests/qualifier_porte_fenetre_drvm.py`, `reports/pensee-porte-fenetre-500.json`.
+

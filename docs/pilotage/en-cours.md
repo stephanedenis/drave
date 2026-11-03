@@ -102,7 +102,7 @@
 ## Ce qui est en cours
 
 - **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
-- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
+- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
 - **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
 
@@ -127,7 +127,7 @@ externes** et la **prochaine action**.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold réel 432 (0,9065/0,4598/0,5633/0,9954) ; porte 140/140 ; sto 5/5** ; **B10.3 bloquée** |
-| **N — le natif** | **N2, N3, N4** | N2 : **fenêtre 1 024 — 2,4759 / 2,4373 au grand corpus (sous 2,5)** ; porte propre 2,7856, **capacité saturée** (2,8662 à 34,3 M) ; N4 0/4 ; N5 gelé | **la fenêtre** (N2.ac + RoPE 512 : 2,9096 à 512, 2,7607 à 2 000) |
+| **N — le natif** | **N2, N3, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856, **capacité saturée** (2,8662 à 34,3 M) ; N4 0/4 ; N5 gelé | **la fenêtre** (N2.ac + RoPE 512 : 2,9096 à 512, 2,7607 à 2 000) |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **loi de la fenêtre mesurée** (256 → 1 024) ; **2 048** en cours, puis un professeur long à distiller |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
