@@ -14225,3 +14225,42 @@ en-cours : ligne B13 resserrée
 ⏵ Deux dépassements : références à 2 518/2 500 et T0 à 4 020. J'enlève une passe ancienne et je resserre les questions.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) références : sortir la passe du 31/10 12 h 54 (historique la garde)\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nmarker=\"> **Passe précédente — 2026-10-31 à 1 … [1447 caractères tronqués]`
+
+  ```
+références : passe 31/10 12h54 sortie
+en-cours : questions resserrées
+    2487    161   T1   2500  docs/pilotage/references-non-regression.md
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[master 61bafd18] BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)
+ 15 files changed, 50 insertions(+), 30 deletions(-)
+[commit 0]
+61bafd18 BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesures B13 relancées et terminées via l'API ; je livre les chiffres et le verdict.
+
+## Mesures B13 via l'API — terminées
+
+Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.deepseek.com`**, sans serveur local ni `--demarrer`. Sorties séparées pour ne pas écraser les résultats du 7B : `reports/pensee-politique-llm-api.json` et `reports/pensee-porte-minute-api.json`.
+
+| mesure | 7B local (hier) | API `deepseek-chat` | verdict |
+|---|---|---|---|
+| **porte-minute** `llm_porte` | but **True**, 26 nœuds, 7 appels, 6,4 s | but **True**, 24 nœuds, 6 appels, **5,5 s** | **identique** (règle discriminante, score 1,0) |
+| **porte-minute** `llm_labyrinthe` | but **False**, 200 nœuds, 95 appels, **101,6 s** | but **False**, 200 nœuds, 78 appels, **2,9 s** | **identique** (0,25 ; sans la porte) |
+| **politique** (`labyrinthe`/`cadenas`/`porte`) | 200 nœuds, 0 erreur | 200 nœuds, **0 erreur**, 2,61 s | **muet** (le labyrinthe reste hors d'atteinte, comme avant) |
+
+- **Mêmes verdicts** sur les trois problèmes ; l'API est **~35× plus rapide** sur le cas sans règle (2,9 s contre 101,6 s) ; **0 erreur** sur 96 appels.
+- **Piège rencontré et corrigé** : `deepseek-flash` est un modèle à **raisonnement** — avec `max_tokens: 8`, il consomme tout dans le raisonnement et rend un contenu **vide**. `deepseek-chat` répond correctement. Les deux mesureurs retiennent donc `deepseek-chat` et refusent un endpoint non local sans GGUF.
+- **Fichiers** : `reports/pensee-politique-llm-api.json`, `reports/pensee-porte-minute-api.json` ; scripts patchés (`est_api`).
+- **Commits** : `5bafefab` (mesures API), `61bafd18` (budgets : références 2 487/2 500, T0 3 997/4 000).
+- **GPU** : libres, aucun serveur local, garde-fou actif.
+
+**Conclusion pour la B13** : le professeur en ligne reproduit les verdicts du 7B sur la porte-minute et la politique ; il est bien plus rapide et ne touche pas aux GPU. La fiche B13 peut désormais citer `deepseek-chat` comme professeur de référence, avec la réserve du changement de modèle (les chiffres ne sont comparables qu'entre passes API). Veux-tu que je rédige la fiche de synthèse `rapport-pensee-gold-api.md` (méthode, contrôle négatif, ce qui pourrait la rendre fausse) et que je la commite ?
+

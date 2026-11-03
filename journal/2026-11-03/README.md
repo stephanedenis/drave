@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**53 commits** · **6 session(s)** · **8 thème(s)**
+**54 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 3 | [attention.md](attention.md) |
-| distribue | 17 | [distribue.md](distribue.md) |
+| distribue | 18 | [distribue.md](distribue.md) |
 | docs | 16 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
@@ -29,7 +29,7 @@
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 20.2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 | `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 9.5 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 12.5 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
-| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 19.2 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
+| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 21.0 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -88,6 +88,7 @@
 | 11:26 | `c4ea6138` | MÉTHODE — LA CLÉ DU PROFESSEUR EST NOMMÉE (FICHIER 0600) ET SON USAGE VÉRIFIÉ |
 | 11:39 | `5bafefab` | B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35 |
 | 11:41 | `c2ba64e4` | BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000 |
+| 11:43 | `61bafd18` | BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -209,4 +210,14 @@ plus rafraîchi. GPU au repos.
   (sortie `reports/pensee-porte-minute-api.json`).
 - L'état ne dit plus « clé API absente » ; la méthode ([`ressources.md`](../../docs/methode/ressources.md))
   nomme le fichier et la variable. Les professeurs sont débloqués, sur l'API uniquement.
+
+## 13 h 20 — la passe propre du 03/11 : **80 vertes, 2 rouges**
+
+- **82 portes, 80 vertes, 2 rouges, 1 h 48** (`work/portes/passe-0303-11h30`), machine au repos
+  (GPU libres ; seuls des claims CPU). Les 2 rouges sont les **connues structurelles** :
+  `porte-indice` (821 s) et `porte-melange` (102 s).
+- Vertes acquises : `porte-homeostasie` **495 s** (LoRA régénéré), `porte-reparti-moteur` **3 s**
+  (ré-étalonnée à 8,7434), `porte-sessions` (N2/S en pause), `porte-tableaux`, `porte-ressources`.
+- Intégration : références (en-tête + § 2 réécrit en **82 lignes**), `en-cours` (82 / 80-2),
+  `portes.md` (11 h 30, 1 h 48, 80/2).
 <!-- /notes -->

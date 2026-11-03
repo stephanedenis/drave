@@ -9780,3 +9780,131 @@ porte-adaptateur-sortie.log
 
 Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'état, puis je te rendrai le bilan de la passe.
 
+
+## Tour 32
+
+### 👤 Utilisateur
+
+background job bash-398 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=0,1 JOURNAUX=work/portes/passe-0303-11h30 bash tools/toutes-les-portes.sh; echo "EXIT=$?"; awk '$2 != 0' work/portes/passe-0303-11h30/registre.txt; tail -1 work/portes/passe-0303-11h30/registre.txt) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ La passe propre est finie — je lis le verdict.
+
+- **job_output** `{"job_id": "bash-398", "timeout_ms": 10000}`
+
+  ```
+porte-adaptateur-sortie ✅                          64 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+  porte-audit-drapeaux   ✅                         167 s  ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  porte-bloc-code        ✅                          10 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          12 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           1 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          45 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          78 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          97 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard   
+… [11169 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict : **82 portes, 80 vertes, 2 rouges** (`indice`, `melange`) — exactement le 80/2 prévu. J'intègre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; python3 - <<'PY'\nimport pathlib\nd = pathlib.Path(\"work/portes/passe-0303-11h30\")\ntot = 0\nfor l in (d/\"registre.txt\").read_text().splitlines():\n    p = l.split()\n    if len(p)==3 and p[1].isdigit(): tot += int(p[2 … [283 caractères tronqués]`
+
+  ```
+13:17
+durée totale: 1 h 48
+11:43:41
+11:43:41
+09:45:51
+61bafd18 BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)
+c2ba64e4 BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000
+  ```
+
+### 🤖 Assistant
+
+⏵ L'autre écrivain a raboté les références à 11 h 43 (budget). Je relis la structure avant de patcher.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 1,30p docs/pilotage/references-non-regression.md | cut -c1-150; echo \"=== ancres ===\"; grep -n \"^## \\|^| porte |\" docs/pilotage/references-non-regression.md | head -8", "description": "Read current references structure afte … [9 caractères tronqués]`
+
+  ```
+# Références de non-régression
+
+> **Dernière passe complète — 2026-11-03 à 04 h 10 :** **82 portes, 77 vertes, 5 rouges**,
+> **1 h 40** (journaux durables `work/portes/passe-0303-04h10`). **Machine au repos** : les deux
+> GPU libres (N2 avait fini son run de nuit), claims des sessions libérés — la passe est **propre**,
+> sans contention. Rouges : les **4 connues** (`porte-indice` 834 s,
+> `porte-melange` 102 s, `porte-homeostasie` env.,
+> `porte-reparti-moteur` 2 s — pin 9,1748 non reproduit, à trancher)
+> + **`porte-sessions`** (mandats N2/S périmés : rouge de **coordination**, pas de code —
+> **rejouée verte à 08 h 10** après leur mise en pause). `porte-tableaux` **verte** (page 03/11), `porte-ressources`
+> **verte** (82e comptée). La 82e porte entre donc dans le compte.
+>
+> **Depuis, `porte-reparti-moteur` est ré-étalonnée** (03/11 : **8,7434**, deux régénérations
+> identiques, modèle effacé ; code et corpus **inchangés** depuis le 8/10) et **rejouée verte**
+> (écart 0,0000 %). Les passes suivantes compteront **3 rouges connues** (`indice`, `melange`,
+> `homeostasie`). Le pin 9,1748 du 29/10 venait d'un modèle **en cache**, jamais régénéré.
+
+> **Depuis, `porte-homeostasie` est a
+… [1231 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je réécris l'en-tête (80/2) et le §2 en 82 lignes, en gardant la trace des deux rouges retirées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/maj_references3.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"Met à jour references-non-regression.md depuis la passe du 03/11 11 h 30 (80/2).\"\"\"\nimport pathlib, re, sys\nd = pathlib.Path(\"work/portes/passe-0303-11h30\")\nec … [3095 caractères tronqués]`
+
+  ```
+82 portes · 80 vertes · 2 rouges · aperçu work/references.new.md
+=== en-tête simulé ===
+> **Dernière passe complète — 2026-11-03 à 11 h 30 :** **82 portes, 80 vertes, 2 rouges**,
+> **1 h 48** (journaux durables `work/portes/passe-0303-11h30`), **machine au repos** (GPU libres ;
+> seuls des claims CPU). Les **2 rouges sont les connues, structurelles** : `porte-indice` (821 s),
+> `porte-melange` (102 s). `porte-homeostasie` **verte** (495 s, LoRA régénéré), `porte-reparti-moteur`
+> **verte** (ré-étalonnée à 8,7434), `porte-sessions` **verte** (N2/S en pause), `porte-tableaux` et
+> `porte-ressources` vertes.
+>
+> **Passe précédente — 2026-11-03 à 04 h 10 :** 82 portes, 77 vertes, 5 rouges, 1 h 40 — 4 connues +
+> `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
+
+> **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/pas
+
+=== lignes §2 ===
+82
+  ```
+
+### 🤖 Assistant
+
+⏵ Application, puis alignement de `en-cours` et `portes.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 work/maj_references3.py --ecrire; echo \"=== en-cours ===\"; grep -n \"portes |\\|dernière passe\" docs/pilotage/en-cours.md; echo \"=== portes.md ===\"; sed -n 14,18p docs/methode/portes.md | cut -c1-150", "description": "Appl … [38 caractères tronqués]`
+
+  ```
+82 portes · 80 vertes · 2 rouges · aperçu work/references.new.md
+RÉÉCRIT
+=== en-cours ===
+117:| portes | **82** (passe du **03/11 04 h 10** : **82, 77/5**) | `tools/porte-*.sh` |
+121:| dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` **rejouée verte** après la pause N2/S) | `docs/pilotage/references-non-regression.md` |
+=== portes.md ===
+`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **82 portes** (03/11 04 h 10, **machine au repos**, **1 h 40**) a donné
+**77 vertes, 5 rouges** (les 4 connues + `porte-sessions`, mandats N2/S périmés — coordination) ;
+**depuis, `porte-reparti-moteur` est ré-étalonnée et `porte-homeostasie` auto-génère son LoRA** :
+les passes suivantes compteront **2 rouges connues** (`indice`, `melange`) ; la liste et le diagnostic sont dans
+[`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"| portes | **82** (passe du **03/11 04 h 10** : **82, 77/5**) | `tools/porte-*.sh` |\",\n \"| portes | … [1756 caractères tronqués]`
+
+  ```
+en-cours + portes.md : passe 11 h 30
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 13 h 20 — la passe propre du 03/11 : **80 vertes, 2 rouges**\n\n- **82 portes, 80 vertes, 2 r … [1670 caractères tronqués]`

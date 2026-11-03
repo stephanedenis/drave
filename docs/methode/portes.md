@@ -11,10 +11,10 @@ bash tools/toutes-les-portes.sh
 Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
 [tableau](../theorie/glossaire/entrees/tableau.md), pas la première tuile), et borne **chaque** [porte](../theorie/glossaire/entrees/porte.md) à `DELAI=1800` s. Durée observée d'une passe complète :
 **1 h 30 – 2 h** sur Hauru (**81 portes** ; certaines entraînent de petits modèles, d'autres utilisent les [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md) ;
-`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **82 portes** (03/11 04 h 10, **machine au repos**, **1 h 40**) a donné
-**77 vertes, 5 rouges** (les 4 connues + `porte-sessions`, mandats N2/S périmés — coordination) ;
-**depuis, `porte-reparti-moteur` est ré-étalonnée et `porte-homeostasie` auto-génère son LoRA** :
-les passes suivantes compteront **2 rouges connues** (`indice`, `melange`) ; la liste et le diagnostic sont dans
+`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **82 portes** (03/11 11 h 30, **machine au repos**, **1 h 48**) a donné
+**80 vertes, 2 rouges** (les 2 connues : `indice`, `melange`) ;
+`porte-reparti-moteur` (ré-étalonnée à 8,7434) et `porte-homeostasie` (auto-générée) sont **vertes** ;
+la liste et le diagnostic sont dans
 [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
 La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), est **comptée**
 depuis cette passe (**81 → 82**).
