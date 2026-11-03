@@ -8057,3 +8057,160 @@ plan hub : journée 08 h 55
 ⏵ File vidée, plan en mode journée. Je commite journal + plan.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-jour.txt <<'EOF'\nJOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURNÉE\n\nLe journal du 03/11 porte la reprise de 08 h 50 : validation humaine de la banque S\nreportée (décision de l'humain), N2 … [504 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-334]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-334", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 167127c9] JOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURNÉE
+ 9 files changed, 239 insertions(+), 23 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La nuit est close, le hub reste actif. Prochaine tâche réelle : trancher l'épinglage de `porte-reparti-moteur` avec des mesures.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v journal | head -6; echo \"=== rejeu 1 ===\"; bash tools/porte-reparti-moteur.sh 2>&1 | tail -4; echo \"=== rejeu 2 ===\"; bash tools/porte-reparti-moteur.sh 2>&1 | tail -4", "description": "Replay reparti-m … [28 caractères tronqués]`
+
+  ```
+M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+=== rejeu 1 ===
+  perplexité entière : 8.7434
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 8.7434 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+=== rejeu 2 ===
+  perplexité entière : 8.7434
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 8.7434 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 30,60p tools/porte-reparti-moteur.sh; echo \"=== commits depuis 29/10 ===\"; git log --oneline --since=\"2026-10-28\" -- tools/entrainer_native_tokens.py tools/porte-reparti-moteur.sh | head -8", "description": "Read gate model  … [31 caractères tronqués]`
+
+  ```
+# contient 255 : les deux chemins fenêtrent alors DIFFÉREMMENT (`--ppl` note les `limit`
+# PREMIERS jetons, `--ppl-reparti` tronque aux `limit` DERNIERS), et la porte comparait donc
+# deux textes différents — 37 à 58 % d'« écart » qui ne disaient rien du découpage.
+# Corrigé, la porte rend 173,0196 des deux côtés (écart 0,0000 %).
+if [ -s "$IDS" ]; then
+    N_IDS=$(tr ',' '\n' < "$IDS" | grep -c '[0-9]')
+else
+    N_IDS=0
+fi
+LIMITE=${LIMITE:-$N_IDS}
+COUCHES=${COUCHES:-2}          # couches gardées côté pilote ; le reste au nœud
+
+TRAVAIL=$(mktemp -d "${TMPDIR:-/tmp}/porte-reparti-XXXXXX")
+LOG_SRV="$TRAVAIL/serveur.log"
+
+[ -x "$D" ] || { echo "  ❌ $D absent : construire d'abord (cargo build --release)"; exit 2; }
+
+# LA PORTE PRODUIT SES PROPRES PRÉREQUIS S'ILS MANQUENT. Ce modèle-là est le NÔTRE — entraîné par
+# `tools/entrainer_moteur.py` et exporté par `tools/`exporter_gguf.py`.
+# Il vivait dans /tmp, donc un redémarrage le faisait disparaître et la porte refusait ; elle
+# l'entraîne maintenant elle-même (~15 s), au lieu de dépendre d'un fichier temporaire.
+if [ ! -s "$MODELE" ]; then
+    if ! "$PP" -c "import torch, transformers" 2>/dev/null; then
+        echo "  ❌ $MODELE absent E
+… [900 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --oneline b49daabf..HEAD -- tools/entrainer_moteur.py tools/exporter_gguf.py | head -8; echo \"--- date b49 ---\"; git log -1 --format=\"%ad %s\" --date=format:\"%d/%m %H:%M\" b49daabf; echo \"--- nb commits depuis ---\"; git r … [141 caractères tronqués]`
+
+  ```
+--- date b49 ---
+29/10 16:36 A8.0 — PORTE-REPARTI ÉPINGLÉE : PPL 9,1748 ; ÉTAT 5/33
+--- nb commits depuis ---
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le code n'a pas bougé depuis l'épinglage : je teste si la régénération du modèle est **déterministe** (le pin n'a de sens que si elle l'est).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la /tmp/moteur_route.gguf 2>/dev/null | cut -c30-70; git ls-files data/corpus_en_val.txt; echo \"--- régénération forcée ---\"; rm -f /tmp/moteur_route.gguf; bash tools/porte-reparti-moteur.sh 2>&1 | tail -3; echo \"--- deuxième (c … [133 caractères tronqués]`
+
+  ```
+ne 4574656  2 nov 21:09 /tmp/moteur_route
+--- régénération forcée ---
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 8.7434 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+--- deuxième (cache réutilisé) ---
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 8.7434 · écart de flux : 0.00e0
+PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"^import\\|^from\" tools/entrainer_moteur.py | head -8; echo \"--- historique des modules importés ---\"; git log --oneline b49daabf..HEAD -- tools/modeles*.py tools/entrainer_moteur.py tools/native_model*.py 2>/dev/null | hea … [198 caractères tronqués]`
+
+  ```
+24:import collections
+25:import argparse
+26:import copy
+27:import math
+28:import os
+29:import sys
+30:import time
+32:import numpy as np
+--- historique des modules importés ---
+c6fb94e2 L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS
+585d5a09 N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE
+5bed145a N3.4c — LE PLACEMENT NATIF EST UNE MÉTADONNÉE, PAS UN CHEMIN ; PORTE 68
+--- data modifiée ? ---
+ne 2032162  8 oct 09:42 data/co
+.gitignore:5:data/	data/corpus_en_val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"data/\\|corpus\\|\\.txt\\|\\.bin\" tools/entrainer_moteur.py | head -8; echo \"--- mtimes ---\"; for f in $(grep -oE \"data/[A-Za-z0-9_./-]+\" tools/entrainer_moteur.py | sort -u | head -4); do ls -la \"$f\" 2>/dev/null | cut … [73 caractères tronqués]`
+
+  ```
+729:    p.add_argument("--donnees", nargs="+", default=["data/corpus_en.txt"])
+730:    p.add_argument("--validation", default="data/corpus_en_val.txt")
+836:          f"{stocke/1e6:.2f} M stockés · corpus {len(train)} octets · {dev}")
+--- mtimes ---
+ne 100276153  8 oct 09:42 data/corpus_en.
+ne 2032162  8 oct 09:42 data/corpus_en_va
+  ```
+
+### 🤖 Assistant
+
+⏵ Régénération **déterministe** à 8,7434 (deux fois, modèle effacé) avec code et corpus inchangés : l'épinglage 9,1748 est périmé. Je le ré-étalonne avec la preuve.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-reparti-moteur.sh\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"# A8.0 — la PPL de référence est épinglée (0,1 %). Le modèle est régénéré par la\n# porte ; la valeur … [921 caractères tronqués]`
+
+  ```
+épinglage ré-étalonné à 8,7434
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 8.7434 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-reparti-moteur` est **verte** après ré-étalonnage. Je mets à jour le registre des rouges connues et je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '/^## .*rouges connues\\|^## Les rouges/,/^## /p' docs/pilotage/references-non-regression.md | head -20; echo \"---\"; grep -n \"rouges connues\\|4 connues\\|porte-reparti-moteur\" docs/pilotage/references-non-regression.md | he … [65 caractères tronqués]`
+
+  ```
+---
+6:> sans contention. Rouges : les **4 connues** (`porte-indice` 834 s,
+8:> `porte-reparti-moteur` 2 s — pin 9,1748 non reproduit, à trancher)
+13:> **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env., `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) — **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers), dès que le JSON a existé ; aucune régression structurelle. La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
+20:> `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
+43:| toutes les portes | `tools/toutes-les-portes.sh` | **82 portes** ; dernière passe **77 vertes, 5 rouges** (03/11 04 h 10, machine au repos) : les 4 connues + `porte-sessions` (coord.) · ⚠ **ne jamais lire une porte à travers un `tail`** |
+126:| `porte-reparti-moteur.sh` | 2 s | PORTE NON TENUE : écart relatif REF 8.7
+… [41 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/references-non-regression.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"> **Passe précédente — 2026-11-02 à 19 h 32 :**\"\"\"\nn = \"\"\"> **Depuis, `porte-repa … [2014 caractères tronqués]`

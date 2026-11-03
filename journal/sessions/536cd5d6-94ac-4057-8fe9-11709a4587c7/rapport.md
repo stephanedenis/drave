@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 17.3 h |
-| Tours | 73 |
-| Messages | 487 |
-| Appels d'outils | 427 |
+| Durée | 17.4 h |
+| Tours | 74 |
+| Messages | 489 |
+| Appels d'outils | 429 |
 | Fichiers touchés | 15 |
-| Commandes | 312 |
+| Commandes | 314 |
 | Sous-agents | 0 |
 | Commits | 37 |
 | Compactages de contexte | 1 |
@@ -171,6 +171,8 @@
 **Tour 72** — est que le dossier de pilotage est à jour avec les bons états des sessions dsh en cours
 
 **Tour 73** — y a-t-il des conflits possibles entre les sessions parallèles?
+
+**Tour 74** — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos professeurs. nos GPU sont exclusivent réservés à l'execution de Drave et ses tâches d'apprentissages
 
 ## 2. Déroulé, étape par étape
 
@@ -1938,6 +1940,17 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 4. **`porte-*`** : réserver/relire les modific
 … [320 caractères tronqués]
 
+### Tour 74 — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos … [101 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Investigate llama-server process, port, GPU and services
+- bash — Search llama, deepseek and professor references in code
+
+**Synthèse produite :**
+
+⏵ Enquête `llama-server` : processus, port, GPU, services, code source et professeurs.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2002,7 +2015,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 272 autres
+- … et 274 autres
 
 ## 4. Mesures et résultats marquants
 

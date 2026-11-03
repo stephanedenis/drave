@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 16.6 h |
+| Durée | 16.7 h |
 | Tours | 28 |
-| Messages | 465 |
-| Appels d'outils | 467 |
+| Messages | 475 |
+| Appels d'outils | 477 |
 | Fichiers touchés | 6 |
-| Commandes | 334 |
+| Commandes | 343 |
 | Sous-agents | 0 |
-| Commits | 15 |
+| Commits | 16 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*18 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -608,11 +608,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Append morning resumption to journal
 - bash — Check claims and hub plan
 - bash — Clean stale claims and claim day job
-- … et 3 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ File vidée, plan en mode journée. Je commite journal + plan.
+⏵ `porte-reparti-moteur` est **verte** après ré-étalonnage. Je mets à jour le registre des rouges connues et je commite.
 
 ## 3. Travail accompli
 
@@ -669,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 294 autres
+- … et 303 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -770,6 +770,15 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T28** `- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélang`
 - **T28** `[{"id": "536cd5d6:passe-82:1793697056", "session": "536cd5d6", "job": "passe-82", "res": {"machine": "exclusive"}, "prio": 1, "eta_min": 150, "created": "2026-11-03T04:10:56", "state": "pending"}, {"i`
 - **T28** `[still running after 60000ms; moved to background job bash-334]`
+- **T28** `PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti`
+- **T28** `# deux textes différents — 37 à 58 % d'« écart » qui ne disaient rien du découpage.`
+- **T28** `# Corrigé, la porte rend 173,0196 des deux côtés (écart 0,0000 %).`
+- **T28** `da038e34 R13.2 + A8.0 — VOCAB 1024 PERD 3,9 % À OCTETS ÉGAUX ; PORTE-INDICE ROUGE QUALIFIÉE`
+- **T28** `fa343715 R13.1 — À OCTETS ÉGAUX LE BPE PERD 0,7 % : LE PILOTE 11 % NE SE REPRODUIT PAS`
+- **T28** `0668ef4e R13.1 — LE BPE NATIF BAT L'OCTET : 3,249 CONTRE 3,689 BITS/OCTET, −11,9 % À OCTETS ÉGAUX`
+- **T28** `PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)`
+- **T28** `126:| `porte-reparti-moteur.sh` | 2 s | PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti |`
+- **T28** `[still running after 60000ms; moved to background job bash-343]`
 
 ## 5. Erreurs rencontrées
 
@@ -796,4 +805,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-bilan.txt <<'EOF' JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACH
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md"); t = p.read_text(encoding="utf
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-jour.txt <<'EOF' JOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURN
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/references-non-regression.md"); t = p.read_t
 
