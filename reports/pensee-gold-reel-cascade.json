@@ -1246,5 +1246,6 @@
       "tete": 0.55,
       "fraction": 0.5
     }
-  }
+  },
+  "appels_note": "429 appels pour 432 phrases : le cache du composite (Cle = (texte, langue)) sert les ablations, et 3 phrases ont été vues d'abord dans une lecture antérieure ; les mesures portent sur les annotations servies, pas sur les appels HTTP."
 }

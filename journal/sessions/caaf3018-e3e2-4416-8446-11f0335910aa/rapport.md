@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 8.4 h |
+| Durée | 8.5 h |
 | Tours | 26 |
-| Messages | 361 |
-| Appels d'outils | 364 |
+| Messages | 363 |
+| Appels d'outils | 366 |
 | Fichiers touchés | 6 |
-| Commandes | 273 |
+| Commandes | 274 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -516,7 +516,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 26 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Check S session liveness and work
 - bash — Peek at S current activity in digest
@@ -531,10 +531,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Launch file-based night watch
 - bash — Silent 10-hour timer for alternation
 - bash — Read first watch line
+- bash — Read watch log after silent wait
 
 **Synthèse produite :**
 
-⏵ 00 h 37 : le gold réel 432 est intégré. J'alterne sur le minuteur muet.
+⏵ 00 h 47 : fiche du gold réel 432 passée à TRUE, revue verte. Alternance reprise.
 
 ## 3. Travail accompli
 
@@ -591,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 233 autres
+- … et 234 autres
 
 ## 4. Mesures et résultats marquants
 

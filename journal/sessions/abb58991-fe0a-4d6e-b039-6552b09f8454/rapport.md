@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 8.5 h |
+| Durée | 8.6 h |
 | Tours | 151 |
-| Messages | 1028 |
-| Appels d'outils | 844 |
+| Messages | 1029 |
+| Appels d'outils | 845 |
 | Fichiers touchés | 48 |
-| Commandes | 671 |
+| Commandes | 672 |
 | Sous-agents | 0 |
-| Commits | 69 |
+| Commits | 70 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3748,7 +3748,7 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 
 ### Tour 151 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Find empty real-gold phrases
 - bash — Inspect real gold and call counting
@@ -3764,11 +3764,11 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - bash — Inspect call counting and cache interplay
 - bash — Document call-count cache effect in JSON
 - bash — Commit cache note on call count
-- … et 1 autres
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Round 149 : lock du hub encore ; j'attends la fin du `git commit` concurrent puis je refais le mien
+⏵ Round 149 : le hub a committé (`bbee22c4`) ; mon commit du JSON est refusé faute de ligne d'état — je mets la ligne du cache et je commite
 
 ## 3. Travail accompli
 
@@ -3867,7 +3867,7 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 631 autres
+- … et 632 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4036,6 +4036,7 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - ÉTAT — T0 4 000 : LA LIGNE DU GOLD RÉEL 432 RACCOURCIE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
 - L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
+- L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 

@@ -6388,3 +6388,20 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-297", "timeout_ms": 3300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK; tail -c 120 work/n2ac/mix1024-30k.log", "description": "Direct check after wait"}`
+
+  ```
+00:47:50
+rope2048-1.25k fini 22:22:47
+6 · 2877 s
+pas   6450 · perte 0.9425 · PPL val 2.563 · 2899 s
+pas   6500 · perte 0.9646 · PPL val 2.564 · 2921 s
+  ```
+
+- **bash** `{"command": "sleep 2700; echo \"---\"; date '+%H:%M:%S'", "description": "Sleep 45 minutes"}`

@@ -12424,3 +12424,47 @@ date ok
   ```
 
 - **bash** `{"command": "ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git commit --only -m \"NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50)\" -m \"Le JSON et l'état disaient true (seuils_contrat.gold_reel_432), la fiche était restée sur le titre false d … [497 caractères tronqués]`
+
+  ```
+pas de lock
+  ✅ index : aucun fait stagé sans état
+[master bbee22c4] NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50)
+ 13 files changed, 691 insertions(+), 37 deletions(-)
+bbee22c4 NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 46 — la fiche du gold réel est corrigée (contrat vérifié)\n\n- Commit **`bbee22c4`** : la fiche `rapport-pensee-cascade-reel-432.md` passe au titre/verdict\n  **true** avec une **note de correction** en tête — le contrat du gold réel est **0 … [420 caractères tronqués]`
+
+  ```
+log-ok
+00:46:20
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 45 : fiche, JSON et état du gold réel 432 enfin cohérents
+
+- **Vérification d'intégrité** : le passage à `true` n'est **pas un goalpost** — les seuils **0,90 / 0,45 / 0,55 / 0,50** sont le **contrat du gold réel** (`qualifier_cascade.py:122`, JSON `seuils_contrat.gold_reel_432`) ; le `false` venait des seuils du **gold 180** (0,94/0,60/0,75/0,60) appliqués par erreur.
+- **Correction** : `bbee22c4` — la fiche `rapport-pensee-cascade-reel-432.md` passe au titre/verdict **true** avec une **note de correction** explicite (les sections du corps restent la première lecture, à réécrire par la session). **Fiche / JSON / état sont désormais cohérents.**
+- **État** : revue ✅ **576 / 661 / 82**, tableau ✅ 2 774 liens, en-cours ✅, T0 sous 4 000 ; runs N2 en cours (2 h 21 et 50 min), GPU occupés et déclarés.
+
+La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 51
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 46/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 46 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`

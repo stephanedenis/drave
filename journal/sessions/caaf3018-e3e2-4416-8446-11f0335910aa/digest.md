@@ -6647,3 +6647,23 @@ e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D
 ⏵ 00 h 37 : le gold réel 432 est intégré. J'alterne sur le minuteur muet.
 
 - **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -2 work/veille-nuit.log; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Read watch log after silent wait"}`
+
+  ```
+00:47
+00:37 · e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCAD · actifs=7 ·   ✅ état court, structuré, multi-s
+00:47 · bbee22c4 NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVE · actifs=7 ·   ✅ état court, structuré, multi-s
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ 00 h 47 : fiche du gold réel 432 passée à TRUE, revue verte. Alternance reprise.
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
