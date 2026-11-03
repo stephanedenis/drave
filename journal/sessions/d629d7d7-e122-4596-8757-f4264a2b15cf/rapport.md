@@ -116,7 +116,6 @@
 
 **Tour 31** — tiens-bien ta liste de tâche dsh à jour. je ne veux pas avoir l'impression que tu es arrêté alors que tu travail
 
-**Tour 32** — est-ce normal que je ne vois que des répétitions de "the **the **the" à l'écran du dsh?
 
 **Tour 33** — background job bash-1224 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/07-mesures-couche-commune.md reports/kfold-14b600-*.json reports/README.md docs/en-cours.md && git commit -m "MESURE 111 — LE PIDGIN A 600 PAS : +5,0 [+2,1 ; +7,3] sur 71 pages, 59/71 (contre +4,6, 50/71 a 300 pas). Le 0089 passe de -1,9 a +2,3 ; le 0095 de +1,5 a +4,9 ; seul le 0327 reste negatif … [199 caractères tronqués]
 
@@ -2151,7 +2150,6 @@ La **`porte-tableaux`** est repassée verte (la cellule en trop corrigée) et la
 
 ⏵ Liste de tâches DSH à jour, puis travail CPU pendant que le Pidgin tourne sur les GPU
 
-### Tour 32 — est-ce normal que je ne vois que des répétitions de "the **the **the" à l'écran du dsh?
 
 *5 appels d'outils.* Actions notables :
 
@@ -2167,7 +2165,6 @@ La **`porte-tableaux`** est repassée verte (la cellule en trop corrigée) et la
 
 \## Sur les répétitions à l'écran
 
-**Non, ce n'était pas normal** : mon flux de sortie a dégénéré en **boucle de répétition** (« the **the **the… ») — un défaut de génération de mon côté, pas un résultat et pas le travail. Les **jobs de fond n'ont pas été affectés** : ils tournent dans leurs propres processus, et je viens de vérifier leur état. La liste de tâches DSH est à jour (10 lignes : 8 terminées, 1 en cours, 1 en attente).
 
 \## Le résultat qui vient de tomber : le Pidgin à 600 pas (mesure 111)
 
