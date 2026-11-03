@@ -117,7 +117,7 @@
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **587** / **674** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` coord., machine au repos) | `docs/pilotage/references-non-regression.md` |
+| dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` **rejouée verte** après la pause N2/S) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 

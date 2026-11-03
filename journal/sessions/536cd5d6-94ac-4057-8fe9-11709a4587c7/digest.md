@@ -11706,3 +11706,21 @@ b6c8246b BILAN DE 08 H — N2 ET S EN PAUSE, LA PASSE 82/77/5 EST LA RÉFÉRENCE
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nold=\"> + **`porte-sessions`** (mandats N2/S périmés, claims libérés : rouge de **coordination**, pas de code —\\n> rejo … [1444 caractères tronqués]`
+
+  ```
+références : porte-sessions rejouée, trois passes anciennes sorties
+    2391    153   T1   2500  docs/pilotage/references-non-regression.md
+  T0 max : 3991 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 587 fiche(s) · 674 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[master 0b53a31c] RÉFÉRENCES — porte-sessions REJOUÉE VERTE APRÈS LA MISE EN PAUSE DE N2/S ; TROIS PASSES ANCIENNES SORTENT
+ 7 files changed, 78 insertions(+), 30 deletions(-)
+[commit 0]
+0b53a31c RÉFÉRENCES — porte-sessions REJOUÉE VERTE APRÈS LA MISE EN PAUSE DE N2/S ; TROIS PASSES ANCIENNES SORTENT
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"| dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` coord., machine au repos) | `docs/pilotage/references … [1058 caractères tronqués]`
