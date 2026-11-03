@@ -12553,3 +12553,46 @@ pas de lock
   ```
 
 - **bash** `{"command": "git commit --only -m \"NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE\" -m \"La fiche gardait « 3 phrases vides » ; 612f8743 a mesuré 432 ids, 0 refus, 0 token vide : les 429 appels sont un effet de cache. Les deux passages (verdict et limites) sont … [297 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 9a337f45] NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE
+ 14 files changed, 183 insertions(+), 44 deletions(-)
+9a337f45 NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 52 — la fiche du gold réel dit le cache\n\n- Commit **`9a337f45`** : les deux passages « 3 phrases vides » de la fiche (verdict et limites)\n  sont corrigés — **429 appels pour 432 ids**, **0 refus**, **0 token vide**, effet de cache\n  (`61 … [229 caractères tronqués]`
+
+  ```
+log-ok
+00:52:44
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 46 : la fiche du gold réel dit le cache — fiche, JSON et état cohérents
+
+- **L/B13** : `612f8743` puis **`9a337f45`** — la fiche `rapport-pensee-cascade-reel-432.md` est corrigée : les **429 appels** pour **432 ids** sont un **effet de cache** (mêmes phrases réutilisées), **0 refus**, **0 token vide** — le générateur n'a pas produit de vides. Les deux passages « 3 phrases vides » (verdict et limites) sont remplacés.
+- **Cohérence** : titre/verdict **true** avec la note de contrat (0,90/0,45/0,55/0,50), chiffres mesurés, contrôle négatif et limites — la fiche, le JSON et l'état disent la même chose.
+- **État** : revue ✅ **576 / 661 / 82**, en-cours ✅, T0 sous 4 000, T1 2 428, tableau ✅ 2 774 liens ; runs N2 en cours (2 h 28 et 57 min).
+
+La veille continue : suivi des fiches N2 en cours, des runs et du **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 52
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 47/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 47 : veille — attente du prochain commit
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [107 caractères tronqués]`

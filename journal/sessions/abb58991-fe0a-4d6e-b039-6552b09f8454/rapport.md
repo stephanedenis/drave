@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 8.6 h |
 | Tours | 151 |
-| Messages | 1030 |
-| Appels d'outils | 846 |
+| Messages | 1031 |
+| Appels d'outils | 847 |
 | Fichiers touchés | 48 |
-| Commandes | 673 |
+| Commandes | 674 |
 | Sous-agents | 0 |
-| Commits | 71 |
+| Commits | 72 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3748,7 +3748,7 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 
 ### Tour 151 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Find empty real-gold phrases
 - bash — Inspect real gold and call counting
@@ -3764,11 +3764,11 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - bash — Inspect call counting and cache interplay
 - bash — Document call-count cache effect in JSON
 - bash — Commit cache note on call count
-- … et 3 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Round 149 : commit `612f8743` fait, mais **T0 à 4 003** (3 mots de trop) ; je raccourcis la ligne d'état et je commite l'état
+⏵ Round 149 : T0 revenu à **3 999** ; le lock du hub bloque encore le commit d'état — j'attends et je refais
 
 ## 3. Travail accompli
 
@@ -3867,7 +3867,7 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 633 autres
+- … et 634 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4039,5 +4039,6 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

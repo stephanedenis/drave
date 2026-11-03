@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 00:40 | `328872b9` | L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE | `en-cours.md`, `README.md`, `attention.md` (+16) |
 | 00:44 | `bbee22c4` | NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50) | `en-cours.md`, `README.md`, `attention.md` (+10) |
 | 00:48 | `612f8743` | L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids) | `en-cours.md`, `README.md`, `attention.md` (+13) |
+| 00:50 | `9a337f45` | NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE | `en-cours.md`, `README.md`, `attention.md` (+11) |
 
 ## Chiffres du jour
 

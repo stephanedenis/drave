@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**11 commits** · **5 session(s)** · **3 thème(s)**
+**12 commits** · **5 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | docs | 6 | [docs.md](docs.md) |
-| mesures | 4 | [mesures.md](mesures.md) |
+| mesures | 5 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
 
@@ -40,6 +40,7 @@
 | 00:40 | `328872b9` | L/B13 — LES SEUILS DU GOLD RÉEL : 0,90 / 0,45 / 0,55 / 0,50, LE VERDICT PASSE À TRUE |
 | 00:44 | `bbee22c4` | NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50) |
 | 00:48 | `612f8743` | L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids) |
+| 00:50 | `9a337f45` | NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE |
 
 ## Le récit de la journée (écrit à la main)
 

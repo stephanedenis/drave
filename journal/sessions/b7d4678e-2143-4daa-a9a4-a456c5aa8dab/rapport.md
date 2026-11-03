@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 8.6 h |
-| Tours | 51 |
-| Messages | 799 |
-| Appels d'outils | 742 |
+| Tours | 52 |
+| Messages | 803 |
+| Appels d'outils | 744 |
 | Fichiers touchés | 25 |
-| Commandes | 524 |
+| Commandes | 526 |
 | Sous-agents | 0 |
 | Commits | 39 |
 | Compactages de contexte | 1 |
@@ -127,6 +127,8 @@
 **Tour 50** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 51** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 52** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1264,7 +1266,7 @@ La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **c
 
 ### Tour 51 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Wait for the next commit
 - bash — Verify and log the cache-effect correction
@@ -1273,10 +1275,27 @@ La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **c
 - edit `reports/rapport-pensee-cascade-reel-432.md`
 - bash — Update the time and verify before the commit
 - bash — Commit the cache correction
+- bash — Log the cache correction
 
 **Synthèse produite :**
 
-⏵ Round 46 : veille — attente du prochain commit
+⏵ Round 46 : la fiche du gold réel dit le cache — fiche, JSON et état cohérents
+
+- **L/B13** : `612f8743` puis **`9a337f45`** — la fiche `rapport-pensee-cascade-reel-432.md` est corrigée : les **429 appels** pour **432 ids** sont un **effet de cache** (mêmes phrases réutilisées), **0 refus**, **0 token vide** — le générateur n'a pas produit de vides. Les deux passages « 3 phrases vides » (verdict et limites) sont remplacés.
+- **Cohérence** : titre/verdict **true** avec la note de contrat (0,90/0,45/0,55/0,50), chiffres mesurés, contrôle négatif et limites — la fiche, le JSON et l'état disent la même chose.
+- **État** : revue ✅ **576 / 661 / 82**, en-cours ✅, T0 sous 4 000, T1 2 428, tableau ✅ 2 774 liens ; runs N2 en cours (2 h 28 et 57 min).
+
+La veille continue : suivi des fiches N2 en cours, des runs et du **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 52 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 47 : veille — attente du prochain commit
 
 ## 3. Travail accompli
 
@@ -1352,7 +1371,7 @@ La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **c
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 484 autres
+- … et 486 autres
 
 ## 4. Mesures et résultats marquants
 
