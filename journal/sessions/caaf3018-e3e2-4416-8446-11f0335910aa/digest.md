@@ -10803,3 +10803,114 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-451", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master c13efaac] PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+ 22 files changed, 208 insertions(+), 62 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'enregistre l'allocation de la nuit dans le registre (S sans claim, run N2 non déclaré) et je renouvelle les claims expirés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; python3 tools/ressources.py --status 2>&1 | sed -n '/Réservations/,$p' | head -6; echo \"--- renew hub ---\"; python3 tools/ressources.py --release --session 536cd5d6 --job jour 2>&1 | tail -1; python3 tools/ressources.py  … [390 caractères tronqués]`
+
+  ```
+18:43
+  Réservations actives :
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / jour : cpu1=1, ram=1 (prio 2, 600 min)
+--- renew hub ---
+  ✅ libéré : 1 réservation(s) de 536cd5d6 / jour
+  ✅ accordé : 536cd5d6 / nuit-hub
+--- L ---
+  ✅ libéré : 1 réservation(s) de e181ce02 / b13-gold
+  ✅ accordé : e181ce02 / nuit-l
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"--- S ---\"; python3 tools/ressources.py --claim --session 29ad180d --job nuit-arbre --res \"cpu1=4,ram=8\" --prio 2 --eta 600 2>&1 | tail -1; echo \"--- N2 run ---\"; python3 tools/ressources.py --claim --session 0733c5bb --job … [308 caractères tronqués]`
+
+  ```
+--- S ---
+  ✅ accordé : 29ad180d / nuit-arbre
+--- N2 run ---
+  ✅ accordé : 0733c5bb / nuit-kd2
+--- status ---
+  Réservations actives :
+    · 536cd5d6 / nuit-hub : cpu1=1, ram=1 (prio 2, 720 min)
+    · e181ce02 / nuit-l : cpu1=4, ram=16 (prio 2, 600 min)
+    · 29ad180d / nuit-arbre : cpu1=4, ram=8 (prio 2, 600 min)
+    · 0733c5bb / nuit-kd2 : gpu0=exclusive, gpu1=exclusive, cpu0=12, ram=60 (prio 1, 300 min)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+### 🤖 Assistant
+
+⏵ Allocation enregistrée (N2 GPU, S/L/hub CPU). Je mets le §11 au fait et je vérifie les mandats.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/plan-travail.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"\"\"- **Claims** : chaque session `--claim` son travail de nuit et `--release` en fin de job. Le run\n  ` … [831 caractères tronqués]`
+
+  ```
+§11 : claims pré-enregistrés
+  ⚠ mandat long (64 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (302 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (1261 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+code=0
+  T0 max : 3994 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-claims.txt <<'EOF'\nPILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE\n\nLe § 11 dit maintenant que le hub a pré-enregistré l'allocation de la nuit :\nN2 nuit-kd2 (gpu0+gpu1 exclusifs, cpu0 12, ram  … [567 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-455]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-455", "timeout_ms": 120000, "wait": true}`
+
+  ```
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-455 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-claims.txt <<'EOF'
+PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE
+
+Le § 11 dit maintenant que le hub a pré-enregistré l'allocation de la nuit :
+N2 nuit-kd2 (gpu0+gpu1 exclusifs, cpu0 12, ram 60 — le run kd2, qui tournait sans
+claim, est déclaré), S nuit-arbre (cpu1 4, ram 8), L nuit-l (cpu1 4, ram 16), hub
+nuit-hub (cpu1 1, ram 1) ; chaque session ajuste (--release/--claim). Le registre
+est cohérent, les mandats longs sont couverts par les claims (sessions.py --check
+--strict passe), et la seule limite affichée reste IA à 33 Gio.
+EOF
+for i in $(seq 1 10); do [ -e .git/index.lock ] || break; sleep 6; done
+git commit --only -F work/msg-claims.txt -- docs/pilotage/plan-travail.md 2>&1 | tail -4) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Le commit a buté sur le verrou ; je réessaie maintenant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 12); do [ -e .git/index.lock ] || break; sleep 6; done; [ -e .git/index.lock ] && echo \"lock encore\" || echo \"lock libre\"; grep -c \"pré-enregistré l'allocation\" docs/pilotage/plan-travail.md; git log --oneline -2 … [58 caractères tronqués]`
+
+  ```
+lock libre
+1
+c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 10); do [ -e .git/index.lock ] || break; sleep 5; done\ngit commit --only -F work/msg-claims.txt -- docs/pilotage/plan-travail.md 2>&1 | tail -4", "description": "Retry commit of night claims allocation"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-457]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-457", "timeout_ms": 120000, "wait": true}`

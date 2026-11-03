@@ -8541,3 +8541,173 @@ exit=0
 c4ea82e653c5896187874d6fb41af1836fcc9987	refs/heads/master
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo \"=== stat N2 ===\"; git show --stat --oneline HEAD | grep -E \"arbre|traductions|banque|limites|schemas/README|reports/INDEX|en-cours|roadmap|plan.md\" | head -12; echo \"=== comptes ===\"; ls reports/*.md … [489 caractères tronqués]`
+
+  ```
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+39ff662c N2 — PHASE DU 03/11 CLOSE : CAPACITÉ SATURÉE, 60 000 PAS À 2,9121, DISTILLATION NATIVE +0,10 À BUDGET ÉGAL
+d0c9646a PRODUCTION — LE PROFESSEUR LONG DISTILLÉ DANS LA RECETTE 512 GAGNE 0,10 À BUDGET ÉGAL : 3,0550 / 2,8062 / 2,7015 / 2,6601
+=== stat N2 ===
+ docs/pilotage/en-cours.md                          |  12 +-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |   5 +-
+=== comptes ===
+599
+685
+=== HEAD S files ===
+reports/rapport-s-arbre-referents.md dans HEAD
+reports/rapport-s-traductions.md dans HEAD
+reports/rapport-s-limites-v6.md absent
+reports/rapport-s-banque-partielle.md absent
+docs/schemas/arbre-referents.svg dans HEAD
+=== diff en-cours ===
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 14b182db..c89aae07 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -27,15 +27,14 @@
+ 
+ - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+ - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après r
+… [934 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== HEAD S plan ===\"; git show HEAD:journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md | head -22; echo \"=== HEAD README/INDEX ===\"; git show HEAD:docs/schemas/README.md | grep -c arbre-referents; git show HEAD:r … [297 caractères tronqués]`
+
+  ```
+=== HEAD S plan ===
+# Plan de session — S, les structures (analyser, banquer, exporter)
+
+> **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+> [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+> `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+> précède ; sa section S y est **écrite** le 02/11 16 h 52 sur demande humaine, et le hub relit.
+
+- **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+- **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+  pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+- **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+- **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+  `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
+- **Heartbeat** : 2026-11-03 17:40 EST
+- **Prochaine action** : **arbre réel** (parent/enfant, profondeur) + **couche de référ
+… [1811 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== HEAD compteurs ===\"; git show HEAD:docs/pilotage/en-cours.md | grep \"fichiers / JSON\"; echo \"=== N2 plan diff ===\"; git show c4ea82e6 -- journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md | head -25; echo \ … [280 caractères tronqués]`
+
+  ```
+=== HEAD compteurs ===
+| fichiers / JSON de résultats | **599** / **685** | `reports/*.md` / `reports/*.json` |
+=== N2 plan diff ===
+commit c4ea82e653c5896187874d6fb41af1836fcc9987
+Author: Stéphane <stephane@localhost>
+Date:   Tue Nov 3 18:39:48 2026 -0500
+
+    COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+    
+    Sur le modèle de 60 000 pas : le « même texte » sature exactement à 1 024 (2,4752 / 2,3822 /
+    2,3430 / 2,3461 à contexte 256/512/1 000/2 000) et le miroir de copie reste à 0,0078 — à 552 Mo
+    vus, la PPL de queue est à 2,34 et la restitution n'existe toujours pas. Sur l'élève distillé
+    (512) : saturation à 512 (2,6335 / 2,5292 / 2,5230 / 2,5240), copie 0,0078.
+    
+    Le miroir est la règle 6 : la fluidité n'est pas la fidélité, et ce cycle le confirme à toutes
+    les tailles.
+
+diff --git a/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md b/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+index 3d6dca9f..f8564578 100644
+--- a/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
++++ b/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+@@ -13,7 +13,7 
+… [592 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout HEAD -- docs/pilotage/en-cours.md && git status --short | grep -E \"rapport-s|arbre-referents|schemas/README|reports/INDEX|corpus-reel|en-cours|roadmap|plan.md|structures\" | head -14; echo \"=== checks ===\"; python3 to … [261 caractères tronqués]`
+
+  ```
+=== checks ===
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · chemin mort : docs/pilotage/plan-travail.md:368 → tools/{sessions,ressources,index_reports,surveille_sessions}.py
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 4 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .git/index.lock 2>/dev/null && echo \"verrou présent\" || echo \"verrou absent\"; sed -n '364,370p' docs/pilotage/plan-travail.md; echo \"=== en-cours worktree vs HEAD ===\"; git show HEAD:docs/pilotage/en-cours.md > docs/pilotage … [222 caractères tronqués]`
+
+  ```
+.git/index.lock
+verrou présent
+|---|---|---|---|---|---|
+| **N2** `0733c5bb` | `reports/n2-*`, `work/n2ac/`, `data/` | finir `kd2`, mesurer et committer ; puis le **contrôle depuis zéro** et la **clôture** ; ensuite **la porte propre (0,29)** | `gpu0`+`gpu1` exclusifs (fin du run), `cpu0` 12, `ram` 60 | fiche + JSON + état + commit | run fini, fiche committée, ou limite nommée |
+| **S** `29ad180d` | `tools/structures/`, `docs/schemas/arbre-referents.svg`, `reports/s-*` | **arbre réel + couche de référents**, puis la **validation des 200 phrases**, puis `h050`/`h053` | `cpu1` 4, `ram` 8 | fiches + tests verts + commit | validation faite ou report nommé |
+| **L/B13** `e181ce02` | `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pensee-*` | **porte stochastique/fenêtre** (test faible), **gold 200+**, **T132/T133** ; professeurs par l'**API** | `cpu1` 4, `ram` 16 | fiches + commit | porte franchie ou négatif nommé |
+| **hub** `536cd5d6` | `docs/pilotage/`, `journal/` (hors sessions), `reports/README.md`, `reports/INDEX.md`, `tools/{sessions,ressources,index_reports,surveille_sessions}.py` | tenir l'**état** (un écrivain à la fois), intégrer chaque fait, surveiller heartbeats et claim
+… [952 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/plan-travail.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"tools/{sessions,ressources,index_reports,surveille_sessions}.py\",\n            \"`tools/sessions.py` … [673 caractères tronqués]`
+
+  ```
+plan-travail : chevrons remplacés, ligne S à jour
+  revue de documentation · 599 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 4 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add docs/pilotage/plan-travail.md docs/pilotage/roadmap.md reports/INDEX.md reports/rapport-s-limites-v6 … [1239 caractères tronqués]`
+
+  ```
+docs/pilotage/plan-travail.md         |  11 ++--
+ docs/pilotage/roadmap.md              |   2 +-
+ reports/INDEX.md                      |   1 +
+ reports/rapport-s-analyseur-roles.md  |   5 +-
+ reports/rapport-s-banque-partielle.md | 110 ++++++++++++++++++++++++++++++++++
+ reports/rapport-s-corpus-reel.md      |  16 ++---
+ reports/rapport-s-limites-v6.md       |  78 ++++++++++++++++++++++++
+ reports/rapport-s-traductions.md      |   2 +-
+ tools/structures                      |   2 +-
+ 9 files changed, 210 insertions(+), 17 deletions(-)
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; git show --stat --oneline HEAD | grep -E \"en-cours|roadmap|plan-travail|INDEX\" ; echo \"=== latest S lines ===\"; git show HEAD:reports/INDEX.md | grep -cE \"limites-v6|traductions\"; git show HEAD:docs/pilota … [162 caractères tronqués]`
+
+  ```
+c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+ docs/pilotage/en-cours.md                          | 15 +++---
+ docs/pilotage/plan-travail.md                      | 47 +++++++++++++++--
+=== latest S lines ===
+1
+0
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/plan-travail.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_tex … [2114 caractères tronqués]`
+
+  ```
+shared re-appliqué sur le HEAD c13efaac
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 599 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 4 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/plan-travail.md reports/INDEX.md re … [1165 caractères tronqués]`

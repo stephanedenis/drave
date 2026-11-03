@@ -363,9 +363,9 @@ close. Le **roster** de la nuit : N2 (GPU), S (CPU), L/B13 (CPU + API), le hub (
 | session | territoire | tâche de la nuit | ressource | livrable | arrêt |
 |---|---|---|---|---|---|
 | **N2** `0733c5bb` | `reports/n2-*`, `work/n2ac/`, `data/` | finir `kd2`, mesurer et committer ; puis le **contrôle depuis zéro** et la **clôture** ; ensuite **la porte propre (0,29)** | `gpu0`+`gpu1` exclusifs (fin du run), `cpu0` 12, `ram` 60 | fiche + JSON + état + commit | run fini, fiche committée, ou limite nommée |
-| **S** `29ad180d` | `tools/structures/`, `docs/schemas/arbre-referents.svg`, `reports/s-*` | **arbre réel + couche de référents**, puis la **validation des 200 phrases**, puis `h050`/`h053` | `cpu1` 4, `ram` 8 | fiches + tests verts + commit | validation faite ou report nommé |
+| **S** `29ad180d` | `tools/structures/`, `docs/schemas/arbre-referents.svg`, `reports/s-*` | **v6** (h050, h053, « si fort que » fermés, gold 60) ; la **validation des paragraphes** sur `/paragraphes` ; la **rétro-traduction** API | `cpu1` 4, `ram` 8 | fiches + tests verts + commit | validation faite ou report nommé |
 | **L/B13** `e181ce02` | `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pensee-*` | **porte stochastique/fenêtre** (test faible), **gold 200+**, **T132/T133** ; professeurs par l'**API** | `cpu1` 4, `ram` 16 | fiches + commit | porte franchie ou négatif nommé |
-| **hub** `536cd5d6` | `docs/pilotage/`, `journal/` (hors sessions), `reports/README.md`, `reports/INDEX.md`, `tools/{sessions,ressources,index_reports,surveille_sessions}.py` | tenir l'**état** (un écrivain à la fois), intégrer chaque fait, surveiller heartbeats et claims ; **passe complète** quand les GPU sont libres ; **bilan 08 h** | `cpu1` 1, `ram` 1 | état/roadmap/journal à jour ; verdict de passe | bilan de 08 h écrit et committé |
+| **hub** `536cd5d6` | `docs/pilotage/`, `journal/` (hors sessions), `reports/README.md`, `reports/INDEX.md`, ``tools/sessions.py`, `tools/ressources.py`, `tools/index_reports.py`, `tools/surveille_sessions.py`` | tenir l'**état** (un écrivain à la fois), intégrer chaque fait, surveiller heartbeats et claims ; **passe complète** quand les GPU sont libres ; **bilan 08 h** | `cpu1` 1, `ram` 1 | état/roadmap/journal à jour ; verdict de passe | bilan de 08 h écrit et committé |
 
 **Les conflits, et comment ils sont évités.**
 
@@ -379,8 +379,11 @@ close. Le **roster** de la nuit : N2 (GPU), S (CPU), L/B13 (CPU + API), le hub (
   fichiers réservés. Un fichier hors territoire se **signale**, ne se corrige pas en silence.
 - **Professeur** : **API DeepSeek** uniquement (`DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key`) ;
   aucun `llama-server`/`ollama` (règle 11, `hauru-gpu-guard`, `porte-ressources`).
-- **Claims** : chaque session `--claim` son travail de nuit et `--release` en fin de job. Le run
-  `kd2-mix512-30k` **tourne sans claim** : N2 le déclare à la reprise (le hub le signale).
+- **Claims** : le hub a **pré-enregistré l'allocation de la nuit** dans le registre — N2
+  `nuit-kd2` (`gpu0`+`gpu1` exclusifs, `cpu0` 12, `ram` 60), S `nuit-arbre` (`cpu1` 4, `ram` 8),
+  L `nuit-l` (`cpu1` 4, `ram` 16), hub `nuit-hub` (`cpu1` 1, `ram` 1) ; chaque session **ajuste**
+  (`--release`/`--claim`) au fil des jobs. Le run `kd2` tournait sans claim : il est désormais
+  déclaré sous N2.
 - **Disque** : `IA` à **33 Gio** — aucun nouveau gros modèle ; corpus et checkpoints sur `Data13TB`.
 
 **La cadence.** Un cycle = un fait mesuré + fiche + JSON + ligne d'état **proposée** + commit.

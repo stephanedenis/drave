@@ -9493,3 +9493,101 @@ ok
   ✅ état court, structuré, multi-session et reprenable
   ```
 
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG'\nÉTAT — T0 REVENU À 3 994 APRÈS LE COMPLÉMENT DES CONTRÔLES DE SORTIE\nMSG\ngit log --oneline -1; echo \"=== review ===\"; python3 tools/revue_documentation.p … [67 caractères tronqués]`
+
+  ```
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078)
+=== review ===
+  revue de documentation · 599 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · chemin mort : docs/pilotage/plan-travail.md:368 → tools/{sessions,ressources,index_reports,surveille_sessions}.py
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 40); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG'\nÉTAT — T0 REVENU À 3 994 APRÈS LE COMPLÉMENT DES CONTRÔLES DE SORTIE\nMSG\ngit log - … [80 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-486]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-486", "timeout_ms": 180000, "wait": true}`
+
+  ```
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   docs/pilotage/en-cours.md
+	modified:   docs/pilotage/plan-travail.md
+	modified:   docs/pilotage/roadmap.md
+	modified:   journal/2026-11-03/README.md
+	modified:   journal/2026-11-03/apprentissage.md
+	modified:   journal/2026-11-03/attention.md
+	modified:   journal/2026-11-03/distribue.md
+	modified:   journal/2026-11-03/docs.md
+	modified:   journal/2026-11-03/memoire.md
+	modified:   journal/2026-11-03/mesures.md
+	modified:   journal/2026-11-03/modele.md
+	modified:   journal/2026-11-03/moteur.md
+	modified:   journal/2026-11-03/outils.md
+	modified:   journal/2026-11-03/portes.md
+	modified:   journal/README.md
+	modified:   journal/THEMES.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/digest.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md
+	modified:   journal/sessions/04ed
+… [18651 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git show --stat --oneline c13efaac | head -8; echo \"=== plan de la nuit (extrait) ===\"; grep -n \"nuit\\|GPU\\|N2\" docs/pilotage/plan-travail.md | tail -12 | cut -c1-180", "description": "Read hub's night plan and GPU expectations"}`
+
+  ```
+c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+ docs/pilotage/en-cours.md                          | 15 +++---
+ docs/pilotage/plan-travail.md                      | 47 +++++++++++++++--
+ journal/2026-11-03/README.md                       |  9 ++--
+ journal/2026-11-03/apprentissage.md                |  4 +-
+ journal/2026-11-03/attention.md                    |  9 ++--
+ journal/2026-11-03/distribue.md                    |  4 +-
+ journal/2026-11-03/docs.md                         |  4 +-
+=== plan de la nuit (extrait) ===
+357:encore** (`kd2-mix512-30k`, les deux GPU à 100 %, fin vers 22 h 40). **S** a repris à 13 h 55 sur
+359:close. Le **roster** de la nuit : N2 (GPU), S (CPU), L/B13 (CPU + API), le hub (pilotage).
+363:| session | territoire | tâche de la nuit | ressource | livrable | arrêt |
+365:| **N2** `0733c5bb` | `reports/n2-*`, `work/n2ac/`, `data/` | finir `kd2`, mesurer et committer ; puis le **contrôle depuis zéro** et la **clôture** ; ensuite **la porte propre
+368:| **hub** `536cd5d6` | `docs/pilotage/`, `journal/` (hors sessions), `reports/README.md`, `reports/INDEX.md`, ``tools/sessions.py`, `tools/ressources.py`, `tools/index_rep
+… [619 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -c \"copie 0,0078\" docs/pilotage/en-cours.md; python3 tools/taille_documents.py 2>&1 | grep -E \"T0\"; sed -n '/### Session `0733c5bb/,/^- \\*\\*Journal/p' docs/pilotage/en-cours.md | head -20", "description": "Check state content and T0 after h … [12 caractères tronqués]`
+
+  ```
+1
+  T0 max : 3994 mots (budget 4 000)
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — le run long de production et la capacité sur le corpus propre.
+- **Plan** : run long à 1 024, capacité ; fiche par fait.
+- **Ambition** : la longueur et la capacité.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
+- **Objectif final** : la production qui tient au long.
+- **Ce qu'elle fait** : la nuit est committée (4 fiches : [`fenêtre`](../../reports/rapport-n2-fenetre.md),
+  [`2 048`](../../reports/rapport-n2-r12-2048.md), [`production`](../../reports/rapport-n2-production-fenetre.md),
+  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
+  **capacité propre** (GPU 1) ; **distillation native** : α = 0,9 gagne **0,14–0,18**.
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : professeur 60 k distillé (fin ~22 h 15).
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et\n  **capacité propre … [1174 caractères tronqués]`

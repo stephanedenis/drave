@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**91 commits** · **6 session(s)** · **10 thème(s)**
+**92 commits** · **6 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | attention | 8 | [attention.md](attention.md) |
 | distribue | 23 | [distribue.md](distribue.md) |
-| docs | 22 | [docs.md](docs.md) |
+| docs | 23 | [docs.md](docs.md) |
 | memoire | 6 | [memoire.md](memoire.md) |
 | mesures | 15 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -31,7 +31,7 @@
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 24.9 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 | `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 25.1 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 26.4 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
-| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 26.4 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
+| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 26.5 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -128,6 +128,7 @@
 | 18:20 | `d0c9646a` | PRODUCTION — LE PROFESSEUR LONG DISTILLÉ DANS LA RECETTE 512 GAGNE 0,10 À BUDGET ÉGAL : 3,0550 / 2,8062 / 2,7015 / 2,6601 |
 | 18:30 | `39ff662c` | N2 — PHASE DU 03/11 CLOSE : CAPACITÉ SATURÉE, 60 000 PAS À 2,9121, DISTILLATION NATIVE +0,10 À BUDGET ÉGAL |
 | 18:39 | `c4ea82e6` | COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE SATURÉE (2,343) ET COPIE TOUJOURS MUETTE (0,0078) |
+| 18:41 | `c13efaac` | PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS |
 
 ## Le récit de la journée (écrit à la main)
 

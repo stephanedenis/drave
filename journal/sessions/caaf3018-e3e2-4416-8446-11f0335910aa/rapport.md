@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 26.4 h |
+| Durée | 26.5 h |
 | Tours | 34 |
-| Messages | 624 |
-| Appels d'outils | 615 |
+| Messages | 633 |
+| Appels d'outils | 623 |
 | Fichiers touchés | 6 |
-| Commandes | 451 |
+| Commandes | 457 |
 | Sous-agents | 0 |
-| Commits | 34 |
+| Commits | 36 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -796,7 +796,7 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 
 ### Tour 34 — fais-moi un plan pour la nuit et aligle le dossier pilotage pour que toutes les sessions soient productives et sans conf … [4 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Inventory sessions, claims, GPU, N2 run
 - bash — Recent commits, Pensée work, plan-travail sections
@@ -812,11 +812,11 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 - bash — Read roadmap N/S/L rows and state date
 - bash — Read N row action and state paragraph
 - bash — Check mtimes and end of state paragraph
-- … et 2 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ La roadmap est en cours d'édition par un autre écrivain (18 h 38) : je ne la touche pas. J'ajoute la note au journal et je commite le plan (§11) + l'état.
+⏵ Le commit a buté sur le verrou ; je réessaie maintenant.
 
 ## 3. Travail accompli
 
@@ -873,7 +873,7 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 411 autres
+- … et 417 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1044,4 +1044,6 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 - HUB — PLAN À JOUR : PASSE 80/2, FENÊTRE SOUS 2,5, API /35 ; HEARTBEAT 13 H 42  Le plan du hub était resté à 08 h 55. Il porte maintenant les faits de la journée
 - ÉTAT — N2 ROUVERTE POUR LE RUN LONG À 1 024 (03/11 13 H 38) ; HEARTBEAT 13 H 45  Le bandeau de reprise disait « rouverte pour la nuit » : N2 a rouvert le 03/11 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-claims.txt <<'EOF' PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE  L
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 10); do [ -e .git/index.lock ] || break; sleep 5; done git commit --only -F work/msg-claims
 

@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 26.5 h |
 | Tours | 14 |
-| Messages | 403 |
-| Appels d'outils | 393 |
+| Messages | 410 |
+| Appels d'outils | 400 |
 | Fichiers touchés | 17 |
-| Commandes | 306 |
+| Commandes | 313 |
 | Sous-agents | 0 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -516,7 +516,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 
 ### Tour 14 — continue
 
-*24 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Read marker and GN homograph code
 - bash — Read subordinator sets and gold phrase format
@@ -532,7 +532,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - bash — Read v4 limit tests and measure test
 - bash — Update tests for v6 and run
 - bash — Re-run 50k corpus measure after v6 changes
-- … et 10 autres
+- … et 17 autres
 
 ## 3. Travail accompli
 
@@ -600,7 +600,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 266 autres
+- … et 273 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -707,6 +707,9 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T14** `compte aussi : la ligne coupe les phrases (3,6 % contre 51,0 %), la phrase reconstruite double le`
 - **T14** `phrase). La **mesure sur corpus réel** ajoute le contraste : 65,5 % de GN+GV sur la littérature`
 - **T14** `propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et`
+- **T14** `50:- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/parag`
+- **T14** `2,3430 / 2,3461 à contexte 256/512/1 000/2 000) et le miroir de copie reste à 0,0078 — à 552 Mo`
+- **T14** `49:- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/parag`
 
 ## 5. Erreurs rencontrées
 
@@ -752,6 +755,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS" -m "Le viewBox est calculé depuis le niveau le plus large, les je
 - S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS PAR L'ANGLAIS, « LES » → « IT » RETROUVÉ" -m "Les trois paragraphes français sont co
 - S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS, « LES » → « IT » RETROUVÉ ; SOURCE ANGLAISE DANS LA PAGE" -m "Les trois paragraphes
+- S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
 

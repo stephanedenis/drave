@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 26.5 h |
 | Tours | 7 |
-| Messages | 703 |
-| Appels d'outils | 656 |
+| Messages | 707 |
+| Appels d'outils | 660 |
 | Fichiers touchés | 27 |
-| Commandes | 486 |
+| Commandes | 489 |
 | Sous-agents | 0 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -229,7 +229,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 7 — <goal_round> Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 … [1192 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check overnight distillation run and repo state
 - bash — Launch 2048 same-steps run
@@ -242,6 +242,9 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Trim T0 after complement
 - bash — Commit T0 fix and check review
 - bash — Retry T0 fix commit after lock
+- bash — Read hub's night plan and GPU expectations
+- bash — Check state content and T0 after hub rewrite
+- bash — Update state with current runs and commit
 
 **Synthèse produite :**
 
@@ -323,7 +326,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 446 autres
+- … et 449 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -496,4 +499,5 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG' ÉTAT — T0 REVENU À 3 994 APRÈS 
 - cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 40); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q 
+- cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 
