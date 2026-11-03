@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 5.3 h |
 | Tours | 14 |
-| Messages | 495 |
-| Appels d'outils | 596 |
+| Messages | 499 |
+| Appels d'outils | 600 |
 | Fichiers touchés | 45 |
-| Commandes | 436 |
+| Commandes | 440 |
 | Sous-agents | 0 |
-| Commits | 17 |
+| Commits | 19 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -586,17 +586,21 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 
 ### Tour 14 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_graines.py`
 - bash — Run stochastic door five seeds
 - job_output
 - bash — Extract five-seed results
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto-graines.md`
+- bash — Apply five-seed state and checks
+- bash — Commit five-seed stochastic fact
+- bash — Wait for concurrent git lock
+- bash — Reset index, stage only our files, commit
 
 **Synthèse produite :**
 
-⏵ Fiche « cinq graines » : le 7B passe 5/5 (28–34 nœuds, 5–7 sonde) ; contrôles 0/1 et oracle
+⏵ Le hub a committé `d2374554` ; l'index contient ses suppressions de journaux. Je réinitialise et je stage uniquement mes 10 fichiers
 
 ## 3. Travail accompli
 
@@ -692,7 +696,7 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 396 autres
+- … et 400 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -807,4 +811,6 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 - B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT" 2>&1 | tail -6; echo 
 - ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %ad %s' --date=fo
 - B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

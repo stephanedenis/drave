@@ -50,7 +50,7 @@ T=${T:-/tmp/porte-homeostasie}
 IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
 [ -s "$BASE_LORA" ] || {
     echo "  ❌ le LoRA de référence est absent : $BASE_LORA"
-    echo "     (il vient du balayage : `tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)"
+    echo '     (il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)'
     exit 2
 }
 . tools/_corpus.sh

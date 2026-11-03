@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (16)
+## Commits du jour (17)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -24,6 +24,7 @@
 | 20:55 | `efdbbf40` | B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT | `portes.md`, `en-cours.md`, `roadmap.md` (+30) |
 | 21:07 | `6532541c` | B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+29) |
 | 21:19 | `8eab6a7c` | ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45 | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
+| 21:32 | `d2374554` | PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE | `portes.md`, `README.md`, `apprentissage.md` (+19) |
 
 ## Chiffres du jour
 

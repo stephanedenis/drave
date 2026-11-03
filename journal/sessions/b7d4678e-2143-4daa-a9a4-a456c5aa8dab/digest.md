@@ -8070,3 +8070,282 @@ json absent
   ```
 
 - **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; echo \"--- tableaux ---\"; bash tools/porte-tableaux.sh 2>&1 | tail -3", "d … [49 caractères tronqués]`
+
+  ```
+revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (53 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (54 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+--- tableaux ---
+  ✅ 1574 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2734 examinés) :
+     reports/rapport-n2-fenetre.md → n2-fenetre.json
+  ```
+
+- **bash** `{"command": "sed -n '125,145p' reports/rapport-n2-fenetre.md; echo \"--- n2 json disponibles ---\"; ls -l reports/n2-*.json reports/*fenetre*.json 2>/dev/null | head; echo \"--- work ---\"; ls -l work/n2ac/*fenetre* work/n2ac/*.json 2>/dev/null | head", "description": "Inspect the N2 fiche link cont … [20 caractères tronqués]`
+
+  ```
+le coût par octet augmente de 4×, ce que la PPL ne montre pas.
+- **Le corpus propre reste à 9,29** (contre 9,27) : la fenêtre ne transfert pas mieux que le
+  compute vers un autre domaine.
+
+## Fichiers
+
+- Modèles : `work/n2ac/rope1024-2.5k.pt` (et `-20k`), `work/n2ac/mix512-15k.pt`,
+  `work/n2ac/mix1024-7.5k.pt` ; témoins `work/n2j/base-wiki-45m.pt`, `work/n2w/mix-60k.pt`,
+  `work/n2ac/mix-200k.pt`.
+- Bancs : `work/n2ac/eval_production.py`, `eval_fenetre.py`, `miroir_copie.py`,
+  `chaine_1024.sh`, `chaine_production.sh` ; les mêmes dans
+  `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/`.
+- Mesures : [`n2-fenetre.json`](n2-fenetre.json) ; fiches amont
+  [`n2-r11`](rapport-n2-r11.md), [`n2-200k`](rapport-n2-200k.md).
+--- n2 json disponibles ---
+-rw-r--r--. 1 stephane stephane  4284 27 oct 23:15 reports/kv-cache-fenetre.json
+-rw-r--r--. 1 stephane stephane  3407  2 nov 19:42 reports/n2-200k.json
+-rw-r--r--. 1 stephane stephane 13717 31 oct 19:42 reports/n2-budget.json
+-rw-r--r--. 1 stephane stephane  2487 31 oct 16:37 reports/n2-distillation.json
+-rw-r--r--. 1 stephane stephane  7376 31 oct 12:57 reports/n2-hierarchie.json
+-rw-r--r--. 1 stephane stephane  1173  1 nov 01:3
+… [922 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -40 work/n2ac/agrege_fenetre.py; echo \"--- entrées ---\"; ls -l work/n2ac/rope1024-2.5k.pt work/n2ac/mix512-15k.pt work/n2ac/mix1024-7.5k.pt work/n2ac/mix-200k.pt 2>/dev/null; echo \"--- json work fenêtre ---\"; ls -l work/n2ac/*.json | grep -i \"fenetre\\|rope1024\\|mix512\\|mix1 … [75 caractères tronqués]`
+
+  ```
+"miroir_1024": "miroir-rope1024-2.5k.json",
+    "miroir_production_512": "miroir-mix512-15k.json",
+    "miroir_256": "miroir-rope.json",
+    "miroir_512": "miroir-rope512.json",
+}
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--sortie", default="reports/n2-fenetre.json")
+    a = ap.parse_args()
+    out = {}
+    for cle, nom in SOURCES.items():
+        p = WORK / nom
+        if p.exists():
+            out[cle] = json.loads(p.read_text(encoding="utf-8"))
+    out["dispositif"] = {
+        "modele": "drave-n0 34,3 M (384/512), RoPE",
+        "recette": "lot 8, lr 3e-4, graine 1, canal ; seq = fenêtre",
+        "runs": {
+            "R1.1": "wiki_fr, 128/256, 20 000 pas, 20,5 Mo, init base-wiki-45m",
+            "R1.2-512": "wiki_fr, 512/512, 5 000 pas, 20,5 Mo, init base-wiki-45m",
+            "R1.2-1024": "wiki_fr, 1 024/1 024, 2 500 pas, 20,5 Mo, init base-wiki-45m",
+            "R1.2-1024-long": "wiki_fr, 1 024/1 024, +17 500 pas (20 000), 164 Mo",
+            "prod-512": "wiki_mix, 512/512, 15 000 pas, 61,4 Mo, init mix-60k (N2.ac)",
+            "prod-1024": "wiki_mix, 1 024/1 024, 7 500 pas, 61,4 Mo, init mix-60k (N2.ac)",
+        },
+        "contro
+… [1376 caractères tronqués]
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,utilization.gpu,memory.used,temperature.gpu,power.draw --format=csv,noheader 2>/dev/null; echo \"--- actual ---\"; python3 tools/ressources.py --actual 2>&1 | grep -E \"GPU|⚠\" | head -6; echo \"--- suggest ---\"; python3 tools/ressources.py --suggest 2>&1 | … [63 caractères tronqués]`
+
+  ```
+0, 100 %, 5646 MiB, 85, 176.79 W
+1, 100 %, 5398 MiB, 75, 227.25 W
+--- actual ---
+  Réel · GPU
+    GPU0 (réservé) : PID 110066 llama-server (366 MiB) ; PID 383833 /home/stephane/gpu-env/bin/python (5276 MiB)
+    GPU1 (non réservé) : PID 110066 llama-server (118 MiB) ; PID 490049 /home/stephane/gpu-env/bin/python (5276 MiB)
+      ⚠ GPU1 utilisé sans réservation
+--- suggest ---
+  Libre maintenant : gpu1 libre · cpu0 : 4 fils libres · cpu1 : 6 fils libres · ram : 21 Gio libres · nvme_raid : libre, 33 Gio · nvme_system : libre, 705 Gio · hdd_data13tb : libre, 1942 Gio
+  File vide.
+  Règle : si la ressource voulue est prise, prends une tâche compatible plutôt que d'attendre.
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --claim --session 0733c5bb-f90b-4f58-9241-3364fa32e46c --job r12-mix-512-gpu1 --res \"gpu1=exclusive,cpu0=4,ram=10\" --prio 1 --eta 180 --note \"posé par la veille : run entrainer_rope sur wiki_mix observé sur GPU1 sans réservation (21 h 35)\" 2>&1 | tail -8; … [159 caractères tronqués]`
+
+  ```
+✅ accordé : 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1
+--- status ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / integration : cpu1=2, ram=4 (prio 1, 60 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 35 — GPU1 : un run N2 non déclaré, maintenant réservé\n\n- `--actual` a montré **GPU1 utilisé sans réservation** par `entrainer_rope` (wiki_mix, PID 490049,\n  38 min) : N2 n'avait réservé que `gpu0`. La règle « un job exclusif par GPU, décl … [678 caractères tronqués]`
+
+  ```
+✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+--- actual gpu ---
+  Réel · GPU
+    GPU0 (réservé) : PID 110066 llama-server (366 MiB) ; PID 383833 /home/stephane/gpu-env/bin/python (5276 MiB)
+    GPU1 (réservé) : PID 110066 llama-server (118 MiB) ; PID 490049 /home/stephane/gpu-env/bin/python (5276 MiB)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 4 : le run N2 de GPU1 est déclaré, le registre reflète le réel
+
+**Ce que j'ai trouvé et corrigé**
+- **GPU1 tournait sans réservation** : `--actual` a montré `entrainer_rope` (wiki_mix, PID 490049, 38 min) sur GPU1 alors que N2 n'avait réservé que `gpu0`. La règle « un job exclusif par GPU, **déclaré** » n'était pas tenue.
+- **Claim posé par la veille** : N2 / `r12-mix-512-gpu1` = `gpu1` exclusif, `cpu0` 4, `ram` 10, 180 min, avec la note « run observé sur GPU1 sans réservation ». Le registre est maintenant cohérent : `gpu0` + `gpu1` à N2, `cpu1` hub/S/Pensée, **`cpu0` 16/16**, `ram` 70/109, `--check` ✅ (seul avertissement : `nvme_raid` 33 Gio).
+
+**État des autres sessions**
+- **N2** : deux runs sur les deux GPU (R1.2-1024 sur `gpu0`, mélange 512 sur `gpu1`) ; la **fiche fenêtre** (`rapport-n2-fenetre.md`, écrite à 21 h 05) reste **non committée**, et son `n2-fenetre.json` est absent — c'est le **seul rouge non structurel** de la passe (`porte-tableaux`, 1 s), à rejouer après le commit N2.
+- **S** : v4 (54/55 types, 131/131 rôles, gold 55, corpus 55) ; **Pensée** : B13 **140/140**, porte sto en cours (`qualifier_porte_sto_graines`) ; **hub** : claim `integration` (cpu1 2), la passe est close.
+- **Passe** : **81 portes, 76 vertes, 5 rouges, 1 h 52** — 4 connues + `porte-tableaux` de passage ; le registre (`references-non-regression`) et l'état sont à jour, T1 à 2 428 mots.
+
+**État vérifié** : revue ✅ 568 fiches / 653 JSON / 82 portes, en-cours ✅, T0 ✅, T1 ✅, porte stricte ✅ (avertissements de claims longs), journal ✅. La veille continue : j'attends le commit N2 pour refermer `porte-tableaux`, je suis les sessions et je tiens le checkpoint de 8 h.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 5 : je vérifie le commit N2, l’état et le registre
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- HEAD ---\"; git log --oneline -4; echo \"--- status ---\"; git status --short | head -10; echo \"--- N2 fiche ---\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json 2>/dev/null; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"j … [66 caractères tronqués]`
+
+  ```
+21:34:25
+--- HEAD ---
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+--- status ---
+M  docs/methode/portes.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+--- N2 fiche ---
+?? reports/rapport-n2-fenetre.md
+json absent
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"entrainer|llama-server|qualifier|porte-\" | grep -v grep | head -5 | cut -c1-110; echo \"--- ressources ---\"; python3 tools/ressources.py --status 2>&1 | grep -A8 \"Réservations\"; python3 tools/ressources.py --check 2>&1 | tail -2",  … [48 caractères tronqués]`
+
+  ```
+110066    04:06:26  462 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.
+ 383833    01:17:48  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/p
+ 490049       40:18  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/
+ 668566       01:37  0.1 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m "POR
+ 668573       01:37  0.0 git commit --only -m PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e 
+--- ressources ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / integration : cpu1=2, ram=4 (prio 1, 60 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 40); do kill -0 668573 2>/dev/null || break; sleep 2; done; ps -p 668573 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -2; git status --short | head -6; date \"+%H:%M:%S\"", "description": "Wait for the hub's portes commit"}`
+
+  ```
+commit fini
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+21:34:35
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -2; echo \"--- rapports récents ---\"; ls -lt reports/*.md reports/*.json | hea … [56 caractères tronqués]`
+
+  ```
+revue de documentation · 569 fiche(s) · 654 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (55 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (56 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+--- rapports récents ---
+-rw-r--r--. 1 stephane stephane   76586  2 nov 21:34 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane   23129  2 nov 21:34 reports/README.md
+-rw-------. 1 stephane stephane    4733  2 nov 21:33 reports/rapport-pensee-porte-sto-graines.md
+-rw-r--r--. 1 stephane stephane    2290  2 nov 21:33 reports/pensee-porte-sto-graines.json
+-rw-r--r--. 1 stephane stephane   29473  2 nov 21:29 reports/historique-passes-portes.md
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_backlog.py 2>&1 | tail -2; python3 tools/verifier_schemas.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; echo \"--- B13 sto graines dans en-cours ---\"; grep -n \"sto\\|graines\" docs/pilotage/en-cours.md | head -3; echo \"--- N2 json ---\"; ls … [118 caractères tronqués]`
+
+  ```
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+     sources et images relatives.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+--- B13 sto graines dans en-cours ---
+5:> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+59:  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde), le labyrinthe 0/1 ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+60:  [B13](../../reports/rapport-b13-porte-140.md), [sto](../../reports/rapport-pensee-porte-sto.md),
+--- N2 json ---
+absent
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 40 — sto graines, portes datées, audits verts\n\n- **Hub** : commit `d2374554` — `portes.md` date la passe du **19 h 32 (1 h 52)** et annonce la\n  **82e porte**. \n- **Pensée** : **porte sto 5/5** sur 5 graines (28–34 nœuds, 5–7 sonde), lab … [425 caractères tronqués]`
+
+  ```
+ok
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 : état à jour (569 fiches / 654 JSON), audits verts, N2 toujours en vol
+
+**Ce qui a bougé**
+- **Hub** : `d2374554` — `portes.md` date la passe du **19 h 32 (1 h 52)** et annonce la **82e porte** (`porte-ressources`) pour la prochaine passe.
+- **Pensée** : **porte sto 5/5** sur 5 graines (28–34 nœuds, 5–7 sonde), labyrinthe 0/1 ; fiche et JSON des graines écrits à 21 h 33 ; `en-cours` suivi.
+- **N2** : les deux runs tournent (R1.2-1024 sur `gpu0`, mélange 512 sur `gpu1` — ce dernier désormais **réservé** par la veille) ; la **fiche fenêtre** reste non committée et son `n2-fenetre.json` absent, donc `porte-tableaux` reste le **seul rouge non structurel**.
+
+**Audits légers du round** : backlog ✅ (aucune arête morte, aucun cycle), schémas ✅, journal ✅, revue documentaire ✅ (**569 fiches / 654 JSON / 82 portes**), en-cours ✅, T0 ✅, T1 ✅ (2 428 mots), porte stricte ✅ (seuls avertissements : mandats longs avec claim actif).
+
+**Ressources** : registre cohérent — N2 `gpu0`+`gpu1`, hub `cpu1` 2, S et Pensée `cpu1` 4+4 ; `cpu0` 16/16, `ram` 70/109 ; seul avertissement `nvme_raid` 33 Gio. Le journal de bord `work/veille/nuit.md` reste tenu.
+
+**Ce qui reste** : attendre le commit N2 pour refermer `porte-tableaux` (le JSON manquant), suivre les sessions (S v4, Pensée, hub) et tenir le **checkpoint de 8 h** (registre, sessions, `git log`, verdict de la passe, bilan). La veille continue.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 6 : je relève l’état (N2, sessions, registre) avant d’agir
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- HEAD ---\"; git log --oneline -4; echo \"--- status ---\"; git status --short | head -8; echo \"--- N2 fiche ---\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json 2>/dev/null; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"js … [188 caractères tronqués]`

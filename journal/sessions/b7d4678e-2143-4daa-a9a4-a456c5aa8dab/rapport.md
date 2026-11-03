@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 5.3 h |
-| Tours | 9 |
-| Messages | 498 |
-| Appels d'outils | 526 |
+| Tours | 11 |
+| Messages | 510 |
+| Appels d'outils | 536 |
 | Fichiers touchés | 22 |
-| Commandes | 342 |
+| Commandes | 352 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 0 |
@@ -43,6 +43,10 @@
 **Tour 8** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 **Tour 9** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 10** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 11** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -309,7 +313,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 9 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check commits, tree and N2 fiche
 - bash — Check running jobs and resource claims
@@ -318,10 +322,60 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Inspect the N2 aggregate script and inputs
 - bash — Check GPU usage and free resources
 - bash — Register the observed GPU1 run with a claim
+- bash — Log the GPU1 claim and recheck the registry
 
 **Synthèse produite :**
 
-⏵ Round 4 : je vérifie le commit N2, les sessions et le registre
+⏵ Round 4 : le run N2 de GPU1 est déclaré, le registre reflète le réel
+
+**Ce que j'ai trouvé et corrigé**
+- **GPU1 tournait sans réservation** : `--actual` a montré `entrainer_rope` (wiki_mix, PID 490049, 38 min) sur GPU1 alors que N2 n'avait réservé que `gpu0`. La règle « un job exclusif par GPU, **déclaré** » n'était pas tenue.
+- **Claim posé par la veille** : N2 / `r12-mix-512-gpu1` = `gpu1` exclusif, `cpu0` 4, `ram` 10, 180 min, avec la note « run observé sur GPU1 sans réservation ». Le registre est maintenant cohérent : `gpu0` + `gpu1` à N2, `cpu1` hub/S/Pensée, **`cpu0` 16/16**, `ram` 70/109, `--check` ✅ (seul avertissement : `nvme_raid` 33 Gio).
+
+**État des autres sessions**
+- **N2** : deux runs sur les deux GPU (R1.2-1024 sur `gpu0`, mélange 512 sur `gpu1`) ; la **fiche fenêtre** (`rapport-n2-fenetre.md`, écrite à 21 h 05) reste **non committée**, et son `n2-fenetre.json` est absent — c'est le **seul rouge non structurel** de la passe (`porte-tableaux`, 1 s), à rejouer après le commit N2.
+- **S** : v4 (54/55 types, 131/131 rôles, gold 55, corpus 55) ; **Pensée** : B13 **140/140**, porte sto en cours (`qualifier_porte_sto_graines`) ; **hub** : claim `integration` (cpu1 2), la passe est close.
+- **Passe** : **81 portes, 76 vertes, 5 rouges, 1 h 52** — 4 connues + `porte-tableaux` de passage ; le registre (`references-non-regression`) et l'état sont à jour, T1 à 2 428 mots.
+
+**État vérifié** : revue ✅ 568 fiches / 653 JSON / 82 portes, en-cours ✅, T0 ✅, T1 ✅, porte stricte ✅ (avertissements de claims longs), journal ✅. La veille continue : j'attends le commit N2 pour refermer `porte-tableaux`, je suis les sessions et je tiens le checkpoint de 8 h.
+
+### Tour 10 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check commits and N2 fiche status
+- bash — Check jobs and resource claims
+- bash — Wait for the hub's portes commit
+- bash — State checks and newest reports
+- bash — Light audits: backlog, schemas, journal, state
+- bash — Log the 21h40 checkpoint
+
+**Synthèse produite :**
+
+⏵ Round 5 : état à jour (569 fiches / 654 JSON), audits verts, N2 toujours en vol
+
+**Ce qui a bougé**
+- **Hub** : `d2374554` — `portes.md` date la passe du **19 h 32 (1 h 52)** et annonce la **82e porte** (`porte-ressources`) pour la prochaine passe.
+- **Pensée** : **porte sto 5/5** sur 5 graines (28–34 nœuds, 5–7 sonde), labyrinthe 0/1 ; fiche et JSON des graines écrits à 21 h 33 ; `en-cours` suivi.
+- **N2** : les deux runs tournent (R1.2-1024 sur `gpu0`, mélange 512 sur `gpu1` — ce dernier désormais **réservé** par la veille) ; la **fiche fenêtre** reste non committée et son `n2-fenetre.json` absent, donc `porte-tableaux` reste le **seul rouge non structurel**.
+
+**Audits légers du round** : backlog ✅ (aucune arête morte, aucun cycle), schémas ✅, journal ✅, revue documentaire ✅ (**569 fiches / 654 JSON / 82 portes**), en-cours ✅, T0 ✅, T1 ✅ (2 428 mots), porte stricte ✅ (seuls avertissements : mandats longs avec claim actif).
+
+**Ressources** : registre cohérent — N2 `gpu0`+`gpu1`, hub `cpu1` 2, S et Pensée `cpu1` 4+4 ; `cpu0` 16/16, `ram` 70/109 ; seul avertissement `nvme_raid` 33 Gio. Le journal de bord `work/veille/nuit.md` reste tenu.
+
+**Ce qui reste** : attendre le commit N2 pour refermer `porte-tableaux` (le JSON manquant), suivre les sessions (S v4, Pensée, hub) et tenir le **checkpoint de 8 h** (registre, sessions, `git log`, verdict de la passe, bilan). La veille continue.
+
+### Tour 11 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check commits, N2 fiche and runs
+- bash — State checks and resource registry
+- bash — Wait for the staged commit and check status
+
+**Synthèse produite :**
+
+⏵ Round 6 : je relève l’état (N2, sessions, registre) avant d’agir
 
 ## 3. Travail accompli
 
@@ -394,7 +448,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 302 autres
+- … et 312 autres
 
 ## 4. Mesures et résultats marquants
 

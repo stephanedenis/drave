@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**198 commits** · **10 session(s)** · **10 thème(s)**
+**199 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -20,7 +20,7 @@
 | modele | 8 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 16 | [portes.md](portes.md) |
+| portes | 17 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -239,6 +239,7 @@
 | 21:19 | `8eab6a7c` | ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45 |
 | 21:26 | `7d2c0a2d` | B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S |
 | 21:30 | `0713f4e6` | NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS |
+| 21:32 | `d2374554` | PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE |
 
 ## Le récit de la journée (écrit à la main)
 

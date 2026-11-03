@@ -5586,3 +5586,87 @@ lock libre
 ⏵ Le commit de nuit inclut mon tableau (81 lignes). Je commite `portes.md`.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m \"PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE\n\nLe doc disait encore « la passe du 02/11 06 h » ; la passe complète du soir a\nrendu 76 vertes / 5 rouges en 1 h 52 (4 connues … [245 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-225]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-225", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master d2374554] PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+ 22 files changed, 612 insertions(+), 66 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Références et `portes.md` committées. Reste le rejeu de `porte-tableaux` : le JSON N2 est-il arrivé ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; ls -la reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git log --oneline -2; git status --short | grep -v journal | head -5; echo \"--- n2 digest/plan ---\"; stat -c '%y' journal/sessions/0733c5bb-f90b-4f58-92 … [176 caractères tronqués]`
+
+  ```
+21:34
+json absent
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/rapport-s-analyseur-roles.md
+--- n2 digest/plan ---
+21:32:49
+- **Heartbeat** : 2026-11-02 19:56 HAE
+  ```
+
+### 🤖 Assistant
+
+⏵ Tâche réelle : `porte-homeostasie` signale `tools/n4_dessin_b.py: Permission denied`. Je vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -l tools/n4_dessin_b.py; sed -n 45,60p tools/porte-homeostasie.sh; echo \"--- test direct ---\"; python3 tools/n4_dessin_b.py --aide 2>&1 | head -3; echo \"code=$?\"", "description": "Inspect n4_dessin_b permission issue"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 47491 16 oct 01:42 tools/n4_dessin_b.py
+BASE_LORA=${BASE_LORA:-/tmp/n4/rang4-lora.pt}
+T=${T:-/tmp/porte-homeostasie}
+[ -s "$M" ] || { echo "  ❌ modèle absent : $M"; exit 2; }
+[ -x "$D" ] || { echo "  ❌ binaire du moteur absent : $D"; exit 2; }
+[ -d "$SNAP" ] || { echo "  ❌ poids PyTorch absents : $SNAP"; exit 2; }
+IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+[ -s "$BASE_LORA" ] || {
+    echo "  ❌ le LoRA de référence est absent : $BASE_LORA"
+    echo "     (il vient du balayage : `tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)"
+    exit 2
+}
+. tools/_corpus.sh
+mkdir -p "$T"
+
+# les morceaux de mesure : deux textes jamais rejoués (m32, m20) et un texte hors domaine
+$P - "$T" "$IDS" <<'PY' || exit 2
+--- test direct ---
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/n4_dessin_b.py", line 70, in <module>
+    import torch
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vrai défaut : le message de la porte **exécute** sa commande (backticks en guillemets doubles) et imprime « Permission denied ». Je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"n4_dessin_b.py --objectif\" tools/porte-homeostasie.sh; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-homeostasie.sh\"); t = p.read_text(encoding=\"utf-8\")\no = '''    echo \"     (il vient du balayage : ` … [632 caractères tronqués]`
+
+  ```
+53:    echo "     (il vient du balayage : `tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)"
+message corrigé : plus d'exécution, python3 explicite
+syntaxe OK
+=== rejeu (attendu exit 2, sans Permission denied) ===
+  ❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt
+     (il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)
+CODE=2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m \"PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE\n\nLa suggestion « il vient du balayage : \\`tools/n4_dessin_b.py ...\\` » était écrite\nentre guillemets DOUBLES : les backticks étaient une substitution … [491 caractères tronqués]`

@@ -12245,3 +12245,174 @@ started background job bash-435
 ⏵ J'attends les cinq graines (le JSON remplira la fiche)
 
 - **job_output** `{"job_id": "bash-435", "timeout_ms": 420000, "wait": true}`
+
+  ```
+{"status":"ok"}   "graine": 2,
+   "but": true,
+   "noeuds": 34,
+   "sonde": 7,
+   "appels": 9,
+   "latence_s": 39.395,
+   "erreurs": 0
+  },
+  {
+   "graine": 3,
+   "but": true,
+   "noeuds": 28,
+   "sonde": 5,
+   "appels": 7,
+   "latence_s": 52.139,
+   "erreurs": 0
+  },
+  {
+   "graine": 4,
+   "but": true,
+   "noeuds": 28,
+   "sonde": 5,
+   "appels": 7,
+   "latence_s": 64.947,
+   "erreurs": 0
+  }
+ ],
+ "labyrinthe": [
+  {
+   "graine": 0,
+   "but": false,
+   "noeuds": 200,
+   "sonde": 3,
+   "latence_s": 182.668
+  }
+ ],
+ "controles": {
+  "oracle": {
+   "but": true,
+   "noeuds": 31,
+   "sonde": 6
+  },
+  "aveugle": {
+   "but": false,
+   "noeuds": 200,
+   "sonde": 61
+  }
+ }
+}
+écrit : reports/pensee-porte-sto-graines.json
+[stderr]
+
+real	4m7,987s
+user	0m0,440s
+sys	0m0,053s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cinq graines : le 7B passe **5/5** (28–34 nœuds, 5–7 sonde) ; labyrinthe 0/1, aveugle 0/1 ; j'extrais le bilan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-porte-sto-graines.json'))\nprint('date',d['date'],'verdict',d['verdict'])\nprint('seuils',json.dumps(d['seuils'],indent=1))\nprint('llm',[(r['graine'],r['but'],r['noeuds'],r['sonde'],r['a … [244 caractères tronqués]`
+
+  ```
+date 2026-11-02 21:33 EST verdict True
+seuils {
+ "llm_5": true,
+ "labyrinthe_non": true,
+ "aveugle_non": true,
+ "oracle_but": true,
+ "aucune_erreur_llm": true,
+ "latence_mesuree": true
+}
+llm [(0, True, 31, 6, 8, 13.085, 0), (1, True, 28, 5, 7, 25.919, 0), (2, True, 34, 7, 9, 39.395, 0), (3, True, 28, 5, 7, 52.139, 0), (4, True, 28, 5, 7, 64.947, 0)]
+laby [(0, False, 200, 3, 182.668)]
+controles {'oracle': {'but': True, 'noeuds': 31, 'sonde': 6}, 'aveugle': {'but': False, 'noeuds': 200, 'sonde': 61}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche « cinq graines » : le 7B passe 5/5 (28–34 nœuds, 5–7 sonde) ; contrôles 0/1 et oracle
+
+- **write** `{"content": "# B13 — la porte stochastique, cinq graines : le 7B passe 5/5 (28–34 nœuds, 5–7 sonde) ; le labyrinthe 0/1, l'aveugle 0/1\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·\n> **Verdict** : ✅ **le 7B passe 5/5 sur les cinq graines** — le tirage `random.rand … [4499 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto-graines.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique l'état « sto 5/5 » (README, INDEX, en-cours, roadmap, plan, journal), puis contrôle et commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, time, re\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-porte-sto.md`](rapport-pensee-porte-sto.md) | **B13** **31 nœuds** |\",\n            \"| [`rapport-pense … [2617 caractères tronqués]`
+
+  ```
+ok
+  566 fiches → reports/INDEX.md
+EN-COURS: 1587
+  T0 max : 3961 mots (budget 4 000)
+  en-cours · 1587 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 569 fiche(s) · 654 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 3 961, revue 569/654 ; je commite les cinq graines
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -8; git add tools/tests/qualifier_porte_sto_graines.py reports/rapport-pensee-porte-sto-graines.md reports/pensee-porte-sto-graines.json reports/README.md reports/INDEX.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md jo … [423 caractères tronqués]`
+
+  ```
+M  docs/methode/portes.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+ journal/sessions/MANIFEST.md                       |  12 +-
+ .../abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md | 121 ----------
+ .../rapport.md                                     |  53 +----
+ .../b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md | 212 -----------------
+ .../rapport.md                                     |  22 +-
+ .../caaf3018-e3e2-4416-8446-11f0335910aa/digest.md | 256 ---------------------
+ .../rapport.md                                     |  20 +-
+ 24 files changed, 88 insertions(+), 949 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Lock concurrent sur l'index ; j'attends et je reprends le commit (mes 24 fichiers restent stagés)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls -l .git/index.lock 2>/dev/null; ps -eo pid,etime,cmd | grep -E \"git (commit|add)\" | grep -v grep | head -3; sleep 20; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git log -1 --format='%h %s'; git diff --cached --stat | t … [75 caractères tronqués]`
+
+  ```
+21:34:19
+-rw-r--r--. 1 stephane stephane 357253  2 nov 21:32 .git/index.lock
+ 668566       01:30 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m "PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE  Le doc disait encore « la passe du 02/11 06 h » ; la passe complète du soir a rendu 76 vertes / 5 rouges en 1 h 52 (4 connues + porte-tableaux, lien N2 en vol). La 82e porte (porte-ressources, née à 20 h 32 après le lancement) sera comptée à la prochaine passe : 81 → 82." -- docs/methode/portes.md 2>&1 | tail -5
+ 668573       01:30 git commit --only -m PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE  Le doc disait encore « la passe du 02/11 06 h » ; la passe complète du soir a rendu 76 vertes / 5 rouges en 1 h 52 (4 connues + porte-tableaux, lien N2 en vol). La 82e porte (porte-ressources, née à 20 h 32 après le lancement) sera comptée à la prochaine passe : 81 → 82. -- docs/methode/portes.md
+lock libre
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+ .../rapport.md                                     |  22 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d
+… [80 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a committé `d2374554` ; l'index contient ses suppressions de journaux. Je réinitialise et je stage uniquement mes 10 fichiers
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git reset -q; git add tools/tests/qualifier_porte_sto_graines.py reports/rapport-pensee-porte-sto-graines.md reports/pensee-porte-sto-graines.json reports/README.md reports/INDEX.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/sessions/e … [417 caractères tronqués]`
