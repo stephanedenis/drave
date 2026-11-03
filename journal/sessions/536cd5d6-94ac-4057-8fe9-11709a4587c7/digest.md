@@ -6021,3 +6021,168 @@ il se passe beaucoup de choses en même temps. coordonne bien tes activités et 
  343576       10:36  0.0 timeout         timeout 1800 bash tools/porte-indice.sh
   ```
 
+### 🤖 Assistant
+
+⏵ Je pose le goal de nuit et je lis les mandats actifs pour caler les claims et les prochaines actions.
+
+- **create_goal** `{"objective": "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/pas … [269 caractères tronqués]`
+
+> **Objectif** (create) : Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante.
+
+
+  ```
+{"goal":{"id":"goal-63a3e56f-d66e-4e43-8974-db1c692b5e45","revision":1,"objective":"Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — N2, le natif : 200 000 pas et la fenêtre
+2: 
+3: > **Mandat ouvert** le 2026-11-02 16 h 20 HAE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ N2) —
+5: > la session reprend le programme **N2** (le natif, GPU) après la clôture de `0b0a6a0d`.
+6: > Le heartbeat est celui de l'état.
+7: 
+8: - **Session** : `0733c5bb-f90b-4f58-9241-3364fa32e46c`
+9: - **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre
+10:   native (R1.1/R1.2 côté N2), les fiches et les contrôles négatifs.
+11: - **Périmètre** : N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2,
+12:   courbe de longueur), R1.1/R1.2 mesurés depuis N2
+13: - **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `reports/rapport-n2-*`,
+14:   `work/n2*`, `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/`
+15: - **Heartbeat** : 2026-11-02 19:56 HAE
+16: - **Objectif final** : trancher la question ouverte de N2 — **les 200 000 pas sur le mélange
+17:   1 Go font-ils passer s
+… [1729 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — S, les structures (analyser, banquer, exporter)
+2: 
+3: > **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+5: > [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+6: > Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+7: > `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+8: > précède ; sa section S y est **écrite** le 02/11 16 h 52 sur demande humaine, et le hub relit.
+9: 
+10: - **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+11: - **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+12:   pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+13: - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+14: - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+15:   `reports/s-banque-*` ; `j
+… [3841 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je pose la consigne de nuit dans le plan de travail et dans l'état, puis je lance la surveillance de la passe.
+
+- **todo_write** `{"todos": [{"content": "Poser la consigne de nuit (plan-travail, en-cours, plan hub)", "status": "in_progress"}, {"content": "Surveiller la passe complète work/portes/passe-1102-19h32", "status": "pending"}, {"content": "Intégrer le verdict de la passe (références, état, roadmap, commit)", "status": … [291 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime, re\n\n# 1) plan-travail : la consigne de nuit\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nt += \"\"\"\n\n### 10.7 La nuit du 02/11 → 03/11 (08 h)\n\n**Consigne.** Les … [3988 caractères tronqués]`
+
+  ```
+plan-travail 10.7 ajouté
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 40, in <module>
+  File "<stdin>", line 37, in sub
+AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**'
+[exit code: 1]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — le hub, la reprise après reboot
+2: 
+3: > **Mandat vivant.** Ouvert le 2026-11-02 15 h 50 HNE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+5: > synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+6: > Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+7: 
+8: - **Session** : `536cd5d6-94ac-4057-8fe9-11709a4587c7`
+9: - **Rôle** : **Hub** — intégration, état, roadmap, chantiers, journal, compteurs ; reprise après le
+10:   reboot du 02/11 15 h 06 ; remise à zéro de la sédimentation ; runbook multi-terminaux.
+11: - **Périmètre** : pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal
+12:   (hors `sessions/<id>/`), `reports/README.md`, `reports/INDEX.md`, outillage de pilotage.
+13: - **Fichiers réservés** : `docs/pilotage/`, `journal/` (hors `sessions/<id>/`),
+14:   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
+15:   `tools/porte-sess
+… [1614 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Une autre session écrit l'état en ce moment ; je ne l'écrase pas. Je lis sa version et je poursuis par le plan de travail et la surveillance.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 45}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 20 h 22 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+9: > (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+10: > [`plan-travail.md`](plan-travail.md) § 9.
+11: 
+12: ## Sessions en cours
+13: 
+14: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+15: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+16: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+17: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+18: 
+19: ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+20: 
+21: - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-
+… [2308 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== en-cours mtime/diff ==\" && stat -c '%y' docs/pilotage/en-cours.md && git status --short docs/pilotage/en-cours.md docs/pilotage/plan-travail.md && echo && echo \"== pass ==\" && tail -4 work/portes/passe-1102-19h32/registr … [125 caractères tronqués]`
+
+  ```
+== en-cours mtime/diff ==
+2026-11-02 20:25:02.524175396 -0500
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+
+== pass ==
+porte-greffe 0 660
+porte-harnais-invariants 0 127
+porte-homeostasie 2 0
+porte-horloge 0 27
+    PID     ELAPSED COMMAND
+ 164366       53:30 bash
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe est à `porte-indice` (10 min, rouge connue) ; je mets le plan du hub à jour, je commite la consigne de nuit et je lance la surveillance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\np=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md'); t=p.read_text()\nh=datetime.datetime.now().strftime('%H:%M')\nt=t.replace('- **Heartbeat** : 2026-11-02 19:5 … [2081 caractères tronqués]`

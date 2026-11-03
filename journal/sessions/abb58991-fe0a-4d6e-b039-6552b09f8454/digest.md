@@ -10367,3 +10367,116 @@ apprise {'episodes': 1000, 'etats_q': 170, 'seule_0': {'but': True, 'pas': 8}, '
 … [672 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Fiche mobile : le 7B échoue à (3,3), passe à (1,3) comme l'aveugle et le labyrinthe ; test non discriminant
+
+- **write** `{"content": "# B13 — la porte mobile : le 7B échoue à (3,3) (200 nœuds, 3 sonde) et passe à (1,3) comme l'aveugle (26/2) et le labyrinthe (29/5) ; test non discriminant\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·\n> **Verdict** : ❌ **la porte mobile ne qualifie p … [6120 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-mobile.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ J'inspecte les lignes d'état (Fait, bullet, B row, README, plan) avant le trim et la mise à jour mobile
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '55,72p' docs/pilotage/en-cours.md; echo '--- BULLET ---'; sed -n '99,103p' docs/pilotage/en-cours.md; echo '--- BROAD ---'; grep -n \"minute 26 nœuds\\|Mis à jour\\|fichiers / JSON\" docs/pilotage/en-cours.md; echo '--- README ---'; sed -n '14 … [342 caractères tronqués]`
+
+  ```
+- **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
+- **Stratégie** : v0 petit et mesuré.
+- **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+- **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
+  ne se rejoue pas), gold **432** ; **gold neuronal** POS/syntagmes, cascade
+  **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27 (règle), labyrinthe 2 sonde ;
+  **porte minute** — **26 nœuds** ;
+  **pragmatique** dev 1,0, test 0,6375 (majoritaire 0,7556) ; l'heuristique garde ;
+  [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
+  [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
+- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.
+- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+- **Prochaine action** : **gold 200+ phrases** ; **porte mobile/stochastique** ; **porte B13** attend S.
+- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ;
+… [6694 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'état (Fait mobile, B row, prochaine action, bullets), README, roadmap, plan, journal ; puis T0
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, time\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"**Mis à jour : 2026-11-02, 20 h 05 HNE (heure locale, EST).**\", \"**Mis à jour : 2026-11-02, 20 h 22 H … [5876 caractères tronqués]`
+
+  ```
+ok 2026-11-02 20:24 EST
+  560 fiches → reports/INDEX.md
+EN-COURS: 1627
+  T0 max : 4001 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1627 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 001 ; je retire un mot (prochaine action), puis tests/gates et commit mobile
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Prochaine action** : **gold 200+** ; **porte stochastique** ou **fenêtre** ; **porte B13** attend S.\",\n            \"-  … [680 caractères tronqués]`
+
+  ```
+ok
+EN-COURS: 1625
+  T0 max : 3999 mots (budget 4 000)
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2696 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+SESS=0
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 3 999, revue 563/649, sessions vertes ; commit de la porte mobile
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -14; echo '=== ADD ==='; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_mobile_drvm.py reports/rapport-pensee-porte-mobile.md reports/pensee-porte-mobile.json reports/READM … [605 caractères tronqués]`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? reports/pensee-porte-mobile.json
+?? reports/rapport-pensee-porte-mobile.md
+?? tools/tests/qualifier_porte_mobile_drvm.py
+=== ADD ===
+ docs/pilotage/en-cours.md                          |  24 +-
+ docs/pilotage/roadmap.md                           |   6 +-
+ journal/2026-11-02/README.md                       |  10 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  10 +-
+ reports/INDEX.md                                   |   5 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-porte-mobile.json                   | 294 +++++++++++++++++++++
+ reports/rapport-pensee-porte-mobile.md             | 103 ++++++++
+ tools/pensee/operateurs.py                         |  12 +
+ tools/tests/qualifier_porte_mobile_drvm.py         | 153 +++++++++++
+ tools/tests/test_pensee_politique.py               |  11 +
+ 11 files changed, 607 insertions(+), 23 deletions(-)
+  ✅ index :
+… [316 caractères tronqués]
+  ```
+

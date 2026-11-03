@@ -321,3 +321,28 @@ leurs claims ; le hub annonce la fenêtre, les sessions `release`, la file admet
   n'empêche pas un job, il rend le conflit visible.
 - Une **porte** `porte-ressources.sh` (`--check --strict`) pourra être ajoutée après validation :
   elle ferait passer le compte de 81 à 82 portes, et les compteurs de l'état suivraient.
+
+
+### 10.7 La nuit du 02/11 → 03/11 (08 h)
+
+**Consigne.** Les quatre sessions actives restent productives jusqu'à 08 h ; aucune n'attend.
+Les claims actifs (02/11 20 h) :
+
+| session | claim | remarque |
+|---|---|---|
+| N2 `0733c5bb` | `gpu0`, `cpu0` 12, `ram` 60 | R1.2-1024 en cours ; node 0 |
+| hub `536cd5d6` | `gpu1`, `cpu1` 8, `ram` 8 | passe de portes ; node 1 |
+| S `29ad180d` | `cpu1` 4, `ram` 8 | homographes/lexique, h033, gold |
+| Pensée `e181ce02` | `cpu1` 4, `ram` 16 | gold 200+, porte mobile |
+| D/R/A `fe3c05f0` | close | place `cpu1` 2 libre si on la rouvre |
+
+**La passe complète en cours** (`work/portes/passe-1102-19h32`, lancée 19 h 32 avec
+`CUDA_VISIBLE_DEVICES=1,0`) est une **exception** : elle partage GPU0 avec N2 (ralentissement
+assumé) et doit finir. Les passes suivantes : partielles sur `gpu1` + `cpu1` ; complètes sur
+`machine` exclusive, après libération de N2/S/Pensée. Le hub suit `registre.txt` et `--actual`.
+
+**Le hub** : `--status` / `--actual` / `--check` du registre, `sessions.py --status`,
+`surveille_sessions.py`, `git status` ; intégration des fiches B13/N2/S, état/roadmap, INDEX,
+références de non-régression ; heartbeat à chaque cycle. **Les sessions** : `--release` en fin
+de job, `--claim` du suivant ; si une action attend l'humain (validation S), prendre la ligne
+suivante. **Checkpoint 08 h** : registre, sessions, `git log`, verdict de la passe, bilan.

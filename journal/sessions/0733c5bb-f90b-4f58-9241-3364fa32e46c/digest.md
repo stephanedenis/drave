@@ -4752,3 +4752,49 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-203", "timeout_ms": 780000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-203", "timeout_ms": 120000, "wait": true}`
+
+  ```
+20:23:25
+rope1024-2.5k fini 20:16:38
+pas    800 · perte 1.1397 · PPL val 2.893 · 358 s
+--- prod ---
+pas   5400 · perte 1.1542 · PPL val 2.809 · 1041 s
+--- portes ---
+ 164359       51:33 bash -c cd /home/stephane/Data13TB/stephane/GitHub
+ 164366       51:33 bash tools/toutes-les-portes.sh
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Généralisation du contrôle « même texte » aux contextes longs
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"work/n2ac/eval_fenetre.py\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace('CONTEXTES = (256, 512, 1000)\\nCIBLE = 128\\nN_FENETRES = 16\\nMAX = 1000',\n              'CONTEXTES = (256, 512, 1 … [1192 caractères tronqués]`
+
+  ```
+ok
+2:"""eval_fenetre.py — le **même texte**, vu avec des contextes de 256, 512 et 1 000 octets.
+46:    ap.add_argument("--contextes", default="256,512,1000")
+58:    contextes = [int(x) for x in a.contextes.split(",")]
+59:    maxi = max(contextes)
+62:           "cible": CIBLE, "contextes": contextes, "ppl": {}}
+63:    for C in contextes:
+67:            x, c = ec.fenetres(val, ct, N_FENETRES, maxi + 1, k * N_FENETRES)
+68:            x, c = x[:, maxi - C:], c[:, maxi - C:]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/rope1024-2.5k.pt --rope --longueurs 128,256,512,1000,2000 --sortie work/n2ac/eval-rope1024-2.5k.json 2>&1 | tail -22", "description": "Evaluate the 1024 eq … [22 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-205]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-205", "timeout_ms": 300000, "wait": true}`

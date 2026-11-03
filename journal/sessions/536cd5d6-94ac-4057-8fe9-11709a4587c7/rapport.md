@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 4.8 h |
+| Durée | 4.9 h |
 | Tours | 8 |
-| Messages | 163 |
-| Appels d'outils | 213 |
+| Messages | 166 |
+| Appels d'outils | 219 |
 | Fichiers touchés | 13 |
-| Commandes | 168 |
+| Commandes | 171 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -524,17 +524,21 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 
 ### Tour 8 — il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécan … [191 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - get_goal
 - job_list
 - bash — Inspect running gate pass logs and processes
 - create_goal
 - read
+- todo_write
+- bash — Add night policy and update state for the night
+- bash — Check state writer and gate pass progress
+- bash — Update hub plan and commit night policy
 
 **Synthèse produite :**
 
-⏵ Je pose le goal de nuit et je lis les mandats actifs pour caler les claims et les prochaines actions.
+⏵ La passe est à `porte-indice` (10 min, rouge connue) ; je mets le plan du hub à jour, je commite la consigne de nuit et je lance la surveillance.
 
 ## 3. Travail accompli
 
@@ -598,7 +602,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 128 autres
+- … et 131 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -726,7 +730,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+9 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ===== b6a672ec digest (head) ===== # Session DSH — relecture  - identifiant : `b6a672ec-3349-4a4c-9e23-4478aa823170` - dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` - créée : 2026-11-01 
 - **T1** : == uptime == [stderr] uptime: invalid option -- 's' Try 'uptime --help' for more information. [exit code: 1]
@@ -736,6 +740,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - **T6** : == branche == ## main...origin/main [ahead 24]  M AGENTS.md  M system/maintenance/logs/scrub-data13tb-20260921-164933.log  M system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/JOURNAL.md 
 - **T7** : [stderr] Traceback (most recent call last):   File "<stdin>", line 8, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: 'Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) 
 - **T7** : 20:00 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, 
+- **T8** : plan-travail 10.7 ajouté [stderr] Traceback (most recent call last):   File "<stdin>", line 40, in <module>   File "<stdin>", line 37, in sub AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 19 h 5
 
 ## 6. Commits
 
@@ -749,4 +754,5 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE"; echo "[exit $?]"; echo "== status ==" && git status --short && echo "(fin)" &
 - feat(thermal): plafonne le GPU 0 à 180 W et documente les ventilateurs Dell sans BIOS" -m "Le GPU 0 throttle à 87 °C (SW Thermal Slowdown) alors que le GPU 1 re
 - PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE" -m "Le pilotage réservait les fichiers, pas la machine. tools/ressources.py ajoute
+- PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H" -m "Consigne § 10.7 : N2 gpu0/cpu0 12, hub gpu1/cpu1 8, S et Pensée cpu1 4+4 
 

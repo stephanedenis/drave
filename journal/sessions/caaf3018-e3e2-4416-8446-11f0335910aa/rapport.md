@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.1 h |
+| Durée | 4.2 h |
 | Tours | 4 |
-| Messages | 154 |
-| Appels d'outils | 196 |
-| Fichiers touchés | 5 |
-| Commandes | 142 |
+| Messages | 170 |
+| Appels d'outils | 216 |
+| Fichiers touchés | 6 |
+| Commandes | 159 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -140,7 +140,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 
 ### Tour 4 — Es-tu en attente active d'une tache et ressource? tu doi pouvoir prendre de petites tâches indépendantes si tu cherches  … [196 caractères tronqués]
 
-*46 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create night goal and snapshot pass and sessions
@@ -156,11 +156,11 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - bash — Check backlog graph and actual resource usage
 - bash — Check reports index freshness
 - bash — Check for live edits by other writer
-- … et 28 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
-⏵ Le nouveau `tools/ressources.py` n'est référencé nulle part dans le routage. Petite tâche utile : l'y inscrire.
+⏵ Attente courte de la fin de `porte-indice` et du commit de l'autre écrivain
 
 ## 3. Travail accompli
 
@@ -173,6 +173,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 | `docs/methode/portes.md` | 0 | 3 |
 | `docs/methode/ressources.md` | 0 | 1 |
 | `docs/pilotage/README.md` | 0 | 2 |
+| `docs/pilotage/plan-travail.md` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -216,7 +217,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 102 autres
+- … et 119 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -270,6 +271,15 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T4** `30:  carte, avec `OMP_NUM_THREADS=4` chacun : **18–25 %** d'utilisation GPU, **560–680 Mo** par`
 - **T4** `36:  deux bases), 65–78 % de GPU, seq 256, lot 8/rang, un fil CPU par rang.`
 - **T4** `[still running after 60000ms; moved to background job bash-142]`
+- **T4** `**147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;`
+- **T4** `| `porte-c4-retard.sh` | 60 s | PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne |`
+- **T4** `| `porte-coupe.sh` | 125 s | ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit |`
+- **T4** `| `porte-delais.sh` | 20 s | ✅ le temps, lui, augmente : 6.43 s → 9.75 s (+3.3 s ≈ 50 ms × 64 pas) |`
+- **T4** `| `porte-mistral.sh` | 9 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p |`
+- **T4** `| `porte-pont.sh` | 75 s | ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux |`
+- **T4** `| `porte-reflexe.sh` | 106 s | ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit |`
+- **T4** `| `porte-reparti-moteur.sh` | 0 s | PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %) |`
+- **T4** `[still running after 60000ms; moved to background job bash-159]`
 
 ## 5. Erreurs rencontrées
 

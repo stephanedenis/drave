@@ -14,16 +14,16 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-02 19:50 EST
-- **Prochaine action** : la **passe de portes** est **en cours** (`porte-bus`, 19 h 37 ; GPU
-  libres) ; à son verdict, **intégrer les lignes B13/N2/S** et mettre `en-cours` à jour. La
-  sous-passe documentaire (8 portes) rend **7/8** : `porte-bloc-maths` rouge sur le seul critère
-  de **coût** (×8,31 pour ×4), **vert seul** trois fois (×4,24 / ×2,84 / ×4,12) — bruit de
-  charge, pas régression.
+- **Heartbeat** : 2026-11-02 20:26 EST
+- **Prochaine action** : la **passe complète** (`work/portes/passe-1102-19h32`, à
+  `porte-indice`, 10 min, rouge connue) ; à son verdict, **intégrer les lignes B13/N2/S**, le
+  registre et l'INDEX ; puis **bilan 08 h**.
+- **Ressources** : `gpu1`, `cpu1` 8 fils, `ram` 8 Gio ; registre `work/ressources.json`.
+- **Nuit** : consigne `plan-travail` § 10.7 ; quatre sessions productives ; bilan 08 h.
 - **État** : actif
 - **Plan** : 1) ~~audit des 111 sessions et du pilotage~~ ; 2) ~~plan de session~~ ; 3) **commits par
   flux** ; 4) **état cohérent** (140/140, gold 432, N2.ac, reboot) ; 5) **mandats** (N2, S, clôture
-  GPU) ; 6) **porte sessions stricte** et registre des rouges ; 7) **INDEX.md** régénéré ; 8) ~~runbook~~ ; 9) **passe de portes**.
+  GPU) ; 6) **porte sessions stricte** et registre des rouges ; 7) **INDEX.md** régénéré ; 8) ~~runbook~~ ; 9) **passe de portes** ; 10) **nuit** : registre, passe, intégration, bilan 08 h.
 - **Ambition** : que l'état redevienne reprenable en deux minutes — zéro fichier non attribué, des
   mandats qui disent la vérité, et une porte qui échoue quand un mandat est mort.
 - **Stratégie** : committer **par flux** avec `git add` explicite et l'index alterné ; ne jamais

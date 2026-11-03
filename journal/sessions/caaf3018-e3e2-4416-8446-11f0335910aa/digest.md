@@ -3585,3 +3585,440 @@ porte-horloge 0 27
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.hub-nuit; git read-tree HEAD; git add docs/pilotage/README.md docs/methode/ressources.md; git commit -m \"DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE\n\ntools/ressources.py (écrit cette nuit … [359 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-142]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-142", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 2bbd45e2] DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+ 23 files changed, 421 insertions(+), 84 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe et un fil de nuit pour le rapport de 8 h
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -3 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt", "description": "Check pass progress after indice"}`
+
+  ```
+lun 02 nov 2026 20:22:59 EST
+30
+porte-harnais-invariants 0 127
+porte-homeostasie 2 0
+porte-horloge 0 27
+porte-homeostasie 2 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/hub-nuit.md <<'EOF'\n# Fil de nuit du hub — 02/11 20 h → 03/11 08 h\n\nBut : passe complète, coordination des sessions (N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`,\nD/R/A `fe3c05f0` close à 18 h 45), petites tâches du te … [2246 caractères tronqués]`
+
+  ```
+fil écrit : work/hub-nuit.md
+lun 02 nov 2026 20:22:59 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Petites vérifications : orphelins, options de l'index des fiches, et avancement de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 120 python3 tools/surveille_sessions.py 2>&1 | tail -18", "description": "Check session file movement and orphans"}`
+
+  ```
+· journal/THEMES.md
+    · journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+    · journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+    · journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+    · journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+    · journal/sessions/MANIFEST.md
+    · journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+    · journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+    · journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+    · journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md
+    · journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+    · journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md
+    · reports/rapport-pensee-porte-mobile.md
+    · tools/tests/qualifier_porte_mobile_drvm.py
+    · tools/tests/test_pensee_politique.py
+  conflits (2) — deux sessions les réclament :
+    ! docs/pilotage/README.md — 536cd5d6-94ac-4057-8fe9-11709a4587c7, hub
+    ! reports/INDEX.md — 536cd5d6-94ac-4057-8fe9-11709a4587c7, hub
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 60 python3 tools/index_reports.py --help 2>&1 | head -12; echo \"---\"; date; wc -l < work/portes/passe-1102-19h32/registre.txt", "description": "Check index tool options and pass count"}`
+
+  ```
+560 fiches → reports/INDEX.md
+---
+lun 02 nov 2026 20:23:13 EST
+30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 120 python3 tools/surveille_sessions.py 2>&1 | head -20; echo \"=== diff INDEX ===\"; git diff --stat reports/INDEX.md", "description": "Read session surveillance header and INDEX diff"}`
+
+  ```
+surveille-sessions · 4 session(s) active(s) · 35 fichier(s) en mouvement
+  0733c5bb-f90b-4f58 · actif   ·  27 min · 6 réservation(s)
+  29ad180d-38a5-4481 · actif   ·  33 min · 5 réservation(s)
+  536cd5d6-94ac-4057 · actif   ·  33 min · 10 réservation(s)
+  e181ce02-cd50-488a · actif   ·  33 min · 15 réservation(s)
+  0733c5bb-f90b-4f58 · 2 fichier(s) : journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md, journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+  29ad180d-38a5-4481 · 0 fichier(s) : 
+  536cd5d6-94ac-4057 · 2 fichier(s) : docs/pilotage/README.md, reports/INDEX.md
+  e181ce02-cd50-488a · 2 fichier(s) : tools/pensee/operateurs.py, reports/pensee-porte-mobile.json
+  hub (partagé)      · 13 fichier(s) : docs/pilotage/README.md, journal/2026-11-02/README.md, journal/2026-11-02/apprentissage.md, journal/2026-11-02/attention.md, journal/2026-11-02/distribue.md …
+
+  orphelins (18) — à attribuer, commiter ou supprimer :
+    · docs/methode/portes.md
+    · docs/methode/ressources.md
+    · journal/README.md
+    · journal/THEMES.md
+    · journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+    · journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapp
+… [243 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'index alterné a désynchronisé l'index principal — je vérifie et je resynchronise proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | head -20; echo \"=== HEAD vs index ===\"; git diff --cached --stat | head -10", "description": "Inspect index desynchronization"}`
+
+  ```
+MM docs/methode/portes.md
+MM docs/methode/ressources.md
+MM docs/pilotage/README.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+=== HEAD vs index ===
+ docs/methode/portes.md                             |  12 +-
+ docs/methode/ressources.md                         |   5 -
+ docs/pilotage/README.md                            |   5 +-
+ journal/2026-11-02/README.md                       |  29 +-
+ journal/2026-11-02/apprentissage.md                |  10 +-
+ journal/2026-11-02/attention.md                    |  10 +-
+ journal/2026-11-02/distribue.md                    |
+… [190 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; unset GIT_INDEX_FILE; git read-tree HEAD; echo \"=== status après resync ===\"; git status --short | head -14; echo \"...\"; echo \"=== vérif : mes commits sont bien dans HEAD ===\"; git show --stat --oneline 2bbd45e2 | head -5; git sh … [106 caractères tronqués]`
+
+  ```
+=== status après resync ===
+ M reports/INDEX.md
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? reports/pensee-porte-mobile.json
+?? reports/rapport-pensee-porte-mobile.md
+?? tools/tests/qualifier_porte_mobile_drvm.py
+...
+=== vérif : mes commits sont bien dans HEAD ===
+2bbd45e2 DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE
+ docs/methode/ressources.md                         |   5 +
+ docs/pilotage/README.md                            |   5 +-
+ journal/2026-11-02/README.md                       |  13 +-
+ journal/2026-11-02/apprentissage.md                |   8 +-
+76862005 PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+ docs/methode/portes.md                             |  12 +-
+ journal/2026-11-02/README.md                       |   7 +-
+ journal/2026-11-02/apprentissage.md                |   2 +-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git checkout -- reports/INDEX.md; git status --short; echo \"=== passe ===\"; date; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; ls -t work/portes/passe-1102-19h32/*.log | head - … [125 caractères tronqués]`
+
+  ```
+M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? reports/pensee-porte-mobile.json
+?? reports/rapport-pensee-porte-mobile.md
+?? tools/tests/qualifier_porte_mobile_drvm.py
+=== passe ===
+lun 02 nov 2026 20:23:52 EST
+30
+porte-homeostasie 2 0
+porte-horloge 0 27
+work/portes/passe-1102-19h32/porte-indice.log
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  témoin   capture d'état    : position(s) [1440] écrite(s) dans /tmp/tmp.sWuzfGFXjc/etatC.*
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification que le journal du 03/11 se créera tout seul à minuit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"mkdir\\|strftime\\|jour\\|date\" tools/journal_auto.py | head -20; echo \"=== docstring ===\"; head -18 tools/journal_auto.py", "description": "Inspect journal auto day-folder logic"}`
+
+  ```
+2:"""journal_auto.py — le journal quotidien, ÉCRIT PAR JOUR (UN DOSSIER) ET PAR THÈME, à partir de git et des sessions.
+4:POURQUOI. Le journal doit consigner les **événements datés** (voir
+5:`docs/organisation-du-depot.md`), et une journée de ce dépôt est trop riche pour un seul
+6:fichier : un jour touche le moteur, les protocoles, les mesures, les portes et la
+7:documentation. D'où le découpage **`<AAAA-MM-JJ>_<thème>.md`** : on lit la journée d'un thème,
+8:et on suit un thème **d'un jour à l'autre** (le nom commence par la date, le thème suit —
+9:`ls journal/2026-10-1*/attention.md`).
+12:  1. **git** — les commits du jour (heure d'auteur, en heure locale de la machine) et les
+15:  2. **journal/sessions/** — les rapports de session dont la fenêtre de temps couvre le jour
+16:     (début et durée lus dans l'index `journal/README.md`, régénéré par
+25:  tools/journal_auto.py                     # aujourd'hui
+26:  tools/journal_auto.py --jour 2026-10-09   # un jour
+27:  tools/journal_auto.py --depuis 2026-10-08 # chaque jour depuis cette date
+28:  tools/journal_auto.py --lister            # les thèmes connus et leurs mots-clés
+29:  tools/journal_auto.py --dry-run           # montre san
+… [1497 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La réservation de la passe expire à 21 h 22 ; je vérifie l'outil et le runbook §9
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/ressources.py --help 2>&1 | head -30", "description": "Read resources tool CLI options"}`
+
+  ```
+usage: ressources.py [-h] [--ledger LEDGER] [--status] [--claim] [--release]
+                     [--check] [--strict] [--suggest] [--actual] [--autotest]
+                     [--session SESSION] [--job JOB] [--res RES] [--prio PRIO]
+                     [--eta ETA] [--note NOTE]
+
+ressources.py — le registre des ressources de Hauru et le protocole de claim.
+
+Pourquoi. Le pilotage réservait des **fichiers** (`sessions.py`) et surveillait les
+**fichiers en mouvement** (`surveille_sessions.py`), mais pas la **machine** : deux
+sessions pouvaient lancer deux entraînements sur le même GPU, ou saturer le même
+NVMe, sans le voir. Ce registre rend les ressources explicites, les réserve et met
+en file ce qui ne tient pas — pour éviter les attentes inutiles et les simultanéités
+intenses.
+
+Capacités (Hauru, 2026-11-02) :
+  gpu0 / gpu1 : 1 job exclusif, 16 Gio de VRAM, NUMA 0 (0-9,20-29)
+  cpu0        : 20 fils (0-9,20-29), réserve 4 → 16 fils utilisables
+  cpu1        : 20 fils (10-19,30-39), réserve 4 → 16 fils utilisables
+  ram         : 125 Gio, réserve 16 → 109 Gio utilisables
+  nvme_system : 1 IO lourde, / (Fanxiang 1 To : /, /home, /FastNVMe)
+  nvme_raid   : 1 IO lourde, /home/stephane/I
+… [504 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '164,228p' docs/pilotage/plan-travail.md", "description": "Read current runbook section 9"}`
+
+  ```
+**L'état au 02/11 16 h 09.** Deux sessions sont **en pause** (`e181ce02` L/B13, `fe3c05f0` D/R/A) ;
+leurs cycles sont committés. Deux chantiers n'ont **pas** de session : **N2** (GPU) et **S**
+(sous-module `tools/structures`). Le hub `536cd5d6` tient l'état, la roadmap et l'index ; les GPU
+sont revenus sains.
+
+**Le principe.** Un terminal = une session = un `plan.md` = un territoire. Une seule session écrit
+`en-cours` à la fois ; les autres **proposent** leur ligne au hub. Toutes les commandes se lancent
+depuis la racine du dépôt.
+
+**Les commandes.**
+
+| besoin | commande |
+|---|---|
+| ouvrir une **nouvelle** session | `dsh --profile dsh-tui` (ou `dsh dsh-tui`) |
+| **reprendre** une session | `dsh --profile dsh-tui --resume <id>` |
+| voir les mandats | `python3 tools/sessions.py --status` |
+| vérifier les mandats | `python3 tools/sessions.py --check --strict` |
+| voir les fichiers en mouvement | `python3 tools/surveille_sessions.py` |
+
+**Les quatre mandats, dans l'ordre de valeur.**
+
+1. **N2 — le natif (GPU).** **Session `0733c5bb` ouverte.** Lire `AGENTS.md`, `en-cours`,
+   `backlog/N2-distillation.md`. **200 k pas terminés** : val_fr **3,16**, littérature **5,61**,
+   anglais **7,
+… [2730 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le §9 a un en-tête périmé (16 h 09) et le mandat de nuit de N2 n'y figure pas. Je vérifie le plan N2 puis je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"nuit\\|R1.2\\|1024\\|1 024\" journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md | head -10; echo \"=== fin du plan ===\"; tail -18 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md", "description": "Che … [30 caractères tronqués]`
+
+  ```
+10:  native (R1.1/R1.2 côté N2), les fiches et les contrôles négatifs.
+12:  courbe de longueur), R1.1/R1.2 mesurés depuis N2
+17:  1 Go font-ils passer sous 2,5 sans perdre le français ?** — puis **R1.1/R1.2** : un schéma
+25:  R1.1/R1.2 (positions relatives) sur le second GPU ; 3) mesurer à budget constant, contrôle
+29:  R1.1/R1.2 doivent tester. Rien à rouvrir de N2.aa — le corpus n'est pas le levier.
+32:  la courbe 128/256/512/1000 est dans `work/n2ac/courbe-mix200.json` ; le banc **R1.1/R1.2** (RoPE)
+=== fin du plan ===
+  la courbe 129→512 devient-elle plate à coût de domaine nul ?
+- **Ambition** : que le programme N cesse de demander « plus de texte ? » et réponde
+  « plus de pas, quelle architecture de position, quelle fenêtre » — chaque réponse portée par
+  une mesure, un contrôle négatif et une fiche.
+- **Stratégie** : 1) lancer les 200 k pas à recette constante (34,3 M, canal, positions
+  aléatoires) sur `data/wiki_mix` et laisser tourner ; 2) pendant le run, préparer le banc
+  R1.1/R1.2 (positions relatives) sur le second GPU ; 3) mesurer à budget constant, contrôle
+  par permutation et courbe de longueur joints ; 4) fiche + JSON + état + commit explicite.
+- **Reprise** : `
+… [776 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "**L'état au 02/11 20 h 25.** Quatre sessions ont rouvert à 16 h 14–16 h 21 ; **D/R/A close** à\n18 h 45 ; **N2 close** à 19 h 46 puis **rouverte** pour la **nuit** (R1.2 à 1 024 octets, mandat\njusqu'à 08 h) ; **S** et **L/B13** actives.  … [506 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "   anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées**.\n   Prochaine action : **R1.2 à 1 024 octets** (mandat de nuit, jusqu'à 08 h) ; la fiche du run\n   200 k et le contrôle « depuis zéro » sont commi … [183 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ L'autre écrivain édite `plan-travail.md` en direct — je ne touche plus aux fichiers de pilotage pendant son tour.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; stat -c '%y %n' docs/pilotage/plan-travail.md docs/pilotage/en-cours.md; git diff --stat docs/pilotage/ | head; echo \"=== §9 actuel (début) ===\"; sed -n '160,170p' docs/pilotage/plan-travail.md; echo \"=== passe ===\"; date; wc -l <  … [156 caractères tronqués]`
+
+  ```
+2026-11-02 20:24:53.885986482 -0500 docs/pilotage/plan-travail.md
+2026-11-02 20:24:24.283191633 -0500 docs/pilotage/en-cours.md
+ docs/pilotage/en-cours.md     | 24 ++++++++++++------------
+ docs/pilotage/plan-travail.md | 25 +++++++++++++++++++++++++
+ docs/pilotage/roadmap.md      |  6 +++---
+ 3 files changed, 40 insertions(+), 15 deletions(-)
+=== §9 actuel (début) ===
+3. **Premier checkpoint** : le hub intègre les quatre sections, met à jour la roadmap et note le
+   journal. Ensuite, chaque session suit la cadence du § 4.
+
+## 9. Reprise après le reboot du 02/11 15 h 06 — ouvrir ou reprendre
+
+**L'état au 02/11 16 h 09.** Deux sessions sont **en pause** (`e181ce02` L/B13, `fe3c05f0` D/R/A) ;
+leurs cycles sont committés. Deux chantiers n'ont **pas** de session : **N2** (GPU) et **S**
+(sous-module `tools/structures`). Le hub `536cd5d6` tient l'état, la roadmap et l'index ; les GPU
+sont revenus sains.
+
+**Le principe.** Un terminal = une session = un `plan.md` = un territoire. Une seule session écrit
+=== passe ===
+lun 02 nov 2026 20:25:00 EST
+30
+porte-horloge 0 27
+  ```
+
+### 🤖 Assistant
+
+⏵ Je renouvelle la réservation de la passe (elle expire à 21 h 22) sans toucher aux fichiers de pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"déjà\\|deja\\|existe\\|même\\|meme\" tools/ressources.py | head -10; echo \"=== registre ===\"; python3 -c \"\nimport json; d=json.load(open('work/ressources.json'))\nprint(json.dumps(d, ensure_ascii=False, indent=1)[:1500])\ … [52 caractères tronqués]`
+
+  ```
+6:sessions pouvaient lancer deux entraînements sur le même GPU, ou saturer le même
+186:            errs.append("machine exclusive : des réservations sont déjà actives")
+195:                errs.append(f"{r} : déjà réservé (1 job exclusif à la fois)")
+209:                    errs.append(f"{r} : IO lourde déjà réservée")
+213:                    deja = reserves_go(ledger, r)
+214:                    if gb + deja > dispo:
+215:                        errs.append(f"{r} : {gb} Gio demandés + {deja} déjà réservés > {dispo} Gio libres")
+313:        print(f"  ❌ {args.session} / {args.job} a déjà une réservation active", file=sys.stderr)
+=== registre ===
+{
+ "claims": [
+  {
+   "id": "0733c5bb:r12-1024:1793667971",
+   "session": "0733c5bb",
+   "job": "r12-1024",
+   "res": {
+    "gpu0": "exclusive",
+    "cpu0": 12,
+    "ram": 60
+   },
+   "prio": 1,
+   "eta_min": 240,
+   "created": "2026-11-02T20:06:11"
+  },
+  {
+   "id": "536cd5d6:portes:1793667971",
+   "session": "536cd5d6",
+   "job": "portes",
+   "res": {
+    "gpu1": "exclusive",
+    "cpu1": 8,
+    "ram": 8
+   },
+   "prio": 1,
+   "eta_min": 110,
+   "created": "2026-11-02T20:06:11"
+  },
+  {
+   "id": "29ad180d:analyseur:1793667971",
+   "session": 
+… [384 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -4 work/portes/passe-1102-19h32/porte-indice.log; echo \"=== processus indice ===\"; ps -o etime,pcpu,args -p 384759 --no-headers 2>/dev/null | cut -c1-100; echo \"=== git ===\"; git status --short | grep -v \"journal/\" | head -8 … [77 caractères tronqués]`
+
+  ```
+capture d'état    : position(s) [1439] écrite(s) dans /tmp/tmp.sWuzfGFXjc/etatB.*
+    capture d'état    : position(s) [1469] écrite(s) dans /tmp/tmp.sWuzfGFXjc/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  témoin   capture d'état    : position(s) [1440] écrite(s) dans /tmp/tmp.sWuzfGFXjc/etatC.*
+=== processus indice ===
+=== git ===
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/pensee-porte-mobile.json
+A  reports/rapport-pensee-porte-mobile.md
+M  tools/pensee/operateurs.py
+lun 02 nov 2026 20:25:18 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que `porte-indice` finit, je prépare les repères à mettre à jour dans les références
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '108,150p' docs/pilotage/references-non-regression.md", "description": "Read reference numbers section 2"}`
+
+  ```
+## 2. Les repères imprimés par chaque porte
+
+| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-10-11 06:30) |
+|---|---|---|
+| `porte-audit-drapeaux.sh` | 149 s | ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun |
+| `porte-budget.sh` | 42 s | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |
+| `porte-bus.sh` | 75 s | ✅ le canal diffusé par fichier change la région du milieu |
+| `porte-bus-socket.sh` | 88 s | ✅ le bus du pilote agit (113.0068 -> 148.9144) |
+| `porte-c4-retard.sh` | 60 s | PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne |
+| `porte-coupe.sh` | 125 s | ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit |
+| `porte-delais.sh` | 20 s | ✅ le temps, lui, augmente : 6.43 s → 9.75 s (+3.3 s ≈ 50 ms × 64 pas) |
+| `porte-episodique.sh` | 166 s | ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un |
+| `porte-etat.sh` | 0,1 s | ✅ aucun fait commité après le dernier état ; contrôle négatif : 3 refus attendus, 3 passes |
+| `porte-flux.sh` | 20 s | mode 4 — lot en listes   
+… [3080 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente courte de la fin de `porte-indice` et du commit de l'autre écrivain
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 150; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"=== git ===\"; git log --one … [118 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-159]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-159", "timeout_ms": 120000, "wait": true}`
