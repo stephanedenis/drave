@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.7 h |
+| Durée | 4.9 h |
 | Tours | 23 |
-| Messages | 259 |
-| Appels d'outils | 269 |
+| Messages | 261 |
+| Appels d'outils | 271 |
 | Fichiers touchés | 6 |
-| Commandes | 206 |
+| Commandes | 207 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -457,18 +457,19 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
 - job_output
 - bash — Ten-minute timer with pass status
+- bash — Ten-minute timer to pass completion
 
 **Synthèse produite :**
 
-⏵ Cadence 10 min validée ; 66/81 portes (63 vertes, 3 tolérées)
+⏵ 73/81 : les **quatre** rouges connues sont là (`indice`, `melange`, `reparti-moteur`, `homeostasie`), aucune surprise
 
-`porte-pont` (89 s) et `porte-prechargement` (175 s) sont vertes. Passe à **66 portes, 63 vertes, 3 rouges tolérées**. Prochaine lourde : `profondeur-routee` (558 s). J'attends 10 min.
+`porte-reparti-moteur` est tombée (code 1, 51 s) — c'est la quatrième rouge **tolérée** attendue. Passe à **73 portes, 69 vertes, 4 rouges connues**. Restent `sauvegarde-modele`, `sessions`, `speculatif`, `tableaux`, `tokenizer-kimi`, `topologie`, `trace`, `vision` (559 s).
 
 ## 3. Travail accompli
 
@@ -525,7 +526,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 166 autres
+- … et 167 autres
 
 ## 4. Mesures et résultats marquants
 

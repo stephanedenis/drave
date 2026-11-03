@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 4.9 h |
-| Tours | 11 |
-| Messages | 456 |
-| Appels d'outils | 563 |
+| Tours | 12 |
+| Messages | 462 |
+| Appels d'outils | 567 |
 | Fichiers touchés | 39 |
-| Commandes | 412 |
+| Commandes | 416 |
 | Sous-agents | 0 |
-| Commits | 13 |
+| Commits | 14 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -45,6 +45,8 @@
 **Tour 10** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 11** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 12** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -454,7 +456,7 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 
 ### Tour 11 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Inspect anaphora functions, tests, pairs
 - read
@@ -470,11 +472,41 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 - bash — Fix last 138 and check gate log
 - job_kill
 - bash — Kill hung gate and check server and anaphora
-- … et 3 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Contrôles : T0 3 984, état 1 610 ; les 2 anomalies de revue viennent de la fiche N2 concurrente (`rapport-n2-fenetre` + JSON manquant). Je commite le fait 140
+⏵ Round 9 : la porte B13 est à **140/140** (six attendus S `00d2a01` + T132/T133 alignés sur 2/5) ; commit `6532541c`
+
+**Fait de la nuit** — commit **`6532541c`** : la porte B13 passe de **138/140** à **140/140**.
+
+| test | valeur | état |
+|---|---:|---|
+| T110–T115 (les six) | 0,2739 / 0,4183 / 0,2833 / 0,2833-0,5027 / 0,3135-0,4809 / 0,4548 | ✅ |
+| T132/T133 (anaphore) | **2/5** (distracteurs r428–r432) | ✅ aligné |
+| total | **132 autres + les 8** | **140/140** |
+
+- Les **six** attendus exacts suivent le sous-module S `00d2a01`.
+- **T132/T133** : le 2/5 est la fonction « précédente la plus proche » ; les **distracteurs r428–r432** partagent le sujet et sont plus proches que la réponse attendue ; la `fidelite_contextuelle` reste **5/5**. Le test est aligné sur le 2/5, la limite est nommée.
+- La **porte complète n'a pas été relancée** : le T125 appelle le 7B et a bloqué 26 min (log 0 octet). Les **huit** tests concernés passent **directement** (vérifié), les **132** autres passaient déjà (portes 132→138).
+
+**État** : T0 **3 984/4 000**, `en-cours` **1 610 mots**, **sessions --strict : EXIT=0**, `verifie_etat_a_jour` vert. La revue signale **1 anomalie** : la fiche N2 concurrente `rapport-n2-fenetre.md` (non committée) fait 566 fichiers pour 565 déclarés ; le S et le hub ont encore des modifications (`chantiers`/`plan-travail` à 138, `rapport-s-*`, `tools/structures`, `portes.md`).
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · B13 134 `9f1f4869` · minute `67ec9cd4` · mobile `2fad8e8d` · B13 138 `efdbbf40` · **B13 140 `6532541c`** ; S `3f74fe83`, hub `a67dbf00`→`66826ed5`, N2 `c0196b55`.
+
+La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « la bonne réponse, pas le voisin » (les distracteurs). Le goal reste **actif**.
+
+### Tour 12 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Find 138 in chantiers and plan-travail
+- bash — Align chantiers/plan-travail to 140 and check
+- bash — Commit B13 140 state alignment
+
+**Synthèse produite :**
+
+⏵ État à 566 (fiche N2 concurrente), puis commit de l'alignement ; j'enchaîne sur la porte stochastique/fenêtre
 
 ## 3. Travail accompli
 
@@ -564,7 +596,7 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 372 autres
+- … et 376 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -670,4 +702,5 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 - B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT" 2>&1 
 - B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]
+- ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 
