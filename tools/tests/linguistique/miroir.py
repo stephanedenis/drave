@@ -210,6 +210,8 @@ def _simple(a: bl.Annotation) -> bool:
     La paire assertion ↔ question est une phrase **simple** : « Tu viens demain. » (GV + GP de
     temps) n'a pas de SUB ; « Si tu viens, nous partirons. » en a une — ce n'est pas la paire.
     """
+    if ";" in a.texte:
+        return False  # juxtaposition : deux propositions, pas une phrase simple
     return not any(e.niveau == "syntagme" and e.type in ("SUB",) for e in a.etiquettes)
 
 

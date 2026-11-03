@@ -22237,3 +22237,86 @@ ok
 ⏵ Round 157 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite la contrainte « phrase simple »
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10, simple'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encod … [952 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  581 fiches → reports/INDEX.md
+  revue de documentation · 584 fiche(s) · 669 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master b100996f] L/B13 — LA PHRASE SIMPLE : r222 ÉCARTÉ, LES PAIRES RESTENT 5/10 (LES JUXTAPOSITIONS PASSENT)
+ 20 files changed, 486 insertions(+), 58 deletions(-)
+ create mode 100644 reports/pensee-lien-simple.json
+ create mode 100644 reports/rapport-pensee-lien-simple.md
+EXIT=0
+b100996f L/B13 — LA PHRASE SIMPLE : r222 ÉCARTÉ, LES PAIRES RESTENT 5/10 (LES JUXTAPOSITIONS PASSENT)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 157 : « phrase simple » committé (`b100996f`, 20 fichiers) — r222 écarté, paires toujours **5/10**, T0 4 000
+
+**Fait de la nuit — round 157** : la contrainte « phrase simple ».
+
+- **Contrainte ajoutée** : `_simple(a)` — une question se lie à une phrase **sans SUB**. C'est ce qui écarte r222 « Si tu viens, nous partirons. » (SUB).
+- **Résultat** : les 10 paires restent **5/10** (r418–r422 5/5, r408–r412 0/5).
+- **Les juxtapositions passent** : r409 → **r344** « Le chat mange ; il dort. », r410 → **r390** « La cloche sonne ; elle appelle. », r411 → **r354** « Marie et Paul dansent ; ils s'amusent. » — l'heuristique ne les étiquette pas SUB ; r408 et r412 tombent à `None`.
+- **Contrôle négatif** : r222 est bien écarté (la contrainte fonctionne sur les SUB marquées) ; r418–r422 restent 5/5.
+- **Ce qui rendrait le résultat faux** : propositions juxtaposées non marquées SUB, 10 paires d'un même bloc.
+- Fiche `rapport-pensee-lien-simple.md` ; JSON `pensee-lien-simple.json`.
+
+**État** : HEAD `b100996f` ; T0 **4 000** ; revue **584/669** verte ; N2 intact ; serveur 7B sain.
+
+La suite : exiger **un seul GV** (pas de point-virgule) dans l'antécédent, ou documenter que le lien ne résout que les paires simples ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+
+## Tour 160
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 158/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 158 : j'exige un **seul GV** (pas de `;`) dans l'antécédent — les juxtapositions r344/r390/r354 doivent tomber ; je mesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''    return not any(e.niveau == \"syntagme\" and e.type in (\"SUB\",) for e in a.etiquettes)'''\nnew='''    if \";\" in a.te … [1054 caractères tronqués]`
+
+  ```
+ok
+r408  'Ne viens-tu pas demain ?'     -> -     ''                             attendu r423 NON
+r409  'Ne mange-t-il pas ?'          -> r306  'Il ne vient pas.'             attendu r424 NON
+r410  'Ne dort-elle pas ?'           -> r308  'Marie lit. Elle aime les livres.' attendu r425 NON
+r411  'Ne partent-ils pas ?'         -> r190  'Ils arrivent demain.'         attendu r426 NON
+r412  'Ne lis-tu pas ?'              -> -     ''                             attendu r427 NON
+r418  'Tu ne viens pas demain ?'     -> r423  'Tu viens demain.'             attendu r423 OK
+r419  'Il ne mange pas ?'            -> r424  'Il mange.'                    attendu r424 OK
+r420  'Elle ne dort pas ?'           -> r425  'Elle dort.'                   attendu r425 OK
+r421  'Ils ne partent pas ?'         -> r426  'Ils partent.'                 attendu r426 OK
+r422  "You don't come tomorrow?"     -> r427  'You come tomorrow.'           attendu r427 OK
+justes 5 / 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 158 : la contrainte `;` écarte r344/r390/r354, mais r409→r306, r410→r308, r411→r190 — les paires restent **5/10** ; je fige et je note la vraie limite : le lien prend **n'importe quelle phrase simple** au bon sujet+verbe
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [4471 caractères tronqués]`
+
+  ```
+json 2559 justes 5
+fiche 2508
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 158 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite la contrainte « un seul GV »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (GV)'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encoding … [938 caractères tronqués]`
