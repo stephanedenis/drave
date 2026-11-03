@@ -6534,3 +6534,38 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-308", "timeout_ms": 420000, "wait": true}`
+
+  ```
+01:35:40
+rope2048-1.25k fini 22:22:47
+rope2048-12.5k fini 01:33:35
+work/n2ac/rope2048-12.5k.pt
+OK2048
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-297 (bash: sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK; tail -c 200 work/n2ac/mix1024-30k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-299 (bash: sleep 2700; echo "---"; date '+%H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-304 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048; cat work/n2ac/chaine_2048_wiki.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ 2 048 à 15 k pas terminé ; lancement de l'attaque de la porte 2,5 et évaluation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_porte.sh 1 > work/n2ac/chaine_porte.out 2>&1 & echo \"porte lancée pid $!\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/rope2048-12.5k.pt --rope --longueurs 128,256,512,1 … [207 caractères tronqués]`
+
+  ```
+porte lancée pid 830873
+[still running after 60000ms; moved to background job bash-309]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-309", "timeout_ms": 300000, "wait": true}`

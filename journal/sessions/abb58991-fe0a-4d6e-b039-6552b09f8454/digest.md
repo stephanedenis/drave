@@ -22422,3 +22422,23 @@ ok
 ⏵ Round 159 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite le constat « plafond 5/10 »
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (plafond)'\nnew=' ; voisin 5/5, inversé 5/10 (max)'\nassert old in t\nt=t.replace(old,new,1)\np.write_text … [973 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4001 mots (budget 4 000)
+  583 fiches → reports/INDEX.md
+  revue de documentation · 586 fiche(s) · 671 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master d0589cd3] L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE
+ 18 files changed, 529 insertions(+), 44 deletions(-)
+ create mode 100644 reports/pensee-lien-thematique.json
+ create mode 100644 reports/rapport-pensee-lien-thematique.md
+EXIT=0
+d0589cd3 L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 159 : T0 toujours à 4 001 ; je raccourcis d'un mot et je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (max)'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encodin … [551 caractères tronqués]`

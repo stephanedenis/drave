@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 9.3 h |
 | Tours | 161 |
-| Messages | 1098 |
-| Appels d'outils | 894 |
+| Messages | 1099 |
+| Appels d'outils | 895 |
 | Fichiers touchés | 48 |
-| Commandes | 720 |
+| Commandes | 721 |
 | Sous-agents | 0 |
-| Commits | 85 |
+| Commits | 86 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4074,16 +4074,17 @@ La suite : contrainte **thématique** (partager le complément/le temps) ou appr
 
 ### Tour 161 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Compare adverbs in pair vs distractor
 - bash — Add thematic adverb constraint and measure
 - bash — Freeze thematic constraint final measurement
 - bash — Commit thematic ceiling fact
+- bash — Shorten state and commit
 
 **Synthèse produite :**
 
-⏵ Round 159 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite le constat « plafond 5/10 »
+⏵ Round 159 : T0 toujours à 4 001 ; je raccourcis d'un mot et je commite l'état
 
 ## 3. Travail accompli
 
@@ -4182,7 +4183,7 @@ La suite : contrainte **thématique** (partager le complément/le temps) ou appr
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 680 autres
+- … et 681 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4370,4 +4371,5 @@ La suite : contrainte **thématique** (partager le complément/le temps) ou appr
 - L/B13 — LA PHRASE SIMPLE : r222 ÉCARTÉ, LES PAIRES RESTENT 5/10 (LES JUXTAPOSITIONS PASSENT)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format=
 - L/B13 — UN SEUL GV : LES JUXTAPOSITIONS TOMBENT, LES PAIRES RESTENT 5/10 (LA PAIRE THÉMATIQUE MANQUE)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 
 - L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log
+- ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1; python3 tools/revue_document
 
