@@ -11850,3 +11850,65 @@ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check s
 ⏵ Le hook exige une **modification** d'`en-cours` avec la roadmap ; je mets l'horodatage à jour et je recommite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && h=$(date '+%H h %M'); sed -i \"s/^\\*\\*Mis à jour : 2026-11-03, 08 h 08 HNE/**Mis à jour : 2026-11-03, ${h} HNE/\" docs/pilotage/en-cours.md; grep -n 'Mis à jour' docs/pilotage/en-cours.md | head -1; git add docs/pilotage/en-cours.m … [516 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-11-03, 08 h 24 HNE (heure locale, EST).**
+[master 5b3d37a8] ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08
+ 13 files changed, 159 insertions(+), 27 deletions(-)
+[commit 0]
+5b3d37a8 ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-63a3e56f-d66e-4e43-8974-db1c692b5e45","revision":1,"objective":"Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante.","phase":"active","roundsStarted":63,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-63a3e56f-d66e-4e43-8974-db1c692b5e45", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante.
+
+
+  ```
+{"goal":{"id":"goal-63a3e56f-d66e-4e43-8974-db1c692b5e45","revision":2,"objective":"Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante.","phase":"complete","roundsStarted":63,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pilotage est aligné sur les états réels ; le goal de nuit est clos.
+
+**Oui, maintenant** (03/11, 08 h 24) — le pilotage et les plans disent la même chose :
+
+| session | état | plan | dernier heartbeat | claim |
+|---|---|---|---|---|
+| **N2** `0733c5bb` | **en pause** | `en pause` | 00 h 25 | libéré |
+| **S** `29ad180d` | **en pause** | `en pause` | 20 h 40 | libéré |
+| **B13** `e181ce02` | actif | `actif` | 21 h 43 | `b13-gold` |
+| **hub** `536cd5d6` | actif | `actif` | 08 h 24 | `veille` |
+
+## Ce qui a été corrigé
+
+- **N2 et S** : arrêt constaté (plus de claim) → plans `État : en pause`, en-cours à jour ; reprise possible à leur réouverture. La porte sessions ne les signale plus périmés.
+- **Passe de 04 h 10** : **82 portes, 77 vertes, 5 rouges** ; la 5e (`porte-sessions`) était la **coordination N2/S**, **rejouée verte** après leur mise en pause ; les **4 rouges connues** restent seules.
+- **B13** : gold 432 réel **true**, DRVM/native 114/114 + 5/5, T132/T133 ; plan à rafraîchir (heartbeat 21 h 43, claim `b13-gold`).
+- **Hub** : bilan de 08 h écrit ; passe 82/77/5 ; 82e `porte-ressources` validée ; `porte-sessions` verte.
+- **Alignés** : `en-cours` 08 h 24, `roadmap` 08 h 08 (N2/S pause, B13 gold 432), `references` (2 391 mots), `journal/2026-11-03` (bilan), README/INDEX 587/674.
+- **Vérifs** : `sessions.py --check --strict` ✅ · `porte-sessions` ✅ · `taille` 3 993/4 000 ✅ · revue 587/674/82 ✅ · `verifie_journal` ✅.
+- **Commits** : `b6c8246b` (bilan), `0b53a31c` (références), `f73a73f1` (5e rouge close), `5b3d37a8` (roadmap).
+
+## Ce qui reste ouvert
+
+- **B13 et hub** : sont-ils encore ouverts dans leurs terminaux ? Si oui, leurs claims couvrent les heartbeats longs (aucune action) ; si non, je les passe en pause comme N2/S.
+- **N2/S** : reprendront quand tu les rouvriras ; la validation humaine de la banque S (200 phrases) t'attend.
+- **Le goal de nuit est clos** : les quatre sessions ont été suivies jusqu'à 08 h, la passe, le registre et le bilan sont dans l'état, la roadmap et le journal.
+
+
+## Tour 73
+
+### 👤 Utilisateur
+
+y a-t-il des conflits possibles entre les sessions parallèles?
+

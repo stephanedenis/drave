@@ -7,19 +7,21 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 15.0 h |
-| Tours | 27 |
-| Messages | 448 |
-| Appels d'outils | 449 |
+| Durée | 16.6 h |
+| Tours | 28 |
+| Messages | 457 |
+| Appels d'outils | 459 |
 | Fichiers touchés | 6 |
-| Commandes | 319 |
+| Commandes | 327 |
 | Sous-agents | 0 |
-| Commits | 13 |
+| Commits | 14 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
 
 - **create** — Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du 
+… [182 caractères tronqués]
+- **resume** — Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du 
 … [182 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -77,6 +79,8 @@
 **Tour 26** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 **Tour 27** — background job bash-290 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -fc "toutes-les-portes.sh" || true; echo "portes: $(ls tools/porte-*.sh | wc -l)"; cat >> work/hub-nuit.md <<'EOF'  ## 04 h 10 — LA FENÊTRE « MACHINE AU REPOS » S'OUVRE : PASSE 82  Les deux GPU sont **libres** (370 / 122 MiB, 0 %) et les claims des sessions sont **périmés** (N2 a fini son run de nuit, GPU inac … [674 caractères tronqués]
+
+**Tour 28** — continue, la validation va attendre un autre jour.
 
 ## 2. Déroulé, étape par étape
 
@@ -586,6 +590,25 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 3. **Committer ou laisser finir** les fichiers en cours de N2 (3) et Pensée (2) — 10 fichiers modifiés
 … [469 caractères tronqués]
 
+### Tour 28 — continue, la validation va attendre un autre jour.
+
+*10 appels d'outils.* Actions notables :
+
+- update_goal
+- bash — Resume goal and check morning state
+- bash — Read current state sessions and next actions
+- bash — Inspect pending reports completeness
+- bash — Check N2 fiche/JSON pairing and counters
+- bash — Full pending file list excluding journal
+- bash — Validate N2 pending files before commit
+- bash — Read N2 section in current state
+- bash — Commit N2 pending files with state line
+- job_output
+
+**Synthèse produite :**
+
+⏵ Je commite les 7 fichiers de N2 (en pause) avec leur ligne d'état, sans toucher à Pensée (active).
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -641,7 +664,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 279 autres
+- … et 287 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -738,6 +761,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T27** `[still running after 60000ms; moved to background job bash-306]`
 - **T27** `- **N2** : `r12-1024` sur GPU0 et `r12-mix-512-gpu1` sur GPU1 ; fiche fenêtre 8,7 Ko, JSON `n2-fenetre.json` attendu.`
 - **T27** `[still running after 60000ms; moved to background job bash-318]`
+- **T28** `[still running after 60000ms; moved to background job bash-327]`
 
 ## 5. Erreurs rencontrées
 
@@ -762,4 +786,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-etat.txt <<'EOF' ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉ
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v journal | head -8; cat > work/msg-passe82.txt <<'EOF' PASSE — 82 PORTES SUR MAC
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-bilan.txt <<'EOF' JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACH
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md"); t = p.read_text(encoding="utf
 

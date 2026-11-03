@@ -61,6 +61,7 @@ Même recette (RoPE, 1 024), mais **20 000 pas** — donc **8× plus d'octets** 
 |---|---:|---:|---:|---:|---:|---:|
 | fenêtre 256, 20 000 pas | 20,5 Mo | 3,3696 | 3,2892 | 3,2545 | 3,2459 | 3,2305 |
 | **fenêtre 1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |
+| fenêtre 2 048, 15 000 pas | 246 Mo | 3,0065 | 2,7227 | **2,6118** | **2,5514** | **2,5114** |
 
 Ce n'est pas une comparaison de fenêtre (les octets diffèrent) : c'est la **recette** à 1 024 qui
 monte en régime. La comparaison honnête est **à corpus et recette égaux** — le run de R1.1
@@ -76,6 +77,12 @@ monte en régime. La comparaison honnête est **à corpus et recette égaux** �
 −0,37 en domaine et **−0,63 à 1 000 octets**, et l'écart **croît avec la longueur**. Sur le même
 corpus, la porte 2,5 n'est plus qu'à **0,13** en domaine à 1 000 octets (2,6256), là où la
 recette à fenêtre 256 était à **0,75** (3,2545).
+
+**Le point d'équilibre se déplace avec le budget** : à 246 Mo vus (15 000 pas à 2 048), la
+fenêtre 2 048 reprend la tête au long — **2,5114** à 4 000 octets, le meilleur chiffre de la nuit
+sur `val_fr`, contre 2,5429 pour 1 024 — mais elle reste derrière à 128 octets (3,0065 contre
+2,9955). « 1 024 est le point d'équilibre » vaut donc **à 20,5 Mo de budget** : plus on paie
+d'octets, plus la fenêtre large devient rentable.
 
 Réserve de corpus : ce modèle n'a vu que `wiki_fr`, dont la validation `val_fr` est le domaine ;
 les modèles du mélange (production) paient la largeur en domaine (`mix-200k` : 3,1591). Le
@@ -119,8 +126,11 @@ n'est pas atteinte.
   l'effet isolé de la fenêtre (les octets ont été multipliés par 8).
 - **La validation interne et les validations d'évaluation** ne sont pas le même texte ; les
   écarts inférieurs à 0,05 ne sont pas interprétables.
-- **Le coût d'inférence quadruple** à chaque doublement de fenêtre : la PPL ne le montre pas, et
-  la décision de production devra le payer.
+**Le coût d'inférence ne quadruple pas.** Mesuré à batch 8 (`work/n2ac/cout_fenetre.py`),
+le débit passe de **22 306** octets/s (fenêtre 256) à **22 730** (512), **21 156** (1 024) et
+**19 405** (2 048) : l'attention quadruple à chaque doublement, mais le FFN **domine** à 34,3 M,
+donc le débit ne perd que **13 %** de 256 à 2 048. La fenêtre est presque gratuite à cette
+taille — elle ne le resterait pas à plus grande échelle.
 
 ## Fichiers
 

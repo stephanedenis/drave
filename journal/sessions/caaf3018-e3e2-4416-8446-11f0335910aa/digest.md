@@ -7738,3 +7738,202 @@ Error: complete and blocked require a direct human turn or the current goal roun
 
 **Coordination** : `sessions --check --strict` sort en 1 (plans N2 00 h 25 et S 20 h 40 périmés sans claim) alors que les sessions vivent — à rafraîchir ou à passer en pause. Trois autres sessions reprises tournaient en parallèle (dont un second hub) ; l'incident « 82ᵉ porte emportée par un commit à index alterné » a été corrigé et **la leçon est consignée** dans `plan-travail.md` §4 (`git read-tree HEAD` après un commit à index alterné).
 
+
+## Tour 28
+
+### 👤 Utilisateur
+
+continue, la validation va attendre un autre jour.
+
+### 🤖 Assistant
+
+⏵ La validation est reportée. Je réarme le goal et j'enchaîne sur le bilan de 8 h et le nouvel état.
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-88b10965-3fd1-4a98-b327-a3923f75e06c", "revision": 1}`
+
+> **Objectif** (resume) : Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.
+
+
+  ```
+{"goal":{"id":"goal-88b10965-3fd1-4a98-b327-a3923f75e06c","revision":2,"objective":"Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.","phase":"active","roundsStarted":22,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; git log --oneline -2; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|pause\" | head -5; echo \"--- git ---\"; git status --short | grep -v journal | head -8; echo \"--- gpu ---\"; nvid … [130 caractères tronqués]`
+
+  ```
+08:49
+5b3d37a8 ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08
+f73a73f1 ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S)
+--- sessions ---
+    0733c5bb-f90b-4f58 · en pause · 504 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    29ad180d-38a5-4481 · en pause · 729 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 618 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 666 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (618 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+--- git ---
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/n2-porte-propre.json
+?? reports/n2-production-fenetre.json
+?? reports/pensee-porte-fe
+… [58 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ 08 h 49 : N2 et S sont en pause, la 5ᵉ rouge est close. Je regarde l'état et les rapports non committés de N2/Pensée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"en pause\\|validation\\|Prochaine action\\|Ce qui reste\" -A1 docs/pilotage/en-cours.md | head -30", "description": "Read current state sessions and next actions"}`
+
+  ```
+17:> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+18->
+--
+21:> est validée. **N2 et S sont en pause** (derniers heartbeats 00 h 25 / 20 h 40 ; claims libérés) ;
+22-> le **B13** et le **hub** restent actifs. La suite : une passe **82** stable ; détail dans
+--
+36:- **Ce que font les autres** : **N2**, **S** (en pause), **Pensée**.
+37:- **Prochaine action** : le **bilan de 08 h** est écrit ; clôture ; la passe **82** stable.
+38-- **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
+--
+52:- **Prochaine action** : **en pause** (dernier heartbeat 20 h 40 ; claim libéré) ; à la reprise :
+53:  h050/h053, puis validation humaine de la banque.
+54-- **Bloquants** : aucun ; **banque à 0** verdict.
+--
+74:- **Prochaine action** : **gold 432 réel (0,9954)** ; **DRVM/native 114/114+5/5** ; la suite :
+75-  **T132/T133**, gold 200+ ; **porte B13** attend S.
+--
+90:- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; fiche/JSON
+91-  `rapport-n2-fenetre` committés ; à la reprise : contrôle depuis zéro, clôture.
+--
+139:## Ce qui reste
+140-
+141:**R1** — R1.2-1024 ; **Pensée** — gold 200+ ; **S** — homogra
+… [129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for f in reports/rapport-n2-fenetre.md reports/rapport-n2-r12-2048.md reports/rapport-n2-porte-propre.md reports/rapport-n2-production-fenetre.md reports/pensee-porte-fenetre-500.json; do echo \"--- $f\"; head -3 \"$f\" 2>/dev/null | c … [235 caractères tronqués]`
+
+  ```
+--- reports/rapport-n2-fenetre.md
+# N2/R1 — La fenêtre entraînée, de 128 à 1 024 : elle gagne où elle sert, et elle bat 200 000 pas
+
+> **Lignes de roadmap** : **R1** (la fenêtre native) et **N2** (le modèle de production) ·
+--- reports/rapport-n2-r12-2048.md
+# R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données g
+
+> **Ligne de roadmap** : R1 (la fenêtre native) · **Date** : 2026-11-03 · **Verdict** : à
+--- reports/rapport-n2-porte-propre.md
+# N2 — La porte < 2,5 sur le corpus propre, attaquée avec la fenêtre
+
+> **Ligne de roadmap** : N2 (la porte de perplexité) · **Date** : 2026-11-03 · **Verdict** :
+--- reports/rapport-n2-production-fenetre.md
+# N2 — La production à fenêtre entraînée (512 / 1 024 / 2 048) et le compute qui va avec
+
+> **Ligne de roadmap** : N2 (le modèle de production) · **Date** : 2026-11-03 · **Verdict** :
+--- reports/pensee-porte-fenetre-500.json
+{
+  "date": "2026-11-02 22:39 EST",
+  "modele": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+--- tailles ---
+ne 2317  3 nov 02:37 reports/n2-porte-pro
+ne 4055  3 nov 02:52 reports/n2-productio
+ne 
+… [38 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Sédimentation : N2 (en pause) a des JSON non committés, dont deux fiches déjà committées. Je vérifie les paires fiche/JSON.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for j in n2-porte-propre n2-production-fenetre; do echo \"--- $j : fiche committée ? $(git log --oneline -1 -- reports/rapport-$j.md | cut -c1-40) ; json suivi ? $(git ls-files reports/$j.json)\"; done; echo \"--- r12-2048 ---\"; git l … [391 caractères tronqués]`
+
+  ```
+--- n2-porte-propre : fiche committée ?  ; json suivi ? 
+--- n2-production-fenetre : fiche committée ?  ; json suivi ? 
+--- r12-2048 ---
+reports/n2-r12-2048.json
+reports/rapport-n2-r12-2048.md
+--- n2-fenetre ---
+reports/n2-fenetre.json
+reports/rapport-n2-fenetre.md
+--- compteurs ---
+118:| fichiers / JSON de résultats | **587** / **674** | `reports/*.md` / `reports/*.json` |
+disque: 587 fiches, 674 JSON
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v \"^MM journal\\|^ M journal\\|^?? journal\" | head -20; echo \"--- total ---\"; git status --short | wc -l", "description": "Full pending file list excluding journal"}`
+
+  ```
+D  journal/2026-11-03/portes.md
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/n2-porte-propre.json
+?? reports/n2-production-fenetre.json
+?? reports/pensee-porte-fenetre-500.json
+?? reports/rapport-n2-porte-propre.md
+?? reports/rapport-n2-production-fenetre.md
+--- total ---
+25
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 est en pause avec 6 fichiers non committés (dont 2 fiches neuves). Je vérifie qu'ils sont complets avant de les committer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for f in reports/rapport-n2-porte-propre.md reports/rapport-n2-production-fenetre.md; do echo \"=== $f\"; grep -m2 -E \"Verdict|Date\" \"$f\" | cut -c1-160; done; echo \"=== JSON valides ? ===\"; for j in reports/n2-porte-propre.json r … [352 caractères tronqués]`
+
+  ```
+=== reports/rapport-n2-porte-propre.md
+> **Ligne de roadmap** : N2 (la porte de perplexité) · **Date** : 2026-11-03 · **Verdict** :
+=== reports/rapport-n2-production-fenetre.md
+> **Ligne de roadmap** : N2 (le modèle de production) · **Date** : 2026-11-03 · **Verdict** :
+=== JSON valides ? ===
+reports/n2-porte-propre.json clés: 7
+reports/n2-production-fenetre.json clés: 11
+reports/n2-r12-2048.json clés: 11
+=== diffs M ===
+ reports/n2-r12-2048.json       | 28 ++++++++++++++++++++++++++++
+ reports/rapport-n2-fenetre.md  |  7 +++++--
+ reports/rapport-n2-r12-2048.md | 14 ++++++++++++--
+ 3 files changed, 45 insertions(+), 4 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 78,100p docs/pilotage/en-cours.md", "description": "Read N2 section in current state"}`
+
+  ```
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — la fenêtre et la production.
+- **Plan** : fenêtre, production, porte.
+- **Ambition** : la longueur d'abord.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
+- **Objectif final** : la production qui tient au long.
+- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la
+  **porte propre**, le contrôle depuis zéro.
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; fiche/JSON
+  `rapport-n2-fenetre` committés ; à la reprise : contrôle depuis zéro, clôture.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+
+> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP (91 scans, 60 documents, 1 982 p,
+> 4,41 M car.) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+
+## Ce qui es
+… [10 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite les 7 fichiers de N2 (en pause) avec leur ligne d'état, sans toucher à Pensée (active).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"\"\"- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la\n  **porte  … [2366 caractères tronqués]`

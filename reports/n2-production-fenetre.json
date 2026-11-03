@@ -1,0 +1,217 @@
+{
+ "temoin_n2ac": {
+  "fichier": "mix-60k.pt",
+  "params": 34301224,
+  "val_fr_L128": 3.4902,
+  "val_fr_L256": 3.4615,
+  "val_fr_L512": 3.5169,
+  "val_fr_permute": 215.5638,
+  "val_big_L128": 3.3565,
+  "val_big_L256": 3.2716,
+  "val_big_L512": 3.3685,
+  "val_big_permute": 226.8678,
+  "corpus_propre_val": 9.2731,
+  "litterature": 6.0283,
+  "anglais": 8.3352,
+  "wikitext2": 9.0525
+ },
+ "temoin_200k": {
+  "fichier": "mix-200k.pt",
+  "params": 34301224,
+  "val_fr_L128": 3.1591,
+  "val_fr_L256": 3.2047,
+  "val_fr_L512": 3.6577,
+  "val_fr_permute": 181.9082,
+  "val_big_L128": 3.0035,
+  "val_big_L256": 3.0298,
+  "val_big_L512": 3.4878,
+  "val_big_permute": 199.8597,
+  "corpus_propre_val": 9.1262,
+  "litterature": 5.6056,
+  "anglais": 7.277,
+  "wikitext2": 8.0018
+ },
+ "prod_512": {
+  "fichier": "mix512-15k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.1588,
+    "256": 3.043,
+    "512": 2.9096,
+    "1000": 2.8018,
+    "2000": 2.7607
+   },
+   "val_big": {
+    "128": 2.999,
+    "256": 2.8672,
+    "512": 2.7514,
+    "1000": 2.6697,
+    "2000": 2.6495
+   }
+  },
+  "permute_fr": 193.4335,
+  "litterature": 5.5247,
+  "anglais": 7.0507,
+  "wikitext2": 7.9023,
+  "corpus_propre": 9.2894
+ },
+ "prod_1024": {
+  "fichier": "mix1024-7.5k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.1489,
+    "256": 3.0488,
+    "512": 2.9103,
+    "1000": 2.7858,
+    "2000": 2.7342
+   },
+   "val_big": {
+    "128": 3.0548,
+    "256": 2.8966,
+    "512": 2.7659,
+    "1000": 2.661,
+    "2000": 2.6258
+   }
+  },
+  "permute_fr": 197.5268,
+  "litterature": 5.5173,
+  "anglais": 7.1904,
+  "wikitext2": 7.9521,
+  "corpus_propre": 9.7158
+ },
+ "prod_2048": {
+  "fichier": "mix2048-3.75k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.1862,
+    "256": 3.0739,
+    "512": 2.9325,
+    "1000": 2.798,
+    "2000": 2.7372
+   },
+   "val_big": {
+    "128": 3.0632,
+    "256": 2.9024,
+    "512": 2.7716,
+    "1000": 2.6654,
+    "2000": 2.617
+   }
+  },
+  "permute_fr": 196.2056,
+  "litterature": 5.5485,
+  "anglais": 7.2908,
+  "wikitext2": 8.0135,
+  "corpus_propre": 10.086
+ },
+ "prod_1024_30k": {
+  "fichier": "mix1024-30k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 2.9943,
+    "256": 2.8569,
+    "512": 2.7221,
+    "1000": 2.6143,
+    "2000": 2.5628
+   },
+   "val_big": {
+    "128": 2.8454,
+    "256": 2.7013,
+    "512": 2.5772,
+    "1000": 2.4759,
+    "2000": 2.4373
+   }
+  },
+  "permute_fr": 186.7614,
+  "litterature": 5.3122,
+  "anglais": 6.5118,
+  "wikitext2": 7.1544,
+  "corpus_propre": 9.3679
+ },
+ "meme_texte_512": {
+  "fichier": "mix512-15k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1000,
+   2000
+  ],
+  "ppl": {
+   "256": 2.7321,
+   "512": 2.6357,
+   "1000": 2.6268,
+   "2000": 2.6275
+  }
+ },
+ "meme_texte_1024": {
+  "fichier": "mix1024-7.5k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1024,
+   2000
+  ],
+  "ppl": {
+   "256": 2.7401,
+   "512": 2.6277,
+   "1024": 2.5846,
+   "2000": 2.5868
+  }
+ },
+ "meme_texte_2048": {
+  "fichier": "mix2048-3.75k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1024,
+   2000
+  ],
+  "ppl": {
+   "256": 2.7696,
+   "512": 2.652,
+   "1024": 2.5948,
+   "2000": 2.5824
+  }
+ },
+ "miroir_512": {
+  "fichier": "mix512-15k.pt",
+  "positions": "rope",
+  "fenetre": 512,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0078,
+   "64": 0.0078,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0078,
+   "300": 0.0,
+   "400": 0.0
+  }
+ },
+ "dispositif": {
+  "corpus": "data/wiki_mix/propre/train.txt (1,02 Go) + canal",
+  "recette": "RoPE, 34,3 M (384/512), lot 8, lr 3e-4, graine 1, seq = fenêtre, init mix-60k (N2.ac)",
+  "temoin": "mix-60k = N2.ac (60 000 pas à 128) ; mix-200k (200 000 pas à 128)",
+  "controles": [
+   "permutation des octets",
+   "même texte 256/512/1 024/2 000",
+   "miroir de copie",
+   "affinage vs depuis zéro"
+  ]
+ }
+}

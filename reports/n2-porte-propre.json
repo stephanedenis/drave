@@ -1,0 +1,92 @@
+{
+ "propre512_8k": {
+  "fichier": "propre512-8k.pt",
+  "val": "data/corpus_propre",
+  "positions": "rope",
+  "L128": 2.9726,
+  "L256": 2.8988,
+  "L512": 2.8443,
+  "L1024": 2.7856
+ },
+ "propre512_8k_test": {
+  "fichier": "propre512-8k.pt",
+  "val": "/tmp/propre_test",
+  "positions": "rope",
+  "L128": 3.0649,
+  "L512": 2.8875,
+  "L1024": 2.8566
+ },
+ "propre128_32k": {
+  "fichier": "propre128-32k.pt",
+  "val": "data/corpus_propre",
+  "positions": "rope",
+  "L128": 2.9027,
+  "L256": 2.9034,
+  "L512": 3.0464,
+  "L1024": 3.1107
+ },
+ "propre128_32k_test": {
+  "fichier": "propre128-32k.pt",
+  "val": "/tmp/propre_test",
+  "positions": "rope",
+  "L128": 3.015,
+  "L512": 3.1104,
+  "L1024": 3.1876
+ },
+ "entrainement_512": {
+  "modele": "drave-n0-rope",
+  "parametres": 34301224,
+  "corpus": "data/corpus_propre/train.txt",
+  "octets": 3244858,
+  "pas": 8000,
+  "seq": 512,
+  "lot": 8,
+  "lr": 0.0003,
+  "graine": 1,
+  "window": 512,
+  "positions": "rope",
+  "init": "work/n2j/base-wiki-45m.pt",
+  "perte_finale": 0.8525079488754272,
+  "ppl_val": 3.363862704237594,
+  "jetons_val": 32768,
+  "tetes": true,
+  "drvm": "work/n2ac/propre512-8k.drvm",
+  "sha256_drvm": "b2034de3cd0d84f4ea2481fe5f7b449eabf5534e4a8463fa0b000fbb73fb8bcf",
+  "duree_s": 1561.0706672668457
+ },
+ "entrainement_128": {
+  "modele": "drave-n0-rope",
+  "parametres": 34301224,
+  "corpus": "data/corpus_propre/train.txt",
+  "octets": 3244858,
+  "pas": 32000,
+  "seq": 128,
+  "lot": 8,
+  "lr": 0.0003,
+  "graine": 1,
+  "window": 256,
+  "positions": "rope",
+  "init": "work/n2j/base-wiki-45m.pt",
+  "perte_finale": 0.9527095556259155,
+  "ppl_val": 3.450012500010037,
+  "jetons_val": 8192,
+  "tetes": true,
+  "drvm": "work/n2ac/propre128-32k.drvm",
+  "sha256_drvm": "3bd5d2a2aea0ed4e829df90206c12eb863bd43e886d0cf35c845d1ec0cfad936",
+  "duree_s": 1910.5735611915588
+ },
+ "dispositif": {
+  "corpus": "data/corpus_propre (train 3 244 858 octets, val 180 224, test 180 224, canal recalculé)",
+  "recette": "RoPE 34,3 M, lot 8, lr 3e-4, graine 1, init base-wiki-45m, 33 Mo vus par bras",
+  "bras": [
+   "fenêtre 512, 8 000 pas",
+   "fenêtre 128 (seq 128), 32 000 pas"
+  ],
+  "temoin": "N2.h : val 3,0904, test 3,1960",
+  "porte": 2.5,
+  "controles": [
+   "val et test disjoints (0 % de fuite, N2.h)",
+   "même budget d octets pour les deux bras"
+  ]
+ }
+}

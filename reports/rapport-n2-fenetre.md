@@ -128,8 +128,11 @@ condition nécessaire, pas suffisante.
   un seul point de départ.
 - **La production part de N2.ac** : le gain mesure un **affinage**, pas un entraînement depuis
   zéro ; un modèle entraîné directement à 512 ferait peut-être mieux (ou moins bien).
-- **La fenêtre n'est pas gratuite à l'inférence** : attention 512² par couche au lieu de 128² —
-  le coût par octet augmente de 4×, ce que la PPL ne montre pas.
+**Le coût d'inférence ne quadruple pas.** Mesuré à batch 8 (`work/n2ac/cout_fenetre.py`),
+le débit passe de **22 306** octets/s (fenêtre 256) à **22 730** (512), **21 156** (1 024) et
+**19 405** (2 048) : l'attention quadruple à chaque doublement, mais le FFN **domine** à 34,3 M,
+donc le débit ne perd que **13 %** de 256 à 2 048. La fenêtre est presque gratuite à cette
+taille — elle ne le resterait pas à plus grande échelle.
 - **Le corpus propre reste à 9,29** (contre 9,27) : la fenêtre ne transfert pas mieux que le
   compute vers un autre domaine.
 

@@ -7,10 +7,10 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 16.9 h |
-| Tours | 72 |
-| Messages | 481 |
-| Appels d'outils | 424 |
+| Durée | 17.3 h |
+| Tours | 73 |
+| Messages | 485 |
+| Appels d'outils | 426 |
 | Fichiers touchés | 15 |
 | Commandes | 311 |
 | Sous-agents | 0 |
@@ -20,6 +20,8 @@
 ## Objectifs déclarés
 
 - **create** — Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32),
+… [227 caractères tronqués]
+- **complete** — Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32),
 … [227 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -167,6 +169,8 @@
 **Tour 71** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [698 caractères tronqués]
 
 **Tour 72** — est que le dossier de pilotage est à jour avec les bons états des sessions dsh en cours
+
+**Tour 73** — y a-t-il des conflits possibles entre les sessions parallèles?
 
 ## 2. Déroulé, étape par étape
 
@@ -1848,7 +1852,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 72 — est que le dossier de pilotage est à jour avec les bons états des sessions dsh en cours
 
-*23 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Audit pilotage vs active DSH session plans
 - read
@@ -1864,11 +1868,38 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - bash — Write 08h bilan, trim state, verify and commit
 - bash — Read the remaining document budget violation
 - bash — Resolve porte-sessions red and trim references
-- … et 6 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ Le hook exige une **modification** d'`en-cours` avec la roadmap ; je mets l'horodatage à jour et je recommite.
+⏵ Le pilotage est aligné sur les états réels ; le goal de nuit est clos.
+
+**Oui, maintenant** (03/11, 08 h 24) — le pilotage et les plans disent la même chose :
+
+| session | état | plan | dernier heartbeat | claim |
+|---|---|---|---|---|
+| **N2** `0733c5bb` | **en pause** | `en pause` | 00 h 25 | libéré |
+| **S** `29ad180d` | **en pause** | `en pause` | 20 h 40 | libéré |
+| **B13** `e181ce02` | actif | `actif` | 21 h 43 | `b13-gold` |
+| **hub** `536cd5d6` | actif | `actif` | 08 h 24 | `veille` |
+
+\## Ce qui a été corrigé
+
+- **N2 et S** : arrêt constaté (plus de claim) → plans `État : en pause`, en-cours à jour ; reprise possible à leur réouverture. La porte sessions ne les signale plus périmés.
+- **Passe de 04 h 10** : **82 portes, 77 vertes, 5 rouges** ; la 5e (`porte-sessions`) était la **coordination N2/S**, **rejouée verte** après leur mise en pause ; les **4 rouges connues** restent seules.
+- **B13** : gold 432 réel **true**, DRVM/native 114/114 + 5/5, T132/T133 ; plan à rafraîchir (heartbeat 21 h 43, claim `b13-gold`).
+- **Hub** : bilan de 08 h écrit ; passe 82/77/5 ; 82e `porte-ressources` validée ; `porte-sessions` verte.
+- **Alignés** : `en-cours` 08 h 24, `roadmap` 08 h 08 (N2/S pause, B13 gold 432), `references` (2 391 mots), `journal/2026-11-03` (bilan), README/INDEX 587/674.
+- **Vérifs** : `sessions.py --check --strict` ✅ · `porte-sessions` ✅ · `taille` 3 993/4 000 ✅ · revue 587/674/82 ✅ · `verifie_journal` ✅.
+- **Commits** : `b6c8246b` (bilan), `0b53a31c` (références), `f73a73f1` (5e rouge close), `5b3d37a8` (roadmap).
+
+\## Ce qui reste ouvert
+
+- **B13 et hub** : sont-ils encore ouverts dans leurs terminaux ? Si oui, leurs claims couvrent les heartbeats longs (aucune action) ; si non, je les passe en pause comme N2/S.
+- **N2/S** : reprendront quand tu les rouvriras ; la validation humaine de la banque S (200 phrases) t'attend.
+- **Le goal de nuit est clos** : les quatre sessions ont été suivies jusqu'à 08 h, la passe, le registre et le bilan sont dans l'état, la roadmap et le journal.
+
+### Tour 73 — y a-t-il des conflits possibles entre les sessions parallèles?
 
 ## 3. Travail accompli
 

@@ -85,10 +85,13 @@
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
 - **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la
-  **porte propre**, le contrôle depuis zéro.
+  **porte propre**, le contrôle depuis zéro ; **trois fiches de nuit** ([`fenêtre`](../../reports/rapport-n2-fenetre.md),
+  [`2 048`](../../reports/rapport-n2-r12-2048.md), [`porte propre`](../../reports/rapport-n2-porte-propre.md),
+  [`production`](../../reports/rapport-n2-production-fenetre.md)) + JSON.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; fiche/JSON
-  `rapport-n2-fenetre` committés ; à la reprise : contrôle depuis zéro, clôture.
+- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; les **6
+  fichiers de la nuit sont committés par le hub** (3 fiches + 2 JSON + la mise à jour de la
+  fenêtre) ; à la reprise : contrôle depuis zéro, clôture.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
