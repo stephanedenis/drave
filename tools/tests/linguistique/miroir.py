@@ -204,6 +204,15 @@ def _sujet(a: bl.Annotation) -> str | None:
     return None
 
 
+def _simple(a: bl.Annotation) -> bool:
+    """Vrai si la phrase n'a **pas** de subordonnée (SUB) ni de syntagme prépositionnel (GP).
+
+    La paire assertion ↔ question est une phrase **simple** : « Tu viens demain. » (GV + GP de
+    temps) n'a pas de SUB ; « Si tu viens, nous partirons. » en a une — ce n'est pas la paire.
+    """
+    return not any(e.niveau == "syntagme" and e.type in ("SUB",) for e in a.etiquettes)
+
+
 def _acte(a: bl.Annotation) -> str:
     """L'acte pragmatique de l'annotation (assertion par défaut)."""
     return next((e.valeur for e in a.etiquettes
@@ -249,6 +258,8 @@ def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict |
         if not (s and _normaliser_egal(s, sujet)):
             continue
         if acte_q == "question" and _acte(b) != "assertion":
+            continue
+        if acte_q == "question" and not _simple(b):
             continue
         v = _verbe(b)
         if verbe and v and _normaliser_egal(v, verbe):

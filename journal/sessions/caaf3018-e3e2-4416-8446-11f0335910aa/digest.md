@@ -6738,3 +6738,22 @@ en-cours mots: 1627
 ⏵ 01 h 17 : T0 à 4 001 (1 mot de trop). L'écrivain rabote ; je revérifie dans 10 min avant d'intervenir.
 
 - **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; tail -1 work/veille-nuit.log", "description": "Recheck T0 after 10 min"}`
+
+  ```
+01:28
+  T0 max : 4000 mots (budget 4 000)
+01:27 · fcd0dc55 L/B13 — LE CRITÈRE ACTE : QUESTION → ASSERTION, L · actifs=8 ·   ✅ état court, structuré, multi-s
+  ```
+
+### 🤖 Assistant
+
+⏵ 01 h 28 : T0 revenu à 4 000, Pensée publie. Alternance.
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`

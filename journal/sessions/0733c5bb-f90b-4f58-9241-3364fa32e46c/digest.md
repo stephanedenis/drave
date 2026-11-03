@@ -6508,3 +6508,22 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-306", "timeout_ms": 420000, "wait": true}`
+
+  ```
+01:28:30
+rope2048-1.25k fini 22:22:47
+[status: completed, exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 200 work/n2ac/rope2048-12.5k.log; ls -la work/n2ac/rope2048-12.5k.pt 2>/dev/null; ps -p 713516 --no-headers -o etime 2>/dev/null || echo FIN", "description": "Check final state of 2048 run"}`
+
+  ```
+01:28:34
+0.9205 · PPL val 2.480 · 10945 s
+pas  10850 · perte 0.9158 · PPL val 2.473 · 10996 s
+pas  10900 · perte 1.0222 · PPL val 2.467 · 11047 s
+pas  10950 · perte 1.0068 · PPL val 2.462 · 11097 s
+   03:05:47
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048", "description": "Wait for 2048 final save"}`

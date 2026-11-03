@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 9.0 h |
+| Durée | 9.2 h |
 | Tours | 26 |
-| Messages | 370 |
-| Appels d'outils | 373 |
+| Messages | 372 |
+| Appels d'outils | 375 |
 | Fichiers touchés | 6 |
-| Commandes | 278 |
+| Commandes | 279 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -516,7 +516,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 26 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Check S session liveness and work
 - bash — Peek at S current activity in digest
@@ -532,11 +532,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Silent 10-hour timer for alternation
 - bash — Read first watch line
 - bash — Read watch log after silent wait
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ 01 h 17 : T0 à 4 001 (1 mot de trop). L'écrivain rabote ; je revérifie dans 10 min avant d'intervenir.
+⏵ 01 h 28 : T0 revenu à 4 000, Pensée publie. Alternance.
 
 ## 3. Travail accompli
 
@@ -593,7 +593,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 238 autres
+- … et 239 autres
 
 ## 4. Mesures et résultats marquants
 

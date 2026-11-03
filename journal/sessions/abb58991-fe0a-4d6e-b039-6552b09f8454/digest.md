@@ -22114,3 +22114,126 @@ ok
 ⏵ Round 156 : T0 à 4 002 après la ligne ; je raccourcis, j'aligne index/README et je commite la normalisation du sujet
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (sujet ok)'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,en … [940 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  580 fiches → reports/INDEX.md
+  revue de documentation · 583 fiche(s) · 668 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 9938083e] L/B13 — LE SUJET INVERSÉ NORMALISÉ : LES PAIRES RESTENT 5/10, LE LIEN CHOISIT HORS PAIRE
+ 16 files changed, 374 insertions(+), 29 deletions(-)
+ create mode 100644 reports/pensee-lien-sujet.json
+ create mode 100644 reports/rapport-pensee-lien-sujet.md
+EXIT=0
+9938083e L/B13 — LE SUJET INVERSÉ NORMALISÉ : LES PAIRES RESTENT 5/10, LE LIEN CHOISIT HORS PAIRE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 156 : sujet inversé normalisé et committé (`9938083e`, 16 fichiers) — paires toujours **5/10**, T0 4 000
+
+**Fait de la nuit — round 156** : la normalisation du sujet inversé.
+
+| question | `_sujet` | `_verbe` |
+|---|---|---|
+| r408 « Ne viens-tu pas demain ? » | **tu** | viens |
+| r409 « Ne mange-t-il pas ? » | **il** | mange |
+| r410 « Ne dort-elle pas ? » | **elle** | dort |
+| r411 « Ne partent-ils pas ? » | **ils** | partent |
+| r412 « Ne lis-tu pas ? » | **tu** | lis |
+
+- **La normalisation marche** : le sujet est le **dernier** segment du token, quel que soit le nombre de segments.
+- **Mais les 10 paires restent 5/10** : le lien trouve désormais des phrases au **bon sujet et bon verbe** mais **hors paire** — r408 → **r222** « Si tu viens, nous partirons. », r409 → **r344** « Le chat mange ; il dort. », r410 → **r227** « Pendant qu'il dort, elle lit. », r411 → **r354** « Marie et Paul dansent ; ils s'amusent. », r412 → **r270** « Quand tu veux, nous partons. ».
+- **Le blocage est maintenant la paire thématique** : le lien matche sujet+verbe et prend le plus proche, sans contrainte d'énoncé.
+- **Contrôle négatif** : r418–r422 5/5 (rien cassé), r408–r412 0/5 (normalisation faite, choix faux).
+- Fiche `rapport-pensee-lien-sujet.md` ; JSON `pensee-lien-sujet.json`.
+
+**État** : HEAD `9938083e` ; T0 **4 000** ; revue **583/668** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **contrainte de paire thématique** (partager le complément/le temps, pas seulement sujet+verbe), puis la **parité DRVM/native**. Le goal reste **actif**.
+
+
+## Tour 159
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 157/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 157 : la paire thématique — je regarde ce qui distingue r423 de r222 (mêmes sujet et verbe, mais pas la même paire) dans l'annotation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 120 python3 - <<'PY'\nimport json\nfrom tools.bloc_linguistique import Heuristique\nbl=Heuristique()\nph={p['id']:p for p in json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']}\nfor pid in ('r222','r423','r344', … [405 caractères tronqués]`
+
+  ```
+r222 Si tu viens, nous partirons.
+   pos [('Si', 'CONJ'), ('tu', 'PRON'), ('viens', 'VERB'), ('nous', 'PRON'), ('partirons', 'NOUN')]
+   syn [('Si tu viens', 'SUB'), ('nous partirons', 'GV')]
+r423 Tu viens demain.
+   pos [('Tu', 'PRON'), ('viens', 'VERB'), ('demain', 'ADV')]
+   syn [('Tu viens', 'GV'), ('demain', 'GP')]
+r344 Le chat mange ; il dort.
+   pos [('Le', 'DET'), ('chat', 'NOUN'), ('mange', 'VERB'), ('il', 'PRON'), ('dort', 'VERB')]
+   syn [('Le chat', 'GN'), ('Le chat mange', 'GN'), ('mange', 'GV'), ('il dort', 'GV')]
+r424 Il mange.
+   pos [('Il', 'PRON'), ('mange', 'VERB')]
+   syn [('Il mange', 'GV')]
+r227 Pendant qu'il dort, elle lit.
+   pos [('Pendant', 'PREP'), ("qu'il", 'CONJ'), ('dort', 'VERB'), ('elle', 'PRON'), ('lit', 'VERB')]
+   syn [("Pendant qu'il dort", 'SUB'), ("Pendant qu'il dort", 'GP'), ('elle lit', 'GV')]
+r425 Elle dort.
+   pos [('Elle', 'PRON'), ('dort', 'VERB')]
+   syn [('Elle dort', 'GV')]
+r354 Marie et Paul dansent ; ils s'amusent.
+   pos [('Marie', 'NOUN'), ('et', 'CONJ'), ('Paul', 'NOUN'), ('dansent', 'NOUN'), ('ils', 'PRON'), ("s'amusent", 'NOUN')]
+   syn [('Marie', 'GV'), ('Paul dansent', 'GV'), ("ils s'amusent", 'GV')]
+r426 Ils partent.
+   pos [
+… [385 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 157 : la paire se distingue par la **phrase simple** (GV seul) contre la **subordonnée** (SUB) ; j'ajoute cette contrainte — l'antécédent doit être une phrase simple, pas une subordonnée
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''def _acte(a: bl.Annotation) -> str:'''\nnew='''def _simple(a: bl.Annotation) -> bool:\n    \"\"\"Vrai si la phrase n'a **pa … [1607 caractères tronqués]`
+
+  ```
+ok
+r408  'Ne viens-tu pas demain ?'     -> -     ''                           attendu r423 NON
+r409  'Ne mange-t-il pas ?'          -> r344  'Le chat mange ; il dort.'   attendu r424 NON
+r410  'Ne dort-elle pas ?'           -> r390  'La cloche sonne ; elle appelle.' attendu r425 NON
+r411  'Ne partent-ils pas ?'         -> r354  "Marie et Paul dansent ; ils s'amusent." attendu r426 NON
+r412  'Ne lis-tu pas ?'              -> -     ''                           attendu r427 NON
+r418  'Tu ne viens pas demain ?'     -> r423  'Tu viens demain.'           attendu r423 OK
+r419  'Il ne mange pas ?'            -> r424  'Il mange.'                  attendu r424 OK
+r420  'Elle ne dort pas ?'           -> r425  'Elle dort.'                 attendu r425 OK
+r421  'Ils ne partent pas ?'         -> r426  'Ils partent.'               attendu r426 OK
+r422  "You don't come tomorrow?"     -> r427  'You come tomorrow.'         attendu r427 OK
+justes 5 / 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 157 : la contrainte **phrase simple** (pas de SUB) écarte r222 mais les paires restent **5/10** : r409/410/411 trouvent encore des phrases à `;` (r344, r390, r354) — je fige ce fait
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [4126 caractères tronqués]`
+
+  ```
+json 2518 justes 5
+fiche 2201
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 157 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite la contrainte « phrase simple »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10, simple'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encod … [952 caractères tronqués]`

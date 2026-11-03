@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 9.2 h |
-| Tours | 158 |
-| Messages | 1081 |
-| Appels d'outils | 883 |
+| Tours | 159 |
+| Messages | 1087 |
+| Appels d'outils | 887 |
 | Fichiers touchés | 48 |
-| Commandes | 709 |
+| Commandes | 713 |
 | Sous-agents | 0 |
-| Commits | 82 |
+| Commits | 83 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -339,6 +339,8 @@
 **Tour 157** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 158** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 159** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3994,7 +3996,40 @@ La suite : **normaliser le sujet inversé** (dernier segment quel que soit le no
 
 **Synthèse produite :**
 
-⏵ Round 156 : T0 à 4 002 après la ligne ; je raccourcis, j'aligne index/README et je commite la normalisation du sujet
+⏵ Round 156 : sujet inversé normalisé et committé (`9938083e`, 16 fichiers) — paires toujours **5/10**, T0 4 000
+
+**Fait de la nuit — round 156** : la normalisation du sujet inversé.
+
+| question | `_sujet` | `_verbe` |
+|---|---|---|
+| r408 « Ne viens-tu pas demain ? » | **tu** | viens |
+| r409 « Ne mange-t-il pas ? » | **il** | mange |
+| r410 « Ne dort-elle pas ? » | **elle** | dort |
+| r411 « Ne partent-ils pas ? » | **ils** | partent |
+| r412 « Ne lis-tu pas ? » | **tu** | lis |
+
+- **La normalisation marche** : le sujet est le **dernier** segment du token, quel que soit le nombre de segments.
+- **Mais les 10 paires restent 5/10** : le lien trouve désormais des phrases au **bon sujet et bon verbe** mais **hors paire** — r408 → **r222** « Si tu viens, nous partirons. », r409 → **r344** « Le chat mange ; il dort. », r410 → **r227** « Pendant qu'il dort, elle lit. », r411 → **r354** « Marie et Paul dansent ; ils s'amusent. », r412 → **r270** « Quand tu veux, nous partons. ».
+- **Le blocage est maintenant la paire thématique** : le lien matche sujet+verbe et prend le plus proche, sans contrainte d'énoncé.
+- **Contrôle négatif** : r418–r422 5/5 (rien cassé), r408–r412 0/5 (normalisation faite, choix faux).
+- Fiche `rapport-pensee-lien-sujet.md` ; JSON `pensee-lien-sujet.json`.
+
+**État** : HEAD `9938083e` ; T0 **4 000** ; revue **583/668** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **contrainte de paire thématique** (partager le complément/le temps, pas seulement sujet+verbe), puis la **parité DRVM/native**. Le goal reste **actif**.
+
+### Tour 159 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Compare pair vs non-pair annotations
+- bash — Add simple-sentence constraint and measure
+- bash — Freeze simple-sentence constraint measurement
+- bash — Commit simple-sentence constraint fact
+
+**Synthèse produite :**
+
+⏵ Round 157 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite la contrainte « phrase simple »
 
 ## 3. Travail accompli
 
@@ -4093,7 +4128,7 @@ La suite : **normaliser le sujet inversé** (dernier segment quel que soit le no
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 669 autres
+- … et 673 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4278,4 +4313,5 @@ La suite : **normaliser le sujet inversé** (dernier segment quel que soit le no
 - ÉTAT — T0 4 000 : LIGNE DU VERBE INVERSÉ RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LE CRITÈRE ACTE : QUESTION → ASSERTION, LES 10 PAIRES RESTENT 5/10, LE SUJET INVERSÉ N'EST PAS NORMALISÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; 
 - L/B13 — LE SUJET INVERSÉ NORMALISÉ : LES PAIRES RESTENT 5/10, LE LIEN CHOISIT HORS PAIRE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h 
+- L/B13 — LA PHRASE SIMPLE : r222 ÉCARTÉ, LES PAIRES RESTENT 5/10 (LES JUXTAPOSITIONS PASSENT)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format=
 
