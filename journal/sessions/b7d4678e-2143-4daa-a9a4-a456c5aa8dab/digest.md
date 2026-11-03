@@ -8478,3 +8478,103 @@ revue de documentation · 569 fiche(s) · 654 JSON · 119 doc(s) · 82 porte(s) 
   ⚠ nvme_raid : 33 Gio libres seulement
   ```
 
+- **write** `{"content": "# Bilan de la nuit — 02/11 20 h → 03/11 08 h\n\n> Brouillon de veille (`work/`, non commité). À figer au checkpoint de 8 h avec le `git log`,\n> les compteurs du disque et l'état des sessions.\n\n## Les faits de la nuit (déjà mesurés)\n\n- **Passe complète 19 h 32** : **81 portes, 76 ve … [2199 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/veille/bilan-08h.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 40 — la porte homeostasie ne s'exécute plus ; bilan 8 h préparé\n\n- **Commit `89e0c2c5`** : `porte-homeostasie` — son message n'exécute plus sa commande (hygiène\n  de porte : une sortie de porte ne doit pas être une exécution). La rouge re … [548 caractères tronqués]`
+
+  ```
+ok
+89e0c2c5 PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+21:37:28
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 7 : bilan de 8 h préparé, état stable, N2 toujours en vol
+
+**Ce qui a été fait**
+- **`work/veille/bilan-08h.md`** : brouillon du bilan de 8 h — les faits de la nuit (passe **76/5**, B13 **140/140**, N2 200 k + R1.2-1024 **3,0529**, S **v4**, D/R/A OCR) et la liste de ce qu'il reste à figer (`git log`, compteurs, sessions, claims, prochaines actions par axe).
+- **`89e0c2c5`** : `porte-homeostasie` — son message n'exécute plus sa commande ; la rouge reste environnementale (`/tmp/n4` absent), pas une régression.
+- **N2** : fiche fenêtre toujours non committée, `n2-fenetre.json` absent (runs 1 h 20 / 42 min) — c'est le seul rouge non structurel (`porte-tableaux`).
+
+**État vérifié** : revue ✅ **569 fiches / 654 JSON / 82 portes**, en-cours ✅, T0 ✅, T1 ✅ (2 428 mots), porte stricte ✅ (avertissements de claims longs), registre des ressources ✅ (seul `nvme_raid` 33 Gio).
+
+**Ressources** : N2 `gpu0`+`gpu1`, hub `cpu1` 2, S et Pensée `cpu1` 4+4 ; `cpu0` 16/16, `ram` 70/109 ; les deux GPU tournent. Rien de bloquant : la veille continue jusqu'au checkpoint de 8 h, en intégrant les commits N2/hub au fil de l'eau.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 8 : je vérifie les nouveaux commits puis j’attends un événement de session
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; echo \"--- N2 ---\"; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git status --short reports/rapport-n2-fenetre.md 2>/dev/null; echo \"--- rapports ---\"; ls -lt reports/*.md reports/*.json | head -3; echo \"--- runs ---\"; … [139 caractères tronqués]`
+
+  ```
+21:37:42
+89e0c2c5 PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+--- N2 ---
+json absent
+?? reports/rapport-n2-fenetre.md
+--- rapports ---
+-rw-r--r--. 1 stephane stephane   76586  2 nov 21:34 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane   23129  2 nov 21:34 reports/README.md
+-rw-------. 1 stephane stephane    4733  2 nov 21:33 reports/rapport-pensee-porte-sto-graines.md
+--- runs ---
+ 383833    01:21:04 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus
+ 490049       43:35 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 30); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; [ -f reports/n2-fenetre.json ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ls -l reports/n2-fenetre.json … [118 caractères tronqués]`
+
+  ```
+21:38:38
+HEAD c4903bc9
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+89e0c2c5 PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE
+json absent
+  ```
+
+- **bash** `{"command": "git show --stat --oneline c4903bc9 | head -8; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2", "de … [55 caractères tronqués]`
+
+  ```
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+ docs/pilotage/en-cours.md                          |  10 +-
+ docs/pilotage/roadmap.md                           |   6 +-
+ journal/2026-11-02/README.md                       |   7 +-
+ journal/2026-11-02/apprentissage.md                |   2 +-
+ journal/2026-11-02/attention.md                    |   2 +-
+ journal/2026-11-02/distribue.md                    |   5 +-
+ journal/2026-11-02/docs.md                         |   2 +-
+--- checks ---
+  revue de documentation · 569 fiche(s) · 654 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (59 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (60 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 30); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; [ -f reports/n2-fenetre.json ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ls -l reports/n2-fenetre.json … [192 caractères tronqués]`

@@ -7846,3 +7846,140 @@ MM docs/pilotage/references-non-regression.md
 … [842 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Round 4 : l'état tient (INDEX 565, README 2 800, claims cohérents) ; la fiche N2/JSON reste ouverte.
+
+**Inspection de 21 h 32**
+
+- **N2** : `n2-fenetre.json` toujours absent ; `porte-tableaux` reste rouge de passage ; le N2 tourne (96 min + claim, mandat long) ; rejeu dès le JSON.
+- **Sessions/claims** : N2 96 + claim, S 52 + claim, hub 53 + claim, B13 6 ; quatre actives ; `porte-sessions` verte ; registre **cohérent** (seul avertissement : `IA` 33 Gio).
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours 82, docs 82e) ; prochaine passe 82.
+- **INDEX** : 565 fiches ; **README** : 2 800/2 800 (pile au budget) ; l'ajout curaté des 3 fiches attend le commit N2 et devra retirer 3 entrées anciennes.
+- **Revue/T0** : 568/653/119 docs/82 portes ✅ ; T0 3 961/4 000 ✅.
+
+**Reste** : JSON N2 → `porte-tableaux` ; README curaté ; veille des sessions (N2/S/hub couverts par leurs claims, B13 à 140/140) ; **bilan 08 h**. Goal actif.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 5 : je regarde les entrées du README curaté et les fiches N2/S/B13 pour l'ajout/trim.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== fiches ==\" && ls -l reports/rapport-s-corpus-reel.md reports/rapport-pensee-porte-minute.md reports/rapport-n2-fenetre.md 2>&1; echo; echo \"== README entrées (début/fin) ==\" && grep -n '^| \\[' reports/README.md | head - … [375 caractères tronqués]`
+
+  ```
+== fiches ==
+-rw-------. 1 stephane stephane 8702  2 nov 21:05 reports/rapport-n2-fenetre.md
+-rw-------. 1 stephane stephane 5967  2 nov 19:50 reports/rapport-pensee-porte-minute.md
+-rw-r--r--. 1 stephane stephane 6056  2 nov 20:38 reports/rapport-s-corpus-reel.md
+
+== README entrées (début/fin) ==
+18:| [`rapport-pensee-porte-sto-graines.md`](rapport-pensee-porte-sto-graines.md) | **B13** **5/5** |
+19:| [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
+20:| [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
+...
+151:| [`rapport-m2-secours.md`](rapport-m2-secours.md) | **B19** — M2 secours : typos 71,2/76,7 vs M1 36,6 ; espaces 41,8/45,2 vs 34,8 ; phrase M1 86,6 vs M2 0 ; niche, pas secours général |
+152:| [`rapport-cerveau-corrections.md`](rapport-cerveau-corrections.md) | **B12 — corrections** : M2 93,2 % = 126/126 vus + 11/20 inédits ; M3 span tautologique ; M4 29 codes, 0/6 non stockés ; M8 96,48 % marginal (exact 65,1 %, baseline par jeu 96,10 %) ; M5/M6/M7 négatifs |
+153:| [`rapport-restitution.md`](rapport-rest
+… [384 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute les 3 fiches (N2/S/B13) au README curaté et je retire les entrées historiques les plus anciennes pour tenir 2 800.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nlines=t.splitlines()\nidx=[i for i,l in enumerate(lines) if l.startswith('| [')]\nassert idx, 'aucune entrée'\nnouvelles=[\n\"| [`rapport-n2-fene … [1520 caractères tronqués]`
+
+  ```
+README : 3 ajoutées, 5 retirées
+== README ==
+2762 reports/README.md
+== occurrences ==
+rapport-n2-fenetre               1
+rapport-s-corpus-reel            1
+rapport-pensee-porte-minute      1
+
+== taille ==
+    2762    180   T1   2800  reports/README.md
+  T0 max : 3961 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+### 🤖 Assistant
+
+⏵ README curaté (2 762/2 800, 3 fiches entrées, 5 sorties) ; je commite et je vérifie la revue.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/README.md && timeout 300 git commit --only -m \"INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT\" -m \"README 2 762/2 800 ; … [549 caractères tronqués]`
+
+  ```
+[commit 1]
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+
+== revue ==
+  revue de documentation · 569 fiche(s) · 654 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+== N2/JSON ==
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 103 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  59 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    ·  60 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·   5 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (103 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans
+… [258 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook exige une ligne d'état pour `reports/README.md` ; j'ajoute la ligne à `en-cours` et je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '^## \\|^### ' docs/pilotage/en-cours.md | head -12; echo; sed -n '78,100p' docs/pilotage/en-cours.md", "description": "Locate state section for the README line"}`
+
+  ```
+12:## Sessions en cours
+19:### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+35:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+50:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+69:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+87:## Ce qui est en cours
+101:## Les chiffres de l'état
+113:## Les chantiers et leurs bloquants
+130:## Ce qui reste
+137:## Les questions ouvertes
+147:## La carte
+
+- **Ce que font les autres** : **hub** (portes), **S** (analyseur), **Pensée** (B13).
+- **Prochaine action** : les contrôles de R1.2-1024, puis la fiche.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+
+> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP (91 scans, 60 documents, 1 982 p,
+> 4,41 M car.) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/
+… [1758 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la ligne d'état INDEX/README (et je retire les deux résultats clos R0/R4 pour le budget), puis je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\ndef sub(t, old, new):\n    assert t.count(old)==1, f\"{t.count(old)} != 1: {old[:80]!r}\"; return t.replace(old,new)\nt=sub(t, \"- **R0 — … [1469 caractères tronqués]`

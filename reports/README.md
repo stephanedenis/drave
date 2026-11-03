@@ -15,6 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
+| [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats |
+| [`rapport-pensee-porte-minute.md`](rapport-pensee-porte-minute.md) | **B13** — la porte minute : 140/140 ; les six attendus S `00d2a01` fixés ; T132/T133 2/5 ; distracteurs r428–r432 |
 | [`rapport-pensee-porte-sto-graines.md`](rapport-pensee-porte-sto-graines.md) | **B13** **5/5** |
 | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
@@ -146,11 +149,6 @@
 | [`rapport-familles-9.md`](rapport-familles-9.md) | **C3.2c** — 9 familles : 7/9 > 30 %, moyenne 69,5 %, contrôle 0 ; indo-européen 14,7 %, uralic 46,7 % |
 | [`rapport-routeur-confiance.md`](rapport-routeur-confiance.md) | **B24** — routeur confiance : typo 63,7 % (+7,5), espaces 34,2 % (−7,5), oracle 79,45 % |
 | [`rapport-routeur-m1-m2.md`](rapport-routeur-m1-m2.md) | **B23** — routeur M1→M2 : espaces 41,8 % vs 11,6 % ; typo 56,2 % < M2 68,3 % ; collision de lexique |
-| [`rapport-m2-typo.md`](rapport-m2-typo.md) | **B22** — M2 et les typos : M2 62–80 % contre M1 24–45 % sur suppression, substitution, insertion, transposition |
-| [`rapport-m9-dose.md`](rapport-m9-dose.md) | **B21** — M9 par dose : M3 0/4/8/12/12 tautologique, M5 +4,25 pts, sham nul, double non additive |
-| [`rapport-m2-secours.md`](rapport-m2-secours.md) | **B19** — M2 secours : typos 71,2/76,7 vs M1 36,6 ; espaces 41,8/45,2 vs 34,8 ; phrase M1 86,6 vs M2 0 ; niche, pas secours général |
-| [`rapport-cerveau-corrections.md`](rapport-cerveau-corrections.md) | **B12 — corrections** : M2 93,2 % = 126/126 vus + 11/20 inédits ; M3 span tautologique ; M4 29 codes, 0/6 non stockés ; M8 96,48 % marginal (exact 65,1 %, baseline par jeu 96,10 %) ; M5/M6/M7 négatifs |
-| [`rapport-restitution.md`](rapport-restitution.md) | **B11.9** : **restitution du code** **79/79** et **449/449** avec aller-retour RSN exact (**100 %**) ; **surface originale 33/79** ; sans décodeur neuronal |
 
 ## Les données brutes
 

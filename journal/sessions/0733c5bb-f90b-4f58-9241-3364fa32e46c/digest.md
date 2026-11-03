@@ -5136,3 +5136,30 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-220", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-216 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; tail -1 work/n2ac/mix1024-7.5k.log; echo "--- 1024-20k ---"; tail -1 work/n2ac/rope1024-20k.log; echo "--- portes ---"; ps -eo pid --no-headers,cmd | grep -c "[p]orte-") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; tail -1 work/n2ac/mix1024-7.5k.log 2>/dev/null; ls work/n2ac/mix1024-7.5k.pt 2>/dev/null && echo CHECKPOINT_OK; tail -1 work/n2ac/rope1024-20k.log", "description": "Check production 1024 completio … [3 caractères tronqués]`
+
+  ```
+21:37:59
+mix512-15k fini 20:54:07
+pas   5600 · perte 1.0271 · PPL val 2.673 · 2366 s
+pas  10450 · perte 1.0868 · PPL val 2.636 · 4823 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/mix1024-7.5k.pt --rope --longueurs 128,256,512,1000,2000 --sortie work/n2ac/eval-mix1024- … [85 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-222]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-222", "timeout_ms": 900000, "wait": true}`

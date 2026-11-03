@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.3 h |
-| Tours | 14 |
-| Messages | 500 |
-| Appels d'outils | 601 |
-| Fichiers touchés | 45 |
-| Commandes | 441 |
+| Durée | 5.4 h |
+| Tours | 15 |
+| Messages | 507 |
+| Appels d'outils | 606 |
+| Fichiers touchés | 46 |
+| Commandes | 444 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 1 |
@@ -51,6 +51,8 @@
 **Tour 13** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 14** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -586,7 +588,7 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 
 ### Tour 14 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_graines.py`
 - bash — Run stochastic door five seeds
@@ -598,10 +600,47 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 - bash — Wait for concurrent git lock
 - bash — Reset index, stage only our files, commit
 - bash — Wait and retry five-seed commit
+- bash — Post-commit checks for five seeds
 
 **Synthèse produite :**
 
-⏵ Nouveau lock concurrent ; j'attends 20 s et je reprends le commit (7 fichiers stagés)
+⏵ Round 12 : la porte stochastique passe **5/5** sur les cinq graines (7B) ; contrôles 0/1 ; commit `c4903bc9`
+
+**Fait de la nuit** — commit **`c4903bc9`** : la porte stochastique, cinq graines.
+
+| graine | LLM `porte_sto` | nœuds | sonde | appels |
+|---:|---|---:|---:|---:|
+| 0 | ✅ | 31 | 6 | 8 |
+| 1 | ✅ | 28 | 5 | 7 |
+| 2 | ✅ | 34 | 7 | 9 |
+| 3 | ✅ | 28 | 5 | 7 |
+| 4 | ✅ | 28 | 5 | 7 |
+| — | labyrinthe | ❌ | 200 | 3 |
+| — | aveugle | ❌ | 200 | 61 |
+| — | oracle | ✅ | 31 | 6 |
+
+- Le tirage `random.random() < 0,8` est **fixé** (`seed(0..4)`) : le 7B passe **5/5** (28–34 nœuds, 5–7 sonde). Le 5/5 est **reproductible**.
+- Les contrôles échouent : le labyrinthe (200/3) et l'aveugle (200/61) ; l'oracle passe (31/6). Le test **discrimine**.
+- Les latences sont **cumulatives** (13,1 → 64,9 s ; ~13 s par run) — limite nommée.
+
+**État** : T0 **3 961/4 000**, `en-cours` **1 587 mots**, revue **569/654**, **sessions --strict : EXIT=0**. Le S et le N2 ont encore des modifications (`rapport-s-*`, `structures`, `rapport-n2-fenetre`) ; le hub a committé `d2374554` (portes) et `89e0c2c5` (porte homeostasie).
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · **5/5 `c4903bc9`** ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`89e0c2c5`, N2 `c0196b55`.
+
+La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 15 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Add porte_fenetre prompt and test
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py`
+- bash — Run window door qualification
+- job_output
+
+**Synthèse produite :**
+
+⏵ J'attends la mesure de la fenêtre (le JSON remplira la fiche)
 
 ## 3. Travail accompli
 
@@ -654,6 +693,7 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_graines.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto-graines.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -697,7 +737,7 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 401 autres
+- … et 404 autres
 
 ## 4. Mesures et résultats marquants
 

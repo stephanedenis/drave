@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 6.0 h |
-| Tours | 12 |
-| Messages | 204 |
-| Appels d'outils | 258 |
+| Durée | 6.1 h |
+| Tours | 13 |
+| Messages | 211 |
+| Appels d'outils | 263 |
 | Fichiers touchés | 13 |
-| Commandes | 194 |
+| Commandes | 199 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 14 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -47,6 +47,8 @@
 **Tour 11** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 **Tour 12** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -684,7 +686,31 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 **Synthèse produite :**
 
-⏵ Round 4 : j'inspecte l'état réel (N2/JSON, INDEX/README, claims, en-cours) avant d'agir.
+⏵ Round 4 : l'état tient (INDEX 565, README 2 800, claims cohérents) ; la fiche N2/JSON reste ouverte.
+
+**Inspection de 21 h 32**
+
+- **N2** : `n2-fenetre.json` toujours absent ; `porte-tableaux` reste rouge de passage ; le N2 tourne (96 min + claim, mandat long) ; rejeu dès le JSON.
+- **Sessions/claims** : N2 96 + claim, S 52 + claim, hub 53 + claim, B13 6 ; quatre actives ; `porte-sessions` verte ; registre **cohérent** (seul avertissement : `IA` 33 Gio).
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours 82, docs 82e) ; prochaine passe 82.
+- **INDEX** : 565 fiches ; **README** : 2 800/2 800 (pile au budget) ; l'ajout curaté des 3 fiches attend le commit N2 et devra retirer 3 entrées anciennes.
+- **Revue/T0** : 568/653/119 docs/82 portes ✅ ; T0 3 961/4 000 ✅.
+
+**Reste** : JSON N2 → `porte-tableaux` ; README curaté ; veille des sessions (N2/S/hub couverts par leurs claims, B13 à 140/140) ; **bilan 08 h**. Goal actif.
+
+### Tour 13 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Inspect curated README entries and new fiches
+- bash — Curate README with new fiches and trim old entries
+- bash — Commit curated README and verify review
+- bash — Locate state section for the README line
+- bash — Add state line and commit README curation
+
+**Synthèse produite :**
+
+⏵ J'ajoute la ligne d'état INDEX/README (et je retire les deux résultats clos R0/R4 pour le budget), puis je recommite.
 
 ## 3. Travail accompli
 
@@ -748,7 +774,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 154 autres
+- … et 159 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -903,4 +929,6 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE" -m "Le pilotage réservait les fichiers, pas la machine. tools/ressources.py ajoute
 - PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H" -m "Consigne § 10.7 : N2 gpu0/cpu0 12, hub gpu1/cpu1 8, S et Pensée cpu1 4+4 
 - PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE" -m "Le N2 tourne depuis 53 min (R1.2-1024) et son heartbeat 
+- INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT" -m "README 2 762/
+- INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT" -m "README 2 762/
 

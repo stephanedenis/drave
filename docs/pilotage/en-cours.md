@@ -86,8 +86,6 @@
 
 ## Ce qui est en cours
 
-- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
-- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
 - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2**
   **3,0107** (−0,244) à octets constants ; depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
@@ -97,6 +95,7 @@
   [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
 - **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
   [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
+- **INDEX** : `reports/README` **2 762/2 800** (3 fiches de la nuit entrées, 5 historiques sorties) ; `reports/INDEX` **565** ; revue **569/654** ; `porte-tableaux` rouge sur le JSON N2 absent.
 
 ## Les chiffres de l'état
 

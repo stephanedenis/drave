@@ -12441,3 +12441,117 @@ EXIT=1
 ⏵ Nouveau lock concurrent ; j'attends 20 s et je reprends le commit (7 fichiers stagés)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,cmd | grep -E \"git (commit|add)\" | grep -v grep | head -2; sleep 20; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git diff --cached --stat | tail -3; git commit -m \"B13 — LA PORTE STOCHASTIQUE, CINQ GRAINE … [176 caractères tronqués]`
+
+  ```
+21:36:34
+ 671142       01:24 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m "PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE  La suggestion « il vient du balayage : \`tools/n4_dessin_b.py ...\` » était écrite entre guillemets DOUBLES : les backticks étaient une substitution de commande, pas du texte. La porte lançait donc le script à chaque échec, et comme il n'est pas exécutable, le journal de la passe affichait « Permission denied » (mesuré à la passe du 02/11 19 h 32). Corrigé : guillemets simples + python3 explicite ; la porte sort toujours en 2 pour le LoRA absent (/tmp effacé), limite environnementale tolérée, mais le message est maintenant inerte." -- tools/porte-homeostasie.sh 2>&1 | tail -5
+ 671150       01:24 git commit --only -m PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE  La suggestion « il vient du balayage : `tools/n4_dessin_b.py ...` » était écrite entre guillemets DOUBLES : les backticks étaient une substitution de commande, pas du texte. La porte lançait donc le script à chaque échec, et comme il n'est pas exécutable, le journal de la passe affichait « Permission denied » (mesuré à la passe du 02/11 19 h 32)
+… [816 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `c4903bc9` ; contrôle post-commit et bilan (cinq graines 5/5)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== CHECKS ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/taille_documents.py 2>&1 | grep -E \"T0\" | head -1; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3  … [224 caractères tronqués]`
+
+  ```
+c4903bc9 21:36:54 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+89e0c2c5 21:35:09 PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE
+d2374554 21:32:49 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+=== CHECKS ===
+  état · dernier fait c4903bc9 · dernier état c4903bc9
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3961 mots (budget 4 000)
+  en-cours · 1587 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+SESS=0
+ M reports/rapport-s-analyseur-roles.md
+ M reports/rapport-s-corpus-reel.md
+ M reports/s-banque-structures.json
+ M tools/structures
+?? reports/rapport-n2-fenetre.md
+?? tools/porte-ressources.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 12 : la porte stochastique passe **5/5** sur les cinq graines (7B) ; contrôles 0/1 ; commit `c4903bc9`
+
+**Fait de la nuit** — commit **`c4903bc9`** : la porte stochastique, cinq graines.
+
+| graine | LLM `porte_sto` | nœuds | sonde | appels |
+|---:|---|---:|---:|---:|
+| 0 | ✅ | 31 | 6 | 8 |
+| 1 | ✅ | 28 | 5 | 7 |
+| 2 | ✅ | 34 | 7 | 9 |
+| 3 | ✅ | 28 | 5 | 7 |
+| 4 | ✅ | 28 | 5 | 7 |
+| — | labyrinthe | ❌ | 200 | 3 |
+| — | aveugle | ❌ | 200 | 61 |
+| — | oracle | ✅ | 31 | 6 |
+
+- Le tirage `random.random() < 0,8` est **fixé** (`seed(0..4)`) : le 7B passe **5/5** (28–34 nœuds, 5–7 sonde). Le 5/5 est **reproductible**.
+- Les contrôles échouent : le labyrinthe (200/3) et l'aveugle (200/61) ; l'oracle passe (31/6). Le test **discrimine**.
+- Les latences sont **cumulatives** (13,1 → 64,9 s ; ~13 s par run) — limite nommée.
+
+**État** : T0 **3 961/4 000**, `en-cours` **1 587 mots**, revue **569/654**, **sessions --strict : EXIT=0**. Le S et le N2 ont encore des modifications (`rapport-s-*`, `structures`, `rapport-n2-fenetre`) ; le hub a committé `d2374554` (portes) et `89e0c2c5` (porte homeostasie).
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · **5/5 `c4903bc9`** ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`89e0c2c5`, N2 `c0196b55`.
+
+La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 13/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 13 : la **fenêtre temporelle** (`LABYRINTHE_PORTE_FENETRE`, `attendre`, t % 3) ; j'ajoute le prompt `porte_fenetre` et son test
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text(encoding='utf-8')\nold='''        if self.jeu == \"porte_sto\":'''\nnew='''        if self.jeu == \"porte_fenetre\":\n            x, y = _xy_pw(etat)\n       … [1830 caractères tronqués]`
+
+  ```
+ok
+Ran 10 tests in 0.001s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc « fenêtre » : oracle Manhattan, aveugle, hasard, LLM `porte_fenetre` vs labyrinthe (t % 3, `attendre`)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_porte_fenetre_drvm.py — la porte **fenêtre** : libre quand t % 3 == 0.\n\n`LABYRINTHE_PORTE_FENETRE` (registre `REGISTRE_PW`) : la porte `(3,3)` n'est libre que lorsque\n`t % 3 == 0` ; l'horloge avance à chaque pas, saut ou **attente**. On mesure  … [6135 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de la fenêtre (t % 3, `attendre`, ≈3 min)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_fenetre_drvm.py && curl -s --max-time 3 http://127.0.0.1:18082/health && time python3 tools/tests/qualifier_porte_fenetre_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-fenetre … [98 caractères tronqués]`
+
+  ```
+started background job bash-444
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la mesure de la fenêtre (le JSON remplira la fiche)
+
+- **job_output** `{"job_id": "bash-444", "timeout_ms": 420000, "wait": true}`
