@@ -8637,3 +8637,42 @@ compteurs 593 682
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/distiller_natif.py work/n2ac/chaine_kd.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add … [1924 caractères tronqués]`
+
+  ```
+revue de documentation · 593 fiche(s) · 682 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-432]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-432", "timeout_ms": 180000, "wait": true}`
+
+  ```
+43833200 DISTILLATION NATIVE — LE PROFESSEUR LONG PAIE À FORTE DOUCEUR : α = 0,9 DONNE 3,5090 / 3,2835 / 3,1863 CONTRE 3,6452 / 3,4493 / 3,3628 POUR L'ÉLÈVE DUR
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Distillation du professeur de production dans la recette 512 (comparaison directe à l'affinage dur)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_kd_production.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_kd_production.sh — le professeur de production (mélange, fenêtre 1 024, 30 000 pas)\n# distillé dans la recette 512, à budget égal (15 000 pas = 61,4 Mo) et même init (mix- … [1034 caractères tronqués]`
+
+  ```
+KD production lancé pid 2405960
+16:21:57
+0, 5280 MiB, 99 %
+1, 274 MiB, 0 %
+ 21800 · perte 1.0576 · PPL val 2.414 · 9688 s
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; tail -c 50 work/n2ac/mix1024-60k.log; tail -c 60 work/n2ac/kd-mix512-15k.log 2>/dev/null", "description": "Wait for 60k production run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-434]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-434", "timeout_ms": 3000000, "wait": true}`

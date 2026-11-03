@@ -6507,3 +6507,615 @@ index 5c3cc9c3..7c0dd925 100644
 … [927 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "limit": 50, "offset": 390}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py</path>
+<type>file</type>
+<content>
+390:                     break
+391:             for g in segs[k + 1:]:
+392:                 if g.type == "GP" and _norm(g.texte).split()[:1] == ["par"]:
+393:                     g.role = "agent"
+394:                     break
+395:     # les cibles d'attachement : GN, tête du GP et GV les plus proches à gauche
+396:     def _tete_gp(g):
+397:         mots = [m for m in MOTIF.finditer(texte, g.debut, g.fin) if m.group().strip()
+398:                 and _norm(m.group()) not in PREP | DET]
+399:         return mots[-1].group() if mots else None
+400:     for k, s in enumerate(segs):
+401:         for g in reversed(segs[:k]):
+402:             if g.type == "GN" and s.cible_nom is None:
+403:                 s.cible_nom = g.texte
+404:             if g.type == "GP" and s.cible_gp is None:
+405:                 s.cible_gp = _tete_gp(g)
+406:             if g.type == "GV" and s.cible_verbe is None:
+407:                 s.cible_verbe = g.texte
+408:     return segs
+409: 
+410: 
+411: ROLES_AMBIGUS = {"pour": ["cause"]}
+412: 
+413: 
+414: def _role_attache(role: str, genre: str) -> str | 
+… [1276 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "old_string": "class Segment:\n    __slots__ = (\"debut\", \"fin\", \"type\", \"role\", \"niveau\", \"texte\", \"cible_nom\", \"cible_gp\", \"cible_verbe\")\n\n    def __init__(self, debut, fin, texte, ty … [1558 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"\"\"def _consomme(toks, i, classes):\n    j = i\n    while j < len(toks) and toks[j].cls in classes: … [2495 caractères tronqués]`
+
+  ```
+arbre ajouté
+Le chat de la voisine qui dort sur le toit se réveille.
+   0   Le chat [GN:agent] parent=3 prof=1 niveau=1
+   1     de la voisine [GP:possession] parent=0 prof=2 niveau=2
+   2       qui dort sur le toit [REL:qualite] parent=1 prof=3 niveau=3
+   3 se réveille [GV:predicat] parent=None prof=0 niveau=0
+La femme a vu l'homme dans le parc.
+   0   La femme [GN:agent] parent=1 prof=1 niveau=1
+   1 a vu [GV:predicat] parent=None prof=0 niveau=0
+   2   l'homme [GN:patient] parent=1 prof=1 niveau=1
+   3     dans le parc [GP:lieu] parent=2 prof=2 niveau=2
+Une belle maison.
+   0 Une belle maison [GN:agent] parent=None prof=0 niveau=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\najout='''\n\nPOSSESSIFS = set(\"mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs\".split())\nPROPRE … [2626 caractères tronqués]`
+
+  ```
+referents ajoutés
+Elle elle → ['Allons', 'Alice']
+se se → ['habitude', 'Allons', 'Alice']
+elle elle → ['habitude', 'conseils', 'Allons', 'Alice']
+se se → ['habitude', 'conseils', 'Allons', 'Alice']
+lui lui → ['habitude', 'conseils', 'Allons', 'Alice']
+en en → ['habitude', 'conseils', 'Allons', 'Alice']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"        return [m for m in PROPRE.findall(texte_partiel)\\n                if _norm(m) not in PRON a … [949 caractères tronqués]`
+
+  ```
+REF [('Elle', ['Alice']), ('se', ['habitude', 'Alice']), ('elle', ['habitude', 'conseils', 'Alice']), ('se', ['habitude', 'conseils', 'Alice']), ('lui', ['habitude', 'conseils', 'Alice']), ('en', ['habitude', 'conseils', 'Alice'])]
+0 Elle avait [GV:predicat] p=None d=0
+1   pour habitude [GP:but] p=0 d=1
+2     de [GP:theme] p=1 d=2
+3   se donner [GV:predicat] p=0 d=1
+4     de très-bons conseils [GP:theme] p=3 d=2
+5       bien qu'elle les suivît rarement [SUB:concession] p=4 d=3
+6   quelquefois elle se grondait [GV:predicat] p=0 d=1
+7     si fort que les larmes lui en venaient aux yeux [SUB:hypothese] p=6 d=2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"\"\"        if t.cls == \"PREP\":\n            j = _consomme(utiles, i + 1, {\"DET\", \"MOT\"})\n    … [1419 caractères tronqués]`
+
+  ```
+préposition seule ignorée
+----------------------------------------------------------------------
+Ran 47 tests in 3.692s
+
+OK
+  gold · 55 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    32  31/32      0.98  69/69    18/18  
+  global     55  54/55      0.99 131/131   47/47  
+  contrôle · baseline 94/131 (0.72) · règles coupées 96/131 (0.73) · rôles mélangés 0.11 [0.00, 0.23]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+Le chat de la voisine qui dort sur le toit se réveille.
+  0   Le chat [GN] p=3 d=1
+  1     de la voisine [GP] p=0 d=2
+  2       qui dort sur le toit [REL] p=1 d=3
+  3 se réveille [GV] p=None d=0
+Elle avait pour habitude de se donner de très-bons conseils (bien qu'elle les suivît rarement), et quelquefois elle se grondait si fort que les larmes lui en venaient aux yeux.
+  0 Elle avait [GV] p=None d=0
+  1   pour habitude [GP] p=0 d=1
+  2   se donner [GV] p=0 d=1
+  3     de très-bons conseils [GP] p=2 d=2
+  4       bien qu'elle les suivît rarement [SUB] p=3 d=3
+  5  
+… [112 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && cat > arbre_svg.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"arbre_svg.py — l'arbre syntaxique et les liens référents-référés, en SVG.\n\nLe retour humain du 03/11 demandait deux choses : un arbre qui a de la **profondeu … [7614 caractères tronqués]`
+
+  ```
+✅ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/arbre-referents.svg · 4681 octets
+racine {http://www.w3.org/2000/svg}svg viewBox 0 0 1020 550
+title Arbre syntaxique et liens référents-référés
+desc L'arbre d'une phrase d'Alice : le GV racine, les GN, GP, REL
+Alice 7 dash 2
+[stderr]
+which: no rsvg-convert in (/home/stephane/IA/outils:/usr/local/cuda-13/bin:/home/stephane/.lmstudio/bin:/home/stephane/IA/outils:/home/stephane/.local/share/../bin:/home/stephane/.cargo/bin:/usr/local/cuda-13/bin:/home/stephane/.lmstudio/bin:/home/stephane/.local/bin:/usr/local/bin:/usr/bin:/bin:/home/stephane/.dotnet/tools:/home/stephane/.lmstudio/bin:/home/stephane/.lmstudio/bin:/home/stephane/.lmstudio/bin)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && which convert inkscape chromium google-chrome firefox 2>/dev/null; python3 -c \"import cairosvg\" 2>/dev/null && echo cairosvg || true; ls -la docs/schemas/arbre-referents.svg", "description": "Find an SVG renderer for visual check"}`
+
+  ```
+/usr/bin/convert
+/usr/bin/inkscape
+/usr/bin/google-chrome
+/usr/bin/firefox
+-rw-r--r--. 1 stephane stephane 4714  3 nov 16:22 docs/schemas/arbre-referents.svg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && convert -density 110 docs/schemas/arbre-referents.svg /tmp/arbre-referents.png 2>&1 | tail -3; ls -la /tmp/arbre-referents.png 2>/dev/null", "description": "Render SVG to PNG for visual check"}`
+
+  ```
+convert: attempt to perform an operation not authorized by the security policy `SVG' @ error/module.c/OpenModule/1273.
+convert: no decode delegate for this image format `SVG' @ error/constitute.c/ReadImageInternal/774.
+convert: no images defined `/tmp/arbre-referents.png' @ error/deprecate.c/ConvertImageCommand/3375.
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && inkscape --export-type=png --export-filename=/tmp/arbre-referents.png --export-width=1100 docs/schemas/arbre-referents.svg 2>&1 | tail -3; ls -la /tmp/arbre-referents.png 2>/dev/null", "description": "Render SVG with inkscape", "time … [14 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 89352  3 nov 16:22 /tmp/arbre-referents.png
+  ```
+
+- **read_image** `{"file_path": "/tmp/arbre-referents.png"}`
+
+  ```
+Error: cannot read "/tmp/arbre-referents.png" as an image: model "deepseek-flash" does not declare image input; switch to an image-capable model to read images
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('mesure_arbre.py'); t=p.read_text(encoding='utf-8')\nt=t.replace('''def mesurer() -> dict:\n    maxs: Counter = Counter()\n    niveaux: Counter = Counter()\n    segm … [3532 caractères tronqués]`
+
+  ```
+207 phrases · 359 candidats · 2308 segments
+  profondeur max par candidat : {'0': 2, '1': 37, '2': 221, '3': 84, '4': 13, '5': 2}
+  niveaux des segments : {'0': 359, '1': 1268, '2': 556, '3': 108, '4': 15, '5': 2}
+  référents : 170 phrases, 371 formes, 294 avec candidat, 77 sans
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-arbre.json
+Ran 47 tests in 3.689s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && cat > tests/test_arbre_svg.py <<'PY'\n\"\"\"Tests de l'arbre (profondeur) et des référents (proposition), et du SVG.\"\"\"\nimport unittest\nimport xml.etree.ElementTree as ET\n\nimport arbre_svg\nimport generateur\n … [1611 caractères tronqués]`
+
+  ```
+Ran 50 tests in 3.693s
+
+OK
+{'0': 2, '1': 37, '2': 221, '3': 84, '4': 13, '5': 2} 371 294 77
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && cat > donnees/paragraphes.json <<'JSON'\n{\n \"version\": 1,\n \"note\": \"Paragraphes complets réels (Alice au pays des merveilles, domaine public) : la phrase cible et la ou les phrases de contexte qui portent l'an … [1388 caractères tronqués]`
+
+  ```
+paragraphes.json OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('README.md'); t=p.read_text(encoding='utf-8')\nsection='''\n## L'arbre et les référents\n\n`construire_arbre()` donne à chaque segment un **père** et une **profondeu … [3513 caractères tronqués]`
+
+  ```
+README arbre/référents
+Ran 50 tests in 3.691s
+
+OK
+[master b18dbac] S — L'ARBRE A UNE PROFONDEUR ET LES RÉFÉRENTS SONT PROPOSÉS : 99 CANDIDATS À ≥3, 294/371 FORMES ; SVG ALICE
+ 7 files changed, 363 insertions(+), 25 deletions(-)
+ create mode 100644 arbre_svg.py
+ create mode 100644 donnees/paragraphes.json
+ create mode 100644 tests/test_arbre_svg.py
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   51b6aaf..b18dbac  master -> master
+  ```
+
+- **write** `{"content": "# S — L'arbre a une profondeur et les référents sont proposés : 99 candidats à ≥3, 294/371 formes\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : la validation humaine s'était\n> arrêtée sur deux manques — « il manque trop souvent de profondeur » et « les référents … [6237 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-arbre-referents.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Original mandate: act as **session S (structures, CPU)**. Read `AGENTS.md`, `docs/pilotage/en-cours.md`, `docs/theorie/jeux-symboliques.md`, `tools/structures/` (submodule `heads/fusion`).
+- Create `journal/sessions/<id>/plan.md` with `python3 tools/sessions.py --modele` (État : actif, heartbeat now); reserve `tools/structures/`, its exports and bank.
+- "Prochaine action : analyseur rôles/subordonnées, puis export au corpus ; 19 tests à garder verts."
+- "Le sous-module se commit dans son dépôt avant de bouger le pointeur."
+- "Un fait = mesure + contrôle + fiche + en-cours + commit (`git add` explicite)."
+- "Ne touche pas à en-cours/roadmap/AGENTS sans le hub."
+- Follow-ups: "mets le dossier copilotage à jour" → update `docs/pilotage/`; "commit l'ensemble"; "push"; "tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses"; "attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus"; "tiens ta liste de tâches dsh à jour et continue".
+
+## Key Technical Concepts
+- Drave: event/flow AI; `docs/` = state/vision, `reports/` = measured fiches/JSON, `journal/` = dated narrative, `data/` = corpora (gitignored).
+- Session contract: `journal/sessions/<id>/plan.md`, heartbeat, reserved globs, `sessions.py --check/--strict`, one writer for `en-cours`.
+- Pre-commit hook `tools/verifie_etat_a_jour.py --index`: reports/roadmap/backlog facts require staged `docs/pilotage/en-cours.md`; hook also runs `archive_sessions.py`, `session_report.py`, `journal_auto.py`, `git add journal` (slow, ~minutes).
+- Use explicit `git add`; alternate index (`GIT_INDEX_FILE=/tmp/index.s`) when other sessions have staged changes.
+- Main remote: `git@github.com:stephanedenis/drave.git`; submodule remote: local `/home/stephane/Data13TB/stephane/GitHub/drave-structures`, configured `receive.denyCurrentBranch=updateInstead`.
+- Structures analyzer: heuristic segmentation GN/GV/GP/REL/SUB; roles by preposition/context; subordinate markers; passive/copula; finite-verb GN boundary; GV stops before time adverb; homograph context rule (noun if next token AUX or another verb).
+- Gold `donnees/gold-analyseur.json`: dev/test/holdout waves; `mesure_analyseur.py` metrics types/coverage/roles + controls baseline, `roles=False`, shuffled 200.
+- `mesure_corpus.py`: 50k lines + 20,799 CEGEP sentences + 50k clean lines/sentences, word-shuffle control, lines vs reconstructed sentences.
+- `candidats_corpus.py`: 200 real clean sentences → 355 candidates in `donnees/phrases_generees.json` (server-loaded bank).
+- `exporter_corpus.py` modes `gold` (default) → `data/structures/banque.jsonl`, `banque` → `banque-validee.jsonl`, `reference` → `banque-reference.jsonl`; `verifier_corpus.py` SHA/counts/spans/restitution/autotest.
+- Gates: `revue_documentation.py`, `taille_documents.py` (T0 ≤ 4000, T1 2800), `verifie_en_cours.py` (≤2000 words, max 5 questions), `porte-tableaux.sh`, `verifier_schemas.py`, `sessions.py --check --strict`.
+- N2 night mandate (GPU, until 08h) + hub full gate pass are running; do not launch GPU jobs. Hub resources registry `tools/ressources.py` committed (`a67dbf00`).
+
+## Files and Code
+- `tools/structures/generateur.py`: v4 uncommitted. Added `VERBES_FINIS`, `COPULES`, `VERBES_LIEU`; GN stops before finite verb; GV stops before time adverb; homograph rule:
+  - verb-lexicon word after ≥1 MOT is treated as **noun** if next token `cls == "AUX"` or next MOT is in `VERBES_FINIS | VERBES_LIEU`; else break.
+  - Added `surprend surprennent surprenons surprenez surprenais surprenait surprenaient` to `VERBES_FINIS`.
+- `tools/structures/donnees/gold-analyseur.json`: v4 uncommitted, **55 phrases** (7 dev, 16 test, 32 holdout in 4 waves: h024–h031, h032–h039, h040–h047, h048–h055). Note explains protocol/limits.
+- `tools/structures/donnees/mesure-analyseur.json`: v4 uncommitted. Global **54/55 types, 131/131 roles, 47/47 complements, coverage 0.99**; holdout 
+… [6382 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Original mandate: act as **session S (structures, CPU)**. Read `AGENTS.md`, `docs/pilotage/en-cours.md`, `docs/theorie/jeux-symboliques.md`, `tools/structures/` (submodule `heads/fusion`).
+- Create `journal/sessions/<id>/plan.md` with `python3 tools/sessions.py --modele` (État : actif, heartbeat now); reserve `tools/structures/`, its exports and bank.
+- "Prochaine action : analyseur rôles/subordonnées, puis export au corpus ; 19 tests à garder verts."
+- "Le sous-module se commit dans son dépôt avant de bouger le pointeur."
+- "Un fait = mesure + contrôle + fiche + en-cours + commit (`git add` explicite)."
+- "Ne touche pas à en-cours/roadmap/AGENTS sans le hub."
+- Follow-ups: "mets le dossier copilotage à jour" → update `docs/pilotage/`; "commit l'ensemble"; "push"; "tu feras un commit push quand ce sera stable. pour l'instant, la machine est tranquille. tu peur entreprendre des choses"; "attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus"; "tiens ta liste de tâches dsh à jour et continue".
+
+## Key Technical Concepts
+- Drave: event/flow AI; `docs/` = state/vision, `reports/` = measured fiches/JSON, `journal/` = dated narrative, `data/` = corpora (gitignored).
+- Session contract: `journal/sessions/<id>/plan.md`, heartbeat, reserved globs, `sessions.py --check/--strict`, one writer for `en-cours`.
+- Pre-commit hook `tools/verifie_etat_a_jour.py --index`: reports/roadmap/backlog facts require staged `docs/pilotage/en-cours.md`; hook also runs `archive_sessions.py`, `session_report.py`, `journal_auto.py`, `git add journal` (slow, ~minutes).
+- Use explicit `git add`; alternate index (`GIT_INDEX_FILE=/tmp/index.s`) when other sessions have staged changes.
+- Main remote: `git@github.com:stephanedenis/drave.git`; submodule remote: local `/home/stephane/Data13TB/stephane/GitHub/drave-structures`, configured `receive.denyCurrentBranch=updateInstead`.
+- Structures analyzer: heuristic segmentation GN/GV/GP/REL/SUB; roles by preposition/context; subordinate markers; passive/copula; finite-verb GN boundary; GV stops before time adverb; homograph context rule (noun if next token AUX or another verb).
+- Gold `donnees/gold-analyseur.json`: dev/test/holdout waves; `mesure_analyseur.py` metrics types/coverage/roles + controls baseline, `roles=False`, shuffled 200.
+- `mesure_corpus.py`: 50k lines + 20,799 CEGEP sentences + 50k clean lines/sentences, word-shuffle control, lines vs reconstructed sentences.
+- `candidats_corpus.py`: 200 real clean sentences → 355 candidates in `donnees/phrases_generees.json` (server-loaded bank).
+- `exporter_corpus.py` modes `gold` (default) → `data/structures/banque.jsonl`, `banque` → `banque-validee.jsonl`, `reference` → `banque-reference.jsonl`; `verifier_corpus.py` SHA/counts/spans/restitution/autotest.
+- Gates: `revue_documentation.py`, `taille_documents.py` (T0 ≤ 4000, T1 2800), `verifie_en_cours.py` (≤2000 words, max 5 questions), `porte-tableaux.sh`, `verifier_schemas.py`, `sessions.py --check --strict`.
+- N2 night mandate (GPU, until 08h) + hub full gate pass are running; do not launch GPU jobs. Hub resources registry `tools/ressources.py` committed (`a67dbf00`).
+
+## Files and Code
+- `tools/structures/generateur.py`: v4 uncommitted. Added `VERBES_FINIS`, `COPULES`, `VERBES_LIEU`; GN stops before finite verb; GV stops before time adverb; homograph rule:
+  - verb-lexicon word after ≥1 MOT is treated as **noun** if next token `cls == "AUX"` or next MOT is in `VERBES_FINIS | VERBES_LIEU`; else break.
+  - Added `surprend surprennent surprenons surprenez surprenais surprenait surprenaient` to `VERBES_FINIS`.
+- `tools/structures/donnees/gold-analyseur.json`: v4 uncommitted, **55 phrases** (7 dev, 16 test, 32 holdout in 4 waves: h024–h031, h032–h039, h040–h047, h048–h055). Note explains protocol/limits.
+- `tools/structures/donnees/mesure-analyseur.json`: v4 uncommitted. Global **54/55 types, 131/131 roles, 47/47 complements, coverage 0.99**; holdout 31/32, 69/69, 18/18, coverage 0.98; controls **94/131 (0.7176)**, **96/131 (0.7328)**, shuffled **0.11 [0, 0.23]**.
+- `tools/structures/donnees/mesure-corpus.json`: re-run v4. Lines: CEGEP 3.6% GN+GV / 0.5% no GV / 0.94 cov / 21 homographs; clean 51.0% / 10.2% / 0.89 / 578; shuffle 3.8% / 0.5% / 0.94 / 19. Sentences: CEGEP 8.5% / 0.8% / 0.94 / 28; clean 65.5% / 8.0% / 0.89 / 1134; shuffle 9.1% / 0.4% / 0.93 / 23.
+- `tools/structures/donnees/phrases_generees.json` + `phrases-corpus-manifest.json`: 200 phrases/355 candidates, SHA-256 `43957a3b9ad2422b…` (unchanged after v4).
+- `tools/structures/tests/test_generateur.py`: updated — `test_homographe_nominal_resolu_par_le_contexte`, `test_limites_nommees_du_contexte` (Le grand lit -> GN "Le grand" + GV "lit"; Le triste fait demeure -> GN "Le triste"); `test_mesure_bat_les_controles` now 55 phrases, types >=54, roles >=0.98, coverage >=0.96.
+- `tools/structures/README.md`: v4 updated (55 phrases, 47 tests, context rule, corpus homograph counts, limits h050/h053). Uncommitted.
+- `tools/structures/mesure_corpus.py`, `candidats_corpus.py`, `mesure_analyseur.py`, `exporter_corpus.py`, `verifier_corpus.py`: committed/pushed (up to `97641d5`).
+- `reports/rapport-s-analyseur-roles.md`: committed v3 in `3f74fe83`, stale (47 phrases, 43→46 tests). Needs v4 55/54/131/47 tests.
+- `reports/rapport-s-corpus-reel.md`: committed `3f74fe83`; needs homograph counts 28/1134 and gold reference 55.
+- `reports/s-banque-structures.json`: manifest old 47-line gold, SHA `f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2`; needs 55-line re-export + new SHA.
+- `data/structures/banque.jsonl`: old 47-line gold export; needs `exporter_corpus.py` re-run (55 lines).
+- `docs/pilotage/en-cours.md`: S section v3 + corpus/bank lines; needs v4 54/55, 131/131, 47/47, 55 gold, 47 tests.
+- `docs/pilotage/roadmap.md`: S row v3; needs v4.
+- `reports/INDEX.md`: analyzer/corpus lines; analyzer title needs v4.
+- `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md`: session plan, heartbeat, state proposal/applied.
+- `tools/ressources.py`: hub registry (committed `a67dbf00`).
+
+## Errors and Fixes
+- Submodule push rejected "refusing to update checked out branch": set `receive.denyCurrentBranch=updateInstead` on `/home/stephane/Data13TB/stephane/GitHub/drave-structures`, then push succeeded.
+- `git commit` failed with `.git/index.lock` due to hub concurrent `git commit --only`: waited ~15s for lock release, retried successfully (`3f74fe83`).
+- Hook commits hang for minutes (`session_report.py` reads all sessions): run in background and poll.
+- T0 over budget several times (4113, 4018, 4040): trimmed en-cours/intro/N2 duplicates; final T0 green, en-cours ~1623 words.
+- `candidats_corpus.py` crashed on temp path `relative_to(DEPOT)`: added `_source_rel()` helper.
+- `mesure_corpus.py` printed wrong output path: `afficher(r, a.sortie)`.
+- h033 fixed with finite-verb lexicon; new limits h050 (verb after "fait" outside lexicon) and h053 (noun after adjective at end) named.
+- v3 test asserted buggy homograph split; replaced by context-resolution test + named-limits test.
+- `reports/` fact commit blocked without en-cours: always staged en-cours with facts.
+- `sessions.py --check --strict` warns on `data/` vs `data/structures/`; hub changed to warning-not-failure.
+
+## Pending Jobs
+- Re-export gold corpus 55 lines: `cd tools/structures && python3 exporter_corpus.py --mode gold && python3 verifier_corpus.py ../../data/structures/banque.jsonl`; copy `data/structures/banque-manifest.json` → `reports/s-banque-structures.json`; note new SHA.
+- Commit/push submodule v4: `generateur.py`, `donnees/gold-analyseur.json`, `donnees/mesure-analyseur.json`, `donnees/mesure-corpus.json`, `tests/test_generateur.py`, `README.md` (47 tests).
+- Update main fiches/state/roadmap/INDEX with v4 figures, 55-line corpus SHA, 47 tests; run `revue_documentation.py`, `taille_documents.py`, `verifie_en_cours.py`, `sessions.py --check`.
+- Commit/push main (pointer + fiches + state) when stable; explicit `git add` only own paths.
+- Update DSH todo list (homograph rule/holdout4 done after commit).
+- Human validation of 200-phrase bank (server loads `donnees/phrases_generees.json`) — depends on human.
+- N2 night mandate and hub full gate pass are other sessions; don't interfere.
+
+## Current Work
+- Just updated `tools/structures/README.md` for v4; 47 tests green; v4 measure 55 phrases → 54/55 types, 131/131 roles, 47/47 complements, coverage 0.99, controls 94/131, 96/131, 0.11.
+- Re-ran corpus measure (50k) and candidate bank (200/355; bank SHA unchanged).
+- Submodule v4 changes are uncommitted; main v4 fiches/state not updated yet.
+
+## Next Step
+- Run `cd tools/structures && python3 exporter_corpus.py --mode gold && python3 verifier_corpus.py ../../data/structures/banque.jsonl`, capture the new 55-line SHA and copy the manifest to `reports/s-banque-structures.json`; then commit/push submodule v4.
+
+## Critical Context
+- Session id: `29ad180d-38a5-4481-a9a7-ec6ab31c895f`.
+- Main `origin/master` = `3f74fe83` (S corpus/bank + shared state); submodule `origin/master` = `97641d5` at last push. Older key commits: `90e507b` (v3 GN boundary), `140feb6` (corpus measure), `97641d5` (bank), `647205a` (v1 roles), `63927a03`/`dca7e7a2` (S v3 state/counters), `d2fc26c6` (D/R/A), `e2227509` (N2 closure incl. S v3), `a67dbf00` (hub resources), `c0196b55` (N2 night).
+- Main reports counters at last commit: **562 fiches / 648 JSON**; en-cours S line v3 + corpus/bank; T0 green.
+- The user wants commits/pushes only when stable; hub/N2/Pensée can edit shared files concurrently. Check `git status`, `git log`, and `.git/index.lock` before committing.
+- The N2 night mandate holds GPU until 08h; hub gate pass `work/portes/passe-1102-19h32` is running; S work is CPU-only.
+- Bank `phrases_generees.json` (200/355) is committed/pushed in submodule `97641d5`; the server `serveur.py` loads it automatically.
+- Gold export SHA old `f2a0d2fb…` will change with the 55-line export; use the new manifest SHA consistently in fiche/state.
+- Exact v4 limits: h050 "Le triste fait demeure." (next verb outside lexicon) and h053 "Le grand lit." (noun after adjective at end); h046/h047 now resolved by context.
+- The agent must keep the DSH task list updated and continue autonomously; no GPU work; respect shared-state ownership.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; echo \"md $(ls reports/*.md | wc -l) json $(ls reports/*.json | wc -l)\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; sed -n '/### Session `29ad180d/,/### Session `e181ce02/p' docs/pilotage/en-co … [279 caractères tronqués]`
+
+  ```
+2026-11-03 16:25 EST
+md 594 json 682
+117:| fichiers / JSON de résultats | **593** / **682** | `reports/*.md` / `reports/*.json` |
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 55), export, tests 47~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle et la frontière GN.
+- **Stratégie** : une règle = une phrase, trois contrôles.
+- **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
+- **Fait** : types **54/55**, rôles **131/131** ; h050/h053 nommées ; **corpus réel** 8,5 %/65,5 % (mélange 9,1 %) ; **banque partielle** : **142** verdicts/71 phrases, **81** lectures/65, arrêt humain (arbre 1, référents 0) ; **47 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md).
+- **Ce qu'elle fait** : **`51b6aaf`** ; corpus **55** (SHA
+… [1652 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\n# plan\np=Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Heartbeat** : 2026-11-03 13:55 EST\", \"- **Heartbeat** : … [5357 caractères tronqués]`
+
+  ```
+état/roadmap/plan/INDEX v5
+  en-cours · 1643 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 violation(s) :
+     · T0 : 4013 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  schémas · 458 document(s) · 67 SVG · 2 source(s)
+  ❌ 1 anomalie(s) :
+     · schéma non référencé : docs/schemas/arbre-referents.svg
+  revue de documentation · 594 fiche(s) · 682 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/schemas/ | head -12; echo \"--- README?\"; ls docs/schemas/README.md 2>/dev/null && grep -n \"svg\" docs/schemas/README.md | head -5; echo \"--- docs map\"; grep -n \"schemas\" docs/README.md | head -5; echo \"--- jeux\"; gre … [254 caractères tronqués]`
+
+  ```
+arbre-referents.svg
+backlog-dependances.svg
+bloc-linguistique-niveaux.svg
+bloc-linguistique-substitution.svg
+chantiers-decision.svg
+chantiers-vision.svg
+decision.puml
+decision.puml.svg
+diehl-cook-architecture.svg
+diehl-cook-banc.svg
+diehl-cook-boucle.svg
+diehl-cook-conformite.svg
+--- README?
+docs/schemas/README.md
+18:| [modules-cerveau-langage.svg](modules-cerveau-langage.svg) | M1 hub → code RSN → bus → M2–M7, M4 → M8 | [les modules](../theorie/modules-cerveau-langage.md) |
+19:| [protocole-semantique.svg](protocole-semantique.svg) | surface L1 → encodeur → z → décodeur + L2 → surface L2 | [le protocole](../theorie/protocole-semantique.md) |
+20:| [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'étage 2 ne voit jamais la surface | [les jeux](../theorie/jeux-symboliques.md) |
+21:| [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../implantation/format-flux.md) |
+22:| [backlog-dependances.svg](backlog-dependances.svg) | le graphe des dépendances du backlog A/B/N/R, par couche | [le graphe](../pilotage/backlog/dependances.md) |
+--- docs map
+94:| [`schemas/README.md`](schemas/README.md) | l'index des 
+… [836 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "limit": 18}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md</path>
+<type>file</type>
+<content>
+1: # Les schémas — index et convention
+2: 
+3: > **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : les schémas directs
+4: > des concepts, les schémas du natif et de l'impulsionnel, deux sources générées par docwatch et
+5: > les quatorze schémas de la synthèse
+6: > (`docs/theorie/synthese/schemas/`). Chaque SVG direct a un `viewBox`, un `<title>`, un `<desc>` et
+7: > `role="img"` ; aucun n'utilise de ressource externe.
+8: >
+9: > **La règle.** Pas d'ASCII art. Un schéma est un SVG, directement, converti depuis Mermaid ou
+10: > PlantUML, ou un **bloc inline** rendu par docwatch. Voir
+11: > [`docs/methode/illustrations.md`](../methode/illustrations.md) ; vérifier avec
+12: > `python3 tools/verifier_schemas.py`.
+13: 
+14: ## Les schémas des concepts
+15: 
+16: | schéma | ce qu'il montre | où il est utilisé |
+17: |---|---|---|
+18: | [modules-cerveau-langage.svg](modules-cerveau-langage.svg) | M1 hub → code RSN → bus → M2–M7, M4 → M8 | [les modules](../theorie/modules-cerveau-langage.md) |
+
+(Showing lines 1-18 of 133. Use offset=19 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\n# le schéma est référencé dans l'index des schémas\np=Path('docs/schemas/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [jeux-symboliques.svg](jeux-symboliques.svg) | surface … [2525 caractères tronqués]`
+
+  ```
+schéma référencé, T0 resserré
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  schémas · 458 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  revue de documentation · 594 fiche(s) · 682 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1616 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ mandat long (165 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (1124 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo \"=== files ===\"; git status --short | grep -E \"rapport-s-arbre|arbre-referents|schemas/README|INDEX|en-cours|roadmap|plan.md|structures\" | head -12; git status --short | head -4; H=$(git rev-parse HEAD) … [458 caractères tronqués]`
+
+  ```
+1b9a412a JOURNAL D629 — DERNIÈRE LIGNE DE LA BOUCLE RETIRÉE
+2ae69e5c JOURNAUX — LES TROIS DERNIÈRES LIGNES DE LA BOUCLE RETIRÉES (COMMIT SANS HOOK POUR NE PAS RÉGÉNÉRER)
+=== files ===
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M docs/schemas/README.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+ M reports/INDEX.md
+ M tools/structures
+?? docs/schemas/arbre-referents.svg
+?? reports/rapport-s-arbre-referents.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M docs/schemas/README.md
+MM journal/2026-11-03/README.md
+ docs/pilotage/en-cours.md                          | 14 ++--
+ docs/pilotage/roadmap.md                           |  2 +-
+ docs/schemas/README.md                             |  1 +
+ docs/schemas/arbre-referents.svg                   | 30 +++++++
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |  4 +-
+ reports/INDEX.md                                   |  1 +
+ reports/rapport-s-arbre-referents.md               | 94 ++++++++++++++++++++++
+ tools/structures                                   |  2 +-
+ 8 files changed, 137 insertions(+), 11 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE\" -m \"construire_arbre() donne un père et une profondeur réelle : 359 candidats, 37 de profondeur max 1, 221 de 2, 99  … [437 caractères tronqués]`

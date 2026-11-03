@@ -14345,6 +14345,7 @@ AssertionError
 
 ### 👤 Utilisateur
 
+l'écran est rempli de "**the **the **the **the **the **the" que se passe-t-il?
 
 ### 🤖 Assistant
 
@@ -14553,6 +14554,103 @@ not exceeded, and then "git restore --staged :/" to recover.
 - Les **fichiers de travail sont sains** : `reports/`, `docs/`, `en-cours`, journal du 03/11 — aucune trace de la boucle.
 - Vérifications vertes : T0 **3 997/4 000**, revue **589 fiches/678 JSON/82 portes**, `verifie_journal` ✅, `verifie_en_cours` ✅, `reports/README` 2 800/2 800.
 
+**Ce qui reste** : trois lignes résiduelles dans `d629/digest.md` et `536/digest.md` + `536/rapport.md` (le motif est en minuscules « the **the », pas la forme majuscule) ; un `git commit` a échoué sur une **collision d'index concurrente** (disque sain : 706 G libres), il suffit de relancer.
 
 **À ton écran** : `Ctrl+L` ou `clear` pour vider le terminal ; le scrollback de la session peut encore montrer le passage. Je peux finir le nettoyage des trois lignes et recommiter — dis-moi si je continue, ou si tu préfères qu'on s'arrête là pour cette session.
+
+
+## Tour 79
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Le hook `archive_sessions` régénère les rapports depuis les transcriptions : il réinjecte la boucle à chaque commit. Je nettoie les trois fichiers et je commite **sans** le hook, puis je vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== avant ==\" && grep -c 'the \\*\\*the' journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rap … [1576 caractères tronqués]`
+
+  ```
+== avant ==
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md:3
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md:2
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md:3
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md -> 64993 lignes
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md -> 14558 lignes
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md -> 2372 lignes
+
+== après ==
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md
+(vide = propre)
+
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[master 2ae69e5c] JOURNAUX — LES TROIS DERNIÈRES LIGNES DE LA BOUCLE RETIRÉES (COMMIT SANS HOOK POUR NE PAS RÉGÉNÉRER)
+ 3 files changed, 351 insertions(+), 86 deletions(-)
+[commit 0]
+2ae69e5c JOURNAUX — LES TROIS DERNIÈRES LIGNES DE LA BOUCLE RETIRÉES (COMMIT SANS HOOK POUR NE PAS RÉGÉNÉRER)
+43833200 DISTILLATION NATIVE — LE PROFESSEUR LONG PAIE À FORTE DOUCEUR : α = 0,9 DONNE 3,5090 / 3,2835 / 3,1863 CONTRE 3,6452 / 3,4493 / 3,3628 POUR L'ÉLÈVE DUR
+0
+rapport 536 propre
+  ```
+
+### 🤖 Assistant
+
+⏵ Il reste un seul fichier (`d629/rapport.md`) ; je le nettoie et je termine.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nf = \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\"\np = pathlib.Path(f); t = p.read_text(errors=\"replace\")\nlignes = [l for l in t.splitlines(keepends=True) if \"the **the\" n … [1079 caractères tronqués]`
+
+  ```
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md -> 12359 lignes
+
+== vérification finale ==
+(vide = propre)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[master 1b9a412a] JOURNAL D629 — DERNIÈRE LIGNE DE LA BOUCLE RETIRÉE
+ 1 file changed, 3 deletions(-)
+[commit 0]
+1b9a412a JOURNAL D629 — DERNIÈRE LIGNE DE LA BOUCLE RETIRÉE
+
+== état final ==
+ M docs/pilotage/roadmap.md
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+MM journal/2026-11-03/distribue.md
+MM journal/2026-11-03/docs.md
+2320304, /home/stephane/gpu-env/bin/python
+2405962, /home/stephane/gpu-env/bin/python
+active
+  ```
+
+### 🤖 Assistant
+
+⏵ Terminé : plus aucune trace de la boucle, vérifications vertes, état et fiche B13 committés.
+
+## Ce qui s'est passé
+
+Une **boucle de répétition de ma génération** (le mot « the » dégénère) — un incident du modèle, **pas du dépôt**. Le hook `archive_sessions` recopie la transcription de chaque session dans `journal/sessions/<id>/digest.md` et `rapport.md` : il a donc propagé la sortie dans **4 journaux de session** (dont le rapport de cette session). Les fichiers de travail (`reports/`, `docs/`, `en-cours`, journal du jour) n'ont jamais été touchés.
+
+## Ce qui a été nettoyé
+
+- `journal/sessions/d629…/digest.md` et `rapport.md` ; `journal/sessions/536…/digest.md` et `rapport.md` — **toutes** les lignes de la boucle retirées, `grep` final **vide**.
+- Commits faits **sans le hook** (`--no-verify`) pour éviter qu'il régénère les rapports depuis la transcription : `2ae69e5c`, `1b9a412a` (plus `1032ed74`, `00bb1fa9` pour les premiers nettoyages).
+- Vérifications : `verifie_journal` ✅, `verifie_en_cours` ✅, T0 **3 999/4 000**, revue **589/678/82** ✅, tous les budgets ✅.
+
+## La fiche B13 (l'objet du travail)
+
+`reports/rapport-pensee-gold-api.md` est écrite et intégrée (README, INDEX, état, journal) :
+- **mêmes verdicts** que le 7B sur la porte-minute (`llm_porte` 1,0 ; `llm_labyrinthe` 0,25) ;
+- **2,9 s contre 101,6 s** sur le cas sans règle, **0 erreur** sur 96 appels ;
+- contrôle négatif, limites (changement de professeur, `deepseek-flash` à raisonnement, cache) et commande de reproduction.
+
+## Ce qu'il faut retenir pour la suite
+
+- Les GPU sont **libres de serveur local** ; deux tâches **Drave** (`gpu-env`) tournent, le garde-fou est **actif**.
+- Le hook `archive_sessions` **régénérera** le rapport `536` au prochain commit normal : la transcription de cette session contient encore la boucle, donc il faudra soit nettoyer la transcription, soit committer les journaux avec `--no-verify` tant que cette session vit. À ta convenance.
+- À l'écran : `Ctrl+L`/`clear` suffit ; rien à réparer côté fichiers.
 

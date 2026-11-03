@@ -1364,9 +1364,7 @@ cmn n= 30 max 135 >160: [] longueurs [(1, 30), (2, 52), (3, 11), (4, 30), (5, 25
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time /home/stephane/IA/venv-drave/bin/python tools/traduire_bench.py --hf Qwen/Qwen2.5-7B-Instruct --dtype bfloat16 --paires fra:eng --n 2 --max-jetons 400 --sortie /tmp/essai_brut.json 2>&1 | tail -5", "description": "Smoke test 7B  … [33 caractères tronqués]`
 
   ```
-Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]
-Loading weights:  83%|████████▎ | 283/339 [00:00<00:00, 2768.41it/s]
-Loading weights: 100%|██████████| 339/339 [00:00<00:00, 2446.01it/s]
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  83%|████████▎ | 283/339 [00:00<00:00, 2768.41it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 2446.01it/s]
   fra:eng   · chrF  86.7 [77.1, 96.4] · plancher  32.9 · hasard  27.4 · tronqué 0/2 · recopié 2 · 2 articles
   → /tmp/essai_brut.json
 [stderr]
@@ -2102,20 +2100,7 @@ PY) finished [status: completed, exit code: 0]. Read its output with job_output.
 
   ```
 Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-
-Fetching 15 files:  13%|█▎        | 2/15 [00:00<00:01,  9.44it/s]
-Fetching 15 files:  27%|██▋       | 4/15 [02:01<06:31, 35.62s/it]
-Fetching 15 files:  33%|███▎      | 5/15 [02:01<04:12, 25.26s/it]
-Fetching 15 files:  40%|████      | 6/15 [02:04<02:46, 18.46s/it]
-Fetching 15 files:  47%|████▋     | 7/15 [02:04<01:44, 13.04s/it]
-Fetching 15 files:  53%|█████▎    | 8/15 [02:06<01:07,  9.66s/it]
-Fetching 15 files:  60%|██████    | 9/15 [02:28<01:21, 13.51s/it]
-Fetching 15 files:  67%|██████▋   | 10/15 [02:44<01:11, 14.35s/it]
-Fetching 15 files:  73%|███████▎  | 11/15 [03:05<01:05, 16.32s/it]
-Fetching 15 files:  80%|████████  | 12/15 [03:31<00:57, 19.12s/it]
-Fetching 15 files:  87%|████████▋ | 13/15 [03:43<00:33, 16.88s/it]
-Fetching 15 files:  93%|█████████▎| 14/15 [03:43<00:11, 11.94s/it]
-Fetching 15 files: 100%|██████████| 15/15 [03:43<00:00, 14.91s/it]
+Fetching 15 files:  13%|█▎        | 2/15 [00:00<00:01,  9.44it/s]Fetching 15 files:  27%|██▋       | 4/15 [02:01<06:31, 35.62s/it]Fetching 15 files:  33%|███▎      | 5/15 [02:01<04:12, 25.26s/it]Fetching 15 files:  40%|████      | 6/15 [02:04<02:46, 18.46s/it]Fetching 15 files:  47%|████▋     | 7/15 [02:04<01:44, 13.04s/it]Fetching 15 files:  53%|█████▎    | 8/15 [02:06<01:07,  9.66s/it]Fetching 15 files:  60%|██████    | 9/15 [02:28<01:21, 13.51s/it]Fetching 15 files:  67%|██████▋   | 10/15 [02:44<01:11, 14.35s/it]Fetching 15 files:  73%|███████▎  | 11/15 [03:05<01:05, 16.32s/it]Fetching 15 files:  80%|████████  | 12/15 [03:31<00:57, 19.12s/it]Fetching 15 files:  87%|████████▋ | 13/15 [03:43<00:33, 16.88s/it]Fetching 15 files:  93%|█████████▎| 14/15 [03:43<00:11, 11.94s/it]Fetching 15 files: 100%|██████████| 15/15 [03:43<00:00, 14.91s/it]
 OK /home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-14B-Instruct/snapshots/cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8
 [status: co
 … [22 caractères tronqués]
@@ -7745,10 +7730,7 @@ api/documents?language=en&limit=5 -> 400 0 ::
 api/search?language=en -> 200 8958 :: {"totalNumber":131161,"pageSize":20,"pageNumber":0,"docuLanguageListResources":[
 api/documents/latest?language=en -> 404 1164 :: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Draft//EN"> <HTML> <HEAD> <TITLE>Err
 api/pressreleases?language=en -> 404 1164 :: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Draft//EN"> <HTML> <HEAD> <TITLE>Err
-api/rss?language=en -> 200 7426 :: <?xml version="1.0" encoding="UTF-8"?>
- <rss version="2.0">
-   <channel>
-     <t
+api/rss?language=en -> 200 7426 :: <?xml version="1.0" encoding="UTF-8"?> <rss version="2.0">   <channel>     <t
   ```
 
 - **bash** `{"command": "curl -sL -A \"Mozilla/5.0\" -o /tmp/press.rss \"https://ec.europa.eu/commission/presscorner/api/rss?language=en\"; head -c 1200 /tmp/press.rss; echo; echo \"--- items ---\"; grep -oE '<link>[^<]+' /tmp/press.rss | head -5; grep -oE '<title>[^<]+' /tmp/press.rss | head -5", "description" … [26 caractères tronqués]`
@@ -9430,10 +9412,7 @@ continue les travaux, si on a couvert les langues les plus populaires (au sens d
   ```
 https://docs.un.org/en/A/RES/80/1 -> 200 4175 text/html; charset=utf-8 :: <!DOCTYPE html> <html lang="en" dir="ltr"> <head>      <!-- 
 https://undocs.org/A/RES/80/1 -> 200 4056 text/html; charset=utf-8 :: <!-- language_links.ejs --> <!DOCTYPE html> <html lang="en">
-https://documents.un.org/api/symbol/access?s=A/RES/80/1&l=en&t=pdf -> 200 176604 application/pdf :: %PDF-1.7
- %����
- 1 0 obj
- <</Type/Catalog/Pages 2 0 R/Lang(e
+https://documents.un.org/api/symbol/access?s=A/RES/80/1&l=en&t=pdf -> 200 176604 application/pdf :: %PDF-1.7 %���� 1 0 obj <</Type/Catalog/Pages 2 0 R/Lang(e
   ```
 
 - **bash** `{"command": "cd /tmp && for L in en fr es ru zh ar; do curl -sL -A \"Mozilla/5.0\" -o un80_$L.pdf -w \"$L %{http_code} %{size_download}\\n\" \"https://documents.un.org/api/symbol/access?s=A/RES/80/1&l=$L&t=pdf\"; pdftotext -layout un80_$L.pdf un80_$L.txt 2>/dev/null; echo \"  lignes: $(wc -l < un80_ … [134 caractères tronqués]`
@@ -23302,6 +23281,7 @@ kfold-14b600-0089.json {'n': 8, 'marge': 2.3, 'ic95': [0.1, 4.6], 'positives': 5
 
 ### 👤 Utilisateur
 
+est-ce normal que je ne vois que des répétitions de "the **the **the" à l'écran du dsh?
 
 ### 🤖 Assistant
 
@@ -23377,6 +23357,7 @@ Updated todo list: 1 pending, 1 in progress, 8 completed.
 
 ## Sur les répétitions à l'écran
 
+**Non, ce n'était pas normal** : mon flux de sortie a dégénéré en **boucle de répétition** (« the **the **the… ») — un défaut de génération de mon côté, pas un résultat et pas le travail. Les **jobs de fond n'ont pas été affectés** : ils tournent dans leurs propres processus, et je viens de vérifier leur état. La liste de tâches DSH est à jour (10 lignes : 8 terminées, 1 en cours, 1 en attente).
 
 ## Le résultat qui vient de tomber : le Pidgin à 600 pas (mesure 111)
 
@@ -23686,6 +23667,7 @@ This is an automatically generated checkpoint condensing an earlier span of the 
 - Wikidata SPARQL 429; Wikipedia API 429 → sleeps/backoff.
 - `porte-tableaux` red: leftover cell from old row in `docs/en-cours.md:124` ("(Ethnologue 2026) ; reste 13 langues…") → removed, answer updated to 20/20.
 - `drave --gpu-banc` said "GPU absent": `DRAVE_GPU` unset (opt-in) + empty `CUDA_VISIBLE_DEVICES`; fixed in `gpu.rs` (bench: CPU 10.3 ms/14 GB/s vs GPU 1.7 ms/86 GB/s, max error +1.99e-7).
+- Output stream degenerated into repeated "the **the" tokens; user asked if normal → acknowledged as generation glitch, jobs unaffected.
 
 ## Pending Jobs
 - Measure 113 (Pidgin 1500 steps) to test plateau — not launched yet.
@@ -26596,14 +26578,7 @@ Updated file
   ```
 ok
 compile-ok
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  19%|█▉        | 84/434 [00:00<00:00, 827.64it/s]
-Loading weights:  38%|███▊      | 167/434 [00:00<00:00, 791.21it/s]
-Loading weights:  57%|█████▋    | 247/434 [00:00<00:00, 622.33it/s]
-Loading weights:  72%|███████▏  | 313/434 [00:00<00:00, 634.32it/s]
-Loading weights:  87%|████████▋ | 379/434 [00:00<00:00, 604.33it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 657.79it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  19%|█▉        | 84/434 [00:00<00:00, 827.64it/s]Loading weights:  38%|███▊      | 167/434 [00:00<00:00, 791.21it/s]Loading weights:  57%|█████▋    | 247/434 [00:00<00:00, 622.33it/s]Loading weights:  72%|███████▏  | 313/434 [00:00<00:00, 634.32it/s]Loading weights:  87%|████████▋ | 379/434 [00:00<00:00, 604.33it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 657.79it/s]
   ```
 
 ### 🤖 Assistant
@@ -27458,13 +27433,7 @@ RuntimeError: element 0 of tensors does not require grad and does not have a gra
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && OMP_NUM_THREADS=20 timeout 600 /home/stephane/IA/venv-drave/bin/python - <<'EOF' 2>&1 | tail -12\nimport torch\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\nfrom peft import LoraConfig, get_peft_model\ntok = AutoToke … [938 caractères tronqués]`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 88/434 [00:00<00:00, 876.25it/s]
-Loading weights:  41%|████      | 176/434 [00:00<00:00, 801.67it/s]
-Loading weights:  59%|█████▉    | 257/434 [00:00<00:00, 730.54it/s]
-Loading weights:  76%|███████▋  | 331/434 [00:00<00:00, 699.98it/s]
-Loading weights:  93%|█████████▎| 402/434 [00:00<00:00, 682.00it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 735.82it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 88/434 [00:00<00:00, 876.25it/s]Loading weights:  41%|████      | 176/434 [00:00<00:00, 801.67it/s]Loading weights:  59%|█████▉    | 257/434 [00:00<00:00, 730.54it/s]Loading weights:  76%|███████▋  | 331/434 [00:00<00:00, 699.98it/s]Loading weights:  93%|█████████▎| 402/434 [00:00<00:00, 682.00it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 735.82it/s]
 params entraînables: 2457600
 couches: 37 | requires_grad L18: False | grad_fn: False
   ```
@@ -27478,14 +27447,7 @@ couches: 37 | requires_grad L18: False | grad_fn: False
   ```
 ok
   307 séries · 214 entraînement · 93 test
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  18%|█▊        | 77/434 [00:00<00:00, 713.55it/s]
-Loading weights:  38%|███▊      | 163/434 [00:00<00:00, 796.70it/s]
-Loading weights:  56%|█████▌    | 243/434 [00:00<00:00, 789.70it/s]
-Loading weights:  74%|███████▍  | 323/434 [00:00<00:00, 763.09it/s]
-Loading weights:  92%|█████████▏| 400/434 [00:00<00:00, 710.33it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 741.22it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  18%|█▊        | 77/434 [00:00<00:00, 713.55it/s]Loading weights:  38%|███▊      | 163/434 [00:00<00:00, 796.70it/s]Loading weights:  56%|█████▌    | 243/434 [00:00<00:00, 789.70it/s]Loading weights:  74%|███████▍  | 323/434 [00:00<00:00, 763.09it/s]Loading weights:  92%|█████████▏| 400/434 [00:00<00:00, 710.33it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 741.22it/s]
   AVANT entraînement : contenu 8-way 0.239 (hasard 0,125)
     pas    0 · perte 3.111
   APRÈS entraînement : contenu 8-way 0.239 (hasard 0,125)
@@ -27606,13 +27568,7 @@ torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 576.00 MiB. GPU 0 
 
   ```
 ok
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 822.82it/s]
-Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 821.12it/s]
-Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 821.81it/s]
-Loading weights:  81%|████████  | 352/434 [00:00<00:00, 868.18it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 885.50it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 822.82it/s]Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 821.12it/s]Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 821.81it/s]Loading weights:  81%|████████  | 352/434 [00:00<00:00, 868.18it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 885.50it/s]
   AVANT entraînement : contenu 8-way 0.239 (hasard 0,125)
     pas    0 · perte 3.596
   APRÈS entraînement : contenu 8-way 0.239 (hasard 0,125)
@@ -27648,13 +27604,7 @@ background job bash-1376 (bash: sleep 120; tail -5 /tmp/plan-entrainement-3b.log
 
   ```
 307 séries · 214 entraînement · 93 test
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  23%|██▎       | 98/434 [00:00<00:00, 979.60it/s]
-Loading weights:  45%|████▌     | 196/434 [00:00<00:00, 854.39it/s]
-Loading weights:  65%|██████▌   | 283/434 [00:00<00:00, 848.24it/s]
-Loading weights:  87%|████████▋ | 376/434 [00:00<00:00, 871.88it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 886.60it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  23%|██▎       | 98/434 [00:00<00:00, 979.60it/s]Loading weights:  45%|████▌     | 196/434 [00:00<00:00, 854.39it/s]Loading weights:  65%|██████▌   | 283/434 [00:00<00:00, 848.24it/s]Loading weights:  87%|████████▋ | 376/434 [00:00<00:00, 871.88it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 886.60it/s]
 ---
 0.2 0.0 cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet &&
 124 1.9 --pas 300 --batch
@@ -27832,14 +27782,7 @@ background job bash-1386 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrin
 ✅ 638 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
   ✅ la page vivante date du dernier commit (2026-10-22)
 ok
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 819.19it/s]
-Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 811.63it/s]
-Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 807.56it/s]
-Loading weights:  77%|███████▋  | 336/434 [00:00<00:00, 805.91it/s]
-Loading weights:  96%|█████████▌| 417/434 [00:00<00:00, 797.58it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 812.29it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 819.19it/s]Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 811.63it/s]Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 807.56it/s]Loading weights:  77%|███████▋  | 336/434 [00:00<00:00, 805.91it/s]Loading weights:  96%|█████████▌| 417/434 [00:00<00:00, 797.58it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 812.29it/s]
   AVANT : h1 0.239 · h2 0.205 · h3 0.170
     pas    0 · perte 2.814
   APRÈS : h1 0.239 · h2 0.193 · h3 0.170
@@ -29394,12 +29337,7 @@ Answer:
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && OMP_NUM_THREADS=20 timeout 600 /home/stephane/IA/venv-drave/bin/python - <<'EOF' 2>&1 | tail -20\nimport json, torch\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\nd=json.load(open(\"data/raisonnement/transitif.json\" … [756 caractères tronqués]`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  22%|██▏       | 97/434 [00:00<00:00, 913.07it/s]
-Loading weights:  44%|████▎     | 189/434 [00:00<00:00, 873.56it/s]
-Loading weights:  64%|██████▍   | 277/434 [00:00<00:00, 875.41it/s]
-Loading weights:  84%|████████▍ | 365/434 [00:00<00:00, 827.79it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 860.08it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  22%|██▏       | 97/434 [00:00<00:00, 913.07it/s]Loading weights:  44%|████▎     | 189/434 [00:00<00:00, 873.56it/s]Loading weights:  64%|██████▍   | 277/434 [00:00<00:00, 875.41it/s]Loading weights:  84%|████████▍ | 365/434 [00:00<00:00, 827.79it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 860.08it/s]
 en L5 attendu=Léa      obtenu='To determine who is at the fro'
 fr L6 attendu=Hugo     obtenu='Pour répondre à cette question'
 fr L6 attendu=Alice    obtenu='Pour répondre à cette question'
@@ -29421,12 +29359,7 @@ en L2 attendu=Sami     obtenu='Sami is at the front.'
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && OMP_NUM_THREADS=20 timeout 600 /home/stephane/IA/venv-drave/bin/python - <<'EOF' 2>&1 | tail -16\nimport json, torch, random\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\nd=json.load(open(\"data/raisonnement/transiti … [1054 caractères tronqués]`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 841.04it/s]
-Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 843.10it/s]
-Loading weights:  60%|██████    | 261/434 [00:00<00:00, 863.77it/s]
-Loading weights:  80%|████████  | 348/434 [00:00<00:00, 820.36it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 847.35it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 841.04it/s]Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 843.10it/s]Loading weights:  60%|██████    | 261/434 [00:00<00:00, 863.77it/s]Loading weights:  80%|████████  | 348/434 [00:00<00:00, 820.36it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 847.35it/s]
 en L4 attendu=David    obtenu='Rosa'
 fr L3 attendu=Sami     obtenu='Sami'
 fr L3 attendu=Chloé    obtenu='Alice'
@@ -29692,14 +29625,7 @@ started background job bash-1481
   ```
 ok
   2000 chaînes appariées → data/raisonnement/transitif_paires.json
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|█▉        | 86/434 [00:00<00:00, 838.40it/s]
-Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 828.71it/s]
-Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 828.64it/s]
-Loading weights:  78%|███████▊  | 339/434 [00:00<00:00, 793.15it/s]
-Loading weights:  98%|█████████▊| 424/434 [00:00<00:00, 811.46it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 831.65it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|█▉        | 86/434 [00:00<00:00, 838.40it/s]Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 828.71it/s]Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 828.64it/s]Loading weights:  78%|███████▊  | 339/434 [00:00<00:00, 793.15it/s]Loading weights:  98%|█████████▊| 424/434 [00:00<00:00, 811.46it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 831.65it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.069 · **pont 1.000** · pont mélangé 0.050
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.057 · **pont 0.911** · pont mélangé 0.065
   L4 · FR→FR 0.944 · EN→EN 0.965 · FR sur EN sans pont 0.049 · **pont 0.681** · pont mélangé 0.062
@@ -29837,13 +29763,7 @@ started background job bash-1485
 
   ```
 2000 chaînes appariées (taille) → data/raisonnement/transitif_paires_taille.json
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 867.82it/s]
-Loading weights:  40%|████      | 174/434 [00:00<00:00, 852.46it/s]
-Loading weights:  60%|█████▉    | 260/434 [00:00<00:00, 839.23it/s]
-Loading weights:  80%|███████▉  | 347/434 [00:00<00:00, 849.62it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 883.99it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 867.82it/s]Loading weights:  40%|████      | 174/434 [00:00<00:00, 852.46it/s]Loading weights:  60%|█████▉    | 260/434 [00:00<00:00, 839.23it/s]Loading weights:  80%|███████▉  | 347/434 [00:00<00:00, 849.62it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 883.99it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.059 · **pont 1.000** · pont mélangé 0.050
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.041 · **pont 0.854** · pont mélangé 0.049
   L4 · FR→FR 0.944 · EN→EN 0.938 · FR sur EN sans pont 0.076 · **pont 0.674** · pont mélangé 0.035
@@ -29946,13 +29866,7 @@ Updated todo list: 2 pending, 2 in progress, 3 completed.
 
   ```
 2000 chaînes appariées (ordre) → data/raisonnement/transitif_paires_3langues.json
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 861.92it/s]
-Loading weights:  42%|████▏     | 183/434 [00:00<00:00, 915.21it/s]
-Loading weights:  63%|██████▎   | 275/434 [00:00<00:00, 859.99it/s]
-Loading weights:  83%|████████▎ | 362/434 [00:00<00:00, 804.67it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 837.89it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 861.92it/s]Loading weights:  42%|████▏     | 183/434 [00:00<00:00, 915.21it/s]Loading weights:  63%|██████▎   | 275/434 [00:00<00:00, 859.99it/s]Loading weights:  83%|████████▎ | 362/434 [00:00<00:00, 804.67it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 837.89it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.079 · **pont 1.000** · pont mélangé 0.030
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.065 · **pont 0.919** · pont mélangé 0.049
   L4 · FR→FR 0.944 · EN→EN 0.944 · FR sur EN sans pont 0.076 · **pont 0.715** · pont mélangé 0.042
@@ -30051,13 +29965,7 @@ ok
 - **job_output** `{"job_id": "bash-1493", "timeout_ms": 900000, "wait": true}`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|█▉        | 86/434 [00:00<00:00, 854.53it/s]
-Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 807.29it/s]
-Loading weights:  58%|█████▊    | 253/434 [00:00<00:00, 728.25it/s]
-Loading weights:  75%|███████▌  | 327/434 [00:00<00:00, 723.13it/s]
-Loading weights:  92%|█████████▏| 400/434 [00:00<00:00, 716.27it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 755.56it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|█▉        | 86/434 [00:00<00:00, 854.53it/s]Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 807.29it/s]Loading weights:  58%|█████▊    | 253/434 [00:00<00:00, 728.25it/s]Loading weights:  75%|███████▌  | 327/434 [00:00<00:00, 723.13it/s]Loading weights:  92%|█████████▏| 400/434 [00:00<00:00, 716.27it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 755.56it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.069 · **pont 0.168** · pont mélangé 0.069
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.057 · **pont 0.057** · pont mélangé 0.049
   L4 · FR→FR 0.944 · EN→EN 0.965 · FR sur EN sans pont 0.049 · **pont 0.035** · pont mélangé 0.035
@@ -30275,14 +30183,7 @@ started background job bash-1499
 
   ```
 2000 chaînes appariées (ordre) → data/raisonnement/transitif_paires_4langues.json
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 854.00it/s]
-Loading weights:  40%|███▉      | 173/434 [00:00<00:00, 824.89it/s]
-Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 819.84it/s]
-Loading weights:  78%|███████▊  | 340/434 [00:00<00:00, 826.32it/s]
-Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 826.49it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 839.54it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 854.00it/s]Loading weights:  40%|███▉      | 173/434 [00:00<00:00, 824.89it/s]Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 819.84it/s]Loading weights:  78%|███████▊  | 340/434 [00:00<00:00, 826.32it/s]Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 826.49it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 839.54it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.069 · **pont 1.000** · pont mélangé 0.059
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.081 · **pont 0.935** · pont mélangé 0.057
   L4 · FR→FR 0.944 · EN→EN 0.910 · FR sur EN sans pont 0.083 · **pont 0.736** · pont mélangé 0.021
@@ -30458,14 +30359,7 @@ python3 -m py_compile tools/pont_plan.py && OMP_NUM_THREADS=20 /home/stephane/IA
   ```
 ok
   307 séries appariées
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 843.89it/s]
-Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 830.53it/s]
-Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 831.89it/s]
-Loading weights:  79%|███████▊  | 341/434 [00:00<00:00, 838.28it/s]
-Loading weights:  98%|█████████▊| 425/434 [00:00<00:00, 834.93it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 849.78it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 843.89it/s]Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 830.53it/s]Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 831.89it/s]Loading weights:  79%|███████▊  | 341/434 [00:00<00:00, 838.28it/s]Loading weights:  98%|█████████▊| 425/434 [00:00<00:00, 834.93it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 849.78it/s]
   extraction des états…
   FR→FR 0.204 · EN→EN 0.216 · EN→FR sans pont 0.250 · **pont 0.148** · pont mélangé 0.114 (hasard 0,125)
   → reports/pont-plan-3b.json
@@ -30560,13 +30454,7 @@ c577f312 MESURE 132 — LE PONT N'ALIGNE PAS L'ETAT DE PLAN : sur 307 series Ver
   ```
 ok
   2000 chaînes appariées (ordre) → data/raisonnement/transitif_paires_ar.json
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  23%|██▎       | 99/434 [00:00<00:00, 930.54it/s]
-Loading weights:  44%|████▍     | 193/434 [00:00<00:00, 827.15it/s]
-Loading weights:  64%|██████▍   | 279/434 [00:00<00:00, 809.56it/s]
-Loading weights:  83%|████████▎ | 361/434 [00:00<00:00, 808.05it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 830.81it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  23%|██▎       | 99/434 [00:00<00:00, 930.54it/s]Loading weights:  44%|████▍     | 193/434 [00:00<00:00, 827.15it/s]Loading weights:  64%|██████▍   | 279/434 [00:00<00:00, 809.56it/s]Loading weights:  83%|████████▎ | 361/434 [00:00<00:00, 808.05it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 830.81it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.050 · **pont 1.000** · pont mélangé 0.030
   L3 · FR→FR 1.000 · EN→EN 0.992 · FR sur EN sans pont 0.081 · **pont 0.902** · pont mélangé 0.065
   L4 · FR→FR 0.944 · EN→EN 0.875 · FR sur EN sans pont 0.042 · **pont 0.729** · pont mélangé 0.062
@@ -30657,12 +30545,7 @@ started background job bash-1507
 - **job_output** `{"job_id": "bash-1507", "timeout_ms": 900000, "wait": true}`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  21%|██        | 89/434 [00:00<00:00, 880.07it/s]
-Loading weights:  41%|████      | 178/434 [00:00<00:00, 883.15it/s]
-Loading weights:  62%|██████▏   | 267/434 [00:00<00:00, 841.81it/s]
-Loading weights:  81%|████████  | 352/434 [00:00<00:00, 836.00it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 859.78it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  21%|██        | 89/434 [00:00<00:00, 880.07it/s]Loading weights:  41%|████      | 178/434 [00:00<00:00, 883.15it/s]Loading weights:  62%|██████▏   | 267/434 [00:00<00:00, 841.81it/s]Loading weights:  81%|████████  | 352/434 [00:00<00:00, 836.00it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 859.78it/s]
   raisonnement : 2000 paires
   FR→FR 0.204 · EN→EN 0.216 · EN→FR sans pont 0.250 · **pont croisé 0.125** · mélangé 0.125 (hasard 0,125)
   → reports/pont-croise-3b.json
@@ -30857,14 +30740,7 @@ python3 -m py_compile tools/pont_raisonnement.py && OMP_NUM_THREADS=20 /home/ste
 
   ```
 ok
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|█▉        | 86/434 [00:00<00:00, 855.51it/s]
-Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 806.54it/s]
-Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 810.26it/s]
-Loading weights:  78%|███████▊  | 339/434 [00:00<00:00, 808.25it/s]
-Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 808.87it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 825.52it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|█▉        | 86/434 [00:00<00:00, 855.51it/s]Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 806.54it/s]Loading weights:  59%|█████▉    | 255/434 [00:00<00:00, 810.26it/s]Loading weights:  78%|███████▊  | 339/434 [00:00<00:00, 808.25it/s]Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 808.87it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 825.52it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.069 · **pont 1.000** · pont mélangé 0.050
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.057 · **pont 0.122** · pont mélangé 0.041
   L4 · FR→FR 0.944 · EN→EN 0.965 · FR sur EN sans pont 0.049 · **pont 0.097** · pont mélangé 0.035
@@ -30946,14 +30822,7 @@ started background job bash-1519
 
   ```
 ok
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 846.11it/s]
-Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 838.97it/s]
-Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 829.21it/s]
-Loading weights:  78%|███████▊  | 339/434 [00:00<00:00, 805.06it/s]
-Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 803.73it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 827.75it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 846.11it/s]Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 838.97it/s]Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 829.21it/s]Loading weights:  78%|███████▊  | 339/434 [00:00<00:00, 805.06it/s]Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 803.73it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 827.75it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.059 · **pont 1.000** · pont mélangé 0.069
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.057 · **pont 1.000** · pont mélangé 0.033
   L4 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.035 · **pont 0.938** · pont mélangé 0.042
@@ -31050,14 +30919,7 @@ started background job bash-1520
 
   ```
 ok
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 848.08it/s]
-Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 839.73it/s]
-Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 829.53it/s]
-Loading weights:  78%|███████▊  | 340/434 [00:00<00:00, 828.60it/s]
-Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 820.85it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 842.08it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 848.08it/s]Loading weights:  40%|███▉      | 172/434 [00:00<00:00, 839.73it/s]Loading weights:  59%|█████▉    | 256/434 [00:00<00:00, 829.53it/s]Loading weights:  78%|███████▊  | 340/434 [00:00<00:00, 828.60it/s]Loading weights:  97%|█████████▋| 423/434 [00:00<00:00, 820.85it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 842.08it/s]
   L2 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.069 · **pont 1.000** · pont mélangé 0.040
   L3 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.057 · **pont 0.968** · pont mélangé 0.016
   L4 · FR→FR 0.944 · EN→EN 0.965 · FR sur EN sans pont 0.049 · **pont 0.819** · pont mélangé 0.042
@@ -31483,13 +31345,7 @@ started background job bash-1527
 
   ```
 ok
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  21%|██        | 89/434 [00:00<00:00, 883.46it/s]
-Loading weights:  41%|████      | 178/434 [00:00<00:00, 863.13it/s]
-Loading weights:  61%|██████    | 265/434 [00:00<00:00, 849.16it/s]
-Loading weights:  81%|████████  | 350/434 [00:00<00:00, 847.07it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 848.37it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  21%|██        | 89/434 [00:00<00:00, 883.46it/s]Loading weights:  41%|████      | 178/434 [00:00<00:00, 863.13it/s]Loading weights:  61%|██████    | 265/434 [00:00<00:00, 849.16it/s]Loading weights:  81%|████████  | 350/434 [00:00<00:00, 847.07it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 848.37it/s]
   raisonnement : 2000 paires
   FR→FR 0.204 · EN→EN 0.216 · EN→FR sans pont 0.250 · **pont croisé 0.136** · mélangé 0.125 (hasard 0,125)
   → reports/pont-multi-3b.json
@@ -31586,26 +31442,7 @@ ok
 
   ```
 ok
-
-Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]
-Loading weights:   0%|          | 1/339 [00:00<01:31,  3.69it/s]
-Loading weights:   5%|▍         | 16/339 [00:00<00:06, 48.16it/s]
-Loading weights:   8%|▊         | 28/339 [00:00<00:04, 68.27it/s]
-Loading weights:  12%|█▏        | 40/339 [00:00<00:04, 74.47it/s]
-Loading weights:  15%|█▌        | 52/339 [00:00<00:03, 72.19it/s]
-Loading weights:  19%|█▉        | 64/339 [00:00<00:03, 82.37it/s]
-Loading weights:  23%|██▎       | 77/339 [00:01<00:02, 87.76it/s]
-Loading weights:  26%|██▌       | 88/339 [00:01<00:02, 87.63it/s]
-Loading weights:  29%|██▉       | 100/339 [00:01<00:02, 90.90it/s]
-Loading weights:  33%|███▎      | 112/339 [00:01<00:02, 89.58it/s]
-Loading weights:  37%|███▋      | 124/339 [00:01<00:02, 89.00it/s]
-Loading weights:  40%|████      | 136/339 [00:01<00:02, 85.29it/s]
-Loading weights:  44%|████▎     | 148/339 [00:01<00:02, 77.96it/s]
-Loading weights:  47%|████▋     | 161/339 [00:02<00:02, 84.87it/s]
-Loading weights:  51%|█████     | 173/339 [00:02<00:01, 85.38it/s]
-Loading weights:  54%|█████▍    | 184/339 [00:02<00:01, 87.92it/s]
-Loading weights:  58%|█████▊    | 197/339 [00:02<00:01, 97.84it/s]
-Loading w
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:   0%|          | 1/339 [00:00<01:31,  3.69it/s]Loading weights:   5%|▍         | 16/339 [00:00<00:06, 48.16it/s]Loading weights:   8%|▊         | 28/339 [00:00<00:04, 68.27it/s]Loading weights:  12%|█▏        | 40/339 [00:00<00:04, 74.47it/s]Loading weights:  15%|█▌        | 52/339 [00:00<00:03, 72.19it/s]Loading weights:  19%|█▉        | 64/339 [00:00<00:03, 82.37it/s]Loading weights:  23%|██▎       | 77/339 [00:01<00:02, 87.76it/s]Loading weights:  26%|██▌       | 88/339 [00:01<00:02, 87.63it/s]Loading weights:  29%|██▉       | 100/339 [00:01<00:02, 90.90it/s]Loading weights:  33%|███▎      | 112/339 [00:01<00:02, 89.58it/s]Loading weights:  37%|███▋      | 124/339 [00:01<00:02, 89.00it/s]Loading weights:  40%|████      | 136/339 [00:01<00:02, 85.29it/s]Loading weights:  44%|████▎     | 148/339 [00:01<00:02, 77.96it/s]Loading weights:  47%|████▋     | 161/339 [00:02<00:02, 84.87it/s]Loading weights:  51%|█████     | 173/339 [00:02<00:01, 85.38it/s]Loading weights:  54%|█████▍    | 184/339 [00:02<00:01, 87.92it/s]Loading weights:  58%|█████▊    | 197/339 [00:02<00:01, 97.84it/s]Loading w
 … [1302 caractères tronqués]
   ```
 
@@ -31832,13 +31669,7 @@ started background job bash-1534
 - **job_output** `{"job_id": "bash-1534", "timeout_ms": 900000, "wait": true}`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 774.91it/s]
-Loading weights:  38%|███▊      | 165/434 [00:00<00:00, 730.76it/s]
-Loading weights:  55%|█████▌    | 239/434 [00:00<00:00, 712.64it/s]
-Loading weights:  72%|███████▏  | 311/434 [00:00<00:00, 694.28it/s]
-Loading weights:  88%|████████▊ | 381/434 [00:00<00:00, 689.37it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 720.81it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 774.91it/s]Loading weights:  38%|███▊      | 165/434 [00:00<00:00, 730.76it/s]Loading weights:  55%|█████▌    | 239/434 [00:00<00:00, 712.64it/s]Loading weights:  72%|███████▏  | 311/434 [00:00<00:00, 694.28it/s]Loading weights:  88%|████████▊ | 381/434 [00:00<00:00, 689.37it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 720.81it/s]
   L2 · FR→FR 1.000 · sans pont 0.059 · **code 64 + pont 0.980** · mélangé 0.079
   L3 · FR→FR 0.691 · sans pont 0.073 · **code 64 + pont 0.415** · mélangé 0.024
   L4 · FR→FR 0.451 · sans pont 0.049 · **code 64 + pont 0.208** · mélangé 0.069
@@ -31865,12 +31696,7 @@ started background job bash-1535
 - **job_output** `{"job_id": "bash-1535", "timeout_ms": 900000, "wait": true}`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  22%|██▏       | 95/434 [00:00<00:00, 910.46it/s]
-Loading weights:  43%|████▎     | 187/434 [00:00<00:00, 859.84it/s]
-Loading weights:  63%|██████▎   | 274/434 [00:00<00:00, 841.30it/s]
-Loading weights:  83%|████████▎ | 359/434 [00:00<00:00, 810.23it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 845.87it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  22%|██▏       | 95/434 [00:00<00:00, 910.46it/s]Loading weights:  43%|████▎     | 187/434 [00:00<00:00, 859.84it/s]Loading weights:  63%|██████▎   | 274/434 [00:00<00:00, 841.30it/s]Loading weights:  83%|████████▎ | 359/434 [00:00<00:00, 810.23it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 845.87it/s]
   L2 · FR→FR 1.000 · sans pont 0.079 · **code 256 + pont 1.000** · mélangé 0.069
   L3 · FR→FR 1.000 · sans pont 0.008 · **code 256 + pont 0.740** · mélangé 0.057
   L4 · FR→FR 0.896 · sans pont 0.069 · **code 256 + pont 0.465** · mélangé 0.042
@@ -32047,13 +31873,7 @@ started background job bash-1539
 - **job_output** `{"job_id": "bash-1539", "timeout_ms": 900000, "wait": true}`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  17%|█▋        | 75/434 [00:00<00:00, 745.93it/s]
-Loading weights:  35%|███▌      | 152/434 [00:00<00:00, 759.72it/s]
-Loading weights:  53%|█████▎    | 232/434 [00:00<00:00, 768.79it/s]
-Loading weights:  71%|███████   | 309/434 [00:00<00:00, 750.12it/s]
-Loading weights:  89%|████████▉ | 387/434 [00:00<00:00, 740.73it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 761.38it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  17%|█▋        | 75/434 [00:00<00:00, 745.93it/s]Loading weights:  35%|███▌      | 152/434 [00:00<00:00, 759.72it/s]Loading weights:  53%|█████▎    | 232/434 [00:00<00:00, 768.79it/s]Loading weights:  71%|███████   | 309/434 [00:00<00:00, 750.12it/s]Loading weights:  89%|████████▉ | 387/434 [00:00<00:00, 740.73it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 761.38it/s]
   poolée L2 · FR→FR 1.000 · **CCA 1.000**
   poolée L3 · FR→FR 0.602 · **CCA 0.504**
   poolée L4 · FR→FR 0.507 · **CCA 0.410**
@@ -32177,13 +31997,7 @@ background job bash-1542 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrin
 - **job_output** `{"job_id": "bash-1542"}`
 
   ```
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 758.91it/s]
-Loading weights:  41%|████      | 176/434 [00:00<00:00, 828.98it/s]
-Loading weights:  60%|█████▉    | 260/434 [00:00<00:00, 822.63it/s]
-Loading weights:  79%|███████▉  | 343/434 [00:00<00:00, 815.59it/s]
-Loading weights:  98%|█████████▊| 425/434 [00:00<00:00, 802.65it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 822.76it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 758.91it/s]Loading weights:  41%|████      | 176/434 [00:00<00:00, 828.98it/s]Loading weights:  60%|█████▉    | 260/434 [00:00<00:00, 822.63it/s]Loading weights:  79%|███████▉  | 343/434 [00:00<00:00, 815.59it/s]Loading weights:  98%|█████████▊| 425/434 [00:00<00:00, 802.65it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 822.76it/s]
   poolée L2 · FR→FR 1.000 · **CCA 1.000**
   poolée L3 · FR→FR 1.000 · **CCA 0.984**
   poolée L4 · FR→FR 0.979 · **CCA 0.743**
@@ -32697,25 +32511,7 @@ started background job bash-1558
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/pont-14b.log 2>/dev/null; nvidia-smi --query-gpu=memory.used --format=csv,noheader", "description": "Vérifier le démarrage du 14 B"}`
 
   ```
-Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]
-Loading weights:   0%|          | 1/579 [00:00<02:37,  3.67it/s]
-Loading weights:   3%|▎         | 16/579 [00:00<00:10, 52.04it/s]
-Loading weights:   5%|▍         | 28/579 [00:00<00:07, 69.34it/s]
-Loading weights:   7%|▋         | 40/579 [00:00<00:06, 80.05it/s]
-Loading weights:   9%|▉         | 52/579 [00:00<00:06, 82.06it/s]
-Loading weights:  11%|█         | 64/579 [00:00<00:05, 90.74it/s]
-Loading weights:  13%|█▎        | 76/579 [00:00<00:05, 91.73it/s]
-Loading weights:  15%|█▌        | 88/579 [00:01<00:05, 84.09it/s]
-Loading weights:  17%|█▋        | 101/579 [00:01<00:05, 91.10it/s]
-Loading weights:  19%|█▉        | 112/579 [00:01<00:05, 88.41it/s]
-Loading weights:  21%|██▏       | 124/579 [00:01<00:04, 94.96it/s]
-Loading weights:  23%|██▎       | 136/579 [00:01<00:04, 91.59it/s]
-Loading weights:  25%|██▌       | 146/579 [00:01<00:06, 69.86it/s]
-Loading weights:  28%|██▊       | 160/579 [00:02<00:05, 81.96it/s]
-Loading weights:  29%|██▉       | 170/579 [00:02<00:05, 81.19it/s]
-Loading weights:  31%|███       | 179/579 [00:02<00:07, 54.36it/s]
-Loading weights:  32%|███▏      | 186/579 [00:02<00:10, 37.76it/s]
-Loading weigh
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights:   0%|          | 1/579 [00:00<02:37,  3.67it/s]Loading weights:   3%|▎         | 16/579 [00:00<00:10, 52.04it/s]Loading weights:   5%|▍         | 28/579 [00:00<00:07, 69.34it/s]Loading weights:   7%|▋         | 40/579 [00:00<00:06, 80.05it/s]Loading weights:   9%|▉         | 52/579 [00:00<00:06, 82.06it/s]Loading weights:  11%|█         | 64/579 [00:00<00:05, 90.74it/s]Loading weights:  13%|█▎        | 76/579 [00:00<00:05, 91.73it/s]Loading weights:  15%|█▌        | 88/579 [00:01<00:05, 84.09it/s]Loading weights:  17%|█▋        | 101/579 [00:01<00:05, 91.10it/s]Loading weights:  19%|█▉        | 112/579 [00:01<00:05, 88.41it/s]Loading weights:  21%|██▏       | 124/579 [00:01<00:04, 94.96it/s]Loading weights:  23%|██▎       | 136/579 [00:01<00:04, 91.59it/s]Loading weights:  25%|██▌       | 146/579 [00:01<00:06, 69.86it/s]Loading weights:  28%|██▊       | 160/579 [00:02<00:05, 81.96it/s]Loading weights:  29%|██▉       | 170/579 [00:02<00:05, 81.19it/s]Loading weights:  31%|███       | 179/579 [00:02<00:07, 54.36it/s]Loading weights:  32%|███▏      | 186/579 [00:02<00:10, 37.76it/s]Loading weigh
 … [2284 caractères tronqués]
   ```
 
@@ -32854,25 +32650,7 @@ compile-ok
 - **job_output** `{"job_id": "bash-1558", "timeout_ms": 1800000, "wait": true}`
 
   ```
-Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]
-Loading weights:   0%|          | 1/579 [00:00<02:37,  3.67it/s]
-Loading weights:   3%|▎         | 16/579 [00:00<00:10, 52.04it/s]
-Loading weights:   5%|▍         | 28/579 [00:00<00:07, 69.34it/s]
-Loading weights:   7%|▋         | 40/579 [00:00<00:06, 80.05it/s]
-Loading weights:   9%|▉         | 52/579 [00:00<00:06, 82.06it/s]
-Loading weights:  11%|█         | 64/579 [00:00<00:05, 90.74it/s]
-Loading weights:  13%|█▎        | 76/579 [00:00<00:05, 91.73it/s]
-Loading weights:  15%|█▌        | 88/579 [00:01<00:05, 84.09it/s]
-Loading weights:  17%|█▋        | 101/579 [00:01<00:05, 91.10it/s]
-Loading weights:  19%|█▉        | 112/579 [00:01<00:05, 88.41it/s]
-Loading weights:  21%|██▏       | 124/579 [00:01<00:04, 94.96it/s]
-Loading weights:  23%|██▎       | 136/579 [00:01<00:04, 91.59it/s]
-Loading weights:  25%|██▌       | 146/579 [00:01<00:06, 69.86it/s]
-Loading weights:  28%|██▊       | 160/579 [00:02<00:05, 81.96it/s]
-Loading weights:  29%|██▉       | 170/579 [00:02<00:05, 81.19it/s]
-Loading weights:  31%|███       | 179/579 [00:02<00:07, 54.36it/s]
-Loading weights:  32%|███▏      | 186/579 [00:02<00:10, 37.76it/s]
-Loading weigh
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights:   0%|          | 1/579 [00:00<02:37,  3.67it/s]Loading weights:   3%|▎         | 16/579 [00:00<00:10, 52.04it/s]Loading weights:   5%|▍         | 28/579 [00:00<00:07, 69.34it/s]Loading weights:   7%|▋         | 40/579 [00:00<00:06, 80.05it/s]Loading weights:   9%|▉         | 52/579 [00:00<00:06, 82.06it/s]Loading weights:  11%|█         | 64/579 [00:00<00:05, 90.74it/s]Loading weights:  13%|█▎        | 76/579 [00:00<00:05, 91.73it/s]Loading weights:  15%|█▌        | 88/579 [00:01<00:05, 84.09it/s]Loading weights:  17%|█▋        | 101/579 [00:01<00:05, 91.10it/s]Loading weights:  19%|█▉        | 112/579 [00:01<00:05, 88.41it/s]Loading weights:  21%|██▏       | 124/579 [00:01<00:04, 94.96it/s]Loading weights:  23%|██▎       | 136/579 [00:01<00:04, 91.59it/s]Loading weights:  25%|██▌       | 146/579 [00:01<00:06, 69.86it/s]Loading weights:  28%|██▊       | 160/579 [00:02<00:05, 81.96it/s]Loading weights:  29%|██▉       | 170/579 [00:02<00:05, 81.19it/s]Loading weights:  31%|███       | 179/579 [00:02<00:07, 54.36it/s]Loading weights:  32%|███▏      | 186/579 [00:02<00:10, 37.76it/s]Loading weigh
 … [2832 caractères tronqués]
   ```
 
@@ -33257,13 +33035,7 @@ started background job bash-1580
 3496064 tools/raisonnement_entrainement.py --pas 500
 9128 MiB
 6320 MiB
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  22%|██▏       | 97/434 [00:00<00:00, 969.39it/s]
-Loading weights:  45%|████▍     | 194/434 [00:00<00:00, 965.62it/s]
-Loading weights:  67%|██████▋   | 291/434 [00:00<00:00, 957.82it/s]
-Loading weights:  89%|████████▉ | 387/434 [00:00<00:00, 407.42it/s]
-Loading weights: 100%|██████████| 434/434 [00:05<00:00, 85.77it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  22%|██▏       | 97/434 [00:00<00:00, 969.39it/s]Loading weights:  45%|████▍     | 194/434 [00:00<00:00, 965.62it/s]Loading weights:  67%|██████▋   | 291/434 [00:00<00:00, 957.82it/s]Loading weights:  89%|████████▉ | 387/434 [00:00<00:00, 407.42it/s]Loading weights: 100%|██████████| 434/434 [00:05<00:00, 85.77it/s]
   ```
 
 ### 🤖 Assistant
@@ -35173,13 +34945,7 @@ drwxr-xr-x. 1 stephane stephane    16762 22 oct 17:53 ..
 -rw-r--r--. 1 stephane stephane     5172 22 oct 17:53 README.md
 -rw-r--r--. 1 stephane stephane   182527 22 oct 17:53 tete.pt
   307 séries appariées
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  23%|██▎       | 99/434 [00:00<00:00, 924.71it/s]
-Loading weights:  44%|████▍     | 192/434 [00:00<00:00, 908.77it/s]
-Loading weights:  65%|██████▌   | 283/434 [00:00<00:00, 850.69it/s]
-Loading weights:  85%|████████▌ | 371/434 [00:00<00:00, 861.19it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 866.61it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  23%|██▎       | 99/434 [00:00<00:00, 924.71it/s]Loading weights:  44%|████▍     | 192/434 [00:00<00:00, 908.77it/s]Loading weights:  65%|██████▌   | 283/434 [00:00<00:00, 850.69it/s]Loading weights:  85%|████████▌ | 371/434 [00:00<00:00, 861.19it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 866.61it/s]
   adaptateur chargé : reports/adaptateur-bilingue-1600
   extraction des états…
   FR→FR 0.216 · EN→EN 0.193 · EN→FR sans pont 0.273 · **pont 0.159** · pont mélangé 0.114 (hasard 0,125)
@@ -36163,13 +35929,7 @@ started background job bash-1681
   ```
 ok
   2000 chaînes appariées (ordre) → data/raisonnement/profondeur_paires.json
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 88/434 [00:00<00:00, 854.95it/s]
-Loading weights:  40%|████      | 174/434 [00:00<00:00, 840.31it/s]
-Loading weights:  61%|██████    | 263/434 [00:00<00:00, 855.11it/s]
-Loading weights:  80%|████████  | 349/434 [00:00<00:00, 850.61it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 859.62it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 88/434 [00:00<00:00, 854.95it/s]Loading weights:  40%|████      | 174/434 [00:00<00:00, 840.31it/s]Loading weights:  61%|██████    | 263/434 [00:00<00:00, 855.11it/s]Loading weights:  80%|████████  | 349/434 [00:00<00:00, 850.61it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 859.62it/s]
 [W1022 18:30:10.578597752 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 700448768 bytes (free: 16187392, total: 16700997632).
   L4 · FR→FR 1.000 · EN→EN 1.000 · FR sur EN sans pont 0.000 · **pont 0.950** · pont mélangé 0.033
   L6 · FR→FR 0.950 · EN→EN 0.975 · FR sur EN sans pont 0.050 · **pont 0.793** · pont mélangé 0.017
@@ -36339,25 +36099,7 @@ Continue working toward the objective in this same session. Treat the current wo
 - **job_output** `{"job_id": "bash-1682", "timeout_ms": 1800000, "wait": true}`
 
   ```
-Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]
-Loading weights:   0%|          | 1/579 [00:00<02:27,  3.91it/s]
-Loading weights:   2%|▏         | 12/579 [00:00<00:13, 40.52it/s]
-Loading weights:   4%|▍         | 24/579 [00:00<00:08, 66.09it/s]
-Loading weights:   6%|▌         | 36/579 [00:00<00:06, 82.14it/s]
-Loading weights:   8%|▊         | 46/579 [00:00<00:06, 83.95it/s]
-Loading weights:  10%|▉         | 56/579 [00:00<00:06, 80.23it/s]
-Loading weights:  11%|█         | 65/579 [00:00<00:06, 74.74it/s]
-Loading weights:  13%|█▎        | 77/579 [00:01<00:05, 85.09it/s]
-Loading weights:  15%|█▌        | 88/579 [00:01<00:05, 89.79it/s]
-Loading weights:  17%|█▋        | 100/579 [00:01<00:05, 90.86it/s]
-Loading weights:  19%|█▉        | 112/579 [00:01<00:05, 93.10it/s]
-Loading weights:  21%|██▏       | 124/579 [00:01<00:05, 83.68it/s]
-Loading weights:  24%|██▎       | 137/579 [00:01<00:04, 92.43it/s]
-Loading weights:  26%|██▌       | 148/579 [00:01<00:04, 89.56it/s]
-Loading weights:  28%|██▊       | 162/579 [00:01<00:04, 96.94it/s]
-Loading weights:  30%|██▉       | 173/579 [00:02<00:04, 96.38it/s]
-Loading weights:  32%|███▏      | 184/579 [00:02<00:04, 96.81it/s]
-Loading weight
+Loading weights:   0%|          | 0/579 [00:00<?, ?it/s]Loading weights:   0%|          | 1/579 [00:00<02:27,  3.91it/s]Loading weights:   2%|▏         | 12/579 [00:00<00:13, 40.52it/s]Loading weights:   4%|▍         | 24/579 [00:00<00:08, 66.09it/s]Loading weights:   6%|▌         | 36/579 [00:00<00:06, 82.14it/s]Loading weights:   8%|▊         | 46/579 [00:00<00:06, 83.95it/s]Loading weights:  10%|▉         | 56/579 [00:00<00:06, 80.23it/s]Loading weights:  11%|█         | 65/579 [00:00<00:06, 74.74it/s]Loading weights:  13%|█▎        | 77/579 [00:01<00:05, 85.09it/s]Loading weights:  15%|█▌        | 88/579 [00:01<00:05, 89.79it/s]Loading weights:  17%|█▋        | 100/579 [00:01<00:05, 90.86it/s]Loading weights:  19%|█▉        | 112/579 [00:01<00:05, 93.10it/s]Loading weights:  21%|██▏       | 124/579 [00:01<00:05, 83.68it/s]Loading weights:  24%|██▎       | 137/579 [00:01<00:04, 92.43it/s]Loading weights:  26%|██▌       | 148/579 [00:01<00:04, 89.56it/s]Loading weights:  28%|██▊       | 162/579 [00:01<00:04, 96.94it/s]Loading weights:  30%|██▉       | 173/579 [00:02<00:04, 96.38it/s]Loading weights:  32%|███▏      | 184/579 [00:02<00:04, 96.81it/s]Loading weight
 … [2847 caractères tronqués]
   ```
 
@@ -36881,13 +36623,7 @@ started background job bash-1705
 
   ```
 2490 paires FR/EN
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 838.89it/s]
-Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 833.12it/s]
-Loading weights:  60%|█████▉    | 260/434 [00:00<00:00, 858.58it/s]
-Loading weights:  80%|███████▉  | 346/434 [00:00<00:00, 829.27it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 847.73it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 838.89it/s]Loading weights:  39%|███▉      | 171/434 [00:00<00:00, 833.12it/s]Loading weights:  60%|█████▉    | 260/434 [00:00<00:00, 858.58it/s]Loading weights:  80%|███████▉  | 346/434 [00:00<00:00, 829.27it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 847.73it/s]
   couche: 18
   n_train: 1743
   n_test: 747
@@ -37235,13 +36971,7 @@ started background job bash-1716
   ```
 ok
   2490 paires FR/EN
-
-Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]
-Loading weights:  20%|██        | 87/434 [00:00<00:00, 867.67it/s]
-Loading weights:  40%|████      | 174/434 [00:00<00:00, 861.90it/s]
-Loading weights:  60%|██████    | 261/434 [00:00<00:00, 860.53it/s]
-Loading weights:  80%|████████  | 348/434 [00:00<00:00, 863.29it/s]
-Loading weights: 100%|██████████| 434/434 [00:00<00:00, 862.04it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  20%|██        | 87/434 [00:00<00:00, 867.67it/s]Loading weights:  40%|████      | 174/434 [00:00<00:00, 861.90it/s]Loading weights:  60%|██████    | 261/434 [00:00<00:00, 860.53it/s]Loading weights:  80%|████████  | 348/434 [00:00<00:00, 863.29it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 862.04it/s]
   couche: 18
   n_train: 1743
   n_test: 747

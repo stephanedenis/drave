@@ -7,15 +7,15 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 24.1 h |
+| Durée | 24.2 h |
 | Tours | 10 |
-| Messages | 304 |
-| Appels d'outils | 306 |
-| Fichiers touchés | 14 |
-| Commandes | 226 |
+| Messages | 326 |
+| Appels d'outils | 324 |
+| Fichiers touchés | 15 |
+| Commandes | 241 |
 | Sous-agents | 0 |
-| Commits | 18 |
-| Compactages de contexte | 0 |
+| Commits | 20 |
+| Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
 
@@ -385,7 +385,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 
 ### Tour 10 — vas-y avec des paragraphes complets et un arbre svg avec liaisons référents-référés
 
-*8 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Find a real paragraph with referents
 - bash — Locate generator tree insertion points
@@ -394,6 +394,14 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - bash — Add tree construction and inspect depths
 - bash — Add referent proposal and test on Alice paragraph
 - bash — Filter verb-like proper nouns and inspect target tree
+- bash — Skip lone prepositions, run tests/measure
+- bash — Generate SVG tree with referent links
+- bash — Find an SVG renderer for visual check
+- bash — Render SVG to PNG for visual check
+- bash — Render SVG with inkscape
+- read_image
+- bash — Measure new tree depth and referent proposal coverage
+- … et 10 autres
 
 **Synthèse produite :**
 
@@ -419,6 +427,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/candidats_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-banque-partielle.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-arbre-referents.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -462,7 +471,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 186 autres
+- … et 201 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -539,10 +548,11 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T9** `34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v4** : règle de contexte des homographes, gold **55** phrases ; analyseur **54/55** types, **131/131`
 - **T9** `563:| [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |`
 - **T9** `564:| [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |`
+- **T10** `- **Fait** : types **54/55**, rôles **131/131** ; h050/h053 nommées ; **corpus réel** 8,5 %/65,5 % (mélange 9,1 %) ; **banque partielle** : **142** verdicts/71 phrases, **81** lectures/65, arrêt humai`
 
 ## 5. Erreurs rencontrées
 
-10 sorties en erreur ou divergentes. Les premières :
+11 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : === data suivis === count: 0 === reports json exemples === reports/b102bis-corpus-jw.json reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md reports/corpus-genres.json reports/corpus-li
@@ -554,6 +564,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T5** : {     "version": 2,     "mode": "gold",     "date": "2026-11-02T19:40:35",     "source": "tools/structures/donnees/gold-analyseur.json",     "sortie": "data/structures/banque.jsonl",     "phrases": 47
 - **T6** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
 - **T9** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 229c5bf16e5e5bf09c0c93d7c274e614c73899b0 but expected d255588d2e4ee2d98482dd9aed6e6b4e64f5950d [exit code: 128]
+- **T10** : convert: attempt to perform an operation not authorized by the security policy `SVG' @ error/module.c/OpenModule/1273. convert: no decode delegate for this image format `SVG' @ error/constitute.c/Read
 
 ## 6. Commits
 
@@ -575,4 +586,6 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES / 65 PHRASES ; L'ARRÊT HUMAIN EST MESURÉ (ARBRE 1, RÉFÉRENTS 0)" -m "La validation humaine s'arrête : arbre 
 - S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ" -m "La validation humaine s'arrête après 142 
 - S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ" -m "La validation humaine s'arrête après 142 
+- S — L'ARBRE A UNE PROFONDEUR ET LES RÉFÉRENTS SONT PROPOSÉS : 99 CANDIDATS À ≥3, 294/371 FORMES ; SVG ALICE" -m "construire_arbre() donne un père et une profond
+- S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE" -m "construire_arbre() donne un père et une profondeur réelle : 359 candidats, 37 de prof
 

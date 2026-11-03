@@ -66,7 +66,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 |---|---|---|---|---|---|---|---|---|
 | `00221850` | Outillage de présentation de documentation | 2026-10-27 11:34 | 4.9 h | 6 | 529 | 38 | 25 | [rapport](sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md) |
 | `04ed1834` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 42 | 0 | 0 | [rapport](sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/rapport.md) |
-| `0733c5bb` | Session N2 : plan et réservations | 2026-11-02 16:14 | 24.1 h | 6 | 583 | 27 | 18 | [rapport](sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) |
+| `0733c5bb` | Session N2 : plan et réservations | 2026-11-02 16:14 | 24.2 h | 6 | 586 | 27 | 18 | [rapport](sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) |
 | `0b0a6a0d` | Continue session work | 2026-10-31 17:17 | 45.3 h | 20 | 1565 | 11 | 88 | [rapport](sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) |
 | `0b2c86eb` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:29 | 1.5 h | 1 | 128 | 5 | 0 | [rapport](sessions/0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630/rapport.md) |
 | `0b69f616` | Continue AI coding session | 2026-10-30 21:46 | 0.3 h | 1 | 200 | 6 | 0 | [rapport](sessions/0b69f616-5c75-4c34-b97a-ae05564812af/rapport.md) |
@@ -86,7 +86,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `22e518ee` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | 1 | 171 | 16 | 0 | [rapport](sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) |
 | `235066f5` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 11:38 | 0.3 h | 1 | 39 | 0 | 0 | [rapport](sessions/235066f5-307a-4285-a882-14bc2d06cb7b/rapport.md) |
 | `27c99b10` | Tu écris un tokenizer BPE | 2026-09-25 19:40 | 0.2 h | 1 | 54 | 1 | 0 | [rapport](sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/rapport.md) |
-| `29ad180d` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 24.1 h | 10 | 306 | 14 | 18 | [rapport](sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) |
+| `29ad180d` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 24.2 h | 10 | 324 | 15 | 20 | [rapport](sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) |
 | `2c2a6595` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 44 | 0 | 0 | [rapport](sessions/2c2a6595-b208-446e-bbd1-d0f49eca45e8/rapport.md) |
 | `2f51f17f` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 17 | 0 | 0 | [rapport](sessions/2f51f17f-f47c-49d5-958f-cafecd3fe01e/rapport.md) |
 | `2fd56aa5` | Dépôt /home/stephane/GitHub/Qtrinet, f | 2026-10-27 18:48 | 0.3 h | 1 | 37 | 0 | 0 | [rapport](sessions/2fd56aa5-7b9b-40b0-9470-05c74b032d55/rapport.md) |
@@ -105,7 +105,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `4e86f5e2` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 37 | 0 | 0 | [rapport](sessions/4e86f5e2-cc8e-43d7-8be0-ba9622de2dc7/rapport.md) |
 | `4f3e8570` | Configuration RAID0 NVMe pour modèles IA | 2026-10-12 15:30 | 25.5 h | 13 | 822 | 41 | 57 | [rapport](sessions/4f3e8570-3d81-41e0-a055-1002702a6959/rapport.md) |
 | `5185ccb1` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 17:03 | 0.4 h | 1 | 123 | 9 | 0 | [rapport](sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md) |
-| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 22.4 h | 78 | 499 | 17 | 49 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
+| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 24.9 h | 79 | 501 | 17 | 51 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
 | `54621513` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.7 h | 1 | 78 | 4 | 0 | [rapport](sessions/54621513-76ae-401e-87df-a5084cacb359/rapport.md) |
 | `564fbe3a` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:07 | 0.1 h | 1 | 35 | 0 | 0 | [rapport](sessions/564fbe3a-a859-4b3b-bd17-4da73a2f4e22/rapport.md) |
 | `56879594` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 29 | 0 | 0 | [rapport](sessions/56879594-1434-4e34-83cc-de42cdf192a1/rapport.md) |

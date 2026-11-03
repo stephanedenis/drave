@@ -13,7 +13,7 @@
 - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
 - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
   `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
-- **Heartbeat** : 2026-11-03 13:55 EST
+- **Heartbeat** : 2026-11-03 16:25 EST
 - **Prochaine action** : **arbre réel** (parent/enfant, profondeur) + **couche de référents**
   (antécédents proposés et résolus avant le verdict), puis **reprise de la validation** des 200
   phrases ; `h050`/`h053` ensuite.
@@ -24,7 +24,7 @@
 
 - **Plan** : 1–4) ~~plan, analyseur (gold 55), export, tests 47~~ ; 5–6) ~~fiche, pointeur,
   état~~ ; 7) **banque partielle** (142 verdicts / 81 lectures / 65 phrases, arrêt humain) ;
-  8) **arbre + référents** (prochain cycle).
+  8) ~~arbre + référents + SVG~~ (99 candidats à ≥3, 294/371 formes) ; 9) **UI + paragraphes**.
 - **Ambition** : que le banc ne soit plus un générateur de candidats seulement **typés** mais un
   analyseur qui **nomme le rôle** et **coupe la subordonnée** — et que la banque sorte du banc
   vers le corpus avec une empreinte qui se rejoue.
