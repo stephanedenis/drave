@@ -7849,3 +7849,11 @@ a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR L
 index OK
   ```
 
+- **bash** `{"command": "sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-*-512z.pt 2>/dev/null; tail -1 work/n2ac/mix1024-60k.log", "description": "Wait for capacity runs"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-379]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-379", "timeout_ms": 2700000, "wait": true}`

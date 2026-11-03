@@ -10486,3 +10486,40 @@ a07c99cc N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR L
 ⏵ Le run long N2 occupe les deux GPU (100 %/97 %) : je reste sur des tâches légères. Je précise la réouverture de N2 dans l'état.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"**N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :\",\n \"**N2** close à 19 h 46 pu … [1003 caractères tronqués]`
+
+  ```
+en-cours : réouverture N2 + 13 h 45
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-436]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-436", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master fc58dc06] ÉTAT — N2 ROUVERTE POUR LE RUN LONG À 1 024 (03/11 13 H 38) ; HEARTBEAT 13 H 45
+ 19 files changed, 591 insertions(+), 120 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour de « continue » bouclé : passe 80/2, fenêtre sous 2,5, API /35, état vert.
+
+**Verdict définitif de la passe** : **82 portes, 80 vertes, 2 rouges** (les connues `indice` et `melange`), **1 h 48**, machine au repos. Les deux rouges réparées sont vertes (`homeostasie` 495 s avec LoRA régénéré, `reparti-moteur` 3 s ré-étalonnée). Intégré aux références (en-tête + **§ 2 en 82 lignes**), à l'état (82 / 80-2), à `portes.md` (`07ec290b`).
+
+**La fenêtre N2 passe sous 2,5** : **2,4759 / 2,4373** au grand corpus (1 024, 30 k pas), porte **propre 2,7856** (0,29 manquant). Le fait est maintenant dans la **question N2**, la **ligne N de la roadmap**, l'**ordre du jour**, l'état daté de `chantiers.md` et la **fiche N2 du backlog** remise au réel (`68c1ecc1`, `f50ad713`).
+
+**Pensée** : le **gold neuronal rejoué sur l'API DeepSeek** donne les **mêmes verdicts** que le 7B local, **latence /35** (`5bafefab`). Les professeurs peuvent quitter le GPU.
+
+**La clé** : vérifiée (`deepseek-flash` → OK), documentée dans `ressources.md` et l'état (`c4ea6138`).
+
+**Incident géré** : un commit a échoué sur l'écriture d'index (disque/FS transitoire) ; récupéré par `git restore --staged :/`, commit intact, écriture repartie, surveillé.
+
+**Maintenant** : N2 a **rouvert** à 13 h 38 pour un run long à 1 024 (60 000 pas) + capacité sur le corpus propre — **les deux GPU sont à 100 %/97 %**, donc je ne lance plus rien de lourd. S est en pause (validation reportée), Pensée publie. Contrôles : revue ✅, `en-cours` ✅, T0 3 995, journal ✅, backlog ✅, état à jour ✅. Dernier commit : `fc58dc06`.
+
+Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand elles tomberont, sans toucher à leurs fichiers.
+

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **584 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **586 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -395,6 +395,7 @@
 | [rapport-pensee-gold-200-subsets.md](rapport-pensee-gold-200-subsets.md) | B13 — les sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles |
 | [rapport-pensee-gold-200.md](rapport-pensee-gold-200.md) | B13 — le gold à 200 phrases réelles : POS 0,7738 |
 | [rapport-pensee-gold-342.md](rapport-pensee-gold-342.md) | B13 — le gold complet : 522 phrases, POS 0,7586 |
+| [rapport-pensee-gold-api.md](rapport-pensee-gold-api.md) | Le gold neuronal sur l'API DeepSeek — mêmes verdicts, trente-cinq fois plus vite |
 | [rapport-pensee-gold-cascade.md](rapport-pensee-gold-cascade.md) | B13 — la cascade complète : POS 0,9415, syntagmes 0,7539, acte 1,0 |
 | [rapport-pensee-gold-complexes.md](rapport-pensee-gold-complexes.md) | B13 — les phrases complexes : POS 0,6471, syntagme 0,4828 |
 | [rapport-pensee-gold-complexes100.md](rapport-pensee-gold-complexes100.md) | B13 — les 100 phrases complexes : POS 0,6984, syntagme 0,2677 |
@@ -447,6 +448,7 @@
 | [rapport-pensee-oubli-total.md](rapport-pensee-oubli-total.md) | B13 — l'oubli total : 0/20, la mémoire est nécessaire |
 | [rapport-pensee-oubli.md](rapport-pensee-oubli.md) | B13 — la mémoire courte : 20/20, 10,0 pas |
 | [rapport-pensee-ouverte.md](rapport-pensee-ouverte.md) | B13 — le curriculum des états `open` : le trou de transfert est comblé |
+| [rapport-pensee-parite-drvm-native-rejoue.md](rapport-pensee-parite-drvm-native-rejoue.md) | B13 — la parité DRVM/native **rejouée** : checkpoint régénéré en CPU, 5/5 prompts, écart 0,00005 |
 | [rapport-pensee-parite-drvm-native.md](rapport-pensee-parite-drvm-native.md) | B13 — la parité DRVM/native : 114/114 poids, 5/5 prompts, rejouable mais checkpoint volatil |
 | [rapport-pensee-partielle.md](rapport-pensee-partielle.md) | B13 — l'observation partielle : 0/20, la mémoire ne suffit pas |
 | [rapport-pensee-periode.md](rapport-pensee-periode.md) | B13 — la période variable : 2–5 pas, la même politique |

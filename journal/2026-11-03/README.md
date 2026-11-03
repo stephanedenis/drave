@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**61 commits** · **6 session(s)** · **8 thème(s)**
+**62 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 18 | [distribue.md](distribue.md) |
-| docs | 19 | [docs.md](docs.md) |
+| docs | 20 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -29,7 +29,7 @@
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 22.2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 | `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 21.4 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 12.5 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
-| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 21.4 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
+| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 21.5 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -96,6 +96,7 @@
 | 13:36 | `90f4ee78` | ÉTAT — COMPTEURS AU DISQUE (589 FICHES / 678 JSON) |
 | 13:38 | `a07c99cc` | N2 — RÉOUVERTURE : RUN LONG À 1 024 (60 000 PAS) ET CAPACITÉ SUR LE CORPUS PROPRE |
 | 13:40 | `f1e8007e` | ÉTAT — LA SESSION N2 REPREND : RUN LONG À 1 024 ET CAPACITÉ PROPRE LANCÉS, T0 À 3 980 |
+| 13:42 | `fc58dc06` | ÉTAT — N2 ROUVERTE POUR LE RUN LONG À 1 024 (03/11 13 H 38) ; HEARTBEAT 13 H 45 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -124,6 +125,8 @@
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 6,2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 
 Index des sessions : [journal](../README.md#sessions).
+
+- **11 h 40 — le gold neuronal sur l'API** : les deux mesureurs B13 rejoués avec `deepseek-chat` (sans serveur local) donnent les **mêmes verdicts** que le 7B (porte-minute 1,0 / 0,25), avec **2,9 s contre 101,6 s** et 0 erreur sur 96 appels ; fiche [`rapport-pensee-gold-api`](../../reports/rapport-pensee-gold-api.md).
 
 ## 08 h 00 — le bilan (à remplir au réveil)
 

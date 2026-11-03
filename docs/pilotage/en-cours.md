@@ -72,7 +72,7 @@
   [sto 5/5](../../reports/rapport-pensee-porte-sto-graines.md),
   [fenêtre](../../reports/rapport-pensee-porte-fenetre.md),
   [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
-- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; **gold neuronal rejoué sur l'API** (`deepseek-chat`) : mêmes verdicts (porte 1,0 / labyrinthe 0,25), latence 5,5 / 2,9 s au lieu de 6,4 / 101,6 s.
+- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; **gold neuronal rejoué sur l'API** (`deepseek-chat`) : mêmes verdicts (porte 1,0 / labyrinthe 0,25), latence 5,5 / 2,9 s au lieu de 6,4 / 101,6 s ; [`fiche`](../../reports/rapport-pensee-gold-api.md).
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
 - **Prochaine action** : **gold 432 réel (0,9954)** ; **DRVM/native 114/114+5/5** ; la suite :
   **T132/T133**, gold 200+ ; **porte B13** attend S.

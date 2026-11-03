@@ -7,9 +7,9 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 21.4 h |
+| Durée | 21.5 h |
 | Tours | 33 |
-| Messages | 607 |
+| Messages | 608 |
 | Appels d'outils | 599 |
 | Fichiers touchés | 6 |
 | Commandes | 436 |
@@ -776,7 +776,21 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 
 **Synthèse produite :**
 
-⏵ Le run long N2 occupe les deux GPU (100 %/97 %) : je reste sur des tâches légères. Je précise la réouverture de N2 dans l'état.
+⏵ Tour de « continue » bouclé : passe 80/2, fenêtre sous 2,5, API /35, état vert.
+
+**Verdict définitif de la passe** : **82 portes, 80 vertes, 2 rouges** (les connues `indice` et `melange`), **1 h 48**, machine au repos. Les deux rouges réparées sont vertes (`homeostasie` 495 s avec LoRA régénéré, `reparti-moteur` 3 s ré-étalonnée). Intégré aux références (en-tête + **§ 2 en 82 lignes**), à l'état (82 / 80-2), à `portes.md` (`07ec290b`).
+
+**La fenêtre N2 passe sous 2,5** : **2,4759 / 2,4373** au grand corpus (1 024, 30 k pas), porte **propre 2,7856** (0,29 manquant). Le fait est maintenant dans la **question N2**, la **ligne N de la roadmap**, l'**ordre du jour**, l'état daté de `chantiers.md` et la **fiche N2 du backlog** remise au réel (`68c1ecc1`, `f50ad713`).
+
+**Pensée** : le **gold neuronal rejoué sur l'API DeepSeek** donne les **mêmes verdicts** que le 7B local, **latence /35** (`5bafefab`). Les professeurs peuvent quitter le GPU.
+
+**La clé** : vérifiée (`deepseek-flash` → OK), documentée dans `ressources.md` et l'état (`c4ea6138`).
+
+**Incident géré** : un commit a échoué sur l'écriture d'index (disque/FS transitoire) ; récupéré par `git restore --staged :/`, commit intact, écriture repartie, surveillé.
+
+**Maintenant** : N2 a **rouvert** à 13 h 38 pour un run long à 1 024 (60 000 pas) + capacité sur le corpus propre — **les deux GPU sont à 100 %/97 %**, donc je ne lance plus rien de lourd. S est en pause (validation reportée), Pensée publie. Contrôles : revue ✅, `en-cours` ✅, T0 3 995, journal ✅, backlog ✅, état à jour ✅. Dernier commit : `fc58dc06`.
+
+Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand elles tomberont, sans toucher à leurs fichiers.
 
 ## 3. Travail accompli
 

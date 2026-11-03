@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 22.2 h |
 | Tours | 78 |
-| Messages | 561 |
-| Appels d'outils | 494 |
+| Messages | 562 |
+| Appels d'outils | 495 |
 | Fichiers touchés | 17 |
-| Commandes | 362 |
+| Commandes | 363 |
 | Sous-agents | 0 |
-| Commits | 45 |
+| Commits | 46 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2088,13 +2088,14 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 
 ### Tour 78 — l'écran est rempli de "**the **the **the **the **the **the" que se passe-t-il?
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Check files for degeneration traces and current state
+- bash — Clean degenerate journal lines, complete fiche integration, commit
 
 **Synthèse produite :**
 
-⏵ C'est une **boucle de répétition de ma génération** (le token « the » dégénère), pas un contenu de vos fichiers. Le dernier script s'est arrêté sur une assertion **avant** d'écrire l'état et le journal ; je vérifie l'intégrité, je répare les deux écritures manquantes et je commite.
+⏵ La boucle a laissé des traces dans **3 fichiers de journal de session** (dont le rapport de cette session, régénéré par le hook), pas dans les fiches. Je nettoie, je complète les deux écritures manquantes et je commite.
 
 ## 3. Travail accompli
 
@@ -2162,7 +2163,7 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 322 autres
+- … et 323 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2351,4 +2352,5 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35" -m "PolitiqueLLM en mode API (deepseek-chat) : porte-minute llm_porte 1,0
 - BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000" -- docs/pilotage/en-cours.md; echo "[commit $?]"
 - BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)" -- docs/pilotage/references-non-regression.md docs/pilotage/en-cours
+- B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAL DE SESSION NETTOYÉ" -m "La fiche rapporte-pensee-gold-api.md documente le disposi
 
