@@ -8018,3 +8018,46 @@ docs/schemas/README.md:1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"**traduction** 14/14 (2 manqués, contexte a003)\", \"**traduction** 14/14 (2 manqués)\")\nt=t.replace(\"* … [1933 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ docs/pilotage/en-cours.md                          |  10 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ docs/schemas/README.md                             |   1 +
+ docs/schemas/arbre-referents.svg                   |  30 ++++++
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |   4 +-
+ reports/INDEX.md                                   |   1 +
+ reports/rapport-s-arbre-referents.md               | 101 ++++++++++++++++++++
+ reports/rapport-s-traductions.md                   | 105 +++++++++++++++++++++
+ tools/structures                                   |   2 +-
+ 9 files changed, 247 insertions(+), 9 deletions(-)
+ create mode 100644 reports/rapport-s-arbre-referents.md
+ create mode 100644 reports/rapport-s-traductions.md
+f92c183b S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS, « LES » → « IT » RETROUVÉ ; SOURCE ANGLAISE DANS LA PAGE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -3; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; curl -s -o /dev/null -w \"page %{http_code}\\n\" http://127.0. … [385 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   ef530713..f92c183b  master -> master
+exit=0
+f92c183b0f4e3a2a33230c664bf16cd4d4bbefe4	refs/heads/master
+644ad3d913e02d25fe441ad89e1f2409d9c1b4a9	refs/heads/master
+page 200
+3 paragraphes, sources anglaises: True
+2449625 python3 serveur.py --port 8765
+  ```
+
+### 🤖 Assistant
+
+⏵ La traduction contrôle le sens : l'anglais d'Alice confirme les 14 référents anaphoriques, dont les deux que l'outil manquait.
+
+J'ai confronté les trois paragraphes français à l'original anglais d'*Alice's Adventures in Wonderland* (Project Gutenberg #11), puisque le corpus français est une traduction. La source anglaise est maintenant affichée sous le contexte français dans la page `/paragraphes` : on voit les deux langues, et l'anglais dit explicitement *she / her / herself / it* là où le français laisse flotter « elle », « lui », « les ». Les **14 formes anaphoriques** des trois paragraphes sont confirmées — les **12 que l'outil proposait** et les **2 qu'il manquait** : « les » dans « bien qu'elle les suivît rarement » est *it*, donc **les conseils**, pas Alice ; « l' » dans « l'ouvrit » est *it*, donc **la boîte**. Les deux « en » (l'un partitif, l'autre préposition « en verre » mal classée) et le « Lequel » du choix sont écartés.
+
+La traduction révèle aussi une erreur de contexte : dans a003, « sa main », « elle » et « se » n'avaient jamais Alice parmi leurs candidats parce que le contexte ne la nommait pas ; l'anglais dit *holding **her** hand*, et le contexte a été complété avec « … se dit Alice vivement », si bien que les candidats incluent maintenant Alice et que la page présélectionne l'antécédent pour les pronoms et possessifs personnels. Elle montre encore deux limites de l'analyseur : « **si fort que** les larmes lui en venaient aux yeux » est étiqueté *hypothèse* alors que l'anglais *so severely as to bring tears into her eyes* en fait une **conséquence** ; et « **de très-bons conseils** » (GP français) est *very good advice* (objet direct anglais), comme « pour habitude » est *generally* — la traduction montre la structure française, elle ne la valide pas telle quelle.
+
+Les limites sont nommées : la version française est elle-même une interprétation (Bué, 1869), l'alignement est au paragraphe et non au mot, trois paragraphes ne font pas une preuve, et « Lequel est-ce ? » devient *Which way?* — le traducteur a choisi. La rétro-traduction automatique (FR → EN → FR) reste à faire : elle passera par l'API DeepSeek (`DEEPSEEK_API_KEY` absent ici), jamais par un serveur local, conformément à la règle 11.
+
+Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page répond 200, les 52 tests passent, la fiche est [`reports/rapport-s-traductions.md`](reports/rapport-s-traductions.md). La fiche de l'arbre et le SVG, de nouveau retirés par un commit L, ont été rétablis. La suite : confirmer les référents sur la page en voyant la source anglaise, puis la rétro-traduction API quand la clé sera là, et les 71 langues de l'UDHR pour un test de référents à plus grande échelle.
+

@@ -138,6 +138,32 @@ propriété de longueur. C'est exactement ce qu'il fallait séparer.
 Réserve : l'initialisation figée est un tirage aléatoire unique ; un autre tirage déplacerait le
 niveau de quelques centièmes, pas la pente.
 
+## 4. La distillation du professeur long dans la recette 512
+
+Le professeur à fenêtre 1 024 (mélange, 30 000 pas) distillé dans la recette 512, **même init**
+(`mix-60k`), **mêmes 15 000 pas** et **mêmes 61,4 Mo ajoutés** que l'affinage dur :
+
+| recette 512 (61,4 Mo ajoutés) | 128 | 512 | 1 000 | 2 000 | litt. | angl. | wt2 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| affinage dur (15 000 pas) | 3,1588 | 2,9096 | 2,8018 | 2,7607 | 5,5247 | 7,0507 | 7,9023 |
+| **distillé α = 0,9** (15 000 pas) | **3,0550** | **2,8062** | **2,7015** | **2,6601** | **5,4309** | **6,7639** | **7,3816** |
+| écart | −0,104 | −0,103 | −0,100 | −0,101 | −0,094 | −0,287 | −0,521 |
+
+**La distillation gagne 0,10 en domaine à budget identique**, et davantage hors domaine
+(−0,29 en anglais, −0,52 sur wikitext2). Deux lectures :
+
+- **le mécanisme se reproduit** : sur l'élève 11,47 M (fiche
+  [`n2-distillation-native`](rapport-n2-distillation-native.md)), α = 0,9 valait −0,14 à −0,18 ;
+  ici, sur un élève de 34,3 M à fenêtre 512, il vaut −0,10 partout — la distillation native est un
+  levier **reproductible**, pas un accident d'un modèle ;
+- **la recette de production devient** : professeur à **fenêtre 1 024** + élève **512** distillé
+  (α = 0,9) — **3,0550** en domaine pour **61,4 Mo**, à **0,14** du run de 60 000 pas (2,9121)
+  qui en a vu **552**. C'est **9× moins d'octets** pour 0,14 de PPL, et **0,10 de mieux** que
+  l'affinage dur de mêmes octets.
+
+**Le coût** : le professeur est évalué à chaque pas (+25–30 % par pas) ; à budget de temps
+constant, l'élève voit ~26 Mo au lieu de 33 (≈ −0,02 de PPL), le gain net reste **~+0,08**.
+
 ## Ce qui pourrait le rendre faux
 
 - **Un lancement par recette** (la recette RoPE est déterministe à graine fixée et init fixée :

@@ -102,7 +102,7 @@
 ## Ce qui est en cours
 
 - **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
-- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
+- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** (3,0550).
 - **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
 

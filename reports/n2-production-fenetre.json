@@ -263,5 +263,46 @@
   "anglais": 6.2043,
   "wikitext2": 6.7874,
   "corpus_propre": 9.0299
+ },
+ "kd_mix512_15k": {
+  "fichier": "kd-mix512-15k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.055,
+    "256": 2.9328,
+    "512": 2.8062,
+    "1000": 2.7015,
+    "2000": 2.6601
+   },
+   "val_big": {
+    "128": 2.9065,
+    "256": 2.7581,
+    "512": 2.642,
+    "1000": 2.5617,
+    "2000": 2.5378
+   }
+  },
+  "permute_fr": 184.2272,
+  "litterature": 5.4309,
+  "anglais": 6.7639,
+  "wikitext2": 7.3816,
+  "corpus_propre": 9.1965
+ },
+ "entrainement_kd": {
+  "modele": "drave-n0-rope-kd",
+  "professeur": "work/n2ac/mix1024-30k.pt",
+  "pas": 15000,
+  "seq": 512,
+  "window": 512,
+  "alpha": 0.9,
+  "T": 2.0,
+  "dim": 384,
+  "expert_hidden": 512,
+  "graine": 1,
+  "perte_finale": 0.9833623170852661,
+  "duree_s": 6548.174042463303,
+  "corpus": "data/wiki_mix/propre/train.txt"
  }
 }

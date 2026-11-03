@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 25.6 h |
 | Tours | 13 |
-| Messages | 376 |
-| Appels d'outils | 368 |
+| Messages | 378 |
+| Appels d'outils | 369 |
 | Fichiers touchés | 16 |
-| Commandes | 282 |
+| Commandes | 283 |
 | Sous-agents | 0 |
 | Commits | 26 |
 | Compactages de contexte | 1 |
@@ -481,7 +481,7 @@ Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `htt
 
 ### Tour 13 — tu peux aussi valider le sens (et indirectement les référents de syntaxe) en utilisant des traductions.
 
-*15 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Inspect S LLM client and API key
 - web_fetch
@@ -497,11 +497,20 @@ Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `htt
 - bash — Inspect L deletions and S files to restore
 - bash — Read S state and HEAD index lines
 - bash — Update state for translation and run checks
-- … et 1 autres
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ La traduction comme contrôle du sens et des référents : je récupère la source anglaise d'Alice et je la confronte aux trois paragraphes.
+⏵ La traduction contrôle le sens : l'anglais d'Alice confirme les 14 référents anaphoriques, dont les deux que l'outil manquait.
+
+J'ai confronté les trois paragraphes français à l'original anglais d'*Alice's Adventures in Wonderland* (Project Gutenberg #11), puisque le corpus français est une traduction. La source anglaise est maintenant affichée sous le contexte français dans la page `/paragraphes` : on voit les deux langues, et l'anglais dit explicitement *she / her / herself / it* là où le français laisse flotter « elle », « lui », « les ». Les **14 formes anaphoriques** des trois paragraphes sont confirmées — les **12 que l'outil proposait** et les **2 qu'il manquait** : « les » dans « bien qu'elle les suivît rarement » est *it*, donc **les conseils**, pas Alice ; « l' » dans « l'ouvrit » est *it*, donc **la boîte**. Les deux « en » (l'un partitif, l'autre préposition « en verre » mal classée) et le « Lequel » du choix sont écartés.
+
+La traduction révèle aussi une erreur de contexte : dans a003, « sa main », « elle » et « se » n'avaient jamais Alice parmi leurs candidats parce que le contexte ne la nommait pas ; l'anglais dit *holding **her** hand*, et le contexte a été complété avec « … se dit Alice vivement », si bien que les candidats incluent maintenant Alice et que la page présélectionne l'antécédent pour les pronoms et possessifs personnels. Elle montre encore deux limites de l'analyseur : « **si fort que** les larmes lui en venaient aux yeux » est étiqueté *hypothèse* alors que l'anglais *so severely as to bring tears into her eyes* en fait une **conséquence** ; et « **de très-bons conseils** » (GP français) est *very good advice* (objet direct anglais), comme « pour habitude » est *generally* — la traduction montre la structure française, elle ne la valide pas telle quelle.
+
+Les limites sont nommées : la version française est elle-même une interprétation (Bué, 1869), l'alignement est au paragraphe et non au mot, trois paragraphes ne font pas une preuve, et « Lequel est-ce ? » devient *Which way?* — le traducteur a choisi. La rétro-traduction automatique (FR → EN → FR) reste à faire : elle passera par l'API DeepSeek (`DEEPSEEK_API_KEY` absent ici), jamais par un serveur local, conformément à la règle 11.
+
+Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page répond 200, les 52 tests passent, la fiche est [`reports/rapport-s-traductions.md`](reports/rapport-s-traductions.md). La fiche de l'arbre et le SVG, de nouveau reti
+… [243 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -568,7 +577,7 @@ Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `htt
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 242 autres
+- … et 243 autres
 
 ## 4. Mesures et résultats marquants
 

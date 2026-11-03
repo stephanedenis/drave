@@ -9024,3 +9024,151 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-461", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD; tail -c 50 work/n2ac/kd-mix512-15k.log", "description": "Poll KD production completion"}`
+
+  ```
+17:54:14
+e 1.0498 · dure 0.9944 · douce 0.1548 · 5347 s
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD", "description": "Wait for KD production finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-463]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-463", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD; tail -c 50 work/n2ac/kd-mix512-15k.log", "description": "Poll KD production"}`
+
+  ```
+18:05:25
+e 1.0593 · dure 1.0221 · douce 0.1467 · 6024 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD", "description": "Wait for KD production checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-465]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-465", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-459 (bash: sleep 2400; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-461 (bash: cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib, re, datetime
+p = pathlib.Path("journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md")
+t = p.read_text(encoding="utf-8")
+t = re.sub(r"- \*\*Heartbeat\*\* : .*", f"- **Heartbeat** : {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')} HAE", t)
+t = t.replace("- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la",
+              "- **Ce qu'elle fait** : la **production à 1 024 / 60 k pas** (2,9121 ; 2,3911 au grand corpus), la")
+p.write_text(t, encoding="utf-8")
+print("plan rafraîchi")
+PY
+sleep 1800; date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD; tail -c 50 work/n2ac/kd-mix512-15k.log", "description": "Direct check of KD production"}`
+
+  ```
+18:16:37
+kd-mix512-15k fini 18:13:58
+work/n2ac/kd-mix512-15k.pt
+OKKD
+3303, "corpus": "data/wiki_mix/propre/train.txt"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation de l'élève distillé de production (professeur 60 k → recette 512)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/kd-mix512-15k.pt --rope --longueurs 128,256,512,1000,2000 --sortie work/n2ac/eval-kd-mix512.json 2>&1 | grep -E '\"(128|256|512|1000|2000)\"|litterature|an … [102 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-467]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-467", "timeout_ms": 300000, "wait": true}`
+
+  ```
+"128": 3.055,
+   "256": 2.9328,
+   "512": 2.8062,
+   "1000": 2.7015,
+   "2000": 2.6601
+   "128": 2.9065,
+   "256": 2.7581,
+   "512": 2.642,
+   "1000": 2.5617,
+   "2000": 2.5378
+ "permute_fr": 184.2272,
+ "litterature": 5.4309,
+ "anglais": 6.7639,
+ "wikitext2": 7.3816,
+ "corpus_propre": 9.1965
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-463 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ La distillation de production gagne 0,10 partout à budget égal — section et commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-production-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"## Ce qui pourrait le rendre faux\"\nneuf = \"\"\"## 4. La distillation du professeur long dans la recette … [2545 caractères tronqués]`
+
+  ```
+§4 ajouté
+json : 14 sources
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep T0; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\n# la ligne N2 de « Ce qui est en cours » : la distillation gagne 0,10\nt = t. … [656 caractères tronqués]`
+
+  ```
+T0 max : 3998 mots (budget 4 000)
+compteurs 598 685
+  T0 max : 4007 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"la **fenêtre 1 024** est la recette de production (2,48–2,91 ; sous 2,5 au grand corpus)\",\n              \"**fenê … [546 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 598 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 👤 Utilisateur
+
+background job bash-465 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**fenêtre 1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus)\",\n              \"**1 024** = re … [1736 caractères tronqués]`
