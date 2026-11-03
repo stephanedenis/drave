@@ -11265,3 +11265,60 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`
+
+  ```
+00:05:03
+HEAD 8133ee1e
+8133ee1e ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE
+16f3eeb0 ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE
+ 713516    01:42:15 /home/stephane/gpu-env/bin/python work/n
+ 758133       11:00 /home/stephane/gpu-env/bin/python work/n
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; ls -t reports/rapport-*.md | head -2; git log --oneline -1; cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 05 — compteur 574 après une  … [273 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · fraîcheur : en-cours.md dit 2026-11-02, le dernier commit date du 2026-11-03
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+reports/rapport-n2-porte-propre.md
+reports/rapport-n2-production-fenetre.md
+8133ee1e ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE
+log-ok
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 3}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 23 h 25 HNE (heure locale, EST).**
+
+(Showing lines 1-3 of 156. Use offset=4 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "**Mis à jour : 2026-11-03, 00 h 06 HNE (heure locale, EST).**", "old_string": "**Mis à jour : 2026-11-02, 23 h 25 HNE (heure locale, EST).**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git status --short docs/pilotage/en-cours.md", "description": "Verify the date … [6 caractères tronqués]`
+
+  ```
+revue de documentation · 574 fiche(s) · 660 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+pas de lock
+ M docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "git commit --only -m \"NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON)\" -m \"La revue signalait en-cours daté du 02/11 alors que le dernier commit est du 03/11 ; l'en-tête passe au 03/11 00 h 06. Compteurs 574/660, 82 portes.\" -- docs/pilotage/en-cour … [155 caractères tronqués]`

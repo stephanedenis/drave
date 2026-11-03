@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 7.7 h |
+| Durée | 7.8 h |
 | Tours | 36 |
-| Messages | 696 |
-| Appels d'outils | 667 |
+| Messages | 701 |
+| Appels d'outils | 672 |
 | Fichiers touchés | 24 |
-| Commandes | 471 |
+| Commandes | 474 |
 | Sous-agents | 0 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,10 +947,15 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 
 ### Tour 36 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Log the day change and check runs
 - bash — Wait for the next commit
+- bash — Verify and log the new fiche counter
+- read
+- edit `docs/pilotage/en-cours.md`
+- bash — Verify the date fix
+- bash — Commit the date fix
 
 **Synthèse produite :**
 
@@ -971,7 +976,7 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 25 |
+| `docs/pilotage/en-cours.md` | 0 | 26 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/chantiers.md` | 0 | 6 |
 | `docs/pilotage/plan-travail.md` | 0 | 8 |
@@ -1029,7 +1034,7 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 431 autres
+- … et 434 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1198,4 +1203,5 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 - NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE" -m "Après un commit à index alterné, l'index principal ignore les fichiers ajoutés 
 - ps -eo pid,etime,args | grep -E "git commit|git add" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo "pas de lock"; git status --short docs/pil
 - NUIT — LA LIGNE DES COMPTEURS RETROUVE SA CELLULE DE CONTRÔLE ; PORTE-TABLEAUX REPASSE VERTE" -m "L'édition du compteur JSON (571/659) avait perdu la troisième 
+- NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON)" -m "La revue signalait en-cours daté du 02/11 alors que le dernier commit est
 

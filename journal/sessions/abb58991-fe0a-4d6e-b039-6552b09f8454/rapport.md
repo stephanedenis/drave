@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 7.8 h |
-| Tours | 123 |
-| Messages | 909 |
-| Appels d'outils | 782 |
+| Durée | 7.9 h |
+| Tours | 127 |
+| Messages | 921 |
+| Appels d'outils | 786 |
 | Fichiers touchés | 48 |
-| Commandes | 612 |
+| Commandes | 616 |
 | Sous-agents | 0 |
 | Commits | 57 |
 | Compactages de contexte | 3 |
@@ -269,6 +269,14 @@
 **Tour 122** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 123** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 124** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 125** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 126** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 127** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3142,6 +3150,78 @@ La suite : attendre la fin (~50 min), comparer 432 vs 180, fiche/commit ; puis l
 
 ### Tour 123 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Check real-gold cascade progress at round 121
+
+**Synthèse produite :**
+
+⏵ Round 121 : cascade 432 à 36 min 54, load 28,4 ; JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --gold-reel` : **36 min 54**.
+- Load : **28,38** ; serveur sain ; N2 intact ; JSON pas encore écrit.
+- HEAD `16f3eeb0` ; T0 3 995 ; revue 573/660 verte.
+
+La suite : attendre la fin (~50 min), comparer 432 vs 180, fiche/commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 124 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check real-gold cascade progress at round 122
+
+**Synthèse produite :**
+
+⏵ Round 122 : cascade 432 à 37 min 41, load 28,5 ; JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --gold-reel` : **37 min 41**.
+- Load : **28,48** ; serveur sain ; N2 intact ; JSON pas encore écrit.
+- HEAD `16f3eeb0` ; T0 3 995 ; revue 573/660 verte.
+
+La suite : attendre la fin (~50 min), comparer 432 vs 180, fiche/commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 125 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check real-gold cascade progress at round 123
+
+**Synthèse produite :**
+
+⏵ Round 123 : cascade 432 à 38 min 33, load 27,4 ; JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --gold-reel` : **38 min 33**.
+- Load : **27,36** ; serveur sain ; N2 intact ; JSON pas encore écrit.
+- HEAD `16f3eeb0` ; T0 3 995 ; revue 573/660 verte.
+
+La suite : attendre la fin (~50 min), comparer 432 vs 180, fiche/commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 126 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check real-gold cascade progress at round 124
+
+**Synthèse produite :**
+
+⏵ Round 124 : cascade 432 à 39 min 30, load 28,6 ; JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --gold-reel` : **39 min 30**.
+- Load : **28,61** ; serveur sain ; N2 intact ; JSON pas encore écrit.
+- HEAD `16f3eeb0` ; T0 3 995 ; revue 573/660 verte.
+
+La suite : attendre la fin (~50 min), comparer 432 vs 180, fiche/commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 127 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3239,7 +3319,7 @@ La suite : attendre la fin (~50 min), comparer 432 vs 180, fiche/commit ; puis l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 572 autres
+- … et 576 autres
 
 ## 4. Mesures et résultats marquants
 

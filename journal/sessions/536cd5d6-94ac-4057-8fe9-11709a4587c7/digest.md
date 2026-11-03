@@ -9790,3 +9790,51 @@ veille 10 min
 ⏵ L'état dit 573 fichiers, le disque en a 574 (nouvelle fiche) ; je corrige le compteur et je vérifie le JSON.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '573' docs/pilotage/en-cours.md; echo \"== disque ==\"; ls reports/*.md | wc -l; ls reports/*.json | wc -l; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nassert t.count('573') … [499 caractères tronqués]`
+
+  ```
+114:| fichiers / JSON de résultats | **573** / **660** | `reports/*.md` / `reports/*.json` |
+== disque ==
+574
+660
+573 -> 574
+  revue de documentation · 574 fiche(s) · 660 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+[master 8133ee1e] ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE
+ 14 files changed, 4640 insertions(+), 57 deletions(-)
+[commit 0]
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Minuit : compteur 574/660 corrigé, revue verte, commit `8133ee1e` ; veille.
+
+- **Sessions** : N2 119 + claim, S 202 + claim, hub 91 + claim `veille`, B13 139 + claim ; quatre actives.
+- **Revue** 574/660/82 ✅ ; **T0 3 995/4 000** ✅ ; registre OK.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h** (dans 8 h). Goal actif.
+
+
+## Tour 46
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 38/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, eleventh", "run_in_background": true}`
+
+  ```
+started background job bash-246
+  ```
+
+- **job_output** `{"job_id": "bash-246", "timeout_ms": 600000, "wait": true}`
