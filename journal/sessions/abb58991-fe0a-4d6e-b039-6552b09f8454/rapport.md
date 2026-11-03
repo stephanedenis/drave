@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 8.2 h |
+| Durée | 8.3 h |
 | Tours | 149 |
-| Messages | 995 |
-| Appels d'outils | 815 |
+| Messages | 999 |
+| Appels d'outils | 819 |
 | Fichiers touchés | 48 |
-| Commandes | 644 |
+| Commandes | 648 |
 | Sous-agents | 0 |
-| Commits | 60 |
+| Commits | 63 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3676,16 +3676,20 @@ Je rédige la fiche et je commite.
 
 ### Tour 149 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Write real-gold 432 fiche
 - bash — Commit real-gold 432 cascade fact
 - bash — Retry commit after index lock
 - bash — Wait for lock then commit real-gold fact
+- bash — Remove stale lock and commit
+- bash — Retry commit after HEAD moved
+- bash — Inspect en-cours B13 line
+- bash — Update en-cours and commit real-gold fact
 
 **Synthèse produite :**
 
-⏵ Round 147 : le hub tient le lock (`git commit --only` en-cours, 21 s) ; j'attends sa fin puis je refais le mien
+⏵ Round 147 : la ligne d'état ne portait que le gold 180 ; j'ajoute le gold réel 432 puis je commite
 
 ## 3. Travail accompli
 
@@ -3784,7 +3788,7 @@ Je rédige la fiche et je commite.
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 604 autres
+- … et 608 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3943,6 +3947,9 @@ Je rédige la fiche et je commite.
 - ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES" 2>&1 | tail -6; echo "EXIT=${PIPESTATU
 - ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
+- L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
+- L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
 - L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
 - L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
 - L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE

@@ -9958,3 +9958,85 @@ veille 10 min
 ⏵ Le JSON est à 661, mais une fiche a été ajoutée entre-temps (574→575) ; je corrige le compteur fichier.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '574' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nassert t.count('574')==1, t.count('574')\np.write_text(t.replace('574','575'))\nprint('574 -> 57 … [392 caractères tronqués]`
+
+  ```
+61:  cascade **0,9415 / 0,6130 / 0,7574 / 1,0** (180) ;
+574 -> 575
+  revue de documentation · 575 fiche(s) · 661 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+[commit 128]
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: repository has been updated, but unable to write
+new index file. Check that disk is not full and quota is
+not exceeded, and then "git restore --staged :/" to recover.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit échoue : « unable to write new index file », disque peut-être plein. Je vérifie l'espace et les gros consommateurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== df ==\" && df -h / /home /home/stephane/Data13TB /home/stephane/IA 2>&1; echo; echo \"== inodes ==\" && df -i / /home 2>&1; echo; echo \"== gros postes ==\" && du -sh .git work reports journal tools 2>/dev/null; du -sh /hom … [332 caractères tronqués]`
+
+  ```
+== df ==
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme2n1p2           828G  121G  706G  15% /
+/dev/nvme2n1p2           828G  121G  706G  15% /home
+/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB
+/dev/md0                 938G  895G   34G  97% /home/stephane/IA
+
+== inodes ==
+Filesystem     Inodes IUsed IFree IUse% Mounted on
+/dev/nvme2n1p2      0     0     0     - /
+/dev/nvme2n1p2      0     0     0     - /home
+
+== gros postes ==
+100M	.git
+14G	work
+18M	reports
+318M	journal
+107M	tools
+13G	/home/stephane/.cache
+6,0G	/tmp
+
+== statut git ==
+ls: cannot access '.git/index.lock': No such file or directory
+
+== orphelins ==
+  ```
+
+### 🤖 Assistant
+
+⏵ Le disque n'est pas plein (706 G libres sur `/home`) ; le commit a collisionné avec une autre session, qui a committé 575/661. L'état est vert.
+
+- **Disques** : `/` 706 G libres (15 %) ; `Data13TB` 1,9 T ; **`IA` 34 G (97 %)** — l'avertissement reste.
+- **Gros postes** : `work/` 14 G, `.cache` 13 G, `/tmp` 6 G ; `.git` 100 M.
+- **État** : `en-cours` **575/661** (committé par l'autre session) ; revue ✅ ; T0 **3 997**.
+- **Sessions** : N2 2, S 227 + claim, hub 116 + claim `veille`, B13 164 + claim.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 40/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, thirteenth", "run_in_background": true}`
+
+  ```
+started background job bash-253
+  ```
+
+- **job_output** `{"job_id": "bash-253", "timeout_ms": 600000, "wait": true}`
