@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.5 h |
 | Tours | 13 |
-| Messages | 532 |
-| Appels d'outils | 555 |
+| Messages | 534 |
+| Appels d'outils | 557 |
 | Fichiers touchés | 23 |
-| Commandes | 367 |
+| Commandes | 369 |
 | Sous-agents | 0 |
-| Commits | 20 |
+| Commits | 21 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -415,7 +415,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 
 ### Tour 13 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check new commits, N2 fiche and runs
 - bash — Wait for a session commit or the N2 JSON
@@ -431,6 +431,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 - edit `docs/pilotage/en-cours.md`
 - bash — Verify state after hub-section fix
 - bash — Wait for the hub commit before fixing en-cours
+- … et 2 autres
 
 **Synthèse produite :**
 
@@ -508,7 +509,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 327 autres
+- … et 329 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -663,4 +664,5 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 - NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI" -m "en-cours : 82 portes (81 à la passe du 02/11 06 h + porte-ressources à
 - NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)" 2>&1 | tail -4
 - NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS" -m "references-non-regression : la passe du 02/11 19 h 32 (81 portes,
+- NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE" -m "La section hub d'en-cours disait encore la passe en cours ; elle est close (8
 

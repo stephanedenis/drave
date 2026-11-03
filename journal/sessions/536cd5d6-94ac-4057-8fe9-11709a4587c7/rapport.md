@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 6.2 h |
-| Tours | 15 |
-| Messages | 219 |
-| Appels d'outils | 267 |
+| Durée | 6.3 h |
+| Tours | 17 |
+| Messages | 225 |
+| Appels d'outils | 269 |
 | Fichiers touchés | 13 |
-| Commandes | 202 |
+| Commandes | 204 |
 | Sous-agents | 0 |
-| Commits | 16 |
+| Commits | 17 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -53,6 +53,10 @@
 **Tour 14** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 **Tour 15** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -750,7 +754,41 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 **Synthèse produite :**
 
-⏵ Le T0 a dépassé de 11 mots (4 011) : je retire la ligne INDEX redondante d'`en-cours` et je libère le claim d'intégration.
+⏵ Round 7 : consigne de nuit dans l'état, plan du hub rafraîchi, T0 3 981, claim d'intégration libéré ; le N2 a pris GPU1.
+
+- **En-cours** : ligne de nuit (claims, release/claim, pas d'attente, bilan 08 h) ; **1 607 mots** ; **T0 3 981/4 000** ; commits `12970a4e` et `18e19b58`.
+- **Plan hub** : heartbeat 21 h 43 ; passe finie, **veille + bilan**.
+- **Registre** : claim hub `integration` **libéré** ; restent N2 `r12-1024` (`gpu0`/`cpu0` 12), **N2 `r12-mix-512-gpu1`** (`gpu1`/`cpu0` 4), S (`cpu1` 4), B13 (`cpu1` 4) ; `--check` OK (IA 33 Gio).
+- **N2** : le second job tourne sur **GPU1** ; `n2-fenetre.json` toujours absent ; `porte-tableaux` rouge de passage ; rejeu après.
+- **Sessions** : N2 108 + 2 claims, S 64 + claim, hub en veille, B13 1 ; quatre actives ; `porte-sessions` verte.
+- **Passe** : 76/5 intégrée ; prochaine **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; veille ; **bilan 08 h**. Goal actif.
+
+### Tour 16 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
+
+**Synthèse produite :**
+
+⏵ Round 8 : veille ; le registre, l'état et la passe tiennent, le N2 tourne sur les deux GPU.
+
+- **En-cours** : 1 607 mots ; **T0 3 981/4 000** ; la consigne de nuit est dans le contrat ; plan hub à 21 h 43 ; commits `12970a4e` et `18e19b58`.
+- **Registre** : hub `integration` libéré ; restent N2 `r12-1024` (`gpu0`/`cpu0` 12), **N2 `r12-mix-512-gpu1`** (`gpu1`/`cpu0` 4), S (`cpu1` 4), B13 (`cpu1` 4) ; `--check` OK (IA 33 Gio).
+- **N2** : deux jobs sur les deux GPU ; `n2-fenetre.json` toujours absent ; `porte-tableaux` rouge de passage ; rejeu après.
+- **Sessions** : N2 108 + 2 claims, S 64 + claim, hub en veille, B13 1 ; quatre actives ; `porte-sessions` verte.
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours 82, docs 82e) ; prochaine **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; veille ; **bilan 08 h**. Goal actif.
+
+### Tour 17 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check state and journal day for 03/11
+- bash — Create 03/11 journal entry and commit
+
+**Synthèse produite :**
+
+⏵ J'ouvre l'entrée de journal du 03/11 avec l'état de la nuit et le point de reprise de 08 h.
 
 ## 3. Travail accompli
 
@@ -814,7 +852,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 162 autres
+- … et 164 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -973,4 +1011,5 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT" -m "README 2 762/
 - NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES" -m "en-cours : ligne de nuit (claims, release/claim, pas d'attente, 
 - ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE" -- docs/pilotage/en-cours.md; echo "[commit $?]"; echo; echo "== 
+- JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49 ET LE POINT DE REPRISE DE 08 H" -m "Quatre sessions, une passe 76/5 intégrée, un registre à quatre claims
 

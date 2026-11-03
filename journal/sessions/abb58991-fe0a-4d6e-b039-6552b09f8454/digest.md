@@ -12776,3 +12776,295 @@ Another git process seems to be running in this repository, or the lock file may
 EXIT=128
   ```
 
+### 🤖 Assistant
+
+⏵ Le hub est en série de commits et son en-cours a une consigne de nuit ; après le lock je repars de **son** en-cours et je réapplique ma ligne fenêtre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 25; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git log -2 --format='%h %s' | head -2; git checkout HEAD -- docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p. … [947 caractères tronqués]`
+
+  ```
+21:47:30
+.git/index.lock
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+en-cours réappliqué
+ tools/pensee/operateurs.py                         |  13 ++
+ tools/tests/qualifier_porte_fenetre_drvm.py        | 129 ++++++++++++++++
+ tools/tests/test_pensee_politique.py               |  10 ++
+ 27 files changed, 462 insertions(+), 422 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Resume session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`; goal `goal-781186f0-1fb6-48ba-af64-5c056d667196`, active, `max_goal_rounds` 1000, currently round 8/1000.
+- Objective: qualify the local 7B tagger on syntagmes (GN/GV/GP/REL/SUB), measure the complete cascade with the real model, then DRVM/native parity; each fact = measure + negative control + fiche + en-cours + explicit commit (`git add` explicite). Do not touch N2 GPUs; take the "jamais en attente" queue when a line blocks.
+- The core objective's three items are already committed; the night continues on further B13 facts.
+
+## Key Technical Concepts
+- Drave/Qtrinet conventions: `docs/` state/concepts, `reports/` measured results/fiches/JSON, `journal/` dated narrative, one writer for `en-cours`, roadmap line per fact, gates, explicit `git add`, `git diff --check`, T0 budget ≤ 4000 words (AGENTS + en-cours + largest task doc), en-cours ≤ 2000 words.
+- Local model: Qwen2.5-7B-Instruct GGUF Q4_K_M, 2 shards, `llama-server` on CPU at `http://127.0.0.1:18082` (`-ngl 0`), GBNF grammar, temperature 0.
+- `NeuronalLLMPOS`, `NeuronalLLMChunks`, `NeuronalLLMPragmatique` in `tools/bloc_linguistique.py`; `BIO` spans; `Cascade`/`priorite_syntagme`.
+- `PolitiqueLLM` in `tools/pensee/operateurs.py` with `jeu` = `cadenas`/`labyrinthe`/`porte`/**`porte_mobile`** (new); `PolitiqueManhattan`, `PolitiqueAveugle`, `PolitiqueHasard`, `PolitiqueAppriseMobile`, `seule_mobile`; `DRVM`, `AStar`, `Budget`.
+- Mobile door: `PORTES_MOBILE = ((3,3),(1,3))`; `REGISTRE_PMOB`; `LABYRINTHE_PORTE_MOBILE_0/1`; `sonde_pmob` opens if policy direction points at the door; `_etat_pmob(x,y,open,d)`; `_d_pmob`, `_open_pmob`, `_xy_pmob`.
+- B13 gate: `PYTHONPATH=. ~/gpu-env/bin/python -m tools.pensee.autotest` = 140 tests, ~4.5 min; expected values compared exactly.
+- S submodule `tools/structures` is the segmentation source; current submodule `00d2a01` ("S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN"); earlier `647205a`, `3b68143`, `97641d5` (the `3f74fe83` gitlink).
+
+## Files and Code
+- `tools/pensee/operateurs.py`: added `porte_mobile` branch in `PolitiqueLLM._invite` (prompt with walls minus doors, door position, open state, but `(4,4)`); +12 lines.
+- `tools/tests/test_pensee_politique.py`: added `test_porte_mobile` (7 tests total): `_etat_pmob(1,2,False,1)`, prompt contains `"(1,3)"` and not `"(1,3),"`.
+- `tools/tests/qualifier_porte_mobile_drvm.py`: new bench, 2 labs × 5 policies, Q-table reference, JSON to `reports/pensee-porte-mobile.json`.
+- `reports/rapport-pensee-porte-mobile.md`, `reports/pensee-porte-mobile.json`: mobile fact (committed `2fad8e8d`).
+- `tools/pensee/autotest.py`: updated exact expected values — T110 `0.1683→0.2739`, T111 `0.3649→0.4183`, T112 `0.1966→0.2833`, T113 `0.1966/0.4568→0.2833/0.5027`, T114 `0.2122/0.4314/602→0.3135/0.4809/602`, T115 `0.4098→0.4548`; docstrings updated (T110 docstring edit succeeded on second attempt).
+- `reports/rapport-b13-porte-138.md`, `reports/b13-porte-138.json`: new B13 gate fiche/JSON, now "six" S attendus (T110–T115), submodule `00d2a01`, gate 132→138, T132/T133 remain 2/5.
+- `reports/rapport-b13-porte-134.md`, `reports/b13-porte-134.json`: previous gate fact (134/140; four S + two anaphora).
+- `reports/README.md`, `reports/INDEX.md`: current "fiches courantes" row = `rapport-b13-porte-138.md` | `**B13** **138/140**`; INDEX 561 fiches.
+- `docs/pilotage/en-cours.md`: 1610 words, T0 3984, updated to B13 138/140 "6 S fixés ; T132/T133 restent", counters **564/650**, timestamp 20 h 39.
+- `docs/pilotage/roadmap.md`: B13 rows updated to 138/140, "6 S fixés ; T132/T133 restent", timestamp 20 h 39.
+- `journal/sessions/e181ce02.../plan.md`: heartbeat 20:39, item 20 `~~porte B13 138~~`, `Moteur B13 138/140`.
+- `journal/2026-11-02/README.md`: note 20 h 39 "porte B13 à 138/140 : les six attendus S 00d2a01".
+- `tools/structures` submodule: current `00d2a01`; `git ls-tree HEAD` = `00d2a01`; `3f74fe83` = `97641d5`.
+
+## Errors
+… [4009 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Resume session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`; goal `goal-781186f0-1fb6-48ba-af64-5c056d667196`, active, `max_goal_rounds` 1000, currently round 8/1000.
+- Objective: qualify the local 7B tagger on syntagmes (GN/GV/GP/REL/SUB), measure the complete cascade with the real model, then DRVM/native parity; each fact = measure + negative control + fiche + en-cours + explicit commit (`git add` explicite). Do not touch N2 GPUs; take the "jamais en attente" queue when a line blocks.
+- The core objective's three items are already committed; the night continues on further B13 facts.
+
+## Key Technical Concepts
+- Drave/Qtrinet conventions: `docs/` state/concepts, `reports/` measured results/fiches/JSON, `journal/` dated narrative, one writer for `en-cours`, roadmap line per fact, gates, explicit `git add`, `git diff --check`, T0 budget ≤ 4000 words (AGENTS + en-cours + largest task doc), en-cours ≤ 2000 words.
+- Local model: Qwen2.5-7B-Instruct GGUF Q4_K_M, 2 shards, `llama-server` on CPU at `http://127.0.0.1:18082` (`-ngl 0`), GBNF grammar, temperature 0.
+- `NeuronalLLMPOS`, `NeuronalLLMChunks`, `NeuronalLLMPragmatique` in `tools/bloc_linguistique.py`; `BIO` spans; `Cascade`/`priorite_syntagme`.
+- `PolitiqueLLM` in `tools/pensee/operateurs.py` with `jeu` = `cadenas`/`labyrinthe`/`porte`/**`porte_mobile`** (new); `PolitiqueManhattan`, `PolitiqueAveugle`, `PolitiqueHasard`, `PolitiqueAppriseMobile`, `seule_mobile`; `DRVM`, `AStar`, `Budget`.
+- Mobile door: `PORTES_MOBILE = ((3,3),(1,3))`; `REGISTRE_PMOB`; `LABYRINTHE_PORTE_MOBILE_0/1`; `sonde_pmob` opens if policy direction points at the door; `_etat_pmob(x,y,open,d)`; `_d_pmob`, `_open_pmob`, `_xy_pmob`.
+- B13 gate: `PYTHONPATH=. ~/gpu-env/bin/python -m tools.pensee.autotest` = 140 tests, ~4.5 min; expected values compared exactly.
+- S submodule `tools/structures` is the segmentation source; current submodule `00d2a01` ("S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN"); earlier `647205a`, `3b68143`, `97641d5` (the `3f74fe83` gitlink).
+
+## Files and Code
+- `tools/pensee/operateurs.py`: added `porte_mobile` branch in `PolitiqueLLM._invite` (prompt with walls minus doors, door position, open state, but `(4,4)`); +12 lines.
+- `tools/tests/test_pensee_politique.py`: added `test_porte_mobile` (7 tests total): `_etat_pmob(1,2,False,1)`, prompt contains `"(1,3)"` and not `"(1,3),"`.
+- `tools/tests/qualifier_porte_mobile_drvm.py`: new bench, 2 labs × 5 policies, Q-table reference, JSON to `reports/pensee-porte-mobile.json`.
+- `reports/rapport-pensee-porte-mobile.md`, `reports/pensee-porte-mobile.json`: mobile fact (committed `2fad8e8d`).
+- `tools/pensee/autotest.py`: updated exact expected values — T110 `0.1683→0.2739`, T111 `0.3649→0.4183`, T112 `0.1966→0.2833`, T113 `0.1966/0.4568→0.2833/0.5027`, T114 `0.2122/0.4314/602→0.3135/0.4809/602`, T115 `0.4098→0.4548`; docstrings updated (T110 docstring edit succeeded on second attempt).
+- `reports/rapport-b13-porte-138.md`, `reports/b13-porte-138.json`: new B13 gate fiche/JSON, now "six" S attendus (T110–T115), submodule `00d2a01`, gate 132→138, T132/T133 remain 2/5.
+- `reports/rapport-b13-porte-134.md`, `reports/b13-porte-134.json`: previous gate fact (134/140; four S + two anaphora).
+- `reports/README.md`, `reports/INDEX.md`: current "fiches courantes" row = `rapport-b13-porte-138.md` | `**B13** **138/140**`; INDEX 561 fiches.
+- `docs/pilotage/en-cours.md`: 1610 words, T0 3984, updated to B13 138/140 "6 S fixés ; T132/T133 restent", counters **564/650**, timestamp 20 h 39.
+- `docs/pilotage/roadmap.md`: B13 rows updated to 138/140, "6 S fixés ; T132/T133 restent", timestamp 20 h 39.
+- `journal/sessions/e181ce02.../plan.md`: heartbeat 20:39, item 20 `~~porte B13 138~~`, `Moteur B13 138/140`.
+- `journal/2026-11-02/README.md`: note 20 h 39 "porte B13 à 138/140 : les six attendus S 00d2a01".
+- `tools/structures` submodule: current `00d2a01`; `git ls-tree HEAD` = `00d2a01`; `3f74fe83` = `97641d5`.
+
+## Errors and Fixes
+- `fatal: Unable to create '.git/index.lock': File exists` on mobile commit: hub's concurrent `git commit --only docs/pilotage/plan-travail.md` held lock; waited ~45 s, lock freed, commit `2fad8e8d` succeeded; hub's staged journals were swept in.
+- `git diff --cached --check` exit 2: `journal/sessions/536cd5d6.../digest.md:6023: new blank line at EOF` (hub file); commit proceeded; post-commit `git diff --check` clean.
+- B13 gate after updating four values gave 132/140: submodule had advanced to `00d2a01` with new values; T110 also failed. Updated five then six values; current run `/tmp/b13-138c.log` still running (log empty at checkpoint).
+- Future timestamps 20 h 52/20 h 45 were corrected to 20 h 39 (project rule "le futur n'est pas une heure").
+- `edit` on `autotest.py` failed "file changed since it was read"; re-read then edit succeeded.
+
+## Pending Jobs
+- Background job `bash-392` = B13 gate rerun after T110 fix, output `/tmp/b13-138c.log`; expected **138/140** (T132/T133 remain). `job_output` returned `[status: running]`.
+- After gate: verify 138, run `verifie_etat_a_jour --index`, `taille_documents`, `verifie_en_cours`, `revue_documentation`, `porte-tableaux.sh`, `verifie_journal.py`, `sessions --check --strict`; commit `autotest.py` + fiche/JSON + README/INDEX + en-cours/roadmap/plan/journal (message e.g. `B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT`).
+- Then: porte stochastique/fenêtre; gold 200+; T132/T133 anaphora reconciliation.
+- `report-b13-porte-138.md`/JSON still may contain some "cinq"/old leftovers; check `grep -n "cinq\|647205a\|134/140"`.
+
+## Current Work
+- B13 gate fact in progress: six `autotest.py` expected values aligned to submodule `00d2a01`; fiche/JSON/state updated to 138/140; gate `bash-392` running.
+- HEAD `42db89f6` (hub "NUIT — LA 82e PORTE : RESSOURCES..."), parent `2fad8e8d` (mobile), `9a17d0cc` (hub night), `3f74fe83` (S corpus/banque), `a67dbf00`/`2bbd45e2` (hub resources).
+- Working tree likely has modified `autotest.py`, `reports/rapport-b13-porte-138.md`, `reports/b13-porte-138.json`, `reports/README.md`, `reports/INDEX.md`, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, plan, journal; possible hub staged `MM docs/pilotage/references-non-regression.md`, journal files.
+- Time ~21:01 EST; T0 3984; en-cours 1610; revue 564/650.
+
+## Next Step
+- Poll `job_output bash-392` (wait) for gate verdict; if **138/140** with only T132/T133 red, run the full check set and commit the six-value B13 fact.
+
+## Critical Context
+- B13 gate history: stale `140/140` at `702b368c` not reproducible (its exact tree gives 138/140); `3b68143`=138/140; `647205a`=134/140; `00d2a01` before six fix=132/140 (T110–T115 + T132/T133); after six fix expected 138/140.
+- T132/T133 `fidelite_lien_auto` = 2/5 deterministically on both submodules/6 hash seeds; expected 5/5; independent anaphora test/gold issue, not the S.
+- Mobile fact: `(3,3)` LLM fails 200 nodes/3 sonde/228.8 s; `(1,3)` LLM passes 28/4/14.4 s, but blind 26/2, hasard 28/4, labyrinthe 29/5 also pass; oracle 29/5; Q-table 2/2 in 8 steps; verdict ❌ test non discriminant; commit `2fad8e8d`.
+- Night commits: POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique (negative) `4a85604d`, T0 `7d5bd08d`, B13 134 `9f1f4869`, minute `67ec9cd4`, mobile `2fad8e8d`; hub/N2/S: `a902abea`, `e12c39c1`, `e2227509`, `c0196b55`, `3f74fe83` (S corpus réel 65,5 % propre / 8,5 % CEGEP; banque 200 phrases/355 candidats), `42db89f6` (82e porte ressources).
+- S submodule `00d2a01` is committed at HEAD `42db89f6`; B13 six expected values now depend on it — reproducible.
+- 7B server `http://127.0.0.1:18082` still running CPU; do not touch N2 GPUs (N2 gpu0/cpu0 12, hub gpu1/cpu1 8, S/Pensée cpu1 4+4 per hub plan).
+- Goal remains active; update_goal edit/complete requires a direct human turn (not available in automatic rounds); do not mark complete while night work remains.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Le lock persiste alors que le hub a fini ; je vérifie qu'aucun git ne tourne, je retire le lock périmé et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls -l .git/index.lock; ps -eo pid,etime,cmd | grep -E \"git (commit|add|reset)\" | grep -v grep | head -3 || true; if ! ps -eo cmd | grep -E \"git (commit|add|reset)\" | grep -v grep >/dev/null; then rm -f .git/index.lock; echo 'lock … [283 caractères tronqués]`
+
+  ```
+21:48:02
+-rw-r--r--. 1 stephane stephane 357893  2 nov 21:46 .git/index.lock
+ 681695       01:13 timeout 300 git commit --only -m ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE -- docs/pilotage/en-cours.md
+ 681696       01:13 git commit --only -m ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE -- docs/pilotage/en-cours.md
+ tools/tests/qualifier_porte_fenetre_drvm.py        | 129 ++++++++++++++++
+ tools/tests/test_pensee_politique.py               |  10 ++
+ 27 files changed, 462 insertions(+), 422 deletions(-)
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 🤖 Assistant
+
+⏵ Le git du hub est bloqué depuis 1 min 13 (timeout 300) ; j'attends sa fin, puis je commite (le lock n'est pas périmé)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 75; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; ps -eo pid,etime,cmd | grep -E \"git (commit|add|reset)\" | grep -v grep | head -2; git log -1 --format='%h %s' | head -1; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCH … [180 caractères tronqués]`

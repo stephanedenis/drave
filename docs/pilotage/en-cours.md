@@ -27,11 +27,11 @@
 - **Ambition** : un état reprenable, des mandats qui disent la vérité.
 - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
-- **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
-  portes en cours** (`porte-bus`, 19 h 37).
+- **Ce qu'elle fait** : intégration ; **passe close — 81 portes, 76 vertes, 5 rouges, 1 h 52** ;
+  INDEX/README ; **bilan de 8 h en préparation**.
 - **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
-- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
-- **Bloquants** : aucun ; la passe tient la machine (GPU libres).
+- **Prochaine action** : intégrer les lignes B13/N2/S ; tenir le **bilan de 8 h**.
+- **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
 ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export

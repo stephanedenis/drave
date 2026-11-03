@@ -8123,3 +8123,57 @@ en-cours + plan hub à jour
 ⏵ Le T0 a dépassé de 11 mots (4 011) : je retire la ligne INDEX redondante d'`en-cours` et je libère le claim d'intégration.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"- **INDEX** : `reports/README` **2 762/2 800** (3 fiches de la nuit entrées, 5 historiques sorties) ; `reports/INDEX` **565** ; rev … [867 caractères tronqués]`
+
+  ```
+ligne INDEX retirée
+  en-cours · 1607 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3981 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+[master 18e19b58] ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE
+ 22 files changed, 279 insertions(+), 65 deletions(-)
+[commit 0]
+
+== release hub ==
+  ✅ libéré : 1 réservation(s) de 536cd5d6 / integration
+
+== check ==
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+
+
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 7 : consigne de nuit dans l'état, plan du hub rafraîchi, T0 3 981, claim d'intégration libéré ; le N2 a pris GPU1.
+
+- **En-cours** : ligne de nuit (claims, release/claim, pas d'attente, bilan 08 h) ; **1 607 mots** ; **T0 3 981/4 000** ; commits `12970a4e` et `18e19b58`.
+- **Plan hub** : heartbeat 21 h 43 ; passe finie, **veille + bilan**.
+- **Registre** : claim hub `integration` **libéré** ; restent N2 `r12-1024` (`gpu0`/`cpu0` 12), **N2 `r12-mix-512-gpu1`** (`gpu1`/`cpu0` 4), S (`cpu1` 4), B13 (`cpu1` 4) ; `--check` OK (IA 33 Gio).
+- **N2** : le second job tourne sur **GPU1** ; `n2-fenetre.json` toujours absent ; `porte-tableaux` rouge de passage ; rejeu après.
+- **Sessions** : N2 108 + 2 claims, S 64 + claim, hub en veille, B13 1 ; quatre actives ; `porte-sessions` verte.
+- **Passe** : 76/5 intégrée ; prochaine **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

@@ -8696,3 +8696,78 @@ json absent
 … [724 caractères tronqués]
   ```
 
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 18, "offset": 22}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+22: 
+23: - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+24: - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+25: - **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
+26:   portes** (GPU 1).
+27: - **Ambition** : un état reprenable, des mandats qui disent la vérité.
+28: - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+29: - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
+30: - **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
+31:   portes en cours** (`porte-bus`, 19 h 37).
+32: - **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+33: - **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+34: - **Bloquants** : aucun ; la passe tient la machine (GPU libres).
+35: - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057
+… [339 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Ce qu'elle fait** : intégration ; **passe close — 81 portes, 76 vertes, 5 rouges, 1 h 52** ;\n  INDEX/README ; **bilan de 8 h en préparation**.\n- **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.\n- **Prochaine ac … [532 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -1; git status --short docs/pilotage/en-cours.md", "description": "Verify state … [24 caractères tronqués]`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ⚠ mandat long (67 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+MM docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 15); do sleep 12; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; git log --oneline -2; git status --short docs/pilotage/en-cours.md", "description": "Wait for the hub commit before fixing en-cours", "ti … [17 caractères tronqués]`
+
+  ```
+21:48:31
+18e19b58 ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+ M docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "git diff docs/pilotage/en-cours.md | head -30; echo \"--- T0 ---\"; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": "Inspect the uncommitted en-cours change and budgets"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index a05aa31d..9e07021c 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -27,11 +27,11 @@
+ - **Ambition** : un état reprenable, des mandats qui disent la vérité.
+ - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+ - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
+-- **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
+-  portes en cours** (`porte-bus`, 19 h 37).
++- **Ce qu'elle fait** : intégration ; **passe close — 81 portes, 76 vertes, 5 rouges, 1 h 52** ;
++  INDEX/README ; **bilan de 8 h en préparation**.
+ - **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+-- **Prochaine action** : finir la **passe complète**, puis intégrer les lignes B13/N2/S.
+-- **Bloquants** : aucun ; la passe tient la machine (GPU libres).
++- **Prochaine action** : intégrer les lignes B13/N2/S ; tenir le **bilan de 8 h**.
++- **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
+ - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
+ 
+ ### 
+… [233 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git status --short | head -6; git commit --only -m \"NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE\" -m \"La section hub d'en-cours disait encore la passe en cours ; elle est close (81 portes, 76 vertes, 5 rouges, 1 h 52). Prochaine action : intégrer B13/ … [186 caractères tronqués]`

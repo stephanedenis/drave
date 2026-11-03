@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.5 h |
+| Durée | 5.6 h |
 | Tours | 15 |
-| Messages | 518 |
-| Appels d'outils | 614 |
+| Messages | 522 |
+| Appels d'outils | 617 |
 | Fichiers touchés | 47 |
-| Commandes | 451 |
+| Commandes | 454 |
 | Sous-agents | 0 |
-| Commits | 25 |
+| Commits | 28 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -631,7 +631,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 
 ### Tour 15 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Add porte_fenetre prompt and test
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py`
@@ -645,10 +645,13 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - bash — Wait for hub commit and retry window commit
 - bash — Wait longer and retry window commit
 - bash — Wait, rebase en-cours on hub, commit window
+- bash — Clear stale lock and commit window
+- bash — Wait for hub git timeout and commit
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Le hub est en série de commits et son en-cours a une consigne de nuit ; après le lock je repars de **son** en-cours et je réapplique ma ligne fenêtre
+⏵ Le hub enchaîne les commits d'en-cours (série en cours) ; j'attends et je reprends
 
 ## 3. Travail accompli
 
@@ -746,7 +749,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 411 autres
+- … et 414 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -864,6 +867,9 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"

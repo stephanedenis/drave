@@ -5728,3 +5728,19 @@ c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABY
 … [26 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Mise à jour du fil de nuit avec le verdict et les correctifs du soir
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n\n## 21 h 30 — VERDICT DE LA PASSE (02/11 19 h 32 → 21 h 17)\n\n**81 portes, 76 vertes, 5 rouges, 1 h 52** (journaux `work/portes/passe-1102-19h32`).\n- 4 rouges **connues** : `porte-indice` (1 027 s, c … [1137 caractères tronqués]`
+
+  ```
+ok
+21:47
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente de 10 min (veille JSON/rejeu en fond)
+
+- **job_output** `{"job_id": "bash-230", "timeout_ms": 600000, "wait": true}`
