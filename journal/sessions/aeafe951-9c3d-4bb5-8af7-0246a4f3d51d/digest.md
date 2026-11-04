@@ -3857,3 +3857,68 @@ started background job bash-162
   ```
 
 - **job_output** `{"job_id": "bash-162", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 3e73690122c14447a49c1204812089c332f28bad but expected b67e4dcba53450ed90c0d356bd698736a50e390f
+[status: completed, exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un autre commit est passé pendant le mien — je resynchronise sans perdre l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo ====; git show --stat --oneline HEAD | head -14; echo ====; git status --short | head -12", "description": "Inspect the intervening commit and index state"}`
+
+  ```
+3e736901 LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+====
+3e736901 LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)
+ docs/pilotage/en-cours.md                          |   8 +-
+ journal/2026-11-04/README.md                       |   9 +-
+ journal/2026-11-04/apprentissage.md                |   4 +-
+ journal/2026-11-04/distribue.md                    |   4 +-
+ journal/2026-11-04/docs.md                         |   7 +-
+ journal/2026-11-04/mesures.md                      |   4 +-
+ journal/2026-11-04/modele.md                       |   4 +-
+ journal/2026-11-04/outils.md                       |   4 +-
+ journal/2026-11-04/portes.md                       |   4 +-
+ journal/README.md                                  |   6 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  61 +++++++++
+ .../rapport.md                                     |  41 +++++-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md |  93 +++++++++++++
+====
+ M docs/im
+… [420 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:docs/pilotage/en-cours.md | grep -n \"D\\*\\* — clos\\|fichiers / JSON\"; echo ====; git ls-tree -r --name-only HEAD | grep -E 'ocr-pdf-restants|aeafe951.*/plan' ; echo ====; git status --short | grep -E 'ocr|aeafe951'" … [78 caractères tronqués]`
+
+  ```
+108:| fichiers / JSON de résultats | **624** / **717** | `reports/*.md` / `reports/*.json` |
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés (4 documents, 49 p, 54 167 car.) ; l'intégration au corpus CEGEP reste au hub (re-split et contrôle 8 Ko).
+====
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+reports/ocr-pdf-restants.json
+reports/rapport-ocr-pdf-restants.md
+====
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 3e736901 | grep -E 'ocr|en-cours|aeafe951.*plan'; echo ====; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_backlog.py 2>&1 |  … [67 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          |   8 +-
+ reports/ocr-pdf-restants.json                      |  52 +++++++
+ reports/rapport-ocr-pdf-restants.md                |  97 +++++++++++++
+====
+  état · dernier fait 3e736901 · dernier état 3e736901
+  ✅ aucun fait commité après le dernier état
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+

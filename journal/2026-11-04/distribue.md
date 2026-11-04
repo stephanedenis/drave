@@ -4,13 +4,14 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (3)
+## Commits du jour (4)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 09:46 | `047945c5` | S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS | `en-cours.md`, `README.md`, `docs.md` (+15) |
 | 12:24 | `1b4be681` | ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24 | `en-cours.md`, `roadmap.md`, `README.md` (+10) |
 | 12:29 | `d94c3a4b` | PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34 | `portes.md`, `chantiers.md`, `en-cours.md` (+15) |
+| 15:33 | `3e736901` | LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000) | `en-cours.md`, `README.md`, `apprentissage.md` (+18) |
 
 ## Sessions actives ce jour
 
@@ -23,6 +24,7 @@
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/rapport-ocr-pdf-restants.md](../../reports/rapport-ocr-pdf-restants.md)
 - [reports/rapport-s-paragraphes.md](../../reports/rapport-s-paragraphes.md)
 
 <!-- notes -->

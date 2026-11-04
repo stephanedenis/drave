@@ -14703,3 +14703,52 @@ d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ;
 ⏵ La N2 a relancé le 2 048 en deux moitiés ; je finalise le commit liens + compteurs + trim (T0 3 998)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**D** — OCR clos (8 `.PDF`)\", \"**D** — OCR clos (8 `.PDF`, [restants](../../reports/rapport-ocr-pdf-restants.md))\")\np.wr … [819 caractères tronqués]`
+
+  ```
+mention OCR OK
+  T0 max : 3997 mots (budget 4 000)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-531]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-529 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'
+import pathlib
+p=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()
+t=t.replace("[DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), ", "")
+p.write_text(t); print('trim OK')
+PY
+python3 tools/taille_documents.py 2>&1 | grep -E "T0 max" | head -1 ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; for i in $(seq 1 12); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo "LOCK" ; else git add reports/rapport-ocr-pdf-restants.md docs/pilotage/en-cours.md && git commit -m "LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)" -m "La fiche du rapport OCR se liait à elle-même par ../../reports/ : deux liens cassés, corrigés en ./ (la fiche et son manifeste). Le compteur passe à 624 fichiers. L'état est resserré (les huit vieilles fiches B13 sortent du « Fait », les courantes restent) : T0 de 4017 à 3997." ; fi) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Deux jobs de commit se sont enchaînés ; je collecte les deux résultats
+
+- **job_output** `{"job_id": "bash-529", "timeout_ms": 30000, "wait": true}`
+
+  ```
+[s/v7 3e736901] LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)
+ 21 files changed, 719 insertions(+), 57 deletions(-)
+ create mode 100644 reports/ocr-pdf-restants.json
+ create mode 100644 reports/rapport-ocr-pdf-restants.md
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-531", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[stderr]
+fatal: cannot lock ref 'HEAD': is at 3e73690122c14447a49c1204812089c332f28bad but expected b67e4dcba53450ed90c0d356bd698736a50e390f
+[status: completed, exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit T0 a été devancé par le précédent ; je retente le trim d'état (T0 3 997)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK\" ; else git add docs/pilotage/en-cours.md && git commit -m \"ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT … [469 caractères tronqués]`

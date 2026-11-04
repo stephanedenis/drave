@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 8.2 h |
 | Tours | 48 |
-| Messages | 497 |
-| Appels d'outils | 713 |
+| Messages | 500 |
+| Appels d'outils | 716 |
 | Fichiers touchés | 15 |
-| Commandes | 530 |
+| Commandes | 531 |
 | Sous-agents | 0 |
-| Commits | 68 |
+| Commits | 69 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1457,7 +1457,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 48 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1473,11 +1473,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Retry commit for 163 and production
 - bash — Remention facts in state and commit
 - bash — Verify cycle 43 final checks
-- … et 3 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Le T0 est encore à 4 006 après le trim : je resserre les rôles/passifs et je refais le commit d'état
+⏵ Deux jobs de commit se sont enchaînés ; je collecte les deux résultats
 
 ## 3. Travail accompli
 
@@ -1543,7 +1543,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 490 autres
+- … et 491 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1758,4 +1758,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)" -m "Deux faits : côté B13, le chunker détecte l
 - B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)" -m "Deux faits : côté B13, le chunker détecte l
 - LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)" -m "La fiche du rapport OCR se liait à elle-même par ../../reports/ : deux liens cassés, corrigés en 
+- LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 3 998)" -m "La fiche du rapport OCR se liait à elle-même par ../../reports/ : deux liens cassés, corrigés en ./ (l
 
