@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 92.4 h |
+| Durée | 92.5 h |
 | Tours | 161 |
-| Messages | 1974 |
-| Appels d'outils | 1697 |
+| Messages | 1983 |
+| Appels d'outils | 1706 |
 | Fichiers touchés | 25 |
-| Commandes | 1395 |
+| Commandes | 1403 |
 | Sous-agents | 2 |
 | Commits | 208 |
 | Compactages de contexte | 5 |
@@ -8540,7 +8540,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 
 ### Tour 161 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Lire le composite neuronal
 - bash — Lire la grammaire pragmatique et son usage
@@ -8556,7 +8556,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - bash — Committer la pragmatique neuronale (130 phrases)
 - bash — Vérifier la branche courante
 - bash — Voir les commits sur s/v7 au-delà de master
-- … et 2 autres
+- … et 10 autres
 
 ## 3. Travail accompli
 
@@ -8637,7 +8637,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1355 autres
+- … et 1363 autres
 
 ## 4. Mesures et résultats marquants
 

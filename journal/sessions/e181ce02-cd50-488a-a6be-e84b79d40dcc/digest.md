@@ -35237,3 +35237,165 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 14 h 50 HNE\", t)\np.write_text( … [803 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-123]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-123", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-quatre-modes-432-pragma.json
+ create mode 100644 reports/rapport-pensee-pragmatique-full.md
+COMMIT OK 1
+8d0008d5 B13 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; 152/152
+mer 04 nov 2026 13:05:23 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1440,1500p' tools/bloc_linguistique.py", "description": "Lire la fusion par niveau"}`
+
+  ```
+a = self.h.analyser(texte, langue, contexte)
+        couv = a.couverture()
+        residuel = [n for n in self.niveaux if couv.get(n, 0.0) < self.seuil]
+        if not residuel:
+            a.source = self.nom
+            a.trace.append({"etape": "cascade", "residuel": [], "appel_neuronal": False})
+            return a
+        self.appels_neuronal += 1
+        b = self.n.analyser(texte, langue, contexte)
+        fusion = _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
+        fusion.trace.append({"etape": "cascade", "residuel": residuel, "appel_neuronal": True,
+                             "seuil": self.seuil})
+        return fusion
+
+
+class CoucheSemantique:
+    """Le consommateur : il ne reçoit que les unités, pas le texte entier.
+
+    C'est le point du contrat : l'heuristique peut activer cette couche **avant** le neuronal,
+    sur une fraction des unités ; le neuronal affine ensuite le résidu.
+    """
+
+    def __init__(self, cout_par_octet: float = 1.0):
+        self.cout_par_octet = cout_par_octet
+        self.appels = 0
+
+    def activer(self, annotation: Annotation) -> dict:
+        self.appels += 1
+        octets = sum(u.fin - u.debut for u in annota
+… [1474 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1339,1400p' tools/bloc_linguistique.py", "description": "Lire _fusion en entier"}`
+
+  ```
+Le mock a montré que le niveau perd (0,3432) ; le réel (deux passes) a montré qu'il gagne
+    (0,9389). Le défaut suit donc la **présence d'un réel**, pas une doctrine.
+    """
+    return PRIORITE_NIVEAU if os.environ.get("DEEPSEEK_KEY_FILE") else None
+
+
+PRIORITE_NIVEAU = {
+    "graphème": "heuristique", "morphème": "heuristique", "mot": "heuristique",
+    "pos": "neuronal", "syntagme": "neuronal", "phrase": "heuristique",
+    "pragmatique": "heuristique", "discours": "heuristique", "document": "heuristique",
+}
+
+
+def _fusion(a: Annotation, b: Annotation, source: str,
+            priorite_syntagme: str = "heuristique",
+            priorite_par_niveau: dict | None = None) -> Annotation:
+    """Fusion déterministe : la meilleure confiance par (niveau, span, type) ; les candidats
+    sont réunis ; la langue/le script vont à la meilleure confiance.
+
+    Si `priorite_par_niveau` est donné, la fusion choisit **la source par niveau** (le
+    neuronal pour POS/syntagmes, l'heuristique pour la pragmatique) au lieu de faire
+    concourir les deux par confiance — c'est la réparation mesurée par la porte des quatre
+    modes : l'ancienne fusion rendait 0,928/0,802/0,857, sous le neuronal seul.
+
+… [2096 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# 1) priorite par type\nt=t.replace('''PRIORITE_NIVEAU = {\n    \"graphème\": \"heuristique\", \"morphème\": \"heuristique\", \"mot\": \ … [4538 caractères tronqués]`
+
+  ```
+fusion par sous-type branchée
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text()\nt=t.replace('''        \"parallele_niveau\": Parallele([h, compose], priorite_syntagme=\"confiance\",\n          … [1303 caractères tronqués]`
+
+  ```
+started background job bash-127
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nh=bl.Heuristique(); n=bl.MockNeuronal()\nph=charger()[:2 … [511 caractères tronqués]`
+
+  ```
+niveau POS 0.4857 | pragma {'acte': 1.0, 'negation': 1.0, 'modalite': 0.95, 'double_sens': 0.9}
+sous-type POS 0.4857 | pragma {'acte': 1.0, 'negation': 1.0, 'modalite': 0.95, 'double_sens': 0.9}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-127 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text()
+t=t.replace('''        "parallele_niveau": Parallele([h, compose], priorite_syntagme="confiance",
+                                      priorite_par_niveau=PRIORITE_NIVEAU),
+        "cascade_niveau": Cascade(h, compose, seuil=a.seuil, priorite_syntagme="confiance",
+                                  priorite_par_niveau=PRIORITE_NIVEAU),''',
+'''        "parallele_niveau": Parallele([h, compose], priorite_syntagme="confiance",
+                                      priorite_par_niveau=PRIORITE_NIVEAU,
+                                      priorite_par_type=PRIORITE_TYPE),
+        "cascade_niveau": Cascade(h, compose, seuil=a.seuil, priorite_syntagme="confiance",
+                                  priorite_par_niveau=PRIORITE_NIVEAU,
+                                  priorite_par_type=PRIORITE_TYPE),''')
+t=t.replace("from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,",
+            "from tools.bloc_linguistique import (PRIORITE_NIVEAU, PRIORITE_TYPE, Cascade, Heuristique,")
+p.write_text(t); print('qualifier : sous-type branché')
+PY
+DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes-432-soustype.json 2>&1 | tail -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-127"}`
+
+  ```
+qualifier : sous-type branché
+parallele_niveau · 0.4 s
+cascade_niveau · 0.4 s
+heuristique {'pos': 0.7444, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+neuronal {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.963, 'modalite': 0.9722, 'double_sens': 0.9884}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+parallele_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9884}, 'fraction_semantique': 0.5199}
+cascade_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9884}, 'fraction_se
+… [52 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432-soustype.json'))\nprint('refus', d.get('refus'), '| seuils', d.get('seuils'))\nfor k in ('heuristique','neuronal','parallele_niveau','cascade_niveau'):\ … [252 caractères tronqués]`
+
+  ```
+refus 0 | seuils {'heuristique': True, 'neuronal': True, 'parallele': True, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': True}
+heuristique POS 0.7444 | pragma {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}
+neuronal POS 0.9389 | pragma {'acte': 0.9954, 'negation': 0.963, 'modalite': 0.9722, 'double_sens': 0.9884}
+parallele_niveau POS 0.9389 | pragma {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9884}
+cascade_niveau POS 0.9389 | pragma {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9884}
+api {'appels': 1287, 'tokens': 314369, 'latence_s': 1236.394}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-fusion-soustype.md <<'MD'\n# B13 — la fusion par sous-type : le double sens gagne 0,0208\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·\n> **Verdict** : ✅ … [7234 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 613 fiche(s) · 703 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`

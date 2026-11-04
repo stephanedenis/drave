@@ -7526,3 +7526,344 @@ docs/pilotage/roadmap.md OK
 ⏵ Commit N2 : runs arrêtés, paire propre, R1.2 interrompu
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md && git commit -m \"N2 — KD2 ET ROPE20 … [610 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 8d0008d5e7c1ec0d03df112dd64f84ed02f7e870 but expected d4a35d11099e09df42e888c7a726a3c1df9f0c4b
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un commit a déplacé HEAD (8d0008d5) ; je vérifie s'il a emporté la synchronisation N2
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 8d0008d5 ===\" ; git show --stat --oneline 8d0008d5 | head -12 ; echo \"=== HEAD SYNCHRO N2 ===\" ; git show HEAD:docs/pilotage/en-cours.md | grep -c \"runs arrêtés\\|paire propre\" ; git show HEAD:do … [206 caractères tronqués]`
+
+  ```
+8d0008d5 B13 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; 152/152
+d4a35d11 B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+64674e0d ERRATUM (SUITE) — LA REPONDÉRATION VAUT −0,05, PAS −0,14 : 3,6067 / 3,3984 / 3,3129 CONTRE 3,6452 / 3,4493 / 3,3628
+=== 8d0008d5 ===
+8d0008d5 B13 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; 152/152
+ docs/implantation/moteur-de-pensee.md              |    5 +-
+ docs/pilotage/en-cours.md                          |   16 +-
+ docs/pilotage/roadmap.md                           |    4 +-
+ journal/2026-11-04/README.md                       |    7 +-
+ journal/2026-11-04/apprentissage.md                |    2 +-
+ journal/2026-11-04/distribue.md                    |    2 +-
+ journal/2026-11-04/docs.md                         |    7 +-
+ journal/2026-11-04/mesures.md                      |    2 +-
+ journal/2026-11-04/modele.md                       |    2 +-
+ journal/2026-11-04/portes.md                       |    2 +-
+ journal/README.md                                  |    4 +-
+=== HEAD SYNCHRO N2 ===
+4
+1
+==
+… [84 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le B13 152/152 (pragmatique sur le gold 432) a atterri ; je vérifie état, chantiers et budget
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== ÉTAT B13 ===\" ; grep -n \"152/152\\|151/151\\|pragmatique 432\\|pragmatique 130\" docs/pilotage/en-cours.md | head -8 ; echo \"=== CHANTIERS/PLAN ===\" ; grep -n \"151/152\\|152/152\\|151/151\" docs/pilotage/chantiers.md d … [277 caractères tronqués]`
+
+  ```
+=== ÉTAT B13 ===
+71:- **Fait** : B13 **151/151** (**variance 0,3 : ±0,0074, 7/7 seuils, refus 0** ; le `parallele` passe de **0,9326** à **0,9389**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; fenêtre **non discriminante** ; **pragmatique 130 : acte 1,0, négation 1,0, modalité 0,9846, double sens 0,9769** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [troisième passe](../../reports/rapport-pensee-troisieme-passe.md), [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [B13](../../reports/rapport-b13-porte-140.md).
+97:- **P
+… [5045 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-03, 13 h 45 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+9: > (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit**, et de nouveau le **03/11 13 h 38** pour le **run long à 1 024** ; runbook :
+10: > [`plan-travail.md`](plan-travail.md) § 9.
+11: 
+12: ## Sessions en cours
+13: 
+14: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+15: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+16: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+17: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+18: >
+19: > **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
+20: > `llama-cpp`/`embed`/`vision` 
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index c89aae07..3bb037cd 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -46,7 +46,7 @@
+ - **Ambition** : nommer le rôle et la frontière GN.
+ - **Stratégie** : une règle = une phrase, trois contrôles.
+ - **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
+-- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md).
++- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md),
+… [3956 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-production-fenetre.md</path>
+<type>file</type>
+<content>
+1: # N2 — La production à fenêtre entraînée (512 / 1 024 / 2 048) et le compute qui va avec
+2: 
+3: > **Ligne de roadmap** : N2 (le modèle de production) · **Date** : 2026-11-03 · **Verdict** :
+4: > à **octets ajoutés constants** (61,4 Mo, le budget de N2.ac), les trois fenêtres écrasent N2.ac
+5: > et le run de 200 000 pas ; **1 024 est la meilleure au long** (2,7342 à 2 000 octets) et **512 la
+6: > meilleure hors domaine** (anglais 7,05, wikitext2 7,90), **2 048 ne paie pas** (3 750 pas
+7: > seulement). En poussant la fenêtre 1 024 à **30 000 pas (307 Mo)**, le modèle de production
+8: > atteint **2,9121** en domaine à 128 octets (60 000 pas, 552 Mo), **2,5276** à 1 000, **2,4761** à
+9: > 2 000, et il passe
+10: > **sous 2,5 sur la validation du grand corpus** (2,3911 à 1 000, 2,3522 à 2 000) — une première
+11: > pour un modèle natif, **obtenue par la fenêtre et non en rabotant la longueur**. Le même compute
+12: > à fenêtre 128 (200 k pas, 205 Mo) donne 3,1591 à 128 et **8,2262** à 1 000 : la fenêtre n'est pas
+13: > un raffinement, c'est la condition pour 
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-r12-2048.md</path>
+<type>file</type>
+<content>
+1: # R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données gagnent
+2: 
+3: > **Ligne de roadmap** : R1 (la fenêtre native) · **Date** : 2026-11-03 · **Verdict** : à
+4: > **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à
+5: > **1 024** — à 2 000 octets, 3,2459 (fenêtre 256) → 2,9728 (512) → **2,9449** (1 024) — et
+6: > **2 048 ne la bat pas** (2,9630) : à budget d'octets fixé, doubler encore la fenêtre divise les
+7: > **pas** par deux (1 250 contre 2 500) et le gain s'annule. À **pas constants** (20 000), la même
+8: > recette à fenêtre **1 024** voit **8× plus d'octets** et **écrase** tout : **2,9955** à 128
+9: > octets, **2,6256** à 1 000, **2,5429** à 4 000 — à **0,13** et **0,04** de 2,5 en domaine
+10: > (`val_fr`, pas le corpus propre : ce n'est pas la porte, c'en est le voisinage). La fenêtre et
+11: > le compute ne s'opposent pas : la fenêtre **rend chaque octet plus utile**, et c'est le produit
+12: > des deux qui compte.
+13: 
+14: ## La question
+15: 
+16: La fic
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-04, 08 h 50 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reboot du 03/11 19 h 33** : la nuit a été coupée net — `kd2` à **8 250/30 000** pas et
+9: > `rope2048` à **3 350/20 000**, **sans checkpoint** ; les quatre sessions sont **en pause**.
+10: > Reprise par le hub le **04/11 08 h** : analyse des sessions, tâches courtes, état, intégration ;
+11: > runbook [`plan-travail.md`](plan-travail.md) § 9, plan de la nuit § 11.
+12: 
+13: ## Sessions en cours
+14: 
+15: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+16: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+17: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+18: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+19: >
+20: > **Serveurs locaux arrêtés (03/11 09 h)** : `llama-serv
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reboot du 03/11 19 h 33** : la nuit a été coupée net — `kd2` à **8 250/30 000** pas et
+> `rope2048` à **3 350/20 000**, **sans checkpoint** ; les quatre sessions sont **en pause**.
+> Reprise par le hub le **04/11 08 h** : analyse des sessions, tâches courtes, état, intégration ;
+> runbook [`plan-travail.md`](plan-travail.md) § 9, plan de la nuit § 11.
+
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+
+- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+- **Rôle** : **Hub de reprise** — analyse des quatre sessions interrompues, tâches courtes, état.
+- **Fait** : index réparé (`git read-tree HEAD`) ; N2/S/Pensée triés ; **8 verdicts S** committés ; banque **84/67** ; **fix FIFO** (+3 tests) ; état au 04/11.
+- **Prochaine action** : commit d'intégration, puis **passe de portes** ; les runs longs N2 ensuite.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 % calcul, PPL −0,006 %)** | **A2.6** (experts : A6.2 bloqué) ; le lot ≥ 2 assumé |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** +
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-04, 13 h 35 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reboot du 03/11 19 h 33** : la nuit a été coupée net — `kd2` à **8 250/30 000** pas et
+9: > `rope2048` à **3 350/20 000**, **sans checkpoint** ; les quatre sessions sont **en pause**.
+10: > Reprise par le hub le **04/11 08 h** : analyse des sessions, tâches courtes, état, intégration ;
+11: > runbook [`plan-travail.md`](plan-travail.md) § 9, plan de la nuit § 11.
+12: 
+13: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+14: 
+15: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+16: - **Rôle** : **Hub de reprise** — analyse des quatre sessions interrompues, tâches courtes, état.
+17: - **Fait** : index réparé (`git read-tree HEAD`) ; N2/S/Pensée triés ; **8 verdicts S** committés ; banque **84/67** ; **fix FIFO** (+3 tests) ;
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-04, 13 h 35 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reboot du 03/11 19 h 33** : la nuit a été coupée net — `kd2` à **8 250/30 000** pas et
+9: > `rope2048` à **3 350/20 000**, **sans checkpoint** ; les quatre sessions sont **en pause**.
+10: > Reprise par le hub le **04/11 08 h** : analyse des sessions, tâches courtes, état, intégration ;
+11: > runbook [`plan-travail.md`](plan-travail.md) § 9, plan de la nuit § 11.
+12: 
+13: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+14: 
+15: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+16: - **Rôle** : **Hub de reprise** — analyse des quatre sessions interrompues, tâches courtes, état.
+17: - **Fait** : index réparé (`git read-tree HEAD`) ; N2/S/Pensée triés ; **8 verdicts S** committés ; banque **84/67** ; **fix FIFO** (+3 tests) ;
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+=== DRVM FICHE ===
+# N0.1 — DRVM se lit-il ? Oui, et le payload est enfin vérifié
+
+> **Ligne de roadmap** : **N (le natif)** · **Date** : 2026-11-04 · **Verdict** : ✅ **149/149
+> portes** : la porte **N0.1** du modèle natif est re-jouée sur un **mini-conteneur** : écriture,
+> lecture, `mmap`, hash, **refus de version** et **refus de corruption** — **6/6**. La corruption
+> du payload n'était **pas** refusée : le lecteur vérifiait le hash du manifeste mais pas celui
+> du **payload**. C'est corrigé (`read_drvm(verifier=True)`).
+>
+> **Dispositif** : [`drvm.py`](../tools/drvm.py), [`autotest.py`](../tools/pensee/autotest.py),
+> JSON [`pensee-drvm-n01.json`](pensee-drvm-n01.json).
+
+## 1. Les six contrôles
+
+| # | contrôle | résultat |
+|---:|---|---|
+| 1 | écriture (SHA-256, 476 octets) | ✅ |
+=== COMMIT FICHE ===
+9593718e N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149
+=== 148/149 DANS DOCS ===
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.1
+… [3958 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le B13 152/152 est committé mais l'état dit 151 : je vérifie la roadmap puis j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"151/151\\|152/152\\|151/152\" docs/pilotage/roadmap.md | head -6 ; echo \"=== FICHE 432 ===\" ; git log --oneline -1 -- reports/rapport-pensee-pragmatique-full.md ; head -6 reports/rapport-pensee-pragmatique-full.md", "descr … [59 caractères tronqués]`
+
+  ```
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + 
+… [4946 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le B13 152/152 (gold 432 : acte 0,9954, la fusion garde l'heuristique) à intégrer partout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -rn \"0,6375\" docs/pilotage/ --include=\"*.md\" | head -6 ; echo \"=== 151 ===\" ; grep -rc \"151/151\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md", "description": … [51 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md:44:**pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556** majoritaire) —
+docs/pilotage/roadmap.md:179:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **porte** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **professeur** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + **votante** + **trois looks** + **bayésien** + **bayésien 2** + **vraisemblance** + **dérive** + **adaptative** + **glisse** + **rupture** + **alternance** + **chaotique** + **fréquent** + **rapide** + **limite** + **hasard 2** + **intra** + **asym** + **rare** + **très rare** + **ul
+… [1320 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 152/152 : je corrige aussi la narrative de la roadmap (l'ancienne « ne qualifie pas »)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '42,47p' docs/pilotage/roadmap.md ; echo \"=== PLAN PRAGMATIQUE ===\" ; grep -n \"pragmatique\" docs/pilotage/plan-travail.md | head -6 ; echo \"=== CHANTIERS PRAGMATIQUE ===\" ; grep -n \"pragmatique\" docs/pilotage/chantiers. … [69 caractères tronqués]`
+
+  ```
+discriminante** (oracle 228, aveugle 215, 7B 238 : tout passe) — c'est le banc qu'il faut réparer ;
+la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la règle, **0** sans) ; la
+**pragmatique neuronale** ne qualifie pas (test **0,6375** pour **0,7556** majoritaire) —
+l'heuristique garde. **N2** : la **loi de la fenêtre** à octets constants donne **3,2545 → 3,0107
+→ 2,9950** (256/512/1 024 à 1 000 octets), **2,9449** à 2 000 pour 1 024, et la **2 048** s'arrête à
+1 024 ; la **production** (N2.ac + RoPE 512) **bat les 200 k pas** (littérature 5,52, anglais 7,05,
+=== PLAN PRAGMATIQUE ===
+39:| **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **151/151** (6 S fixés ; T132/T133 2/5), gold **432**, 116 liens ; **gold neuronal** (POS **0,9415** / syntagmes **0,7539** / acte **1,0**) ; **DRVM/native** règle (**3 nœuds**) ; **DRVM N0.1 6/6** ; **pragmatique 130 : 1,0 / 1,0 / 0,9846 / 0,9769** — elle qualifie. Prochaine : **T132/T133**, **gold 200+**. |
+40:| **S — les structures (session `29ad180d`)** | les structures d'interprétation candidates, la va
+… [1714 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Intégration finale du B13 152/152 (gold 432) dans l'état et les pages de pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:70]); continue\n        t=t.replace(old … [3219 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md MISS ['**pragmatique 130 : 1,0 / 1,0 / 0,9846 / 0,9769** — elle qualifie. Pro']
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3993 mots (budget 4 000)
+  revue de documentation · 613 fiche(s) · 703 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2951 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 152/152 (pragmatique gold 432) et narrative corrigée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilot … [729 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.6 h |
+| Durée | 5.7 h |
 | Tours | 12 |
-| Messages | 227 |
-| Appels d'outils | 407 |
+| Messages | 234 |
+| Appels d'outils | 414 |
 | Fichiers touchés | 15 |
-| Commandes | 250 |
+| Commandes | 257 |
 | Sous-agents | 0 |
-| Commits | 23 |
+| Commits | 24 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -458,7 +458,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 12 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -474,11 +474,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Commit B13 151 pragmatique integration
 - bash — Wait for lock and retry pragmatique commit
 - bash — Check rope process, logs and recent runs
-- … et 3 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Commit N2 : runs arrêtés, paire propre, R1.2 interrompu
+⏵ Commit B13 152/152 (pragmatique gold 432) et narrative corrigée
 
 ## 3. Travail accompli
 
@@ -544,7 +544,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 210 autres
+- … et 217 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -672,7 +672,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-7 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -681,6 +681,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T9** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
 - **T10** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8cea841f41bd691bd941bd198ce9132f805321f7 but expected 6b0e9c833c6d33ced86fe7bc9857850c48515f4f [exit code: 128]
 - **T12** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
+- **T12** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8d0008d5e7c1ec0d03df112dd64f84ed02f7e870 but expected d4a35d11099e09df42e888c7a726a3c1df9f0c4b [exit code: 128]
 
 ## 6. Commits
 
@@ -707,4 +708,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé
 - B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé
 - N2 — KD2 ET ROPE2048 ARRÊTÉS POUR LA PAIRE PROPRE (ROPE À 6 400/20 000) ; REPONDÉRATION −0,05 ; R1.2 INTERROMPU" -m "La session N2 a arrêté kd2 et rope2048 (cod
+- B13 152/152 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; ÉTAT ET PILOTAGE" -m "Le fait est committé (8d0008d5, rapport-pensee
 
