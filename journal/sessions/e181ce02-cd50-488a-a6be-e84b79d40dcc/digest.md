@@ -37658,3 +37658,80 @@ Traceback (most recent call last):
 AssertionError
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Fait.*B13\\|Prochaine action.*candidats\\|Ce qu'elle fait\" docs/pilotage/en-cours.md | sed -n '1,8p'; echo ---; sed -n \"$(grep -n 'e181ce02' docs/pilotage/en-cours.md | head -1 | cut -d: -f1),+14p\" docs/pilotage/en-cours … [47 caractères tronqués]`
+
+  ```
+42:- **Ce qu'elle fait** : intégration ; passe **11 h 30 — 82, 80/2** ; plan de nuit.
+57:- **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67**.
+71:- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; **passifs : règle 5/5 fausse ; correctifs hors du chemin S (roadmap 163)** ; fiches [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md).
+72:- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
+74:- **Prochaine action** : les **candidats verbes**, puis le **générateur S** ; T132/T133 à 5/5.
+86:- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α = 0
+… [1879 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nvieux = \"- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; … [1436 caractères tronqués]`
+
+  ```
+ligne B13 resserrée + boilerplate retiré
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     · session « Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif)* » ne dit pas « **Ce que font les autres** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n# restaurer la ligne de contrat (verifie_en_cours l'exige)\nt=t.replace(\"- **Prochaine action** : les **candidats verbes**, puis le **gé … [1089 caractères tronqués]`
+
+  ```
+bloc resserré
+  ❌ 1 violation(s) :
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Plan** : B13, R4.4, bloc linguistique.\", \"- **Plan** : B13, bloc linguistique.\")\nt=t.replace(\"- **Stratégie** : v0 … [335 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-cible-proximite.md reports/pensee-cible-proximite.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilota … [917 caractères tronqués]`
+
+  ```
+Another git process seems to be running in this repository, or the lock file may be stale
+COMMIT OK 1
+21110849 B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+ .../rapport.md                                     |  13 +-
+ journal/sessions/MANIFEST.md                       |   8 +-
+ .../aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md | 271 +++++++++++++++++++++
+ .../rapport.md                                     |  23 +-
+ .../rapport.md                                     |  16 +-
+ reports/pensee-cible-proximite.json                |  32 +++
+ reports/rapport-pensee-cible-proximite.md          |  64 +++++
+ 23 files changed, 742 insertions(+), 80 deletions(-)
+--- vérif code :
+0
+0
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git status --porcelain | grep -E \"tools/(bloc|pensee)|docs/(implantation|pilotage)\" ; echo \"--- commit :\"\nfor i in 1 2 3 4 5 6; do\n  git add tools/bloc_li … [907 caractères tronqués]`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+--- commit :
+[still running after 60000ms; moved to background job bash-234]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-234", "timeout_ms": 900000, "wait": true}`

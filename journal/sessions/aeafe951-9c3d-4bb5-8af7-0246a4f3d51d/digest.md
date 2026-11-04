@@ -4825,3 +4825,101 @@ started background job bash-245
   ```
 
 - **job_output** `{"job_id": "bash-245", "timeout_ms": 240000, "wait": true}`
+
+  ```
+ok
+[s/v7 26e21acf] D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+ 21 files changed, 534 insertions(+), 47 deletions(-)
+ create mode 100644 reports/ocr-cegep-64.json
+ create mode 100644 reports/rapport-ocr-cegep-64.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : le commit est parti sur la branche `s/v7` et a pris 21 fichiers — j'inspecte avant toute correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short --branch | head -5; echo ====; git log --oneline -3; echo ====; git show --stat --oneline 26e21acf | head -26; echo ====; git branch -vv | head -10", "description": "Inspect branch, commit contents, and branch list … [2 caractères tronqués]`
+
+  ```
+## s/v7
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+MM journal/2026-11-04/README.md
+MM journal/2026-11-04/apprentissage.md
+====
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+21110849 B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+6cb09126 ÉTAT — HEURE 16 H 04 ; B13 163/163, D clos, 2 048 À 2 200 PAS
+====
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+ docs/pilotage/en-cours.md                          |   6 +-
+ journal/2026-11-04/README.md                       |   7 +-
+ journal/2026-11-04/apprentissage.md                |   2 +-
+ journal/2026-11-04/distribue.md                    |   2 +-
+ journal/2026-11-04/docs.md                         |   8 +-
+ journal/2026-11-04/mesures.md                      |   2 +-
+ journal/2026-11-04/modele.md                       |   2 +-
+ journal/2026-11-04/outils.md                       |   2 +-
+ journal/2026-11-04/portes.md                       |   2 +-
+ journal/README.md                   
+… [1283 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit `--only` n'a PAS pris les fichiers de L (21 = mes 4 + journal) ; je vérifie l'état et la branche active
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -14; echo ====; git diff --cached --stat | tail -4; echo ====; git show HEAD:docs/pilotage/en-cours.md | grep -n \"D\\*\\* — \\|fichiers / JSON\" | head -3; echo ====; git diff docs/pilotage/en-cours.md | he … [80 caractères tronqués]`
+
+  ```
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+MM journal/2026-11-04/README.md
+MM journal/2026-11-04/apprentissage.md
+MM journal/2026-11-04/distribue.md
+MM journal/2026-11-04/docs.md
+MM journal/2026-11-04/mesures.md
+MM journal/2026-11-04/modele.md
+MM journal/2026-11-04/outils.md
+MM journal/2026-11-04/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+====
+ .../rapport.md                                     |  20 ++--
+ tools/bloc_linguistique.py                         |  28 +++++-
+ tools/pensee/autotest.py                           |  21 +++-
+ 21 files changed, 97 insertions(+), 372 deletions(-)
+====
+108:| fichiers / JSON de résultats | **626** / **719** | `reports/*.md` / `reports/*.json` |
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — **contaminé, à restaurer** : 8 `.PDF` OCRisés ; **2 neufs** (Choquette 6 p, Assurance 1 p),
+… [380 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached docs/pilotage/en-cours.md | head -40", "description": "Check whether the staged en-cours preserves the correction"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index dd7d41a2..979c3d5d 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -63,16 +63,16 @@
+ ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif)*
+ 
+ - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+-- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
+-- **Plan** : B13, R4.4, bloc linguistique.
++- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
++- **Plan** : B13, bloc linguistique.
+ - **Ambition** : un runtime cognitif tracé.
+-- **Stratégie** : v0 petit et mesuré.
++- **Stratégie** : v0 mesuré.
+ - **Objectif final** : un moteur de pensée v0.
+-- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; **passifs : règle 5/5 fausse ; correctifs hors du chemin S (roadmap 163)** ; fiches [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../report
+… [1238 caractères tronqués]
+  ```
+

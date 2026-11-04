@@ -2219,12 +2219,12 @@ def t152_tirages() -> tuple[bool, str]:
 
 
 def t153_attachement() -> tuple[bool, str]:
-    """L'attachement sur le gold 432 : top1 0,3431, exact 0,0042."""
+    """L'attachement sur le gold 612 (239 cibles) : top1 0,3975, exact 0,0544."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
-    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.3431) < 0.001
-            and abs(r["exact_taux"] - 0.0042) < 0.001), (
+    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.3975) < 0.001
+            and abs(r["exact_taux"] - 0.0544) < 0.001), (
         f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
         f"couverture {r['couverture']}")
 
@@ -2333,6 +2333,18 @@ def t160_passifs_sans_par() -> tuple[bool, str]:
         if roles and roles[0] == "patient":
             ok += 1
     return ok == 3, f"passif sans par (chunker) : {ok}/3 patient"
+
+
+def t161_cible_proximite() -> tuple[bool, str]:
+    """La cible par proximité : le verbe du GV le plus proche."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    r = evaluer_bloc("h", bl.Heuristique(), charger())
+    a, th = r["attachement"], r["attachement_tete"]
+    return (a["cibles"] == 239 and a["top1"] == 95 and a["exact"] == 13
+            and th["top1"] == 94 and a["topk"] == 78), (
+        f"proximité : top1 {a['top1']}/239, exact {a['exact']}/239, "
+        f"tête {th['top1']}/145")
 
 
 def main() -> int:
@@ -2494,7 +2506,8 @@ def main() -> int:
               ("T157 rôles par position", t157_roles()),
               ("T158 passifs", t158_passifs()),
               ("T159 correctif passifs", t159_passifs_corriges()),
-              ("T160 passifs sans par", t160_passifs_sans_par())]
+              ("T160 passifs sans par", t160_passifs_sans_par()),
+              ("T161 cible proximité", t161_cible_proximite())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

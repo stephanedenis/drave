@@ -537,6 +537,25 @@ class Heuristique:
         except Exception:
             return {}
 
+    @staticmethod
+    def _cible_proche(texte: str, segment: dict, gvs: list[dict]) -> str | None:
+        """La cible d'un segment : le **verbe du GV le plus proche** (règle de proximité).
+
+        Rend `None` si le segment est lui-même un GV ou s'il n'y a pas de GV. Le verbe est le
+        dernier token du GV (`a vu` → `vu`, `est mangé` → `mangé`).
+        """
+        if segment.get("type") == "GV" or not gvs:
+            return None
+        def ecart(g: dict) -> int:
+            if g["fin"] <= segment["debut"]:
+                return segment["debut"] - g["fin"]
+            if g["debut"] >= segment["fin"]:
+                return g["debut"] - segment["fin"]
+            return 0
+        g = min(gvs, key=ecart)
+        mots = re.findall(r"[\wÀ-ÿ'-]+", texte[g["debut"]:g["fin"]])
+        return mots[-1] if mots else None
+
     def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
         mots = self._mots(texte)
         lex = POS_FERME.get(langue, POS_FERME["fr"])
@@ -673,6 +692,9 @@ class Heuristique:
                         cible = att.get("cible")
                     else:
                         cible = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
+                    if not cible:
+                        gvs = [x for x in c.get("segments", []) if x.get("type") == "GV"]
+                        cible = self._cible_proche(texte, s, gvs)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
                     if cible:
                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
@@ -684,10 +706,14 @@ class Heuristique:
                                                 meta=meta))
         else:
             for s in self._syntagmes_simple(texte, lg):
+                meta = {"role": s["role"], "niveau": s["niveau"]}
+                cible = self._cible_proche(texte, s, [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"])
+                if cible:
+                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.35,
                                             candidats=[s["type"]], langue=lg, script=script,
-                                            meta={"role": s["role"], "niveau": s["niveau"]}))
+                                            meta=meta))
         # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
         if cands and self.union:
             deja = {(s.get("type"), s.get("debut"), s.get("fin"))

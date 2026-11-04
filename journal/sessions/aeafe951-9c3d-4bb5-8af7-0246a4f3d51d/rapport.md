@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 6.8 h |
+| Durée | 6.9 h |
 | Tours | 6 |
-| Messages | 218 |
-| Appels d'outils | 250 |
+| Messages | 223 |
+| Appels d'outils | 255 |
 | Fichiers touchés | 9 |
-| Commandes | 203 |
+| Commandes | 208 |
 | Sous-agents | 1 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -277,7 +277,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 
 ### Tour 6 — Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message:  RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est  … [1998 caractères tronqués]
 
-*28 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Replay the 8 188-byte window and DOC2 leak offsets
 - send_message
@@ -293,11 +293,11 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - list_agents
 - bash — Check counters and wait for the fiche
 - interrupt_agent
-- … et 12 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ Je corrige l'état et je commite en `--only` (les fichiers de L restent stagés)
+⏵ Vérification finale : la branche active est `s/v7`, pas `master` — écart à signaler au hub
 
 ## 3. Travail accompli
 
@@ -361,7 +361,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 163 autres
+- … et 168 autres
 
 ## 4. Mesures et résultats marquants
 

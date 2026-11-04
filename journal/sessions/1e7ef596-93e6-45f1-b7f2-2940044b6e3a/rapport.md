@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 8.8 h |
+| Durée | 8.9 h |
 | Tours | 62 |
-| Messages | 560 |
-| Appels d'outils | 763 |
+| Messages | 562 |
+| Appels d'outils | 765 |
 | Fichiers touchés | 15 |
-| Commandes | 578 |
+| Commandes | 580 |
 | Sous-agents | 0 |
-| Commits | 77 |
+| Commits | 79 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1782,17 +1782,19 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 62 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run seven controls and check rope
 - bash — Read new OCR fiche and state bloat
 - bash — Inspect clean corpus and restoration plan
 - bash — Restore clean corpus and fix state/link
+- bash — Trim and commit corpus restoration
+- bash — Retry restoration commit and check T0
 
 **Synthèse produite :**
 
-⏵ Restauration du corpus propre à 62 documents (DOC1/DOC2 écartés), état et lien corrigés
+⏵ Le verrou git est tenu ; je retente le commit de la restauration
 
 ## 3. Travail accompli
 
@@ -1858,7 +1860,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 538 autres
+- … et 540 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2083,4 +2085,6 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)" -m "Le re-split OCR est fait et inscrit dans la ligne de D (train 4,46 M, val 32 220, test 12 711, 
 - ÉTAT — HEURE 16 H 04 ; B13 163/163, D clos, 2 048 À 2 200 PAS" -m "Cycle d'audit : les sept contrôles sont verts (624/717, 3036 liens, T0 3999, en-cours 1629, b
 - B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont complets : la règle
+- D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 3 996" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
+- D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 4 000" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
 

@@ -16119,3 +16119,152 @@ pas   2700 · perte 1.0690 · PPL val 2.744 · 2759 s
 1, 100 %
   ```
 
+### 🤖 Assistant
+
+⏵ Une fiche OCR « cegep-64 » est apparue (626/719) avec un lien cassé, et le T0 est à 4 036 ; je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -10 reports/rapport-ocr-cegep-64.md 2>/dev/null ; echo \"=== LIEN ===\" ; grep -n \"reports/\" reports/rapport-ocr-cegep-64.md | head -4 ; echo \"=== ÉTAT 1666 ? ===\" ; head -3 docs/pilotage/en-cours.md ; grep -n \"fichiers / JS … [215 caractères tronqués]`
+
+  ```
+# D — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train
+
+> **Ligne de roadmap** : D · **Date** : 2026-11-04 · **Verdict** : ⛔ **le re-split 64 (2/1/1) est
+> contaminé** — **DOC2**, placé en **val**, a **18/20 fenêtres de 500 o** déjà dans l'ancien train
+> (**17 001 o contigus**, offsets 4 026 047 → 4 044 047) ; **DOC1** (train) est un quasi-doublon
+> intra-train (**24/26** fenêtres, une fenêtre de **8 188 o exacte**). Le contrôle **8 Ko exact est
+> à 0** et **ne le voit pas** (les deux scans du même document ont été OCRisés deux fois, le texte
+> diffère légèrement). ✅ **le corpus propre à 62 documents est prêt et vérifié** :
+> `work/ocr/cegep64/propre/` — 60 anciens + **Choquette** (6 p) + **Assurance** (1 p), DOC1/DOC2
+> écartés ; 8 Ko 0, 500 o 0, val/test anciens intacts.
+=== LIEN ===
+97:> SHA `f57154df…`), restauration à appliquer ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+101:- `reports/ocr-cegep-64.json` — le manifeste (états 64 et 62, contrôles, restauration).
+102:- `reports/rapport-ocr-cegep-64.md` — cette fiche.
+=== ÉTAT 1666 ? ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 14 HNE (heure locale, EST).**
+71:- **Fait** : B13 *
+… [699 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le re-split 64 est contaminé (DOC2 val ≈ train) ; le corpus propre à 62 est prêt — j'inspecte la restauration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls -la work/ocr/cegep64/propre/ 2>/dev/null ; echo \"=== TAILLES ===\" ; wc -c work/ocr/cegep64/propre/*.txt 2>/dev/null ; echo \"=== FICHE FIN ===\" ; sed -n '85,105p' reports/rapport-ocr-cegep-64.md ; echo \"=== BACKUP ? ===\" ; ls  … [127 caractères tronqués]`
+
+  ```
+total 4380
+drwxr-xr-x. 1 stephane stephane     176  4 nov 16:07 .
+drwxr-xr-x. 1 stephane stephane     402  4 nov 16:06 ..
+-rw-r--r--. 1 stephane stephane     578  4 nov 16:07 contamination.json
+-rw-r--r--. 1 stephane stephane     578  4 nov 16:07 contamination.stdout
+drwxr-xr-x. 1 stephane stephane     148  4 nov 16:07 controle
+-rw-r--r--. 1 stephane stephane     304  4 nov 16:07 controle_500o.json
+-rw-r--r--. 1 stephane stephane   10524  4 nov 16:06 test.txt
+-rw-r--r--. 1 stephane stephane 4440987  4 nov 16:06 train.txt
+-rw-r--r--. 1 stephane stephane   12536  4 nov 16:06 val.txt
+=== TAILLES ===
+  10524 work/ocr/cegep64/propre/test.txt
+4440987 work/ocr/cegep64/propre/train.txt
+  12536 work/ocr/cegep64/propre/val.txt
+4464047 total
+=== FICHE FIN ===
+- **Ce qui pourrait le rendre faux** : le 500 o est un contrôle **exact**, pas un détecteur de
+  paraphrase ; une réécriture ou un OCR très différent passerait. La baseline ne couvre que
+  val/test contre train, pas la duplication intra-train ancienne. Les pages et caractères sont
+  dérivés des manifestes, pas recomptés page à page. Le corpus 62 n'est pas déployé : tant que le
+  hub n'a pas restauré, `data/` reste l'état 64 contaminé.
+
+#
+… [1096 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Restauration du corpus propre à 62 documents (DOC1/DOC2 écartés), état et lien corrigés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; mkdir -p /tmp/cegep64-contamine ; cp data/corpus_ocr_cegep/*.txt /tmp/cegep64-contamine/ ; cp work/ocr/cegep64/propre/train.txt work/ocr/cegep64/propre/val.txt work/ocr/cegep64/propre/test.txt data/corpus_ocr_cegep/ ; wc -c data/corpu … [1198 caractères tronqués]`
+
+  ```
+10524 data/corpus_ocr_cegep/test.txt
+4440987 data/corpus_ocr_cegep/train.txt
+  12536 data/corpus_ocr_cegep/val.txt
+4464047 total
+lien OCR64 OK
+état OK
+  T0 max : 4000 mots (budget 4 000)
+  ✅ 3046 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+
+  ```
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 13 HNE (heure locale, EST).**
+71:- **Fait** : B13 **152/152** (**variance 0,3 : ±0,0074, 7/7 seuils, refus 0** ; le `parallele` passe de **0,9326** à **0,9389**) ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; fenêtre **non discriminante** ; **pragmatique 130 : acte 1,0, négation 1,0, modalité 0,9846, double sens 0,9769** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md).
+97:- **Pensée — B13 (actif)** : **152/152**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
+120:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 152/152, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+130:**N2** — f
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observ
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observ
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+# B13 — les passifs : la règle de position se trompe (5/5 faux)
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+> **161/161 portes** : la règle de position (`agent` si avant le GV) se trompe sur les **cinq
+> passifs** testés (`Le chat est mangé par le chien.` …) : le **GN sujet est un patient**, et le
+> **GP en `par`** est l'agent. La règle naïve donne `agent` au sujet et `moyen` au `par` — deux
+> erreurs par phrase. La couverture 0,8195 de T157 est donc **surévaluée**.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-passifs.json`](pensee-passifs.json).
+=== STATUS ===
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+M  journal/2026-11-04/README.md
+M  journal/2026-11-04/apprentissage.md
+M  journal/2026-11-04/distribue.md
+M  journal/2026-11-04/docs.md
+M  journal/2026-11-04/mesures.md
+M  journal/2026-11-04/modele.md
+M  journal/2026-11-04/portes.md
+M  journal/README.md
+M  journal/THEMES.md
+M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+=== 0,4725 DANS DOCS ===
+docs/pilotage/chantiers.md:88:| **L — l
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observ
+… [3958 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 000 : je resserre la cible (×13) et commit la restauration du corpus 62
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**cible par proximité (exact 0,0042 → 0,0544)**\", \"**cible par proximité (exact ×13)**\")\np.write_text(t); print('trim OK … [996 caractères tronqués]`

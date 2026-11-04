@@ -63,16 +63,16 @@
 ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif)*
 
 - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
-- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
-- **Plan** : B13, R4.4, bloc linguistique.
+- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
+- **Plan** : B13, bloc linguistique.
 - **Ambition** : un runtime cognitif tracé.
-- **Stratégie** : v0 petit et mesuré.
+- **Stratégie** : v0 mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; **passifs : règle 5/5 fausse ; correctifs hors du chemin S (roadmap 163)** ; fiches [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md).
-- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
+- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; rôles 301/322 ; passifs hors du chemin S ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md).
+- **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
-- **Prochaine action** : les **candidats verbes**, puis le **générateur S** ; T132/T133 à 5/5.
-- **Bloquants** : les **7B locales** sont **interdites** (règle 11) ; reste **gold 200+**.
+- **Prochaine action** : les **candidats verbes**, puis le **générateur S**.
+- **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(actif)*
