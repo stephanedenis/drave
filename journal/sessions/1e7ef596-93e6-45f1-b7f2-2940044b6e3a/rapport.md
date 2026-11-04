@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 6.2 h |
+| Durée | 6.3 h |
 | Tours | 19 |
-| Messages | 290 |
-| Appels d'outils | 477 |
+| Messages | 294 |
+| Appels d'outils | 481 |
 | Fichiers touchés | 15 |
-| Commandes | 320 |
+| Commandes | 324 |
 | Sous-agents | 0 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -669,16 +669,20 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 19 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
 - bash — Run links, backlog, journal and table gates
 - bash — Check state facts, time and runs
+- bash — Locate 154 and sous-type variance lines
+- bash — Integrate B13 155 tirages across docs
+- bash — Trim state and stage 155 integration
+- bash — Commit B13 155 tirages integration
 
 **Synthèse produite :**
 
-⏵ Cycle 14 : instantané, audit et faits committés depuis le cycle 13
+⏵ Commit B13 155/155 (tirages, cache) et l'intégration
 
 ## 3. Travail accompli
 
@@ -744,7 +748,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 280 autres
+- … et 284 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -919,4 +923,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 154/154 — LA VARIANCE DU SOUS-TYPE (0,9838 À 0,3, LE GAIN TIENT) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé avec le backlog N2 (6728
 - ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34" -m "La B13 a produit deux JSON de plus (soustype-t03b, t03c) : le disque passe à 707, l'état suit. B13
 - INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)" -m "Le catalogue rattrape la variance du sous-type et les tirages ; l'heure de l'
+- B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait B13 (rapport-pensee-tirages
 

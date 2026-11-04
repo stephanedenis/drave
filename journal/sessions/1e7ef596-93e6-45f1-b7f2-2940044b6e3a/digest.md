@@ -9302,3 +9302,256 @@ Round: 13/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+### 🤖 Assistant
+
+⏵ Cycle 13 : instantané, audit et faits committés depuis le cycle 12
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+2ee74678 INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)
+8a0de643 ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+67286d12 BACKLOG N2 — L'ERRATUM DE LA DISTILLATION (LE +0,10 ÉTAIT UNE REPONDÉRATION) ET LA PAIRE PROPRE DANS LA PAGE
+bd4298fe INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)
+4542fe4b PLAN-TRAVAIL — L/B13 PASSE À 153/153 (+ FUSION PAR SOUS-TYPE) ; ÉTAT ALLÉGÉ (T0 3 968)
+a6292fb1 B13 153/153 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; ÉTAT, CHANTIERS, ROADMAP
+92769981 B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153
+---STATUS---
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+M  reports/README.md
+A  reports/pensee-quatre-modes-432-soustype-t03b.json
+A  reports/pensee-quatre-modes-432-soustype-t03c.json
+ M reports/pensee-quatre-modes.json
+A  reports/pensee-tirages.json
+A  reports/rapport-pensee-tirages.md
+M  tools/pensee/autotest.py
+?? reports/rapport-s-parag
+… [1038 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1611 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3981 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"B13 \\*\\*15\\|Pensée — B13\\|B13 : 15\\|tirages\\|N2 — actif\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -8 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix … [134 caractères tronqués]`
+
+  ```
+13 h 38
+# En ce moment
+
+**Mis à jour : 2026-11-04, 15 h 20 HNE (heure locale, EST).**
+71:- **Fait** : B13 **154/154** ; gold **432** (réel → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; **pragmatique 130 qualifie** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; **variance du sous-type : 0,9838 à 0,3 (le gain tient)** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md).
+95:- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** : α = 0 **fini** (perte **1,014**, 7 050 s), α = 0,9 **en cours** ; **repondération 4× : −0,05**.
+97:- **Pensée — B13 (actif)**
+… [469 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La B13 a stagé son commit tirages ; je lis le verdict et le diff d'état avant de laisser passer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== FICHE TIRAGES ===\" ; head -10 reports/rapport-pensee-tirages.md ; echo \"=== STAGED ÉTAT ===\" ; git diff --cached docs/pilotage/en-cours.md | head -30 ; echo \"=== LOCK ===\" ; [ -e .git/index.lock ] && echo \"encore\" || … [78 caractères tronqués]`
+
+  ```
+=== FICHE TIRAGES ===
+# B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache masque la variance
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·
+> **Verdict** : ✅ **155/155 portes** : trois tirages à **température 0,3** donnent **0,9838,
+> 0,9838, 0,9838** — variance **nulle**. Ce n'est pas une preuve de stabilité : c'est le **cache**
+> de l'API (mêmes invites, mêmes réponses). La variance réelle du modèle n'est pas mesurée par
+> ce banc ; elle est **masquée**.
+>
+> **Dispositif** : [`qualifier_quatre_modes.py`](../tools/tests/linguistique/qualifier_quatre_modes.py),
+> [`pensee-quatre-modes-432-soustype-t03b.json`](pensee-quatre-modes-432-soustype-t03b.json),
+=== STAGED ÉTAT ===
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index a7b65adf..551b8808 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 13 h 35 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 15 h 20 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+=== 
+… [14 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 13 : B13 tirages 155/155 stagé (le cache masque la variance), docs verts
+
+**Cycle 13 — le 155e fait B13 est prêt, avec sa réserve.**
+
+- **B13 — les trois tirages (155/155)** : à température 0,3, trois tirages donnent **0,9838, 0,9838, 0,9838** — **variance nulle**. Mais ce n'est **pas** une preuve de stabilité : c'est le **cache de l'API** (mêmes invites, mêmes réponses) — la variance réelle du modèle est **masquée** par le banc. La fiche `rapport-pensee-tirages` est **stagée** avec son JSON, les outils, l'implémentation et le README ; le commit B13 est imminent. L'état n'a que l'heure de touchée (15 h 20) : le **155** reste à intégrer côté hub, avec la réserve du cache.
+- **Contrôles** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 611 mots**, **T0 3 981 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **3 100 pas** (perte 0,908), GPU0 et GPU1 à 99 %.
+
+**WIP** : B13 tirages/t03b/t03c (committés sous peu), S `rapport-s-paragraphes.md`. **Le goal reste actif** : 155 à intégrer (cache compris), α = 0,9 à finir, puis la passe complète.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 14/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 14 : instantané, audit et faits committés depuis le cycle 13
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+2ee74678 INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)
+8a0de643 ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+67286d12 BACKLOG N2 — L'ERRATUM DE LA DISTILLATION (LE +0,10 ÉTAIT UNE REPONDÉRATION) ET LA PAIRE PROPRE DANS LA PAGE
+bd4298fe INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)
+4542fe4b PLAN-TRAVAIL — L/B13 PASSE À 153/153 (+ FUSION PAR SOUS-TYPE) ; ÉTAT ALLÉGÉ (T0 3 968)
+a6292fb1 B13 153/153 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; ÉTAT, CHANTIERS, ROADMAP
+92769981 B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153
+---STATUS---
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+M  reports/README.md
+A  reports/pensee-quatre-modes-432-soustype-t03b.json
+A  reports/pensee-quatre-modes-432-soustype-t
+… [1205 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1611 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3981 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"B13 \\*\\*15\\|Pensée — B13\\|B13 : 15\\|tirages\\|N2 — actif\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -8 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix … [134 caractères tronqués]`
+
+  ```
+13 h 39
+# En ce moment
+
+**Mis à jour : 2026-11-04, 15 h 20 HNE (heure locale, EST).**
+71:- **Fait** : B13 **154/154** ; gold **432** (réel → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; **pragmatique 130 qualifie** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; **variance du sous-type : 0,9838 à 0,3 (le gain tient)** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md).
+95:- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** : α = 0 **fini** (perte **1,014**, 7 050 s), α = 0,9 **en cours** ; **repondération 4× : −0,05**.
+97:- **Pensée — B13 (actif)**
+… [469 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 155/155 : le commit de session est stagé depuis 5 min — le hub intègre le fait (avec le cache)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"154/154\\|T0–T153\\|variance du sous-type\\|0,9838\" docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md | head -12", "description": "Locate 154 and sous-type variance lines"}`
+
+  ```
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observ
+… [9544 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Intégration du B13 155/155 (tirages : le cache masque la variance) et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:60]); continue\n        t=t.replace(old … [1934 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1634 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4004 mots (budget 4 000)
+  revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 004 : je retire la variance du sous-type du « Fait » (elle reste dans les fiches) puis commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**variance du sous-type : 0,9838 à 0,3 (le gain tient)** ; \", \"\")\np.write_text(t); print('trim OK')\nPY\npython3 tools/ … [367 caractères tronqués]`
+
+  ```
+trim OK
+  T0 max : 3993 mots (budget 4 000)
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+ M reports/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 155/155 (tirages, cache) et l'intégration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git commit -m \"B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; … [510 caractères tronqués]`

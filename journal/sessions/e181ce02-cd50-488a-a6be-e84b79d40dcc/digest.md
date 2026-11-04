@@ -35641,3 +35641,43 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 15 h 20 HNE\", t)\np.write_text( … [816 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-146]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-146", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-tirages.json
+ create mode 100644 reports/rapport-pensee-tirages.md
+COMMIT OK 1
+62672792 B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155
+mer 04 nov 2026 13:40:06 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cache\" tools/llm/deepseek.py | head -8; grep -n \"cache\" tools/tests/linguistique/qualifier_quatre_modes.py | head -3", "description": "Voir le cache du client DeepSeek"}`
+
+  ```
+14:dans le dépôt, dans un cache ou dans un message d'erreur. Il ne dépend d'aucun
+21:- cache : `data/deepseek/cache/<sha256>.json` (gitignoré), clé = modèle + messages
+44:CACHE_DEFAUT = RACINE / "data" / "deepseek" / "cache"
+66:    cache: bool = False
+96:def _cache_cle(modele: str, messages: list[dict], temperature: float,
+128:                 modele: str | None = None, cache_dir: str | pathlib.Path | None = None,
+137:        self.cache_dir = pathlib.Path(cache_dir or os.environ.get("DEEPSEEK_CACHE")
+151:    def _lire_cache(self, cle: str) -> ReponseDeepSeek | None:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pensee-tirages.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Verdict** : ✅ **155/155 portes** : trois tirages à **température 0,3** donnent **0,9838,\n> 0,9838, 0,9838* … [3949 caractères tronqués]`
+
+  ```
+correction honnête appliquée
+  revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"l'**échantillonnage alternatif** (T152 : trois tirages identiques, le modèle est déterministe) ;\",\n            \"l'**écha … [645 caractères tronqués]`
