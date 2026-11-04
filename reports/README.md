@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-relation.md`](rapport-pensee-relation.md) | **B13** — la relation GN → GV : 221/637, 322 sans rôle, **159/159** |
 | [`rapport-pensee-cibles-500.md`](rapport-pensee-cibles-500.md) | **B13** — les 500 premiers segments : 294 GN, 206 GV, **158/158** |
 | [`rapport-pensee-cibles.md`](rapport-pensee-cibles.md) | **B13** — les cibles : 1624 segments sans cible sur 1863, **157/157** |
 | [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |

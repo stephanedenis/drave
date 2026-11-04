@@ -10587,3 +10587,14 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-49 (bash: sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; tail -c 45 work/n2ac/pond4-mix512-15k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK", "description": "Wait for corrected production KD", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-54]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-51 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-54", "timeout_ms": 1200000, "wait": true}`

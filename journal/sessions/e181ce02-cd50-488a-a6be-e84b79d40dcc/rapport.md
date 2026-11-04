@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 93.9 h |
+| Durée | 94.0 h |
 | Tours | 164 |
-| Messages | 2035 |
-| Appels d'outils | 1751 |
+| Messages | 2037 |
+| Appels d'outils | 1753 |
 | Fichiers touchés | 25 |
-| Commandes | 1439 |
+| Commandes | 1440 |
 | Sous-agents | 2 |
-| Commits | 215 |
+| Commits | 216 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8719,7 +8719,7 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 
 ### Tour 164 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Diagnostiquer les 500 premiers segments sans cible
 - bash — Écrire la fiche des 500 segments et la porte T155
@@ -8728,6 +8728,7 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 - job_output
 - bash — Mesurer la relation GN → GV par le rôle
 - bash — Écrire la fiche de la relation GN→GV et la porte T156
+- bash — Committer la relation GN→GV
 
 ## 3. Travail accompli
 
@@ -8808,7 +8809,7 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1399 autres
+- … et 1400 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9171,4 +9172,5 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 - B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "L'ATTACHEM
 - B13 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE SUR 1863 (12,8 %) ; 157/157" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES CIBLES"; t
 - B13 — LES 500 PREMIERS SEGMENTS : 294 GN, 206 GV, LE SVO NU N'A PAS DE CIBLE ; 158/158" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "500 PREMIERS"; t
+- B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RELATION GN"; then echo "COMMI
 

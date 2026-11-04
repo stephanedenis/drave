@@ -2257,6 +2257,23 @@ def t155_cibles_500() -> tuple[bool, str]:
     return gn == 294 and gv == 206, f"500 premiers : {gn} GN, {gv} GV"
 
 
+def t156_relation() -> tuple[bool, str]:
+    """La relation GN → GV : 221/637 (0,3469)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    h = bl.Heuristique()
+    n = avec = 0
+    for p in charger():
+        a = h.analyser(p["texte"], p["langue"])
+        gv = any(e.niveau == "syntagme" and e.type == "GV" for e in a.etiquettes)
+        for e in a.etiquettes:
+            if e.niveau == "syntagme" and e.type == "GN":
+                n += 1
+                if gv and (e.meta or {}).get("role") in ("agent", "patient", "destinataire"):
+                    avec += 1
+    return n == 637 and avec == 221, f"relation : {avec}/{n} ({round(avec/n, 4)})"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2411,7 +2428,8 @@ def main() -> int:
               ("T152 trois tirages", t152_tirages()),
               ("T153 attachement", t153_attachement()),
               ("T154 cibles", t154_cibles()),
-              ("T155 cibles 500", t155_cibles_500())]
+              ("T155 cibles 500", t155_cibles_500()),
+              ("T156 relation GN-GV", t156_relation())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
