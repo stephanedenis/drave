@@ -36,8 +36,8 @@ sous-agents pour les tâches bornées.
 | session | mandat | chantiers | charge | prochaine action |
 |---|---|---|---|---|
 | **N2 — le natif (session `0733c5bb`)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1 Go, 60 k pas) : **3,49 / 6,03** — production ; **200 k pas** : val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées** ; fiche + clôture en cours. |
-| **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **140/140** (6 S fixés ; T132/T133 2/5), gold **432**, 116 liens ; **gold neuronal** (POS **0,9415** / syntagmes **0,7539** / acte **1,0**) ; **DRVM/native** règle (**3 nœuds**) ; **pragmatique** test **0,6375** — l'heuristique garde. Prochaine : **gold 200+**, **porte B13**. |
-| **S — les structures (session `29ad180d`)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | **54/55** types, **131/131** rôles, **47/47** compléments, gold **55**, corpus **55** (SHA `76accf9d…`), **47 tests** ; **h050/h053**, puis **validation humaine** de la banque (0 verdict). |
+| **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **148/148** (6 S fixés ; T132/T133 2/5), gold **432**, 116 liens ; **gold neuronal** (POS **0,9415** / syntagmes **0,7539** / acte **1,0**) ; **DRVM/native** règle (**3 nœuds**) ; **pragmatique** test **0,6375** — l'heuristique garde. Prochaine : **T132/T133**, **gold 200+**. |
+| **S — les structures (session `29ad180d`)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | **61/61** types, **144/144** rôles, **56 tests**, gold **60**, corpus **60**, banque **84/67**, **8 verdicts** ; **poursuivre la validation sur `/paragraphes`**, rétro-traduction API. |
 | **D/R/A — terminé (02/11)** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | **OCR CEGEP 91 scans uniques (60 documents, 1 982 p, 4,41 M car.)** ; clôture le 02/11. Restent R1.1/R1.2 (N2) et A2.6 (A) ; les 8 scans `.PDF` sont une limite nommée. |
 
 **Le rôle d'intégration** (le « hub ») : tient `en-cours`, `roadmap`, `chantiers`, ce plan,
@@ -188,12 +188,12 @@ depuis la racine du dépôt.
    anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées**.
    Prochaine action : **fiche + état + commit**, puis **clôture**.
 2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
-   et `tools/structures/`. **54/55** types, **131/131** rôles, **47/47** compléments, gold **55**,
-   corpus **55** (SHA `76accf9d…`), **47 tests**. Prochaine action : **h050/h053**, puis
-   **validation humaine** ; le sous-module se commit **dans son dépôt** avant le pointeur.
-3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **140/140** (6 S fixés ; T132/T133 2/5), gold **432**, 116 liens ; **gold neuronal** qualifié (POS **0,9415**, syntagmes
+   et `tools/structures/`. **61/61** types, **144/144** rôles, **56 tests**, gold **60**,
+   corpus **60**, banque **84/67**. Prochaine action : **poursuivre la validation sur
+   `/paragraphes`**, rétro-traduction API ; le sous-module se commit **dans son dépôt** avant le pointeur.
+3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **148/148** (6 S fixés ; T132/T133 2/5), gold **432**, 116 liens ; **gold neuronal** qualifié (POS **0,9415**, syntagmes
    **0,7539**, acte **1,0**) ; **DRVM/native** par la règle (**3 nœuds**) ; **pragmatique** test
-   **0,6375** — l'heuristique garde. Prochaine action : **gold 200+**, **porte B13**.
+   **0,6375** — l'heuristique garde. Prochaine action : **T132/T133**, **gold 200+**.
 4. **D/R/A — les données (CPU/IO).** **Close le 02/11 à 18 h 45** : OCR du fonds CEGEP —
    **147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;
    fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md). Restent **R1.1/R1.2** (N2) et

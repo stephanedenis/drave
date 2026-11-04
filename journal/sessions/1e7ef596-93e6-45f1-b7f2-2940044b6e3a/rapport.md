@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.0 h |
-| Tours | 8 |
-| Messages | 175 |
-| Appels d'outils | 335 |
+| Durée | 5.1 h |
+| Tours | 9 |
+| Messages | 184 |
+| Appels d'outils | 350 |
 | Fichiers touchés | 14 |
-| Commandes | 184 |
+| Commandes | 195 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 13 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -39,6 +39,8 @@
 **Tour 7** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 **Tour 8** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
+
+**Tour 9** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -315,7 +317,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 8 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -331,11 +333,42 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - edit `docs/pilotage/roadmap.md`
 - edit `docs/pilotage/roadmap.md`
 - edit `docs/pilotage/roadmap.md`
-- … et 3 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Commit roadmap + état (cycle 3)
+⏵ Cycle 3 clos : roadmap alignée sur S v7 et B13 148/148, état et docs verts
+
+**Cycle 3 — la roadmap rattrape les faits committés.**
+
+- **Roadmap** : S passe en **v7** (**61/61** types, **144/144** rôles, **56 tests**, le fait divers tranché — la tête du GN arrête le verbe, [fiche](../../reports/rapport-s-fait-divers.md)) ; B13 passe de 140/140 à **148/148** (T0–T148) dans les deux lignes ; N2 porte les **runs `kd2`/`rope2048`** ; R1.2 porte `rope2048` ; l'état B13 daté du 04/11. Commit **`1b4be681`**.
+- **État** : heure remise à **12 h 24** (les sessions écrivaient 14 h 15), compteurs **610 fiches / 696 JSON / 120 docs / 83 portes**.
+- **Contrôles** : revue ✅ (classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation) ; **2 920 liens** ✅ ; backlog **frontière 3** ✅ ; journal **1 968 liens** ✅ ; tableaux ✅ ; `en-cours` **1 603 mots**, **T0 3 973 / 4 000** ✅.
+
+**WIP de leurs sessions** : B13 **DRVM N0/N1** (`pensee-drvm-n01.json`, `rapport-drvm-n01.md`, `tools/drvm.py`), S `rapport-s-paragraphes.md`, `reports/pensee-quatre-modes.json` — non committés, donc non intégrés.
+
+**Runs** : `kd2` (log bufferisé, ~19 400 estimé), `rope2048` **5 450/20 000** (≈2 s/pas) ; GPU 99–99 %. La passe complète attend leur fin.
+
+**Le goal reste actif** : les sessions n'ont pas clos (DRVM, paragraphes) et la passe n'est pas passée.
+
+### Tour 9 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Sweep stale facts in docs
+- bash — Audit resource claims and mandates
+- read
+- bash — Update stale B13/S/gate facts in pilotage docs
+- bash — Update state time and verify pilotage docs
+- bash — Commit pilotage docs alignment
+
+**Synthèse produite :**
+
+⏵ Commit pilotage : chantiers, plan-travail, portes et état alignés
 
 ## 3. Travail accompli
 
@@ -400,7 +433,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 144 autres
+- … et 155 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -545,4 +578,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19" -m "La troisième passe (rapport-pensee-troisieme-passe, JSON pe
 - ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)" -m "Les nouveaux rapports de la session B13 (DRVM N0/N1, pensee-drvm-n01.json) et de S (rapport-s-paragraph
 - ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24" -m "La roadmap gardait B13 à 140/140 et S à la v6 : mis à jour des d
+- PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34" -m "chantiers.md : B 148/148, L porte B13 148/148, B13 148/1
 

@@ -10173,3 +10173,25 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-24 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 50 work/n2ac/kdpp-mix512-a0.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-28", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 60 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null", "description": "Poll kdp alpha 0.9"}`
+
+  ```
+12:29:30
+kdp a=0 fini 11:01:35
+kdp a=0.9 fini 12:18:59
+work/n2ac/kdp-1147m-a0.9.pt
+OK09
+96.569046974182, "corpus": "data/wiki_fr/propre/train.txt"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat de la paire propre (α=0 vs α=0,9) — la question du biais est tranchée
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/kdp-1147m-a0.9.pt --rope --longueurs 128,512,1024 --sortie work/n2ac/eval-kdp-1147m-a0.9.json 2>&1 | tail -4; python3 -c \"\nimport json\nfor n,f in (('α=0  … [384 caractères tronqués]`

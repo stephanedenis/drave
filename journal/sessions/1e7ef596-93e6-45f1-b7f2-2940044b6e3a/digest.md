@@ -6078,3 +6078,293 @@ en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
 ⏵ Commit roadmap + état (cycle 3)
 
 - **bash** `{"command": "git commit -m \"ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24\" -m \"La roadmap gardait B13 à 140/140 et S à la v6 : mis à jour des deux lignes de synthèse, de la ligne B13 détaillée (T0–T148) et des prochaines actions N (runs kd2/rope2048) e … [283 caractères tronqués]`
+
+  ```
+[s/v7 1b4be681] ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24
+ 13 files changed, 412 insertions(+), 32 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 3
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAIL … [133 caractères tronqués]`
+
+  ```
+1b4be681 ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24
+70c9df7e ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)
+7b11a93f ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/drvm.py
+ M tools/pensee/autotest.py
+ M tools/tests/linguistique/qualifier_quatre_modes.py
+?? reports/pensee-drvm-n01.json
+?? reports/rapport-drvm-n01.md
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 610 fiche(s) · 696 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3973 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---RUNS---\" ; cd /home/stephane/Data13TB/stephane/GitHub/ … [212 caractères tronqués]`
+
+  ```
+✅ 2920 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1968 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---RUNS---
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+pas   5450 · perte 1.0400 · PPL val 2.620 · 10490 s
+0, 99 %
+1, 99 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 3 clos : roadmap alignée sur S v7 et B13 148/148, état et docs verts
+
+**Cycle 3 — la roadmap rattrape les faits committés.**
+
+- **Roadmap** : S passe en **v7** (**61/61** types, **144/144** rôles, **56 tests**, le fait divers tranché — la tête du GN arrête le verbe, [fiche](../../reports/rapport-s-fait-divers.md)) ; B13 passe de 140/140 à **148/148** (T0–T148) dans les deux lignes ; N2 porte les **runs `kd2`/`rope2048`** ; R1.2 porte `rope2048` ; l'état B13 daté du 04/11. Commit **`1b4be681`**.
+- **État** : heure remise à **12 h 24** (les sessions écrivaient 14 h 15), compteurs **610 fiches / 696 JSON / 120 docs / 83 portes**.
+- **Contrôles** : revue ✅ (classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation) ; **2 920 liens** ✅ ; backlog **frontière 3** ✅ ; journal **1 968 liens** ✅ ; tableaux ✅ ; `en-cours` **1 603 mots**, **T0 3 973 / 4 000** ✅.
+
+**WIP de leurs sessions** : B13 **DRVM N0/N1** (`pensee-drvm-n01.json`, `rapport-drvm-n01.md`, `tools/drvm.py`), S `rapport-s-paragraphes.md`, `reports/pensee-quatre-modes.json` — non committés, donc non intégrés.
+
+**Runs** : `kd2` (log bufferisé, ~19 400 estimé), `rope2048` **5 450/20 000** (≈2 s/pas) ; GPU 99–99 %. La passe complète attend leur fin.
+
+**Le goal reste actif** : les sessions n'ont pas clos (DRVM, paragraphes) et la passe n'est pas passée.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 4 : instantané, audit et faits committés depuis le cycle 3
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+1b4be681 ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24
+70c9df7e ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)
+7b11a93f ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19
+625271c8 INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+b58cd52f ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+29122912 ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/drvm.py
+ M tools/pensee/autotest.py
+ M tools/tests/linguistique/qualifier_quatre_modes.py
+?? reports/pensee-drvm-n01.json
+?? reports/rapport-drvm-n01.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 166 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglai
+… [905 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 610 fiche(s) · 696 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3973 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2920 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1968 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2920 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"B13 \\*\\*14\\|B13 : 14\\|Pensée — B13\\|S — les structures\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== RUNS ===\" ; tail -1 work/n2ac/kd2-mix512 … [167 caractères tronqués]`
+
+  ```
+12 h 26
+# En ce moment
+
+**Mis à jour : 2026-11-04, 12 h 24 HNE (heure locale, EST).**
+51:- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+71:- **Fait** : B13 **148/148** (troisième passe : variance **nulle**, run 3 = run 2 — POS **0,9389**, syntagmes **0,8241**, tête **0,8797**, refus **0** ; le `parallele` passe de **0,9326** à **0,9389** avec la clé ; seuil du parallèle ; défaut conditionnel ; run2 ; élision POS **0,7455**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [troisième passe](../../reports/rapport-pensee-troisieme-passe.md), [B13](../
+… [706 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 4 : balayage des faits périmés dans docs/ et audit des claims
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== 140/140 ===\" ; grep -rn \"140/140\" docs/ --include=\"*.md\" | grep -v archive | head -8 ; echo \"=== S v6 ===\" ; grep -rn \"60/60 types\\|142/142 rôles\" docs/ --include=\"*.md\" | grep -v archive | head -8 ; echo \"===  … [139 caractères tronqués]`
+
+  ```
+=== 140/140 ===
+docs/pilotage/chantiers.md:84:| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **140/140 portes** (6 S fixés ; T132/T133 2/5) | B10.3 (encodeur) ; **B13** : gold 200+ ; porte 140/140 ; pragmatique | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+docs/pilotage/chantiers.md:88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160 synthétiques** (POS 0,7544 à 320 phrases, réel 0,7657, exact 0,194, tête 0,510), **attachement tête 1,0/0,966/0,932** ; **coréférence 116 liens, CV 0,847 ± 0,051** ; cascade **0,9415 / 0,7539 / 1,0** ; **pragmatique neuronale test 0,6375** — l'heuristique garde | **gold 200+** ; **porte B13** (140/140) ; la cascade mesurée | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique), N2 (allègement) |
+docs/pilotage/chantiers.md:90:| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? 
+… [3555 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --check --strict 2>&1 | tail -8 ; echo \"---SESSIONS CHECK---\" ; python3 tools/sessions.py --check --strict 2>&1 | tail -6 ; echo \"---STATUS RESSOURCES---\" ; python3 tools/ressources.py --status 2>&1 | tail -6", "description": "Audit resource claims and ma … [8 caractères tronqués]`
+
+  ```
+✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ❌ --strict : les avertissements comptent comme des conflits.
+---SESSIONS CHECK---
+  ⚠ mandat long (166 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+---STATUS RESSOURCES---
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1940 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / n2-jour : gpu0=exclusive, gpu1=exclusive, cpu0=12, ram=60 (prio 1, 360 min)
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 4 : lecture des docs de pilotage restés à 140/140 et 82 portes
+
+- **read** `{"file_path": "docs/pilotage/chantiers.md", "limit": 16, "offset": 80}`
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 8, "offset": 36}`
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 8, "offset": 190}`
+- **read** `{"file_path": "docs/methode/portes.md", "limit": 18, "offset": 8}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md</path>
+<type>file</type>
+<content>
+80: 
+81: | chantier | la question à laquelle il répond | état au 01/11 | prochaine action | dépend de | fournit à |
+82: |---|---|---|---|---|---|
+83: | **A — le moteur** | un flux de blocs typés peut-il tourner, se placer, se répartir, se rejouer ? | ✅ A1–A8 ; A3.4, A5.4, A6.2 bloqués ; A2.6 partiel ; A8.3 expliqué | **A2.6** (experts, A6.2 bloqué) ; réduire le lot | — | N, B (exécution) |
+84: | **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **140/140 portes** (6 S fixés ; T132/T133 2/5) | B10.3 (encodeur) ; **B13** : gold 200+ ; porte 140/140 ; pragmatique | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+85: | **N — le natif** | le modèle natif peut-il être petit, creux, honnête et général ? | 🔬 N0/N1 mesurés ; N2.h : 3,09 en domaine, 16,70 → 3,85 hors dépôt ; N4 partiel | **N2** (français réel, capacité) ; N4 (consigne) | A (moteur), D (corpus) | R1–R3, N5 |
+86: | **R — le lecteur** | un document, une question
+… [4342 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+36: | session | mandat | chantiers | charge | prochaine action |
+37: |---|---|---|---|---|
+38: | **N2 — le natif (session `0733c5bb`)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1 Go, 60 k pas) : **3,49 / 6,03** — production ; **200 k pas** : val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées** ; fiche + clôture en cours. |
+39: | **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **140/140** (6 S fixés ; T132/T133 2/5), gold **432**, 116 liens ; **gold neuronal** (POS **0,9415** / syntagmes **0,7539** / acte **1,0**) ; **DRVM/native** règle (**3 nœuds**) ; **pragmatique** test **0,6375** — l'heuristique garde. Prochaine : **gold 200+**, **porte B13**. |
+40: | **S — les structures (session `29ad180d`)** | les structures d'interprétation candidate
+… [799 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+190: 2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
+191:    et `tools/structures/`. **54/55** types, **131/131** rôles, **47/47** compléments, gold **55**,
+192:    corpus **55** (SHA `76accf9d…`), **47 tests**. Prochaine action : **h050/h053**, puis
+193:    **validation humaine** ; le sous-module se commit **dans son dépôt** avant le pointeur.
+194: 3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **140/140** (6 S fixés ; T132/T133 2/5), gold **432**, 116 liens ; **gold neuronal** qualifié (POS **0,9415**, syntagmes
+195:    **0,7539**, acte **1,0**) ; **DRVM/native** par la règle (**3 nœuds**) ; **pragmatique** test
+196:    **0,6375** — l'heuristique garde. Prochaine action : **gold 200+**, **porte B13**.
+197: 4. **D/R/A — les données (CPU/IO).** **Close le 02/11 à 18 h 45** : OCR du fonds CEGEP —
+
+(Showing lines 190-197 of 402. Use offset=198 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md</path>
+<type>file</type>
+<content>
+8: bash tools/toutes-les-portes.sh
+9: ```
+10: 
+11: Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
+12: [tableau](../theorie/glossaire/entrees/tableau.md), pas la première tuile), et borne **chaque** [porte](../theorie/glossaire/entrees/porte.md) à `DELAI=1800` s. Durée observée d'une passe complète :
+13: **1 h 30 – 2 h** sur Hauru (**81 portes** ; certaines entraînent de petits modèles, d'autres utilisent les [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md) ;
+14: `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **82 portes** (03/11 11 h 30, **machine au repos**, **1 h 48**) a donné
+15: **80 vertes, 2 rouges** (les 2 connues : `indice`, `melange`) ;
+16: `porte-reparti-moteur` (ré-étalonnée à 8,7434) et `porte-homeostasie` (auto-générée) sont **vertes** ;
+17: la liste et le diagnostic sont dans
+18: [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
+19: La **82e** porte, `porte-ressour
+… [439 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de chantiers, plan-travail et portes (B13 148/148, S v7, 83 portes)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:70]); continue\n        t=t.replace(old,new)\n    p.wri … [3375 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+docs/methode/portes.md OK
+---VÉRIF---
+13:**1 h 30 – 2 h** sur Hauru (**83 portes** ; certaines entraînent de petits modèles, d'autres utilisent les [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md) ;
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit pilotage : chantiers, plan-travail, portes et état alignés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.pl.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.pl.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\*M … [740 caractères tronqués]`
+
+  ```
+en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3973 mots (budget 4 000)
+  revue de documentation · 610 fiche(s) · 696 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2920 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ 2920 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "git commit -m \"PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34\" -m \"chantiers.md : B 148/148, L porte B13 148/148, B13 148/148 (T0–T148), S v7 (61/61, 144/144, 56 tests), état au 04/11. plan-travail.md : L/B13 148/148, S v7, prochain … [387 caractères tronqués]`

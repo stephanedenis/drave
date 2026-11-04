@@ -34738,3 +34738,10 @@ ok
   ```
 
 - **job_output** `{"job_id": "bash-87", "timeout_ms": 600000, "wait": true}`
+
+  ```
+température paramétrable
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`
