@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.8 h |
+| Durée | 5.9 h |
 | Tours | 13 |
-| Messages | 245 |
-| Appels d'outils | 423 |
+| Messages | 249 |
+| Appels d'outils | 427 |
 | Fichiers touchés | 15 |
-| Commandes | 266 |
+| Commandes | 270 |
 | Sous-agents | 0 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -493,7 +493,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 13 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -502,10 +502,14 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check alpha 0.9 process and alpha 0 result
 - bash — Update state with alpha 0 result and trim
 - bash — Commit alpha 0 state and trims
+- bash — Inspect concurrent commit and state
+- bash — Inspect 153 state and session doc edits
+- bash — Integrate B13 153 and fix T0 typo
+- bash — Commit B13 153 integration
 
 **Synthèse produite :**
 
-⏵ Commit état : α=0 fini, α=0,9 en cours, B13 allégé
+⏵ Commit B13 153/153 (fusion par sous-type) et corrections
 
 ## 3. Travail accompli
 
@@ -571,7 +575,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 226 autres
+- … et 230 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -699,7 +703,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+9 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -709,6 +713,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T10** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8cea841f41bd691bd941bd198ce9132f805321f7 but expected 6b0e9c833c6d33ced86fe7bc9857850c48515f4f [exit code: 128]
 - **T12** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
 - **T12** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8d0008d5e7c1ec0d03df112dd64f84ed02f7e870 but expected d4a35d11099e09df42e888c7a726a3c1df9f0c4b [exit code: 128]
+- **T13** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 9276998190a9538c31d0a4e4d7fbb856e2b65453 but expected 09c5bb496d4d10395891019733d5ccb113f8e5af [exit code: 128]
 
 ## 6. Commits
 
@@ -737,4 +742,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - N2 — KD2 ET ROPE2048 ARRÊTÉS POUR LA PAIRE PROPRE (ROPE À 6 400/20 000) ; REPONDÉRATION −0,05 ; R1.2 INTERROMPU" -m "La session N2 a arrêté kd2 et rope2048 (cod
 - B13 152/152 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; ÉTAT ET PILOTAGE" -m "Le fait est committé (8d0008d5, rapport-pensee
 - ÉTAT — N2 : α = 0 FINI (PERTE 1,014, 7 050 S) ; α = 0,9 EN COURS ; B13 152 ALLÉGÉ (T0 3 987)" -m "La paire propre a son premier bras : α = 0 donne 1,014 de pert
+- B13 153/153 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; ÉTAT, CHANTIERS, ROADMAP" -m "Le fait est committé (92769981, rapport-pensee-fusi
 

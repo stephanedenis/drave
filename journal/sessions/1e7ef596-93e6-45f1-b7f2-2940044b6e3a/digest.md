@@ -8303,3 +8303,86 @@ Approval prompts are disabled in this session: actions that require approval are
 ⏵ Commit état : α=0 fini, α=0,9 en cours, B13 allégé
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/en-cours.md && git commit -m \"ÉTAT — N2 : α = 0 FINI (PERTE 1,014, 7 050  … [529 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 9276998190a9538c31d0a4e4d7fbb856e2b65453 but expected 09c5bb496d4d10395891019733d5ccb113f8e5af
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a encore bougé (92769981) ; je vérifie si l'état α=0 est passé avec
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 92769981 ===\" ; git show --stat --oneline 92769981 | head -10 ; echo \"=== HEAD ÉTAT ===\" ; git show HEAD:docs/pilotage/en-cours.md | grep -c \"α = 0 \\*\\*fini\\*\\*\" ; git show HEAD:docs/pilotage … [175 caractères tronqués]`
+
+  ```
+92769981 B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153
+09c5bb49 B13 152/152 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; ÉTAT ET PILOTAGE
+8d0008d5 B13 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; 152/152
+=== 92769981 ===
+92769981 B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153
+ docs/implantation/moteur-de-pensee.md              |    5 +-
+ docs/pilotage/en-cours.md                          |   10 +-
+ journal/2026-11-04/README.md                       |   11 +-
+ journal/2026-11-04/apprentissage.md                |    6 +-
+ journal/2026-11-04/distribue.md                    |    6 +-
+ journal/2026-11-04/docs.md                         |   11 +-
+ journal/2026-11-04/mesures.md                      |    6 +-
+ journal/2026-11-04/modele.md                       |    6 +-
+ journal/2026-11-04/portes.md                       |    6 +-
+=== HEAD ÉTAT ===
+1
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 13 HNE (heure locale, EST).**
+=== STATUS ===
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/roadmap.md
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-pa
+… [12 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 153/153 (fusion par sous-type) : le commit a balayé l'état ; je vérifie chantiers/roadmap
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; grep -n \"153/153\\|152/152\\|sous-type\\|soustype\" docs/pilotage/en-cours.md | head -6 ; echo \"=== DIFF CHANTIERS ===\" ; git diff docs/pilotage/chantiers.md | head -30 ;  … [136 caractères tronqués]`
+
+  ```
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 13 HNE (heure locale, EST).**
+71:- **Fait** : B13 **152/152** (**variance 0,3 : ±0,0074, 7/7 seuils, refus 0** ; le `parallele` passe de **0,9326** à **0,9389**) ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; fenêtre **non discriminante** ; **pragmatique 130 : acte 1,0, négation 1,0, modalité 0,9846, double sens 0,9769** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md).
+97:- **Pensée — B13 (actif)** : **152/152**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
+120:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 152/152, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+130:**N2** — f
+… [20582 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 153/153 : le commit a laissé chantiers/roadmap en WIP — je corrige (T0–T152) et j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:70]); continue\n        t=t.replace(old … [1719 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/roadmap.md OK
+  en-cours · 1628 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3998 mots (budget 4 000)
+  revue de documentation · 613 fiche(s) · 703 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2951 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 153/153 (fusion par sous-type) et corrections
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/en-cours.md docs/pilotage/chantiers.md docs/pilotage/roadmap.md && git com … [565 caractères tronqués]`

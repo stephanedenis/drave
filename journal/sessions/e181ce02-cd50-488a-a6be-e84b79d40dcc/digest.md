@@ -35418,3 +35418,38 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-132", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-quatre-modes-432-soustype.json
+ create mode 100644 reports/rapport-pensee-fusion-soustype.md
+COMMIT OK 1
+92769981 B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153
+mer 04 nov 2026 13:14:28 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --temperature 0.3 --sortie reports/pensee-quatre-modes-432-soustype-t03.json 2>&1 | tail -8", "descri … [102 caractères tronqués]`
+
+  ```
+started background job bash-133
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"153/153\\|152/152\\|T0–T150\" docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/en-cours.md 2>/dev/null | head -6", "description": "Voir si le pilotage cite le bon compte de portes"}`
+
+  ```
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observ
+… [7943 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/roadmap.md','docs/pilotage/chantiers.md'):\n    p=pathlib.Path(f); t=p.read_text()\n    n1=t.count(\"152/152\"); n2=t.count(\"T0–T151\")\n    t=t.replace(\"152/152\",\"153/15 … [371 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 152→153: 5 | T151→T150: 1
+docs/pilotage/chantiers.md 152→153: 6 | T151→T150: 1
+  revue de documentation · 613 fiche(s) · 703 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **job_output** `{"job_id": "bash-133", "timeout_ms": 3600000, "wait": true}`
