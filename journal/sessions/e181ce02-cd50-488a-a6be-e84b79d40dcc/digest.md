@@ -35734,3 +35734,31 @@ attachement_tete {'cibles': 145, 'labels': 145, 'top1': 81, 'topk': 77, 'top1_ta
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nfor nom in (\"rapport-pensee-absents.md\",\"rapport-pensee-lien-auto.md\"):\n    t=re.sub(r\"\\n\\| \\[`[^\\]]*\"+re.escape(nom)+r\"`\\][^\\n … [607 caractères tronqués]`
+
+  ```
+2 lignes retirées
+  ❌ 1 violation(s) :
+     · reports/README.md : 2811 mots > budget 2800 (T1)
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rapport-pensee\" reports/README.md | head -6; echo ---; grep -c \"rapport-pensee\" reports/README.md", "description": "Voir les lignes pensee du README"}`
+
+  ```
+18:| [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |
+19:| [`rapport-pensee-tirages.md`](rapport-pensee-tirages.md) | **B13** — les trois tirages : 0,9838 exactement, le modèle est déterministe, **155/155** |
+20:| [`rapport-pensee-soustype-variance.md`](rapport-pensee-soustype-variance.md) | **B13** — la variance du sous-type : double sens 0,9838 à 0,3, **154/154** |
+22:| [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |
+25:| [`rapport-pensee-porte-minute.md`](rapport-pensee-porte-minute.md) | **B13** — la porte minute : 140/140 ; les six attendus S `00d2a01` fixés ; T132/T133 2/5 ; distracteurs r428–r432 |
+26:| [`rapport-pensee-gold-api.md`](rapport-pensee-gold-api.md) | **B13** — le gold neuronal sur l'API DeepSeek : mêmes verdicts que le 7B (porte 1,0 / labyrinthe 0,25), **2,9 s contre 101,6 s**, 0 erreur sur 96 appels ; professeur de référence `deepseek-chat` |
+---
+49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncibles=(\"rapport-pensee-porte-minute.md\",\"rapport-pensee-gold-api.md\",\"rapport-pensee-cascade-reel-432.md … [669 caractères tronqués]`

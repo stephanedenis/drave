@@ -1,0 +1,22 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "156/156",
+ "attachement": {
+  "cibles": 239,
+  "labels": 145,
+  "top1": 0.3431,
+  "topk": 0.3264,
+  "exact": 0.0042,
+  "couverture": 0.6067
+ },
+ "tete": {
+  "top1": 0.5586,
+  "topk": 0.531
+ },
+ "limites": [
+  "94 cibles sans label",
+  "1 exact",
+  "gold 432"
+ ]
+}
