@@ -10261,3 +10261,28 @@ avertissement posé
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-distillation-native.md reports/rapport-n2-production-fenetre.md docs/pilotage/en-cours.md work/n2a … [1275 caractères tronqués]`
+
+  ```
+revue de documentation · 610 fiche(s) · 697 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-35]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-35", "timeout_ms": 180000, "wait": true}`
+
+  ```
+84c28889 ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-26 (bash: sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-28 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 60 work/n2ac/kdpp-mix512-a0.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+

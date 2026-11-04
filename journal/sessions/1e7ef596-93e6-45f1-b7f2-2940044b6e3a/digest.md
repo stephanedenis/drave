@@ -6439,3 +6439,49 @@ revue de documentation · 610 fiche(s) · 697 JSON · 120 doc(s) · 83 porte(s) 
   ```
 
 - **bash** `{"command": "git commit -m \"ÉTAT — COMPTEURS 610/697 (WIP B13 t03) ; HEURE 12 H 37\" -m \"Le nouveau JSON pensee-quatre-modes-432-t03.json (B13, non committé) porte le disque à 697 JSON ; l'état suit le disque comme le veut la revue. Les WIP B13 (DRVM N0/N1, t03) et N2 (rapport-n2-distillation-nati … [152 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un commit de session tient le verrou git ; j'attends et je retente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls -l .git/index.lock 2>/dev/null ; pgrep -af \"git (commit|add|status)\" | head -5 ; sleep 8 ; echo \"---RETRY---\" ; if [ -e .git/index.lock ]; then echo \"lock toujours là\" ; else git commit -m \"ÉTAT — COMPTEURS 610/697 (WIP B13  … [272 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 371910  4 nov 12:32 .git/index.lock
+437181 bash -c cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-distillation-native.md reports/rapport-n2-production-fenetre.md docs/pilotage/en-cours.md work/n2ac/entrainer_rope_pondere.py 2>/dev/null; git commit -q -F - -- reports/rapport-n2-distillation-native.md reports/rapport-n2-production-fenetre.md docs/pilotage/en-cours.md <<'MSG' ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION  Le code d'hier donnait à la tête principale le poids 1 au lieu de 1/4 (l'entraîneur fait la moyenne des quatre têtes). Corrigé, le pas 1 vaut 5,8480 et le pas 50 2,6713 — exactement le bras dur.  Paire propre (même code, même harnais, même init, mêmes 33 Mo, seul α change) : α = 0 → 3,7072 / 3,5727 / 3,5251 ; α = 0,9 → 3,6774 / 3,5633 / 3,5208 ; gain −0,030 / −0,009 / −0,004, dans le bruit. Le harnais (passe du professeur + seconde passe de l'élève) déplace la PPL de +0,06 à +0,16 : aucune comparaison entr
+… [2039 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux commits de session se disputent le verrou : N2 (erratum distillation) et B13 (DRVM 149/149)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 5; done ; echo \"=== LOCK ===\" ; [ -e .git/index.lock ] && echo \"encore\" || echo \"libre\" ; echo \"=== LOG ===\" ; git log --oneline -5 ; echo \"=== HEAD ÉTAT ===\" ; … [217 caractères tronqués]`
+
+  ```
+=== LOCK ===
+libre
+=== LOG ===
+84c28889 ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION
+d94c3a4b PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34
+1b4be681 ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24
+70c9df7e ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)
+7b11a93f ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19
+=== HEAD ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 14 h 20 HNE (heure locale, EST).**
+71:- **Fait** : B13 **148/148** (troisième passe : variance **nulle**, run 3 = run 2 — POS **0,9389**, syntagmes **0,8241**, tête **0,8797**, refus **0** ; le `parallele` passe de **0,9326** à **0,9389** avec la clé ; seuil du parallèle ; défaut conditionnel ; run2 ; élision POS **0,7455**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,637
+… [1669 caractères tronqués]
+  ```
+

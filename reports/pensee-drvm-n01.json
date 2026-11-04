@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-04",
+ "ligne": "N",
+ "portes": "149/149",
+ "controles": 6,
+ "refus_version": "version non supportée : 2",
+ "refus_corruption": "hash du payload invalide",
+ "avant": "accepté",
+ "limites": [
+  "mini-conteneur",
+  "476 octets",
+  "verifier=False non vérifié"
+ ]
+}

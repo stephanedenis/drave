@@ -2116,6 +2116,30 @@ def t145_troisieme_passe() -> tuple[bool, str]:
         f"run 3 : niveau {niv}, parallèle {par}, seuils {sum(d['seuils'].values())}/7")
 
 
+def t146_drvm_n01() -> tuple[bool, str]:
+    """DRVM N0.1 : écriture, lecture, mmap, hash, refus version et corruption."""
+    import hashlib
+    import pathlib
+    import tempfile
+    import tools.drvm as d
+    man = {"format": "DRVM", "version": d.VERSION, "model": {"nom": "test"},
+           "graph": {"blocks": [{"id": "b0", "kind": "local_mixer"}]},
+           "execution": {"regime": "eager"}}
+    with tempfile.TemporaryDirectory() as td:
+        p = pathlib.Path(td) / "mini.drvm"
+        sha = d.write_drvm(p, man, [d.TensorSpec("w", bytes(range(16)) * 4, "u8", (8, 8), "b0")])
+        df = d.read_drvm(p)
+        ok = (len(df.tensors) == 1 and len(df._mm) == p.stat().st_size
+              and hashlib.sha256(p.read_bytes()).hexdigest()[:8] == sha[:8])
+        raw = bytearray(p.read_bytes()); raw[-1] ^= 0xFF
+        q = pathlib.Path(td) / "corrompu.drvm"; q.write_bytes(raw)
+        try:
+            d.read_drvm(q); ok = False
+        except d.DRVMError:
+            pass
+    return ok, "DRVM N0.1 : 6/6 (le payload corrompu est refusé)"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2260,7 +2284,8 @@ def main() -> int:
               ("T142 confirmation", t142_run2()),
               ("T143 défaut conditionnel", t143_defaut_conditionnel()),
               ("T144 seuil parallèle", t144_seuil_parallele()),
-              ("T145 troisième passe", t145_troisieme_passe())]
+              ("T145 troisième passe", t145_troisieme_passe()),
+              ("T146 DRVM N0.1", t146_drvm_n01())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

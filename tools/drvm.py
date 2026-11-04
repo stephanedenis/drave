@@ -163,8 +163,8 @@ def write_drvm(path: str | os.PathLike, manifest: dict[str, Any],
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def read_drvm(path: str | os.PathLike) -> DrvmFile:
-    """Lit un DRVM, vérifie l'en-tête, le manifeste et le payload."""
+def read_drvm(path: str | os.PathLike, verifier: bool = True) -> DrvmFile:
+    """Lit un DRVM, vérifie l'en-tête, le manifeste et le payload (SHA-256)."""
     p = Path(path)
     f = p.open("rb")
     try:
@@ -191,6 +191,9 @@ def read_drvm(path: str | os.PathLike) -> DrvmFile:
         _valide(manifest)
         f.seek(0)
         mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        if verifier and hashlib.sha256(mm[poff:]).digest() != psha:
+            mm.close()
+            raise DRVMError("hash du payload invalide")
     except Exception:
         f.close()
         raise

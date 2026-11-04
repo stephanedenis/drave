@@ -42,6 +42,7 @@ def main() -> None:
     ap.add_argument("--gold-reel", action="store_true", default=True)
     ap.add_argument("--sortie", default=str(RACINE / "reports/pensee-quatre-modes.json"))
     ap.add_argument("--seuil", type=float, default=0.6)
+    ap.add_argument("--temperature", type=float, default=0.0)
     a = ap.parse_args()
     phrases = charger(a.gold_reel)
     if a.limite:
@@ -52,7 +53,7 @@ def main() -> None:
     usage = {"appels": 0, "tokens": 0, "latence_s": 0.0}
 
     def transport(invite: str, grammaire: str, max_jetons: int) -> str:
-        r = client.demande(invite, temperature=0.0, max_tokens=max(64, int(max_jetons or 256)))
+        r = client.demande(invite, temperature=a.temperature, max_tokens=max(64, int(max_jetons or 256)))
         usage["appels"] += 1
         u = r.usage if isinstance(r.usage, dict) else {}
         usage["tokens"] += int(u.get("total_tokens", 0) or 0)

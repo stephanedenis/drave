@@ -7,12 +7,12 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.1 h |
+| Durée | 5.2 h |
 | Tours | 9 |
-| Messages | 188 |
-| Appels d'outils | 355 |
+| Messages | 190 |
+| Appels d'outils | 358 |
 | Fichiers touchés | 14 |
-| Commandes | 200 |
+| Commandes | 203 |
 | Sous-agents | 0 |
 | Commits | 15 |
 | Compactages de contexte | 0 |
@@ -353,7 +353,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 9 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -369,11 +369,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Verify links, journal, backlog and runs
 - bash — Correct JSON counter and verify
 - bash — Commit corrected JSON counter
-- … et 1 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Un commit de session tient le verrou git ; j'attends et je retente
+⏵ L'ERratum N2 est committé ; je repère toutes les affirmations « distillation +0,10 » à corriger
 
 ## 3. Travail accompli
 
@@ -438,7 +438,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 160 autres
+- … et 163 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -560,6 +560,9 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T5** `0, 5280 MiB, 99 %`
 - **T8** `| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v6** : h050, h053 et « si fort que » **fermés**, gold **60** (vague 5) ; **60/60** types, **142/142** r`
 - **T9** `437181 bash -c cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport`
+- **T9** `136:- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → runs relancés, réponse attendue.`
+- **T9** `Paire propre (même code, même harnais, même init, mêmes 33 Mo, seul α change) :`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 

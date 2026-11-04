@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 44.3 h |
 | Tours | 8 |
-| Messages | 774 |
-| Appels d'outils | 719 |
+| Messages | 777 |
+| Appels d'outils | 720 |
 | Fichiers touchés | 27 |
-| Commandes | 532 |
+| Commandes | 533 |
 | Sous-agents | 0 |
 | Commits | 28 |
 | Compactages de contexte | 0 |
@@ -255,7 +255,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 8 — reprends
 
-*47 appels d'outils.* Actions notables :
+*48 appels d'outils.* Actions notables :
 
 - bash — Check time, runs, GPU and git state
 - bash — Inspect relaunched runs and reboot commit
@@ -271,7 +271,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Wait for the corrected alpha=0 control
 - bash — Poll corrected alpha=0 run
 - bash — Wait for corrected alpha=0 completion
-- … et 21 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
@@ -353,7 +353,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 492 autres
+- … et 493 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -34794,3 +34794,51 @@ parallele 0.9385 0.8246 0.8723
 cascade_niveau 0.9385 0.8246 0.8723
   ```
 
+### 🤖 Assistant
+
+⏵ Committer DRVM N0.1, puis la variance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 14 h 20 HNE\", t)\np.write_text( … [760 caractères tronqués]`
+
+  ```
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 1
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 2
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 3
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 4
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 5
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 6
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 7
+d94c3a4b PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34
+mer 04 nov 2026 12:33:52 EST
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or
+… [1002 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la .git/index.lock 2>&1; ps aux | grep -E \"git (commit|add|merge|rebase|status)\" | grep -v grep | head -3; date", "description": "Vérifier le verrou git"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 371910  4 nov 12:32 .git/index.lock
+stephane  437181  0.1  0.0   7832  4200 ?        Ss   12:32   0:00 bash -c cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-distillation-native.md reports/rapport-n2-production-fenetre.md docs/pilotage/en-cours.md work/n2ac/entrainer_rope_pondere.py 2>/dev/null; git commit -q -F - -- reports/rapport-n2-distillation-native.md reports/rapport-n2-production-fenetre.md docs/pilotage/en-cours.md <<'MSG' ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION  Le code d'hier donnait à la tête principale le poids 1 au lieu de 1/4 (l'entraîneur fait la moyenne des quatre têtes). Corrigé, le pas 1 vaut 5,8480 et le pas 50 2,6713 — exactement le bras dur.  Paire propre (même code, même harnais, même init, mêmes 33 Mo, seul α change) : α = 0 → 3,7072 / 3,5727 / 3,5251 ; α = 0,9 → 3,6774 / 3,5633 / 3,5208 ; gain −0,030 / −0,009 / −0,004, dans le bruit. Le harnais (passe du professeur + seconde passe de l'élèv
+… [676 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; ls .git/index.lock 2>&1 | tail -1; for i in 1 2 3 4 5 6 7; do\n  git add tools/drvm.py tools/pensee/autotest.py tools/tests/linguistique/qualifier_quatre_modes. … [520 caractères tronqués]`
