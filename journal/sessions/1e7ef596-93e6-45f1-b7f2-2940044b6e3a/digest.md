@@ -12917,3 +12917,91 @@ revue de documentation · 619 fiche(s) · 712 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ La narrative B13 est stagée depuis 10 min : le hub la finalise et recale l'heure
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h36.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h36.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [1134 caractères tronqués]`
+
+  ```
+heure 14 h 43
+  revue de documentation · 619 fiche(s) · 712 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3991 mots (budget 4 000)
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/MANIFEST.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-461]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit de la narrative B13 tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-461", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[stderr]
+fatal: cannot lock ref 'HEAD': is at ff180c3a2f41ce81a2eceb930ce5374f7c78fab7 but expected 2fec7c7919706187c6eb5b974814f55633729cea
+[status: completed, exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ La session B13 a fini par committer sa narrative (ff180c3a) ; je vérifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== ff180c3a ===\" ; git show --stat --oneline ff180c3a | head -10 ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; echo \"=== STATUS ===\" ; git status --short | grep -v \"^M  journal\\|^MM  … [212 caractères tronqués]`
+
+  ```
+ff180c3a B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159
+2fec7c79 ÉTAT — HEURE 14 H 39 ; B13 159/159, N2 α = 0,9 À 10 700 PAS
+e5323bc0 B13 159/159 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+=== ff180c3a ===
+ff180c3a B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-04/README.md                       |   9 +-
+ journal/2026-11-04/apprentissage.md                |   4 +-
+ journal/2026-11-04/distribue.md                    |   4 +-
+ journal/2026-11-04/docs.md                         |   7 +-
+ journal/2026-11-04/mesures.md                      |   4 +-
+ journal/2026-11-04/modele.md                       |   4 +-
+ journal/2026-11-04/portes.md                       |   4 +-
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 10 HNE (heure locale, EST).**
+=== STATUS ===
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-roles.jso
+… [92 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La relation est committée (ff180c3a) ; le B13 attaque les rôles — je recale l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; cp docs/pilotage/en-cours.md /tmp/state.h36b.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h36b.md'\nt=open(p … [703 caractères tronqués]`
+
+  ```
+108:| fichiers / JSON de résultats | **620** / **713** | `reports/*.md` / `reports/*.json` |
+  revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+heure 14 h 45
+  revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3991 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le B13 a déjà produit les rôles (620/713) ; je commite l'heure et je lis le verdict
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -10 reports/rapport-pensee-roles.md 2>/dev/null ; echo \"=== ÉTAT RÔLES ? ===\" ; grep -n \"rôles\\|roles\" docs/pilotage/en-cours.md | head -3 ; for i in $(seq 1 12); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e . … [411 caractères tronqués]`

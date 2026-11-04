@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 7.3 h |
+| Durée | 7.4 h |
 | Tours | 41 |
-| Messages | 422 |
-| Appels d'outils | 631 |
+| Messages | 427 |
+| Appels d'outils | 636 |
 | Fichiers touchés | 15 |
-| Commandes | 460 |
+| Commandes | 464 |
 | Sous-agents | 0 |
-| Commits | 50 |
+| Commits | 52 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1256,16 +1256,21 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 41 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
 - bash — Run links, backlog, journal and table gates
 - bash — Check state and run status
+- bash — Finalize staged B13 narrative and commit
+- job_output
+- bash — Inspect B13 narrative commit and state
+- bash — Check counters, correct time and stage
+- bash — Read roles fiche and commit state time
 
 **Synthèse produite :**
 
-⏵ Cycle 36 : instantané, audit et faits committés depuis le cycle 35
+⏵ Le B13 a déjà produit les rôles (620/713) ; je commite l'heure et je lis le verdict
 
 ## 3. Travail accompli
 
@@ -1331,7 +1336,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 420 autres
+- … et 424 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1524,4 +1529,6 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 14 H 31 ; B13 158/158, N2 α = 0,9 À 9 700 PAS" -m "Cycle d'audit : les sept contrôles sont verts (618/711, 3000 liens, T0 3995, en-cours 1625, back
 - B13 159/159 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON de la relation sont complets : 
 - ÉTAT — HEURE 14 H 39 ; B13 159/159, N2 α = 0,9 À 10 700 PAS" -m "Cycle d'audit : les sept contrôles sont verts (619/712, 3009 liens, T0 3991, en-cours 1621, bac
+- B13 — LA NARRATIVE (ÉTAT 159/159, README, IMPLÉMENTATION, OUTILS) ; HEURE 14 H 45" -m "La session B13 avait stagé sa narrative (état, README, implémentation, ou
+- ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)" -m "La session B13 a committé la relation (ff180c3a, 159/159) et produit la fiche des rôles (620/713) : le
 

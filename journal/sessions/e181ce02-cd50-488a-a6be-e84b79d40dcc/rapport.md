@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.0 h |
-| Tours | 164 |
-| Messages | 2037 |
-| Appels d'outils | 1753 |
+| Durée | 94.1 h |
+| Tours | 165 |
+| Messages | 2042 |
+| Appels d'outils | 1756 |
 | Fichiers touchés | 25 |
-| Commandes | 1440 |
+| Commandes | 1443 |
 | Sous-agents | 2 |
 | Commits | 216 |
 | Compactages de contexte | 5 |
@@ -367,6 +367,8 @@
 **Tour 163** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 164** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 165** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8730,6 +8732,63 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 - bash — Écrire la fiche de la relation GN→GV et la porte T156
 - bash — Committer la relation GN→GV
 
+**Synthèse produite :**
+
+⏵ Autonomie : 15 rounds, 159/159 ; relation GN → GV 0,35, cibles 12,8 %
+
+Le round de la **relation GN → GV** ferme la file d'attachement : **221/637** (0,3469), et **322 GN sans rôle**. Commit **`ff180c3a`**.
+
+\## Le round
+
+| rôle | GN | part |
+|---|---:|---:|
+| **agent** | **260** | 40,8 % |
+| **patient** | **55** | 8,6 % |
+| **groupe nominal** (sans rôle) | **322** | 50,6 % |
+| **tout** | **637** | 100 % |
+
+| mesure | valeur |
+|---|---:|
+| GN avec rôle et un GV | **221** |
+| taux | **0,3469** |
+
+**Ce que ça dit** :
+
+- **La moitié des GN n'ont pas de rôle** (322) : le segmenteur les déclare « groupe nominal » sans dire s'ils sont agent ou patient — la relation GN → GV est **indécidable** pour eux.
+- **Les rôles posés sont fiables** : 260 agents + 55 patients ; la relation est calculable pour 221 GN.
+- **La relation est une autre mesure que la cible** : la cible attache un segment à un autre (239 cas) ; la relation dit le **rôle** du GN (315 cas). Les deux se complètent.
+- **La négative est explicite** : 0,3469 < 1,0.
+
+\## L'état de l'autonomie (15 rounds, ~2 h 50)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil du parallèle, fusion par sous-type (double sens 0,9676 → 0,9884) |
+| **Réel** | 3 passes à 0 (identiques), 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu est refusé (le hash manquait) |
+| **L (annotation)** | attachement top1 0,3431, exact 0,0042 ; cibles 239/1863 ; relation 221/637 |
+
+- **159/159 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **619 fiches / 712 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **14 h 43 HNE** ; il reste **~1 h 05** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard — le merge reste à faire.
+
+\## La suite
+
+1. **Annoter le rôle des 322 GN** : le levier de la relation, comme les cibles pour l'attachement.
+2. **Le merge `s/v7` → `master`**.
+3. **Le GGUF** : la porte N0.1 complète.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue la file : prochain round, **l'annotation du rôle des 322 GN** — la moitié indécidable.
+
+### Tour 165 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Analyser les 322 GN sans rôle
+- bash — Écrire la fiche des rôles par position et la porte T157
+- bash — Trim README et passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8809,7 +8868,7 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1400 autres
+- … et 1403 autres
 
 ## 4. Mesures et résultats marquants
 
