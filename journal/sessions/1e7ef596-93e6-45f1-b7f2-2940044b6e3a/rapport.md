@@ -7,12 +7,12 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 4.3 h |
+| Durée | 4.4 h |
 | Tours | 5 |
-| Messages | 113 |
-| Appels d'outils | 224 |
+| Messages | 116 |
+| Appels d'outils | 234 |
 | Fichiers touchés | 9 |
-| Commandes | 125 |
+| Commandes | 127 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -194,7 +194,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 5 — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la docum … [23 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Check sessions, recent commits and tree
 - bash — Run documentation review and state freshness
@@ -210,11 +210,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Read current full state
 - bash — Read B13 state-line updates in recent commits
 - bash — Read N3 report conclusion and backlog page
-- … et 6 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Repérage des corrections N3 : lien, backlog, roadmap, références
+⏵ Vérification de l'heure réelle et des faits S/B13 committés ou WIP
 
 ## 3. Travail accompli
 
@@ -274,7 +274,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 85 autres
+- … et 87 autres
 
 ## 4. Mesures et résultats marquants
 

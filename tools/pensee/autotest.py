@@ -2060,6 +2060,17 @@ def t141_elision() -> tuple[bool, str]:
     return abs(pos - 0.7455) < 0.001, f"élision : POS {pos}"
 
 
+def t142_run2() -> tuple[bool, str]:
+    """La passe de confirmation : refus 0, niveau 0,9389."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-quatre-modes-432-run2.json").read_text(encoding="utf-8"))
+    pos_niv = d["modes"]["cascade_niveau"]["all"]["pos"]["exactitude"]
+    return abs(pos_niv - 0.9389) < 0.001 and d.get("refus", 0) == 0, (
+        f"run 2 : refus {d.get('refus')}, niveau {pos_niv}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2200,7 +2211,8 @@ def main() -> int:
               ("T138 défaut fusion", t138_defaut_niveau()),
               ("T139 quatre modes", t139_quatre_modes()),
               ("T140 refus r353", t140_r353()),
-              ("T141 élision", t141_elision())]
+              ("T141 élision", t141_elision()),
+              ("T142 confirmation", t142_run2())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -9094,3 +9094,32 @@ To github.com:stephanedenis/drave.git
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in docs/pilotage/en-cours.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"types **6 … [2319 caractères tronqués]`
+
+  ```
+re-apply v7 sur le HEAD
+     · T0 : 4040 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 606 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 39b7ef00f822cbf30c212f49dfcb92db879ba6c7 but expected 81fa1a86e9e4ef7ec00adf50bb126fe78e81f282
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+To github.com:stephanedenis/drave.git
+   81fa1a86..39b7ef00  master -> master
+39b7ef00f822cbf30c212f49dfcb92db879ba6c7	refs/heads/master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; git show HEAD:reports/rapport-s-fait-divers.md >/dev/null 2>&1 && echo \"fiche v7 dans HEAD\" || echo \"fiche v7 absente\"; git show HEAD:reports/INDEX.md | grep -c \"fait-divers\"; git ls-tree HEAD tools/struct … [257 caractères tronqués]`
+
+  ```
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+fiche v7 absente
+0
+160000 commit 7ccc60f0c637430bb7fa37a7df1d628f6087a243	tools/structures
+117:| fichiers / JSON de résultats | **606** / **691** | `reports/*.md` / `reports/*.json` |
+57:- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
+117:| fichiers / JSON de résultats | **606** / **691** | `reports/*.md` / `reports/*.json` |
+  ❌ 1 violation(s) :
+     · T0 : 4040 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **réf … [3006 caractères tronqués]`

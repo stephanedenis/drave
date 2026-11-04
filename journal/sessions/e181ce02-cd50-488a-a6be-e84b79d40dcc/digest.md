@@ -34083,3 +34083,19 @@ cascade_niveau {"all": {"pos": {"exactitude": 0.9389, "exactitude_ferme": 0.9228
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    pos_niv = d[\"modes\"][\"cascade_niveau\"][\"pos\"]',\n            '    pos_niv = d[\"modes\"][\"cascade_niveau\"][\"all\ … [238 caractères tronqués]`
+
+  ```
+ok
+  ✅ T142 confirmation      run 2 : refus 0, niveau 0.9389
+  145/145 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 13 h 35 HNE\", t)\np.write_text( … [782 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-68]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-68", "timeout_ms": 600000, "wait": true}`

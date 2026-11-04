@@ -2458,3 +2458,242 @@ started background job bash-93
   ```
 
 - **job_output** `{"job_id": "bash-93", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[master 39b7ef00] ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+ 13 files changed, 402 insertions(+), 32 deletions(-)
+ create mode 100644 journal/2026-11-04/portes.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -12; echo ====; git show --stat --oneline HEAD | head -16; echo ====; grep -n \"N3 — clos\" docs/pilotage/en-cours.md; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Verify post-comm … [31 caractères tronqués]`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+ M tools/structures
+?? reports/pensee-quatre-modes-432-run2.json
+?? reports/pensee-quatre-modes-run2.json
+?? reports/rapport-pensee-quatre-modes-run2.md
+?? reports/rapport-s-fait-divers.md
+?? reports/rapport-s-paragraphes.md
+====
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+ docs/pilotage/en-cours.md                          |   6 +-
+ journal/2026-11-04/README.md                       |   4 +-
+ journal/2026-11-04/portes.md                       |  27 +++
+ journal/README.md                                  |   8 +-
+ journal/THEMES.md                                  |   1 +
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 185 +++++++++++++++++++++
+ .../rapport.md                                     |  29 +++-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md |  15 ++
+ .../rapport.md                                     |  16 +-
+ journal/sessions/MANIFEST.md                       |  10 +-
+ .../aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md | 114 +++++++++++++
+
+… [545 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py 2>&1 | tail -3; python3 tools/revue_documentation.py 2>&1 | tail -3; bash tools/porte-n3-inventaire.sh >/tmp/pn3.log 2>&1; echo \"[porte n3 inventaire exit $?]\"; tail -2 /tmp/pn3.log", "descripti … [58 caractères tronqués]`
+
+  ```
+état · dernier fait 81fa1a86 · dernier état 39b7ef00
+  ✅ aucun fait commité après le dernier état
+  revue de documentation · 606 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[porte n3 inventaire exit 0]
+  JSON ........... 20  (20 cités par les fiches)
+  ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence morte, aucun instrument orphelin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/pilotage/en-cours.md | head -40", "description": "Inspect latest concurrent en-cours edit"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index e3e6541c..ea60a495 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 11 h 43 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Statut\\|⏳\" docs/pilotage/backlog/N3-operations-natives.md | head -8; echo ====; grep -n \"N3\" docs/pilotage/roadmap.md | head -8", "description": "Check whether backlog and roadmap still mark N3 partial"}`
+
+  ```
+3:> **Statut** : partiel · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+86:3. ⏳ une porte par brique (temps, perte, rejeu) ;
+87:4. ⏳ k-WTA et routes : même traitement.
+====
+82:7. **N3** — les opérations natives restantes, qui remplissent la file « jamais en attente ».
+199:| **N3** | les opérations natives : [k-WTA](../theorie/glossaire/entrees/k-wta.md), routes, sortie précoce, pont, rejeu, placement | 🔬 **couvert par brique ; service composé** | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N3.4d · N3.5a/b/c/d/e/f · N3.6 service ✅** (pont actif, placement métadonnée ; saut de calcul conditionnel) |
+339:  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo ====; git status --short | wc -l; git status --short | grep '^ M docs/pilotage/en-cours.md' && git diff --stat docs/pilotage/en-cours.md", "description": "Final log and working tree summary"}`
+
+  ```
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+81fa1a86 N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE
+862d9c2f B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+7632ab94 B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143
+====
+11
+ M docs/pilotage/en-cours.md
+ docs/pilotage/en-cours.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière verrue : le backlog dit encore « partiel » — passage à mesurée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"docs/pilotage/backlog/N3-operations-natives.md\")\nt = p.read_text()\nt = t.replace(\"> **Statut** : partiel · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1\",\n     … [1437 caractères tronqués]`
+
+  ```
+ok
+3:> **Statut** : mesurée · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+87:3. ✅ une porte par brique (temps, perte, rejeu) — **17 portes vertes** le 04/11 11 h 32 ;
+88:4. ✅ k-WTA et routes : même traitement (`porte-n3-routes`, `porte-n3-sparsite`, `-compte`).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '47,54p' docs/pilotage/backlog/N3-operations-natives.md; echo ====; sed -n '1,10p' docs/pilotage/backlog/N3-operations-natives.md", "description": "Read exact remaining text in N3 backlog"}`
+
+  ```
+le placement reste une métadonnée, la décision à seuil est rejouable ; le saut de calcul reste
+conditionnel (N3.2b2).
+
+**Ce qui reste** : un chemin natif distribué (le placement natif est une métadonnée) et une
+architecture de cache si elle existe ; la composition de service est **faite** (N3.6). N3.2a,
+N3.2b0, N3.2b1 (seuil), N3.2b2 (condition K/V), N3.3a/b/c, N3.4a (composition), N3.4b (pont),
+N3.4c (condition placement) et N3.6 (service : pont/placement/seuil) sont **faits**.
+
+====
+# N3 — Opérations natives : de la mesure à la production
+
+> **Statut** : mesurée · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+> **Ligne de roadmap** : N3 · **Fiches de résultat** :
+> [`n4-porte-execution`](../../../reports/rapport-n4-porte-execution.md),
+> [`n4-dessin-b`](../../../reports/rapport-n4-dessin-b.md),
+> [`design-H`](../../../reports/rapport-design-H-profondeur-routee.md),
+> [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md),
+> [`n3.2a-service`](../../../reports/rapport-n3.2a-service.md),
+> [`n3.3a-routes`](../../../reports/rapport-n3.3a-routes.md),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"docs/pilotage/backlog/N3-operations-natives.md\")\nt = p.read_text()\nancien = \"N3.4c (condition placement) et N3.6 (service : pont/placement/seuil) sont **faits**.\"\nnouveau = … [549 caractères tronqués]`
+
+  ```
+ok
+27:> [`n3-inventaire`](../../../reports/rapport-n3-inventaire.md).
+53:N3.4c (condition placement) et N3.6 (service : pont/placement/seuil) sont **faits**. **Vérifié le 04/11** : 17 portes de brique vertes (92 s, 0 rouge), chaîne
+54:fiche → JSON → porte complète, inventaire exécutable ([fiche](../../../reports/rapport-n3-inventaire.md)).
+  ❌ N3 : l'index dit « partiel », la fiche dit « mesurée »
+
+❌ 1 erreur(s) — le graphe ment.
+  revue de documentation · 606 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"docs/pilotage/backlog/index.md\")\nt = p.read_text()\nancien = \"| N3 | [Opérations natives en production](N3-operations-natives.md) | partiel | P2 | N1 | N3 |\"\nnouveau = \"| N … [346 caractères tronqués]`
+
+  ```
+ok
+  frontière (3) : A2.6, N2, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  revue de documentation · 606 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du backlog N3 (statut mesurée, graphe à 3 à la frontière)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat docs/pilotage/en-cours.md docs/pilotage/backlog/; echo ====; git diff docs/pilotage/en-cours.md | head -12", "description": "Check en-cours diff and backlog changes before staging"}`
+
+  ```
+docs/pilotage/backlog/N3-operations-natives.md | 12 +++++++-----
+ docs/pilotage/backlog/index.md                 |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+====
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo ====; git status --short | head -15; echo ====; head -4 docs/pilotage/en-cours.md", "description": "Check if another session committed and current state"}`
+
+  ```
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+81fa1a86 N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE
+862d9c2f B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+====
+M  docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/backlog/N3-operations-natives.md
+ M docs/pilotage/backlog/index.md
+M  docs/pilotage/en-cours.md
+ M journal/2026-11-04/README.md
+ M journal/2026-11-04/distribue.md
+ M journal/2026-11-04/docs.md
+ M journal/2026-11-04/mesures.md
+ M journal/2026-11-04/modele.md
+ M journal/2026-11-04/portes.md
+ M journal/README.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+M  journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+M  journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+====
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 35 HNE (heure locale, EST).**
+  ```
+
+### 🤖 Assistant
+
+⏵ Une autre session tient l'index (fichiers stagés) — je n'y touche pas
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l .git/index.lock 2>/dev/null || echo 'pas de verrou d index'; echo ====; git diff --cached --stat; echo ====; git diff --cached docs/pilotage/en-cours.md | grep -E '^\\+.*N3|^\\+.*portes \\||^\\+.*fichiers / JSON' | head", "desc … [75 caractères tronqués]`
+
+  ```
+pas de verrou d index
+====
+ docs/implantation/moteur-de-pensee.md              |    5 +-
+ docs/pilotage/en-cours.md                          |    2 +-
+ .../rapport.md                                     |   12 +-
+ .../rapport.md                                     |   14 +-
+ reports/README.md                                  |    2 +-
+ reports/pensee-quatre-modes-432-run2.json          | 1120 ++++++++++++++++++++
+ reports/pensee-quatre-modes-run2.json              |   33 +
+ reports/rapport-pensee-quatre-modes-run2.md        |   61 ++
+ tools/pensee/autotest.py                           |   14 +-
+ 9 files changed, 1245 insertions(+), 18 deletions(-)
+====
+  ```
+
+- **bash** `{"command": "sleep 30; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo ====; git diff --cached --stat | tail -4; echo ====; git status --short | grep -E '^M |^ M docs/pilotage' | head", "description": "Wait briefly and re-check whether the other session committed"}`
+
+  ```
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+81fa1a86 N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE
+====
+ reports/pensee-quatre-modes-run2.json              |   33 +
+ reports/rapport-pensee-quatre-modes-run2.md        |   61 ++
+ tools/pensee/autotest.py                           |   14 +-
+ 9 files changed, 1245 insertions(+), 18 deletions(-)
+====
+M  docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/backlog/N3-operations-natives.md
+ M docs/pilotage/backlog/index.md
+M  reports/README.md
+M  tools/pensee/autotest.py
+  ```
+

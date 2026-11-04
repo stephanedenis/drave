@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 91.0 h |
+| Durée | 91.1 h |
 | Tours | 159 |
-| Messages | 1901 |
-| Appels d'outils | 1626 |
+| Messages | 1903 |
+| Appels d'outils | 1628 |
 | Fichiers touchés | 25 |
-| Commandes | 1339 |
+| Commandes | 1340 |
 | Sous-agents | 2 |
-| Commits | 199 |
+| Commits | 200 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8417,7 +8417,7 @@ Une section a été ajoutée à « Ce qui est original » : **le service distant
 
 ### Tour 159 — go
 
-*10 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Rejouer les quatre modes sur le gold 432 (run 2)
 - bash — Voir où le modèle natif est cité dans le pilotage
@@ -8429,6 +8429,7 @@ Une section a été ajoutée à « Ce qui est original » : **le service distant
 - bash — Lire le brut du run 2 et relancer
 - bash — Voir la structure réelle du brut run 2
 - bash — Corriger le chemin du brut et relancer
+- bash — Committer la confirmation run 2
 
 **Synthèse produite :**
 
@@ -8513,7 +8514,7 @@ Une section a été ajoutée à « Ce qui est original » : **le service distant
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1299 autres
+- … et 1300 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8860,4 +8861,5 @@ Une section a été ajoutée à « Ce qui est original » : **le service distant
 - B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT DE LA FUSI
 - B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "Q
 - B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "L'ÉLISI
+- B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA CONFIRMATION"; th
 

@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 2.3 h |
+| Durée | 2.4 h |
 | Tours | 3 |
-| Messages | 86 |
-| Appels d'outils | 114 |
+| Messages | 97 |
+| Appels d'outils | 127 |
 | Fichiers touchés | 6 |
-| Commandes | 93 |
+| Commandes | 106 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -130,7 +130,7 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 
 ### Tour 3 — go
 
-*19 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Inspect current tree, staged files, and en-cours diff
 - bash — Check en-cours modification time and hub process
@@ -146,11 +146,11 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 - job_output
 - bash — Verify commit contents and remaining working tree
 - bash — Check no foreign files, state freshness, doc review
-- … et 4 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ Restauration de la ligne N3 et des compteurs, en conservant les mises à jour de S
+⏵ Une autre session tient l'index (fichiers stagés) — je n'y touche pas
 
 ## 3. Travail accompli
 
@@ -207,7 +207,7 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 53 autres
+- … et 66 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -15,9 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-quatre-modes-run2.md`](rapport-pensee-quatre-modes-run2.md) | **B13** — la confirmation : refus 0, niveau 0,9389, **145/145** |
 | [`rapport-pensee-elision.md`](rapport-pensee-elision.md) | **B13** — l'élision : POS 0,7455, le refus r353 tombe, **144/144** |
 | [`rapport-pensee-quatre-modes-432.md`](rapport-pensee-quatre-modes-432.md) | **B13** — les quatre modes sur le gold 432 : le niveau gagne (0,9309/0,8226/0,8784), **143/143** |
-| [`rapport-pensee-defaut-niveau.md`](rapport-pensee-defaut-niveau.md) | **B13** — le défaut de la fusion : confiance 0,7424 vs niveau 0,3432, **141/141** |
 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
 | [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats |
 | [`rapport-pensee-porte-minute.md`](rapport-pensee-porte-minute.md) | **B13** — la porte minute : 140/140 ; les six attendus S `00d2a01` fixés ; T132/T133 2/5 ; distracteurs r428–r432 |

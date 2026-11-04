@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 43.5 h |
+| Durée | 43.6 h |
 | Tours | 17 |
-| Messages | 437 |
-| Appels d'outils | 421 |
+| Messages | 439 |
+| Appels d'outils | 423 |
 | Fichiers touchés | 17 |
-| Commandes | 334 |
+| Commandes | 336 |
 | Sous-agents | 0 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -590,7 +590,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 
 ### Tour 17 — ensuite?
 
-*7 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Implement v7 fait-divers GN head rule
 - bash — Inspect current GN branch for v7 bug
@@ -599,6 +599,8 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - bash — Document v7, add fiche, commit and push submodule
 - bash — Commit v7 and push main
 - bash — Reapply v7 on newest HEAD, commit, push
+- bash — Inspect hub commit state for v7 and T0
+- bash — Trim T0, add v7 fiche/index, commit and push
 
 **Synthèse produite :**
 
@@ -670,7 +672,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 294 autres
+- … et 296 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -780,6 +782,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - **T14** `50:- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/parag`
 - **T14** `2,3430 / 2,3461 à contexte 256/512/1 000/2 000) et le miroir de copie reste à 0,0078 — à 552 Mo`
 - **T14** `49:- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/parag`
+- **T17** `57:- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ;`
 
 ## 5. Erreurs rencontrées
 
@@ -834,6 +837,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture d'Alice, la tab
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture, la table de ve
 - S — COMPTEURS : 601 FICHES / 686 JSON (LA BANQUE À NEUF)" -m "Les compteurs de l'état suivent le disque après la fiche de la banque à neuf et le JSON du jour." 
+- S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :

@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "145/145",
+ "run1": {
+  "neuronal_pos": 0.9309,
+  "niveau": 0.9309
+ },
+ "run2": {
+  "neuronal_pos": 0.9389,
+  "niveau": 0.9389
+ },
+ "refus": 0,
+ "seuils": {
+  "heuristique": true,
+  "neuronal": true,
+  "parallele": false,
+  "cascade": true,
+  "parallele_niveau": true,
+  "cascade_niveau": true,
+  "aucun_refus": true
+ },
+ "api": {
+  "appels": 858,
+  "tokens": 254454,
+  "latence_s": 807.5519999999992
+ },
+ "limites": [
+  "deux passes",
+  "gold 432",
+  "PRIORITE_NIVEAU non basculé"
+ ]
+}
