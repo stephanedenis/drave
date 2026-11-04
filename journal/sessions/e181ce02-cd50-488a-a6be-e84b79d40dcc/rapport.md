@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 93.8 h |
+| Durée | 93.9 h |
 | Tours | 164 |
-| Messages | 2032 |
-| Appels d'outils | 1748 |
+| Messages | 2035 |
+| Appels d'outils | 1751 |
 | Fichiers touchés | 25 |
-| Commandes | 1436 |
+| Commandes | 1439 |
 | Sous-agents | 2 |
 | Commits | 215 |
 | Compactages de contexte | 5 |
@@ -8719,13 +8719,15 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 
 ### Tour 164 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Diagnostiquer les 500 premiers segments sans cible
 - bash — Écrire la fiche des 500 segments et la porte T155
 - bash — Passer toutes les portes
 - bash — Committer les 500 premiers segments
 - job_output
+- bash — Mesurer la relation GN → GV par le rôle
+- bash — Écrire la fiche de la relation GN→GV et la porte T156
 
 ## 3. Travail accompli
 
@@ -8806,7 +8808,7 @@ Je continue la file : prochain round, **l'attachement des 500 premiers segments*
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1396 autres
+- … et 1399 autres
 
 ## 4. Mesures et résultats marquants
 

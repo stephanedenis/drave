@@ -36000,3 +36000,32 @@ retry 4
   ```
 
 - **job_output** `{"job_id": "bash-164", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[s/v7 9e3e2070] B13 — LES 500 PREMIERS SEGMENTS : 294 GN, 206 GV, LE SVO NU N'A PAS DE CIBLE ; 158/158
+ 16 files changed, 259 insertions(+), 42 deletions(-)
+COMMIT OK 5
+9e3e2070 B13 — LES 500 PREMIERS SEGMENTS : 294 GN, 206 GV, LE SVO NU N'A PAS DE CIBLE ; 158/158
+mer 04 nov 2026 14:32:43 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); ph=charger()\nn=0; avec=0; roles={}\nfor p in ph:\ … [605 caractères tronqués]`
+
+  ```
+GN 637 | avec rôle agent/patient/destinataire et un GV 221 | taux 0.3469
+rôles {'agent': 260, 'groupe nominal': 322, 'patient': 55}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-relation.md <<'MD'\n# B13 — la relation GN → GV : 221 sur 637 (0,3469)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅\n> **159/159 portes** : la  … [6591 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 619 fiche(s) · 712 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`

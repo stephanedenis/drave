@@ -1,0 +1,18 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "159/159",
+ "GN": 637,
+ "roles": {
+  "agent": 260,
+  "patient": 55,
+  "groupe nominal": 322
+ },
+ "relation": 221,
+ "taux": 0.3469,
+ "limites": [
+  "322 GN sans rôle",
+  "gold 432",
+  "la relation inverse n'est pas mesurée"
+ ]
+}
