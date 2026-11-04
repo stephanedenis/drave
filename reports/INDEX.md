@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **596 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **606 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -248,6 +248,7 @@
 | [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
 | [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture |
 | [rapport-n2-r12-2048.md](rapport-n2-r12-2048.md) | R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données gagnent |
+| [rapport-n3-inventaire.md](rapport-n3-inventaire.md) | N3 — l'inventaire exécutable : 17 portes vertes, la fiche de backlog était périmée |
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
 | [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
 | [rapport-n3.2b0-profondeur.md](rapport-n3.2b0-profondeur.md) | N3.2b0 — la profondeur de service est branchée, et le service lisait mal les requêtes |
@@ -388,8 +389,11 @@
 | [rapport-pensee-croyance.md](rapport-pensee-croyance.md) | B13 — la croyance : 0/20, la distribution seule ne suffit pas |
 | [rapport-pensee-curieuse.md](rapport-pensee-curieuse.md) | B13 — la curiosité : 0/20, le bonus de certitude ne suffit pas |
 | [rapport-pensee-cycle.md](rapport-pensee-cycle.md) | B13 — la pénalité -1 ne casse pas le cycle : 0/20 |
+| [rapport-pensee-defaut-conditionnel.md](rapport-pensee-defaut-conditionnel.md) | B13 — le défaut conditionnel : le niveau si le réel est là |
+| [rapport-pensee-defaut-niveau.md](rapport-pensee-defaut-niveau.md) | B13 — le défaut de la fusion : la confiance, pas le niveau |
 | [rapport-pensee-derive.md](rapport-pensee-derive.md) | B13 — la fiabilité qui dérive : v = 0,56, 20/20 |
 | [rapport-pensee-drvf.md](rapport-pensee-drvf.md) | B13 — DRVF `thought` : la trace se relit, la corruption se voit |
+| [rapport-pensee-elision.md](rapport-pensee-elision.md) | B13 — l'élision : le bloc coupe `l'écoutent`, le refus tombe |
 | [rapport-pensee-ferme.md](rapport-pensee-ferme.md) | B13 — la porte qui se referme : le moteur repasse |
 | [rapport-pensee-frequent.md](rapport-pensee-frequent.md) | B13 — la bascule fréquente : 1/50, 20/20 |
 | [rapport-pensee-frontiere-71.md](rapport-pensee-frontiere-71.md) | L — la frontière sur les 71 langues : le script est tenu (71/71), la langue sur libellés courts ne l'est pas (0,137 contre 0,032) |
@@ -474,6 +478,8 @@
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
 | [rapport-pensee-pragmatique-neuronale.md](rapport-pensee-pragmatique-neuronale.md) | B13 — la pragmatique neuronale : parfaite sur les 20 réelles (dev), sous le majoritaire sur les 160 synthétiques (test) |
 | [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |
+| [rapport-pensee-quatre-modes-432.md](rapport-pensee-quatre-modes-432.md) | B13 — les quatre modes sur le gold 432 : le niveau gagne avec le réel |
+| [rapport-pensee-quatre-modes-run2.md](rapport-pensee-quatre-modes-run2.md) | B13 — la confirmation (run 2) : refus 0, le niveau gagne encore |
 | [rapport-pensee-quatre-modes.md](rapport-pensee-quatre-modes.md) | L — la porte des quatre modes sur le gold 432 : le neuronal API domine (0,9309 / 0,8226 / 0,8784), la fusion dégrade (0,928 / 0,802 / 0,857) |
 | [rapport-pensee-rapide.md](rapport-pensee-rapide.md) | B13 — la bascule très fréquente : 1/10, 20/20 |
 | [rapport-pensee-rare.md](rapport-pensee-rare.md) | B13 — l'information rare : utile 10 % du temps, 20/20 |
@@ -493,6 +499,7 @@
 | [rapport-pensee-seuil-bord.md](rapport-pensee-seuil-bord.md) | B13 — le bord du seuil : × 0,42 et × 0,44 réussissent (50/50) |
 | [rapport-pensee-seuil-fin.md](rapport-pensee-seuil-fin.md) | B13 — le seuil fin : × 0,4 réussit, × 0,45 échoue (non monotone) |
 | [rapport-pensee-seuil-graines.md](rapport-pensee-seuil-graines.md) | B13 — le seuil sur 5 graines : le seuil est ~0,4 |
+| [rapport-pensee-seuil-parallele.md](rapport-pensee-seuil-parallele.md) | B13 — le seuil du parallèle : il ne peut pas battre le max |
 | [rapport-pensee-seuil.md](rapport-pensee-seuil.md) | B13 — le seuil d'oubli : dans (0,2 ; 0,5] |
 | [rapport-pensee-seuils-gold-reel.md](rapport-pensee-seuils-gold-reel.md) | B13 — les seuils du gold réel : 0,90 / 0,45 / 0,55 / 0,50, le verdict passe à true |
 | [rapport-pensee-seule.md](rapport-pensee-seule.md) | B13 — la politique seule : 8 pas, 15/15 buts, sans A* |
@@ -502,6 +509,7 @@
 | [rapport-pensee-sto-seule.md](rapport-pensee-sto-seule.md) | B13 — la politique seule sur le bruit : elle réessaie et atteint le but |
 | [rapport-pensee-stochastique.md](rapport-pensee-stochastique.md) | B13 — la porte stochastique : 80 % d'ouverture, la politique réessaie |
 | [rapport-pensee-tres-rare.md](rapport-pensee-tres-rare.md) | B13 — l'information très rare : utile 1 %, 20/20 |
+| [rapport-pensee-troisieme-passe.md](rapport-pensee-troisieme-passe.md) | B13 — la troisième passe : variance nulle, tous les seuils verts |
 | [rapport-pensee-ultra-rare.md](rapport-pensee-ultra-rare.md) | B13 — l'information ultra-rare : utile 0,1 %, 20/20 |
 | [rapport-pensee-un-look.md](rapport-pensee-un-look.md) | B13 — un seul look : 20/20 |
 | [rapport-pensee-v0.md](rapport-pensee-v0.md) | Pensée v0 — le state store, l'arbre hashé et six portes |
@@ -570,7 +578,9 @@
 | [rapport-s-arbre-referents.md](rapport-s-arbre-referents.md) | S — L'arbre a une profondeur et les référents sont proposés : 99 candidats à ≥3, 294/371 formes |
 | [rapport-s-banque-partielle.md](rapport-s-banque-partielle.md) | S — La banque s'arrête à 81 lectures / 65 phrases : l'arbre manque de profondeur, les référents ne sont pas résolus |
 | [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |
+| [rapport-s-fait-divers.md](rapport-s-fait-divers.md) | S — Le fait divers est tranché : 61/61 types, 144/144 rôles ; la tête du GN arrête le verbe |
 | [rapport-s-limites-v6.md](rapport-s-limites-v6.md) | S — Les trois limites de la v4 sont fermées : h050, h053 et « si fort que » ; 60/60 types, 142/142 rôles |
+| [rapport-s-paragraphes.md](rapport-s-paragraphes.md) | S — La banque de paragraphes passe à neuf : six paires d'Alice, sources anglaises et référents |
 | [rapport-s-traductions.md](rapport-s-traductions.md) | S — La traduction contrôle le sens : 14/14 référents anaphoriques confirmés par l'anglais, le « les » → « it » retrouvé |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |

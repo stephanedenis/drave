@@ -1,0 +1,21 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "148/148",
+ "passes": {
+  "run1": 0.9309,
+  "run2": 0.9389,
+  "run3": 0.9389
+ },
+ "parallele": {
+  "run2": 0.9326,
+  "run3": 0.9389
+ },
+ "seuils": "7/7",
+ "refus": 0,
+ "limites": [
+  "température 0",
+  "cache possible",
+  "gold 432"
+ ]
+}

@@ -2102,6 +2102,20 @@ def t144_seuil_parallele() -> tuple[bool, str]:
         f"seuil : parallèle {par} < niveau {niv}")
 
 
+def t145_troisieme_passe() -> tuple[bool, str]:
+    """La troisième passe : variance nulle, 7/7 seuils."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-quatre-modes-432-run3.json").read_text(encoding="utf-8"))
+    m = d["modes"]
+    niv = m["cascade_niveau"]["all"]["pos"]["exactitude"]
+    par = m["parallele"]["all"]["pos"]["exactitude"]
+    tous = all(d["seuils"].values())
+    return abs(niv - 0.9389) < 0.001 and abs(par - 0.9389) < 0.001 and tous and d["refus"] == 0, (
+        f"run 3 : niveau {niv}, parallèle {par}, seuils {sum(d['seuils'].values())}/7")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2245,7 +2259,8 @@ def main() -> int:
               ("T141 élision", t141_elision()),
               ("T142 confirmation", t142_run2()),
               ("T143 défaut conditionnel", t143_defaut_conditionnel()),
-              ("T144 seuil parallèle", t144_seuil_parallele())]
+              ("T144 seuil parallèle", t144_seuil_parallele()),
+              ("T145 troisième passe", t145_troisieme_passe())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

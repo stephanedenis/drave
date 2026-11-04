@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 4.7 h |
-| Tours | 6 |
-| Messages | 151 |
-| Appels d'outils | 297 |
+| Durée | 4.8 h |
+| Tours | 7 |
+| Messages | 158 |
+| Appels d'outils | 306 |
 | Fichiers touchés | 14 |
-| Commandes | 157 |
+| Commandes | 166 |
 | Sous-agents | 0 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -35,6 +35,8 @@
 **Tour 5** — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la documentation et du pilotage
 
 **Tour 6** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
+
+**Tour 7** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -244,7 +246,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 6 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -257,10 +259,39 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Inspect worktree state diff and counts
 - bash — Update state with B13 147 fact and verify
 - bash — Commit only the updated state
+- bash — Verify cycle commit and state checks
+- bash — Verify links, journal, backlog and runs
 
 **Synthèse produite :**
 
-⏵ Commit partiel de l'état (sans les WIP B13/S)
+⏵ Cycle 1 : B13 147/147 intégré, état et docs verts, suivi actif
+
+**Audit du cycle — tout est vert** : revue ✅ (**609 fiches, 695 JSON, 120 docs, 83 portes**), **2 904 liens** ✅, backlog **frontière 3** (A2.6, N2, N4) ✅, journal **1 968 liens** ✅, tableaux ✅, `en-cours` **1 590 mots** ✅, **T0 3 960 / 4 000** ✅.
+
+**Intégré** :
+- **B13 147/147** — le seuil du parallèle : la confiance plafonne à **0,9326** sous le max **0,9389** ; fiche [`seuil parallèle`](../../reports/rapport-pensee-seuil-parallele.md) citée ; le fait est dans `25d631fe`, l'état dans **`b58cd52f`**.
+- **N2** — progression corrigée : `kd2` **~19 400/30 000** (le log s'arrête à 12 050 : sortie **bufferisée**, GPU à 99 %), `rope2048` **4 800/20 000** (≈2 s/pas, ralenti par kd2) ; ETA **~13 h 30 / ~19–20 h** (l'ancienne, 15 h 10, était fausse).
+- Heure locale corrigée (**12 h 09** ; les sessions écrivaient 14 h 05) ; compteurs **609/695**.
+
+**Ce qui reste** (aux sessions, pas au hub) : B13 troisième passe (`432 run3`, `troisieme-passe` non committés), S `rapport-s-paragraphes.md`, les journaux dérivés en cours de régénération. Les runs tournent (GPU 99–100 %) ; la **passe complète** attend leur fin.
+
+**Le goal reste actif** : je ré-audite et j'intègre à chaque cycle ; il sera complet quand les sessions auront clos leurs faits et que la passe complète sera passée.
+
+### Tour 7 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Check and regenerate reports catalog
+- bash — Update state time and stage catalog
+- bash — Commit regenerated reports catalog and state
+
+**Synthèse produite :**
+
+⏵ Commit du catalogue 606 fiches et de l'état 12 h 16
 
 ## 3. Travail accompli
 
@@ -325,7 +356,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 117 autres
+- … et 126 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -464,4 +495,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE" -m "Le fait B13 146/146 (défaut conditionnel : le niveau si le réel es
 - ÉTAT — N2 : KD2 ~19 400/30 000 (LOG BUFFERISÉ), ROPE2048 4 650/20 000 ; ETA CORRIGÉE (~13 H 30 / ~19–20 H)" -m "Le log kd2 s'arrête à 12 050 pas (11 h 07) alors
 - ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE" -m "Le fait 147/147 et sa fiche (rapport-pensee-seuil-parallele)
+- INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16" -m "Le catalogue généré était périmé de 10 fiches : N3 (inventaire)
 

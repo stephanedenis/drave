@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 91.5 h |
+| Durée | 91.6 h |
 | Tours | 160 |
-| Messages | 1925 |
-| Appels d'outils | 1649 |
+| Messages | 1927 |
+| Appels d'outils | 1651 |
 | Fichiers touchés | 25 |
-| Commandes | 1355 |
+| Commandes | 1356 |
 | Sous-agents | 2 |
-| Commits | 202 |
+| Commits | 203 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*21 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8495,7 +8495,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Trim README et passer toutes les portes
 - bash — Committer le seuil du parallèle
 - bash — Lancer la troisième passe API (variance)
-- … et 3 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -8580,7 +8580,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1315 autres
+- … et 1316 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8930,4 +8930,5 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA CONFIRMATION"; th
 - B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT CONDITI
 - B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "SEUIL DU PA
+- B13 — LA TROISIÈME PASSE : VARIANCE NULLE (0,9389), 7/7 SEUILS, REFUS 0 ; 148/148" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "TROISIÈME PASSE"; the
 

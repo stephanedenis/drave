@@ -5362,3 +5362,217 @@ index 0505ef39..fe6e9954 100644
 ⏵ Commit partiel de l'état (sans les WIP B13/S)
 
 - **bash** `{"command": "git commit --only docs/pilotage/en-cours.md -m \"ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE\" -m \"Le fait 147/147 et sa fiche (rapport-pensee-seuil-parallele) sont committés dans 25d631fe ; l'état les porte. Compteurs 609/695 (troisiè … [219 caractères tronqués]`
+
+  ```
+[s/v7 b58cd52f] ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE
+ 16 files changed, 277 insertions(+), 53 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 1
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | head -12 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILLE---\" ; python3 tools/taille_documents … [96 caractères tronqués]`
+
+  ```
+b58cd52f ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+29122912 ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+MM journal/2026-11-04/README.md
+MM journal/2026-11-04/distribue.md
+MM journal/2026-11-04/docs.md
+MM journal/2026-11-04/mesures.md
+MM journal/2026-11-04/modele.md
+MM journal/2026-11-04/portes.md
+MM journal/README.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+---REVUE---
+  revue de documentation · 609 fiche(s) · 695 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1590 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenabl
+… [50 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---RUNS---\" ; cd /home/stephane/Data13TB/stephane/GitHub/ … [212 caractères tronqués]`
+
+  ```
+✅ 2904 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1968 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---RUNS---
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+pas   4800 · perte 1.0144 · PPL val 2.628 · 9571 s
+0, 99 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 1 : B13 147/147 intégré, état et docs verts, suivi actif
+
+**Audit du cycle — tout est vert** : revue ✅ (**609 fiches, 695 JSON, 120 docs, 83 portes**), **2 904 liens** ✅, backlog **frontière 3** (A2.6, N2, N4) ✅, journal **1 968 liens** ✅, tableaux ✅, `en-cours` **1 590 mots** ✅, **T0 3 960 / 4 000** ✅.
+
+**Intégré** :
+- **B13 147/147** — le seuil du parallèle : la confiance plafonne à **0,9326** sous le max **0,9389** ; fiche [`seuil parallèle`](../../reports/rapport-pensee-seuil-parallele.md) citée ; le fait est dans `25d631fe`, l'état dans **`b58cd52f`**.
+- **N2** — progression corrigée : `kd2` **~19 400/30 000** (le log s'arrête à 12 050 : sortie **bufferisée**, GPU à 99 %), `rope2048` **4 800/20 000** (≈2 s/pas, ralenti par kd2) ; ETA **~13 h 30 / ~19–20 h** (l'ancienne, 15 h 10, était fausse).
+- Heure locale corrigée (**12 h 09** ; les sessions écrivaient 14 h 05) ; compteurs **609/695**.
+
+**Ce qui reste** (aux sessions, pas au hub) : B13 troisième passe (`432 run3`, `troisieme-passe` non committés), S `rapport-s-paragraphes.md`, les journaux dérivés en cours de régénération. Les runs tournent (GPU 99–100 %) ; la **passe complète** attend leur fin.
+
+**Le goal reste actif** : je ré-audite et j'intègre à chaque cycle ; il sera complet quand les sessions auront clos leurs faits et que la passe complète sera passée.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 2 : nouvel instantané, audit et faits committés depuis le cycle 1
+
+- **bash** `{"command": "git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | head -18 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+b58cd52f ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+29122912 ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+8189c4f3 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+MM journal/2026-11-04/README.md
+MM journal/2026-11-04/distribue.md
+MM journal/2026-11-04/docs.md
+MM journal/2026-11-04/mesures.md
+MM journal/2026-11-04/modele.md
+MM journal/2026-11-04/portes.md
+MM journal/README.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/e181ce02-cd50-4
+… [1213 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -5 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|T0 :\" | head -3", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 609 fiche(s) · 695 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1590 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3960 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -3 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2904 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1968 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2904 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; echo \"=== HEAD ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; grep -n \"B13 \\*\\*14\\|B13 : 14\\|Pensée — B13\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== RUNS ===\" ; tail -1 work/n2ac/kd … [175 caractères tronqués]`
+
+  ```
+12 h 12
+=== HEAD ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 12 h 09 HNE (heure locale, EST).**
+71:- **Fait** : B13 **147/147** (seuil du parallèle : la confiance plafonne à **0,9326** sous le max **0,9389** ; défaut conditionnel ; run2 ; élision POS **0,7455**, r353 tombé) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [B13](../../reports/rapport-b13-porte-140.md).
+97:- **Pensée — B13 (actif)** : **147/147**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; fusion : la confiance bat le niveau.
+108:| fichiers / JSON de résultats | **609** / **695** | `reports/*.md` / `reports/*.json` |
+120:
+… [316 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle du catalogue `reports/INDEX.md` : est-il à jour des 609 fiches ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -12 reports/INDEX.md ; echo \"---LIGNES---\" ; grep -c \"](.*\\.md)\" reports/INDEX.md ; echo \"---REGEN---\" ; python3 tools/index_reports.py 2>&1 | tail -3 ; echo \"---DIFF---\" ; git diff --stat reports/INDEX.md ; git diff --  … [84 caractères tronqués]`
+
+  ```
+# Index des fiches de reports/
+
+> **Généré** par `tools/index_reports.py` — **596 fiches**. Les fichiers
+> d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+> la page d'état, elle, compte tous les `.md` de `reports/`.
+
+| fiche | titre |
+|---|---|
+| [07-mesures-couche-commune.md](07-mesures-couche-commune.md) | 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune |
+| [aiguille-30b.md](aiguille-30b.md) | aiguille v2 — /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf |
+| [aiguille-gpt-oss.md](aiguille-gpt-oss.md) | aiguille v2 — /home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf |
+| [alignement-verne.md](alignement-verne.md) | Alignement phrase à phrase — *Le Tour du monde en quatre-vingts jours* (français → anglais) |
+---LIGNES---
+596
+---REGEN---
+  606 fiches → reports/INDEX.md
+---DIFF---
+ reports/INDEX.md | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+diff --git a/reports/INDEX.md b/reports/INDEX.md
+index dc3ee292..221937c5 100644
+--- a/reports/INDEX.md
++++ b/reports/INDEX.md
+@@ -1,6 +1,6 @@
+ # Index des fiches de reports/
+ 
+-> **Généré** par `tool
+… [1308 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le catalogue était périmé (596 → 606) : régénéré, je le commite avec l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.idx.md && python3 - <<'PY'\nimport subprocess\np='/tmp/state.idx.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=t.replace(\"**Mis à … [594 caractères tronqués]`
+
+  ```
+en-cours · 1590 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3960 mots (budget 4 000)
+  revue de documentation · 609 fiche(s) · 695 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2914 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du catalogue 606 fiches et de l'état 12 h 16
+
+- **bash** `{"command": "git commit -m \"INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16\" -m \"Le catalogue généré était périmé de 10 fiches : N3 (inventaire), S (fait divers, paragraphes), B13 (élision, quatre modes, run2, défaut, défaut conditionnel, seuil parallèl … [280 caractères tronqués]`
