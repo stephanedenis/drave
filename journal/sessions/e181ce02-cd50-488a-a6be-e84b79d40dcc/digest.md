@@ -37305,3 +37305,96 @@ bash tools/porte-bloc-linguistique.sh      EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py docs/pilotage/en-cours.md docs/implantation/moteur-de-pensee.md reports/README.md\n  timeout 240 git commit -m \"B13 — LES PASSIFS SANS PAR ENTRE … [786 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-206]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-206", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[s/v7 1f74e6cf] B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+ 23 files changed, 702 insertions(+), 66 deletions(-)
+COMMIT OK 1
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+--- contenu :
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 146 ++++++++++
+ .../rapport.md                                     |  22 +-
+ reports/README.md                                  |   2 +-
+ tools/bloc_linguistique.py                         |   8 +-
+ tools/pensee/autotest.py                           |  21 +-
+ 23 files changed, 702 insertions(+), 66 deletions(-)
+--- vérif :
+2
+1
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le round passif est enfin dans HEAD (`1f74e6cf`, vérifié). J'attaque la règle d'attachement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def attachement\\|def evaluer_bloc\" -A 40 tools/tests/linguistique/evaluer_gold.py | head -70", "description": "Lire l'implémentation de l'attachement"}`
+
+  ```
+80:def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+81-    tp = fp = fn = ttp = tfp = tfn = 0
+82-    pos_ok = pos_n = pos_ok_ferme = pos_n_ferme = pos_ok_ouvert = pos_n_ouvert = 0
+83-    conf = defaultdict(Counter)
+84-    acte_ok = neg_ok = mod_ok = ds_ok = 0
+85-    fractions = []
+86-    att_n = att_labels = att_top1 = att_topk = att_exact = 0
+87-    att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
+88-    for phrase in phrases:
+89-        a = bloc.analyser(phrase["texte"], phrase["langue"])
+90-        fractions.append(a.fraction_semantique)
+91-        pos = _pos_map(a)
+92-        for mot in phrase["mots"]:
+93-            pred = pos.get((mot["debut"], mot["fin"]), "?")
+94-            pos_n += 1
+95-            pos_ok += int(pred == mot["pos"])
+96-            ferme = mot["pos"] in {"DET", "PREP", "PRON", "CONJ", "AUX", "ADV", "NUM"}
+97-            if ferme:
+98-                pos_n_ferme += 1
+99-                pos_ok_ferme += int(pred == mot["pos"])
+100-            else:
+101-                pos_n_ouvert += 1
+102-                pos_ok_ouvert += int(pred == mot["pos"])
+103-            conf[mot["pos"]][pred] += 1
+104-        pred_seg, gold_seg = _seg(a), {(s["type"], 
+… [836 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '120,175p' tools/tests/linguistique/evaluer_gold.py", "description": "Lire la mesure de l'attachement"}`
+
+  ```
+if e is None:
+                continue
+            att_labels += 1
+            att = (e.meta or {}).get("attachement") or {}
+            cible = (att.get("cible") or "").strip()
+            if cible == cibles[0]:
+                att_exact += 1
+            if cible and any(c in cible or cible in c for c in cibles):
+                att_top1 += 1
+            if any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
+                att_topk += 1
+            # attachement par tête : le segment prédit qui couvre la tête du gold
+            att_t_n += 1
+            tete = [x for x in a.etiquettes if x.niveau == "syntagme"
+                    and x.type == s["type"] and x.debut <= s["debut"] < x.fin]
+            if not tete:
+                continue
+            et = tete[0]
+            att_t_labels += 1
+            att2 = (et.meta or {}).get("attachement") or {}
+            cible2 = (att2.get("cible") or "").strip()
+            if cible2 and any(c in cible2 or cible2 in c for c in cibles):
+                att_t_top1 += 1
+            if any(any(c in nom for c in cibles) for nom in (et.candidats or [])):
+                att_t_topk += 1
+        pr, g = _pragma(a), phrase["pragma"]
+… [1945 caractères tronqués]
+  ```
+

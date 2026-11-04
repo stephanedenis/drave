@@ -772,3 +772,132 @@ Mission corrigée :
 
 Timebox inchangée. Si tu as déjà écrit une fiche avec « doublon », corrige-la.
 
+### 🤖 Assistant
+
+⏵ Mission corrigée : vérification des préfixes et lancement de l'OCR par document
+
+- **bash** `{"command": "date -Is; stat -c '%n %s %y' data/corpus_ocr_cegep/*.txt; echo \"=== prefixes\"; python3 - <<'EOF'\nimport hashlib\nbase='data/corpus_ocr_cegep/'\nfor n,taille,att in (('train',4430959,'6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310'),\n                     ('val',1253 … [482 caractères tronqués]`
+
+  ```
+2026-11-04T16:00:21-05:00
+data/corpus_ocr_cegep/test.txt 12711 2026-11-04 15:57:00.365480928 -0500
+data/corpus_ocr_cegep/train.txt 4464947 2026-11-04 15:57:00.342307238 -0500
+data/corpus_ocr_cegep/val.txt 32220 2026-11-04 15:57:00.364257077 -0500
+=== prefixes
+train total 4464947 prefixe 4430959 sha 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310 attendu 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310 OK suffixe_octets 33988
+val total 32220 prefixe 12536 sha dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1 attendu dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1 OK suffixe_octets 19684
+test total 12711 prefixe 10524 sha 1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84 attendu 1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84 OK suffixe_octets 2187
+  ```
+
+- **bash** `{"command": "mkdir -p work/ocr/cegep64/par-doc && cat > work/ocr/cegep64/ocr_par_doc.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"OCR des 8 PDF un par un, sortie dans par-doc/ (lecture seule sur data/).\"\"\"\nimport json, pathlib, sys, hashlib\nRACINE = pathlib.Path('/home/stephane/Data13TB/stephane/G … [1165 caractères tronqués]`
+
+  ```
+started background job bash-204
+  ```
+
+### 🤖 Assistant
+
+⏵ Préfixes intacts confirmés ; préparation des copies et du contrôle négatif pendant l'OCR
+
+- **bash** `{"command": "mkdir -p work/ocr/cegep64/controle && cp data/corpus_ocr_cegep/train.txt work/ocr/cegep64/controle/train.txt && cp data/corpus_ocr_cegep/val.txt work/ocr/cegep64/controle/val.txt && cp data/corpus_ocr_cegep/test.txt work/ocr/cegep64/controle/test.txt && sha256sum work/ocr/cegep64/contro … [175 caractères tronqués]`
+
+  ```
+2895e30d04b8c377259e5131e61870157f0554a9026eca5fffa18847b7159a5c  work/ocr/cegep64/controle/test.txt
+661e6386fb09ca333778e37dfdff8badd55135ea014d04975714ab8cc445458d  work/ocr/cegep64/controle/train.txt
+271117c2b22e63ea63dd2cc3ea26765e862a1793b3d1c37b7a36da5a387dddbe  work/ocr/cegep64/controle/val.txt
+2895e30d04b8c377259e5131e61870157f0554a9026eca5fffa18847b7159a5c  data/corpus_ocr_cegep/test.txt
+661e6386fb09ca333778e37dfdff8badd55135ea014d04975714ab8cc445458d  data/corpus_ocr_cegep/train.txt
+271117c2b22e63ea63dd2cc3ea26765e862a1793b3d1c37b7a36da5a387dddbe  data/corpus_ocr_cegep/val.txt
+=== tailles
+work/ocr/cegep64/controle/test.txt 12711
+work/ocr/cegep64/controle/train.txt 4464947
+work/ocr/cegep64/controle/val.txt 32220
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\n# extrait la 1re fenetre 8 Ko de val (meme algorithme que verifie_contamination) et l'injecte en tete du train de controle\nimport sys, pathlib\nsys.path.insert(0,'tools')\nimport verifie_contamination as vc\nval=pathlib.Path('data/corpus_ocr_cegep/val.txt')\nW1=next( … [673 caractères tronqués]`
+
+  ```
+W1 len 8189 debut b"inscription AQPC\nAQPC- Confirmation d'in" fin b'ur ensuite apporter des modifications \xc3\xa0'
+ctrl octets 4473206
+premiere fenetre == W1 : True len 8189
+W1 dans fenetres : True
+  ```
+
+### 👤 Utilisateur
+
+Agent aeafe951-9c3d-4bb5-8af7-0246a4f3d51d sent a message: 
+Le re-split n'est **pas** de moi : c'est le **hub**, à 15 h 57. Documente l'**état 15:57 comme état courant** (train 4 464 947, val 32 220, test 12 711 ; anciens préfixes intacts : train[:4 430 959] = `6d53a023…`, val[:12 536] = `dd605833…`, test[:10 524] = `1c9ab734…`). L'état 15:49 (append unique de 55 857 o) est un état **transitoire** : une phrase d'historique suffit, pas une mesure principale.
+
+Je viens de lancer le contrôle officiel sur les fichiers 15:57, résultat à confronter au tien :
+- `train_troncons` **546**, val **4 tronçons / 0 doublon**, test **2 tronçons / 0 doublon**, `recouvrement_eval` **[]** → **0 doublon entre splits à 8 Ko**.
+
+Donc ton signal de 24/34 fenêtres de 500 o **n'est pas une fuite de split au sens du dépôt** : c'est soit du **boilerplate** (les formulaires Cisco partagent en-têtes/pieds), soit de la répétition **intra-train**. Traite-le comme une **observation secondaire** : donne les fenêtres, montre 2–3 exemples (offset, texte), et dis si elles tombent dans train, val ou test. Ne qualifie pas cela de « doublon/contamination » sans une fenêtre de 8 Ko commune ; le verdict principal est le contrôle 8 Ko + le contrôle négatif.
+
+À faire avant de rendre :
+1. le tableau par document (Choquette, DOC1, DOC2, Assurance) : split, pages, caractères, fenêtres 500 o retrouvées dans **quel** split (train/val/test), avec exemples ;
+2. le contrôle négatif du 8 Ko : injecte une fenêtre de val dans une copie du train et montre que le script la trouve (sinon le « 0 » ne vaut rien) ;
+3. les deux livrables sur l'état 15:57 + la ligne d'état (64 documents, 2 031 p, re-split 2/1/1, anciens splits intacts, **8 Ko 0**) ;
+4. corrige toute fiche déjà écrite qui parle de « doublon » comme verdict.
+
+Timebox : termine et rends le rapport 10 lignes.
+
+### 🤖 Assistant
+
+⏵ OCR en cours ; mesures 8 Ko et contrôle négatif en parallèle
+
+- **job_output** `{"job_id": "bash-204"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 10-19,30-39 python3 tools/verifie_contamination.py --train work/ocr/cegep64/controle/train_fuite.txt --val work/ocr/cegep64/controle/val.txt --test work/ocr/cegep64/controle/test.txt --taille-troncon 8192 --sortie work/ocr … [292 caractères tronqués]`
+
+  ```
+{
+ "train_troncons": 547,
+ "par_split": {
+  "val.txt": {
+   "troncons": 4,
+   "doublons": 1,
+   "taux": 0.25
+  },
+  "test.txt": {
+   "troncons": 2,
+   "doublons": 0,
+   "taux": 0.0
+  }
+ }
+}
+=== exit 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : fenêtres de 8 Ko des suffixes contre les préfixes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib, mmap\nsys.path.insert(0,'tools'); import verifie_contamination as vc\nbase=pathlib.Path('data/corpus_ocr_cegep')\nd={n:(base/f'{n}.txt').read_bytes() for n in ('train','val','test')}\npref={'tr … [971 caractères tronqués]`
+
+  ```
+suffixes {'train': 33988, 'val': 19684, 'test': 2187}
+--- suffixe train: 5 fenetres 8 Ko, tailles [8176, 8187, 8188, 8185, 1248]
+   dans prefixe train: 1/5
+   dans prefixe val: 0/5
+   dans prefixe test: 0/5
+   dans suffixe val: 0/5
+   dans suffixe test: 0/5
+--- suffixe val: 3 fenetres 8 Ko, tailles [8184, 8189, 3308]
+   dans prefixe train: 0/3
+   dans prefixe val: 0/3
+   dans prefixe test: 0/3
+   dans suffixe train: 0/3
+   dans suffixe test: 0/3
+--- suffixe test: 1 fenetres 8 Ko, tailles [2184]
+   dans prefixe train: 0/1
+   dans prefixe val: 0/1
+   dans prefixe test: 0/1
+   dans suffixe train: 0/1
+   dans suffixe val: 0/1
+  ```
+

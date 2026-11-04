@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
 | Durée | 6.6 h |
-| Tours | 5 |
-| Messages | 187 |
-| Appels d'outils | 221 |
+| Tours | 6 |
+| Messages | 190 |
+| Appels d'outils | 222 |
 | Fichiers touchés | 7 |
-| Commandes | 182 |
+| Commandes | 183 |
 | Sous-agents | 1 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -28,6 +28,8 @@
 **Tour 4** — peux-tu prendre une tâche
 
 **Tour 5** — lance la suite en subagent et supervise la suite des travaux
+
+**Tour 6** — Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message:  RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est bien 0 (546/4/2 fenêtres, 0 doublon) et mon contrôle négatif est OK (fenêtre de val injectée = 1 doublon trouvé, 25 %). MAIS le contrôle de non-duplication croisée que tu m'as demandé (point 4) trouve une fuite réelle, invisible à 8 Ko :  - DOC2 (19 101 car., 20 p) est en **val** … [1718 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -237,7 +239,7 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 
 ### Tour 5 — lance la suite en subagent et supervise la suite des travaux
 
-*24 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Inspect existing CEGEP OCR corpus and manifest
 - bash — Check contamination tool usage
@@ -253,11 +255,27 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 - send_message
 - bash — Find lowercase counterparts of the uppercase scans
 - bash — Check old train hash and Choquette context
-- … et 7 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ Le hub a committé le re-split (8f32227d) ; j'attends la fiche de preuve du sous-agent pour l'intégrer
+⏵ Supervision en cours : le sous-agent finit la fiche ; l'essentiel est déjà vérifié
+
+**Sous-agent D2 lancé et supervisé** (mission : prouver l'intégration du corpus CEGEP à 64 documents). Il tourne encore ; voici ce que ma supervision a déjà établi, indépendamment de lui.
+
+\## Vérifié par moi
+
+- **Le re-split du hub (15 h 57) est sain** : les anciens splits sont **préservés au préfixe** — `train[:4 430 959]` = `6d53a023…` (manifeste), `val[:12 536]` = `dd605833…`, `test[:10 524]` = `1c9ab734…`. Les suffixes ajoutés sont bien **Choquette + DOC1** (train), **DOC2** (val), **Assurance** (test), avec les tailles attendues (33 988 / 19 684 / 2 187 octets).
+- **Contamination 8 Ko = 0** : `train` 546 tronçons, `val` 4 / 0 doublon, `test` 2 / 0 doublon, `recouvrement_eval` vide. C'est le contrôle officiel, que j'ai relancé moi-même sur l'état stable.
+- **Fausse alerte corrigée** : j'avais cru voir 70 % de doublons dans l'append ; c'était un artefact — je lisais le train **pendant** que le hub le réécrivait (la queue du nouveau train se comparait à son propre milieu). Le sous-agent a été redirigé en conséquence : pas de verdict « doublon », les recouvrements de 500 o sont traités comme observation secondaire (boilerplate des formulaires Cisco), pas comme une fuite.
+
+\## Ce qui reste au sous-agent
+
+Le tableau **par document** (split, pages, caractères, fenêtres 500 o et dans quel split), le **contrôle négatif** du 8 Ko (fenêtre de val injectée dans une copie du train → doit être trouvée), et les deux livrables `reports/rapport-ocr-cegep-64.md` + `reports/ocr-cegep-64.json`.
+
+Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche si elle s'écarte, puis j'intègre (ligne d'état, compteurs, commit explicite) — ou je passe la main au hub s'il tient encore l'index. État actuel : `8f32227d` (re-split committé), D déjà marqué clos dans `en-cours`, runs N2 intacts.
+
+### Tour 6 — Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message:  RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est  … [1998 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -319,7 +337,7 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 142 autres
+- … et 143 autres
 
 ## 4. Mesures et résultats marquants
 

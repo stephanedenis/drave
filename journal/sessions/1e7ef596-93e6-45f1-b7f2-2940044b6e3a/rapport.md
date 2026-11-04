@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 8.6 h |
 | Tours | 57 |
-| Messages | 538 |
-| Appels d'outils | 748 |
+| Messages | 539 |
+| Appels d'outils | 749 |
 | Fichiers touchés | 15 |
-| Commandes | 563 |
+| Commandes | 564 |
 | Sous-agents | 0 |
-| Commits | 74 |
+| Commits | 75 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1669,16 +1669,17 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 57 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Run seven documentation controls
 - bash — Execute OCR re-split at exact char boundaries
 - bash — Record re-split in state and commit
 - bash — Trim D line, commit and verify
+- bash — Retry trim commit and final checks
 
 **Synthèse produite :**
 
-⏵ T0 à 4 010 : je resserre la ligne D, puis commit et contrôles
+⏵ Le trim d'état est prêt (T0 3 999) mais le verrou git est tenu ; je retente
 
 ## 3. Travail accompli
 
@@ -1744,7 +1745,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 523 autres
+- … et 524 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1966,4 +1967,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)" -m "L'OCR des 8 .PDF est intégré : les 4 documents (54 167 car.) sont a
 - D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0" -m "Les quatre documents OCR sont répartis aux bornes exactes (Choquette 7 575 + DOC1 25 470 en
 - ÉTAT — T0 3 997 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)" -m "Le re-split OCR est fait et inscrit dans la ligne de D (train 4,46 M, val 32 220, test 12 711, 
+- ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)" -m "Le re-split OCR est fait et inscrit dans la ligne de D (train 4,46 M, val 32 220, test 12 711, 
 

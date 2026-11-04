@@ -15695,3 +15695,33 @@ data/corpus_ocr_cegep/val.txt: 0
 ⏵ T0 à 4 010 : je resserre la ligne D, puis commit et contrôles
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"; **re-split 2/1/1 fait** (train 4,46 M, val 32 220, test 12 711) ; 8 Ko 0\", \"; **re-split 2/1/1** ; 8 Ko 0\")\nt=t.replac … [1064 caractères tronqués]`
+
+  ```
+trim OK
+  T0 max : 3999 mots (budget 4 000)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== FINAL ===
+8f32227d D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+d4688bd2 ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)
+7c48a63d ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3999 mots (budget 4 000)
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be ru
+… [88 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le trim d'état est prêt (T0 3 999) mais le verrou git est tenu ; je retente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; ls -l .git/index.lock ; pgrep -af \"git (commit|add)\" | head -3 ; else git add docs/pilotage/en-cour … [708 caractères tronqués]`

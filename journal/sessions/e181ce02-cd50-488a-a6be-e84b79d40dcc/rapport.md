@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 95.3 h |
+| Durée | 95.4 h |
 | Tours | 171 |
-| Messages | 2098 |
-| Appels d'outils | 1799 |
+| Messages | 2104 |
+| Appels d'outils | 1806 |
 | Fichiers touchés | 25 |
-| Commandes | 1478 |
+| Commandes | 1485 |
 | Sous-agents | 2 |
 | Commits | 223 |
 | Compactages de contexte | 6 |
@@ -9114,7 +9114,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 
 ### Tour 171 — This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat t … [9197 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'état, la branche et l'écart master/s/v7
 - bash — Lire l'état courant
@@ -9127,12 +9127,14 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - bash — Corriger l'état et passer les portes rapides
 - bash — Committer le round passif resté hors de HEAD et vérifier
 - job_output
+- bash — Lire l'implémentation de l'attachement
+- bash — Lire la mesure de l'attachement
+- bash — Voir où l'attachement est posé
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Je récupère d'abord mon dernier round resté non commité (T160, passifs)
-
-Le working tree contient mon dernier round (règle passive du chunker, T156/T157 à jour, porte T160) que le commit concurrent `d72269e0` n'a **pas** emporté : `git show HEAD:tools/pensee/autotest.py` ne connaît pas `t160`. Je le commite proprement, en vérifiant le contenu du commit cette fois.
+⏵ Gain net : top1 0,3431 → **0,3975**, exact 0,0042 → **0,0544** (×13), tête 0,5586 → 0,6483
 
 ## 3. Travail accompli
 
@@ -9213,7 +9215,7 @@ Le working tree contient mon dernier round (règle passive du chunker, T156/T157
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1438 autres
+- … et 1445 autres
 
 ## 4. Mesures et résultats marquants
 

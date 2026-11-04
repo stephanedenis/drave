@@ -4303,3 +4303,69 @@ ALERTE data/ modifié pendant la session (pas par moi, rien écrit dans data/). 
 
 background job bash-201 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/ocr/cegep64 && python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_cegep/val.txt --test data/corpus_ocr_cegep/test.txt --taille-troncon 8192 --sortie work/ocr/cegep64/contamination-supervision.json 2>&1 | tail -25) finished [status: completed, exit code: 0]. Read its output with job_output.
 
+- **job_output** `{"job_id": "bash-201", "timeout_ms": 60000, "wait": true}`
+
+  ```
+"test.txt": {
+    "troncons": 69,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 546,
+  "par_split": {
+   "val.txt": {
+    "troncons": 4,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
+[status: completed, exit code: 0]
+  ```
+
+- **send_message** `{"agent_id": "206a4022-ab3c-497d-a5fa-0194931c7fa0", "message": "Le re-split n'est **pas** de moi : c'est le **hub**, à 15 h 57. Documente l'**état 15:57 comme état courant** (train 4 464 947, val 32 220, test 12 711 ; anciens préfixes intacts : train[:4 430 959] = `6d53a023…`, val[:12 536] = `dd605 … [1562 caractères tronqués]`
+
+  ```
+message delivered to agent 206a4022-ab3c-497d-a5fa-0194931c7fa0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 20; git log --oneline -2; echo ====; grep -n \"re-split\\|D\\*\\* — clos\" docs/pilotage/en-cours.md | head -3; echo ====; ls -l reports/*cegep-64* 2>/dev/null || echo 'fiche 64 pas encore écrite'", "description": "Check hub co … [32 caractères tronqués]`
+
+  ```
+8f32227d D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+d4688bd2 ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)
+====
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire) ; **re-split 2/1/1** ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
+====
+fiche 64 pas encore écrite
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a committé le re-split (8f32227d) ; j'attends la fiche de preuve du sous-agent pour l'intégrer
+
+- **list_agents** `{}`
+
+  ```
+206a4022-ab3c-497d-a5fa-0194931c7fa0 [running] — D2 — intégration corpus CEGEP 64
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 45; ls -l reports/*cegep-64* 2>/dev/null || echo 'pas encore'; git log --oneline -1; date '+%H:%M:%S'", "description": "Wait and check for the subagent deliverables"}`
+
+  ```
+pas encore
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+16:02:23
+  ```
+

@@ -9,10 +9,10 @@
 | Début | 2026-11-04 15:56 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 21 |
-| Appels d'outils | 26 |
+| Messages | 28 |
+| Appels d'outils | 34 |
 | Fichiers touchés | 0 |
-| Commandes | 25 |
+| Commandes | 31 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt Drave, racine /home/stephane/Data13TB/stephane/GitHub/Qtrinet (lis AGENTS.md pour le context … [4909 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Inspecte la racine et les répertoires cibles
 - bash — Date courante et liste des outils
@@ -41,11 +41,11 @@
 - bash — Aide du script de contamination
 - bash — Lecture du script de contamination
 - bash — Traces récentes et état git
-- … et 12 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ Préfixes intacts confirmés ; préparation des copies et du contrôle négatif pendant l'OCR
+⏵ Mesure par document : fenêtres de 500 o dans chaque préfixe et suffixe
 
 ## 3. Travail accompli
 
@@ -81,6 +81,12 @@
 - **T1** OCR des 8 PDF un par un sur cpu1
 - **T1** Copie des splits 15:57 pour le contrôle négatif
 - **T1** Injection alignée d'une fenêtre de val dans une copie du train
+- **T1** Contrôle négatif : fenêtre de val injectée dans le train
+- **T1** Fenêtres 8 Ko des suffixes dans les préfixes et autres suffixes
+- **T1** Identifie la fenêtre 8 Ko du suffixe présente dans le préfixe
+- **T1** Compare les empreintes OCR aux manifestes
+- **T1** Teste les variantes de hash et le contenu OCR
+- **T1** Fenêtres 500 o par texte dans préfixes et suffixes
 
 ## 4. Mesures et résultats marquants
 
@@ -100,4 +106,7 @@
 - **T1** `ce dernier, l'unité de comparaison est la **fenêtre** de 8 Ko coupée au mot, pas la ligne —`
 - **T1** `sinon les titres de sections répétés (« Biographie », etc.) font un faux taux de 5 %.`
 - **T1** `help="0 = lignes ; 8192 = fenêtres de 8 Ko (texte intégral)")`
+- **T1** `--- suffixe train: 5 fenetres 8 Ko, tailles [8176, 8187, 8188, 8185, 1248]`
+- **T1** `--- suffixe val: 3 fenetres 8 Ko, tailles [8184, 8189, 3308]`
+- **T1** `--- suffixe test: 1 fenetres 8 Ko, tailles [2184]`
 
