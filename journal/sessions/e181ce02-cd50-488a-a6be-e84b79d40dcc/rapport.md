@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 92.8 h |
-| Tours | 161 |
-| Messages | 1993 |
-| Appels d'outils | 1716 |
+| Durée | 92.9 h |
+| Tours | 162 |
+| Messages | 2003 |
+| Appels d'outils | 1723 |
 | Fichiers touchés | 25 |
-| Commandes | 1410 |
+| Commandes | 1417 |
 | Sous-agents | 2 |
 | Commits | 210 |
 | Compactages de contexte | 5 |
@@ -361,6 +361,8 @@
 **Tour 160** — vas-y en automomie pour le 4 prochaines heures
 
 **Tour 161** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 162** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8540,7 +8542,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 
 ### Tour 161 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*40 appels d'outils.* Actions notables :
 
 - bash — Lire le composite neuronal
 - bash — Lire la grammaire pragmatique et son usage
@@ -8556,7 +8558,60 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - bash — Committer la pragmatique neuronale (130 phrases)
 - bash — Vérifier la branche courante
 - bash — Voir les commits sur s/v7 au-delà de master
-- … et 16 autres
+- … et 17 autres
+
+**Synthèse produite :**
+
+⏵ Autonomie : 9 rounds livrés, 154/154, le sous-type tient à 0,3
+
+L'autonomie a produit **neuf rounds mesurés**, tous committés et verts. La moisson :
+
+\## Les neuf rounds
+
+| # | round | résultat | commit |
+|---|---|---|---|
+| 1 | **Défaut conditionnel** | niveau si la clé, confiance sinon — le mock perd (0,3454), le réel gagne (0,9389) | `d390136a` |
+| 2 | **Seuil du parallèle** | la confiance plafonne sous le max (0,9326 < 0,9389) ; seuil corrigé | `25d631fe` |
+| 3 | **Troisième passe** | variance nulle, 7/7 seuils, refus 0 | (index) |
+| 4 | **DRVM N0.1** | **6/6** : le payload corrompu était **accepté** ; le hash manquait — corrigé | `9593718e` |
+| 5 | **Variance à 0,3** | ±0,0074 au pire, 7/7 seuils, refus 0 | `8cea841f` |
+| 6 | **Pragmatique neuronale** | acte **1,0**, négation **1,0** sur 130 phrases | `a2926831` |
+| 7 | **Pragmatique sur 432** | acte 0,9954 ; la fusion garde l'heuristique (0,9676/0,9861) | `8d0008d5` |
+| 8 | **Fusion par sous-type** | double sens **0,9676 → 0,9884** (+0,0208) | `92769981` |
+| 9 | **Variance du sous-type** | **0,9838 à 0,3** — le gain tient sur deux températures | `8f00b73a` |
+
+\## Ce que ça a établi
+
+- **Le réel tranche** : le niveau gagne avec l'API, perd avec le mock ; le défaut suit la **présence de la clé**, pas une doctrine.
+- **La granularité paie** : la fusion par **sous-type** (acte/double sens au neuronal, négation/modalité à l'heuristique) gagne **+0,02** en double sens — et le gain **tient** à 0,3.
+- **Le format natif avait un trou** : DRVM vérifiait le manifeste mais **pas le payload** ; N0.1 l'a attrapé.
+- **La mesure est stable** : trois passes à 0 (identiques), deux à 0,3 (±0,007).
+
+\## L'état
+
+- **154/154 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **614 fiches / 705 JSON / 120 docs / 83 portes** — ✅ ; `en-cours` à jour (15 h 10).
+- Les commits sont sur la branche **`s/v7`** (celle des autres sessions) ; `master` est en retard de ~19 commits — le merge sera à faire.
+- L'horloge réelle est **13 h 31 HNE** ; il reste **~2 h 20** d'autonomie.
+
+\## La suite
+
+1. **Trois tirages à 0,3** : la moyenne du double sens.
+2. **Les autres sous-types** : le `discours` par exemple.
+3. **Le merge `s/v7` → `master`** : à faire proprement.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue la file : prochain round, **les trois tirages** — la moyenne et l'écart-type du sous-type.
+
+### Tour 162 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Deuxième tirage à 0,3 (sous-type)
+- bash — Troisième tirage à 0,3 (sous-type)
+- bash — Voir la mesure du discours
+- bash — Calculer la moyenne et l'écart-type des trois tirages
+- bash — Écrire la fiche des trois tirages et la porte T152
+- bash — Passer toutes les portes
 
 ## 3. Travail accompli
 
@@ -8637,7 +8692,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1370 autres
+- … et 1377 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -35501,3 +35501,131 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-138", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 67286d12a945a406e0513bdfe282f092d5b28a53 but expected bd4298fea9112ceef893631aec18ea3879161e20
+retry 1
+[s/v7 8f00b73a] B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+ 16 files changed, 97 insertions(+), 36 deletions(-)
+COMMIT OK 2
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+mer 04 nov 2026 13:31:04 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/roadmap.md','docs/pilotage/chantiers.md'):\n    p=pathlib.Path(f); t=p.read_text()\n    n=t.count(\"153/153\")\n    t=t.replace(\"153/153\",\"154/154\").replace(\"T0–T150\",\ … [294 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 153→154: 0
+docs/pilotage/chantiers.md 153→154: 0
+  revue de documentation · 614 fiche(s) · 705 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+mer 04 nov 2026 13:31:21 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 9 rounds livrés, 154/154, le sous-type tient à 0,3
+
+L'autonomie a produit **neuf rounds mesurés**, tous committés et verts. La moisson :
+
+## Les neuf rounds
+
+| # | round | résultat | commit |
+|---|---|---|---|
+| 1 | **Défaut conditionnel** | niveau si la clé, confiance sinon — le mock perd (0,3454), le réel gagne (0,9389) | `d390136a` |
+| 2 | **Seuil du parallèle** | la confiance plafonne sous le max (0,9326 < 0,9389) ; seuil corrigé | `25d631fe` |
+| 3 | **Troisième passe** | variance nulle, 7/7 seuils, refus 0 | (index) |
+| 4 | **DRVM N0.1** | **6/6** : le payload corrompu était **accepté** ; le hash manquait — corrigé | `9593718e` |
+| 5 | **Variance à 0,3** | ±0,0074 au pire, 7/7 seuils, refus 0 | `8cea841f` |
+| 6 | **Pragmatique neuronale** | acte **1,0**, négation **1,0** sur 130 phrases | `a2926831` |
+| 7 | **Pragmatique sur 432** | acte 0,9954 ; la fusion garde l'heuristique (0,9676/0,9861) | `8d0008d5` |
+| 8 | **Fusion par sous-type** | double sens **0,9676 → 0,9884** (+0,0208) | `92769981` |
+| 9 | **Variance du sous-type** | **0,9838 à 0,3** — le gain tient sur deux températures | `8f00b73a` |
+
+## Ce que ça a établi
+
+- **Le réel tranche** : le niveau gagne avec l'API, perd avec le mock ; le défaut suit la **présence de la clé**, pas une doctrine.
+- **La granularité paie** : la fusion par **sous-type** (acte/double sens au neuronal, négation/modalité à l'heuristique) gagne **+0,02** en double sens — et le gain **tient** à 0,3.
+- **Le format natif avait un trou** : DRVM vérifiait le manifeste mais **pas le payload** ; N0.1 l'a attrapé.
+- **La mesure est stable** : trois passes à 0 (identiques), deux à 0,3 (±0,007).
+
+## L'état
+
+- **154/154 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **614 fiches / 705 JSON / 120 docs / 83 portes** — ✅ ; `en-cours` à jour (15 h 10).
+- Les commits sont sur la branche **`s/v7`** (celle des autres sessions) ; `master` est en retard de ~19 commits — le merge sera à faire.
+- L'horloge réelle est **13 h 31 HNE** ; il reste **~2 h 20** d'autonomie.
+
+## La suite
+
+1. **Trois tirages à 0,3** : la moyenne du double sens.
+2. **Les autres sous-types** : le `discours` par exemple.
+3. **Le merge `s/v7` → `master`** : à faire proprement.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue la file : prochain round, **les trois tirages** — la moyenne et l'écart-type du sous-type.
+
+
+## Tour 162
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 143/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --temperature 0.3 --sortie reports/pensee-quatre-modes-432-soustype-t03b.json 2>&1 | tail -3", "descr … [94 caractères tronqués]`
+
+  ```
+started background job bash-140
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --temperature 0.3 --sortie reports/pensee-quatre-modes-432-soustype-t03c.json 2>&1 | tail -3", "descr … [95 caractères tronqués]`
+
+  ```
+started background job bash-141
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nh=bl.Heuristique()\nr=evaluer_bloc('h', h, charger())\np … [117 caractères tronqués]`
+
+  ```
+discours None
+clés ['bloc', 'phrases', 'pos', 'syntagme', 'pragmatique', 'fraction_semantique', 'attachement', 'attachement_tete']
+  ```
+
+### 👤 Utilisateur
+
+background job bash-140 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --temperature 0.3 --sortie reports/pensee-quatre-modes-432-soustype-t03b.json 2>&1 | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-141 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --temperature 0.3 --sortie reports/pensee-quatre-modes-432-soustype-t03c.json 2>&1 | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, statistics\nfichiers=['reports/pensee-quatre-modes-432-soustype-t03.json',\n          'reports/pensee-quatre-modes-432-soustype-t03b.json',\n          'reports/pensee-quatre-modes-432-soustype-t03c.json … [614 caractères tronqués]`
+
+  ```
+double sens (3 tirages 0,3) [0.9838, 0.9838, 0.9838]
+moyenne 0.9838 | écart-type 0.0 | min 0.9838 | max 0.9838
+POS [0.9385, 0.9385, 0.9385] | tête [0.8723, 0.8723, 0.8723]
+heuristique double sens 0.9676
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-tirages.md <<'MD'\n# B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache masque la variance\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·\n> **Ve … [6827 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`

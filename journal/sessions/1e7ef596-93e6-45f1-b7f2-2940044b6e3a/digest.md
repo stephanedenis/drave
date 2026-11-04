@@ -8986,3 +8986,90 @@ docs/pilotage/plan-travail.md OK
 ⏵ Commit B13 154/154 (variance du sous-type) dans tout le pilotage
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilot … [648 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 8f00b73a12188dac328eb68ed195634e4adb52fb but expected 67286d12a945a406e0513bdfe282f092d5b28a53
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a bougé (8f00b73a) ; je vérifie si l'intégration 154 est passée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 8f00b73a ===\" ; git show --stat --oneline 8f00b73a | head -12 ; echo \"=== HEAD 154 ===\" ; git show HEAD:docs/pilotage/en-cours.md | grep -c \"154/154\" ; git show HEAD:docs/pilotage/roadmap.md | gr … [245 caractères tronqués]`
+
+  ```
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+67286d12 BACKLOG N2 — L'ERRATUM DE LA DISTILLATION (LE +0,10 ÉTAIT UNE REPONDÉRATION) ET LA PAIRE PROPRE DANS LA PAGE
+bd4298fe INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)
+=== 8f00b73a ===
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+ docs/pilotage/chantiers.md                         |  8 ++--
+ docs/pilotage/en-cours.md                          | 10 ++---
+ docs/pilotage/plan-travail.md                      |  6 +--
+ docs/pilotage/roadmap.md                           |  6 +--
+ journal/2026-11-04/README.md                       |  7 ++--
+ journal/2026-11-04/apprentissage.md                |  7 +++-
+ journal/2026-11-04/distribue.md                    |  2 +-
+ journal/2026-11-04/docs.md                         |  2 +-
+ journal/2026-11-04/mesures.md                      |  2 +-
+ journal/2026-11-04/modele.md                       |  2 +-
+ journal/2026-11-04/portes.md                       |  2 +-
+=== HEAD 154 ===
+4
+3
+4
+=== STATUS ===
+ M reports/pensee-quatre-modes.json
+?? reports/pensee-quatre-modes-43
+… [110 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 11 (B13 154, backlog N2)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 ma … [348 caractères tronqués]`
+
+  ```
+---REVUE---
+  revue de documentation · 614 fiche(s) · 707 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 705 JSON, le disque en a 707
+---EN-COURS---
+  en-cours · 1611 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3981 mots (budget 4 000)
+---LIENS---
+  ✅ 2961 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas  2350 · perte 1.0874 · dure 1.1650 · douce 0.4294 · 1129 s
+0, 99 %
+1, 96 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Compteur JSON 705 → 707 (B13 t03b/t03c) : correction et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.c707.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.c707.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\* … [625 caractères tronqués]`
+
+  ```
+revue de documentation · 614 fiche(s) · 707 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1611 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3981 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit compteurs 614/707 et clôture du cycle 11
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/en-cours.md && git commit -m \"ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ;  … [347 caractères tronqués]`
