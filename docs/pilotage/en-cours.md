@@ -54,7 +54,7 @@
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = trois contrôles.
 - **Objectif final** : gold 60, corpus 60.
-- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
+- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; **55 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
 - **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**.
 - **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits, 8

@@ -567,3 +567,152 @@ The command keeps running in the background. You will be notified when it finish
 … [5095 caractères tronqués]
   ```
 
+- **job_kill** `{"job_id": "bash-15", "reason": "grep trop large sur le dépôt"}`
+
+  ```
+requested cancellation of job bash-15
+  ```
+
+- **grep** `{"pattern": "Tu es la session|un fait = mesure|proposée au hub", "path": "docs", "include": "*.md"}`
+
+  ```
+Found 1 match
+
+docs/pilotage/plan-travail.md
+Line 204: > Tu es la session `<rôle>`. Lis `AGENTS.md`, `docs/pilotage/en-cours.md` et **seulement** le
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md", "offset": 150, "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+150: - **La file** : si un chantier est bloqué (B10.3, A3.4, A5.4, A6.2, R2/R3/R5), on prend la
+151:   **suivante** de la frontière (§ 6 de `chantiers.md`) — jamais d'attente.
+152: - **Le plafond** : au-delà de 5 sessions ou de 4 sous-agents par session, la coordination
+153:   (état, git, revue, relecture humaine) coûte plus qu'elle ne rapporte.
+154: 
+155: ## 8. La mise en route
+156: 
+157: 1. **Ouvrir les sessions** : N2 (GPU, à ouvrir), L/B13 (reprise de `e181ce02`), S (structures, à ouvrir), D/R/A (reprise de `fe3c05f0`) ; chacune crée ou reprend son `journal/sessions/<id>/plan.md` (les onze champs), réserve son territoire (§ 3) et met à jour sa section dans `en-cours` **via le hub**.
+158: 2. **Vérifier** : `sessions.py --check --strict` (aucun recouvrement), `surveille_sessions.py` (les
+159:    orphelins), `revue_documentation.py` (compteurs).
+160: 3. **Premier checkpoint** : le hub intègre les quatre sections, met à jour la roadmap et note le
+161:    journal. Ensuite, chaque session suit la cadence du § 4.
+162: 
+163: ## 9. Reprise après le reboot du 02/11 15 h 
+… [7115 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérifiant qui a relancé les runs et quel rôle est attendu
+
+- **bash** `{"command": "git show --format=fuller --no-patch 55243f42; echo ====; grep -c 'kd2' journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md; grep -n 'relanc' journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | tail -5", "description": "Check commit author and hub digest mention … [15 caractères tronqués]`
+
+  ```
+commit 55243f42a67f0accdbfbf564a1ab964186d0378a
+Author:     Stéphane <stephane@localhost>
+AuthorDate: Wed Nov 4 09:34:32 2026 -0500
+Commit:     Stéphane <stephane@localhost>
+CommitDate: Wed Nov 4 09:34:32 2026 -0500
+
+    N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+    
+    Les anciens logs sont préservés en .interrompu.log ; le claim n2-jour (gpu0+gpu1, cpu0 12, ram 60) couvre les deux runs. rope2048 a démarré (pas 50 à 51 s, PPL val 4,228 → 3,611) ; kd2 a démarré après le chargement du corpus (pas 50 à 23 s). La passe complète attend la fin des runs (règle §11).
+====
+69
+3574:⏵ Commit de la relance des deux runs N2
+3596:      → **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+3602:      → **relancer la passe de portes** (arrêtée à 08 h 40), puis laisser les runs longs N2 à leur session ; l'état du 04/11 est committé (`5
+3625:⏵ Trois sessions à ouvrir, les deux runs N2 déjà relancés
+3637:> Tu es la session <rôle>. Lis `AGENTS.md`, `docs/pilotage/en-cours.md` (état du 04/11, 09 h 35) et seulement le d
+… [373 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -80 journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md", "description": "Read end of hub session digest"}`
+
+  ```
+⏵ Commit de la relance des deux runs N2
+
+- **bash** `{"command": "git add docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md && git commit -m \"N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS\" -m \"Les anciens logs sont préservés en .interrompu.log ; le claim n … [309 caractères tronqués]`
+
+  ```
+[master 55243f42] N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+ 10 files changed, 563 insertions(+), 34 deletions(-)
+ create mode 100644 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+ create mode 100644 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification d'une nouvelle session apparue et santé des runs
+
+- **bash** `{"command": "python3 tools/sessions.py --status 2>&1 | head -16 ; echo \"---NOUVELLE---\" ; ls journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/ ; head -12 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md 2>/dev/null", "description": "Inspect newly appeared session"}`
+
+  ```
+sessions · plans de m
+… [4572 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérifiant quels terminaux DSH tournent en parallèle
+
+- **bash** `{"command": "ps -eo pid,etimes,args | grep -E '[d]sh|[n]ode.*dsh' | head -20; echo ====; ls -la /home/stephane/.dsh/profiles/dsh-tui/ 2>/dev/null | head", "description": "List running DSH processes"}`
+
+  ```
+2999   50897 node /home/stephane/.local/bin/dsh web --no-open
+  67321    8247 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+ 259387    1025 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+ 264612     217 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume 0733c5bb-f90b-4f58-9241-3364fa32e46c
+ 264723     199 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+ 264909     171 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc
+ 266773       0 zstd -dc /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/22bcae27-254b-47b2-acda-87467dab060c/session.jsonl.zstd
+ 266778       0 bash -c ps -eo pid,etimes,args | grep -E '[d]sh|[n]ode.*dsh' | head -20; echo ====; ls -la /home/stephane/.dsh/profiles/dsh-tui/ 2>/dev/null | head
+ 266786       0 grep -E [d]sh|[n]ode.*dsh
+====
+total 60
+drwxr-xr-x. 1 stephane stephane   238 12 oct 10:14 .
+drwxr-xr-x. 1 stephane stephane    60 12 oct 10:07 ..
+-rw-------. 1 stephane stephane  2219 12 oct 10:14 cordis.patch.yml
+-rw-------. 1 stephane stephane  1835 12 oct 10:09 cor
+… [360 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --status 2>&1 | head -40; echo ====; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo ====; tail -2 work/n2ac/kd2-mix512-30k.log; tail -2 work/n2ac/rope2048-20k.log", "description": "Check resource claims, GPU, and N2 run l … [5 caractères tronqués]`
+
+  ```
+ressources · Hauru — registre /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ressources.json
+  ressource      type      capacité  utilisé    libre  détail
+  gpu0           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16       12        4  réserve 4 fils
+  cpu1           cpu             16        0       16  réserve 4 fils
+  ram            ram            109       60       49  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1944 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / n2-jour : gpu0=exclusive, gpu1=exclusive, cpu0=12, ram=60 (prio 1, 360 min)
+====
+0, 5200 MiB, 100 %
+1, 9950 MiB, 100 %
+====
+pas  1100 · perte 1.3191 · dure 1.0618 · douce 0.3916 · 516 s
+pas  1150 · perte 1.4070 · dure 1.1755 · douce 0.3764 · 539 s
+pas    550 · perte 1.2934 · PPL val 3.050 · 560 s
+pas  
+… [44 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cas particulier : cette session est un doublon vide, les trois rôles tournent déjà
+
+- **ask_user_question** `{"questions": [{"id": "role", "header": "Rôle de cette session", "question": "Le prompt contient `<rôle>` et `<id>` non remplis, et cette session (`aeafe951`, ouverte à 09:25) n'a pas de `plan.md`. Or les trois sessions de rôle sont déjà ouvertes dans d'autres terminaux : N2 `0733c5bb` (PID 264612), … [1018 caractères tronqués]`

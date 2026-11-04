@@ -9866,3 +9866,67 @@ plan rouvert
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat >> journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md <<'EOF'\n\n## 04/11 — reprise après le reboot : les deux runs relancés\n\nLe reboot du **03/11 à 19 h 33** a interrompu les deux runs de la nuit **sans checkpoint** :\n`kd2` (dist … [1668 caractères tronqués]`
+
+  ```
+✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-7]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-7", "timeout_ms": 180000, "wait": true}`
+
+  ```
+cee944c3 N2 — REPRISE APRÈS LE REBOOT : MANDAT ROUVERT, LES DEUX RUNS SUIVIS, LA MESURE EST LA PROCHAINE ACTION
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de parité de la perte de distillation (les têtes précoces) — suspicion de biais
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '/perte_main\\|dure = F.cross_entropy/,/1 + len/p' work/n2ac/distiller_natif.py; echo \"=== entraîneur de référence ===\"; sed -n '/pertes = \\[F.cross_entropy/,/perte = sum/p' tools/entrainer_native.py", "description": "Compare loss normalizat … [28 caractères tronqués]`
+
+  ```
+dure = F.cross_entropy(logits_e.reshape(-1, 256), y.reshape(-1))
+        douce = F.kl_div(F.log_softmax(logits_e.reshape(-1, 256) / a.T, dim=-1),
+                         F.softmax(logits_p.reshape(-1, 256) / a.T, dim=-1),
+                         reduction="batchmean") * (a.T ** 2)
+        perte = (1 - a.alpha) * dure + a.alpha * douce
+        # Parité avec `entrainer_rope.py` : les têtes précoces sont supervisées aussi, pour que
+        # la comparaison « distillée vs dure » porte sur le MÊME entraînement.
+        for e in eleve(x, canal=c)["early"]:
+            perte = perte + F.cross_entropy(e.reshape(-1, 256), y.reshape(-1)) / (
+                1 + len(eleve.cfg.early_blocks))
+=== entraîneur de référence ===
+        pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
+        if a.tetes:
+            for e in sortie["early"]:
+                pertes.append(F.cross_entropy(e.reshape(-1, 256), y.reshape(-1)))
+        perte = sum(pertes) / len(pertes)
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de la normalisation et lancement des deux contrôles (α=0 et α=0,9 corrigés)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"work/n2ac/distiller_natif.py\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"        perte = (1 - a.alpha) * dure + a.alpha * douce\n        # Parité avec `entrainer_rope.py` : les têtes préc … [2561 caractères tronqués]`
+
+  ```
+normalisation corrigée
+contrôles lancés pid 267927
+[still running after 60000ms; moved to background job bash-9]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-9", "timeout_ms": 180000, "wait": true}`
+
+  ```
+09:45:42
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  derniere = float(perte)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; head -6 work/n2ac/kdp-1147m-a0.log | tail -4; tail -c 60 work/n2ac/kd2-mix512-30k.log", "description": "Check parity control alpha=0 progress", "timeoutMs": 600000}`

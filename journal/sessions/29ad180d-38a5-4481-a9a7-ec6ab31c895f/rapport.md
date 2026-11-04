@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 41.5 h |
 | Tours | 15 |
-| Messages | 417 |
-| Appels d'outils | 405 |
+| Messages | 425 |
+| Appels d'outils | 413 |
 | Fichiers touchés | 17 |
-| Commandes | 318 |
+| Commandes | 326 |
 | Sous-agents | 0 |
-| Commits | 31 |
+| Commits | 33 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -549,9 +549,17 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 
 ### Tour 15 — ensuite?
 
-*1 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Locate French/English Alice paragraph pairs
+- bash — Locate French Alice passages in corpus
+- bash — Read French Alice section in corpus
+- bash — Add six Alice paragraph pairs, update tests/page
+- bash — Fix all-caps proper nouns, verify nine paragraphs
+- bash — Restart server, verify nine, update README
+- bash — Commit nine-paragraph bank and push submodule
+- bash — Write nine-paragraph fiche, update state and checks
+- bash — Update counters, commit nine-paragraph bank, push
 
 **Synthèse produite :**
 
@@ -623,7 +631,7 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 278 autres
+- … et 286 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -736,7 +744,7 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 
 ## 5. Erreurs rencontrées
 
-11 sorties en erreur ou divergentes. Les premières :
+12 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : === data suivis === count: 0 === reports json exemples === reports/b102bis-corpus-jw.json reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md reports/corpus-genres.json reports/corpus-li
@@ -749,6 +757,7 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 - **T6** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
 - **T9** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 229c5bf16e5e5bf09c0c93d7c274e614c73899b0 but expected d255588d2e4ee2d98482dd9aed6e6b4e64f5950d [exit code: 128]
 - **T10** : convert: attempt to perform an operation not authorized by the security policy `SVG' @ error/module.c/OpenModule/1273. convert: no decode delegate for this image format `SVG' @ error/constitute.c/Read
+- **T15** : PROPRE accepte ALICE  OK 0 [stderr] Traceback (most recent call last):   File "/usr/lib64/python3.13/urllib/request.py", line 1331, in do_open     h.request(req.get_method(), req.selector, req.data, h
 
 ## 6. Commits
 
@@ -783,4 +792,6 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050, h053 et le « si fort que » (l'intensi
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050, h053 et le « si fort que » (l'intensi
+- S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture d'Alice, la tab
+- S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture, la table de ve
 

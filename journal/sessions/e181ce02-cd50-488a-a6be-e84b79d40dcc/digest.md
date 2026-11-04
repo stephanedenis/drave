@@ -33026,3 +33026,179 @@ Le professeur parle ; les élèves l'écoutent.
 … [2815 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/tests/linguistique/ | head -20; echo ---; grep -rn \"refus\\|r353\" tools/tests/linguistique/quatre_modes.py tools/tests/linguistique/evaluer_gold.py 2>/dev/null | head -8", "description": "Trouver le banc des quatre modes e … [12 caractères tronqués]`
+
+  ```
+anaphore.py
+evaluer_gold.py
+gold_gele.json
+gold.json
+gold.py
+gold_reel.json
+gold_reel.py
+gold_synthetique.json
+gold_synthetique.py
+juge.py
+miroir.py
+__pycache__
+qualifier_cascade.py
+qualifier_frontiere_71.py
+qualifier_lien_appris.py
+qualifier_neuronal.py
+qualifier_pragmatique.py
+qualifier_quatre_modes.py
+qualifier_syntagmes.py
+test_bloc_linguistique.py
+---
+tools/tests/linguistique/evaluer_gold.py:5:(`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+tools/tests/linguistique/evaluer_gold.py:203:            reel = {"statut": "refus", "detail": type(e).__name__ + ": " + str(e)[:160]}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"refus\\|RefusNeuronal\\|r353\" tools/tests/linguistique/qualifier_quatre_modes.py | head -12; echo ---; sed -n \"$(grep -n 'def .*refus' tools/tests/linguistique/qualifier_quatre_modes.py | head -1 | cut -d: -f1),+25p\" too … [132 caractères tronqués]`
+
+  ```
+12:Mêmes mesures que la cascade : POS, syntagmes F1, tête F1, acte, fraction, refus.
+83:    refus = [p["id"] for p in phrases if compose.analyser(p["texte"], p["langue"]).refus]
+99:        "aucun_refus": len(refus) == 0,
+108:        "refus": len(refus), "refus_detail": refus[:10],
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/tests/linguistique/qualifier_quatre_modes.py", "description": "Lire le banc des quatre modes"}`
+
+  ```
+#!/usr/bin/env python3
+"""qualifier_quatre_modes.py — la porte des quatre modes du contrat de L sur le gold 432.
+
+Les quatre modes du contrat (`docs/theorie/contrat-bloc-langue.md`) mesurés sur le
+**même** gold réel 432 :
+
+  1. heuristique seule ;
+  2. neuronal seul (le composite POS + syntagmes, via l'API DeepSeek — règle 11) ;
+  3. parallèle (`Parallele`) ;
+  4. cascade (`Cascade`, seuil 0,6).
+
+Mêmes mesures que la cascade : POS, syntagmes F1, tête F1, acte, fraction, refus.
+Le coût est mesuré : appels du tagger, tokens API, latence, durée.
+
+Usage :
+    DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key \
+    python3 tools/tests/linguistique/qualifier_quatre_modes.py --limite 3
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import statistics
+import sys
+import time
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE))
+
+from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,
+                                     NeuronalLLMChunks, NeuronalLLMCompose,
+                                     NeuronalLLMPOS, Parallele)
+from tools.llm.deepseek import DeepSeek
+from tools.tests.linguistique.evaluer_gold impor
+… [2040 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'.')\nfrom tools.llm.deepseek import DeepSeek\nc=DeepSeek(); print('disponible', c.disponible())\n\" 2>&1 | tail -3; python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.bloc_l … [632 caractères tronqués]`
+
+  ```
+disponible False
+clé absente — refus non reproductible hors API
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"PRIORITE_NIVEAU\\|priorite_par_niveau\" tools/bloc_linguistique.py | head -12", "description": "Voir où PRIORITE_NIVEAU est utilisé"}`
+
+  ```
+1330:PRIORITE_NIVEAU = {
+1339:            priorite_par_niveau: dict | None = None) -> Annotation:
+1343:    Si `priorite_par_niveau` est donné, la fusion choisit **la source par niveau** (le
+1355:    if priorite_par_niveau:
+1360:        choisis = dict(priorite_par_niveau)
+1389:                 priorite_par_niveau: dict | None = None):
+1394:        self.priorite_par_niveau = priorite_par_niveau
+1400:        return _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
+1411:                 priorite_par_niveau: dict | None = None):
+1417:        self.priorite_par_niveau = priorite_par_niveau
+1431:        fusion = _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nn=t.count(\"priorite_par_niveau: dict | None = None\")\nt=t.replace(\"priorite_par_niveau: dict | None = None\",\n            \"priorite … [765 caractères tronqués]`
+
+  ```
+défauts basculés 3
+FAILED (failures=2)
+❌ tests
+parallele POS 0.3432 syn 0.1378 tete 0.4553 acte 0.9967
+cascade POS 0.3432 syn 0.1378 tete 0.4553 acte 0.9967
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nn=t.count(\"priorite_par_niveau: dict | None = PRIORITE_NIVEAU\")\nt=t.replace(\"priorite_par_niveau: dict | None = PRIORITE_NIVEAU\",\n … [839 caractères tronqués]`
+
+  ```
+défauts rétablis 3
+}
+✅ porte bloc linguistique verte
+parallele (défaut) POS 0.7424 syn 0.3165 tete 0.4764
+parallele_niveau POS 0.3432 syn 0.1378 tete 0.4553
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-defaut-niveau.md <<'MD'\n# B13 — le défaut de la fusion : la confiance, pas le niveau\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-02 (repris le\n> 04-11) · **Verdi … [6821 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 600 fiche(s) · 686 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2818 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"rapport-pensee-[a-z0-9-]*\\.md\" reports/README.md | head -25; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nrows=[l for l in t.splitlines() if 'rapport-pensee-' in l]\nprint('ligne … [80 caractères tronqués]`
+
+  ```
+rapport-pensee-defaut-niveau.md
+rapport-pensee-defaut-niveau.md
+rapport-pensee-porte-minute.md
+rapport-pensee-porte-minute.md
+rapport-pensee-gold-api.md
+rapport-pensee-gold-api.md
+rapport-pensee-cascade-reel-432.md
+rapport-pensee-cascade-reel-432.md
+rapport-pensee-vrais-absents.md
+rapport-pensee-vrais-absents.md
+rapport-pensee-pieges.md
+rapport-pensee-pieges.md
+rapport-pensee-miroir.md
+rapport-pensee-miroir.md
+rapport-pensee-gold-342.md
+rapport-pensee-gold-342.md
+rapport-pensee-anaphore-bilan.md
+rapport-pensee-anaphore-bilan.md
+rapport-pensee-bord-fin.md
+rapport-pensee-bord-fin.md
+rapport-pensee-courbe20.md
+rapport-pensee-courbe20.md
+rapport-pensee-seuil.md
+rapport-pensee-seuil.md
+rapport-pensee-oubli.md
+lignes pensee 50
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nimport re\nfor nom in (\"rapport-pensee-bord-fin.md\",\"rapport-pensee-courbe20.md\",\"rapport-pensee-seuil.md\"):\n    t=re.sub(r\"\\n\\| \\[`[^ … [242 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 600 fiche(s) · 686 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`

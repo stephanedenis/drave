@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 89.0 h |
+| Durée | 89.1 h |
 | Tours | 156 |
-| Messages | 1836 |
-| Appels d'outils | 1568 |
+| Messages | 1840 |
+| Appels d'outils | 1572 |
 | Fichiers touchés | 25 |
-| Commandes | 1286 |
+| Commandes | 1290 |
 | Sous-agents | 2 |
 | Commits | 195 |
 | Compactages de contexte | 5 |
@@ -8234,7 +8234,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 
 ### Tour 156 — reprends
 
-*14 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état après l'interruption
 - bash — Vérifier les fichiers du round 141
@@ -8250,6 +8250,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - bash — Voir où PRIORITE_NIVEAU est utilisé
 - bash — Basculer le défaut et mesurer
 - bash — Rétablir le défaut et mesurer la différence
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -8334,7 +8335,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1246 autres
+- … et 1250 autres
 
 ## 4. Mesures et résultats marquants
 

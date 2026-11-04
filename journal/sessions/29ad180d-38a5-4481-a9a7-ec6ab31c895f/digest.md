@@ -8774,3 +8774,149 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 
 ensuite?
 
+### 🤖 Assistant
+
+⏵ Ensuite : étendre la banque à neuf paragraphes complets pour que la validation ait du volume, puis l'API et l'UDHR. Je commence par les paires français/anglais.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== FR ===\"; grep -n \"Alice commençait\\|petite table à trois pieds\\|Il était inutile\\|fort bien de dire\\|drôle de sentiment\\|Au bout de quelques instants\" data/corpus_fr_litterature.txt | head -12; echo \"=== EN ===\"; … [297 caractères tronqués]`
+
+  ```
+=== FR ===
+301:extraordinaires, qu'Alice commençait à croire qu'il n'y en avait guère
+645:va sans dire. Au bout de quelques instants, il sembla tout naturel à
+1732:Alice commençait à dire en elle-même, "Mais, que faire de cette
+72398:Il était inutile d’essayer de suivre à pied une voiture emportée au
+331250:l'avait entièrement découvert. Au bout de quelques instants, elle se
+=== EN ===
+[stderr]
+grep: /tmp/dsh-spill-6kwciu/session-03d9fea74531/3419e307cd51-web_fetch.txt: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lasse de rester assise\\|petite table à trois pieds\\|inutile d’attendre\\|Bois-moi\\|drôle de sentiment\\|se mit à l’œuvre\" data/corpus_fr_litterature.txt | head -10; echo \"=== contexte a001 ===\"; grep -n \"Allons, à qu … [217 caractères tronqués]`
+
+  ```
+=== contexte a001 ===
+361:"Allons, à quoi bon pleurer ainsi," se dit Alice vivement. "Je vous
+=== premières lignes Alice ===
+120:  Douce Alice, acceptez l'offrande
+174:dialogues! "La belle avance," pensait Alice, "qu'un livre sans images,
+183:Il n'y avait rien là de bien étonnant, et Alice ne trouva même pas
+188:son gousset, la regarda, puis se prit à courir de plus belle, Alice
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '165,420p' data/corpus_fr_litterature.txt", "description": "Read French Alice section in corpus"}`
+
+  ```
+CHAPITRE PREMIER.
+
+AU FOND DU TERRIER.
+
+
+ALICE, assise auprès de sa sœur sur le gazon, commençait à s'ennuyer
+de rester là à ne rien faire; une ou deux fois elle avait jeté les
+yeux sur le livre que lisait sa sœur; mais quoi! pas d'images, pas de
+dialogues! "La belle avance," pensait Alice, "qu'un livre sans images,
+sans causeries!".
+
+Elle s'était mise à réfléchir, (tant bien que mal, car la chaleur du
+jour l'endormait et la rendait lourde,) se demandant si le plaisir de
+faire une couronne de marguerites valait bien la peine de se lever et
+de cueillir les fleurs, quand tout à coup un lapin blanc aux yeux roses
+passa près d'elle.
+
+Il n'y avait rien là de bien étonnant, et Alice ne trouva même pas
+très-extraordinaire d'entendre parler le Lapin qui se disait: "Ah!
+j'arriverai trop tard!" (En y songeant après, il lui sembla bien
+qu'elle aurait dû s'en étonner, mais sur le moment cela lui avait paru
+tout naturel.) Cependant, quand le Lapin vint à tirer une montre de
+son gousset, la regarda, puis se prit à courir de plus belle, Alice
+sauta sur ses pieds, frappée de cette idée que jamais elle n'avait vu
+de lapin avec un gousset et une montre. Entraînée par la curiosité elle
+s'élança sur s
+… [12329 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np=Path('donnees/paragraphes.json'); d=json.loads(p.read_text(encoding='utf-8'))\nnouvelles = [\n {\"id\":\"a004\",\n  \"contexte\":\"\",\n  \"cible\":\"ALICE,  … [5296 caractères tronqués]`
+
+  ```
+9 paragraphes
+test_arbre_svg loop: True
+test 9 + page neuf
+----------------------------------------------------------------------
+Ran 55 tests in 4.296s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace('PROPRE = re.compile(r\"\\\\b[A-ZÀ-Ý][a-zà-ÿ]{2,}\\\\b\")',\n            'PROPRE = re.compile(r\"\\\\b … [660 caractères tronqués]`
+
+  ```
+PROPRE accepte ALICE
+
+OK
+0
+[stderr]
+Traceback (most recent call last):
+  File "/usr/lib64/python3.13/urllib/request.py", line 1331, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/http/client.py", line 1386, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/http/client.py", line 1432, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/http/client.py", line 1381, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/http/client.py", line 1141, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/lib64/python3.13/http/client.py", line 1085, in send
+    self.connect()
+
+… [1624 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && tail -3 /tmp/structures-serveur.log 2>/dev/null; nohup python3 serveur.py --port 8765 > /tmp/structures-serveur.log 2>&1 & echo \"pid $!\"; sleep 2; python3 - <<'PY'\nimport json, urllib.request\nd=json.load(urllib.r … [804 caractères tronqués]`
+
+  ```
+pid 268346
+9 paragraphes, sources: True
+a004 | ALICE, assise auprès de sa sœur sur le gazon, comm | 1 réf.
+a005 | Tout à coup elle rencontra sur son passage une pet | 3 réf.
+a006 | Comme cela n'avançait à rien de passer son temps à | 4 réf.
+a007 | C'est bien facile à dire « Buvez-moi », mais Alice | 0 réf.
+a008 | « Je me sens toute drôle, » dit Alice, « on dirait | 7 réf.
+a009 | Un moment après, voyant qu'il ne se passait plus r | 5 réf.
+1
+README neuf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add generateur.py donnees/paragraphes.json tests/test_serveur.py static/paragraphes.html README.md && git commit -m \"S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS … [542 caractères tronqués]`
+
+  ```
+[master 4012729] S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS
+ 5 files changed, 54 insertions(+), 6 deletions(-)
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   230d03a..4012729  master -> master
+4012729
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-s-paragraphes.md <<'MD'\n# S — La banque de paragraphes passe à neuf : six paires d'Alice, sources anglaises et référents\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : la banque passe de  … [5322 caractères tronqués]`
+
+  ```
+état/INDEX paragraphes 9
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 600 fichiers, le disque en a 601
+  en-cours · 1627 mots · 7 sections · 4 session(s) · 4 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; for f in docs/pilotage/en-cours.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace( … [2644 caractères tronqués]`

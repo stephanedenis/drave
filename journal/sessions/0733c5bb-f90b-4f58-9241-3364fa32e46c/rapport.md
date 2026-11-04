@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 41.5 h |
 | Tours | 8 |
-| Messages | 730 |
-| Appels d'outils | 680 |
+| Messages | 734 |
+| Appels d'outils | 684 |
 | Fichiers touchés | 27 |
-| Commandes | 504 |
+| Commandes | 507 |
 | Sous-agents | 0 |
 | Commits | 27 |
 | Compactages de contexte | 0 |
@@ -255,7 +255,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 8 — reprends
 
-*8 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check time, runs, GPU and git state
 - bash — Inspect relaunched runs and reboot commit
@@ -265,10 +265,13 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Reopen plan after reboot
 - bash — Write post-reboot narrative and commit
 - job_output
+- bash — Compare loss normalization with reference trainer
+- bash — Fix loss normalization and launch parity controls
+- bash — Check parity control alpha=0 progress
 
 **Synthèse produite :**
 
-⏵ Réouverture de la session et état post-reboot
+⏵ Correction de la normalisation et lancement des deux contrôles (α=0 et α=0,9 corrigés)
 
 ## 3. Travail accompli
 
@@ -346,7 +349,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 464 autres
+- … et 467 autres
 
 ## 4. Mesures et résultats marquants
 
