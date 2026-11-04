@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 7.7 h |
+| Durée | 7.8 h |
 | Tours | 47 |
-| Messages | 469 |
-| Appels d'outils | 684 |
+| Messages | 474 |
+| Appels d'outils | 689 |
 | Fichiers touchés | 15 |
-| Commandes | 505 |
+| Commandes | 509 |
 | Sous-agents | 0 |
-| Commits | 58 |
+| Commits | 59 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1424,7 +1424,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 47 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1432,10 +1432,14 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check state and run status
 - bash — Correct state time and commit
 - job_output
+- bash — Verify cycle 42 final checks
+- bash — Identify newest B13 fiche and state
+- bash — Integrate B13 162 passifs corrected
+- bash — Commit B13 162 passifs corrected
 
 **Synthèse produite :**
 
-⏵ Le commit tourne en arrière-plan ; je collecte le résultat
+⏵ Le commit du 162 tourne en arrière-plan ; je collecte le résultat
 
 ## 3. Travail accompli
 
@@ -1501,7 +1505,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 465 autres
+- … et 469 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1702,4 +1706,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 161/161 — LES PASSIFS : LA RÈGLE DE POSITION SE TROMPE (5/5), LA COUVERTURE 0,8195 EST SURÉVALUÉE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON 
 - ÉTAT — HEURE 15 H 04 ; B13 161/161, N2 α = 0,9 À 13 850 PAS" -m "Cycle d'audit : les sept contrôles sont verts (621/714, 3023 liens, T0 3983, en-cours 1613, bac
 - ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS" -m "Cycle d'audit : les sept contrôles sont verts (621/714, 3023 liens, T0 3983, en-cours 1613, bac
+- B13 162/162 — LE CORRECTIF DES PASSIFS (par → AGENT), MAIS LE GÉNÉRATEUR S COURT-CIRCUITE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON du correctif
 

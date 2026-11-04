@@ -36392,3 +36392,15 @@ tools/tests/linguistique/gold_reel.py:142:     [("GN", "Le garçon", "agent"), (
 tools/tests/linguistique/gold_reel.py:204:     [("GN", "The boy", "agent"), ("GV", "plays", "prédicat"), ("GP", "with the ball", "moyen", "plays")], {"acte": "assertion"}),
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-passifs-corriges.md <<'MD'\n# B13 — le correctif des passifs : `par` → agent, mais le generateur S court-circuite\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 ·  … [5944 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 622 fiche(s) · 715 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncibles=(\"rapport-pensee-passifs.md\",\"rapport-pensee-relation.md\")\nout=[]; n=0\nfor l in lignes:\n    if any(c … [553 caractères tronqués]`

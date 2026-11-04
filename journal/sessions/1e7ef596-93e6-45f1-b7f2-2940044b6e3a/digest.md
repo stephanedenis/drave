@@ -14038,3 +14038,117 @@ revue de documentation · 621 fiche(s) · 714 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 42 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h42.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h42.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [942 caractères tronqués]`
+
+  ```
+heure 15 h 06
+  revue de documentation · 621 fiche(s) · 714 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3983 mots (budget 4 000)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-505]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-505", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[s/v7 a4b3200c] ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS
+ 14 files changed, 385 insertions(+), 27 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 42
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -6 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [337 caractères tronqués]`
+
+  ```
+a4b3200c ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS
+36d6ef67 B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161
+9c04d0c2 B13 161/161 — LES PASSIFS : LA RÈGLE DE POSITION SE TROMPE (5/5), LA COUVERTURE 0,8195 EST SURÉVALUÉE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+---REVUE---
+  revue de documentation · 622 fiche(s) · 715 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1613 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3983 mots (budget 4 000)
+---LIENS---
+  ✅ 3028 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas 14550 · perte 0.8945 · dure 0.9932 · douce
+… [16 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Une nouvelle fiche B13 est apparue (622/715) : je l'identifie pour le prochain cycle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls -lt --time-style=\"+%H:%M\" reports/rapport-pensee-*.md | head -2 ; echo \"=== FICHE ===\" ; head -10 $(ls -t reports/rapport-pensee-*.md | head -1) ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; grep -n \"fichiers / … [154 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  2554 15:07 reports/rapport-pensee-passifs-corriges.md
+-rw-r--r--. 1 stephane stephane  3033 14:56 reports/rapport-pensee-passifs.md
+=== FICHE ===
+# B13 — le correctif des passifs : `par` → agent, mais le generateur S court-circuite
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+> **162/162 portes** : la fonction `_role_gp` rend désormais **`agent`** pour `par`/`by` (au lieu de
+> `moyen`). Mais l'heuristique en production passe par le **generateur S**, qui a **sa propre**
+> table de rôles : le GP `par le chien` reste `moyen` dans l'annotation. Le correctif est
+> **partiel** — et la fiche le dit.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-passifs-corriges.json`](pensee-passifs-corriges.json).
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 30 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **622** / **715** | `reports/*.md` / `reports/*.json` |
+=== A0.9 ===
+pas 14600 · perte 0.9332 · dure 1.0690 · douce 0.2445 · 6914 s
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 162/162 : le correctif des passifs (`par` → agent) mais le générateur S court-circuite — j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:60]); continue\n        t=t.replace(old … [2255 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1619 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3989 mots (budget 4 000)
+  revue de documentation · 622 fiche(s) · 715 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3028 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 162/162 (correctif passifs partiel)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git add reports/rapport-pensee-passifs-corriges.md reports/pensee-passifs-corriges.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md ; for i in $(seq 1 12); do [ -e .git/i … [642 caractères tronqués]`

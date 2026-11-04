@@ -1,0 +1,13 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "162/162",
+ "role_gp": "agent (corrigé)",
+ "generateur_s": "moyen (non corrigé)",
+ "annotation": "moyen",
+ "limites": [
+  "deux tables de rôles",
+  "les passifs sans par",
+  "gold 432"
+ ]
+}
