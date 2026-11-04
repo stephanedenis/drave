@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**67 commits** · **5 session(s)** · **6 thème(s)**
+**68 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 36 | [docs.md](docs.md) |
-| mesures | 20 | [mesures.md](mesures.md) |
+| mesures | 21 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -26,7 +26,7 @@
 | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 7.7 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 43.7 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 2.5 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 94.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 94.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -99,6 +99,7 @@
 | 14:51 | `c2f1c7da` | ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS |
 | 14:54 | `452a46e2` | B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160 |
 | 15:00 | `9c04d0c2` | B13 161/161 — LES PASSIFS : LA RÈGLE DE POSITION SE TROMPE (5/5), LA COUVERTURE 0,8195 EST SURÉVALUÉE ; ÉTAT, ROADMAP, CHANTIERS, PLAN |
+| 15:03 | `36d6ef67` | B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161 |
 
 ## Le récit de la journée (écrit à la main)
 

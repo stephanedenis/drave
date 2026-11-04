@@ -13891,3 +13891,150 @@ revue de documentation · 621 fiche(s) · 714 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 41 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h41.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h41.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [935 caractères tronqués]`
+
+  ```
+heure 15 h 03
+  revue de documentation · 621 fiche(s) · 714 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3983 mots (budget 4 000)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-499]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-499", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[stderr]
+fatal: cannot lock ref 'HEAD': is at 36d6ef67a3d2c77286ca6ed34c933daf302e2036 but expected 9c04d0c20a0ae2fb7c1ebf08c9d14dac5f5bfff6
+[status: completed, exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a bougé (36d6ef67) ; je vérifie le commit de session
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 36d6ef67 ===\" ; git show --stat --oneline 36d6ef67 | head -12 ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; echo \"=== STATUS ===\" ; git status --short | grep -v \"^M  journal\\|^MM  … [140 caractères tronqués]`
+
+  ```
+36d6ef67 B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161
+9c04d0c2 B13 161/161 — LES PASSIFS : LA RÈGLE DE POSITION SE TROMPE (5/5), LA COUVERTURE 0,8195 EST SURÉVALUÉE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+452a46e2 B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160
+=== 36d6ef67 ===
+36d6ef67 B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-04/README.md                       |   9 +-
+ journal/2026-11-04/apprentissage.md                |   4 +-
+ journal/2026-11-04/distribue.md                    |   4 +-
+ journal/2026-11-04/docs.md                         |   8 +-
+ journal/2026-11-04/mesures.md                      |   4 +-
+ journal/2026-11-04/modele.md                       |   4 +-
+ journal/2026-11-04/portes.md                       |   4 +-
+ journal/README.md                                  |   4 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  33 +++++
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 15 h 03 HNE (he
+… [202 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 41 : narrative des passifs committée, sous-module S modifié, α = 0,9 à 14 150
+
+**Cycle 41 — la narrative des passifs est committée, le S se met à jour.**
+
+- **B13 161/161** : la session a committé la narrative des passifs (`36d6ef67` : « 5/5 faux, la position ne suffit pas — le sujet est un patient ») ; le hub avait posé le fait, la métrique et les pages (`9c04d0c2`). L'état est cohérent : rôles 0,8195 (522/637, **surévaluée**), passifs 5/5 faux.
+- **S — sous-module modifié** : `tools/structures` a des changements non committés (`m` dans le statut) — l'analyseur/l'export de la session S progressent ; son commit (dans son dépôt, puis le pointeur) suivra.
+- **Audit complet** : revue ✅ **621 fiches / 714 JSON / 120 docs / 83 portes** ; **3 023 liens** ✅ ; backlog ✅ ; journal ✅ ; `en-cours` **1 613 mots**, **T0 3 983 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **14 150 pas** (perte 0,979), GPU0 99 %.
+
+**WIP** : B13 `pensee-quatre-modes.json`, S sous-module + `rapport-s-paragraphes.md`. **Le goal reste actif** : le fait S à recevoir, la suite B13, α = 0,9 à finir, puis la passe complète des portes.
+
+
+## Tour 47
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 42/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 42 : instantané, audit et faits committés depuis le cycle 41
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+36d6ef67 B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161
+9c04d0c2 B13 161/161 — LES PASSIFS : LA RÈGLE DE POSITION SE TROMPE (5/5), LA COUVERTURE 0,8195 EST SURÉVALUÉE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+452a46e2 B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160
+c2f1c7da ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS
+85b58e17 B13 160/160 — LES RÔLES PAR POSITION : 301/322 GN, LA RELATION CALCULABLE POUR 301 (0,4725) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+97c6ba26 ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)
+ff180c3a B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159
+2fec7c79 ÉTAT — HEURE 14 H 39 ; B13 159/159, N2 α = 0,9 À 10 700 PAS
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 325 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 196 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), re
+… [686 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 621 fiche(s) · 714 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1613 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3983 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 3023 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 3023 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"passifs\\|B13 \\*\\*16\\|B13 : 16\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; nvidia-smi -- … [100 caractères tronqués]`
+
+  ```
+15 h 06
+# En ce moment
+
+**Mis à jour : 2026-11-04, 15 h 03 HNE (heure locale, EST).**
+71:- **Fait** : B13 **161/161** ; **pragmatique 432 : acte 0,9954 (la fusion garde l'heuristique)** ; **attachement : 0,3431 / 0,0042** ; **relation GN → GV : 221/637 (0,3469) ; 322 GN sans rôle** ; **rôles : 301/322 par position (129 avant = agent, 172 après = patient) ; relation 0,8195 (522/637) surévaluée** ; **passifs : la règle se trompe (5/5 : sujet patient, `par` agent)** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [cibles](../../reports/rapport-pensee-cibles.md), [cibles 500](../../reports/rapport-pensee-cibles-500.md), [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/r
+… [387 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 42 : audit vert ; je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h42.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h42.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [942 caractères tronqués]`

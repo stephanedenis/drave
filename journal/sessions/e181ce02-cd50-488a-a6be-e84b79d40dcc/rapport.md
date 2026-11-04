@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.4 h |
-| Tours | 166 |
-| Messages | 2051 |
-| Appels d'outils | 1763 |
+| Durée | 94.5 h |
+| Tours | 167 |
+| Messages | 2059 |
+| Appels d'outils | 1769 |
 | Fichiers touchés | 25 |
-| Commandes | 1448 |
+| Commandes | 1454 |
 | Sous-agents | 2 |
 | Commits | 218 |
 | Compactages de contexte | 5 |
@@ -371,6 +371,8 @@
 **Tour 165** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 166** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 167** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8850,6 +8852,62 @@ Je continue la file : prochain round, **la justesse de la position** — l'heuri
 - bash — Committer les passifs
 - job_output
 
+**Synthèse produite :**
+
+⏵ Autonomie : 17 rounds, 161/161 ; les passifs cassent la règle de position
+
+Le round des **passifs** est un **résultat négatif utile** : la règle de position se trompe **5/5**. Commit **`36d6ef67`**.
+
+\## Le round
+
+| phrase | sujet | `par` | rôle attendu | rôle obtenu |
+|---|---|---|---|---|
+| `Le chat est mangé par le chien.` | chat = **patient** | chien = **agent** | patient/agent | **agent/moyen** |
+| `La souris est chassée par le chat.` | souris = patient | chat = agent | patient/agent | agent/moyen |
+| `Le livre est lu par Paul.` | livre = patient | Paul = agent | patient/agent | agent/moyen |
+| `La lettre est écrite par Marie.` | lettre = patient | Marie = agent | patient/agent | agent/moyen |
+| `Le gâteau est fait par le boulanger.` | gâteau = patient | boulanger = agent | patient/agent | agent/moyen |
+
+**Ce que ça dit** :
+
+- **La règle de position est fausse sur les passifs** : le sujet d'un passif est un **patient**, pas un agent ; le `par` + GN est l'**agent**, pas un « moyen ».
+- **La couverture 0,8195 de T157 est surévaluée** : elle supposait la position suffisante ; sur les passifs, elle est fausse.
+- **Le correctif est simple** : détecter `être` + participe + `par` + GN → le GN sujet devient `patient`, le GN du `par` devient `agent`.
+- **La négative est explicite** : 5/5 faux, pas 5/5 juste.
+
+\## L'état de l'autonomie (17 rounds, ~3 h 15)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,8195 (surévaluée) ; passifs 5/5 faux |
+
+- **161/161 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **621 fiches / 714 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **15 h 05 HNE** ; il reste **~45 min** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard.
+
+\## La suite
+
+1. **Le correctif des passifs** : `être + participe + par` → inverser les rôles.
+2. **Les passifs dans le gold** : les compter.
+3. **Le merge `s/v7` → `master`**.
+4. **Le GGUF** : la porte N0.1 complète.
+
+Je continue la file : prochain round, **le correctif des passifs** — la règle qui a échoué 5/5.
+
+### Tour 167 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Lire la fonction de rôle des GP
+- bash — Corriger le rôle de par et tester
+- bash — Trouver d'où vient le rôle moyen
+- bash — Trouver la source du rôle moyen
+- bash — Écrire la fiche du correctif des passifs et la porte T159
+- bash — Trim README et passer les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8929,7 +8987,7 @@ Je continue la file : prochain round, **la justesse de la position** — l'heuri
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1408 autres
+- … et 1414 autres
 
 ## 4. Mesures et résultats marquants
 

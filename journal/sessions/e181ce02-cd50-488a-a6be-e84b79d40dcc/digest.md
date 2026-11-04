@@ -36269,3 +36269,126 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 16 h 25 HNE\", t)\np.write_text( … [615 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-176]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-176", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[s/v7 36d6ef67] B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161
+ 18 files changed, 297 insertions(+), 43 deletions(-)
+COMMIT OK 1
+36d6ef67 B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161
+mer 04 nov 2026 15:05:23 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 17 rounds, 161/161 ; les passifs cassent la règle de position
+
+Le round des **passifs** est un **résultat négatif utile** : la règle de position se trompe **5/5**. Commit **`36d6ef67`**.
+
+## Le round
+
+| phrase | sujet | `par` | rôle attendu | rôle obtenu |
+|---|---|---|---|---|
+| `Le chat est mangé par le chien.` | chat = **patient** | chien = **agent** | patient/agent | **agent/moyen** |
+| `La souris est chassée par le chat.` | souris = patient | chat = agent | patient/agent | agent/moyen |
+| `Le livre est lu par Paul.` | livre = patient | Paul = agent | patient/agent | agent/moyen |
+| `La lettre est écrite par Marie.` | lettre = patient | Marie = agent | patient/agent | agent/moyen |
+| `Le gâteau est fait par le boulanger.` | gâteau = patient | boulanger = agent | patient/agent | agent/moyen |
+
+**Ce que ça dit** :
+
+- **La règle de position est fausse sur les passifs** : le sujet d'un passif est un **patient**, pas un agent ; le `par` + GN est l'**agent**, pas un « moyen ».
+- **La couverture 0,8195 de T157 est surévaluée** : elle supposait la position suffisante ; sur les passifs, elle est fausse.
+- **Le correctif est simple** : détecter `être` + participe + `par` + GN → le GN sujet devient `patient`, le GN du `par` devient `agent`.
+- **La négative est explicite** : 5/5 faux, pas 5/5 juste.
+
+## L'état de l'autonomie (17 rounds, ~3 h 15)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,8195 (surévaluée) ; passifs 5/5 faux |
+
+- **161/161 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **621 fiches / 714 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **15 h 05 HNE** ; il reste **~45 min** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard.
+
+## La suite
+
+1. **Le correctif des passifs** : `être + participe + par` → inverser les rôles.
+2. **Les passifs dans le gold** : les compter.
+3. **Le merge `s/v7` → `master`**.
+4. **Le GGUF** : la porte N0.1 complète.
+
+Je continue la file : prochain round, **le correctif des passifs** — la règle qui a échoué 5/5.
+
+
+## Tour 167
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 148/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def _role_gp' tools/bloc_linguistique.py | cut -d: -f1),+16p\" tools/bloc_linguistique.py", "description": "Lire la fonction de rôle des GP"}`
+
+  ```
+def _role_gp(prep: str) -> str:
+    p = prep.casefold()
+    if p in {"dans", "sur", "sous", "chez", "vers", "entre", "devant", "derrière", "près", "loin",
+             "in", "on", "at", "under", "between"}:
+        return "lieu"
+    if p in {"pendant", "depuis", "durant", "avant", "après", "during", "since", "before", "after"}:
+        return "temps"
+    if p in {"pour", "afin", "for", "to"}:
+        return "but"
+    if p in {"avec", "par", "sans", "with", "by", "without"}:
+        return "moyen"
+    if p in {"à", "a", "au", "aux", "to"}:
+        return "destinataire"
+    if p in {"de", "du", "des", "of", "from"}:
+        return "theme"
+    return "complément"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    if p in {\"avec\", \"par\", \"sans\", \"with\", \"by\", \"without\"}:\n        return \"moyen\"''',\n'''    if p in { … [764 caractères tronqués]`
+
+  ```
+par → agent
+Le chat est mangé par le chien. | [('GN', 'Le chat', 'agent'), ('GV', 'est mangé', 'predicat'), ('GV', 'est mangé par le chien', 'prédicat'), ('GP', 'par le chien', 'moyen')]
+Le livre est lu par Paul. | [('GN', 'Le livre', 'agent'), ('GV', 'est lu', 'predicat'), ('GV', 'est lu par Paul', 'prédicat'), ('GP', 'par Paul', 'moyen')]
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_role_gp\\|moyen\" tools/bloc_linguistique.py tools/tests/linguistique/generateur*.py 2>/dev/null | head -10", "description": "Trouver d'où vient le rôle moyen"}`
+
+  ```
+tools/bloc_linguistique.py:371:def _role_gp(prep: str) -> str:
+tools/bloc_linguistique.py:382:        # `avec`/`sans` restent le moyen.
+tools/bloc_linguistique.py:385:        return "moyen"
+tools/bloc_linguistique.py:561:                segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"\\\"moyen\\\"\\|'moyen'\" tools/*.py tools/tests/linguistique/*.py 2>/dev/null | head -6", "description": "Trouver la source du rôle moyen"}`
+
+  ```
+tools/bloc_linguistique.py:385:        return "moyen"
+tools/tests/linguistique/gold.py:62:      ("GP", "avec le télescope", "moyen", "vu")], {"acte": "assertion"}),
+tools/tests/linguistique/gold_reel.py:142:     [("GN", "Le garçon", "agent"), ("GV", "joue", "prédicat"), ("GP", "au ballon", "moyen", "joue")], {"acte": "assertion"}),
+tools/tests/linguistique/gold_reel.py:204:     [("GN", "The boy", "agent"), ("GV", "plays", "prédicat"), ("GP", "with the ball", "moyen", "plays")], {"acte": "assertion"}),
+  ```
+
