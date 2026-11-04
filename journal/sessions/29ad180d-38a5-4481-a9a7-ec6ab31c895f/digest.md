@@ -9079,3 +9079,18 @@ To /home/stephane/Data13TB/stephane/GitHub/drave-structures
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; for f in docs/pilotage/en-cours.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace( … [2386 caractères tronqués]`
+
+  ```
+862d9c2f B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+état/INDEX v7
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 603 fichiers, le disque en a 606
+     · compteurs : en-cours.md dit 688 JSON, le disque en a 691
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 81fa1a86e9e4ef7ec00adf50bb126fe78e81f282 but expected 862d9c2f31945891d6b0aa8ef532a7306bbc6473
+To github.com:stephanedenis/drave.git
+   cfb68013..81fa1a86  master -> master
+81fa1a86e9e4ef7ec00adf50bb126fe78e81f282	refs/heads/master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in docs/pilotage/en-cours.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"types **6 … [2319 caractères tronqués]`

@@ -2344,3 +2344,117 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-87", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[master 81fa1a86] N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE
+ 24 files changed, 2936 insertions(+), 78 deletions(-)
+ create mode 100644 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+ create mode 100644 reports/n3-inventaire.json
+ create mode 100644 reports/rapport-n3-inventaire.md
+ create mode 100644 tools/n3_inventaire.py
+ create mode 100755 tools/porte-n3-inventaire.sh
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -30; echo ====; git status --short | head -20", "description": "Verify commit contents and remaining working tree"}`
+
+  ```
+81fa1a86 N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE
+ docs/pilotage/en-cours.md                          |    7 +-
+ journal/2026-11-04/README.md                       |   15 +-
+ journal/2026-11-04/distribue.md                    |   10 +-
+ journal/2026-11-04/docs.md                         |   10 +-
+ journal/2026-11-04/mesures.md                      |   16 +-
+ journal/2026-11-04/modele.md                       |   10 +-
+ journal/README.md                                  |   10 +-
+ journal/THEMES.md                                  |    2 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |   47 +
+ .../rapport.md                                     |   14 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md |  285 ++++
+ .../rapport.md                                     |   34 +-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md |  117 ++
+ .../rapport.md                                     |   45 +-
+ journal/sessions/MANIFEST.md                       |   12 +-
+ .../aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md | 1518 ++++++++++++++++++++
+ .../aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md   |   34 +
+ .../rapport.md    
+… [922 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --name-only --format= HEAD | grep -E 'pensee|s-paragraphes|structures|INDEX|README' || echo 'aucun fichier des autres sessions dans le commit'; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -3; python3 tools/revue_documen … [96 caractères tronqués]`
+
+  ```
+journal/2026-11-04/README.md
+journal/README.md
+  état · dernier fait 81fa1a86 · dernier état 81fa1a86
+  ✅ aucun fait commité après le dernier état
+     · compteurs : en-cours.md dit 82 portes, le disque en a 83
+     · compteurs : en-cours.md dit 603 fichiers, le disque en a 606
+     · compteurs : en-cours.md dit 688 JSON, le disque en a 691
+  ```
+
+### 🤖 Assistant
+
+⏵ Une autre session a réécrit en-cours après le commit — inspection avant correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/pilotage/en-cours.md", "description": "Diff working en-cours against committed state"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 564ee7f0..94368bf2 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 13 h 25 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -54,7 +54,7 @@
+ - **Ambition** : nommer le rôle et la frontière GN.
+ - **Stratégie** : une règle = trois contrôles.
+ - **Objectif final** : gold 60, corpus 60.
+-- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; **55 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
++- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; *
+… [2271 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Restauration de la ligne N3 et des compteurs, en conservant les mises à jour de S
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text()\nt = t.replace(\"**Mis à jour : 2026-11-04, 13 h 25 HNE (heure locale, EST).**\",\n              \"**Mis à jour : 2 … [1393 caractères tronqués]`
+
+  ```
+11:43
+ok
+  revue de documentation · 606 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/2026-11-04, 11 h 49 HNE/2026-11-04, 11 h 43 HNE/' docs/pilotage/en-cours.md && git add docs/pilotage/en-cours.md && git status --short | head -12", "description": "Fix header time and stage en-cours only"}`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+ M tools/structures
+?? reports/pensee-quatre-modes-432-run2.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG'\nÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691\n\nUne session S a réécrit `en-cours` depuis une copie antérieure au commit 81fa1a86 et a\nemporté la li … [404 caractères tronqués]`
+
+  ```
+started background job bash-93
+  ```
+
+- **job_output** `{"job_id": "bash-93", "timeout_ms": 180000, "wait": true}`

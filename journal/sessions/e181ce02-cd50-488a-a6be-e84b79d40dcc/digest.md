@@ -34082,3 +34082,4 @@ clés ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail', 'appels', 'ap
 cascade_niveau {"all": {"pos": {"exactitude": 0.9389, "exactitude_ferme": 0.9228, "exactitude_ouvert": 0.956, "tokens": 2375, "confusions": {"ADJ": {"ADJ": 77}, "ADV": {"ADV": 86, "NOUN": 3, "ADJ": 3, "?": 1}, "AUX": {"AUX": 110, "?": 3, "VERB": 3}, "CONJ": {"PRON": 6, "CONJ": 53, "?": 13, "INTJ": 2, "PREP": 2, "N
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    pos_niv = d[\"modes\"][\"cascade_niveau\"][\"pos\"]',\n            '    pos_niv = d[\"modes\"][\"cascade_niveau\"][\"all\ … [238 caractères tronqués]`

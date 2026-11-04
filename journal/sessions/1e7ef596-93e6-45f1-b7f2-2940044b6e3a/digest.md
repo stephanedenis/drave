@@ -3935,3 +3935,188 @@ index eedf5200..564ee7f0 100644
 … [10201 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture des faits B13 récents, de la fiche N3 et des pages de pilotage
+
+- **bash** `{"command": "for c in 862d9c2f 7632ab94 4449646d; do echo \"=== $c ===\"; git show $c -- docs/pilotage/en-cours.md | sed -n '1,30p'; done", "description": "Read B13 state-line updates in recent commits"}`
+
+  ```
+=== 862d9c2f ===
+commit 862d9c2f31945891d6b0aa8ef532a7306bbc6473
+Author: Stéphane <stephane@localhost>
+Date:   Wed Nov 4 11:17:10 2026 -0500
+
+    B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index b537a218..eedf5200 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 12 h 05 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 13 h 25 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -113,7 +113,7 @@
+ |---|---|---|
+ | portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **602** / **687** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **603** / **688** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **03/11 11 h 30** (82, **80/2**,
+… [2136 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '100,170p' reports/rapport-n3-inventaire.md ; echo \"=== BACKLOG N3 ===\" ; head -50 docs/pilotage/backlog/N3-operations-natives.md 2>/dev/null", "description": "Read N3 report conclusion and backlog page"}`
+
+  ```
+**N3 est clos sur ses deux négatifs.** Les trois documents à mettre à jour (le hub tient
+`en-cours`, `roadmap` et `backlog`) :
+
+- **backlog `N3-operations-natives.md`** : statut `partiel` → **`mesurée`** ; étapes 3 et 4
+  `⏳` → **`✅`** ; ajouter la fiche de résultat ci-dessous ; « Ce qui reste » garde les deux
+  **conditions** (chemin distribué natif, saut de calcul), pas des portes.
+- **roadmap, ligne N** : `N3` → **couvert** (17 portes, inventaire), reste les deux
+  conditions.
+- **en-cours** : la ligne proposée est
+  `- **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire
+  exécutable (\`porte-n3-inventaire\`, autotest 5/5) ; deux conditions nommées (placement =
+  métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).`
+  et le compteur de portes **82 → 83**.
+
+## 7. Fichiers
+
+- `tools/n3_inventaire.py` — le vérificateur (statique, `--autotest`).
+- `tools/porte-n3-inventaire.sh` — la porte (1 s), lancée par `toutes-les-portes.sh`.
+- `reports/n3-inventaire.json` — l'inventaire mesuré.
+- `reports/rapport-n3-inventaire.md` — cette fiche.
+=== BACKLOG N3 ===
+# N3 — Opérations natives : de la mesure à la production
+
+
+… [2904 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"N — le natif\\|N3\\|N2, N3\" docs/pilotage/roadmap.md | head -8 ; echo \"=== REFERENCES ===\" ; grep -n \"83\\|82\\|n3\" docs/pilotage/references-non-regression.md | head -12 ; echo \"=== CHANTIERS ===\" ; grep -n \"N3\" docs/pilotage/chantiers.md | head -8", "description": "L … [47 caractères tronqués]`
+
+  ```
+32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; reste la **porte propre (0,29)** ; **N4** |
+82:7. **N3** — les opérations natives restantes, qui remplissent la file « jamais en attente ».
+199:| **N3** | les opérations natives : [k-WTA](../theorie/glossaire/entrees/k-wta.md), routes, sortie précoce, pont, rejeu, placement | 🔬 **couvert par brique ; service composé** | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N3.4d · N3.5a/b/c/d/e/f · N3.6 service ✅** (pont actif, placement métadonnée ; saut de calcul conditionnel) |
+339:  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
+=== REFERENCES ===
+3:> **Dernière passe complète — 2026-11-03 à 11 h 30 :** **82 portes, 80 vertes, 2 rouges**,
+5:>
+… [1964 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit des outils documentaires et repérage des pages N3 à mettre à jour
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -6 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | tail -6 ; echo \"---FORMATS---\" ; python3 tools/verifier_formats.py 2>&1 | tail -6", "description": "Run links, backlog and format checks"}`
+
+  ```
+❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2883 examinés) :
+     reports/rapport-n3-inventaire.md → ../../reports/rapport-n3-inventaire.md
+---BACKLOG---
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---FORMATS---
+Le côté Rust est interrogé par `drave <modele> --bloc <tenseur>:<index>`, qui
+passe par `row_f32` — le chemin du chargement réel du modèle. Vérifier un
+déquantificateur par un chemin qui n'est pas celui du moteur ne prouve rien.
+
+Sortie : écart max et verdict ; code de retour 1 si divergence.
+  ```
+
+- **bash** `{"command": "grep -n \"Statut\\|partiel\\|⏳\\|Ce qui reste\\|étapes 3\\|étapes 4\" docs/pilotage/backlog/N3-operations-natives.md | head -20 ; echo \"---ÉTAPES---\" ; grep -n -A3 \"3\\.\\|4\\.\" docs/pilotage/backlog/N3-operations-natives.md | head -25", "description": "Locate N3 backlog status and  … [15 caractères tronqués]`
+
+  ```
+3:> **Statut** : partiel · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+49:**Ce qui reste** : un chemin natif distribué (le placement natif est une métadonnée) et une
+86:3. ⏳ une porte par brique (temps, perte, rejeu) ;
+87:4. ⏳ k-WTA et routes : même traitement.
+---ÉTAPES---
+8:> [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md),
+9:> [`n3.2a-service`](../../../reports/rapport-n3.2a-service.md),
+10:> [`n3.3a-routes`](../../../reports/rapport-n3.3a-routes.md),
+11:> [`n3.2b0-profondeur`](../../../reports/rapport-n3.2b0-profondeur.md),
+12:> [`n3.3b-sparsite`](../../../reports/rapport-n3.3b-sparsite.md),
+13:> [`n3.3c-compte`](../../../reports/rapport-n3.3c-sparsite-compte.md),
+14:> [`n3.4a-composition`](../../../reports/rapport-n3.4a-composition.md),
+15:> [`n3.2b1-seuil`](../../../reports/rapport-n3.2b1-seuil.md),
+16:> [`n3.2b2-cache`](../../../reports/rapport-n3.2b2-cache.md),
+17:> [`n3.4b-pont`](../../../reports/rapport-n3.4b-pont.md),
+18:> [`n3.4c-placement`](../../../reports/rapport-n3.4c-placement.md),
+19:> [`n3.4d-couverture`](../../../reports/rapport-n3.4d-couverture.md),
+20:> [`n3.5a-deux-regions`](../../../reports/rapport-n3.5a-deux-regions.md),
+21:> [`n3.5b-deu
+… [820 caractères tronqués]
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -5 ; echo \"---SCHEMAS---\" ; python3 tools/verifier_schemas.py 2>&1 | tail -3 ; echo \"---CHAINE---\" ; python3 tools/verifier_chaine_etat.py 2>&1 | tail -5 ; echo \"---BILAN---\" ; python3 tools/verifier_bilan.py 2>&1 | tail -5", "description": … [55 caractères tronqués]`
+
+  ```
+✅ 1629 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2883 examinés) :
+     reports/rapport-n3-inventaire.md → ../../reports/rapport-n3-inventaire.md
+---SCHEMAS---
+  schémas · 459 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+---CHAINE---
+    from lecture_etat import Tete, charger_etats, charger_ids  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py", line 23, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+---BILAN---
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'docs/synthese/07-modeles-alternatifs-entree-sortie.md'
+  ```
+
+### 🤖 Assistant
+
+⏵ Repérage des corrections N3 : lien, backlog, roadmap, références
+
+- **bash** `{"command": "git diff -- reports/INDEX.md reports/README.md | head -30 ; echo \"=== LIEN N3 ===\" ; grep -n \"\\.\\./\\.\\./reports/rapport-n3\" reports/rapport-n3-inventaire.md ; echo \"=== BACKLOG 40-92 ===\" ; sed -n '40,92p' docs/pilotage/backlog/N3-operations-natives.md", "description": "Inspec … [46 caractères tronqués]`
+
+  ```
+diff --git a/reports/README.md b/reports/README.md
+index ea0ecbfd..a72c0ccb 100644
+--- a/reports/README.md
++++ b/reports/README.md
+@@ -15,9 +15,9 @@
+ 
+ | fichier | ce qu'il porte |
+ |---|---|
++| [`rapport-pensee-quatre-modes-run2.md`](rapport-pensee-quatre-modes-run2.md) | **B13** — la confirmation : refus 0, niveau 0,9389, **145/145** |
+ | [`rapport-pensee-elision.md`](rapport-pensee-elision.md) | **B13** — l'élision : POS 0,7455, le refus r353 tombe, **144/144** |
+ | [`rapport-pensee-quatre-modes-432.md`](rapport-pensee-quatre-modes-432.md) | **B13** — les quatre modes sur le gold 432 : le niveau gagne (0,9309/0,8226/0,8784), **143/143** |
+-| [`rapport-pensee-defaut-niveau.md`](rapport-pensee-defaut-niveau.md) | **B13** — le défaut de la fusion : confiance 0,7424 vs niveau 0,3432, **141/141** |
+ | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
+ | [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP 
+… [2833 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '30,33p' docs/pilotage/roadmap.md ; echo \"=== LIGNE 199 ===\" ; sed -n '197,200p' docs/pilotage/roadmap.md ; echo \"=== REFERENCES HEAD ===\" ; sed -n '1,14p' docs/pilotage/references-non-regression.md ; echo \"=== TABLE N3 ===\" ; grep -n -B1 -A1 \"porte-n3-cache\" docs/pilotag … [107 caractères tronqués]`
+
+  ```
+| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 % calcul, PPL −0,006 %)** | **A2.6** (experts : A6.2 bloqué) ; le lot ≥ 2 assumé |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** +
+… [9175 caractères tronqués]
+  ```
+

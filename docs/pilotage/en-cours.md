@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 11 h 43 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -54,7 +54,7 @@
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = trois contrôles.
 - **Objectif final** : gold 60, corpus 60.
-- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; **55 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
+- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
 - **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**.
 - **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits, 8
@@ -114,7 +114,7 @@
 |---|---|---|
 | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **605** / **691** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **606** / **691** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**9 commits** · **5 session(s)** · **4 thème(s)**
+**10 commits** · **5 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,6 +15,7 @@
 | docs | 3 | [docs.md](docs.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
+| portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -39,6 +40,7 @@
 | 10:14 | `4449646d` | B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141 |
 | 10:49 | `7632ab94` | B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143 |
 | 11:17 | `862d9c2f` | B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144 |
+| 11:41 | `81fa1a86` | N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE |
 
 ## Le récit de la journée (écrit à la main)
 

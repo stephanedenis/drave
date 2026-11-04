@@ -9,10 +9,10 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 4.3 h |
 | Tours | 5 |
-| Messages | 109 |
-| Appels d'outils | 213 |
+| Messages | 113 |
+| Appels d'outils | 224 |
 | Fichiers touchés | 9 |
-| Commandes | 115 |
+| Commandes | 125 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -194,7 +194,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 5 — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la docum … [23 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Check sessions, recent commits and tree
 - bash — Run documentation review and state freshness
@@ -205,10 +205,16 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Full status, N3 tools and gate count
 - bash — Read N3 report verdict and proposed integration
 - bash — Inspect current state structure and counters
+- todo_write
+- bash — Inspect staged and unstaged state changes
+- bash — Read current full state
+- bash — Read B13 state-line updates in recent commits
+- bash — Read N3 report conclusion and backlog page
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Instantané de l'état, des fichiers N3 et des travaux en cours
+⏵ Repérage des corrections N3 : lien, backlog, roadmap, références
 
 ## 3. Travail accompli
 
@@ -268,7 +274,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 75 autres
+- … et 85 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -374,6 +380,17 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T4** `1, 9950 MiB, 100 %`
 - **T5** `0, 5280 MiB, 100 %`
 - **T5** `1, 13200 MiB, 100 %`
+- **T5** `- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; **`
+- **T5** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non mesuré** (run interrompu).`
+- **T5** `**Partiel** — mesuré : la **sortie précoce** (**−24,05 %** de temps pour **−1,61** point de`
+- **T5** `moteur** : **÷1,47 / ÷1,24** à profondeur 8, avec une variabilité de ±10 % ; le chemin court`
+- **T5** `entraîné est le facteur limitant (**23,19 %** contre **47,73 %** pour le long).`
+- **T5** `| [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats `
+- **T5** `- la variabilité ±10 % entre exécutions peut masquer le gain ;`
+- **T5** `| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurée`
+- **T5** `| **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, [attention](../theorie/glossaire/entrees/attention.md) locale, [FFN](../theorie/glossaire/entrees/ffn.md) creux, 3 têtes précoces | ✅ | aucune — PPL *`
+- **T5** `| **N2** | la distillation : corpus, professeur, [curriculum](../theorie/glossaire/entrees/curriculum.md) | 🔬 | **N2.h** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,0904**, pas `
+- **T5** `90-| `porte-mistral.sh` | 8 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher  |`
 
 ## 5. Erreurs rencontrées
 

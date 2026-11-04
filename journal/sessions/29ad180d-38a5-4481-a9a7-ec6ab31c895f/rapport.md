@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 43.5 h |
 | Tours | 17 |
-| Messages | 435 |
-| Appels d'outils | 419 |
+| Messages | 437 |
+| Appels d'outils | 421 |
 | Fichiers touchés | 17 |
-| Commandes | 332 |
+| Commandes | 334 |
 | Sous-agents | 0 |
-| Commits | 35 |
+| Commits | 37 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -590,13 +590,15 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 
 ### Tour 17 — ensuite?
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Implement v7 fait-divers GN head rule
 - bash — Inspect current GN branch for v7 bug
 - bash — Replace GN block with head tracking and test
 - bash — Add h061, measure, test v7
 - bash — Document v7, add fiche, commit and push submodule
+- bash — Commit v7 and push main
+- bash — Reapply v7 on newest HEAD, commit, push
 
 **Synthèse produite :**
 
@@ -668,7 +670,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 292 autres
+- … et 294 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -832,5 +834,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture d'Alice, la tab
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture, la table de ve
 - S — COMPTEURS : 601 FICHES / 686 JSON (LA BANQUE À NEUF)" -m "Les compteurs de l'état suivent le disque après la fiche de la banque à neuf et le JSON du jour." 
+- S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
+- S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 

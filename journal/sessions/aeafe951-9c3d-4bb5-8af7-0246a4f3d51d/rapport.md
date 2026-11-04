@@ -9,12 +9,12 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 2.3 h |
 | Tours | 3 |
-| Messages | 80 |
-| Appels d'outils | 107 |
+| Messages | 86 |
+| Appels d'outils | 114 |
 | Fichiers touchés | 6 |
-| Commandes | 87 |
+| Commandes | 93 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -130,7 +130,7 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 
 ### Tour 3 — go
 
-*12 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Inspect current tree, staged files, and en-cours diff
 - bash — Check en-cours modification time and hub process
@@ -144,10 +144,13 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 - bash — Stage only my files and the state line
 - bash — Commit the N3 inventory, gate, report, and state line
 - job_output
+- bash — Verify commit contents and remaining working tree
+- bash — Check no foreign files, state freshness, doc review
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Commit d'intégration N3 (fichiers explicites + ligne d'état)
+⏵ Restauration de la ligne N3 et des compteurs, en conservant les mises à jour de S
 
 ## 3. Travail accompli
 
@@ -204,7 +207,7 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 47 autres
+- … et 53 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -339,4 +342,5 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 ## 6. Commits
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACK
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ;
 
