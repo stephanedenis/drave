@@ -7,19 +7,23 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 1.2 h |
-| Tours | 1 |
-| Messages | 22 |
-| Appels d'outils | 29 |
-| Fichiers touchés | 1 |
-| Commandes | 23 |
+| Durée | 2.3 h |
+| Tours | 3 |
+| Messages | 80 |
+| Appels d'outils | 107 |
+| Fichiers touchés | 6 |
+| Commandes | 87 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 1 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — Tu es la session <rôle>. Lis AGENTS.md, docs/pilotage/en-cours.md (état du 04/11, 09 h 35) et seulement le document de ta tâche. Reprends journal/sessions/<id>/plan.md. La machine est stable ; les runs N2 sont déjà relancés (kd2 gpu0, rope2048 gpu1) — ne les relance pas. Exécute la prochaine action de ton plan ; un fait = mesure + contrôle + fiche + ligne d'état (proposée au hub) + commit (git add … [63 caractères tronqués]
+
+**Tour 2** — peux-tu prendre une tâche
+
+**Tour 3** — go
 
 ## 2. Déroulé, étape par étape
 
@@ -63,6 +67,88 @@ Ce que j'ai fait, et rien de plus :
 
 Pour le hub : la note `cloture.md` est **non suivie**, à intégrer (ou écarter) dans son prochain commit d'intégration ; `en-cours` ne liste pas `aeafe951`, il n'y a donc aucune ligne d'état à retirer.
 
+### Tour 2 — peux-tu prendre une tâche
+
+*66 appels d'outils.* Actions notables :
+
+- bash — Locate the never-waiting queue and next actions in roadmap
+- bash — Read roadmap header and priorities
+- bash — Read the never-waiting queue
+- bash — Read backlog index frontier
+- bash — Find backlog entries for A8.3b, A2.6, N3, N4
+- bash — List relevant backlog fiches and A8.3b mentions
+- read
+- bash — Read full backlog table statuses
+- bash — List gates and read gate runner
+- bash — Find native brick implementations and N3 reports
+- bash — Check genealogy doc freshness
+- bash — Find last Panini/Nipada cycle traces
+- bash — Check context budget of documents
+- bash — Run documentation review read-only
+- … et 49 autres
+
+**Synthèse produite :**
+
+⏵ Tâche N3 livrée ; intégration à faire par le hub
+
+**J'ai pris N3 — les opérations natives**, la seule ligne **CPU** de la frontière (`A2.6`, `N2`, `N4` étaient pris ou bloqués par les GPU). Les runs N2 n'ont pas été touchés.
+
+\## Ce qui est mesuré
+
+- **17/17 portes de brique vertes** le **04/11 11 h 32**, en **92 s**, **0 rouge** — verdict lu au **code de sortie** (`work/portes-n3-cloture/registre.txt`), pas au marqueur.
+- **Chaîne fiche → JSON → porte complète** : 18 portes (17 + l'inventaire), 20 fiches, 20 JSON, **0 orpheline, 0 référence morte**.
+- **Nouvelle porte** `porte-n3-inventaire.sh` : vérifie la couverture à chaque passe ; **autotest 5/5** (retirer une porte, ajouter une orpheline, retirer un JSON, en ajouter un orphelin → elle **échoue**, comme elle doit).
+- **Le défaut trouvé** : le code n'a pas bougé, la documentation si. **N3.1** (29/10) dit « sortie précoce : service non » et « k-WTA/routes : aucune porte » — refuté le même jour par N3.2b0/N3.3a ; le **backlog** dit encore « ⏳ une porte par brique » alors que 17 existent, toutes vertes. **N3.4d** avait déjà la bonne conclusion le 29/10 ; elle n'a pas été propagée.
+
+**N3 est clos sur ses deux négatifs nommés** : placement = métadonnée, saut de calcul conditionnel (N3.2b2). Ce sont des conditions d'architecture, pas des portes manquantes.
+
+\## Fichiers (non committés, pour le hub)
+
+- `tools/n3_inventaire.py` — le vérificateur
+- `tools/porte-n3-inventaire.sh` — la porte (1 s, auto-découverte par `toutes-les-portes.sh`)
+- `reports/rapport-n3-inventaire.md` — la fiche (verdict, table des 17 portes, contradictions, contrôle négatif, limites)
+- `reports/n3-inventaire.json` — l'inventaire mesuré
+- `journal/sessions/aeafe951-.../plan.md` — mandat, passé `en pause` (résultat livré)
+
+\## Pourquoi pas de commit
+
+`en-cours.md` est **tenu par le hub et modifié à 11 h 27** (WIP non committé, avec `reports/INDEX.md` et `reports/README.md`), et le hook `verifie_etat_a_jour.py` **refuse** un fait `reports/` sans ligne d'état. Committer maintenant volerait le WIP du hub ; je ne l'ai pas fait, et je n'ai **pas touché** `en-cours`/`roadmap`/`AGENTS`.
+
+**Intégration proposée au hub :**
+
+```bash
+git add tools/n3_inventaire.py tools/porte-n3-inventaire.sh \
+        reports/rapport-n3-inventaire.md reports/n3-inventaire.json \
+        docs/pilotage/en-cours.md \
+        journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+```
+
+Ligne d'état à ajouter sous « Ce qui est en cours » :
+
+> **N3 — clos** : 17 por
+… [561 caractères tronqués]
+
+### Tour 3 — go
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Inspect current tree, staged files, and en-cours diff
+- bash — Check en-cours modification time and hub process
+- bash — Identify session ids of running DSH processes
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
+- bash — Run doc review and state checks before commit
+- bash — Mark session plan as terminated with hub handoff
+- bash — Stage only my files and the state line
+- bash — Commit the N3 inventory, gate, report, and state line
+- job_output
+
+**Synthèse produite :**
+
+⏵ Commit d'intégration N3 (fichiers explicites + ligne d'état)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -70,6 +156,11 @@ Pour le hub : la note `cloture.md` est **non suivie**, à intégrer (ou écarter
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/n3_inventaire.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-inventaire.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-inventaire.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,6 +187,24 @@ Pour le hub : la note `cloture.md` est **non suivie**, à intégrer (ou écarter
 - **T1** Read existing closure note formats
 - **T1** Confirm clean tree and running sessions
 - **T1** Verify no state file touched and list working tree
+- **T2** Locate the never-waiting queue and next actions in roadmap
+- **T2** Read roadmap header and priorities
+- **T2** Read the never-waiting queue
+- **T2** Read backlog index frontier
+- **T2** Find backlog entries for A8.3b, A2.6, N3, N4
+- **T2** List relevant backlog fiches and A8.3b mentions
+- **T2** Read full backlog table statuses
+- **T2** List gates and read gate runner
+- **T2** Find native brick implementations and N3 reports
+- **T2** Check genealogy doc freshness
+- **T2** Find last Panini/Nipada cycle traces
+- **T2** Check context budget of documents
+- **T2** Run documentation review read-only
+- **T2** Check backlog graph and frontier
+- **T2** Show chantier frontier tool output
+- **T2** Check N3 service report and its remaining work
+- **T2** Inspect N3 gate headers
+- … et 47 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -220,4 +329,14 @@ Pour le hub : la note `cloture.md` est **non suivie**, à intégrer (ou écarter
 - **T1** `Total : 282.2 Mo de traces brutes.`
 - **T1** `./journal/sessions/MANIFEST.md:87:| `aeafe951` | 2026-11-04 09:25 | 0.0 Mo | 0 Ko | 0 | 0 | 0 | 0 | 0 |`
 - … (tronqué)
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T2** : porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-linguistique.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh por
+
+## 6. Commits
+
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACK
 

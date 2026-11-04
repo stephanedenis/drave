@@ -8962,3 +8962,120 @@ Il reste à **valider les neuf paragraphes** sur `http://127.0.0.1:8765/paragrap
 
 Le sous-module est poussé en **`4012729`** et le principal en **`cfb68013`** ; l'état est à **601 fiches / 686 JSON**, la page répond 200 avec les neuf sources. Le serveur tourne (il se relance avec `cd tools/structures && python3 serveur.py`).
 
+
+## Tour 16
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ La suite : la validation des neuf paragraphes (humain), puis la rétro-traduction API, l'UDHR et le v7 « fait divers ».
+
+La banque est maintenant à **neuf paragraphes complets**, avec leurs contextes, leurs antécédents et leurs sources anglaises ; la page `http://127.0.0.1:8765/paragraphes` les affiche avec l'arbre et les référents, et les **55 tests** passent (sous-module `4012729`, principal `cfb68013`, état 601 fiches / 686 JSON). Le geste qui manque est humain : **valider les neuf paragraphes** — trancher les référents (la page les présélectionne pour les pronoms personnels et la source anglaise aide) puis les quatre verdicts de structure. C'est ce que la page attend.
+
+Côté machine, trois chantiers restent ouverts. Le premier est la **rétro-traduction** FR → EN → FR par l'API DeepSeek : le code de `llm.py` est prêt, mais `DEEPSEEK_API_KEY` n'est pas dans l'environnement ; dès que la clé est fournie, le contrôle du sens devient automatique (jamais par un serveur local, règle 11). Le deuxième est l'**UDHR** : les 71 langues du travail L offrent un corpus parallèle pour tester les référents à plus grande échelle que les neuf paragraphes d'Alice. Le troisième est le **v7 « fait divers »** : « Le fait divers surprend » reste mal découpé parce que « divers » n'est pas dans le lexique d'adjectifs ; la correction — traiter le nom après l'adjectif, puis s'arrêter avant le verbe — ajoutera la phrase au gold (61/61, 144/144) et fermera la limite nommée dans la fiche v6.
+
+L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fait divers » en attendant, puis la rétro-traduction quand la clé arrive. Dis-moi si tu préfères que je fasse le v7 tout de suite ou que je prépare le code de la rétro-traduction avec un mode sans clé explicite.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+ensuite?
+
+### 🤖 Assistant
+
+⏵ Je fais le v7 « fait divers » : le nom après l'adjectif, puis le verbe, et j'ajoute la phrase au gold.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"calme calmes fort forte forts fortes\", \"calme calmes fort forte forts fortes divers diverse\")\nt= … [3936 caractères tronqués]`
+
+  ```
+v7 : adjectif divers, tête du GN, adjectif après l'homographe
+Le fait divers surprend. -> [('Le fait divers surprend', 'GN', 'agent')]
+Le fait divers. -> [('Le fait divers', 'GN', 'agent')]
+Le grand lit. -> [('Le grand lit', 'GN', 'agent')]
+Le triste fait demeure. -> [('Le triste fait', 'GN', 'agent'), ('demeure', 'GV', 'predicat')]
+Le simple fait surprend. -> [('Le simple fait', 'GN', 'agent'), ('surprend', 'GV', 'predicat')]
+Le chat fait des bonds. -> [('Le chat', 'GN', 'agent'), ('fait', 'GV', 'predicat'), ('des bonds', 'GP', 'theme')]
+Une demeure. -> [('Une demeure', 'GN', 'agent')]
+Le roi Louis parle. -> [('Le roi Louis', 'GN', 'agent'), ('parle', 'GV', 'predicat')]
+Le petit chat noir dort. -> [('Le petit chat noir', 'GN', 'agent'), ('dort', 'GV', 'predicat')]
+La petite ferme est belle. -> [('La petite ferme', 'GN', 'agent'), ('est belle', 'GV', 'predicat')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '/if t.cls in (\"DET\", \"PRON\")/,/segs.append(Segment(t.debut, utiles\\[j - 1\\].fin/p' generateur.py | head -55", "description": "Inspect current GN branch for v7 bug"}`
+
+  ```
+if t.cls in ("DET", "PRON") and not (t.cls == "PRON" and i + 1 < len(utiles)
+                                             and utiles[i + 1].cls in ("AUX", "MOT")):
+            j, mots = i, 0
+            while j < len(utiles) and utiles[j].cls in ("DET", "PRON", "MOT") and mots < 3:
+                if (utiles[j].cls == "MOT" and mots >= 1
+                        and (_norm(utiles[j].texte) in VERBES_FINIS
+                             or _norm(utiles[j].texte) in VERBES_LIEU)):
+                    # Homographe : le mot est un nom si le suivant est un auxiliaire/copule
+                    # (« la petite ferme est ») ou un autre verbe (« le simple fait surprend »).
+                    suivant = utiles[j + 1] if j + 1 < len(utiles) else None
+                    precedent = utiles[j - 1] if j > 0 else None
+                    nom = suivant is not None and (
+                        suivant.cls == "AUX"
+                        or (suivant.cls == "MOT"
+                            and (_norm(suivant.texte) in VERBES_FINIS
+                                 or _norm(suivant.texte) in VERBES_LIEU)))
+                    if not nom and precedent is not None:
+                        adjectif = _nor
+… [485 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('generateur.py'); t=p.read_text(encoding='utf-8')\nold = '''            j, mots = i, 0\n            while j < len(utiles) and utiles[j].cls in (\"DET\", \"PRON\", \" … [4265 caractères tronqués]`
+
+  ```
+bloc GN remplacé
+Le fait divers surprend. -> [('Le fait divers', 'GN', 'agent'), ('surprend', 'GV', 'predicat')]
+Le fait divers. -> [('Le fait divers', 'GN', 'agent')]
+Le grand lit. -> [('Le grand lit', 'GN', 'agent')]
+Le triste fait demeure. -> [('Le triste fait', 'GN', 'agent'), ('demeure', 'GV', 'predicat')]
+Le simple fait surprend. -> [('Le simple fait', 'GN', 'agent'), ('surprend', 'GV', 'predicat')]
+Le chat fait des bonds. -> [('Le chat', 'GN', 'agent'), ('fait', 'GV', 'predicat'), ('des bonds', 'GP', 'theme')]
+Une demeure. -> [('Une demeure', 'GN', 'agent')]
+Le roi Louis parle. -> [('Le roi Louis', 'GN', 'agent'), ('parle', 'GV', 'predicat')]
+Le petit chat noir dort. -> [('Le petit chat noir', 'GN', 'agent'), ('dort', 'GV', 'predicat')]
+La petite ferme est belle. -> [('La petite ferme', 'GN', 'agent'), ('est belle', 'GV', 'predicat')]
+Le grand lit est beau. -> [('Le grand lit', 'GN', 'agent'), ('est beau', 'GV', 'predicat')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np=Path('donnees/gold-analyseur.json'); d=json.loads(p.read_text(encoding='utf-8'))\nif \"h061\" not in {x[\"id\"] for x in d[\"phrases\"]}:\n    d[\"phrases\"] … [1579 caractères tronqués]`
+
+  ```
+61 phrases
+  gold · 61 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    38  38/38      1.00  82/82    21/21  
+  global     61  61/61      1.00 144/144   50/50  
+  contrôle · baseline 104/144 (0.72) · règles coupées 106/144 (0.74) · rôles mélangés 0.10 [0.00, 0.24]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+tests v7
+Ran 56 tests in 4.290s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"**60 phrases** en trois découpages\", \"**61 phrases** en trois découpages\")\nt=t.replace(\"(37 phrases … [5524 caractères tronqués]`
+
+  ```
+README v7
+
+OK
+[master 523d8c1] S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+ 5 files changed, 91 insertions(+), 32 deletions(-)
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   4012729..523d8c1  master -> master
+523d8c1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; for f in docs/pilotage/en-cours.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace( … [2386 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 41.6 h |
-| Tours | 15 |
-| Messages | 427 |
-| Appels d'outils | 414 |
+| Durée | 43.5 h |
+| Tours | 17 |
+| Messages | 435 |
+| Appels d'outils | 419 |
 | Fichiers touchés | 17 |
-| Commandes | 327 |
+| Commandes | 332 |
 | Sous-agents | 0 |
-| Commits | 34 |
+| Commits | 35 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -48,6 +48,10 @@
 **Tour 14** — continue
 
 **Tour 15** — ensuite?
+
+**Tour 16** — continue
+
+**Tour 17** — ensuite?
 
 ## 2. Déroulé, étape par étape
 
@@ -572,6 +576,32 @@ Il reste à **valider les neuf paragraphes** sur `http://127.0.0.1:8765/paragrap
 
 Le sous-module est poussé en **`4012729`** et le principal en **`cfb68013`** ; l'état est à **601 fiches / 686 JSON**, la page répond 200 avec les neuf sources. Le serveur tourne (il se relance avec `cd tools/structures && python3 serveur.py`).
 
+### Tour 16 — continue
+
+**Synthèse produite :**
+
+⏵ La suite : la validation des neuf paragraphes (humain), puis la rétro-traduction API, l'UDHR et le v7 « fait divers ».
+
+La banque est maintenant à **neuf paragraphes complets**, avec leurs contextes, leurs antécédents et leurs sources anglaises ; la page `http://127.0.0.1:8765/paragraphes` les affiche avec l'arbre et les référents, et les **55 tests** passent (sous-module `4012729`, principal `cfb68013`, état 601 fiches / 686 JSON). Le geste qui manque est humain : **valider les neuf paragraphes** — trancher les référents (la page les présélectionne pour les pronoms personnels et la source anglaise aide) puis les quatre verdicts de structure. C'est ce que la page attend.
+
+Côté machine, trois chantiers restent ouverts. Le premier est la **rétro-traduction** FR → EN → FR par l'API DeepSeek : le code de `llm.py` est prêt, mais `DEEPSEEK_API_KEY` n'est pas dans l'environnement ; dès que la clé est fournie, le contrôle du sens devient automatique (jamais par un serveur local, règle 11). Le deuxième est l'**UDHR** : les 71 langues du travail L offrent un corpus parallèle pour tester les référents à plus grande échelle que les neuf paragraphes d'Alice. Le troisième est le **v7 « fait divers »** : « Le fait divers surprend » reste mal découpé parce que « divers » n'est pas dans le lexique d'adjectifs ; la correction — traiter le nom après l'adjectif, puis s'arrêter avant le verbe — ajoutera la phrase au gold (61/61, 144/144) et fermera la limite nommée dans la fiche v6.
+
+L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fait divers » en attendant, puis la rétro-traduction quand la clé arrive. Dis-moi si tu préfères que je fasse le v7 tout de suite ou que je prépare le code de la rétro-traduction avec un mode sans clé explicite.
+
+### Tour 17 — ensuite?
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Implement v7 fait-divers GN head rule
+- bash — Inspect current GN branch for v7 bug
+- bash — Replace GN block with head tracking and test
+- bash — Add h061, measure, test v7
+- bash — Document v7, add fiche, commit and push submodule
+
+**Synthèse produite :**
+
+⏵ Je fais le v7 « fait divers » : le nom après l'adjectif, puis le verbe, et j'ajoute la phrase au gold.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -638,7 +668,7 @@ Le sous-module est poussé en **`4012729`** et le principal en **`cfb68013`** ; 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 287 autres
+- … et 292 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -802,4 +832,5 @@ Le sous-module est poussé en **`4012729`** et le principal en **`cfb68013`** ; 
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture d'Alice, la tab
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture, la table de ve
 - S — COMPTEURS : 601 FICHES / 686 JSON (LA BANQUE À NEUF)" -m "Les compteurs de l'état suivent le disque après la fiche de la banque à neuf et le JSON du jour." 
+- S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 

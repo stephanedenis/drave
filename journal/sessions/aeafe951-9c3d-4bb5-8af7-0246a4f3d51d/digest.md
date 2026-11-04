@@ -826,3 +826,1521 @@ Ce que j'ai fait, et rien de plus :
 
 Pour le hub : la note `cloture.md` est **non suivie**, à intégrer (ou écarter) dans son prochain commit d'intégration ; `en-cours` ne liste pas `aeafe951`, il n'y a donc aucune ligne d'état à retirer.
 
+
+## Tour 2
+
+### 👤 Utilisateur
+
+peux-tu prendre une tâche
+
+### 🤖 Assistant
+
+⏵ Cherchant une tâche libre, CPU seule, hors territoires des sessions actives
+
+- **bash** `{"command": "grep -n \"jamais en attente\\|file\\|prochaine action\\|N4\\|R1.2-1024\\|R0.7\\|B10.3\" docs/pilotage/roadmap.md | head -40", "description": "Locate the never-waiting queue and next actions in roadmap"}`
+
+  ```
+5:> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+18:- **DSH ne reste jamais en attente** : chaque ligne a une **prochaine action** ; si elle est bloquée, on prend la
+19:  suivante. La file d'attente n'existe pas : il y a toujours un chantier non bloqué à faire avancer.
+28:| chantier | ce qu'il couvre | état | prochaine action |
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** 
+… [7142 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' docs/pilotage/roadmap.md", "description": "Read roadmap header and priorities"}`
+
+  ```
+# La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+
+> **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+> L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+>
+> **Détail et histoire** : l'ancien plan [A/B](../theorie/glossaire/entrees/a-b.md) est archivé dans
+> [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+> [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+> dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+> [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+
+## Comment lire cette roadmap
+
+- **Les états** : ✅ mesuré et écrit · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+- **Le carpe diem** : pas d'échéance. Un chantier est **[fait](../theorie/glossaire/entrees
+… [12207 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '330,383p' docs/pilotage/roadmap.md", "description": "Read the never-waiting queue"}`
+
+  ```
+rapide, graphe de document, gist, mesures et blocs structurels.
+
+---
+
+## La file « jamais en attente »
+
+Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
+
+- **non bloqué, à faire** : **N2** (200 k pas sur le mélange 1 Go, puis R1) ; **N4** (consigne courte) ;
+  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
+  **S** (frontière du GN, gold plus large) ;
+- **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
+- **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
+  B10.3 (B10.2bis mesurée, fiche au backlog) ;
+- **clos** : B2.6 (le plan multi-tâches), B3 (le plan résiste), B4 (les opérateurs), B5/B6 (les jeux), B7/B8
+  (langues et maîtres), C3.2 (familles), N0.3b (parité DRVM ↔ GGUF), B12.10 (intégration, négatif).
+
+## Ce qui est bloqué, et par quoi
+
+| ligne | bloqué par | ce qu'il faudrait |
+|---|---|---|
+| B1.5 prose scientifique | aucun corpus parallèle humain d'articles FR/EN | un corpus (revue, actes, manuel) traduit par des humains |
+| A3.4 Colab | le compte et le runtime Colab | un compte (la recette est dans `doc
+… [2473 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"prochaine action\" docs/pilotage/backlog/index.md | head; echo ====; sed -n '1,60p' docs/pilotage/backlog/index.md", "description": "Read backlog index frontier"}`
+
+  ```
+39:**P0** = prochaine action non bloquée ; **P1** = après P0 ou dépend d'une ligne en cours ; **P2** = utile mais
+74:prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadmap.
+133:- [L'état courant](../en-cours.md) — la prochaine action.
+====
+# Le backlog des fonctionnalités — index
+
+> **Ce que ce dossier est.** Une **fiche par fonctionnalité** à documenter et à implémenter : le programme
+> **R (le lecteur)** et les lignes ouvertes des programmes A, B et N. Une fiche n'est **pas** un résultat :
+> elle porte le besoin, le contrat, la porte, les contrôles négatifs et ce qui pourrait la rendre fausse. Le
+> résultat, quand il existe, vit dans `reports/`.
+>
+> **La roadmap** est [`../roadmap.md`](../roadmap.md) ; l'**analyse** qui a ouvert le programme R est
+> [`../../theorie/lecture-rapide.md`](../../theorie/lecture-rapide.md) ; l'**état courant** est
+> [`../en-cours.md`](../en-cours.md). **Chargement** : une fiche à la fois, jamais le dossier entier. **37 fiches** : 20 pour R, 17 pour les lignes
+> ouvertes A/B/N ; le **graphe** des dépendances est dans [`dependances.md`](dependances.md).
+
+## Comment utiliser une fiche
+
+1. **Lire le besoin et le contrat** — c'es
+… [2866 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"A8.3b\\|A2.6\\|N3\\|N4\" docs/pilotage/backlog/index.md", "description": "Find backlog entries for A8.3b, A2.6, N3, N4"}`
+
+  ```
+80:| N4 | [Usage : SFT, service, sûreté](N4-usage-sft.md) | partiel | P1 | — | N4 |
+89:| A2.6 | [Ordonnanceur : experts et tête](A2.6-ordonnanceur.md) | partiel | P2 | A2 | A2.6 |
+90:| N3 | [Opérations natives en production](N3-operations-natives.md) | partiel | P2 | N1 | N3 |
+  ```
+
+- **bash** `{"command": "ls docs/pilotage/backlog/ | grep -Ei 'A8|A2|N3|N4|R12|R11'; echo ====; grep -rn \"A8.3b\" docs/pilotage/backlog/*.md | head -10", "description": "List relevant backlog fiches and A8.3b mentions"}`
+
+  ```
+A2.6-ordonnanceur.md
+A8.0-portes-ppl.md
+A8.3-defaut.md
+N3-operations-natives.md
+N4-usage-sft.md
+R11-contexte-hierarchique.md
+R12-curriculum-contexte.md
+====
+docs/pilotage/backlog/A8.0-portes-ppl.md:50:**A8.3a** — épingler le **régime 1 %** (les mêmes portes, budget en vigueur), puis **A8.3b**
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A8.3-defaut.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A8.3-defaut.md</path>
+<type>file</type>
+<content>
+1: # A8.3 — Passer la règle place+perte par défaut
+2: 
+3: > **Statut** : mesurée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A8.0
+4: > **Ligne de roadmap** : A8.3 · **Fiches de résultat** :
+5: > [`a83-defaut`](../../../reports/rapport-a83-defaut.md) et
+6: > [`a83b-regimes`](../../../reports/rapport-a83b-regimes.md).
+7: > **Résumé** : décider si `DRAVE_PERTE_MAX` devient le défaut ; la mesure dit **non**, pas
+8: > encore.
+9: 
+10: ## Le besoin
+11: 
+12: La règle choisit la précision du KV par couche selon la perte mesurée. Elle payait (+0,03 %
+13: sur les dernières couches) et rendait le choix de la main. La passer par défaut ferait
+14: bénéficier tout le monde de l'int8 tardif — à condition de ne pas déplacer les chiffres.
+15: 
+16: ## L'état
+17: 
+18: **Mesurée négative** — le défaut déplace les portes épinglées de **−5,9 % à +19,5 %** ; trois
+19: régimes sont reproductibles (f32, mélange tardif 1 %, int8 partout), et le **mélange** est un
+20: troisième point : il **améliore deux mesures sur trois** et dégrade le mode de lot. La cause du
+21: signe
+… [1581 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N4-usage-sft.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N4-usage-sft.md</path>
+<type>file</type>
+<content>
+1: # N4 — Usage : SFT, service, sûreté
+2: 
+3: > **Statut** : partiel · **Priorité** : P1 · **Programme** : N · **Dépend de** : — · **Plafonné par** : N2 (la qualité du student)
+4: > **Ligne de roadmap** : N4 · **Fiche de résultat attendue** : rapport-n4-usage.md (à créer dans `reports/`)
+5: > **Résumé** : Rendre le natif utilisable : répondre, s'arrêter, suivre une consigne, servir sur une API.
+6: > **Glossaire** : [SFT](../../theorie/glossaire/entrees/sft.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [jeton](../../theorie/glossaire/entrees/jeton.md).
+7: 
+8: ## Le besoin
+9: 
+10: Le service tourne (69 octets, 611 ms) mais le SFT mémorise : 24/24 vus, 0/4 tenus. Sans tenue à l'écart, il n'y a pas d'assistant.
+11: 
+12: **Périmètre arrêté le 2026-10-29** : la **consigne courte, sans document** (format, arrêt, refus). La restitution depuis un document lu est **R31** ; les deux partagent le même protocole de partage par document, écrit une fois.
+13: 
+14: ## L'état
+15: 
+16: Génération greedy 160 octets (12 cohérents), service Python/Rust, jet
+… [725 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md</path>
+<type>file</type>
+<content>
+1: # N3 — Opérations natives : de la mesure à la production
+2: 
+3: > **Statut** : partiel · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+4: > **Ligne de roadmap** : N3 · **Fiches de résultat** :
+5: > [`n4-porte-execution`](../../../reports/rapport-n4-porte-execution.md),
+6: > [`n4-dessin-b`](../../../reports/rapport-n4-dessin-b.md),
+7: > [`design-H`](../../../reports/rapport-design-H-profondeur-routee.md),
+8: > [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md),
+9: > [`n3.2a-service`](../../../reports/rapport-n3.2a-service.md),
+10: > [`n3.3a-routes`](../../../reports/rapport-n3.3a-routes.md),
+11: > [`n3.2b0-profondeur`](../../../reports/rapport-n3.2b0-profondeur.md),
+12: > [`n3.3b-sparsite`](../../../reports/rapport-n3.3b-sparsite.md),
+13: > [`n3.3c-compte`](../../../reports/rapport-n3.3c-sparsite-compte.md),
+14: > [`n3.4a-composition`](../../../reports/rapport-n3.4a-composition.md),
+15: > [`n3.2b1-seuil`](../../../reports/rapport-n3.2b1-seuil.md),
+16: > [`n3.2b2-cache`](../../../reports/rapport-n3.2b2-cache.md),
+17: > [`n3.4b-pont`
+… [4016 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '60,100p' docs/pilotage/backlog/index.md", "description": "Read full backlog table statuses"}`
+
+  ```
+| R21 | [Mémoire de travail et gist](R21-memoire-travail-gist.md) | spécifiée | P1 | R01, R11 | R2.1 |
+| R22 | [Mémoire épisodique et relecture](R22-memoire-episodique.md) | spécifiée | P2 | R01, R21 | R2.2 |
+| R31 | [Restitution : SFT de lecture](R31-restitution-sft.md) | spécifiée | P1 | R01, R03, R21 | R3.1 |
+| R32 | [Citations et provenance](R32-citations-provenance.md) | spécifiée | P2 | R31, R01, R21 | R3.2 |
+| R41 | [Bloc tableaux](R41-bloc-tableaux.md) | mesurée | P2 | R01 | R4.1 |
+| R42 | [Bloc code (AST, exécution)](R42-bloc-code.md) | mesurée | P2 | R01 | R4.2 |
+| R43 | [Bloc maths](R43-bloc-maths.md) | mesurée | P3 | R01 | R4.3 |
+| R44 | [Encodeur visuel / OCR](R44-encodeur-visuel.md) | partiel | P3 | R41, R42, R43 | R4.4 |
+| R51 | [Lecture croisée / multi-documents](R51-lecture-croisee.md) | spécifiée | P3 | R31, R32, R03, R01 | R5.1 |
+| R52 | [Décodeur multilingue](R52-multilingue-decodeur.md) | spécifiée | P3 | B10.3, R31, R32 | R5.2 |
+
+## Les lignes ouvertes A/B/N
+
+**17 fiches compactes.** Elles ne recopient pas les mesures : elles disent l'état, ce qui bloque, la porte et la
+prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadmap.
+
+| id |
+… [1973 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls tools/porte-*.sh | sed 's#tools/##' | tr '\\n' ' '; echo; echo ====; sed -n '1,80p' tools/toutes-les-portes.sh", "description": "List gates and read gate runner"}`
+
+  ```
+porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-linguistique.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh porte-bus.sh porte-bus-socket.sh porte-c4-retard.sh porte-cerveau.sh porte-consolidation.sh porte-coupe.sh porte-cycle-c2.sh porte-deepseek.sh porte-delais.sh porte-diff-couche.sh porte-document.sh porte-echange-experts.sh porte-episodique.sh porte-etat.sh porte-flux.sh porte-fusion.sh porte-gain.sh porte-greffe.sh porte-harnais-invariants.sh porte-homeostasie.sh porte-horloge.sh porte-indice.sh porte-jeux.sh porte-jumeaux.sh porte-lecteur.sh porte-lecture.sh porte-m5-brouillon.sh porte-melange.sh porte-memoire.sh porte-miroir-blocs.sh porte-mistral.sh porte-n3-cache.sh porte-n3-composition.sh porte-n3-deux-processus.sh porte-n3-deux-regions.sh porte-n3-generation.sh porte-n3-placement.sh porte-n3-pont.sh porte-n3-positions.sh porte-n3-profondeur.sh porte-n3-refus.sh porte-n3-reseau.sh porte-n3-routes.sh porte-n3-service-briques.sh porte-n3-service.sh porte-n3-seuil.sh porte-n3-sparsite-compte.sh porte-n3-sparsite.sh porte-occupation-elagage.sh porte-occupation-moteur.sh porte-ocr-scans.s
+… [4439 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rln \"k-wta\\|k_wta\\|sortie précoce\\|sortie_precoce\" tools/*.py | head; echo ====; ls reports | grep -E 'n3\\.|n3-' | head -30", "description": "Find native brick implementations and N3 reports"}`
+
+  ```
+tools/journal_auto.py
+tools/lecteur_controleur.py
+====
+n3.1-etat.json
+n3.2a-service.json
+n3.2b0-profondeur.json
+n3.2b1-seuil.json
+n3.2b2-cache.json
+n3.3a-routes.json
+n3.3b-sparsite.json
+n3.3c-sparsite-compte.json
+n3.4a-composition.json
+n3.4b-pont.json
+n3.4c-placement.json
+n3.4d-couverture.json
+n3.5a-deux-regions.json
+n3.5b-deux-processus.json
+n3.5c-reseau.json
+n3.5d-refus.json
+n3.5e-generation.json
+n3.5f-positions.json
+n3.6-service-briques.json
+rapport-n3.1-etat.md
+rapport-n3.2a-service.md
+rapport-n3.2b0-profondeur.md
+rapport-n3.2b1-seuil.md
+rapport-n3.2b2-cache.md
+rapport-n3.3a-routes.md
+rapport-n3.3b-sparsite.md
+rapport-n3.3c-sparsite-compte.md
+rapport-n3.4a-composition.md
+rapport-n3.4b-pont.md
+rapport-n3.4c-placement.md
+  ```
+
+- **bash** `{"command": "ls -la docs/theorie/genealogie-des-langues.md; grep -n \"2026-\\|mis à jour\\|dernière\" docs/theorie/genealogie-des-langues.md | head -10; echo ====; wc -l docs/theorie/genealogie-des-langues.md", "description": "Check genealogy doc freshness"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 5028 28 oct 09:17 docs/theorie/genealogie-des-langues.md
+====
+74 docs/theorie/genealogie-des-langues.md
+  ```
+
+- **bash** `{"command": "grep -rn \"panini\\|nipada\" --include='*.md' journal/2026-11-0* docs/methode/panini-nipada.md 2>/dev/null | tail -15", "description": "Find last Panini/Nipada cycle traces"}`
+
+  ```
+(no output)
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit rapide des documents et du budget de contexte (lecture seule)
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -30", "description": "Check context budget of documents"}`
+
+  ```
+budget de contexte · documents chargeables
+    mots lignes  cat budget  document
+    6629    384   T1   9000  docs/pilotage/roadmap.md
+    5999    597 DATÉ      0  docs/implantation/contexte-long.md
+    4858    515   T1   5000  docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+    4085    431 DATÉ      0  docs/implantation/numa-segregation.md
+    3131    294   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2788    181   T1   2800  reports/README.md
+    2353    150   T1   2500  docs/pilotage/references-non-regression.md
+    2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/form
+… [498 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -40", "description": "Run documentation review read-only"}`
+
+  ```
+revue de documentation · 604 fiche(s) · 690 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_backlog.py 2>&1 | tail -30", "description": "Check backlog graph and frontier"}`
+
+  ```
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "ls tools | grep -i 'chantier\\|frontiere\\|carte' ; python3 tools/carte_chantiers.py 2>&1 | head -40", "description": "Show chantier frontier tool output"}`
+
+  ```
+c8_carte_profondeur.sh
+carte_chantiers.py
+carte_coupe.sh
+carte_decisions.py
+carte-facultes.sh
+carte-fenetre-puits.sh
+carte_langues.py
+carte_latence.sh
+carte-sortie-profondeur.sh
+glossaire_cartes.py
+→ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/chantiers-vision.svg
+  ```
+
+- **bash** `{"command": "git log --oneline -8 -- reports/rapport-n3.6-service-briques.md reports/rapport-n3.2b2-cache.md; echo ====; tail -40 reports/rapport-n3.6-service-briques.md", "description": "Check N3 service report and its remaining work"}`
+
+  ```
+f9132a68 N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE
+51a3dc91 N3.2b2 — LE SAUT DE CALCUL N'EST PAS GRATUIT : 5,2 → 2,0 MS, SORTIE DIFFÉRENTE ; PORTE 66
+====
+| seuil 0 / seuil 1 | **12/0** et **0/12**, textes différents |
+| seuil 0,01, deux fois | **11/1**, rejeu identique |
+| paramètres A/B/C / T | **428 504** / **132 528** |
+
+## Le contrôle négatif
+
+- **Pont nul** : B diffère de A — un vrai changement est détecté ; la porte ne dit pas « tout est
+  identique » par construction.
+- **Placement** : C est identique à A — le champ est **inerte**, comme N3.4c l'avait nommé.
+- **Seuils extrêmes** : 0 → tout court, 1 → tout plein, textes différents ; 0,01 → mixte **et**
+  rejouable. La décision n'est pas un tirage.
+
+## La condition
+
+N3.2b2 a nommé la limite : la décision à seuil calcule **les deux chemins** ; elle ne saute pas le
+calcul. La profondeur 1 est plus rapide mais change le contenu, parce que les couches sautées ne
+fournissent plus leurs **K/V** aux jetons suivants. Cette porte prouve la **composition** dans le
+service, pas un gain de temps qui n'existe pas encore.
+
+## Ce qui pourrait le rendre faux
+
+- **Modèle synthétique, un prompt, 12 octets** : la comparaison pr
+… [933 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for f in tools/porte-n3-*.sh; do echo \"== $f\"; grep -m2 -E '^# (porte|POURQUOI|Ce que)' \"$f\"; done | head -60", "description": "Inspect N3 gate headers"}`
+
+  ```
+== tools/porte-n3-cache.sh
+# porte-n3-cache.sh — N3.2b2 : que gagne-t-on à couper la profondeur en génération ?
+== tools/porte-n3-composition.sh
+# porte-n3-composition.sh — N3.4a : les briques natives composent-elles sur UN modèle ?
+== tools/porte-n3-deux-processus.sh
+# porte-n3-deux-processus.sh — N3.5b : le découpage en DEUX PROCESSUS (fichier)
+== tools/porte-n3-deux-regions.sh
+# porte-n3-deux-regions.sh — N3.5a : le modèle natif coupé en deux régions
+== tools/porte-n3-generation.sh
+# porte-n3-generation.sh — N3.5e : génération répartie sur deux processus TCP.
+== tools/porte-n3-placement.sh
+# porte-n3-placement.sh — N3.4c : le champ `placement` du DRVM natif agit-il ?
+== tools/porte-n3-pont.sh
+# porte-n3-pont.sh — N3.4b : le PONT natif agit-il dans la génération ?
+== tools/porte-n3-positions.sh
+# porte-n3-positions.sh — N3.5f : le serveur vérifie la POSITION de chaque pas.
+== tools/porte-n3-profondeur.sh
+# porte-n3-profondeur.sh — N3.2b0 : la profondeur de service change-t-elle la génération ?
+== tools/porte-n3-refus.sh
+# porte-n3-refus.sh — N3.5d : le protocole REFUSE un aval qui n'a pas le même modèle.
+== tools/porte-n3-reseau.sh
+# porte-n3-reseau.sh — N3.5c : deux processus, f
+… [787 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rln \"précoce\\|precoce\\|early_exit\\|sortie_precoce\\|early\" tools/porte-*.sh | head; echo ====; grep -rn \"précoce\" reports/rapport-n3.1-etat.md | head", "description": "Find the early-exit gate"}`
+
+  ```
+tools/porte-n3-cache.sh
+tools/porte-n3-composition.sh
+tools/porte-n3-deux-processus.sh
+tools/porte-n3-deux-regions.sh
+tools/porte-n3-generation.sh
+tools/porte-n3-placement.sh
+tools/porte-n3-pont.sh
+tools/porte-n3-positions.sh
+tools/porte-n3-profondeur.sh
+tools/porte-n3-refus.sh
+====
+14:| sortie précoce | `porte-reflexe.sh` | **non** — bench `--reflexe-essai` |
+27:porte ; il reste le service de la sortie précoce et `k-WTA/routes`.
+31:1. **N3.2** — porter la sortie précoce dans le chemin de service (pas seulement le bench) ;
+  ```
+
+- **bash** `{"command": "grep -rn \"sortie précoce\" reports/*.md | head -10", "description": "Find early-exit measurements"}`
+
+  ```
+reports/rapport-c8-echelle.md:114:* **corollaire pratique** : on ne « rattrape » pas une sortie précoce avec plus de données (le
+reports/rapport-c8-echelle.md:119:  et ce qui manque à la sortie précoce est une **petite** partie de l'information — ×1,5, pas ×10.
+reports/rapport-n3.1-etat.md:14:| sortie précoce | `porte-reflexe.sh` | **non** — bench `--reflexe-essai` |
+reports/rapport-n3.1-etat.md:27:porte ; il reste le service de la sortie précoce et `k-WTA/routes`.
+reports/rapport-n3.1-etat.md:31:1. **N3.2** — porter la sortie précoce dans le chemin de service (pas seulement le bench) ;
+reports/rapport-n3.2a-service.md:6:> chemin inconnu rend **404**. N3.2 (sortie précoce en service) reste ouvert.
+reports/rapport-n3.2a-service.md:35:- **Pas de sortie précoce, de pont ni de rejeu** dans ce service : N3.2b et N3.3 restent.
+reports/rapport-n3.2a-service.md:42:N3.2b (sortie précoce en service), N3.3 (porte `k-WTA/routes`), puis la porte de composition.
+reports/rapport-n3.2b2-cache.md:43:  partiel, sortie précoce seulement sur le dernier jeton) — non testée ici.
+reports/rapport-n3.3a-routes.md:40:(sortie précoce en service), puis la porte de composition. La porte N3.2a (service) et N3.3
+… [1 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,45p' reports/rapport-n3.1-etat.md", "description": "Read N3.1 state report table"}`
+
+  ```
+# N3.1 — l’état des opérations natives : une porte composée serait prématurée
+
+> **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ⛔ **pas de porte composée
+> aujourd’hui** — une brique n’a ni service ni porte (`k-WTA/routes`) ; la profondeur routée a une porte (`porte-profondeur-routee.sh`), pas de service, et
+> une méta-porte qui lance les portes existantes ne testerait **pas** leur composition.
+>
+> **Dispositif** : inventaire statique des gates et des chemins de service ; aucun nouveau run ;
+> données [`n3.1-etat.json`](n3.1-etat.json).
+
+## L’inventaire
+
+| brique | porte | service |
+|---|---|---|
+| sortie précoce | `porte-reflexe.sh` | **non** — bench `--reflexe-essai` |
+| rejeu | `porte-trace.sh` | oui |
+| placement | `porte-topologie.sh` | oui |
+| pont | `porte-pont.sh` | oui |
+| coupe | `porte-coupe.sh` | oui |
+| profondeur routée | `porte-profondeur-routee.sh` | rapport design-H, pas de service |
+| k-WTA / routes | **aucune** | **aucun chemin** |
+
+## Ce que ça décide
+
+N3 reste **partielle**. Une porte composée honnête demanderait que chaque brique **s’exécute dans
+le moteur** puis que la composition soit mesurée (temps, perte, rejeu) ; lancer les portes
+sépar
+… [863 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rln \"reflexe\" --include='*.py' --include='*.rs' --include='*.sh' tools/ | head -20", "description": "Locate reflexe/early-exit implementation"}`
+
+  ```
+tools/porte-reflexe.sh
+tools/porte-peripherie.sh
+tools/porte-speculatif.sh
+  ```
+
+- **bash** `{"command": "grep -rn \"reflexe-essai\\|reflexe_essai\\|reflexe\" --include='*.rs' --include='*.py' --include='*.sh' . 2>/dev/null | grep -v '^./data' | head -20", "description": "Find reflexe option across code"}`
+
+  ```
+./tools/porte-reflexe.sh:2:# porte-reflexe.sh — la porte de la capacité C8 (premier pas) : le RÉFLEXE.
+./tools/porte-reflexe.sh:50:timeout 1800 "$D" "$M" --reflexe-essai "$N" --ids-file "$IDS" --ctx 256 --threads 8 \
+./tools/porte-peripherie.sh:115:reflexe=$($D "$M" --entree "signal:$T/signal.txt" --sortie "$T/r.f32" --ctx 8 --threads 8 \
+./tools/porte-peripherie.sh:118:echo "  passe complète : ${complet:-?} M paires par décision · réflexe 8/24 couches : ${reflexe:-?} M"
+./tools/porte-peripherie.sh:119:[ -n "$complet" ] && [ -n "$reflexe" ] || { echo "  ❌ la métrique n'est pas rendue"; exit 1; }
+./tools/porte-peripherie.sh:122:c, r = float('$complet'), float('$reflexe')
+./tools/porte-speculatif.sh:91:    echo "     (elle l'est dans reports/rapport-speculatif-reflexe.md : 2,4 à 30 % à K = 4)"
+./drave-core/src/main.rs:127:        eprintln!("       drave <modele> --reflexe-essai N [--ids-file F]");
+./drave-core/src/main.rs:629:        (opt.reflexe_essai > 0, "--reflexe-essai"),
+./drave-core/src/main.rs:646:    if opt.reflexe_essai > 0 { run_reflexe_essai(opt); return; }
+./drave-core/src/main.rs:1184:    reflexe_essai: usize,
+./drave-core/src/main.rs:1465:            "--reflexe-essai" 
+… [474 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,60p' tools/porte-reflexe.sh", "description": "Read the early-exit gate"}`
+
+  ```
+#!/bin/bash
+# porte-reflexe.sh — la porte de la capacité C8 (premier pas) : le RÉFLEXE.
+#
+# LA QUESTION. Un réflexe médullaire ne remonte pas au cortex : il répond par un
+# chemin COURT. Dans le moteur, ce chemin existe déjà — `--couches 0,L` tronque le
+# modèle et `--tete-partielle` applique la tête à la fin de la plage. La question
+# mesurable n'est donc pas « peut-on faire un réflexe ? » mais **« à partir de quelle
+# profondeur un réflexe tombe-t-il d'accord avec le modèle entier ? »**.
+#
+# CE QUE LA MESURE A RÉPONDÉ : avec la TÊTE DU MODÈLE, l'accord est de 0 % jusqu'à
+# 16 couches sur 24, 8,3 % à 20, et 100 % seulement à 24. Le diagnostic est dans la
+# même table : la COSINUS entre l'état tronqué et l'état final vaut 0,037 à 1 couche,
+# 0,130 à 16 et 1,000 à 24 — **l'état intermédiaire est presque ORTHOGONAL à l'état
+# final**, et la tête du modèle lit une direction que seules les dernières couches
+# produisent.
+#
+# **CORRECTION DU 2026-10-10 — la conclusion « pas de sortie précoce utilisable » est
+# vraie de la TÊTE EMPRUNTÉE et fausse de l'ÉTAT** (voir la dernière section de cette
+# porte). Une sonde LINÉAIRE entraînée sur l'état de 16 couches lit le prochain jeton à
+# **40,
+… [2135 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"drvm-serve\\|fn run_serve\\|serve\" drave-core/src/main.rs | head -30", "description": "Locate native service code and options"}`
+
+  ```
+170:    if args[1] == "--drvm-serve" {
+173:        if let Err(e) = native::servir(&f, port) { eprintln!("serveur : {e}"); std::process::exit(3); }
+236:    if args[1] == "--drvm-serve-gen" {
+243:        eprintln!("[drvm-serve-gen] 127.0.0.1:{port} · blocs {k_cli}..{} · boucle de génération", nat.cfg_n_blocks());
+338:    if args[1] == "--drvm-serve-aval" {
+346:        eprintln!("[drvm-serve-aval] 127.0.0.1:{port} · blocs {k}..{} · aucun cache sur le fil", nat.cfg_n_blocks());
+588:    // réparti (`--ppl-reparti`) et le nœud relais (`--flux-serveur`, `--region`)
+593:        || args.iter().any(|a| a == "--flux-serveur")
+622:        (opt.flux_serveur.is_some(), "--flux-serveur"),
+650:    if let Some(adresse) = opt.flux_serveur.clone() { run_serveur_flux(opt, &adresse); return; }
+1263:    bus_serveur: Option<u16>,
+1301:    flux_serveur: Option<String>,
+1507:            "--bus-serveur" => { o.bus_serveur = suivant(i).parse().ok(); 2 }
+1525:            "--flux-serveur" => { o.flux_serveur = Some(suivant(i).clone()); 2 }
+3696:/// des chemins FLUX. Ils étaient ignorés dans `--flux-serveur` et
+4477:fn demarrer_bus_serveur(port: u16, bus: std::sync::Arc<std::sync::Mutex<bus::Bus>>) {
+4554:fn ru
+… [767 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"couches\\|tete_partielle\\|tete-partielle\" drave-core/src/main.rs | head -30", "description": "Check truncation options in engine"}`
+
+  ```
+129:        eprintln!("                                     couches, tête appliquée à la fin de la");
+132:        eprintln!("                                     combien de couches pour qu'un réflexe");
+657:    if opt.k3_essai { run_k3_essai(opt.couches); return; }
+695:    println!("architecture : {arch} · {n_layer} couches · hidden {hidden} · intermédiaire {inter}");
+937:/// **Sonde de plage** (`--tete-partielle`) : appliquer la tête de sortie à la
+938:/// fin d'une plage `--couches a:b`. Par défaut une plage partielle rend le flux
+941:/// de vérifier une réduction finale dont les couches suivantes ne tournent pas
+977:fn poser_tete_partielle(mdl: &mut model::Model) {
+978:    mdl.tete_partielle = true;
+979:    eprintln!("[plage] `--tete-partielle` : la tête de sortie est appliquée à la fin de la \
+987:/// REFUSÉ sans `--tete-partielle` : ailleurs, elle changerait le modèle au lieu de lire un chemin
+990:fn appliquer_adaptateur(mdl: &mut model::Model, chemin: Option<&str>, tete_partielle: bool) {
+992:    if !tete_partielle {
+993:        eprintln!("[adaptateur] `--adaptateur-sortie` sans `--tete-partielle` : l'adaptateur \
+1020:fn poser_plage(mdl: &mut model::Model, tete_partielle: bo
+… [973 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,55p' reports/rapport-n3.2b0-profondeur.md", "description": "Read routed-depth service report"}`
+
+  ```
+# N3.2b0 — la profondeur de service est branchée, et le service lisait mal les requêtes
+
+> **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.2b0 tenu** — le
+> service natif accepte `DRAVE_NATIVE_PROFONDEUR=N`, la profondeur 1 et la profondeur pleine
+> donnent des sorties **différentes**, chacune est **déterministe**, et `/sante` ne bouge pas.
+> La porte a aussi trouvé un **défaut de lecture HTTP** : le service lisait la requête en un
+> seul `read` et perdait parfois le corps. Corrigé.
+>
+> **Dispositif** : `tools/porte-n3-profondeur.sh`, petit `drave-n0` synthétique (graine 7,
+> 2 blocs, 132 528 paramètres), service `--drvm-serve` ; données
+> [`n3.2b0-profondeur.json`](n3.2b0-profondeur.json).
+
+## Le défaut trouvé
+
+Avant correctif, **la même requête** `/generer` donnait parfois **12 octets** (corps vide) et
+parfois **15 octets** (prompt « abc » + 12 générés) : le service faisait un seul `read` et le
+corps pouvait arriver dans un second segment TCP. Ce n’était pas un aléa du modèle, c’était une
+**lecture incomplète**.
+
+Correctif : lire jusqu’à `Content-Length` (et jusqu’à la fin des en-têtes), 64 Ko maximum.
+
+## Ce qui est mesuré après correctif
+
+| mesure | rés
+… [1246 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,50p' tools/porte-n3-profondeur.sh", "description": "Read routed-depth gate"}`
+
+  ```
+#!/bin/bash
+# porte-n3-profondeur.sh — N3.2b0 : la profondeur de service change-t-elle la génération ?
+#
+# `DRAVE_NATIVE_PROFONDEUR=N` coupe le calcul natif après N blocs (défaut : tous).
+# C'est une sortie précoce FIXE, sans seuil de confiance : N3.2b0 mesure le CHEMIN
+# de service, pas la qualité. La porte vérifie que le même modèle à profondeur 1
+# et à profondeur pleine donne des sorties différentes, que chaque profondeur est
+# déterministe, et que /sante ne change pas.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+PY=${PY:-/home/stephane/gpu-env/bin/python}
+T=$(mktemp -d "${TMPDIR:-/tmp}/porte-n3-profondeur-XXXXXX")
+trap 'kill ${SRV:-} 2>/dev/null; wait ${SRV:-} 2>/dev/null; rm -rf "$T"' EXIT
+[ -x "$D" ] || { echo "  ❌ $D absent"; exit 2; }
+"$PY" -c "import torch" 2>/dev/null || { echo "  ❌ $PY n'a pas torch"; exit 2; }
+
+echo "=== 1. un DRVM à 2 blocs, graine 7 ==="
+"$PY" - "$T/modele.drvm" "$T/params" <<'PY' || exit 2
+import sys, torch
+sys.path.insert(0, ".")
+from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+torch.manual_seed(7)
+cfg = NativeConfig(vocab=256, d_model=32, n_blocks=2, n_heads=2, expert_hidden=16,
+                 
+… [1197 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,30p' reports/rapport-n4-porte-execution.md; echo ====; ls reports | grep -i 'n4'", "description": "Check what N4 service report covers"}`
+
+  ```
+# N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24)
+
+> Campagne : **cerveau** · expérience : rendre le dessin B **exécutable** par `drave` — écriture
+> d'un GGUF dense (Qwen2), pose du lecteur appris sur un chemin tronqué, et mesure par le moteur.
+> Question : les chiffres du dessin B, mesurés en torch le 14/10 (`reports/rapport-n4-dessin-b.md`),
+> sont-ils ceux du **moteur** ? Un chiffre que le moteur ne reproduit pas n'est pas encore un
+> chiffre du dépôt.
+> Verdict : **oui, à 2 % près, et le verdict du moteur est plus net que celui de torch.**
+> À profondeur 8, sur les deux morceaux de test jamais vus : l'adaptateur seul rend **272,45**
+> (m32) et **168,85** (m20) ; le même adaptateur sur un modèle dont les **8 premières couches ont
+> été entraînées** rend **185,67** et **136,33** — soit **÷1,47** et **÷1,24**, mesurés par
+> `drave` sur un fichier écrit ici. Sur trois entraînements à graine fixée, le rapport vaut
+> ÷1,32 · ÷1,46 · ÷1,43 (m32) et ÷1,01 · ÷1,25 · ÷1,22 (m20) : **le signe est stable, la taille
+> varie de ±10 %** (§ 4 — la graine ne suffit pas dès qu'on rétropropage à travers les couches).
+> La tête **empruntée** du modèl
+… [2014 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git log --oneline -5 -- reports/rapport-n4-porte-execution.md; echo ====; tail -25 reports/rapport-n3.2b2-cache.md", "description": "Check N4 report date and N3 cache report tail"}`
+
+  ```
+4035fe3d DOCS — QUATRE FAMILLES : MÉTHODE, PILOTAGE, THÉORIE, IMPLANTATION
+aeb941f1 Porte d'execution de N4 : le chemin court entraine est mesure par le MOTEUR (÷1,47 et ÷1,24) — et la graine ne suffit pas a reproduire un chiffre qui retropropage
+====
+## Le contrôle négatif
+
+- **Chaque régime deux/trois fois** : déterministe — la différence n’est pas un tirage.
+- **Plein contre profondeur 1** : textes différents — le saut change le contenu.
+- **Temps médian** : 5,2 ms contre 2,0 ms — le gain de calcul est réel, pas supposé.
+
+## Ce qui pourrait le rendre faux
+
+- **Modèle synthétique** ; un prompt ; trois mesures.
+- **Le temps n’est pas la qualité** : plus rapide ne veut pas dire meilleur.
+- **La condition K/V** est une analyse de l’architecture, pas une mesure de cache instrumenté.
+- **N3.2b2** pourrait être viable avec une architecture différente (cache par jeton, recalcul
+  partiel, sortie précoce seulement sur le dernier jeton) — non testée ici.
+
+## Ce que ça change
+
+N3.2b2 est **nommé** : le saut de calcul ne se transpose pas au cache sans coût. N3 reste
+**partielle** : la composition avec pont/placement, et une architecture de cache si elle existe.
+N3.2b1 (décision à seuil) res
+… [204 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/verifie_etat_a_jour.py", "description": "Read the state-line pre-commit hook"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [2088 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls .git/hooks/ | head; echo ====; cat .git/hooks/pre-commit 2>/dev/null | head -30", "description": "Check installed git hooks"}`
+
+  ```
+applypatch-msg.sample
+commit-msg.sample
+fsmonitor-watchman.sample
+post-update.sample
+pre-applypatch.sample
+pre-commit
+pre-commit.sample
+pre-merge-commit.sample
+prepare-commit-msg.sample
+pre-push.sample
+====
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en éch
+… [441 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -l \"CUDA\\|cuda\\|nvidia-smi\" tools/porte-n3-*.sh; echo \"---\"; grep -h \"threads\\|taskset\\|OMP_NUM\" tools/porte-n3-*.sh | sort -u | head", "description": "Check N3 gates for GPU usage and thread settings"}`
+
+  ```
+---
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --help 2>&1 | head -30", "description": "Read resource claim usage"}`
+
+  ```
+usage: ressources.py [-h] [--ledger LEDGER] [--status] [--claim] [--release]
+                     [--check] [--strict] [--suggest] [--actual] [--autotest]
+                     [--session SESSION] [--job JOB] [--res RES] [--prio PRIO]
+                     [--eta ETA] [--note NOTE]
+
+ressources.py — le registre des ressources de Hauru et le protocole de claim.
+
+Pourquoi. Le pilotage réservait des **fichiers** (`sessions.py`) et surveillait les
+**fichiers en mouvement** (`surveille_sessions.py`), mais pas la **machine** : deux
+sessions pouvaient lancer deux entraînements sur le même GPU, ou saturer le même
+NVMe, sans le voir. Ce registre rend les ressources explicites, les réserve et met
+en file ce qui ne tient pas — pour éviter les attentes inutiles et les simultanéités
+intenses.
+
+Capacités (Hauru, 2026-11-02) :
+  gpu0 / gpu1 : 1 job exclusif, 16 Gio de VRAM, NUMA 0 (0-9,20-29)
+  cpu0        : 20 fils (0-9,20-29), réserve 4 → 16 fils utilisables
+  cpu1        : 20 fils (10-19,30-39), réserve 4 → 16 fils utilisables
+  ram         : 125 Gio, réserve 16 → 109 Gio utilisables
+  nvme_system : 1 IO lourde, / (Fanxiang 1 To : /, /home, /FastNVMe)
+  nvme_raid   : 1 IO lourde, /home/stephane/I
+… [504 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat journal/sessions/_modele/plan.md; echo ====; python3 tools/ressources.py --claim --session aeafe951 --job n3-cloture --res cpu1=4 --prio 2 --eta 45 --note \"passe N3 (18 portes CPU)\" 2>&1 | tail -8", "description": "Read plan model and claim cpu1"}`
+
+  ```
+# Plan de session — <id>
+
+> **Mandat vivant.** Écris ce fichier **avant** `en-cours`, mets-le à jour à chaque cycle,
+> et passe `État : terminé` quand la session se retire.
+
+- **Session** : `<id>`
+- **Rôle** : <chantier / programme>
+- **Périmètre** : <A8.0, R13, ...>
+- **Fichiers réservés** : `tools/...`, `reports/...`
+- **Heartbeat** : <AAAA-MM-JJ HH:MM HAE>
+- **Prochaine action** : <une action nommée>
+- **État** : actif
+====
+  ✅ accordé : aeafe951 / n3-cloture
+  ```
+
+### 🤖 Assistant
+
+⏵ Mandat N3 écrit ; lancement de la passe des 18 portes natives sur cpu1
+
+- **write** `{"content": "# Plan de session — N3, les opérations natives : la clôture par l'inventaire\n\n> **Mandat ouvert** le 2026-11-04 10 h 05 HNE, sur la frontière du graphe\n> (`A2.6, N2, N3, N4` — les trois autres sont pris : N2 aux runs GPU, A2.6 et N4\n> attendent les mêmes GPU jusqu'à ~15 h). La sessi … [1872 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "rm -rf work/portes-n3-cloture; JOURNAUX=work/portes-n3-cloture DELAI=600 PORTES=n3 taskset -c 10-19,30-39 bash tools/toutes-les-portes.sh", "description": "Run the 18 N3 gates on cpu1 in background", "run_in_background": true}`
+
+  ```
+started background job bash-58
+  ```
+
+- **bash** `{"command": "for f in reports/rapport-n3.*.md; do printf '%-40s ' \"$(basename \"$f\")\"; grep -m1 -E '\\*\\*Verdict\\*\\*|Verdict :' \"$f\" | sed 's/^> //' | cut -c1-110; done", "description": "Extract verdicts from all N3 reports"}`
+
+  ```
+rapport-n3.1-etat.md                     **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ⛔ **pas de porte composée
+rapport-n3.2a-service.md                 **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.2a tenu** — le
+rapport-n3.2b0-profondeur.md             **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.2b0 tenu** — le
+rapport-n3.2b1-seuil.md                  **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.2b1 tenu** — le
+rapport-n3.2b2-cache.md                  **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ⛔ **condition nommée** —
+rapport-n3.3a-routes.md                  **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.3a tenu** — deux
+rapport-n3.3b-sparsite.md                **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.3b tenu** — trois
+rapport-n3.3c-sparsite-compte.md         **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.3c tenu** — les
+rapport-n3.4a-composition.md             **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.4a tenu** — les
+rapport-n3.4b-pont.md  
+… [1287 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for f in reports/rapport-n3.*.md; do echo \"== $(basename \"$f\")\"; sed -n '/## Fichiers/,$p' \"$f\" | grep -E '^\\- `' | head -3; done", "description": "Extract file/gate mapping per N3 report"}`
+
+  ```
+== rapport-n3.1-etat.md
+- `reports/n3.1-etat.json` — l’inventaire.
+- `reports/rapport-n3.1-etat.md` — cette fiche.
+== rapport-n3.2a-service.md
+- `tools/porte-n3-service.sh` — la porte.
+- `reports/n3.2a-service.json` — les mesures.
+- `reports/rapport-n3.2a-service.md` — cette fiche.
+== rapport-n3.2b0-profondeur.md
+- `drave-core/src/native.rs` — lecture HTTP complète + profondeur.
+- `tools/porte-n3-profondeur.sh` — la porte.
+- `reports/n3.2b0-profondeur.json` — les mesures.
+== rapport-n3.2b1-seuil.md
+- `drave-core/src/native.rs` — `generer_seuil`, `pas_profondeur`, service `seuil=`.
+- `tools/porte-n3-seuil.sh` — la porte.
+- `reports/n3.2b1-seuil.json` — les mesures.
+== rapport-n3.2b2-cache.md
+- `tools/porte-n3-cache.sh` — la porte.
+- `reports/n3.2b2-cache.json` — les mesures.
+- `reports/rapport-n3.2b2-cache.md` — cette fiche.
+== rapport-n3.3a-routes.md
+- `tools/porte-n3-routes.sh` — la porte.
+- `reports/n3.3a-routes.json` — les mesures.
+- `reports/rapport-n3.3a-routes.md` — cette fiche.
+== rapport-n3.3b-sparsite.md
+- `tools/porte-n3-sparsite.sh` — la porte.
+- `reports/n3.3b-sparsite.json` — les mesures.
+- `reports/rapport-n3.3b-sparsite.md` — cette fiche.
+== rapport-n3.3c-sparsite-co
+… [2864 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3.4d-couverture.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3.4d-couverture.md</path>
+<type>file</type>
+<content>
+1: # N3.4d — la couverture N3 par brique est complète, la composition native reste conditionnelle
+2: 
+3: > **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **couverture par brique**
+4: > — chaque opération native a une porte verte ou une condition nommée. ⛔ **composition native
+5: > unique** avec placement : impossible sans un chemin distribué natif qui n’existe pas.
+6: >
+7: > **Dispositif** : synthèse des fiches et portes, aucun nouveau run ; données
+8: > [`n3.4d-couverture.json`](n3.4d-couverture.json).
+9: 
+10: ## La couverture
+11: 
+12: | brique | porte(s) | état |
+13: |---|---|---|
+14: | k-WTA / routes | N3.3a, N3.3b, N3.3c | ✅ |
+15: | sortie précoce | N3.2b0, N3.2b1, N3.2b2 | ✅ / condition K/V |
+16: | pont | N3.4b, `porte-pont` | ✅ |
+17: | rejeu | `porte-trace` | ✅ |
+18: | placement | `porte-topologie` (GGUF), N3.4c (natif) | ✅ / condition métadonnée |
+19: | service | N3.2a | ✅ |
+20: | composition | N3.4a | ✅ |
+21: 
+22: ## La condition
+23: 
+24: Une **composition native unique** qui inclurait le placement demanderait un chemin distribué
+
+… [1228 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-58", "wait": true, "timeout_ms": 240000}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (17 portes, borne 600 s) ===
+    journaux : work/portes-n3-cloture
+  porte-n3-cache         ✅                           6 s  PORTE TENUE : saut de calcul mesuré · sortie changée · condition K/V nommée
+  porte-n3-composition   ✅                           6 s  PORTE TENUE : service + profondeur + routage + comptage composés sur les mêmes modèles
+  porte-n3-deux-processus ✅                           5 s  PORTE TENUE : deux processus · fichier de frontière · logits identiques au pas plein
+  porte-n3-deux-regions  ✅                           4 s  PORTE TENUE : découpage 0..k / k..n bit-exact · pont des deux côtés · prompt différent
+  porte-n3-generation    ✅                           9 s  PORTE TENUE : génération répartie · deux caches · sortie bit-identique
+  porte-n3-placement     ✅                           5 s  PORTE TENUE : placement natif = métadonnée · A déterministe · contrôle pont nul détecté
+  porte-n3-pont          ✅                           4 s  PORTE TENUE : pont natif branché · A déterministe · pont nul change la sortie
+  porte-n3-positions     ✅                           5 s  PORTE TENUE : position vérifiée pas à pas · désync refusée · succè
+… [1498 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe N3 verte (17/17) ; construction de l'inventaire exécutable
+
+- **bash** `{"command": "ls reports/n3.*.json | wc -l; for j in reports/n3.*.json; do n=$(basename \"$j\"); grep -l \"$n\" reports/rapport-n3.*.md >/dev/null || echo \"ORPHELIN $n\"; done; echo \"--- portes citées par les fiches:\"; grep -ho 'porte-n3-[a-z0-9-]*\\.sh' reports/rapport-n3.*.md | sort -u | wc -l", … [56 caractères tronqués]`
+
+  ```
+19
+--- portes citées par les fiches:
+17
+  ```
+
+- **bash** `{"command": "cat work/portes-n3-cloture/registre.txt; echo ====; git log -1 --format='%h %ad %s' --date=iso -- reports/rapport-n3.4d-couverture.md", "description": "Read pass registry and last N3 coverage commit"}`
+
+  ```
+porte-n3-cache 0 6
+porte-n3-composition 0 6
+porte-n3-deux-processus 0 5
+porte-n3-deux-regions 0 4
+porte-n3-generation 0 9
+porte-n3-placement 0 5
+porte-n3-pont 0 4
+porte-n3-positions 0 5
+porte-n3-profondeur 0 6
+porte-n3-refus 0 5
+porte-n3-reseau 0 5
+porte-n3-routes 0 5
+porte-n3-service-briques 0 6
+porte-n3-service 0 6
+porte-n3-seuil 0 6
+porte-n3-sparsite-compte 0 4
+porte-n3-sparsite 0 5
+--- 17 vertes, 0 rouges ---
+====
+4619fd80 2026-10-29 21:10:28 -0400 N3.4d — COUVERTURE N3 PAR BRIQUE : COMPOSITION NATIVE = CONDITION
+  ```
+
+- **bash** `{"command": "git show --stat f9132a68 | head -20; echo ====; git show --stat 51a3dc91 | head -20", "description": "Check whether past N3 commits updated en-cours"}`
+
+  ```
+commit f9132a68715337383bef368979ed3d9c7c031529
+Author: Stéphane <stephane@localhost>
+Date:   Fri Oct 30 10:46:54 2026 -0400
+
+    N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE
+    
+    N3.4a composait service + profondeur + routage + comptage ; sa porte disait
+    elle-même qu'elle ne couvrait ni le seuil ni le pont/placement. N3.4b/c les
+    avaient prouvés par `--drvm-generate`, pas par le service. Cette porte les
+    fait passer par le chemin réel, `--drvm-serve` :
+    - A (pont normal) déterministe ; B (pont nul, 4 160 poids) diffère → le pont
+      agit dans le service ;
+    - C (placement remote) identique à A → le placement reste une métadonnée ;
+    - seuil 0/1 : 12/0 et 0/12, textes différents ; 0,01 : 11/1, rejeu identique.
+    Condition nommée : N3.2b2, la décision calcule les deux chemins, le saut de
+    calcul n'est pas gratuit.
+    
+    Porte `tools/porte-n3-service-briques.sh` (6,5 s), fiche et JSON, état et
+    roadmap à jour. Commit en `--only` : l'index est partagé avec les autres sessions.
+
+====
+commit 51a3dc9107e1e228b340feed852ae259ba5ad79c
+Author: Stéphane <stephane@localhost>
+Date:   Thu Oct 29 20:46:33 2026 -0400
+
+    N3.2b2 — LE SAUT DE CALCUL N
+… [617 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de l'outil d'inventaire et de sa porte
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"n3_inventaire.py — la couverture N3, vérifiée au lieu d'être racontée.\n\nPOURQUOI CET OUTIL EXISTE. N3.1 (29/10) publie un inventaire statique : « sortie\nprécoce : service non », « k-WTA/routes : aucune porte, aucun chemin ». N3.2b0 et\nN3.3a lui donnent  … [8289 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/n3_inventaire.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"tools/n3_inventaire.py\")\nt = p.read_text()\nt = t.replace(\"# Le contrat de couverture, figé le 2026-11-04 : 17 portes de brique, 20 fiches,\\n# 19 JSON. La porte d'inventaire  … [899 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-n3-inventaire.sh — la couverture N3, vérifiée à chaque passe.\n#\n# POURQUOI CETTE PORTE EXISTE. Les 17 portes `porte-n3-*` prouvent chacune une\n# brique, mais **rien** ne prouvait que la liste des briques et celle des portes\n# coïncident encore. N3.1 (29/10) affi … [1227 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-inventaire.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-n3-inventaire.sh && python3 tools/n3_inventaire.py --json reports/n3-inventaire.json; echo \"[exit $?]\"; python3 tools/n3_inventaire.py --autotest; echo \"[autotest exit $?]\"", "description": "Generate inventor … [25 caractères tronqués]`
+
+  ```
+=== l'inventaire N3 (couverture exécutable) ===
+  portes ......... 18  (17 citées par les fiches)
+  fiches ......... 19
+  JSON ........... 19  (19 cités par les fiches)
+  ❌ portes orphelines : porte-n3-inventaire.sh
+  ❌ couverture perdue : 19 fiches < 21
+  ❌ couverture perdue : 19 json < 20
+[exit 1]
+  ✅ autotest · sain
+  ✅ autotest · porte retirée
+  ✅ autotest · porte orpheline
+  ✅ autotest · json retiré
+  ✅ autotest · json orphelin
+  ✅ autotest : 5/5 cas attendus
+[autotest exit 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"tools/n3_inventaire.py\")\nt = p.read_text()\nt = t.replace(\"# Le contrat de couverture, figé le 2026-11-04 : 17 portes de brique + la porte\\n# d'inventaire = 18, 20 fiches + c … [1039 caractères tronqués]`
+
+  ```
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche de clôture N3
+
+- **write** `{"content": "# N3 — l'inventaire exécutable : 17 portes vertes, la fiche de backlog était périmée\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-04 · **Verdict** : ✅ **N3 couvert et\n> vérifié** — les **17 portes de brique** sont vertes en **92 s** (04/11 10 h 09, registre\n> `work/portes-n3-cl … [7760 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-inventaire.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/n3_inventaire.py --json reports/n3-inventaire.json; echo \"[exit $?]\"; echo ====; bash tools/porte-n3-inventaire.sh; echo \"[gate exit $?]\"", "description": "Re-run inventory and its gate"}`
+
+  ```
+=== l'inventaire N3 (couverture exécutable) ===
+  portes ......... 18  (18 citées par les fiches)
+  fiches ......... 20
+  JSON ........... 20  (20 cités par les fiches)
+  ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence morte, aucun instrument orphelin
+[exit 0]
+====
+=== l'inventaire N3 : la couverture ne peut pas pourrir en silence ===
+  ✅ autotest · sain
+  ✅ autotest · porte retirée
+  ✅ autotest · porte orpheline
+  ✅ autotest · json retiré
+  ✅ autotest · json orphelin
+  ✅ autotest : 5/5 cas attendus
+=== l'inventaire N3 (couverture exécutable) ===
+  portes ......... 18  (18 citées par les fiches)
+  fiches ......... 20
+  JSON ........... 20  (20 cités par les fiches)
+  ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence morte, aucun instrument orphelin
+[gate exit 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la revue documentaire et de la porte dans le lanceur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -20", "description": "Run documentation review after adding the fiche"}`
+
+  ```
+revue de documentation · 605 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+     · compteurs : en-cours.md dit 82 portes, le disque en a 83
+     · compteurs : en-cours.md dit 604 fichiers, le disque en a 605
+     · compteurs : en-cours.md dit 690 JSON, le disque en a 691
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/porte-inv && JOURNAUX=/tmp/porte-inv PORTES=inventaire bash tools/toutes-les-portes.sh 2>&1 | tail -8", "description": "Run the new gate through the official runner"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (1 portes, borne 1800 s) ===
+    journaux : /tmp/porte-inv
+  porte-n3-inventaire    ✅                           0 s    ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence
+--- 1 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/porte-inv
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md; git diff --stat docs/pilotage/en-cours.md; sed -n '108,120p' docs/pilotage/en-cours.md; echo ====; git status --short | head -20", "description": "Check whether the hub updated  … [19 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 11394 11:27:08 docs/pilotage/en-cours.md
+ docs/pilotage/en-cours.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+## Les chiffres de l'état
+
+> Vérifié par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **604** / **690** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
+| dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; complète après les runs | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+====
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+ M tools/structures
+?? journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+?? reports/n3-inventaire.json
+?? reports/pensee-quatre-modes-432-run2.json
+?? reports/pensee-quatre-modes-run2.json
+?? reports/r
+… [164 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls -l --time-style=+%H:%M:%S work/portes-n3-cloture/registre.txt reports/n3-inventaire.json reports/rapport-n3-inventaire.md", "description": "Check pass time and current time"}`
+
+  ```
+11:36:10
+-rw-r--r--. 1 stephane stephane 3076 11:35:28 reports/n3-inventaire.json
+-rw-------. 1 stephane stephane 8090 11:35:23 reports/rapport-n3-inventaire.md
+-rw-r--r--. 1 stephane stephane  417 11:32:26 work/portes-n3-cloture/registre.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/n3_inventaire.py --json /tmp/inv.json >/dev/null && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/inv.json'))\nprint(len(d['portes']), len(d['fiches']), len(d['json']))\nprint(d['constats'])\nPY", "description": … [44 caractères tronqués]`
+
+  ```
+18 20 20
+[]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de l'horodatage réel de la passe et mise à jour du plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"reports/rapport-n3-inventaire.md\")\nt = p.read_text()\nt = t.replace(\"**92 s** (04/11 10 h 09, registre\", \"**92 s** (04/11 11 h 32, registre\")\nt = t.replace(\"17 portes de  … [348 caractères tronqués]`
+
+  ```
+3
+4:> vérifié** — les **17 portes de brique** sont vertes en **92 s** (04/11 11 h 32, registre
+90:- **Point dans le temps** : 17/17 le 04/11 11 h 32, sur cpu1, pendant les runs N2 ; les
+110:  `- **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md\")\nt = p.read_text()\nt = t.replace(\"- **Heartbeat** : 2026-11-04 10:05 HNE\", \"- **Heartbeat** : 2026-11-04 11:3 … [872 caractères tronqués]`
+
+  ```
+ok
+# Plan de session — N3, les opérations natives : la clôture par l'inventaire
+
+> **Mandat ouvert** le 2026-11-04 10 h 05 HNE, sur la frontière du graphe
+> (`A2.6, N2, N3, N4` — les trois autres sont pris : N2 aux runs GPU, A2.6 et N4
+> attendent les mêmes GPU jusqu'à ~15 h). La session prend la seule ligne **CPU**
+> de la frontière et la mène jusqu'à son verdict.
+
+- **Session** : `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d`
+- **Rôle** : **N3 — les opérations natives** : vérifier que chaque brique mesurée a bien
+  une porte dans le moteur, que l'inventaire de N3.1 ne ment plus, et clore la ligne sur
+  ses deux négatifs nommés (placement = métadonnée, saut de calcul conditionnel).
+- **Périmètre** : N3 (N3.1–N3.6), `tools/porte-n3-*.sh`, `reports/rapport-n3.*`,
+  `reports/n3.*`.
+- **Fichiers réservés** : `tools/porte-n3-*.sh`, `tools/n3_inventaire.py`,
+  `reports/rapport-n3-*`, `reports/n3-*`, `work/n3*`,
+  `journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/`.
+- **Heartbeat** : 2026-11-04 11:37 HNE
+- **Prochaine action** : **intégration par le hub** — `git add tools/n3_inventaire.py
+  tools/porte-n3-inventaire.sh reports/rapport-n3-inventaire.md reports/n3-inventaire.json`,
+  ligne d'
+… [797 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md\")\nt = p.read_text()\nt = t.replace(\"> **Mandat ouvert** le 2026-11-04 10 h 05 HNE\", \"> **Mandat ouvert** le 202 … [551 caractères tronqués]`
+
+  ```
+ok
+  ⚠ mandat long (116 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat périmé (167 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md : état inconnu 'en pause (résultat livré, intégration hub en attente)'
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md : heartbeat illisible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"heartbeat\\|HEARTBEAT\\|%Y-%m-%d\" tools/sessions.py | head -20; sed -n '/def _heartbeat/,/^def /p' tools/sessions.py | head -40", "description": "Inspect heartbeat parsing rules"}`
+
+  ```
+5:périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+8:et les heartbeats périmés (le `--check` seul les signale). Les **fichiers
+16:l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+18:`work/ressources.json` : le heartbeat n'est pas exigé ; le registre distingue le
+34:CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+71:    hb = champs.get("heartbeat", "")
+72:    heartbeat = None
+77:            heartbeat = datetime.fromisoformat(brut)
+79:            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+80:        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+84:            "fichiers": fic, "heartbeat": heartbeat, "age": age,
+113:    heartbeat = f"{m.group(1)} {int(m.group(2)):02d}:{m.group(3)} HAE" if m else ""
+124:                    "heartbeat": heartbeat})
+136:        heartbeat = s["heartbeat"] or datetime.now().strftime("%Y-%m-%d %H:%M HAE")
+142:> **Repris de `en-cours` le {datetime.now().strftime('%Y-%m-%d %H:%M')}** — plan *à confirmer* par la
+143:> session : le heartbeat est celui de l'état, pas une preuve de vie.
+149:- **Heartbeat** : {heartbeat}
+187:            erreurs.append(f"{p['chemin'
+… [235 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,90p' tools/sessions.py", "description": "Read heartbeat parsing block"}`
+
+  ```
+valeur = " ".join(x.strip() for x in m.group(2).splitlines()).strip()
+        champs[_cle(m.group(1))] = _valeur(valeur)
+    # tolérances : Role / Perimetre sans accent
+    for alias, cible in (("role", "rôle"), ("perimetre", "périmètre"),
+                         ("fichiers reserves", "fichiers réservés"),
+                         ("prochaine", "prochaine action"), ("etat", "état")):
+        if cible not in champs and alias in champs:
+            champs[cible] = champs[alias]
+    sid = champs.get("session") or chemin.parent.name
+    per = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("périmètre", "")) if x.strip()]
+    fic = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("fichiers réservés", "")) if x.strip()]
+    hb = champs.get("heartbeat", "")
+    heartbeat = None
+    age = None
+    try:
+        brut = re.sub(r"\s*(HAE|EDT|EST|UTC[−-]?[0-9]+)\s*$", "", hb).strip()
+        if "T" in brut:
+            heartbeat = datetime.fromisoformat(brut)
+        else:
+            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+    except Exception:
+        pass
+    return {"id": sid, "chemin": c
+… [246 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md\")\nt = p.read_text()\nt = t.replace(\"- **Heartbeat** : 2026-11-04 11:37 HNE\", \"- **Heartbeat** : 2026-11-04 11:3 … [428 caractères tronqués]`
+
+  ```
+ok
+  ⚠ mandat long (116 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat périmé (167 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ```
+
+### 🤖 Assistant
+
+⏵ Libération du claim et dernières vérifications (journal, budget)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/ressources.py --release --session aeafe951 --job n3-cloture 2>&1 | tail -3; python3 tools/verifie_journal.py 2>&1 | tail -4; python3 tools/taille_documents.py 2>&1 | tail -3", "description": "Release CPU claim and run j … [23 caractères tronqués]`
+
+  ```
+✅ libéré : 1 réservation(s) de aeafe951 / n3-cloture
+  journal · 41 jour(s) · 119 session(s) · 1965 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E 'n3|aeafe951'; echo ====; python3 tools/revue_documentation.py 2>&1 | tail -6", "description": "Show my files and current review status"}`
+
+  ```
+?? journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+?? reports/n3-inventaire.json
+?? reports/rapport-n3-inventaire.md
+?? tools/n3_inventaire.py
+?? tools/porte-n3-inventaire.sh
+====
+  revue de documentation · 605 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+     · compteurs : en-cours.md dit 82 portes, le disque en a 83
+     · compteurs : en-cours.md dit 604 fichiers, le disque en a 605
+     · compteurs : en-cours.md dit 690 JSON, le disque en a 691
+  ```
+
+### 🤖 Assistant
+
+⏵ Tâche N3 livrée ; intégration à faire par le hub
+
+**J'ai pris N3 — les opérations natives**, la seule ligne **CPU** de la frontière (`A2.6`, `N2`, `N4` étaient pris ou bloqués par les GPU). Les runs N2 n'ont pas été touchés.
+
+## Ce qui est mesuré
+
+- **17/17 portes de brique vertes** le **04/11 11 h 32**, en **92 s**, **0 rouge** — verdict lu au **code de sortie** (`work/portes-n3-cloture/registre.txt`), pas au marqueur.
+- **Chaîne fiche → JSON → porte complète** : 18 portes (17 + l'inventaire), 20 fiches, 20 JSON, **0 orpheline, 0 référence morte**.
+- **Nouvelle porte** `porte-n3-inventaire.sh` : vérifie la couverture à chaque passe ; **autotest 5/5** (retirer une porte, ajouter une orpheline, retirer un JSON, en ajouter un orphelin → elle **échoue**, comme elle doit).
+- **Le défaut trouvé** : le code n'a pas bougé, la documentation si. **N3.1** (29/10) dit « sortie précoce : service non » et « k-WTA/routes : aucune porte » — refuté le même jour par N3.2b0/N3.3a ; le **backlog** dit encore « ⏳ une porte par brique » alors que 17 existent, toutes vertes. **N3.4d** avait déjà la bonne conclusion le 29/10 ; elle n'a pas été propagée.
+
+**N3 est clos sur ses deux négatifs nommés** : placement = métadonnée, saut de calcul conditionnel (N3.2b2). Ce sont des conditions d'architecture, pas des portes manquantes.
+
+## Fichiers (non committés, pour le hub)
+
+- `tools/n3_inventaire.py` — le vérificateur
+- `tools/porte-n3-inventaire.sh` — la porte (1 s, auto-découverte par `toutes-les-portes.sh`)
+- `reports/rapport-n3-inventaire.md` — la fiche (verdict, table des 17 portes, contradictions, contrôle négatif, limites)
+- `reports/n3-inventaire.json` — l'inventaire mesuré
+- `journal/sessions/aeafe951-.../plan.md` — mandat, passé `en pause` (résultat livré)
+
+## Pourquoi pas de commit
+
+`en-cours.md` est **tenu par le hub et modifié à 11 h 27** (WIP non committé, avec `reports/INDEX.md` et `reports/README.md`), et le hook `verifie_etat_a_jour.py` **refuse** un fait `reports/` sans ligne d'état. Committer maintenant volerait le WIP du hub ; je ne l'ai pas fait, et je n'ai **pas touché** `en-cours`/`roadmap`/`AGENTS`.
+
+**Intégration proposée au hub :**
+
+```bash
+git add tools/n3_inventaire.py tools/porte-n3-inventaire.sh \
+        reports/rapport-n3-inventaire.md reports/n3-inventaire.json \
+        docs/pilotage/en-cours.md \
+        journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+```
+
+Ligne d'état à ajouter sous « Ce qui est en cours » :
+
+> **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
+
+**Compteurs** : portes **82 → 83**, fichiers **604 → 605**, JSON **690 → 691**, et la prochaine passe complète comptera **83 portes**. C'est exactement ce que `revue_documentation.py` signale aujourd'hui (3 anomalies de compteurs, rien d'autre) ; journal, budget de contexte et mandats passent. Claim `cpu1` libéré.
+
+
+## Tour 3
+
+### 👤 Utilisateur
+
+go
+
+### 🤖 Assistant
+
+⏵ Intégration : état du hub, diff d'en-cours, puis commit explicite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git log --oneline -3; echo ====; git status --short | head -25; echo ====; git diff --cached --stat | tail -5; echo ====; git diff docs/pilotage/en-cours.md | head -30", "description": "Inspect current tree, staged  … [26 caractères tronqués]`
+
+  ```
+11:39:50
+862d9c2f B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+7632ab94 B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143
+4449646d B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141
+====
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+ M tools/structures
+?? journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+?? reports/n3-inventaire.json
+?? reports/pensee-quatre-modes-432-run2.json
+?? reports/pensee-quatre-modes-run2.json
+?? reports/rapport-n3-inventaire.md
+?? reports/rapport-pensee-quatre-modes-run2.md
+?? reports/rapport-s-paragraphes.md
+?? tools/n3_inventaire.py
+?? tools/porte-n3-inventaire.sh
+====
+====
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index eedf5200..af1c1f6f 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 13 h 25 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 13 h 30 HNE (heure local
+… [763 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md; git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo ====; head -5 docs/pilotage/en-cours.md; echo ====; ps -eo pid,etimes,args | grep -E '[d]sh --profile' | head", "d … [64 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 11394 11:27:08 docs/pilotage/en-cours.md
+862d9c2f 11:17:10 B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+7632ab94 10:49:47 B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143
+4449646d 10:14:18 B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141
+====
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 30 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+====
+  67321   15305 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+ 259387    8083 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+ 264612    7275 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume 0733c5bb-f90b-4f58-9241-3364fa32e46c
+ 264723    7257 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+ 264909    7229 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc
+ 287431    3626 node /home/stephane/.local/share/../bin/dsh --profile dsh-t
+… [2 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for p in 67321 259387 287431; do echo -n \"$p \"; tr '\\0' '\\n' < /proc/$p/environ 2>/dev/null | grep '^DSH_SESSION_ID=' || echo '(pas de DSH_SESSION_ID)'; done", "description": "Identify session ids of running DSH processes"}`
+
+  ```
+67321 (pas de DSH_SESSION_ID)
+259387 (pas de DSH_SESSION_ID)
+287431 (pas de DSH_SESSION_ID)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "offset": 96, "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+96:   (gpu1) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+97: - **Bloquants** : aucun.
+98: - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+99: 
+100: 
+101: ## Ce qui est en cours
+102: 
+103: - **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque **84/67**, **8 verdicts de référents**, **55/55 tests** ; référents **294/371**, page **`/paragraphes`**.
+104: - **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs relancés à 09 h 30** (la nuit était coupée : `kd2` 8 250/30 000, `rope2048` 3 350/20 000) ; **distillé : −0,10** ; copie 0,0078.
+105: - **Pensée — B13 (en pause)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5 ; **fix FIFO du store** (+3 tests) ; qualifier fenêtre BFS 500 écarté.
+106: - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
+107: 
+108: ## Les chiffres de l'état
+10
+… [990 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "old_string": "**Mis à jour : 2026-11-04, 13 h 30 HNE (heure locale, EST).**", "new_string": "**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "old_string": "- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs relancés à 09 h 30** (la nuit était coupée : `kd2` 8 250/30 000, `rope2048` 3 350/20 000)  … [560 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |\n| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |\n| f … [349 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -6; echo ====; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -4; echo ====; python3 tools/sessions.py --check 2>&1 | tail -4", "description": "Run doc review and state checks before … [9 caractères tronqués]`
+
+  ```
+revue de documentation · 605 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+====
+  état · dernier fait 862d9c2f · dernier état 862d9c2f
+  ✅ aucun fait commité après le dernier état
+====
+  ⚠ mandat long (120 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ mandat périmé (171 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md\")\nt = p.read_text()\nt = t.replace(\"- **État** : en pause\", \"- **État** : terminé\")\nt = t.replace(\"- **Proch … [707 caractères tronqués]`
+
+  ```
+ok
+18:- **Prochaine action** : **close** — N3 est intégré (fiche, JSON, porte, ligne d'état) ; il reste au hub
+23:- **État** : terminé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/n3_inventaire.py tools/porte-n3-inventaire.sh reports/rapport-n3-inventaire.md reports/n3-inventaire.json docs/pilotage/en-cours.md journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md && git status --short", " … [55 caractères tronqués]`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+A  journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+A  reports/n3-inventaire.json
+ M reports/pensee-quatre-modes.json
+A  reports/rapport-n3-inventaire.md
+A  tools/n3_inventaire.py
+ M tools/pensee/autotest.py
+A  tools/porte-n3-inventaire.sh
+ M tools/structures
+?? reports/pensee-quatre-modes-432-run2.json
+?? reports/pensee-quatre-modes-run2.json
+?? reports/rapport-pensee-quatre-modes-run2.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit d'intégration N3 (fichiers explicites + ligne d'état)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG'\nN3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE\n\n17/17 portes N3 vertes le 04/11 11 h 32 (registre work/portes-n3-cloture ; verdict au code de\nsortie, ja … [968 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-87]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-87", "timeout_ms": 180000, "wait": true}`

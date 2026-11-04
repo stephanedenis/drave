@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 90.6 h |
-| Tours | 158 |
-| Messages | 1889 |
-| Appels d'outils | 1616 |
+| Durée | 91.0 h |
+| Tours | 159 |
+| Messages | 1901 |
+| Appels d'outils | 1626 |
 | Fichiers touchés | 25 |
-| Commandes | 1330 |
+| Commandes | 1339 |
 | Sous-agents | 2 |
 | Commits | 199 |
 | Compactages de contexte | 5 |
@@ -351,6 +351,8 @@
 **Tour 157** — voir /home/stephane/.config/drave/deepseek.key
 
 **Tour 158** — ok, tiens en compte pour notre stratégie de modèle natif drave et continue
+
+**Tour 159** — go
 
 ## 2. Déroulé, étape par étape
 
@@ -8376,7 +8378,61 @@ La clé DeepSeek est utilisée : les **six modes** sont mesurés sur le **gold r
 
 **Synthèse produite :**
 
-⏵ Intégrer la leçon au modèle natif Drave, puis corriger le r353
+⏵ Leçon intégrée au modèle natif + élision : POS 0,7455, r353 tombe ; 144/144
+
+La leçon de la mesure réelle est **dans la stratégie du modèle natif**, et le refus `r353` est corrigé. Commit **`862d9c2f`**.
+
+\## 1. La leçon, dans `docs/theorie/modele-natif.md`
+
+Une section a été ajoutée à « Ce qui est original » : **le service distant gagne l'analyse, pas le sens**. Sur le gold 432, l'API (0,9309 / 0,8226 / 0,8784) bat l'heuristique (0,7394 / 0,2520 / 0,4511) mais ne rend pas la pragmatique (**acte 0,0000**) ; la **fusion par niveau** prend à chacun ce qu'il fait mieux. Trois exigences pour le natif :
+
+1. **Le contrat doit porter le niveau**, pas seulement la sortie — un bloc qui ne rend pas un niveau doit le **déclarer**, et la fusion doit choisir **par niveau** (la version native de « le bloc, pas la couche »).
+2. **La tokenisation est un contrat** : le service a rendu 7 POS pour 6 tokens sur `l'écoutent` ; un bloc natif qui tokenise autrement que le centre casse la comparaison.
+3. **Le réel doit être joignable dans les portes** : le mock avait conclu l'inverse du réel (niveau 0,3432 contre 0,7424) ; un défaut choisi sur le mock est un défaut faux.
+
+\## 2. L'élision : le refus tombe
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| tokens de `l'écoutent` | 1 | **2** (`l'` + `écoutent`) |
+| POS (432 phrases) | 0,7444 | **0,7455** |
+| syntagmes F1 | 0,2861 | 0,2861 |
+| tête F1 | 0,4986 | 0,4986 |
+
+**Ce que ça dit** :
+
+- **Le refus venait de la tokenisation** : le bloc et le modèle ne découpaient pas l'élision pareil ; le contrat impose maintenant **sa** tokenisation au bloc neuronal.
+- **Le gain est petit mais réel** (+0,0011 de POS) : les élisions sont rares dans le gold, mais chaque `l'`/`d'`/`qu'` était mal aligné.
+- **Aucune perte** : les syntagmes et la tête ne bougent pas ; les 9 portes dépendantes ont été mises à jour (T87–T90, T107, T138).
+- **La négative est explicite** : le refus n'est pas encore re-joué sur l'API — il faudra une passe pour le confirmer.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-elision.md`](../../reports/rapport-pensee-elision.md) ; JSON [`pensee-elision.json`](../../reports/pensee-elision.json) ; T141 dans [`autotest.py`](../../tools/pensee/autotest.py) ; stratégie : [`modele-natif.md`](../../docs/theorie/modele-natif.md).
+- **144/144 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **603 fiches / 688 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (13 h 25).
+- L'horloge réelle est **11 h 18 HNE** ; le goal est actif.
+
+
+… [442 caractères tronqués]
+
+### Tour 159 — go
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Rejouer les quatre modes sur le gold 432 (run 2)
+- bash — Voir où le modèle natif est cité dans le pilotage
+- job_output
+- bash — Lire le refus et les seuils du run 2
+- bash — Écrire la fiche de confirmation et la porte T142
+- bash — Trim README et passer toutes les portes
+- bash — Corriger T142 et relancer
+- bash — Lire le brut du run 2 et relancer
+- bash — Voir la structure réelle du brut run 2
+- bash — Corriger le chemin du brut et relancer
+
+**Synthèse produite :**
+
+⏵ Attendre la passe de confirmation
 
 ## 3. Travail accompli
 
@@ -8457,7 +8513,7 @@ La clé DeepSeek est utilisée : les **six modes** sont mesurés sur le **gold r
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1290 autres
+- … et 1299 autres
 
 ## 4. Mesures et résultats marquants
 

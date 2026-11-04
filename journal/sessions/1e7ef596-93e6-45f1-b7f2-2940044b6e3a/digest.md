@@ -3650,3 +3650,288 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Le hub** : je surveille les deux runs, je tiens l'état, je lance la passe à la fin et j'intègre les résultats. Dis-moi si tu ouvres les trois sessions ou si tu préfères que je pousse S et L par sous-agents à la place.
 
+
+## Tour 5
+
+### 👤 Utilisateur
+
+les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la documentation et du pilotage
+
+### 🤖 Assistant
+
+⏵ Audit de cohérence de `docs/` et état des sessions démarrées
+
+- **bash** `{"command": "python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause|terminé\" | head -10 ; echo \"---COMMITS---\" ; git log --oneline -8 --pretty=\"%h %ad %s\" --date=format:\"%d/%m %H:%M\" ; echo \"---STATUS---\" ; git status --short | head -12", "description": "Check sessions, recent c … [17 caractères tronqués]`
+
+  ```
+⏰ 0733c5bb-f90b-4f58 · actif    · 120 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    0b0a6a0d-05f5-4308 · terminé  · 4506 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+    0b69f616-5c75-4c34 · terminé  · 6580 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 171 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    22e518ee-81b8-4081 · terminé  · 5751 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+    29ad180d-38a5-4481 · en pause · 1081 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 1319 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    71d57f53-8b41-4220 · terminé  · 7084 min 
+… [1583 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -10 ; echo \"---ÉTAT EN RETARD---\" ; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -8 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation|T0 :\" | head -5", "description": "Run documentation r … [27 caractères tronqués]`
+
+  ```
+revue de documentation · 605 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---ÉTAT EN RETARD---
+  état · dernier fait 862d9c2f · dernier état 862d9c2f
+  ✅ aucun fait commité après le dernier état
+---TAILLE---
+  T0 max : 4040 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4040 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== KD2 ===\" ; tail -2 work/n2ac/kd2-mix512-30k.log 2>/dev/null ; echo \"=== ROPE ===\" ; tail -2 work/n2ac/rope2048-20k.log 2>/dev/null ; echo \"=== GPU ===\" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --forma … [181 caractères tronqués]`
+
+  ```
+=== KD2 ===
+pas 12000 · perte 1.1357 · dure 1.0045 · douce 0.2302 · 5642 s
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+=== ROPE ===
+pas   3900 · perte 1.1304 · PPL val 2.669 · 7590 s
+pas   3950 · perte 0.9882 · PPL val 2.663 · 7700 s
+=== GPU ===
+0, 5280 MiB, 100 %
+1, 13200 MiB, 100 %
+=== OUTILS DOC ===
+tools/revue_documentation.py
+tools/taille_documents.py
+tools/verifie_backlog.py
+tools/verifie_contamination.py
+tools/verifie_en_cours.py
+tools/verifie_etat_a_jour.py
+tools/verifie_journal.py
+tools/verifier_bilan.py
+tools/verifier_chaine_etat.py
+tools/verifier_formats.py
+tools/verifier_liens.py
+tools/verifier_parite_native.py
+tools/verifier_schemas.py
+tools/verifier_table_types.sh
+tools/verifier_v41_engram.py
+tools/verifier_v41_mhc.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de l'état courant, des écarts non committés et des sessions actives
+
+- **bash** `{"command": "git diff --stat ; echo \"=== ÉTAT DIFF ===\" ; git diff -- docs/pilotage/en-cours.md | head -100", "description": "Inspect uncommitted state and worktree changes"}`
+
+  ```
+docs/implantation/moteur-de-pensee.md              |   5 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  47 ++
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md |  70 ++
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md |  68 ++
+ reports/INDEX.md                                   |   1 +
+ reports/README.md                                  |   2 +-
+ reports/pensee-quatre-modes.json                   | 734 ++++++++++++---------
+ tools/pensee/autotest.py                           |  14 +-
+ tools/structures                                   |   2 +-
+ 9 files changed, 615 insertions(+), 328 deletions(-)
+=== ÉTAT DIFF ===
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" ; echo \"=== NOUVELLE SESSION ===\" ; cat journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md 2>/dev/null | head -30", "description": "List active sessions and new session plan"}`
+
+  ```
+⏰ 0733c5bb-f90b-4f58 · actif    · 121 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 172 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 1082 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 1320 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · en pause · 2279 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (121 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+=== NOUVELLE SESSION ===
+# Plan de session — N3, les opérations natives : la clôture par l'inventaire
+
+> **Mandat ouvert** le 2026-11-04 11 h 30 HNE, sur la frontière du graphe
+> (`A2.6,
+… [1881 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 862d9c2f | head -15 ; echo \"---10:49---\" ; git show --stat --oneline 7632ab94 | head -10 ; echo \"---10:14---\" ; git show --stat --oneline 4449646d | head -10 ; echo \"---S 09:46---\" ; git show --stat --oneline 047945c5 | head -12", "description": "Inspect  … [32 caractères tronqués]`
+
+  ```
+862d9c2f B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+ docs/implantation/moteur-de-pensee.md              |   7 +-
+ docs/pilotage/en-cours.md                          |   4 +-
+ docs/theorie/modele-natif.md                       |  18 ++
+ journal/2026-11-04/README.md                       |   9 +-
+ journal/2026-11-04/distribue.md                    |   4 +-
+ journal/2026-11-04/docs.md                         |   4 +-
+ journal/2026-11-04/mesures.md                      |  10 +-
+ journal/2026-11-04/modele.md                       |   4 +-
+ journal/README.md                                  |   4 +-
+ journal/THEMES.md                                  |   2 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  66 +++++
+ .../rapport.md                                     |  16 +-
+ journal/sessions/MANIFEST.md                       |   6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 289 +++++++++++++++++++++
+---10:49---
+7632ab94 B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143
+ docs/implantation/moteur-de-pensee.md              |   6 +-
+ docs/pilotage/en-cours.md         
+… [1920 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Instantané de l'état, des fichiers N3 et des travaux en cours
+
+- **bash** `{"command": "git status --short ; echo \"---N3 TOOLS---\" ; ls -l tools/porte-n3-* tools/n3_inventaire.py 2>&1 | head ; echo \"---N3 LOG---\" ; git log --oneline -1 -- tools/n3_inventaire.py reports/rapport-n3-inventaire.md 2>/dev/null ; echo \"---PORTES COUNT---\" ; ls tools/porte-*.sh | wc -l", "d … [52 caractères tronqués]`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+A  journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M reports/INDEX.md
+ M reports/README.md
+A  reports/n3-inventaire.json
+ M reports/pensee-quatre-modes.json
+A  reports/rapport-n3-inventaire.md
+A  tools/n3_inventaire.py
+ M tools/pensee/autotest.py
+A  tools/porte-n3-inventaire.sh
+ M tools/structures
+?? reports/pensee-quatre-modes-432-run2.json
+?? reports/pensee-quatre-modes-run2.json
+?? reports/rapport-pensee-quatre-modes-run2.md
+?? reports/rapport-s-paragraphes.md
+---N3 TOO
+… [818 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -30 reports/rapport-n3-inventaire.md 2>/dev/null ; echo \"---PROPOSITION---\" ; grep -n -A6 -B2 \"roadmap\\|backlog\\|proposition\\|statut\" reports/rapport-n3-inventaire.md 2>/dev/null | head -40", "description": "Read N3 report verdict and proposed integration"}`
+
+  ```
+# N3 — l'inventaire exécutable : 17 portes vertes, la fiche de backlog était périmée
+
+> **Ligne de roadmap** : N3 · **Date** : 2026-11-04 · **Verdict** : ✅ **N3 couvert et
+> vérifié** — les **17 portes de brique** sont vertes en **92 s** (04/11 11 h 32, registre
+> `work/portes-n3-cloture/registre.txt`), la chaîne fiche → JSON → porte est **complète**
+> (18 portes avec l'inventaire, 20 fiches, 20 JSON, **0 orpheline, 0 référence morte**), et
+> l'inventaire devient une **porte** (`porte-n3-inventaire`, autotest **5/5**). ⛔ **deux
+> conditions nommées** restent : le **placement** est une métadonnée, le **saut de calcul**
+> est conditionnel (N3.2b2). Ce n'est pas une porte manquante, c'est une architecture absente.
+>
+> **Dispositif** : `PORTES=n3 taskset -c 10-19,30-39 bash tools/toutes-les-portes.sh` sur
+> **cpu1** (claim `aeafe951/n3-cloture`, cpu1=4), pendant que N2 tient les deux GPU ;
+> **aucun run GPU**, aucun modèle réel : les 17 portes utilisent des `drave-n0` synthétiques
+> (132 528 paramètres). Données [`n3-inventaire.json`](n3-inventaire.json).
+
+## 1. La passe : 17/17, 92 s, zéro rouge
+
+| porte | brique | s | verdict (dernière ligne du journal) |
+|---|---|---:|---|
+| `porte-
+… [3934 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l docs/pilotage/en-cours.md ; grep -n \"Mis à jour\\|^## \\|^### \" docs/pilotage/en-cours.md | head -30 ; echo \"---COUNTERS---\" ; sed -n '/Les chiffres de l.état/,/Les chantiers/p' docs/pilotage/en-cours.md | head -20", "description": "Inspect current state structure and counters … [2 caractères tronqués]`
+
+  ```
+157 docs/pilotage/en-cours.md
+3:**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
+13:### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+22:## Sessions en cours
+34:### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)*
+49:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export *(en pause)*
+66:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)*
+85:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
+101:## Ce qui est en cours
+109:## Les chiffres de l'état
+121:## Les chantiers et leurs bloquants
+137:## Ce qui reste
+145:## Les questions ouvertes
+153:## La carte
+---COUNTERS---
+## Les chiffres de l'état
+
+> Vérifié par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **605** / **691** | `reports/*.md` / `reports/
+… [293 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Plan de suivi documentaire : N3, état, mandats, outils, runbook
+
+- **todo_write** `{"todos": [{"content": "Intégrer N3 : fiche, JSON, porte, backlog, roadmap, état", "status": "in_progress"}, {"content": "Resserrer en-cours sous T0 4000 et vérifier la structure", "status": "pending"}, {"content": "Remettre les mandats S et L à « actif » (heartbeat courant)", "status": "pending"},  … [296 caractères tronqués]`
+
+  ```
+Updated todo list: 5 pending, 1 in progress, 0 completed.
+  ```
+
+- **bash** `{"command": "git diff --cached -- docs/pilotage/en-cours.md | head -80 ; echo \"=== NON STAGÉ EN-COURS ===\" ; git diff -- docs/pilotage/en-cours.md | head -40", "description": "Inspect staged and unstaged state changes"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index eedf5200..564ee7f0 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 13 h 25 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -102,6 +102,7 @@
+ 
+ - **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque **84/67**, **8 verdicts de référents**, **55/55 tests** ; référents **294/371**, page **`/paragraphes`**.
+ - **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs relancés à 09 h 30** (la nuit était coupée : `kd2` 8 250/30 000, `rope2048` 3 350/20 000) ; **distillé : −0,10** ; copie 0,0078.
++- **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
+ - **Pensée — B13 (e
+… [1137 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,157p' docs/pilotage/en-cours.md", "description": "Read current full state"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reboot du 03/11 19 h 33** : la nuit a été coupée net — `kd2` à **8 250/30 000** pas et
+> `rope2048` à **3 350/20 000**, **sans checkpoint** ; les quatre sessions sont **en pause**.
+> Reprise par le hub le **04/11 08 h** : analyse des sessions, tâches courtes, état, intégration ;
+> runbook [`plan-travail.md`](plan-travail.md) § 9, plan de la nuit § 11.
+
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+
+- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+- **Rôle** : **Hub de reprise** — analyse des quatre sessions interrompues, tâches courtes, état.
+- **Fait** : index réparé (`git read-tree HEAD`) ; N2/S/Pensée triés ; **8 verdicts S** committés ; banque **84/67** ; **fix FIFO** (+3 tests) ; état au 04/11.
+- **Prochaine action** : commit d'intégration, puis **passe de portes** ; les runs longs N2 ensuite.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../
+… [10201 caractères tronqués]
+  ```
+

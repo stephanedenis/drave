@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 13 h 25 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 11 h 41 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -102,6 +102,7 @@
 
 - **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque **84/67**, **8 verdicts de référents**, **55/55 tests** ; référents **294/371**, page **`/paragraphes`**.
 - **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs relancés à 09 h 30** (la nuit était coupée : `kd2` 8 250/30 000, `rope2048` 3 350/20 000) ; **distillé : −0,10** ; copie 0,0078.
+- **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
 - **Pensée — B13 (en pause)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5 ; **fix FIFO du store** (+3 tests) ; qualifier fenêtre BFS 500 écarté.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
 
@@ -111,9 +112,9 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
+| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **603** / **688** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **605** / **691** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 

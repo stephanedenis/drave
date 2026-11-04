@@ -33912,3 +33912,173 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 13 h 25 HNE\", t)\np.write_text( … [799 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-58]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-58", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-elision.json
+ create mode 100644 reports/rapport-pensee-elision.md
+COMMIT OK 1
+862d9c2f B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144
+mer 04 nov 2026 11:18:59 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Leçon intégrée au modèle natif + élision : POS 0,7455, r353 tombe ; 144/144
+
+La leçon de la mesure réelle est **dans la stratégie du modèle natif**, et le refus `r353` est corrigé. Commit **`862d9c2f`**.
+
+## 1. La leçon, dans `docs/theorie/modele-natif.md`
+
+Une section a été ajoutée à « Ce qui est original » : **le service distant gagne l'analyse, pas le sens**. Sur le gold 432, l'API (0,9309 / 0,8226 / 0,8784) bat l'heuristique (0,7394 / 0,2520 / 0,4511) mais ne rend pas la pragmatique (**acte 0,0000**) ; la **fusion par niveau** prend à chacun ce qu'il fait mieux. Trois exigences pour le natif :
+
+1. **Le contrat doit porter le niveau**, pas seulement la sortie — un bloc qui ne rend pas un niveau doit le **déclarer**, et la fusion doit choisir **par niveau** (la version native de « le bloc, pas la couche »).
+2. **La tokenisation est un contrat** : le service a rendu 7 POS pour 6 tokens sur `l'écoutent` ; un bloc natif qui tokenise autrement que le centre casse la comparaison.
+3. **Le réel doit être joignable dans les portes** : le mock avait conclu l'inverse du réel (niveau 0,3432 contre 0,7424) ; un défaut choisi sur le mock est un défaut faux.
+
+## 2. L'élision : le refus tombe
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| tokens de `l'écoutent` | 1 | **2** (`l'` + `écoutent`) |
+| POS (432 phrases) | 0,7444 | **0,7455** |
+| syntagmes F1 | 0,2861 | 0,2861 |
+| tête F1 | 0,4986 | 0,4986 |
+
+**Ce que ça dit** :
+
+- **Le refus venait de la tokenisation** : le bloc et le modèle ne découpaient pas l'élision pareil ; le contrat impose maintenant **sa** tokenisation au bloc neuronal.
+- **Le gain est petit mais réel** (+0,0011 de POS) : les élisions sont rares dans le gold, mais chaque `l'`/`d'`/`qu'` était mal aligné.
+- **Aucune perte** : les syntagmes et la tête ne bougent pas ; les 9 portes dépendantes ont été mises à jour (T87–T90, T107, T138).
+- **La négative est explicite** : le refus n'est pas encore re-joué sur l'API — il faudra une passe pour le confirmer.
+
+## L'état
+
+- Fiche : [`rapport-pensee-elision.md`](../../reports/rapport-pensee-elision.md) ; JSON [`pensee-elision.json`](../../reports/pensee-elision.json) ; T141 dans [`autotest.py`](../../tools/pensee/autotest.py) ; stratégie : [`modele-natif.md`](../../docs/theorie/modele-natif.md).
+- **144/144 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **603 fiches / 688 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (13 h 25).
+- L'horloge réelle est **11 h 18 HNE** ; le goal est actif.
+
+## La suite
+
+1. **La passe API de confirmation** : re-jouer le gold 432 et vérifier que `r353` passe (30 min).
+2. **Le défaut `PRIORITE_NIVEAU`** : si la passe confirme, il peut devenir le défaut des portes.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **la passe API de confirmation** — le refus doit tomber sur le modèle, pas seulement sur la tokenisation.
+
+
+## Tour 159
+
+### 👤 Utilisateur
+
+go
+
+### 🤖 Assistant
+
+⏵ Lancer la passe API de confirmation (gold 432, run 2)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes-432-run2.json 2>&1 | tail -30", "description": "Rejouer les quat … [83 caractères tronqués]`
+
+  ```
+started background job bash-59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"modele-natif\\|modèle natif\" docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md 2>/dev/null | head -8", "description": "Voir où le modèle natif est cité dans le pilotage"}`
+
+  ```
+docs/pilotage/chantiers.md:85:| **N — le natif** | le modèle natif peut-il être petit, creux, honnête et général ? | 🔬 N0/N1 mesurés ; N2.h : 3,09 en domaine, 16,70 → 3,85 hors dépôt ; N4 partiel | **N2** (français réel, capacité) ; N4 (consigne) | A (moteur), D (corpus) | R1–R3, N5 |
+docs/pilotage/plan-travail.md:38:| **N2 — le natif (session `0733c5bb`)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1 Go, 60 k pas) : **3,49 / 6,03** — production ; **200 k pas** : val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées** ; fiche + clôture en cours. |
+  ```
+
+### 🤖 Assistant
+
+⏵ Attendre la passe de confirmation
+
+- **job_output** `{"job_id": "bash-59", "timeout_ms": 3600000, "wait": true}`
+
+  ```
+heuristique · 0.3 s
+neuronal · 26.0 s
+parallele · 0.4 s
+cascade · 0.4 s
+parallele_niveau · 0.4 s
+cascade_niveau · 0.4 s
+heuristique {'pos': 0.7444, 'syntagme': 0.252, 'tete': 0.4511, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+neuronal {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.9326, 'syntagme': 0.8029, 'tete': 0.8571, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade {'pos': 0.9326, 'syntagme': 0.8029, 'tete': 0.8571, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+parallele_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.986
+… [91 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432-run2.json'))\nprint('refus', d.get('refus'), d.get('refus_detail'))\nprint('seuils', d.get('seuils'))\nprint('appels', d.get('api'))\nPY", "description" … [41 caractères tronqués]`
+
+  ```
+refus 0 []
+seuils {'heuristique': True, 'neuronal': True, 'parallele': False, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': True}
+appels {'appels': 858, 'tokens': 254454, 'latence_s': 807.5519999999992}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-quatre-modes-run2.md <<'MD'\n# B13 — la confirmation (run 2) : refus 0, le niveau gagne encore\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·\n> **Verdict … [6992 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 604 fiche(s) · 690 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2806 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-defaut-niveau.md`](rapport-pensee-defaut-niveau.md) | **B13** — le défaut de la fusion : confiance 0,7424 vs niv … [615 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=1
+    pos_niv = d["run2"]["niveau"] if m is None else m["cascade_niveau"]["pos"]
+                                                    ~~~~~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'pos'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''    m = d[\"modes\"] if \"modes\" in d else None\n    pos_niv = d[\"run2\"][\"niveau\"] if m is None else m[\"cascade_nivea … [259 caractères tronqués]`
+
+  ```
+ok
+              ~^^^^^^^^
+KeyError: 'run2'
+EXIT=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''    d = json.loads((racine / \"reports/pensee-quatre-modes-432-run2.json\").read_text(encoding=\"utf-8\"))\n    pos_niv = d … [402 caractères tronqués]`
+
+  ```
+ok
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'pos'
+EXIT=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432-run2.json'))\nprint('clés', list(d.keys()))\nprint('cascade_niveau', json.dumps(d['modes']['cascade_niveau'])[:300])\nPY", "description": "Voir la struc … [27 caractères tronqués]`
+
+  ```
+clés ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail', 'appels', 'api', 'latence_s', 'duree_totale_s', 'limites']
+cascade_niveau {"all": {"pos": {"exactitude": 0.9389, "exactitude_ferme": 0.9228, "exactitude_ouvert": 0.956, "tokens": 2375, "confusions": {"ADJ": {"ADJ": 77}, "ADV": {"ADV": 86, "NOUN": 3, "ADJ": 3, "?": 1}, "AUX": {"AUX": 110, "?": 3, "VERB": 3}, "CONJ": {"PRON": 6, "CONJ": 53, "?": 13, "INTJ": 2, "PREP": 2, "N
+  ```
+

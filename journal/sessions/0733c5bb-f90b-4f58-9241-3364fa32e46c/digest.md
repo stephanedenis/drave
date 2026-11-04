@@ -10074,3 +10074,50 @@ paire propre lancée pid 299987
   ```
 
 - **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 50 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null; cat work/n2ac/kdpp.out 2>/dev/null; tail -c 50 work/n2ac/kdpp-mix512-a0.log 2>/dev/null", "description": "Wait for corrected alpha=0.9 control",  … [20 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-21]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-16 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 50 work/n2ac/kdp-1147m-a0.log; tail -c 50 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-21", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; cat work/n2ac/kdpp.out 2>/dev/null; tail -c 50 work/n2ac/kdpp-mix512-a0.log 2>/dev/null", "description": "Poll corrected runs"}`
+
+  ```
+11:28:52
+kdp a=0 fini 11:01:35
+te 1.1397 · dure 1.0694 · douce 0.5102 · 988 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -la work/n2ac/kdpp-mix512-a0.log 2>/dev/null; tail -c 200 work/n2ac/kdpp-mix512-a0.log 2>/dev/null; ps -eo pid,etime,cmd --no-headers | grep \"[d]istiller_natif\" | cut -c1-70; nvidia-smi --query-gpu=index,memory.used --format=csv,noheader", "descr … [43 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 3263  4 nov 11:28 work/n2ac/kdpp-mix512-a0.log
+s
+pas  2000 · perte 1.1083 · dure 1.0426 · douce 0.5342 · 941 s
+pas  2050 · perte 1.0859 · dure 1.0136 · douce 0.5102 · 964 s
+pas  2100 · perte 1.1397 · dure 1.0694 · douce 0.5102 · 988 s
+ 295337       27:21 /home/stephane/gpu-env/bin/python work/n2ac/distil
+ 299990       20:46 /home/stephane/gpu-env/bin/python work/n2ac/distil
+0, 5280 MiB
+1, 13200 MiB
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 50 work/n2ac/kdpp-mix512-a0.log", "description": "Wait for corrected alpha=0.9", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-24]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-24", "timeout_ms": 2400000, "wait": true}`
