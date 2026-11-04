@@ -10527,3 +10527,14 @@ pas 11000 · perte 0.9849 · 2050 s
   ```
 
 - **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log", "description": "Wait for the two production arms", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-51]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-47 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; cat work/n2ac/pond4-mix512-15k.log 2>/dev/null | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-51", "timeout_ms": 1800000, "wait": true}`

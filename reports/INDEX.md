@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **613 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **615 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -382,6 +382,8 @@
 | [rapport-pensee-cascade-union.md](rapport-pensee-cascade-union.md) | B13 — la cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels |
 | [rapport-pensee-cascade-vrai-modele.md](rapport-pensee-cascade-vrai-modele.md) | B13 — la cascade complète avec le vrai modèle : POS 0,9415 / syntagmes 0,6130 / tête 0,7574 / acte 1,0 sur 180 phrases |
 | [rapport-pensee-chaotique.md](rapport-pensee-chaotique.md) | B13 — l'alternance aléatoire : 20/20, v = 0,12 |
+| [rapport-pensee-cibles-500.md](rapport-pensee-cibles-500.md) | B13 — les 500 premiers segments : 294 GN et 206 GV sans cible |
+| [rapport-pensee-cibles.md](rapport-pensee-cibles.md) | B13 — les cibles de l'attachement : 1624 segments sans cible sur 1863 |
 | [rapport-pensee-concurrentes.md](rapport-pensee-concurrentes.md) | B13 — les routes concurrentes : 0/20 au but 0, 20/20 au but 1 |
 | [rapport-pensee-contexte.md](rapport-pensee-contexte.md) | B13 — la réponse contextuelle : 5/5, la phrase précédente tranche |
 | [rapport-pensee-correction.md](rapport-pensee-correction.md) | B13 — la mesure corrigée : `seule_minute` rendait de faux échecs |

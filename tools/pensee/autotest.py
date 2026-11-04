@@ -2239,6 +2239,24 @@ def t154_cibles() -> tuple[bool, str]:
         f"cibles : {sans}/{tot} segments sans cible (couverture {round((tot-sans)/tot,4)})")
 
 
+def t155_cibles_500() -> tuple[bool, str]:
+    """Les 500 premiers segments : 294 GN, 206 GV."""
+    from ..tests.linguistique.evaluer_gold import charger
+    ph = charger()
+    n = 0
+    gn = gv = 0
+    for p in ph:
+        for s in p["segments"]:
+            if not s.get("cible"):
+                n += 1
+                if n <= 500:
+                    if s.get("type") == "GN":
+                        gn += 1
+                    elif s.get("type") == "GV":
+                        gv += 1
+    return gn == 294 and gv == 206, f"500 premiers : {gn} GN, {gv} GV"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2392,7 +2410,8 @@ def main() -> int:
               ("T151 variance sous-type", t151_soustype_variance()),
               ("T152 trois tirages", t152_tirages()),
               ("T153 attachement", t153_attachement()),
-              ("T154 cibles", t154_cibles())]
+              ("T154 cibles", t154_cibles()),
+              ("T155 cibles 500", t155_cibles_500())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
