@@ -28,7 +28,7 @@ import time
 RACINE = pathlib.Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(RACINE))
 
-from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,
+from tools.bloc_linguistique import (PRIORITE_NIVEAU, PRIORITE_TYPE, Cascade, Heuristique,
                                      NeuronalLLMChunks, NeuronalLLMCompose,
                                      NeuronalLLMPOS, NeuronalLLMPragmatique, Parallele)
 from tools.llm.deepseek import DeepSeek
@@ -71,9 +71,11 @@ def main() -> None:
         "parallele": Parallele([h, compose], priorite_syntagme="confiance"),
         "cascade": Cascade(h, compose, seuil=a.seuil, priorite_syntagme="confiance"),
         "parallele_niveau": Parallele([h, compose], priorite_syntagme="confiance",
-                                      priorite_par_niveau=PRIORITE_NIVEAU),
+                                      priorite_par_niveau=PRIORITE_NIVEAU,
+                                      priorite_par_type=PRIORITE_TYPE),
         "cascade_niveau": Cascade(h, compose, seuil=a.seuil, priorite_syntagme="confiance",
-                                  priorite_par_niveau=PRIORITE_NIVEAU),
+                                  priorite_par_niveau=PRIORITE_NIVEAU,
+                                  priorite_par_type=PRIORITE_TYPE),
     }
     t0 = time.perf_counter()
     mesures = {}

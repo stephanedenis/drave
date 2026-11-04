@@ -1349,10 +1349,21 @@ PRIORITE_NIVEAU = {
     "pragmatique": "heuristique", "discours": "heuristique", "document": "heuristique",
 }
 
+# La finesse **par sous-type** : le neuronal gagne l'acte et le double sens, l'heuristique
+# garde la négation et la modalité (mesuré : 0,9954 au neuronal contre 0,9676 à l'heuristique
+# pour la négation). Un niveau entier ne peut pas exprimer ce partage.
+PRIORITE_TYPE = {
+    ("pragmatique", "acte"): "neuronal",
+    ("pragmatique", "double_sens"): "neuronal",
+    ("phrase", "négation"): "heuristique",
+    ("phrase", "modalité"): "heuristique",
+}
+
 
 def _fusion(a: Annotation, b: Annotation, source: str,
             priorite_syntagme: str = "heuristique",
-            priorite_par_niveau: dict | None = None) -> Annotation:
+            priorite_par_niveau: dict | None = None,
+            priorite_par_type: dict | None = None) -> Annotation:
     """Fusion déterministe : la meilleure confiance par (niveau, span, type) ; les candidats
     sont réunis ; la langue/le script vont à la meilleure confiance.
 
@@ -1374,8 +1385,12 @@ def _fusion(a: Annotation, b: Annotation, source: str,
         # heuristiques faux — 0,8069 au lieu de 0,8226 : il est retiré. Les niveaux absents
         # du dict gardent toutes les sources.
         choisis = dict(priorite_par_niveau)
-        etiquettes = [e for e in meilleures.values()
-                      if e.niveau not in choisis or e.source == choisis[e.niveau]]
+        types = dict(priorite_par_type or {})
+        etiquettes = []
+        for e in meilleures.values():
+            src = types.get((e.niveau, e.type), choisis.get(e.niveau))
+            if src is None or e.source == src:
+                etiquettes.append(e)
         # La source est choisie par niveau : plus d'arbitrage de chevauchement à faire.
     else:
         etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
@@ -1402,19 +1417,22 @@ class Parallele:
 
     def __init__(self, blocs: Sequence[BlocLinguistique],
                  priorite_syntagme: str = "heuristique",
-                 priorite_par_niveau: dict | None = None):
+                 priorite_par_niveau: dict | None = None,
+                 priorite_par_type: dict | None = None):
         if len(blocs) != 2:
             raise ValueError("le parallèle attend exactement deux blocs")
         self.blocs = list(blocs)
         self.priorite_syntagme = priorite_syntagme
         self.priorite_par_niveau = (priorite_par_niveau if priorite_par_niveau is not None
                                      else priorite_par_defaut())
+        self.priorite_par_type = dict(priorite_par_type or {})
 
     def analyser(self, texte: str, langue: str | None = None,
                  contexte: str | None = None) -> Annotation:
         a = self.blocs[0].analyser(texte, langue, contexte)
         b = self.blocs[1].analyser(texte, langue, contexte)
-        return _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
+        return _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau,
+                       self.priorite_par_type)
 
 
 class Cascade:
@@ -1425,7 +1443,8 @@ class Cascade:
     def __init__(self, heuristique: BlocLinguistique, neuronal: BlocLinguistique,
                  seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique"),
                  priorite_syntagme: str = "heuristique",
-                 priorite_par_niveau: dict | None = None):
+                 priorite_par_niveau: dict | None = None,
+                 priorite_par_type: dict | None = None):
         self.h = heuristique
         self.n = neuronal
         self.seuil = seuil
@@ -1433,6 +1452,7 @@ class Cascade:
         self.priorite_syntagme = priorite_syntagme
         self.priorite_par_niveau = (priorite_par_niveau if priorite_par_niveau is not None
                                      else priorite_par_defaut())
+        self.priorite_par_type = dict(priorite_par_type or {})
         self.appels_neuronal = 0
 
     def analyser(self, texte: str, langue: str | None = None,
@@ -1446,7 +1466,8 @@ class Cascade:
             return a
         self.appels_neuronal += 1
         b = self.n.analyser(texte, langue, contexte)
-        fusion = _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
+        fusion = _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau,
+                         self.priorite_par_type)
         fusion.trace.append({"etape": "cascade", "residuel": residuel, "appel_neuronal": True,
                              "seuil": self.seuil})
         return fusion

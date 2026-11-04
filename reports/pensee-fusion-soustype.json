@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "153/153",
+ "niveau": {
+  "acte": 0.9954,
+  "negation": 0.9676,
+  "modalite": 0.9861,
+  "double_sens": 0.9676
+ },
+ "soustype": {
+  "acte": 0.9954,
+  "negation": 0.9676,
+  "modalite": 0.9861,
+  "double_sens": 0.9884
+ },
+ "gain_double_sens": 0.0208,
+ "refus": 0,
+ "seuils": "7/7",
+ "limites": [
+  "une passe",
+  "gold 432",
+  "quatre paires dans PRIORITE_TYPE"
+ ]
+}

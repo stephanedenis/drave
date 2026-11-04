@@ -2179,6 +2179,19 @@ def t149_pragmatique_full() -> tuple[bool, str]:
         f"pragma 432 : acte {m['acte']}, négation {m['negation']} < {h['negation']}")
 
 
+def t150_fusion_soustype() -> tuple[bool, str]:
+    """La fusion par sous-type : double sens 0,9884 (+0,0208)."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-quatre-modes-432-soustype.json").read_text(encoding="utf-8"))
+    m = d["modes"]["parallele_niveau"]["all"]["pragmatique"]
+    h = d["modes"]["heuristique"]["all"]["pragmatique"]
+    return (abs(m["double_sens"] - 0.9884) < 0.001
+            and m["double_sens"] > h["double_sens"]), (
+        f"sous-type : double sens {m['double_sens']} (niveau {h['double_sens']})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2327,7 +2340,8 @@ def main() -> int:
               ("T146 DRVM N0.1", t146_drvm_n01()),
               ("T147 variance", t147_variance()),
               ("T148 pragmatique neuronale", t148_pragmatique()),
-              ("T149 pragma 432", t149_pragmatique_full())]
+              ("T149 pragma 432", t149_pragmatique_full()),
+              ("T150 fusion sous-type", t150_fusion_soustype())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -10413,3 +10413,10 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.pt 2>/dev/null && echo OKPP0; tail -c 45 work/n2ac/kdpp-mix512-a0.log", "description": "Wait for production pair alpha=0", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-44]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-44", "timeout_ms": 900000, "wait": true}`

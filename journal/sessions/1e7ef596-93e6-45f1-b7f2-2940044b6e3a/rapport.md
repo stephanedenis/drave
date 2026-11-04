@@ -7,15 +7,15 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.7 h |
-| Tours | 12 |
-| Messages | 234 |
-| Appels d'outils | 414 |
+| Durée | 5.8 h |
+| Tours | 13 |
+| Messages | 245 |
+| Appels d'outils | 423 |
 | Fichiers touchés | 15 |
-| Commandes | 257 |
+| Commandes | 266 |
 | Sous-agents | 0 |
-| Commits | 24 |
-| Compactages de contexte | 0 |
+| Commits | 25 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -47,6 +47,8 @@
 **Tour 11** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 **Tour 12** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -458,7 +460,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 12 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -474,11 +476,36 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Commit B13 151 pragmatique integration
 - bash — Wait for lock and retry pragmatique commit
 - bash — Check rope process, logs and recent runs
-- … et 10 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ Commit B13 152/152 (pragmatique gold 432) et narrative corrigée
+⏵ Cycle 7 : B13 152/152, paire propre α=0 finie, état et docs verts
+
+**Cycle 7 — la journée B13 et le virage N2.**
+
+- **B13 152/152** : la pragmatique sur le **gold 432** — avec le tagger branché, le neuronal rend l'**acte 0,9954** (contre 0,0 sans lui), mais la **négation (0,9630)** et la **modalité (0,9722)** restent **sous l'heuristique** (0,9676 / 0,9861) : la fusion par niveau **garde l'heuristique**. Intégré (état, roadmap, chantiers, plan-travail) ; la narrative « la pragmatique ne qualifie pas » est **corrigée partout** et l'historique (quatre modes, fusion 0,7424/0,3432) passe dans les fiches. Commit `09c5bb49`.
+- **N2 — erratum (suite)** : la **repondération vaut −0,05**, pas −0,14 (3,6067/3,3984/3,3129 contre 3,6452/3,4493/3,3628) ; à parité stricte, la distillation **ne gagne rien**.
+- **N2 — virage** : `kd2` et `rope2048` **arrêtés** (rope à **6 400/20 000** : le point 2 048 de R1.2 est **interrompu**, pas conclu) pour la **paire propre de production**. **α = 0 est fini** : 15 000 pas, perte **1,014**, **7 050 s (1 h 57)** ; α = 0,9 ensuite ; les GPU sont libres entre les deux.
+- **Contrôles** : revue ✅ **613 fiches / 703 JSON / 120 docs / 83 portes** ; **2 951 liens** ✅ ; journal **1 971 liens** ✅ ; `en-cours` **1 623 mots**, **T0 3 993 / 4 000** ✅.
+
+**WIP** : B13 fusion « soustype » (`pensee-fusion-soustype.json`, `pensee-quatre-modes-432-soustype.json`), S `rapport-s-paragraphes.md`. **Claim** `n2-jour` à 720 min. **Le goal reste actif** : α = 0,9 et les faits S/B13 à venir, puis la passe complète.
+
+### Tour 13 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Check alpha 0.9 process and alpha 0 result
+- bash — Update state with alpha 0 result and trim
+- bash — Commit alpha 0 state and trims
+
+**Synthèse produite :**
+
+⏵ Commit état : α=0 fini, α=0,9 en cours, B13 allégé
 
 ## 3. Travail accompli
 
@@ -544,7 +571,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 217 autres
+- … et 226 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -709,4 +736,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé
 - N2 — KD2 ET ROPE2048 ARRÊTÉS POUR LA PAIRE PROPRE (ROPE À 6 400/20 000) ; REPONDÉRATION −0,05 ; R1.2 INTERROMPU" -m "La session N2 a arrêté kd2 et rope2048 (cod
 - B13 152/152 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; ÉTAT ET PILOTAGE" -m "Le fait est committé (8d0008d5, rapport-pensee
+- ÉTAT — N2 : α = 0 FINI (PERTE 1,014, 7 050 S) ; α = 0,9 EN COURS ; B13 152 ALLÉGÉ (T0 3 987)" -m "La paire propre a son premier bras : α = 0 donne 1,014 de pert
 

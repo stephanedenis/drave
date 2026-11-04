@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-fusion-soustype.md`](rapport-pensee-fusion-soustype.md) | **B13** — la fusion par sous-type : double sens 0,9884 (+0,0208), **153/153** |
 | [`rapport-pensee-pragmatique-full.md`](rapport-pensee-pragmatique-full.md) | **B13** — la pragmatique sur le gold 432 : acte 0,9954, la fusion garde l'heuristique, **152/152** |
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
 | [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |

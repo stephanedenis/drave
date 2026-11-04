@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 92.5 h |
+| Durée | 92.6 h |
 | Tours | 161 |
-| Messages | 1983 |
-| Appels d'outils | 1706 |
+| Messages | 1985 |
+| Appels d'outils | 1708 |
 | Fichiers touchés | 25 |
-| Commandes | 1403 |
+| Commandes | 1404 |
 | Sous-agents | 2 |
-| Commits | 208 |
+| Commits | 209 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8540,7 +8540,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 
 ### Tour 161 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Lire le composite neuronal
 - bash — Lire la grammaire pragmatique et son usage
@@ -8556,7 +8556,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - bash — Committer la pragmatique neuronale (130 phrases)
 - bash — Vérifier la branche courante
 - bash — Voir les commits sur s/v7 au-delà de master
-- … et 10 autres
+- … et 11 autres
 
 ## 3. Travail accompli
 
@@ -8637,7 +8637,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1363 autres
+- … et 1364 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8993,4 +8993,5 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - B13 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; 150/150" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA VARIANCE"; then echo "COMMI
 - B13 — LA PRAGMATIQUE NEURONALE : ACTE 1,0, NÉGATION 1,0 SUR 130 PHRASES ; 151/151" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "PRAGMATIQUE NEURONALE
 - B13 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; 152/152" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "PRAGMATIQUE
+- B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "FUSION PAR SOUS-TYPE"; t
 
