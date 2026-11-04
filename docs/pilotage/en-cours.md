@@ -1,13 +1,23 @@
 # En ce moment
 
-**Mis à jour : 2026-11-03, 13 h 45 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 08 h 50 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
 >
-> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
-> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit**, et de nouveau le **03/11 13 h 38** pour le **run long à 1 024** ; runbook :
-> [`plan-travail.md`](plan-travail.md) § 9.
+> **Reboot du 03/11 19 h 33** : la nuit a été coupée net — `kd2` à **8 250/30 000** pas et
+> `rope2048` à **3 350/20 000**, **sans checkpoint** ; les quatre sessions sont **en pause**.
+> Reprise par le hub le **04/11 08 h** : analyse des sessions, tâches courtes, état, intégration ;
+> runbook [`plan-travail.md`](plan-travail.md) § 9, plan de la nuit § 11.
+
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+
+- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+- **Rôle** : **Hub de reprise** — analyse des quatre sessions interrompues, tâches courtes, état.
+- **Fait** : index réparé (`git read-tree HEAD`) ; N2/S/Pensée triés ; **8 verdicts S** committés ; banque **84/67** ; **fix FIFO** (+3 tests) ; état au 04/11.
+- **Prochaine action** : commit d'intégration, puis **passe de portes** ; les runs longs N2 ensuite.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
 
 ## Sessions en cours
 
@@ -16,93 +26,84 @@
 > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
 > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
 >
-> **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
-> `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
-> DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
-> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API fournie** (`~/.config/drave/deepseek.key`).
+> **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU réservés à Drave.
 >
-> **Bilan de 08 h** : 82 portes, 77/5 ; N2/S en pause ; B13 et hub actifs ; [journal](../../journal/2026-11-03/README.md).
+> **Bilan de 08 h du 04/11** : nuit **coupée à 19 h 33** ; quatre sessions en pause, WIP triés ;
+> **passe de 08 h 40 arrêtée** ; runs longs N2 ensuite. [journal du 03/11](../../journal/2026-11-03/README.md).
 
-### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)*
 
 - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
 - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
-- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration, portes**, **plan de nuit**.
-- **Ambition** : un état reprenable, des mandats qui disent la vérité.
-- **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
-- **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
-- **Ce qu'elle fait** : intégration ; **passe 11 h 30 — 82 portes, 80/2** ; INDEX/README ; **plan de
-  nuit**.
-- **Ce que font les autres** : **N2** (run kd2, GPU), **S** (arbre), **Pensée** (portes).
-- **Prochaine action** : tenir l'**état**, intégrer les faits ; **passe** si GPU libres ; **bilan 08 h**.
+- **Plan** : audit, état, runbook ; nuit.
+- **Ambition** : un état reprenable.
+- **Stratégie** : committer par flux.
+- **Objectif final** : sédimentation à zéro.
+- **Ce qu'elle fait** : intégration ; **passe 11 h 30 — 82, 80/2** ; plan de nuit.
+- **Ce que font les autres** : **N2**, **S**, **Pensée**.
+- **Prochaine action** : **rouvrir le hub** (session `1e7ef596`) ; il tient l'état, la passe et
+  l'intégration ; les runs longs N2 repartent ensuite.
 - **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
-### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export *(en pause)*
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
 - **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
-- **Plan** : 1–4) ~~plan, analyseur (gold 55), export, tests 47~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Plan** : analyseur, export, arbre, validation.
 - **Ambition** : nommer le rôle et la frontière GN.
-- **Stratégie** : une règle = une phrase, trois contrôles.
-- **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
-- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md), [`limites`](../../reports/rapport-s-limites-v6.md).
-- **Ce qu'elle fait** : **`230d03a`** ; page **`/paragraphes`** ; corpus **60** ; banque **200/355**, **142/81/65**.
-- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
-- **Prochaine action** : **confirmer les référents sur `/paragraphes`** (source anglaise), puis la rétro-traduction
-  API quand la clé ; le nom après un adjectif hors lexique.
+- **Stratégie** : une règle = trois contrôles.
+- **Objectif final** : gold 60, corpus 60.
+- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
+- **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67**.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**.
+- **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits, 8
+  verdicts committés), puis la rétro-traduction API ; le nom après un adjectif hors lexique.
 - **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents ; la banque
   partielle reste archivée.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
-### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)*
 
 - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
 - **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
-- **Plan** : 1–6) ~~moteur B13~~ ; 7) ~~R4.4~~ ; 8) ~~heuristique~~ ; 9) ~~bloc~~ ; 10) ~~coréférence~~.
-- **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
+- **Plan** : B13, R4.4, bloc linguistique.
+- **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 petit et mesuré.
-- **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
-- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** —
-  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 9/9 appris, parité 114/114+5/5 (--drvm) ;
-  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **non discriminante** (oracle 228, aveugle 215) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
-  [B13](../../reports/rapport-b13-porte-140.md), [sto](../../reports/rapport-pensee-porte-sto.md),
-  [sto 5/5](../../reports/rapport-pensee-porte-sto-graines.md),
-  [fenêtre](../../reports/rapport-pensee-porte-fenetre.md),
-  [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
-- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; **gold neuronal rejoué sur l'API** (`deepseek-chat`) : mêmes verdicts (porte 1,0 / labyrinthe 0,25), latence 5,5 / 2,9 s au lieu de 6,4 / 101,6 s ; [`fiche`](../../reports/rapport-pensee-gold-api.md).
-- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+- **Objectif final** : un moteur de pensée v0.
+- **Fait** : B13 **140/140** (T132/T133 2/5), gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ;
+  **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; **fenêtre non discriminante** (oracle 228, aveugle 215) ;
+  **pragmatique 0,6375** ; fiches [B13](../../reports/rapport-b13-porte-140.md), [fenêtre](../../reports/rapport-pensee-porte-fenetre.md).
+- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence 5,5 / 2,9 s au lieu de 6,4 / 101,6 s) ; [fiche](../../reports/rapport-pensee-gold-api.md).
+- **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **gold 432 réel (0,9954)** ; **DRVM/native 114/114+5/5** ; la suite :
-  **T132/T133**, gold 200+ ; **porte B13** attend S.
+  **T132/T133**, gold 200+ ; **porte B13** attend S ; le **fix FIFO** est testé, le qualifier
+  fenêtre BFS 500 attend une version API (le serveur local est interdit).
 - **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM/minute/mobile ; la **pragmatique neuronale** ne qualifie pas ; la **porte B13** attend S ; reste **gold 200+** ; les expériences **7B locales** sont **interdites** (règle 11) — la professeure passe par l'**API DeepSeek** ou le **DRVM natif**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
-### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2** — le run long de production et la capacité sur le corpus propre.
-- **Plan** : run long à 1 024, capacité ; fiche par fait.
+- **Plan** : 1 024, capacité.
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
-- **Ce qu'elle fait** : la nuit est committée (4 fiches : [`fenêtre`](../../reports/rapport-n2-fenetre.md),
-  [`2 048`](../../reports/rapport-n2-r12-2048.md), [`production`](../../reports/rapport-n2-production-fenetre.md),
-  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
-  **capacité propre** (GPU 1) ; **distillation native** : α = 0,9 gagne **0,14–0,18**.
+- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; distillation native **+0,10** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [porte](../../reports/rapport-n2-porte-propre.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : professeur 60 k distillé (fin ~22 h 15).
+- **Prochaine action** : **relancer `kd2` (30 000 pas) et `rope2048` (20 000 pas)** — longs,
+  après les tâches courtes ; puis la **porte propre (0,29)**.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
-> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP (91 scans, 60 documents, 1 982 p,
-> 4,41 M car.) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
-> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md), fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
 
 ## Ce qui est en cours
 
-- **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
-- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; le compute à 128 : 3,1591/8,2262 ; **distillé : −0,10** ; copie 0,0078.
-- **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
+- **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque **84/67**, **8 verdicts de référents**, **55/55 tests** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`**.
+- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **la nuit est coupée** : `kd2` 8 250/30 000, `rope2048` 3 350/20 000, **sans checkpoint** ; **distillé : −0,10** ; copie 0,0078.
+- **Pensée — B13 (en pause)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5 ; **fix FIFO du store** (+3 tests) ; qualifier fenêtre BFS 500 laissé de côté.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
 
 ## Les chiffres de l'état
@@ -115,7 +116,7 @@
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **599** / **685** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) | `docs/pilotage/references-non-regression.md` |
+| dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) ; passe du **04/11 08 h 40 arrêtée** (tâches courtes d'abord) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 
@@ -131,20 +132,22 @@ externes** et la **prochaine action**.
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
-**C1** corpus · **C2** traduction · **C3** restitution · **C4** styles · **C5** domaines ·
-**C6** documentation · **C7** pensée — hors graphe.
+**C1** · **C2** · **C3** · **C4** · **C5** · **C6** · **C7** — hors graphe.
 
 ## Ce qui reste
 
-**R1** — R1.2-1024 ; **Pensée** — gold 200+ ; **S** — homographes, validation ;
-**N4** — consigne ; **B10.3** — `z` ; **B13** — 140/140 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+**N2** — relancer `kd2`/`rope2048` ; **R1** — R1.2-1024 ; **Pensée** — gold 200+ ; **S** —
+poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 140/140 ; **R0.7** —
+tagger ; **D** — OCR clos (8 `.PDF`).
 
-- **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+
 
 ## Les questions ouvertes
 
 - **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
 - **N2** : **< 2,5** ? → **oui par la fenêtre** : 2,4759 / 2,4373 au grand corpus (1 024, 30 k pas) ; la porte **propre** reste à 2,7856.
+- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non mesuré** (run interrompu).
+- **R1 (nuit)** : 2 048 à 20 000 pas ? → **non mesuré** (run interrompu).
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.
 
 ## La carte

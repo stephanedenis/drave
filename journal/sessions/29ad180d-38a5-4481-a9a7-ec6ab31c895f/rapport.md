@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 26.6 h |
 | Tours | 14 |
-| Messages | 413 |
-| Appels d'outils | 403 |
+| Messages | 415 |
+| Appels d'outils | 404 |
 | Fichiers touchés | 17 |
-| Commandes | 316 |
+| Commandes | 317 |
 | Sous-agents | 0 |
 | Commits | 31 |
 | Compactages de contexte | 1 |
@@ -516,7 +516,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 
 ### Tour 14 — continue
 
-*34 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - bash — Read marker and GN homograph code
 - bash — Read subordinator sets and gold phrase format
@@ -532,7 +532,18 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - bash — Read v4 limit tests and measure test
 - bash — Update tests for v6 and run
 - bash — Re-run 50k corpus measure after v6 changes
-- … et 20 autres
+- … et 21 autres
+
+**Synthèse produite :**
+
+⏵ Les trois limites de la v4 sont fermées : gold 60, 60/60 types, 142/142 rôles ; la page est relancée avec l'arbre corrigé.
+
+Le cycle v6 ferme les trois limites nommées. `h050` (« Le triste **fait** demeure ») et `h053` (« Le grand **lit** ») trouvaient un nom après un adjectif : la règle regarde maintenant le mot précédent (l'adjectif ou le déterminant) et le mot suivant (un verbe ou la ponctuation), si bien que le GN va jusqu'au nom et que le verbe ouvre le GV ; « demeure » et « crier » entrent au lexique, et un lexique d'adjectifs (grand, petite, vieille, triste, simple, fort…) sert aux deux règles. Le « **si fort que** » — la limite que la traduction anglaise d'Alice avait révélée — n'est plus une hypothèse : le « si » est un intensif, le GV l'avale avec l'adjectif (« elle se grondait si fort »), et le « que » qui suit ouvre la **conséquence**. La page le montre : dans a001, le GV est « quelquefois elle se grondait si fort » et le SUB « que les larmes lui en venaient aux yeux » porte le rôle *consequence*.
+
+Le gold passe de 55 à **60 phrases** avec la vague 5 (`h056–h060`), écrite après les règles et mesurée une fois : la conséquence, l'hypothèse conditionnelle (« S'il pleut, je reste »), le nom après adjectif, et le contrôle négatif du « fait » verbe après un nom (« Le chat fait des bonds »). La mesure donne **60/60 types**, **142/142 rôles**, **50/50 compléments**, couverture **1,00** ; les contrôles restent à **102/142**, **104/142** et **0,10**. Le corpus re-mesuré garde ses taux (65,5 % de GN+GV contre 9,1 % pour le mélange) et compte **596/1 184** homographes ; la couverture propre passe de 0,89 à 0,88. La traduction avait trouvé la limite du « si fort que », la v6 la corrige et la fiche [`rapport-s-limites-v6.md`](reports/rapport-s-limites-v6.md) le raconte ; la fiche de la traduction et celle du corpus sont mises à jour, et la fiche v4 note les deux limites fermées.
+
+Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le principal en **`8854fe8f`**. Le serveur a été relancé (pid 2486060) et `http://127.0.0.1:8765/paragraphes` répond 200 avec les sources anglaises : recharge la page pour voir les arbres corrigés, puis tranche les référents et les structures. La suite : la rétro-traduction FR → EN → FR par l'API DeepSeek quand la clé sera là (jamais par un serveur local, règle 11), les 71 langues de l'UDHR pour un test de référents plus large, et la nouvelle limite nommée — le nom après un adjectif **hors lexique** (« Le fait di
+… [17 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -600,7 +611,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 276 autres
+- … et 277 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -19,7 +19,9 @@
 - **Prochaine action** : la **porte B13** est à **140/140** (6 S fixés ; T132/T133 2/5) ; la **porte qui bouge** est un **test faible** (l'aveugle/labyrinthe passent) ;
   reprendre la **porte stochastique/fenêtre** et le **gold 200+**.
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
-- **État** : actif
+- **État** : en pause
+- **Arrêt constaté** : reboot du 03/11 19 h 33 ; le fix FIFO du store est testé (3/3, l'ancien
+  code échoue 2/3), le qualifier fenêtre BFS 500 est laissé de côté (serveur local interdit).
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
   (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) **banc anytime** (AUC,

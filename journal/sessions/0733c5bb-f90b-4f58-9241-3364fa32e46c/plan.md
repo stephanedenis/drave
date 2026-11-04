@@ -35,5 +35,6 @@
   `rapport-n2-fenetre` + JSON committés) ; le contrôle depuis zéro et la clôture restent, à la
   reprise.
 - **État** : en pause
-- **Arrêt constaté** : dernier heartbeat 2026-11-03 00 h 25 ; plus de claim actif ; reprise
-  possible quand la session rouvre (les runs R1.2-1024 et R1.2-mix-512-gpu1 sont mesurés).
+- **Arrêt constaté** : reboot du 03/11 19 h 33 ; les runs `kd2` (8 250/30 000) et `rope2048`
+  (3 350/20 000) sont **interrompus sans checkpoint** ; claim `nuit-kd2` libéré ; les fiches
+  portent « run interrompu, non mesuré ».

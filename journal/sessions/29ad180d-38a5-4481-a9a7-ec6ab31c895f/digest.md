@@ -8731,3 +8731,39 @@ c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFL
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; for f in docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/plan-travail.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-co … [3188 caractères tronqués]`
+
+  ```
+c7c310bb PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE
+re-apply ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 599 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-s-banque-partielle.md
+ create mode 100644 reports/rapport-s-limites-v6.md
+8854fe8f S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -3; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; cd tools/structures && kill 2449625 2>/dev/null; sleep 1; nohu … [620 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   c4ea82e6..8854fe8f  master -> master
+exit=0
+8854fe8f5206a631ba89cb31570b674bb5336a8b	refs/heads/master
+230d03a4fb2b87ef5105bb1faa9112f1001f27c0	refs/heads/master
+pid 2486060
+page 200
+a001 segments: [('Elle avait', 'GV', 'predicat'), ('pour habitude', 'GP', 'but'), ('se donner', 'GV', 'predicat'), ('de très-bons conseils', 'GP', 'theme'), ("bien qu'elle les suivît rarement", 'SUB', 'concession'), ('quelquefois elle se grondait si fort', 'GV', 'predicat')]
+sources anglaises: True
+  ```
+
+### 🤖 Assistant
+
+⏵ Les trois limites de la v4 sont fermées : gold 60, 60/60 types, 142/142 rôles ; la page est relancée avec l'arbre corrigé.
+
+Le cycle v6 ferme les trois limites nommées. `h050` (« Le triste **fait** demeure ») et `h053` (« Le grand **lit** ») trouvaient un nom après un adjectif : la règle regarde maintenant le mot précédent (l'adjectif ou le déterminant) et le mot suivant (un verbe ou la ponctuation), si bien que le GN va jusqu'au nom et que le verbe ouvre le GV ; « demeure » et « crier » entrent au lexique, et un lexique d'adjectifs (grand, petite, vieille, triste, simple, fort…) sert aux deux règles. Le « **si fort que** » — la limite que la traduction anglaise d'Alice avait révélée — n'est plus une hypothèse : le « si » est un intensif, le GV l'avale avec l'adjectif (« elle se grondait si fort »), et le « que » qui suit ouvre la **conséquence**. La page le montre : dans a001, le GV est « quelquefois elle se grondait si fort » et le SUB « que les larmes lui en venaient aux yeux » porte le rôle *consequence*.
+
+Le gold passe de 55 à **60 phrases** avec la vague 5 (`h056–h060`), écrite après les règles et mesurée une fois : la conséquence, l'hypothèse conditionnelle (« S'il pleut, je reste »), le nom après adjectif, et le contrôle négatif du « fait » verbe après un nom (« Le chat fait des bonds »). La mesure donne **60/60 types**, **142/142 rôles**, **50/50 compléments**, couverture **1,00** ; les contrôles restent à **102/142**, **104/142** et **0,10**. Le corpus re-mesuré garde ses taux (65,5 % de GN+GV contre 9,1 % pour le mélange) et compte **596/1 184** homographes ; la couverture propre passe de 0,89 à 0,88. La traduction avait trouvé la limite du « si fort que », la v6 la corrige et la fiche [`rapport-s-limites-v6.md`](reports/rapport-s-limites-v6.md) le raconte ; la fiche de la traduction et celle du corpus sont mises à jour, et la fiche v4 note les deux limites fermées.
+
+Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le principal en **`8854fe8f`**. Le serveur a été relancé (pid 2486060) et `http://127.0.0.1:8765/paragraphes` répond 200 avec les sources anglaises : recharge la page pour voir les arbres corrigés, puis tranche les référents et les structures. La suite : la rétro-traduction FR → EN → FR par l'API DeepSeek quand la clé sera là (jamais par un serveur local, règle 11), les 71 langues de l'UDHR pour un test de référents plus large, et la nouvelle limite nommée — le nom après un adjectif **hors lexique** (« Le fait divers surprend »).
+

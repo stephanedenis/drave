@@ -9676,3 +9676,57 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-493", "timeout_ms": 3500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 55 work/n2ac/kd2-mix512-30k.log; tail -c 55 work/n2ac/rope2048-20k.log; git log --oneline -2 | cat", "description": "Poll runs and repo"}`
+
+  ```
+18:58:22
+ perte 1.2844 · dure 1.1232 · douce 0.2966 · 1925 s
+
+pas   1450 · perte 1.1848 · PPL val 2.851 · 1472 s
+8854fe8f S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES
+c7c310bb PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 50 work/n2ac/kd2-mix512-30k.log; tail -c 50 work/n2ac/rope2048-20k.log", "description": "Wait 30 min for runs", "timeoutMs": 1850000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-495]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-495", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation des deux compléments (2 048 mêmes pas, distillation 30 k) pendant les runs
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\nif \"## 6. Le complément 2 048\" not in t:\n    t += \"\"\"\n## 6. Le complément 2 048 « mêmes pas » : 20 000 pas, 328 Mo\n\nL … [1629 caractères tronqués]`
+
+  ```
+section 2 048 ajoutée (placeholders)
+section distillation 30k ajoutée (placeholders)
+  ```
+
+- **bash** `{"command": "sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 50 work/n2ac/kd2-mix512-30k.log; tail -c 50 work/n2ac/rope2048-20k.log", "description": "Poll runs after ~55 min", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-497]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-495 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 50 work/n2ac/kd2-mix512-30k.log; tail -c 50 work/n2ac/rope2048-20k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-497", "timeout_ms": 600000, "wait": true}`

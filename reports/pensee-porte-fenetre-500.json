@@ -1,0 +1,165 @@
+{
+  "date": "2026-11-02 22:39 EST",
+  "modele": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+  "endpoint": "http://127.0.0.1:18082",
+  "probleme": {
+    "nom": "labyrinthe_porte_fenetre",
+    "porte": [
+      3,
+      3
+    ],
+    "but": [
+      4,
+      4
+    ],
+    "regle": "la porte (3,3) n'est libre que si t % 3 == 0 ; l'horloge avance à chaque pas, saut ou attente",
+    "budget": 500
+  },
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeux": [
+      "porte_fenetre",
+      "labyrinthe"
+    ],
+    "contrainte": "grammaire GBNF, quatre directions"
+  },
+  "mesures": {
+    "oracle": {
+      "noeuds": 500,
+      "but": false,
+      "par_operateur": {
+        "pas": 167,
+        "saut": 167,
+        "attendre": 165,
+        "sonde": 1
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique",
+        "temporel"
+      ],
+      "cout": 671.0,
+      "appels": 165,
+      "budget": 500,
+      "politique": "manhattan",
+      "score": 0.2,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.103
+    },
+    "aveugle": {
+      "noeuds": 500,
+      "but": false,
+      "par_operateur": {
+        "pas": 167,
+        "saut": 168,
+        "attendre": 165
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique",
+        "temporel"
+      ],
+      "cout": 668.0,
+      "appels": 165,
+      "budget": 500,
+      "politique": "aveugle",
+      "score": 0.2,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.1
+    },
+    "hasard": {
+      "noeuds": 500,
+      "but": false,
+      "par_operateur": {
+        "pas": 155,
+        "saut": 155,
+        "attendre": 153,
+        "sonde": 37
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique",
+        "temporel"
+      ],
+      "cout": 803.0,
+      "appels": 153,
+      "budget": 500,
+      "politique": "hasard",
+      "score": 0.2,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.094
+    },
+    "llm_porte_fenetre": {
+      "noeuds": 500,
+      "but": false,
+      "par_operateur": {
+        "pas": 139,
+        "saut": 140,
+        "attendre": 138,
+        "sonde": 83
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique",
+        "temporel"
+      ],
+      "cout": 972.0,
+      "appels": 137,
+      "budget": 500,
+      "politique": "llm",
+      "score": 0.2,
+      "latence_s": 129.393,
+      "erreurs": 0,
+      "duree_s": 129.526
+    },
+    "llm_labyrinthe": {
+      "noeuds": 500,
+      "but": false,
+      "par_operateur": {
+        "pas": 166,
+        "saut": 167,
+        "attendre": 165,
+        "sonde": 2
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique",
+        "temporel"
+      ],
+      "cout": 675.0,
+      "appels": 164,
+      "budget": 500,
+      "politique": "llm",
+      "score": 0.2,
+      "latence_s": 83.11,
+      "erreurs": 0,
+      "duree_s": 83.357
+    }
+  },
+  "seuils": {
+    "oracle_but": false,
+    "oracle_sonde": true,
+    "aveugle_non": true,
+    "hasard_non": true,
+    "llm_but": false,
+    "llm_sonde": true,
+    "labyrinthe_non": true,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": false,
+  "limites": [
+    "La porte n'est libre qu'à t % 3 == 0 ; l'horloge avance avec le pas, le saut et l'attente ; l'A* choisit l'attente, le LLM la direction.",
+    "Le hasard peut tomber sur t % 3 == 0 ; le contrôle propre est l'aveugle et le labyrinthe.",
+    "L'A* explore ; le nombre de nœuds dépend du tie-breaking ; le but et la sonde sont les mesures.",
+    "La latence inclut la file du serveur ; CPU seulement ; une graine, température 0."
+  ]
+}

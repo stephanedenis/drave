@@ -1,0 +1,11 @@
+{
+ "version": 2,
+ "mode": "banque",
+ "date": "2026-11-04T08:42:21",
+ "source": "tools/structures/donnees",
+ "sortie": "data/structures/banque-validee.jsonl",
+ "phrases": 67,
+ "candidats_acceptes": 84,
+ "sha256": "3ca1ac2002e225f69d689a929ab6bb9c6c8b6a06c6b3895af71e1406830c79f2",
+ "note": "verdicts du banc (`resolu`, `compatible`, `double_sens`) ; le dernier verdict d'un candidat gagne ; spans vérifiés."
+}

@@ -21,7 +21,8 @@
   et la **porte propre N2 (0,29)** quand N2 reprend.
 - **Ressources** : `cpu1` 1 fil, `ram` 1 Gio (claim `jour`) ; aucun GPU ; registre à jour, file vide.
 - **Nuit** : consigne `plan-travail` § 10.7 ; quatre sessions productives ; bilan 08 h.
-- **État** : actif
+- **État** : en pause
+- **Arrêt constaté** : reboot du 03/11 19 h 33 ; reprise par le hub `1e7ef596` le 04/11 08 h.
 - **Plan** : 1) ~~audit des 111 sessions et du pilotage~~ ; 2) ~~plan de session~~ ; 3) **commits par
   flux** ; 4) **état cohérent** (140/140, gold 432, N2.ac, reboot) ; 5) **mandats** (N2, S, clôture
   GPU) ; 6) **porte sessions stricte** et registre des rouges ; 7) **INDEX.md** régénéré ; 8) ~~runbook~~ ; 9) **passe de portes** ; 10) **nuit** : registre, passe, intégration, bilan 08 h.

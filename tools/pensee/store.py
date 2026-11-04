@@ -101,7 +101,11 @@ class Store:
     def push(self, empreinte: str, score: float) -> None:
         n = self.noeuds.setdefault(empreinte, Noeud(empreinte))
         n.score = score
-        self.ouverts.setdefault(empreinte, len(self.ouverts))
+        # FIFO réel : un nœud re-poussé reprend un numéro de file (le BFS doit voir l'ordre
+        # d'ouverture, pas l'ordre de première découverte — sinon la frontière se fige).
+        if empreinte not in self.ouverts:
+            self.ouverts[empreinte] = self._seq
+            self._seq += 1
 
     def frontier(self) -> list[tuple[float, int, str]]:
         """Les nœuds ouverts, meilleur score d'abord ; égalité tranchée par l'insertion."""

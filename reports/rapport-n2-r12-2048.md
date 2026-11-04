@@ -149,11 +149,20 @@ le débit passe de **22 306** octets/s (fenêtre 256) à **22 730** (512), **21 
 donc le débit ne perd que **13 %** de 256 à 2 048. La fenêtre est presque gratuite à cette
 taille — elle ne le resterait pas à plus grande échelle.
 
+## 5. Le complément 2 048 « mêmes pas » — run interrompu, non mesuré
+
+Le point 2 048 à **20 000 pas** (328 Mo, deux fois les octets du run 1 024 de référence) a été
+lancé le **03/11 vers 18 h 33** et **interrompu par le reboot à 19 h 33**, après **3 350 pas**
+(PPL de validation 2,694–2,731). **Aucun checkpoint n'a été écrit** : le point 2 048 à pas
+constants **reste non mesuré**.
+
 ## Fichiers
 
 - Modèles : `work/n2ac/rope2048-1.25k.pt`, `work/n2ac/rope1024-20k.pt` ; comparés à
-  `work/n2ac/rope-20k.pt` et `work/n2ac/rope512-5k.pt` (fiche `n2-fenetre`).
+  `work/n2ac/rope-20k.pt` et `work/n2ac/rope512-5k.pt` (fiche `n2-fenetre`). Le run
+  `rope2048-20k.pt` **n'a pas été écrit — interrompu**.
 - Bancs : `work/n2ac/eval_production.py`, `eval_longueurs.py`, `eval_fenetre.py`,
   `chaine_2048_wiki.sh`, `chaine_1024.sh`.
 - Mesures : `reports/n2-r12-2048.json` ; fiches amont
   [`n2-fenetre`](rapport-n2-fenetre.md), [`n2-r11`](rapport-n2-r11.md).
+

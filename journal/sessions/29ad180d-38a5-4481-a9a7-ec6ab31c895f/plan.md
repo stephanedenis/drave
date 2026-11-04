@@ -17,7 +17,9 @@
 - **Prochaine action** : **arbre réel** (parent/enfant, profondeur) + **couche de référents**
   (antécédents proposés et résolus avant le verdict), puis **reprise de la validation** des 200
   phrases ; `h050`/`h053` ensuite.
-- **État** : actif
+- **État** : en pause
+- **Arrêt constaté** : reboot du 03/11 19 h 33 ; les validations humaines sont committées
+  (`7ccc60f`), la page et les tests restent verts ; reprise à ouvrir.
 - **Reprise** : 2026-11-03 13 h 55 ; le retour humain (arrêt de la validation : arbre trop
   plat, référents non résolus) ouvre le cycle arbre/référents ; la banque partielle garde
   142 verdicts / 81 lectures / 65 phrases.

@@ -173,6 +173,15 @@ constant, l'élève voit ~26 Mo au lieu de 33 (≈ −0,02 de PPL), le gain net 
 **Contrôles de sortie** : le « même texte » de l'élève distillé sature à **512**, sa fenêtre
 (2,6335 → 2,5292 → 2,5230 → 2,5240), et le miroir de copie reste muet (0,0078).
 
+## 5. La distillation à 30 000 pas — run interrompu, non mesuré
+
+Le run `kd2-mix512-30k` (professeur **60 000 pas**, fenêtre 1 024, distillé dans la recette 512
+à **30 000 pas**, 122 Mo, même init `mix-60k`) a été lancé le **03/11 vers 18 h 25** et
+**interrompu par le reboot à 19 h 33**, après **8 250 pas** (perte 1,02–1,35 ; part « douce »
+0,22–0,29 sur les derniers pas). **Aucun checkpoint n'a été écrit** : le run repart de zéro.
+La question — *le gain de la distillation tient-il quand les octets doublent ?* — **reste
+ouverte** ; aucun chiffre n'est publié ici.
+
 ## Ce qui pourrait le rendre faux
 
 - **Un lancement par recette** (la recette RoPE est déterministe à graine fixée et init fixée :
@@ -196,8 +205,8 @@ taille — elle ne le resterait pas à plus grande échelle.
 ## Fichiers
 
 - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,
-  `mix1024-30k.pt`, `mix512-zero-15k.pt` ; témoins `work/n2w/mix-60k.pt`,
-  `work/n2ac/mix-200k.pt`.
+  `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins
+  `work/n2w/mix-60k.pt`, `work/n2ac/mix-200k.pt`.
 - Bancs : `work/n2ac/eval_production.py`, `eval_fenetre.py`, `chaine_production.sh`,
   `chaine_2048_mix.sh`, `chaine_prod1024_long.sh`, `chaine_prod_zero.sh`.
 - Mesures : `reports/n2-production-fenetre.json` ; fiches amont
