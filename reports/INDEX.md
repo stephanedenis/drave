@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **612 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **613 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -365,6 +365,7 @@
 | [rapport-pensee-anaphore-semantique.md](rapport-pensee-anaphore-semantique.md) | B13 — la sémantique des verbes : 23/30, la table ne bat pas le dernier nom |
 | [rapport-pensee-anaphore.md](rapport-pensee-anaphore.md) | B13 — l'anaphore : 4/4 liens justes |
 | [rapport-pensee-asym.md](rapport-pensee-asym.md) | B13 — la fiabilité asymétrique : 0,9 / 0,5, 20/20 |
+| [rapport-pensee-attachement.md](rapport-pensee-attachement.md) | B13 — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042 |
 | [rapport-pensee-audit.md](rapport-pensee-audit.md) | B13 — l'audit des mesures « seule » : 15/15 cohérentes, et un transfert qui manque |
 | [rapport-pensee-banc.md](rapport-pensee-banc.md) | B13 — le banc anytime : l'A* atteint le but en 32 nœuds, l'aléatoire n'y arrive pas |
 | [rapport-pensee-bayes-appris.md](rapport-pensee-bayes-appris.md) | B13 — la vraisemblance apprise : v = 0,899, 20/20 |
@@ -512,7 +513,7 @@
 | [rapport-pensee-soustype-variance.md](rapport-pensee-soustype-variance.md) | B13 — la variance du sous-type : 0,9838 à 0,3, le gain tient |
 | [rapport-pensee-sto-seule.md](rapport-pensee-sto-seule.md) | B13 — la politique seule sur le bruit : elle réessaie et atteint le but |
 | [rapport-pensee-stochastique.md](rapport-pensee-stochastique.md) | B13 — la porte stochastique : 80 % d'ouverture, la politique réessaie |
-| [rapport-pensee-tirages.md](rapport-pensee-tirages.md) | B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache masque la variance |
+| [rapport-pensee-tirages.md](rapport-pensee-tirages.md) | B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache était inactif — le modèle est déterministe |
 | [rapport-pensee-tres-rare.md](rapport-pensee-tres-rare.md) | B13 — l'information très rare : utile 1 %, 20/20 |
 | [rapport-pensee-troisieme-passe.md](rapport-pensee-troisieme-passe.md) | B13 — la troisième passe : variance nulle, tous les seuils verts |
 | [rapport-pensee-ultra-rare.md](rapport-pensee-ultra-rare.md) | B13 — l'information ultra-rare : utile 0,1 %, 20/20 |

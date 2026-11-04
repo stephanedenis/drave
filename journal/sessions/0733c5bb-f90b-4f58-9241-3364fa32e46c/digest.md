@@ -10504,3 +10504,10 @@ pas  5000 · perte 1.0997 · 931 s
   ```
 
 - **bash** `{"command": "sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; tail -c 45 work/n2ac/pond4-mix512-15k.log", "description": "Wait for both prod … [38 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-49]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 2400000, "wait": true}`

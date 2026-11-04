@@ -10165,3 +10165,167 @@ titre fiche OK
 ⏵ Commit : titre de la fiche aligné et compteurs 616/709
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git commit -m \"ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT I … [458 caractères tronqués]`
+
+  ```
+[s/v7 e21e6385] ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE) ; COMPTEURS 616/709
+ 15 files changed, 161 insertions(+), 38 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 18 (titre tirages, compteurs 709)
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [410 caractères tronqués]`
+
+  ```
+e21e6385 ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE) ; COMPTEURS 616/709
+41629e8e B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+f9ccaf96 TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-attachement.json
+?? reports/rapport-pensee-attachement.md
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3995 mots (budget 4 000)
+---LIENS---
+  ✅ 2982 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jou
+… [240 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 18 : erratum des tirages clos (titre aligné), compteurs 616/709
+
+**Cycle 18 — l'erratum des tirages est clos, la fiche parle comme l'état.**
+
+- **Erratum des tirages** : la session B13 l'avait committé (`41629e8e`) mais sans le **titre** de la fiche — le corps et le JSON disaient le **déterminisme**, le titre disait encore le cache. Le hub aligne le titre : « **le cache était inactif — le modèle est déterministe** » (`e21e6385`). Fiche, état, roadmap, chantiers et plan disent maintenant la même chose : à 0,3, mêmes réponses sur ces invites ; la variance réelle n'est pas mesurable par ce banc.
+- **Compteurs** : le nouveau `pensee-attachement` (B13) porte le disque à **616 fiches / 709 JSON** ; l'état suit.
+- **Contrôles** : revue ✅ **616 / 709 / 120 docs / 83 portes** ; **2 982 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 625 mots**, **T0 3 995 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **5 100 pas** (perte 0,923), GPU à 99–100 %.
+
+**WIP** : B13 `pensee-attachement` (fiche/JSON non suivis), README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : l'attachement B13 à committer/intégrer, α = 0,9 à finir, puis la passe complète.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 19/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 19 : instantané, audit et faits committés depuis le cycle 18
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+e21e6385 ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE) ; COMPTEURS 616/709
+41629e8e B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+f9ccaf96 TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN
+b710b7e6 B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+62672792 B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155
+2ee74678 INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)
+8a0de643 ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-attachement.json
+?? reports/rapport-pensee-attachement.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 254 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/angl
+… [907 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3995 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2982 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2982 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"attachement\\|B13 \\*\\*15\\|B13 : 15\\|tirages\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -8 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; … [120 caractères tronqués]`
+
+  ```
+13 h 54
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 52 HNE (heure locale, EST).**
+71:- **Fait** : B13 **155/155** ; gold **432** (réel → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; **pragmatique 130 qualifie** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; **tirages à 0,3 : 0,9838 ×3 — variance nulle ; le cache était inactif (déterminisme sur ces invites) ; variance réelle non mesurable** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md).
+108:| fichiers / JSON de résultats | **616** / **709** | `reports/*.md` / `reports/*.json` |
+120:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un e
+… [195 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 19 : le catalogue INDEX a une fiche de retard (attachement B13) — je régénère
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== FICHE ATTACHEMENT ===\" ; head -10 reports/rapport-pensee-attachement.md ; echo \"=== INDEX ===\" ; python3 tools/index_reports.py 2>&1 | tail -1 ; git diff --stat reports/INDEX.md", "description": "Read attachement verdict … [23 caractères tronqués]`
+
+  ```
+=== FICHE ATTACHEMENT ===
+# B13 — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+> **156/156 portes** : l'**attachement** (le segment → sa cible) est mesuré sur le gold 432 :
+> **top1 0,3431**, **top-k 0,3264**, **exact 0,0042**, **couverture 0,6067**. La couverture est la
+> première limite : **145 cibles sur 239** sont annotées, et l'attachement exact est **quasi nul**
+> (1 sur 239).
+>
+> **Dispositif** : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+=== INDEX ===
+  613 fiches → reports/INDEX.md
+ reports/INDEX.md | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Attachement B13 : 156/156 (top1 0,3431, exact 0,0042) — INDEX 613 et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.att.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.att.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [1084 caractères tronqués]`
