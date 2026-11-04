@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.2 h |
-| Tours | 165 |
-| Messages | 2044 |
-| Appels d'outils | 1758 |
+| Durée | 94.3 h |
+| Tours | 166 |
+| Messages | 2049 |
+| Appels d'outils | 1761 |
 | Fichiers touchés | 25 |
-| Commandes | 1444 |
+| Commandes | 1447 |
 | Sous-agents | 2 |
 | Commits | 217 |
 | Compactages de contexte | 5 |
@@ -369,6 +369,8 @@
 **Tour 164** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 165** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 166** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8791,6 +8793,61 @@ Je continue la file : prochain round, **l'annotation du rôle des 322 GN** — l
 - bash — Committer les rôles par position
 - job_output
 
+**Synthèse produite :**
+
+⏵ Autonomie : 16 rounds, 160/160 ; la relation passe à 0,82
+
+Le round des **rôles par position** rend la relation GN → GV calculable : **129 avant / 172 après** le GV, la couverture passe de 0,3469 à **0,8195**. Commit **`452a46e2`**.
+
+\## Le round
+
+| mesure | GN | part |
+|---|---:|---:|
+| GN sans rôle | **322** | 100 % |
+| dont avec un GV | **301** | 93,5 % |
+| **avant le GV** (sujet probable) | **129** | 40,0 % |
+| **après le GV** (objet probable) | **172** | 53,4 % |
+
+| relation | avant | **après la règle de position** |
+|---|---:|---:|
+| GN avec rôle et un GV | 221 (0,3469) | **522 (0,8195)** |
+
+**Ce que ça dit** :
+
+- **La position est un signal fort** : la règle de position rend la relation calculable pour **301 GN de plus** — la moitié indécidable n'est plus qu'un quart.
+- **Le rôle par position est une heuristique**, pas une annotation : `agent` si avant, `patient` si après — elle se trompera sur les passifs (`Le chat est mangé par le chien`).
+- **La négative est explicite** : 0,8195 < 1,0 ; 115 GN restent sans rôle (les 21 sans GV et les cas particuliers).
+
+\## L'état de l'autonomie (16 rounds, ~3 h)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,3469 → **0,8195** |
+
+- **160/160 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **620 fiches / 713 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **14 h 55 HNE** ; il reste **~55 min** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard — le merge reste à faire.
+
+\## La suite
+
+1. **La justesse de la position** : sur un échantillon annoté à la main (les passifs).
+2. **Les passifs** : détecter `par` + GN après le GV.
+3. **Le merge `s/v7` → `master`**.
+4. **Le GGUF** : la porte N0.1 complète.
+
+Je continue la file : prochain round, **la justesse de la position** — l'heuristique a-t-elle raison ?
+
+### Tour 166 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Tester les passifs sur la règle de position
+- bash — Écrire la fiche des passifs et la porte T158
+- bash — Passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8870,7 +8927,7 @@ Je continue la file : prochain round, **l'annotation du rôle des 322 GN** — l
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1404 autres
+- … et 1407 autres
 
 ## 4. Mesures et résultats marquants
 

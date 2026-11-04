@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "161/161",
+ "passifs": 5,
+ "erreurs": 5,
+ "roles_obtenus": "agent/moyen",
+ "roles_attendus": "patient/agent",
+ "limites": [
+  "cinq phrases",
+  "la fréquence des passifs n'est pas mesurée",
+  "gold 432"
+ ]
+}

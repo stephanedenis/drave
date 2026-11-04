@@ -36160,3 +36160,100 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-172", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 85b58e1774b4532b4e4d8d4e5c580d8489a1e53d but expected 97c6ba2693787189651f7838c1c735b3b8ce7a2a
+retry 1
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at c2f1c7da4e41e008e24e7e1ad5a5f9014ae36ff9 but expected 85b58e1774b4532b4e4d8d4e5c580d8489a1e53d
+retry 2
+[s/v7 452a46e2] B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160
+ 7 files changed, 191 insertions(+), 12 deletions(-)
+COMMIT OK 3
+452a46e2 B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160
+mer 04 nov 2026 14:55:54 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 16 rounds, 160/160 ; la relation passe à 0,82
+
+Le round des **rôles par position** rend la relation GN → GV calculable : **129 avant / 172 après** le GV, la couverture passe de 0,3469 à **0,8195**. Commit **`452a46e2`**.
+
+## Le round
+
+| mesure | GN | part |
+|---|---:|---:|
+| GN sans rôle | **322** | 100 % |
+| dont avec un GV | **301** | 93,5 % |
+| **avant le GV** (sujet probable) | **129** | 40,0 % |
+| **après le GV** (objet probable) | **172** | 53,4 % |
+
+| relation | avant | **après la règle de position** |
+|---|---:|---:|
+| GN avec rôle et un GV | 221 (0,3469) | **522 (0,8195)** |
+
+**Ce que ça dit** :
+
+- **La position est un signal fort** : la règle de position rend la relation calculable pour **301 GN de plus** — la moitié indécidable n'est plus qu'un quart.
+- **Le rôle par position est une heuristique**, pas une annotation : `agent` si avant, `patient` si après — elle se trompera sur les passifs (`Le chat est mangé par le chien`).
+- **La négative est explicite** : 0,8195 < 1,0 ; 115 GN restent sans rôle (les 21 sans GV et les cas particuliers).
+
+## L'état de l'autonomie (16 rounds, ~3 h)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,3469 → **0,8195** |
+
+- **160/160 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **620 fiches / 713 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **14 h 55 HNE** ; il reste **~55 min** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard — le merge reste à faire.
+
+## La suite
+
+1. **La justesse de la position** : sur un échantillon annoté à la main (les passifs).
+2. **Les passifs** : détecter `par` + GN après le GV.
+3. **Le merge `s/v7` → `master`**.
+4. **Le GGUF** : la porte N0.1 complète.
+
+Je continue la file : prochain round, **la justesse de la position** — l'heuristique a-t-elle raison ?
+
+
+## Tour 166
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 147/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nphrases=[\"Le chat est mangé par le chien.\",\"La souris est chassée par le chat.\",\"Le livre est lu par Pau … [331 caractères tronqués]`
+
+  ```
+Le chat est mangé par le chien. | [('GN', 'Le chat', 'agent'), ('GV', 'est mangé', 'predicat'), ('GV', 'est mangé par le chien', 'prédicat'), ('GP', 'par le chien', 'moyen')]
+La souris est chassée par le chat. | [('GN', 'La souris', 'agent'), ('GV', 'est chassée', 'predicat'), ('GV', 'est chassée par le chat', 'prédicat'), ('GP', 'par le chat', 'moyen')]
+Le livre est lu par Paul. | [('GN', 'Le livre', 'agent'), ('GV', 'est lu', 'predicat'), ('GV', 'est lu par Paul', 'prédicat'), ('GP', 'par Paul', 'moyen')]
+La lettre est écrite par Marie. | [('GN', 'La lettre', 'agent'), ('GV', 'est écrite', 'predicat'), ('GV', 'est écrite par Marie', 'prédicat'), ('GP', 'par Marie', 'moyen')]
+Le gâteau est fait par le boulanger. | [('GN', 'Le gâteau', 'agent'), ('GV', 'est fait', 'predicat'), ('GV', 'est fait par le boulanger', 'prédicat'), ('GP', 'par le boulanger', 'moyen')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-passifs.md <<'MD'\n# B13 — les passifs : la règle de position se trompe (5/5 faux)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅\n> **161/161 po … [6923 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 621 fiche(s) · 714 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`
