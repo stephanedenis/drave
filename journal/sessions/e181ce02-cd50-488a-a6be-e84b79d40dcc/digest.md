@@ -35982,3 +35982,21 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-164", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 731890b345c94b5f6568a2a56c852398f64ab290 but expected 548fed1d0305ec658d228b27f85cd00e2328a0fa
+retry 1
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 465dc04ff8334999a0547afe4c0df2178d622771 but expected 731890b345c94b5f6568a2a56c852398f64ab290
+retry 2
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 76da3f9f82e159f3f326bee289b82cb1b3914f53 but expected 465dc04ff8334999a0547afe4c0df2178d622771
+retry 3
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 9815d435282436b1dadd4bfd5b04e455111dda49 but expected 76da3f9f82e159f3f326bee289b82cb1b3914f53
+retry 4
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-164", "timeout_ms": 600000, "wait": true}`
