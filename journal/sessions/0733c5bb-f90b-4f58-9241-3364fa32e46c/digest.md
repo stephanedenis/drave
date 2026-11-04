@@ -10435,3 +10435,10 @@ OKPP0
 ⏵ Évaluation du contrôle α=0 de production (le vrai comparateur de la distillation)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/kdpp-mix512-a0.pt --rope --longueurs 128,512,1000,2000 --sortie work/n2ac/eval-kdpp-mix512-a0.json 2>&1 | grep -E '\"(128|512|1000|2000)\"|litterature|angl … [361 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-45]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-45", "timeout_ms": 300000, "wait": true}`

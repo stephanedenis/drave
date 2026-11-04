@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.9 h |
-| Tours | 14 |
-| Messages | 255 |
-| Appels d'outils | 435 |
+| Durée | 6.0 h |
+| Tours | 15 |
+| Messages | 262 |
+| Appels d'outils | 444 |
 | Fichiers touchés | 15 |
-| Commandes | 278 |
+| Commandes | 287 |
 | Sous-agents | 0 |
-| Commits | 27 |
+| Commits | 28 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -51,6 +51,8 @@
 **Tour 13** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 **Tour 14** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -525,7 +527,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 14 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -533,10 +535,38 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check state facts, time and alpha run
 - bash — Trim state and update plan-travail to 153
 - bash — Commit plan-travail 153 and state trim
+- bash — Verify cycle 9 commits and checks
+- bash — Verify links, journal and alpha 0.9
+- bash — Inspect B13 WIP state diff and fiche
 
 **Synthèse produite :**
 
-⏵ Commit plan-travail 153 et état allégé (T0 3 968)
+⏵ Cycle 9 : plan-travail 153, état allégé (T0 3 968), B13 154 en WIP
+
+**Cycle 9 — la cohérence passe avant les faits.**
+
+- **Plan-travail** : la ligne L/B13 était restée à **152/152** — alignée sur **153/153**, avec la **fusion par sous-type** (double sens **0,9884**, +0,0208) dans les deux sections. Commit `4542fe4b`.
+- **État allégé** : le « Fait » B13 perd l'historique (variance/parallèle, gold chiffré, fenêtre, chiffres de la pragmatique 130) — les fiches le portent ; l'état garde le 153/153, les deux résultats pragmatiques et le DRVM. **T0 3 968 / 4 000**, `en-cours` **1 598 mots**.
+- **B13 — WIP 154/154** : la **variance du sous-type** à température 0,3 donne **0,9838** (−0,0046 contre 0,9884) — **toujours au-dessus** de l'heuristique (0,9676) : le gain **tient sur deux températures**. Fiche/JSON pas encore committés ; l'état a déjà été touché par la session (compteurs **614 / 705**, heure 15 h 05 — à corriger au prochain cycle).
+- **Contrôles** : revue ✅ **614 fiches / 705 JSON / 120 docs / 83 portes** ; **2 958 liens** ✅ ; journal ✅ ; backlog ✅.
+- **Paire propre N2** : **α = 0,9** à **1 100 pas** (perte 0,981), GPU0 à 100 %.
+
+**WIP** : S `rapport-s-paragraphes.md`, B13 `soustype-variance` + t03. **Le goal reste actif** : 154 à committer/intégrer, α = 0,9 à finir, puis la passe complète.
+
+### Tour 15 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Regenerate index and correct state time
+- bash — Commit index 611 and corrected time
+
+**Synthèse produite :**
+
+⏵ Commit INDEX 611 et heure corrigée
 
 ## 3. Travail accompli
 
@@ -602,7 +632,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 238 autres
+- … et 247 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -771,4 +801,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — N2 : α = 0 FINI (PERTE 1,014, 7 050 S) ; α = 0,9 EN COURS ; B13 152 ALLÉGÉ (T0 3 987)" -m "La paire propre a son premier bras : α = 0 donne 1,014 de pert
 - B13 153/153 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; ÉTAT, CHANTIERS, ROADMAP" -m "Le fait est committé (92769981, rapport-pensee-fusi
 - PLAN-TRAVAIL — L/B13 PASSE À 153/153 (+ FUSION PAR SOUS-TYPE) ; ÉTAT ALLÉGÉ (T0 3 968)" -m "Le plan-travail était resté à 152 : aligné sur les 153 portes, avec 
+- INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)" -m "Le catalogue généré rattrape les trois fiches B13 (pragmatiqu
 

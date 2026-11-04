@@ -35453,3 +35453,29 @@ docs/pilotage/chantiers.md 152→153: 6 | T151→T150: 1
   ```
 
 - **job_output** `{"job_id": "bash-133", "timeout_ms": 3600000, "wait": true}`
+
+  ```
+parallele_niveau · 0.5 s
+cascade_niveau · 0.5 s
+heuristique {'pos': 0.7444, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+neuronal {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.963, 'modalite': 0.9745, 'double_sens': 0.9838}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+parallele_niveau {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9838}, 'fraction_semantique': 0.5199}
+cascade_niveau {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9838}, 'fraction_semantique': 0.5199}
+[status: co
+… [22 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-soustype-variance.md <<'MD'\n# B13 — la variance du sous-type : 0,9838 à 0,3, le gain tient\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·\n> **Verdict**  … [6504 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 614 fiche(s) · 705 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nfor nom in (\"rapport-pensee-fusion-soustype.md\",\"rapport-pensee-pragmatique-full.md\"):\n    t=re.sub(r\"\\n\\| \\[`[^\\]]*\"+re.escape(no … [622 caractères tronqués]`

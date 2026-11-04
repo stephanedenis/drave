@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **608 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **611 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -399,6 +399,7 @@
 | [rapport-pensee-frequent.md](rapport-pensee-frequent.md) | B13 — la bascule fréquente : 1/50, 20/20 |
 | [rapport-pensee-frontiere-71.md](rapport-pensee-frontiere-71.md) | L — la frontière sur les 71 langues : le script est tenu (71/71), la langue sur libellés courts ne l'est pas (0,137 contre 0,032) |
 | [rapport-pensee-fusion-reparee.md](rapport-pensee-fusion-reparee.md) | L — la fusion réparée : par niveau (neuronal POS/syntagmes, heuristique pragmatique) — 0,9309 / 0,8226 / 0,8784 / 0,9954, le maximum des deux |
+| [rapport-pensee-fusion-soustype.md](rapport-pensee-fusion-soustype.md) | B13 — la fusion par sous-type : le double sens gagne 0,0208 |
 | [rapport-pensee-glisse.md](rapport-pensee-glisse.md) | B13 — la dérive continue : v = 0,5, 20/20 |
 | [rapport-pensee-gold-200-subsets.md](rapport-pensee-gold-200-subsets.md) | B13 — les sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles |
 | [rapport-pensee-gold-200.md](rapport-pensee-gold-200.md) | B13 — le gold à 200 phrases réelles : POS 0,7738 |
@@ -477,6 +478,7 @@
 | [rapport-pensee-porte-sto-graines.md](rapport-pensee-porte-sto-graines.md) | B13 — la porte stochastique, cinq graines : le 7B passe 5/5 (28–34 nœuds, 5–7 sonde) ; le labyrinthe 0/1, l'aveugle 0/1 |
 | [rapport-pensee-porte-sto.md](rapport-pensee-porte-sto.md) | B13 — la porte stochastique : le 7B l'ouvre (31 nœuds, 6 sonde, 13,0 s) ; sans la règle, 200/3/182,6 s ; le hasard par chance |
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
+| [rapport-pensee-pragmatique-full.md](rapport-pensee-pragmatique-full.md) | B13 — la pragmatique sur le gold 432 : acte 0,9954, la fusion garde l'heuristique |
 | [rapport-pensee-pragmatique-neuronale.md](rapport-pensee-pragmatique-neuronale.md) | B13 — la pragmatique neuronale : 1,0 / 1,0 / 0,98 / 0,98 sur 130 phrases |
 | [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |
 | [rapport-pensee-quatre-modes-432.md](rapport-pensee-quatre-modes-432.md) | B13 — les quatre modes sur le gold 432 : le niveau gagne avec le réel |
@@ -507,6 +509,7 @@
 | [rapport-pensee-shaping.md](rapport-pensee-shaping.md) | B13 — le reward shaping : il ne suffit pas, la politique seule échoue encore |
 | [rapport-pensee-si.md](rapport-pensee-si.md) | B13 — la règle du `si` : 29/29, la dernière règle de surface |
 | [rapport-pensee-silencieuse.md](rapport-pensee-silencieuse.md) | PENSER SANS VERBALISER — la boucle d'état naïve détruit la prédiction, et verbaliser n'est PAS du gaspillage |
+| [rapport-pensee-soustype-variance.md](rapport-pensee-soustype-variance.md) | B13 — la variance du sous-type : 0,9838 à 0,3, le gain tient |
 | [rapport-pensee-sto-seule.md](rapport-pensee-sto-seule.md) | B13 — la politique seule sur le bruit : elle réessaie et atteint le but |
 | [rapport-pensee-stochastique.md](rapport-pensee-stochastique.md) | B13 — la porte stochastique : 80 % d'ouverture, la politique réessaie |
 | [rapport-pensee-tres-rare.md](rapport-pensee-tres-rare.md) | B13 — l'information très rare : utile 1 %, 20/20 |
