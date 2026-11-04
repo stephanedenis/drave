@@ -36578,3 +36578,115 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    return n == 637 and avec == 221, f\"relation : {avec}/{n} ({round(avec/n, 4)})\"',\n            '    return n == 637 and  … [432 caractères tronqués]`
+
+  ```
+T156/T157 mis à jour
+  ✅ T160 passifs sans par  passif sans par (chunker) : 3/3 patient
+  163/163 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 16 h 45 HNE\", t)\np.write_text( … [660 caractères tronqués]`
+
+  ```
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 1
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 2
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 3
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 4
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 5
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 6
+
+Another git process seems to be running in this repository, or the lock file may be stale
+retry 7
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+mer 04 nov 2026 15:33:27 EST
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this r
+… [1015 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 19 rounds, 163/163 ; les passifs restent chez S
+
+Le round des **passifs sans `par`** ferme la file : le chunker les détecte (3/3), le générateur S les ignore — et le commit est passé (emporté par `d72269e0`, l'autre session ayant indexé mes fichiers).
+
+## Le round
+
+| chemin | `Le livre est lu.` | état |
+|---|---|---|
+| `_syntagmes_simple` (chunker, mon code) | **patient** | ✅ 3/3 |
+| générateur S (`tools/structures/`, S) | `agent` | ❌ hors territoire |
+| annotation finale | `agent` | ❌ |
+
+**Ce que ça dit** :
+
+- **La règle `être + participe` est dans le chunker** (3/3), mais le générateur S (le segmenter par défaut) ne l'a pas — l'annotation finale ne change pas.
+- **Deux corrections pour un seul problème** : `_role_gp` (`par` → agent, fait) et le chunker (fait) ; il manque le **générateur S**, hors de mon territoire.
+- **La session S est la seule à pouvoir finir** : `tools/structures/generateur.py:251` connaît déjà le passif (« par Marie (agent, après un passif) ») mais ne l'applique pas au GN sujet.
+- **La négative est explicite** : la porte du bloc reste verte, la sortie ne change pas.
+
+## L'état de l'autonomie (19 rounds, ~3 h 45)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,8195 ; passifs 5/5 faux côté S |
+
+- **163/163 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **623 fiches / 716 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **15 h 33 HNE** ; la fenêtre de 4 h se ferme à **15 h 50**.
+- Les commits sont sur **`s/v7`** ; `master` est en retard — le merge reste à faire.
+
+## La suite
+
+1. **La session S** : `être + participe` → `patient` dans `generateur.py` (la connaissance y est déjà).
+2. **Le merge `s/v7` → `master`**.
+3. **Le GGUF** : la porte N0.1 complète.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+La fenêtre d'autonomie se ferme dans ~15 min : je livre l'état et je m'arrête sur ce bilan mesuré, prêt à reprendre sur la ligne S ou le merge.
+
+
+## Tour 169
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 150/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s'; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; git status --porcelain | wc -l; git log --one … [75 caractères tronqués]`
+
+  ```
+mer 04 nov 2026 15:33:52 EST
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+27
+65
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"la **session S** (T160 : le chunker 3/3 patient, le generateur S ignore) ;\",\n            \"la **session S** (T160 : 3 … [703 caractères tronqués]`

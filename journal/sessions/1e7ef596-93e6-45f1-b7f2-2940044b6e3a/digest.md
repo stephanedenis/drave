@@ -14610,3 +14610,96 @@ remeontion OK
   ✅ index : aucun fait stagé sans état
   ```
 
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 43 (B13 163, production N2 −0,06)
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [362 caractères tronqués]`
+
+  ```
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+2b0832ca N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+---REVUE---
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 623 fichiers, le disque en a 624
+---EN-COURS---
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3995 mots (budget 4 000)
+---LIENS---
+     reports/rapport-ocr-pdf-restants.md → ../../reports/rapport-ocr-pdf-restants.md
+     reports/rapport-ocr-pdf-restants.md
+… [287 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La N2 a clôturé (−0,06 depuis une init entraînée) ; la revue signale 2 liens cassés (rapport OCR) et le compteur 624 — je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"reports/\" reports/rapport-ocr-pdf-restants.md | head -4 ; ls reports/ocr-pdf-restants.json 2>/dev/null ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-ocr-pdf-restants.md'); t=p.read_text()\nt=t.replace( … [608 caractères tronqués]`
+
+  ```
+90:> [fiche](../../reports/rapport-ocr-pdf-restants.md) · [manifeste](../../reports/ocr-pdf-restants.json).
+94:- `reports/ocr-pdf-restants.json` — le manifeste (agrégats, SHA-256 du corpus).
+95:- `reports/rapport-ocr-pdf-restants.md` — cette fiche.
+reports/ocr-pdf-restants.json
+liens fiche OK
+compteur OK
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 4017 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 017 : je retire les 8 vieilles fiches B13 de l'état (le courant reste), puis commit liens + compteurs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"[DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../re … [1210 caractères tronqués]`
+
+  ```
+trim OK
+  T0 max : 4006 mots (budget 4 000)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-529]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 est encore à 4 006 après le trim : je resserre les rôles/passifs et je refais le commit d'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**rôles : 301/322 par position ; relation 0,8195 (522/637) surévaluée**\", \"**rôles : 301/322 ; relation 0,8195 surévaluée* … [584 caractères tronqués]`
+
+  ```
+trim2 OK
+  T0 max : 3997 mots (budget 4 000)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+=== JOB ===
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+  ```
+
+### 🤖 Assistant
+
+⏵ La N2 a relancé le 2 048 en deux moitiés ; je finalise le commit liens + compteurs + trim (T0 3 998)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**D** — OCR clos (8 `.PDF`)\", \"**D** — OCR clos (8 `.PDF`, [restants](../../reports/rapport-ocr-pdf-restants.md))\")\np.wr … [819 caractères tronqués]`

@@ -3705,3 +3705,155 @@ d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ;
 132-## Les questions ouvertes
   ```
 
+### 🤖 Assistant
+
+⏵ Index libre : intégration de D (fiche, manifeste, ligne d'état, compteurs)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text()\nt = t.replace(\"**Mis à jour : 2026-11-04, 15 h 23 HNE (heure locale, EST).**\",\n              \"**Mis à jour : 2026-11-04, 15 h … [581 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat | tail -2; git add reports/rapport-ocr-pdf-restants.md reports/ocr-pdf-restants.json docs/pilotage/en-cours.md journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md && git status --short | head -10",  … [52 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub commite (verrou d'index) — j'attends la fin avant de committer D
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 50; ls .git/index.lock 2>/dev/null || echo 'verrou libre'; git log --oneline -2; echo ====; grep -n \"D — clos\\|fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md | head", "description": "Wait for the index lock to clear … [18 caractères tronqués]`
+
+  ```
+.git/index.lock
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+====
+3:**Mis à jour : 2026-11-04, 16 h 45 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **624** / **717** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etimes,args | grep -E '[g]it |[a]rchive_sessions|[s]ession_report|[j]ournal_auto' | head; echo ====; grep -n \"Ce qui reste\" -A 3 docs/pilotage/en-cours.md; echo ====; ls -l --time-style=+%H:%M:%S .git/index.lock", "descr … [55 caractères tronqués]`
+
+  ```
+634773      79 bash -c cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replace("**repondération 4× : −0,05** ; fiches", "**repondération 4× : −0,05** ; **2 048 relancé** (2×10 000 pas) ; fiches") t = t.replace("- **Prochaine action** : **en pause** — erratum mesuré ; ensuite la **porte propre (0,29)**, et le run de ~2 M de pas.",               "- **Prochaine action** : le **2 048** (fin ~21 h) ; ensuite la **porte propre (0,29)**.") p.write_text(t, encoding="utf-8") print("état : 2 048 en vol") PY python3 tools/taille_documents.py 2>&1 | grep -E "T0|✅|❌" | head -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md && git commit -q -F - -- docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md <<'MSG' N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)  Après deux interruptions (reboot du 03/11, contention du 04/11), le complément «
+… [1859 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux sessions se disputent le commit ; j'attends la fin de la file avant d'intégrer D
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; ls .git/index.lock 2>/dev/null || echo 'verrou libre'; git log --oneline -3; echo ====; git status --short | grep -E 'ocr-pdf|en-cours|^M ' | head -8", "description": "Wait for the commit storm and check state"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-158]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-158", "timeout_ms": 30000, "wait": true}`
+
+  ```
+verrou libre
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+====
+M  docs/pilotage/en-cours.md
+A  reports/rapport-ocr-pdf-restants.md
+?? reports/ocr-pdf-restants.json
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-158 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; ls .git/index.lock 2>/dev/null || echo 'verrou libre'; git log --oneline -3; echo ====; git status --short | grep -E 'ocr-pdf|en-cours|^M ' | head -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --name-only; echo ====; git show :docs/pilotage/en-cours.md | grep -n \"D — clos\\|fichiers / JSON\\|Mis à jour\" | head; echo ====; git status --short | head -12", "description": "Inspect staged files and state lin … [21 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md
+journal/2026-11-04/README.md
+journal/2026-11-04/apprentissage.md
+journal/2026-11-04/distribue.md
+journal/2026-11-04/docs.md
+journal/2026-11-04/mesures.md
+journal/2026-11-04/modele.md
+journal/2026-11-04/outils.md
+journal/2026-11-04/portes.md
+journal/README.md
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+journal/sessions/MANIFEST.md
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+reports/rapport-ocr-pdf-restants.md
+====
+3:**Mis à jour : 2026-11-04, 16 h 50 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **624** / **717** | `reports/*.md` / `reports/*.json` |
+====
+ M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+MM journal/2026-11-04/README.md
+MM journal/2026-11-04/apprentissage.md
+MM journal/2026-11-04/distribue.md
+MM journal/2026-11-04/docs.md
+MM journal/2026-11-04/mes
+… [191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"D — clos\" docs/pilotage/en-cours.md; echo ====; git diff --cached docs/pilotage/en-cours.md | head -40; echo ====; git diff docs/pilotage/en-cours.md | head -10", "description": "Compare working and staged en-cours for the … [9 caractères tronqués]`
+
+  ```
+====
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 6f509650..5a33039d 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 15 h 23 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 16 h 50 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -68,7 +68,7 @@
+ - **Ambition** : un runtime cognitif tracé.
+ - **Stratégie** : v0 petit et mesuré.
+ - **Objectif final** : un moteur de pensée v0.
+-- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position ; relation 0,8195 (522/637) surévaluée** ; **passifs : règle 5/5 fausse ; correctifs `par`/sans `par` hors du chemin S** ; [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md) (roadmap 163) ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-
+… [4364 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Intégration de D : manifeste + plan, puis commit explicite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/ocr-pdf-restants.json journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md && git diff --cached --name-only | grep -vE '^(journal/|docs/pilotage/en-cours.md|reports/(rapport-ocr-pdf-restants.md|ocr-pdf-restan … [169 caractères tronqués]`
+
+  ```
+index : uniquement en-cours + journal + mes fichiers
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG'\nD — LES 8 .PDF RESTANTS SONT OCRISÉS : 4 DOCUMENTS, 49 PAGES, 54 167 CAR. ; 3 DOUBLONS ET 1 FORMULAIRE NOMMÉS\n\nLes 8 scans .PDF (58 p) que rglob(\"*.pdf\") manquait sont qualifiés au texte natif intégral\n( … [975 caractères tronqués]`
+
+  ```
+started background job bash-162
+  ```
+
+- **job_output** `{"job_id": "bash-162", "timeout_ms": 240000, "wait": true}`

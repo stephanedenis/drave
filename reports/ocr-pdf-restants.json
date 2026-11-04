@@ -1,0 +1,52 @@
+{
+ "date": "2026-11-04",
+ "ligne": "Données (R4.4 appliqué)",
+ "nature": "corpus OCR des PDF scannés",
+ "dispositif": {
+  "ocr": "tesseract 5.5.3 sans root (work/ocr/root)",
+  "langues": "fra+eng",
+  "dpi": 300,
+  "psm": 3,
+  "pretraitement": "aucun (le R4.4 le fera)",
+  "detection": "liste explicite de scans qualifiés sur le texte intégral",
+  "liste": "work/ocr/restants-pdf.liste",
+  "ouvriers": 8,
+  "split": "hash salé du chemin : 5% val, 5% test",
+  "deduplication": "documents + tronçons"
+ },
+ "pdfs": 8,
+ "scannes": 8,
+ "ocrises": 4,
+ "pages_ocr": 49,
+ "caracteres": 54167,
+ "troncons": 9,
+ "documents": {
+  "train": 4,
+  "val": 0,
+  "test": 0
+ },
+ "octets": {
+  "train": 55857,
+  "val": 0,
+  "test": 0
+ },
+ "temps_s": 90.1,
+ "echantillon": "---\nChoquette c. Chagnon\nCANADA\n\nPROVINCE DE QUÉBEC COUR SUPÉRIEURE\nDISTRICT DE ST-HYACINTHE (Chambre de la Famille)\nN°. 750-04-006963-120 JULIE CHOQUETTE, résidant et\n\ndomiciliée au 111, rue Milan, à Beloeil,\nprovince de Québec, J3G 5V3, district de St-\nHyacinthe;\n\nDemanderesse\nc.\n\nRENÉ CHAGNON, domicilié et résidant\n\nau 111, rue Milan, à Beloeil, province de\n\nQuébec, J3G 5V3, district de St-Hyacinthe;\nDéfendeur\n\nREQUETE INTRODUCTIVE D’ INSTANCE POUR GARDE ET PENSION\n\nALIMENTAIRE, PROVISION POUR\nFR\n---\nDOC1\nNOTES DE COURS OBLIGATOIRES\n\n420-CAB-HY\nÉléments des technologies de l'information\n\nALAIN AUCLAIR\nprofesseur\n\nSESSION AUTOMNE 2014\n\nCÉGEP de ST-HYACINTHE\n\nPage 0 de 238\n\n\nAIO IT\nCISCO Cisco Networking Academy Mind Wide Open\n\nPre\n\nIT Essentials 5.0\n\n0.2.2.2 Fiche de travail — Offres d’emploi\nImprimez et complétez cette fiche de travail.\n\nDans cette fiche de travail, vous serez amené à utiliser Internet, un journal ou à vous rendre dans un magasin\nlocal pour recueillir des informations sur le",
+ "racines": [
+  {
+   "nom": "CEGEP",
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP",
+   "pdfs": 8,
+   "licence": "notes de cours — droits réservés, usage local, non diffusé"
+  }
+ ],
+ "mots_estimes": 8736,
+ "sha256_train": "ba4099c52bf26a75aca13f1e9b8144ce449003224874ee1dd60b556aa8887805",
+ "sha256_val": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ "sha256_test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ "limites": [
+  "OCR brut : rotation/contraste/colonnes non traités (le R4.4 les traite)",
+  "WER non mesurée (pas de vérité terrain sur les scans réels)",
+  "licences : droits réservés, corpus local non diffusé"
+ ]
+}

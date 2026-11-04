@@ -9,7 +9,7 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 47.3 h |
 | Tours | 8 |
-| Messages | 838 |
+| Messages | 839 |
 | Appels d'outils | 775 |
 | Fichiers touchés | 27 |
 | Commandes | 571 |
@@ -275,7 +275,44 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 **Synthèse produite :**
 
-⏵ Relance du complément 2 048 en deux moitiés (checkpoint à 10 000 pas) et compteur au disque
+⏵ Round achevé : erratum mesuré, fiches corrigées, 2 048 en vol
+
+Le round a produit une **correction importante** : un contrôle de parité a attrapé un biais dans mon distillateur, et le chiffre de distillation a été refait proprement.
+
+\## Ce qui s'est passé
+
+**Le biais** : mon distillateur donnait à la tête principale le poids **1** au lieu de **1/4** (l'entraîneur de référence fait la *moyenne* des quatre têtes), et la passe du professeur déplace la PPL à elle seule. Mes « gains » de distillation mélangeaient donc trois effets.
+
+**Le contrôle de parité** : avec la perte corrigée, le pas 1 vaut **5,8480** et le pas 50 **2,6713** — exactement le bras dur. Parité exacte.
+
+**Les trois décompositions** :
+
+| bras | 128 | 512 | 1 000 | 2 000 | lecture |
+|---|---:|---:|---:|---:|---|
+| 11,47 M depuis zéro : α = 0 (même harnais) | 3,7072 | 3,5727 | 3,5251 | — | référence |
+| 11,47 M depuis zéro : α = 0,9 | 3,6774 | 3,5633 | 3,5208 | — | **−0,03 / −0,01 / 0,00** : rien |
+| 11,47 M : repondération 4× seule | 3,6067 | 3,3984 | 3,3129 | — | **−0,05** : petit levier gratuit |
+| **production : α = 0** (même harnais) | 3,1500 | 2,9069 | 2,8006 | 2,7618 | référence |
+| production : 4× seul | 3,1457 | 2,9129 | 2,8105 | 2,7693 | ~0 ici |
+| **production : α = 0,9 corrigé** | **3,1119** | **2,8462** | **2,7388** | **2,6968** | **−0,06** ; anglais −0,19, wt2 −0,34 |
+| pour mémoire : vieux code (gonflé) | 3,0550 | 2,8062 | 2,7015 | 2,6601 | −0,10…−0,52 |
+
+**Conclusion** : le chiffre du 03/11 était **gonflé 2×**. La distillation **paie depuis une initialisation entraînée** (−0,06, et −0,19/−0,34 hors domaine) et **ne paie rien depuis zéro**. La recette de production reste « professeur 1 024 + élève 512 distillé » : 3,1119 pour 61,4 Mo, à 0,20 du run de 552 Mo.
+
+J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub citait 1,014 et 0,8385, qui sont des pertes ; les PPL sont 3,1500 et 3,1119).
+
+\## Commits
+
+- **`84c28889`** — erratum : la distillation native ne gagne rien à parité stricte.
+- **`64674e0d`** — la repondération vaut −0,05, pas −0,14.
+- **`51ab1b36`** — production : −0,06 à parité stricte (3,1119 / 2,8462 / 2,7388 / 2,6968).
+- **`2b0832ca`** — clôture du 04/11 et correction perte/PPL.
+- **`b67e4dcb`** — complément 2 048 relancé en deux moitiés.
+
+\## En vol et reste
+
+**En vol** : le complément **2 048** en deux segments de 10 000 pas (checkpoint à chaque segment, pour survivre aux reboots) — sortie ~18 h 20 puis ~21 h 10. C'est le dernier item de l'o
+… [191 caractères tronqués]
 
 ## 3. Travail accompli
 

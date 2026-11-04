@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 94.9 h |
-| Tours | 168 |
-| Messages | 2071 |
-| Appels d'outils | 1779 |
+| Tours | 169 |
+| Messages | 2076 |
+| Appels d'outils | 1782 |
 | Fichiers touchés | 25 |
-| Commandes | 1463 |
+| Commandes | 1465 |
 | Sous-agents | 2 |
-| Commits | 220 |
+| Commits | 221 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -375,6 +375,8 @@
 **Tour 167** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 168** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 169** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8968,6 +8970,57 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 - bash — Mettre T156/T157 à jour et relancer
 - bash — Committer les passifs sans par
 
+**Synthèse produite :**
+
+⏵ Autonomie : 19 rounds, 163/163 ; les passifs restent chez S
+
+Le round des **passifs sans `par`** ferme la file : le chunker les détecte (3/3), le générateur S les ignore — et le commit est passé (emporté par `d72269e0`, l'autre session ayant indexé mes fichiers).
+
+\## Le round
+
+| chemin | `Le livre est lu.` | état |
+|---|---|---|
+| `_syntagmes_simple` (chunker, mon code) | **patient** | ✅ 3/3 |
+| générateur S (`tools/structures/`, S) | `agent` | ❌ hors territoire |
+| annotation finale | `agent` | ❌ |
+
+**Ce que ça dit** :
+
+- **La règle `être + participe` est dans le chunker** (3/3), mais le générateur S (le segmenter par défaut) ne l'a pas — l'annotation finale ne change pas.
+- **Deux corrections pour un seul problème** : `_role_gp` (`par` → agent, fait) et le chunker (fait) ; il manque le **générateur S**, hors de mon territoire.
+- **La session S est la seule à pouvoir finir** : `tools/structures/generateur.py:251` connaît déjà le passif (« par Marie (agent, après un passif) ») mais ne l'applique pas au GN sujet.
+- **La négative est explicite** : la porte du bloc reste verte, la sortie ne change pas.
+
+\## L'état de l'autonomie (19 rounds, ~3 h 45)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,8195 ; passifs 5/5 faux côté S |
+
+- **163/163 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **623 fiches / 716 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **15 h 33 HNE** ; la fenêtre de 4 h se ferme à **15 h 50**.
+- Les commits sont sur **`s/v7`** ; `master` est en retard — le merge reste à faire.
+
+\## La suite
+
+1. **La session S** : `être + participe` → `patient` dans `generateur.py` (la connaissance y est déjà).
+2. **Le merge `s/v7` → `master`**.
+3. **Le GGUF** : la porte N0.1 complète.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+La fenêtre d'autonomie se ferme dans ~15 min : je livre l'état et je m'arrête sur ce bilan mesuré, prêt à reprendre sur la ligne S ou le merge.
+
+### Tour 169 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Vérification finale de l'état
+- bash — Trim T0 et committer l'état final
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9047,7 +9100,7 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1423 autres
+- … et 1425 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9415,4 +9468,5 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 - B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES PASSIFS
 - B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORRECTIF DES PA
 - B13 — LES PASSIFS SANS PAR : LE CHUNKER 3/3 PATIENT, LE GÉNÉRATEUR S IGNORE ; 163/163" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "SANS PAR"; then e
+- ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COM
 

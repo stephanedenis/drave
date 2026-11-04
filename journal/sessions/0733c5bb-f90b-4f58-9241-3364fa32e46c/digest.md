@@ -11013,3 +11013,64 @@ pas    200 · perte 1.2704 · PPL val 3.305 · 204 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**repondération 4× : −0,05** ; fiches\", \"**repondération 4× : −0,05** ; **2 048 relancé** (2×10 000 pas) ; fiches … [1280 caractères tronqués]`
+
+  ```
+état : 2 048 en vol
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-74]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-74", "timeout_ms": 180000, "wait": true}`
+
+  ```
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round achevé : erratum mesuré, fiches corrigées, 2 048 en vol
+
+Le round a produit une **correction importante** : un contrôle de parité a attrapé un biais dans mon distillateur, et le chiffre de distillation a été refait proprement.
+
+## Ce qui s'est passé
+
+**Le biais** : mon distillateur donnait à la tête principale le poids **1** au lieu de **1/4** (l'entraîneur de référence fait la *moyenne* des quatre têtes), et la passe du professeur déplace la PPL à elle seule. Mes « gains » de distillation mélangeaient donc trois effets.
+
+**Le contrôle de parité** : avec la perte corrigée, le pas 1 vaut **5,8480** et le pas 50 **2,6713** — exactement le bras dur. Parité exacte.
+
+**Les trois décompositions** :
+
+| bras | 128 | 512 | 1 000 | 2 000 | lecture |
+|---|---:|---:|---:|---:|---|
+| 11,47 M depuis zéro : α = 0 (même harnais) | 3,7072 | 3,5727 | 3,5251 | — | référence |
+| 11,47 M depuis zéro : α = 0,9 | 3,6774 | 3,5633 | 3,5208 | — | **−0,03 / −0,01 / 0,00** : rien |
+| 11,47 M : repondération 4× seule | 3,6067 | 3,3984 | 3,3129 | — | **−0,05** : petit levier gratuit |
+| **production : α = 0** (même harnais) | 3,1500 | 2,9069 | 2,8006 | 2,7618 | référence |
+| production : 4× seul | 3,1457 | 2,9129 | 2,8105 | 2,7693 | ~0 ici |
+| **production : α = 0,9 corrigé** | **3,1119** | **2,8462** | **2,7388** | **2,6968** | **−0,06** ; anglais −0,19, wt2 −0,34 |
+| pour mémoire : vieux code (gonflé) | 3,0550 | 2,8062 | 2,7015 | 2,6601 | −0,10…−0,52 |
+
+**Conclusion** : le chiffre du 03/11 était **gonflé 2×**. La distillation **paie depuis une initialisation entraînée** (−0,06, et −0,19/−0,34 hors domaine) et **ne paie rien depuis zéro**. La recette de production reste « professeur 1 024 + élève 512 distillé » : 3,1119 pour 61,4 Mo, à 0,20 du run de 552 Mo.
+
+J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub citait 1,014 et 0,8385, qui sont des pertes ; les PPL sont 3,1500 et 3,1119).
+
+## Commits
+
+- **`84c28889`** — erratum : la distillation native ne gagne rien à parité stricte.
+- **`64674e0d`** — la repondération vaut −0,05, pas −0,14.
+- **`51ab1b36`** — production : −0,06 à parité stricte (3,1119 / 2,8462 / 2,7388 / 2,6968).
+- **`2b0832ca`** — clôture du 04/11 et correction perte/PPL.
+- **`b67e4dcb`** — complément 2 048 relancé en deux moitiés.
+
+## En vol et reste
+
+**En vol** : le complément **2 048** en deux segments de 10 000 pas (checkpoint à chaque segment, pour survivre aux reboots) — sortie ~18 h 20 puis ~21 h 10. C'est le dernier item de l'objectif.
+
+**Portes** : revue verte, T0 à 3 989, état frais et cohérent, journal vert, 623 fiches / 717 JSON. GPU 0 libre, GPU 1 au 2 048. Objectif laissé **actif** pour le dernier complément.
+

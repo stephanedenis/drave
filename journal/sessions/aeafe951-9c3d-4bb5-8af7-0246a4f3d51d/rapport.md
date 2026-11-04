@@ -7,14 +7,14 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 6.1 h |
+| Durée | 6.2 h |
 | Tours | 4 |
-| Messages | 150 |
-| Appels d'outils | 187 |
+| Messages | 158 |
+| Appels d'outils | 194 |
 | Fichiers touchés | 7 |
-| Commandes | 157 |
+| Commandes | 162 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -182,7 +182,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ### Tour 4 — peux-tu prendre une tâche
 
-*49 appels d'outils.* Actions notables :
+*56 appels d'outils.* Actions notables :
 
 - bash — Check repo, runs, and GPU state
 - bash — Read A8.3b report and list A8.3 files
@@ -198,11 +198,11 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - bash — Read the OCR pipeline script
 - bash — Check tesseract install and find uppercase PDF scans
 - bash — Inspect the CEGEP OCR manifest structure
-- … et 33 autres
+- … et 38 autres
 
 **Synthèse produite :**
 
-⏵ Le hub commite (verrou d'index) — j'attends la fin avant de committer D
+⏵ Intégration de D : manifeste + plan, puis commit explicite
 
 ## 3. Travail accompli
 
@@ -260,7 +260,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 117 autres
+- … et 122 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -398,4 +398,5 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACK
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ;
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' D — LES 8 .PDF RESTANTS SONT OCRISÉS : 4 DOCUMENTS, 49 PAGES, 54 167 CAR. ; 3 DOUB
 
