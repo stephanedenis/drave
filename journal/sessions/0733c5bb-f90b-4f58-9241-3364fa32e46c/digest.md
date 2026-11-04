@@ -10162,3 +10162,14 @@ kdp a=0 fini 11:01:35
   ```
 
 - **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 60 work/n2ac/kdpp-mix512-a0.log", "description": "Wait for kdp 0.9 finish", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-28]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-24 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 50 work/n2ac/kdpp-mix512-a0.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-28", "timeout_ms": 900000, "wait": true}`
