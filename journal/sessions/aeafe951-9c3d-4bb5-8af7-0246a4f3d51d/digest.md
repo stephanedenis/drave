@@ -3037,3 +3037,306 @@ f9132a68 N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE
 backlog propre
   ```
 
+### 🤖 Assistant
+
+⏵ GPU libres mais la passe du hub approche : je choisis une tâche CPU de frontière (N4)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/ressources.py --status 2>&1 | head -20; echo ====; grep -n \"Prochaine action\\|passe\" journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md | head", "description": "Check resource claims and hub pass plan"}`
+
+  ```
+ressources · Hauru — registre /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ressources.json
+  ressource      type      capacité  utilisé    libre  détail
+  gpu0           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16       12        4  réserve 4 fils
+  cpu1           cpu             16        0       16  réserve 4 fils
+  ram            ram            109       60       49  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1937 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / n2-jour : gpu0=exclusive, gpu1=exclusive, cpu0=12, ram=60 (prio 1, 720 min)
+====
+16:- **Prochaine action** : **suivi docs** (N3 intégré, état au 04/11), puis la **passe** après les runs.
+19:  4) **revue + commit** ; 5) **passe de portes** ; 6) **runs longs N2** (plus tard, sur décision).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools | grep -i 'n4\\|consigne\\|sft' ; echo ====; ls data | head -20; echo ====; grep -rn \"consignes\" tools/*.py 2>/dev/null | head -5", "description": "Find existing N4/SFT tooling and data layout"}`
+
+  ```
+evaluer_consignes.py
+evaluer_sft.py
+jeu_consignes.py
+n4_dessin_b.py
+sft_natif.py
+====
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+consignes_train.jsonl
+consignes_val.jsonl
+corpus_en.txt
+corpus_en_val.txt
+corpus_fr_litterature.txt
+corpus_fr_train.txt
+corpus_fr.txt
+corpus_fr_val.txt
+corpus_litt_propre
+corpus_mixte_dev.txt
+corpus_mixte_litt2.txt
+corpus_mixte_litt.txt
+====
+tools/evaluer_consignes.py:6:    m,_=charger(sys.argv[1] if len(sys.argv)>1 else '/tmp/drave-n0-consignes.pt','cpu')
+tools/evaluer_consignes.py:7:    ps=[json.loads(l) for l in pathlib.Path('data/consignes_val.jsonl').read_text().splitlines() if l.strip()]
+tools/evaluer_consignes.py:16:    pathlib.Path('reports/native-consignes.json').write_text(json.dumps(out,ensure_ascii=False,indent=1)+"\n")
+tools/jeu_consignes.py:2:"""jeu_consignes.py — N4.8 : consignes courtes procédurales, mots tenus à l'écart."""
+tools/jeu_consignes.py:26:    pathlib.Path('data/consignes_train.jsonl').write_text('\n'.join(json.dumps(p,ensure_ascii=False) for p in train)+'\n')
+  ```
+
+### 🤖 Assistant
+
+⏵ Tâche retenue : les 8 `.PDF` restants de D — je vérifie le fonds et l'outillage OCR
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"\\.PDF\\|8 scans\\|58 p\" reports/rapport-ocr-cegep.md docs/pilotage/*.md 2>/dev/null | head -12; echo ====; ls tools | grep -i ocr; echo ====; which tesseract pdftoppm pdfimages 2>/dev/null", "description": "Locate the re … [28 caractères tronqués]`
+
+  ```
+reports/rapport-ocr-cegep.md:4:**Statut** : **fonds `.pdf` parcouru** — 91 scans uniques, **60 documents retenus** (1 982 p), 31 écartés (texte OCR < 300 car. ou doublon) ; 8 scans en `.PDF` hors parcours (limite nommée) ; manifeste `reports/ocr-pdf-cegep.json` ; le fonds CEGEP compte 2 681 PDF, dont 147 sans couche texte (2 701 p), 91 uniques (2 053 p).
+reports/rapport-ocr-cegep.md:48:- **30 PDF en `.PDF`** (majuscules) échappent à `rglob("*.pdf")` : 8 scans, 58 p (6 uniques) — mesuré, **hors corpus**, à reprendre avec un parcours insensible à la casse.
+reports/rapport-ocr-cegep.md:66:L'OCR des **8 scans `.PDF`** (58 p, parcours insensible à la casse) ; le **pipeline R4.4** (nettoyage) ; la **WER** quand une vérité terrain existera ; la fusion avec les 20 livres et le corpus natif.
+docs/pilotage/en-cours.md:130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+docs/pilotage/plan-travail.md:41:| **D/R/A — terminé (02/11)** | les corpus (texte intégral, PDF/OCR, licences
+… [1162 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find data -maxdepth 3 -iname '*.pdf' 2>/dev/null | head -20; find data -maxdepth 3 -iname '*.PDF' 2>/dev/null | wc -l", "description": "Find PDF files in the data tree"}`
+
+  ```
+data/onu/pdf/A_RES_80_1-en.pdf
+data/onu/pdf/A_RES_80_1-fr.pdf
+data/onu/pdf/A_RES_80_1-es.pdf
+data/onu/pdf/A_RES_80_1-ru.pdf
+data/onu/pdf/A_RES_80_1-zh.pdf
+data/onu/pdf/A_RES_80_2-en.pdf
+data/onu/pdf/A_RES_80_2-fr.pdf
+data/onu/pdf/A_RES_80_2-es.pdf
+data/onu/pdf/A_RES_80_2-ru.pdf
+data/onu/pdf/A_RES_80_2-zh.pdf
+data/onu/pdf/A_RES_80_4-en.pdf
+data/onu/pdf/A_RES_80_4-fr.pdf
+data/onu/pdf/A_RES_80_4-es.pdf
+data/onu/pdf/A_RES_80_4-ru.pdf
+data/onu/pdf/A_RES_80_4-zh.pdf
+data/onu/pdf/A_RES_80_5-en.pdf
+data/onu/pdf/A_RES_80_5-fr.pdf
+data/onu/pdf/A_RES_80_5-es.pdf
+data/onu/pdf/A_RES_80_5-ru.pdf
+data/onu/pdf/A_RES_80_5-zh.pdf
+25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find data -name '*.PDF' 2>/dev/null | head -40; echo ====; find data -name '*.PDF' 2>/dev/null | wc -l", "description": "Find exact uppercase .PDF files"}`
+
+  ```
+====
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,50p' tools/ocr_pdf.py; echo ====; grep -n \"tesseract\\|ocrmypdf\\|OCR\" tools/ocr_pdf.py | head -10", "description": "Read the OCR pipeline script"}`
+
+  ```
+#!/usr/bin/env python3
+"""ocr_pdf.py — l'OCR des PDF **scannés** (R4.4 appliqué aux documents réels).
+
+POURQUOI. `extrait_pdf.py` extrait le texte natif ; les PDF sans couche texte (les scans) sont
+comptés et écartés. Ce script les **océrise** avec le tesseract installé sans root par
+`installer_ocr.sh` (5.5.3, fra+eng) : `pdftoppm` rend les pages, `tesseract` les lit.
+
+Ce qu'il ne fait pas (encore) : le prétraitement d'image de R4.4 (`nettoyer_scan.py` : rotation,
+contraste, colonnes) — le pilote mesure l'OCR **brut** ; la WER réelle n'a pas de vérité terrain
+(seule la parité R4.4 sur scans simulés la donne), donc la fiche donne le débit, les caractères et
+un échantillon, pas une WER inventée.
+
+Usage :
+  python3 tools/ocr_pdf.py --max-doc 20          # pilote (les 20 premiers scannés)
+  python3 tools/ocr_pdf.py                       # tous les scannés des racines
+  python3 tools/ocr_pdf.py --liste scans.txt --ouvriers 8
+      # liste explicite de scans déjà qualifiés (détection intégrale), pages en parallèle
+
+DÉTECTION. Sans `--liste`, un PDF est « scanné » si ses **deux premières pages** portent moins de
+50 caractères natifs par page. Mesure du 02/11 sur le fonds CEGEP : 807 candi
+… [1857 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l work/ocr/root/usr/bin/tesseract 2>/dev/null; echo ====; find /home/stephane/Data13TB/stephane/archives/CEGEP -name '*.PDF' 2>/dev/null | head -40; echo ====; find /home/stephane/Data13TB/stephane/archives/CEGEP -name '*.PDF' 2> … [90 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 55672 16 oct 07:05 work/ocr/root/usr/bin/tesseract
+====
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Déménagement du D-2227/DOC.PDF
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Inquiétudes/Choquette c. Chagnon.PDF
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Programmes420/420A0_0700 Devis ministériel.PDF
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Services Informatiques/1140E_QUICK_FR.PDF
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Services Informatiques/1140_FR.PDF
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Syndicat/OPERATION_CA_FFF_BULLETIN_NO_5.PDF
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Syndicat/LES_GRXVES_PROPRES_SONT-ELLES_UTILES.PDF
+/home/stephane/Data13TB/stephane/archives/CEGEP/i
+… [3340 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json'))\nprint(type(d), list(d)[:10] if isinstance(d,dict) else len(d))\nfor k in list(d)[:6]:\n    v=d[k]\n    print(k, type(v), (len(v) if hasattr(v,'__len__')  … [73 caractères tronqués]`
+
+  ```
+<class 'dict'> ['date', 'ligne', 'nature', 'dispositif', 'pdfs', 'scannes', 'ocrises', 'pages_ocr', 'caracteres', 'troncons']
+date <class 'str'> 10
+ligne <class 'str'> 23
+nature <class 'str'> 26
+dispositif <class 'dict'> 11
+pdfs <class 'int'> 91
+scannes <class 'int'> 91
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '120,240p' tools/ocr_pdf.py", "description": "Read OCR script options and output"}`
+
+  ```
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--max-doc", type=int, default=0)
+    ap.add_argument("--racine", default="", help="restreindre à une racine : Biblio_large, CEGEP")
+    ap.add_argument("--deja", type=int, default=0, help="sauter les N premiers PDF examinés (reprise)")
+    ap.add_argument("--liste", type=pathlib.Path, default=None,
+                    help="fichier de chemins PDF : OCR sans détection (scans déjà qualifiés)")
+    ap.add_argument("--ouvriers", type=int, default=1,
+                    help="pages OCR en parallèle (tesseract forcé mono-thread)")
+    ap.add_argument("--dpi", type=int, default=300)
+    ap.add_argument("--langues", default="fra+eng")
+    ap.add_argument("--max-pages", type=int, default=0)
+    ap.add_argument("--min-chars", type=int, default=300)
+    ap.add_argument("--chunk", type=int, default=8192)
+    ap.add_argument("--val", type=float, default=0.05)
+    ap.add_argument("--test", type=float, default=0.05)
+    ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--sortie", type=pathlib.Path, default=RACINE / "data/corpus_ocr")
+    ap.add_argument("--manifeste", type=pathlib.Pat
+… [5220 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && which pdftotext pdfinfo; python3 tools/ocr_pdf.py --help 2>&1 | head -25", "description": "Check PDF tools and OCR script CLI"}`
+
+  ```
+/usr/bin/pdftotext
+/usr/bin/pdfinfo
+usage: ocr_pdf.py [-h] [--max-doc MAX_DOC] [--racine RACINE] [--deja DEJA]
+                  [--liste LISTE] [--ouvriers OUVRIERS] [--dpi DPI]
+                  [--langues LANGUES] [--max-pages MAX_PAGES]
+                  [--min-chars MIN_CHARS] [--chunk CHUNK] [--val VAL]
+                  [--test TEST] [--graine GRAINE] [--sortie SORTIE]
+                  [--manifeste MANIFESTE]
+
+ocr_pdf.py — l'OCR des PDF **scannés** (R4.4 appliqué aux documents réels).
+POURQUOI. `extrait_pdf.py` extrait le texte natif ; les PDF sans couche texte
+(les scans) sont comptés et écartés. Ce script les **océrise** avec le
+tesseract installé sans root par `installer_ocr.sh` (5.5.3, fra+eng) :
+`pdftoppm` rend les pages, `tesseract` les lit. Ce qu'il ne fait pas (encore)
+: le prétraitement d'image de R4.4 (`nettoyer_scan.py` : rotation, contraste,
+colonnes) — le pilote mesure l'OCR **brut** ; la WER réelle n'a pas de vérité
+terrain (seule la parité R4.4 sur scans simulés la donne), donc la fiche donne
+le débit, les caractères et un échantillon, pas une WER inventée. Usage :
+python3 tools/ocr_pdf.py --max-doc 20 # pilote (les 20 premiers scannés)
+python3 tools/ocr_pdf.
+… [561 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouveau mandat : clore la limite des 8 `.PDF` du fonds CEGEP (OCR, CPU seule)
+
+- **write** `{"content": "# Plan de session — D, les données : les 8 `.PDF` restants\n\n> **Mandat du 2026-11-04 15 h 25 HNE**, après la clôture de N3 dans la même session\n> (`81fa1a86`, `39b7ef00`). La frontière du graphe est **A2.6, N2, N4** : tous GPU, et le\n> claim `n2-jour` tient encore les deux cartes ;  … [2134 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=+%H:%M:%S journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md; git log --oneline -2 -- journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md; tail -5 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a … [77 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 2342 11:41:12 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+81fa1a86 N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE
+  chaque affirmation de la fiche N3 est confrontée à une porte ou à un rapport ; le
+  contrôle négatif de l'inventaire est un autotest qui **doit** échouer sur une brique
+  sans porte.
+- **Objectif final** : N3 clos sur ses deux négatifs nommés, avec un inventaire qui
+  tourne, et la fiche/roadmap à mettre à jour par le hub.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md", "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — N3, les opérations natives : la clôture par l'inventaire
+2: 
+3: > **Mandat ouvert** le 2026-11-04 11 h 30 HNE, sur la frontière du graphe
+4: > (`A2.6, N2, N3, N4` — les trois autres sont pris : N2 aux runs GPU, A2.6 et N4
+5: > attendent les mêmes GPU jusqu'à ~15 h). La session prend la seule ligne **CPU**
+6: > de la frontière et la mène jusqu'à son verdict.
+7: 
+8: - **Session** : `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d`
+9: - **Rôle** : **N3 — les opérations natives** : vérifier que chaque brique mesurée a bien
+10:   une porte dans le moteur, que l'inventaire de N3.1 ne ment plus, et clore la ligne sur
+
+(Showing lines 1-10 of 34. Use offset=11 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "# Plan de session — D, les données : les 8 `.PDF` restants\n\n> **Mandat du 2026-11-04 15 h 25 HNE**, après la clôture de N3 dans la même session\n> (`81fa1a86`, `39b7ef00`). La frontière du graphe est **A2.6, N2, N4** : tous GPU, et le\n> claim `n2-jour` tient encore les deux cartes ;  … [2134 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/ressources.py --claim --session aeafe951 --job ocr-pdf-restants --res cpu1=8 --prio 2 --eta 30 --note \"OCR des 8 .PDF CEGEP\" 2>&1 | tail -2; mkdir -p work/ocr/restants", "description": "Claim cpu1 and prepare OCR work … [12 caractères tronqués]`
+
+  ```
+✅ accordé : aeafe951 / ocr-pdf-restants
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport subprocess, pathlib\nracine = pathlib.Path('/home/stephane/Data13TB/stephane/archives/CEGEP')\npdfs = sorted(racine.rglob('*.PDF'))\nrows = []\nfor p in pdfs:\n    try:\n        info = subprocess.run(['pdfinf … [979 caractères tronqués]`
+
+  ```
+0.0 car/p   1 p       0 car  DOC.PDF
+     0.0 car/p   6 p       0 car  Choquette c. Chagnon.PDF
+     0.0 car/p   1 p       0 car  DOC.PDF
+     0.0 car/p   6 p       0 car  Choquette c. Chagnon.PDF
+     0.0 car/p  22 p       0 car  DOC1.PDF
+     0.0 car/p  20 p       0 car  DOC2.PDF
+     0.0 car/p   1 p       0 car  Assurance pour stagiaires-B2344-11403.PDF
+     0.0 car/p   1 p       0 car  Assurance pour stagiaires.PDF
+   307.5 car/p   2 p     615 car  DESCRIPTION_DU_PROJET2.PDF
+   574.0 car/p   1 p     574 car  RAPPORT_ACTIVITE_DE_ENSEIGNANT.PDF
+   981.5 car/p 184 p  180597 car  1140_FR.PDF
+   981.5 car/p 184 p  180597 car  1140_FR.PDF
+  1228.9 car/p 220 p  270357 car  420A0_0700 Devis ministériel.PDF
+  1228.9 car/p 220 p  270357 car  420A0_0700 Devis ministériel.PDF
+  1228.9 car/p 220 p  270357 car  420A0_0700.PDF
+  1249.4 car/p  24 p   29985 car  FORMATION_CALL_PILOT.PDF
+  1474.3 car/p  78 p  114994 car  nRF24L01P(新版无线模块控制IC).PDF
+  1715.7 car/p  33 p   56617 car  GET_FILE.PDF
+  1715.7 car/p  33 p   56617 car  GET_FILE.PDF
+  2061.0 car/p   2 p    4122 car  1140E_QUICK_FR.PDF
+  2061.0 car/p   2 p    4122 car  1140E_QUICK_FR.PDF
+  2276.5 car/p  28 p   63741 car  LES_GRXVES_PROPRES_
+… [650 caractères tronqués]
+  ```
+

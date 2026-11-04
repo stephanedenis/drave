@@ -10916,3 +10916,23 @@ compteurs 623 716
 ⏵ Correction d'une confusion perte/PPL dans l'état (le hub a lu la perte, pas la PPL)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"**paire propre de production** finie : α=0 1,014, α=0,9 **0,8385 (−0,176)** ; **repondération 4× : −0,05**\"\nneuf = \"** … [2321 caractères tronqués]`
+
+  ```
+état corrigé : PPL et non perte
+  T0 max : 4007 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-69]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-69", "timeout_ms": 180000, "wait": true}`
+
+  ```
+2b0832ca N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md) … [1230 caractères tronqués]`

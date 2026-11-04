@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 8.0 h |
 | Tours | 48 |
-| Messages | 490 |
-| Appels d'outils | 706 |
+| Messages | 491 |
+| Appels d'outils | 707 |
 | Fichiers touchés | 15 |
-| Commandes | 523 |
+| Commandes | 524 |
 | Sous-agents | 0 |
-| Commits | 64 |
+| Commits | 65 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1457,7 +1457,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 48 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1469,10 +1469,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Wait for lock and retry 163 commit
 - bash — Stage state and commit 163
 - bash — Add N2 production line to state and stage
+- bash — Add production line and commit 163 + N2
 
 **Synthèse produite :**
 
-⏵ Le hook exige la ligne N2 de la production (−0,06) : je mets l'état à jour et commit le 163 + la production
+⏵ La ligne de la production manquait dans l'état : je l'ajoute, puis commit 163 + production
 
 ## 3. Travail accompli
 
@@ -1538,7 +1539,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 483 autres
+- … et 484 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1747,4 +1748,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
 - B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
 - B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
+- B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)" -m "Deux faits : côté B13, le chunker détecte l
 

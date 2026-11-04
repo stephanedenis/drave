@@ -14524,3 +14524,36 @@ M	journal/2026-11-04/mesures.md
 … [560 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Le hook exige la ligne N2 de la production (−0,06) : je mets l'état à jour et commit le 163 + la production
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -8 reports/rapport-n2-distillation-native.md ; python3 - <<'PY'\nimport pathlib, subprocess, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).st … [1399 caractères tronqués]`
+
+  ```
+# N2 — La distillation native : le professeur long dans un élève à fenêtre courte
+
+> **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03/04 · **Verdict — ERRATUM** :
+> le gain annoncé le 03/11 (**0,14 à 0,18** à α = 0,9) était un **artefact de pondération**, pas de
+> la distillation. Le code d'hier donnait à la tête principale le poids **1** au lieu de **1/4**
+> (l'entraîneur de référence fait la **moyenne** des quatre têtes) : les runs « distillés » étaient
+> donc aussi des runs **à tête principale surpondérée**. À **parité stricte** — même code, même
+> harnais, même init, mêmes 33 Mo, seul α change — **α = 0,9 ne gagne rien** : 3,6774 / 3,5633 /
+état OK 15 h 23
+  T0 max : 3986 mots (budget 4 000)
+  revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1616 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to 
+… [77 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La ligne de la production manquait dans l'état : je l'ajoute, puis commit 163 + production
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**repondération 4× : −0,05**.\", \"**repondération 4× : −0,05** ; **production (chaine) : −0,06 à parité stricte (3,1119/2,8 … [951 caractères tronqués]`

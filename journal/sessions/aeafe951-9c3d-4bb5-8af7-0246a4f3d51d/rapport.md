@@ -9,10 +9,10 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 6.0 h |
 | Tours | 4 |
-| Messages | 120 |
-| Appels d'outils | 154 |
+| Messages | 127 |
+| Appels d'outils | 162 |
 | Fichiers touchés | 6 |
-| Commandes | 131 |
+| Commandes | 135 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -182,7 +182,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ### Tour 4 — peux-tu prendre une tâche
 
-*16 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Check repo, runs, and GPU state
 - bash — Read A8.3b report and list A8.3 files
@@ -198,11 +198,11 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - bash — Read the OCR pipeline script
 - bash — Check tesseract install and find uppercase PDF scans
 - bash — Inspect the CEGEP OCR manifest structure
-- … et 2 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Tâche retenue : les 8 `.PDF` restants de D — je vérifie le fonds et l'outillage OCR
+⏵ 8 scans / 58 pages qualifiés (22 `.PDF` natifs exclus) — OCR en cours
 
 ## 3. Travail accompli
 
@@ -211,7 +211,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/n3_inventaire.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-inventaire.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-inventaire.md` | 1 | 0 |
@@ -259,7 +259,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 91 autres
+- … et 95 autres
 
 ## 4. Mesures et résultats marquants
 

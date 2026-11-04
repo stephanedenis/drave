@@ -36553,3 +36553,21 @@ Les enfants sont partis. | [('GN', 'Les enfants', 'agent'), ('GV', 'sont partis'
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncible=\"rapport-pensee-passifs-corriges.md\"\nout=[]; n=0\nfor l in lignes:\n    if cible in l:\n        n+=1; con … [631 caractères tronqués]`
+
+  ```
+lignes retirées 1
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=1
+  ✅ T159 correctif passifs par → agent, avec → moyen
+  ✅ T160 passifs sans par  passif sans par (chunker) : 3/3 patient
+  161/163 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep \"❌\"", "description": "Lister les portes rouges", "timeoutMs": 5400000}`

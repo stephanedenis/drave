@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 13:46 | `f9ccaf96` | TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 13:48 | `41629e8e` | B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155 | `en-cours.md`, `README.md`, `modele.md` (+5) |
 | 13:52 | `e21e6385` | ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE) ; COMPTEURS 616/709 | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
+| 15:22 | `2b0832ca` | N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL | `en-cours.md`, `README.md`, `apprentissage.md` (+19) |
 
 ## Sessions actives ce jour
 
@@ -24,6 +25,7 @@
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-n2-distillation-native.md](../../reports/rapport-n2-distillation-native.md)
 - [reports/rapport-pensee-tirages.md](../../reports/rapport-pensee-tirages.md)
 
 <!-- notes -->

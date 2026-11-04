@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**73 commits** · **5 session(s)** · **7 thème(s)**
+**74 commits** · **5 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 39 | [docs.md](docs.md) |
 | mesures | 21 | [mesures.md](mesures.md) |
-| modele | 4 | [modele.md](modele.md) |
+| modele | 5 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -106,6 +106,7 @@
 | 15:13 | `cc3c73fe` | B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162 |
 | 15:16 | `9c9d7b22` | ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15 |
 | 15:20 | `51ab1b36` | PRODUCTION — LA DISTILLATION VAUT −0,06 À PARITÉ STRICTE (PAS −0,10) : 3,1119 / 2,8462 / 2,7388 / 2,6968 |
+| 15:22 | `2b0832ca` | N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL |
 
 ## Le récit de la journée (écrit à la main)
 
