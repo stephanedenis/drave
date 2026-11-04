@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 89.6 h |
-| Tours | 156 |
-| Messages | 1852 |
-| Appels d'outils | 1584 |
+| Durée | 90.2 h |
+| Tours | 157 |
+| Messages | 1871 |
+| Appels d'outils | 1600 |
 | Fichiers touchés | 25 |
-| Commandes | 1301 |
+| Commandes | 1315 |
 | Sous-agents | 2 |
-| Commits | 197 |
+| Commits | 198 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -347,6 +347,8 @@
 **Tour 155** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 156** — reprends
+
+**Tour 157** — voir /home/stephane/.config/drave/deepseek.key
 
 ## 2. Déroulé, étape par étape
 
@@ -8254,7 +8256,67 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 
 **Synthèse produite :**
 
-⏵ Reprendre après l'interruption : vérifier l'état et finir le round
+⏵ Reprise : le défaut de fusion (confiance 0,7424 bat niveau 0,3432) ; 141/141
+
+La session a repris après l'interruption (l'horloge est au **04/11**, l'état a beaucoup bougé). Round livré : le **défaut de la fusion** est tranché par la mesure. Commit **`4449646d`**.
+
+\## Ce qui s'est passé entre-temps
+
+- Le **gold** est à **432 réels** (612 phrases) ; les **portes gelées** protègent les mesures.
+- Le **neuronal réel** est passé à l'**API DeepSeek** (règle 11) : le `NeuronalLLMCompose` (POS + chunks) remplace le modèle local — la qualification neuronale n'est plus bloquée par `llama-cli`, mais par la **clé** (`DEEPSEEK_KEY_FILE` absente ici).
+- Le **segmenteur** a été amélioré par une autre session (S F1 0,1696 → **0,281**) ; les portes T110–T115 codaient les anciens nombres — mises à jour.
+- La ligne L a produit les fiches « quatre modes », « fusion réparée », « frontière 71 », « lien appris », « lien deux sens ».
+
+\## Le round : le défaut de la fusion
+
+| mode | POS | syntagmes F1 | tête F1 |
+|---|---:|---:|---:|
+| **confiance (défaut)** | **0,7424** | **0,3165** | **0,4764** |
+| niveau (`PRIORITE_NIVEAU`) | 0,3432 | 0,1378 | 0,4553 |
+
+**Ce que ça dit** :
+
+- **Le niveau est calibré pour le neuronal réel**, pas pour le mock : `PRIORITE_NIVEAU` donne la POS au neuronal ; le mock la rend mal (0,34), la confiance la garde à l'heuristique (0,74).
+- **Le défaut doit rester la confiance** : la fusion par niveau est une **option** du banc, pas le comportement par défaut — c'est ce que la mesure du mock impose.
+- **Le réel tranchera** : sur l'API, le niveau gagnait (0,9331/0,8069/0,8704) ; sans la clé, on ne peut pas le vérifier — le défaut sûr est la confiance.
+- **La négative est explicite** : −0,40 de POS, −0,18 de syntagmes.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-defaut-niveau.md`](../../reports/rapport-pensee-defaut-niveau.md) ; JSON [`pensee-defaut-niveau.json`](../../reports/pensee-defaut-niveau.json) ; T138 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **141/141 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **600 fiches / 686 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (10 h 45).
+- Le commit a été retenté (le hook exigeait une vraie ligne d'état ; l'autre session avait commité `cfb68013`).
+- Le **refus `r353`** n'est pas reproductible sans la clé DeepSeek ; il reste ouvert.
+
+\## La suite
+
+1. **La clé DeepSeek** : la seule façon de trancher le défaut (niveau vs confiance) sur le réel.
+2. **Le refus `r353`** : non reproductible san
+… [224 caractères tronqués]
+
+### Tour 157 — voir /home/stephane/.config/drave/deepseek.key
+
+*16 appels d'outils.* Actions notables :
+
+- bash — Vérifier la disponibilité de la clé DeepSeek
+- bash — Tester les quatre modes sur 3 phrases
+- bash — Lancer la mesure des quatre modes sur le gold 432
+- job_output
+- bash — Lire le JSON des quatre modes
+- bash — Diagnostiquer le refus r353
+- bash — Lire le coût de la passe API
+- bash — Écrire la fiche des quatre modes sur le gold 432
+- bash — Vérifier si le JSON brut était suivi par git
+- bash — Voir la tokenisation du r353
+- bash — Ajouter les portes T139/T140 et l'état
+- bash — Passer toutes les portes
+- bash — Voir comment le module résout les chemins
+- bash — Corriger le chemin et relancer
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Attendre la mesure réelle des quatre modes (API)
 
 ## 3. Travail accompli
 
@@ -8335,7 +8397,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1261 autres
+- … et 1275 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8680,4 +8742,5 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES ABSENTS"; then echo "CO
 - B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT DE LA FUSI
 - B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT DE LA FUSI
+- B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "Q
 

@@ -1,0 +1,56 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "143/143",
+ "modes": {
+  "heuristique": {
+   "pos": 0.7394,
+   "syn": 0.252,
+   "tete": 0.4511,
+   "acte": 0.9954
+  },
+  "neuronal": {
+   "pos": 0.9309,
+   "syn": 0.8226,
+   "tete": 0.8784,
+   "acte": 0.0
+  },
+  "parallele": {
+   "pos": 0.928,
+   "syn": 0.802,
+   "tete": 0.857,
+   "acte": 0.9954
+  },
+  "cascade": {
+   "pos": 0.928,
+   "syn": 0.802,
+   "tete": 0.857,
+   "acte": 0.9954
+  },
+  "parallele_niveau": {
+   "pos": 0.9309,
+   "syn": 0.8226,
+   "tete": 0.8784,
+   "acte": 0.9954
+  },
+  "cascade_niveau": {
+   "pos": 0.9309,
+   "syn": 0.8226,
+   "tete": 0.8784,
+   "acte": 0.9954
+  }
+ },
+ "cout": {
+  "appels": 858,
+  "tokens": 254341,
+  "latence_s": 803.8
+ },
+ "refus": [
+  "r353"
+ ],
+ "limites": [
+  "une passe API",
+  "gold 432",
+  "PRIORITE_NIVEAU est une décision"
+ ]
+}

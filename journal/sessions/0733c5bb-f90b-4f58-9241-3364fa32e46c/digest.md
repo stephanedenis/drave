@@ -9953,3 +9953,58 @@ pas    50 · perte 2.6713 · dure 2.8839 · douce 6.4360 · 29 s
 ⏵ La parité est exacte (5,8480 au pas 1 = le bras dur) ; j'attends le contrôle α=0 puis α=0,9 corrigé
 
 - **bash** `{"command": "sleep 2400; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 60 work/n2ac/kdp-1147m-a0.log; tail -c 50 work/n2ac/rope2048-20k.log", "description": "Wait for the corrected alpha=0 control", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-11]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-11", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 60 work/n2ac/kdp-1147m-a0.log; ls work/n2ac/kdp-1147m-a0.pt 2>/dev/null && echo OK0", "description": "Poll corrected alpha=0 run"}`
+
+  ```
+10:26:06
+50 · perte 1.3761 · dure 1.3366 · douce 0.9910 · 2442 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; grep -E \"ppl|duree\" work/n2ac/kdp-1147m-a0.pt.json 2>/dev/null; ls work/n2ac/kdp-1147m-a0.pt 2>/dev/null && echo OK0", "description": "Wait for corrected alpha=0 completion", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-13]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-13", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-11 (bash: sleep 2400; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 60 work/n2ac/kdp-1147m-a0.log; tail -c 50 work/n2ac/rope2048-20k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.pt work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null; tail -c 60 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null; tail -c 50 work/n2ac/kd2-mix512-30k.log", "description": "Check corrected controls stat … [4 caractères tronqués]`
+
+  ```
+10:46:16
+e 1.1796 · dure 1.0213 · douce 0.2477 · 4349 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -2 work/n2ac/kdp-1147m-a0.log; ls -la work/n2ac/kdp-1147m-a0.pt 2>/dev/null; date '+%H:%M:%S'", "description": "Read alpha=0 corrected log tail"}`
+
+  ```
+pas  6350 · perte 1.2369 · dure 1.1904 · douce 0.8509 · 3648 s
+pas  6400 · perte 1.3798 · dure 1.3242 · douce 1.0227 · 3677 s
+10:46:22
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 50 work/n2ac/kdp-1147m-a0.log; tail -c 50 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null", "description": "Wait for corrected alpha=0 completion", "timeoutMs": 600000}`

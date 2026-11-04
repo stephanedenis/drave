@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 0.3 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 18 |
-| Appels d'outils | 25 |
-| Fichiers touchés | 0 |
-| Commandes | 20 |
+| Messages | 22 |
+| Appels d'outils | 29 |
+| Fichiers touchés | 1 |
+| Commandes | 23 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu es la session <rôle>. Lis AGENTS.md, docs/pilotage/en-cours.md (état du 04/11, 09 h 35) et seulement le document de t … [343 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Show repo status and session directories
 - bash — Show recent commits and current date
@@ -41,11 +41,27 @@
 - bash — Show session status from tool
 - bash — List all session plans with roles and states
 - bash — Search references to my session id and list tools
-- … et 10 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Cas particulier : cette session est un doublon vide, les trois rôles tournent déjà
+⏵ Session fermée sans commit ; rapport au hub
+
+**Session `aeafe951` fermée comme doublon — aucun travail lancé, aucun état touché.**
+
+Ce qui a motivé la fermeture :
+
+- Le prompt reçu portait `<rôle>` et `<id>` **non remplis** : ni mandat, ni `plan.md`, ni document de tâche.
+- Les trois sessions de rôle étaient déjà ouvertes et actives : N2 `0733c5bb`, S `29ad180d`, L/Pensée `e181ce02` (plus le hub `1e7ef596`). Les runs N2 tournent bien (`kd2` ~1 150 pas, `rope2048` ~600 pas, GPU 0/1 à 100 %, claim `n2-jour` actif) — je ne les ai pas touchés.
+- Ta réponse : **fermer cette session comme doublon**.
+
+Ce que j'ai fait, et rien de plus :
+
+- écrit `journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md` (trace de la fermeture, dans mon seul territoire) ;
+- **pas de commit** : l'arbre est en mouvement (S et L ont des fichiers modifiés/non suivis en ce moment), un commit aurait risqué de mélanger leur WIP à mon `git add` ;
+- `docs/pilotage/en-cours.md`, la roadmap et `AGENTS.md` sont **intacts** (vérifié par `git diff`).
+
+Pour le hub : la note `cloture.md` est **non suivie**, à intégrer (ou écarter) dans son prochain commit d'intégration ; `en-cours` ne liste pas `aeafe951`, il n'y a donc aucune ligne d'état à retirer.
 
 ## 3. Travail accompli
 
@@ -53,6 +69,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -76,6 +93,9 @@
 - **T1** Read end of hub session digest
 - **T1** List running DSH processes
 - **T1** Check resource claims, GPU, and N2 run logs
+- **T1** Read existing closure note formats
+- **T1** Confirm clean tree and running sessions
+- **T1** Verify no state file touched and list working tree
 
 ## 4. Mesures et résultats marquants
 

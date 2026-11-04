@@ -33381,3 +33381,245 @@ mer 04 nov 2026 10:14:11 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 10 h 45 HNE\", t)\nt=t.replace(\ … [1111 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-29]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-29", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-pensee-defaut-niveau.md
+ delete mode 100644 reports/rapport-s-paragraphes.md
+COMMIT OK 1
+4449646d B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141
+mer 04 nov 2026 10:16:09 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise : le défaut de fusion (confiance 0,7424 bat niveau 0,3432) ; 141/141
+
+La session a repris après l'interruption (l'horloge est au **04/11**, l'état a beaucoup bougé). Round livré : le **défaut de la fusion** est tranché par la mesure. Commit **`4449646d`**.
+
+## Ce qui s'est passé entre-temps
+
+- Le **gold** est à **432 réels** (612 phrases) ; les **portes gelées** protègent les mesures.
+- Le **neuronal réel** est passé à l'**API DeepSeek** (règle 11) : le `NeuronalLLMCompose` (POS + chunks) remplace le modèle local — la qualification neuronale n'est plus bloquée par `llama-cli`, mais par la **clé** (`DEEPSEEK_KEY_FILE` absente ici).
+- Le **segmenteur** a été amélioré par une autre session (S F1 0,1696 → **0,281**) ; les portes T110–T115 codaient les anciens nombres — mises à jour.
+- La ligne L a produit les fiches « quatre modes », « fusion réparée », « frontière 71 », « lien appris », « lien deux sens ».
+
+## Le round : le défaut de la fusion
+
+| mode | POS | syntagmes F1 | tête F1 |
+|---|---:|---:|---:|
+| **confiance (défaut)** | **0,7424** | **0,3165** | **0,4764** |
+| niveau (`PRIORITE_NIVEAU`) | 0,3432 | 0,1378 | 0,4553 |
+
+**Ce que ça dit** :
+
+- **Le niveau est calibré pour le neuronal réel**, pas pour le mock : `PRIORITE_NIVEAU` donne la POS au neuronal ; le mock la rend mal (0,34), la confiance la garde à l'heuristique (0,74).
+- **Le défaut doit rester la confiance** : la fusion par niveau est une **option** du banc, pas le comportement par défaut — c'est ce que la mesure du mock impose.
+- **Le réel tranchera** : sur l'API, le niveau gagnait (0,9331/0,8069/0,8704) ; sans la clé, on ne peut pas le vérifier — le défaut sûr est la confiance.
+- **La négative est explicite** : −0,40 de POS, −0,18 de syntagmes.
+
+## L'état
+
+- Fiche : [`rapport-pensee-defaut-niveau.md`](../../reports/rapport-pensee-defaut-niveau.md) ; JSON [`pensee-defaut-niveau.json`](../../reports/pensee-defaut-niveau.json) ; T138 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **141/141 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **600 fiches / 686 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (10 h 45).
+- Le commit a été retenté (le hook exigeait une vraie ligne d'état ; l'autre session avait commité `cfb68013`).
+- Le **refus `r353`** n'est pas reproductible sans la clé DeepSeek ; il reste ouvert.
+
+## La suite
+
+1. **La clé DeepSeek** : la seule façon de trancher le défaut (niveau vs confiance) sur le réel.
+2. **Le refus `r353`** : non reproductible sans l'API.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **la mesure du réel** — si la clé est disponible, sinon le prochain item de la file L.
+
+
+## Tour 157
+
+### 👤 Utilisateur
+
+voir /home/stephane/.config/drave/deepseek.key
+
+### 🤖 Assistant
+
+⏵ Vérifier la clé DeepSeek et lancer la mesure réelle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /home/stephane/.config/drave/deepseek.key 2>&1 | tail -1; DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key python3 -c \"\nimport sys; sys.path.insert(0,'.')\nfrom tools.llm.deepseek import DeepSeek\nc=DeepSeek(); pr … [117 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 36  3 nov 11:15 /home/stephane/.config/drave/deepseek.key
+disponible True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 900 python3 tools/tests/linguistique/qualifier_quatre_modes.py --limite 3 2>&1 | tail -25", "description": "Tester les quatre modes sur 3 phrases", "timeoutMs": 9000 … [3 caractères tronqués]`
+
+  ```
+heuristique · 0.0 s
+neuronal · 0.0 s
+parallele · 0.0 s
+cascade · 0.0 s
+parallele_niveau · 0.0 s
+cascade_niveau · 0.0 s
+heuristique {'pos': 0.8571, 'syntagme': 0.7368, 'tete': 0.8235, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+neuronal {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 0.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.0}
+parallele {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+cascade {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+parallele_niveau {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+cascade_niveau {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes-432.json 2>&1 | tail -30", "description": "Lancer la mesure des  … [79 caractères tronqués]`
+
+  ```
+started background job bash-32
+  ```
+
+### 🤖 Assistant
+
+⏵ Attendre la mesure réelle des quatre modes (API)
+
+- **job_output** `{"job_id": "bash-32", "timeout_ms": 3600000, "wait": true}`
+
+  ```
+heuristique · 0.3 s
+neuronal · 0.3 s
+parallele · 0.4 s
+cascade · 0.4 s
+parallele_niveau · 0.4 s
+cascade_niveau · 0.4 s
+heuristique {'pos': 0.7394, 'syntagme': 0.252, 'tete': 0.4511, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+neuronal {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+parallele_niveau {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade_niveau {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'dou
+… [84 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-32 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes-432.json 2>&1 | tail -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432.json'))\nprint('clés', list(d.keys())[:10])\nfor k in ('refus','refus_detail','cout','usage','phrases','seuils'):\n    if k in d: print(k, d[k])\nPY", " … [46 caractères tronqués]`
+
+  ```
+clés ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail', 'appels', 'api', 'latence_s', 'duree_totale_s']
+refus 1
+refus_detail ['r353']
+seuils {'heuristique': True, 'neuronal': True, 'parallele': False, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': False}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.bloc_linguistique import NeuronalLLMCompose, NeuronalLLMPOS, NeuronalLLMChunks\nfrom tools.llm.d … [611 caractères tronqués]`
+
+  ```
+texte Le professeur parle ; les élèves l'écoutent.
+refus neuronal-pos: ValueError: longueur POS 7 / 6; neuronal-syntagmes: ValueError: longueur BIO 7 / 6
+trace [{'etape': 'neuronal-pos', 'erreur': 'longueur POS 7 / 6'}, {'etape': 'neuronal-syntagmes', 'erreur': 'longueur BIO 7 / 6'}, {'etape': 'compose', 'niveaux': []}]
+etiquettes []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432.json'))\nprint('appels', d.get('appels'), '| api', d.get('api'), '| latence', d.get('latence_s'), '| durée', d.get('duree_totale_s'))\nprint('modes', li … [75 caractères tronqués]`
+
+  ```
+appels {'pos': 429, 'syntagmes': 429} | api {'appels': 858, 'tokens': 254341, 'latence_s': 803.7759999999992} | latence {'moyenne': 0.001, 'mediane': 0.001} | durée 2.4
+modes ['heuristique', 'neuronal', 'parallele', 'cascade', 'parallele_niveau', 'cascade_niveau']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-quatre-modes-432.md <<'MD'\n# B13 — les quatre modes sur le gold 432 : le niveau gagne avec le réel\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6 et règle 11) · **Date** : 2026-11-04 ·\n> … [4645 caractères tronqués]`
+
+  ```
+json écrit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/pensee-quatre-modes-432.json; git log --oneline -1 -- reports/pensee-quatre-modes-432.json; head -c 300 reports/pensee-quatre-modes-432.json", "description": "Vérifier si le JSON brut était suivi par gi … [3 caractères tronqués]`
+
+  ```
+?? reports/pensee-quatre-modes-432.json
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "143/143",
+ "modes": {
+  "heuristique": {
+   "pos": 0.7394,
+   "syn": 0.252,
+   "tete": 0.4511,
+   "acte": 0.9954
+  },
+  "neuronal": {
+   "pos": 0.9309,
+   "syn": 0.8226,
+   "tete": 0.8784,
+   "acte": 0.0
+  },
+  "parallele": {
+   "pos": 0.928,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'.')\nfrom tools.bloc_linguistique import Heuristique\nh=Heuristique()\nprint([ (t, typ) for d,f,t,typ in h._mots(\\\"Le professeur parle ; les élèves l'écoutent.\\\")])\n\" 2>&1 | tail -2 … [49 caractères tronqués]`
+
+  ```
+[('Le', 'mot'), ('professeur', 'mot'), ('parle', 'mot'), (';', 'ponctuation'), ('les', 'mot'), ('élèves', 'mot'), ("l'écoutent", 'mot'), ('.', 'ponctuation')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T138 le défaut de la fusion        confiance 0,7424 vs niveau 0,3432 : le niveau perd\\n\",\n\"  T138 le défaut de la fusi … [4064 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 602 fiche(s) · 687 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=1
+    d = json.loads((RACINE / "reports/pensee-quatre-modes-432.json").read_text(encoding="utf-8"))
+                    ^^^^^^
+NameError: name 'RACINE' is not defined
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"RACINE\\|racine\\|parents\\[\" tools/pensee/autotest.py | head -5; sed -n '1,30p' tools/pensee/autotest.py | grep -n \"import\\|Path\"", "description": "Voir comment le module résout les chemins"}`
+
+  ```
+6:  T1  le flux DRVF thought se relit   enveloppe, racine, rejeu ; un score corrompu est refusé
+9:  T4  la justification est valide     chemin racine → settled ; un chemin inventé est refusé
+92:    """Le flux `thought` : enveloppe DRVF, racine, rejeu, corruption refusée."""
+98:    racine = m.store.chemin(d.etat.empreinte())[0]
+99:    octets = encoder(m.trace, m.store, racine, "cruches")
+27:from __future__ import annotations
+29:import sys
+30:from dataclasses import replace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''    import json\n    d = json.loads((RACINE / \"reports/pensee-quatre-modes-432.json\").read_text(encoding=\"utf-8\"))''',\ … [405 caractères tronqués]`
+
+  ```
+ok
+  ✅ T139 quatre modes      quatre modes : niveau POS 0.9309, acte 0.9954
+  ✅ T140 refus r353        r353 : 6 mots du bloc, dont l'élision en un seul
+  143/143 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-quatre-modes-432.md reports/pensee-quatre-modes-432.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pil … [526 caractères tronqués]`

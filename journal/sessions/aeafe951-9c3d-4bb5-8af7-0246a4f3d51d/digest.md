@@ -716,3 +716,113 @@ pas
 ⏵ Cas particulier : cette session est un doublon vide, les trois rôles tournent déjà
 
 - **ask_user_question** `{"questions": [{"id": "role", "header": "Rôle de cette session", "question": "Le prompt contient `<rôle>` et `<id>` non remplis, et cette session (`aeafe951`, ouverte à 09:25) n'a pas de `plan.md`. Or les trois sessions de rôle sont déjà ouvertes dans d'autres terminaux : N2 `0733c5bb` (PID 264612), … [1018 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"role","selected":["Fermer cette session (doublon)"]}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Fermeture propre : note de clôture dans le dossier de la session vide
+
+- **bash** `{"command": "sed -n '1,40p' journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md; echo ====; sed -n '1,25p' journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/cloture.md", "description": "Read existing closure note formats"}`
+
+  ```
+# Session `0733c5bb` — N2, le natif : 200 000 pas et la fenêtre
+
+> **Id DSH** : `0733c5bb-f90b-4f58-9241-3364fa32e46c`.
+> **Rôle** : N2 — le natif, GPU (programme N, puis R1.1/R1.2 vus depuis N2).
+> **Mandat** : [`plan.md`](plan.md) · **Journaux** : [le 02/11](../../../journal/2026-11-02/README.md),
+> [l'état](../../../docs/pilotage/en-cours.md), [l'index des sessions](../../README.md#sessions).
+
+## Ce qui a été livré
+
+- **200 000 pas sur le mélange 1 Go** (`data/wiki_mix/propre`, 1 017 487 092 octets), recette
+  N2.ac à un paramètre près, GPU 0, **11 410 s** (3 h 10, 57 ms/pas). Cinq PPL mesurées avec le
+  mètre de N2.ac repassé sur le témoin 60 k **à l'identique** : validation française **3,4902 →
+  3,1591** (−0,33), grand corpus **3,3565 → 3,0035**, littérature **6,0283 → 5,6056**, anglais
+  **8,3352 → 7,2770**, wikitext2 **9,0525 → 8,0018** ; transfert au corpus propre 9,27 → 9,13 ;
+  précision top-1 **0,6416 → 0,6741**. Fiche
+  [`n2-200k`](../../../reports/rapport-n2-200k.md), agrégat
+  [`n2-200k.json`](../../../reports/n2-200k.json).
+- **La réponse à la question ouverte de N2** : la porte **< 2,5 n'est pas atteinte** (3,1591 en
+  domaine) ; la loi de puissance de la trajectoi
+… [3031 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git status --short --branch; echo ====; ps -eo pid,etimes,args | grep -E '[d]sh --profile' | head", "description": "Confirm clean tree and running sessions"}`
+
+  ```
+## master...origin/master [ahead 1]
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M reports/INDEX.md
+ M reports/pensee-quatre-modes.json
+ M tools/structures
+?? reports/pensee-quatre-modes-432.json
+?? reports/rapport-s-paragraphes.md
+====
+  67321   11597 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+ 259387    4375 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+ 264612    3567 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume 0733c5bb-f90b-4f58-9241-3364fa32e46c
+ 264723    3549 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+ 264909    3521 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la note de clôture, sans commit (arbre partagé en mouvement)
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md", "content": "# Clôture — `aeafe951` : session vide, fermée comme doublon\n\n> **Session** : `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` · **Début** : 2026-11-04 09 h 25 ·\n> ** … [1324 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "git status --short --branch; echo ====; git diff --stat -- docs/pilotage/ AGENTS.md journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/", "description": "Verify no state file touched and list working tree"}`
+
+  ```
+## master...origin/master [ahead 1]
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M reports/INDEX.md
+ M reports/pensee-quatre-modes.json
+ M tools/structures
+?? journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md
+?? reports/pensee-quatre-modes-432.json
+?? reports/rapport-s-paragraphes.md
+====
+  ```
+
+### 🤖 Assistant
+
+⏵ Session fermée sans commit ; rapport au hub
+
+**Session `aeafe951` fermée comme doublon — aucun travail lancé, aucun état touché.**
+
+Ce qui a motivé la fermeture :
+
+- Le prompt reçu portait `<rôle>` et `<id>` **non remplis** : ni mandat, ni `plan.md`, ni document de tâche.
+- Les trois sessions de rôle étaient déjà ouvertes et actives : N2 `0733c5bb`, S `29ad180d`, L/Pensée `e181ce02` (plus le hub `1e7ef596`). Les runs N2 tournent bien (`kd2` ~1 150 pas, `rope2048` ~600 pas, GPU 0/1 à 100 %, claim `n2-jour` actif) — je ne les ai pas touchés.
+- Ta réponse : **fermer cette session comme doublon**.
+
+Ce que j'ai fait, et rien de plus :
+
+- écrit `journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/cloture.md` (trace de la fermeture, dans mon seul territoire) ;
+- **pas de commit** : l'arbre est en mouvement (S et L ont des fichiers modifiés/non suivis en ce moment), un commit aurait risqué de mélanger leur WIP à mon `git add` ;
+- `docs/pilotage/en-cours.md`, la roadmap et `AGENTS.md` sont **intacts** (vérifié par `git diff`).
+
+Pour le hub : la note `cloture.md` est **non suivie**, à intégrer (ou écarter) dans son prochain commit d'intégration ; `en-cours` ne liste pas `aeafe951`, il n'y a donc aucune ligne d'état à retirer.
+

@@ -2026,6 +2026,30 @@ def t138_defaut_niveau() -> tuple[bool, str]:
         f"défaut : confiance {round(r_conf, 4)}, niveau {round(r_niv, 4)}")
 
 
+def t139_quatre_modes() -> tuple[bool, str]:
+    """Les quatre modes (API réelle) : le niveau gagne (0,9309) et garde l'acte (0,9954)."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-quatre-modes-432.json").read_text(encoding="utf-8"))
+    m = d["modes"]
+    return (m["cascade_niveau"]["pos"] > m["heuristique"]["pos"]
+            and m["cascade_niveau"]["acte"] > m["neuronal"]["acte"]
+            and m["cascade_niveau"]["syn"] > m["heuristique"]["syn"]), (
+        f"quatre modes : niveau POS {m['cascade_niveau']['pos']}, "
+        f"acte {m['cascade_niveau']['acte']}")
+
+
+def t140_r353() -> tuple[bool, str]:
+    """Le refus r353 : 6 mots du bloc, le modèle en rend 7 (l'élision)."""
+    import tools.bloc_linguistique as bl
+    h = bl.Heuristique()
+    mots = [t for d, f, t, typ in h._mots("Le professeur parle ; les élèves l'écoutent.")
+            if typ == "mot"]
+    return len(mots) == 6 and "l'écoutent" in mots, (
+        f"r353 : {len(mots)} mots du bloc, dont l'élision en un seul")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2163,7 +2187,9 @@ def main() -> int:
               ("T135 liens classés", t135_liens_classes()),
               ("T136 absents", t136_absents()),
               ("T137 vrais absents", t137_vrais_absents()),
-              ("T138 défaut fusion", t138_defaut_niveau())]
+              ("T138 défaut fusion", t138_defaut_niveau()),
+              ("T139 quatre modes", t139_quatre_modes()),
+              ("T140 refus r353", t140_r353())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
