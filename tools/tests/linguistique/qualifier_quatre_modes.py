@@ -30,7 +30,7 @@ sys.path.insert(0, str(RACINE))
 
 from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,
                                      NeuronalLLMChunks, NeuronalLLMCompose,
-                                     NeuronalLLMPOS, Parallele)
+                                     NeuronalLLMPOS, NeuronalLLMPragmatique, Parallele)
 from tools.llm.deepseek import DeepSeek
 from tools.tests.linguistique.evaluer_gold import evaluer_bloc
 from tools.tests.linguistique.qualifier_cascade import _sources, charger
@@ -63,7 +63,8 @@ def main() -> None:
     h = Heuristique()
     pos = NeuronalLLMPOS("deepseek-chat", transport=transport)
     chunks = NeuronalLLMChunks("deepseek-chat", transport=transport)
-    compose = NeuronalLLMCompose(pos, chunks)
+    pragma = NeuronalLLMPragmatique("deepseek-chat", transport=transport)
+    compose = NeuronalLLMCompose(pos, chunks, pragma)
     modes = {
         "heuristique": h,
         "neuronal": compose,

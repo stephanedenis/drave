@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 12 h 49 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 14 h 40 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,7 +68,7 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **150/150** (troisième passe : variance **nulle** — POS **0,9389**, refus **0** ; **variance 0,3 : ±0,0074 au pire, 7/7 seuils, refus 0** ; le `parallele` passe de **0,9326** à **0,9389** avec la clé ; seuil du parallèle ; défaut conditionnel ; run2 ; élision **0,7455**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [troisième passe](../../reports/rapport-pensee-troisieme-passe.md), [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [B13](../../reports/rapport-b13-porte-140.md).
+- **Fait** : B13 **150/150** (**variance 0,3 : ±0,0074, 7/7 seuils, refus 0** ; le `parallele` passe de **0,9326** à **0,9389** ; les étapes seuil, défaut conditionnel, run 2, élision et troisième passe sont dans les fiches) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [troisième passe](../../reports/rapport-pensee-troisieme-passe.md), [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [B13](../../reports/rapport-b13-porte-140.md).
 - **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **T132/T133**, **gold 200+** ; le qualifier fenêtre attend une version API (serveur local interdit).

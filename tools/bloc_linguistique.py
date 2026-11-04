@@ -1160,25 +1160,30 @@ class NeuronalLLMCompose:
 
     nom = "neuronal"
 
-    def __init__(self, pos: BlocLinguistique, chunks: BlocLinguistique):
+    def __init__(self, pos: BlocLinguistique, chunks: BlocLinguistique,
+                 pragma: BlocLinguistique | None = None):
         self.pos = pos
         self.chunks = chunks
+        self.pragma = pragma
 
     def analyser(self, texte: str, langue: str | None = None,
                  contexte: str | None = None) -> Annotation:
         a = self.pos.analyser(texte, langue, contexte)
         b = self.chunks.analyser(texte, langue, contexte)
-        etiquettes = a.etiquettes + b.etiquettes
-        refus = "; ".join(x for x in (a.refus, b.refus) if x)
+        c = self.pragma.analyser(texte, langue, contexte) if self.pragma else None
+        etiquettes = a.etiquettes + b.etiquettes + (c.etiquettes if c else [])
+        refus = "; ".join(x for x in (a.refus, b.refus, c.refus if c else "") if x)
         lg = a.langue if a.langue != "und" else b.langue
         script = a.script if a.script != SCRIPT_NEUTRE else b.script
         return Annotation(
             texte=texte, langue=lg, script=script, etiquettes=etiquettes,
             source=self.nom, refus=refus,
-            trace=a.trace + b.trace + [{"etape": "compose",
-                                        "niveaux": sorted({e.niveau for e in etiquettes})}],
+            trace=a.trace + b.trace + (c.trace if c else []) + [
+                {"etape": "compose",
+                 "niveaux": sorted({e.niveau for e in etiquettes})}],
             cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
-                  "duree_s": round(a.cout.get("duree_s", 0.0) + b.cout.get("duree_s", 0.0), 6)})
+                  "duree_s": round(a.cout.get("duree_s", 0.0) + b.cout.get("duree_s", 0.0)
+                                   + (c.cout.get("duree_s", 0.0) if c else 0.0), 6)})
 
 
 ACTES = ("assertion", "question", "exclamation")

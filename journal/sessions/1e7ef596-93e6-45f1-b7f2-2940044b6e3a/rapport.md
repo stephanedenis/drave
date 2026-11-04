@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.4 h |
-| Tours | 11 |
-| Messages | 212 |
-| Appels d'outils | 386 |
+| Durée | 5.5 h |
+| Tours | 12 |
+| Messages | 218 |
+| Appels d'outils | 395 |
 | Fichiers touchés | 15 |
-| Commandes | 229 |
+| Commandes | 238 |
 | Sous-agents | 0 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -45,6 +45,8 @@
 **Tour 10** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 **Tour 11** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
+
+**Tour 12** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -424,7 +426,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 11 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -436,10 +438,39 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - edit `reports/README.md`
 - bash — Add variance row and stage catalog updates
 - bash — Commit index and readme catalog updates
+- bash — Verify cycle 6 commits and checks
+- bash — Verify links, journal and runs
 
 **Synthèse produite :**
 
-⏵ Commit catalogue (INDEX 608, README variance) et état
+⏵ Cycle 6 : catalogue 608 fiches, README variance, état 611/699 — docs verts
+
+**Cycle 6 — le catalogue rattrape, le pilotage reste vert.**
+
+- **Catalogue** : `reports/INDEX.md` passe de **606 à 608 fiches** (DRVM N0.1, variance 0,3) et le README courbe reçoit la ligne **variance 150/150** ; commit `34a25a93`.
+- **État** : **611 fiches / 699 JSON / 120 docs / 83 portes**, B13 **150/150**, S **v7**, N2 avec l'**erratum** ; T0 **3 998 / 4 000**, `en-cours` **1 628 mots**.
+- **Contrôles** : revue ✅ ; **2 932 liens** ✅ ; backlog **frontière 3** ✅ ; journal **1 971 liens** ✅ ; tableaux ✅.
+- **Ressources** : le claim `n2-jour` (360 min, créé 09 h 30 → ~15 h 30) sera **plus court que `rope2048`** (~19–20 h) — à étendre par la session N2 ; les GPU sont à 99–100 %.
+
+**WIP de leurs sessions** : B13 pragmatique 130 phrases (`pensee-pragmatique-130.json`, `rapport-pensee-pragmatique-neuronale.md`), `pensee-quatre-modes.json`, `bloc_linguistique.py` ; S `rapport-s-paragraphes.md`. **Runs** : `kd2` (log bufferisé), `rope2048` **6 300/20 000**.
+
+**Le goal reste actif** : les sessions n'ont pas clos (pragmatique, paragraphes) et la passe complète attend la fin des runs.
+
+### Tour 12 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Extend N2 resource claim for rope ETA
+- bash — Trim state B13 history and verify
+- bash — Commit trimmed state and extended claim note
+
+**Synthèse produite :**
+
+⏵ Commit état allégé et claim prolongé
 
 ## 3. Travail accompli
 
@@ -505,7 +536,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 189 autres
+- … et 198 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -663,4 +694,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 149/149 — DRVM N0.1 : LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé (9593718e, rappor
 - B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé (8cea841f, rapport-pen
 - INDEX — 606 → 608 (DRVM N0.1, VARIANCE) ; README — LA VARIANCE 150/150 AJOUTÉE ; ÉTAT 12 H 54" -m "Le catalogue généré rattrape les deux dernières fiches (DRVM 
+- ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)" -m "L'historique B13 (seuil, défaut conditionnel, run 2, élision, troisième 
 

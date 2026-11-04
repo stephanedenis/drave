@@ -35110,3 +35110,56 @@ started background job bash-114
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : ±0,0074 au pire, **150/150** |\\n\", \ … [582 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-114 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text()
+t=t.replace("from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,\n                                     NeuronalLLMChunks, NeuronalLLMCompose,\n                                     NeuronalLLMPOS, Parallele)",
+"from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,\n                                     NeuronalLLMChunks, NeuronalLLMCompose,\n                                     NeuronalLLMPOS, NeuronalLLMPragmatique, Parallele)")
+t=t.replace("    compose = NeuronalLLMCompose(pos, chunks)",
+"    pragma = NeuronalLLMPragmatique(\"deepseek-chat\", transport=transport)\n    compose = NeuronalLLMCompose(pos, chunks, pragma)")
+p.write_text(t); print('pragma dans le banc des quatre modes')
+PY
+DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes-432-pragma.json 2>&1 | tail -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-114"}`
+
+  ```
+pragma dans le banc des quatre modes
+parallele_niveau · 0.4 s
+cascade_niveau · 0.4 s
+heuristique {'pos': 0.7444, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+neuronal {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.963, 'modalite': 0.9722, 'double_sens': 0.9884}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+parallele_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'frac
+… [59 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432-pragma.json'))\nprint('refus', d.get('refus'), '| seuils', d.get('seuils'))\nfor k in ('heuristique','neuronal','parallele_niveau'):\n    m=d['modes'][k … [331 caractères tronqués]`
+
+  ```
+refus 0 | seuils {'heuristique': True, 'neuronal': True, 'parallele': True, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': True}
+heuristique POS 0.7444 | syn 0.2524 | tête 0.4516 | pragma {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}
+neuronal POS 0.9389 | syn 0.8241 | tête 0.8797 | pragma {'acte': 0.9954, 'negation': 0.963, 'modalite': 0.9722, 'double_sens': 0.9884}
+parallele_niveau POS 0.9389 | syn 0.8241 | tête 0.8797 | pragma {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}
+api {'appels': 1287, 'tokens': 314369, 'latence_s': 1236.394}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 14 h 40 HNE\", t)\np.write_text( … [842 caractères tronqués]`

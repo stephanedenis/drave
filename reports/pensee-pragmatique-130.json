@@ -1,0 +1,20 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "151/151",
+ "phrases": 130,
+ "pos": 0.9677,
+ "syn": 0.8795,
+ "tete": 0.9202,
+ "pragma": {
+  "acte": 1.0,
+  "negation": 1.0,
+  "modalite": 0.9846,
+  "double_sens": 0.9769
+ },
+ "limites": [
+  "130 phrases (échantillon)",
+  "3 taggers par phrase",
+  "la passe complète est en cours"
+ ]
+}

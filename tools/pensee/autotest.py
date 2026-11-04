@@ -2154,6 +2154,19 @@ def t147_variance() -> tuple[bool, str]:
         f"temp 0,3 : POS {pos}, tête {tete}")
 
 
+def t148_pragmatique() -> tuple[bool, str]:
+    """La pragmatique neuronale : acte 1,0, négation 1,0 sur 130 phrases."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-pragmatique-130.json").read_text(encoding="utf-8"))
+    pr = d["pragma"]
+    return (d["phrases"] == 130 and abs(pr["acte"] - 1.0) < 1e-9
+            and abs(pr["negation"] - 1.0) < 1e-9 and pr["modalite"] > 0.98), (
+        f"pragma : acte {pr['acte']}, négation {pr['negation']}, "
+        f"modalité {pr['modalite']}, double sens {pr['double_sens']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2300,7 +2313,8 @@ def main() -> int:
               ("T144 seuil parallèle", t144_seuil_parallele()),
               ("T145 troisième passe", t145_troisieme_passe()),
               ("T146 DRVM N0.1", t146_drvm_n01()),
-              ("T147 variance", t147_variance())]
+              ("T147 variance", t147_variance()),
+              ("T148 pragmatique neuronale", t148_pragmatique())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
