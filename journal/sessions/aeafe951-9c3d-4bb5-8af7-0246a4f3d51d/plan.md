@@ -16,10 +16,15 @@
 - **Fichiers réservés** : `reports/rapport-ocr-pdf-restants.md`,
   `reports/ocr-pdf-restants.json`, `work/ocr/restants*`, `tools/ocr_pdf.py` (lecture seule),
   `journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/`.
-- **Heartbeat** : 2026-11-04 15:26 EST
-- **Prochaine action** : **qualifier les 8 scans** parmi les 30 `.PDF` (texte natif
-  < 50 car/page), les OCRiser avec la liste explicite, puis mesurer et écrire la fiche.
-- **État** : actif
+- **Heartbeat** : 2026-11-04 15:35 EST
+- **Prochaine action** : **intégration par le hub** — `git add reports/rapport-ocr-pdf-restants.md
+  reports/ocr-pdf-restants.json docs/pilotage/en-cours.md` ; compteur fiches **623→624**
+  (JSON 717 inchangé) ; ligne D (voir la fiche).
+- **Fait** : **8 scans / 58 p** qualifiés (22 `.PDF` natifs exclus, 307–3 688 car/p) ; OCR
+  **90,1 s** ; **4 documents / 49 p / 54 167 car.** retenus ; 3 doublons identiques au texte
+  et 1 formulaire de 210 car. nommés ; manifeste et fiche
+  [`rapport-ocr-pdf-restants`](../../../reports/rapport-ocr-pdf-restants.md).
+- **État** : en pause
 - **Plan** : 1) plan + claim cpu1 ; 2) détection sur le texte intégral (contrôle : un `.PDF`
   natif doit être exclu) ; 3) OCR `--liste` (8 ouvriers) ; 4) dédup + 8 Ko + manifeste ;
   5) fiche + JSON ; 6) ligne d'état proposée au hub, commit explicite.

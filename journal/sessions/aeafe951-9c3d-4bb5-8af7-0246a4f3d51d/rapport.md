@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 6.0 h |
+| Durée | 6.1 h |
 | Tours | 4 |
-| Messages | 127 |
-| Appels d'outils | 162 |
-| Fichiers touchés | 6 |
-| Commandes | 135 |
+| Messages | 144 |
+| Appels d'outils | 181 |
+| Fichiers touchés | 7 |
+| Commandes | 151 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -182,7 +182,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ### Tour 4 — peux-tu prendre une tâche
 
-*24 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Check repo, runs, and GPU state
 - bash — Read A8.3b report and list A8.3 files
@@ -198,11 +198,11 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - bash — Read the OCR pipeline script
 - bash — Check tesseract install and find uppercase PDF scans
 - bash — Inspect the CEGEP OCR manifest structure
-- … et 10 autres
+- … et 27 autres
 
 **Synthèse produite :**
 
-⏵ 8 scans / 58 pages qualifiés (22 `.PDF` natifs exclus) — OCR en cours
+⏵ Doublons confirmés au texte (3/3) — rédaction de la fiche D
 
 ## 3. Travail accompli
 
@@ -216,6 +216,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-inventaire.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-inventaire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf-restants.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -259,7 +260,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 95 autres
+- … et 111 autres
 
 ## 4. Mesures et résultats marquants
 

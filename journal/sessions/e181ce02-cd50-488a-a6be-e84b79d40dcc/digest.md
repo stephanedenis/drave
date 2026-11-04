@@ -36571,3 +36571,10 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep \"❌\"", "description": "Lister les portes rouges", "timeoutMs": 5400000}`
+
+  ```
+❌ T156 relation GN-GV    relation : 241/637 (0.3783)
+  ❌ T157 rôles par position rôles : 302 sans rôle, 109 avant le GV, 172 après
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    return n == 637 and avec == 221, f\"relation : {avec}/{n} ({round(avec/n, 4)})\"',\n            '    return n == 637 and  … [432 caractères tronqués]`

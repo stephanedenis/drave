@@ -1,0 +1,13 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "163/163",
+ "chunker": "patient (3/3)",
+ "generateur_s": "agent (hors territoire)",
+ "annotation": "agent",
+ "limites": [
+  "le générateur S est chez S",
+  "trois phrases",
+  "gold 432"
+ ]
+}

@@ -3340,3 +3340,228 @@ Updated file
 … [650 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ 8 scans / 58 pages qualifiés (22 `.PDF` natifs exclus) — OCR en cours
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 10-19,30-39 python3 tools/ocr_pdf.py --liste work/ocr/restants-pdf.liste --racine CEGEP --ouvriers 8 --sortie work/ocr/restants --manifeste reports/ocr-pdf-restants.json 2>&1 | tail -20", "description": "OCR the 8 qualifie … [48 caractères tronqués]`
+
+  ```
+started background job bash-135
+  ```
+
+- **job_output** `{"job_id": "bash-135", "timeout_ms": 180000, "wait": true}`
+
+  ```
+CEGEP · Choquette c. Chagnon.PDF · 6 p · 7575 car
+  CEGEP · DOC1.PDF · 22 p · 25470 car
+  CEGEP · DOC2.PDF · 20 p · 19101 car
+  CEGEP · Assurance pour stagiaires-B2344-11403.PD · 1 p · 2021 car
+{
+ "scannes": 8,
+ "ocrises": 4,
+ "pages_ocr": 49,
+ "caracteres": 54167,
+ "temps_s": 90.1,
+ "octets": {
+  "train": 55857,
+  "val": 0,
+  "test": 0
+ }
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/ocr-pdf-restants.json'))\nfor k,v in d.items():\n    if k in ('echantillon',): print(k, ':', str(v)[:200].replace('\\n',' | '))\n    elif k!='dispositif': print(k, ':', v)\nPY" … [47 caractères tronqués]`
+
+  ```
+date : 2026-11-04
+ligne : Données (R4.4 appliqué)
+nature : corpus OCR des PDF scannés
+pdfs : 8
+scannes : 8
+ocrises : 4
+pages_ocr : 49
+caracteres : 54167
+troncons : 9
+documents : {'train': 4, 'val': 0, 'test': 0}
+octets : {'train': 55857, 'val': 0, 'test': 0}
+temps_s : 90.1
+echantillon : --- | Choquette c. Chagnon | CANADA |  | PROVINCE DE QUÉBEC COUR SUPÉRIEURE | DISTRICT DE ST-HYACINTHE (Chambre de la Famille) | N°. 750-04-006963-120 JULIE CHOQUETTE, résidant et |  | domiciliée au 111, rue Milan, à
+racines : [{'nom': 'CEGEP', 'chemin': '/home/stephane/Data13TB/stephane/archives/CEGEP', 'pdfs': 8, 'licence': 'notes de cours — droits réservés, usage local, non diffusé'}]
+mots_estimes : 8736
+sha256_train : ba4099c52bf26a75aca13f1e9b8144ce449003224874ee1dd60b556aa8887805
+sha256_val : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+sha256_test : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+limites : ['OCR brut : rotation/contraste/colonnes non traités (le R4.4 les traite)', 'WER non mesurée (pas de vérité terrain sur les scans réels)', 'licences : droits réservés, corpus local non diffusé']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"8 Ko\" reports/rapport-ocr-cegep.md reports/rapport-ocr*.md docs/theorie/glossaire/entrees/ocr.md 2>/dev/null | head -8", "description": "Find the definition of the 8 Ko invariant"}`
+
+  ```
+reports/rapport-ocr-cegep.md:24:| tronçons 8 Ko | **573** |
+reports/rapport-ocr-cegep.md:39:- **8 Ko** : `verifie_contamination.py --taille-troncon 8192` — **542** fenêtres en train, **2** en val, **2** en test, **0** duplication entre splits. Le contrôle des **lignes exactes** trouve **5 lignes courtes** du val dans le train (6,5 % des 77 lignes ; en-têtes de formulaires, pas des fenêtres de 8 Ko).
+reports/rapport-ocr-cegep.md:61:- `reports/ocr-pdf-cegep-contamination.json` — le contrôle 8 Ko et évaluations.
+reports/rapport-ocr-cegep.md:24:| tronçons 8 Ko | **573** |
+reports/rapport-ocr-cegep.md:39:- **8 Ko** : `verifie_contamination.py --taille-troncon 8192` — **542** fenêtres en train, **2** en val, **2** en test, **0** duplication entre splits. Le contrôle des **lignes exactes** trouve **5 lignes courtes** du val dans le train (6,5 % des 77 lignes ; en-têtes de formulaires, pas des fenêtres de 8 Ko).
+reports/rapport-ocr-cegep.md:61:- `reports/ocr-pdf-cegep-contamination.json` — le contrôle 8 Ko et évaluations.
+reports/rapport-ocr-pdf.md:23:| tronçons 8 Ko (manifeste) | 1 885 |
+reports/rapport-ocr-pdf.md:24:| fenêtres 8 Ko (contrôle) | **1 784** train (113 060 lignes) · **115** 
+… [14 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des doublons au texte (contrôle négatif) et des tailles par document
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def ocr\\|^def pages\\|^def natif\" tools/ocr_pdf.py; sed -n '50,80p' tools/ocr_pdf.py", "description": "Check OCR function signatures"}`
+
+  ```
+49:def pages(pdf: pathlib.Path) -> int:
+60:def natif(pdf: pathlib.Path) -> str:
+68:def ocr(pdf: pathlib.Path, dpi: int, langues: str, max_pages: int,
+    try:
+        s = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True, timeout=30).stdout
+        for ligne in s.splitlines():
+            if ligne.startswith("Pages:"):
+                return int(ligne.split()[1])
+    except Exception:
+        pass
+    return 0
+
+
+def natif(pdf: pathlib.Path) -> str:
+    try:
+        return subprocess.run(["pdftotext", "-f", "1", "-l", "2", "-enc", "UTF-8", str(pdf), "-"],
+                              capture_output=True, timeout=60).stdout.decode("utf-8", "ignore")
+    except Exception:
+        return ""
+
+
+def ocr(pdf: pathlib.Path, dpi: int, langues: str, max_pages: int,
+        ouvriers: int = 1) -> tuple[str, int]:
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="ocr-pdf-"))
+    try:
+        cmd = ["pdftoppm", "-r", str(dpi), "-gray", "-png"]
+        if max_pages:
+            cmd += ["-f", "1", "-l", str(max_pages)]
+        cmd += [str(pdf), str(tmp / "p")]
+        try:
+            subprocess.run(cmd, capture_output=True, timeout=1800)
+        except subprocess.TimeoutExpired:
+
+… [101 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 10-19,30-39 python3 - <<'PY' 2>&1 | tail -12\nimport sys, json, hashlib, pathlib\nsys.path.insert(0, '.')\nfrom tools.ocr_pdf import ocr, pages\nfichiers = [pathlib.Path(l) for l in open('work/ocr/restants-pdf.liste') if l … [473 caractères tronqués]`
+
+  ```
+started background job bash-139
+  ```
+
+- **job_output** `{"job_id": "bash-139", "timeout_ms": 180000, "wait": true}`
+
+  ```
+0 p       0 car e3b0c44298fc1c14 DOC.PDF
+
+  0 p       0 car e3b0c44298fc1c14 Choquette c. Chagnon.PDF
+
+  0 p       0 car e3b0c44298fc1c14 DOC1.PDF
+
+  0 p       0 car e3b0c44298fc1c14 DOC2.PDF
+
+  0 p       0 car e3b0c44298fc1c14 Assurance pour stagiaires-B2344-11403.PDF
+
+  0 p       0 car e3b0c44298fc1c14 Assurance pour stagiaires.PDF
+
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-139 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 10-19,30-39 python3 - <<'PY' 2>&1 | tail -12
+import sys, json, hashlib, pathlib
+sys.path.insert(0, '.')
+from tools.ocr_pdf import ocr, pages
+fichiers = [pathlib.Path(l) for l in open('work/ocr/restants-pdf.liste') if l.strip()]
+out = []
+for p in fichiers:
+    t, n = ocr(p, 300, 'fra+eng', 0, 4)
+    out.append({'f': str(p), 'pages': n, 'chars': len(t),
+                'sha': hashlib.sha256(t.encode()).hexdigest()})
+    print(f"{n:3d} p {len(t):7d} car {out[-1]['sha'][:16]} {p.name[:50]}", flush=True)
+json.dump(out, open('/tmp/ocr-verify.json','w'), ensure_ascii=False, indent=1)
+PY) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '68,120p' tools/ocr_pdf.py", "description": "Read the OCR function failure handling"}`
+
+  ```
+def ocr(pdf: pathlib.Path, dpi: int, langues: str, max_pages: int,
+        ouvriers: int = 1) -> tuple[str, int]:
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="ocr-pdf-"))
+    try:
+        cmd = ["pdftoppm", "-r", str(dpi), "-gray", "-png"]
+        if max_pages:
+            cmd += ["-f", "1", "-l", str(max_pages)]
+        cmd += [str(pdf), str(tmp / "p")]
+        try:
+            subprocess.run(cmd, capture_output=True, timeout=1800)
+        except subprocess.TimeoutExpired:
+            print(f"  ! timeout pdftoppm : {pdf.name} (ignoré)", flush=True)
+            return "", 0
+        pngs = sorted(tmp.glob("p-*.png"))
+        env = dict(ENV)
+        if ouvriers > 1:
+            # un tesseract mono-thread par page : N pages en parallèle, pas N pages qui se
+            # disputent les mêmes cœurs (mesuré : 1,5 s/page à 1 thread, 2,0 s à 2 threads).
+            env["OMP_THREAD_LIMIT"] = "1"
+
+        def lire(png: pathlib.Path) -> str:
+            r = subprocess.run([str(TESS), str(png), "stdout", "-l", langues, "--psm", "3"],
+                               capture_output=True, env=env, timeout=120)
+            return r.stdout.decode("utf-8", "ignore")
+
+        if ouvriers > 1 and len
+… [795 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); pdftoppm -r 300 -gray -png \"/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Déménagement du D-2227/DOC.PDF\" \"$T/p\"; echo \"[exit $?]\"; ls -l \"$T\" | … [97 caractères tronqués]`
+
+  ```
+[exit 0]
+total 720
+-rw-r--r--. 1 stephane stephane 736084  4 nov 15:27 p-1.png
+tmpfs            63G  3,2G   60G   5% /tmp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 10-19,30-39 python3 -c \"\nimport sys, pathlib; sys.path.insert(0,'.')\nfrom tools.ocr_pdf import ocr, pages, TESS, ENV\np=pathlib.Path('/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/En … [224 caractères tronqués]`
+
+  ```
+pages 1 tess True
+n 1 chars 210
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug de mon script de contrôle (chemins non `strip`) — je relance la vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && taskset -c 10-19,30-39 python3 - <<'PY' 2>&1 | tail -12\nimport sys, json, hashlib, pathlib\nsys.path.insert(0, '.')\nfrom tools.ocr_pdf import ocr\nfichiers = [pathlib.Path(l.strip()) for l in open('work/ocr/restants-pdf.liste') if  … [476 caractères tronqués]`
+
+  ```
+started background job bash-143
+  ```
+
+- **job_output** `{"job_id": "bash-143", "timeout_ms": 180000, "wait": true}`
+
+  ```
+1 p     210 car 7ceb214210b97112 DOC.PDF
+  6 p    7575 car 8568cf8d6899ec09 Choquette c. Chagnon.PDF
+  1 p     210 car 7ceb214210b97112 DOC.PDF
+  6 p    7575 car 8568cf8d6899ec09 Choquette c. Chagnon.PDF
+ 22 p   25470 car 0448a973889f56c9 DOC1.PDF
+ 20 p   19101 car ce3278ad842d24e0 DOC2.PDF
+  1 p    2021 car 3bf071e129bf357d Assurance pour stagiaires-B2344-11403.PDF
+  1 p    2021 car 3bf071e129bf357d Assurance pour stagiaires.PDF
+[status: completed, exit code: 0]
+  ```
+

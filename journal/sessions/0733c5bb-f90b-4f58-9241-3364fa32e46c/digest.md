@@ -10936,3 +10936,68 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md) … [1230 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3989 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-70]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-70", "timeout_ms": 180000, "wait": true}`
+
+  ```
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"=== fraîcheur ===\"; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -1; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; echo \"=== journ … [390 caractères tronqués]`
+
+  ```
+=== revue ===
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 716 JSON, le disque en a 717
+=== fraîcheur ===
+  ✅ aucun fait commité après le dernier état
+=== en-cours ===
+  ✅ état court, structuré, multi-session et reprenable
+=== journal ===
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== T0 ===
+  T0 max : 3989 mots (budget 4 000)
+=== GPU ===
+0, 1 MiB
+1, 1 MiB
+=== commits du 04/11 ===
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+2b0832ca N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL
+9c9d7b22 ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15
+a4b3200c ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS
+c2f1c7da ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS
+97c6ba26 ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)
+2fec7c79 ÉTAT — HEURE 14 H 39 ; B13 159/159, N2 α = 0,9 À 10 700 PAS
+9815d435 ÉTAT — HEURE 14 H 27 ; B13 158/158, N2 α = 0,9 À 9 250 PAS
+76da3f9f ÉTAT — HEURE 14 H 25 ; B13 158/158, N2 α = 0,9 À 8 800 PAS
+465dc04f ÉTAT — HEURE 14 H 21 ; B13 158/158, N2 
+… [1551 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance du complément 2 048 en deux moitiés (checkpoint à 10 000 pas) et compteur au disque
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_2048_2x10k.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_2048_2x10k.sh — le complément 2 048 en DEUX moitiés (un point de contrôle toutes les 2 h 50,\n# pour survivre aux reboots) :\n#   1. 10 000 pas = 164 Mo : le point « octets co … [1776 caractères tronqués]`
+
+  ```
+2 048 en deux moitiés lancé pid 631204
+compteurs 623 717
+15:27:38
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep -E \"T0\"; sleep 240; date '+%H:%M:%S'; tail -1 work/n2ac/rope2048-10k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --forma … [87 caractères tronqués]`

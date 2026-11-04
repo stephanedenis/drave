@@ -14557,3 +14557,42 @@ Another git process seems to
 ⏵ La ligne de la production manquait dans l'état : je l'ajoute, puis commit 163 + production
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**repondération 4× : −0,05**.\", \"**repondération 4× : −0,05** ; **production (chaine) : −0,06 à parité stricte (3,1119/2,8 … [951 caractères tronqués]`
+
+  ```
+ligne 95 OK
+  T0 max : 3998 mots (budget 4 000)
+  revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verrou git encore tenu : je retente le commit des deux faits (163 + production)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; ls -l .git/index.lock ; pgrep -af \"git (commit|add)\" | head -3 ; else git add docs/pilotage/en-cour … [584 caractères tronqués]`
+
+  ```
+[stderr]
+  ❌ commit refusé : 3 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/pensee-passifs-sans-par.json
+     · reports/rapport-pensee-passifs-sans-par.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook veut les 3 faits dans le diff d'état : je rementionne la fiche/le JSON et la roadmap, puis commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**passifs : règle 5/5 fausse ; correctifs `par`/sans `par` hors du chemin S**\", \"**passifs : règle 5/5 fausse ; correctifs … [1037 caractères tronqués]`

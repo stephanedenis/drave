@@ -68,7 +68,7 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position ; relation 0,8195 (522/637) surévaluée** ; **passifs : règle 5/5 fausse ; correctifs `par`/sans `par` hors du chemin S** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
+- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position ; relation 0,8195 (522/637) surévaluée** ; **passifs : règle 5/5 fausse ; correctifs `par`/sans `par` hors du chemin S** ; [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md) (roadmap 163) ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
 - **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **T132/T133**, **gold 200+** ; le qualifier fenêtre attend une version API (serveur local interdit).
@@ -105,7 +105,7 @@
 |---|---|---|
 | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **623** / **716** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **623** / **717** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 

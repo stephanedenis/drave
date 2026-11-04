@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 8.0 h |
+| Durée | 8.1 h |
 | Tours | 48 |
-| Messages | 491 |
-| Appels d'outils | 707 |
+| Messages | 493 |
+| Appels d'outils | 709 |
 | Fichiers touchés | 15 |
-| Commandes | 524 |
+| Commandes | 526 |
 | Sous-agents | 0 |
-| Commits | 65 |
+| Commits | 67 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1457,7 +1457,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 48 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1470,10 +1470,12 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Stage state and commit 163
 - bash — Add N2 production line to state and stage
 - bash — Add production line and commit 163 + N2
+- bash — Retry commit for 163 and production
+- bash — Remention facts in state and commit
 
 **Synthèse produite :**
 
-⏵ La ligne de la production manquait dans l'état : je l'ajoute, puis commit 163 + production
+⏵ Le hook veut les 3 faits dans le diff d'état : je rementionne la fiche/le JSON et la roadmap, puis commit
 
 ## 3. Travail accompli
 
@@ -1539,7 +1541,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 484 autres
+- … et 486 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1667,7 +1669,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-12 sorties en erreur ou divergentes. Les premières :
+14 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -1681,6 +1683,8 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T16** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8f00b73a12188dac328eb68ed195634e4adb52fb but expected 67286d12a945a406e0513bdfe282f092d5b28a53 [exit code: 128]
 - **T48** : 71:- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position (129 avant = agent, 172 après = patient) ; relation 0,8195 (522/637) su
 - **T48** : # N2 — La distillation native : le professeur long dans un élève à fenêtre courte  > **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03/04 · **Verdict — ERRATUM** : > le gain annoncé 
+- **T48** : ligne 95 OK   T0 max : 3998 mots (budget 4 000)   revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)   ✅ tout passe : classement, structure, annotation, fraîch
+- **T48** : [stderr]   ❌ commit refusé : 3 fait(s) stagé(s) sans docs/pilotage/en-cours.md      · docs/pilotage/roadmap.md      · reports/pensee-passifs-sans-par.json      · reports/rapport-pensee-passifs-sans-pa
 
 ## 6. Commits
 
@@ -1748,5 +1752,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
 - B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
 - B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
+- B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)" -m "Deux faits : côté B13, le chunker détecte l
+- B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)" -m "Deux faits : côté B13, le chunker détecte l
 - B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)" -m "Deux faits : côté B13, le chunker détecte l
 
