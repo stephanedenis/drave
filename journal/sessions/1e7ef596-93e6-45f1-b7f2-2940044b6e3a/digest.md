@@ -9950,3 +9950,137 @@ M  docs/pilotage/roadmap.md
 ⏵ Commit correction : le cache était inactif, le modèle est déterministe
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git commit -m \"TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION É … [621 caractères tronqués]`
+
+  ```
+[s/v7 f9ccaf96] TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN
+ 25 files changed, 585 insertions(+), 77 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 17 (correction cache → déterminisme)
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [337 caractères tronqués]`
+
+  ```
+f9ccaf96 TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN
+b710b7e6 B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+62672792 B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155
+---STATUS---
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3995 mots (budget 4 000)
+---LIENS---
+  ✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas  4350 · perte 0.9353 · dure 1.0106 · douce 0.3235 · 2078 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 17 : cache → déterminisme corrigé, le titre de la fiche B13 attend encore
+
+**Cycle 17 — l'hypothèse du cache est corrigée dans tout le pilotage.**
+
+- **Correction de fond** : le cache du client était **inactif** (`cache=False` par défaut). À 0,3, le modèle rend exactement les mêmes réponses sur ces invites : il est **déterministe**, et la variance réelle n'est **pas mesurable** par ce banc. L'état, la roadmap, les chantiers et le plan-travail passent du « cache » au **déterminisme** ; la retouche B13 (fiche, JSON, outils, implémentation, README) a été emportée par le commit `f9ccaf96`.
+- **Incohérence nommée** : le **titre** de `rapport-pensee-tirages` dit encore « le cache masque la variance » — le corps et le JSON sont corrigés, la session B13 reste à aligner le titre à son prochain commit. Le hub ne touche pas à sa fiche.
+- **Contrôles** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 625 mots**, **T0 3 995 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **4 350 pas** (perte 0,935), GPU à 99–100 %.
+
+**WIP** : B13 titre de fiche + `pensee-quatre-modes.json` ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : titre B13 à recevoir, α = 0,9 à finir, puis la passe complète.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 18/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 18 : instantané, audit et faits committés depuis le cycle 17
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+f9ccaf96 TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN
+b710b7e6 B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+62672792 B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155
+2ee74678 INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)
+8a0de643 ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+67286d12 BACKLOG N2 — L'ERRATUM DE LA DISTILLATION (LE +0,10 ÉTAIT UNE REPONDÉRATION) ET LA PAIRE PROPRE DANS LA PAGE
+bd4298fe INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)
+---STATUS---
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 248 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 119 min · docs/pilota
+… [786 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3995 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"tirages\\|cache\\|déterministe\\|B13 \\*\\*15\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== FICHE TITRE ===\" ; head -2 reports/rapport-pensee-tira … [193 caractères tronqués]`
+
+  ```
+13 h 48
+# En ce moment
+
+**Mis à jour : 2026-11-04, 15 h 25 HNE (heure locale, EST).**
+71:- **Fait** : B13 **155/155** ; gold **432** (réel → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; **pragmatique 130 qualifie** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; **tirages à 0,3 : 0,9838 ×3 — variance nulle ; le cache était inactif (déterminisme sur ces invites) ; variance réelle non mesurable** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md).
+108:| fichiers / JSON de résultats | **615** / **708** | `reports/*.md` / `reports/*.json` |
+=== FICHE TITRE ===
+# B13 — les trois tirages à 0,3 : 0,9838 exactement,
+… [121 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état a repris l'heure de session (15 h 25) ; je la recale et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\*Mis … [1124 caractères tronqués]`

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**44 commits** · **5 session(s)** · **6 thème(s)**
+**45 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 20 | [docs.md](docs.md) |
 | mesures | 16 | [mesures.md](mesures.md) |
-| modele | 1 | [modele.md](modele.md) |
+| modele | 2 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -76,6 +76,7 @@
 | 13:36 | `2ee74678` | INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35) |
 | 13:38 | `62672792` | B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155 |
 | 13:41 | `b710b7e6` | B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL |
+| 13:46 | `f9ccaf96` | TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN |
 
 ## Le récit de la journée (écrit à la main)
 
