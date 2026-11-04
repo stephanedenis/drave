@@ -5642,3 +5642,111 @@ en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
 ⏵ Commit de l'état B13 148/148 (partiel, sans les WIP)
 
 - **bash** `{"command": "git commit --only docs/pilotage/en-cours.md -m \"ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19\" -m \"La troisième passe (rapport-pensee-troisieme-passe, JSON pensee-troisieme-passe) est committée dans 625271c8 (emportée par l'index) ; l … [318 caractères tronqués]`
+
+  ```
+[s/v7 7b11a93f] ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19
+ 13 files changed, 369 insertions(+), 33 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 2
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [130 caractères tronqués]`
+
+  ```
+7b11a93f ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19
+625271c8 INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+b58cd52f ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/drvm.py
+ M tools/pensee/autotest.py
+ M tools/tests/linguistique/qualifier_quatre_modes.py
+?? reports/pensee-drvm-n01.json
+---REVUE---
+  revue de documentation · 610 fiche(s) · 696 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3973 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---RUNS---\" ; cd /home/stephane/Data13TB/stephane/GitHub/ … [212 caractères tronqués]`
+
+  ```
+✅ 2920 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1968 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---RUNS---
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+pas   4950 · perte 1.0201 · PPL val 2.637 · 9901 s
+0, 100 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Le state de session a déjà mis les compteurs à 610/696 : je vérifie et je commite l'état
+
+- **bash** `{"command": "git diff -- docs/pilotage/en-cours.md | head -30", "description": "Inspect session state update"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 70c8cd35..a226bae9 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 14 h 10 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 14 h 15 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -105,7 +105,7 @@
+ |---|---|---|
+ | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **609** / **695** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **610** / **696** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
+  ```
+
+### 🤖 Assistant
+
+⏵ État : compteurs 610/696 et heure réelle, commit partiel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 ; date '+%H h %M' ; cp docs/pilotage/en-cours.md /tmp/state.c.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.c.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=Tr … [635 caractères tronqués]`
+
+  ```
+7b11a93f ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19
+625271c8 INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+12 h 18
+  en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3973 mots (budget 4 000)
+  revue de documentation · 610 fiche(s) · 696 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+# En ce moment
+
+**Mis à jour : 2026-11-04, 12 h 18 HNE (heure locale, EST).**
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de l'état (compteurs 610/696, heure réelle) par l'index
+
+- **bash** `{"command": "git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---COMMIT---\" ; git commit -m \"ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)\" -m \"Les nouveaux rapports de la session B13 (DRVM N0/N1, pensee-drvm-n01.json) et de S (rapport-s-paragraphes.md) sont su … [284 caractères tronqués]`

@@ -34711,3 +34711,30 @@ VERSION 0 | MAGIC b'DRVM' | blocs connus ['bridge', 'early_head', 'input', 'loca
 6) refus corruption : ÉCHEC
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drvm.py'); t=p.read_text()\nt=t.replace(\"def read_drvm(path: str | os.PathLike) -> DrvmFile:\\n    \\\"\\\"\\\"Lit un DRVM, vérifie l'en-tête, le manifeste et le payload.\\\"\\ … [1570 caractères tronqués]`
+
+  ```
+payload vérifié
+refus corruption : hash du payload invalide
+verifier=False : accepté (assumé)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-drvm-n01.md <<'MD'\n# N0.1 — DRVM se lit-il ? Oui, et le payload est enfin vérifié\n\n> **Ligne de roadmap** : **N (le natif)** · **Date** : 2026-11-04 · **Verdict** : ✅ **149/149\n> portes** : la porte **N0.1** … [7005 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 610 fiche(s) · 696 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2806 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-troisieme-passe.md`](rapport-pensee-troisieme-passe.md) | **B13** — la troisième passe : variance nulle, 7/7 seu … [146 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **job_output** `{"job_id": "bash-87", "timeout_ms": 600000, "wait": true}`

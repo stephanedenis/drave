@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 4.9 h |
 | Tours | 7 |
-| Messages | 161 |
-| Appels d'outils | 309 |
+| Messages | 165 |
+| Appels d'outils | 314 |
 | Fichiers touchés | 14 |
-| Commandes | 169 |
+| Commandes | 174 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -279,7 +279,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 7 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -291,10 +291,15 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Read third-pass result and current status
 - bash — Integrate B13 third pass into state and verify
 - bash — Commit only the state with third-pass fact
+- bash — Verify cycle commits and checks
+- bash — Verify links, journal, backlog and runs
+- bash — Inspect session state update
+- bash — Correct state time and verify counters
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Commit de l'état B13 148/148 (partiel, sans les WIP)
+⏵ Commit de l'état (compteurs 610/696, heure réelle) par l'index
 
 ## 3. Travail accompli
 
@@ -359,7 +364,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 129 autres
+- … et 134 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -500,4 +505,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE" -m "Le fait 147/147 et sa fiche (rapport-pensee-seuil-parallele)
 - INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16" -m "Le catalogue généré était périmé de 10 fiches : N3 (inventaire)
 - ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19" -m "La troisième passe (rapport-pensee-troisieme-passe, JSON pe
+- ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)" -m "Les nouveaux rapports de la session B13 (DRVM N0/N1, pensee-drvm-n01.json) et de S (rapport-s-paragraph
 

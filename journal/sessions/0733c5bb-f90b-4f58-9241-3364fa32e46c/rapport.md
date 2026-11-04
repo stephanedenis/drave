@@ -7,10 +7,10 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 43.9 h |
+| Durée | 44.1 h |
 | Tours | 8 |
-| Messages | 763 |
-| Appels d'outils | 709 |
+| Messages | 765 |
+| Appels d'outils | 710 |
 | Fichiers touchés | 27 |
 | Commandes | 525 |
 | Sous-agents | 0 |
@@ -255,7 +255,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 8 — reprends
 
-*37 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Check time, runs, GPU and git state
 - bash — Inspect relaunched runs and reboot commit
