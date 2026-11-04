@@ -13005,3 +13005,205 @@ heure 14 h 45
 ⏵ Le B13 a déjà produit les rôles (620/713) ; je commite l'heure et je lis le verdict
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -10 reports/rapport-pensee-roles.md 2>/dev/null ; echo \"=== ÉTAT RÔLES ? ===\" ; grep -n \"rôles\\|roles\" docs/pilotage/en-cours.md | head -3 ; for i in $(seq 1 12); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e . … [411 caractères tronqués]`
+
+  ```
+# B13 — les 322 GN sans rôle : 129 avant le GV, 172 après
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+> **160/160 portes** : les **322 GN sans rôle** sont **301 avec un GV** ; la **position** tranche :
+> **129 avant** le GV (sujet probable → `agent`), **172 après** (objet probable → `patient`).
+> La règle de position rend la relation GN → GV **calculable pour 301 GN** au lieu de 221
+> (0,3469 → 0,4725).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+=== ÉTAT RÔLES ? ===
+51:- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+54:- **Stratégie** : une règle = trois contrôles.
+56:- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-d
+… [264 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le B13 a produit les rôles (160/160, 0,4725) ; je collecte le commit d'état
+
+- **job_output** `{"job_id": "bash-464", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[s/v7 97c6ba26] ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)
+ 15 files changed, 293 insertions(+), 40 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 36 (rôles 160/160 en WIP)
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -6 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [337 caractères tronqués]`
+
+  ```
+97c6ba26 ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)
+ff180c3a B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159
+2fec7c79 ÉTAT — HEURE 14 H 39 ; B13 159/159, N2 α = 0,9 À 10 700 PAS
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-roles.json
+?? reports/rapport-pensee-roles.md
+---REVUE---
+  revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1621 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3991 mots (budget 4 000)
+---LIENS---
+  ✅ 3016 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas 11950 · perte 0.9942 · dure 1.1350 · douce 0.2605 · 5668 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 36 : relation committée, rôles 160/160 en WIP (0,4725)
+
+**Cycle 36 — la relation est committée, les rôles arrivent.**
+
+- **B13 — la relation committée** (`ff180c3a`, 159/159) : 221/637 GN portent un rôle et un GV (0,3469) ; 322 GN sans rôle.
+- **B13 — les rôles (160/160, WIP)** : les **322 GN sans rôle** sont **301 avec un GV** ; la **position** tranche — **129 avant** le GV (sujet probable → `agent`), **172 après** (objet probable → `patient`). La règle de position rend la relation **calculable pour 301 GN** au lieu de 221 : **0,3469 → 0,4725**. Fiche et JSON produits, pas encore committés ; l'intégration suivra.
+- **État** : heure recalée à **14 h 45**, compteurs **620 / 713** (la fiche des rôles), `en-cours` **1 621 mots**, **T0 3 991 / 4 000**.
+- **Contrôles** : revue ✅ **620 / 713 / 120 docs / 83 portes** ; **3 016 liens** ✅ ; journal ✅ ; backlog ✅.
+- **Paire propre N2** : **α = 0,9** à **11 950 pas** (perte 0,994), GPU0 99 % (GPU1 libéré).
+
+**WIP** : B13 rôles (fiche/JSON), README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : les rôles à committer/intégrer, le fait S, α = 0,9 à finir, puis la passe complète.
+
+
+## Tour 42
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 37/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 37 : instantané, audit et faits committés depuis le cycle 36
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+97c6ba26 ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)
+ff180c3a B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159
+2fec7c79 ÉTAT — HEURE 14 H 39 ; B13 159/159, N2 α = 0,9 À 10 700 PAS
+e5323bc0 B13 159/159 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+9e3e2070 B13 — LES 500 PREMIERS SEGMENTS : 294 GN, 206 GV, LE SVO NU N'A PAS DE CIBLE ; 158/158
+9815d435 ÉTAT — HEURE 14 H 27 ; B13 158/158, N2 α = 0,9 À 9 250 PAS
+76da3f9f ÉTAT — HEURE 14 H 25 ; B13 158/158, N2 α = 0,9 À 8 800 PAS
+465dc04f ÉTAT — HEURE 14 H 21 ; B13 158/158, N2 α = 0,9 À 8 350 PAS
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-roles.json
+?? reports/rapport-pensee-roles.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 307 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 178 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>
+… [693 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1621 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3991 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 3016 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 3016 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"rôles\\|roles\\|B13 \\*\\*16\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; nvidia-smi --query … [95 caractères tronqués]`
+
+  ```
+14 h 48
+# En ce moment
+
+**Mis à jour : 2026-11-04, 14 h 45 HNE (heure locale, EST).**
+51:- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+54:- **Stratégie** : une règle = trois contrôles.
+56:- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
+94:- **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
+108:| fichiers / JSON de résultats | **620** / **713** | `reports/*.md` / `reports/*.json` |
+=== A0.9 ===
+pas 12000 · perte 0.9143 · dure 1.0195 · douce 0.2647 · 5692 s
+0, 100 %
+1, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 160/160 : les rôles par position (301 GN, 0,4725) — j'intègre avec lesresserrements
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:60]); continue\n        t=t.replace(old … [2199 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3992 mots (budget 4 000)
+  revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3016 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 160/160 (rôles par position, 0,4725)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git add reports/rapport-pensee-roles.md reports/pensee-roles.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md ; for i in $(seq 1 12); do [ -e .git/index.lock ] || break;  … [631 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-471]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit du 160 tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-471", "timeout_ms": 180000, "wait": true}`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.1 h |
+| Durée | 94.2 h |
 | Tours | 165 |
-| Messages | 2042 |
-| Appels d'outils | 1756 |
+| Messages | 2043 |
+| Appels d'outils | 1757 |
 | Fichiers touchés | 25 |
-| Commandes | 1443 |
+| Commandes | 1444 |
 | Sous-agents | 2 |
-| Commits | 216 |
+| Commits | 217 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8783,11 +8783,12 @@ Je continue la file : prochain round, **l'annotation du rôle des 322 GN** — l
 
 ### Tour 165 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Analyser les 322 GN sans rôle
 - bash — Écrire la fiche des rôles par position et la porte T157
 - bash — Trim README et passer toutes les portes
+- bash — Committer les rôles par position
 
 ## 3. Travail accompli
 
@@ -8868,7 +8869,7 @@ Je continue la file : prochain round, **l'annotation du rôle des 322 GN** — l
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1403 autres
+- … et 1404 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9232,4 +9233,5 @@ Je continue la file : prochain round, **l'annotation du rôle des 322 GN** — l
 - B13 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE SUR 1863 (12,8 %) ; 157/157" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES CIBLES"; t
 - B13 — LES 500 PREMIERS SEGMENTS : 294 GN, 206 GV, LE SVO NU N'A PAS DE CIBLE ; 158/158" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "500 PREMIERS"; t
 - B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RELATION GN"; then echo "COMMI
+- B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "322 GN SANS RÔLE"; t
 

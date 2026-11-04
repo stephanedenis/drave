@@ -15,9 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-roles.md`](rapport-pensee-roles.md) | **B13** — les 322 GN sans rôle : 129 avant le GV, 172 après, relation 0,8195, **160/160** |
 | [`rapport-pensee-relation.md`](rapport-pensee-relation.md) | **B13** — la relation GN → GV : 221/637, 322 sans rôle, **159/159** |
-| [`rapport-pensee-cibles-500.md`](rapport-pensee-cibles-500.md) | **B13** — les 500 premiers segments : 294 GN, 206 GV, **158/158** |
-| [`rapport-pensee-cibles.md`](rapport-pensee-cibles.md) | **B13** — les cibles : 1624 segments sans cible sur 1863, **157/157** |
 | [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |
 | [`rapport-pensee-tirages.md`](rapport-pensee-tirages.md) | **B13** — les trois tirages : 0,9838 exactement, le modèle est déterministe, **155/155** |
 | [`rapport-pensee-soustype-variance.md`](rapport-pensee-soustype-variance.md) | **B13** — la variance du sous-type : double sens 0,9838 à 0,3, **154/154** |

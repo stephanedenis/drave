@@ -1,0 +1,16 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "160/160",
+ "sans_role": 322,
+ "avec_gv": 301,
+ "avant_gv": 129,
+ "apres_gv": 172,
+ "relation_avant": 0.3469,
+ "relation_apres": 0.8195,
+ "limites": [
+  "la position n'est pas le rôle",
+  "les passifs",
+  "gold 432"
+ ]
+}

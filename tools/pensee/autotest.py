@@ -2274,6 +2274,28 @@ def t156_relation() -> tuple[bool, str]:
     return n == 637 and avec == 221, f"relation : {avec}/{n} ({round(avec/n, 4)})"
 
 
+def t157_roles() -> tuple[bool, str]:
+    """Les 322 GN sans rôle : 129 avant le GV, 172 après."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    h = bl.Heuristique()
+    n = avant = apres = 0
+    for p in charger():
+        a = h.analyser(p["texte"], p["langue"])
+        gv = [e for e in a.etiquettes if e.niveau == "syntagme" and e.type == "GV"]
+        for e in a.etiquettes:
+            if (e.niveau == "syntagme" and e.type == "GN"
+                    and (e.meta or {}).get("role") == "groupe nominal"):
+                n += 1
+                if gv:
+                    if gv[0].debut > e.debut:
+                        avant += 1
+                    else:
+                        apres += 1
+    return n == 322 and avant == 129 and apres == 172, (
+        f"rôles : {n} sans rôle, {avant} avant le GV, {apres} après")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2429,7 +2451,8 @@ def main() -> int:
               ("T153 attachement", t153_attachement()),
               ("T154 cibles", t154_cibles()),
               ("T155 cibles 500", t155_cibles_500()),
-              ("T156 relation GN-GV", t156_relation())]
+              ("T156 relation GN-GV", t156_relation()),
+              ("T157 rôles par position", t157_roles())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
