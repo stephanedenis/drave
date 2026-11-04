@@ -10084,3 +10084,84 @@ revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ L'état a repris l'heure de session (15 h 25) ; je la recale et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\*Mis … [1124 caractères tronqués]`
+
+  ```
+heure 13 h 49
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3995 mots (budget 4 000)
+  revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-347]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit tourne en arrière-plan (hook/journal) ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-347", "wait": true, "timeout_ms": 180000}`
+
+  ```
+[stderr]
+fatal: cannot lock ref 'HEAD': is at 41629e8ee6a5c6fbca4e99480c5b547c5fae3660 but expected f9ccaf961dbca2a3a8e48a1ec63af5900c9d3bd7
+[status: completed, exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a bougé (41629e8e) pendant le commit ; je vérifie ce qui est passé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 41629e8e ===\" ; git show --stat --oneline 41629e8e | head -8 ; echo \"=== ÉTAT HEAD ===\" ; git show HEAD:docs/pilotage/en-cours.md | head -3 ; echo \"=== STATUS ===\" ; git status --short | grep -v  … [170 caractères tronqués]`
+
+  ```
+41629e8e B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+f9ccaf96 TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN
+b710b7e6 B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+=== 41629e8e ===
+41629e8e B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-04/README.md                       |   5 +-
+ journal/2026-11-04/modele.md                       |   8 +-
+ journal/README.md                                  |   2 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 134 +++++++++++++++++++++
+ .../rapport.md                                     |  43 +++++--
+ journal/sessions/MANIFEST.md                       |   6 +-
+=== ÉTAT HEAD ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 49 HNE (heure locale, EST).**
+=== STATUS ===
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-atta
+… [113 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le titre de la fiche tirages est resté « cache » : je l'aligne (corps = déterminisme) et je corrige le compteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\np=pathlib.Path('reports/rapport-pensee-tirages.md'); t=p.read_text()\nt=t.replace(\"# B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache masque la variance\", \"# B13 — les t … [907 caractères tronqués]`
+
+  ```
+titre fiche OK
+état 13 h 52
+  revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2982 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  T0 max : 3995 mots (budget 4 000)
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit : titre de la fiche aligné et compteurs 616/709
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git commit -m \"ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT I … [458 caractères tronqués]`

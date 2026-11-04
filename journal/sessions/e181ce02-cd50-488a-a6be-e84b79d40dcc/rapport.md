@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 93.1 h |
+| Durée | 93.2 h |
 | Tours | 162 |
-| Messages | 2010 |
-| Appels d'outils | 1730 |
+| Messages | 2013 |
+| Appels d'outils | 1733 |
 | Fichiers touchés | 25 |
-| Commandes | 1422 |
+| Commandes | 1425 |
 | Sous-agents | 2 |
 | Commits | 212 |
 | Compactages de contexte | 5 |
@@ -8604,7 +8604,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 
 ### Tour 162 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Deuxième tirage à 0,3 (sous-type)
 - bash — Troisième tirage à 0,3 (sous-type)
@@ -8618,6 +8618,9 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - bash — Corriger l'hypothèse du cache dans la fiche des tirages
 - bash — Trim T0 et passer les portes
 - bash — Committer l'erratum des tirages
+- bash — Mesurer l'attachement sur le gold 432
+- bash — Écrire la fiche de l'attachement et la porte T153
+- … et 1 autres
 
 ## 3. Travail accompli
 
@@ -8698,7 +8701,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1382 autres
+- … et 1385 autres
 
 ## 4. Mesures et résultats marquants
 

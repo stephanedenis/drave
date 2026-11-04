@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 6.4 h |
+| Durée | 6.5 h |
 | Tours | 23 |
-| Messages | 313 |
-| Appels d'outils | 504 |
+| Messages | 317 |
+| Appels d'outils | 508 |
 | Fichiers touchés | 15 |
-| Commandes | 347 |
+| Commandes | 350 |
 | Sous-agents | 0 |
-| Commits | 35 |
+| Commits | 36 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -773,17 +773,21 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 23 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
 - bash — Run links, backlog, journal and table gates
 - bash — Check fiche title and run status
 - bash — Correct state time and commit
+- job_output
+- bash — Inspect concurrent commit and state
+- bash — Fix fiche title and counter, verify
+- bash — Commit title fix and counters
 
 **Synthèse produite :**
 
-⏵ L'état a repris l'heure de session (15 h 25) ; je la recale et commit
+⏵ Commit : titre de la fiche aligné et compteurs 616/709
 
 ## 3. Travail accompli
 
@@ -849,7 +853,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 307 autres
+- … et 310 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1027,4 +1031,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait B13 (rapport-pensee-tirages
 - TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La retouche B13 (corps de la fiche + JSON, no
 - ÉTAT — HEURE CORRIGÉE (15 H 25 → 13 H 50) ; LA FICHE TIRAGES GARDE SON TITRE « CACHE »" -m "La session B13 avait réécrit l'heure (15 h 25) ; l'état est recalé à
+- ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE) ; COMPTEURS 616/709" -m "La session B13 avai
 

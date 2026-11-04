@@ -1,4 +1,4 @@
-# B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache masque la variance
+# B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache était inactif — le modèle est déterministe
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·
 > **Verdict** : ✅ **155/155 portes** : trois tirages à **température 0,3** donnent **0,9838,

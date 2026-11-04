@@ -35702,3 +35702,35 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-150", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at f9ccaf961dbca2a3a8e48a1ec63af5900c9d3bd7 but expected b710b7e6263cbdfdf994fb3eb3562a5e3768f265
+retry 1
+[s/v7 41629e8e] B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+ 8 files changed, 191 insertions(+), 16 deletions(-)
+COMMIT OK 2
+41629e8e B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+mer 04 nov 2026 13:50:12 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nh=bl.Heuristique()\nr=evaluer_bloc('h', h, charger())\np … [157 caractères tronqués]`
+
+  ```
+attachement {'cibles': 239, 'labels': 145, 'top1': 82, 'topk': 78, 'exact': 1, 'top1_taux': 0.3431, 'topk_taux': 0.3264, 'exact_taux': 0.0042, 'couverture': 0.6067}
+attachement_tete {'cibles': 145, 'labels': 145, 'top1': 81, 'topk': 77, 'top1_taux': 0.5586, 'topk_taux': 0.531, 'couverture': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-attachement.md <<'MD'\n# B13 — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅\n> **156/ … [6497 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2811 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nfor nom in (\"rapport-pensee-absents.md\",\"rapport-pensee-lien-auto.md\"):\n    t=re.sub(r\"\\n\\| \\[`[^\\]]*\"+re.escape(nom)+r\"`\\][^\\n … [607 caractères tronqués]`
