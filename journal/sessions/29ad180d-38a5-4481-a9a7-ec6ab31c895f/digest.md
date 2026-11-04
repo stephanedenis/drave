@@ -9191,3 +9191,61 @@ La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:
 
 on a un gros contexte et il semble que la session achève. peut-on clore la session, ou il serait mieux de compacter et continuer?
 
+### 🤖 Assistant
+
+⏵ Je recommande de clore : le cycle est mesuré et poussé, la suite dépend de toi (validation) et de la clé API. Je prépare la clôture propre de la session.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*État\\*\\*\\|^- \\*\\*Heartbeat\\*\\*\\|^- \\*\\*Prochaine action\\*\\*\\|^- \\*\\*Reprise\\*\\*\" journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md; echo \"=== en-cours S ===\"; sed -n '/### Session `2 … [251 caractères tronqués]`
+
+  ```
+16:- **Heartbeat** : 2026-11-04 11:50 EST
+17:- **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits, 8
+19:- **État** : actif
+20:- **Reprise** : le 04/11 09 h 46 ; la banque de paragraphes est passée à neuf.
+21:- **Reprise** : 2026-11-03 13 h 55 ; le retour humain (arrêt de la validation : arbre trop
+=== en-cours S ===
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(actif)*
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : analyseur, export, arbre, validation.
+- **Ambition** : nommer le rôle et la frontière GN.
+- **Stratégie** : une règle = trois contrôles.
+- **Objectif final** : gold 60, corpus 60.
+- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../repo
+… [758 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/session_report.py --help 2>&1 | head -20; echo \"=== branche ===\"; git branch --show-current; git log --oneline -1; git status -sb | head -3", "description": "Read session report usage and current branch"}`
+
+  ```
+usage: session_report.py [-h] [--repo REPO] [--session SESSION] [--quiet]
+
+options:
+  -h, --help         show this help message and exit
+  --repo REPO
+  --session SESSION
+  --quiet
+=== branche ===
+s/v7
+8c73db9b ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS
+## s/v7
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/chantiers.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; python3 - <<'PY'\nfrom pathlib import Path\np=Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'); t=p.read_text(encoding='utf-8')\nimport re\nt=re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", \ … [2065 caractères tronqués]`
+
+  ```
+2026-11-04 16:32 EST
+plan/en-cours : clôture
+  29ad180d : rapport 70 Ko, 18 tours, 17 fichiers, 113 mesures, 12 erreurs
+  ⚠ mandat périmé (282 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ⚠ mandat périmé (282 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/ docs/pilotage/en-cours.md && GIT_INDEX_FILE=/ … [684 caractères tronqués]`

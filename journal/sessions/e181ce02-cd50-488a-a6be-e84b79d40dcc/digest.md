@@ -37913,3 +37913,48 @@ python3 tools/taille_documents.py            EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-candidats-verbes.md reports/pensee-candidats-verbes.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilo … [853 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-242]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-242", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-candidats-verbes.json
+ create mode 100644 reports/rapport-pensee-candidats-verbes.md
+COMMIT OK 1
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+--- vérif :
+2
+3
+mer 04 nov 2026 16:32:31 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log --oneline -3; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; git status --porcelain | grep -E \"tools/|reports/rapport-pensee|docs/(implantation|pilotage)\" | head … [53 caractères tronqués]`
+
+  ```
+mer 04 nov 2026 16:32:39 EST
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+8c73db9b ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS
+3833a604 D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 ÉCARTÉS) ; T0 3 984
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+M  docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"164/164\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md 2>/dev/null; grep -n \"164/164\" docs/pilotage/en-cours.md | head -3", "description": "Vérifier le compte de portes dans le pilotage"}`
+
+  ```
+docs/pilotage/en-cours.md:1
+docs/pilotage/roadmap.md:0
+docs/pilotage/chantiers.md:0
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**B13** — 164/164\", \"**B13** — 165/165\")\np.write_text(t); print('B13 → 165/165')\nPY\npython3 tools/taille_documents.py … [542 caractères tronqués]`

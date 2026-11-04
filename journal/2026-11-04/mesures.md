@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,10 +31,11 @@
 | 15:03 | `36d6ef67` | B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+15) |
 | 15:29 | `d72269e0` | B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+22) |
 | 16:00 | `1f74e6cf` | B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
+| 16:30 | `f7195ce0` | B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 
 ## Chiffres du jour
 
-`0,3469` · `0,3431` · `0,0042` · `0,6067` · `0,9838` · `0,0208` · `0,9884` · `0,9954` · `3,6067` · `3,3984` · `3,3129` · `3,6452`
+`0,3264` · `0,4686` · `0,7655` · `0,3469` · `0,3431` · `0,0042` · `0,6067` · `0,9838` · `0,0208` · `0,9884` · `0,9954` · `3,6067`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -45,7 +46,7 @@
 - `206a4022-ab3c-497d-a5fa-0194931c7fa0` — Tu travailles dans le dépôt (début 2026-11-04 15:56, 0.2 h) → [rapport](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) · [digest](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 48.3 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 6.9 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 95.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 95.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -54,6 +55,7 @@
 - [reports/rapport-drvm-n01.md](../../reports/rapport-drvm-n01.md)
 - [reports/rapport-n2-distillation-native.md](../../reports/rapport-n2-distillation-native.md)
 - [reports/rapport-n3-inventaire.md](../../reports/rapport-n3-inventaire.md)
+- [reports/rapport-pensee-candidats-verbes.md](../../reports/rapport-pensee-candidats-verbes.md)
 - [reports/rapport-pensee-defaut-conditionnel.md](../../reports/rapport-pensee-defaut-conditionnel.md)
 - [reports/rapport-pensee-defaut-niveau.md](../../reports/rapport-pensee-defaut-niveau.md)
 - [reports/rapport-pensee-elision.md](../../reports/rapport-pensee-elision.md)

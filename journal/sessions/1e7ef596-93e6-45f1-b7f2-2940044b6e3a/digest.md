@@ -16907,3 +16907,27 @@ docs/pilotage
 ⏵ B13 165/165 intégré (T0 3 976) ; je corrige la dernière mention 164 et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**164/164**, gold 432\", \"**165/165**, gold 432\")\np.write_text(t); print('ligne 97 OK')\nPY\ngrep -c \"164/164\" docs/pil … [1192 caractères tronqués]`
+
+  ```
+ligne 97 OK
+docs/pilotage/en-cours.md:1
+docs/pilotage/roadmap.md:0
+docs/pilotage/chantiers.md:0
+docs/pilotage/plan-travail.md:0
+  T0 max : 3976 mots (budget 4 000)
+  revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le verrou git est tenu ; je retente le commit du 165
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; ls -l .git/index.lock ; pgrep -af \"git (commit|add)\" | head -3 ; else git add reports/rapport-pense … [1106 caractères tronqués]`

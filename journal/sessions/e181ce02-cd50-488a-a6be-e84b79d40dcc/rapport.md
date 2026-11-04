@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 95.8 h |
+| Durée | 95.9 h |
 | Tours | 172 |
-| Messages | 2137 |
-| Appels d'outils | 1840 |
+| Messages | 2141 |
+| Appels d'outils | 1844 |
 | Fichiers touchés | 25 |
-| Commandes | 1514 |
+| Commandes | 1517 |
 | Sous-agents | 2 |
-| Commits | 226 |
+| Commits | 227 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9178,7 +9178,7 @@ Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
 
 ### Tour 172 — oui
 
-*9 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Voir les lecteurs de candidats
 - bash — Ajouter les verbes aux candidats et mesurer le top-k
@@ -9188,6 +9188,9 @@ Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
 - job_output
 - bash — Passer les portes rapides
 - bash — Committer les candidats verbes et vérifier
+- bash — Vérification finale de l'état
+- bash — Vérifier le compte de portes dans le pilotage
+- bash — Aligner l'état sur 165/165 et committer
 
 **Synthèse produite :**
 
@@ -9272,7 +9275,7 @@ Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1474 autres
+- … et 1477 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9646,4 +9649,5 @@ Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
 - B13 — LA CIBLE PAR PROXIMITÉ : EXACT 0,0042 → 0,0544 (×13), TOP1 0,3975, TÊTE 0,6483 ; 164/164" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/r
 - B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164" -- tools/bloc_linguistique.py tools/pensee/autotest.py doc
 - B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-candida
+- ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "165/165 (CANDIDA
 
