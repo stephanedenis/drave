@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 93.4 h |
-| Tours | 163 |
-| Messages | 2022 |
-| Appels d'outils | 1740 |
+| Durée | 93.5 h |
+| Tours | 164 |
+| Messages | 2027 |
+| Appels d'outils | 1743 |
 | Fichiers touchés | 25 |
-| Commandes | 1431 |
+| Commandes | 1433 |
 | Sous-agents | 2 |
-| Commits | 213 |
+| Commits | 214 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -365,6 +365,8 @@
 **Tour 162** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 163** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 164** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8661,11 +8663,65 @@ Je continue la file : prochain round, **les 94 cibles sans label** — la couver
 
 ### Tour 163 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Compter les segments sans cible
 - bash — Écrire la fiche des cibles et la porte T154
 - bash — Passer toutes les portes
+- bash — Committer les cibles de l'attachement
+- job_output
+
+**Synthèse produite :**
+
+⏵ Autonomie : 13 rounds, 157/157 ; cibles 12,8 %, double sens 0,98
+
+Le round des **cibles** précise le point faible de L : **239 cibles sur 1863 segments** (12,8 %). Commits **`2db5fb4e`** (le round, emporté par le commit d'état d'une autre session) et les précédents.
+
+\## Le round
+
+| mesure | valeur |
+|---|---:|
+| segments du gold 432 | **1863** |
+| segments **sans cible** | **1624** (87,2 %) |
+| segments avec cible | **239** (12,8 %) |
+
+**Ce que ça dit** :
+
+- **L'attachement est à peine annoté** : 12,8 % des segments ont une cible ; le taux exact de 0,0042 se lit sur 239 cibles, pas sur 1863 segments.
+- **La fiche T153 sous-estimait** : elle parlait de « 94 cibles sans label » ; le vrai chiffre est **1624 segments sans cible**. La nuance est importante : le gold n'annote pas l'attachement de la plupart des segments, il annote **quelques** cibles.
+- **Deux dénominateurs, deux lectures** : la couverture 0,6067 de T153 (145 labels sur 239 cibles) et la couverture 0,1283 (239 sur 1863 segments) — il faut les nommer.
+- **La négative est explicite** : 0,1283 de couverture, ce n'est pas un gold d'attachement.
+
+\## L'état de l'autonomie (13 rounds)
+
+| # | round | résultat |
+|---|---|---|
+| 1–2 | défaut conditionnel, seuil du parallèle | niveau si la clé ; la confiance plafonne |
+| 3–4 | 3ᵉ passe, DRVM N0.1 | variance nulle ; le payload corrompu refusé |
+| 5–6 | variance 0,3, pragmatique 130 | ±0,0074 ; acte 1,0, négation 1,0 |
+| 7–8 | pragma 432, fusion par sous-type | acte 0,9954 ; double sens 0,9676 → 0,9884 |
+| 9–11 | variance sous-type, tirages, erratum | 0,9838 ; déterminisme (pas le cache) |
+| 12–13 | attachement, cibles | top1 0,3431, exact 0,0042 ; 12,8 % annotés |
+
+- **157/157 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **617 fiches / 710 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **14 h 11 HNE** ; il reste **~1 h 40** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard — le merge est à faire proprement (je ne l'ai pas tenté : la branche porte les travaux de plusieurs sessions).
+
+\## La suite
+
+1. **Annoter l'attachement** : 1863 segments est un travail réel ; commencer par les 500 premiers.
+2. **La règle d'attachement** : le top-k 0,3264 sur les 239 cibles est le seul signal.
+3. **Le merge `s/v7` → `master`** : quand les autres sessions seront au repos.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue la file : prochain round, **l'attachement des 500 premiers segments** — la couverture, 
+… [8 caractères tronqués]
+
+### Tour 164 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Diagnostiquer les 500 premiers segments sans cible
 
 ## 3. Travail accompli
 
@@ -8746,7 +8802,7 @@ Je continue la file : prochain round, **les 94 cibles sans label** — la couver
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1391 autres
+- … et 1393 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9107,4 +9163,5 @@ Je continue la file : prochain round, **les 94 cibles sans label** — la couver
 - B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "TROIS TIRAGES"; then
 - B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "ERRATUM DES TI
 - B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "L'ATTACHEM
+- B13 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE SUR 1863 (12,8 %) ; 157/157" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES CIBLES"; t
 

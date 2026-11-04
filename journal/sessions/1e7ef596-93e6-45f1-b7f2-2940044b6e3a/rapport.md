@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 6.7 h |
-| Tours | 29 |
-| Messages | 355 |
-| Appels d'outils | 552 |
+| Durée | 6.8 h |
+| Tours | 30 |
+| Messages | 361 |
+| Appels d'outils | 559 |
 | Fichiers touchés | 15 |
-| Commandes | 390 |
+| Commandes | 396 |
 | Sous-agents | 0 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -81,6 +81,8 @@
 **Tour 28** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 29** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -937,7 +939,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 29 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -947,10 +949,34 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Integrate B13 157 cibles across docs
 - bash — Trim and commit B13 157 cibles
 - job_output
+- bash — Verify cycle 24 final checks
 
 **Synthèse produite :**
 
-⏵ Le commit du 157 tourne en arrière-plan ; je collecte le résultat
+⏵ Cycle 24 : B13 157/157 (cibles, couverture réelle 0,1283) intégré
+
+**Cycle 24 — la couverture de l'attachement est corrigée.**
+
+- **B13 157/157** : les **cibles** de l'attachement — le dénominateur fait **1863 segments**, dont **1624 sans cible** dans le gold (**87,2 %**). Le « 94 cibles sans label » de la fiche précédente était une **sous-estimation**. La **couverture réelle** est **239/1863 = 0,1283** : le **0,6067** ne valait que sur les cibles **annotées**. Fiche et JSON committés (`2db5fb4e`) ; état, roadmap, chantiers et plan-travail passent à 157/157 ; le « Fait » est resserré (pragmatique 130 et tirages condensés) — **T0 3 986 / 4 000**, `en-cours` **1 616 mots**.
+- **Contrôles** : revue ✅ **617 fiches / 710 JSON / 120 docs / 83 portes** ; **2 989 liens** ✅ ; journal ✅ ; backlog ✅.
+- **Paire propre N2** : **α = 0,9** à **7 100 pas** (perte 0,967), GPU0 99 % / GPU1 99 %.
+
+**WIP** : B13 `pensee-quatre-modes.json` ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : la suite B13 et le fait S à recevoir, α = 0,9 à finir, puis la passe complète.
+
+### Tour 30 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state and run status
+- bash — Correct state time and commit
+- job_output
+
+**Synthèse produite :**
+
+⏵ Le commit tourne en arrière-plan ; je collecte le résultat
 
 ## 3. Travail accompli
 
@@ -1016,7 +1042,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 350 autres
+- … et 356 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1200,4 +1226,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 14 H 02 ; B13 156/156, N2 α = 0,9 À 6 000 PAS" -m "Cycle d'audit sans nouveau fait : les sept contrôles sont verts (616/709, 2980 liens, T0 3989, e
 - ÉTAT — HEURE 14 H 05 ; B13 156/156, N2 α = 0,9 À 6 400 PAS" -m "Cycle d'audit : les sept contrôles sont verts (616/709, 2980 liens, T0 3989, en-cours 1619, back
 - B13 157/157 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE (87,2 %), COUVERTURE RÉELLE 0,1283 ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSO
+- ÉTAT — HEURE 14 H 11 ; B13 157/157, N2 α = 0,9 À 7 150 PAS" -m "Cycle d'audit : les sept contrôles sont verts (617/710, 2989 liens, T0 3986, en-cours 1616, back
 
