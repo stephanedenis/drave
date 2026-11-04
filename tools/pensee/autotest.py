@@ -2140,6 +2140,20 @@ def t146_drvm_n01() -> tuple[bool, str]:
     return ok, "DRVM N0.1 : 6/6 (le payload corrompu est refusé)"
 
 
+def t147_variance() -> tuple[bool, str]:
+    """La variance (temp 0,3) : ±0,0074 au pire, 7/7 seuils."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-quatre-modes-432-t03.json").read_text(encoding="utf-8"))
+    m = d["modes"]
+    pos = m["cascade_niveau"]["all"]["pos"]["exactitude"]
+    tete = m["cascade_niveau"]["all"]["syntagme"]["tete"]["f1"]
+    return (abs(pos - 0.9385) < 0.001 and abs(tete - 0.8723) < 0.001
+            and all(d["seuils"].values())), (
+        f"temp 0,3 : POS {pos}, tête {tete}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2285,7 +2299,8 @@ def main() -> int:
               ("T143 défaut conditionnel", t143_defaut_conditionnel()),
               ("T144 seuil parallèle", t144_seuil_parallele()),
               ("T145 troisième passe", t145_troisieme_passe()),
-              ("T146 DRVM N0.1", t146_drvm_n01())]
+              ("T146 DRVM N0.1", t146_drvm_n01()),
+              ("T147 variance", t147_variance())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

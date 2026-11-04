@@ -6568,3 +6568,207 @@ libre
 ⏵ Commit de l'ERratum N2 dans l'état, la roadmap et le plan-travail
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/plan-travail.md && git commit -m \"ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS\" -m \"Le +0,14–0 … [564 caractères tronqués]`
+
+  ```
+[s/v7 6b0e9c83] ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS
+ 12 files changed, 140 insertions(+), 30 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 4 (après erratum)
+
+- **bash** `{"command": "git log --oneline -4 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -12 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAIL … [134 caractères tronqués]`
+
+  ```
+6b0e9c83 ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS
+9593718e N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149
+84c28889 ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION
+d94c3a4b PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-quatre-modes-432-t03.json
+?? reports/pensee-variance.json
+?? reports/rapport-pensee-variance.md
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 611 fiche(s) · 698 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3994 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---RUNS---\" ; cd /home/stephane/Data13TB/stephane/GitHub/ … [212 caractères tronqués]`
+
+  ```
+✅ 2928 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---RUNS---
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+pas   5950 · perte 1.1355 · PPL val 2.598 · 11238 s
+0, 100 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 4 : erratum N2 propagé, pilotage aligné, docs verts
+
+**Cycle 4 — un erratum majeur, et la documentation corrigée.**
+
+- **ERratum N2** : le gain de distillation **+0,14–0,18** (et le **+0,10** de la production) venait d'un **poids de tête principale à 1 au lieu de 1/4**. La paire propre donne **−0,030 / −0,009 / −0,004**, dans le bruit ; la §4 de la fiche production est **sous contrôle**, la paire propre (α = 0 / 0,9) tourne. Corrigé dans l'**état**, la **roadmap** (ligne N2) et le **plan-travail** (§ 11) — commits `84c28889` (fait) et `6b0e9c83` (propagation).
+- **Pilotage aligné** : `chantiers.md`, `plan-travail.md` et `portes.md` passent à **B13 148/148**, **S v7** (61/61, 144/144, 56 tests), **83 portes** (la 83e, `porte-n3-inventaire`) — commit `d94c3a4b`. Claims : registre cohérent, `n2-jour` actif ; seul avertissement `nvme_raid` 33 Gio.
+- **B13 DRVM N0.1 : 149/149** (payload corrompu refusé, le hash manquait) — commit `9593718e`, fiche/JSON désormais committés ; l'état garde **148/148** (dernier fait complet) et sera mis à 149 au prochain cycle.
+- **Contrôles** : revue ✅ **611 fiches / 698 JSON / 120 docs / 83 portes** ; **2 928 liens** ✅ ; backlog **frontière 3** ✅ ; journal **1 971 liens** ✅ ; tableaux ✅ ; `en-cours` **1 624 mots**, **T0 3 994 / 4 000** ✅.
+- **WIP** : B13 variance (`pensee-variance`, t03), S `rapport-s-paragraphes.md` ; **runs** `kd2` (log bufferisé) et `rope2048` **5 950/20 000** (GPU 100 %).
+
+**Le goal reste actif** : la passe complète attend les runs, et les faits B13 149 / variance et S paragraphes seront intégrés dès leurs commits.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 5 : instantané, audit et faits committés depuis le cycle 4
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+6b0e9c83 ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS
+9593718e N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149
+84c28889 ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION
+d94c3a4b PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34
+1b4be681 ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24
+70c9df7e ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)
+7b11a93f ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19
+625271c8 INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-quatre-modes-432-t03.json
+?? reports/pensee-variance.json
+?? reports/rapport-pensee-variance.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 180 min · N2 (200 000 pas sur l
+… [946 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 611 fiche(s) · 698 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3994 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2928 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2928 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"B13 \\*\\*14\\|B13 : 14\\|Pensée — B13\\|DRVM N0\\|149/149\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -8 ; echo \"=== RUNS ===\" ; tail -1 work/n2ac/kd2-mix512- … [166 caractères tronqués]`
+
+  ```
+12 h 40
+# En ce moment
+
+**Mis à jour : 2026-11-04, 12 h 37 HNE (heure locale, EST).**
+71:- **Fait** : B13 **148/148** (troisième passe : variance **nulle**, run 3 = run 2 — POS **0,9389**, syntagmes **0,8241**, tête **0,8797**, refus **0** ; le `parallele` passe de **0,9326** à **0,9389** avec la clé ; seuil du parallèle ; défaut conditionnel ; run2 ; élision POS **0,7455**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [troisième passe](../../reports/rapport-pensee-troisieme-passe.md), [B13](../../reports/rapport-b13-porte-140.md).
+97:- **Pensée — B13 (actif)** : **148/148**, gold 432, D
+… [480 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 5 : le fait B13 149/149 (DRVM N0.1) est committé mais absent de l'état — je l'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== DRVM FICHE ===\" ; head -16 reports/rapport-drvm-n01.md ; echo \"=== COMMIT FICHE ===\" ; git log --oneline -1 -- reports/rapport-drvm-n01.md ; echo \"=== 148/149 DANS DOCS ===\" ; grep -rn \"148/148\\|149/149\" docs/pilota … [139 caractères tronqués]`
+
+  ```
+=== DRVM FICHE ===
+# N0.1 — DRVM se lit-il ? Oui, et le payload est enfin vérifié
+
+> **Ligne de roadmap** : **N (le natif)** · **Date** : 2026-11-04 · **Verdict** : ✅ **149/149
+> portes** : la porte **N0.1** du modèle natif est re-jouée sur un **mini-conteneur** : écriture,
+> lecture, `mmap`, hash, **refus de version** et **refus de corruption** — **6/6**. La corruption
+> du payload n'était **pas** refusée : le lecteur vérifiait le hash du manifeste mais pas celui
+> du **payload**. C'est corrigé (`read_drvm(verifier=True)`).
+>
+> **Dispositif** : [`drvm.py`](../tools/drvm.py), [`autotest.py`](../tools/pensee/autotest.py),
+> JSON [`pensee-drvm-n01.json`](pensee-drvm-n01.json).
+
+## 1. Les six contrôles
+
+| # | contrôle | résultat |
+|---:|---|---|
+| 1 | écriture (SHA-256, 476 octets) | ✅ |
+=== COMMIT FICHE ===
+9593718e N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149
+=== 148/149 DANS DOCS ===
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.1
+… [9484 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Intégration B13 149/149 et DRVM N0.1 dans l'état, la roadmap, les chantiers et le plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:70]); continue\n        t=t.replace(old … [2774 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1621 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3991 mots (budget 4 000)
+  revue de documentation · 611 fiche(s) · 698 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2928 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 149/149 et DRVM N0.1 dans le pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md && git commit -m \"B13 149/149 — DRVM N0.1 : LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; ÉTAT, ROADMAP, CHANT … [563 caractères tronqués]`

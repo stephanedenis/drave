@@ -34864,3 +34864,25 @@ mer 04 nov 2026 12:36:34 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119* … [593 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 14 h 30 HNE\", t)\np.write_text( … [739 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-107]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-107", "timeout_ms": 600000, "wait": true}`

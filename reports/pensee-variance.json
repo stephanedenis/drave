@@ -1,0 +1,27 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "150/150",
+ "temp0": {
+  "pos": 0.9389,
+  "syn": 0.8241,
+  "tete": 0.8797
+ },
+ "temp03": {
+  "pos": 0.9385,
+  "syn": 0.8246,
+  "tete": 0.8723
+ },
+ "ecarts": {
+  "pos": -0.0004,
+  "syn": 0.0005,
+  "tete": -0.0074
+ },
+ "seuils": "7/7",
+ "refus": 0,
+ "limites": [
+  "un seul tirage à 0,3",
+  "cache possible",
+  "gold 432"
+ ]
+}
