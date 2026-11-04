@@ -4369,3 +4369,105 @@ pas encore
 16:02:23
   ```
 
+### 🤖 Assistant
+
+⏵ Supervision en cours : le sous-agent finit la fiche ; l'essentiel est déjà vérifié
+
+**Sous-agent D2 lancé et supervisé** (mission : prouver l'intégration du corpus CEGEP à 64 documents). Il tourne encore ; voici ce que ma supervision a déjà établi, indépendamment de lui.
+
+## Vérifié par moi
+
+- **Le re-split du hub (15 h 57) est sain** : les anciens splits sont **préservés au préfixe** — `train[:4 430 959]` = `6d53a023…` (manifeste), `val[:12 536]` = `dd605833…`, `test[:10 524]` = `1c9ab734…`. Les suffixes ajoutés sont bien **Choquette + DOC1** (train), **DOC2** (val), **Assurance** (test), avec les tailles attendues (33 988 / 19 684 / 2 187 octets).
+- **Contamination 8 Ko = 0** : `train` 546 tronçons, `val` 4 / 0 doublon, `test` 2 / 0 doublon, `recouvrement_eval` vide. C'est le contrôle officiel, que j'ai relancé moi-même sur l'état stable.
+- **Fausse alerte corrigée** : j'avais cru voir 70 % de doublons dans l'append ; c'était un artefact — je lisais le train **pendant** que le hub le réécrivait (la queue du nouveau train se comparait à son propre milieu). Le sous-agent a été redirigé en conséquence : pas de verdict « doublon », les recouvrements de 500 o sont traités comme observation secondaire (boilerplate des formulaires Cisco), pas comme une fuite.
+
+## Ce qui reste au sous-agent
+
+Le tableau **par document** (split, pages, caractères, fenêtres 500 o et dans quel split), le **contrôle négatif** du 8 Ko (fenêtre de val injectée dans une copie du train → doit être trouvée), et les deux livrables `reports/rapport-ocr-cegep-64.md` + `reports/ocr-cegep-64.json`.
+
+Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche si elle s'écarte, puis j'intègre (ligne d'état, compteurs, commit explicite) — ou je passe la main au hub s'il tient encore l'index. État actuel : `8f32227d` (re-split committé), D déjà marqué clos dans `en-cours`, runs N2 intacts.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message: 
+RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est bien 0 (546/4/2 fenêtres, 0 doublon) et mon contrôle négatif est OK (fenêtre de val injectée = 1 doublon trouvé, 25 %). MAIS le contrôle de non-duplication croisée que tu m'as demandé (point 4) trouve une fuite réelle, invisible à 8 Ko :
+
+- DOC2 (19 101 car., 20 p) est en **val** et **19/20 fenêtres de 500 o sont exactes dans le préfixe train**, en 2 runs contigus : offsets train 4 025 086 (7 fenêtres, 6 000 o) et 4 033 087 (12 fenêtres, 11 001 o), soit 17 001 o du doc déjà dans l'ancien train. Aucune fenêtre de 8 Ko commune (d'où le 0 du script) : l'OCR diffère légèrement entre les deux copies (même document scanné deux fois). C'est une fuite train→val de quasi-duplicat.
+- DOC1 (25 470 car., 22 p) est en train et **24/26 fenêtres de 500 o sont dans le préfixe train** : runs 3 998 953 (8 fen., 7 000 o) et 4 007 954 (16 fen., 15 001 o), 22 001 o redondants ; **1 fenêtre de 8 188 o est exactement commune** (suffixe train offset 16 365 == préfixe train 4 007 429, texte « niveau les composants répertoriés… © 2013 Cisco »).
+- Choquette : 8/8 fenêtres dans le suffixe train, 0/8 dans tous les préfixes → neuf. Assurance : 2/2 dans le suffixe test, 0/2 dans les préfixes → neuf. Formulaire DOC : 0 partout (écarté).
+- Répartition 2/1/1 confirmée par localisation : Choquette+DOC1 dans train, DOC2 dans val, Assurance dans test ; longueurs OCR identiques au manifeste restants (sha256[:16] = 8568cf8d…, 0448a973…, ce3278ad…).
+
+Conséquence : ton « 0 doublon » est vrai au sens strict du script (fenêtres 8 Ko exactes), mais le corpus 64 n'est pas propre : la val contient un document dont 89 % du texte est déjà dans le train. Je documente les deux (0 à 8 Ko ; fuite quasi-duplicat à 500 o, avec offsets) et je ne conclus pas « intégration réussie ». Réponds seulement si tu veux un autre verdict ; sinon je rends les livrables avec ce constat et la ligne d'état « 64 documents, re-split 2/1/1, anciens splits intacts, 8 Ko 0, MAIS DOC2 (val) quasi-dupliqué dans train (17 001 o contigus) ».
+
+### 🤖 Assistant
+
+⏵ Le sous-agent trouve une fuite val→train invisible à 8 Ko — je rejoue ses offsets avant de valider
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=+%H:%M:%S data/corpus_ocr_cegep/; python3 - <<'PY'\nfrom pathlib import Path\ntr = Path('data/corpus_ocr_cegep/train.txt').read_bytes()\nva = Path('data/corpus_ocr_cegep/val.txt').read_bytes()\nte = Path('data/corp … [893 caractères tronqués]`
+
+  ```
+total 4412
+-rw-r--r--. 1 stephane stephane   12711 15:57:00 test.txt
+-rw-r--r--. 1 stephane stephane 4464947 15:57:00 train.txt
+-rw-r--r--. 1 stephane stephane   32220 15:57:00 val.txt
+fenêtre 8 188 o : égale ? True · suffixe/prefixe : 4447324 4007429
+extrait : niveau les composants répertoriés |  | dans le tableau. |  | Marqu
+DOC2 (val) : 18/20 fenêtres 500 o dans l ancien train
+offsets (début/fin) : [4026047, 4027047, 4028047] ... [4042047, 4043047, 4044047]
+DOC2 taille : 19684 o
+  ```
+
+### 🤖 Assistant
+
+⏵ Fuite confirmée (18/20 fenêtres DOC2, fenêtre 8 188 o exacte) — je fais construire le corpus propre et je cadre la correction
+
+- **send_message** `{"agent_id": "206a4022-ab3c-497d-a5fa-0194931c7fa0", "message": "Rejoué et confirmé : la fenêtre de 8 188 o est exacte (`train[4 447 324:4 455 512] == train[4 007 429:4 015 617]`, « niveau les composants répertoriés… ») et DOC2 a **18/20** fenêtres de 500 o dans l'ancien train (offsets 4 026 047 → 4 … [1848 caractères tronqués]`
+
+  ```
+message delivered to agent 206a4022-ab3c-497d-a5fa-0194931c7fa0
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle indépendant de la baseline 500 o du corpus 60 (avant tout ajout)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\ntr = Path('data/corpus_ocr_cegep/train.txt').read_bytes()[:4430959]\nva = Path('data/corpus_ocr_cegep/val.txt').read_bytes()[:12536]\nte = Path('data/corpus_ocr_cegep/test.txt').read_bytes( … [486 caractères tronqués]`
+
+  ```
+val 60: 0/13 fenêtres 500 o présentes dans le train ancien
+test 60: 0/11 fenêtres 500 o présentes dans le train ancien
+train ancien 4430959 o · val 12536 · test 10524
+  ```
+
+### 🤖 Assistant
+
+⚠ Baseline 500 o du corpus 60 = **0/13 et 0/11** : la fuite DOC2 est bien introduite par l'ajout. J'attends le corpus propre du sous-agent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l work/ocr/cegep64/propre/ 2>/dev/null || echo 'corpus propre pas encore écrit'; ls -l reports/*cegep-64* 2>/dev/null || echo 'fiche pas encore'; git log --oneline -1", "description": "Check subagent clean corpus and deliverables … [2 caractères tronqués]`
+
+  ```
+corpus propre pas encore écrit
+fiche pas encore
+68a40051 ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"D\\*\\* — clos\\|fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md | head; echo ====; git status --short | head -8; git diff --cached --stat | tail -2", "description": "Read current D state line and index status"}`
+
+  ```
+3:**Mis à jour : 2026-11-04, 16 h 25 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **625** / **718** | `reports/*.md` / `reports/*.json` |
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire) ; **re-split 2/1/1** ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
+====
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/pensee-cible-proximite.json
+  ```
+

@@ -901,3 +901,233 @@ suffixes {'train': 33988, 'val': 19684, 'test': 2187}
    dans suffixe val: 0/1
   ```
 
+### 🤖 Assistant
+
+⏵ Localisation de la fenêtre 8 Ko commune intra-train
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib\nsys.path.insert(0,'tools'); import verifie_contamination as vc\nbase=pathlib.Path('data/corpus_ocr_cegep')\ntrain=(base/'train.txt').read_bytes(); old=train[:4430959]; suf=train[4430959:]\np=pa … [504 caractères tronqués]`
+
+  ```
+fen 0: offset suffixe 0, len 8176, dans prefixe -1
+fen 1: offset suffixe 8177, len 8187, dans prefixe -1
+fen 2: offset suffixe 16365, len 8188, dans prefixe 4007429
+  debut: b'niveau les composants r\xc3\xa9pertori\xc3\xa9s\n\ndans le tableau.\n\nMarque et num\xc3\xa9ro de\nmod\xc3\xa8le\n\nCaract\xc3\xa9ristiques\n\nCo\xc3\xbbt\n\nCarte son'
+  fin  : b'naient le lecteur de disquettes sur le bo\xc3\xaetier ?\n\n\xc2\xa9 2013 Cisco et/ou ses filiales. Tous droits r\xc3\xa9serv\xc3\xa9s. Ce document'
+  contexte prefixe: b'es CD,\ndes \xc3\xa9tiquettes de CD et ses propres films. Le client souhaite mettre \xc3\xa0 niveau les composants r\xc3\xa9pertori\xc3\xa9s\n\ndans le tableau.\n\nMarque et num\xc3\xa9ro de\nmod\xc3'
+fen 3: offset suffixe 24554, len 8185, dans prefixe -1
+fen 4: offset suffixe 32740, len 1248, dans prefixe -1
+  ```
+
+- **job_output** `{"job_id": "bash-204"}`
+
+  ```
+1 DOC.PDF 1 p 210 car
+2 Choquette c. Chagnon.PDF 6 p 7575 car
+3 DOC.PDF 1 p 210 car
+4 Choquette c. Chagnon.PDF 6 p 7575 car
+5 DOC1.PDF 22 p 25470 car
+6 DOC2.PDF 20 p 19101 car
+7 Assurance pour stagiaires-B2344-11403.PDF 1 p 2021 car
+8 Assurance pour stagiaires.PDF 1 p 2021 car
+=== exit 0
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-204 (bash: mkdir -p work/ocr/cegep64/par-doc && cat > work/ocr/cegep64/ocr_par_doc.py <<'EOF'
+#!/usr/bin/env python3
+"""OCR des 8 PDF un par un, sortie dans par-doc/ (lecture seule sur data/)."""
+import json, pathlib, sys, hashlib
+RACINE = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')
+sys.path.insert(0, str(RACINE / 'tools'))
+import ocr_pdf
+
+liste = [pathlib.Path(x.strip()) for x in
+         (RACINE/'work/ocr/restants-pdf.liste').read_text(encoding='utf-8').splitlines() if x.strip()]
+sortie = RACINE/'work/ocr/cegep64/par-doc'
+manifeste = []
+for i, pdf in enumerate(liste, 1):
+    n = ocr_pdf.pages(pdf)
+    texte, npages = ocr_pdf.ocr(pdf, 300, 'fra+eng', 0, 8)
+    nom = f'{i:02d}_{pdf.stem[:60]}.txt'
+    (sortie/nom).write_text(texte, encoding='utf-8')
+    manifeste.append({'rang': i, 'pdf': str(pdf), 'stem': pdf.stem, 'pages': n,
+                      'pages_ocr': npages, 'caracteres': len(texte),
+                      'empreinte16': hashlib.blake2b(texte.encode(), digest_size=16).hexdigest(),
+                      'fichier': nom})
+    print(f'{i} {pdf.name[:50]} {n} p {len(texte)} car', flush=True)
+(sortie/'manifeste.json').write_text(json.dumps(manifeste, ensure_ascii=False, indent=1)+'\n', encoding='utf-8')
+EOF
+taskset -c 10-19,30-39 python3 work/ocr/cegep64/ocr_par_doc.py 2>&1 | tail -20; echo "=== exit $?") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ OCR terminé (8 PDF, 5 textes) ; mesure par document et vérification de la répartition
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib, hashlib\nm=json.loads(pathlib.Path('work/ocr/cegep64/par-doc/manifeste.json').read_text())\nfor e in m:\n    print(e['rang'], e['stem'][:40], e['pages'], e['caracteres'], e['empreinte16'])\npr … [264 caractères tronqués]`
+
+  ```
+1 DOC 1 210 f3d8028d2bb172f526199cfa03cf7f7e
+2 Choquette c. Chagnon 6 7575 44706eceee1dfc73af89a0dc3d16fa8a
+3 DOC 1 210 f3d8028d2bb172f526199cfa03cf7f7e
+4 Choquette c. Chagnon 6 7575 44706eceee1dfc73af89a0dc3d16fa8a
+5 DOC1 22 25470 72639e7a501f52c30f8e05282d54789d
+6 DOC2 20 19101 576693e51b6290e5ac572ac28c40551d
+7 Assurance pour stagiaires-B2344-11403 1 2021 01306200ef4852cb62ca5be280337db0
+8 Assurance pour stagiaires 1 2021 01306200ef4852cb62ca5be280337db0
+--- attendu manifeste restants: DOC 7ceb214210b97112 (210), Choquette 8568cf8d6899ec09 (7575), DOC1 0448a973889f56c9 (25470), DOC2 ce3278ad842d24e0 (19101), Assurance 3bf071e129bf357d (2021)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les longueurs OCR concordent au caractère près ; je vérifie la méthode de hash puis mesure la répartition
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport hashlib, pathlib\nt=pathlib.Path('work/ocr/cegep64/par-doc/02_Choquette c. Chagnon.txt').read_text()\nprint('len',len(t))\nprint('blake2b16', hashlib.blake2b(t.encode(),digest_size=16).hexdigest())\nprint('s … [656 caractères tronqués]`
+
+  ```
+len 7575
+blake2b16 44706eceee1dfc73af89a0dc3d16fa8a
+sha256[:16] 8568cf8d6899ec09
+sha256[16:] 2a9e3b0d6a05b23581db04509387ca50047967b853543568
+md5[:16] cb0abb8a0496564e
+sha1[:16] 3ac84b9838a7ad07
+blake2b8 b7248b352f544ef1
+sha256 8568cf8d6899ec092a9e3b0d6a05b23581db04509387ca50047967b853543568
+=== recherche d'un texte identique ailleurs (restants)
+238
+CANADA
+
+PROVINCE DE QUÉBEC COUR SUPÉRIEURE
+DISTRICT DE ST-HYACINTHE (Chambre de la Famille)
+N°. 7
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure par document : fenêtres de 500 o dans chaque préfixe et suffixe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/ocr/cegep64/mesure_par_doc.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"Fenêtres de 500 o par texte OCR, dans les préfixes (ancien corpus) et suffixes (ajouts).\"\"\"\nimport json, pathlib, hashlib\nR = pathlib.Path('/home/st … [2224 caractères tronqués]`
+
+  ```
+textes distincts: 5
+7ceb214210b97112 DOC                           1p    210car pt:0/1 pv:0/1 pt:0/1 st:0/1 sv:0/1 st:0/1
+8568cf8d6899ec09 Choquette c. Chagnon          6p   7575car pt:0/8 pv:0/8 pt:0/8 st:8/8 sv:0/8 st:0/8
+0448a973889f56c9 DOC1                         22p  25470car pt:24/26 pv:0/26 pt:0/26 st:24/26 sv:0/26 st:0/26
+ce3278ad842d24e0 DOC2                         20p  19101car pt:19/20 pv:0/20 pt:0/20 st:0/20 sv:19/20 st:0/20
+3bf071e129bf357d Assurance pour stagiaires-B2  1p   2021car pt:0/2 pv:0/2 pt:0/2 st:0/2 sv:0/2 st:2/2
+RUNS prefixe_train 0448a973889f56c9 [(3998953, 8, 7000), (4007954, 16, 15001)]
+RUNS prefixe_train ce3278ad842d24e0 [(4025086, 7, 6000), (4033087, 12, 11001)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : DOC1 et DOC2 sont déjà dans l'ancien train — DOC2 est en val. Message au parent.
+
+- **send_message** `{"agent_id": "aeafe951-9c3d-4bb5-8af7-0246a4f3d51d", "message": "RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est bien 0 (546/4/2 fenêtres, 0 doublon) et mon contrôle négatif est OK (fenêtre de val injectée = 1 doublon trouvé, 25 %). MAIS le contrôle de non-duplication croisée que tu m'as … [1832 caractères tronqués]`
+
+  ```
+message delivered to agent aeafe951-9c3d-4bb5-8af7-0246a4f3d51d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nbase=pathlib.Path('data/corpus_ocr_cegep')\nd={n:(base/f'{n}.txt').read_bytes() for n in ('train','val','test')}\nold=d['train'][:4430959]\nt=pathlib.Path('work/ocr/cegep64/par-doc/06_DOC2.txt').rea … [647 caractères tronqués]`
+
+  ```
+=== DOC2
+  offset prefixtrain 4025086: b'of | fol | le\nCISCO Cisco Networking Academy Mind Wide Open\n\xc3\x80\nIT Essentials 5.0\n\n3.1.1.3 Travaux pratiques \xe2\x80\x94 Installation de l\xe2\x80\x99alimentation\n\nIntroduction\nI'
+  offset prefixtrain 4033087: b'es filiales. Tous droits r\xc3\xa9serv\xc3\xa9s. Ce document contient des informations publiques Cisco. Page 1 sur 2\n\noY\n\nIT Essentials Chapitre 3 \xe2\x80\x94 Travaux pratiques\n\n\xc3\x89'
+  doc[0:500] -> prefixe 4025086  b'of | fol | le\nCISCO Cisco Networking Academy Mind Wide Open\n\xc3\x80\nIT Essentials 5.0\n\n3.1.1.3 '
+  doc[1000:1500] -> prefixe 4026086  b"sance totale de l'alimentation ?\n\n7 \xc3\xa0 votre instructeur de contr\xc3\xb4ler votre travail.\n\n\xe2\x80\x9c"
+  doc[5000:5500] -> prefixe 4030086  b"de l'ordinateur.\n\nMat\xc3\xa9riel conseill\xc3\xa9\ne Ordinateur avec alimentation, carte m\xc3\xa8re, lecteu"
+  doc[10000:10500] -> prefixe 4035087  b's Cisco. Page 2 sur 3\n\nIT Essentials\n\nChapitre 3 - Travaux pratiques\n\n\xc2\xa9 Enlarge View\n\nGA-'
+  doc[15000:15500] -> prefixe 4040087  b"\nUn syst\xc3\xa8me d'exploitation peut alors \xc3\xaatre install\xc3\xa9.\n\nCes travaux pratiques sont
+… [2080 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contamination officielle finale et vérification de stabilité de `data/`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== avant\"; stat -c '%n %s %y' data/corpus_ocr_cegep/*.txt; sha256sum data/corpus_ocr_cegep/*.txt; taskset -c 10-19,30-39 python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_ce … [611 caractères tronqués]`
+
+  ```
+=== avant
+data/corpus_ocr_cegep/test.txt 12711 2026-11-04 15:57:00.365480928 -0500
+data/corpus_ocr_cegep/train.txt 4464947 2026-11-04 15:57:00.342307238 -0500
+data/corpus_ocr_cegep/val.txt 32220 2026-11-04 15:57:00.364257077 -0500
+2895e30d04b8c377259e5131e61870157f0554a9026eca5fffa18847b7159a5c  data/corpus_ocr_cegep/test.txt
+661e6386fb09ca333778e37dfdff8badd55135ea014d04975714ab8cc445458d  data/corpus_ocr_cegep/train.txt
+271117c2b22e63ea63dd2cc3ea26765e862a1793b3d1c37b7a36da5a387dddbe  data/corpus_ocr_cegep/val.txt
+=== exit 0
+=== apres
+data/corpus_ocr_cegep/test.txt 12711 2026-11-04 15:57:00.365480928 -0500
+data/corpus_ocr_cegep/train.txt 4464947 2026-11-04 15:57:00.342307238 -0500
+data/corpus_ocr_cegep/val.txt 32220 2026-11-04 15:57:00.364257077 -0500
+2895e30d04b8c377259e5131e61870157f0554a9026eca5fffa18847b7159a5c  data/corpus_ocr_cegep/test.txt
+661e6386fb09ca333778e37dfdff8badd55135ea014d04975714ab8cc445458d  data/corpus_ocr_cegep/train.txt
+271117c2b22e63ea63dd2cc3ea26765e862a1793b3d1c37b7a36da5a387dddbe  data/corpus_ocr_cegep/val.txt
+=== resultat 8 Ko
+{
+ "train_troncons": 546,
+ "par_split": {
+  "val.txt": {
+   "troncons": 4,
+   "doublons": 0,
+   "taux": 0.0
+  },
+  "test.txt": 
+… [192 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/ocr-cegep-64.json reports/rapport-ocr-cegep-64.md 2>&1; echo \"=== texte des suffixes/debuts\"; python3 - <<'EOF'\nimport pathlib\nbase=pathlib.Path('data/corpus_ocr_cegep')\nd={n:(base/f'{n}.txt').read_bytes() for n i … [340 caractères tronqués]`
+
+  ```
+ls: cannot access 'reports/ocr-cegep-64.json': No such file or directory
+ls: cannot access 'reports/rapport-ocr-cegep-64.md': No such file or directory
+=== texte des suffixes/debuts
+train suffixe 33988 chars 33045 lignes 992
+  debut b'Choquette c. Chagnon\nCANADA\n\nPROVINCE DE QU\xc3\x89BEC COUR SUP\xc3\x89RIEURE\nDISTRICT DE ST-HYACINTHE'
+  fin   b'Cisco et/ou ses filiales. Tous droits r\xc3\xa9serv\xc3\xa9s. Ce document contient des informations pu'
+val suffixe 19684 chars 19102 lignes 723
+  debut b'\nbliques Cisco. Page 1 sur 1\n\n(7\n\nDOC2\nof | fol | le\nCISCO Cisco Networking Academy Mind W'
+  fin   b'ail\n\n\xc2\xa9 2013 Cisco et/ou ses filiales. Tous droits r\xc3\xa9serv\xc3\xa9s. Ce document contient des in'
+test suffixe 2187 chars 2104 lignes 62
+  debut b'\nformations publiques Cisco: Page 2 sur 2\n\nAssurance pour stagiaires-B2344-11403\nBFL CANAD'
+  fin   b"\xc3\xa9sentant autoris\xc3\xa9\n#\nF a\n\na \xc2\xb0\n\nCourtiers d'assurances internationaux\nwww. BFLCANADA.ca\n\n"
+  ```
+
+### 🤖 Assistant
+
+⏵ Les suffixes semblent coupés au milieu d'un mot — je vérifie la construction exacte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nbase=pathlib.Path('data/corpus_ocr_cegep')\nd={n:(base/f'{n}.txt').read_bytes() for n in ('train','val','test')}\ndec={'train':4430959,'val':12536,'test':10524}\nsuf={n:d[n][dec[n]:] for n in d}\nte … [707 caractères tronqués]`
+
+  ```
+01_DOC chars 210 octets 219 debut 'D 23/7\n\n“T3 |\n| Ÿ x | ¥\n"4\nx x\ny\nVA\na x\n4\n| (Va |\n' fin 'paogé clou\n\nMSe ant Metric te pew Lo Tales\nthe CORONA Ww. fe'
+02_Choquette c. Chagnon chars 7575 octets 7861 debut 'CANADA\n\nPROVINCE DE QUÉBEC COUR SUPÉRIEURE\nDISTRIC' fin 'te-Julie, le 6 novembre 2012\n\n\\ Procureur de la demanderesse'
+03_DOC chars 210 octets 219 debut 'D 23/7\n\n“T3 |\n| Ÿ x | ¥\n"4\nx x\ny\nVA\na x\n4\n| (Va |\n' fin 'paogé clou\n\nMSe ant Metric te pew Lo Tales\nthe CORONA Ww. fe'
+04_Choquette c. Chagnon chars 7575 octets 7861 debut 'CANADA\n\nPROVINCE DE QUÉBEC COUR SUPÉRIEURE\nDISTRIC' fin 'te-Julie, le 6 novembre 2012\n\n\\ Procureur de la demanderesse'
+05_DOC1 chars 25470 octets 26127 debut 'NOTES DE COURS OBLIGATOIRES\n\n420-CAB-HY\nÉléments d' fin ' contient des informations publiques Cisco. Page 1 sur 1\n\n(7'
+06_DOC2 chars 19101 octets 19683 debut 'of | fol | le\nCISCO Cisco Networking Academy Mind ' fin 'ment contient des informations publiques Cisco: Page 2 sur 2'
+07_Assurance pour stagiaires-B2344-11403 chars 2021 octets 2104 debut 'BFL CANADA risques et assurances inc.\nKy 5) BFL Sr' fin "a °\n\nCourtiers d'assurances internationaux\nwww. BF
+… [607 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Agent aeafe951-9c3d-4bb5-8af7-0246a4f3d51d sent a message: 
+Rejoué et confirmé : la fenêtre de 8 188 o est exacte (`train[4 447 324:4 455 512] == train[4 007 429:4 015 617]`, « niveau les composants répertoriés… ») et DOC2 a **18/20** fenêtres de 500 o dans l'ancien train (offsets 4 026 047 → 4 044 047, contigus). Ton verdict tient : le 0 à 8 Ko est vrai mais **insuffisant**, et DOC2 (val) est un quasi-doublon de l'ancien train. Garde-le.
+
+AVANT DE RENDRE, construis et mesure le **corpus propre** (dans `work/ocr/cegep64/propre/`, **jamais** dans `data/`) :
+1. `train_propre` = ancien train **exact** (`train[:4 430 959]`, hash `6d53a023…`) + **Choquette** (7 575 car.) + **Assurance** (2 021 car.), avec séparateur `\n\n` et sans mot collé (vérifie la jonction) ;
+2. `val_propre` = ancien val exact (`val[:12 536]`, hash `dd605833…`) ; `test_propre` = ancien test exact (`test[:10 524]`, hash `1c9ab734…`) ;
+3. **exclus** : DOC1 (24/26 fenêtres déjà dans le train — doublon intra-train) et DOC2 (fuite val→train).
+Mesures à rendre :
+- stats du corpus propre : **62 documents** (55 train / 4 val / 3 test), pages **1 989** (1 982 + 7), caractères **4 418 407** (4 408 811 + 9 596), tronçons, octets, SHA-256 des trois splits ;
+- contrôle 8 Ko sur le propre (attendu 0) + contrôle négatif ;
+- contrôle 500 o **avant/après** : donne la **baseline** du vieux corpus 60 (fenêtres 500 o de val/test retrouvées dans train) et celle du propre ; le propre ne doit **rien ajouter** à la baseline. Si la baseline est > 0, dis-le : c'est un défaut préexistant, pas celui du re-split.
+- commandes exactes de restauration pour le hub (`cp work/ocr/cegep64/propre/*.txt data/corpus_ocr_cegep/`), avec les hashes attendus.
+Livrables : `reports/rapport-ocr-cegep-64.md` (verdict : 2 neufs, 2 quasi-doublons écartés, fuite DOC2 mesurée, 8 Ko insuffisant, corpus propre 62) + `reports/ocr-cegep-64.json`. Ligne d'état : **« 62 documents (60 + 2 neufs), DOC1/DOC2 écartés, fuite DOC2(val)→train 17 001 o mesurée, 8 Ko exact 0 mais insuffisant, 500 o = baseline »**. Pas de « 64 documents ».
+
+Timebox : termine et rends le rapport 10 lignes.
+

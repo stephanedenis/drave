@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 16 h 10 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 16 h 06 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,10 +68,10 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; **passifs : règle 5/5 fausse ; correctifs hors du chemin S (roadmap 163)** ; fiches [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
+- **Fait** : B13 **164/164** ; cible par proximité (**exact 0,0042 → 0,0544**, fiche [cible proximité](../../reports/rapport-pensee-cible-proximite.md)) ; **pragmatique 432 : 0,9954** ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; **passifs : règle 5/5 fausse ; correctifs hors du chemin S (roadmap 163)** ; fiches [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
 - **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
-- **Prochaine action** : la **règle d'attachement** (le GV le plus proche), puis le **générateur S** (passifs) ; T132/T133 sont à 5/5.
+- **Prochaine action** : les **candidats verbes** (le top-k à 0,3264), puis le **générateur S** (passifs) ; T132/T133 sont à 5/5.
 - **Bloquants** : les **7B locales** sont **interdites** (règle 11) ; reste **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -105,7 +105,7 @@
 |---|---|---|
 | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **624** / **717** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **625** / **718** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 

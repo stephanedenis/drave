@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 6.6 h |
+| Durée | 6.7 h |
 | Tours | 6 |
-| Messages | 190 |
-| Appels d'outils | 222 |
+| Messages | 201 |
+| Appels d'outils | 232 |
 | Fichiers touchés | 7 |
-| Commandes | 183 |
+| Commandes | 191 |
 | Sous-agents | 1 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -277,6 +277,23 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 
 ### Tour 6 — Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message:  RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est  … [1998 caractères tronqués]
 
+*10 appels d'outils.* Actions notables :
+
+- bash — Replay the 8 188-byte window and DOC2 leak offsets
+- send_message
+- bash — Measure the baseline 500-byte cross-split overlap of the 60-doc corpus
+- bash — Check subagent clean corpus and deliverables
+- bash — Read current D state line and index status
+- bash — Wait for subagent's clean corpus and deliverables
+- job_output
+- bash — Verify clean corpus prefixes, junction, and 500 o baseline
+- bash — Run 8 Ko contamination check on clean corpus
+- bash — Count characters of the clean train
+
+**Synthèse produite :**
+
+⏵ Corpus propre construit (4 440 987 o) — je vérifie préfixes, jonction et contamination avant d'accepter
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -337,7 +354,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 143 autres
+- … et 151 autres
 
 ## 4. Mesures et résultats marquants
 

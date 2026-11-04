@@ -15725,3 +15725,172 @@ Another git process seems to be ru
 ⏵ Le trim d'état est prêt (T0 3 999) mais le verrou git est tenu ; je retente
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; ls -l .git/index.lock ; pgrep -af \"git (commit|add)\" | head -3 ; else git add docs/pilotage/en-cour … [708 caractères tronqués]`
+
+  ```
+[s/v7 68a40051] ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+ 18 files changed, 401 insertions(+), 50 deletions(-)
+=== FINAL ===
+68a40051 ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+8f32227d D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 52 : re-split OCR fait (2/1/1, 8 Ko 0), B13 163 en HEAD, T0 3 999
+
+**Cycle 52 — le re-split OCR est fait, la narrative B13 entre en HEAD.**
+
+- **D — le re-split OCR est fait** (`8f32227d`) : aux bornes exactes, **2 documents en train** (Choquette 7 575 car. + DOC1 25 470), **1 en val** (DOC2 19 101), **1 en test** (Assurance 2 103) ; les anciens splits sont conservés. **Train 4,46 M, val 32 220, test 12 711 ; 8 Ko 0**. La ligne de D est close, re-split compris ; l'état le dit (T0 3 999, `68a40051`).
+- **B13 — les passifs sans par entrent vraiment dans HEAD** (`1f74e6cf`) : le chunker donne **3/3 `patient`**, les portes T156/T157 sont à jour (T160), **163/163**.
+- **Audit complet** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 629 mots**, **T0 3 999 / 4 000** ✅.
+- **2 048** : le run continue (première moitié, GPU1 en charge).
+
+**WIP** : B13 (README, implémentation, outils), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**. **Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 58
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 53/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 53 : audit vert, B13 163/163 confirmé en HEAD, re-split OCR clos
+
+**Cycle 53 — audit vert, les deux faits du cycle 52 tiennent.**
+
+- **Audit complet** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 629 mots**, **T0 3 999 / 4 000** ✅.
+- **B13 163/163** : la narrative `1f74e6cf` confirme que les **passifs sans `par`** entrent vraiment dans HEAD — chunker **3/3 `patient`**, portes **T156/T157** à jour, **T160** ; le correctif hors du chemin S reste nommé.
+- **D** : le re-split OCR est **fait** (2 train / 1 val / 1 test, 8 Ko 0, train 4,46 M) et inscrit dans la ligne de D.
+- **2 048** : le run continue (première moitié, GPU1 en charge).
+- **WIP** : B13 (README, implémentation, outils), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 59
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 54/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 54 : instantané et audit des sept contrôles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+68a40051 ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+8f32227d D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+d4688bd2 ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)
+7c48a63d ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause ·  43 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 255 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+  ⏰ 29ad180d-38a5-4481 · actif    · 255 min · 
+… [555 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [317 caractères tronqués]`
+
+  ```
+revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---ROPE---
+pas   2200 · perte 0.9980 · PPL val 2.780 · 2248 s
+0, 0 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 54 : audit vert, le 2 048 monte (2 200/10 000), B13 163 stable
+
+**Cycle 54 — audit vert, le 2 048 progresse.**
+
+- **Audit complet** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 629 mots**, **T0 3 999 / 4 000** ✅.
+- **B13 163/163** stable : les passifs sans `par` (chunker 3/3, T156/T157, T160) sont dans HEAD ; la suite (README, implémentation, outils) reste en WIP.
+- **D** : le re-split OCR est fait (2/1/1, 8 Ko 0) et inscrit dans la ligne de D.
+- **2 048** : le run est à **2 200/10 000** (2 248 s, GPU1 à 100 %) ; la seconde moitié suivra.
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 60
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 55/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 55 : audit vert, je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; head -3 docs/pilotage/en-cours.md ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1  … [195 caractères tronqués]`
+
+  ```
+68a40051 ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+8f32227d D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 10 HNE (heure locale, EST).**
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 55 : heure 16 h 10 (session) à recaler ; commit de l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h55.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h55.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\* … [863 caractères tronqués]`

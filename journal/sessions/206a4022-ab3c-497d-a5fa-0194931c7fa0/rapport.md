@@ -7,12 +7,12 @@
 | Identifiant | `206a4022-ab3c-497d-a5fa-0194931c7fa0` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 15:56 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 28 |
-| Appels d'outils | 34 |
+| Messages | 36 |
+| Appels d'outils | 44 |
 | Fichiers touchés | 0 |
-| Commandes | 31 |
+| Commandes | 40 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt Drave, racine /home/stephane/Data13TB/stephane/GitHub/Qtrinet (lis AGENTS.md pour le context … [4909 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - bash — Inspecte la racine et les répertoires cibles
 - bash — Date courante et liste des outils
@@ -41,11 +41,11 @@
 - bash — Aide du script de contamination
 - bash — Lecture du script de contamination
 - bash — Traces récentes et état git
-- … et 19 autres
+- … et 28 autres
 
 **Synthèse produite :**
 
-⏵ Mesure par document : fenêtres de 500 o dans chaque préfixe et suffixe
+⏵ Correction du script de mesure 500 o
 
 ## 3. Travail accompli
 
@@ -87,6 +87,15 @@
 - **T1** Compare les empreintes OCR aux manifestes
 - **T1** Teste les variantes de hash et le contenu OCR
 - **T1** Fenêtres 500 o par texte dans préfixes et suffixes
+- **T1** Exemples et offsets de la duplication DOC1/DOC2
+- **T1** Contamination 8 Ko finale avec contrôle de stabilité
+- **T1** Vérifie l'absence des livrables et inspecte les suffixes
+- **T1** Longueurs et offsets des textes OCR dans les suffixes
+- **T1** Construit train/val/test propres et vérifie les jonctions
+- **T1** Contamination 8 Ko sur le corpus propre
+- **T1** Contrôle négatif du corpus propre
+- **T1** Baseline 500 o et contrôle du corpus propre
+- **T1** Mesure baseline et propre en 500 o
 
 ## 4. Mesures et résultats marquants
 
@@ -109,4 +118,11 @@
 - **T1** `--- suffixe train: 5 fenetres 8 Ko, tailles [8176, 8187, 8188, 8185, 1248]`
 - **T1** `--- suffixe val: 3 fenetres 8 Ko, tailles [8184, 8189, 3308]`
 - **T1** `--- suffixe test: 1 fenetres 8 Ko, tailles [2184]`
+- **T1** `=== resultat 8 Ko`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : [stderr]   File "<stdin>", line 22     t=sum(1 for p in pos if split_find:= ((propre/f'{s}.txt').read_bytes().find(b[p:p+500]) if p+500<=len(b) else -1))!=-1                                       ^^ S
 

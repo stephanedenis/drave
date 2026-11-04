@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 8.6 h |
-| Tours | 57 |
-| Messages | 539 |
-| Appels d'outils | 749 |
+| Durée | 8.7 h |
+| Tours | 60 |
+| Messages | 548 |
+| Appels d'outils | 753 |
 | Fichiers touchés | 15 |
-| Commandes | 564 |
+| Commandes | 568 |
 | Sous-agents | 0 |
-| Commits | 75 |
+| Commits | 76 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -137,6 +137,12 @@
 **Tour 56** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 57** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 58** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 59** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 60** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1679,7 +1685,64 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Le trim d'état est prêt (T0 3 999) mais le verrou git est tenu ; je retente
+⏵ Cycle 52 : re-split OCR fait (2/1/1, 8 Ko 0), B13 163 en HEAD, T0 3 999
+
+**Cycle 52 — le re-split OCR est fait, la narrative B13 entre en HEAD.**
+
+- **D — le re-split OCR est fait** (`8f32227d`) : aux bornes exactes, **2 documents en train** (Choquette 7 575 car. + DOC1 25 470), **1 en val** (DOC2 19 101), **1 en test** (Assurance 2 103) ; les anciens splits sont conservés. **Train 4,46 M, val 32 220, test 12 711 ; 8 Ko 0**. La ligne de D est close, re-split compris ; l'état le dit (T0 3 999, `68a40051`).
+- **B13 — les passifs sans par entrent vraiment dans HEAD** (`1f74e6cf`) : le chunker donne **3/3 `patient`**, les portes T156/T157 sont à jour (T160), **163/163**.
+- **Audit complet** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 629 mots**, **T0 3 999 / 4 000** ✅.
+- **2 048** : le run continue (première moitié, GPU1 en charge).
+
+**WIP** : B13 (README, implémentation, outils), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**. **Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 58 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+**Synthèse produite :**
+
+⏵ Cycle 53 : audit vert, B13 163/163 confirmé en HEAD, re-split OCR clos
+
+**Cycle 53 — audit vert, les deux faits du cycle 52 tiennent.**
+
+- **Audit complet** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 629 mots**, **T0 3 999 / 4 000** ✅.
+- **B13 163/163** : la narrative `1f74e6cf` confirme que les **passifs sans `par`** entrent vraiment dans HEAD — chunker **3/3 `patient`**, portes **T156/T157** à jour, **T160** ; le correctif hors du chemin S reste nommé.
+- **D** : le re-split OCR est **fait** (2 train / 1 val / 1 test, 8 Ko 0, train 4,46 M) et inscrit dans la ligne de D.
+- **2 048** : le run continue (première moitié, GPU1 en charge).
+- **WIP** : B13 (README, implémentation, outils), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 59 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+
+**Synthèse produite :**
+
+⏵ Cycle 54 : audit vert, le 2 048 monte (2 200/10 000), B13 163 stable
+
+**Cycle 54 — audit vert, le 2 048 progresse.**
+
+- **Audit complet** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 629 mots**, **T0 3 999 / 4 000** ✅.
+- **B13 163/163** stable : les passifs sans `par` (chunker 3/3, T156/T157, T160) sont dans HEAD ; la suite (README, implémentation, outils) reste en WIP.
+- **D** : le re-split OCR est fait (2/1/1, 8 Ko 0) et inscrit dans la ligne de D.
+- **2 048** : le run est à **2 200/10 000** (2 248 s, GPU1 à 100 %) ; la seconde moitié suivra.
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 60 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Audit and check state time
+- bash — Correct time and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 55 : heure 16 h 10 (session) à recaler ; commit de l'état
 
 ## 3. Travail accompli
 
@@ -1745,7 +1808,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 524 autres
+- … et 528 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1968,4 +2031,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0" -m "Les quatre documents OCR sont répartis aux bornes exactes (Choquette 7 575 + DOC1 25 470 en
 - ÉTAT — T0 3 997 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)" -m "Le re-split OCR est fait et inscrit dans la ligne de D (train 4,46 M, val 32 220, test 12 711, 
 - ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)" -m "Le re-split OCR est fait et inscrit dans la ligne de D (train 4,46 M, val 32 220, test 12 711, 
+- ÉTAT — HEURE 16 H 04 ; B13 163/163, D clos, 2 048 À 2 200 PAS" -m "Cycle d'audit : les sept contrôles sont verts (624/717, 3036 liens, T0 3999, en-cours 1629, b
 

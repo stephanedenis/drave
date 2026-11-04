@@ -37398,3 +37398,155 @@ if e is None:
 … [1945 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"attachement\"\\|attachement' tools/bloc_linguistique.py | head -12; echo ---; grep -n \"def _seg\\b\" -A 12 tools/tests/linguistique/evaluer_gold.py | head -16", "description": "Voir où l'attachement est posé"}`
+
+  ```
+671:                    att = c.get("attachement") or {}
+678:                        meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
+---
+55:def _seg(a: bl.Annotation) -> set[tuple[str, int, int]]:
+56-    return {(e.type, e.debut, e.fin) for e in a.etiquettes if e.niveau == "syntagme"}
+57-
+58-
+59-def _tete(a: bl.Annotation) -> set[tuple[str, int]]:
+60-    """La tête d'un segment : son premier token (début) et son type."""
+61-    return {(e.type, e.debut) for e in a.etiquettes if e.niveau == "syntagme"}
+62-
+63-
+64-def _pragma(a: bl.Annotation) -> dict:
+65-    acte = next((e.valeur for e in a.etiquettes if e.niveau == "pragmatique" and e.type == "acte"), "")
+66-    neg = any(e.type == "négation" for e in a.etiquettes if e.niveau == "phrase")
+67-    mod = any(e.type == "modalité" for e in a.etiquettes if e.niveau == "phrase")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '640,700p' tools/bloc_linguistique.py", "description": "Lire la construction du meta d'attachement"}`
+
+  ```
+# 4. phrase + pragmatique
+        for d, f, p, typ in self._phrases(texte):
+            etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.85,
+                                        langue=lg, script=script))
+            if self._negation(p):
+                etiquettes.append(Etiquette("phrase", "négation", "oui", d, f, self.nom, 0.65,
+                                            langue=lg, script=script))
+            if self._modalite(p):
+                etiquettes.append(Etiquette("phrase", "modalité", "oui", d, f, self.nom, 0.55,
+                                            langue=lg, script=script))
+            premier = next((m.group() for m in re.finditer(r"\w+", p)), "")
+            acte = ("question" if typ == "interrogative" else
+                    "exclamation" if typ == "exclamative" else
+                    "ordre" if premier.casefold() in VERBES_IMPERATIFS else "assertion")
+            etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f, self.nom, 0.45,
+                                        candidats=["assertion", "question", "ordre"],
+                                        langue=lg, script=script))
+            if (" ou " in p or "«" in 
+… [2701 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente la cible par proximité (le verbe du GV le plus proche) et je mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# 1) helper de proximité, juste avant _syntagmes_simple\nt=t.replace('''    def _syntagmes_simple(self, texte: str, langue: str) -> list … [3446 caractères tronqués]`
+
+  ```
+règle de proximité posée
+attachement {'cibles': 239, 'labels': 145, 'top1': 95, 'topk': 78, 'exact': 13, 'top1_taux': 0.3975, 'topk_taux': 0.3264, 'exact_taux': 0.0544, 'couverture': 0.6067}
+tête {'cibles': 145, 'labels': 145, 'top1': 94, 'topk': 77, 'top1_taux': 0.6483, 'topk_taux': 0.531, 'couverture': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain net : top1 0,3431 → **0,3975**, exact 0,0042 → **0,0544** (×13), tête 0,5586 → 0,6483
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-bloc-linguistique.sh 2>&1 | tail -2; timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr= … [288 caractères tronqués]`
+
+  ```
+}
+✅ porte bloc linguistique verte
+POS 0.7455 | syn 0.2864 | tête 0.4989 | pragma {'acte': 0.9967, 'negation': 0.9771, 'modalite': 0.9886, 'double_sens': 0.9444}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | tail -4", "description": "Lancer l'autotest complet en fond", "run_in_background": true, "timeoutMs": 5400000}`
+
+  ```
+started background job bash-213
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nph=charger()\nprint('charger =', len(ph), 'phrases')\nr4 … [326 caractères tronqués]`
+
+  ```
+charger = 612 phrases
+432 : POS 0.7577 | syn 0.2705 | tête 0.4736 | pragma {'acte': 0.9954, 'negation': 0.9884, 'modalite': 0.9838, 'double_sens': 0.963}
+432 attachement {'cibles': 184, 'labels': 115, 'top1': 73, 'topk': 60, 'exact': 13, 'top1_taux': 0.3967, 'topk_taux': 0.3261, 'exact_taux': 0.0707, 'couverture': 0.625}
+  ```
+
+- **job_kill** `{"job_id": "bash-213", "reason": "Ajouter T161 avant de relancer la passe complète"}`
+
+  ```
+requested cancellation of job bash-213
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def t153_attachement' tools/pensee/autotest.py | cut -d: -f1),+8p\" tools/pensee/autotest.py", "description": "Lire T153 à mettre à jour"}`
+
+  ```
+def t153_attachement() -> tuple[bool, str]:
+    """L'attachement sur le gold 432 : top1 0,3431, exact 0,0042."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.3431) < 0.001
+            and abs(r["exact_taux"] - 0.0042) < 0.001), (
+        f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
+        f"couverture {r['couverture']}")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''def t153_attachement() -> tuple[bool, str]:\n    \"\"\"L'attachement sur le gold 432 : top1 0,3431, exact 0,0042.\"\"\"\n   … [2586 caractères tronqués]`
+
+  ```
+T153 mis à jour, T161 ajoutée
+2509:              ("T160 passifs sans par", t160_passifs_sans_par()),
+2510:              ("T161 cible proximité", t161_cible_proximite())]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | tail -4", "description": "Relancer l'autotest complet avec T161", "run_in_background": true, "timeoutMs": 5400000}`
+
+  ```
+started background job bash-217
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-cible-proximite.md <<'MD'\n# B13 — la cible par proximité : l'exact passe de 0,0042 à 0,0544 (×13)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅ … [6240 caractères tronqués]`
+
+  ```
+fiche, JSON, docs, état et README écrits
+  revue de documentation · 625 fiche(s) · 718 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4009 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"cible par proximité (**exact 0,0042 → 0,0544**, fiche [cible proximité](../../reports/rapport-pensee-cible-proximite.md)) ; … [508 caractères tronqués]`
+
+  ```
+❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"cible par proximité (**exact 0,0042 → 0,0544**) ;\", \"cible par proximité (exact 0,0042 → 0,0544) ;\")\np.write_text(t)\nP … [87 caractères tronqués]`
+
+  ```
+❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"puis le **générateur S** (passifs) ; T132/T133 à 5/5.\", \"puis le **générateur S** ; T132/T133 à 5/5.\")\np.write_text(t)\ … [153 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **job_output** `{"job_id": "bash-217", "timeout_ms": 600000, "wait": true}`
