@@ -10598,3 +10598,18 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-51 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-54", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log", "description": "Poll corrected production KD"}`
+
+  ```
+14:50:46
+kdpp a=0 fini 13:09:40
+027 · dure 1.0192 · douce 0.2528 · 5809 s
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK", "description": "Wait for final production arm", "timeoutMs": 700000}`
