@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (51)
+## Commits du jour (52)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -59,6 +59,7 @@
 | 16:16 | `f661728c` | B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+17) |
 | 16:19 | `3833a604` | D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 ÉCARTÉS) ; T0 3 984 | `en-cours.md`, `README.md`, `apprentissage.md` (+15) |
 | 16:23 | `8c73db9b` | ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
+| 16:35 | `1d2cd6af` | ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+17) |
 
 ## Chiffres du jour
 

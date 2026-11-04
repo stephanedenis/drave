@@ -17038,3 +17038,140 @@ pas   3950 · perte 0.9882 · PPL val 2.666 · 4037 s
 ⏵ Les pages 165 sont stagées ; je recale l'heure de l'état et commit le tout
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h61.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h61.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\* … [1045 caractères tronqués]`
+
+  ```
+heure 16 h 35
+[s/close 1d2cd6af] ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+ 20 files changed, 332 insertions(+), 46 deletions(-)
+1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+83c91b24 ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Attention : le commit est tombé sur la branche `s/close`, pas `s/v7` — je vérifie et corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== BRANCHE ===\" ; git branch --show-current ; git branch -a | head -10 ; echo \"=== S/V7 ===\" ; git log --oneline -2 s/v7 ; echo \"=== S/CLOSE ===\" ; git log --oneline -2 s/close ; echo \"=== DIFF ===\" ; git log --oneline  … [119 caractères tronqués]`
+
+  ```
+=== BRANCHE ===
+s/close
+  backup/pre-scrub-20261101-133055
+  master
+* s/close
+  s/v7
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/master
+  remotes/origin/s/close
+  remotes/origin/s/v7
+=== S/V7 ===
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+8c73db9b ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS
+=== S/CLOSE ===
+1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+83c91b24 ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET
+=== DIFF ===
+1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+83c91b24 ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET
+  ```
+
+### 🤖 Assistant
+
+⏵ `s/close` = `s/v7` + 2 commits ; je reviens sur `s/v7` et fast-forward
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git checkout s/v7 2>&1 | tail -2 ; git merge --ff-only s/close 2>&1 | tail -3 ; echo \"=== APRÈS ===\" ; git branch --show-current ; git log --oneline -3 ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -6", "descri … [48 caractères tronqués]`
+
+  ```
+M	reports/pensee-quatre-modes.json
+M	tools/structures
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 105 +++++++++++++++++
+ .../rapport.md                                     |  58 +++++++--
+ 21 files changed, 492 insertions(+), 69 deletions(-)
+=== APRÈS ===
+s/v7
+1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+83c91b24 ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 61 : B13 165/165, branche recollée sur `s/v7`, session S en pause
+
+**Cycle 61 — le 165e fait B13 entre, et la branche est recollée.**
+
+- **B13 165/165 — les candidats verbes** (`f7195ce0`) : les `candidats` portent les verbes des trois GV les plus proches (`_verbes_proches`) ; **top-k 0,3264 → 0,4686**, **tête 0,5310 → 0,7655** ; top1 (0,3975) et exact (0,0544) inchangés. État et pages à 165/165 (`83c91b24`, `1d2cd6af`).
+- **Branche recollée** : le commit d'état était tombé sur `s/close` (branche d'une session) ; la branche est revenue sur **`s/v7`** et le fast-forward a intégré les 2 commits (`1d2cd6af` en tête).
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 612 mots**, **T0 3 982 / 4 000** ✅.
+- **Session S en pause** (5 min) ; N2 et OCR **en pause**.
+- **2 048** : le run continue (3 950/10 000, GPU1 en charge).
+
+**WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`). **Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 67
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 62/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 62 : instantané et audit des sept contrôles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+83c91b24 ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+8c73db9b ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS
+3833a604 D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 ÉCARTÉS) ; T0 3 984
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause ·  77 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 289 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause ·   9 min · S (structures) — S-analyseur rô
+… [524 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [317 caractères tronqués]`
+
+  ```
+revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1612 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3982 mots (budget 4 000)
+  ✅ 3053 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---ROPE---
+pas   4150 · perte 1.0960 · PPL val 2.662 · 4241 s
+0, 0 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 62 : audit vert ; je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h62.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h62.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\* … [867 caractères tronqués]`
