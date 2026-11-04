@@ -11288,3 +11288,206 @@ revue de documentation · 617 fiche(s) · 710 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 25 : audit vert ; l'état a repris 15 h 45 — je recale et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h25.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h25.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [988 caractères tronqués]`
+
+  ```
+heure 14 h 10
+  revue de documentation · 617 fiche(s) · 710 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3986 mots (budget 4 000)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-396]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-396", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[s/v7 9c2f5d72] ÉTAT — HEURE 14 H 11 ; B13 157/157, N2 α = 0,9 À 7 150 PAS
+ 15 files changed, 281 insertions(+), 41 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 25
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -6 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [337 caractères tronqués]`
+
+  ```
+9c2f5d72 ÉTAT — HEURE 14 H 11 ; B13 157/157, N2 α = 0,9 À 7 150 PAS
+2db5fb4e B13 157/157 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE (87,2 %), COUVERTURE RÉELLE 0,1283 ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+f20662d7 ÉTAT — HEURE 14 H 05 ; B13 156/156, N2 α = 0,9 À 6 400 PAS
+---STATUS---
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 617 fiche(s) · 710 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1616 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3986 mots (budget 4 000)
+---LIENS---
+  ✅ 2989 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas  7450 · perte 0.9735 · dure 1.1036 · douce 0.2737 · 3549 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 25 : audit vert, heure 14 h 11, B13 157/157 stable
+
+**Cycle 25 — tout est vert, l'état est recalé.**
+
+- **Audit complet** : revue ✅ **617 fiches / 710 JSON / 120 docs / 83 portes** ; **2 989 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **État** : heure ramenée de **15 h 45** (horloge de session) à **14 h 11** ; B13 reste à **157/157** (l'attachement et les cibles committés), rien de neuf à intégrer.
+- **WIP** : B13 `pensee-quatre-modes.json` (prochaine mesure), S `rapport-s-paragraphes.md`.
+- **Paire propre N2** : **α = 0,9** à **7 450 pas** (perte 0,974), GPU0 99 % / GPU1 99 %.
+
+**Le goal reste actif** : recevoir la prochaine mesure B13 et le fait S, finir α = 0,9, puis lancer la passe complète des portes.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 26/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 26 : instantané, audit et faits committés depuis le cycle 25
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+9c2f5d72 ÉTAT — HEURE 14 H 11 ; B13 157/157, N2 α = 0,9 À 7 150 PAS
+2db5fb4e B13 157/157 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE (87,2 %), COUVERTURE RÉELLE 0,1283 ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+f20662d7 ÉTAT — HEURE 14 H 05 ; B13 156/156, N2 α = 0,9 À 6 400 PAS
+cfd9c273 B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156
+24d5b571 B13 156/156 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042 ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+72f3edab INDEX — 612 → 613 (ATTACHEMENT B13 : 156/156, TOP1 0,3431, EXACT 0,0042) ; HEURE 13 H 55
+e21e6385 ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE) ; COMPTEURS 616/709
+41629e8e B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-cibles-500.json
+?? reports/rapport-pensee-cibles-500.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 272 min · N2 (200 000 pas sur le
+… [945 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 618 fiche(s) · 711 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1616 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3986 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2998 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2998 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"cibles\\|B13 \\*\\*15\\|B13 : 15\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; nvidia-smi --q … [99 caractères tronqués]`
+
+  ```
+14 h 13
+# En ce moment
+
+**Mis à jour : 2026-11-04, 15 h 50 HNE (heure locale, EST).**
+71:- **Fait** : B13 **157/157** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; **tirages à 0,3 : 0,9838 ×3 (déterminisme sur ces invites ; variance non mesurable)** ; **attachement : top1 0,3431, exact 0,0042** ; **cibles : 1863 segments, 1624 sans cible (87,2 %) ; couverture réelle 239/1863 = 0,1283** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [cibles](../../reports/rapport-pensee-cibles.md).
+108:| fichiers / JSON de résultats | **618** / **711** | `reports/*.md` / `reports/*.json` |
+120:| **B — l'intelligen
+… [243 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La fiche « cibles-500 » B13 est apparue ; je lis le verdict avant d'intégrer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -12 reports/rapport-pensee-cibles-500.md ; echo \"=== JSON ===\" ; head -6 reports/pensee-cibles-500.json ; echo \"=== STATE FAIT ===\" ; grep -n \"cibles\" docs/pilotage/en-cours.md | head -3", "description": "Read cibles-500 ve … [17 caractères tronqués]`
+
+  ```
+# B13 — les 500 premiers segments : 294 GN et 206 GV sans cible
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+> **158/158 portes** : les **500 premiers segments sans cible** sont **294 GN** et **206 GV** —
+> la structure élémentaire (sujet + verbe) des phrases du début du gold. Leur attachement n'est
+> pas annoté, et la règle ne peut pas l'inventer : c'est la **couverture** qui manque, pas la
+> mesure.
+>
+> **Dispositif** : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`gold_reel.py`](../tools/tests/linguistique/gold_reel.py),
+> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-cibles-500.json`](pensee-cibles-500.json).
+
+=== JSON ===
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "158/158",
+ "premiers_500": {
+  "GN": 294,
+=== STATE FAIT ===
+71:- **Fait** : B13 **157/157** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; **tirages à 0,3 : 0,9838 ×3 (déterminisme sur ces invites ; variance non mesurable)** ; **attachement : top1 0,3431, exact 0,004
+… [643 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 158/158 : 500 premiers segments sans cible = 294 GN / 206 GV — j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:60]); continue\n        t=t.replace(old … [1988 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1633 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4003 mots (budget 4 000)
+  revue de documentation · 618 fiche(s) · 711 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2998 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 003 : je resserre les cibles et la pragmatique, puis commit du 158
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**cibles : 1863 segments, 1624 sans cible (87,2 %) ; couverture réelle 239/1863 = 0,1283**\", \"**cibles : 1863 segments, 1 … [1440 caractères tronqués]`

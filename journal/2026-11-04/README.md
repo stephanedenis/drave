@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**52 commits** · **5 session(s)** · **6 thème(s)**
+**53 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 23 | [docs.md](docs.md) |
+| docs | 24 | [docs.md](docs.md) |
 | mesures | 18 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 45.9 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 46.0 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
 | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 6.8 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 43.7 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 2.5 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
@@ -84,6 +84,7 @@
 | 14:01 | `cfd9c273` | B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156 |
 | 14:04 | `f20662d7` | ÉTAT — HEURE 14 H 05 ; B13 156/156, N2 α = 0,9 À 6 400 PAS |
 | 14:08 | `2db5fb4e` | B13 157/157 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE (87,2 %), COUVERTURE RÉELLE 0,1283 ; ÉTAT, ROADMAP, CHANTIERS, PLAN |
+| 14:10 | `9c2f5d72` | ÉTAT — HEURE 14 H 11 ; B13 157/157, N2 α = 0,9 À 7 150 PAS |
 
 ## Le récit de la journée (écrit à la main)
 

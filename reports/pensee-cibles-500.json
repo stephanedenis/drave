@@ -1,0 +1,15 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "158/158",
+ "premiers_500": {
+  "GN": 294,
+  "GV": 206
+ },
+ "total_sans_cible": 1624,
+ "limites": [
+  "les 500 suivants peuvent différer",
+  "gold 432",
+  "la cible d'un GN sujet n'est pas définie"
+ ]
+}

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,6 +31,7 @@
 | 13:58 | `24d5b571` | B13 156/156 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042 ; ÉTAT, ROADMAP, CHANTIERS, PLAN | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+16) |
 | 14:04 | `f20662d7` | ÉTAT — HEURE 14 H 05 ; B13 156/156, N2 α = 0,9 À 6 400 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+13) |
 | 14:08 | `2db5fb4e` | B13 157/157 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE (87,2 %), COUVERTURE RÉELLE 0,1283 ; ÉTAT, ROADMAP, CHANTIERS, PLAN | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+13) |
+| 14:10 | `9c2f5d72` | ÉTAT — HEURE 14 H 11 ; B13 157/157, N2 α = 0,9 À 7 150 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
 
 ## Chiffres du jour
 
@@ -40,7 +41,7 @@
 
 ## Sessions actives ce jour
 
-- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 45.9 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 46.0 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
 - `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 6.8 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 43.7 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 2.5 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)

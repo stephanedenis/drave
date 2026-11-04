@@ -35877,3 +35877,89 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-160", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 2db5fb4eea85cb76d0aec654c75631cd98683a28 but expected f20662d74549308ccb0ac116899bc63f480775f4
+COMMIT OK 1
+2db5fb4e B13 157/157 — LES CIBLES DE L'ATTACHEMENT : 1624 SEGMENTS SANS CIBLE (87,2 %), COUVERTURE RÉELLE 0,1283 ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+mer 04 nov 2026 14:11:57 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 13 rounds, 157/157 ; cibles 12,8 %, double sens 0,98
+
+Le round des **cibles** précise le point faible de L : **239 cibles sur 1863 segments** (12,8 %). Commits **`2db5fb4e`** (le round, emporté par le commit d'état d'une autre session) et les précédents.
+
+## Le round
+
+| mesure | valeur |
+|---|---:|
+| segments du gold 432 | **1863** |
+| segments **sans cible** | **1624** (87,2 %) |
+| segments avec cible | **239** (12,8 %) |
+
+**Ce que ça dit** :
+
+- **L'attachement est à peine annoté** : 12,8 % des segments ont une cible ; le taux exact de 0,0042 se lit sur 239 cibles, pas sur 1863 segments.
+- **La fiche T153 sous-estimait** : elle parlait de « 94 cibles sans label » ; le vrai chiffre est **1624 segments sans cible**. La nuance est importante : le gold n'annote pas l'attachement de la plupart des segments, il annote **quelques** cibles.
+- **Deux dénominateurs, deux lectures** : la couverture 0,6067 de T153 (145 labels sur 239 cibles) et la couverture 0,1283 (239 sur 1863 segments) — il faut les nommer.
+- **La négative est explicite** : 0,1283 de couverture, ce n'est pas un gold d'attachement.
+
+## L'état de l'autonomie (13 rounds)
+
+| # | round | résultat |
+|---|---|---|
+| 1–2 | défaut conditionnel, seuil du parallèle | niveau si la clé ; la confiance plafonne |
+| 3–4 | 3ᵉ passe, DRVM N0.1 | variance nulle ; le payload corrompu refusé |
+| 5–6 | variance 0,3, pragmatique 130 | ±0,0074 ; acte 1,0, négation 1,0 |
+| 7–8 | pragma 432, fusion par sous-type | acte 0,9954 ; double sens 0,9676 → 0,9884 |
+| 9–11 | variance sous-type, tirages, erratum | 0,9838 ; déterminisme (pas le cache) |
+| 12–13 | attachement, cibles | top1 0,3431, exact 0,0042 ; 12,8 % annotés |
+
+- **157/157 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **617 fiches / 710 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **14 h 11 HNE** ; il reste **~1 h 40** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard — le merge est à faire proprement (je ne l'ai pas tenté : la branche porte les travaux de plusieurs sessions).
+
+## La suite
+
+1. **Annoter l'attachement** : 1863 segments est un travail réel ; commencer par les 500 premiers.
+2. **La règle d'attachement** : le top-k 0,3264 sur les 239 cibles est le seul signal.
+3. **Le merge `s/v7` → `master`** : quand les autres sessions seront au repos.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue la file : prochain round, **l'attachement des 500 premiers segments** — la couverture, mesurée.
+
+
+## Tour 164
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 145/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\n# les 500 premiers segments sans cible : quels types, quelles phrases ?\nfrom collections import Counter\n … [415 caractères tronqués]`
+
+  ```
+500 premiers sans cible : {'GN': 294, 'GV': 206}
+[('g001', 'GN', 'Le chat'), ('g001', 'GV', 'dort'), ('g002', 'GN', 'Le chat'), ('g002', 'GV', 'dort'), ('g003', 'GN', 'La femme'), ('g003', 'GV', 'a vu'), ('g003', 'GN', "l'homme"), ('g004', 'GN', 'Il')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-cibles-500.md <<'MD'\n# B13 — les 500 premiers segments : 294 GN et 206 GV sans cible\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅\n> **158/158 … [6327 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 618 fiche(s) · 711 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`
