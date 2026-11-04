@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 27.2 h |
-| Tours | 7 |
-| Messages | 721 |
-| Appels d'outils | 672 |
+| Durée | 41.5 h |
+| Tours | 8 |
+| Messages | 730 |
+| Appels d'outils | 680 |
 | Fichiers touchés | 27 |
-| Commandes | 497 |
+| Commandes | 504 |
 | Sous-agents | 0 |
-| Commits | 26 |
+| Commits | 27 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -41,6 +41,8 @@
 **Tour 6** — continue
 
 **Tour 7** — <goal_round> Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identi … [912 caractères tronqués]
+
+**Tour 8** — reprends
 
 ## 2. Déroulé, étape par étape
 
@@ -251,6 +253,23 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ⏵ Préparation des deux compléments (2 048 mêmes pas, distillation 30 k) pendant les runs
 
+### Tour 8 — reprends
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check time, runs, GPU and git state
+- bash — Inspect relaunched runs and reboot commit
+- bash — Read my plan and state block after reboot
+- bash — Check for leftover placeholders in fiches
+- bash — Check relaunch commands and plan diff
+- bash — Reopen plan after reboot
+- bash — Write post-reboot narrative and commit
+- job_output
+
+**Synthèse produite :**
+
+⏵ Réouverture de la session et état post-reboot
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -327,7 +346,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 457 autres
+- … et 464 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -501,4 +520,5 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG' ÉTAT — T0 REVENU À 3 994 APRÈS 
 - cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 40); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q 
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
+- cd /home/stephane/GitHub/Qtrinet && cat >> journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md <<'EOF'  ## 04/11 — reprise après le reboot : les de
 

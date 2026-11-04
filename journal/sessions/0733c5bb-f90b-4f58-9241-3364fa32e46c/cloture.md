@@ -127,3 +127,22 @@ doublent, et un meilleur professeur donne-t-il un meilleur élève ?
 
 **Commits de la phase** : `ad070205`, `43833200`, `36195516`, `d0c9646a` (+ `a07c99cc`,
 `f1e8007e` pour la réouverture).
+
+## 04/11 — reprise après le reboot : les deux runs relancés
+
+Le reboot du **03/11 à 19 h 33** a interrompu les deux runs de la nuit **sans checkpoint** :
+`kd2` (distillation 30 000 pas, 8 250 pas faits) et `rope2048-20k` (complément 2 048, 3 350 pas
+faits). Aucune mesure perdue — les fiches portaient déjà leurs résultats antérieurs ; ce sont les
+**deux compléments** qui manquent.
+
+Le hub les a **relancés le 04/11 à 09 h 30** sur les deux cartes (claim `n2-jour`), et la passe de
+portes attend leur sortie (règle § 11) :
+
+| run | carte | pas | avancement | sortie attendue |
+|---|---|---:|---|---|
+| `kd2` — professeur 60 k → élève 512 | gpu0 | 30 000 | mesure en cours | ~13 h 15 |
+| `rope2048-20k` — complément « mêmes pas » | gpu1 | 20 000 | mesure en cours | ~14 h 45 |
+
+À leur sortie : mesurer (les mêmes bancs, mêmes contrôles), remplacer les sections « run
+interrompu, non mesuré » des fiches `n2-production-fenetre` § 5 et `n2-r12-2048` § 5 par les
+résultats, mettre l'état à jour et committer.

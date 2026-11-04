@@ -8767,3 +8767,10 @@ Le gold passe de 55 à **60 phrases** avec la vague 5 (`h056–h060`), écrite a
 
 Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le principal en **`8854fe8f`**. Le serveur a été relancé (pid 2486060) et `http://127.0.0.1:8765/paragraphes` répond 200 avec les sources anglaises : recharge la page pour voir les arbres corrigés, puis tranche les référents et les structures. La suite : la rétro-traduction FR → EN → FR par l'API DeepSeek quand la clé sera là (jamais par un serveur local, règle 11), les 71 langues de l'UDHR pour un test de référents plus large, et la nouvelle limite nommée — le nom après un adjectif **hors lexique** (« Le fait divers surprend »).
 
+
+## Tour 15
+
+### 👤 Utilisateur
+
+ensuite?
+

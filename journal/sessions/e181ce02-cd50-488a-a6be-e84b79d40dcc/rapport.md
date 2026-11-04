@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 46.0 h |
-| Tours | 155 |
-| Messages | 1820 |
-| Appels d'outils | 1554 |
+| Durée | 89.0 h |
+| Tours | 156 |
+| Messages | 1836 |
+| Appels d'outils | 1568 |
 | Fichiers touchés | 25 |
-| Commandes | 1272 |
+| Commandes | 1286 |
 | Sous-agents | 2 |
 | Commits | 195 |
 | Compactages de contexte | 5 |
@@ -345,6 +345,8 @@
 **Tour 154** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 155** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 156** — reprends
 
 ## 2. Déroulé, étape par étape
 
@@ -8230,6 +8232,29 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - bash — Écrire la fiche des vrais absents et la porte T137
 - bash — Trim README et passer toutes les portes
 
+### Tour 156 — reprends
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état après l'interruption
+- bash — Vérifier les fichiers du round 141
+- bash — Vérifier la porte T137 et l'historique des fichiers
+- bash — Vérifier les dernières portes et l'état du pilotage
+- bash — Lire la dernière fiche de la ligne B13
+- bash — Trouver le refus r353
+- bash — Lire l'adaptateur neuronal réel
+- bash — Trouver le banc des quatre modes et le refus
+- bash — Lire la logique de refus des quatre modes
+- bash — Lire le banc des quatre modes
+- bash — Tester le refus r353 via l'API
+- bash — Voir où PRIORITE_NIVEAU est utilisé
+- bash — Basculer le défaut et mesurer
+- bash — Rétablir le défaut et mesurer la différence
+
+**Synthèse produite :**
+
+⏵ Reprendre après l'interruption : vérifier l'état et finir le round
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8309,7 +8334,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1232 autres
+- … et 1246 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8437,7 +8462,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 
 ## 5. Erreurs rencontrées
 
-24 sorties en erreur ou divergentes. Les premières :
+26 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]

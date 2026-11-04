@@ -32764,3 +32764,265 @@ classes {'liens': 116, 'intra': 51, 'inter': 65, 'absent': 0, 'taux_intra': 0.43
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-absents.md`](rapport-pensee-absents.md) | **B13** — les absents : 0, les quatre étaient des faux, **139/139** |\ … [589 caractères tronqués]`
+
+  ```
+The tool call was interrupted after it was recorded, but no result was durably recorded. Its outcome is unknown. Decide whether to retry from the tool semantics: retry only if the operation is read-only or idempotent; if it may have side effects, first verify external state or ask the user. Do not retry blindly.
+  ```
+
+
+## Tour 156
+
+### 👤 Utilisateur
+
+reprends
+
+### 👤 Utilisateur
+
+<system-reminder>
+Updated instructions from: AGENTS.md
+
+This file changed after it was loaded. Use the following content instead of the previously loaded instructions from this file.
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Reprendre après l'interruption : vérifier l'état et finir le round
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date && git log -1 --format='%h %s' && git status --porcelain | head -8 && python3 tools/taille_documents.py 2>&1 | tail -3 && grep -c \"rapport-pensee-absents\" reports/README.md", "description": "Vérifier l'état après l'interruptio … [3 caractères tronqués]`
+
+  ```
+mer 04 nov 2026 09:41:05 EST
+55243f42 N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/rapport-pensee-vrais-absents.md reports/pensee-vrais-absents.json 2>&1 | tail -2; grep -c \"T137\" tools/pensee/autotest.py; git log --oneline -3; git status --porcelain | wc -l", "description": "Vérifier les fichiers  … [14 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  253  2 nov 14:40 reports/pensee-vrais-absents.json
+-rw-r--r--. 1 stephane stephane 3166  2 nov 14:40 reports/rapport-pensee-vrais-absents.md
+1
+55243f42 N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+0582a6e1 MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11
+59329788 REPRISE — LES QUATRE SESSIONS INTERROMPUES SONT TRIÉES ; ÉTAT AU 04/11
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"t137\\|T137\" tools/pensee/autotest.py; echo ---; git log --all --oneline -2 -- reports/rapport-pensee-vrais-absents.md; echo ---; git log --all --oneline -3 -- tools/tests/linguistique/miroir.py", "description": "Vérifier  … [44 caractères tronqués]`
+
+  ```
+2007:def t137_vrais_absents() -> tuple[bool, str]:
+2153:              ("T137 vrais absents", t137_vrais_absents())]
+---
+702b368c B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140
+---
+87e2e5a9 L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)
+4f1de240 L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE
+d0589cd3 L/B13 — LA CONTRAINTE THÉMATIQUE : CINQ CONTRAINTES DE FORME, TOUJOURS 5/10 — LE LIEN DE SURFACE PLAFONNE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"T1[3-9][0-9]\" tools/pensee/autotest.py | tail -6; echo ---; grep -n \"B13\\|Pensée\\|session L\" docs/pilotage/en-cours.md | head -6; echo ---; git log --oneline -6 --all -- reports/ | head -6", "description": "Vérifier le … [42 caractères tronqués]`
+
+  ```
+2148:              ("T132 lien auto", t132_lien_auto()),
+2149:              ("T133 lien réparé", t133_lien_auto_fixe()),
+2150:              ("T134 lien coréf", t134_lien_coref()),
+2151:              ("T135 liens classés", t135_liens_classes()),
+2152:              ("T136 absents", t136_absents()),
+2153:              ("T137 vrais absents", t137_vrais_absents())]
+---
+17:- **Fait** : index réparé (`git read-tree HEAD`) ; N2/S/Pensée triés ; **8 verdicts S** committés ; banque **84/67** ; **fix FIFO** (+3 tests) ; état au 04/11.
+43:- **Ce que font les autres** : **N2**, **S**, **Pensée**.
+59:- **Ce que font les autres** : **hub**, **N2**, **Pensée**.
+66:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)*
+69:- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
+70:- **Plan** : B13, R4.4, bloc linguistique.
+---
+59329788 REPRISE — LES QUATRE SESSIONS INTERROMPUES SONT TRIÉES ; ÉTAT AU 04/11
+8854fe8f S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES
+c4ea82e6 COMPLÉMENT — LES CONTRÔLES DE SORTIE DE LA PRODUCTION : FENÊTRE S
+… [441 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -t reports/rapport-pensee*.md | head -5; echo ---; tail -30 $(ls -t reports/rapport-pensee*.md | head -1)", "description": "Lire la dernière fiche de la ligne B13"}`
+
+  ```
+reports/rapport-pensee-fusion-reparee.md
+reports/rapport-pensee-quatre-modes.md
+reports/rapport-pensee-frontiere-71.md
+reports/rapport-pensee-lien-appris.md
+reports/rapport-pensee-lien-deux-sens.md
+---
+  prenait les syntagmes de l'heuristique. Mesuré : **0,9331 / 0,8069 / 0,8704** — la POS gagne
+  0,0022, mais les syntagmes perdent **0,0157** (46 phrases de syntagmes heuristiques faux).
+  **Rejeté** : la fusion stricte par niveau est meilleure.
+- **Les seuils de la porte** : `parallele_niveau` et `cascade_niveau` **passent** ; l'ancien
+  `parallele` **échoue** (0,928 < 0,9299) ; `aucun_refus` échoue (**1 refus**, `r353`).
+- **Tests du contrat** : 16/16 ; **porte du bloc linguistique** : verte.
+
+## 5. Ce qui pourrait rendre ce résultat faux
+
+- Un seul gold (432 phrases), une seule passe API (température 0, cache versionné).
+- Le choix des niveaux (`PRIORITE_NIVEAU`) est **une décision**, pas une mesure : il vient des
+  mesures de la porte (le neuronal gagne POS/syntagmes/tête, l'heuristique la pragmatique).
+- La fusion stricte **n'a pas de repli** : si le neuronal ne rend pas un niveau, ce niveau est vide
+  (le contrat du refus). C'est assumé — le repli mesuré était pire.
+- Le refus
+… [776 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"r353\" reports/*.md tools/tests/linguistique/*.py tools/*.py 2>/dev/null | head -8; echo ---; python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\np=next(p for p  … [121 caractères tronqués]`
+
+  ```
+reports/rapport-pensee-fusion-reparee.md:58:  `parallele` **échoue** (0,928 < 0,9299) ; `aucun_refus` échoue (**1 refus**, `r353`).
+reports/rapport-pensee-fusion-reparee.md:68:- Le refus `r353` reste ouvert.
+reports/rapport-pensee-fusion-reparee.md:73:2. **Le refus `r353`** : le nommer, le traiter.
+tools/tests/linguistique/gold_reel.py:1087:    ('r353', 'fr', "Le professeur parle ; les élèves l'écoutent.",
+---
+Le professeur parle ; les élèves l'écoutent.
+{'acte': 'assertion', 'coref': {"l'": 'professeur'}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '826,900p' tools/bloc_linguistique.py", "description": "Lire l'adaptateur neuronal réel"}`
+
+  ```
+"Niveaux attendus : phrase.type, pragmatique.acte, syntagme (GN/GV/GP/REL/SUB). "
+            f"Langue indiquée : {langue or 'inconnue'}. Contexte : {contexte or 'aucun'}.\n"
+            f"Texte : {texte}"
+        )
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        if not pathlib.Path(self.modele).exists():
+            raise RefusNeuronal(f"modèle absent : {self.modele}")
+        try:
+            sortie = subprocess.run(
+                [self.llama_cli, "-m", self.modele, "-p", self._prompt(texte, langue, contexte),
+                 "-n", str(self.max_jetons), "--temp", "0", "--no-display-prompt"],
+                capture_output=True, text=True, timeout=self.timeout)
+        except (OSError, subprocess.TimeoutExpired) as e:
+            raise RefusNeuronal(str(e)) from e
+        texte_sortie = sortie.stdout.strip()
+        debut = texte_sortie.find("{")
+        fin = texte_sortie.rfind("}")
+        if debut < 0 or fin <= debut:
+            raise RefusNeuronal(f"pas de JSON : {texte_sortie[:120]!r}")
+        try:
+            d = json.loads(texte_sortie[debut:fin + 1])
+  
+… [2815 caractères tronqués]
+  ```
+

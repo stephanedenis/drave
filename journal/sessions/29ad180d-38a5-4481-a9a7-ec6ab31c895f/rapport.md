@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 26.6 h |
-| Tours | 14 |
-| Messages | 415 |
-| Appels d'outils | 404 |
+| Durée | 41.5 h |
+| Tours | 15 |
+| Messages | 417 |
+| Appels d'outils | 405 |
 | Fichiers touchés | 17 |
-| Commandes | 317 |
+| Commandes | 318 |
 | Sous-agents | 0 |
 | Commits | 31 |
 | Compactages de contexte | 1 |
@@ -46,6 +46,8 @@
 **Tour 13** — tu peux aussi valider le sens (et indirectement les référents de syntaxe) en utilisant des traductions.
 
 **Tour 14** — continue
+
+**Tour 15** — ensuite?
 
 ## 2. Déroulé, étape par étape
 
@@ -545,6 +547,16 @@ Le gold passe de 55 à **60 phrases** avec la vague 5 (`h056–h060`), écrite a
 Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le principal en **`8854fe8f`**. Le serveur a été relancé (pid 2486060) et `http://127.0.0.1:8765/paragraphes` répond 200 avec les sources anglaises : recharge la page pour voir les arbres corrigés, puis tranche les référents et les structures. La suite : la rétro-traduction FR → EN → FR par l'API DeepSeek quand la clé sera là (jamais par un serveur local, règle 11), les 71 langues de l'UDHR pour un test de référents plus large, et la nouvelle limite nommée — le nom après un adjectif **hors lexique** (« Le fait di
 … [17 caractères tronqués]
 
+### Tour 15 — ensuite?
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Locate French/English Alice paragraph pairs
+
+**Synthèse produite :**
+
+⏵ Ensuite : étendre la banque à neuf paragraphes complets pour que la validation ait du volume, puis l'API et l'UDHR. Je commence par les paires français/anglais.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -611,7 +623,7 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 277 autres
+- … et 278 autres
 
 ## 4. Mesures et résultats marquants
 

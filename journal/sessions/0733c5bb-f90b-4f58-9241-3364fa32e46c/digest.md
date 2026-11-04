@@ -9730,3 +9730,139 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-495 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 50 work/n2ac/kd2-mix512-30k.log; tail -c 50 work/n2ac/rope2048-20k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-497", "timeout_ms": 600000, "wait": true}`
+
+  ```
+The tool call was interrupted after it was recorded, but no result was durably recorded. Its outcome is unknown. Decide whether to retry from the tool semantics: retry only if the operation is read-only or idempotent; if it may have side effects, first verify external state or ask the user. Do not retry blindly.
+  ```
+
+
+## Tour 8
+
+### 👤 Utilisateur
+
+reprends
+
+### 🤖 Assistant
+
+⏵ Reprise : état du temps, des runs et du dépôt
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M:%S'; echo \"=== runs ===\"; cat work/n2ac/kd60k.out 2>/dev/null; cat work/n2ac/prod2048_20k.out 2>/dev/null; ls work/n2ac/kd2-mix512-30k.pt work/n2ac/rope2048-20k.pt 2>/dev/null; echo \"=== GPU ===\"; nvidia-smi --query-gpu=index … [156 caractères tronqués]`
+
+  ```
+2026-11-04 09:41:08
+=== runs ===
+=== GPU ===
+0, 5200 MiB, 100 %
+1, 9950 MiB, 99 %
+=== git ===
+55243f42 N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+0582a6e1 MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -c 70 work/n2ac/kd2-mix512-30k.log 2>/dev/null; echo \"---\"; tail -c 70 work/n2ac/rope2048-20k.log 2>/dev/null; echo \"=== ls ===\"; ls -la work/n2ac/*.pt 2>/dev/null | tail -6; echo \"=== reboot commit ===\"; git show --stat --oneline 55243f42  … [72 caractères tronqués]`
+
+  ```
+5 s
+pas  1000 · perte 1.4246 · dure 1.1311 · douce 0.4151 · 469 s
+---
+l 3.061 · 509 s
+pas    550 · perte 1.2934 · PPL val 3.050 · 560 s
+=== ls ===
+-rw-r--r--. 1 stephane stephane 137248341  2 nov 17:20 work/n2ac/rope-20k-g2.pt
+-rw-r--r--. 1 stephane stephane 137247942  2 nov 16:44 work/n2ac/rope-20k.pt
+-rw-r--r--. 1 stephane stephane 137248208  2 nov 17:51 work/n2ac/rope512-5k.pt
+-rw-r--r--. 1 stephane stephane 137248341  2 nov 18:01 work/n2ac/zero-absolu.pt
+-rw-r--r--. 1 stephane stephane 137248607  2 nov 18:48 work/n2ac/zero-rope-40k.pt
+-rw-r--r--. 1 stephane stephane 137248075  2 nov 18:25 work/n2ac/zero-rope.pt
+=== reboot commit ===
+55243f42 N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+ docs/pilotage/en-cours.md                          |  21 +-
+ journal/2026-11-04/README.md                       |   8 +-
+ journal/2026-11-04/docs.md                         |   6 +-
+ journal/README.md                                  |   5 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md   |   4 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 430 +++++++++++++++++++++
+ .../rapport.md                                     |  78 +
+… [239 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 1,40p journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md; echo \"=== état (session N2) ===\"; sed -n '/### Session `0733c5bb/,/^- \\*\\*Journal/p' docs/pilotage/en-cours.md | head -20", "description": "Read my plan and state block af … [12 caractères tronqués]`
+
+  ```
+# Plan de session — N2, le natif : 200 000 pas et la fenêtre
+
+> **Mandat ouvert** le 2026-11-02 16 h 20 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ N2) —
+> la session reprend le programme **N2** (le natif, GPU) après la clôture de `0b0a6a0d`.
+> Le heartbeat est celui de l'état.
+
+- **Session** : `0733c5bb-f90b-4f58-9241-3364fa32e46c`
+- **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre
+  native (R1.1/R1.2 côté N2), les fiches et les contrôles négatifs.
+- **Périmètre** : N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2,
+  courbe de longueur), R1.1/R1.2 mesurés depuis N2
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `reports/rapport-n2-*`,
+  `work/n2*`, `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/`
+- **Heartbeat** : 2026-11-03 18:30 HAE
+- **Objectif final** : trancher la question ouverte de N2 — **les 200 000 pas sur le mélange
+  1 Go font-ils passer sous 2,5 sans perdre le français ?** — puis **R1.1/R1.2** : un schéma
+  de position **relatif** reproduit-il par construction le gain des positions aléatoires, et
+  la courbe 129→512 devient-elle plate à coût de
+… [2888 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rn \"{{\" reports/*.md | head -10; echo \"=== fiches concernées ===\"; grep -n \"interrompu\\|non mesuré\" reports/rapport-n2-r12-2048.md reports/rapport-n2-production-fenetre.md | head -8", "description": "Check for leftover placeholders in fic … [5 caractères tronqués]`
+
+  ```
+reports/rapport-corpus-wiki-texte.md:5:> résidus **1 / 20 000 lignes** (`{{`), **0 / 51 250** fenêtres de 8 Ko de la validation et
+reports/rapport-corpus-wiki-texte.md:31:3. **débalise** : commentaires, `<ref>`, tableaux `{| … |}`, modèles `{{ … }}` (30 itérations),
+reports/rapport-corpus-wiki-texte.md:50:| résidus (`{{` / `[[` / `<`) sur 20 000 lignes | **1 / 0 / 3** |
+reports/rapport-corpus-wiki-texte.md:67:| résidus (`{{` / `[[` / `<`) sur 20 000 lignes | **1 / 0 / 3** |
+reports/rapport-corpus-wiki-texte.md:89:| langue | articles | caractères | mots (car. / 6,2) | octets | fuite lignes | fuite 8 Ko | éval | résidus `{{`/`[[`/`<` |
+=== fiches concernées ===
+reports/rapport-n2-r12-2048.md:152:## 5. Le complément 2 048 « mêmes pas » — run interrompu, non mesuré
+reports/rapport-n2-r12-2048.md:155:lancé le **03/11 vers 18 h 33** et **interrompu par le reboot à 19 h 33**, après **3 350 pas**
+reports/rapport-n2-r12-2048.md:157:constants **reste non mesuré**.
+reports/rapport-n2-r12-2048.md:163:  `rope2048-20k.pt` **n'a pas été écrit — interrompu**.
+reports/rapport-n2-production-fenetre.md:176:## 5. La distillation à 30 000 pas — run interrompu, non mesuré
+reports/rapport-n2-production-f
+… [235 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git show 55243f42 -- journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md | head -30; echo \"=== commandes en cours ===\"; ps -eo pid,etime,cmd --no-headers | grep -E \"[d]istiller_natif|[e]ntrainer_rope\" | cut -c1-200", "description": "Chec … [35 caractères tronqués]`
+
+  ```
+commit 55243f42a67f0accdbfbf564a1ab964186d0378a
+Author: Stéphane <stephane@localhost>
+Date:   Wed Nov 4 09:34:32 2026 -0500
+
+    N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+    
+    Les anciens logs sont préservés en .interrompu.log ; le claim n2-jour (gpu0+gpu1, cpu0 12, ram 60) couvre les deux runs. rope2048 a démarré (pas 50 à 51 s, PPL val 4,228 → 3,611) ; kd2 a démarré après le chargement du corpus (pas 50 à 23 s). La passe complète attend la fin des runs (règle §11).
+
+diff --git a/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md b/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+index 6aec2621..b314bcf8 100644
+--- a/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
++++ b/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+@@ -31,8 +31,8 @@
+   sont mesurées — val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — et
+   la courbe 128/256/512/1000 est dans `work/n2ac/courbe-mix200.json` ; le banc **R1.1/R1.2** (RoPE)
+   est mesuré (3,2545 à 1 000, 3,0107 à octets constants) ; reste le contrôle « depuis zéro ».
+-- **Prochaine action** : **relancer `kd2`
+… [960 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réouverture de la session et état post-reboot
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, datetime\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", f\"- **Heartbeat** : {datetime.date … [1136 caractères tronqués]`
+
+  ```
+plan rouvert
+    0733c5bb-f90b-4f58 · actif    ·   1 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+  T0 max : 3994 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat >> journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md <<'EOF'\n\n## 04/11 — reprise après le reboot : les deux runs relancés\n\nLe reboot du **03/11 à 19 h 33** a interrompu les deux runs de la nuit **sans checkpoint** :\n`kd2` (dist … [1668 caractères tronqués]`

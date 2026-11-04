@@ -9,10 +9,10 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 2.2 h |
 | Tours | 4 |
-| Messages | 103 |
-| Appels d'outils | 202 |
+| Messages | 105 |
+| Appels d'outils | 204 |
 | Fichiers touchés | 9 |
-| Commandes | 104 |
+| Commandes | 106 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -142,7 +142,7 @@ Rien n'est perdu : l'interruption est écrite avec ses chiffres, les validations
 
 ### Tour 4 — la machine est stabilisée. tu peux reprentre tous les chantiers en parallèle. dis-moi si je dois démarer d'autres sessio … [6 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Search run commands in shell scripts
 - bash — Search session transcript for run command
@@ -158,11 +158,37 @@ Rien n'est perdu : l'interruption est écrite avec ses chiffres, les validations
 - bash — Monitor run progress after one minute
 - job_output
 - edit `docs/pilotage/en-cours.md`
-- … et 15 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ Commit de la relance des deux runs N2
+⏵ Trois sessions à ouvrir, les deux runs N2 déjà relancés
+
+**Oui — trois sessions, pas quatre.** Le hub reste cette session ; N2, S et L reprennent chacune dans son terminal. Pas de 4e pour l'instant : **A2.6 attend les GPU** (les deux sont pris par N2 jusqu'à ~15 h) et **R0.7 est dans le mandat de L**.
+
+**À lancer (un terminal par ligne) :**
+```bash
+dsh --profile dsh-tui --resume 0733c5bb-f90b-4f58-9241-3364fa32e46c   # N2 — GPU
+dsh --profile dsh-tui --resume 29ad180d-38a5-4481-a9a7-ec6ab31c895f   # S  — CPU
+dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensée — CPU+API
+```
+
+**Prompt à coller (le même, adapté) :**
+> Tu es la session <rôle>. Lis `AGENTS.md`, `docs/pilotage/en-cours.md` (état du 04/11, 09 h 35) et seulement le document de ta tâche. Reprends `journal/sessions/<id>/plan.md`. La machine est stable ; les runs N2 sont **déjà relancés** (kd2 gpu0, rope2048 gpu1) — **ne les relance pas**. Exécute la prochaine action de ton plan ; un fait = mesure + contrôle + fiche + ligne d'état (proposée au hub) + commit (`git add` explicite). Ne touche pas `en-cours`/`roadmap`/`AGENTS` sans le hub.
+
+- **N2** : surveille `work/n2ac/kd2-mix512-30k.log` et `rope2048-20k.log` ; à la fin, remplis les §5/§6 des deux fiches et committe.
+- **S** : poursuis la validation `/paragraphes` (a001–a003 faits) ; banque **84/67**, **55/55 tests**.
+- **L** : le **fix FIFO** est testé ; reprends **T132/T133** et le **gold 200+** ; le qualifier fenêtre attend l'API (pas de serveur local).
+
+**Déjà fait par le hub :**
+- **kd2** sur gpu0 : 350 pas en 163 s (~0,47 s/pas), GPU à 100 % → fin estimée **~13 h 25**.
+- **rope2048** sur gpu1 : 250 pas en 254 s (~1,0 s/pas) → fin estimée **~15 h 10**.
+- Claim `n2-jour` (gpu0+gpu1, cpu0 12, ram 60) ; anciens logs préservés en `.interrompu.log` ; état et plan N2 committés (`55243f42`).
+- Une session vide `aeafe951` (0 tour, ouverte à 09:25) est apparue : sans plan, elle ne compte pas — tu peux la fermer.
+
+**La passe de portes** : elle attend la fin des runs (règle §11 — une passe et une mesure GPU ne cohabitent pas). Dernière complète : 03/11 11 h 30. Je la lance vers **15 h 15**, ou sur gpu1 avec la dérogation si tu veux le verdict plus tôt — mais les portes de temps seront bruitées.
+
+**Le hub** : je surveille les deux runs, je tiens l'état, je lance la passe à la fin et j'intègre les résultats. Dis-moi si tu ouvres les trois sessions ou si tu préfères que je pousse S et L par sous-agents à la place.
 
 ## 3. Travail accompli
 
@@ -222,7 +248,7 @@ Rien n'est perdu : l'interruption est écrite avec ses chiffres, les validations
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 64 autres
+- … et 66 autres
 
 ## 4. Mesures et résultats marquants
 

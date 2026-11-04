@@ -3574,3 +3574,79 @@ T0 max : 3994 mots (budget 4 000)
 ⏵ Commit de la relance des deux runs N2
 
 - **bash** `{"command": "git add docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md && git commit -m \"N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS\" -m \"Les anciens logs sont préservés en .interrompu.log ; le claim n … [309 caractères tronqués]`
+
+  ```
+[master 55243f42] N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+ 10 files changed, 563 insertions(+), 34 deletions(-)
+ create mode 100644 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+ create mode 100644 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification d'une nouvelle session apparue et santé des runs
+
+- **bash** `{"command": "python3 tools/sessions.py --status 2>&1 | head -16 ; echo \"---NOUVELLE---\" ; ls journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/ ; head -12 journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md 2>/dev/null", "description": "Inspect newly appeared session"}`
+
+  ```
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · en pause · 906 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+    0b0a6a0d-05f5-4308 · terminé  · 4381 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 6455 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+  ⏰ 1e7ef596-93e6-45f1 · actif    ·  46 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+      → **relancer la passe de portes** (arrêtée à 08 h 40), puis laisser les runs longs N2 à leur session ; l'état du 04/11 est committé (`5
+… [1582 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== KD2 ===\" ; tail -2 work/n2ac/kd2-mix512-30k.log ; echo \"=== ROPE ===\" ; tail -2 work/n2ac/rope2048-20k.log ; echo \"=== GPU ===\" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader ; echo \" … [128 caractères tronqués]`
+
+  ```
+=== KD2 ===
+pas   300 · perte 1.5447 · dure 1.1671 · douce 0.5221 · 140 s
+pas   350 · perte 1.3388 · dure 1.0075 · douce 0.4648 · 163 s
+=== ROPE ===
+pas    200 · perte 1.2688 · PPL val 3.306 · 203 s
+pas    250 · perte 1.2396 · PPL val 3.247 · 254 s
+=== GPU ===
+0, 5200 MiB, 100 %
+1, 9950 MiB, 100 %
+=== ÉTAT ===
+55243f42 N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS
+0582a6e1 MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois sessions à ouvrir, les deux runs N2 déjà relancés
+
+**Oui — trois sessions, pas quatre.** Le hub reste cette session ; N2, S et L reprennent chacune dans son terminal. Pas de 4e pour l'instant : **A2.6 attend les GPU** (les deux sont pris par N2 jusqu'à ~15 h) et **R0.7 est dans le mandat de L**.
+
+**À lancer (un terminal par ligne) :**
+```bash
+dsh --profile dsh-tui --resume 0733c5bb-f90b-4f58-9241-3364fa32e46c   # N2 — GPU
+dsh --profile dsh-tui --resume 29ad180d-38a5-4481-a9a7-ec6ab31c895f   # S  — CPU
+dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensée — CPU+API
+```
+
+**Prompt à coller (le même, adapté) :**
+> Tu es la session <rôle>. Lis `AGENTS.md`, `docs/pilotage/en-cours.md` (état du 04/11, 09 h 35) et seulement le document de ta tâche. Reprends `journal/sessions/<id>/plan.md`. La machine est stable ; les runs N2 sont **déjà relancés** (kd2 gpu0, rope2048 gpu1) — **ne les relance pas**. Exécute la prochaine action de ton plan ; un fait = mesure + contrôle + fiche + ligne d'état (proposée au hub) + commit (`git add` explicite). Ne touche pas `en-cours`/`roadmap`/`AGENTS` sans le hub.
+
+- **N2** : surveille `work/n2ac/kd2-mix512-30k.log` et `rope2048-20k.log` ; à la fin, remplis les §5/§6 des deux fiches et committe.
+- **S** : poursuis la validation `/paragraphes` (a001–a003 faits) ; banque **84/67**, **55/55 tests**.
+- **L** : le **fix FIFO** est testé ; reprends **T132/T133** et le **gold 200+** ; le qualifier fenêtre attend l'API (pas de serveur local).
+
+**Déjà fait par le hub :**
+- **kd2** sur gpu0 : 350 pas en 163 s (~0,47 s/pas), GPU à 100 % → fin estimée **~13 h 25**.
+- **rope2048** sur gpu1 : 250 pas en 254 s (~1,0 s/pas) → fin estimée **~15 h 10**.
+- Claim `n2-jour` (gpu0+gpu1, cpu0 12, ram 60) ; anciens logs préservés en `.interrompu.log` ; état et plan N2 committés (`55243f42`).
+- Une session vide `aeafe951` (0 tour, ouverte à 09:25) est apparue : sans plan, elle ne compte pas — tu peux la fermer.
+
+**La passe de portes** : elle attend la fin des runs (règle §11 — une passe et une mesure GPU ne cohabitent pas). Dernière complète : 03/11 11 h 30. Je la lance vers **15 h 15**, ou sur gpu1 avec la dérogation si tu veux le verdict plus tôt — mais les portes de temps seront bruitées.
+
+**Le hub** : je surveille les deux runs, je tiens l'état, je lance la passe à la fin et j'intègre les résultats. Dis-moi si tu ouvres les trois sessions ou si tu préfères que je pousse S et L par sous-agents à la place.
+
