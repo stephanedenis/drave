@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,10 +18,11 @@
 | 12:05 | `25d631fe` | B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+16) |
 | 12:34 | `9593718e` | N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 | 12:42 | `8cea841f` | B13 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; 150/150 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+20) |
+| 12:58 | `64674e0d` | ERRATUM (SUITE) — LA REPONDÉRATION VAUT −0,05, PAS −0,14 : 3,6067 / 3,3984 / 3,3129 CONTRE 3,6452 / 3,4493 / 3,3628 | `en-cours.md`, `README.md`, `apprentissage.md` (+14) |
 
 ## Chiffres du jour
 
-`0,0074` · `0,9326` · `0,9389` · `0,7455` · `0,9309` · `0,8226` · `0,8784` · `0,7424` · `0,3432`
+`3,6067` · `3,3984` · `3,3129` · `3,6452` · `3,4493` · `3,3628` · `0,0074` · `0,9326` · `0,9389` · `0,7455` · `0,9309` · `0,8226`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -38,6 +39,7 @@
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-drvm-n01.md](../../reports/rapport-drvm-n01.md)
+- [reports/rapport-n2-distillation-native.md](../../reports/rapport-n2-distillation-native.md)
 - [reports/rapport-n3-inventaire.md](../../reports/rapport-n3-inventaire.md)
 - [reports/rapport-pensee-defaut-conditionnel.md](../../reports/rapport-pensee-defaut-conditionnel.md)
 - [reports/rapport-pensee-defaut-niveau.md](../../reports/rapport-pensee-defaut-niveau.md)

@@ -10393,3 +10393,22 @@ a2926831 B13 — LA PRAGMATIQUE NEURONALE : ACTE 1,0, NÉGATION 1,0 SUR 130 PHRA
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"**runs relancés à 09 h 30** : `kd2` **~19 400/30 000** (gpu0), `rope2048` **4 650/20 000** (gpu1)\"\nneuf = \"`kd2` et `r … [1406 caractères tronqués]`
+
+  ```
+état : runs corrigés
+  T0 max : 3993 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-43]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-43", "timeout_ms": 180000, "wait": true}`
+
+  ```
+64674e0d ERRATUM (SUITE) — LA REPONDÉRATION VAUT −0,05, PAS −0,14 : 3,6067 / 3,3984 / 3,3129 CONTRE 3,6452 / 3,4493 / 3,3628
+[status: completed, exit code: 0]
+  ```
+

@@ -35209,3 +35209,15 @@ a2926831 B13 — LA PRAGMATIQUE NEURONALE : ACTE 1,0, NÉGATION 1,0 SUR 130 PHRA
 18
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-pragmatique-full.md <<'MD'\n# B13 — la pragmatique sur le gold 432 : acte 0,9954, la fusion garde l'heuristique\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11- … [7740 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 612 fiche(s) · 701 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2833 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nfor nom in (\"rapport-pensee-pragmatique-neuronale.md\",\"rapport-pensee-defaut-conditionnel.md\",\"rapport-pensee-seuil-parallele.md\"):\n   … [722 caractères tronqués]`
