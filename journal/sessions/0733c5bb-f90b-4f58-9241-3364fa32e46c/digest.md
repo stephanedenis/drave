@@ -10294,3 +10294,32 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-36", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; tail -c 55 work/n2ac/kdpp-mix512-a0.log; tail -c 55 work/n2ac/pond4-1147m-512.log; tail -c 45 work/n2ac/rope2048-20k.log", "description": "Poll all three runs"}`
+
+  ```
+12:54:54
+ perte 0.9441 · dure 0.8882 · douce 0.3888 · 6160 s
+e 1.3645 · 1057 s
+pas  6000 · perte 1.2081 · 1268 s
+ · perte 0.9833 · PPL val 2.590 · 12205 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Arbitrage : j'arrête le complément 2 048 (9 h restantes sous contention) au profit des contrôles
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && kill 261314 2>/dev/null; sleep 3; ps -p 261314 >/dev/null && echo \"2048 encore là\" || echo \"2048 arrêté (6000/20 000, non mesuré)\"; sleep 120; date '+%H:%M:%S'; tail -c 55 work/n2ac/pond4-1147m-512.log; tail -c 55 work/n2ac/kdpp-mix512-a0.log", "d … [54 caractères tronqués]`
+
+  ```
+2048 arrêté (6000/20 000, non mesuré)
+[still running after 60000ms; moved to background job bash-38]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-38", "timeout_ms": 300000, "wait": true}`

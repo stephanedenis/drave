@@ -35163,3 +35163,10 @@ api {'appels': 1287, 'tokens': 314369, 'latence_s': 1236.394}
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 14 h 40 HNE\", t)\np.write_text( … [842 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-118]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-118", "timeout_ms": 600000, "wait": true}`

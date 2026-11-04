@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 5.5 h |
 | Tours | 12 |
-| Messages | 218 |
-| Appels d'outils | 395 |
+| Messages | 222 |
+| Appels d'outils | 400 |
 | Fichiers touchés | 15 |
-| Commandes | 238 |
+| Commandes | 243 |
 | Sous-agents | 0 |
-| Commits | 20 |
+| Commits | 21 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -458,7 +458,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 12 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -467,10 +467,15 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Extend N2 resource claim for rope ETA
 - bash — Trim state B13 history and verify
 - bash — Commit trimmed state and extended claim note
+- bash — Verify cycle 7 commits and checks
+- bash — Verify links, journal, claim and runs
+- bash — Check pragmatique fiche and JSON commit status
+- bash — Integrate B13 151 pragmatique across docs
+- bash — Commit B13 151 pragmatique integration
 
 **Synthèse produite :**
 
-⏵ Commit état allégé et claim prolongé
+⏵ Commit B13 151/151 (pragmatique qualifiée) dans le pilotage
 
 ## 3. Travail accompli
 
@@ -536,7 +541,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 198 autres
+- … et 203 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -695,4 +700,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé (8cea841f, rapport-pen
 - INDEX — 606 → 608 (DRVM N0.1, VARIANCE) ; README — LA VARIANCE 150/150 AJOUTÉE ; ÉTAT 12 H 54" -m "Le catalogue généré rattrape les deux dernières fiches (DRVM 
 - ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)" -m "L'historique B13 (seuil, défaut conditionnel, run 2, élision, troisième 
+- B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé
 

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,6 +19,7 @@
 | 12:19 | `70c9df7e` | ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 | 12:46 | `96c96ae9` | B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+17) |
 | 12:50 | `34a25a93` | INDEX — 606 → 608 (DRVM N0.1, VARIANCE) ; README — LA VARIANCE 150/150 AJOUTÉE ; ÉTAT 12 H 54 | `en-cours.md`, `README.md`, `docs.md` (+9) |
+| 12:53 | `60a32393` | ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H) | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+18) |
 
 ## Chiffres du jour
 
@@ -28,7 +29,7 @@
 
 ## Sessions actives ce jour
 
-- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 44.5 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 44.7 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
 - `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 5.5 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 43.7 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 2.5 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
@@ -40,6 +41,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-production-fenetre.md](../../reports/rapport-n2-production-fenetre.md)
 - [reports/rapport-n2-r12-2048.md](../../reports/rapport-n2-r12-2048.md)
+- [reports/rapport-pensee-pragmatique-neuronale.md](../../reports/rapport-pensee-pragmatique-neuronale.md)
 - [reports/rapport-pensee-troisieme-passe.md](../../reports/rapport-pensee-troisieme-passe.md)
 
 <!-- notes -->

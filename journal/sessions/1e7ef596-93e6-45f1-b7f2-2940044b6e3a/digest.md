@@ -7283,3 +7283,104 @@ trim OK
 ⏵ Commit état allégé et claim prolongé
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)\" -m \"L'historique B13 (seuil, défaut conditionnel, run 2, élision, troisième passe) passe dans les fiches : l'état garde le 150/150  … [268 caractères tronqués]`
+
+  ```
+[s/v7 60a32393] ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)
+ 21 files changed, 425 insertions(+), 177 deletions(-)
+ create mode 100644 reports/pensee-pragmatique-130.json
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 7
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAIL … [133 caractères tronqués]`
+
+  ```
+60a32393 ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)
+34a25a93 INDEX — 606 → 608 (DRVM N0.1, VARIANCE) ; README — LA VARIANCE 150/150 AJOUTÉE ; ÉTAT 12 H 54
+96c96ae9 B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+---STATUS---
+ M reports/pensee-quatre-modes.json
+?? reports/pensee-quatre-modes-432-pragma.json
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 699 JSON, le disque en a 700
+---EN-COURS---
+  en-cours · 1616 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3986 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---CLAIM---\" ; python3 tools/ressources.py --status 2>&1 | tail -3 ; echo \"---RUNS---\" ; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; tail -1 wor … [189 caractères tronqués]`
+
+  ```
+✅ 2932 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---CLAIM---
+
+  Réservations actives :
+    · 0733c5bb / n2-jour : gpu0=exclusive, gpu1=exclusive, cpu0=12, ram=60 (prio 1, 720 min)
+---RUNS---
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+pas   6400 · perte 0.9833 · PPL val 2.590 · 12205 s
+0, 99 %
+1, 98 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Le JSON passe à 700 et la pragmatique 130 pourrait être committée : je vérifie avant d'intégrer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== FICHE PRAGMATIQUE ===\" ; git log --oneline -1 -- reports/rapport-pensee-pragmatique-neuronale.md ; head -10 reports/rapport-pensee-pragmatique-neuronale.md ; echo \"=== JSON 130 ===\" ; git log --oneline -1 -- reports/pens … [195 caractères tronqués]`
+
+  ```
+=== FICHE PRAGMATIQUE ===
+60a32393 ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)
+# B13 — la pragmatique neuronale : 1,0 / 1,0 / 0,98 / 0,98 sur 130 phrases
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·
+> **Verdict** : ✅ **151/151 portes** : la **pragmatique neuronale** est branchée sur le composite
+> (`NeuronalLLMPragmatique` → `NeuronalLLMCompose`) et mesurée sur les **130 premières phrases**
+> du gold 432 : **acte 1,0**, **négation 1,0**, **modalité 0,9846**, **double sens 0,9769**. La
+> sortie que le composite ne rendait pas (acte 0,0) est maintenant **la meilleure**.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`qualifier_quatre_modes.py`](../tools/tests/linguistique/qualifier_quatre_modes.py),
+=== JSON 130 ===
+60a32393 ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)
+=== 60a STAT ===
+ reports/pensee-pragmatique-130.json                |  20 +++
+ reports/rapport-pensee-pragmatique-neuronale.md    | 179 +++++++--------------
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 151/151 : la pragmatique neuronale qualifie (1,0/1,0/0,9846/0,9769) — intégration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:70]); continue\n        t=t.replace(old … [2723 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1620 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3990 mots (budget 4 000)
+  revue de documentation · 611 fiche(s) · 700 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2932 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 151/151 (pragmatique qualifiée) dans le pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md && git commit -m \"B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉT … [489 caractères tronqués]`
