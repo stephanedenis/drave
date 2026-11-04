@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 11.0 h |
-| Tours | 109 |
-| Messages | 762 |
-| Appels d'outils | 914 |
+| Tours | 110 |
+| Messages | 766 |
+| Appels d'outils | 917 |
 | Fichiers touchés | 15 |
-| Commandes | 728 |
+| Commandes | 731 |
 | Sous-agents | 0 |
-| Commits | 128 |
+| Commits | 129 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -241,6 +241,8 @@
 **Tour 108** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 109** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 110** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2887,7 +2889,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 104 : audit vert ; je recale l'heure et commit
+⏵ Cycle 104 : audit vert, seconde moitié du 2 048 à 350/10 000, heure 18 h 25
+
+**Cycle 104 — tout est vert, la seconde moitié avance.**
+
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 623 mots**, **T0 3 993 / 4 000** ✅.
+- **2 048** : la seconde moitié est à **350/10 000** (358 s, GPU1 à 100 % ; perte 0,9944).
+- **B13 165/165**, D **restauré à 62 documents**, compteurs 627/720, sur **`s/v7`**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la seconde moitié du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 110 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope second half
+- bash — Correct time and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 105 : audit vert ; je recale l'heure et commit
 
 ## 3. Travail accompli
 
@@ -2953,7 +2976,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 688 autres
+- … et 691 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3229,4 +3252,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - 2 048 — LA PREMIÈRE MOITIÉ EST FINIE (10 000 PAS, 10 224 S, DRVM) ; LA SECONDE EST LANCÉE" -m "Le premier run de 10 000 pas du complément 2 048 est terminé (10 
 - ÉTAT — HEURE 19 H 32 ; 2 048 : 1RE MOITIÉ FINIE, 2E À 200 PAS ; B13 165/165, D 62" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 39
 - ÉTAT — HEURE 19 H 37 ; 2 048 : 2E MOITIÉ À 350 PAS ; B13 165/165, D 62" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3993, en-cour
+- ÉTAT — HEURE 19 H 42 ; 2 048 : 2E MOITIÉ À 500 PAS ; B13 165/165, D 62" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3993, en-cour
 
