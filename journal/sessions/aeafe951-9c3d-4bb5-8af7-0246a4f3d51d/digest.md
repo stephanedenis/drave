@@ -4923,3 +4923,98 @@ index dd7d41a2..979c3d5d 100644
 … [1238 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification finale : la branche active est `s/v7`, pas `master` — écart à signaler au hub
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"master..s/v7 : $(git rev-list --count master..s/v7) commits ; s/v7..master : $(git rev-list --count s/v7..master)\"; git log --oneline master..s/v7 | head -12; echo ====; git log --oneline -1 master; git log --oneline -1 s/v7; … [107 caractères tronqués]`
+
+  ```
+master..s/v7 : 75 commits ; s/v7..master : 0
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+21110849 B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+6cb09126 ÉTAT — HEURE 16 H 04 ; B13 163/163, D clos, 2 048 À 2 200 PAS
+68a40051 ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+8f32227d D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+d4688bd2 ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)
+7c48a63d ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+3e736901 LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+====
+af28eadd B13 — LA CON
+… [210 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --name-only --format= HEAD | grep -vE '^(journal/|docs/pilotage/en-cours.md|reports/(ocr-cegep-64.json|rapport-ocr-cegep-64.md))$' || echo 'commit : mes 4 chemins + journal seulement, aucun fichier de L'; echo ====; python3  … [247 caractères tronqués]`
+
+  ```
+journal/2026-11-04/README.md
+journal/2026-11-04/apprentissage.md
+journal/2026-11-04/distribue.md
+journal/2026-11-04/docs.md
+journal/2026-11-04/mesures.md
+journal/2026-11-04/modele.md
+journal/2026-11-04/outils.md
+journal/2026-11-04/portes.md
+journal/README.md
+journal/THEMES.md
+journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+journal/sessions/MANIFEST.md
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+====
+  état · dernier fait 26e21acf · dernier état 26e21acf
+  ✅ aucun fait commité après le dernier état
+  revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+====
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+
+… [4 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Supervision terminée : fuite confirmée, état corrigé, restauration et branche au hub
+
+**J'ai lancé D2 en sous-agent et supervisé jusqu'au verdict.** La « suite » a produit un résultat dur : **le corpus 64 du hub est contaminé**, et le contrôle 8 Ko du dépôt ne le voit pas.
+
+## Ce que la supervision a établi
+
+- **Fausse alerte corrigée** : j'avais d'abord cru à 70 % de doublons ; c'était un artefact de lecture pendant la réécriture du corpus. Redirection du sous-agent, puis vérification sur l'état stable 15 h 57.
+- **La vraie fuite** : **DOC2**, placé en **val**, a **18/20 fenêtres de 500 o** déjà dans l'ancien train — **17 001 o contigus** (offsets 4 026 047 → 4 044 047). **DOC1** (train) : **24/26**, dont une fenêtre de **8 188 o exacte** (`train[4 447 324:4 455 512] == train[4 007 429:4 015 617]`).
+- **Pourquoi le 8 Ko dit 0** : les deux copies du même document ont été OCRisées deux fois ; le texte diffère légèrement, donc aucune fenêtre de 8 Ko n'est exacte. Le contrôle négatif (fenêtre de val injectée) est bien détecté (**1 doublon, 25 %**) : le 0 n'est pas un 0 de complaisance, il est **insuffisant**.
+- **Baseline du corpus 60 : 0/13 (val), 0/11 (test)** → la fuite est **introduite par l'ajout**, pas préexistante.
+- **Choquette et Assurance sont neufs** (0/8, 0/2) ; DOC1 et DOC2 sont les quasi-doublons.
+
+## Le corpus propre 62, prêt et vérifié
+
+`work/ocr/cegep64/propre/` : ancien train exact + **Choquette** + **Assurance** ; DOC1/DOC2 écartés ; val/test anciens intacts.
+
+| split | octets | SHA-256 | 8 Ko | 500 o |
+|---|---:|---|---:|---:|
+| train | 4 440 987 | `f57154df…` | 543 tronçons | — |
+| val | 12 536 | `dd605833…` | 2 / 0 | **0/13** |
+| test | 10 524 | `1c9ab734…` | 2 / 0 | **0/11** |
+
+**62 documents (55/4/3), 1 989 p, 4 418 407 car.**, jonction propre.
+
+## Committé
+
+**`26e21acf`** (branche active **`s/v7`**) : fiche `rapport-ocr-cegep-64.md`, manifeste `ocr-cegep-64.json`, **ligne d'état corrigée** — D n'est plus « clos 64 docs / 8 Ko 0 » mais **« contaminé, à restaurer »** — compteurs **626/719**. Le commit `--only` n'a **pas** pris les fichiers stagés de L (vérifié) ; le hook d'état est vert, la revue documentaire passe.
+
+## Deux choses restent au hub
+
+1. **Restaurer `data/`** (réservé par N2, je ne l'ai pas touché) :
+   `cp work/ocr/cegep64/propre/{train,val,test}.txt data/corpus_ocr_cegep/` — hashes attendus ci-dessus. Le corpus 64 contaminé peut être archivé dans `work/ocr/cegep64/contamine-15h57/`.
+2. **La branche** : `s/v7` est **75 commits devant `master`**, fast-forward possible (`s/v7..master` = 0). Tout l'après-midi (B13 164, états du hub, N2 2 048) est sur `s/v7` ; `master` est resté à `af28eadd`. À merger/pousser — c'est le hub qui décide.
+
+Le sous-agent s'est arrêté juste avant d'écrire ses livrables (25 min) ; je les ai écrits à partir de ses mesures vérifiées et des miennes (les deux contrôles négatifs, les offsets, la baseline). Je peux appliquer la restauration `data/` si tu m'y autorises, sinon le hub la prend.
+

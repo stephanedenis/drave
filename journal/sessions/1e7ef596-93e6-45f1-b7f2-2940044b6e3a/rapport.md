@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 8.9 h |
 | Tours | 62 |
-| Messages | 562 |
-| Appels d'outils | 765 |
+| Messages | 565 |
+| Appels d'outils | 768 |
 | Fichiers touchés | 15 |
-| Commandes | 580 |
+| Commandes | 583 |
 | Sous-agents | 0 |
-| Commits | 79 |
+| Commits | 81 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1782,7 +1782,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 62 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run seven controls and check rope
@@ -1791,10 +1791,13 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Restore clean corpus and fix state/link
 - bash — Trim and commit corpus restoration
 - bash — Retry restoration commit and check T0
+- bash — Commit restored state and fiche
+- bash — Locate D line in state
+- bash — Update D line and commit restoration
 
 **Synthèse produite :**
 
-⏵ Le verrou git est tenu ; je retente le commit de la restauration
+⏵ La session OCR a laissé D en « contaminé, à restaurer » ; j'inscris la restauration faite et commit
 
 ## 3. Travail accompli
 
@@ -1860,7 +1863,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 540 autres
+- … et 543 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2087,4 +2090,6 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont complets : la règle
 - D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 3 996" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
 - D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 4 000" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
+- D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 4 000" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
+- D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 ÉCARTÉS) ; T0 3 984" -m "Le corpus propre à 62 documents (60 anciens + Choquette + Assurance, DOC1/DO
 

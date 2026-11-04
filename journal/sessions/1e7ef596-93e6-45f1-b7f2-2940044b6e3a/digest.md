@@ -16268,3 +16268,80 @@ docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, 
 ⏵ T0 à 4 000 : je resserre la cible (×13) et commit la restauration du corpus 62
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**cible par proximité (exact 0,0042 → 0,0544)**\", \"**cible par proximité (exact ×13)**\")\np.write_text(t); print('trim OK … [996 caractères tronqués]`
+
+  ```
+trim OK
+  T0 max : 4000 mots (budget 4 000)
+  revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+LOCK
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le verrou git est tenu ; je retente le commit de la restauration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"cible par proximité\" docs/pilotage/en-cours.md | head -2 ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; ls -l .git/index.lock ; pgrep - … [875 caractères tronqués]`
+
+  ```
+71:- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; rôles 301/322 ; passifs hors du chemin S ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md).
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+  T0 max : 4000 mots (budget 4 000)
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-ocr-cegep-64.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+### 🤖 Assistant
+
+⏵ La session OCR a committé la contamination (26e21acf) ; je retente l'état « restauré » + la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -2 ; head -3 docs/pilotage/en-cours.md ; grep -n \"restauré à 62\" docs/pilotage/en-cours.md | head -2 ; git add docs/pilotage/en-cours.md reports/rapport-ocr-cegep-64.md reports/ocr-cegep-64.json ; for i in $(seq 1  … [949 caractères tronqués]`
+
+  ```
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 14 HNE (heure locale, EST).**
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+  revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 4000 mots (budget 4 000)
+  ✅ 3046 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-ocr-cegep-64.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage
+… [66 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état n'a pas la ligne « restauré » (le grep est vide) ; je la réécris et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"D — \" docs/pilotage/en-cours.md | head -3 ; echo \"---\" ; grep -n \"OCRisés\\|corpus CEGEP\" docs/pilotage/en-cours.md | head -3", "description": "Locate D line in state"}`
+
+  ```
+---
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — **contaminé, à restaurer** : 8 `.PDF` OCRisés ; **2 neufs** (Choquette 6 p, Assurance 1 p), **2 quasi-doublons écartés** (DOC1 22 p, DOC2 20 p) ; le re-split 2/1/1 plaçait **DOC2 en val** avec **18/20 fenêtres de 500 o** déjà dans le train (17 001 o contigus ; 8 Ko exact 0 mais **insuffisant**) ; corpus propre **62 documents** prêt et vérifié (`work/ocr/cegep64/propre/`, SHA `f57154df…`), restauration à appliquer ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+  ```
+
+### 🤖 Assistant
+
+⏵ La session OCR a laissé D en « contaminé, à restaurer » ; j'inscris la restauration faite et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"**D** — **contaminé, à restaurer** : 8 `.PDF` OCRisés ; **2 neufs** (Choquette 6 p, Assurance 1 p), **2 quasi-doublons écartés** (DO … [1642 caractères tronqués]`

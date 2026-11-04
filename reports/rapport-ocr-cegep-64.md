@@ -94,7 +94,7 @@ Hashes attendus : `f57154df…`, `dd605833…`, `1c9ab734…` (ci-dessus). Le co
 > 1 p), **2 quasi-doublons écartés** (DOC1 22 p, DOC2 20 p) ; le re-split 2/1/1 plaçait **DOC2 en
 > val** avec **18/20 fenêtres de 500 o** déjà dans le train (17 001 o contigus ; 8 Ko exact 0 mais
 > **insuffisant**) ; corpus propre **62 documents** prêt et vérifié (`work/ocr/cegep64/propre/`,
-> SHA `f57154df…`), restauration à appliquer ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+> SHA `f57154df…`), restauration à appliquer ; [fiche](./rapport-ocr-cegep-64.md).
 
 ## 7. Fichiers
 

@@ -37735,3 +37735,85 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-234", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[s/v7 f661728c] B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+ 20 files changed, 430 insertions(+), 59 deletions(-)
+COMMIT OK 1
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  77 +++++++++++
+ .../rapport.md                                     |   6 +-
+ tools/bloc_linguistique.py                         |  28 +++-
+ tools/pensee/autotest.py                           |  21 ++-
+ 20 files changed, 430 insertions(+), 59 deletions(-)
+--- vérif :
+2
+3
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log --oneline -2; git status --porcelain | head -6; echo \"--- portes :\"; bash tools/porte-tableaux.sh 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1;  … [166 caractères tronqués]`
+
+  ```
+mer 04 nov 2026 16:18:47 EST
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+MM journal/2026-11-04/README.md
+MM journal/2026-11-04/apprentissage.md
+MM journal/2026-11-04/distribue.md
+MM journal/2026-11-04/docs.md
+MM journal/2026-11-04/mesures.md
+MM journal/2026-11-04/modele.md
+--- portes :
+  ✅ 3046 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+✅ porte bloc linguistique verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise : le round passif est enfin dans HEAD, et la cible par proximité est livrée (164/164)
+
+Deux choses faites depuis votre « continue ».
+
+## 1. Un écart trouvé et réparé
+
+Mon dernier round (règle passive du chunker, T156/T157 à jour, porte **T160**) **n'était pas dans HEAD** : le commit concurrent `d72269e0` avait emporté mes fiches et mes docs, mais **pas le code**, et ma boucle de commit avait cru réussir parce que son message contenait « SANS PAR ». Vérifié par `git show HEAD:tools/pensee/autotest.py` (0 occurrence de `t160`). Réparé et vérifié dans `1f74e6cf` (2 occurrences de `t160`, 1 de la règle passive).
+
+**Leçon appliquée désormais** : je vérifie `git show HEAD:<fichier>` après chaque commit, pas le message.
+
+## 2. Nouveau round : la cible par proximité
+
+Règle ajoutée dans **mon** territoire (`tools/bloc_linguistique.py`, `_cible_proche`) : quand le générateur S ne fournit pas de `cible`, le segment prend **le verbe du GV le plus proche**. Mesure sur la **même population que T153** (612 phrases, 239 cibles) :
+
+| mesure | avant | **après** | écart |
+|---|---:|---:|---:|
+| top1 | 82 (0,3431) | **95 (0,3975)** | +13 |
+| **exact** | **1 (0,0042)** | **13 (0,0544)** | **×13** |
+| tête top1 | 81/145 (0,5586) | **94/145 (0,6483)** | +13 |
+| top-k | 78 (0,3264) | 78 (0,3264) | 0 |
+
+Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
+
+**Contrôle négatif explicite** : 226/239 restent faux en exact ; le top-k ne bouge pas (les `candidats` sont des types, pas des verbes) ; la règle se trompera sur les passifs et les phrases à plusieurs GV.
+
+**Artefacts** : fiche [`reports/rapport-pensee-cible-proximite.md`](reports/rapport-pensee-cible-proximite.md) + JSON, porte **T161**, T153 mise à jour, tableau de `docs/implantation/moteur-de-pensee.md`, état.
+
+## 3. État et vérification
+
+- **164/164 portes** (autotest complet lancé avec T161, vert).
+- `porte-tableaux` ✅ (3046 liens), `revue` ✅, `taille` ✅ (T0 3 999), `verifie_en_cours` ✅, `porte-bloc` ✅.
+- Commits : `1f74e6cf` (code passif), `21110849` (fiches, emporté par une autre session), **`f661728c`** (code + docs de la proximité, HEAD).
+- État à jour dans `docs/pilotage/en-cours.md` (16 h 25) ; prochaine action : **les candidats verbes** (le top-k à 0,3264), puis le générateur S.
+
+## 4. Ce qui reste ouvert
+
+- **Le top-k à 0,3264** : remplir les `candidats` avec les verbes proches — la marche suivante, dans mon territoire.
+- **Le générateur S** (`tools/structures/generateur.py`) : les deux règles de passif, hors de mon territoire, à demander à la session S.
+- **`master`** : `s/v7` a ~70 commits d'avance, et `master` a un upstream `origin/master` — un merge local ne suffirait pas, il faudrait pousser. Je n'ai rien tenté sans votre accord.
+
+Voulez-vous que j'enchaîne sur **les candidats verbes** (mesurable, dans mon territoire) ou que je prépare le **merge/push de `master`** ?
+

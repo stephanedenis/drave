@@ -127,7 +127,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — **contaminé, à restaurer** : 8 `.PDF` OCRisés ; **2 neufs** (Choquette 6 p, Assurance 1 p), **2 quasi-doublons écartés** (DOC1 22 p, DOC2 20 p) ; le re-split 2/1/1 plaçait **DOC2 en val** avec **18/20 fenêtres de 500 o** déjà dans le train (17 001 o contigus ; 8 Ko exact 0 mais **insuffisant**) ; corpus propre **62 documents** prêt et vérifié (`work/ocr/cegep64/propre/`, SHA `f57154df…`), restauration à appliquer ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md).
 
 ## Les questions ouvertes
 

@@ -9,7 +9,7 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 6.9 h |
 | Tours | 6 |
-| Messages | 223 |
+| Messages | 224 |
 | Appels d'outils | 255 |
 | Fichiers touchés | 9 |
 | Commandes | 208 |
@@ -297,7 +297,40 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 
 **Synthèse produite :**
 
-⏵ Vérification finale : la branche active est `s/v7`, pas `master` — écart à signaler au hub
+⏵ Supervision terminée : fuite confirmée, état corrigé, restauration et branche au hub
+
+**J'ai lancé D2 en sous-agent et supervisé jusqu'au verdict.** La « suite » a produit un résultat dur : **le corpus 64 du hub est contaminé**, et le contrôle 8 Ko du dépôt ne le voit pas.
+
+\## Ce que la supervision a établi
+
+- **Fausse alerte corrigée** : j'avais d'abord cru à 70 % de doublons ; c'était un artefact de lecture pendant la réécriture du corpus. Redirection du sous-agent, puis vérification sur l'état stable 15 h 57.
+- **La vraie fuite** : **DOC2**, placé en **val**, a **18/20 fenêtres de 500 o** déjà dans l'ancien train — **17 001 o contigus** (offsets 4 026 047 → 4 044 047). **DOC1** (train) : **24/26**, dont une fenêtre de **8 188 o exacte** (`train[4 447 324:4 455 512] == train[4 007 429:4 015 617]`).
+- **Pourquoi le 8 Ko dit 0** : les deux copies du même document ont été OCRisées deux fois ; le texte diffère légèrement, donc aucune fenêtre de 8 Ko n'est exacte. Le contrôle négatif (fenêtre de val injectée) est bien détecté (**1 doublon, 25 %**) : le 0 n'est pas un 0 de complaisance, il est **insuffisant**.
+- **Baseline du corpus 60 : 0/13 (val), 0/11 (test)** → la fuite est **introduite par l'ajout**, pas préexistante.
+- **Choquette et Assurance sont neufs** (0/8, 0/2) ; DOC1 et DOC2 sont les quasi-doublons.
+
+\## Le corpus propre 62, prêt et vérifié
+
+`work/ocr/cegep64/propre/` : ancien train exact + **Choquette** + **Assurance** ; DOC1/DOC2 écartés ; val/test anciens intacts.
+
+| split | octets | SHA-256 | 8 Ko | 500 o |
+|---|---:|---|---:|---:|
+| train | 4 440 987 | `f57154df…` | 543 tronçons | — |
+| val | 12 536 | `dd605833…` | 2 / 0 | **0/13** |
+| test | 10 524 | `1c9ab734…` | 2 / 0 | **0/11** |
+
+**62 documents (55/4/3), 1 989 p, 4 418 407 car.**, jonction propre.
+
+\## Committé
+
+**`26e21acf`** (branche active **`s/v7`**) : fiche `rapport-ocr-cegep-64.md`, manifeste `ocr-cegep-64.json`, **ligne d'état corrigée** — D n'est plus « clos 64 docs / 8 Ko 0 » mais **« contaminé, à restaurer »** — compteurs **626/719**. Le commit `--only` n'a **pas** pris les fichiers stagés de L (vérifié) ; le hook d'état est vert, la revue documentaire passe.
+
+\## Deux choses restent au hub
+
+1. **Restaurer `data/`** (réservé par N2, je ne l'ai pas touché) :
+   `cp work/ocr/cegep64/propre/{train,val,test}.txt data/corpus_ocr_cegep/` — hashes attendus ci-dessus. Le corpus 64 contaminé peut être archivé dans `work/ocr/cegep64/contamine-15h57/`.
+2. **La branche** : `s/v7` est **75 c
+… [498 caractères tronqués]
 
 ## 3. Travail accompli
 

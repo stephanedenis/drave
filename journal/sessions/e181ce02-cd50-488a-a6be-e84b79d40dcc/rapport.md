@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 95.6 h |
-| Tours | 171 |
-| Messages | 2126 |
-| Appels d'outils | 1830 |
+| Durée | 95.7 h |
+| Tours | 172 |
+| Messages | 2129 |
+| Appels d'outils | 1831 |
 | Fichiers touchés | 25 |
-| Commandes | 1506 |
+| Commandes | 1507 |
 | Sous-agents | 2 |
 | Commits | 225 |
 | Compactages de contexte | 6 |
@@ -383,6 +383,8 @@
 **Tour 170** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 171** — This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.  <compacted-summary> ## Primary Request and Intent - Goal `goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180 … [8917 caractères tronqués]
+
+**Tour 172** — oui
 
 ## 2. Déroulé, étape par étape
 
@@ -9114,7 +9116,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 
 ### Tour 171 — This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat t … [9197 caractères tronqués]
 
-*42 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'état, la branche et l'écart master/s/v7
 - bash — Lire l'état courant
@@ -9130,11 +9132,51 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - bash — Lire l'implémentation de l'attachement
 - bash — Lire la mesure de l'attachement
 - bash — Voir où l'attachement est posé
-- … et 25 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
-⏵ 164/164 portes vertes ; je commite le round avec vérification du contenu
+⏵ Reprise : le round passif est enfin dans HEAD, et la cible par proximité est livrée (164/164)
+
+Deux choses faites depuis votre « continue ».
+
+\## 1. Un écart trouvé et réparé
+
+Mon dernier round (règle passive du chunker, T156/T157 à jour, porte **T160**) **n'était pas dans HEAD** : le commit concurrent `d72269e0` avait emporté mes fiches et mes docs, mais **pas le code**, et ma boucle de commit avait cru réussir parce que son message contenait « SANS PAR ». Vérifié par `git show HEAD:tools/pensee/autotest.py` (0 occurrence de `t160`). Réparé et vérifié dans `1f74e6cf` (2 occurrences de `t160`, 1 de la règle passive).
+
+**Leçon appliquée désormais** : je vérifie `git show HEAD:<fichier>` après chaque commit, pas le message.
+
+\## 2. Nouveau round : la cible par proximité
+
+Règle ajoutée dans **mon** territoire (`tools/bloc_linguistique.py`, `_cible_proche`) : quand le générateur S ne fournit pas de `cible`, le segment prend **le verbe du GV le plus proche**. Mesure sur la **même population que T153** (612 phrases, 239 cibles) :
+
+| mesure | avant | **après** | écart |
+|---|---:|---:|---:|
+| top1 | 82 (0,3431) | **95 (0,3975)** | +13 |
+| **exact** | **1 (0,0042)** | **13 (0,0544)** | **×13** |
+| tête top1 | 81/145 (0,5586) | **94/145 (0,6483)** | +13 |
+| top-k | 78 (0,3264) | 78 (0,3264) | 0 |
+
+Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
+
+**Contrôle négatif explicite** : 226/239 restent faux en exact ; le top-k ne bouge pas (les `candidats` sont des types, pas des verbes) ; la règle se trompera sur les passifs et les phrases à plusieurs GV.
+
+**Artefacts** : fiche [`reports/rapport-pensee-cible-proximite.md`](reports/rapport-pensee-cible-proximite.md) + JSON, porte **T161**, T153 mise à jour, tableau de `docs/implantation/moteur-de-pensee.md`, état.
+
+\## 3. État et vérification
+
+- **164/164 portes** (autotest complet lancé avec T161, vert).
+- `porte-tableaux` ✅ (3046 liens), `revue` ✅, `taille` ✅ (T0 3 999), `verifie_en_cours` ✅, `porte-bloc` ✅.
+- Commits : `1f74e6cf` (code passif), `21110849` (fiches, emporté par une autre session), **`f661728c`** (code + docs de la proximité, HEAD).
+- État à jour dans `docs/pilotage/en-cours.md` (16 h 25) ; prochaine action : **les candidats verbes** (le top-k à 0,3264), puis le générateur S.
+
+\## 4. Ce qui reste ouvert
+
+- **Le top-k à 0,3264** : remplir les `candidats` avec les verbes proches — la marche suivante, dans mon territoire.
+- **Le générateur S** (`tools/structures/generateur.py`) : l
+… [400 caractères tronqués]
+
+### Tour 172 — oui
 
 ## 3. Travail accompli
 
@@ -9215,7 +9257,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1466 autres
+- … et 1467 autres
 
 ## 4. Mesures et résultats marquants
 
