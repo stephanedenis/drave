@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 4.7 h |
 | Tours | 6 |
-| Messages | 147 |
-| Appels d'outils | 292 |
+| Messages | 151 |
+| Appels d'outils | 297 |
 | Fichiers touchés | 14 |
-| Commandes | 152 |
+| Commandes | 157 |
 | Sous-agents | 0 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -244,7 +244,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 6 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -252,10 +252,15 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check run progress and GPU load
 - bash — Update N2 progress and ETA in state
 - bash — Commit corrected N2 progress in state
+- bash — Inspect concurrent commit and state inclusion
+- bash — Check HEAD state B13 fact and commit diff
+- bash — Inspect worktree state diff and counts
+- bash — Update state with B13 147 fact and verify
+- bash — Commit only the updated state
 
 **Synthèse produite :**
 
-⏵ Commit de l'état N2 corrigé (progression et ETA)
+⏵ Commit partiel de l'état (sans les WIP B13/S)
 
 ## 3. Travail accompli
 
@@ -320,7 +325,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 112 autres
+- … et 117 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -443,10 +448,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
+- **T6** : M  docs/implantation/moteur-de-pensee.md M  docs/pilotage/en-cours.md  M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md  M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rappor
 
 ## 6. Commits
 
@@ -457,4 +463,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - PILOTAGE — N3 INTÉGRÉ, S 61/61 ET B13 145/145 DANS L'ÉTAT ; 83e PORTE, § 12 ET LE SUIVI DOCS" -m "Backlog N3 mesurée, roadmap N3 couvert, 83e porte dans les réf
 - ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE" -m "Le fait B13 146/146 (défaut conditionnel : le niveau si le réel es
 - ÉTAT — N2 : KD2 ~19 400/30 000 (LOG BUFFERISÉ), ROPE2048 4 650/20 000 ; ETA CORRIGÉE (~13 H 30 / ~19–20 H)" -m "Le log kd2 s'arrête à 12 050 pas (11 h 07) alors
+- ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE" -m "Le fait 147/147 et sa fiche (rapport-pensee-seuil-parallele)
 

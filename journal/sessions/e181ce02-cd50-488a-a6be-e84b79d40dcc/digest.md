@@ -34348,3 +34348,89 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-78", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-seuil-parallele.json
+ create mode 100644 reports/rapport-pensee-seuil-parallele.md
+COMMIT OK 1
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+mer 04 nov 2026 12:07:41 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes-432-run3.json 2>&1 | tail -5", "description": "Lancer la troisiè … [74 caractères tronqués]`
+
+  ```
+started background job bash-79
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"DRVM\" tools/ docs/implantation/ 2>/dev/null | head -6; ls tools/ | head -20", "description": "Trouver le code DRVM"}`
+
+  ```
+tools/tokenizer_kimi/tiktoken.model
+tools/__pycache__/drvm.cpython-313.pyc
+tools/__pycache__/drvm_trace.cpython-313.pyc
+tools/__pycache__/gguf_drvm.cpython-313.pyc
+tools/__pycache__/entrainer_native_tokens.cpython-313.pyc
+tools/__pycache__/carte_chantiers.cpython-313.pyc
+adaptateur_langue.py
+aiguille.py
+aligneur_litteraire.py
+amplification.py
+analyse_alignement.py
+analyse_empreinte.py
+analyse_engram.py
+analyse_experts_statique.py
+analyse_flux.py
+analyse_hc.py
+analyse_litteraire.py
+analyse_octets_par_jeton.py
+analyse_reutilisation_experts.py
+analyse_union_experts.py
+ancre_professeur.py
+applique_pont.py
+approximabilite_bloc.py
+apres-telechargement-k3.sh
+archive_sessions.py
+audit_drapeaux_harnais.py
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+### 👤 Utilisateur
+
+background job bash-79 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes-432-run3.json 2>&1 | tail -5) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-79"}`
+
+  ```
+neuronal {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+parallele_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade_niveau {'pos': 0.9389, 'syntagme': 0.8241, 'tete': 0.8797, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432-run3.json'))\nprint('refus', d.get('refus'), '| seuils', d.get('seuils'))\nprint('heur', d['modes']['heuristique']['all']['pos']['exactitude'])\nprint(' … [217 caractères tronqués]`
+
+  ```
+refus 0 | seuils {'heuristique': True, 'neuronal': True, 'parallele': True, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': True}
+heur 0.7444
+niveau 0.9389
+parallele 0.9389
+api {'appels': 858, 'tokens': 254454, 'latence_s': 807.5519999999992}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-troisieme-passe.md <<'MD'\n# B13 — la troisième passe : variance nulle, tous les seuils verts\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·\n> **Verdict* … [7026 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 609 fiche(s) · 695 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2804 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-quatre-modes-run2.md`](rapport-pensee-quatre-modes-run2.md) | **B13** — la confirmation : refus 0, niveau 0,9389 … [605 caractères tronqués]`

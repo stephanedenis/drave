@@ -5251,3 +5251,114 @@ pas   4650 · perte 1.0863 · PPL val 2.650 · 9241 s
 ⏵ Commit de l'état N2 corrigé (progression et ETA)
 
 - **bash** `{"command": "git status --short | head -8 ; echo \"---COMMIT---\" ; git commit -m \"ÉTAT — N2 : KD2 ~19 400/30 000 (LOG BUFFERISÉ), ROPE2048 4 650/20 000 ; ETA CORRIGÉE (~13 H 30 / ~19–20 H)\" -m \"Le log kd2 s'arrête à 12 050 pas (11 h 07) alors que le GPU est à 100 % : la sortie est bufferisée ; à … [297 caractères tronqués]`
+
+  ```
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+M  reports/README.md
+ M reports/pensee-quatre-modes.json
+---COMMIT---
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 25d631fe13caf781ebe5284c525a69ef4d5d7d02 but expected 2912291226d47cbf88c81bf49083e5df7ceac817
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un nouveau commit de session a déplacé HEAD ; je vérifie s'il a emporté l'état N2
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"=== 25d631fe ===\" ; git show --stat --oneline 25d631fe | head -12 ; echo \"=== HEAD ÉTAT N2 ===\" ; git show HEAD:docs/pilotage/en-cours.md | grep -n \"19 400\\|12 000+\\|fin estimée\" | head -5 ; echo \"=== STAGED ===\" ; git diff --cached --name-status | … [133 caractères tronqués]`
+
+  ```
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+29122912 ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+=== 25d631fe ===
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/en-cours.md                          |   8 +-
+ journal/2026-11-04/README.md                       |   9 +-
+ journal/2026-11-04/distribue.md                    |   4 +-
+ journal/2026-11-04/docs.md                         |   7 +-
+ journal/2026-11-04/mesures.md                      |   4 +-
+ journal/2026-11-04/modele.md                       |   4 +-
+ journal/2026-11-04/portes.md                       |   4 +-
+ journal/README.md                                  |   4 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 211 +++++++++++++++++++++
+ .../rapport.md                                     |  63 +++++-
+=== HEAD ÉTAT N2 ===
+86:- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; 
+… [1428 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit B13 147/147 a emporté l'état N2 ; je vérifie le fait B13 et les compteurs
+
+- **bash** `{"command": "git show HEAD:docs/pilotage/en-cours.md | grep -n \"Mis à jour\\|B13 \\*\\*14[67]\\|B13 : 14[67]\\|B13\\*\\* — 14[67]\\|fichiers / JSON\" | head -8 ; echo \"=== HEAD 25d état diff ===\" ; git show 25d631fe -- docs/pilotage/en-cours.md | head -40", "description": "Check HEAD state B13 fa … [20 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-11-04, 13 h 55 HNE (heure locale, EST).**
+71:- **Fait** : B13 **146/146** (défaut conditionnel : le niveau si le réel est là, la confiance sinon ; run2 : refus **0**, niveau **0,9389** ; élision POS **0,7455**, r353 tombé) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [B13](../../reports/rapport-b13-porte-140.md).
+108:| fichiers / JSON de résultats | **608** / **693** | `reports/*.md` / `reports/*.json` |
+120:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 146/146, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte pro
+… [3400 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff -- docs/pilotage/en-cours.md | head -30 ; echo \"=== STATUS FULL ===\" ; git status --short | grep -v \"^M  journal\" | head -15 ; echo \"=== COUNTS ===\" ; ls reports/*.md | wc -l ; ls reports/*.json | wc -l", "description": "Inspect worktree state diff and counts"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 0505ef39..fe6e9954 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 13 h 55 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 14 h 05 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -105,7 +105,7 @@
+ |---|---|---|
+ | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **608** / **693** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **609** / **695** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
+ 
+=== STATUS FULL ===
+ M docs/implantation/moteur-de-pensee.md
+ 
+… [300 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ État : B13 147/147 committé (seuil du parallèle), compteurs 609/695
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 -- reports/rapport-pensee-seuil-parallele.md ; date '+%H h %M' ; cp docs/pilotage/en-cours.md /tmp/state.b13.md && python3 - <<'PY'\nimport subprocess\np='/tmp/state.b13.md'\nt=open(p).read()\nh=subprocess.run([' … [1862 caractères tronqués]`
+
+  ```
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+12 h 09
+  en-cours · 1590 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3960 mots (budget 4 000)
+  revue de documentation · 609 fiche(s) · 695 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit partiel de l'état (sans les WIP B13/S)
+
+- **bash** `{"command": "git commit --only docs/pilotage/en-cours.md -m \"ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE\" -m \"Le fait 147/147 et sa fiche (rapport-pensee-seuil-parallele) sont committés dans 25d631fe ; l'état les porte. Compteurs 609/695 (troisiè … [219 caractères tronqués]`

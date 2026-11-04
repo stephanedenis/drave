@@ -10147,3 +10147,18 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-21 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 50 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null; cat work/n2ac/kdpp.out 2>/dev/null; tail -c 50 work/n2ac/kdpp-mix512-a0.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-26", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; cat work/n2ac/kdpp.out 2>/dev/null; ls work/n2ac/kdpp-mix512-a0.pt 2>/dev/null && echo OKPP0", "description": "Poll both corrected runs"}`
+
+  ```
+12:09:20
+kdp a=0 fini 11:01:35
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 60 work/n2ac/kdpp-mix512-a0.log", "description": "Wait for kdp 0.9 finish", "timeoutMs": 600000}`

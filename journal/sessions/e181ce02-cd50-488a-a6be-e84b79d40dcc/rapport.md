@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 91.4 h |
+| Durée | 91.5 h |
 | Tours | 160 |
-| Messages | 1919 |
-| Appels d'outils | 1643 |
+| Messages | 1925 |
+| Appels d'outils | 1649 |
 | Fichiers touchés | 25 |
-| Commandes | 1350 |
+| Commandes | 1355 |
 | Sous-agents | 2 |
 | Commits | 202 |
 | Compactages de contexte | 5 |
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*15 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8494,6 +8494,8 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Corriger le seuil et écrire la fiche
 - bash — Trim README et passer toutes les portes
 - bash — Committer le seuil du parallèle
+- bash — Lancer la troisième passe API (variance)
+- … et 3 autres
 
 **Synthèse produite :**
 
@@ -8578,7 +8580,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1310 autres
+- … et 1315 autres
 
 ## 4. Mesures et résultats marquants
 
