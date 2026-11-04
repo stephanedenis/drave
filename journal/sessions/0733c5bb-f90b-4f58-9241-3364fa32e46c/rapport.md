@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 44.3 h |
 | Tours | 8 |
-| Messages | 770 |
-| Appels d'outils | 715 |
+| Messages | 774 |
+| Appels d'outils | 719 |
 | Fichiers touchés | 27 |
-| Commandes | 530 |
+| Commandes | 532 |
 | Sous-agents | 0 |
-| Commits | 27 |
+| Commits | 28 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -255,7 +255,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 8 — reprends
 
-*43 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - bash — Check time, runs, GPU and git state
 - bash — Inspect relaunched runs and reboot commit
@@ -271,11 +271,11 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Wait for the corrected alpha=0 control
 - bash — Poll corrected alpha=0 run
 - bash — Wait for corrected alpha=0 completion
-- … et 19 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ Test direct de la repondération (le vrai levier ?) dans l'entraîneur de référence
+⏵ Marquage du doute dans la fiche production (le contrôle propre est en cours)
 
 ## 3. Travail accompli
 
@@ -353,7 +353,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 490 autres
+- … et 492 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -528,4 +528,5 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 40); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q 
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && cat >> journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md <<'EOF'  ## 04/11 — reprise après le reboot : les de
+- cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done
 

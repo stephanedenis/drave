@@ -1,14 +1,13 @@
 # N2 — La distillation native : le professeur long dans un élève à fenêtre courte
 
-> **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03 · **Verdict** : le premier
-> distillateur **natif → natif** du dépôt (professeur `drave-n0` RoPE à fenêtre 1 024, élève
-> 11,47 M à fenêtre 512, init identique, mêmes 33 Mo) **paie — et le optimum est à forte douceur**.
-> À **α = 0,9**, l'élève gagne **0,136** à 128 octets (3,5090 contre 3,6452), **0,166** à 512 et
-> **0,177** à 1 024 ; le gain **croît avec la longueur**, alors que le professeur n'a que 1 024
-> octets de fenêtre et l'élève 512. À α = 0,5 le gain s'effondre et s'inverse à 1 024 (+0,019) :
-> **mélanger dur et doux dilue le professeur**. Le professeur coûte **+25 % par pas** (259 contre
-> 208 ms) : à temps égal il reste ~0,15 de gain net — la distillation native est le premier levier
-> qui **ajoute** à la fenêtre au lieu de la remplacer.
+> **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03/04 · **Verdict — ERRATUM** :
+> le gain annoncé le 03/11 (**0,14 à 0,18** à α = 0,9) était un **artefact de pondération**, pas de
+> la distillation. Le code d'hier donnait à la tête principale le poids **1** au lieu de **1/4**
+> (l'entraîneur de référence fait la **moyenne** des quatre têtes) : les runs « distillés » étaient
+> donc aussi des runs **à tête principale surpondérée**. À **parité stricte** — même code, même
+> harnais, même init, mêmes 33 Mo, seul α change — **α = 0,9 ne gagne rien** : 3,6774 / 3,5633 /
+> 3,5208 contre **3,7072 / 3,5727 / 3,5251** pour α = 0, soit **−0,030 / −0,009 / −0,004**, dans le
+> bruit. Le bruit de harnais lui-même est de **±0,06 à ±0,16** : c'est la leçon de la nuit.
 
 ## La question
 
@@ -32,34 +31,35 @@ voit loin apprennent-elles quelque chose à un élève qui ne voit pas si loin, 
 
 ## Ce qui est mesuré
 
-Validation française, canal fourni :
+Le **contrôle de parité** d'abord : le code a été corrigé (`perte = moyenne(tête principale
+distillée, têtes précoces)`, exactement la perte de `entrainer_rope.py`). Vérification : la perte
+du **pas 1** vaut **5,8480** et celle du pas 50 **2,6713** — les valeurs du bras dur de référence
+(5,8480 / 2,6714). La parité est exacte.
 
-| élève 11,47 M, fenêtre 512 (33 Mo) | 128 | 512 | 1 024 |
+| élève 11,47 M, fenêtre 512, 33 Mo (même code, même harnais, même init) | 128 | 512 | 1 024 |
 |---|---:|---:|---:|
-| **dur** (α = 0, référence) | 3,6452 | 3,4493 | **3,3628** |
-| distillé α = 0,5 | 3,5861 | 3,4330 | 3,3819 |
-| écart | −0,059 | −0,016 | +0,019 |
-| **distillé α = 0,9** | **3,5090** | **3,2835** | **3,1863** |
-| écart | **−0,136** | **−0,166** | **−0,177** |
+| **α = 0** (contrôle : le professeur est évalué, pas imité) | **3,7072** | **3,5727** | **3,5251** |
+| **α = 0,9** (distillation) | 3,6774 | 3,5633 | 3,5208 |
+| **écart** | −0,030 | −0,009 | −0,004 |
+| pour mémoire : bras dur de l'entraîneur (sans passe professeur) | 3,6452 | 3,4493 | 3,3628 |
+| pour mémoire : l'ancien code α = 0,9 (tête principale surpondérée) | 3,5090 | 3,2835 | 3,1863 |
 
-## Lecture
+**Trois lectures, dans l'ordre de l'importance :**
 
-1. **La douceur paie, et il en faut beaucoup.** α = 0,5 donne un gain faible et même négatif à
-   1 024 ; α = 0,9 donne −0,14 à −0,18 **partout**. Mélanger à parts égales le dur et le doux
-   revient à entraîner sur une cible que **personne** ne vise : le professeur est presque toujours
-   meilleur que les octets réels (il est plus gros et voit 1 024), donc suivre sa distribution est
-   la bonne cible, pas un compromis.
-2. **Le gain croît avec la longueur** (−0,136 à 128, −0,177 à 1 024) alors que l'élève ne voit que
-   512 octets : les cibles douces **transportent** une partie de ce que le professeur a appris au
-   long, même si l'élève ne peut pas le reconstruire. C'est le premier mécanisme de la nuit qui
-   améliore l'élève **au-delà de sa fenêtre**.
-3. **Le coût est modeste : +25 % par pas** (259 contre 208 ms), et non ×2 comme le laissait croire
-   le premier run (mesuré sous contention). À budget de temps constant, l'élève distillé voit
-   ~26,5 Mo au lieu de 33 (≈ −0,02 de PPL sur la pente mesurée) : le gain net reste **~+0,15**.
-4. **La distillation ne remplace pas la fenêtre, elle s'y ajoute** : l'élève distillé (3,19 à
-   1 024 octets) reste loin du professeur (2,63) et du même élève **entraîné à 1 024** (2,87 à
-   1 024 octets, fiche [`n2-porte-propre`](rapport-n2-porte-propre.md)). C'est un **complément** :
-   il faut d'abord un professeur long, et la fenêtre d'entraînement reste le levier premier.
+1. **La distillation native ne gagne rien** à ce budget : −0,03 à −0,00, et le signe n'est même pas
+   stable avec la longueur. À α = 0,9, les cibles douces d'un professeur qui voit 1 024 octets
+   n'apprennent rien de mesurable à un élève qui en voit 512.
+2. **Le harnais déplace la PPL de +0,06 à +0,16** : les deux runs de la paire (α = 0 et α = 0,9)
+   valent ~3,70/3,57/3,53 là où le même entraînement mené par `entrainer_rope.py` vaut
+   3,6452/3,4493/3,3628. Même perte au pas 1, même init, même données : la seule différence est la
+   **passe du professeur et la seconde passe de l'élève** (ordre des noyaux, non-déterminisme GPU
+   amplifié sur 8 000 pas). **Aucune comparaison entre deux harnais différents n'est donc sûre** —
+   c'est ce qui a produit le faux gain.
+3. **L'erreur est instructive** : le gain apparent venait donc d'une **repondération** (tête
+   principale 4×) et non des cibles douces. L'ampleur exacte de cette repondération se mesure
+   proprement dans l'**entraîneur de référence** — expérience lancée le 04/11 (poids principal
+   4×, même init, mêmes 33 Mo) ; son résultat dira si c'est un levier **gratuit** de −0,1 ou un
+   simple déplacement du harnais.
 
 ## Ce qui pourrait le rendre faux
 

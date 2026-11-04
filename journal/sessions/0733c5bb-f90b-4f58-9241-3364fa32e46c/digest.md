@@ -10195,3 +10195,69 @@ OK09
 ⏵ Résultat de la paire propre (α=0 vs α=0,9) — la question du biais est tranchée
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/kdp-1147m-a0.9.pt --rope --longueurs 128,512,1024 --sortie work/n2ac/eval-kdp-1147m-a0.9.json 2>&1 | tail -4; python3 -c \"\nimport json\nfor n,f in (('α=0  … [384 caractères tronqués]`
+
+  ```
+L128 : 3.6774
+  L512 : 3.5633
+  L1024 : 3.5208
+{"fichier": "kdp-1147m-a0.9.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.6774, "L512": 3.5633, "L1024": 3.5208}
+α=0 corrigé            3.7072 3.5727 3.5251
+α=0,9 corrigé          3.6774 3.5633 3.5208
+dur (entraîneur)       3.6452 3.4493 3.3628
+α=0,9 ancien code      3.509 3.2835 3.1863
+  ```
+
+### 🤖 Assistant
+
+⏵ Erratum : la distillation native ne gagne rien à parité stricte — je corrige les fiches
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-distillation-native.md\")\nt = p.read_text(encoding=\"utf-8\")\ni = t.index(\"> **Ligne de roadmap**\")\nj = t.index(\"## La question\")\nt = t[:i] + \"\"\"> **Ligne de roadmap**  … [3169 caractères tronqués]`
+
+  ```
+fiche distillation : erratum écrit
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Test direct de la repondération (le vrai levier ?) dans l'entraîneur de référence
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-distillation-native.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"3. **L'erreur est instructive** : surpondérer la tête principale de 4× vaut **−0,14 à −0,18** d … [5566 caractères tronqués]`
+
+  ```
+point 3 tempéré
+poids 4× lancé pid 435081
+12:30:35
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/GitHub/Qtrinet && tail -3 work/n2ac/pond4-1147m-512.log 2>/dev/null; date '+%H:%M:%S'; ps -eo pid,etime,cmd --no-headers | grep \"[e]ntrainer_rope_pondere\" | cut -c1-50", "description": "Verify the weighted-control run started"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-33]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-33", "timeout_ms": 180000, "wait": true}`
+
+  ```
+pas     1 · perte 5.7286 · 1 s
+12:32:39
+ 435081       02:03 bash -c cd /home/stephane/Data
+ 435082       02:03 /home/stephane/gpu-env/bin/pyt
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Marquage du doute dans la fiche production (le contrôle propre est en cours)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-production-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"## 4. La distillation du professeur long dans la recette 512\"\nneuf = \"\"\"## 4. La distillation du prof … [1502 caractères tronqués]`
+
+  ```
+avertissement posé
+état : erratum signalé
+  T0 max : 3973 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-distillation-native.md reports/rapport-n2-production-fenetre.md docs/pilotage/en-cours.md work/n2a … [1275 caractères tronqués]`

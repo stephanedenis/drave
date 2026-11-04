@@ -144,7 +144,17 @@ propriété de longueur. C'est exactement ce qu'il fallait séparer.
 Réserve : l'initialisation figée est un tirage aléatoire unique ; un autre tirage déplacerait le
 niveau de quelques centièmes, pas la pente.
 
-## 4. La distillation du professeur long dans la recette 512
+## 4. La distillation du professeur long dans la recette 512 — **SOUS CONTRÔLE (erratum)**
+
+> **Avertissement du 04/11.** Ce paragraphe a été mesuré avec le distillateur d'hier, dont la
+> perte donnait à la tête principale le poids **1** au lieu de **1/4** (l'entraîneur de référence
+> fait la moyenne des quatre têtes), et dont le harnais (passe du professeur) décale la PPL de
+> **+0,06 à +0,16** à lui seul. La **paire propre** — même code, même harnais, seul α change — a
+> été relancée le 04/11 sur la recette de production (α = 0 et α = 0,9, 15 000 pas, mêmes 61,4 Mo)
+> et **son résultat remplacera celui-ci**. Sur l'élève 11,47 M, la paire propre donne **−0,03 /
+> −0,01 / 0,00** : la distillation native n'y gagne **rien** (fiche
+> [`n2-distillation-native`](rapport-n2-distillation-native.md), erratum). Le chiffre ci-dessous
+> est donc **à ne pas citer** avant la paire de production.
 
 Le professeur à fenêtre 1 024 (mélange, 30 000 pas) distillé dans la recette 512, **même init**
 (`mix-60k`), **mêmes 15 000 pas** et **mêmes 61,4 Mo ajoutés** que l'affinage dur :

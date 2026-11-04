@@ -34745,3 +34745,52 @@ température paramétrable
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-87 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text()
+t=t.replace('    ap.add_argument("--seuil", type=float, default=0.6)',
+            '    ap.add_argument("--seuil", type=float, default=0.6)\n    ap.add_argument("--temperature", type=float, default=0.0)')
+t=t.replace('        r = client.demande(invite, temperature=0.0, max_tokens=max(64, int(max_jetons or 256)))',
+            '        r = client.demande(invite, temperature=a.temperature, max_tokens=max(64, int(max_jetons or 256)))')
+p.write_text(t); print('température paramétrable')
+PY
+DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --temperature 0.3 --sortie reports/pensee-quatre-modes-432-t03.json 2>&1 | tail -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-87"}`
+
+  ```
+parallele_niveau · 0.4 s
+cascade_niveau · 0.4 s
+heuristique {'pos': 0.7444, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+neuronal {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+parallele_niveau {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+cascade_niveau {'pos': 0.9385, 'syntagme': 0.8246, 'tete': 0.8723, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5199}
+[status: comp
+… [20 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\ntry:\n    d=json.load(open('reports/pensee-quatre-modes-432-t03.json'))\n    print('refus', d.get('refus'), '| seuils', d.get('seuils'))\n    for k in ('heuristique','neuronal','parallele','cascade_nive … [329 caractères tronqués]`
+
+  ```
+refus 0 | seuils {'heuristique': True, 'neuronal': True, 'parallele': True, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': True}
+heuristique 0.7444 0.2524 0.4516
+neuronal 0.9385 0.8246 0.8723
+parallele 0.9385 0.8246 0.8723
+cascade_niveau 0.9385 0.8246 0.8723
+  ```
+

@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 5.1 h |
 | Tours | 9 |
-| Messages | 184 |
-| Appels d'outils | 350 |
+| Messages | 188 |
+| Appels d'outils | 355 |
 | Fichiers touchés | 14 |
-| Commandes | 195 |
+| Commandes | 200 |
 | Sous-agents | 0 |
-| Commits | 13 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -353,7 +353,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 9 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -365,10 +365,15 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Update stale B13/S/gate facts in pilotage docs
 - bash — Update state time and verify pilotage docs
 - bash — Commit pilotage docs alignment
+- bash — Verify cycle 4 commits and checks
+- bash — Verify links, journal, backlog and runs
+- bash — Correct JSON counter and verify
+- bash — Commit corrected JSON counter
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Commit pilotage : chantiers, plan-travail, portes et état alignés
+⏵ Un commit de session tient le verrou git ; j'attends et je retente
 
 ## 3. Travail accompli
 
@@ -433,7 +438,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 155 autres
+- … et 160 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -554,15 +559,17 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T5** `+- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 t`
 - **T5** `0, 5280 MiB, 99 %`
 - **T8** `| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v6** : h050, h053 et « si fort que » **fermés**, gold **60** (vague 5) ; **60/60** types, **142/142** r`
+- **T9** `437181 bash -c cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport`
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
 - **T6** : M  docs/implantation/moteur-de-pensee.md M  docs/pilotage/en-cours.md  M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md  M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rappor
 - **T8** : 31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees
+- **T9** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
 
 ## 6. Commits
 
@@ -579,4 +586,6 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18)" -m "Les nouveaux rapports de la session B13 (DRVM N0/N1, pensee-drvm-n01.json) et de S (rapport-s-paragraph
 - ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24" -m "La roadmap gardait B13 à 140/140 et S à la v6 : mis à jour des d
 - PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34" -m "chantiers.md : B 148/148, L porte B13 148/148, B13 148/1
+- ÉTAT — COMPTEURS 610/697 (WIP B13 t03) ; HEURE 12 H 37" -m "Le nouveau JSON pensee-quatre-modes-432-t03.json (B13, non committé) porte le disque à 697 JSON ; l'
+- ÉTAT — COMPTEURS 610/697 (WIP B13 t03) ; HEURE 12 H 37" -m "Le nouveau JSON pensee-quatre-modes-432-t03.json (B13, non committé) porte le disque à 697 JSON ; l'
 

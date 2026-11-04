@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 91.8 h |
+| Durée | 91.9 h |
 | Tours | 160 |
-| Messages | 1943 |
-| Appels d'outils | 1668 |
+| Messages | 1948 |
+| Appels d'outils | 1673 |
 | Fichiers touchés | 25 |
-| Commandes | 1372 |
+| Commandes | 1376 |
 | Sous-agents | 2 |
-| Commits | 203 |
+| Commits | 205 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*40 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8495,11 +8495,11 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Trim README et passer toutes les portes
 - bash — Committer le seuil du parallèle
 - bash — Lancer la troisième passe API (variance)
-- … et 20 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ Passer en autonomie 4 h : mettre le goal à jour puis enchaîner les rounds
+⏵ Committer DRVM N0.1, puis la variance
 
 ## 3. Travail accompli
 
@@ -8580,7 +8580,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1332 autres
+- … et 1336 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8931,4 +8931,6 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT CONDITI
 - B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "SEUIL DU PA
 - B13 — LA TROISIÈME PASSE : VARIANCE NULLE (0,9389), 7/7 SEUILS, REFUS 0 ; 148/148" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "TROISIÈME PASSE"; the
+- N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DRVM N0.1"; then echo 
+- N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DRVM N0.1"; then echo 
 
