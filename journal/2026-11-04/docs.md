@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (29)
+## Commits du jour (30)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -37,10 +37,11 @@
 | 14:23 | `76da3f9f` | ÉTAT — HEURE 14 H 25 ; B13 158/158, N2 α = 0,9 À 8 800 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+10) |
 | 14:27 | `9815d435` | ÉTAT — HEURE 14 H 27 ; B13 158/158, N2 α = 0,9 À 9 250 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
 | 14:30 | `9e3e2070` | B13 — LES 500 PREMIERS SEGMENTS : 294 GN, 206 GV, LE SVO NU N'A PAS DE CIBLE ; 158/158 | `en-cours.md`, `README.md`, `apprentissage.md` (+13) |
+| 14:35 | `e5323bc0` | B13 159/159 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; ÉTAT, ROADMAP, CHANTIERS, PLAN | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+17) |
 
 ## Chiffres du jour
 
-`87,2 %` · `0,1283` · `0,3431` · `0,0042` · `×3` · `0,9838` · `0,0208` · `0,9884` · `0,9954` · `0,9846` · `0,9769` · `0,0074`
+`0,3469` · `87,2 %` · `0,1283` · `0,3431` · `0,0042` · `×3` · `0,9838` · `0,0208` · `0,9884` · `0,9954` · `0,9846` · `0,9769`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -62,6 +63,7 @@
 - [reports/rapport-pensee-cibles-500.md](../../reports/rapport-pensee-cibles-500.md)
 - [reports/rapport-pensee-cibles.md](../../reports/rapport-pensee-cibles.md)
 - [reports/rapport-pensee-pragmatique-neuronale.md](../../reports/rapport-pensee-pragmatique-neuronale.md)
+- [reports/rapport-pensee-relation.md](../../reports/rapport-pensee-relation.md)
 - [reports/rapport-pensee-troisieme-passe.md](../../reports/rapport-pensee-troisieme-passe.md)
 
 <!-- notes -->
