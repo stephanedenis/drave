@@ -14215,3 +14215,73 @@ a4b3200c ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS
 ⏵ La paire propre est finie : α=0,9 donne 0,8385 contre 1,014 (−0,176) — je mets l'état à jour
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.kdpp.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.kdpp.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\* … [2014 caractères tronqués]`
+
+  ```
+revue de documentation · 622 fiche(s) · 715 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3989 mots (budget 4 000)
+  en-cours · 1619 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+AttributeError: 'str' object has no attribute 'write_text'
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-511]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le script d'état a échoué (le fichier n'a pas été écrit) : je collecte le job et je refais proprement
+
+- **job_output** `{"job_id": "bash-511", "timeout_ms": 60000, "wait": true}`
+
+  ```
+On branch s/v7
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   docs/implantation/moteur-de-pensee.md
+	modified:   reports/README.md
+	modified:   reports/pensee-quatre-modes.json
+	modified:   tools/bloc_linguistique.py
+	modified:   tools/pensee/autotest.py
+	modified:   tools/structures (modified content)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	reports/rapport-s-paragraphes.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[status: completed, exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit n'a rien committé (l'état était inchangé) : je refais la mise à jour N2 proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 docs/pilotage/en-cours.md && grep -n \"paire propre\" docs/pilotage/en-cours.md | head -3 ; python3 - <<'PY'\nimport pathlib, subprocess, re\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text()\nh=subprocess.run(['da … [1438 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 35 HNE (heure locale, EST).**
+31:> **Bilan de 13 h** : reprises à 09 h ; **runs N2 arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** en cours ;
+86:- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** en cours ; **repondération 4× : −0,05** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+88:- **Prochaine action** : **attendre α = 0,9** (la paire propre), puis la repondération et la mesure ; ensuite la **porte propre (0,29)**.
+état OK 15 h 15
+  revue de documentation · 622 fiche(s) · 715 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3991 mots (budget 4 000)
+  en-cours · 1621 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état 
+… [74 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le Bilan de l'état dit encore « paire propre en cours » : je corrige et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"> **Bilan de 13 h** : reprises à 09 h ; **runs N2 arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** en cours  … [1017 caractères tronqués]`

@@ -10653,3 +10653,18 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-58", "timeout_ms": 600000, "wait": true}`
+
+  ```
+15:16:03
+kdpp a=0 fini 13:09:40
+kdpp a=0.9 fini 15:11:58
+work/n2ac/kdpp-mix512-a0.9.pt
+OK
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bras décisif est là : évaluation de la distillation corrigée à l'échelle de production
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/kdpp-mix512-a0.9.pt --rope --longueurs 128,512,1000,2000 --sortie work/n2ac/eval-kdpp-mix512-a09.json 2>&1 | grep -E '\"(128|512|1000|2000)\"|litterature|a … [80 caractères tronqués]`

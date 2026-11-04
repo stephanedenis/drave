@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 7.8 h |
+| Durée | 7.9 h |
 | Tours | 47 |
-| Messages | 477 |
-| Appels d'outils | 692 |
+| Messages | 480 |
+| Appels d'outils | 695 |
 | Fichiers touchés | 15 |
-| Commandes | 511 |
+| Commandes | 513 |
 | Sous-agents | 0 |
-| Commits | 60 |
+| Commits | 61 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1424,7 +1424,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 47 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1437,10 +1437,12 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Integrate B13 162 passifs corrected
 - bash — Commit B13 162 passifs corrected
 - bash — Update state with paire propre result
+- bash — Update state with paire propre result correctly
+- bash — Fix Bilan and commit paire propre result
 
 **Synthèse produite :**
 
-⏵ Le script d'état a échoué (le fichier n'a pas été écrit) : je collecte le job et je refais proprement
+⏵ Le commit de l'état N2 tourne en arrière-plan ; je collecte le résultat
 
 ## 3. Travail accompli
 
@@ -1506,7 +1508,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 471 autres
+- … et 473 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1709,4 +1711,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS" -m "Cycle d'audit : les sept contrôles sont verts (621/714, 3023 liens, T0 3983, en-cours 1613, bac
 - B13 162/162 — LE CORRECTIF DES PASSIFS (par → AGENT), MAIS LE GÉNÉRATEUR S COURT-CIRCUITE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON du correctif
 - ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 12" -m "Les deux bras de la paire propre de production sont fini
+- ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15" -m "Les deux bras de la paire propre de production sont fini
 

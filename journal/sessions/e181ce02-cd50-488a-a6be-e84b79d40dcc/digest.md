@@ -36416,3 +36416,118 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 16 h 35 HNE\", t)\np.write_text( … [678 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-183]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-183", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[s/v7 cc3c73fe] B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162
+ 20 files changed, 154 insertions(+), 52 deletions(-)
+COMMIT OK 1
+cc3c73fe B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162
+mer 04 nov 2026 15:15:59 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find . -name \"generateur*.py\" -not -path \"./.git/*\" 2>/dev/null | head -3; grep -rn \"moyen\" $(find . -name \"generateur*.py\" -not -path \"./.git/*\" | head -1) 2>/dev/null | head -5", "description": "Trouver le générateur S et … [20 caractères tronqués]`
+
+  ```
+./tools/structures/generateur.py
+251:    (destinataire), ou « par Marie » (agent, après un passif) de « par la porte » (moyen).
+277:        return "moyen"
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 18 rounds, 162/162 ; le générateur S est en territoire S
+
+Le correctif des passifs révèle une **limite de territoire** : le générateur S (qui court-circuite `_role_gp`) vit dans **`tools/structures/`** — le territoire S, où je ne dois pas écrire. Commits **`cc3c73fe`**.
+
+## Le round et sa limite
+
+| chemin | `par le chien` | état |
+|---|---|---|
+| `_role_gp` (mon code, le chunker simple) | **agent** | ✅ corrigé |
+| `generateur.py` (S, `tools/structures/`) | `moyen` | ❌ **hors de mon territoire** |
+| annotation finale | `moyen` | ❌ |
+
+**Ce que ça dit** :
+
+- **Le correctif est local** : `_role_gp` est utilisée par le chunker simple, pas par le générateur S (le segmenter par défaut) — la correction ne change pas l'annotation.
+- **Le vrai correctif est chez S** : `tools/structures/generateur.py:277` rend `moyen` pour `par` ; la ligne 251 dit même « par Marie (agent, après un passif) » — la connaissance est là, la règle ne l'applique pas.
+- **Je n'y touche pas** : la consigne est explicite (« ne pas écrire dans S/D/N2 ») ; le correctif S est à **demander** à la session S.
+- **La négative est explicite** : la porte du bloc reste verte, mais la sortie ne change pas.
+
+## L'état de l'autonomie (18 rounds, ~3 h 25)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,8195 ; passifs 5/5 faux, correctif bloqué par le territoire |
+
+- **162/162 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **622 fiches / 715 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **15 h 15 HNE** ; il reste **~35 min** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard.
+
+## La suite
+
+1. **La session S** : lui demander `par` → `agent` dans `generateur.py` (la ligne 251 le sait déjà).
+2. **Les passifs sans `par`**.
+3. **Le merge `s/v7` → `master`**.
+4. **Le GGUF** : la porte N0.1 complète.
+
+Je continue la file : prochain round, **les passifs sans `par`** — la partie qui reste dans mon territoire.
+
+
+## Tour 168
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 149/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '529,575p' tools/bloc_linguistique.py", "description": "Lire le chunker simple"}`
+
+  ```
+"""
+        if not self.segmenter_s:
+            return {}
+        try:
+            import generateur
+            base = generateur._segmente(texte, generateur._tokens(texte))
+            return {(s.debut, s.fin, s.type): (s.cible_gp or s.cible_nom or s.cible_verbe)
+                    for s in base}
+        except Exception:
+            return {}
+
+    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+        mots = self._mots(texte)
+        lex = POS_FERME.get(langue, POS_FERME["fr"])
+        segments: list[dict] = []
+        i = 0
+        while i < len(mots):
+            d, f, t, typ = mots[i]
+            n = _normaliser(t)
+            if typ == "mot" and n in lex.get("DET", set()):
+                j = i + 1
+                while j < len(mots) and mots[j][3] == "mot" and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set()):
+                    j += 1
+                segments.append({"type": "GN", "role": "groupe nominal", "niveau": 0,
+                                 "debut": d, "fin": mots[j - 1][1],
+                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                i = j
+      
+… [1129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                segments.append({\"type\": \"GN\", \"role\": \"groupe nominal\", \"niveau\": 0,\n                         … [1339 caractères tronqués]`

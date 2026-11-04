@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 94.6 h |
-| Tours | 167 |
-| Messages | 2061 |
-| Appels d'outils | 1771 |
+| Tours | 168 |
+| Messages | 2067 |
+| Appels d'outils | 1775 |
 | Fichiers touchés | 25 |
-| Commandes | 1455 |
+| Commandes | 1459 |
 | Sous-agents | 2 |
 | Commits | 219 |
 | Compactages de contexte | 5 |
@@ -373,6 +373,8 @@
 **Tour 166** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 167** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 168** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8899,7 +8901,7 @@ Je continue la file : prochain round, **le correctif des passifs** — la règle
 
 ### Tour 167 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Lire la fonction de rôle des GP
 - bash — Corriger le rôle de par et tester
@@ -8909,6 +8911,58 @@ Je continue la file : prochain round, **le correctif des passifs** — la règle
 - bash — Trim README et passer les portes
 - bash — Committer le correctif des passifs
 - job_output
+- bash — Trouver le générateur S et sa table de rôles
+
+**Synthèse produite :**
+
+⏵ Autonomie : 18 rounds, 162/162 ; le générateur S est en territoire S
+
+Le correctif des passifs révèle une **limite de territoire** : le générateur S (qui court-circuite `_role_gp`) vit dans **`tools/structures/`** — le territoire S, où je ne dois pas écrire. Commits **`cc3c73fe`**.
+
+\## Le round et sa limite
+
+| chemin | `par le chien` | état |
+|---|---|---|
+| `_role_gp` (mon code, le chunker simple) | **agent** | ✅ corrigé |
+| `generateur.py` (S, `tools/structures/`) | `moyen` | ❌ **hors de mon territoire** |
+| annotation finale | `moyen` | ❌ |
+
+**Ce que ça dit** :
+
+- **Le correctif est local** : `_role_gp` est utilisée par le chunker simple, pas par le générateur S (le segmenter par défaut) — la correction ne change pas l'annotation.
+- **Le vrai correctif est chez S** : `tools/structures/generateur.py:277` rend `moyen` pour `par` ; la ligne 251 dit même « par Marie (agent, après un passif) » — la connaissance est là, la règle ne l'applique pas.
+- **Je n'y touche pas** : la consigne est explicite (« ne pas écrire dans S/D/N2 ») ; le correctif S est à **demander** à la session S.
+- **La négative est explicite** : la porte du bloc reste verte, mais la sortie ne change pas.
+
+\## L'état de l'autonomie (18 rounds, ~3 h 25)
+
+| bloc | résultat |
+|---|---|
+| **Fusion** | défaut conditionnel, seuil, sous-type (double sens 0,9884) |
+| **Réel** | 3 passes à 0, 3 à 0,3 (0,9838), pragma acte 0,9954 |
+| **Natif** | DRVM N0.1 : 6/6, le payload corrompu refusé |
+| **L (annotation)** | attachement 0,3431 ; cibles 239/1863 ; relation 0,8195 ; passifs 5/5 faux, correctif bloqué par le territoire |
+
+- **162/162 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **622 fiches / 715 JSON / 120 docs / 83 portes** — ✅.
+- L'horloge réelle est **15 h 15 HNE** ; il reste **~35 min** d'autonomie.
+- Les commits sont sur **`s/v7`** ; `master` est en retard.
+
+\## La suite
+
+1. **La session S** : lui demander `par` → `agent` dans `generateur.py` (la ligne 251 le sait déjà).
+2. **Les passifs sans `par`**.
+3. **Le merge `s/v7` → `master`**.
+4. **Le GGUF** : la porte N0.1 complète.
+
+Je continue la file : prochain round, **les passifs sans `par`** — la partie qui reste dans mon territoire.
+
+### Tour 168 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Lire le chunker simple
+- bash — Détecter le passif sans par et tester
+- bash — Écrire la fiche des passifs sans par et la porte T160
 
 ## 3. Travail accompli
 
@@ -8989,7 +9043,7 @@ Je continue la file : prochain round, **le correctif des passifs** — la règle
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1415 autres
+- … et 1419 autres
 
 ## 4. Mesures et résultats marquants
 
