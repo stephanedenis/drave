@@ -10412,3 +10412,4 @@ The command keeps running in the background. You will be notified when it finish
 [status: completed, exit code: 0]
   ```
 
+- **bash** `{"command": "sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.pt 2>/dev/null && echo OKPP0; tail -c 45 work/n2ac/kdpp-mix512-a0.log", "description": "Wait for production pair alpha=0", "timeoutMs": 600000}`

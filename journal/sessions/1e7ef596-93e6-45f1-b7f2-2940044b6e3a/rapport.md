@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 5.6 h |
 | Tours | 12 |
-| Messages | 223 |
-| Appels d'outils | 401 |
+| Messages | 227 |
+| Appels d'outils | 407 |
 | Fichiers touchés | 15 |
-| Commandes | 244 |
+| Commandes | 250 |
 | Sous-agents | 0 |
-| Commits | 22 |
+| Commits | 23 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -458,7 +458,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 12 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -473,10 +473,12 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Integrate B13 151 pragmatique across docs
 - bash — Commit B13 151 pragmatique integration
 - bash — Wait for lock and retry pragmatique commit
+- bash — Check rope process, logs and recent runs
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ Verrou git tenu par une session : j'attends puis je retente le commit
+⏵ Commit N2 : runs arrêtés, paire propre, R1.2 interrompu
 
 ## 3. Travail accompli
 
@@ -542,7 +544,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 204 autres
+- … et 210 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -704,4 +706,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — B13 150/150 ALLÉGÉ (T0 3 986) ; CLAIM N2 PROLONGÉ À 720 MIN (ROPE ~19–20 H)" -m "L'historique B13 (seuil, défaut conditionnel, run 2, élision, troisième 
 - B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé
 - B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé
+- N2 — KD2 ET ROPE2048 ARRÊTÉS POUR LA PAIRE PROPRE (ROPE À 6 400/20 000) ; REPONDÉRATION −0,05 ; R1.2 INTERROMPU" -m "La session N2 a arrêté kd2 et rope2048 (cod
 

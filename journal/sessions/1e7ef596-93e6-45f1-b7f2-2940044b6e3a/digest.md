@@ -7400,3 +7400,129 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Verrou git tenu par une session : j'attends puis je retente le commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; ls -l .git/index.lock ; pgrep -af \"git (commit|add)\" | head -3 ; else echo \"LOCK LIBRE\" ; git add … [609 caractères tronqués]`
+
+  ```
+LOCK LIBRE
+[s/v7 d4a35d11] B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+ 10 files changed, 67 insertions(+), 17 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 7
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [132 caractères tronqués]`
+
+  ```
+d4a35d11 B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+64674e0d ERRATUM (SUITE) — LA REPONDÉRATION VAUT −0,05, PAS −0,14 : 3,6067 / 3,3984 / 3,3129 CONTRE 3,6452 / 3,4493 / 3,3628
+a2926831 B13 — LA PRAGMATIQUE NEURONALE : ACTE 1,0, NÉGATION 1,0 SUR 130 PHRASES ; 151/151
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-pragmatique-full.json
+?? reports/pensee-quatre-modes-432-pragma.json
+?? reports/rapport-pensee-pragmatique-full.md
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 612 fiche(s) · 701 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3993 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---CLAIM---\" ; python3 tools/ressources.py --status 2>&1 | tail -2 ; echo \"---RUNS---\" ; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; tail -1 wor … [189 caractères tronqués]`
+
+  ```
+✅ 2940 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---CLAIM---
+  Réservations actives :
+    · 0733c5bb / n2-jour : gpu0=exclusive, gpu1=exclusive, cpu0=12, ram=60 (prio 1, 720 min)
+---RUNS---
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+pas   6400 · perte 0.9833 · PPL val 2.590 · 12205 s
+0, 99 %
+1, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Le GPU1 est à 0 % : le run rope a-t-il été arrêté pour la paire de distillation ? Je vérifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== PROC ===\" ; pgrep -af \"entrainer_rope|distiller_natif|chaine_|distiller\" | grep -v pgrep | head -6 ; echo \"=== LOGS RÉCENTS ===\" ; ls -lt --time-style=\"+%H:%M\" work/n2ac/*.log | head -8 ; echo \"=== ROPE TAIL ===\" ; … [184 caractères tronqués]`
+
+  ```
+=== PROC ===
+299987 bash work/n2ac/chaine_kd_production_propre.sh 0
+299990 /home/stephane/gpu-env/bin/python work/n2ac/distiller_natif.py --professeur work/n2ac/mix1024-60k.pt --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --seq 512 --window 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2w/mix-60k.pt --pas 15000 --alpha 0 --T 2 --sortie work/n2ac/kdpp-mix512-a0.pt --drvm work/n2ac/kdpp-mix512-a0.drvm
+=== LOGS RÉCENTS ===
+-rw-r--r--. 1 stephane stephane  19276 13:02 work/n2ac/kdpp-mix512-a0.log
+-rw-r--r--. 1 stephane stephane    526 12:57 work/n2ac/pond4-1147m-512.log
+-rw-r--r--. 1 stephane stephane    415 12:55 work/n2ac/rope2048-20k.lancement.log
+-rw-r--r--. 1 stephane stephane   7358 12:54 work/n2ac/rope2048-20k.log
+-rw-r--r--. 1 stephane stephane  11445 12:18 work/n2ac/kdp-1147m-a0.9.log
+-rw-r--r--. 1 stephane stephane    474 11:08 work/n2ac/kd2-mix512-30k.lancement.log
+-rw-r--r--. 1 stephane stephane  16596 11:07 work/n2ac/kd2-mix512-30k.log
+-rw-r--r--. 1 stephane stephane  11445 11:01 work/n2ac/kdp-1147m-a0.log
+=== ROPE TAIL ===
+pas   6250 · perte 1.0217 · PPL val 2.595 · 11883 s
+pas   6300 · perte 1.0600 · PPL va
+… [554 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== 64674e0d ===\" ; git show --stat --oneline 64674e0d | head -8 ; echo \"=== ERRATUM FICHE ===\" ; head -10 reports/rapport-n2-distillation-native.md ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; grep -n \"fic … [141 caractères tronqués]`
+
+  ```
+=== 64674e0d ===
+64674e0d ERRATUM (SUITE) — LA REPONDÉRATION VAUT −0,05, PAS −0,14 : 3,6067 / 3,3984 / 3,3129 CONTRE 3,6452 / 3,4493 / 3,3628
+ docs/pilotage/en-cours.md                          |  2 +-
+ journal/2026-11-04/README.md                       | 11 ++--
+ journal/2026-11-04/apprentissage.md                |  6 +-
+ journal/2026-11-04/distribue.md                    |  6 +-
+ journal/2026-11-04/docs.md                         |  9 +--
+ journal/2026-11-04/mesures.md                      |  6 +-
+ journal/2026-11-04/modele.md                       |  6 +-
+=== ERRATUM FICHE ===
+# N2 — La distillation native : le professeur long dans un élève à fenêtre courte
+
+> **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03/04 · **Verdict — ERRATUM** :
+> le gain annoncé le 03/11 (**0,14 à 0,18** à α = 0,9) était un **artefact de pondération**, pas de
+> la distillation. Le code d'hier donnait à la tête principale le poids **1** au lieu de **1/4**
+> (l'entraîneur de référence fait la **moyenne** des quatre têtes) : les runs « distillés » étaient
+> donc aussi des runs **à tête principale surpondérée**. À **parité stricte** — même code, même
+> harnais, même init, mêmes 33 Mo, seu
+… [1530 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 : kd2 et rope2048 arrêtés pour la paire propre — le hub synchronise l'état et la roadmap
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:70]); continue\n        t=t.replace(old … [2929 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+  en-cours · 1614 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3984 mots (budget 4 000)
+  revue de documentation · 612 fiche(s) · 701 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2940 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit N2 : runs arrêtés, paire propre, R1.2 interrompu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md && git commit -m \"N2 — KD2 ET ROPE20 … [610 caractères tronqués]`

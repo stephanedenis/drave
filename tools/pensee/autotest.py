@@ -2167,6 +2167,18 @@ def t148_pragmatique() -> tuple[bool, str]:
         f"modalité {pr['modalite']}, double sens {pr['double_sens']}")
 
 
+def t149_pragmatique_full() -> tuple[bool, str]:
+    """Le pragma sur le gold 432 : acte 0,9954, la fusion garde l'heuristique."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-quatre-modes-432-pragma.json").read_text(encoding="utf-8"))
+    m = d["modes"]["neuronal"]["all"]["pragmatique"]
+    h = d["modes"]["heuristique"]["all"]["pragmatique"]
+    return (abs(m["acte"] - 0.9954) < 0.001 and m["negation"] < h["negation"]), (
+        f"pragma 432 : acte {m['acte']}, négation {m['negation']} < {h['negation']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2314,7 +2326,8 @@ def main() -> int:
               ("T145 troisième passe", t145_troisieme_passe()),
               ("T146 DRVM N0.1", t146_drvm_n01()),
               ("T147 variance", t147_variance()),
-              ("T148 pragmatique neuronale", t148_pragmatique())]
+              ("T148 pragmatique neuronale", t148_pragmatique()),
+              ("T149 pragma 432", t149_pragmatique_full())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

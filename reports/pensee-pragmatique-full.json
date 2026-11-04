@@ -1,0 +1,38 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "152/152",
+ "heuristique": {
+  "pos": 0.7444,
+  "acte": 0.9954,
+  "negation": 0.9676,
+  "modalite": 0.9861,
+  "double_sens": 0.9676
+ },
+ "neuronal": {
+  "pos": 0.9389,
+  "acte": 0.9954,
+  "negation": 0.963,
+  "modalite": 0.9722,
+  "double_sens": 0.9884
+ },
+ "niveau": {
+  "pos": 0.9389,
+  "acte": 0.9954,
+  "negation": 0.9676,
+  "modalite": 0.9861,
+  "double_sens": 0.9676
+ },
+ "cout": {
+  "appels": 1287,
+  "tokens": 314369,
+  "latence_s": 1236.4
+ },
+ "refus": 0,
+ "seuils": "7/7",
+ "limites": [
+  "une passe",
+  "granularité du niveau",
+  "gold 432"
+ ]
+}
