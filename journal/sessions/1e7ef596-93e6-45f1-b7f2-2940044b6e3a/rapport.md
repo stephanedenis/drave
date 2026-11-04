@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 1.5 h |
+| Durée | 1.6 h |
 | Tours | 3 |
-| Messages | 80 |
-| Appels d'outils | 162 |
+| Messages | 84 |
+| Appels d'outils | 171 |
 | Fichiers touchés | 9 |
-| Commandes | 82 |
+| Commandes | 86 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -96,7 +96,7 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 
 ### Tour 3 — fais des tâches courtes aprèes avoir analysé l'état de chacune des sessions qui ont été interrompues par le redémarrage.
 
-*116 appels d'outils.* Actions notables :
+*125 appels d'outils.* Actions notables :
 
 - job_kill
 - read
@@ -112,11 +112,11 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 - bash — Inspect store fix and Pensée test style
 - bash — Read S untracked validation data
 - bash — Read S export flow and data writers
-- … et 94 autres
+- … et 103 autres
 
 **Synthèse produite :**
 
-⏵ Commit d'intégration de la reprise
+⏵ Alignement des prochaines actions des mandats sur l'état du 04/11
 
 ## 3. Travail accompli
 
@@ -127,11 +127,11 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 | `tools/tests/test_pensee_store.py` | 1 | 0 |
 | `reports/rapport-n2-production-fenetre.md` | 0 | 3 |
 | `reports/rapport-n2-r12-2048.md` | 0 | 4 |
-| `journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md` | 1 | 1 |
-| `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 1 |
-| `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 1 |
-| `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 1 |
-| `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 1 |
+| `journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md` | 1 | 2 |
+| `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 2 |
+| `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 2 |
+| `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 2 |
+| `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
 | `docs/pilotage/en-cours.md` | 0 | 49 |
 
 ### Commandes exécutées (échantillon)
@@ -176,7 +176,7 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 42 autres
+- … et 46 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -284,4 +284,5 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 
 - S — VALIDATION HUMAINE : 8 VERDICTS DE RÉFÉRENTS SUR /PARAGRAPHES (a001–a003) + 8 VERDICTS BANQUE (p003, c010, c066, c067)" && git log --oneline -1 && git statu
 - REPRISE — LES QUATRE SESSIONS INTERROMPUES SONT TRIÉES ; ÉTAT AU 04/11" -m "N2 : les deux runs de la nuit sont interrompus par le reboot de 19 h 33 (kd2 8 250/3
+- MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11" -m "N2 : relancer kd2/rope2048 puis la porte propre. S : poursuivre la validation /paragraph
 

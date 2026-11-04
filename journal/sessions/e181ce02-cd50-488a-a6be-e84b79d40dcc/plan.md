@@ -16,8 +16,8 @@
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
 - **Heartbeat** : 2026-11-02 21:43 EST
-- **Prochaine action** : la **porte B13** est à **140/140** (6 S fixés ; T132/T133 2/5) ; la **porte qui bouge** est un **test faible** (l'aveugle/labyrinthe passent) ;
-  reprendre la **porte stochastique/fenêtre** et le **gold 200+**.
+- **Prochaine action** : le **fix FIFO** est testé (3/3) ; reprendre **T132/T133** et le **gold
+  200+** ; la porte stochastique/fenêtre attend une version API (serveur local interdit).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
 - **État** : en pause
 - **Arrêt constaté** : reboot du 03/11 19 h 33 ; le fix FIFO du store est testé (3/3, l'ancien

@@ -13,9 +13,8 @@
 - **Fichiers réservés** : `docs/pilotage/`, `journal/` (hors `sessions/<id>/`),
   `reports/README.md`, `reports/INDEX.md`, l'index git.
 - **Heartbeat** : 2026-11-04 08:50 EST
-- **Prochaine action** : committer l'intégration (N2 interrompu, S validations, Pensée FIFO, état
-  au 04/11), puis relancer la passe de portes (arrêtée à 08 h 40) et laisser les runs longs N2 à
-  leur session.
+- **Prochaine action** : **relancer la passe de portes** (arrêtée à 08 h 40), puis laisser les
+  runs longs N2 à leur session ; l'état du 04/11 est committé (`59329788`).
 - **État** : actif
 - **Plan** : 1) ~~analyse des quatre sessions~~ ; 2) ~~tâches courtes~~ ; 3) **état au 04/11** ;
   4) **revue + commit** ; 5) **passe de portes** ; 6) **runs longs N2** (plus tard, sur décision).

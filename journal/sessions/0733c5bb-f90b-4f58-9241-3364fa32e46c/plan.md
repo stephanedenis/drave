@@ -31,9 +31,8 @@
   sont mesurées — val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** — et
   la courbe 128/256/512/1000 est dans `work/n2ac/courbe-mix200.json` ; le banc **R1.1/R1.2** (RoPE)
   est mesuré (3,2545 à 1 000, 3,0107 à octets constants) ; reste le contrôle « depuis zéro ».
-- **Prochaine action** : la **fiche + état + commit** du run de 200 k sont faits (fiche fenêtre
-  `rapport-n2-fenetre` + JSON committés) ; le contrôle depuis zéro et la clôture restent, à la
-  reprise.
+- **Prochaine action** : **relancer `kd2` (30 000 pas) et `rope2048` (20 000 pas)** — longs,
+  après les tâches courtes ; puis la **porte propre (0,29)**.
 - **État** : en pause
 - **Arrêt constaté** : reboot du 03/11 19 h 33 ; les runs `kd2` (8 250/30 000) et `rope2048`
   (3 350/20 000) sont **interrompus sans checkpoint** ; claim `nuit-kd2` libéré ; les fiches
