@@ -491,6 +491,24 @@ même contrat se remplacent **sans toucher au bus**. Le bloc est **aveugle à sa
 accepte un transformeur, un réseau impulsionnel, un solveur ou un service distant. C'est ce qui rend la comparaison honnête : même entrée, même
 sortie attendue, même trace.
 
+**La leçon de L (04/11) : le service distant gagne l'analyse, pas le sens.** Sur le gold 432, un
+service distant (l'API DeepSeek) mesuré comme un bloc du contrat donne **POS 0,9309**,
+**syntagmes 0,8226**, **tête 0,8784** — contre 0,7394 / 0,2520 / 0,4511 pour l'heuristique — mais
+**acte pragmatique 0,0000** : il ne rend pas la pragmatique. La **fusion par niveau**
+(`PRIORITE_NIVEAU`) prend au neuronal ce qu'il fait mieux (POS, syntagmes) et laisse à
+l'heuristique ce qu'elle fait mieux (pragmatique, 0,9954). Pour le natif, cela fixe trois
+exigences :
+
+1. **Le contrat doit porter le niveau**, pas seulement la sortie : un bloc qui ne rend pas un
+   niveau doit le **déclarer** (refus), et la fusion doit choisir **par niveau** — c'est la
+   version native de « le bloc, pas la couche ».
+2. **La tokenisation est un contrat** : le service a rendu **7 POS pour 6 tokens** sur
+   `l'écoutent` (élision) ; un bloc natif qui tokenise autrement que le centre casse la
+   comparaison. Le centre doit imposer sa tokenisation, ou le bloc doit la déclarer.
+3. **Le réel doit être joignable dans les portes** : le mock avait conclu l'inverse du réel
+   (niveau 0,3432 contre 0,7424) ; un défaut choisi sur le mock est un défaut faux. Toute
+   décision de fusion se mesure **avec le réel**, sinon elle reste une hypothèse.
+
 **2. Le format porte le graphe.** DRVM ne stocke pas seulement des tenseurs : il stocke des **blocs**, des
 **régions**, des **routes**, des **têtes** et un **contrat d'activation**. Un format qui ne sait pas dire ces
 choses ne peut pas exécuter le régime.

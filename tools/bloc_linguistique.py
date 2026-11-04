@@ -412,7 +412,7 @@ class Heuristique:
     # -- tokens -------------------------------------------------------------
     @staticmethod
     def _mots(texte: str) -> list[tuple[int, int, str, str]]:
-        motif = re.compile(r"\w+(?:['’\-]\w+)*|\d+(?:[.,]\d+)*|https?://\S+|[\U0001F300-\U0001FAFF]|[^\w\s]")
+        motif = re.compile(r"\b[ldmtsnLDMTNS]['’](?=\w)|\w+(?:['’\-]\w+)*|\d+(?:[.,]\d+)*|https?://\S+|[\U0001F300-\U0001FAFF]|[^\w\s]")
         sortie = []
         for m in motif.finditer(texte):
             t = m.group()

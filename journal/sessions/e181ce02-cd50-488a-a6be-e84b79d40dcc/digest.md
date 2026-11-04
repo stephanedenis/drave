@@ -33623,3 +33623,292 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-quatre-modes-432.md reports/pensee-quatre-modes-432.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pil … [526 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-43]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-43", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-quatre-modes-432.json
+ create mode 100644 reports/rapport-pensee-quatre-modes-432.md
+COMMIT OK 1
+7632ab94 B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143
+mer 04 nov 2026 10:51:36 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Quatre modes sur le réel : le niveau gagne (0,9309/0,8226/0,8784) ; 143/143
+
+La clé DeepSeek est utilisée : les **six modes** sont mesurés sur le **gold réel 432** avec le **neuronal réel** — et le **niveau** gagne. Commit **`7632ab94`**.
+
+## Les six modes (432 phrases, API réelle)
+
+| mode | POS | syntagmes F1 | tête F1 | acte |
+|---|---:|---:|---:|---:|
+| heuristique | 0,7394 | 0,2520 | 0,4511 | **0,9954** |
+| neuronal (compose) | **0,9309** | **0,8226** | **0,8784** | 0,0000 |
+| parallèle (confiance) | 0,9280 | 0,8020 | 0,8570 | 0,9954 |
+| cascade (confiance) | 0,9280 | 0,8020 | 0,8570 | 0,9954 |
+| **parallèle_niveau** | **0,9309** | **0,8226** | **0,8784** | 0,9954 |
+| **cascade_niveau** | **0,9309** | **0,8226** | **0,8784** | 0,9954 |
+
+**Ce que ça dit** :
+
+- **Le niveau gagne avec le réel** : POS **0,9309** (+0,19 sur l'heuristique), syntagmes **0,8226** (+0,57), tête **0,8784** (+0,43) — et la **pragmatique** reste celle de l'heuristique (0,9954) parce que le neuronal ne la rend pas (acte 0,0).
+- **Le neuronal seul ne suffit pas** : son acte est **0,0** ; la fusion par niveau lui prend la POS et les syntagmes, et laisse la pragmatique à l'heuristique.
+- **Le mock avait conclu l'inverse** (0,3432 pour le niveau) : le défaut ne peut pas être changé sans la clé — c'est pourquoi il reste la confiance **dans les portes**, et le banc utilise l'option `PRIORITE_NIVEAU`.
+- **Le coût est mesuré** : **858 appels API**, **254 341 tokens**, **803,8 s** de latence cumulée pour la passe complète.
+
+## Le refus `r353`, nommé
+
+`Le professeur parle ; les élèves l'écoutent.` — le neuronal rend **7 POS pour 6 tokens** (`ValueError: longueur POS 7 / 6`) : le tokenizer du bloc garde `l'écoutent` en **un** token, le modèle en rend **deux**. Le refus est **nommé** (T140) ; le correctif est la prochaine action.
+
+## L'état
+
+- Fiche : [`rapport-pensee-quatre-modes-432.md`](../../reports/rapport-pensee-quatre-modes-432.md) ; JSON [`pensee-quatre-modes-432.json`](../../reports/pensee-quatre-modes-432.json) ; T139/T140 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **143/143 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **602 fiches / 687 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (12 h 05).
+- L'horloge réelle est **10 h 51 HNE** ; le goal est actif.
+- **À noter** : le JSON brut de la passe (les seuils, le détail par phrase) a été écrasé par le résumé — les chiffres clés sont dans la fiche et le résumé, le brut est à rejouer (30 min) si besoin.
+
+## La suite
+
+1. **Le correctif du `r353`** : aligner la tokenisation de l'élision sur celle du bloc.
+2. **La deuxième passe API** : confirmer le niveau avant d'en faire le défaut des portes.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **le correctif du `r353`** — l'élision, cause nommée.
+
+
+## Tour 158
+
+### 👤 Utilisateur
+
+ok, tiens en compte pour notre stratégie de modèle natif drave et continue
+
+### 🤖 Assistant
+
+⏵ Intégrer la leçon au modèle natif Drave, puis corriger le r353
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"modèle natif\\|natif Drave\\|drave-n0\\|modèle Drave\" docs/ 2>/dev/null | head -6; echo ---; ls docs/theorie/ | head -20", "description": "Trouver les documents du modèle natif"}`
+
+  ```
+docs/archive/roadmap-detail-2026-10-29.md
+docs/archive/roadmap-native-2026-10-29.md
+docs/schemas/natif-graphe-n0.svg
+docs/schemas/natif-original.svg
+docs/schemas/README.md
+docs/methode/ressources.md
+---
+architecture-native.md
+carte.md
+contrat-bloc-langue.md
+genealogie-des-langues.md
+glossaire
+glossaire.md
+histoire.md
+jeux-symboliques.md
+lecture-rapide.md
+modele-natif.md
+modules-cerveau-langage.md
+pensee-iterative.md
+pre-traitement-linguistique.md
+protocole-semantique.md
+semantique-universaux.md
+synthese
+vision.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/theorie/modele-natif.md docs/theorie/architecture-native.md; grep -n \"^#\\|^##\" docs/theorie/modele-natif.md | head -20", "description": "Voir la structure du document du modèle natif"}`
+
+  ```
+612 docs/theorie/modele-natif.md
+  129 docs/theorie/architecture-native.md
+  741 total
+1:# Le modèle Drave natif — un graphe, un flux, trois niveaux
+19:## 1. Ce qu'on appelle « natif »
+44:## 2. Les trois niveaux — surface, RSN, pensée
+46:### Le problème
+81:### Ce que la RSN est, et ce qu'elle n'est pas
+100:### La RSN comme quotient
+133:### Niveau, étage, couche — ne pas confondre
+144:### Le système de types et la légalité du graphe
+183:### Neutralité et informativité
+208:### Ce que la séparation coûte
+224:### Le miroir
+239:## 3. Le bus — des faits, pas des matrices
+264:## 4. Le graphe — blocs, régions, routes, têtes
+321:### Le mode d'opération est privé
+350:### La granularité : petit, mais pas trop
+369:### Le graphe dynamique
+385:## 5. DRVM — le conteneur
+415:## 6. Le régime d'exécution
+427:### Rejouer : la pile de déterminisme
+464:## 7. L'objectif d'entraînement
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '464,560p' docs/theorie/modele-natif.md", "description": "Lire la section de l'objectif d'entraînement"}`
+
+  ```
+## 7. L'objectif d'entraînement
+
+**Le prochain octet ne suffit pas** : il n'apprend ni à sortir tôt, ni à penser, ni à se décomposer. Le natif a
+donc **sept pertes**, et chacune a une porte :
+
+![Sept pertes, un seul objectif](../schemas/natif-pertes.svg)
+
+| # | perte | ce qu'elle installe | contrôle |
+|---:|---|---|---|
+| 1 | **prochain octet** | le socle : prédire | perplexité, jeu tenu à l'écart |
+| 2 | **distillation** | la distribution du professeur | écart au professeur, permutation |
+| 3 | **pertes locales par bloc** | chaque région reste utile seule | ablation d'une région |
+| 4 | **têtes précoces** | la bonne réponse à la profondeur *k* | tête précoce contre témoin sans tête |
+| 5 | **contraction de la pensée** | λ < 1, contenu conservé | λ et contenu après *k* pas |
+| 6 | **cohérence du pont** | la sortie d'une région reste lisible | pont contre sans pont |
+| 7 | **budget de sparsité** | k-WTA 25 %, pas plus | qualité à budget égal |
+
+**Les données sont le second verrou.** 610 exemples sont un **banc**, pas un corpus : la cible v0 est
+**50 000 séquences**, avec un jeu **tenu à l'écart** et un **contrôle par permutation**. La capacité ne paie
+qu'avec les données — c'est la 
+… [4536 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/modele-natif.md'); t=p.read_text()\nancre = \"C'est ce qui rend la comparaison honnête : même entrée, même\\nsortie attendue, même trace.\"\nassert ancre in t\najout = an … [1597 caractères tronqués]`
+
+  ```
+section ajoutée
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 602 fiche(s) · 687 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def _mots' tools/bloc_linguistique.py | cut -d: -f1),+22p\" tools/bloc_linguistique.py", "description": "Lire le tokeniseur du bloc"}`
+
+  ```
+def _mots(texte: str) -> list[tuple[int, int, str, str]]:
+        motif = re.compile(r"\w+(?:['’\-]\w+)*|\d+(?:[.,]\d+)*|https?://\S+|[\U0001F300-\U0001FAFF]|[^\w\s]")
+        sortie = []
+        for m in motif.finditer(texte):
+            t = m.group()
+            if t.startswith(("http://", "https://")):
+                typ = "url"
+            elif t[0].isdigit():
+                typ = "nombre"
+            elif re.fullmatch(r"[^\w\s]", t):
+                typ = "ponctuation"
+            elif len(t) == 1 and ord(t) >= 0x1F300:
+                typ = "emoji"
+            else:
+                typ = "mot"
+            sortie.append((m.start(), m.end(), t, typ))
+        return sortie
+
+    @staticmethod
+    def _phrases(texte: str) -> list[tuple[int, int, str, str]]:
+        # frontières : ponctuation forte + espace ; on protège les abréviations et les décimales
+        motif = re.compile(r"[^.!?…]+(?:[.!?…]+|$)", re.S)
+        sortie = []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nold='        motif = re.compile(r\"\\\\w+(?:[\\'’\\\\-]\\\\w+)*|\\\\d+(?:[.,]\\\\d+)*|https?://\\\\S+|[\\\\U0001F300-\\\\U0001FAFF]|[^\\ … [409 caractères tronqués]`
+
+  ```
+ancienne ligne trouvée
+415:        motif = re.compile(r"\w+(?:['’\-]\w+)*|\d+(?:[.,]\d+)*|https?://\S+|[\U0001F300-\U0001FAFF]|[^\w\s]")
+435:        motif = re.compile(r"[^.!?…]+(?:[.!?…]+|$)", re.S)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nold='        motif = re.compile(r\"\\\\w+(?:[\\'’\\\\-]\\\\w+)*|\\\\d+(?:[.,]\\\\d+)*|https?://\\\\S+|[\\\\U0001F300-\\\\U0001FAFF]|[^\\ … [914 caractères tronqués]`
+
+  ```
+élision séparée
+['Le', 'professeur', 'parle', ';', 'les', 'élèves', "l'", 'écoutent', '.']
+POS 0.7455 syn 0.2861 tete 0.4986
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-elision.md <<'MD'\n# B13 — l'élision : le bloc coupe `l'écoutent`, le refus tombe\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·\n> **Verdict** : ✅ **144/ … [6641 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 603 fiche(s) · 688 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=1
+  ✅ T140 refus r353        r353 : 7 mots du bloc, l'élision séparée
+  ✅ T141 élision           élision : POS 0.7455
+  138/144 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep \"❌\" | head -10", "description": "Lister les portes rouges après l'élision", "timeoutMs": 5400000}`
+
+  ```
+❌ T87 phrases complexes  r201-205 : POS 0.7059, syntagme 0.2857
+  ❌ T88 20 complexes       r201-220 : POS 0.7154, syntagme 0.2381
+  ❌ T89 50 complexes       r201-250 : POS 0.7264, syntagme 0.2524
+  ❌ T90 100 complexes      r201-300 : POS 0.7143, syntagme 0.2317
+  ❌ T107 gold complet      gold complet : 602 phrases, POS 0.7475, tête 0.505
+  ❌ T138 défaut fusion     défaut : confiance 0.7455, niveau 0.3454
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"0.70[0-9][0-9]\\|0.71[0-9][0-9]\\|0.72[0-9][0-9]\\|0.7443\\|0.7424\\|0.3432\" tools/pensee/autotest.py | head -12", "description": "Voir les valeurs attendues des portes rouges"}`
+
+  ```
+1397:    """Les 50 phrases complexes : POS 0,7013, syntagme 0,3060."""
+1405:    return abs(r["pos"]["exactitude"] - 0.7013) < 0.001, (
+1639:            and abs(r["pos"]["exactitude"] - 0.7443) < 0.001), (
+2018:    """Le défaut de la fusion : la confiance (0,7424) bat le niveau (0,3432)."""
+2025:    return abs(r_conf - 0.7424) < 0.001 and abs(r_niv - 0.3432) < 0.001 and r_conf > r_niv, (
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"r\\[\\\"pos\\\"\\]\\[\\\"exactitude\\\"\\] - 0\\.\" tools/pensee/autotest.py | head -20", "description": "Lister les valeurs POS codées"}`
+
+  ```
+1377:    return abs(r["pos"]["exactitude"] - 0.6471) < 0.001, (
+1391:    return abs(r["pos"]["exactitude"] - 0.6829) < 0.001, (
+1405:    return abs(r["pos"]["exactitude"] - 0.7013) < 0.001, (
+1419:    return abs(r["pos"]["exactitude"] - 0.6984) < 0.001, (
+1639:            and abs(r["pos"]["exactitude"] - 0.7443) < 0.001), (
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1365,1425p' tools/pensee/autotest.py | grep -n \"def t\\|0\\.6\\|0\\.7\" | head -12", "description": "Associer les valeurs aux portes"}`
+
+  ```
+4:def t87_complexes() -> tuple[bool, str]:
+13:    return abs(r["pos"]["exactitude"] - 0.6471) < 0.001, (
+18:def t88_complexes20() -> tuple[bool, str]:
+27:    return abs(r["pos"]["exactitude"] - 0.6829) < 0.001, (
+32:def t89_complexes50() -> tuple[bool, str]:
+41:    return abs(r["pos"]["exactitude"] - 0.7013) < 0.001, (
+46:def t90_complexes100() -> tuple[bool, str]:
+55:    return abs(r["pos"]["exactitude"] - 0.6984) < 0.001, (
+60:def t91_discours() -> tuple[bool, str]:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('return abs(r[\"pos\"][\"exactitude\"] - 0.6471) < 0.001, (',\n            'return abs(r[\"pos\"][\"exactitude\"] - 0.7059) <  … [1048 caractères tronqués]`
+
+  ```
+6 valeurs mises à jour
+  ✅ T141 élision           élision : POS 0.7455
+  144/144 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 13 h 25 HNE\", t)\np.write_text( … [799 caractères tronqués]`

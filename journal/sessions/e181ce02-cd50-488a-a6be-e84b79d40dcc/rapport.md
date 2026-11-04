@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 90.2 h |
-| Tours | 157 |
-| Messages | 1871 |
-| Appels d'outils | 1600 |
+| Durée | 90.6 h |
+| Tours | 158 |
+| Messages | 1889 |
+| Appels d'outils | 1616 |
 | Fichiers touchés | 25 |
-| Commandes | 1315 |
+| Commandes | 1330 |
 | Sous-agents | 2 |
-| Commits | 198 |
+| Commits | 199 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -349,6 +349,8 @@
 **Tour 156** — reprends
 
 **Tour 157** — voir /home/stephane/.config/drave/deepseek.key
+
+**Tour 158** — ok, tiens en compte pour notre stratégie de modèle natif drave et continue
 
 ## 2. Déroulé, étape par étape
 
@@ -8316,7 +8318,65 @@ La session a repris après l'interruption (l'horloge est au **04/11**, l'état a
 
 **Synthèse produite :**
 
-⏵ Attendre la mesure réelle des quatre modes (API)
+⏵ Quatre modes sur le réel : le niveau gagne (0,9309/0,8226/0,8784) ; 143/143
+
+La clé DeepSeek est utilisée : les **six modes** sont mesurés sur le **gold réel 432** avec le **neuronal réel** — et le **niveau** gagne. Commit **`7632ab94`**.
+
+\## Les six modes (432 phrases, API réelle)
+
+| mode | POS | syntagmes F1 | tête F1 | acte |
+|---|---:|---:|---:|---:|
+| heuristique | 0,7394 | 0,2520 | 0,4511 | **0,9954** |
+| neuronal (compose) | **0,9309** | **0,8226** | **0,8784** | 0,0000 |
+| parallèle (confiance) | 0,9280 | 0,8020 | 0,8570 | 0,9954 |
+| cascade (confiance) | 0,9280 | 0,8020 | 0,8570 | 0,9954 |
+| **parallèle_niveau** | **0,9309** | **0,8226** | **0,8784** | 0,9954 |
+| **cascade_niveau** | **0,9309** | **0,8226** | **0,8784** | 0,9954 |
+
+**Ce que ça dit** :
+
+- **Le niveau gagne avec le réel** : POS **0,9309** (+0,19 sur l'heuristique), syntagmes **0,8226** (+0,57), tête **0,8784** (+0,43) — et la **pragmatique** reste celle de l'heuristique (0,9954) parce que le neuronal ne la rend pas (acte 0,0).
+- **Le neuronal seul ne suffit pas** : son acte est **0,0** ; la fusion par niveau lui prend la POS et les syntagmes, et laisse la pragmatique à l'heuristique.
+- **Le mock avait conclu l'inverse** (0,3432 pour le niveau) : le défaut ne peut pas être changé sans la clé — c'est pourquoi il reste la confiance **dans les portes**, et le banc utilise l'option `PRIORITE_NIVEAU`.
+- **Le coût est mesuré** : **858 appels API**, **254 341 tokens**, **803,8 s** de latence cumulée pour la passe complète.
+
+\## Le refus `r353`, nommé
+
+`Le professeur parle ; les élèves l'écoutent.` — le neuronal rend **7 POS pour 6 tokens** (`ValueError: longueur POS 7 / 6`) : le tokenizer du bloc garde `l'écoutent` en **un** token, le modèle en rend **deux**. Le refus est **nommé** (T140) ; le correctif est la prochaine action.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-quatre-modes-432.md`](../../reports/rapport-pensee-quatre-modes-432.md) ; JSON [`pensee-quatre-modes-432.json`](../../reports/pensee-quatre-modes-432.json) ; T139/T140 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **143/143 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **602 fiches / 687 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (12 h 05).
+- L'horloge réelle est **10 h 51 HNE** ; le goal est actif.
+- **À noter** : le JSON brut de la passe (les seuils, le détail par phrase) a été écrasé par le résumé — les chiffres clés sont dans la fiche et le résumé, le brut est à rejouer (30 min) si besoin.
+
+\#
+… [372 caractères tronqués]
+
+### Tour 158 — ok, tiens en compte pour notre stratégie de modèle natif drave et continue
+
+*16 appels d'outils.* Actions notables :
+
+- bash — Trouver les documents du modèle natif
+- bash — Voir la structure du document du modèle natif
+- bash — Lire la section de l'objectif d'entraînement
+- bash — Intégrer la leçon au document du modèle natif
+- bash — Lire le tokeniseur du bloc
+- bash — Repérer la ligne du motif de tokenisation
+- bash — Séparer l'élision et mesurer l'impact
+- bash — Écrire la fiche de l'élision et les portes T141
+- bash — Passer toutes les portes
+- bash — Lister les portes rouges après l'élision
+- bash — Voir les valeurs attendues des portes rouges
+- bash — Lister les valeurs POS codées
+- bash — Associer les valeurs aux portes
+- bash — Mettre les 6 valeurs à jour et relancer
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ Intégrer la leçon au modèle natif Drave, puis corriger le r353
 
 ## 3. Travail accompli
 
@@ -8397,7 +8457,7 @@ La session a repris après l'interruption (l'horloge est au **04/11**, l'état a
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1275 autres
+- … et 1290 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8743,4 +8803,5 @@ La session a repris après l'interruption (l'horloge est au **04/11**, l'état a
 - B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT DE LA FUSI
 - B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT DE LA FUSI
 - B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "Q
+- B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "L'ÉLISI
 

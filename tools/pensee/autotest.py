@@ -1374,7 +1374,7 @@ def t87_complexes() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 205]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.6471) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.7059) < 0.001, (
         f"r201-205 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1388,7 +1388,7 @@ def t88_complexes20() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 220]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.6829) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.7154) < 0.001, (
         f"r201-220 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1402,7 +1402,7 @@ def t89_complexes50() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 250]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.7013) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.7264) < 0.001, (
         f"r201-250 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1416,7 +1416,7 @@ def t90_complexes100() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 300]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.6984) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.7143) < 0.001, (
         f"r201-300 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1636,7 +1636,7 @@ def t107_gold_complet() -> tuple[bool, str]:
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, phrases)
     return (len(phrases) == 602
-            and abs(r["pos"]["exactitude"] - 0.7443) < 0.001), (
+            and abs(r["pos"]["exactitude"] - 0.7475) < 0.001), (
         f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
         f"tête {round(r['syntagme']['tete']['f1'], 4)}")
 
@@ -2022,7 +2022,7 @@ def t138_defaut_niveau() -> tuple[bool, str]:
     h, n = bl.Heuristique(), bl.MockNeuronal()
     r_conf = evaluer_bloc("c", bl.Parallele([h, n]), ph)["pos"]["exactitude"]
     r_niv = evaluer_bloc("n", bl.Parallele([h, n], priorite_par_niveau=bl.PRIORITE_NIVEAU), ph)["pos"]["exactitude"]
-    return abs(r_conf - 0.7424) < 0.001 and abs(r_niv - 0.3432) < 0.001 and r_conf > r_niv, (
+    return abs(r_conf - 0.7455) < 0.001 and abs(r_niv - 0.3454) < 0.001 and r_conf > r_niv, (
         f"défaut : confiance {round(r_conf, 4)}, niveau {round(r_niv, 4)}")
 
 
@@ -2046,8 +2046,18 @@ def t140_r353() -> tuple[bool, str]:
     h = bl.Heuristique()
     mots = [t for d, f, t, typ in h._mots("Le professeur parle ; les élèves l'écoutent.")
             if typ == "mot"]
-    return len(mots) == 6 and "l'écoutent" in mots, (
-        f"r353 : {len(mots)} mots du bloc, dont l'élision en un seul")
+    return len(mots) == 7 and "l'" in mots and "écoutent" in mots, (
+        f"r353 : {len(mots)} mots du bloc, l'élision séparée")
+
+
+def t141_elision() -> tuple[bool, str]:
+    """L'élision : POS 0,7455 (+0,0011) sur les 432 phrases."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    h = bl.Heuristique()
+    r = evaluer_bloc("h", h, charger())
+    pos = round(r["pos"]["exactitude"], 4)
+    return abs(pos - 0.7455) < 0.001, f"élision : POS {pos}"
 
 
 def main() -> int:
@@ -2189,7 +2199,8 @@ def main() -> int:
               ("T137 vrais absents", t137_vrais_absents()),
               ("T138 défaut fusion", t138_defaut_niveau()),
               ("T139 quatre modes", t139_quatre_modes()),
-              ("T140 refus r353", t140_r353())]
+              ("T140 refus r353", t140_r353()),
+              ("T141 élision", t141_elision())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

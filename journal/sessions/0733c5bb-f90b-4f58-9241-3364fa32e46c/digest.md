@@ -10008,3 +10008,69 @@ pas  6400 · perte 1.3798 · dure 1.3242 · douce 1.0227 · 3677 s
   ```
 
 - **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 50 work/n2ac/kdp-1147m-a0.log; tail -c 50 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null", "description": "Wait for corrected alpha=0 completion", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-16]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-13 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; grep -E "ppl|duree" work/n2ac/kdp-1147m-a0.pt.json 2>/dev/null; ls work/n2ac/kdp-1147m-a0.pt 2>/dev/null && echo OK0) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-16", "timeout_ms": 1100000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.pt work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null; tail -c 50 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null", "description": "Poll corrected controls"}`
+
+  ```
+11:06:34
+kdp a=0 fini 11:01:35
+work/n2ac/kdp-1147m-a0.pt
+te 1.9480 · dure 1.9787 · douce 2.0609 · 230 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation du contrôle α=0 corrigé (doit reproduire le bras dur)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/kdp-1147m-a0.pt --rope --longueurs 128,512,1024 --sortie work/n2ac/eval-kdp-1147m-a0.json 2>&1 | tail -4; echo \"=== référence dure ===\"; python3 -c \"\nim … [182 caractères tronqués]`
+
+  ```
+L128 : 3.7072
+  L512 : 3.5727
+  L1024 : 3.5251
+{"fichier": "kdp-1147m-a0.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.7072, "L512": 3.5727, "L1024": 3.5251}
+=== référence dure ===
+{'L128': 3.6452, 'L512': 3.4493, 'L1024': 3.3628}
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte d'un biais de harnais : je remplace kd2 (code d'hier) par la paire propre de production
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -c 70 work/n2ac/kd2-mix512-30k.log; grep -c \"pas \" work/n2ac/kd2-mix512-30k.log; ps -eo pid,cmd --no-headers | grep \"[d]istiller_natif\" | cut -c1-60", "description": "Check kd2 progress before deciding"}`
+
+  ```
+s
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+242
+ 260916 /home/stephane/gpu-env/bin/python work/n2ac/distille
+ 295337 /home/stephane/gpu-env/bin/python work/n2ac/distille
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && kill 260916 2>/dev/null; sleep 3; ps -p 260916 >/dev/null && echo \"kd2 encore là\" || echo \"kd2 arrêté (code d'hier, biaisé)\"; cat > work/n2ac/chaine_kd_production_propre.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_kd_production_propre.sh — la PAIRE  … [1511 caractères tronqués]`
+
+  ```
+kd2 arrêté (code d'hier, biaisé)
+paire propre lancée pid 299987
+11:08:40
+0, 274 MiB, 0 %
+1, 13198 MiB, 100 %
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 50 work/n2ac/kdp-1147m-a0.9.log 2>/dev/null; cat work/n2ac/kdpp.out 2>/dev/null; tail -c 50 work/n2ac/kdpp-mix512-a0.log 2>/dev/null", "description": "Wait for corrected alpha=0.9 control",  … [20 caractères tronqués]`

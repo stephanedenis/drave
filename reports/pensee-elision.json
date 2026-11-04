@@ -1,0 +1,20 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "144/144",
+ "avant": {
+  "tokens": "1",
+  "pos": 0.7444
+ },
+ "apres": {
+  "tokens": "2",
+  "pos": 0.7455
+ },
+ "syn": 0.2861,
+ "tete": 0.4986,
+ "limites": [
+  "refus non re-joué sur l'API",
+  "élisions rares",
+  "gold 612"
+ ]
+}
