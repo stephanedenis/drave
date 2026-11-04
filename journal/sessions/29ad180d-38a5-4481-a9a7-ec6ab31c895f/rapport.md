@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 41.5 h |
+| Durée | 41.6 h |
 | Tours | 15 |
-| Messages | 425 |
-| Appels d'outils | 413 |
+| Messages | 426 |
+| Appels d'outils | 414 |
 | Fichiers touchés | 17 |
-| Commandes | 326 |
+| Commandes | 327 |
 | Sous-agents | 0 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -549,7 +549,7 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 
 ### Tour 15 — ensuite?
 
-*9 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Locate French/English Alice paragraph pairs
 - bash — Locate French Alice passages in corpus
@@ -560,6 +560,7 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 - bash — Commit nine-paragraph bank and push submodule
 - bash — Write nine-paragraph fiche, update state and checks
 - bash — Update counters, commit nine-paragraph bank, push
+- bash — Fix counters, commit, push, verify page
 
 **Synthèse produite :**
 
@@ -631,7 +632,7 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 286 autres
+- … et 287 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -794,4 +795,5 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050, h053 et le « si fort que » (l'intensi
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture d'Alice, la tab
 - S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS" -m "Six nouvelles paires complètes : l'ouverture, la table de ve
+- S — COMPTEURS : 601 FICHES / 686 JSON (LA BANQUE À NEUF)" -m "Les compteurs de l'état suivent le disque après la fiche de la banque à neuf et le JSON du jour." 
 

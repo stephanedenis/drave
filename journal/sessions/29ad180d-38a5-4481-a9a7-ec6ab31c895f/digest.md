@@ -8920,3 +8920,20 @@ To /home/stephane/Data13TB/stephane/GitHub/drave-structures
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; for f in docs/pilotage/en-cours.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace( … [2644 caractères tronqués]`
+
+  ```
+cee944c3 N2 — REPRISE APRÈS LE REBOOT : MANDAT ROUVERT, LES DEUX RUNS SUIVIS, LA MESURE EST LA PROCHAINE ACTION
+état 601 + INDEX
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 599 fichiers, le disque en a 601
+     · compteurs : en-cours.md dit 685 JSON, le disque en a 686
+ create mode 100644 journal/2026-11-04/mesures.md
+ create mode 100644 reports/rapport-s-paragraphes.md
+047945c5 S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS
+To github.com:stephanedenis/drave.git
+   8854fe8f..047945c5  master -> master
+exit=0
+047945c5cb80862741cc150d86c26f05fa4a6d91	refs/heads/master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| fichiers / JSON de résultats | **599** / **685** |\", \"| fichiers / JSON de résultats | **601** / **68 … [1071 caractères tronqués]`

@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 89.1 h |
 | Tours | 156 |
-| Messages | 1840 |
-| Appels d'outils | 1572 |
+| Messages | 1841 |
+| Appels d'outils | 1573 |
 | Fichiers touchés | 25 |
-| Commandes | 1290 |
+| Commandes | 1291 |
 | Sous-agents | 2 |
 | Commits | 195 |
 | Compactages de contexte | 5 |
@@ -8234,7 +8234,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 
 ### Tour 156 — reprends
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état après l'interruption
 - bash — Vérifier les fichiers du round 141
@@ -8250,7 +8250,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - bash — Voir où PRIORITE_NIVEAU est utilisé
 - bash — Basculer le défaut et mesurer
 - bash — Rétablir le défaut et mesurer la différence
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -8335,7 +8335,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1250 autres
+- … et 1251 autres
 
 ## 4. Mesures et résultats marquants
 
