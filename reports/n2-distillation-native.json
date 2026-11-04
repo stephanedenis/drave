@@ -68,5 +68,64 @@
    "a09_ms_par_pas": 259,
    "ratio": 1.25
   }
+ },
+ "controle_alpha0": {
+  "fichier": "kdp-1147m-a0.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.7072,
+  "L512": 3.5727,
+  "L1024": 3.5251
+ },
+ "controle_alpha09": {
+  "fichier": "kdp-1147m-a0.9.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.6774,
+  "L512": 3.5633,
+  "L1024": 3.5208
+ },
+ "controle_poids4": {
+  "fichier": "pond4-1147m-512.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.6067,
+  "L512": 3.3984,
+  "L1024": 3.3129
+ },
+ "erratum": {
+  "date": "2026-11-04",
+  "cause": "poids de la tête principale 1 au lieu de 1/4 (moyenne de l'entraîneur) + échelle de perte",
+  "parite_verifiee": "perte du pas 1 = 5,8480 et du pas 50 = 2,6713 (celles du bras dur)",
+  "paire_propre": {
+   "alpha0": [
+    3.7072,
+    3.5727,
+    3.5251
+   ],
+   "alpha09": [
+    3.6774,
+    3.5633,
+    3.5208
+   ],
+   "gain": [
+    -0.03,
+    -0.009,
+    -0.004
+   ]
+  },
+  "reponderation": {
+   "poids4": [
+    3.6067,
+    3.3984,
+    3.3129
+   ],
+   "gain": [
+    -0.039,
+    -0.051,
+    -0.05
+   ]
+  },
+  "conclusion": "la distillation native ne gagne rien à parité stricte ; le gain d'hier était un artefact de pondération"
  }
 }

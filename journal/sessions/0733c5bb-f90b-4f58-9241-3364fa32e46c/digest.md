@@ -10323,3 +10323,73 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-38", "timeout_ms": 300000, "wait": true}`
+
+  ```
+12:57:15
+al": 3.515434994263144, "duree_s": 1549.6319715976715}
+ perte 1.0830 · dure 1.0350 · douce 0.4031 · 6301 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contrôle de repondération est terminé : évaluation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/pond4-1147m-512.pt --rope --longueurs 128,512,1024 --sortie work/n2ac/eval-pond4-1147m.json 2>&1 | tail -4; cat work/n2ac/pond4-1147m-512.pt.json 2>/dev/nul … [65 caractères tronqués]`
+
+  ```
+L128 : 3.6067
+  L512 : 3.3984
+  L1024 : 3.3129
+{"fichier": "pond4-1147m-512.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.6067, "L512": 3.3984, "L1024": 3.3129}
+{
+ "modele": "drave-n0-rope-pondere",
+ "pas": 8000,
+ "seq": 512,
+ "window": 512,
+ "poids_principale": 4.0,
+ "dim": 224,
+ "expert_hidden": 288,
+ "graine": 1,
+ "ppl_val": 3.515434994263144,
+ "duree_s": 1549.6319715976715
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ La repondération vaut −0,05 (pas −0,14) : correction du point 3 de l'erratum
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-distillation-native.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"3. **L'erreur est instructive** : le gain apparent venait donc d'une **repondération** (tête\n   prin … [2555 caractères tronqués]`
+
+  ```
+point 3 corrigé avec la mesure
+json erratum : 10 clés
+12:57:53
+e 1.0861 · dure 1.0259 · douce 0.4340 · 6325 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep T0; python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-distillation-native.md reports/n2-distillation-n … [926 caractères tronqués]`
+
+  ```
+T0 max : 3990 mots (budget 4 000)
+  revue de documentation · 611 fiche(s) · 700 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+a2926831 B13 — LA PRAGMATIQUE NEURONALE : ACTE 1,0, NÉGATION 1,0 SUR 130 PHRASES ; 151/151
+[stderr]
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/n2-distillation-native.json
+     · reports/rapport-n2-distillation-native.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"distillation native\\|distillé :\" docs/pilotage/en-cours.md | head -4", "description": "Locate distillation mentions in state"}`
+
+  ```
+86:- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; **runs relancés à 09 h 30** : `kd2` **~19 400/30 000** (gpu0), `rope2048` **4 650/20 000** (gpu1) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"**runs relancés à 09 h 30** : `kd2` **~19 400/30 000** (gpu0), `rope2048` **4 650/20 000** (gpu1)\"\nneuf = \"`kd2` et `r … [1406 caractères tronqués]`

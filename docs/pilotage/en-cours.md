@@ -83,7 +83,7 @@
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
-- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; **runs relancés à 09 h 30** : `kd2` **~19 400/30 000** (gpu0), `rope2048` **4 650/20 000** (gpu1) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** en cours ; **repondération 4× : −0,05** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
 - **Prochaine action** : **surveiller les runs** (fin estimée **~13 h 30** / **~19–20 h**), puis mesurer et committer ; la **paire propre de la distillation** (production) est en cours ; ensuite la **porte propre (0,29)**.
 - **Bloquants** : aucun.

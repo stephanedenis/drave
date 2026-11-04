@@ -55,11 +55,14 @@ du **pas 1** vaut **5,8480** et celle du pas 50 **2,6713** — les valeurs du br
    **passe du professeur et la seconde passe de l'élève** (ordre des noyaux, non-déterminisme GPU
    amplifié sur 8 000 pas). **Aucune comparaison entre deux harnais différents n'est donc sûre** —
    c'est ce qui a produit le faux gain.
-3. **L'erreur est instructive** : le gain apparent venait donc d'une **repondération** (tête
-   principale 4×) et non des cibles douces. L'ampleur exacte de cette repondération se mesure
-   proprement dans l'**entraîneur de référence** — expérience lancée le 04/11 (poids principal
-   4×, même init, mêmes 33 Mo) ; son résultat dira si c'est un levier **gratuit** de −0,1 ou un
-   simple déplacement du harnais.
+3. **L'erreur est instructive, et le levier qu'elle cachait est modeste.** Le gain apparent
+   venait de la **pondération de la perte**, pas des cibles douces. Mesuré proprement dans
+   l'entraîneur de référence (même init, mêmes 33 Mo), le poids principal **4×** vaut
+   **3,6067 / 3,3984 / 3,3129** contre 3,6452 / 3,4493 / 3,3628 — soit **−0,039 / −0,051 /
+   −0,050**. C'est un levier **gratuit** (un facteur dans la perte), réel mais cinq fois plus
+   petit que le −0,14 à −0,18 annoncé ; le reste de l'écart d'hier venait de l'**échelle** de la
+   perte du vieux code (4 à 7× plus grande, donc un pas effectif différent sous `clip_grad_norm`).
+   Deux confusions pour le prix d'une : c'est exactement ce qu'un contrôle de parité attrape.
 
 ## Ce qui pourrait le rendre faux
 
