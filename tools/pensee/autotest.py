@@ -2218,6 +2218,17 @@ def t152_tirages() -> tuple[bool, str]:
         f"tirages : {val} (écart-type 0, modèle déterministe)")
 
 
+def t153_attachement() -> tuple[bool, str]:
+    """L'attachement sur le gold 432 : top1 0,3431, exact 0,0042."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.3431) < 0.001
+            and abs(r["exact_taux"] - 0.0042) < 0.001), (
+        f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
+        f"couverture {r['couverture']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2369,7 +2380,8 @@ def main() -> int:
               ("T149 pragma 432", t149_pragmatique_full()),
               ("T150 fusion sous-type", t150_fusion_soustype()),
               ("T151 variance sous-type", t151_soustype_variance()),
-              ("T152 trois tirages", t152_tirages())]
+              ("T152 trois tirages", t152_tirages()),
+              ("T153 attachement", t153_attachement())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -35762,3 +35762,16 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncibles=(\"rapport-pensee-porte-minute.md\",\"rapport-pensee-gold-api.md\",\"rapport-pensee-cascade-reel-432.md … [669 caractères tronqués]`
+
+  ```
+lignes retirées 3
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 5400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 15 h 35 HNE\", t)\np.write_text( … [628 caractères tronqués]`

@@ -15,15 +15,13 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |
 | [`rapport-pensee-tirages.md`](rapport-pensee-tirages.md) | **B13** — les trois tirages : 0,9838 exactement, le modèle est déterministe, **155/155** |
 | [`rapport-pensee-soustype-variance.md`](rapport-pensee-soustype-variance.md) | **B13** — la variance du sous-type : double sens 0,9838 à 0,3, **154/154** |
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
 | [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |
 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
 | [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats |
-| [`rapport-pensee-porte-minute.md`](rapport-pensee-porte-minute.md) | **B13** — la porte minute : 140/140 ; les six attendus S `00d2a01` fixés ; T132/T133 2/5 ; distracteurs r428–r432 |
-| [`rapport-pensee-gold-api.md`](rapport-pensee-gold-api.md) | **B13** — le gold neuronal sur l'API DeepSeek : mêmes verdicts que le 7B (porte 1,0 / labyrinthe 0,25), **2,9 s contre 101,6 s**, 0 erreur sur 96 appels ; professeur de référence `deepseek-chat` |
-| [`rapport-pensee-cascade-reel-432.md`](rapport-pensee-cascade-reel-432.md) | **L** **0,9065** |
 | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |

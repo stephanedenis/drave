@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 93.3 h |
+| Durée | 93.4 h |
 | Tours | 162 |
-| Messages | 2015 |
-| Appels d'outils | 1735 |
+| Messages | 2017 |
+| Appels d'outils | 1737 |
 | Fichiers touchés | 25 |
-| Commandes | 1427 |
+| Commandes | 1428 |
 | Sous-agents | 2 |
-| Commits | 212 |
+| Commits | 213 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8604,7 +8604,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 
 ### Tour 162 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Deuxième tirage à 0,3 (sous-type)
 - bash — Troisième tirage à 0,3 (sous-type)
@@ -8620,7 +8620,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - bash — Committer l'erratum des tirages
 - bash — Mesurer l'attachement sur le gold 432
 - bash — Écrire la fiche de l'attachement et la porte T153
-- … et 3 autres
+- … et 4 autres
 
 ## 3. Travail accompli
 
@@ -8701,7 +8701,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1387 autres
+- … et 1388 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9061,4 +9061,5 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "VARIANCE DU SOUS-TYP
 - B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "TROIS TIRAGES"; then
 - B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "ERRATUM DES TI
+- B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "L'ATTACHEM
 
