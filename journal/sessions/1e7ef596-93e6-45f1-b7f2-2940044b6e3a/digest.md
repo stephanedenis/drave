@@ -20212,3 +20212,92 @@ pas   9500 · perte 0.9614 · PPL val 2.509 · 9709 s
 ⏵ Cycle 98 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h98.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h98.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\* … [839 caractères tronqués]`
+
+  ```
+heure 18 h 09
+[s/v7 6df8fdce] ÉTAT — HEURE 19 H 15 ; B13 165/165, D RESTAURÉ 62, 2 048 À 9 500 PAS
+ 7 files changed, 127 insertions(+), 13 deletions(-)
+6df8fdce ÉTAT — HEURE 19 H 15 ; B13 165/165, D RESTAURÉ 62, 2 048 À 9 500 PAS
+adfa6ed9 ÉTAT — HEURE 19 H 11 ; B13 165/165, D RESTAURÉ 62, 2 048 À 9 350 PAS
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 98 : audit vert, état committé sur `s/v7`, heure 18 h 09
+
+**Cycle 98 — tout est vert, le 2 048 est à 500 pas de la fin.**
+
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 612 mots**, **T0 3 982 / 4 000** ✅.
+- **État** : heure **18 h 09**, B13 **165/165**, D **restauré à 62 documents**, compteurs 627/720, sur **`s/v7`**.
+- **2 048** : le run est à **9 500/10 000** (9 709 s, GPU1 à 100 %) — **500 pas restants**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la fin du 2 048 (imminente), les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 104
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 99/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 99 : instantané, audit et fin du 2 048
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+6df8fdce ÉTAT — HEURE 19 H 15 ; B13 165/165, D RESTAURÉ 62, 2 048 À 9 500 PAS
+adfa6ed9 ÉTAT — HEURE 19 H 11 ; B13 165/165, D RESTAURÉ 62, 2 048 À 9 350 PAS
+f0b3f2cc ÉTAT — HEURE 19 H 07 ; B13 165/165, D RESTAURÉ 62, 2 048 À 9 200 PAS
+a3ccaf34 ÉTAT — HEURE 19 H 03 ; B13 165/165, D RESTAURÉ 62, 2 048 À 9 050 PAS
+bbd6d209 ÉTAT — HEURE 18 H 58 ; B13 165/165, D RESTAURÉ 62, 2 048 À 8 900 PAS
+1cf19ad8 ÉTAT — HEURE 18 H 54 ; B13 165/165, D RESTAURÉ 62, 2 048 À 8 750 PAS
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 170 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 382 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 102 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac
+… [457 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [508 caractères tronqués]`
+
+  ```
+revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1612 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3982 mots (budget 4 000)
+  ✅ 3053 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---ROPE---
+pas   9550 · perte 0.9601 · PPL val 2.512 · 9760 s
+pas   9600 · perte 0.9241 · PPL val 2.507 · 9811 s
+pas   9650 · perte 0.9695 · PPL val 2.511 · 9862 s
+---JSON FINAL ?---
+-rw-r--r--. 1 stephane stephane 10837 18:12 work/n2ac/rope2048-10k.log
+-rw-r--r--. 1 stephane stephane   415 12:55 work/n2ac/rope2048-20k.lancement.log
+0, 0 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 99 : audit vert ; je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h99.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h99.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\* … [839 caractères tronqués]`
