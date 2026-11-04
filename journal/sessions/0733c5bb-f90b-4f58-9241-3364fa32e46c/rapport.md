@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 47.1 h |
 | Tours | 8 |
-| Messages | 819 |
-| Appels d'outils | 756 |
+| Messages | 822 |
+| Appels d'outils | 759 |
 | Fichiers touchés | 27 |
-| Commandes | 556 |
+| Commandes | 559 |
 | Sous-agents | 0 |
-| Commits | 30 |
+| Commits | 31 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -255,7 +255,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 8 — reprends
 
-*84 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - bash — Check time, runs, GPU and git state
 - bash — Inspect relaunched runs and reboot commit
@@ -271,11 +271,11 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Wait for the corrected alpha=0 control
 - bash — Poll corrected alpha=0 run
 - bash — Wait for corrected alpha=0 completion
-- … et 45 autres
+- … et 48 autres
 
 **Synthèse produite :**
 
-⏵ Le bras décisif est là : évaluation de la distillation corrigée à l'échelle de production
+⏵ Décomposition complète : la distillation corrigée vaut −0,06 (et non −0,10) — fiche et état
 
 ## 3. Travail accompli
 
@@ -353,7 +353,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 516 autres
+- … et 519 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -531,4 +531,5 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done
 - cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep T0; python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 15);
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") vieux = "**r
+- cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-production-fenetre.md re
 

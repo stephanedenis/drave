@@ -36531,3 +36531,25 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                segments.append({\"type\": \"GN\", \"role\": \"groupe nominal\", \"niveau\": 0,\n                         … [1339 caractères tronqués]`
+
+  ```
+passif sans par : GN patient
+Le livre est lu. | [('GN', 'Le livre', 'agent'), ('GV', 'est lu', 'predicat')]
+La porte est ouverte. | [('GN', 'La porte', 'agent'), ('GV', 'est ouverte', 'predicat')]
+Les enfants sont partis. | [('GN', 'Les enfants', 'agent'), ('GV', 'sont partis', 'predicat')]
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-passifs-sans-par.md <<'MD'\n# B13 — les passifs sans `par` : le chunker les détecte, le générateur S les ignore\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · ** … [6654 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2802 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncible=\"rapport-pensee-passifs-corriges.md\"\nout=[]; n=0\nfor l in lignes:\n    if cible in l:\n        n+=1; con … [631 caractères tronqués]`

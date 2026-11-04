@@ -10668,3 +10668,50 @@ OK
 ⏵ Le bras décisif est là : évaluation de la distillation corrigée à l'échelle de production
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/kdpp-mix512-a0.9.pt --rope --longueurs 128,512,1000,2000 --sortie work/n2ac/eval-kdpp-mix512-a09.json 2>&1 | grep -E '\"(128|512|1000|2000)\"|litterature|a … [80 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-59]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-59", "timeout_ms": 300000, "wait": true}`
+
+  ```
+"128": 3.1119,
+   "512": 2.8462,
+   "1000": 2.7388,
+   "2000": 2.6968
+   "128": 2.9485,
+   "512": 2.6881,
+   "1000": 2.6059,
+   "2000": 2.5837
+ "litterature": 5.4975,
+ "anglais": 6.866,
+ "wikitext2": 7.5599,
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Décomposition complète : la distillation corrigée vaut −0,06 (et non −0,10) — fiche et état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-production-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\ni = t.index(\"## 4. La distillation du professeur long dans la recette 512\")\nj = t.index(\"## 5. La distillation à … [2846 caractères tronqués]`
+
+  ```
+§4 réécrit
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path(\"reports/n2-production-fenetre.json\")\nd = json.loads(p.read_text())\nfor cle, f in ((\"kdpp_a0\",\"work/n2ac/eval-kdpp-mix512-a0.json\"),\n               (\"kdpp_a09\",\"work/n2ac/eval-kdpp-m … [1818 caractères tronqués]`
+
+  ```
+json : 23 clés
+état mis à jour
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-production-fenetre.md reports/n2-production-fenetre.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/rapport-n2-production-fenetre.md re … [1171 caractères tronqués]`

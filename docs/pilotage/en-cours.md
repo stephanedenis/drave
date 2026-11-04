@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 15 h 15 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 15 h 19 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,7 +68,7 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **162/162** ; **pragmatique 432 : 0,9954** ; **attachement : 0,3431 / 0,0042** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position (129 avant = agent, 172 après = patient) ; relation 0,8195 (522/637) surévaluée** ; **passifs : la règle se trompe (5/5) ; correctif `par` → agent (`_role_gp`), mais le générateur S garde `moyen` — partiel** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [cibles](../../reports/rapport-pensee-cibles.md), [cibles 500](../../reports/rapport-pensee-cibles-500.md), [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md).
+- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position (129 avant = agent, 172 après = patient) ; relation 0,8195 (522/637) surévaluée** ; **passifs : la règle se trompe (5/5) ; le correctif `par` → agent (`_role_gp`) et la règle sans `par` (chunker 3/3) restent hors du chemin S** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
 - **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **T132/T133**, **gold 200+** ; le qualifier fenêtre attend une version API (serveur local interdit).
@@ -94,7 +94,7 @@
 - **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
 - **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** : α = 0 **1,014**, α = 0,9 **0,8385** (7 102 s) — **−0,176** ; la distillation **paie** sur la recette ; **repondération 4× : −0,05**.
 - **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
-- **Pensée — B13 (actif)** : **162/162**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
+- **Pensée — B13 (actif)** : **163/163**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
 
 ## Les chiffres de l'état
@@ -105,7 +105,7 @@
 |---|---|---|
 | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **622** / **715** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **623** / **716** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 
@@ -117,7 +117,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 162/162, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 163/163, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre (0,29)** ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** arrêté à 6 400/20 000 ; la restitution |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -127,7 +127,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 162/162 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
 
 ## Les questions ouvertes
 

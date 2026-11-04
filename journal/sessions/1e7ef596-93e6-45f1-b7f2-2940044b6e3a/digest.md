@@ -14285,3 +14285,181 @@ no changes added to commit (use "git add" and/or "git commit -a")
 ⏵ Le Bilan de l'état dit encore « paire propre en cours » : je corrige et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"> **Bilan de 13 h** : reprises à 09 h ; **runs N2 arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** en cours  … [1017 caractères tronqués]`
+
+  ```
+bilan OK
+  T0 max : 3996 mots (budget 4 000)
+  revue de documentation · 622 fiche(s) · 715 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-513]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit de l'état N2 tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-513", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[s/v7 9c9d7b22] ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15
+ 18 files changed, 332 insertions(+), 45 deletions(-)
+ create mode 100644 journal/2026-11-04/outils.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 42 (B13 162, paire propre N2)
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [338 caractères tronqués]`
+
+  ```
+9c9d7b22 ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15
+cc3c73fe B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162
+2eb587eb B13 162/162 — LE CORRECTIF DES PASSIFS (par → AGENT), MAIS LE GÉNÉRATEUR S COURT-CIRCUITE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/pensee-passifs-sans-par.json
+---REVUE---
+  revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1626 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3996 mots (budget 4 000)
+---LIENS---
+  ✅ 3034 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1973 lien(s)
+  ✅ un dossier par jour, sessions ancrées
+… [330 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 42 : paire propre N2 (−0,176) et B13 162 intégrés, la suite en WIP
+
+**Cycle 42 — la paire propre tranche, le B13 continue.**
+
+- **N2 — la paire propre est finie** : α = 0 donne **1,014** (7 050 s), α = 0,9 donne **0,8385** (7 102 s) → **−0,176**. À code strictement identique, sur la recette de production, la **distillation paie** — c'est la mesure qui manquait à l'erratum du 33 Mo. L'état porte le résultat (commit `9c9d7b22`) ; la fiche N2 et le contrôle de repondération suivront.
+- **B13 162/162** : le **correctif des passifs** (`_role_gp` : `par` → `agent`) est **partiel** — le **générateur S** a sa propre table et garde `moyen` en annotation ; la fiche le dit. Commits `2eb587eb` (le hub) et `cc3c73fe` (la narrative B13).
+- **B13 — la suite** : `pensee-passifs-sans-par` (compteurs **623 / 716**) est en WIP ; l'intégration au prochain cycle.
+- **Contrôles** : revue ✅ **623 fiches / 716 JSON / 120 docs / 83 portes** ; **3 034 liens** ✅ ; journal **1 973 liens** ✅ ; `en-cours` **1 626 mots**, **T0 3 996 / 4 000** ✅.
+
+**WIP** : B13 passifs-sans-par + implémentation/outils ; S sous-module `tools/structures` + `rapport-s-paragraphes.md`. **Le goal reste actif** : la suite B13, la fiche N2 de la paire propre, le fait S, puis la passe complète des portes.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 43/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 43 : instantané, audit et faits committés depuis le cycle 42
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+9c9d7b22 ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15
+cc3c73fe B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162
+2eb587eb B13 162/162 — LE CORRECTIF DES PASSIFS (par → AGENT), MAIS LE GÉNÉRATEUR S COURT-CIRCUITE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+a4b3200c ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS
+36d6ef67 B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161
+9c04d0c2 B13 161/161 — LES PASSIFS : LA RÈGLE DE POSITION SE TROMPE (5/5), LA COUVERTURE 0,8195 EST SURÉVALUÉE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+452a46e2 B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160
+c2f1c7da ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/pensee-passifs-sans-par.json
+?? reports/rapport-pensee-passifs-sans-par.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    
+… [979 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1626 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3996 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 3034 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1973 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 3034 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"passifs-sans-par\\|B13 \\*\\*16\\|B13 : 16\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== FICHE WIP ===\" ; ls -t reports/rapport-pensee-passifs*.md … [221 caractères tronqués]`
+
+  ```
+15 h 18
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 40 HNE (heure locale, EST).**
+71:- **Fait** : B13 **162/162** ; **pragmatique 432 : 0,9954** ; **attachement : 0,3431 / 0,0042** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position (129 avant = agent, 172 après = patient) ; relation 0,8195 (522/637) surévaluée** ; **passifs : la règle se trompe (5/5) ; correctif `par` → agent (`_role_gp`), mais le générateur S garde `moyen` — partiel** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [cibles](../../reports/rapport-pensee-cibles.md), [cibles 500](../../reports/rapport-pensee-cibles-500.md), [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pe
+… [1019 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 163/163 : les passifs sans `par` (chunker 3/3, S l'ignore) — j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:60]); continue\n        t=t.replace(old … [2306 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3995 mots (budget 4 000)
+  revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3034 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 163/163 (passifs sans `par`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git add reports/rapport-pensee-passifs-sans-par.md reports/pensee-passifs-sans-par.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md ; for i in $(seq 1 12); do [ -e .git/i … [678 caractères tronqués]`

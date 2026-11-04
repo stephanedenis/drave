@@ -372,5 +372,109 @@
    "300": 0.0,
    "400": 0.0
   }
+ },
+ "kdpp_a0": {
+  "fichier": "kdpp-mix512-a0.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.15,
+    "512": 2.9069,
+    "1000": 2.8006,
+    "2000": 2.7618
+   },
+   "val_big": {
+    "128": 3.0051,
+    "512": 2.7567,
+    "1000": 2.673,
+    "2000": 2.649
+   }
+  },
+  "permute_fr": 200.5006,
+  "litterature": 5.5295,
+  "anglais": 7.0734,
+  "wikitext2": 7.85,
+  "corpus_propre": 9.3037
+ },
+ "kdpp_a09": {
+  "fichier": "kdpp-mix512-a0.9.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.1119,
+    "512": 2.8462,
+    "1000": 2.7388,
+    "2000": 2.6968
+   },
+   "val_big": {
+    "128": 2.9485,
+    "512": 2.6881,
+    "1000": 2.6059,
+    "2000": 2.5837
+   }
+  },
+  "permute_fr": 188.4576,
+  "litterature": 5.4975,
+  "anglais": 6.866,
+  "wikitext2": 7.5599,
+  "corpus_propre": 9.3586
+ },
+ "pond4_mix512": {
+  "fichier": "pond4-mix512-15k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.1457,
+    "512": 2.9129,
+    "1000": 2.8105,
+    "2000": 2.7693
+   },
+   "val_big": {
+    "128": 2.9996,
+    "512": 2.7621,
+    "1000": 2.6745,
+    "2000": 2.6534
+   }
+  },
+  "permute_fr": 193.2584,
+  "litterature": 5.5266,
+  "anglais": 7.155,
+  "wikitext2": 7.9765,
+  "corpus_propre": 9.2314
+ },
+ "erratum_distillation": {
+  "date": "2026-11-04",
+  "cause": "poids de la tête principale 1 au lieu de 1/4 + échelle de perte du vieux code",
+  "parite": "perte du pas 1 = 5,8480 et du pas 50 = 2,6713 (celles du bras dur)",
+  "paire_propre": {
+   "alpha0": [
+    3.15,
+    2.9069,
+    2.8006,
+    2.7618
+   ],
+   "alpha09": [
+    3.1119,
+    2.8462,
+    2.7388,
+    2.6968
+   ],
+   "gain": [
+    -0.038,
+    -0.061,
+    -0.062,
+    -0.065
+   ]
+  },
+  "reponderation_seule": [
+   3.1457,
+   2.9129,
+   2.8105,
+   2.7693
+  ],
+  "conclusion": "−0,06 en domaine, −0,19 anglais, −0,34 wikitext2 : la distillation paie, deux fois moins que le chiffre du 03/11"
  }
 }

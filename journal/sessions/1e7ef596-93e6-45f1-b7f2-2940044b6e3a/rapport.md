@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 7.9 h |
-| Tours | 47 |
-| Messages | 480 |
-| Appels d'outils | 695 |
+| Tours | 48 |
+| Messages | 487 |
+| Appels d'outils | 703 |
 | Fichiers touchés | 15 |
-| Commandes | 513 |
+| Commandes | 520 |
 | Sous-agents | 0 |
-| Commits | 61 |
+| Commits | 62 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -117,6 +117,8 @@
 **Tour 46** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 47** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 48** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1424,7 +1426,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 47 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1442,7 +1444,32 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Le commit de l'état N2 tourne en arrière-plan ; je collecte le résultat
+⏵ Cycle 42 : paire propre N2 (−0,176) et B13 162 intégrés, la suite en WIP
+
+**Cycle 42 — la paire propre tranche, le B13 continue.**
+
+- **N2 — la paire propre est finie** : α = 0 donne **1,014** (7 050 s), α = 0,9 donne **0,8385** (7 102 s) → **−0,176**. À code strictement identique, sur la recette de production, la **distillation paie** — c'est la mesure qui manquait à l'erratum du 33 Mo. L'état porte le résultat (commit `9c9d7b22`) ; la fiche N2 et le contrôle de repondération suivront.
+- **B13 162/162** : le **correctif des passifs** (`_role_gp` : `par` → `agent`) est **partiel** — le **générateur S** a sa propre table et garde `moyen` en annotation ; la fiche le dit. Commits `2eb587eb` (le hub) et `cc3c73fe` (la narrative B13).
+- **B13 — la suite** : `pensee-passifs-sans-par` (compteurs **623 / 716**) est en WIP ; l'intégration au prochain cycle.
+- **Contrôles** : revue ✅ **623 fiches / 716 JSON / 120 docs / 83 portes** ; **3 034 liens** ✅ ; journal **1 973 liens** ✅ ; `en-cours` **1 626 mots**, **T0 3 996 / 4 000** ✅.
+
+**WIP** : B13 passifs-sans-par + implémentation/outils ; S sous-module `tools/structures` + `rapport-s-paragraphes.md`. **Le goal reste actif** : la suite B13, la fiche N2 de la paire propre, le fait S, puis la passe complète des portes.
+
+### Tour 48 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check B13 next fact and GPU state
+- bash — Integrate B13 163 passifs sans par
+- bash — Commit B13 163 passifs sans par
+- job_output
+
+**Synthèse produite :**
+
+⏵ Le commit du 163 tourne en arrière-plan ; je collecte le résultat
 
 ## 3. Travail accompli
 
@@ -1508,7 +1535,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 473 autres
+- … et 480 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1712,4 +1739,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 162/162 — LE CORRECTIF DES PASSIFS (par → AGENT), MAIS LE GÉNÉRATEUR S COURT-CIRCUITE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON du correctif
 - ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 12" -m "Les deux bras de la paire propre de production sont fini
 - ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15" -m "Les deux bras de la paire propre de production sont fini
+- B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
 
