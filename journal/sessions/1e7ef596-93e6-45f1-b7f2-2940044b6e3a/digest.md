@@ -14463,3 +14463,64 @@ docs/pilotage/plan-travail.md OK
 ⏵ Commit B13 163/163 (passifs sans `par`)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git add reports/rapport-pensee-passifs-sans-par.md reports/pensee-passifs-sans-par.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md ; for i in $(seq 1 12); do [ -e .git/i … [678 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-520]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit du 163 tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-520", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[status: completed, exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verrou git tenu par une session : j'attends puis je retente le commit du 163
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; echo \"=== LOCK ===\" ; [ -e .git/index.lock ] && echo \"encore\" || echo \"libre\" ; echo \"=== LOG ===\" ; git log --oneline -2 ; echo \"=== STAGED ===\" ; gi … [683 caractères tronqués]`
+
+  ```
+=== LOCK ===
+libre
+=== LOG ===
+51ab1b36 PRODUCTION — LA DISTILLATION VAUT −0,06 À PARITÉ STRICTE (PAS −0,10) : 3,1119 / 2,8462 / 2,7388 / 2,6968
+9c9d7b22 ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15
+=== STAGED ===
+M	docs/pilotage/chantiers.md
+M	docs/pilotage/plan-travail.md
+M	docs/pilotage/roadmap.md
+M	journal/2026-11-04/README.md
+M	journal/2026-11-04/apprentissage.md
+M	journal/2026-11-04/distribue.md
+M	journal/2026-11-04/docs.md
+M	journal/2026-11-04/mesures.md
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+### 🤖 Assistant
+
+⏵ La N2 a tranché la production (−0,06 à parité stricte) ; le commit du 163 attend l'état — je le stage et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"163/163\" docs/pilotage/en-cours.md | head -2 ; git add docs/pilotage/en-cours.md ; for i in $(seq 1 12); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK\" ; else git commit -m … [656 caractères tronqués]`
+
+  ```
+71:- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position (129 avant = agent, 172 après = patient) ; relation 0,8195 (522/637) surévaluée** ; **passifs : la règle se trompe (5/5) ; le correctif `par` → agent (`_role_gp`) et la règle sans `par` (chunker 3/3) restent hors du chemin S** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md), [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
+97:- **Pensée — B13 (actif)** : **163/163**, gold 432
+… [560 caractères tronqués]
+  ```
+

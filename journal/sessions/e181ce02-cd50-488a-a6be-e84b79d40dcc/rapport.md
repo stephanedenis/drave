@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.6 h |
+| Durée | 94.7 h |
 | Tours | 168 |
-| Messages | 2068 |
-| Appels d'outils | 1776 |
+| Messages | 2069 |
+| Appels d'outils | 1777 |
 | Fichiers touchés | 25 |
-| Commandes | 1460 |
+| Commandes | 1461 |
 | Sous-agents | 2 |
 | Commits | 219 |
 | Compactages de contexte | 5 |
@@ -8958,12 +8958,13 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 
 ### Tour 168 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Lire le chunker simple
 - bash — Détecter le passif sans par et tester
 - bash — Écrire la fiche des passifs sans par et la porte T160
 - bash — Trim README et passer toutes les portes
+- bash — Lister les portes rouges
 
 ## 3. Travail accompli
 
@@ -9044,7 +9045,7 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1420 autres
+- … et 1421 autres
 
 ## 4. Mesures et résultats marquants
 

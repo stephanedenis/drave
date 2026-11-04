@@ -83,9 +83,9 @@
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
-- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α=0 1,014, α=0,9 **0,8385 (−0,176)** ; **repondération 4× : −0,05** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α = 0 → **3,1500**, α = 0,9 → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération 4× : −0,05** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : **analyser la paire propre** (−0,176) et le contrôle de repondération ; ensuite la **porte propre (0,29)**.
+- **Prochaine action** : **en pause** — erratum mesuré ; ensuite la **porte propre (0,29)**, et le run de ~2 M de pas.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 

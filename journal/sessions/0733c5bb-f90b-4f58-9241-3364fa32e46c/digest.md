@@ -10715,3 +10715,204 @@ json : 23 clés
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-production-fenetre.md reports/n2-production-fenetre.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/rapport-n2-production-fenetre.md re … [1171 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-62]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/AGENTS.md</path>
+<type>file</type>
+<content>
+1: # Directives de l'agent — Drave
+2: 
+3: > **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+4: 
+5: > **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+6: > **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+7: > (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+8: > [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+9: 
+10: ## 1. La vision (l'essentiel)
+11: 
+12: **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+13: réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et mo
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+6: > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+7: > [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les deux sessions sont **en pause**, leurs cycles
+10: > sont committés, les GPU sont sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook
+11: > dans [`plan-travail.md`](plan-travail.md) § 9.
+12: 
+13: ## Sessions en cours
+14: 
+15: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+16: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+17: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+18: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+19: 
+20: ### Sess
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<��p<r�=�U���̼����O=ˮ�
+��<L�=���=wf	��W���Z��聈=
+*$=Z�.=��3��P;�z�����i&<�i�=��R<|�=Z6;:h�%>��=V">˕�=O?���
+�<�@�;oJ�������f�A6�s�#��1�=5S9�@����b=��+���<ސҽ��<ض
+=wTżMQN��?Z�*|�="1��懼�K���)=��=m8=��=�*�<�.��.z<=l�����<,� <�Ɠ�k%g�e"= 5�<�*�<��R����=Cv�<w�,������������������=�߸��JG��^<�������H������a��%�<�^<��<�|��t6�<�7s=��6��p�]� <0C�p�P=-u�����(�=�%��a���I=0ĕ�v��h�<��(½�`=(��<�݆��֥=8��;<?�<���<�����M��&=�W�=��T<RO��Z��{Sü������<3��<����o��=��;=<@��D����3��j㕼��
+>7��OH��ҝ<ܴ=��M���j��Hm=�f=�@�S�=�G�<3O�'0��j\ >�O�<�92<[�ǼݏP�sJ��
+���e�~�� 0=O2=�"�'_�b>��Z�^=�՘��=�</%��C��?�+�g���|g�_�����=��K�U8=�F�< �>@�C�b����ӈ=EP�;�y�ս<eĽj�	�3�9����-$=xm=[D>�Ｅ�d���<�C=��~���=���;��ϽK�<㮕���5U�=It��`�<�Ӽ
+S��@�Z��Q�>ʩ�T%��]�,<4d=)1=JE$=���<�1}<ڒ<`An�C�3�}6ҽ�-�^�<�k��F��:?<��\[��<$
+=��<�7�=��a9(�=6�l��T=x;�=����Y����<�=�a�=��=�nܼ-<k��Ћ=�F�<YO =8 ˼�=��n���9=Zs�m�=�A=��;�*��=�/d=~�(��0�=m� �wh�<���<4/�<�����B>%��<~�&��c>�8d��nq=��Լnt>�������=���=��v:�X�<T<Q��Ng;�
+ ���h����v����=|���f�=碗;Ĕ=��8�(p�;��������U��M9w��]u<*4����=C�U�g��=ٗ꼑ߖ=#w�;w�:��ý�����_=6����V�����=_����ҽR�=Ub�<$�L=�������<
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   docs/pilotage/en-cours.md
+	modified:   docs/pilotage/plan-travail.md
+	modified:   docs/pilotage/roadmap.md
+	modified:   journal/2026-11-03/README.md
+	modified:   journal/2026-11-03/apprentissage.md
+	modified:   journal/2026-11-03/attention.md
+	modified:   journal/2026-11-03/distribue.md
+	modified:   journal/2026-11-03/docs.md
+	modified:   journal/2026-11-03/memoire.md
+	modified:   journal/2026-11-03/mesures.md
+	modified:   journal/2026-11-03/modele.md
+	modified:   journal/2026-11-03/moteur.md
+	modified:   journal/2026-11-03/outils.md
+	modified:   journal/2026-11-03/portes.md
+	modified:   journal/README.md
+	modified:   journal/THEMES.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/digest.md
+	modified:   journal/sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md
+	modified:   journal/sessions/04ed
+… [3959 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-62", "timeout_ms": 180000, "wait": true}`
+
+  ```
+51ab1b36 PRODUCTION — LA DISTILLATION VAUT −0,06 À PARITÉ STRICTE (PAS −0,10) : 3,1119 / 2,8462 / 2,7388 / 2,6968
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuance finale de l'erratum : rien depuis zéro, −0,06 depuis une init entraînée
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-distillation-native.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"> bruit. Le bruit de harnais lui-même est de **±0,06 à ±0,16** : c'est la leçon de la nuit.\"\" … [1608 caractères tronqués]`
+
+  ```
+nuance ajoutée
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat >> journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md <<'EOF'\n\n## 04/11 — l'erratum de la distillation : le contrôle de parité\n\nLe contrôle de parité de la perte a révélé que le distillateur d'hier donnait à la tête principale\nl … [2544 caractères tronqués]`
+
+  ```
+✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+plan en pause
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"- **Prochaine action** : **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0) et `rope2048`\\n  (gpu1) ; p … [2210 caractères tronqués]`
+
+  ```
+compteurs 623 716
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+51ab1b36 PRODUCTION — LA DISTILLATION VAUT −0,06 À PARITÉ STRICTE (PAS −0,10) : 3,1119 / 2,8462 / 2,7388 / 2,6968
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-n2-distillation-native.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short docs/pilotage/en-cours.md; grep -n \"Prochaine action\" docs/pilotage/en-cours.md | head -4; grep -n \"surveiller les runs\" docs/pilotage/en-cours.md | head -2", "description": "Check en-cours state after failed commit"}`
+
+  ```
+18:- **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+44:- **Prochaine action** : reprise par le hub `1e7ef596` ; l'état du 04/11 est la source.
+59:- **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits), puis la rétro-traduction API ; le nom après un adjectif hors lexique.
+74:- **Prochaine action** : **T132/T133**, **gold 200+** ; le qualifier fenêtre attend une version API (serveur local interdit).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"0733c5bb\" docs/pilotage/en-cours.md | head -3; sed -n 38,50p docs/pilotage/en-cours.md", "description": "Locate my session block after hub rewrite"}`
+
+  ```
+78:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(actif)*
+80:- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+90:- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+- **Plan** : audit, état, runbook ; nuit.
+- **Ambition** : un état reprenable.
+- **Stratégie** : committer par flux.
+- **Objectif final** : sédimentation à zéro.
+- **Ce qu'elle fait** : intégration ; passe **11 h 30 — 82, 80/2** ; plan de nuit.
+- **Ce que font les autres** : **N2**, **S**, **Pensée**.
+- **Prochaine action** : reprise par le hub `1e7ef596` ; l'état du 04/11 est la source.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
+
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(actif)*
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 78,92p docs/pilotage/en-cours.md", "description": "Read my session block"}`
+
+  ```
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(actif)*
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — le run long de production et la capacité sur le corpus propre.
+- **Plan** : 1 024, capacité.
+- **Ambition** : la longueur et la capacité.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
+- **Objectif final** : la production qui tient au long.
+- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α=0 1,014, α=0,9 **0,8385 (−0,176)** ; **repondération 4× : −0,05** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : **analyser la paire propre** (−0,176) et le contrôle de repondération ;
+… [177 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction d'une confusion perte/PPL dans l'état (le hub a lu la perte, pas la PPL)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"**paire propre de production** finie : α=0 1,014, α=0,9 **0,8385 (−0,176)** ; **repondération 4× : −0,05**\"\nneuf = \"** … [2321 caractères tronqués]`

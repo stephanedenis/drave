@@ -8,6 +8,13 @@
 > harnais, même init, mêmes 33 Mo, seul α change — **α = 0,9 ne gagne rien** : 3,6774 / 3,5633 /
 > 3,5208 contre **3,7072 / 3,5727 / 3,5251** pour α = 0, soit **−0,030 / −0,009 / −0,004**, dans le
 > bruit. Le bruit de harnais lui-même est de **±0,06 à ±0,16** : c'est la leçon de la nuit.
+>
+> **Mais la distillation paie depuis une initialisation entraînée** : sur la **recette de
+> production** (34,3 M, init `mix-60k`, mêmes 15 000 pas, mêmes 61,4 Mo), la paire propre donne
+> **3,1119 / 2,8462 / 2,7388 / 2,6968** contre **3,1500 / 2,9069 / 2,8006 / 2,7618** — soit
+> **−0,04 à −0,07** en domaine et **−0,19 / −0,34** hors domaine
+> (fiche [`n2-production-fenetre`](rapport-n2-production-fenetre.md) § 4). Le résultat d'hier
+> n'était donc pas *faux* : il était **gonflé** (2×) et attribué au mauvais mécanisme.
 
 ## La question
 
@@ -46,9 +53,11 @@ du **pas 1** vaut **5,8480** et celle du pas 50 **2,6713** — les valeurs du br
 
 **Trois lectures, dans l'ordre de l'importance :**
 
-1. **La distillation native ne gagne rien** à ce budget : −0,03 à −0,00, et le signe n'est même pas
-   stable avec la longueur. À α = 0,9, les cibles douces d'un professeur qui voit 1 024 octets
-   n'apprennent rien de mesurable à un élève qui en voit 512.
+1. **Depuis zéro, la distillation native ne gagne rien** à ce budget : −0,03 à −0,00, et le signe
+   n'est même pas stable avec la longueur. **Depuis une initialisation entraînée**, elle gagne
+   **−0,06** (fiche production § 4) : ce n'est pas le schéma qui est inutile, c'est **le point de
+   départ** qui décide. Un élève sans bases n'a que faire d'une distribution fine ; un élève déjà
+   entraîné, si.
 2. **Le harnais déplace la PPL de +0,06 à +0,16** : les deux runs de la paire (α = 0 et α = 0,9)
    valent ~3,70/3,57/3,53 là où le même entraînement mené par `entrainer_rope.py` vaut
    3,6452/3,4493/3,3628. Même perte au pas 1, même init, même données : la seule différence est la

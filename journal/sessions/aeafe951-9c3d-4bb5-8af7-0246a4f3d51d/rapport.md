@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 5.9 h |
+| Durée | 6.0 h |
 | Tours | 4 |
-| Messages | 112 |
-| Appels d'outils | 138 |
+| Messages | 120 |
+| Appels d'outils | 154 |
 | Fichiers touchés | 6 |
-| Commandes | 115 |
+| Commandes | 131 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -182,6 +182,28 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ### Tour 4 — peux-tu prendre une tâche
 
+*16 appels d'outils.* Actions notables :
+
+- bash — Check repo, runs, and GPU state
+- bash — Read A8.3b report and list A8.3 files
+- bash — Read current state header and next actions
+- bash — Check whether runs are alive and staged state
+- bash — Read chantiers table and remaining actions
+- bash — Check whether the N3 backlog update was integrated
+- bash — Check resource claims and hub pass plan
+- bash — Find existing N4/SFT tooling and data layout
+- bash — Locate the remaining PDFs and OCR tools
+- bash — Find PDF files in the data tree
+- bash — Find exact uppercase .PDF files
+- bash — Read the OCR pipeline script
+- bash — Check tesseract install and find uppercase PDF scans
+- bash — Inspect the CEGEP OCR manifest structure
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ Tâche retenue : les 8 `.PDF` restants de D — je vérifie le fonds et l'outillage OCR
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -237,7 +259,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 75 autres
+- … et 91 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -365,9 +387,10 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-linguistique.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh por
+- **T4** : reports/rapport-ocr-cegep.md:4:**Statut** : **fonds `.pdf` parcouru** — 91 scans uniques, **60 documents retenus** (1 982 p), 31 écartés (texte OCR < 300 car. ou doublon) ; 8 scans en `.PDF` hors parc
 
 ## 6. Commits
 

@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 7.9 h |
+| Durée | 8.0 h |
 | Tours | 48 |
-| Messages | 487 |
-| Appels d'outils | 703 |
+| Messages | 490 |
+| Appels d'outils | 706 |
 | Fichiers touchés | 15 |
-| Commandes | 520 |
+| Commandes | 523 |
 | Sous-agents | 0 |
-| Commits | 62 |
+| Commits | 64 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1457,7 +1457,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 48 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1466,10 +1466,13 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Integrate B13 163 passifs sans par
 - bash — Commit B13 163 passifs sans par
 - job_output
+- bash — Wait for lock and retry 163 commit
+- bash — Stage state and commit 163
+- bash — Add N2 production line to state and stage
 
 **Synthèse produite :**
 
-⏵ Le commit du 163 tourne en arrière-plan ; je collecte le résultat
+⏵ Le hook exige la ligne N2 de la production (−0,06) : je mets l'état à jour et commit le 163 + la production
 
 ## 3. Travail accompli
 
@@ -1535,7 +1538,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 480 autres
+- … et 483 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1663,7 +1666,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-10 sorties en erreur ou divergentes. Les premières :
+12 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -1675,6 +1678,8 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T12** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8d0008d5e7c1ec0d03df112dd64f84ed02f7e870 but expected d4a35d11099e09df42e888c7a726a3c1df9f0c4b [exit code: 128]
 - **T13** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 9276998190a9538c31d0a4e4d7fbb856e2b65453 but expected 09c5bb496d4d10395891019733d5ccb113f8e5af [exit code: 128]
 - **T16** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8f00b73a12188dac328eb68ed195634e4adb52fb but expected 67286d12a945a406e0513bdfe282f092d5b28a53 [exit code: 128]
+- **T48** : 71:- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 par position (129 avant = agent, 172 après = patient) ; relation 0,8195 (522/637) su
+- **T48** : # N2 — La distillation native : le professeur long dans un élève à fenêtre courte  > **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03/04 · **Verdict — ERRATUM** : > le gain annoncé 
 
 ## 6. Commits
 
@@ -1739,5 +1744,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 162/162 — LE CORRECTIF DES PASSIFS (par → AGENT), MAIS LE GÉNÉRATEUR S COURT-CIRCUITE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON du correctif
 - ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 12" -m "Les deux bras de la paire propre de production sont fini
 - ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15" -m "Les deux bras de la paire propre de production sont fini
+- B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
+- B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
 - B13 163/163 — LES PASSIFS SANS par : LE CHUNKER LES DÉTECTE (3/3), LE GÉNÉRATEUR S LES IGNORE ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont com
 

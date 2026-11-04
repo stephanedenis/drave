@@ -146,3 +146,26 @@ portes attend leur sortie (règle § 11) :
 À leur sortie : mesurer (les mêmes bancs, mêmes contrôles), remplacer les sections « run
 interrompu, non mesuré » des fiches `n2-production-fenetre` § 5 et `n2-r12-2048` § 5 par les
 résultats, mettre l'état à jour et committer.
+
+## 04/11 — l'erratum de la distillation : le contrôle de parité
+
+Le contrôle de parité de la perte a révélé que le distillateur d'hier donnait à la tête principale
+le poids **1** au lieu de **1/4** (l'entraîneur fait la moyenne des quatre têtes), et que le
+harnais (passe du professeur) déplace la PPL de lui-même. Trois expériences ont suivi :
+
+| contrôle | résultat | lecture |
+|---|---|---|
+| paire propre 11,47 M **depuis zéro** (α = 0 vs 0,9) | 3,7072 / 3,5727 / 3,5251 vs 3,6774 / 3,5633 / 3,5208 | **−0,03 / −0,01 / 0,00** : rien |
+| repondération 4× seule, 11,47 M depuis zéro | 3,6067 / 3,3984 / 3,3129 | **−0,05** : un petit levier gratuit |
+| paire propre **production** (34,3 M, init mix-60k) | 3,1500… vs 3,1119 / 2,8462 / 2,7388 / 2,6968 | **−0,04 à −0,07** en domaine, **−0,19 / −0,34** hors domaine |
+
+**Conclusion** : le chiffre du 03/11 (−0,10 / −0,29 / −0,52) était **gonflé 2×** par l'échelle de
+perte du vieux code ; la distillation **paie depuis une initialisation entraînée** (−0,06), et **ne
+paie rien depuis zéro**. Les deux fiches (`n2-distillation-native` et `n2-production-fenetre` § 4)
+portent l'erratum et la décomposition complète ; `reports/n2-distillation-native.json` porte le
+bloc `erratum`.
+
+**Runs arrêtés** : `kd2` (30 000 pas, code d'hier) et `rope2048-20k` (6000/20 000, trop lent sous
+contention) — non mesurés, à reprendre si le levier le justifie.
+
+**Commits** : `84c28889` (erratum), `64674e0d` (repondération −0,05), `51ab1b36` (production −0,06).

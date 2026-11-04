@@ -12,7 +12,7 @@
   courbe de longueur), R1.1/R1.2 mesurés depuis N2
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `reports/rapport-n2-*`,
   `work/n2*`, `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/`
-- **Heartbeat** : 2026-11-04 09:41 HAE
+- **Heartbeat** : 2026-11-04 15:22 HAE
 - **Objectif final** : trancher la question ouverte de N2 — **les 200 000 pas sur le mélange
   1 Go font-ils passer sous 2,5 sans perdre le français ?** — puis **R1.1/R1.2** : un schéma
   de position **relatif** reproduit-il par construction le gain des positions aléatoires, et
@@ -33,10 +33,14 @@
   est mesuré (3,2545 à 1 000, 3,0107 à octets constants) ; reste le contrôle « depuis zéro ».
 - **Prochaine action** : **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du
   corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
-- **État** : actif
+- **État** : en pause
 - **Arrêt constaté** : reboot du 03/11 19 h 33 ; les runs `kd2` (8 250/30 000) et `rope2048`
   (3 350/20 000) sont **interrompus sans checkpoint** ; claim `nuit-kd2` libéré ; les fiches
   portent « run interrompu, non mesuré ».
 - **Reprise du 04/11 09 h 41** : les deux runs **relancés** (hub, 09 h 30) — `kd2` sur gpu0
   (~13 h 15) et `rope2048` sur gpu1 (~14 h 45) ; claim `n2-jour` (gpu0+gpu1). À leur sortie :
   mesurer, remplacer les sections « interrompu » des deux fiches par les résultats, committer.
+- **Bilan du 04/11** : l'erratum de la distillation est mesuré — **rien depuis zéro**, **−0,06
+  depuis une init entraînée** ; le complément 2 048 et la distillation 30 k sont **arrêtés** (code
+  biaisé, contention). Commits `84c28889`, `64674e0d`, `51ab1b36` ; les deux fiches portent
+  l'erratum complet.

@@ -2888,3 +2888,152 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 **Non touchés** : les runs N2 (GPU 0 et 1), le claim `n2-jour`, `AGENTS.md`, la roadmap (déjà à jour : N3 « couvert par brique »). Claim `cpu1` libéré, session `aeafe951` terminée.
 
+
+## Tour 4
+
+### 👤 Utilisateur
+
+peux-tu prendre une tâche
+
+### 🤖 Assistant
+
+⏵ Recherche de la prochaine tâche libre : état, runs, et ligne A8.3
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; git log --oneline -4; git status --short | head -12; echo ====; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; tail -1 work/n2ac/kd2-mix512-30k.log; tail -1 work/n2ac/rope2048-20k.log", … [50 caractères tronqués]`
+
+  ```
+15:21
+9c9d7b22 ÉTAT — N2 : LA PAIRE PROPRE EST FINIE — α = 0,9 DONNE 0,8385 CONTRE 1,014 (−0,176) ; HEURE 15 H 15
+cc3c73fe B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162
+2eb587eb B13 162/162 — LE CORRECTIF DES PASSIFS (par → AGENT), MAIS LE GÉNÉRATEUR S COURT-CIRCUITE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+a4b3200c ÉTAT — HEURE 15 H 07 ; B13 161/161, N2 α = 0,9 À 14 250 PAS
+ M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+ M journal/2026-11-04/README.md
+ M journal/2026-11-04/docs.md
+ M journal/README.md
+ M journal/THEMES.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+====
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+pas   6400 · perte 0.9833 · PPL val 2.590 · 12205 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' reports/rapport-a83b-regimes.md 2>/dev/null; echo ====; ls reports | grep -i 'a83'", "description": "Read A8.3b report and list A8.3 files"}`
+
+  ```
+# A8.3b — les trois régimes de KV : le mélange tardif est meilleur que le f32, l'int8 partout est pire
+
+> **Ligne de roadmap** : A8.3 (suite d'A8.3 et d'A8.0) · **Date** : 2026-10-29 · **Verdict** :
+> ✅ **la non-monotonie est réelle et reproductible** — trois régimes, trois chiffres :
+> f32 (**61,9920 / 60,8135 / 113,0068**), mélange tardif 1 % (**58,3200 / 62,7357 / 111,8003**),
+> int8 partout (**66,6195 / 72,6501 / 120,0813**). Le mélange améliore **deux mesures sur
+> trois** ; l'int8 partout dégrade **partout**. Ce n'est pas un artefact de la règle : le
+> chemin explicite (`DRAVE_KV_BITS=8`) redonne exactement les chiffres du budget 10 %.
+>
+> **Dispositif** : Qwen2.5-0.5B-Q8_0, portes `porte-flux` et `porte-pont`, GPU ; trois régimes
+> par variable d'environnement (`DRAVE_KV_BITS`, `DRAVE_PERTE_MAX`) ; JSON
+> [`a83b-regimes.json`](a83b-regimes.json) ; suite d'[A8.3](rapport-a83-defaut.md).
+
+## La question
+
+A8.3 a montré que le défaut place+perte déplace les portes de −5,9 % à +19,5 %. Le signe
+positif (un mode *s'améliore*) est suspect : une quantification ne devrait que dégrader.
+D'où vient-il — de la règle, du nombre de couches, ou du chemin de calcul ?
+
+## Ce qui est mesuré
+
+
+… [2763 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,35p' docs/pilotage/en-cours.md; echo '...'; grep -n \"Ce qui reste\\|prochaine action\" docs/pilotage/en-cours.md | head -20", "description": "Read current state header and next actions"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-04, 15 h 19 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reboot du 03/11 19 h 33** : la nuit a été coupée (`kd2` **8 250/30 000**, `rope2048`
+> **3 350/20 000**, sans checkpoint) ; les quatre sessions ont été mises en pause. **Reprise du
+> 04/11** : hub `1e7ef596` (08 h 50), N2 09 h 41, S 09 h 46, L/B13 10 h 14 ; **N3** clos en
+> session courte (11 h 30–11 h 38). Runbook [`plan-travail.md`](plan-travail.md) § 9 et § 12.
+
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+
+- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+- **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs (revue, liens, tableaux).
+- **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+
+## Sessions en cours
+
+> Contrat : [`continuite
+… [961 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etimes,args | grep -E 'kd2|rope2048|train|python.*n2' | grep -v grep | head; echo ====; tail -3 work/n2ac/kd2-mix512-30k.log; echo ---; tail -3 work/n2ac/rope2048-20k.log; echo ====; git show :docs/pilotage/en-cours.md >/d … [140 caractères tronqués]`
+
+  ```
+====
+pas 11950 · perte 1.2178 · dure 1.1180 · douce 0.2223 · 5618 s
+pas 12000 · perte 1.1357 · dure 1.0045 · douce 0.2302 · 5642 s
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+---
+pas   6300 · perte 1.0600 · PPL val 2.593 · 11990 s
+pas   6350 · perte 0.9438 · PPL val 2.599 · 12098 s
+pas   6400 · perte 0.9833 · PPL val 2.590 · 12205 s
+====
+en-cours stagé
+ .../rapport.md                                     |  10 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  22 ---
+ .../rapport.md                                     |  11 +-
+ reports/pensee-passifs-sans-par.json               |  13 ++
+ reports/rapport-pensee-passifs-sans-par.md         |  61 +++++++
+ 23 files changed, 129 insertions(+), 338 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '115,145p' docs/pilotage/en-cours.md", "description": "Read chantiers table and remaining actions"}`
+
+  ```
+externes** et la **prochaine action**.
+
+| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 163/163, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+| **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre (0,29)** ; **N4** |
+| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** arrêté à 6 400/20 000 ; la restitution |
+| **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
+| **Backlog — graphe** | **37 fiches, 43 arêtes, 3 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
+
+**C1** · **C2** · **C3** · **C4** · **C5** · **C6** · **C7** — hors graphe.
+
+## Ce qui reste
+
+**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0
+… [1051 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 -- docs/pilotage/backlog/N3-operations-natives.md; grep -n \"Statut\" docs/pilotage/backlog/N3-operations-natives.md; git status --short | grep backlog || echo 'backlog propre'", "description": "Check whether the … [35 caractères tronqués]`
+
+  ```
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+f9132a68 N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE
+720d7e7d N3.5f — POSITION VÉRIFIÉE PAS À PAS, DÉSYNC REFUSÉE (CODE 4) ; PORTE 76
+3:> **Statut** : mesurée · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+backlog propre
+  ```
+
