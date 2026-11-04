@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-passifs-corriges.md`](rapport-pensee-passifs-corriges.md) | **B13** — le correctif des passifs : `par` → agent, le generateur S court-circuite, **162/162** |
+| [`rapport-pensee-passifs-sans-par.md`](rapport-pensee-passifs-sans-par.md) | **B13** — les passifs sans par : le chunker 3/3, le générateur S ignore, **163/163** |
 | [`rapport-pensee-roles.md`](rapport-pensee-roles.md) | **B13** — les 322 GN sans rôle : 129 avant le GV, 172 après, relation 0,8195, **160/160** |
 | [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |
 | [`rapport-pensee-tirages.md`](rapport-pensee-tirages.md) | **B13** — les trois tirages : 0,9838 exactement, le modèle est déterministe, **155/155** |

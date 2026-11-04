@@ -15675,3 +15675,23 @@ data/corpus_ocr_cegep/val.txt: 0
 ⏵ Le re-split est fait (2/1/1, 8 Ko 0) ; je l'inscris dans l'état et je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"D — clos\" docs/pilotage/en-cours.md ; python3 - <<'PY'\nimport pathlib, subprocess, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdou … [1209 caractères tronqués]`
+
+  ```
+état OK 15 h 57
+  T0 max : 4010 mots (budget 4 000)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+[s/v7 8f32227d] D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+ 19 files changed, 1944 insertions(+), 60 deletions(-)
+ create mode 100644 journal/sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md
+ create mode 100644 journal/sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 010 : je resserre la ligne D, puis commit et contrôles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"; **re-split 2/1/1 fait** (train 4,46 M, val 32 220, test 12 711) ; 8 Ko 0\", \"; **re-split 2/1/1** ; 8 Ko 0\")\nt=t.replac … [1064 caractères tronqués]`

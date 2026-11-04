@@ -9,10 +9,10 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 6.6 h |
 | Tours | 5 |
-| Messages | 177 |
-| Appels d'outils | 212 |
+| Messages | 187 |
+| Appels d'outils | 221 |
 | Fichiers touchés | 7 |
-| Commandes | 177 |
+| Commandes | 182 |
 | Sous-agents | 1 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -237,7 +237,7 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 
 ### Tour 5 — lance la suite en subagent et supervise la suite des travaux
 
-*15 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Inspect existing CEGEP OCR corpus and manifest
 - bash — Check contamination tool usage
@@ -253,11 +253,11 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 - send_message
 - bash — Find lowercase counterparts of the uppercase scans
 - bash — Check old train hash and Choquette context
-- … et 1 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ Le hash de l'ancien train ne correspond plus au manifeste — je cherche l'original et je cadre la supervision
+⏵ Le hub a committé le re-split (8f32227d) ; j'attends la fiche de preuve du sous-agent pour l'intégrer
 
 ## 3. Travail accompli
 
@@ -319,7 +319,7 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 137 autres
+- … et 142 autres
 
 ## 4. Mesures et résultats marquants
 

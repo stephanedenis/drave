@@ -549,7 +549,13 @@ class Heuristique:
                 j = i + 1
                 while j < len(mots) and mots[j][3] == "mot" and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set()):
                     j += 1
-                segments.append({"type": "GN", "role": "groupe nominal", "niveau": 0,
+                role = "groupe nominal"
+                # le passif sans `par` : GN + AUX (être) + participe → le sujet est un patient
+                if j < len(mots) and _normaliser(mots[j][2]) in {
+                        "est", "sont", "était", "étaient", "été", "sera", "seront",
+                        "suis", "es", "sommes", "êtes"}:
+                    role = "patient"
+                segments.append({"type": "GN", "role": role, "niveau": 0,
                                  "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j

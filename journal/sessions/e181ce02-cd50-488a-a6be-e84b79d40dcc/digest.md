@@ -37159,3 +37159,149 @@ Current DSH file policy: danger-full-access. The DSH file sandbox does not restr
 
 Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git remote -v | head -4; echo \"--- master upstream :\"; git rev-parse --abbrev-ref master@{upstream} 2>&1 | head -1; echo \"--- diff travail :\"; git diff --stat tools/bloc_linguistique.py tools/pensee/autotest.py docs/implantation/ … [116 caractères tronqués]`
+
+  ```
+origin	git@github.com:stephanedenis/drave.git (fetch)
+origin	git@github.com:stephanedenis/drave.git (push)
+--- master upstream :
+origin/master
+--- diff travail :
+ docs/implantation/moteur-de-pensee.md |  5 +++--
+ reports/README.md                     |  2 +-
+ tools/bloc_linguistique.py            |  8 +++++++-
+ tools/pensee/autotest.py              | 21 ++++++++++++++++++---
+ 4 files changed, 29 insertions(+), 7 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,120p' docs/pilotage/en-cours.md", "description": "Lire le bloc B13 et la suite de l'état"}`
+
+  ```
+- **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents.
+- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
+
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif)*
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
+- **Plan** : B13, R4.4, bloc linguistique.
+- **Ambition** : un runtime cognitif tracé.
+- **Stratégie** : v0 petit et mesuré.
+- **Objectif final** : un moteur de pensée v0.
+- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; **passifs : règle 5/5 fausse ; correctifs hors du chemin S (roadmap 163)** ; fiches [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
+- **Ce qu'elle 
+… [4055 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff tools/pensee/autotest.py tools/bloc_linguistique.py | head -80", "description": "Voir le diff non commité"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index de25b059..37e6a8c8 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -549,7 +549,13 @@ class Heuristique:
+                 j = i + 1
+                 while j < len(mots) and mots[j][3] == "mot" and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set()):
+                     j += 1
+-                segments.append({"type": "GN", "role": "groupe nominal", "niveau": 0,
++                role = "groupe nominal"
++                # le passif sans `par` : GN + AUX (être) + participe → le sujet est un patient
++                if j < len(mots) and _normaliser(mots[j][2]) in {
++                        "est", "sont", "était", "étaient", "été", "sera", "seront",
++                        "suis", "es", "sommes", "êtes"}:
++                    role = "patient"
++                segments.append({"type": "GN", "role": role, "niveau": 0,
+                                  "debut": d, "fin": mots[j - 1][1],
+                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                 i = j
+diff --git a/tools/pensee/autotest.py b/tool
+… [2316 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"T132\\|T133\\|def t132\\|def t133\" tools/pensee/autotest.py | head -8", "description": "Localiser les portes T132/T133"}`
+
+  ```
+1959:def t132_lien_auto() -> tuple[bool, str]:
+1968:def t133_lien_auto_fixe() -> tuple[bool, str]:
+2469:              ("T132 lien auto", t132_lien_auto()),
+2470:              ("T133 lien réparé", t133_lien_auto_fixe()),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1959,1990p' tools/pensee/autotest.py", "description": "Lire T132/T133"}`
+
+  ```
+def t132_lien_auto() -> tuple[bool, str]:
+    """Le lien automatique par le sujet : 5/5 (les assertions précèdent les questions)."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_lien_auto
+    r = fidelite_lien_auto(charger())
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien auto : {r['justes']:.0f}/{r['paires']} (sujet de surface)")
+
+
+def t133_lien_auto_fixe() -> tuple[bool, str]:
+    """Le lien réparé : 5/5 après réordonnancement (les distracteurs ne le cassent pas)."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_lien_auto
+    r = fidelite_lien_auto(charger())
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien réparé : {r['justes']:.0f}/{r['paires']}")
+
+
+def t134_lien_coref() -> tuple[bool, str]:
+    """La coréférence comme lien : 62/116."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import mesurer_lien_coref
+    ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 427]
+    r = mesurer_lien_coref(ph)
+    return r["liens"] == 116 and r["avec_phrase"] == 65, (
+   
+… [298 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat; echo ---; git show HEAD:tools/pensee/autotest.py | grep -c \"t160_passifs_sans_par\"; git show HEAD:tools/bloc_linguistique.py | grep -c \"le passif sans\"", "description": "Confirmer que le dernier round n'est pas d … [10 caractères tronqués]`
+
+  ```
+docs/implantation/moteur-de-pensee.md              |   5 +-
+ journal/README.md                                  |   7 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 579 ++++++++++++++++
+ .../rapport.md                                     | 189 +++++-
+ journal/sessions/MANIFEST.md                       |   9 +-
+ .../aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md | 218 ++++++
+ .../rapport.md                                     |  44 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 286 ++++++++
+ .../rapport.md                                     |  27 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-quatre-modes.json                   | 734 ++++++++++++---------
+ tools/bloc_linguistique.py                         |   8 +-
+ tools/pensee/autotest.py                           |  21 +-
+ tools/structures                                   |   0
+ 14 files changed, 1769 insertions(+), 360 deletions(-)
+---
+0
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je récupère d'abord mon dernier round resté non commité (T160, passifs)
+
+Le working tree contient mon dernier round (règle passive du chunker, T156/T157 à jour, porte T160) que le commit concurrent `d72269e0` n'a **pas** emporté : `git show HEAD:tools/pensee/autotest.py` ne connaît pas `t160`. Je le commite proprement, en vérifiant le contenu du commit cette fois.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Prochaine action** : **T132/T133**, **gold 200+** ; le qualifier fenêtre attend une version API (serveur local inte … [827 caractères tronqués]`
+
+  ```
+état : prochaine action corrigée
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py docs/pilotage/en-cours.md docs/implantation/moteur-de-pensee.md reports/README.md\n  timeout 240 git commit -m \"B13 — LES PASSIFS SANS PAR ENTRE … [786 caractères tronqués]`

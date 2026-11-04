@@ -478,3 +478,297 @@ def main() -> int:
 … [5800 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Inspection du script de contamination et de ses options
+
+- **bash** `{"command": "python3 tools/verifie_contamination.py --help 2>&1; echo \"=== exit $?\"", "description": "Aide du script de contamination"}`
+
+  ```
+usage: verifie_contamination.py [-h] --train TRAIN [--val VAL] [--test TEST]
+                                [--eval EVAL] [--fenetre FENETRE] [--pas PAS]
+                                [--echantillon ECHANTILLON]
+                                [--taille-troncon TAILLE_TRONCON]
+                                [--sortie SORTIE]
+
+verifie_contamination.py — les fuites entre splits et entre corpus, mesurées.
+POURQUOI CE FICHIER. Un corpus d'entraînement sans contrôle de fuite est un
+corpus qui mentira sur son évaluation. Ce script vérifie deux choses, avec des
+chiffres : 1. **les doublons de tronçons entre splits** : chaque ligne des
+fichiers (tronçon de 8 Ko écrit par `corpus_wikipedia.py`) est hachée ; un
+tronçon qui apparaît dans deux splits est une fuite exacte (les quasi-doublons
+ne sont pas détectés — c'est dit). Pour le **texte intégral**
+(`corpus_wikipedia_texte.py`), l'unité est la **fenêtre** de 8 Ko coupée au
+mot (`--taille-troncon 8192`), parce que les tronçons contiennent des retours
+à la ligne ; 2. **le recouvrement avec les jeux d'évaluation** : des fenêtres
+de `--fenetre` octets, échantillonnées dans chaque fichier d'évaluation, sont
+cherchées dans l'entraînement par 
+… [748 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,200p' tools/verifie_contamination.py", "description": "Lecture du script de contamination"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_contamination.py — les fuites entre splits et entre corpus, mesurées.
+
+POURQUOI CE FICHIER. Un corpus d'entraînement sans contrôle de fuite est un corpus qui mentira
+sur son évaluation. Ce script vérifie deux choses, avec des chiffres :
+
+1. **les doublons de tronçons entre splits** : chaque ligne des fichiers (tronçon de 8 Ko écrit
+   par `corpus_wikipedia.py`) est hachée ; un tronçon qui apparaît dans deux splits est une fuite
+   exacte (les quasi-doublons ne sont pas détectés — c'est dit). Pour le **texte intégral**
+   (`corpus_wikipedia_texte.py`), l'unité est la **fenêtre** de 8 Ko coupée au mot
+   (`--taille-troncon 8192`), parce que les tronçons contiennent des retours à la ligne ;
+2. **le recouvrement avec les jeux d'évaluation** : des fenêtres de `--fenetre` octets,
+   échantillonnées dans chaque fichier d'évaluation, sont cherchées dans l'entraînement par
+   `mmap.find` — une fenêtre trouvée est une fuite.
+
+Ce n'est pas un détecteur de paraphrase : deux textes reformulés passent. C'est un contrôle
+d'**exactitude**, celui qui doit être à zéro avant d'entraîner.
+
+Usage :
+  python3 tools/verifie_contamination.py --train data/corpus_wiki_fr/tr
+… [4851 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche des traces de l'append et lancement de la contamination réelle
+
+- **bash** `{"command": "ls -lat work/ | head -15; echo \"=== work/ocr récent\"; ls -lat work/ocr/ | head -15; echo \"=== git status court\"; git status --short | head -30; echo \"=== suivi data\"; git ls-files data/corpus_ocr_cegep/ ; echo \"=== gitignore\"; grep -n \"data\\|work\" .gitignore", "description":  … [30 caractères tronqués]`
+
+  ```
+total 220
+drwxr-xr-x. 1 stephane stephane   596  4 nov 15:56 ocr
+drwxr-xr-x. 1 stephane stephane  1422  4 nov 15:30 .
+-rw-r--r--. 1 stephane stephane   393  4 nov 15:30 ressources.json
+drwxr-xr-x. 1 stephane stephane 10116  4 nov 15:26 n2ac
+drwxr-xr-x. 1 stephane stephane   768  4 nov 11:32 portes-n3-cloture
+drwxr-xr-x. 1 stephane stephane    76  4 nov 08:44 pensee
+drwxr-xr-x. 1 stephane stephane   244  4 nov 08:07 portes
+-rw-r--r--. 1 stephane stephane   556  3 nov 18:43 msg-claims.txt
+-rw-r--r--. 1 stephane stephane   801  3 nov 18:40 msg-nuit.txt
+-rw-r--r--. 1 stephane stephane   454  3 nov 13:36 msg-cpt.txt
+-rw-r--r--. 1 stephane stephane   640  3 nov 13:34 msg-backlog-n2.txt
+-rw-r--r--. 1 stephane stephane   554  3 nov 13:31 msg-1335.txt
+-rw-r--r--. 1 stephane stephane   696  3 nov 13:29 msg-n2-sous25.txt
+-rw-r--r--. 1 stephane stephane   652  3 nov 13:18 msg-80-2.txt
+=== work/ocr récent
+total 1532
+drwxr-xr-x. 1 stephane stephane     46  4 nov 15:56 cegep64
+drwxr-xr-x. 1 stephane stephane    596  4 nov 15:56 .
+drwxr-xr-x. 1 stephane stephane   1422  4 nov 15:30 ..
+drwxr-xr-x. 1 stephane stephane     48  4 nov 15:24 restants
+-rw-r--r--. 1 stephane stephane   1148  4 nov 15:24 r
+… [1361 caractères tronqués]
+  ```
+
+- **bash** `{"command": "taskset -c 10-19,30-39 python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_cegep/val.txt --test data/corpus_ocr_cegep/test.txt --taille-troncon 8192 --sortie work/ocr/cegep64/contamination.json; echo \"=== exit $?\"", "description": "Cont … [47 caractères tronqués]`
+
+  ```
+{
+ "train": "data/corpus_ocr_cegep/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 14205,
+  "par_split": {
+   "val.txt": {
+    "troncons": 207,
+    "doublons": 131,
+    "taux": 0.63285
+   },
+   "test.txt": {
+    "troncons": 69,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 546,
+  "par_split": {
+   "val.txt": {
+    "troncons": 4,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
+=== exit 0
+  ```
+
+### 👤 Utilisateur
+
+Agent aeafe951-9c3d-4bb5-8af7-0246a4f3d51d sent a message: 
+STOP — la prémisse « 4 nouveaux documents » est fausse, et je viens de le mesurer. Ne conclus pas « 64 documents ». Voici la preuve indépendante, à rejouer toi-même avant de l'écrire :
+
+- `train[:4_430_959]` (l'ancien train, hash `6d53a023…` du manifeste) contient déjà une grande partie du texte ajouté : **25 fenêtres exactes de 500 octets sur 56** (pas de 1 000) du bloc ajouté s'y retrouvent ; un exemple à `new[30000:30500]` == `old[3999195:3999695]` (« Fiche de travail — Offres d'emploi ») ; « Choquette » apparaît **7 fois** dans l'ancien train ; sur 200 fenêtres aléatoires de 200 o, **101** sont dans l'ancien train.
+- Interprétation : les 4 documents OCRisés depuis les `.PDF` majuscules sont, au moins en grande partie, des **doublons** de documents déjà présents dans les 60 (mêmes contenus sous des copies `.pdf` minuscules), que la déduplication par hash de document entier n'a pas vus parce que l'OCR diffère légèrement.
+
+NOUVELLE MISSION (même périmètre de fichiers, mêmes interdits — `data/` en lecture seule, aucun commit, pas de docs/pilotage) :
+1. Quantifie le doublon **par document** : ré-OCRise les 8 `.PDF` un par un (`tools/ocr_pdf.py` fonctions `ocr`/`pages`, ou `--liste` vers `work/ocr/cegep64/par-doc/`), puis pour chacun des 5 textes distincts, mesure la fraction de fenêtres de 500 o (pas 1 000) présentes dans `train[:4_430_959]` et dans val/test. Donne le tableau par document.
+2. Prépare `work/ocr/cegep64/train_restaure.txt` = les **4 430 959 premiers octets** de `data/corpus_ocr_cegep/train.txt` ; vérifie que son SHA-256 vaut `6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310` (le hash du manifeste). Ne touche pas à `data/`.
+3. Fais quand même le contrôle 8 Ko **entre splits** (train complet vs val/test) + le contrôle négatif (fenêtre de val injectée dans une copie du train doit être trouvée). Mais le résultat principal est le **doublon intra-train** : le contrôle 8 Ko entre splits peut être à 0 et ne pas voir le problème.
+4. Écris les deux livrables avec le verdict honnête : l'append est un **doublon** ; le corpus ne gagne pas 4 documents ; l'état « 64 documents » n'est pas soutenu ; la restauration (retirer les 55 857 octets ajoutés) est la décision à proposer au hub, avec le hash restauré. La fiche `reports/rapport-ocr-cegep-64.md` doit porter ce verdict, pas « intégration réussie ».
+5. Si ton contrôle par document contredit le mien (par exemple duplication faible < 10 %), dis-le explicitement et donne les chiffres — c'est le désaccord qui compte, pas la confirmation.
+
+Rapport final : mêmes 10 lignes, avec la **ligne d'état exacte** proposée au hub (elle doit dire « doublon, restauration proposée », pas « 64 documents »).
+
+### 🤖 Assistant
+
+⏵ Rejeu de la mesure du parent : fenêtres du bloc ajouté dans l'ancien train
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport mmap, random, hashlib\np='data/corpus_ocr_cegep/train.txt'\nd=open(p,'rb').read()\nold, new = d[:4430959], d[4430959:]\nprint('old',len(old),'new',len(new))\nprint('sha old',hashlib.sha256(old).hexdigest())\n# fenetres 500, pas 1000\npos=list(range(0,len(new)-5 … [914 caractères tronqués]`
+
+  ```
+old 4430959 new 33988
+sha old 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310
+fenetres 500/1000: 34
+trouvees 24 / 34 0.706
+exemples [(8000, 3999064), (9000, 4000064), (10000, 4001064)]
+exemple 30000: False
+Choquette old 7 new 1
+200o trouvees 149 /200 = 0.745
+  ```
+
+- **bash** `{"command": "head -c 4430959 data/corpus_ocr_cegep/train.txt > work/ocr/cegep64/train_restaure.txt && sha256sum work/ocr/cegep64/train_restaure.txt && stat -c '%n %s' work/ocr/cegep64/train_restaure.txt; echo \"=== attendu 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310\"", "descrip … [67 caractères tronqués]`
+
+  ```
+6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310  work/ocr/cegep64/train_restaure.txt
+work/ocr/cegep64/train_restaure.txt 4430959
+=== attendu 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : la taille lue du train ne correspond plus — vérification immédiate
+
+- **bash** `{"command": "date -Is; stat -c '%n %s %y' data/corpus_ocr_cegep/train.txt; sha256sum data/corpus_ocr_cegep/train.txt; echo \"=== tail sha\"; tail -c 55857 data/corpus_ocr_cegep/train.txt | sha256sum; echo \"=== python len\"; python3 -c \"d=open('data/corpus_ocr_cegep/train.txt','rb').read(); print(l … [184 caractères tronqués]`
+
+  ```
+2026-11-04T15:59:01-05:00
+data/corpus_ocr_cegep/train.txt 4464947 2026-11-04 15:57:00.342307238 -0500
+661e6386fb09ca333778e37dfdff8badd55135ea014d04975714ab8cc445458d  data/corpus_ocr_cegep/train.txt
+=== tail sha
+03c616b4d1ec5f35550a538e177c11ce82db0b108c6844808fbc5ddac9bd1a2e  -
+=== python len
+4464947
+b'Choquette c. Chagnon\nCANADA\n\nPR'
+=== git?
+total 4412
+drwxr-xr-x. 1 stephane stephane      48  2 nov 16:31 .
+drwxr-xr-x. 1 stephane stephane    2664  2 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane   12711  4 nov 15:57 test.txt
+-rw-r--r--. 1 stephane stephane 4464947  4 nov 15:57 train.txt
+-rw-r--r--. 1 stephane stephane   32220  4 nov 15:57 val.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ `data/` a changé pendant la session (15:57) — j'identifie l'auteur et l'état
+
+- **bash** `{"command": "date -Is; ps -eo pid,lstart,cmd | grep -E \"ocr_pdf|contamination|python3\" | grep -v grep | tail -20; echo \"=== ouverts\"; (command -v lsof >/dev/null && lsof data/corpus_ocr_cegep/train.txt 2>/dev/null) || echo \"lsof absent/rien\"; echo \"=== fichiers work recents <10min\"; find wor … [149 caractères tronqués]`
+
+  ```
+2026-11-04T15:59:31-05:00
+   2062 mar nov  3 19:34:00 2026 /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   2233 mar nov  3 19:34:01 2026 /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+   3002 mar nov  3 19:34:05 2026 /usr/bin/python3 /home/stephane/.local/share/pipewire-eq/eqdaemon.py
+ 268346 mer nov  4 09:45:22 2026 python3 serveur.py --port 8765
+=== ouverts
+lsof absent/rien
+=== fichiers work recents <10min
+1793825800.5041941730 work/ocr/cegep64/queue_55857.bin 55857
+1793825906.6550946740 work/ocr/cegep64/contamination.json 578
+1793825931.3719418120 work/ocr/cegep64/train_restaure.txt 4430959
+1793825951.4950571470 work/n2ac/rope2048-10k.log 2413
+  ```
+
+- **bash** `{"command": "for f in data/corpus_ocr_cegep/*.txt; do echo \"$f $(stat -c %s $f) $(tail -c 120 $f | tr '\\n' '|')\"; done; echo \"=== tete val/test\"; head -c 150 data/corpus_ocr_cegep/val.txt; echo; echo \"---\"; head -c 150 data/corpus_ocr_cegep/test.txt", "description": "Que contiennent les nouve … [17 caractères tronqués]`
+
+  ```
+data/corpus_ocr_cegep/test.txt 12711 réal, ce 25 juin 2013||y Représentant autorisé|#|F a||a °||Courtiers d'assurances internationaux|www. BFLCANADA.ca||
+data/corpus_ocr_cegep/train.txt 4464947 rôler votre travail||© 2013 Cisco et/ou ses filiales. Tous droits réservés. Ce document contient des informations pu
+data/corpus_ocr_cegep/val.txt 32220 cteur de contrôler votre travail||© 2013 Cisco et/ou ses filiales. Tous droits réservés. Ce document contient des in
+=== tete val/test
+inscription AQPC
+AQPC- Confirmation d'inscription
+
+36e COLLOQUE ANNUEL DE L'AQPC
+
+8, 9 et 10 juin 2016
+
+Votre inscription est confirmée, sous réserv
+---
+2.8寸ILI9341 TFTLCD尺寸图（钢化玻璃TP）
+Customer Approved LES HE W À De | HM
+(AP ATES)
+50.00(Outline)
+49.60(TP) — 0.20 0
+10S 46.00(TP V.A
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte envoyée au parent, puis préparation de l'OCR par document
+
+- **send_message** `{"agent_id": "aeafe951-9c3d-4bb5-8af7-0246a4f3d51d", "message": "ALERTE data/ modifié pendant la session (pas par moi, rien écrit dans data/). À 15:57:00, data/corpus_ocr_cegep/ n'est plus l'état 15:49 : train 4 486 816→4 464 947 o (SHA 661e6386…), val 12 536→32 220 o, test 10 524→12 711 o. Le préfi … [837 caractères tronqués]`
+
+  ```
+message delivered to agent aeafe951-9c3d-4bb5-8af7-0246a4f3d51d
+  ```
+
+- **bash** `{"command": "sed -n '1,99p' tools/ocr_pdf.py; echo \"=== liste\"; cat work/ocr/restants-pdf.liste", "description": "Lecture des constantes et fonctions OCR, liste des PDF"}`
+
+  ```
+#!/usr/bin/env python3
+"""ocr_pdf.py — l'OCR des PDF **scannés** (R4.4 appliqué aux documents réels).
+
+POURQUOI. `extrait_pdf.py` extrait le texte natif ; les PDF sans couche texte (les scans) sont
+comptés et écartés. Ce script les **océrise** avec le tesseract installé sans root par
+`installer_ocr.sh` (5.5.3, fra+eng) : `pdftoppm` rend les pages, `tesseract` les lit.
+
+Ce qu'il ne fait pas (encore) : le prétraitement d'image de R4.4 (`nettoyer_scan.py` : rotation,
+contraste, colonnes) — le pilote mesure l'OCR **brut** ; la WER réelle n'a pas de vérité terrain
+(seule la parité R4.4 sur scans simulés la donne), donc la fiche donne le débit, les caractères et
+un échantillon, pas une WER inventée.
+
+Usage :
+  python3 tools/ocr_pdf.py --max-doc 20          # pilote (les 20 premiers scannés)
+  python3 tools/ocr_pdf.py                       # tous les scannés des racines
+  python3 tools/ocr_pdf.py --liste scans.txt --ouvriers 8
+      # liste explicite de scans déjà qualifiés (détection intégrale), pages en parallèle
+
+DÉTECTION. Sans `--liste`, un PDF est « scanné » si ses **deux premières pages** portent moins de
+50 caractères natifs par page. Mesure du 02/11 sur le fonds CEGEP : 807 candi
+… [4239 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Agent aeafe951-9c3d-4bb5-8af7-0246a4f3d51d sent a message: 
+CORRECTION IMPORTANTE — ignore mon message précédent sur le « doublon » : c'était un artefact de lecture pendant une réécriture. Le hub a réécrit le corpus à 15 h 57 (re-split 2/1/1) **pendant** que je mesurais ; j'ai comparé la queue du nouveau train avec son propre milieu, d'où les fenêtres qui se ressemblaient.
+
+État stable à mesurer (ne lis que celui-là, vérifie taille + mtime avant/après chaque mesure) :
+- `train.txt` 4 464 947 o, `val.txt` 32 220 o, `test.txt` 12 711 o (mtime 15:57:00) ;
+- **les anciens splits sont préservés au préfixe, hashes du manifeste** : train[:4 430 959] = `6d53a023…`, val[:12 536] = `dd605833…`, test[:10 524] = `1c9ab734…` — je l'ai vérifié, refais-le ;
+- répartition annoncée par le hub : **Choquette 7 575 + DOC1 25 470 → train ; DOC2 19 101 → val ; Assurance 2 021 → test**.
+
+Mission corrigée :
+1. Vérifie les trois préfixes (hashes ci-dessus) : c'est la preuve que le re-split n'a pas touché l'ancien corpus.
+2. Vérifie la répartition : les suffixes ajoutés à chaque split doivent correspondre aux textes OCR des documents (ré-OCRise un par un dans `work/ocr/cegep64/par-doc/`, compare par fenêtres de 500 o ; les textes doivent se retrouver **dans le split annoncé**, pas dans un autre).
+3. Contrôle 8 Ko **entre splits** sur les fichiers 15:57 (train vs val vs test), avec le contrôle négatif (fenêtre de val injectée dans une copie du train → doit être trouvée).
+4. Contrôle de non-duplication croisée : pour chaque nouveau document, vérifie qu'il ne duplique pas le préfixe d'un **autre** split (fenêtres exactes de 500 o). Si un nouveau doc de val/test duplique l'ancien train, c'est une fuite — dis-le avec les offsets.
+5. Écris les deux livrables avec le verdict vrai : re-split 2/1/1, anciens splits intacts, contamination 8 Ko = X (chiffre), contrôle négatif OK/KO. La fiche doit aussi noter que le manifeste `ocr-pdf-restants.json` disait « 4 en train » : le re-split du hub le remplace (2/1/1), c'est la version à retenir.
+6. Ligne d'état proposée : corpus CEGEP 64 documents, re-split 2/1/1, anciens splits intacts, 8 Ko 0 (ou le chiffre vrai).
+
+Timebox inchangée. Si tu as déjà écrit une fiche avec « doublon », corrige-la.
+

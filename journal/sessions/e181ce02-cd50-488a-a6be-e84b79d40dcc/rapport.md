@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 95.3 h |
 | Tours | 171 |
-| Messages | 2095 |
-| Appels d'outils | 1796 |
+| Messages | 2098 |
+| Appels d'outils | 1799 |
 | Fichiers touchés | 25 |
-| Commandes | 1476 |
+| Commandes | 1478 |
 | Sous-agents | 2 |
-| Commits | 222 |
+| Commits | 223 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9114,7 +9114,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 
 ### Tour 171 — This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat t … [9197 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'état, la branche et l'écart master/s/v7
 - bash — Lire l'état courant
@@ -9124,6 +9124,15 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - bash — Localiser les portes T132/T133
 - bash — Lire T132/T133
 - bash — Confirmer que le dernier round n'est pas dans HEAD
+- bash — Corriger l'état et passer les portes rapides
+- bash — Committer le round passif resté hors de HEAD et vérifier
+- job_output
+
+**Synthèse produite :**
+
+⏵ Je récupère d'abord mon dernier round resté non commité (T160, passifs)
+
+Le working tree contient mon dernier round (règle passive du chunker, T156/T157 à jour, porte T160) que le commit concurrent `d72269e0` n'a **pas** emporté : `git show HEAD:tools/pensee/autotest.py` ne connaît pas `t160`. Je le commite proprement, en vérifiant le contenu du commit cette fois.
 
 ## 3. Travail accompli
 
@@ -9204,7 +9213,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1436 autres
+- … et 1438 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9574,4 +9583,5 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - B13 — LES PASSIFS SANS PAR : LE CHUNKER 3/3 PATIENT, LE GÉNÉRATEUR S IGNORE ; 163/163" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "SANS PAR"; then e
 - ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COM
 - ÉTAT — T0 DANS LE BUDGET (3999) ; LA LIGNE B13 EST À 163/163 APRÈS L'AUTONOMIE" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "163/163 APRÈS"; then ech
+- B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163" -- tools/bloc_linguistique.py tools/pensee/autote
 

@@ -2271,7 +2271,7 @@ def t156_relation() -> tuple[bool, str]:
                 n += 1
                 if gv and (e.meta or {}).get("role") in ("agent", "patient", "destinataire"):
                     avec += 1
-    return n == 637 and avec == 221, f"relation : {avec}/{n} ({round(avec/n, 4)})"
+    return n == 637 and avec == 241, f"relation : {avec}/{n} ({round(avec/n, 4)})"
 
 
 def t157_roles() -> tuple[bool, str]:
@@ -2292,7 +2292,7 @@ def t157_roles() -> tuple[bool, str]:
                         avant += 1
                     else:
                         apres += 1
-    return n == 322 and avant == 129 and apres == 172, (
+    return n == 302 and avant == 109 and apres == 172, (
         f"rôles : {n} sans rôle, {avant} avant le GV, {apres} après")
 
 
@@ -2319,6 +2319,20 @@ def t159_passifs_corriges() -> tuple[bool, str]:
     from tools.bloc_linguistique import _role_gp
     return _role_gp("par") == "agent" and _role_gp("avec") == "moyen", (
         f"par → {_role_gp('par')}, avec → {_role_gp('avec')}")
+
+
+def t160_passifs_sans_par() -> tuple[bool, str]:
+    """Les passifs sans par : le chunker 3/3 patient."""
+    import tools.bloc_linguistique as bl
+    h = bl.Heuristique(segmenter_s=False)
+    ok = 0
+    for txt in ("Le livre est lu.", "La porte est ouverte.", "Les enfants sont partis."):
+        a = h.analyser(txt, "fr")
+        roles = [(e.meta or {}).get("role") for e in a.etiquettes
+                 if e.niveau == "syntagme" and e.type == "GN"]
+        if roles and roles[0] == "patient":
+            ok += 1
+    return ok == 3, f"passif sans par (chunker) : {ok}/3 patient"
 
 
 def main() -> int:
@@ -2479,7 +2493,8 @@ def main() -> int:
               ("T156 relation GN-GV", t156_relation()),
               ("T157 rôles par position", t157_roles()),
               ("T158 passifs", t158_passifs()),
-              ("T159 correctif passifs", t159_passifs_corriges())]
+              ("T159 correctif passifs", t159_passifs_corriges()),
+              ("T160 passifs sans par", t160_passifs_sans_par())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

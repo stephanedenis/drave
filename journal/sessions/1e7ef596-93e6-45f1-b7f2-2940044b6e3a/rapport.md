@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 8.5 h |
+| Durée | 8.6 h |
 | Tours | 57 |
-| Messages | 537 |
-| Appels d'outils | 747 |
+| Messages | 538 |
+| Appels d'outils | 748 |
 | Fichiers touchés | 15 |
-| Commandes | 562 |
+| Commandes | 563 |
 | Sous-agents | 0 |
-| Commits | 73 |
+| Commits | 74 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1669,15 +1669,16 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 57 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Run seven documentation controls
 - bash — Execute OCR re-split at exact char boundaries
 - bash — Record re-split in state and commit
+- bash — Trim D line, commit and verify
 
 **Synthèse produite :**
 
-⏵ Le re-split est fait (2/1/1, 8 Ko 0) ; je l'inscris dans l'état et je commite
+⏵ T0 à 4 010 : je resserre la ligne D, puis commit et contrôles
 
 ## 3. Travail accompli
 
@@ -1743,7 +1744,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 522 autres
+- … et 523 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1964,4 +1965,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT" -m "L'état repasse sous le budget (3997/4000) : les huit fiches B13 anciennes quittent le « Fait
 - ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)" -m "L'OCR des 8 .PDF est intégré : les 4 documents (54 167 car.) sont a
 - D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0" -m "Les quatre documents OCR sont répartis aux bornes exactes (Choquette 7 575 + DOC1 25 470 en
+- ÉTAT — T0 3 997 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)" -m "Le re-split OCR est fait et inscrit dans la ligne de D (train 4,46 M, val 32 220, test 12 711, 
 

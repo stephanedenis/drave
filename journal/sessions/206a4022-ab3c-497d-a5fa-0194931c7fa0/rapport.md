@@ -7,12 +7,12 @@
 | Identifiant | `206a4022-ab3c-497d-a5fa-0194931c7fa0` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 15:56 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 13 |
-| Appels d'outils | 15 |
+| Messages | 21 |
+| Appels d'outils | 26 |
 | Fichiers touchés | 0 |
-| Commandes | 15 |
+| Commandes | 25 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt Drave, racine /home/stephane/Data13TB/stephane/GitHub/Qtrinet (lis AGENTS.md pour le context … [4909 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Inspecte la racine et les répertoires cibles
 - bash — Date courante et liste des outils
@@ -41,11 +41,11 @@
 - bash — Aide du script de contamination
 - bash — Lecture du script de contamination
 - bash — Traces récentes et état git
-- … et 1 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ Recherche des traces de l'append et lancement de la contamination réelle
+⏵ Préfixes intacts confirmés ; préparation des copies et du contrôle négatif pendant l'OCR
 
 ## 3. Travail accompli
 
@@ -71,6 +71,16 @@
 - **T1** Lecture du script de contamination
 - **T1** Traces récentes et état git
 - **T1** Contrôle de contamination 8 Ko sur le corpus réel
+- **T1** Mesure indépendante du recouvrement append/ancien train
+- **T1** Restaure les 4 430 959 premiers octets et vérifie le hash
+- **T1** Contrôle de l'état réel du train après alerte
+- **T1** Processus et fichiers récemment modifiés
+- **T1** Que contiennent les nouveaux val et test
+- **T1** Lecture des constantes et fonctions OCR, liste des PDF
+- **T1** Vérifie les trois préfixes et les tailles
+- **T1** OCR des 8 PDF un par un sur cpu1
+- **T1** Copie des splits 15:57 pour le contrôle négatif
+- **T1** Injection alignée d'une fenêtre de val dans une copie du train
 
 ## 4. Mesures et résultats marquants
 

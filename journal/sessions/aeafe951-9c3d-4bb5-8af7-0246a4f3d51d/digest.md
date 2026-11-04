@@ -4173,3 +4173,133 @@ window new[30000:30500] trouvée old[3999195:3999695]
 fenêtres 500 o trouvées : 25 / 56
   ```
 
+### 🤖 Assistant
+
+⏵ Découverte : l'append du hub duplique des documents déjà présents — je redirige le sous-agent avant qu'il conclue
+
+- **send_message** `{"agent_id": "206a4022-ab3c-497d-a5fa-0194931c7fa0", "message": "STOP — la prémisse « 4 nouveaux documents » est fausse, et je viens de le mesurer. Ne conclus pas « 64 documents ». Voici la preuve indépendante, à rejouer toi-même avant de l'écrire :\n\n- `train[:4_430_959]` (l'ancien train, hash `6d … [2479 caractères tronqués]`
+
+  ```
+message delivered to agent 206a4022-ab3c-497d-a5fa-0194931c7fa0
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la cause : les `.PDF` majuscules ont-ils des jumeaux `.pdf` déjà dans le corpus ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for n in 'DOC' 'Choquette c. Chagnon' 'DOC1' 'DOC2' 'Assurance pour stagiaires' 'Assurance pour stagiaires-B2344-11403'; do echo \"== $n\"; find /home/stephane/Data13TB/stephane/archives/CEGEP -iname \"$n.pdf\" -printf '%s %p\\n' 2>/ … [95 caractères tronqués]`
+
+  ```
+== DOC
+85600 /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Déménagement du D-2227/DOC.PDF
+85600 /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Administration/Déménagement du D-2227/DOC.PDF
+== Choquette c. Chagnon
+144798 /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Inquiétudes/Choquette c. Chagnon.PDF
+144798 /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Administration/Inquiétudes/Choquette c. Chagnon.PDF
+== DOC1
+398003 /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/2014A/DOC1.PDF
+== DOC2
+318694 /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/2014A/DOC2.PDF
+== Assurance pour stagiaires
+20526 /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/H2014/Assurance pour stagiaires.PDF
+== Assurance pour stagiaires-B2344-11403
+20526 /home/stephane/Data13TB/stephane/archives/CEGEP
+… [110 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\nimport hashlib, re\ntr = Path('data/corpus_ocr_cegep/train.txt').read_bytes()\nn = 55857\nold, new = tr[:-n], tr[-n:]\nprint('sha old :', hashlib.sha256(old).hexdigest())\nprint('sha manife … [355 caractères tronqués]`
+
+  ```
+sha old : dfefb0aebeccef9d09e0d77bb95f7cab0a1312cfb30d0dd41189865fc7e218b9
+sha manifeste : 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310
+--- 95165 DOMINIQUE AUDET |  | Monsieur Stéphane Denis | 148, rue Bisson | Delson (Québec) J5B 2G9 |  | OBJET: |  | Stéphane Denis |  | -C- |  | Julie Choquette |  | Divorce |  | N/D: 1977- |  | Votre dossier DIVORCE |  | SERVICES RENDUS ET HONORAIRES |  | 16-10-12 | 02-11-12 |  | 05-11-12 |  | 14-11-12 | 14-11-12 |  | 23-11-12 |  | 23-11-12 |  | 23-11-12 |  | Rencontre avec vous-même: | Préparat
+--- 96519 elson (Québec) J5B 2G9 |  | Facture no: 1233 |  | Montréal, le 23 novembre 2012 |  | OBJET: Stéphane Denis Page 2de2 |  | -C- |  | Julie Choquette |  | Divorce |  | N/D: 1977- |  | Votre dossier DIVORCE |  | Temps Taux Honoraires  % Employé Total Redres. Redres. Emp. |  | CB Chantal Beauchesne 2,7500h. 170,00 467,50 7,8341 0,00 0,00 | DA Dominique Audet 18
+--- 97455 vier 2013 | Monsieur Stéphane Denis | | 148, rue Bisson | Delson (Québec) J5B 2G9 |  | Facture | OBJET: Stéphane Denis | -C- | Julie Choquette | Divorce | N/D: 1977- 1 de 2 | Facture no: 1243 | SERVICES RENDUS ET HONORAIRES Temps | 19-12-12 Rencontre avec vous-même
+… [1519 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hash de l'ancien train ne correspond plus au manifeste — je cherche l'original et je cadre la supervision
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find data work -type f -name '*.txt' -size +4200k -size -4800k -printf '%s %p\\n' 2>/dev/null | head -10; echo ====; grep -n \"sortie\\|racines\\|liste\" reports/ocr-pdf-cegep.json | head -10", "description": "Search for the original … [44 caractères tronqués]`
+
+  ```
+4633889 data/corpus_fr.txt
+4379837 data/udhr/udhr_train.txt
+4402195 data/corpus_fr_train.txt
+4836314 data/corpus_repo_propre/train.txt
+4464947 data/corpus_ocr_cegep/train.txt
+====
+11:  "detection": "liste explicite de scans qualifiés sur le texte intégral",
+12:  "liste": "work/ocr/scans-uniques.txt",
+42: "racines": [
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=+%H:%M:%S data/corpus_ocr_cegep/; date '+%H:%M:%S'; echo ====; ps -eo pid,etimes,args | grep -E '[o]cr_pdf|[c]orpus_ocr|[p]ython3 -' | head; echo ====; git log --oneline -2", "description": "Check live corpus mutat … [20 caractères tronqués]`
+
+  ```
+total 4412
+-rw-r--r--. 1 stephane stephane   12711 15:57:00 test.txt
+-rw-r--r--. 1 stephane stephane 4464947 15:57:00 train.txt
+-rw-r--r--. 1 stephane stephane   32220 15:57:00 val.txt
+15:58:56
+====
+ 660595      88 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n "D — clos" docs/pilotage/en-cours.md ; python3 - <<'PY' import pathlib, subprocess, re p=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text() h=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip() t=re.sub(r"\*\*Mis à jour : 2026-11-04, [0-9]{1,2} h [0-9]{2} HNE \(heure locale, EST\)\.\*\*", f"**Mis à jour : 2026-11-04, {h} HNE (heure locale, EST).**", t) t=t.replace("22 `.PDF` natifs exclus) ; 8 Ko 0 ; [fiche]", "22 `.PDF` natifs exclus) ; **re-split 2/1/1 fait** (train 4,46 M, val 32 220, test 12 711) ; 8 Ko 0 ; [fiche]") p.write_text(t); print('état OK', h) PY python3 tools/taille_documents.py 2>&1 | grep -E "T0 max" | head -1 ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo "LOCK" ; else git add docs/p
+… [853 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub réécrit le corpus en direct (re-split 2/1/1 à 15 h 57) — je vérifie l'intégrité des préfixes et préviens le sous-agent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\nimport hashlib\natt = {'train':(4430959,'6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310'),\n       'val':(12536,'dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063 … [582 caractères tronqués]`
+
+  ```
+train: taille 4464947 · préfixe 4430959 · sha préfixe 6d53a023db1ab7aa · manifeste 6d53a023db1ab7aa · OK
+val: taille 32220 · préfixe 12536 · sha préfixe dd605833f27eab63 · manifeste dd605833f27eab63 · OK
+test: taille 12711 · préfixe 10524 · sha préfixe 1c9ab73459c1e44a · manifeste 1c9ab73459c1e44a · OK
+====
+total 4412
+-rw-r--r--. 1 stephane stephane   12711 15:57:00 test.txt
+-rw-r--r--. 1 stephane stephane 4464947 15:57:00 train.txt
+-rw-r--r--. 1 stephane stephane   32220 15:57:00 val.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Fausse alerte de ma part : le corpus était réécrit pendant ma lecture — je corrige le sous-agent et je vérifie les préfixes
+
+- **send_message** `{"agent_id": "206a4022-ab3c-497d-a5fa-0194931c7fa0", "message": "CORRECTION IMPORTANTE — ignore mon message précédent sur le « doublon » : c'était un artefact de lecture pendant une réécriture. Le hub a réécrit le corpus à 15 h 57 (re-split 2/1/1) **pendant** que je mesurais ; j'ai comparé la queue  … [1961 caractères tronqués]`
+
+  ```
+message delivered to agent 206a4022-ab3c-497d-a5fa-0194931c7fa0
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle indépendant : contamination 8 Ko sur les fichiers 15 h 57 et débuts des suffixes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/ocr/cegep64 && python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_cegep/val.txt --test data/corpus_ocr_cegep/test.txt --taille-troncon 8192 --sortie work/ocr/cegep64/con … [136 caractères tronqués]`
+
+  ```
+started background job bash-201
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\nfor nom, prefixe in (('train',4430959), ('val',12536), ('test',10524)):\n    b = Path(f'data/corpus_ocr_cegep/{nom}.txt').read_bytes()\n    s = b[prefixe:prefixe+100].decode('utf-8','replac … [154 caractères tronqués]`
+
+  ```
+train: +33988 o · début du suffixe : Choquette c. Chagnon | CANADA |  | PROVINCE DE QUÉBEC COUR SUPÉRIEURE | DISTRICT DE ST-HYACINTHE (Chambre 
+val: +19684 o · début du suffixe :  | bliques Cisco. Page 1 sur 1 |  | (7 |  | DOC2 | of | fol | le | CISCO Cisco Networking Academy Mind Wide Open | �
+test: +2187 o · début du suffixe :  | formations publiques Cisco: Page 2 sur 2 |  | Assurance pour stagiaires-B2344-11403 | BFL CANADA risques
+  ```
+
+### 👤 Utilisateur
+
+Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message: 
+ALERTE data/ modifié pendant la session (pas par moi, rien écrit dans data/). À 15:57:00, data/corpus_ocr_cegep/ n'est plus l'état 15:49 : train 4 486 816→4 464 947 o (SHA 661e6386…), val 12 536→32 220 o, test 10 524→12 711 o. Le préfixe train[:4 430 959] est intact (SHA 6d53a023… conforme), suivi de 33 988 o ; le delta total (+55 859 o) ≈ le bloc de 55 857 o réparti sur les 3 splits : un re-split des 4 documents a été appliqué par un autre agent/hub. Aucun processus d'OCR en cours (ps vérifié). Conséquence : les SHA val dd6058…/test 1c9ab7… de ma mission initiale ne sont plus valides, et train_restaure.txt (déjà créé, 4 430 959 o, SHA 6d53a023… OK) reste la référence de restauration. Ma mesure sur l'état actuel : 24/34 fenêtres de 500 o (pas 1 000) du bloc ajouté sont exactes dans l'ancien train (70,6 %), Choquette 7× dans l'ancien, 149/200 fenêtres aléatoires de 200 o. Je continue la mesure par document et les livrables sur cet état, en documentant les deux états (15:49 et 15:57). Si le re-split est de toi, dis-moi lequel documenter comme état courant.
+
+### 👤 Utilisateur
+
+background job bash-201 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/ocr/cegep64 && python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_cegep/val.txt --test data/corpus_ocr_cegep/test.txt --taille-troncon 8192 --sortie work/ocr/cegep64/contamination-supervision.json 2>&1 | tail -25) finished [status: completed, exit code: 0]. Read its output with job_output.
+
