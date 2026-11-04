@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 92.1 h |
 | Tours | 161 |
-| Messages | 1961 |
-| Appels d'outils | 1684 |
+| Messages | 1964 |
+| Appels d'outils | 1687 |
 | Fichiers touchés | 25 |
-| Commandes | 1385 |
+| Commandes | 1388 |
 | Sous-agents | 2 |
 | Commits | 206 |
 | Compactages de contexte | 5 |
@@ -8540,7 +8540,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 
 ### Tour 161 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Lire le composite neuronal
 - bash — Lire la grammaire pragmatique et son usage
@@ -8549,6 +8549,9 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - bash — Lire l'analyser du tagger pragmatique
 - bash — Mesurer la pragmatique neuronale sur 130 phrases
 - job_output
+- bash — Lancer la passe complète avec la pragmatique
+- bash — Écrire la fiche de la pragmatique neuronale et la porte T148
+- bash — Trim README et passer toutes les portes
 
 ## 3. Travail accompli
 
@@ -8629,7 +8632,7 @@ Je continue la file : prochain round, **la pragmatique neuronale** — la seule 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1345 autres
+- … et 1348 autres
 
 ## 4. Mesures et résultats marquants
 

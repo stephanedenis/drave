@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**26 commits** · **5 session(s)** · **6 thème(s)**
+**27 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 2 | [apprentissage.md](apprentissage.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 9 | [docs.md](docs.md) |
+| docs | 10 | [docs.md](docs.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -58,6 +58,7 @@
 | 12:34 | `9593718e` | N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149 |
 | 12:38 | `6b0e9c83` | ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS |
 | 12:42 | `8cea841f` | B13 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; 150/150 |
+| 12:46 | `96c96ae9` | B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL |
 
 ## Le récit de la journée (écrit à la main)
 

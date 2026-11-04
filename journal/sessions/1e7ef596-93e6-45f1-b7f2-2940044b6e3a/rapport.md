@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 5.4 h |
-| Tours | 10 |
-| Messages | 204 |
-| Appels d'outils | 374 |
-| Fichiers touchés | 14 |
-| Commandes | 219 |
+| Tours | 11 |
+| Messages | 212 |
+| Appels d'outils | 386 |
+| Fichiers touchés | 15 |
+| Commandes | 229 |
 | Sous-agents | 0 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -43,6 +43,8 @@
 **Tour 9** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 **Tour 10** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
+
+**Tour 11** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -389,7 +391,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 10 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -402,10 +404,42 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check HEAD state for 150 and counters
 - bash — Integrate B13 150 variance across pilotage docs
 - bash — Commit B13 150 variance integration
+- bash — Verify cycle 5 commits and checks
+- bash — Verify links, journal, backlog and runs
 
 **Synthèse produite :**
 
-⏵ Commit B13 150/150 (variance) dans le pilotage
+⏵ Cycle 5 : B13 149→150 intégré (DRVM, variance), état et docs verts
+
+**Cycle 5 — la chaîne B13 est intégrée, de 149 à 150.**
+
+- **B13 149/149 — DRVM N0.1** : porte re-jouée sur mini-conteneur, **6/6** ; le lecteur vérifiait le hash du **manifeste** mais pas celui du **payload** — corrigé (`read_drvm(verifier=True)`), le payload corrompu est refusé. Commit `9593718e`, fiche `rapport-drvm-n01` + JSON committés.
+- **B13 150/150 — variance à 0,3** : **±0,0074 au pire, 7/7 seuils, refus 0**. Commit `8cea841f` (le commit B13 a emporté l'index : l'intégration 149/DRVM est passée avec lui), puis l'état/roadmap/chantiers/plan-travail à **150/150** (T0–T150) — commit `96c96ae9`.
+- **ERratum N2** (rappel) : le +0,10 de distillation était une **repondération** ; la paire propre donne −0,03/−0,01/−0,004 ; propagé dans l'état, la roadmap et le plan-travail (`6b0e9c83`).
+- **Contrôles** : revue ✅ **611 fiches / 698 JSON / 120 docs / 83 portes** ; **2 928 liens** ✅ ; backlog **frontière 3** ✅ ; journal **1 971 liens** ✅ ; tableaux ✅ ; `en-cours` **1 628 mots**, **T0 3 998 / 4 000** ✅.
+
+**WIP de leurs sessions** : S `rapport-s-paragraphes.md` (non committé), B13 `pensee-quatre-modes.json` / `bloc_linguistique.py` / `qualifier_quatre_modes.py` ; **runs** `kd2` (log bufferisé) et `rope2048` **6 200/20 000**, GPU 100 %.
+
+**Le goal reste actif** : la passe complète attend la fin des runs, et les faits S paragraphes (et la suite B13) seront intégrés à leurs commits.
+
+### Tour 11 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Check index, README rows and claim
+- read
+- bash — Inspect index regeneration diff
+- edit `reports/README.md`
+- bash — Add variance row and stage catalog updates
+- bash — Commit index and readme catalog updates
+
+**Synthèse produite :**
+
+⏵ Commit catalogue (INDEX 608, README variance) et état
 
 ## 3. Travail accompli
 
@@ -427,6 +461,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/references-non-regression.md` | 0 | 3 |
 | `docs/pilotage/plan-travail.md` | 0 | 1 |
+| `reports/README.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -470,7 +505,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 179 autres
+- … et 189 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -627,4 +662,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS" -m "Le +0,14–0,18 (et le +0,10 de la production) ve
 - B13 149/149 — DRVM N0.1 : LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé (9593718e, rappor
 - B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé (8cea841f, rapport-pen
+- INDEX — 606 → 608 (DRVM N0.1, VARIANCE) ; README — LA VARIANCE 150/150 AJOUTÉE ; ÉTAT 12 H 54" -m "Le catalogue généré rattrape les deux dernières fiches (DRVM 
 

@@ -35085,3 +35085,28 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-113", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+130 phrases — POS 0.9677 | syn 0.8795 | tête 0.9202
+pragma {'acte': 1.0, 'negation': 1.0, 'modalite': 0.9846, 'double_sens': 0.9769}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text()\nt=t.replace(\"from tools.bloc_linguistique import (PRIORITE_NIVEAU, Cascade, Heuristique,\\n                     … [963 caractères tronqués]`
+
+  ```
+started background job bash-114
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-pragmatique-neuronale.md <<'MD'\n# B13 — la pragmatique neuronale : 1,0 / 1,0 / 0,98 / 0,98 sur 130 phrases\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 · … [6916 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 611 fiche(s) · 699 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : ±0,0074 au pire, **150/150** |\\n\", \ … [582 caractères tronqués]`

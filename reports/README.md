@@ -15,8 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : ±0,0074 au pire, **150/150** |
+| [`rapport-pensee-pragmatique-neuronale.md`](rapport-pensee-pragmatique-neuronale.md) | **B13** — la pragmatique neuronale : acte 1,0, négation 1,0 sur 130 phrases, **151/151** |
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
+| [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |
 | [`rapport-pensee-seuil-parallele.md`](rapport-pensee-seuil-parallele.md) | **B13** — le seuil du parallèle : la confiance plafonne sous le max, **147/147** |
 | [`rapport-pensee-defaut-conditionnel.md`](rapport-pensee-defaut-conditionnel.md) | **B13** — le défaut conditionnel : niveau si la clé, confiance sinon, **146/146** |
 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |

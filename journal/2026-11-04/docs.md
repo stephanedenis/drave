@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,10 +17,11 @@
 | 12:13 | `625271c8` | INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+18) |
 | 12:16 | `7b11a93f` | ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19 | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 12:19 | `70c9df7e` | ÉTAT — COMPTEURS 610/696 ; HEURE CORRIGÉE (12 H 18) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
+| 12:46 | `96c96ae9` | B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+17) |
 
 ## Chiffres du jour
 
-`0,9326` · `0,9389`
+`0,0074` · `0,9326` · `0,9389`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

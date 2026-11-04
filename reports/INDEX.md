@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **606 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **608 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -123,6 +123,7 @@
 | [rapport-dessin-B-poids-creux.md](rapport-dessin-B-poids-creux.md) | Dessin B (poids creux) — le levier reste à trouver : élaguer coûte toujours cher |
 | [rapport-dialogue-diabla.md](rapport-dialogue-diabla.md) | Le dialogue réel (DiaBLa) : +40,3 / +44,2 au 1,5 B — mais la référence est une **post-édition**, pas une traduction |
 | [rapport-drapeaux-ignores.md](rapport-drapeaux-ignores.md) | Drapeaux et variables « analysés mais jamais appliqués » — audit systématique |
+| [rapport-drvm-n01.md](rapport-drvm-n01.md) | N0.1 — DRVM se lit-il ? Oui, et le payload est enfin vérifié |
 | [rapport-drvm-parite.md](rapport-drvm-parite.md) | N0.3b — DRVM ↔ checkpoint : 114/114 tenseurs identiques |
 | [rapport-drvm-ppl.md](rapport-drvm-ppl.md) | N0.3b — PPL DRVM ↔ GGUF : 28,7355, puis 59 / 1 076 octets ; close |
 | [rapport-drvm-trace.md](rapport-drvm-trace.md) | N0.5 — trace et rejeu DRVM : contenu, logits et rejeu exacts |
@@ -476,7 +477,7 @@
 | [rapport-pensee-porte-sto-graines.md](rapport-pensee-porte-sto-graines.md) | B13 — la porte stochastique, cinq graines : le 7B passe 5/5 (28–34 nœuds, 5–7 sonde) ; le labyrinthe 0/1, l'aveugle 0/1 |
 | [rapport-pensee-porte-sto.md](rapport-pensee-porte-sto.md) | B13 — la porte stochastique : le 7B l'ouvre (31 nœuds, 6 sonde, 13,0 s) ; sans la règle, 200/3/182,6 s ; le hasard par chance |
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
-| [rapport-pensee-pragmatique-neuronale.md](rapport-pensee-pragmatique-neuronale.md) | B13 — la pragmatique neuronale : parfaite sur les 20 réelles (dev), sous le majoritaire sur les 160 synthétiques (test) |
+| [rapport-pensee-pragmatique-neuronale.md](rapport-pensee-pragmatique-neuronale.md) | B13 — la pragmatique neuronale : 1,0 / 1,0 / 0,98 / 0,98 sur 130 phrases |
 | [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |
 | [rapport-pensee-quatre-modes-432.md](rapport-pensee-quatre-modes-432.md) | B13 — les quatre modes sur le gold 432 : le niveau gagne avec le réel |
 | [rapport-pensee-quatre-modes-run2.md](rapport-pensee-quatre-modes-run2.md) | B13 — la confirmation (run 2) : refus 0, le niveau gagne encore |
@@ -513,6 +514,7 @@
 | [rapport-pensee-ultra-rare.md](rapport-pensee-ultra-rare.md) | B13 — l'information ultra-rare : utile 0,1 %, 20/20 |
 | [rapport-pensee-un-look.md](rapport-pensee-un-look.md) | B13 — un seul look : 20/20 |
 | [rapport-pensee-v0.md](rapport-pensee-v0.md) | Pensée v0 — le state store, l'arbre hashé et six portes |
+| [rapport-pensee-variance.md](rapport-pensee-variance.md) | B13 — la variance à température 0,3 : ±0,007 au pire |
 | [rapport-pensee-verite.md](rapport-pensee-verite.md) | B13 — la vérité qui change : porte cachée, 20/20 aux deux phases |
 | [rapport-pensee-votante.md](rapport-pensee-votante.md) | B13 — l'observation votante : deux looks, 20/20, 1 % d'erreur |
 | [rapport-pensee-votante3.md](rapport-pensee-votante3.md) | B13 — l'observation à trois looks : 20/20, mais 4000 épisodes |
