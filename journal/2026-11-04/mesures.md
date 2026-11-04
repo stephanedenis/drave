@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,20 +12,22 @@
 | 10:14 | `4449646d` | B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+19) |
 | 10:49 | `7632ab94` | B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+18) |
 | 11:17 | `862d9c2f` | B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144 | `moteur-de-pensee.md`, `en-cours.md`, `modele-natif.md` (+17) |
+| 11:46 | `af28eadd` | B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
+| 11:50 | `c83f58b5` | S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE | `en-cours.md`, `README.md`, `distribue.md` (+19) |
 
 ## Chiffres du jour
 
-`0,7455` · `0,9309` · `0,8226` · `0,8784` · `0,7424` · `0,3432`
+`0,9389` · `0,7455` · `0,9309` · `0,8226` · `0,8784` · `0,7424` · `0,3432`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 43.4 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
-- `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 4.4 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 43.6 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
+- `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 4.5 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 43.6 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
-- `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 2.4 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 91.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 2.5 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 91.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -34,6 +36,8 @@
 - [reports/rapport-pensee-defaut-niveau.md](../../reports/rapport-pensee-defaut-niveau.md)
 - [reports/rapport-pensee-elision.md](../../reports/rapport-pensee-elision.md)
 - [reports/rapport-pensee-quatre-modes-432.md](../../reports/rapport-pensee-quatre-modes-432.md)
+- [reports/rapport-pensee-quatre-modes-run2.md](../../reports/rapport-pensee-quatre-modes-run2.md)
+- [reports/rapport-s-fait-divers.md](../../reports/rapport-s-fait-divers.md)
 - [reports/rapport-s-paragraphes.md](../../reports/rapport-s-paragraphes.md)
 
 <!-- notes -->

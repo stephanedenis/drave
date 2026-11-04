@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 91.1 h |
-| Tours | 159 |
-| Messages | 1903 |
-| Appels d'outils | 1628 |
+| Durée | 91.2 h |
+| Tours | 160 |
+| Messages | 1911 |
+| Appels d'outils | 1635 |
 | Fichiers touchés | 25 |
-| Commandes | 1340 |
+| Commandes | 1344 |
 | Sous-agents | 2 |
 | Commits | 200 |
 | Compactages de contexte | 5 |
@@ -33,6 +33,10 @@
 … [253 caractères tronqués]
 - **resume** — Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantier
 … [253 caractères tronqués]
+- **edit** — Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pa
+… [193 caractères tronqués]
+- **resume** — Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pa
+… [193 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -353,6 +357,8 @@
 **Tour 158** — ok, tiens en compte pour notre stratégie de modèle natif drave et continue
 
 **Tour 159** — go
+
+**Tour 160** — vas-y en automomie pour le 4 prochaines heures
 
 ## 2. Déroulé, étape par étape
 
@@ -8433,7 +8439,58 @@ Une section a été ajoutée à « Ce qui est original » : **le service distant
 
 **Synthèse produite :**
 
-⏵ Attendre la passe de confirmation
+⏵ Confirmation (run 2) : refus 0, le niveau gagne encore (0,9389) ; 145/145
+
+La passe API est **rejouée** après le correctif d'élision : **aucun refus**, et le niveau gagne encore. Commit **`af28eadd`**.
+
+\## Run 1 contre run 2
+
+| mode | POS (run 1) | **POS (run 2)** | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|---:|
+| heuristique | 0,7394 | **0,7444** | 0,2520 | 0,4511 | 0,9954 |
+| neuronal | 0,9309 | **0,9389** | 0,8241 | 0,8797 | 0,0000 |
+| parallèle | 0,9280 | 0,9326 | 0,8029 | 0,8571 | 0,9954 |
+| cascade | 0,9280 | 0,9326 | 0,8029 | 0,8571 | 0,9954 |
+| **parallele_niveau** | 0,9309 | **0,9389** | **0,8241** | **0,8797** | 0,9954 |
+| **cascade_niveau** | 0,9309 | **0,9389** | **0,8241** | **0,8797** | 0,9954 |
+
+**Ce que ça dit** :
+
+- **Le refus `r353` est tombé** : `refus 0`, `aucun_refus: True` — l'élision séparée aligne la tokenisation du bloc sur celle du modèle (la cause était bien là).
+- **Le niveau gagne encore** (0,9389) et le gain est **stable** (run 1 : 0,9309) : ce n'est pas un accident d'une passe.
+- **La pragmatique reste à l'heuristique** (0,9954) : le neuronal seul la perd (acte 0,0) ; c'est la **raison d'être de la fusion par niveau**.
+- **Le coût est stable** : 858 appels, 254 454 tokens, 807,6 s de latence.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-quatre-modes-run2.md`](../../reports/rapport-pensee-quatre-modes-run2.md) ; brut [`pensee-quatre-modes-432-run2.json`](../../reports/pensee-quatre-modes-432-run2.json) ; résumé [`pensee-quatre-modes-run2.json`](../../reports/pensee-quatre-modes-run2.json) ; T142 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **145/145 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **604 fiches / 690 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (13 h 35).
+- L'horloge réelle est **11 h 48 HNE** ; le goal est actif.
+- **Un point à trancher** : le seuil `parallele` échoue encore (0,9326 < 0,9299 ?) — le seuil du banc est peut-être à réviser, ou le mode `parallele` (confiance) est intrinsèquement sous le niveau.
+
+\## La suite
+
+1. **Le défaut `PRIORITE_NIVEAU`** : les deux passes convergent ; il peut devenir le défaut des portes **quand la clé est présente** (sinon la confiance).
+2. **Le seuil du `parallele`** : le réviser ou le documenter.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la clé** — la décision que les deux passes autorisent.
+
+### Tour 160 — vas-y en automomie pour le 4 prochaines heures
+
+*7 appels d'outils.* Actions notables :
+
+- get_goal
+- update_goal
+- bash — Voir les constructeurs de Parallele et Cascade
+- bash — Conditionner le défaut à la présence de la clé
+- bash — Écrire la fiche du défaut conditionnel et la porte T143
+- bash — Trim T0/README et passer toutes les portes
+
+**Synthèse produite :**
+
+⏵ Passer en autonomie 4 h : mettre le goal à jour puis enchaîner les rounds
 
 ## 3. Travail accompli
 
@@ -8514,7 +8571,7 @@ Une section a été ajoutée à « Ce qui est original » : **le service distant
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1300 autres
+- … et 1304 autres
 
 ## 4. Mesures et résultats marquants
 

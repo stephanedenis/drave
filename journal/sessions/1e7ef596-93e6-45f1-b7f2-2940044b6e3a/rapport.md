@@ -7,12 +7,12 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 4.4 h |
+| Durée | 4.5 h |
 | Tours | 5 |
-| Messages | 116 |
-| Appels d'outils | 234 |
-| Fichiers touchés | 9 |
-| Commandes | 127 |
+| Messages | 125 |
+| Appels d'outils | 253 |
+| Fichiers touchés | 11 |
+| Commandes | 130 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -194,7 +194,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 5 — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la docum … [23 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*49 appels d'outils.* Actions notables :
 
 - bash — Check sessions, recent commits and tree
 - bash — Run documentation review and state freshness
@@ -210,11 +210,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Read current full state
 - bash — Read B13 state-line updates in recent commits
 - bash — Read N3 report conclusion and backlog page
-- … et 9 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ Vérification de l'heure réelle et des faits S/B13 committés ou WIP
+⏵ Lectures fraîches de la roadmap, des références et du runbook
 
 ## 3. Travail accompli
 
@@ -230,7 +230,9 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 | `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 2 |
 | `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 2 |
 | `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 3 |
-| `docs/pilotage/en-cours.md` | 0 | 60 |
+| `docs/pilotage/en-cours.md` | 2 | 60 |
+| `reports/rapport-n3-inventaire.md` | 0 | 1 |
+| `docs/pilotage/backlog/N3-operations-natives.md` | 0 | 6 |
 
 ### Commandes exécutées (échantillon)
 
@@ -274,7 +276,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 87 autres
+- … et 90 autres
 
 ## 4. Mesures et résultats marquants
 

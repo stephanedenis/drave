@@ -9123,3 +9123,39 @@ fiche v7 absente
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **réf … [3006 caractères tronqués]`
+
+  ```
+T0/INDEX v7
+     · T0 : 4024 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 606 fiche(s) · 691 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1654 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at af28eaddd29d95d923d6f70c5da17823a76ecbd5 but expected 39b7ef00f822cbf30c212f49dfcb92db879ba6c7
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+To github.com:stephanedenis/drave.git
+   39b7ef00..af28eadd  master -> master
+af28eaddd29d95d923d6f70c5da17823a76ecbd5	refs/heads/master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"- **Fait** : types **61/61**, rôles **144/144** ; corpus 8,5 %/65,5 % ; banque **9** paragraphes ; arbre  … [1834 caractères tronqués]`
+
+  ```
+❌ 1 violation(s) :
+     · T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+Switched to a new branch 's/v7'
+ M docs/pilotage/backlog/N3-operations-natives.md
+ M docs/pilotage/backlog/index.md
+M  docs/pilotage/en-cours.md
+ M journal/2026-11-04/README.md
+ 22 files changed, 367 insertions(+), 65 deletions(-)
+ create mode 100644 reports/rapport-s-fait-divers.md
+c83f58b5 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+To github.com:stephanedenis/drave.git
+ * [new branch]        s/v7 -> s/v7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"types **61/61**, rôles **144/144** ; corpus 8,5 %/65,5 % ; page **`/paragraphes`** ; **56 tests** ; [anal … [1034 caractères tronqués]`

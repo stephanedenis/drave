@@ -34099,3 +34099,144 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-68", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-quatre-modes-run2.json
+ create mode 100644 reports/rapport-pensee-quatre-modes-run2.md
+COMMIT OK 1
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+mer 04 nov 2026 11:48:43 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirmation (run 2) : refus 0, le niveau gagne encore (0,9389) ; 145/145
+
+La passe API est **rejouée** après le correctif d'élision : **aucun refus**, et le niveau gagne encore. Commit **`af28eadd`**.
+
+## Run 1 contre run 2
+
+| mode | POS (run 1) | **POS (run 2)** | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|---:|
+| heuristique | 0,7394 | **0,7444** | 0,2520 | 0,4511 | 0,9954 |
+| neuronal | 0,9309 | **0,9389** | 0,8241 | 0,8797 | 0,0000 |
+| parallèle | 0,9280 | 0,9326 | 0,8029 | 0,8571 | 0,9954 |
+| cascade | 0,9280 | 0,9326 | 0,8029 | 0,8571 | 0,9954 |
+| **parallele_niveau** | 0,9309 | **0,9389** | **0,8241** | **0,8797** | 0,9954 |
+| **cascade_niveau** | 0,9309 | **0,9389** | **0,8241** | **0,8797** | 0,9954 |
+
+**Ce que ça dit** :
+
+- **Le refus `r353` est tombé** : `refus 0`, `aucun_refus: True` — l'élision séparée aligne la tokenisation du bloc sur celle du modèle (la cause était bien là).
+- **Le niveau gagne encore** (0,9389) et le gain est **stable** (run 1 : 0,9309) : ce n'est pas un accident d'une passe.
+- **La pragmatique reste à l'heuristique** (0,9954) : le neuronal seul la perd (acte 0,0) ; c'est la **raison d'être de la fusion par niveau**.
+- **Le coût est stable** : 858 appels, 254 454 tokens, 807,6 s de latence.
+
+## L'état
+
+- Fiche : [`rapport-pensee-quatre-modes-run2.md`](../../reports/rapport-pensee-quatre-modes-run2.md) ; brut [`pensee-quatre-modes-432-run2.json`](../../reports/pensee-quatre-modes-432-run2.json) ; résumé [`pensee-quatre-modes-run2.json`](../../reports/pensee-quatre-modes-run2.json) ; T142 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **145/145 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **604 fiches / 690 JSON / 120 docs / 82 portes** — ✅ ; `en-cours` à jour (13 h 35).
+- L'horloge réelle est **11 h 48 HNE** ; le goal est actif.
+- **Un point à trancher** : le seuil `parallele` échoue encore (0,9326 < 0,9299 ?) — le seuil du banc est peut-être à réviser, ou le mode `parallele` (confiance) est intrinsèquement sous le niveau.
+
+## La suite
+
+1. **Le défaut `PRIORITE_NIVEAU`** : les deux passes convergent ; il peut devenir le défaut des portes **quand la clé est présente** (sinon la confiance).
+2. **Le seuil du `parallele`** : le réviser ou le documenter.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la clé** — la décision que les deux passes autorisent.
+
+
+## Tour 160
+
+### 👤 Utilisateur
+
+vas-y en automomie pour le 4 prochaines heures
+
+### 🤖 Assistant
+
+⏵ Passer en autonomie 4 h : mettre le goal à jour puis enchaîner les rounds
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":3,"objective":"Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.","phase":"active","roundsStarted":141,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "edit", "goal_id": "goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d", "objective": "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel ( … [324 caractères tronqués]`
+
+> **Objectif** (edit) : Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file.
+
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":4,"objective":"Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file.","phase":"active","roundsStarted":141,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d", "revision": 4}`
+
+> **Objectif** (resume) : Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file.
+
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":5,"objective":"Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file.","phase":"active","roundsStarted":141,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"priorite_par_niveau: dict | None = None\" tools/bloc_linguistique.py | head -3; sed -n '1385,1420p' tools/bloc_linguistique.py", "description": "Voir les constructeurs de Parallele et Cascade"}`
+
+  ```
+1339:            priorite_par_niveau: dict | None = None) -> Annotation:
+1389:                 priorite_par_niveau: dict | None = None):
+1411:                 priorite_par_niveau: dict | None = None):
+    nom = "parallele"
+
+    def __init__(self, blocs: Sequence[BlocLinguistique],
+                 priorite_syntagme: str = "heuristique",
+                 priorite_par_niveau: dict | None = None):
+        if len(blocs) != 2:
+            raise ValueError("le parallèle attend exactement deux blocs")
+        self.blocs = list(blocs)
+        self.priorite_syntagme = priorite_syntagme
+        self.priorite_par_niveau = priorite_par_niveau
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        a = self.blocs[0].analyser(texte, langue, contexte)
+        b = self.blocs[1].analyser(texte, langue, contexte)
+        return _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau)
+
+
+class Cascade:
+    """L'heuristique d'abord ; le neuronal seulement si un niveau reste sous le seuil."""
+
+    nom = "cascade"
+
+    def __init__(self, heuristique: BlocLinguistique, neuronal: BlocLinguistique,
+                 
+… [518 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nif \"import os\" not in t.split(\"\\n\")[:40]:\n    t=t.replace(\"from __future__ import annotations\", \"from __future__ import annotat … [1218 caractères tronqués]`
+
+  ```
+patch appliqué
+sans clé : None
+avec clé : niveau
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-defaut-conditionnel.md <<'MD'\n# B13 — le défaut conditionnel : le niveau si le réel est là\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·\n> **Verdict**  … [6531 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 607 fiche(s) · 692 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · reports/README.md : 2805 mots > budget 2800 (T1)
+     · T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"le **seuil du `parallele`** (T143 : défaut conditionnel au joignable ; le seuil échoue encore) ;\",\n            \"le * … [1042 caractères tronqués]`

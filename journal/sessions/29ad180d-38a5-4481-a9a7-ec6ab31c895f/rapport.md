@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 43.6 h |
 | Tours | 17 |
-| Messages | 439 |
-| Appels d'outils | 423 |
+| Messages | 441 |
+| Appels d'outils | 425 |
 | Fichiers touchés | 17 |
-| Commandes | 336 |
+| Commandes | 338 |
 | Sous-agents | 0 |
-| Commits | 38 |
+| Commits | 40 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -590,7 +590,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 
 ### Tour 17 — ensuite?
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Implement v7 fait-divers GN head rule
 - bash — Inspect current GN branch for v7 bug
@@ -601,6 +601,8 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - bash — Reapply v7 on newest HEAD, commit, push
 - bash — Inspect hub commit state for v7 and T0
 - bash — Trim T0, add v7 fiche/index, commit and push
+- bash — Trim T0 and commit v7 on a branch
+- bash — Final T0 trim, amend branch, force-push
 
 **Synthèse produite :**
 
@@ -672,7 +674,7 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 296 autres
+- … et 298 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -841,4 +843,6 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
+- S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' from pathlib import Path p=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf
 

@@ -2697,3 +2697,99 @@ M  reports/README.md
 M  tools/pensee/autotest.py
   ```
 
+- **bash** `{"command": "sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; git diff --cached --stat | tail -3; ls .git/index.lock 2>/dev/null || echo 'pas de verrou'", "description": "Wait for the other session's commit to land"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-107]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-107", "timeout_ms": 30000, "wait": true}`
+
+  ```
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+pas de verrou
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-107 (bash: sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; git diff --cached --stat | tail -3; ls .git/index.lock 2>/dev/null || echo 'pas de verrou') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ L'a commité ; je reprends l'index pour le backlog N3
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo ====; git status --short | head -12; echo ====; grep -n \"N3 — clos\\|portes | \\|fichiers / JSON\" docs/pilotage/en-cours.md; echo ====; git diff --cached --stat | tail -3", "description": "Check HEAD afte … [35 caractères tronqués]`
+
+  ```
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+====
+ M docs/pilotage/backlog/N3-operations-natives.md
+ M docs/pilotage/backlog/index.md
+ M docs/pilotage/en-cours.md
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M reports/pensee-quatre-modes.json
+ M tools/structures
+?? reports/rapport-s-fait-divers.md
+?? reports/rapport-s-paragraphes.md
+====
+104:- **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
+114:| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+116:| fichiers / JSON de résultats | **606** / **691** | `reports/*.md` / `reports/*.json` |
+====
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/pilotage/en-cours.md", "description": "Inspect the remaining en-cours diff"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 226572f0..6e86ca2b 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -54,13 +54,12 @@
+ - **Ambition** : nommer le rôle et la frontière GN.
+ - **Stratégie** : une règle = trois contrôles.
+ - **Objectif final** : gold 60, corpus 60.
+-- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
++- **Fait** : types **61/61**, rôles **144/144** ; corpus 8,5 %/65,5 % ; banque **9** paragraphes ; arbre 99 à ≥3, référents 294/371 ; page **`/paragraphes`** ; **56 tests** ; [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [v7](../../reports/rapport-s-fait-divers.md).
+ - **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67**.
+ - **Ce que font les autres** : **hub**, **N2**, **Pensée**.
+ - **Prochaine 
+… [524 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md reports/rapport-s-fait-divers.md 2>/dev/null; date '+%H:%M:%S'; sleep 45; echo '--- après 45 s ---'; git log --oneline -1; git status --short | grep -E 'en-cours|rapport-s-fait'" … [68 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 11556 11:47:58 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane  2904 11:42:30 reports/rapport-s-fait-divers.md
+11:49:51
+--- après 45 s ---
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+M  docs/pilotage/en-cours.md
+A  reports/rapport-s-fait-divers.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 50; git log --oneline -2; echo ====; git diff --cached --stat | tail -3", "description": "Wait for S's commit and check the index"}`
+
+  ```
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+====
+ reports/rapport-s-fait-divers.md | 47 ++++++++++++++++++++++++++++++++++++++++
+ tools/structures                 |  2 +-
+ 3 files changed, 50 insertions(+), 4 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; git log --oneline -2; echo ====; git diff --cached --stat | tail -2; date '+%H:%M:%S'", "description": "Wait for S's commit to complete"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-112]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+

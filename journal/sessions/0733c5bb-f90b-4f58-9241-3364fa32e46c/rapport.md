@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 43.4 h |
+| Durée | 43.6 h |
 | Tours | 8 |
-| Messages | 757 |
-| Appels d'outils | 704 |
+| Messages | 759 |
+| Appels d'outils | 706 |
 | Fichiers touchés | 27 |
-| Commandes | 521 |
+| Commandes | 523 |
 | Sous-agents | 0 |
 | Commits | 27 |
 | Compactages de contexte | 0 |
@@ -255,7 +255,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 8 — reprends
 
-*32 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Check time, runs, GPU and git state
 - bash — Inspect relaunched runs and reboot commit
@@ -271,7 +271,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Wait for the corrected alpha=0 control
 - bash — Poll corrected alpha=0 run
 - bash — Wait for corrected alpha=0 completion
-- … et 10 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
@@ -353,7 +353,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 481 autres
+- … et 483 autres
 
 ## 4. Mesures et résultats marquants
 

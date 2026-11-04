@@ -4335,3 +4335,70 @@ reports/INDEX.md                                   |   1 +
  tools/pensee/autotest.py                           |  29 ++-
   ```
 
+### 🤖 Assistant
+
+⏵ Réécriture de l'état : N3 clos, N2/S/L actifs, B13 144/144, une seule voix
+
+- **write** `{"file_path": "docs/pilotage/en-cours.md", "content": "# En ce moment\n\n**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**\n\n> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et\n> plan plus bas (**La carte**).\n>\n> **Reboot du 03/11 19 h 33* … [10307 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier a changé (session active) ; relecture puis réécriture
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 160}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-04, 13 h 35 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reboot du 03/11 19 h 33** : la nuit a été coupée net — `kd2` à **8 250/30 000** pas et
+9: > `rope2048` à **3 350/20 000**, **sans checkpoint** ; les quatre sessions sont **en pause**.
+10: > Reprise par le hub le **04/11 08 h** : analyse des sessions, tâches courtes, état, intégration ;
+11: > runbook [`plan-travail.md`](plan-travail.md) § 9, plan de la nuit § 11.
+12: 
+13: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+14: 
+15: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+16: - **Rôle** : **Hub de reprise** — analyse des quatre sessions interrompues, tâches courtes, état.
+17: - **Fait** : index réparé (`git read-tree HEAD`) ; N2/S/Pensée triés ; **8 verdicts S** committés ; banque **84/67** ; **fix FIFO** (+3 tests) ;
+… [10887 caractères tronqués]
+  ```
+
+- **write** `{"content": "# En ce moment\n\n**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**\n\n> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et\n> plan plus bas (**La carte**).\n>\n> **Reboot du 03/11 19 h 33** : la nuit a été coupée (`kd2` **8 250/30 … [10309 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de l'état hors course (fichier temporaire puis remplacement atomique)
+
+- **bash** `{"command": "cat > /tmp/en-cours.hub.md <<'EOF'\n# En ce moment\n\n**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**\n\n> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et\n> plan plus bas (**La carte**).\n>\n> **Reboot du 03/11 19 h 33** : la … [10461 caractères tronqués]`
+
+  ```
+1528 /tmp/en-cours.hub.md
+15:> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+134:- Méthode : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/en-cours.hub.md docs/pilotage/.en-cours.hub.tmp && mv docs/pilotage/.en-cours.hub.tmp docs/pilotage/en-cours.md && git add docs/pilotage/en-cours.md && git status --short docs/pilotage/en-cours.md && head -3 docs/pilotage/en- … [77 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+# En ce moment
+
+**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**
+  ```
+
