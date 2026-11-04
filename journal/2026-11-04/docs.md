@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (21)
+## Commits du jour (22)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -29,6 +29,7 @@
 | 13:32 | `8a0de643` | ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34 | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
 | 13:41 | `b710b7e6` | B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+15) |
 | 13:58 | `24d5b571` | B13 156/156 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042 ; ÉTAT, ROADMAP, CHANTIERS, PLAN | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+16) |
+| 14:04 | `f20662d7` | ÉTAT — HEURE 14 H 05 ; B13 156/156, N2 α = 0,9 À 6 400 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+13) |
 
 ## Chiffres du jour
 

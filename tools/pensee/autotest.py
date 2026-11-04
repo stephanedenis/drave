@@ -2229,6 +2229,16 @@ def t153_attachement() -> tuple[bool, str]:
         f"couverture {r['couverture']}")
 
 
+def t154_cibles() -> tuple[bool, str]:
+    """Les cibles de l'attachement : 1624 segments sans cible sur 1863."""
+    from ..tests.linguistique.evaluer_gold import charger
+    ph = charger()
+    tot = sum(len(p["segments"]) for p in ph)
+    sans = sum(1 for p in ph for s in p["segments"] if not s.get("cible"))
+    return tot == 1863 and sans == 1624, (
+        f"cibles : {sans}/{tot} segments sans cible (couverture {round((tot-sans)/tot,4)})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2381,7 +2391,8 @@ def main() -> int:
               ("T150 fusion sous-type", t150_fusion_soustype()),
               ("T151 variance sous-type", t151_soustype_variance()),
               ("T152 trois tirages", t152_tirages()),
-              ("T153 attachement", t153_attachement())]
+              ("T153 attachement", t153_attachement()),
+              ("T154 cibles", t154_cibles())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "157/157",
+ "segments": 1863,
+ "sans_cible": 1624,
+ "avec_cible": 239,
+ "couverture": 0.1283,
+ "limites": [
+  "l'attachement n'est pas annoté pour 1624 segments",
+  "gold 432",
+  "deux dénominateurs"
+ ]
+}

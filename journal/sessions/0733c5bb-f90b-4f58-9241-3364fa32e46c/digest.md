@@ -10511,3 +10511,19 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-49", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/pond4-mix512-15k.log", "description": "Poll both controls again"}`
+
+  ```
+14:05:18
+kdpp a=0 fini 13:09:40
+� 1864 s
+pas 11000 · perte 0.9849 · 2050 s
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log", "description": "Wait for the two production arms", "timeoutMs": 600000}`
