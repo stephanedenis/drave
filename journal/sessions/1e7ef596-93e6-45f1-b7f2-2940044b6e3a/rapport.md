@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 8.2 h |
 | Tours | 48 |
-| Messages | 500 |
-| Appels d'outils | 716 |
+| Messages | 502 |
+| Appels d'outils | 718 |
 | Fichiers touchés | 15 |
-| Commandes | 531 |
+| Commandes | 533 |
 | Sous-agents | 0 |
-| Commits | 69 |
+| Commits | 71 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1457,7 +1457,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 48 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1473,11 +1473,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Retry commit for 163 and production
 - bash — Remention facts in state and commit
 - bash — Verify cycle 43 final checks
-- … et 4 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Deux jobs de commit se sont enchaînés ; je collecte les deux résultats
+⏵ Les commits de session se succèdent (77aa0b3f) ; je vérifie l'état et retente le trim
 
 ## 3. Travail accompli
 
@@ -1543,7 +1543,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 491 autres
+- … et 493 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1671,7 +1671,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-14 sorties en erreur ou divergentes. Les premières :
+15 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -1687,6 +1687,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T48** : # N2 — La distillation native : le professeur long dans un élève à fenêtre courte  > **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03/04 · **Verdict — ERRATUM** : > le gain annoncé 
 - **T48** : ligne 95 OK   T0 max : 3998 mots (budget 4 000)   revue de documentation · 623 fiche(s) · 716 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)   ✅ tout passe : classement, structure, annotation, fraîch
 - **T48** : [stderr]   ❌ commit refusé : 3 fait(s) stagé(s) sans docs/pilotage/en-cours.md      · docs/pilotage/roadmap.md      · reports/pensee-passifs-sans-par.json      · reports/rapport-pensee-passifs-sans-pa
+- **T48** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 77aa0b3f1309474913055c14ec82c2b225a96db4 but expected 3e73690122c14447a49c1204812089c332f28bad [exit code: 128]
 
 ## 6. Commits
 
@@ -1759,4 +1760,6 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)" -m "Deux faits : côté B13, le chunker détecte l
 - LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)" -m "La fiche du rapport OCR se liait à elle-même par ../../reports/ : deux liens cassés, corrigés en 
 - LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 3 998)" -m "La fiche du rapport OCR se liait à elle-même par ../../reports/ : deux liens cassés, corrigés en ./ (l
+- ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT, LA FICHE OCR ENTRE DANS D" -m "L'état repasse sous le budget : les huit fiches B13 anciennes (DR
+- ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT" -m "L'état repasse sous le budget (3997/4000) : les huit fiches B13 anciennes quittent le « Fait
 

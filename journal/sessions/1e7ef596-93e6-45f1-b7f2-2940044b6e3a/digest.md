@@ -14752,3 +14752,16 @@ fatal: cannot lock ref 'HEAD': is at 3e73690122c14447a49c1204812089c332f28bad bu
 ⏵ Le commit T0 a été devancé par le précédent ; je retente le trim d'état (T0 3 997)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK\" ; else git add docs/pilotage/en-cours.md && git commit -m \"ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT … [469 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 77aa0b3f1309474913055c14ec82c2b225a96db4 but expected 3e73690122c14447a49c1204812089c332f28bad
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les commits de session se succèdent (77aa0b3f) ; je vérifie l'état et retente le trim
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 77aa0b3f ===\" ; git show --stat --oneline 77aa0b3f | head -8 ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; echo … [654 caractères tronqués]`

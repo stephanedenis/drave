@@ -9,10 +9,10 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 6.2 h |
 | Tours | 4 |
-| Messages | 159 |
-| Appels d'outils | 195 |
+| Messages | 162 |
+| Appels d'outils | 197 |
 | Fichiers touchés | 7 |
-| Commandes | 163 |
+| Commandes | 165 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -182,7 +182,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ### Tour 4 — peux-tu prendre une tâche
 
-*57 appels d'outils.* Actions notables :
+*59 appels d'outils.* Actions notables :
 
 - bash — Check repo, runs, and GPU state
 - bash — Read A8.3b report and list A8.3 files
@@ -198,11 +198,40 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - bash — Read the OCR pipeline script
 - bash — Check tesseract install and find uppercase PDF scans
 - bash — Inspect the CEGEP OCR manifest structure
-- … et 39 autres
+- … et 41 autres
 
 **Synthèse produite :**
 
-⏵ Un autre commit est passé pendant le mien — je resynchronise sans perdre l'état
+⏵ D est mesuré, écrit et intégré — vérifications finales vertes
+
+**Tâche prise : D — les 8 `.PDF` restants** (la dernière limite nommée de « Ce qui reste », CPU seule, sans toucher aux GPU ni aux runs N2). Elle est **faite, mesurée et committée** — le hub l'a intégrée dans `3e736901` (« LIENS OCR + COMPTEURS 624 »).
+
+\## La mesure
+
+| | |
+|---|---:|
+| `.PDF` majuscules du fonds CEGEP | **30** |
+| scans qualifiés (texte natif **0** car/p) | **8** / **58 p** |
+| `.PDF` natifs exclus (contrôle) | **22** (307–3 688 car/p — aucun entre 0 et 307) |
+| OCR (tesseract 5.5.3, 300 dpi, 8 ouvriers, cpu1) | **90,1 s** |
+| fichiers uniques / textes distincts | **6** / **5** |
+| documents retenus | **4** — **49 p**, **54 167 car.**, 8 736 mots, 9 tronçons de 8 Ko |
+| doublons identiques au bit près | **3/3** (DOC, Choquette, Assurance) |
+| formulaire écarté et nommé | **1** (210 car., sous le seuil de 300) |
+
+Le rapport CEGEP annonçait « 8 scans, 58 p (6 uniques) » : les pages sont justes, le « 6 uniques » comptait des **fichiers**, pas des **textes** — l'OCR tranche à **4 documents**.
+
+\## Ce qui est livré
+
+- `reports/rapport-ocr-pdf-restants.md` — la fiche (qualification, table par fichier, empreintes, contrôles, limites) ;
+- `reports/ocr-pdf-restants.json` — le manifeste (agrégats, SHA-256, dispositif) ;
+- la ligne d'état dans `en-cours` : **D — clos : les 8 `.PDF` OCRisés (4 documents, 49 p, 54 167 car.)** ; compteurs **624 fiches / 717 JSON**.
+
+\## Ce qui reste explicitement au hub
+
+L'**intégration au corpus CEGEP** (60 → 64 documents, 1 982 → 2 031 pages) n'est pas faite : `data/` est réservé par N2, et relancer `ocr_pdf.py --sortie data/corpus_ocr` **écraserait** les splits existants. Il faut un ajout explicite, un **re-split** (les 4 documents tombent tous en train) et le contrôle de contamination à 8 Ko. La fiche le dit et donne les chiffres.
+
+Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --head` ✅ (dernier fait = dernier état), `verifie_backlog` ✅, claim `cpu1` libéré. Les runs N2 (2 048 relancé) n'ont pas été touchés.
 
 ## 3. Travail accompli
 
@@ -260,7 +289,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 123 autres
+- … et 125 autres
 
 ## 4. Mesures et résultats marquants
 

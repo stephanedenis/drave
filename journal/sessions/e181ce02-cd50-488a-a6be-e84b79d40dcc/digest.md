@@ -36700,3 +36700,35 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-193", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 3e73690122c14447a49c1204812089c332f28bad but expected b67e4dcba53450ed90c0d356bd698736a50e390f
+retry 1
+[s/v7 77aa0b3f] ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+ 9 files changed, 152 insertions(+), 24 deletions(-)
+COMMIT OK 2
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+mer 04 nov 2026 15:37:51 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ce qu'elle fait\\|123/123\\|163/163\" docs/pilotage/en-cours.md | head -4; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Ce qu'elle fait** : B13 (DRVF, … [373 caractères tronqués]`
+
+  ```
+42:- **Ce qu'elle fait** : intégration ; passe **11 h 30 — 82, 80/2** ; plan de nuit.
+57:- **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67**.
+71:- **Fait** : B13 **163/163** ; **pragmatique 432 : 0,9954** ; **relation GN → GV : 221/637** ; **rôles : 301/322 ; relation 0,8195 surévaluée** ; **passifs : règle 5/5 fausse ; correctifs hors du chemin S (roadmap 163)** ; fiches [relation](../../reports/rapport-pensee-relation.md), [rôles](../../reports/rapport-pensee-roles.md), [passifs](../../reports/rapport-pensee-passifs.md), [passifs corrigés](../../reports/rapport-pensee-passifs-corriges.md), [passifs sans par](../../reports/rapport-pensee-passifs-sans-par.md).
+72:- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add docs/pilotage/en-cours.md\n  timeout 240 git commit -m \"ÉTAT — T0 DANS LE BUDGET (3999) ; LA LIGNE B13 EST À 163/163 APRÈS L'AUTONOMIE\" 2>&1 | tail -2\n  if git log -1 --format='%s' | grep -q \ … [216 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-195]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-195", "timeout_ms": 600000, "wait": true}`

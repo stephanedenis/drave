@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.9 h |
-| Tours | 169 |
-| Messages | 2076 |
-| Appels d'outils | 1782 |
+| Durée | 95.0 h |
+| Tours | 170 |
+| Messages | 2086 |
+| Appels d'outils | 1788 |
 | Fichiers touchés | 25 |
-| Commandes | 1465 |
+| Commandes | 1468 |
 | Sous-agents | 2 |
-| Commits | 221 |
+| Commits | 222 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -36,6 +36,8 @@
 - **edit** — Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pa
 … [193 caractères tronqués]
 - **resume** — Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pa
+… [193 caractères tronqués]
+- **complete** — Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pa
 … [193 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -377,6 +379,8 @@
 **Tour 168** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 169** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 170** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9015,11 +9019,96 @@ La fenêtre d'autonomie se ferme dans ~15 min : je livre l'état et je m'arrête
 
 ### Tour 169 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Vérification finale de l'état
 - bash — Trim T0 et committer l'état final
 - job_output
+- bash — Corriger la ligne de session et vérifier T0
+- bash — Committer l'état final de l'autonomie
+
+**Synthèse produite :**
+
+⏵ Autonomie close : 19 rounds, 163/163, T0 3999
+
+La fenêtre de 4 h se ferme (15 h 40, deadline 15 h 50). Bilan mesuré et committé : **`77aa0b3f`**.
+
+\## Les 19 rounds de l'autonomie
+
+| bloc | rounds | résultats |
+|---|---|---|
+| **Fusion** | défaut conditionnel, seuil du parallèle, fusion par sous-type | niveau si la clé ; la confiance plafonne ; double sens **0,9676 → 0,9884** |
+| **Réel (API)** | 3ᵉ passe, variance 0,3, pragmatique 130, pragmatique 432, sous-type 0,3, trois tirages, erratum | variance nulle (déterminisme) ; acte **0,9954** ; double sens **0,9838** à 0,3 |
+| **Natif** | DRVM N0.1 | **6/6**, le payload corrompu **refusé** (le hash manquait) |
+| **L (annotation)** | attachement, cibles, 500 premiers, relation, rôles, passifs ×3 | top1 0,3431, exact **0,0042** ; cibles **239/1863** ; relation **0,8195** (surévaluée) ; passifs **5/5 faux** |
+
+\## L'état final
+
+- **163/163 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **624 fiches / 717 JSON / 120 docs / 83 portes** — ✅ ; T0 **3 999 mots**.
+- **4 commits B13** de la session sur `s/v7` (`8f00b73a` variance sous-type, `41629e8e` erratum, `9e3e2070` 500 segments, `cc3c73fe` correctif passifs, `77aa0b3f` état) + les précédents ; les autres rounds ont été emportés par les commits d'état des autres sessions.
+- **`master` est en retard de 65 commits** sur `s/v7` — le merge est le premier chantier de reprise.
+- **La ligne S bloque deux correctifs** : `par` → `agent` et `être + participe` → `patient` dans `tools/structures/generateur.py` (la connaissance y est déjà, la règle ne l'applique pas).
+- **Le GGUF** (Qwen 7B) manque toujours pour la porte N0.1 complète.
+
+\## Ce que l'autonomie a établi
+
+- **Le réel tranche le mock** : le niveau gagne avec l'API, perd avec le mock ; le défaut suit la clé.
+- **La granularité paie** : la fusion par sous-type gagne +0,02 en double sens, et le gain tient à 0,3.
+- **Le format natif avait un trou** : DRVM ne vérifiait pas le payload — corrigé et mesuré.
+- **L'attachement est le point faible de L** : 12,8 % des segments annotés, 0,0042 exact ; les passifs et les rôles restent des heuristiques non validées.
+
+\## La suite
+
+1. **Le merge `s/v7` → `master`** (65 commits).
+2. **La session S** : les deux règles de passif.
+3. **Le GGUF** : la porte N0.1 complète.
+4. **L'annotation** : cibles et rôles — le vrai levier.
+
+Je m'arrête ici sur ce bilan : la fenêtre demandée est écoulée, tout est mesuré, écrit et committé.
+
+### Tour 170 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Vérification finale de la fenêtre
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Autonomie close : 19 rounds, 163/163, tout est mesuré, écrit et committé
+
+La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué **complete**. Voici le bilan.
+
+\## Le résultat
+
+**163/163 portes**, `porte-bloc-linguistique` verte, `revue` **624 fiches / 717 JSON / 120 docs / 83 portes**, T0 **3 999 mots**, `en-cours` vert. HEAD **`77aa0b3f`** (« ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE »). La vérification finale a été faite à **15 h 41 HNE** : les trois portes de documentation passent, l'état est à jour.
+
+\## Les 19 rounds
+
+| bloc | résultats |
+|---|---|
+| **Fusion** | défaut conditionnel (niveau si la clé, confiance sinon) ; le parallèle plafonne sous le max ; **fusion par sous-type** : double sens **0,9676 → 0,9884** |
+| **Réel (API DeepSeek)** | 3 passes à 0 identiques, 3 à 0,3 (**0,9838**), pragma **acte 0,9954**, écart-type 0 (le modèle est **déterministe**, pas le cache) |
+| **Natif** | **DRVM N0.1 : 6/6** — le payload corrompu était **accepté** ; le hash manquait, corrigé (`read_drvm(verifier=True)`) |
+| **L (annotation)** | attachement top1 0,3431, **exact 0,0042**, cibles **239/1863** (12,8 %) ; relation GN → GV **0,8195** (surévaluée) ; **passifs 5/5 faux** |
+
+\## Les artefacts
+
+- **Fiches** : `rapport-pensee-{defaut-conditionnel, seuil-parallele, troisieme-passe, drvm-n01, variance, pragmatique-neuronale, pragmatique-full, fusion-soustype, soustype-variance, tirages, attachement, cibles, cibles-500, relation, roles, passifs, passifs-corriges, passifs-sans-par}.md` + les JSON correspondants.
+- **Commits** (branche **`s/v7`**) : `d390136a`, `25d631fe`, `9593718e`, `8cea841f`, `a2926831`, `8d0008d5`, `92769981`, `8f00b73a`, `62672792`, `41629e8e`, `cfd9c273`, `9e3e2070`, `ff180c3a`, `452a46e2`, `36d6ef67`, `cc3c73fe`, `77aa0b3f`. Quatre rounds ont été **emportés** par des commits d'état d'autres sessions (`2db5fb4e`, `d72269e0`, `625271c8`…) — les fichiers sont commités, le message n'est pas le mien.
+
+\## Ce qui reste à faire (et à qui)
+
+1. **Le merge `s/v7` → `master`** : **65 commits** d'avance ; c'est le premier chantier de reprise.
+2. **La session S** : deux règles de passif dans `tools/structures/generateur.py` (`par` → agent, `être + participe` → patient) — la connaissance y est déjà, la règle ne l'applique pas. **Je n'y ai pas touché** (territoire S).
+3. **Le GGUF** (Qwen 7B) : la porte N0.1 complète.
+4. **L'annotation** : cibles et rôles — le vrai levier de l'attachement.
+
+\## Réserves honnêtes
+
+- 
+… [670 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -9100,7 +9189,7 @@ La fenêtre d'autonomie se ferme dans ~15 min : je livre l'état et je m'arrête
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1425 autres
+- … et 1428 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9469,4 +9558,5 @@ La fenêtre d'autonomie se ferme dans ~15 min : je livre l'état et je m'arrête
 - B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORRECTIF DES PA
 - B13 — LES PASSIFS SANS PAR : LE CHUNKER 3/3 PATIENT, LE GÉNÉRATEUR S IGNORE ; 163/163" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "SANS PAR"; then e
 - ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COM
+- ÉTAT — T0 DANS LE BUDGET (3999) ; LA LIGNE B13 EST À 163/163 APRÈS L'AUTONOMIE" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "163/163 APRÈS"; then ech
 
