@@ -36732,3 +36732,144 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-195", "timeout_ms": 600000, "wait": true}`
+
+  ```
+no changes added to commit (use "git add" and/or "git commit -a")
+COMMIT OK 1
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+mer 04 nov 2026 15:40:28 EST
+23
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie close : 19 rounds, 163/163, T0 3999
+
+La fenêtre de 4 h se ferme (15 h 40, deadline 15 h 50). Bilan mesuré et committé : **`77aa0b3f`**.
+
+## Les 19 rounds de l'autonomie
+
+| bloc | rounds | résultats |
+|---|---|---|
+| **Fusion** | défaut conditionnel, seuil du parallèle, fusion par sous-type | niveau si la clé ; la confiance plafonne ; double sens **0,9676 → 0,9884** |
+| **Réel (API)** | 3ᵉ passe, variance 0,3, pragmatique 130, pragmatique 432, sous-type 0,3, trois tirages, erratum | variance nulle (déterminisme) ; acte **0,9954** ; double sens **0,9838** à 0,3 |
+| **Natif** | DRVM N0.1 | **6/6**, le payload corrompu **refusé** (le hash manquait) |
+| **L (annotation)** | attachement, cibles, 500 premiers, relation, rôles, passifs ×3 | top1 0,3431, exact **0,0042** ; cibles **239/1863** ; relation **0,8195** (surévaluée) ; passifs **5/5 faux** |
+
+## L'état final
+
+- **163/163 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **624 fiches / 717 JSON / 120 docs / 83 portes** — ✅ ; T0 **3 999 mots**.
+- **4 commits B13** de la session sur `s/v7` (`8f00b73a` variance sous-type, `41629e8e` erratum, `9e3e2070` 500 segments, `cc3c73fe` correctif passifs, `77aa0b3f` état) + les précédents ; les autres rounds ont été emportés par les commits d'état des autres sessions.
+- **`master` est en retard de 65 commits** sur `s/v7` — le merge est le premier chantier de reprise.
+- **La ligne S bloque deux correctifs** : `par` → `agent` et `être + participe` → `patient` dans `tools/structures/generateur.py` (la connaissance y est déjà, la règle ne l'applique pas).
+- **Le GGUF** (Qwen 7B) manque toujours pour la porte N0.1 complète.
+
+## Ce que l'autonomie a établi
+
+- **Le réel tranche le mock** : le niveau gagne avec l'API, perd avec le mock ; le défaut suit la clé.
+- **La granularité paie** : la fusion par sous-type gagne +0,02 en double sens, et le gain tient à 0,3.
+- **Le format natif avait un trou** : DRVM ne vérifiait pas le payload — corrigé et mesuré.
+- **L'attachement est le point faible de L** : 12,8 % des segments annotés, 0,0042 exact ; les passifs et les rôles restent des heuristiques non validées.
+
+## La suite
+
+1. **Le merge `s/v7` → `master`** (65 commits).
+2. **La session S** : les deux règles de passif.
+3. **Le GGUF** : la porte N0.1 complète.
+4. **L'annotation** : cibles et rôles — le vrai levier.
+
+Je m'arrête ici sur ce bilan : la fenêtre demandée est écoulée, tout est mesuré, écrit et committé.
+
+
+## Tour 170
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 151/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s'; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; git status --porcelain | wc -l", "description … [39 caractères tronqués]`
+
+  ```
+mer 04 nov 2026 15:41:11 EST
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+23
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":5,"objective":"Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file.","phase":"active","roundsStarted":151,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+
+  ```
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observ
+… [3958 caractères tronqués]
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d", "revision": 5}`
+
+> **Objectif** (complete) : Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file.
+
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":6,"objective":"Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file.","phase":"complete","roundsStarted":151,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Autonomie close : 19 rounds, 163/163, tout est mesuré, écrit et committé
+
+La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué **complete**. Voici le bilan.
+
+## Le résultat
+
+**163/163 portes**, `porte-bloc-linguistique` verte, `revue` **624 fiches / 717 JSON / 120 docs / 83 portes**, T0 **3 999 mots**, `en-cours` vert. HEAD **`77aa0b3f`** (« ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE »). La vérification finale a été faite à **15 h 41 HNE** : les trois portes de documentation passent, l'état est à jour.
+
+## Les 19 rounds
+
+| bloc | résultats |
+|---|---|
+| **Fusion** | défaut conditionnel (niveau si la clé, confiance sinon) ; le parallèle plafonne sous le max ; **fusion par sous-type** : double sens **0,9676 → 0,9884** |
+| **Réel (API DeepSeek)** | 3 passes à 0 identiques, 3 à 0,3 (**0,9838**), pragma **acte 0,9954**, écart-type 0 (le modèle est **déterministe**, pas le cache) |
+| **Natif** | **DRVM N0.1 : 6/6** — le payload corrompu était **accepté** ; le hash manquait, corrigé (`read_drvm(verifier=True)`) |
+| **L (annotation)** | attachement top1 0,3431, **exact 0,0042**, cibles **239/1863** (12,8 %) ; relation GN → GV **0,8195** (surévaluée) ; **passifs 5/5 faux** |
+
+## Les artefacts
+
+- **Fiches** : `rapport-pensee-{defaut-conditionnel, seuil-parallele, troisieme-passe, drvm-n01, variance, pragmatique-neuronale, pragmatique-full, fusion-soustype, soustype-variance, tirages, attachement, cibles, cibles-500, relation, roles, passifs, passifs-corriges, passifs-sans-par}.md` + les JSON correspondants.
+- **Commits** (branche **`s/v7`**) : `d390136a`, `25d631fe`, `9593718e`, `8cea841f`, `a2926831`, `8d0008d5`, `92769981`, `8f00b73a`, `62672792`, `41629e8e`, `cfd9c273`, `9e3e2070`, `ff180c3a`, `452a46e2`, `36d6ef67`, `cc3c73fe`, `77aa0b3f`. Quatre rounds ont été **emportés** par des commits d'état d'autres sessions (`2db5fb4e`, `d72269e0`, `625271c8`…) — les fichiers sont commités, le message n'est pas le mien.
+
+## Ce qui reste à faire (et à qui)
+
+1. **Le merge `s/v7` → `master`** : **65 commits** d'avance ; c'est le premier chantier de reprise.
+2. **La session S** : deux règles de passif dans `tools/structures/generateur.py` (`par` → agent, `être + participe` → patient) — la connaissance y est déjà, la règle ne l'applique pas. **Je n'y ai pas touché** (territoire S).
+3. **Le GGUF** (Qwen 7B) : la porte N0.1 complète.
+4. **L'annotation** : cibles et rôles — le vrai levier de l'attachement.
+
+## Réserves honnêtes
+
+- Les **horodatages** de l'état (`16 h 45`) sont en avance sur l'horloge réelle (15 h 41) ; les commits concurrents les ont fait dériver.
+- La **branche `s/v7`** porte les travaux de plusieurs sessions ; `master` est en retard — je ne l'ai pas mergé (risque de conflit avec les autres sessions actives).
+- Le **cache DeepSeek** est `cache=False` par défaut : l'identité des trois tirages est un **déterminisme du modèle**, pas un cache.
+- La **relation 0,8195** est une **couverture surévaluée** : les passifs la cassent (5/5 faux).
+
+Tout est prêt pour reprendre : dites-moi si je dois attaquer le **merge**, demander les correctifs à **S**, ou continuer **l'annotation**.
+

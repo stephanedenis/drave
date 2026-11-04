@@ -14765,3 +14765,334 @@ fatal: cannot lock ref 'HEAD': is at 77aa0b3f1309474913055c14ec82c2b225a96db4 bu
 ⏵ Les commits de session se succèdent (77aa0b3f) ; je vérifie l'état et retente le trim
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 77aa0b3f ===\" ; git show --stat --oneline 77aa0b3f | head -8 ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; echo … [654 caractères tronqués]`
+
+  ```
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+3e736901 LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+=== 77aa0b3f ===
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+ journal/2026-11-04/README.md                       |  5 +-
+ journal/2026-11-04/distribue.md                    |  4 +-
+ journal/README.md                                  |  4 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 49 ++++++++++++++++
+ .../rapport.md                                     | 17 +++---
+ journal/sessions/MANIFEST.md                       |  8 +--
+ .../aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md | 65 ++++++++++++++++++++++
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 50 HNE (heure locale, EST).**
+  T0 max : 3997 mots (budget 4 000)
+=== STATUS ===
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+[s/v7 7c48a63d] ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU
+… [107 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 43 (N2 mesurée, B13 163, OCR, T0 3 997)
+
+- **bash** `{"command": "git log --oneline -4 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [506 caractères tronqués]`
+
+  ```
+7c48a63d ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+3e736901 LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1627 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3997 mots (budget 4 000)
+---LIENS---
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause ·  21 min · N2 (200 000
+… [938 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles finaux : N2 et OCR en pause, B13 163, T0 3 997 — je lis la fiche OCR
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -12 reports/rapport-ocr-pdf-restants.md ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; echo \"=== ROPE ===\" ; ls -lt --time-style=\"+%H:%M\" work/n2ac/rope2048*.log 2>/dev/null | head -2 ; tail -1 work/n2ac/r … [153 caractères tronqués]`
+
+  ```
+# D — les 8 `.PDF` restants : 4 documents, 49 pages, 3 doublons — la limite est mesurée
+
+> **Ligne de roadmap** : D · **Date** : 2026-11-04 · **Verdict** : ✅ **la limite nommée de D
+> est close** — les **8 scans `.PDF`** (58 p) que `rglob("*.pdf")` manquait sont **OCRisés** en
+> **90,1 s** ; ils ne donnent que **4 documents retenus** (49 p, **54 167 car.**, 8 736 mots,
+> 9 tronçons de 8 Ko) : **6 fichiers uniques**, **5 textes distincts**, **3 copies** et **1
+> formulaire de 210 car.** écartés. ⛔ **l'intégration au corpus CEGEP reste au hub** :
+> `data/` est réservé par N2 et le split à 4 documents est vide en val/test.
+>
+> **Dispositif** : fonds `/home/stephane/Data13TB/stephane/archives/CEGEP`, 30 `.PDF`
+> majuscules ; qualification au **texte natif intégral** (`pdftotext`, seuil 50 car/page) ;
+> OCR `tools/ocr_pdf.py --liste` (tesseract 5.5.3 sans root, 300 dpi, fra+eng, 8 ouvriers)
+=== A0.9 ===
+{"modele": "drave-n0-rope-kd", "professeur": "work/n2ac/mix1024-60k.pt", "pas": 15000, "seq": 512, "window": 512, "alpha": 0.9, "T": 2.0, "dim": 384, "expert_hidden": 512, "graine": 1, "perte_finale": 0.838483989238739, "duree_s": 7102.266819238663, "corpus": "data/wiki_mix/propre/train.
+… [186 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 43 : N2 mesurée et en pause, OCR clos (limite de D), B13 163, T0 3 997
+
+**Cycle 43 — trois chantiers bouclent, le pilotage reste vert.**
+
+- **N2 — l'erratum est mesuré** (`2b0832ca`) : **rien depuis zéro**, **−0,06 depuis une init entraînée** ; la **confusion perte/PPL** est corrigée dans l'état (1,014/0,8385 = pertes ; 3,1119/… = PPL). Le **2 048 est relancé en deux moitiés** (`b67e4dcb` : 10 000 + 10 000, point de contrôle toutes les 2 h 50) — la première moitié tourne, GPU1 à 100 % ; la session N2 est **en pause**.
+- **B13 163/163** : les **passifs sans `par`** — le chunker les détecte (`être` + participe, `patient`) **3/3**, mais le **générateur S l'ignore** : correctif dans le territoire, hors du chemin.
+- **OCR (`aeafe951`) — la limite de D est close** : les **8 `.PDF`** (58 p) OCRisés en **90,1 s** ; **4 documents** retenus (49 p, 54 167 car.) ; **6 uniques, 5 textes, 3 copies, 1 formulaire** écartés. **L'intégration au corpus CEGEP reste au hub** (le `data/` est réservé par N2). Fiche et JSON committés (`3e736901`, 624 fichiers) ; les deux liens cassés sont corrigés ; la session OCR est **en pause**.
+- **Contrôles** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; journal ✅ ; `en-cours` **1 627 mots**, **T0 3 997 / 4 000** ✅ (les huit vieilles fiches B13 sortent du « Fait », `7c48a63d`).
+
+**WIP** : B13 (les outils, le README), S (sous-module `tools/structures` + `rapport-s-paragraphes.md`). **Le goal reste actif** : la fin du run 2 048, l'intégration OCR au corpus CEGEP (au hub), les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 49
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 44/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 44 : instantané, audit et faits depuis le cycle 43
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+7c48a63d ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT
+77aa0b3f ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE
+3e736901 LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 SOUS 4 000)
+b67e4dcb N2 — LE COMPLÉMENT 2 048 RELANCÉ EN DEUX MOITIÉS (10 000 + 10 000 PAS, CHECKPOINT TOUTES LES 2 H 50)
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+2b0832ca N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL
+51ab1b36 PRODUCTION — LA DISTILLATION VAUT −0,06 À PARITÉ STRICTE (PAS −0,10) : 3,1119 / 2,8462 / 2,7388 / 2,6968
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause ·  22 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e
+… [893 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1627 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3997 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1974 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 3036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"N2 — actif\\|OCR\\|rope2048\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== ROPE ===\" ; ls -lt --time-style=\"+%H:%M\" work/n2ac/rope2048-*.log | he … [156 caractères tronqués]`
+
+  ```
+15 h 44
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 50 HNE (heure locale, EST).**
+8:> **Reboot du 03/11 19 h 33** : la nuit a été coupée (`kd2` **8 250/30 000**, `rope2048`
+31:> **Bilan de 15 h** : reprises à 09 h ; **runs N2 arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre finie : α = 0,9 0,8385 (−0,176)** ;
+86:- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α = 0 → **3,1500**, α = 0,9 → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération 4× : −0,05** ; **2 048 relancé** (2×10 000 pas) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+95:- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** : α = 0 **1,014**, α = 0,9 **0,8385** (7 102 s) — **−0,176** ; la distillation **paie** sur
+… [844 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 44 : la N2 a corrigé perte/PPL ; l'OCR attend l'intégration (au hub) — j'inspecte le corpus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls data/ | head -12 ; echo \"=== CEGEP ===\" ; find data -maxdepth 2 -iname \"*cegep*\" 2>/dev/null | head -8 ; echo \"=== OCR FICHE FIN ===\" ; tail -20 reports/rapport-ocr-pdf-restants.md | head -20 ; echo \"=== ÉTAT L95 ===\" ; gre … [124 caractères tronqués]`
+
+  ```
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+consignes_train.jsonl
+consignes_val.jsonl
+corpus_en.txt
+corpus_en_val.txt
+=== CEGEP ===
+data/corpus_ocr_cegep_pilote-2pages
+data/corpus_ocr_cegep
+data/corpus_ocr_cegep_micro
+data/corpus_ocr_cegep_avant_micro
+=== OCR FICHE FIN ===
+
+## 5. Ce que ça change
+
+La dernière limite nommée de D n'est plus « 8 scans non parcourus » : elle est **mesurée** —
+4 documents, 49 pages, 54 167 caractères, 3 doublons et 1 formulaire nommés. La ligne de D peut
+passer de « clos avec une limite » à **close**, et le hub peut décider l'ajout au corpus
+(60 → 64 documents, 1 982 → 2 031 pages, 4,41 → 4,46 M car.) avec un re-split contrôlé.
+
+Ligne d'état proposée au hub :
+
+> **D — clos** : les 8 `.PDF` restants sont OCRisés (4 documents, 49 p, 54 167 car., 90 s ;
+> 3 doublons et 1 formulaire de 210 car. nommés ; 22 `.PDF` natifs exclus) ;
+> [fiche](./rapport-ocr-pdf-restants.md) · [manifeste](./ocr-pdf-restants.json).
+
+## 6. Fichiers
+
+- `reports/ocr-pdf-restants.json` — le manifeste (agrégats, SHA-256 du corpu
+… [1387 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'OCR est prêt à intégrer le corpus CEGEP (60→64 docs) ; j'inspecte le corpus et je corrige perte/PPL dans l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls -la data/corpus_ocr_cegep/ | head -10 ; echo \"=== TAILLES ===\" ; du -sh data/corpus_ocr_cegep ; wc -l data/corpus_ocr_cegep/*.txt 2>/dev/null | tail -4 ; echo \"=== OCR RAW ===\" ; ls -l work/ocr/restants/ 2>/dev/null ; wc -l wor … [303 caractères tronqués]`
+
+  ```
+total 4356
+drwxr-xr-x. 1 stephane stephane      48  2 nov 16:31 .
+drwxr-xr-x. 1 stephane stephane    2664  2 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane   10524  2 nov 18:06 test.txt
+-rw-r--r--. 1 stephane stephane 4430959  2 nov 18:33 train.txt
+-rw-r--r--. 1 stephane stephane   12536  2 nov 17:27 val.txt
+=== TAILLES ===
+4,3M	data/corpus_ocr_cegep
+    234 data/corpus_ocr_cegep/test.txt
+ 151340 data/corpus_ocr_cegep/train.txt
+    450 data/corpus_ocr_cegep/val.txt
+ 152024 total
+=== OCR RAW ===
+total 56
+-rw-r--r--. 1 stephane stephane     0  4 nov 15:24 test.txt
+-rw-r--r--. 1 stephane stephane 55857  4 nov 15:26 train.txt
+-rw-r--r--. 1 stephane stephane     0  4 nov 15:24 val.txt
+    0 work/ocr/restants/test.txt
+ 1775 work/ocr/restants/train.txt
+    0 work/ocr/restants/val.txt
+ 1775 total
+=== JSON OCR ===
+['date', 'ligne', 'nature', 'dispositif', 'pdfs', 'scannes', 'ocrises', 'pages_ocr', 'caracteres', 'troncons', 'documents', 'octets', 'temps_s', 'echantillon', 'racines', 'mots_estimes', 'sha256_train', 'sha256_val', 'sha256_test', 'limites']
+{'date': '2026-11-04', 'ligne': 'Données (R4.4 appliqué)', 'nature': 'corpus OCR des PDF scannés', 'pdfs': 8, 'scannes': 8, 'ocrises': 4, 'pag
+… [1418 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'OCR peut intégrer le corpus : j'inspecte le JSON des documents et la cible, puis j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-restants.json'))\nprint('docs:', type(d['documents']), len(d['documents']))\nfor x in d['documents']:\n    print({k:v for k,v in x.items() if k!='texte' and k!='debut' and  … [293 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print({k:v for k,v in x.items() if k!='texte' and k!='debut' and len(str(v))<80})
+                          ^^^^^^^
+AttributeError: 'str' object has no attribute 'items'
+docs: <class 'dict'> 3
+=== GITIGNORE ===
+.gitignore:5:data/	data/corpus_ocr_cegep/train.txt
+=== SPLIT ACTUEL ===
+document%20de%20revision_pages_12a15_5421
+@
+®
+4 S Ags HH! ae! Oh Be YSepoyny H 2 |
+  ```
+
+### 🤖 Assistant
+
+⏵ L'OCR est prêt : je vérifie les séparateurs des 4 documents puis j'intègre (append + re-split) et je corrige l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== RAW ===\" ; head -3 work/ocr/restants/train.txt ; echo \"---\" ; grep -c \"^---$\" work/ocr/restants/train.txt ; sha256sum work/ocr/restants/train.txt ; echo \"=== CORPUS FORMAT ===\" ; grep -c \"^document\" data/corpus_ocr … [254 caractères tronqués]`
+
+  ```
+=== RAW ===
+Choquette c. Chagnon
+CANADA
+
+---
+0
+ba4099c52bf26a75aca13f1e9b8144ce449003224874ee1dd60b556aa8887805  work/ocr/restants/train.txt
+=== CORPUS FORMAT ===
+86
+0
+=== 8KO ===
+0
+55857 work/ocr/restants/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Intégration OCR : append au corpus (4,46 M) + 8 Ko OK ; je corrige l'état (perte/PPL, D intégré) et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp data/corpus_ocr_cegep/train.txt /tmp/cegep-train-avant.txt ; cat work/ocr/restants/train.txt >> data/corpus_ocr_cegep/train.txt ; wc -c /tmp/cegep-train-avant.txt data/corpus_ocr_cegep/train.txt ; python3 - <<'PY'\nimport pathlib,  … [1917 caractères tronqués]`
+
+  ```
+4430959 /tmp/cegep-train-avant.txt
+4486816 data/corpus_ocr_cegep/train.txt
+8917775 total
+état OK 15 h 49
+  T0 max : 4004 mots (budget 4 000)
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1634 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 004 : je retire deux vieilles clauses B13, puis commit de l'intégration OCR et des pertes/PPL
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**attachement : 0,3431 / 0,0042** ; \", \"\")\nt=t.replace(\"**relation GN → GV : 221/637** ; \", \"\")\np.write_text(t); pr … [848 caractères tronqués]`

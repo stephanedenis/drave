@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 8.2 h |
-| Tours | 48 |
-| Messages | 502 |
-| Appels d'outils | 718 |
+| Durée | 8.4 h |
+| Tours | 49 |
+| Messages | 513 |
+| Appels d'outils | 730 |
 | Fichiers touchés | 15 |
-| Commandes | 533 |
+| Commandes | 545 |
 | Sous-agents | 0 |
-| Commits | 71 |
+| Commits | 72 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -119,6 +119,8 @@
 **Tour 47** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 48** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 49** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1457,7 +1459,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 48 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -1473,11 +1475,39 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Retry commit for 163 and production
 - bash — Remention facts in state and commit
 - bash — Verify cycle 43 final checks
-- … et 6 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ Les commits de session se succèdent (77aa0b3f) ; je vérifie l'état et retente le trim
+⏵ Cycle 43 : N2 mesurée et en pause, OCR clos (limite de D), B13 163, T0 3 997
+
+**Cycle 43 — trois chantiers bouclent, le pilotage reste vert.**
+
+- **N2 — l'erratum est mesuré** (`2b0832ca`) : **rien depuis zéro**, **−0,06 depuis une init entraînée** ; la **confusion perte/PPL** est corrigée dans l'état (1,014/0,8385 = pertes ; 3,1119/… = PPL). Le **2 048 est relancé en deux moitiés** (`b67e4dcb` : 10 000 + 10 000, point de contrôle toutes les 2 h 50) — la première moitié tourne, GPU1 à 100 % ; la session N2 est **en pause**.
+- **B13 163/163** : les **passifs sans `par`** — le chunker les détecte (`être` + participe, `patient`) **3/3**, mais le **générateur S l'ignore** : correctif dans le territoire, hors du chemin.
+- **OCR (`aeafe951`) — la limite de D est close** : les **8 `.PDF`** (58 p) OCRisés en **90,1 s** ; **4 documents** retenus (49 p, 54 167 car.) ; **6 uniques, 5 textes, 3 copies, 1 formulaire** écartés. **L'intégration au corpus CEGEP reste au hub** (le `data/` est réservé par N2). Fiche et JSON committés (`3e736901`, 624 fichiers) ; les deux liens cassés sont corrigés ; la session OCR est **en pause**.
+- **Contrôles** : revue ✅ **624 fiches / 717 JSON / 120 docs / 83 portes** ; **3 036 liens** ✅ ; journal ✅ ; `en-cours` **1 627 mots**, **T0 3 997 / 4 000** ✅ (les huit vieilles fiches B13 sortent du « Fait », `7c48a63d`).
+
+**WIP** : B13 (les outils, le README), S (sous-module `tools/structures` + `rapport-s-paragraphes.md`). **Le goal reste actif** : la fin du run 2 048, l'intégration OCR au corpus CEGEP (au hub), les faits B13/S, puis la passe complète des portes.
+
+### Tour 49 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state and rope run
+- bash — Inspect data corpus and OCR integration target
+- bash — Inspect CEGEP corpus and OCR raw files
+- bash — Inspect OCR documents and corpus split
+- bash — Check OCR separators, hashes and corpus format
+- bash — Integrate OCR into corpus and fix state labels
+- bash — Trim state and commit OCR integration
+
+**Synthèse produite :**
+
+⏵ T0 à 4 004 : je retire deux vieilles clauses B13, puis commit de l'intégration OCR et des pertes/PPL
 
 ## 3. Travail accompli
 
@@ -1543,7 +1573,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 493 autres
+- … et 505 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1671,7 +1701,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-15 sorties en erreur ou divergentes. Les premières :
+16 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -1762,4 +1792,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - LIENS OCR + COMPTEURS 624 ; ÉTAT RESSERRÉ (T0 3 998)" -m "La fiche du rapport OCR se liait à elle-même par ../../reports/ : deux liens cassés, corrigés en ./ (l
 - ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT, LA FICHE OCR ENTRE DANS D" -m "L'état repasse sous le budget : les huit fiches B13 anciennes (DR
 - ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT" -m "L'état repasse sous le budget (3997/4000) : les huit fiches B13 anciennes quittent le « Fait
+- ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)" -m "L'OCR des 8 .PDF est intégré : les 4 documents (54 167 car.) sont a
 
