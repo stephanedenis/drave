@@ -9,10 +9,10 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 6.1 h |
 | Tours | 4 |
-| Messages | 144 |
-| Appels d'outils | 181 |
+| Messages | 150 |
+| Appels d'outils | 187 |
 | Fichiers touchés | 7 |
-| Commandes | 151 |
+| Commandes | 157 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -182,7 +182,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ### Tour 4 — peux-tu prendre une tâche
 
-*43 appels d'outils.* Actions notables :
+*49 appels d'outils.* Actions notables :
 
 - bash — Check repo, runs, and GPU state
 - bash — Read A8.3b report and list A8.3 files
@@ -198,11 +198,11 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - bash — Read the OCR pipeline script
 - bash — Check tesseract install and find uppercase PDF scans
 - bash — Inspect the CEGEP OCR manifest structure
-- … et 27 autres
+- … et 33 autres
 
 **Synthèse produite :**
 
-⏵ Doublons confirmés au texte (3/3) — rédaction de la fiche D
+⏵ Le hub commite (verrou d'index) — j'attends la fin avant de committer D
 
 ## 3. Travail accompli
 
@@ -260,7 +260,7 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 111 autres
+- … et 117 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -388,10 +388,11 @@ Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non sta
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-linguistique.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh por
 - **T4** : reports/rapport-ocr-cegep.md:4:**Statut** : **fonds `.pdf` parcouru** — 91 scans uniques, **60 documents retenus** (1 982 p), 31 écartés (texte OCR < 300 car. ou doublon) ; 8 scans en `.PDF` hors parc
+- **T4** : docs/pilotage/en-cours.md | 4 ++--  1 file changed, 2 insertions(+), 2 deletions(-) [stderr] fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  An
 
 ## 6. Commits
 

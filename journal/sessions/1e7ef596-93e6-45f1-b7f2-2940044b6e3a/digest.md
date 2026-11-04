@@ -14596,3 +14596,17 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Le hook veut les 3 faits dans le diff d'état : je rementionne la fiche/le JSON et la roadmap, puis commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**passifs : règle 5/5 fausse ; correctifs `par`/sans `par` hors du chemin S**\", \"**passifs : règle 5/5 fausse ; correctifs … [1037 caractères tronqués]`
+
+  ```
+remeontion OK
+  T0 max : 3995 mots (budget 4 000)
+  revue de documentation · 623 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[s/v7 d72269e0] B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+ 25 files changed, 508 insertions(+), 83 deletions(-)
+ create mode 100644 reports/pensee-passifs-sans-par.json
+ create mode 100644 reports/rapport-pensee-passifs-sans-par.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+

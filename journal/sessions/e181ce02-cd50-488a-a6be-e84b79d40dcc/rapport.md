@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.8 h |
+| Durée | 94.9 h |
 | Tours | 168 |
-| Messages | 2070 |
-| Appels d'outils | 1778 |
+| Messages | 2071 |
+| Appels d'outils | 1779 |
 | Fichiers touchés | 25 |
-| Commandes | 1462 |
+| Commandes | 1463 |
 | Sous-agents | 2 |
-| Commits | 219 |
+| Commits | 220 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8958,7 +8958,7 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 
 ### Tour 168 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Lire le chunker simple
 - bash — Détecter le passif sans par et tester
@@ -8966,6 +8966,7 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 - bash — Trim README et passer toutes les portes
 - bash — Lister les portes rouges
 - bash — Mettre T156/T157 à jour et relancer
+- bash — Committer les passifs sans par
 
 ## 3. Travail accompli
 
@@ -9046,7 +9047,7 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1422 autres
+- … et 1423 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9413,4 +9414,5 @@ Je continue la file : prochain round, **les passifs sans `par`** — la partie q
 - B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "322 GN SANS RÔLE"; t
 - B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES PASSIFS
 - B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORRECTIF DES PA
+- B13 — LES PASSIFS SANS PAR : LE CHUNKER 3/3 PATIENT, LE GÉNÉRATEUR S IGNORE ; 163/163" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "SANS PAR"; then e
 

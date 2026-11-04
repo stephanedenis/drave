@@ -11001,3 +11001,15 @@ compteurs 623 717
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep -E \"T0\"; sleep 240; date '+%H:%M:%S'; tail -1 work/n2ac/rope2048-10k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --forma … [87 caractères tronqués]`
+
+  ```
+revue de documentation · 623 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3989 mots (budget 4 000)
+15:31:42
+pas    200 · perte 1.2704 · PPL val 3.305 · 204 s
+0, 1 MiB, 0 %
+1, 9950 MiB, 99 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**repondération 4× : −0,05** ; fiches\", \"**repondération 4× : −0,05** ; **2 048 relancé** (2×10 000 pas) ; fiches … [1280 caractères tronqués]`

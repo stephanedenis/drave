@@ -3565,3 +3565,143 @@ started background job bash-143
 [status: completed, exit code: 0]
   ```
 
+### 🤖 Assistant
+
+⏵ Doublons confirmés au texte (3/3) — rédaction de la fiche D
+
+- **write** `{"content": "# D — les 8 `.PDF` restants : 4 documents, 49 pages, 3 doublons — la limite est mesurée\n\n> **Ligne de roadmap** : D · **Date** : 2026-11-04 · **Verdict** : ✅ **la limite nommée de D\n> est close** — les **8 scans `.PDF`** (58 p) que `rglob(\"*.pdf\")` manquait sont **OCRisés** en\n> * … [5230 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf-restants.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; git log --oneline -2; echo ====; git status --short | head -14; echo ====; git diff --cached --stat | tail -3", "description": "Check index state before integrating the D result"}`
+
+  ```
+15:30
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+2b0832ca N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL
+====
+ M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-04/README.md
+MM journal/2026-11-04/apprentissage.md
+MM journal/2026-11-04/distribue.md
+MM journal/2026-11-04/docs.md
+MM journal/2026-11-04/mesures.md
+MM journal/2026-11-04/modele.md
+MM journal/2026-11-04/outils.md
+MM journal/2026-11-04/portes.md
+MM journal/README.md
+====
+ reports/pensee-passifs-sans-par.json               |  13 +
+ reports/rapport-pensee-passifs-sans-par.md         |  61 +++
+ 26 files changed, 202 insertions(+), 1235 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"D — OCR clos\\|fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md | head", "description": "Locate en-cours lines for D and counters"}`
+
+  ```
+3:**Mis à jour : 2026-11-04, 15 h 23 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **623** / **717** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/4,41 → 4,47 M car/4,41 → 4,46 M car/' reports/rapport-ocr-pdf-restants.md && grep -n \"4,46\" reports/rapport-ocr-pdf-restants.md", "description": "Fix corpus character estimate in the report"}`
+
+  ```
+84:(60 → 64 documents, 1 982 → 2 031 pages, 4,41 → 4,46 M car.) avec un re-split contrôlé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/ressources.py --release --session aeafe951 --job ocr-pdf-restants 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -5", "description": "Release CPU claim and run doc review"}`
+
+  ```
+✅ libéré : 1 réservation(s) de aeafe951 / ocr-pdf-restants
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 623 fichiers, le disque en a 624
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ce qui reste\" -A 3 docs/pilotage/en-cours.md | head -6; echo ====; grep -n \"portes |\" docs/pilotage/en-cours.md | head -2", "description": "Read the current remaining-actions line for D"}`
+
+  ```
+128:## Ce qui reste
+129-
+130-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+131-
+====
+106:| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md\")\nt = p.read_text()\nt = t.replace(\"- **Heartbeat** : 2026-11-04 15:26 EST\", \"- **Heartbeat** : 2026-11-04 15:3 … [1074 caractères tronqués]`
+
+  ```
+ok
+19:- **Heartbeat** : 2026-11-04 15:35 EST
+20:- **Prochaine action** : **intégration par le hub** — `git add reports/rapport-ocr-pdf-restants.md
+23:- **Fait** : **8 scans / 58 p** qualifiés (22 `.PDF` natifs exclus, 307–3 688 car/p) ; OCR
+27:- **État** : en pause
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo ====; git diff --cached --stat | tail -3; echo ====; git status --short | grep -E '^M |ocr-pdf' | head -8", "description": "Check whether the hub's integration commit landed"}`
+
+  ```
+7ecabda3 ÉTAT — T0 REVENU SOUS 4 000 (LE BLOC DE SESSION N2 EST RESSERRÉ)
+2b0832ca N2 — CLÔTURE DU 04/11 : L'ERRATUM EST MESURÉ (RIEN DEPUIS ZÉRO, −0,06 DEPUIS UNE INIT ENTRAÎNÉE) ET L'ÉTAT CORRIGE UNE CONFUSION PERTE/PPL
+====
+ reports/pensee-passifs-sans-par.json               |  13 +
+ reports/rapport-pensee-passifs-sans-par.md         |  61 +++
+ 26 files changed, 202 insertions(+), 1235 deletions(-)
+====
+M  docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+?? reports/ocr-pdf-restants.json
+?? reports/rapport-ocr-pdf-restants.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 45; git log --oneline -1; git diff --cached --stat | tail -2; date '+%H:%M:%S'", "description": "Wait briefly for the hub commit"}`
+
+  ```
+d72269e0 B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10)
+15:31:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Mis à jour\\|fichiers / JSON\\|D — \" docs/pilotage/en-cours.md | head; echo ====; python3 tools/revue_documentation.py 2>&1 | tail -3; echo ====; git status --short | head -10", "description": "Read updated counters and D  … [23 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-11-04, 15 h 23 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **623** / **717** | `reports/*.md` / `reports/*.json` |
+====
+  revue de documentation · 624 fiche(s) · 717 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 623 fichiers, le disque en a 624
+====
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/ocr-pdf-restants.json
+?? reports/rapport-ocr-pdf-restants.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ce qui reste\" -A 4 docs/pilotage/en-cours.md", "description": "Read the remaining-actions section"}`
+
+  ```
+128:## Ce qui reste
+129-
+130-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+131-
+132-## Les questions ouvertes
+  ```
+
