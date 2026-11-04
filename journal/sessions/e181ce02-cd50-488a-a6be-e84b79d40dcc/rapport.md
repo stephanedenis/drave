@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 93.4 h |
-| Tours | 162 |
-| Messages | 2017 |
-| Appels d'outils | 1737 |
+| Tours | 163 |
+| Messages | 2022 |
+| Appels d'outils | 1740 |
 | Fichiers touchés | 25 |
-| Commandes | 1428 |
+| Commandes | 1431 |
 | Sous-agents | 2 |
 | Commits | 213 |
 | Compactages de contexte | 5 |
@@ -363,6 +363,8 @@
 **Tour 161** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 **Tour 162** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
+
+**Tour 163** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8622,6 +8624,49 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - bash — Écrire la fiche de l'attachement et la porte T153
 - … et 4 autres
 
+**Synthèse produite :**
+
+⏵ Autonomie : 12 rounds, 156/156 ; l'attachement exact est quasi nul (0,0042)
+
+Pendant l'autonomie, trois rounds de plus :
+
+\## Les derniers rounds
+
+| # | round | résultat | commit |
+|---|---|---|---|
+| 10 | **Trois tirages à 0,3** | 0,9838, 0,9838, 0,9838 — écart-type 0 | `62672792` |
+| 10 bis | **Erratum** | le **cache était inactif** (`cache=False`) : le modèle est **déterministe**, pas le cache | `41629e8e` |
+| 11 | **L'attachement sur le gold 432** | top1 **0,3431**, top-k 0,3264, **exact 0,0042**, couverture **0,6067** | `cfd9c273` |
+
+**Ce que ça dit** :
+
+- **La variance nulle n'est pas le cache** : le client DeepSeek a `cache=False` par défaut ; les trois passes ont bien appelé l'API. Le modèle est **déterministe** sur ces invites — la variance réelle demanderait un autre échantillonnage (top-p, pénalité).
+- **Le sous-type tient** : 0,9838 > 0,9676 sur les trois tirages.
+- **L'attachement est le point le plus faible de L** : **1 exact sur 239** (0,0042), et seulement **145 cibles annotées** — la couverture (60,7 %) est le premier levier, la règle le second.
+
+\## L'état
+
+- **156/156 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **616 fiches / 709 JSON / 120 docs / 83 portes** — ✅ ; `en-cours` à jour (15 h 35).
+- Les commits sont sur **`s/v7`** (master est en retard) ; l'horloge réelle est **14 h 03 HNE** ; il reste **~1 h 45** d'autonomie.
+- La branche `s/v7` accumule les rounds B13 et les travaux des autres sessions ; le merge vers `master` sera à faire proprement.
+
+\## La suite
+
+1. **Les 94 cibles sans label** : annoter, puis re-mesurer l'attachement (le vrai levier).
+2. **L'échantillonnage alternatif** : la variance réelle du pragma.
+3. **Le merge `s/v7` → `master`**.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue la file : prochain round, **les 94 cibles sans label** — la couverture de l'attachement.
+
+### Tour 163 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Compter les segments sans cible
+- bash — Écrire la fiche des cibles et la porte T154
+- bash — Passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8701,7 +8746,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1388 autres
+- … et 1391 autres
 
 ## 4. Mesures et résultats marquants
 

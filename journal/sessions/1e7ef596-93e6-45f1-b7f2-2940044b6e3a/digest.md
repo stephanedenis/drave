@@ -10736,3 +10736,183 @@ revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 22 : audit vert ; je recale l'heure de l'état et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h22.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h22.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [1032 caractères tronqués]`
+
+  ```
+heure 14 h 01
+  revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3989 mots (budget 4 000)
+  en-cours · 1619 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-374]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-374", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[stderr]
+fatal: cannot lock ref 'HEAD': is at cfd9c273575ca3edb48be7cd2f85f2bd7a2e7f16 but expected 24d5b571bbe118123324790037268c3bf23aaf84
+[status: completed, exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a bougé (cfd9c273) ; je vérifie le commit de session et l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== cfd9c273 ===\" ; git show --stat --oneline cfd9c273 | head -12 ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; echo \"=== STATUS ===\" ; git status --short | grep -v \"^M  journal\\|^MM  … [145 caractères tronqués]`
+
+  ```
+cfd9c273 B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156
+24d5b571 B13 156/156 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042 ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+72f3edab INDEX — 612 → 613 (ATTACHEMENT B13 : 156/156, TOP1 0,3431, EXACT 0,0042) ; HEURE 13 H 55
+=== cfd9c273 ===
+cfd9c273 B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-04/README.md                       |   7 +-
+ journal/2026-11-04/apprentissage.md                |   2 +-
+ journal/2026-11-04/distribue.md                    |   2 +-
+ journal/2026-11-04/docs.md                         |   8 +-
+ journal/2026-11-04/mesures.md                      |   2 +-
+ journal/2026-11-04/modele.md                       |   2 +-
+ journal/2026-11-04/portes.md                       |   2 +-
+ journal/README.md                                  |   4 +-
+ journal/THEMES.md                                  |   2 +-
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 14 h 01 HNE (heure locale, EST).**
+=== S
+… [157 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 22 (B13 156 narrative)
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -6 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [337 caractères tronqués]`
+
+  ```
+cfd9c273 B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156
+24d5b571 B13 156/156 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042 ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+72f3edab INDEX — 612 → 613 (ATTACHEMENT B13 : 156/156, TOP1 0,3431, EXACT 0,0042) ; HEURE 13 H 55
+---STATUS---
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1619 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3989 mots (budget 4 000)
+---LIENS---
+  ✅ 2980 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas  6350 · perte 0.9675 · dure 1.1032 · douce 0.2841 · 3028 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 22 : audit vert, B13 156/156 (narrative) committé, heure 14 h 01
+
+**Cycle 22 — la narrative de l'attachement est committée, tout reste vert.**
+
+- **B13 156/156** : la session a committé la narrative de l'attachement (`cfd9c273` : implémentation + état + journal) ; le hub avait déjà posé le fait et les pages (fiche/JSON, `24d5b571`). L'état est cohérent : 156/156, attachement (top1 0,3431, exact 0,0042, couverture 0,6067), limites nommées (145/239 annotées, 1 exact sur 239). L'heure corrigée (14 h 01) a été emportée par le commit de session.
+- **Audit complet** : revue ✅ **616 fiches / 709 JSON / 120 docs / 83 portes** ; **2 980 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 619 mots**, **T0 3 989 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **6 350 pas** (perte 0,968), GPU0 99 % / GPU1 99 %.
+
+**WIP** : B13 `pensee-quatre-modes.json` (prochaine mesure), S `rapport-s-paragraphes.md`. **Le goal reste actif** : le fait S et la suite B13 à recevoir, α = 0,9 à finir, puis la passe complète.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 23/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 23 : instantané, audit et faits committés depuis le cycle 22
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+cfd9c273 B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156
+24d5b571 B13 156/156 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042 ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+72f3edab INDEX — 612 → 613 (ATTACHEMENT B13 : 156/156, TOP1 0,3431, EXACT 0,0042) ; HEURE 13 H 55
+e21e6385 ERRATUM DES TIRAGES — LE TITRE DE LA FICHE ALIGNÉ SUR LE CORPS (LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE) ; COMPTEURS 616/709
+41629e8e B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155
+f9ccaf96 TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN
+b710b7e6 B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+62672792 B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155
+---STATUS---
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 263 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif   
+… [810 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 616 fiche(s) · 709 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1619 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3989 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2980 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2980 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"attachement\\|B13 \\*\\*15\\|B13 : 15\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; nvidia-sm … [104 caractères tronqués]`
+
+  ```
+14 h 04
+# En ce moment
+
+**Mis à jour : 2026-11-04, 14 h 01 HNE (heure locale, EST).**
+71:- **Fait** : B13 **156/156** ; **pragmatique 130 qualifie** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; **tirages à 0,3 : 0,9838 ×3 — variance nulle ; le cache était inactif (déterminisme sur ces invites) ; variance réelle non mesurable** ; **attachement : top1 0,3431, exact 0,0042 (couverture 0,6067 ; 145/239 annotées, 1 exact)** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md), [sous-type variance](../../reports/rapport-pensee-soustype-variance.md), [tirages](../../reports/rapport-pensee-tirages.md), [attachement](../../reports/rapport-pensee-attachement.md).
+108:| fichiers / JSON de résultats | **616** / **709** | `reports/*.md` / `reports/*.json` |
+120:| **B — l'intelligence** | **B13** 
+… [229 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 23 : audit vert ; je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h23.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h23.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [932 caractères tronqués]`

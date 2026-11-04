@@ -35775,3 +35775,86 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 15 h 35 HNE\", t)\np.write_text( … [628 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-156]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-156", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[s/v7 cfd9c273] B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156
+ 18 files changed, 351 insertions(+), 40 deletions(-)
+COMMIT OK 1
+cfd9c273 B13 — L'ATTACHEMENT SUR LE GOLD 432 : TOP1 0,3431, EXACT 0,0042, COUVERTURE 0,6067 ; 156/156
+mer 04 nov 2026 14:03:47 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 12 rounds, 156/156 ; l'attachement exact est quasi nul (0,0042)
+
+Pendant l'autonomie, trois rounds de plus :
+
+## Les derniers rounds
+
+| # | round | résultat | commit |
+|---|---|---|---|
+| 10 | **Trois tirages à 0,3** | 0,9838, 0,9838, 0,9838 — écart-type 0 | `62672792` |
+| 10 bis | **Erratum** | le **cache était inactif** (`cache=False`) : le modèle est **déterministe**, pas le cache | `41629e8e` |
+| 11 | **L'attachement sur le gold 432** | top1 **0,3431**, top-k 0,3264, **exact 0,0042**, couverture **0,6067** | `cfd9c273` |
+
+**Ce que ça dit** :
+
+- **La variance nulle n'est pas le cache** : le client DeepSeek a `cache=False` par défaut ; les trois passes ont bien appelé l'API. Le modèle est **déterministe** sur ces invites — la variance réelle demanderait un autre échantillonnage (top-p, pénalité).
+- **Le sous-type tient** : 0,9838 > 0,9676 sur les trois tirages.
+- **L'attachement est le point le plus faible de L** : **1 exact sur 239** (0,0042), et seulement **145 cibles annotées** — la couverture (60,7 %) est le premier levier, la règle le second.
+
+## L'état
+
+- **156/156 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **616 fiches / 709 JSON / 120 docs / 83 portes** — ✅ ; `en-cours` à jour (15 h 35).
+- Les commits sont sur **`s/v7`** (master est en retard) ; l'horloge réelle est **14 h 03 HNE** ; il reste **~1 h 45** d'autonomie.
+- La branche `s/v7` accumule les rounds B13 et les travaux des autres sessions ; le merge vers `master` sera à faire proprement.
+
+## La suite
+
+1. **Les 94 cibles sans label** : annoter, puis re-mesurer l'attachement (le vrai levier).
+2. **L'échantillonnage alternatif** : la variance réelle du pragma.
+3. **Le merge `s/v7` → `master`**.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue la file : prochain round, **les 94 cibles sans label** — la couverture de l'attachement.
+
+
+## Tour 163
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 144/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\ntot=0; sans=0; ids=[]\nfor p in ph:\n    for s in p[\"segments\"]:\n        tot+=1\n        if not s.get(\ … [232 caractères tronqués]`
+
+  ```
+segments 1863 | sans cible 1624
+[('g001', 'GN', 'Le chat'), ('g001', 'GV', 'dort'), ('g002', 'GN', 'Le chat'), ('g002', 'GV', 'dort'), ('g003', 'GN', 'La femme'), ('g003', 'GV', 'a vu')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-cibles.md <<'MD'\n# B13 — les cibles de l'attachement : 1624 segments sans cible sur 1863\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅\n> **157 … [6308 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 617 fiche(s) · 710 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [244 caractères tronqués]`
