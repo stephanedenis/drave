@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 91.3 h |
+| Durée | 91.4 h |
 | Tours | 160 |
-| Messages | 1917 |
-| Appels d'outils | 1641 |
+| Messages | 1919 |
+| Appels d'outils | 1643 |
 | Fichiers touchés | 25 |
-| Commandes | 1349 |
+| Commandes | 1350 |
 | Sous-agents | 2 |
-| Commits | 201 |
+| Commits | 202 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8493,6 +8493,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Lire les seuils du banc des quatre modes
 - bash — Corriger le seuil et écrire la fiche
 - bash — Trim README et passer toutes les portes
+- bash — Committer le seuil du parallèle
 
 **Synthèse produite :**
 
@@ -8577,7 +8578,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1309 autres
+- … et 1310 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8926,4 +8927,5 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "L'ÉLISI
 - B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA CONFIRMATION"; th
 - B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT CONDITI
+- B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "SEUIL DU PA
 

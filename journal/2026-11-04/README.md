@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**14 commits** · **5 session(s)** · **5 thème(s)**
+**15 commits** · **5 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 4 | [docs.md](docs.md) |
+| docs | 5 | [docs.md](docs.md) |
 | mesures | 7 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -22,10 +22,10 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 43.8 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 4.6 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 4.7 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 43.7 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 2.5 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 91.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 91.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -45,6 +45,7 @@
 | 11:46 | `af28eadd` | B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145 |
 | 11:50 | `8189c4f3` | S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE |
 | 11:57 | `d390136a` | B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146 |
+| 12:02 | `29122912` | ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE |
 
 ## Le récit de la journée (écrit à la main)
 

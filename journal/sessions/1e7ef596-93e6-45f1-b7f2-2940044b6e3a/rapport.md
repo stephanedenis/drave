@@ -7,15 +7,20 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 4.6 h |
-| Tours | 5 |
-| Messages | 140 |
-| Appels d'outils | 283 |
+| Durée | 4.7 h |
+| Tours | 6 |
+| Messages | 147 |
+| Appels d'outils | 292 |
 | Fichiers touchés | 14 |
-| Commandes | 144 |
+| Commandes | 152 |
 | Sous-agents | 0 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
+
+## Objectifs déclarés
+
+- **create** — Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par l
+… [207 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -28,6 +33,8 @@
 **Tour 4** — la machine est stabilisée. tu peux reprentre tous les chantiers en parallèle. dis-moi si je dois démarer d'autres sessions dsh
 
 **Tour 5** — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la documentation et du pilotage
+
+**Tour 6** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [677 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -194,7 +201,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 5 — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la docum … [23 caractères tronqués]
 
-*79 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - bash — Check sessions, recent commits and tree
 - bash — Run documentation review and state freshness
@@ -210,11 +217,45 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Read current full state
 - bash — Read B13 state-line updates in recent commits
 - bash — Read N3 report conclusion and backlog page
-- … et 51 autres
+- … et 54 autres
 
 **Synthèse produite :**
 
-⏵ Commit de l'état 146/146 et des compteurs 608/693
+⏵ Audit docs terminé, N3 intégré, suivi continu armé
+
+**Audit de `docs/` — tout passe, et les corrections sont committées.**
+
+- **Revue** : `revue_documentation` ✅ (classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation) — **608 fiches, 693 JSON, 120 docs, 83 portes**.
+- **Liens** : 2 888 liens relatifs ✅ (le lien mort de la fiche N3 est corrigé) · **tableaux** : 1 631 fichiers ✅ · **journal** : 41 jours, 119 sessions, 1 968 liens ✅ · **schémas** : 67 SVG ✅.
+- **Budget** : `en-cours` **1 566 mots**, **T0 3 936 / 4 000** ✅ · **backlog** : 37 fiches, 43 arêtes, **frontière 3** (N3 en est sorti) ✅ · **mandats** : `sessions.py --check` sans erreur.
+
+**Intégré** :
+- **N3 clos** : backlog `partiel` → **`mesurée`** (étapes 3/4 ✅, fiche `n3-inventaire`), roadmap **N3 ✅ couvert**, **83e porte** `porte-n3-inventaire` dans les références, **§ 12** du runbook (reprise et suivi docs).
+- **État** : S **61/61** types, **144/144** rôles, **56 tests** ; B13 **146/146** (défaut conditionnel) ; N2/S/L **actifs**, hub actif, 536c en pause ; N3 dans « Ce qui est en cours ».
+- **Commits** : `d390136a` (le commit B13 a emporté l'index : N3, backlog, roadmap, références, § 12, plans) et `29122912` (état : B13 146/146, compteurs 608/693, heure corrigée).
+
+**Deux constats** :
+- **Écritures concurrentes** : les sessions écrivent et committent `en-cours` alors que le hub doit tenir la plume ; le commit B13 a ainsi emporté l'index préparé. J'ai repris le fil — mais il faut leur rappeler de **proposer** leur ligne, pas d'écrire l'état.
+- **Horloge** : les sessions écrivent « 13 h 50 » à **11 h 57** (dérive ~+1 h 50) ; l'état est remis à l'heure locale réelle (12 h 02). À surveiller à chaque cycle.
+
+**Ce qui reste** (WIP de leurs sessions, pas du hub) : B13 `seuil parallèle` (fiche/JSON non committés), S `rapport-s-paragraphes.md` ; les runs `kd2` (12 050+/30 000, log bufferisé) et `rope2048` (4 600/20 000, ~2 s/pas) tournent à 99–100 % des GPU ; la passe complète après.
+
+**Le suivi est armé** (goal) : à chaque cycle, j'audite les outils, j'intègre les faits **committés** des sessions, je corrige compteurs/dates/liens/mandats et je committe. Je continue tant que les sessions n'ont pas clos leurs faits et que la passe n'est pas passée.
+
+### Tour 6 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check run progress and GPU load
+- bash — Update N2 progress and ETA in state
+- bash — Commit corrected N2 progress in state
+
+**Synthèse produite :**
+
+⏵ Commit de l'état N2 corrigé (progression et ETA)
 
 ## 3. Travail accompli
 
@@ -279,7 +320,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 104 autres
+- … et 112 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -398,6 +439,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T5** `90-| `porte-mistral.sh` | 8 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher  |`
 - **T5** `-- **Fait** : types **60/60**, rôles **142/142** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **55 t`
 - **T5** `+- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 t`
+- **T5** `0, 5280 MiB, 99 %`
 
 ## 5. Erreurs rencontrées
 
@@ -414,4 +456,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS" -m "Les anciens logs sont préservés en .interrompu.log ; 
 - PILOTAGE — N3 INTÉGRÉ, S 61/61 ET B13 145/145 DANS L'ÉTAT ; 83e PORTE, § 12 ET LE SUIVI DOCS" -m "Backlog N3 mesurée, roadmap N3 couvert, 83e porte dans les réf
 - ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE" -m "Le fait B13 146/146 (défaut conditionnel : le niveau si le réel es
+- ÉTAT — N2 : KD2 ~19 400/30 000 (LOG BUFFERISÉ), ROPE2048 4 650/20 000 ; ETA CORRIGÉE (~13 H 30 / ~19–20 H)" -m "Le log kd2 s'arrête à 12 050 pas (11 h 07) alors
 

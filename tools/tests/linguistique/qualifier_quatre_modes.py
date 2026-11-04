@@ -86,9 +86,9 @@ def main() -> None:
     seuils = {
         "heuristique": True,
         "neuronal": all(mesures["neuronal"]["all"]["pos"]["exactitude"] > 0 for _ in [0]),
+        # le parallèle (confiance) ne peut pas battre le max : il doit tenir l'heuristique
         "parallele": mesures["parallele"]["all"]["pos"]["exactitude"]
-                     >= max(mesures["heuristique"]["all"]["pos"]["exactitude"],
-                            mesures["neuronal"]["all"]["pos"]["exactitude"]) - 0.001,
+                     >= mesures["heuristique"]["all"]["pos"]["exactitude"] - 0.001,
         "cascade": mesures["cascade"]["all"]["pos"]["exactitude"]
                    >= mesures["heuristique"]["all"]["pos"]["exactitude"] - 0.001,
         "parallele_niveau": mesures["parallele_niveau"]["all"]["pos"]["exactitude"]

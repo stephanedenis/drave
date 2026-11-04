@@ -2089,6 +2089,19 @@ def t143_defaut_conditionnel() -> tuple[bool, str]:
         f"défaut : sans clé {sans}, avec clé {'niveau' if avec else 'confiance'}")
 
 
+def t144_seuil_parallele() -> tuple[bool, str]:
+    """Le seuil du parallèle : la confiance plafonne sous le max, le niveau le bat."""
+    import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((racine / "reports/pensee-quatre-modes-432-run2.json").read_text(encoding="utf-8"))
+    m = d["modes"]
+    par = m["parallele"]["all"]["pos"]["exactitude"]
+    niv = m["cascade_niveau"]["all"]["pos"]["exactitude"]
+    return abs(par - 0.9326) < 0.001 and abs(niv - 0.9389) < 0.001 and par < niv, (
+        f"seuil : parallèle {par} < niveau {niv}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2231,7 +2244,8 @@ def main() -> int:
               ("T140 refus r353", t140_r353()),
               ("T141 élision", t141_elision()),
               ("T142 confirmation", t142_run2()),
-              ("T143 défaut conditionnel", t143_defaut_conditionnel())]
+              ("T143 défaut conditionnel", t143_defaut_conditionnel()),
+              ("T144 seuil parallèle", t144_seuil_parallele())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

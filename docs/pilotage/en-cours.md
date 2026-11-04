@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 12 h 02 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 13 h 55 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -83,16 +83,16 @@
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
-- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; distillation native **+0,10** ; **runs relancés à 09 h 30** : `kd2` **12 000+/30 000** (gpu0), `rope2048` **3 950+/20 000** (gpu1) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; distillation native **+0,10** ; **runs relancés à 09 h 30** : `kd2` **~19 400/30 000** (gpu0, log bufferisé), `rope2048` **4 650/20 000** (gpu1, ≈2 s/pas) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [porte](../../reports/rapport-n2-porte-propre.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : **surveiller les runs** (fin estimée **~13 h 25** / **~15 h 10**), puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+- **Prochaine action** : **surveiller les runs** (fin estimée **~13 h 30** / **~19–20 h** (rope ralenti par kd2)), puis mesurer et committer ; ensuite la **porte propre (0,29)**.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
 ## Ce qui est en cours
 
 - **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
-- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs actifs** `kd2` (gpu0) et `rope2048` (gpu1).
+- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs actifs** : `kd2` **~19 400** (gpu0, log bufferisé), `rope2048` **4 650/20 000** (gpu1, ≈2 s/pas).
 - **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
 - **Pensée — B13 (actif)** : **146/146**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; fusion : la confiance bat le niveau.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.

@@ -1,0 +1,15 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "147/147",
+ "max": 0.9389,
+ "parallele": 0.9326,
+ "niveau": 0.9389,
+ "ancien_seuil": ">= max - 0,001",
+ "nouveau_seuil": ">= heuristique - 0,001",
+ "limites": [
+  "deux passes",
+  "gold 432",
+  "la confiance plafonne"
+ ]
+}

@@ -5040,3 +5040,214 @@ index e23de123..4ece79fe 100644
 ⏵ Commit de l'état 146/146 et des compteurs 608/693
 
 - **bash** `{"command": "git status --short | head -15 ; echo \"---COMMIT---\" ; git commit -m \"ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE\" -m \"Le fait B13 146/146 (défaut conditionnel : le niveau si le réel est là, la confiance sinon) est committé dans d390136a  … [269 caractères tronqués]`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/en-cours.md
+M  journal/2026-11-04/README.md
+M  journal/2026-11-04/distribue.md
+M  journal/2026-11-04/docs.md
+M  journal/2026-11-04/mesures.md
+M  journal/2026-11-04/modele.md
+M  journal/2026-11-04/portes.md
+M  journal/README.md
+M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+ M tools/tests/linguistique/qualifier_quatre_modes.py
+?? reports/pensee-seuil-parallele.json
+---COMMIT---
+[s/v7 29122912] ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+ 14 files changed, 221 insertions(+), 36 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale après le commit d'état
+
+- **bash** `{"command": "git log --oneline -4 ; echo \"---STATUS---\" ; git status --short | head -12 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Verify c … [35 caractères tronqués]`
+
+  ```
+29122912 ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+8189c4f3 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+ M tools/tests/linguistique/qualifier_quatre_modes.py
+?? reports/pensee-seuil-parallele.json
+?? reports/rapport-pensee-seuil-parallele.md
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 608 fiche(s) · 693 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 144 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    1e7ef596-93e6-45f1 · actif    ·  15 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-
+… [745 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== KD2 ===\" ; tail -1 work/n2ac/kd2-mix512-30k.log ; echo \"=== ROPE ===\" ; tail -1 work/n2ac/rope2048-20k.log ; echo \"=== GPU ===\" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader ; echo \" … [142 caractères tronqués]`
+
+  ```
+=== KD2 ===
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+=== ROPE ===
+pas   4600 · perte 1.0448 · PPL val 2.643 · 9131 s
+=== GPU ===
+0, 5280 MiB, 99 %
+1, 13200 MiB, 100 %
+=== BACKLOG ===
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+### 🤖 Assistant
+
+⏵ Armement du suivi documentaire continu (goal)
+
+- **create_goal** `{"objective": "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits  … [249 caractères tronqués]`
+
+> **Objectif** (create) : Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée.
+
+
+  ```
+{"goal":{"id":"goal-3a308101-e06b-49c2-841d-ee6a5ea6df1f","revision":1,"objective":"Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit docs terminé, N3 intégré, suivi continu armé
+
+**Audit de `docs/` — tout passe, et les corrections sont committées.**
+
+- **Revue** : `revue_documentation` ✅ (classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation) — **608 fiches, 693 JSON, 120 docs, 83 portes**.
+- **Liens** : 2 888 liens relatifs ✅ (le lien mort de la fiche N3 est corrigé) · **tableaux** : 1 631 fichiers ✅ · **journal** : 41 jours, 119 sessions, 1 968 liens ✅ · **schémas** : 67 SVG ✅.
+- **Budget** : `en-cours` **1 566 mots**, **T0 3 936 / 4 000** ✅ · **backlog** : 37 fiches, 43 arêtes, **frontière 3** (N3 en est sorti) ✅ · **mandats** : `sessions.py --check` sans erreur.
+
+**Intégré** :
+- **N3 clos** : backlog `partiel` → **`mesurée`** (étapes 3/4 ✅, fiche `n3-inventaire`), roadmap **N3 ✅ couvert**, **83e porte** `porte-n3-inventaire` dans les références, **§ 12** du runbook (reprise et suivi docs).
+- **État** : S **61/61** types, **144/144** rôles, **56 tests** ; B13 **146/146** (défaut conditionnel) ; N2/S/L **actifs**, hub actif, 536c en pause ; N3 dans « Ce qui est en cours ».
+- **Commits** : `d390136a` (le commit B13 a emporté l'index : N3, backlog, roadmap, références, § 12, plans) et `29122912` (état : B13 146/146, compteurs 608/693, heure corrigée).
+
+**Deux constats** :
+- **Écritures concurrentes** : les sessions écrivent et committent `en-cours` alors que le hub doit tenir la plume ; le commit B13 a ainsi emporté l'index préparé. J'ai repris le fil — mais il faut leur rappeler de **proposer** leur ligne, pas d'écrire l'état.
+- **Horloge** : les sessions écrivent « 13 h 50 » à **11 h 57** (dérive ~+1 h 50) ; l'état est remis à l'heure locale réelle (12 h 02). À surveiller à chaque cycle.
+
+**Ce qui reste** (WIP de leurs sessions, pas du hub) : B13 `seuil parallèle` (fiche/JSON non committés), S `rapport-s-paragraphes.md` ; les runs `kd2` (12 050+/30 000, log bufferisé) et `rope2048` (4 600/20 000, ~2 s/pas) tournent à 99–100 % des GPU ; la passe complète après.
+
+**Le suivi est armé** (goal) : à chaque cycle, j'audite les outils, j'intègre les faits **committés** des sessions, je corrige compteurs/dates/liens/mandats et je committe. Je continue tant que les sessions n'ont pas clos leurs faits et que la passe n'est pas passée.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 1 du suivi : nouvel instantané du dépôt, des sessions et des runs
+
+- **bash** `{"command": "git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | head -20 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+29122912 ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+8189c4f3 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+81fa1a86 N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACKLOG ÉTAIT PÉRIMÉE
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+ M tools/tests/linguistique/qualifier_quatre_modes.py
+?? reports/pensee-seuil-parallele.json
+?? reports/rapport-pensee-seuil-parallele.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 145 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    1e7ef596-93e6-45f1 · actif    ·  16 min · docs/pilotage/` (en-cours, roadmap, chantiers
+… [752 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -5 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|T0 :\" | head -3", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 608 fiche(s) · 693 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1566 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3936 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -3 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2896 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1968 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2896 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; echo \"=== KD2 ===\" ; tail -2 work/n2ac/kd2-mix512-30k.log ; echo \"=== ROPE ===\" ; tail -2 work/n2ac/rope2048-20k.log ; echo \"=== GPU ===\" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv, … [179 caractères tronqués]`
+
+  ```
+12 h 05
+=== KD2 ===
+pas 12000 · perte 1.1357 · dure 1.0045 · douce 0.2302 · 5642 s
+pas 12050 · perte 1.0476 · dure 0.9189 · douce 0.2130 · 5665 s
+=== ROPE ===
+pas   4600 · perte 1.0448 · PPL val 2.643 · 9131 s
+pas   4650 · perte 1.0863 · PPL val 2.650 · 9241 s
+=== GPU ===
+0, 5280 MiB, 100 %
+1, 13200 MiB, 100 %
+=== LOGS TAILLE ===
+-rw-r--r--. 1 stephane stephane 16596 11:07 work/n2ac/kd2-mix512-30k.log
+-rw-r--r--. 1 stephane stephane  5439 12:05 work/n2ac/rope2048-20k.log
+  ```
+
+### 🤖 Assistant
+
+⏵ État N2 corrigé : progression réelle et ETA du run rope (≈19–20 h)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"12 000+\\|3 950+\\|fin estimée\\|runs actifs\" docs/pilotage/en-cours.md ; cp docs/pilotage/en-cours.md /tmp/state.n2.md && python3 - <<'PY'\np='/tmp/state.n2.md'\nt=open(p).read()\nt=t.replace(\"**Mis à jour : 2026-11-04,  … [1005 caractères tronqués]`
+
+  ```
+86:- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; distillation native **+0,10** ; **runs relancés à 09 h 30** : `kd2` **12 000+/30 000** (gpu0), `rope2048` **3 950+/20 000** (gpu1) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [porte](../../reports/rapport-n2-porte-propre.md).
+88:- **Prochaine action** : **surveiller les runs** (fin estimée **~13 h 25** / **~15 h 10**), puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+95:- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs actifs** `kd2` (gpu0) et `rope2048` (gpu1).
+  en-cours · 1582 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3952 mots (budget 4 000)
+  revue de documentation · 608 fiche(s) · 693 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de l'état N2 corrigé (progression et ETA)
+
+- **bash** `{"command": "git status --short | head -8 ; echo \"---COMMIT---\" ; git commit -m \"ÉTAT — N2 : KD2 ~19 400/30 000 (LOG BUFFERISÉ), ROPE2048 4 650/20 000 ; ETA CORRIGÉE (~13 H 30 / ~19–20 H)\" -m \"Le log kd2 s'arrête à 12 050 pas (11 h 07) alors que le GPU est à 100 % : la sortie est bufferisée ; à … [297 caractères tronqués]`
