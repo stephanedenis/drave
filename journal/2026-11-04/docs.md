@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (59)
+## Commits du jour (60)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -67,6 +67,7 @@
 | 16:50 | `fad7b7cf` | ÉTAT — HEURE 17 H 03 ; B13 165/165, D RESTAURÉ 62, 2 048 À 4 850 PAS | `en-cours.md`, `README.md`, `docs.md` (+4) |
 | 16:53 | `1b4ee66f` | ÉTAT — HEURE 17 H 06 ; B13 165/165, D RESTAURÉ 62, 2 048 À 4 950 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+10) |
 | 16:55 | `f6076fb6` | ÉTAT — HEURE 17 H 10 ; B13 165/165, D RESTAURÉ 62, 2 048 À 5 100 PAS | `en-cours.md`, `README.md`, `docs.md` (+4) |
+| 16:57 | `d6c5474d` | ÉTAT — HEURE 17 H 17 ; B13 165/165, D RESTAURÉ 62, 2 048 À 5 250 PAS | `en-cours.md`, `README.md`, `docs.md` (+4) |
 
 ## Chiffres du jour
 
@@ -77,7 +78,7 @@
 ## Sessions actives ce jour
 
 - `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 47.3 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
-- `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 9.5 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
+- `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 9.6 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
 - `206a4022-ab3c-497d-a5fa-0194931c7fa0` — Tu travailles dans le dépôt (début 2026-11-04 15:56, 0.2 h) → [rapport](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) · [digest](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 48.3 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 6.9 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
