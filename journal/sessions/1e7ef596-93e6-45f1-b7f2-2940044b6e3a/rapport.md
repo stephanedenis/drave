@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 6.0 h |
+| Durée | 6.1 h |
 | Tours | 16 |
-| Messages | 269 |
-| Appels d'outils | 453 |
+| Messages | 272 |
+| Appels d'outils | 456 |
 | Fichiers touchés | 15 |
-| Commandes | 296 |
+| Commandes | 299 |
 | Sous-agents | 0 |
-| Commits | 29 |
+| Commits | 30 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -583,7 +583,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 16 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -592,10 +592,13 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Inspect N2 backlog page and index
 - bash — Add N2 erratum to backlog and update time
 - bash — Commit N2 backlog erratum update
+- bash — Locate 153 counts and sous-type lines
+- bash — Integrate B13 154 variance across docs
+- bash — Commit B13 154 integration
 
 **Synthèse produite :**
 
-⏵ Commit backlog N2 : erratum et paire propre
+⏵ Commit B13 154/154 (variance du sous-type) dans tout le pilotage
 
 ## 3. Travail accompli
 
@@ -661,7 +664,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 256 autres
+- … et 259 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -832,4 +835,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - PLAN-TRAVAIL — L/B13 PASSE À 153/153 (+ FUSION PAR SOUS-TYPE) ; ÉTAT ALLÉGÉ (T0 3 968)" -m "Le plan-travail était resté à 152 : aligné sur les 153 portes, avec 
 - INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)" -m "Le catalogue généré rattrape les trois fiches B13 (pragmatiqu
 - BACKLOG N2 — L'ERRATUM DE LA DISTILLATION (LE +0,10 ÉTAIT UNE REPONDÉRATION) ET LA PAIRE PROPRE DANS LA PAGE" -m "La page N2 ne portait que le 200 k et la fenêt
+- B13 154/154 — LA VARIANCE DU SOUS-TYPE (0,9838 À 0,3, LE GAIN TIENT) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé avec le backlog N2 (6728
 
