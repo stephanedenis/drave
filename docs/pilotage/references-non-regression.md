@@ -9,6 +9,10 @@
 >
 > **Passe précédente — 2026-11-03 à 04 h 10 :** 82 portes, 77 vertes, 5 rouges, 1 h 40 — 4 connues +
 > `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
+>
+> **83e porte — 04/11 :** `porte-n3-inventaire` (1 s) ajoutée et **verte** dans la passe N3
+> (17/17, 92 s, 0 rouge, `work/portes-n3-cloture/registre.txt`) ; elle entrera dans la prochaine
+> passe complète (83 portes).
 
 > **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env., `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) — **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers), dès que le JSON a existé ; aucune régression structurelle. La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
 
@@ -37,7 +41,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **82 portes** ; dernière passe **80 vertes, 2 rouges** (03/11 11 h 30, machine au repos) : les 2 connues (`indice`, `melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **83 portes** (82 à la dernière passe complète ; la 83e, `porte-n3-inventaire`, testée verte le 04/11) ; dernière passe **80 vertes, 2 rouges** (03/11 11 h 30, machine au repos) : les 2 connues (`indice`, `melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs
@@ -93,6 +97,7 @@
 | `porte-n3-deux-processus.sh` | 4 s | PORTE TENUE : deux processus · fichier de frontière · logits identiques au pas plein |
 | `porte-n3-deux-regions.sh` | 4 s | PORTE TENUE : découpage 0..k / k..n bit-exact · pont des deux côtés · prompt différent |
 | `porte-n3-generation.sh` | 8 s | PORTE TENUE : génération répartie · deux caches · sortie bit-identique |
+| `porte-n3-inventaire.sh` | 1 s | PORTE TENUE : inventaire N3 exécutable (autotest 5/5) · 18 portes, 20 fiches, 20 JSON, 0 orpheline |
 | `porte-n3-placement.sh` | 4 s | PORTE TENUE : placement natif = métadonnée · A déterministe · contrôle pont nul détecté |
 | `porte-n3-pont.sh` | 5 s | PORTE TENUE : pont natif branché · A déterministe · pont nul change la sortie |
 | `porte-n3-positions.sh` | 4 s | PORTE TENUE : position vérifiée pas à pas · désync refusée · succès bit-exact |

@@ -4402,3 +4402,533 @@ M  docs/pilotage/en-cours.md
 **Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**
   ```
 
+### 🤖 Assistant
+
+⏵ Intégration N3 : lien, backlog, roadmap
+
+- **edit** `{"file_path": "reports/rapport-n3-inventaire.md", "new_string": "  métadonnée, saut de calcul conditionnel) ; fiche rapport-n3-inventaire.`", "old_string": "  métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).`"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-inventaire.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/backlog/N3-operations-natives.md", "new_string": "> **Statut** : mesurée · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1", "old_string": "> **Statut** : partiel · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/backlog/N3-operations-natives.md", "new_string": "> [`n3.6-service-briques`](../../../reports/rapport-n3.6-service-briques.md),\n> [`n3-inventaire`](../../../reports/rapport-n3-inventaire.md).", "old_string": "> [`n3.6-service-briques`](../../../reports/rapport-n3.6-serv … [18 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/backlog/N3-operations-natives.md", "new_string": "**Mesuré et couvert** — la **sortie précoce** (**−24,05 %** de temps pour **−1,61** point de", "old_string": "**Partiel** — mesuré : la **sortie précoce** (**−24,05 %** de temps pour **−1,61** point de"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/backlog/N3-operations-natives.md", "new_string": "La **composition de service** (pont + placement + seuil) est **tenue** (N3.6) : le pont agit,\nle placement reste une métadonnée, la décision à seuil est rejouable ; le saut de calcul reste\nconditionnel (N3.2b2).\n\nL'** … [487 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/backlog/N3-operations-natives.md", "new_string": "3. ✅ une porte par brique (temps, perte, rejeu) ;\n4. ✅ k-WTA et routes : même traitement.", "old_string": "3. ⏳ une porte par brique (temps, perte, rejeu) ;\n4. ⏳ k-WTA et routes : même traitement."}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture du backlog N3 (modification concurrente détectée)
+
+- **read** `{"file_path": "docs/pilotage/backlog/N3-operations-natives.md", "limit": 95}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md</path>
+<type>file</type>
+<content>
+1: # N3 — Opérations natives : de la mesure à la production
+2: 
+3: > **Statut** : mesurée · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+4: > **Ligne de roadmap** : N3 · **Fiches de résultat** :
+5: > [`n4-porte-execution`](../../../reports/rapport-n4-porte-execution.md),
+6: > [`n4-dessin-b`](../../../reports/rapport-n4-dessin-b.md),
+7: > [`design-H`](../../../reports/rapport-design-H-profondeur-routee.md),
+8: > [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md),
+9: > [`n3.2a-service`](../../../reports/rapport-n3.2a-service.md),
+10: > [`n3.3a-routes`](../../../reports/rapport-n3.3a-routes.md),
+11: > [`n3.2b0-profondeur`](../../../reports/rapport-n3.2b0-profondeur.md),
+12: > [`n3.3b-sparsite`](../../../reports/rapport-n3.3b-sparsite.md),
+13: > [`n3.3c-compte`](../../../reports/rapport-n3.3c-sparsite-compte.md),
+14: > [`n3.4a-composition`](../../../reports/rapport-n3.4a-composition.md),
+15: > [`n3.2b1-seuil`](../../../reports/rapport-n3.2b1-seuil.md),
+16: > [`n3.2b2-cache`](../../../reports/rapport-n3.2b2-cache.md),
+17: > [`n3.4b-pont`
+… [4361 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Backlog : le N3 a déjà appliqué l'essentiel ; reste le mot « Partiel »
+
+- **edit** `{"file_path": "docs/pilotage/backlog/N3-operations-natives.md", "new_string": "**Mesuré et couvert** — la **sortie précoce** (**−24,05 %** de temps pour **−1,61** point de", "old_string": "**Partiel** — mesuré : la **sortie précoce** (**−24,05 %** de temps pour **−1,61** point de"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N3-operations-natives.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "git status --short | head -25 ; echo \"---ÉTAT HEAD---\" ; head -3 docs/pilotage/en-cours.md ; echo \"---BACKLOG COMMIT?---\" ; git log --oneline -1 -- docs/pilotage/backlog/N3-operations-natives.md", "description": "Check concurrent docs edits and state"}`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/backlog/N3-operations-natives.md
+ M docs/pilotage/backlog/index.md
+M  docs/pilotage/en-cours.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+ M journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-n3-inventaire.md
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+?? reports/pensee-defaut-conditionnel.json
+?? reports/rapport-pensee-defaut-conditionnel.md
+?? reports/rapport-s-paragraphes.md
+---ÉTAT HEAD---
+# En ce moment
+
+**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**
+---BACKLOG COMMIT?---
+f9132a68 N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE
+  ```
+
+### 🤖 Assistant
+
+⏵ Lectures fraîches de la roadmap, des références et du runbook
+
+- **read** `{"file_path": "docs/pilotage/roadmap.md", "limit": 1, "offset": 32}`
+- **read** `{"file_path": "docs/pilotage/roadmap.md", "limit": 3, "offset": 198}`
+- **read** `{"file_path": "docs/pilotage/references-non-regression.md", "limit": 42}`
+- **read** `{"file_path": "docs/pilotage/references-non-regression.md", "limit": 10, "offset": 89}`
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 8, "offset": 388}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+32: | **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; reste la **porte propre (0,29)** ; **N4** |
+
+(Showing lines 32-32 of 383. Use offset=33 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+198: | **N2** | la distillation : corpus, professeur, [curriculum](../theorie/glossaire/entrees/curriculum.md) | 🔬 | **N2.h** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,0904**, pas 2,85 ; **la diversité française divise la PPL hors dépôt par 4,3** (16,70 → 3,85) pour **+0,17** en domaine ; **positions aléatoires : 14,11 → 3,25** à 256 octets ; les deux leviers **se composent** (DR : 3,47 / 4,10 / 3,49 à 256) ; la **capacité** (21,65 M) paie **−0,06** en domaine mais ne couvre pas. le **corpus élargi** (N2.i, 4,84 Mo) **généralise** (littérature −22 %, anglais −40 %) ; le **corpus réel** (N2.j, 186 Mo de Wikipédia) donne **7,42** en littérature et **12,41** en anglais (×1,7 à ×2,6) ; le **multilingue** (N2.k, 10 langues, 237 Mo) paie **+57 %** en français et gagne **−42 à −91 %** ailleurs ; les **positions aléatoires** (N2.j2) font tomber le verrou de longueur sur le corpus réel (256 octets 9,28 → 4,49, 512 13,37 → 5,67) ; la **capacité** sur 186 Mo (N2.j3, 21,65 M) paie **−0,19** (contre **−0,06** sur 3,24 Mo) : **données × capacité** ; le **cana
+… [1532 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Références de non-régression
+2: 
+3: > **Dernière passe complète — 2026-11-03 à 11 h 30 :** **82 portes, 80 vertes, 2 rouges**,
+4: > **1 h 48** (journaux durables `work/portes/passe-0303-11h30`), **machine au repos** (GPU libres ;
+5: > seuls des claims CPU). Les **2 rouges sont les connues, structurelles** : `porte-indice` (821 s),
+6: > `porte-melange` (102 s). `porte-homeostasie` **verte** (495 s, LoRA régénéré), `porte-reparti-moteur`
+7: > **verte** (ré-étalonnée à 8,7434), `porte-sessions` **verte** (N2/S en pause), `porte-tableaux` et
+8: > `porte-ressources` vertes.
+9: >
+10: > **Passe précédente — 2026-11-03 à 04 h 10 :** 82 portes, 77 vertes, 5 rouges, 1 h 40 — 4 connues +
+11: > `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
+12: 
+13: > **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env., `porte-reparti-moteur` 51 s) + **`por
+… [2300 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+89: | `porte-miroir-blocs.sh` | 7 s | ✅ porte miroir verte |
+90: | `porte-mistral.sh` | 8 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher  |
+91: | `porte-n3-cache.sh` | 6 s | PORTE TENUE : saut de calcul mesuré · sortie changée · condition K/V nommée |
+92: | `porte-n3-composition.sh` | 6 s | PORTE TENUE : service + profondeur + routage + comptage composés sur les mêmes modèles |
+93: | `porte-n3-deux-processus.sh` | 4 s | PORTE TENUE : deux processus · fichier de frontière · logits identiques au pas plein |
+94: | `porte-n3-deux-regions.sh` | 4 s | PORTE TENUE : découpage 0..k / k..n bit-exact · pont des deux côtés · prompt différent |
+95: | `porte-n3-generation.sh` | 8 s | PORTE TENUE : génération répartie · deux caches · sortie bit-identique |
+96: | `porte-n3-placement.sh` | 4 s | PORTE TENUE : placement natif = métadonnée · A déterministe · contrôle pont nul détecté |
+97: | `porte-n3-pont.sh` | 5 s | PORTE TENUE : pont natif branché · A déterministe · pont nul change la sortie |
+98: | `porte-n3-p
+… [169 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+388: 
+389: **La cadence.** Un cycle = un fait mesuré + fiche + JSON + ligne d'état **proposée** + commit.
+390: Checkpoints du hub : **22 h**, **00 h**, **04 h**, **08 h** (bilan). Une session qui attend
+391: l'humain prend la ligne suivante : on ne bloque jamais. **Le bilan de 08 h** tient en quatre
+392: lignes : ce que chaque session a livré (fiche + commit), le verdict de la passe si elle a tourné,
+393: les claims réels, et ce qui attend l'humain (validation S, clé API déjà fournie).
+
+(End of file - total 393 lines)
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Roadmap, références et runbook : N3 clos, 83e porte, § 12 de reprise
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "porte propre **2,7856** ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 partiel | **N2** : **clôturée**", "old_string": "porte propre **2,7856** ; N4 partiel | **N2** : **clôturée**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "| **N3** | les opérations natives : [k-WTA](../theorie/glossaire/entrees/k-wta.md), routes, sortie précoce, pont, rejeu, placement | ✅ **couvert** (17 portes vertes, 04/11 ; `porte-n3-inventaire`) | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N … [458 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/references-non-regression.md", "new_string": "> `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).\n>\n> **83e porte — 04/11 :** `porte-n3-inventaire` (1 s) ajoutée et **verte** dans la passe N3\n> (17/17, 92 s, 0 rouge, `work/portes-n3-clot … [286 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/references-non-regression.md", "new_string": "| toutes les portes | `tools/toutes-les-portes.sh` | **83 portes** (82 à la dernière passe complète ; la 83e, `porte-n3-inventaire`, testée verte le 04/11) ; dernière passe **80 vertes, 2 rouges** (03/11 11 h 30, machine au r … [352 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/references-non-regression.md", "new_string": "| `porte-n3-generation.sh` | 8 s | PORTE TENUE : génération répartie · deux caches · sortie bit-identique |\n| `porte-n3-inventaire.sh` | 1 s | PORTE TENUE : inventaire N3 exécutable (autotest 5/5) · 18 portes, 20 fiches, 20  … [146 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "les claims réels, et ce qui attend l'humain (validation S, clé API déjà fournie).\n\n## 12. La reprise du 04/11 — le suivi documentaire\n\nLa nuit du 03/11 a été interrompue par le reboot de 19 h 33 (deux runs sans checkpoint). Le\n04/11, … [540 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des mandats avant mise à jour des statuts
+
+- **bash** `{"command": "for id in 29ad180d-38a5-4481-a9a7-ec6ab31c895f e181ce02-cd50-488a-a6be-e84b79d40dcc 0733c5bb-f90b-4f58-9241-3364fa32e46c 1e7ef596-93e6-45f1-b7f2-2940044b6e3a; do echo \"=== $id\" ; grep -n \"Heartbeat\\|État\\|Arrêt constaté\\|Prochaine action\" journal/sessions/$id/plan.md ; done", "de … [48 caractères tronqués]`
+
+  ```
+=== 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+16:- **Heartbeat** : 2026-11-03 17:40 EST
+17:- **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits, 8
+19:- **État** : en pause
+20:- **Arrêt constaté** : reboot du 03/11 19 h 33 ; les validations humaines sont committées
+49:- **Prochaine action (après le cycle)** : la **validation humaine** de la banque (le mode `banque`
+=== e181ce02-cd50-488a-a6be-e84b79d40dcc
+18:- **Heartbeat** : 2026-11-02 21:43 EST
+19:- **Prochaine action** : le **fix FIFO** est testé (3/3) ; reprendre **T132/T133** et le **gold
+22:- **État** : en pause
+23:- **Arrêt constaté** : reboot du 03/11 19 h 33 ; le fix FIFO du store est testé (3/3, l'ancien
+=== 0733c5bb-f90b-4f58-9241-3364fa32e46c
+15:- **Heartbeat** : 2026-11-04 09:41 HAE
+34:- **Prochaine action** : **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du
+36:- **État** : actif
+37:- **Arrêt constaté** : reboot du 03/11 19 h 33 ; les runs `kd2` (8 250/30 000) et `rope2048`
+=== 1e7ef596-93e6-45f1-b7f2-2940044b6e3a
+15:- **Heartbeat** : 2026-11-04 08:50 EST
+16:- **Prochaine action** : **relancer la passe de portes** (arrêtée à 08 h 40), puis laisser les
+18:- **État** 
+… [7 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mandats : S et L repassent « actif », heartbeats au 04/11
+
+- **edit** `{"file_path": "journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "new_string": "- **Heartbeat** : 2026-11-04 11:50 EST", "old_string": "- **Heartbeat** : 2026-11-03 17:40 EST"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "new_string": "- **État** : actif", "old_string": "- **État** : en pause"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "new_string": "- **Reprise** : le 04/11 09 h 46 ; la banque de paragraphes est passée à neuf.", "old_string": "- **Arrêt constaté** : reboot du 03/11 19 h 33 ; les validations humaines sont committées\n  (`7ccc60f`), la p … [52 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "new_string": "- **Heartbeat** : 2026-11-04 11:50 EST", "old_string": "- **Heartbeat** : 2026-11-02 21:43 EST"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "new_string": "- **État** : actif", "old_string": "- **État** : en pause"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "new_string": "- **Reprise** : le 04/11 10 h 14 ; quatre modes, élision 144/144.", "old_string": "- **Arrêt constaté** : reboot du 03/11 19 h 33 ; le fix FIFO du store est testé (3/3, l'ancien\n  code échoue 2/3), le qual … [68 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Mandats : N2 et hub alignés sur les runs et le suivi docs
+
+- **edit** `{"file_path": "journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md", "new_string": "- **Heartbeat** : 2026-11-04 11:50 EST", "old_string": "- **Heartbeat** : 2026-11-04 09:41 HAE"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md", "new_string": "- **Reprise** : le 04/11 09 h 41 ; runs `kd2`/`rope2048` en cours.", "old_string": "- **Arrêt constaté** : reboot du 03/11 19 h 33 ; les runs `kd2` (8 250/30 000) et `rope2048`\n  (3 350/20 000) sont **inte … [109 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md", "new_string": "- **Heartbeat** : 2026-11-04 11:50 EST", "old_string": "- **Heartbeat** : 2026-11-04 08:50 EST"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md", "new_string": "- **Prochaine action** : **suivi docs** (N3 intégré, état au 04/11), puis la **passe** après les runs.", "old_string": "- **Prochaine action** : **relancer la passe de portes** (arrêtée à 08 h 40), puis lai … [87 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Réapplication de l'état autoritatif puis contrôles de cohérence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/en-cours.hub.md docs/pilotage/.en-cours.tmp && mv docs/pilotage/.en-cours.tmp docs/pilotage/en-cours.md && git add docs/pilotage/en-cours.md && echo \"état réappliqué\" ; python3 tools/verifie_en_cours.py 2>&1 | head -6 ; ech … [317 caractères tronqués]`
+
+  ```
+état réappliqué
+  en-cours · 1528 mots · 7 sections · 4 session(s) · 5 puces · 6 questions
+  ❌ 2 anomalie(s) :
+     · 6 questions ouvertes > 5
+     · question sans ce qui la débloque (`→`) : **N3** : le **placement** est une métadonnée et le **saut de
+---SESSIONS---
+  ⚠ mandat long (134 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ❌ plan actif non listé dans en-cours : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a
+---TAILLE---
+  T0 max : 3898 mots (budget 4 000)
+---REVUE---
+  revue de documentation · 607 fiche(s) · 692 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 606 fichiers, le disque en a 607
+     · compteurs : en-cours.md dit 691 JSON, le disque en a 692
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de l'état : mandat hub listé, 6e question retirée, compteurs 607/692
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/en-cours.hub.md'\nt=open(p).read()\nhub = \"\"\"### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11\n\n- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.m … [1267 caractères tronqués]`
+
+  ```
+en-cours · 1572 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---SESSIONS---
+  ⚠ mandat long (135 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+---TAILLE---
+  T0 max : 3942 mots (budget 4 000)
+---REVUE---
+  revue de documentation · 607 fiche(s) · 692 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles finaux : liens, backlog, journal, tableaux, schémas
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -4 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | tail -6 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---SCHEMAS---\" ; python3 tools/verifier_schemas.py 2>&1 | tail -2", "description … [51 caractères tronqués]`
+
+  ```
+✅ 2888 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (3) : A2.6, N2, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1968 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---SCHEMAS---
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -3 ; echo \"---STAGED---\" ; git diff --cached --name-status ; echo \"---STATUS---\" ; git status --short | head -25", "description": "Run table gate and inspect staged set"}`
+
+  ```
+✅ 1631 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2888 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---STAGED---
+M	docs/pilotage/en-cours.md
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/backlog/N3-operations-natives.md
+ M docs/pilotage/backlog/index.md
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+ M docs/pilotage/roadmap.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-n3-inventaire.md
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+?? reports/pensee-defaut-conditionnel.json
+?? reports/rapport-pensee-defaut-conditionnel.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit d'intégration N3 et de cohérence documentaire
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---ADD---\" ; git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/references-non-regression.md docs/pilotage/plan-travail.md docs/pilotage/backlog/N3-operations-natives.md docs/pilotage/backlog/index.md reports/rapport-n3-inventaire.md  … [278 caractères tronqués]`
+
+  ```
+8189c4f3 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+---ADD---
+M	docs/pilotage/backlog/N3-operations-natives.md
+M	docs/pilotage/backlog/index.md
+M	docs/pilotage/en-cours.md
+M	docs/pilotage/plan-travail.md
+M	docs/pilotage/references-non-regression.md
+M	docs/pilotage/roadmap.md
+M	journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md
+M	journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+M	journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+M	reports/rapport-n3-inventaire.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Des commits de session sont arrivés pendant l'écriture : je repars de l'état HEAD
+
+- **bash** `{"command": "git show --stat --oneline 39b7ef00 | head -8 ; echo \"=== HEAD ÉTAT ===\" ; git show HEAD:docs/pilotage/en-cours.md | head -35 ; echo \"...\" ; git show HEAD:docs/pilotage/en-cours.md | grep -n \"S — les structures\\|N3 — clos\\|Pensée — B13\\|fichiers / JSON\\|portes |\" | head -8", "d … [57 caractères tronqués]`
+
+  ```
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+ docs/pilotage/en-cours.md                          |   6 +-
+ journal/2026-11-04/README.md                       |   4 +-
+ journal/2026-11-04/portes.md                       |  27 +++
+ journal/README.md                                  |   8 +-
+ journal/THEMES.md                                  |   1 +
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 185 +++++++++++++++++++++
+ .../rapport.md                                     |  29 +++-
+=== HEAD ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reboot du 03/11 19 h 33** : la nuit a été coupée (`kd2` **8 250/30 000**, `rope2048`
+> **3 350/20 000**, sans checkpoint) ; les quatre sessions ont été mises en pause. **Reprise du
+> 04/11** : hub `1e7ef596` (08 h 50), N2 09 h 41, S 09 h 46, L/B13 10 h 14 ; **N3** clos en
+> session courte (11 h 30–11 h 38). Runbook [`plan-travail.md`](plan-travail.md) § 9 et § 12.
+
+## Sessions en cours
+
+> Contrat : [`con
+… [2295 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 8189c4f3 | head -10 ; echo \"=== B13 RUN2 ===\" ; git show --stat --oneline af28eadd | head -10 ; echo \"=== DISK COUNTS ===\" ; ls reports/*.md | wc -l ; ls reports/*.json | wc -l ; ls tools/porte-*.sh | wc -l", "description": "Inspect S/B13 commits and curren … [15 caractères tronqués]`
+
+  ```
+8189c4f3 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+ docs/pilotage/en-cours.md                          |  95 ++++++--------
+ journal/2026-11-04/README.md                       |  14 +-
+ journal/2026-11-04/distribue.md                    |   8 +-
+ journal/2026-11-04/docs.md                         |   8 +-
+ journal/2026-11-04/mesures.md                      |  16 ++-
+ journal/2026-11-04/modele.md                       |   8 +-
+ journal/2026-11-04/portes.md                       |   8 +-
+ journal/README.md                                  |  10 +-
+ journal/THEMES.md                                  |   2 +-
+=== B13 RUN2 ===
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+ docs/implantation/moteur-de-pensee.md              |    5 +-
+ docs/pilotage/en-cours.md                          |    2 +-
+ journal/2026-11-04/README.md                       |   13 +-
+ journal/2026-11-04/distribue.md                    |    8 +-
+ journal/2026-11-04/docs.md                         |   11 +-
+ journal/2026-11-04/mesures.md                      |    8 +-
+ journal/2026-11-04/modele.md                       |   
+… [160 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état intègre les faits désormais committés (S 61/61, B13 145/145)
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/en-cours.hub.md'\nt=open(p).read()\nt=t.replace(\"- **Fait** : types **60/60**, rôles **142/142** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **55 tests** ; fic … [2855 caractères tronqués]`
+
+  ```
+en-cours · 1550 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3920 mots (budget 4 000)
+  revue de documentation · 607 fiche(s) · 692 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de cohérence : N3, faits S/B13, 83e porte, § 12, mandats
+
+- **bash** `{"command": "git diff --cached --name-status ; echo \"---COMMIT---\" ; git commit -m \"PILOTAGE — N3 INTÉGRÉ, S 61/61 ET B13 145/145 DANS L'ÉTAT ; 83e PORTE, § 12 ET LE SUIVI DOCS\" -m \"Backlog N3 mesurée, roadmap N3 couvert, 83e porte dans les références, runbook § 12 ; état 607 fiches / 692 JSON  … [259 caractères tronqués]`

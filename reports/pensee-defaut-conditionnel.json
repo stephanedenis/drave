@@ -1,0 +1,19 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "146/146",
+ "sans_cle": {
+  "defaut": "confiance",
+  "mock_pos": 0.7455
+ },
+ "avec_cle": {
+  "defaut": "niveau",
+  "reel_pos": 0.9389,
+  "mock_pos": 0.3454
+ },
+ "limites": [
+  "clé = proxy",
+  "deux passes",
+  "mock en CI"
+ ]
+}

@@ -12,9 +12,8 @@
   `tools/ressources.py`, `tools/index_reports.py`, `tools/surveille_sessions.py`, l'index git.
 - **Fichiers réservés** : `docs/pilotage/`, `journal/` (hors `sessions/<id>/`),
   `reports/README.md`, `reports/INDEX.md`, l'index git.
-- **Heartbeat** : 2026-11-04 08:50 EST
-- **Prochaine action** : **relancer la passe de portes** (arrêtée à 08 h 40), puis laisser les
-  runs longs N2 à leur session ; l'état du 04/11 est committé (`59329788`).
+- **Heartbeat** : 2026-11-04 11:50 EST
+- **Prochaine action** : **suivi docs** (N3 intégré, état au 04/11), puis la **passe** après les runs.
 - **État** : actif
 - **Plan** : 1) ~~analyse des quatre sessions~~ ; 2) ~~tâches courtes~~ ; 3) **état au 04/11** ;
   4) **revue + commit** ; 5) **passe de portes** ; 6) **runs longs N2** (plus tard, sur décision).

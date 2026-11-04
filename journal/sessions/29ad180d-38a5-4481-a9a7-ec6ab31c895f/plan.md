@@ -13,12 +13,11 @@
 - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
 - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
   `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
-- **Heartbeat** : 2026-11-03 17:40 EST
+- **Heartbeat** : 2026-11-04 11:50 EST
 - **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits, 8
   verdicts committés), puis la rétro-traduction API ; le nom après un adjectif hors lexique.
-- **État** : en pause
-- **Arrêt constaté** : reboot du 03/11 19 h 33 ; les validations humaines sont committées
-  (`7ccc60f`), la page et les tests restent verts ; reprise à ouvrir.
+- **État** : actif
+- **Reprise** : le 04/11 09 h 46 ; la banque de paragraphes est passée à neuf.
 - **Reprise** : 2026-11-03 13 h 55 ; le retour humain (arrêt de la validation : arbre trop
   plat, référents non résolus) ouvre le cycle arbre/référents ; la banque partielle garde
   142 verdicts / 81 lectures / 65 phrases.

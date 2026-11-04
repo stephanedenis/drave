@@ -2071,6 +2071,24 @@ def t142_run2() -> tuple[bool, str]:
         f"run 2 : refus {d.get('refus')}, niveau {pos_niv}")
 
 
+def t143_defaut_conditionnel() -> tuple[bool, str]:
+    """Le défaut conditionnel : niveau si la clé, confiance sinon."""
+    import os
+    import tools.bloc_linguistique as bl
+    ancien = os.environ.pop("DEEPSEEK_KEY_FILE", None)
+    try:
+        sans = bl.priorite_par_defaut()
+        os.environ["DEEPSEEK_KEY_FILE"] = "/tmp/x"
+        avec = bl.priorite_par_defaut()
+    finally:
+        if ancien is None:
+            os.environ.pop("DEEPSEEK_KEY_FILE", None)
+        else:
+            os.environ["DEEPSEEK_KEY_FILE"] = ancien
+    return sans is None and avec is bl.PRIORITE_NIVEAU, (
+        f"défaut : sans clé {sans}, avec clé {'niveau' if avec else 'confiance'}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2212,7 +2230,8 @@ def main() -> int:
               ("T139 quatre modes", t139_quatre_modes()),
               ("T140 refus r353", t140_r353()),
               ("T141 élision", t141_elision()),
-              ("T142 confirmation", t142_run2())]
+              ("T142 confirmation", t142_run2()),
+              ("T143 défaut conditionnel", t143_defaut_conditionnel())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

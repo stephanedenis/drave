@@ -2793,3 +2793,98 @@ af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,93
 The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
   ```
 
+- **job_output** `{"job_id": "bash-112", "timeout_ms": 30000, "wait": true}`
+
+  ```
+c83f58b5 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+====
+ docs/pilotage/en-cours.md | 94 +++++++++++++++++++----------------------------
+ 1 file changed, 37 insertions(+), 57 deletions(-)
+11:52:49
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-112 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; git log --oneline -2; echo ====; git diff --cached --stat | tail -2; date '+%H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Le hub prépare une réécriture d'en-cours — je vérifie que N3 y survit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat; echo ====; git diff --cached docs/pilotage/en-cours.md | grep -E '^[-+].*(N3|portes \\||fichiers / JSON)' | head -12; echo ====; ls .git/index.lock 2>/dev/null || echo 'pas de verrou'", "description": "Check … [38 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md | 94 +++++++++++++++++++----------------------------
+ 1 file changed, 37 insertions(+), 57 deletions(-)
+====
++> 04/11** : hub `1e7ef596` (08 h 50), N2 09 h 41, S 09 h 46, L/B13 10 h 14 ; **N3** clos en
++> **N3 clos** ; la **passe complète attend la fin des runs** (§ 11). [journal du 04/11](../../journal/2026-11-04/README.md).
+-### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)*
++### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif)*
+-- **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
++- **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
++| dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N
+… [767 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 55; git log --oneline -2; echo ====; git status --short | grep -E 'backlog|en-cours|^ M' | head -8", "description": "Wait for the hub integration commit"}`
+
+  ```
+c83f58b5 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+====
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/backlog/N3-operations-natives.md
+ M docs/pilotage/backlog/index.md
+M  docs/pilotage/en-cours.md
+ M journal/README.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+ M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show :docs/pilotage/en-cours.md | grep -nE 'portes \\||fichiers / JSON|N3 — clos|N3 clos' | head; echo ====; git show :docs/pilotage/en-cours.md | head -3", "description": "Check counters in the hub's staged en-cours"}`
+
+  ```
+23:> **N3 clos** ; la **passe complète attend la fin des runs** (§ 11). [journal du 04/11](../../journal/2026-11-04/README.md).
+87:- **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
+97:| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+99:| fichiers / JSON de résultats | **606** / **691** | `reports/*.md` / `reports/*.json` |
+====
+# En ce moment
+
+**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**
+  ```
+
+### 🤖 Assistant
+
+⏵ N3 est intégré ; le hub a repris la ligne d'état dans son commit en préparation
+
+**N3 est fait, mesuré, committé — et le hub l'a déjà repris dans son état en préparation.**
+
+## Ce qui est au dépôt
+
+| commit | contenu |
+|---|---|
+| **`81fa1a86`** | la fiche `rapport-n3-inventaire.md`, le JSON, `tools/n3_inventaire.py`, `tools/porte-n3-inventaire.sh` (la 83e porte), la ligne d'état et les compteurs |
+| **`39b7ef00`** | restauration de la ligne N3 après qu'une session S a réécrit `en-cours` depuis une copie antérieure (ses 61/61, 144/144 et 56 tests sont conservés) |
+
+**Mesure** : 17/17 portes de brique vertes le 04/11 à 11 h 32, **92 s, 0 rouge** (registre, verdict au code de sortie) ; **18 portes, 20 fiches, 20 JSON, 0 orpheline, 0 référence morte** ; nouvelle porte d'inventaire, **autotest 5/5**. N3 est clos sur ses deux négatifs nommés : **placement = métadonnée**, **saut de calcul conditionnel** (N3.2b2).
+
+## Le hub a pris le relais
+
+Son `en-cours` stagé (pas encore committé) contient déjà : **« N3 clos »**, la ligne complète, les **compteurs 83 / 606 / 691**, la chaîne N ramenée à **N2, N4**, et les deux conditions. C'est la bonne intégration ; je n'ai pas touché son index.
+
+## Reste un diff non committé (volontairement)
+
+Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non stagés** — le hub tient l'index en ce moment :
+
+- `docs/pilotage/backlog/N3-operations-natives.md` : statut **partiel → mesurée**, étapes 3 et 4 **✅**, fiche `n3-inventaire` liée, vérification du 04/11 écrite ;
+- `docs/pilotage/backlog/index.md` : même statut, la frontière du graphe passe à **3** (`A2.6, N2, N4`).
+
+`verifie_backlog.py` est vert sur cet état (plus d'erreur « la fiche dit mesurée, l'index dit partiel »), `revue_documentation.py` est vert, la porte N3 est verte. Il suffit au hub d'ajouter ces deux fichiers à son commit d'intégration.
+
+**Non touchés** : les runs N2 (GPU 0 et 1), le claim `n2-jour`, `AGENTS.md`, la roadmap (déjà à jour : N3 « couvert par brique »). Claim `cpu1` libéré, session `aeafe951` terminée.
+

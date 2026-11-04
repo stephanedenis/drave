@@ -7,9 +7,9 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 43.6 h |
+| Durée | 43.7 h |
 | Tours | 17 |
-| Messages | 441 |
+| Messages | 442 |
 | Appels d'outils | 425 |
 | Fichiers touchés | 17 |
 | Commandes | 338 |
@@ -606,7 +606,13 @@ L'ordre le plus utile est donc : toi, la validation des neuf ; moi, le v7 « fai
 
 **Synthèse produite :**
 
-⏵ Je fais le v7 « fait divers » : le nom après l'adjectif, puis le verbe, et j'ajoute la phrase au gold.
+⏵ Le fait divers est tranché : 61/61 types, 144/144 rôles, 56 tests ; le sous-module est poussé, la fiche et l'état sont sur la branche `s/v7`.
+
+Le v7 ferme la limite nommée du cycle précédent. « Le fait divers surprend » ne coupe plus le verbe dans le GN : la règle suit la **tête du GN** — dès qu'un nom est vu (« fait », ou « lit » après « grand »), un homographe qui suit un adjectif n'est plus le nom — et elle accepte un adjectif **après** l'homographe (« fait **divers** ») quand le verbe vient ensuite. « divers » entre dans le lexique d'adjectifs. Le gold gagne `h061` (sixième vague, écrite après la règle et mesurée une fois) : **61/61 types**, **144/144 rôles**, **50/50 compléments**, couverture **1,00** ; les contrôles restent à **104/144** (0,722), **106/144** (0,736) et **0,10**. Les **56 tests** passent, dont le nouveau test du fait divers.
+
+Le sous-module est poussé en **`523d8c1`**. Le principal a été très bousculé par les commits concurrents du hub, du N2 et de L : l'état S (61/61, 144/144, 606 fiches / 691 JSON) a été repris dans `39b7ef00`, mais la fiche v7, la ligne d'INDEX et le pointeur ont été poussés sur la branche **`s/v7`** (`8189c4f3`), que le hub peut fusionner — la branche porte aussi les changements déjà stagés par les autres sessions. Le T1 signale `reports/README.md` à 2 805 mots (budget 2 800), un texte du hub, pas du S.
+
+La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:8765/paragraphes` (référents puis structure, la source anglaise à côté), puis la **rétro-traduction API** quand la clé sera là, les **71 langues** de l'UDHR, et les deux limites restantes de la traduction — « de très-bons conseils » (GP français, objet direct anglais) et « Lequel est-ce ? » (*Which way?*).
 
 ## 3. Travail accompli
 

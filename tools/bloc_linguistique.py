@@ -29,6 +29,8 @@ Le contrat est dans `docs/implantation/bloc-linguistique.md` ; la fiche dans
 """
 from __future__ import annotations
 
+import os
+
 import argparse
 import collections
 import copy
@@ -1327,6 +1329,15 @@ def _supprimer_chevauchements(etiquettes: list[Etiquette],
 # La priorité **par niveau** de la fusion : le neuronal tient POS/syntagmes/tête,
 # l'heuristique tient phrase/pragmatique/discours/document. C'est la réparation de la
 # fusion : les deux sources ne concourent plus par confiance sur les mêmes niveaux.
+def priorite_par_defaut() -> dict | None:
+    """La fusion par niveau si un neuronal réel est joignable (clé DeepSeek), sinon la confiance.
+
+    Le mock a montré que le niveau perd (0,3432) ; le réel (deux passes) a montré qu'il gagne
+    (0,9389). Le défaut suit donc la **présence d'un réel**, pas une doctrine.
+    """
+    return PRIORITE_NIVEAU if os.environ.get("DEEPSEEK_KEY_FILE") else None
+
+
 PRIORITE_NIVEAU = {
     "graphème": "heuristique", "morphème": "heuristique", "mot": "heuristique",
     "pos": "neuronal", "syntagme": "neuronal", "phrase": "heuristique",
@@ -1391,7 +1402,8 @@ class Parallele:
             raise ValueError("le parallèle attend exactement deux blocs")
         self.blocs = list(blocs)
         self.priorite_syntagme = priorite_syntagme
-        self.priorite_par_niveau = priorite_par_niveau
+        self.priorite_par_niveau = (priorite_par_niveau if priorite_par_niveau is not None
+                                     else priorite_par_defaut())
 
     def analyser(self, texte: str, langue: str | None = None,
                  contexte: str | None = None) -> Annotation:
@@ -1414,7 +1426,8 @@ class Cascade:
         self.seuil = seuil
         self.niveaux = niveaux
         self.priorite_syntagme = priorite_syntagme
-        self.priorite_par_niveau = priorite_par_niveau
+        self.priorite_par_niveau = (priorite_par_niveau if priorite_par_niveau is not None
+                                     else priorite_par_defaut())
         self.appels_neuronal = 0
 
     def analyser(self, texte: str, langue: str | None = None,

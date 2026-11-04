@@ -10,6 +10,15 @@
 > 04/11** : hub `1e7ef596` (08 h 50), N2 09 h 41, S 09 h 46, L/B13 10 h 14 ; **N3** clos en
 > session courte (11 h 30–11 h 38). Runbook [`plan-travail.md`](plan-travail.md) § 9 et § 12.
 
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+
+- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+- **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs (revue, liens, tableaux).
+- **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+
 ## Sessions en cours
 
 > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
@@ -44,8 +53,8 @@
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = trois contrôles.
 - **Objectif final** : gold 60, corpus 60.
-- **Fait** : types **60/60**, rôles **142/142** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **55 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md).
-- **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67** ; **en cours : 61/61, 144/144, 56 tests** (fiche à committer).
+- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
+- **Ce qu'elle fait** : page **`/paragraphes`**, corpus **60**, banque **84/67**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**.
 - **Prochaine action** : **poursuivre la validation sur `/paragraphes`** (a001–a003 faits), puis la rétro-traduction API ; le nom après un adjectif hors lexique.
 - **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents.
@@ -59,8 +68,8 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **144/144** (élision POS **0,7455**, refus **r353 tombé**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [B13](../../reports/rapport-b13-porte-140.md).
-- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35) ; **en cours : run2 145/145** (fiche staged).
+- **Fait** : B13 **145/145** (run2 : refus **0**, niveau **0,9389** ; élision POS **0,7455**, r353 tombé) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [B13](../../reports/rapport-b13-porte-140.md).
+- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **T132/T133**, **gold 200+** ; le qualifier fenêtre attend une version API (serveur local interdit).
 - **Bloquants** : la **pragmatique neuronale** ne qualifie pas ; les **7B locales** sont **interdites** (règle 11) ; reste **gold 200+**.
@@ -82,10 +91,10 @@
 
 ## Ce qui est en cours
 
-- **S — les structures** : 60/60 types, 142/142 rôles, 55 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`** ; **en cours** 61/61, 144/144, 56 tests.
+- **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
 - **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs actifs** `kd2` (gpu0) et `rope2048` (gpu1).
 - **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
-- **Pensée — B13 (actif)** : **144/144**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; fusion : la confiance bat le niveau ; **en cours** run2 145/145.
+- **Pensée — B13 (actif)** : **145/145**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; fusion : la confiance bat le niveau.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
 
 ## Les chiffres de l'état
@@ -96,7 +105,7 @@
 |---|---|---|
 | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **606** / **691** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **607** / **692** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 
@@ -108,7 +117,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 144/144, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 145/145, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre (0,29)** ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** (`rope2048`) ; la restitution |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -118,7 +127,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 144/144 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 145/145 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
 
 ## Les questions ouvertes
 
@@ -127,7 +136,6 @@ externes** et la **prochaine action**.
 - **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → runs relancés, réponse attendue.
 - **R1 (nuit)** : 2 048 à 20 000 pas ? → `rope2048` en cours, réponse attendue.
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.
-- **N3** : le **placement** est une métadonnée et le **saut de calcul** conditionnel — deux conditions nommées, pas des portes.
 
 ## La carte
 

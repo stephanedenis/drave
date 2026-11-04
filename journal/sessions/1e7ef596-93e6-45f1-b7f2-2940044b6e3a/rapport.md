@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 4.5 h |
+| Durée | 4.6 h |
 | Tours | 5 |
-| Messages | 125 |
-| Appels d'outils | 253 |
-| Fichiers touchés | 11 |
-| Commandes | 130 |
+| Messages | 136 |
+| Appels d'outils | 279 |
+| Fichiers touchés | 14 |
+| Commandes | 140 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -194,7 +194,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 5 — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la docum … [23 caractères tronqués]
 
-*49 appels d'outils.* Actions notables :
+*75 appels d'outils.* Actions notables :
 
 - bash — Check sessions, recent commits and tree
 - bash — Run documentation review and state freshness
@@ -210,11 +210,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Read current full state
 - bash — Read B13 state-line updates in recent commits
 - bash — Read N3 report conclusion and backlog page
-- … et 21 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
-⏵ Lectures fraîches de la roadmap, des références et du runbook
+⏵ Commit de cohérence : N3, faits S/B13, 83e porte, § 12, mandats
 
 ## 3. Travail accompli
 
@@ -225,14 +225,17 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 | `tools/tests/test_pensee_store.py` | 1 | 0 |
 | `reports/rapport-n2-production-fenetre.md` | 0 | 3 |
 | `reports/rapport-n2-r12-2048.md` | 0 | 4 |
-| `journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md` | 1 | 2 |
+| `journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md` | 1 | 4 |
 | `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 2 |
-| `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 2 |
-| `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 2 |
-| `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 3 |
+| `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 5 |
+| `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 5 |
+| `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 5 |
 | `docs/pilotage/en-cours.md` | 2 | 60 |
 | `reports/rapport-n3-inventaire.md` | 0 | 1 |
 | `docs/pilotage/backlog/N3-operations-natives.md` | 0 | 6 |
+| `docs/pilotage/roadmap.md` | 0 | 2 |
+| `docs/pilotage/references-non-regression.md` | 0 | 3 |
+| `docs/pilotage/plan-travail.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -276,7 +279,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 90 autres
+- … et 100 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -406,4 +409,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - REPRISE — LES QUATRE SESSIONS INTERROMPUES SONT TRIÉES ; ÉTAT AU 04/11" -m "N2 : les deux runs de la nuit sont interrompus par le reboot de 19 h 33 (kd2 8 250/3
 - MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11" -m "N2 : relancer kd2/rope2048 puis la porte propre. S : poursuivre la validation /paragraph
 - N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS" -m "Les anciens logs sont préservés en .interrompu.log ; 
+- PILOTAGE — N3 INTÉGRÉ, S 61/61 ET B13 145/145 DANS L'ÉTAT ; 83e PORTE, § 12 ET LE SUIVI DOCS" -m "Backlog N3 mesurée, roadmap N3 couvert, 83e porte dans les réf
 

@@ -1,6 +1,6 @@
 # N3 — Opérations natives : de la mesure à la production
 
-> **Statut** : partiel · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+> **Statut** : mesurée · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
 > **Ligne de roadmap** : N3 · **Fiches de résultat** :
 > [`n4-porte-execution`](../../../reports/rapport-n4-porte-execution.md),
 > [`n4-dessin-b`](../../../reports/rapport-n4-dessin-b.md),
@@ -23,7 +23,8 @@
 > [`n3.5d-refus`](../../../reports/rapport-n3.5d-refus.md),
 > [`n3.5e-generation`](../../../reports/rapport-n3.5e-generation.md),
 > [`n3.5f-positions`](../../../reports/rapport-n3.5f-positions.md),
-> [`n3.6-service-briques`](../../../reports/rapport-n3.6-service-briques.md).
+> [`n3.6-service-briques`](../../../reports/rapport-n3.6-service-briques.md),
+> [`n3-inventaire`](../../../reports/rapport-n3-inventaire.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.
@@ -36,7 +37,7 @@ porte** des opérations natives.
 
 ## L'état
 
-**Partiel** — mesuré : la **sortie précoce** (**−24,05 %** de temps pour **−1,61** point de
+**Mesuré et couvert** — la **sortie précoce** (**−24,05 %** de temps pour **−1,61** point de
 perte ; le saut de calcul existe, le saut de contenu non), le **cache** (**19,25×**), le pont,
 le rejeu et le placement (A2.6). La profondeur routée (dessin B) est **exécutée par le
 moteur** : **÷1,47 / ÷1,24** à profondeur 8, avec une variabilité de ±10 % ; le chemin court
@@ -49,7 +50,8 @@ conditionnel (N3.2b2).
 **Ce qui reste** : un chemin natif distribué (le placement natif est une métadonnée) et une
 architecture de cache si elle existe ; la composition de service est **faite** (N3.6). N3.2a,
 N3.2b0, N3.2b1 (seuil), N3.2b2 (condition K/V), N3.3a/b/c, N3.4a (composition), N3.4b (pont),
-N3.4c (condition placement) et N3.6 (service : pont/placement/seuil) sont **faits**.
+N3.4c (condition placement) et N3.6 (service : pont/placement/seuil) sont **faits**. **Vérifié le 04/11** : 17 portes de brique vertes (92 s, 0 rouge), chaîne
+fiche → JSON → porte complète, inventaire exécutable ([fiche](../../../reports/rapport-n3-inventaire.md)).
 
 ## Le contrat
 
@@ -83,8 +85,8 @@ N3.4c (condition placement) et N3.6 (service : pont/placement/seuil) sont **fait
 1. ✅ les briques mesurées (sortie précoce, cache, pont, rejeu, profondeur routée) ;
 2. ✅ profondeur routée, décision à seuil et pont dans le service (N3.2b0/b1, N3.6) ; le saut
    de calcul reste conditionnel (N3.2b2) ;
-3. ⏳ une porte par brique (temps, perte, rejeu) ;
-4. ⏳ k-WTA et routes : même traitement.
+3. ✅ une porte par brique (temps, perte, rejeu) — **17 portes vertes** le 04/11 11 h 32 ;
+4. ✅ k-WTA et routes : même traitement (`porte-n3-routes`, `porte-n3-sparsite`, `-compte`).
 
 ## Voir aussi
 

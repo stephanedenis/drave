@@ -109,7 +109,7 @@ tout cas pour les liens, pas pour les phrases.
 - **en-cours** : la ligne proposée est
   `- **N3 — clos** : 17 portes de brique vertes (04/11 11 h 32, 92 s, 0 rouge) ; inventaire
   exécutable (\`porte-n3-inventaire\`, autotest 5/5) ; deux conditions nommées (placement =
-  métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).`
+  métadonnée, saut de calcul conditionnel) ; fiche rapport-n3-inventaire.`
   et le compteur de portes **82 → 83**.
 
 ## 7. Fichiers

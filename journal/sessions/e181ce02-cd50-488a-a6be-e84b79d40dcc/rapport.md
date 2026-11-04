@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 91.2 h |
+| Durée | 91.3 h |
 | Tours | 160 |
-| Messages | 1911 |
-| Appels d'outils | 1635 |
+| Messages | 1914 |
+| Appels d'outils | 1638 |
 | Fichiers touchés | 25 |
-| Commandes | 1344 |
+| Commandes | 1346 |
 | Sous-agents | 2 |
-| Commits | 200 |
+| Commits | 201 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8487,6 +8487,9 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Conditionner le défaut à la présence de la clé
 - bash — Écrire la fiche du défaut conditionnel et la porte T143
 - bash — Trim T0/README et passer toutes les portes
+- bash — Corriger compteurs, question et lien cassé
+- bash — Committer le défaut conditionnel
+- job_output
 
 **Synthèse produite :**
 
@@ -8571,7 +8574,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1304 autres
+- … et 1306 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8919,4 +8922,5 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - B13 — LES QUATRE MODES SUR LE RÉEL : LE NIVEAU GAGNE (0,9309/0,8226/0,8784) ET GARDE L'ACTE ; 143/143" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "Q
 - B13 — L'ÉLISION : LE CONTRAT IMPOSE SA TOKENISATION (POS 0,7455), LE REFUS R353 TOMBE ; 144/144" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "L'ÉLISI
 - B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA CONFIRMATION"; th
+- B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT CONDITI
 

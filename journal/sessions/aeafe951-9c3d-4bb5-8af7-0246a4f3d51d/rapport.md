@@ -9,10 +9,10 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 2.5 h |
 | Tours | 3 |
-| Messages | 109 |
-| Appels d'outils | 137 |
+| Messages | 111 |
+| Appels d'outils | 138 |
 | Fichiers touchés | 6 |
-| Commandes | 114 |
+| Commandes | 115 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -130,7 +130,7 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 
 ### Tour 3 — go
 
-*42 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Inspect current tree, staged files, and en-cours diff
 - bash — Check en-cours modification time and hub process
@@ -146,11 +146,37 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 - job_output
 - bash — Verify commit contents and remaining working tree
 - bash — Check no foreign files, state freshness, doc review
-- … et 25 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
-⏵ Le hub prépare une réécriture d'en-cours — je vérifie que N3 y survit
+⏵ N3 est intégré ; le hub a repris la ligne d'état dans son commit en préparation
+
+**N3 est fait, mesuré, committé — et le hub l'a déjà repris dans son état en préparation.**
+
+\## Ce qui est au dépôt
+
+| commit | contenu |
+|---|---|
+| **`81fa1a86`** | la fiche `rapport-n3-inventaire.md`, le JSON, `tools/n3_inventaire.py`, `tools/porte-n3-inventaire.sh` (la 83e porte), la ligne d'état et les compteurs |
+| **`39b7ef00`** | restauration de la ligne N3 après qu'une session S a réécrit `en-cours` depuis une copie antérieure (ses 61/61, 144/144 et 56 tests sont conservés) |
+
+**Mesure** : 17/17 portes de brique vertes le 04/11 à 11 h 32, **92 s, 0 rouge** (registre, verdict au code de sortie) ; **18 portes, 20 fiches, 20 JSON, 0 orpheline, 0 référence morte** ; nouvelle porte d'inventaire, **autotest 5/5**. N3 est clos sur ses deux négatifs nommés : **placement = métadonnée**, **saut de calcul conditionnel** (N3.2b2).
+
+\## Le hub a pris le relais
+
+Son `en-cours` stagé (pas encore committé) contient déjà : **« N3 clos »**, la ligne complète, les **compteurs 83 / 606 / 691**, la chaîne N ramenée à **N2, N4**, et les deux conditions. C'est la bonne intégration ; je n'ai pas touché son index.
+
+\## Reste un diff non committé (volontairement)
+
+Deux fichiers de backlog sont modifiés et validés dans l'arbre, mais **non stagés** — le hub tient l'index en ce moment :
+
+- `docs/pilotage/backlog/N3-operations-natives.md` : statut **partiel → mesurée**, étapes 3 et 4 **✅**, fiche `n3-inventaire` liée, vérification du 04/11 écrite ;
+- `docs/pilotage/backlog/index.md` : même statut, la frontière du graphe passe à **3** (`A2.6, N2, N4`).
+
+`verifie_backlog.py` est vert sur cet état (plus d'erreur « la fiche dit mesurée, l'index dit partiel »), `revue_documentation.py` est vert, la porte N3 est verte. Il suffit au hub d'ajouter ces deux fichiers à son commit d'intégration.
+
+**Non touchés** : les runs N2 (GPU 0 et 1), le claim `n2-jour`, `AGENTS.md`, la roadmap (déjà à jour : N3 « couvert par brique »). Claim `cpu1` libéré, session `aeafe951` terminée.
 
 ## 3. Travail accompli
 
@@ -207,7 +233,7 @@ Ligne d'état à ajouter sous « Ce qui est en cours » :
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 74 autres
+- … et 75 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -87,7 +87,7 @@ prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadm
 | B1.5 | [Prose scientifique (corpus humain)](B1.5-prose-scientifique.md) | bloquée | P3 | B1 | B1.5 |
 | B11.10 | [Cartes et ambiguïtés de la RSN](B11.10-cartes-ambiguites.md) | mesurée | P2 | B11 | B11.10 |
 | A2.6 | [Ordonnanceur : experts et tête](A2.6-ordonnanceur.md) | partiel | P2 | A2 | A2.6 |
-| N3 | [Opérations natives en production](N3-operations-natives.md) | partiel | P2 | N1 | N3 |
+| N3 | [Opérations natives en production](N3-operations-natives.md) | mesurée | P2 | N1 | N3 |
 | A3.2 | [Granularité du flux](A3.2-granularite.md) | mesurée | P2 | A3 | A3.2 |
 | A3.3 | [Seuil de rentabilité](A3.3-seuil.md) | mesurée | P2 | A3.2 | A3.3 |
 | A8.0 | [Portes PPL épinglées](A8.0-portes-ppl.md) | mesurée | P2 | A8 | A8.0 |

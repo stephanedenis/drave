@@ -391,3 +391,12 @@ Checkpoints du hub : **22 h**, **00 h**, **04 h**, **08 h** (bilan). Une session
 l'humain prend la ligne suivante : on ne bloque jamais. **Le bilan de 08 h** tient en quatre
 lignes : ce que chaque session a livré (fiche + commit), le verdict de la passe si elle a tourné,
 les claims réels, et ce qui attend l'humain (validation S, clé API déjà fournie).
+
+## 12. La reprise du 04/11 — le suivi documentaire
+
+La nuit du 03/11 a été interrompue par le reboot de 19 h 33 (deux runs sans checkpoint). Le
+04/11, le hub `1e7ef596` a rouvert l'état, relancé `kd2`/`rope2048` (09 h 30) et trois sessions
+ont repris (N2 09 h 41, S 09 h 46, L/B13 10 h 14) ; **N3** a clos sa ligne en session courte
+(11 h 30–11 h 38). Le suivi docs tourne à chaque cycle : `revue_documentation.py`,
+`verifie_en_cours.py`, `taille_documents.py`, `verifie_journal.py`, `verifier_liens.py`,
+`porte-tableaux.sh` ; la **passe complète** attend la fin des runs (règle § 11).
