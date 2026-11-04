@@ -6772,3 +6772,89 @@ docs/pilotage/plan-travail.md OK
 ⏵ Commit B13 149/149 et DRVM N0.1 dans le pilotage
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md && git commit -m \"B13 149/149 — DRVM N0.1 : LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; ÉTAT, ROADMAP, CHANT … [563 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 8cea841f41bd691bd941bd198ce9132f805321f7 but expected 6b0e9c833c6d33ced86fe7bc9857850c48515f4f
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un commit de session a déplacé HEAD (8cea841f) ; je vérifie s'il a emporté l'intégration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"=== 8cea841f ===\" ; git show --stat --oneline 8cea841f | head -14 ; echo \"=== HEAD 149 ===\" ; git show HEAD:docs/pilotage/en-cours.md | grep -c \"149/149\" ; git show HEAD:docs/pilotage/roadmap.md | gr … [254 caractères tronqués]`
+
+  ```
+8cea841f B13 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; 150/150
+6b0e9c83 ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS
+9593718e N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149
+=== 8cea841f ===
+8cea841f B13 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; 150/150
+ docs/implantation/moteur-de-pensee.md              |    5 +-
+ docs/pilotage/chantiers.md                         |   10 +-
+ docs/pilotage/en-cours.md                          |   14 +-
+ docs/pilotage/plan-travail.md                      |    6 +-
+ docs/pilotage/roadmap.md                           |   10 +-
+ journal/2026-11-04/README.md                       |    9 +-
+ journal/2026-11-04/apprentissage.md                |    7 +-
+ journal/2026-11-04/distribue.md                    |    4 +-
+ journal/2026-11-04/docs.md                         |    4 +-
+ journal/2026-11-04/mesures.md                      |    4 +-
+ journal/2026-11-04/modele.md                       |    4 +-
+ journal/2026-11-04/portes.md                       |    4 +-
+ journal/README.md                                  |    4 +-
+=== HE
+… [392 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit B13 150/150 a emporté l'intégration 149/DRVM ; je vérifie l'état des compteurs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== HEAD ÉTAT B13/COUNT/TIME ===\" ; head -3 docs/pilotage/en-cours.md ; grep -n \"B13 \\*\\*15\\|Pensée — B13\\|B13 : 15\\|fichiers / JSON\\|150/150\" docs/pilotage/en-cours.md | head -8 ; echo \"=== 150 AUTRES ===\" ; grep -c … [277 caractères tronqués]`
+
+  ```
+=== HEAD ÉTAT B13/COUNT/TIME ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 12 h 43 HNE (heure locale, EST).**
+97:- **Pensée — B13 (actif)** : **149/149**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; fusion : la confiance bat le niveau.
+108:| fichiers / JSON de résultats | **611** / **698** | `reports/*.md` / `reports/*.json` |
+=== 150 AUTRES ===
+docs/pilotage/roadmap.md:0
+docs/pilotage/chantiers.md:0
+docs/pilotage/plan-travail.md:0
+=== REVUE ===
+  revue de documentation · 611 fiche(s) · 698 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== LOG ===
+8cea841f B13 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; 150/150
+6b0e9c83 ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS
+  ```
+
+### 🤖 Assistant
+
+⏵ Intégration B13 150/150 (variance à 0,3) dans le pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:70]); continue\n        t=t.replace(old … [1807 caractères tronqués]`
+
+  ```
+état OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1628 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3998 mots (budget 4 000)
+  revue de documentation · 611 fiche(s) · 698 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2928 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit B13 150/150 (variance) dans le pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md && git commit -m \"B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, … [414 caractères tronqués]`

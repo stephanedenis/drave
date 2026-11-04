@@ -34886,3 +34886,202 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-107", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-variance.json
+ create mode 100644 reports/rapport-pensee-variance.md
+COMMIT OK 1
+8cea841f B13 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; 150/150
+mer 04 nov 2026 12:43:49 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie : 5 rounds livrés (défaut conditionnel, seuil, passes, DRVM, variance) ; 150/150
+
+Pendant l'autonomie, cinq rounds mesurés sont livrés, tous committés et verts.
+
+## Les cinq rounds
+
+| round | résultat | commit |
+|---|---|---|
+| **Le défaut conditionnel** | niveau si la clé, confiance sinon (le mock perd, le réel gagne) | `d390136a` |
+| **Le seuil du parallèle** | la confiance plafonne sous le max (0,9326 < 0,9389) ; seuil corrigé | `25d631fe` |
+| **La troisième passe** | variance nulle, **7/7 seuils**, refus 0 | (avec l'index) |
+| **DRVM N0.1** | **6/6** : le payload corrompu était **accepté** ; le hash manquait — corrigé | `9593718e` |
+| **La variance à 0,3** | ±0,0074 au pire, POS stable, 7/7 seuils, refus 0 | `8cea841f` |
+
+## Ce que ça a établi
+
+- **Le réel tranche** : le niveau gagne avec l'API (0,9389) et perd avec le mock (0,3454) — le défaut suit la **présence de la clé**, pas une doctrine.
+- **La confiance plafonne** : le mode `parallele` ne peut pas battre le max (sa règle le lui interdit) ; seul le niveau le bat.
+- **La mesure est stable** : trois passes à 0 (identiques) et une à 0,3 (±0,0074) — la tokenisation corrigée n'est pas un accident.
+- **Le format natif avait un trou** : DRVM vérifiait le manifeste mais **pas le payload** ; la porte N0.1 l'a attrapé et le hash est maintenant vérifié.
+- **Le refus `r353` est tombé** : l'élision (`l'` + `écoutent`) aligne le bloc sur le modèle.
+
+## L'état
+
+- **150/150 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **611 fiches / 698 JSON / 120 docs / 83 portes** — ✅ ; `en-cours` à jour (14 h 30).
+- Le goal est **actif**, réarmé pour la session d'autonomie (11 h 50 → 15 h 50 EST) ; l'horloge réelle est **12 h 43 HNE**.
+- Les 5 commits sont passés malgré les courses d'index (un `index.lock` d'une autre session a été attendu 30 s).
+
+## La suite (il reste ~3 h)
+
+1. **La pragmatique neuronale** : le composite ne la rend pas (acte 0,0) — la prochaine mesure utile.
+2. **Le GGUF** : la porte N0.1 complète quand le modèle sera là.
+3. **Trois tirages à 0,3** : la moyenne et l'écart-type.
+4. **L** : le gold vivant peut grandir.
+
+Je continue la file : prochain round, **la pragmatique neuronale** — la seule sortie que le réel ne rend pas encore.
+
+
+## Tour 161
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit ; si une ligne est bloquée, prendre la suivante de la file."
+Round: 142/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class NeuronalLLMPOS\\|class NeuronalLLMChunks\\|class NeuronalLLMCompose\" tools/bloc_linguistique.py; sed -n \"$(grep -n 'class NeuronalLLMCompose' tools/bloc_linguistique.py | cut -d: -f1),+40p\" tools/bloc_linguistique. … [49 caractères tronqués]`
+
+  ```
+885:class NeuronalLLMPOS:
+1016:class NeuronalLLMChunks:
+1151:class NeuronalLLMCompose:
+class NeuronalLLMCompose:
+    """Deux taggers neuronaux, **une** annotation : POS + syntagmes, même contrat.
+
+    Le composite n'invente rien : il appelle les deux taggers (chacun avec son cache), réunit
+    leurs étiquettes et leurs traces, et laisse `source = neuronal`. C'est le bloc que la
+    cascade complète branche ; la pragmatique reste à l'heuristique, qui la tient à 1,0 sur le
+    gold. Un refus d'un des deux taggers n'efface pas l'autre : l'annotation est **partielle**,
+    et `refus` dit lequel a manqué.
+    """
+
+    nom = "neuronal"
+
+    def __init__(self, pos: BlocLinguistique, chunks: BlocLinguistique):
+        self.pos = pos
+        self.chunks = chunks
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        a = self.pos.analyser(texte, langue, contexte)
+        b = self.chunks.analyser(texte, langue, contexte)
+        etiquettes = a.etiquettes + b.etiquettes
+        refus = "; ".join(x for x in (a.refus, b.refus) if x)
+        lg = a.langue if a.langue != "und" else b.langue
+        script = a.script if a.
+… [903 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1178,1250p' tools/bloc_linguistique.py", "description": "Lire la grammaire pragmatique et son usage"}`
+
+  ```
+trace=a.trace + b.trace + [{"etape": "compose",
+                                        "niveaux": sorted({e.niveau for e in etiquettes})}],
+            cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
+                  "duree_s": round(a.cout.get("duree_s", 0.0) + b.cout.get("duree_s", 0.0), 6)})
+
+
+ACTES = ("assertion", "question", "exclamation")
+
+
+def grammaire_pragma() -> str:
+    """La grammaire GBNF de l'objet pragmatique : quatre champs, des valeurs fermées."""
+    texte = ('root ::= "{\\"acte\\":" acte ",\\"negation\\":" bool ",\\"modalite\\":" bool '
+             '",\\"double_sens\\":" bool "}"\n')
+    texte += 'acte ::= ' + ' | '.join('"\\"%s\\""' % a for a in ACTES) + '\n'
+    texte += 'bool ::= "true" | "false"\n'
+    return texte
+
+
+class NeuronalLLMPragmatique:
+    """Le tagger **pragmatique** réel : acte, négation, modalité, double sens.
+
+    Le modèle local rend un objet JSON à quatre champs, contraint par la grammaire
+    `grammaire_pragma` : l'acte (`assertion`, `question`, `exclamation`), puis trois
+    booléens. Le bloc construit les étiquettes `pragmatique.acte`, `phrase.négation`,
+    `phrase.modalité` et `pragmatique.double_sens` ; c'est le m
+… [2482 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    def __init__(self, pos: BlocLinguistique, chunks: BlocLinguistique):\n        self.pos = pos\n        self.chunks = c … [2933 caractères tronqués]`
+
+  ```
+pragma branché sur le composite
+Le chat dort. | refus - | pragma [('pragmatique', 'acte', 'assertion')]
+Tu viens demain ? | refus - | pragma [('pragmatique', 'acte', 'question')]
+Viens ! | refus - | pragma [('pragmatique', 'acte', 'exclamation')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1290,1360p' tools/bloc_linguistique.py", "description": "Lire la construction des étiquettes pragmatiques"}`
+
+  ```
+refus=f"neuronal-pragmatique: {type(e).__name__}: {str(e)[:160]}",
+                                    trace=[{"etape": "neuronal-pragmatique", "erreur": str(e)[:160]}],
+                                    cout={"octets": len(texte.encode()),
+                                          "duree_s": round(time.perf_counter() - t0, 6)})
+        if self.cache:
+            self._cache[cle] = annotation
+        return annotation
+
+
+# --------------------------------------------------------------------------- compositions
+
+
+def _supprimer_chevauchements(etiquettes: list[Etiquette],
+                              priorite_syntagme: str = "heuristique") -> list[Etiquette]:
+    """Les alternatives se suppriment **par type** quand les types sont complémentaires.
+
+    `pos` et `syntagme` sont des alternatives de **span** : on garde la plus confiante.
+    Pour le **syntagme**, la politique par défaut (`heuristique`) garde la segmentation de
+    l'heuristique ; `confiance` laisse la plus confiante gagner (le tagger neuronal à 0,6
+    passe devant l'heuristique à 0,4). `phrase` (type/négation/modalité), `pragmatique` (acte/double_sens/contexte), `discours`
+    (paragraphe/connecteur) et `document` (ti
+… [2728 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1252,1292p' tools/bloc_linguistique.py", "description": "Lire l'analyser du tagger pragmatique"}`
+
+  ```
+if not texte.strip():
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        cle = (texte, langue)
+        if self.cache and cle in self._cache:
+            return copy.deepcopy(self._cache[cle])
+        try:
+            with self._verrou:
+                self.appels += 1
+            sortie = self.transport(self._invite(texte), grammaire_pragma(), self.max_jetons)
+            debut, fin = sortie.find("{"), sortie.rfind("}")
+            if debut < 0 or fin <= debut:
+                raise ValueError(f"pas de JSON : {sortie[:120]!r}")
+            donnees = json.loads(sortie[debut:fin + 1])
+            acte = str(donnees.get("acte", "")).lower()
+            if acte not in ACTES:
+                raise ValueError(f"acte inconnu : {acte!r}")
+            negation = bool(donnees.get("negation", False))
+            modalite = bool(donnees.get("modalite", False))
+            double_sens = bool(donnees.get("double_sens", False))
+            n = len(texte)
+            etiquettes = [Etiquette("pragmatique", "acte", acte, 0, n, self.nom,
+                                    self.confiance, langue=lg, script=script)]
+            if negation:
+    
+… [1393 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.bloc_linguistique import NeuronalLLMCompose, NeuronalLLMPOS, NeuronalLLMChunks, NeuronalLLMPragm … [812 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-113]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-113", "timeout_ms": 1800000, "wait": true}`

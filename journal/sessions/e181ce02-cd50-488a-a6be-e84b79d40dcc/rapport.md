@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 92.0 h |
-| Tours | 160 |
-| Messages | 1952 |
-| Appels d'outils | 1677 |
+| Durée | 92.1 h |
+| Tours | 161 |
+| Messages | 1961 |
+| Appels d'outils | 1684 |
 | Fichiers touchés | 25 |
-| Commandes | 1379 |
+| Commandes | 1385 |
 | Sous-agents | 2 |
 | Commits | 206 |
 | Compactages de contexte | 5 |
@@ -359,6 +359,8 @@
 **Tour 159** — go
 
 **Tour 160** — vas-y en automomie pour le 4 prochaines heures
+
+**Tour 161** — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mes … [665 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8499,7 +8501,54 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 **Synthèse produite :**
 
-⏵ Committer DRVM N0.1, puis la variance
+⏵ Autonomie : 5 rounds livrés (défaut conditionnel, seuil, passes, DRVM, variance) ; 150/150
+
+Pendant l'autonomie, cinq rounds mesurés sont livrés, tous committés et verts.
+
+\## Les cinq rounds
+
+| round | résultat | commit |
+|---|---|---|
+| **Le défaut conditionnel** | niveau si la clé, confiance sinon (le mock perd, le réel gagne) | `d390136a` |
+| **Le seuil du parallèle** | la confiance plafonne sous le max (0,9326 < 0,9389) ; seuil corrigé | `25d631fe` |
+| **La troisième passe** | variance nulle, **7/7 seuils**, refus 0 | (avec l'index) |
+| **DRVM N0.1** | **6/6** : le payload corrompu était **accepté** ; le hash manquait — corrigé | `9593718e` |
+| **La variance à 0,3** | ±0,0074 au pire, POS stable, 7/7 seuils, refus 0 | `8cea841f` |
+
+\## Ce que ça a établi
+
+- **Le réel tranche** : le niveau gagne avec l'API (0,9389) et perd avec le mock (0,3454) — le défaut suit la **présence de la clé**, pas une doctrine.
+- **La confiance plafonne** : le mode `parallele` ne peut pas battre le max (sa règle le lui interdit) ; seul le niveau le bat.
+- **La mesure est stable** : trois passes à 0 (identiques) et une à 0,3 (±0,0074) — la tokenisation corrigée n'est pas un accident.
+- **Le format natif avait un trou** : DRVM vérifiait le manifeste mais **pas le payload** ; la porte N0.1 l'a attrapé et le hash est maintenant vérifié.
+- **Le refus `r353` est tombé** : l'élision (`l'` + `écoutent`) aligne le bloc sur le modèle.
+
+\## L'état
+
+- **150/150 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **611 fiches / 698 JSON / 120 docs / 83 portes** — ✅ ; `en-cours` à jour (14 h 30).
+- Le goal est **actif**, réarmé pour la session d'autonomie (11 h 50 → 15 h 50 EST) ; l'horloge réelle est **12 h 43 HNE**.
+- Les 5 commits sont passés malgré les courses d'index (un `index.lock` d'une autre session a été attendu 30 s).
+
+\## La suite (il reste ~3 h)
+
+1. **La pragmatique neuronale** : le composite ne la rend pas (acte 0,0) — la prochaine mesure utile.
+2. **Le GGUF** : la porte N0.1 complète quand le modèle sera là.
+3. **Trois tirages à 0,3** : la moyenne et l'écart-type.
+4. **L** : le gold vivant peut grandir.
+
+Je continue la file : prochain round, **la pragmatique neuronale** — la seule sortie que le réel ne rend pas encore.
+
+### Tour 161 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Lire le composite neuronal
+- bash — Lire la grammaire pragmatique et son usage
+- bash — Brancher la pragmatique et tester
+- bash — Lire la construction des étiquettes pragmatiques
+- bash — Lire l'analyser du tagger pragmatique
+- bash — Mesurer la pragmatique neuronale sur 130 phrases
+- job_output
 
 ## 3. Travail accompli
 
@@ -8580,7 +8629,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1339 autres
+- … et 1345 autres
 
 ## 4. Mesures et résultats marquants
 

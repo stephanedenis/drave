@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 5.3 h |
+| Durée | 5.4 h |
 | Tours | 10 |
-| Messages | 199 |
-| Appels d'outils | 369 |
+| Messages | 204 |
+| Appels d'outils | 374 |
 | Fichiers touchés | 14 |
-| Commandes | 214 |
+| Commandes | 219 |
 | Sous-agents | 0 |
-| Commits | 16 |
+| Commits | 18 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -389,7 +389,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 10 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -397,10 +397,15 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check state facts, time and runs
 - bash — Read DRVM N0.1 verdict and doc counts
 - bash — Integrate B13 149 and DRVM N0.1 in pilotage docs
+- bash — Commit B13 149 and DRVM N0.1 integration
+- bash — Inspect concurrent commit and staged integration
+- bash — Check HEAD state for 150 and counters
+- bash — Integrate B13 150 variance across pilotage docs
+- bash — Commit B13 150 variance integration
 
 **Synthèse produite :**
 
-⏵ Intégration B13 149/149 et DRVM N0.1 dans l'état, la roadmap, les chantiers et le plan
+⏵ Commit B13 150/150 (variance) dans le pilotage
 
 ## 3. Travail accompli
 
@@ -465,7 +470,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 174 autres
+- … et 179 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -593,13 +598,14 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-5 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
 - **T6** : M  docs/implantation/moteur-de-pensee.md M  docs/pilotage/en-cours.md  M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md  M journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rappor
 - **T8** : 31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees
 - **T9** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
+- **T10** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 8cea841f41bd691bd941bd198ce9132f805321f7 but expected 6b0e9c833c6d33ced86fe7bc9857850c48515f4f [exit code: 128]
 
 ## 6. Commits
 
@@ -619,4 +625,6 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — COMPTEURS 610/697 (WIP B13 t03) ; HEURE 12 H 37" -m "Le nouveau JSON pensee-quatre-modes-432-t03.json (B13, non committé) porte le disque à 697 JSON ; l'
 - ÉTAT — COMPTEURS 610/697 (WIP B13 t03) ; HEURE 12 H 37" -m "Le nouveau JSON pensee-quatre-modes-432-t03.json (B13, non committé) porte le disque à 697 JSON ; l'
 - ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS" -m "Le +0,14–0,18 (et le +0,10 de la production) ve
+- B13 149/149 — DRVM N0.1 : LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé (9593718e, rappor
+- B13 150/150 — LA VARIANCE À 0,3 : ±0,0074 AU PIRE, 7/7 SEUILS, REFUS 0 ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé (8cea841f, rapport-pen
 
