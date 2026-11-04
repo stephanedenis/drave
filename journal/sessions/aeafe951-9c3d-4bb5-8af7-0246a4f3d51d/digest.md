@@ -4742,3 +4742,86 @@ Created file
 </content>
   ```
 
+- **write** `{"content": "# D — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train\n\n> **Ligne de roadmap** : D · **Date** : 2026-11-04 · **Verdict** : ⛔ **le re-split 64 (2/1/1) est\n> contaminé** — **DOC2**, placé en **val**, a **18/20 fenêtres de 500 o** déjà dans l'ancie … [5950 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-cegep-64.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -n \"D\\*\\* — \\|fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md | head; echo ====; python3 tools/revue_documentation.py 2>&1 | tail -3; git status --short | grep -E 'en-cours|cegep-64' | head", "descrip … [64 caractères tronqués]`
+
+  ```
+16:11
+3:**Mis à jour : 2026-11-04, 16 h 06 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **625** / **718** | `reports/*.md` / `reports/*.json` |
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire) ; **re-split 2/1/1** ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
+====
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 625 fichiers, le disque en a 626
+     · compteurs : en-cours.md dit 718 JSON, le disque en a 719
+M  docs/pilotage/en-cours.md
+?? reports/ocr-cegep-64.json
+?? reports/rapport-ocr-cegep-64.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat; echo ====; git diff docs/pilotage/en-cours.md | head -20; echo ====; ls .git/index.lock 2>/dev/null || echo 'pas de verrou'", "description": "Inspect staged en-cours and working diff"}`
+
+  ```
+docs/pilotage/chantiers.md                |  8 ++--
+ docs/pilotage/en-cours.md                 | 10 ++---
+ docs/pilotage/plan-travail.md             |  6 +--
+ docs/pilotage/roadmap.md                  |  6 +--
+ reports/pensee-cible-proximite.json       | 32 ++++++++++++++++
+ reports/rapport-pensee-cible-proximite.md | 64 +++++++++++++++++++++++++++++++
+ 6 files changed, 111 insertions(+), 15 deletions(-)
+====
+====
+pas de verrou
+  ```
+
+### 🤖 Assistant
+
+⏵ L'index est tenu par un commit B13 en préparation ; j'attends pour corriger l'état sans le voler
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 55; git log --oneline -2; git diff --cached --stat | tail -3; date '+%H:%M:%S'", "description": "Wait for the pending commit to land"}`
+
+  ```
+6cb09126 ÉTAT — HEURE 16 H 04 ; B13 163/163, D clos, 2 048 À 2 200 PAS
+68a40051 ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+ reports/pensee-cible-proximite.json       | 32 ++++++++++++++++
+ reports/rapport-pensee-cible-proximite.md | 64 +++++++++++++++++++++++++++++++
+ 6 files changed, 111 insertions(+), 15 deletions(-)
+16:13:02
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige l'état et je commite en `--only` (les fichiers de L restent stagés)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"D\\*\\* — \" docs/pilotage/en-cours.md; grep -n \"fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md | head -3", "description": "Read the exact D line to replace"}`
+
+  ```
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire) ; **re-split 2/1/1** ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
+3:**Mis à jour : 2026-11-04, 16 h 06 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **625** / **718** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text()\nt = t.replace(\"**Mis à jour : 2026-11-04, 16 h 06 HNE (heure locale, EST).**\",\n              \"**Mis à jour : 2026-11-04, 16 h 1 … [1097 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/plan.md')\nt = p.read_text()\nt = t.replace(\"- **Heartbeat** : 2026-11-04 15:35 EST\", \"- **Heartbeat** : 2026-11-04 16:15  … [1971 caractères tronqués]`
+
+  ```
+started background job bash-245
+  ```
+
+- **job_output** `{"job_id": "bash-245", "timeout_ms": 240000, "wait": true}`

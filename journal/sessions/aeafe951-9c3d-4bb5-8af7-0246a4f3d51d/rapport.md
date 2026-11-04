@@ -9,12 +9,12 @@
 | Début | 2026-11-04 09:25 |
 | Durée | 6.8 h |
 | Tours | 6 |
-| Messages | 214 |
-| Appels d'outils | 246 |
+| Messages | 218 |
+| Appels d'outils | 250 |
 | Fichiers touchés | 9 |
-| Commandes | 200 |
+| Commandes | 203 |
 | Sous-agents | 1 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -277,7 +277,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 
 ### Tour 6 — Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message:  RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est  … [1998 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Replay the 8 188-byte window and DOC2 leak offsets
 - send_message
@@ -293,11 +293,11 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - list_agents
 - bash — Check counters and wait for the fiche
 - interrupt_agent
-- … et 9 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ L'index est tenu par un commit B13 en préparation ; j'attends pour corriger l'état sans le voler
+⏵ Je corrige l'état et je commite en `--only` (les fichiers de L restent stagés)
 
 ## 3. Travail accompli
 
@@ -361,7 +361,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 160 autres
+- … et 163 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -500,4 +500,5 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' N3 — L'INVENTAIRE EXÉCUTABLE : 17 PORTES DE BRIQUE VERTES (92 S), LA FICHE DE BACK
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ;
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' D — LES 8 .PDF RESTANTS SONT OCRISÉS : 4 DOCUMENTS, 49 PAGES, 54 167 CAR. ; 3 DOUB
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' from pathlib import Path p = Path('journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/
 

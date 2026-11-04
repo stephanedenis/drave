@@ -37550,3 +37550,111 @@ fiche, JSON, docs, état et README écrits
   ```
 
 - **job_output** `{"job_id": "bash-217", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ T159 correctif passifs par → agent, avec → moyen
+  ✅ T160 passifs sans par  passif sans par (chunker) : 3/3 patient
+  ✅ T161 cible proximité   proximité : top1 95/239, exact 13/239, tête 94/145
+  164/164 portes tenues
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ 164/164 portes vertes ; je commite le round avec vérification du contenu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/roadmap.md','docs/pilotage/chantiers.md'):\n    p=pathlib.Path(f); t=p.read_text(); n=t.count(\"163/163\")\n    t=t.replace(\"163/163\",\"164/164\").replace(\"T0–T160\",\"T0– … [520 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 163→164: 0
+docs/pilotage/chantiers.md 163→164: 0
+bash tools/porte-tableaux.sh                 EXIT=1
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=1
+python3 tools/taille_documents.py            EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -6; echo \"=== revue :\"; python3 tools/revue_documentation.py 2>&1 | tail -6", "description": "Voir les deux portes rouges"}`
+
+  ```
+✅ 1652 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 3046 examinés) :
+     reports/rapport-ocr-cegep-64.md → ../../reports/rapport-ocr-cegep-64.md
+=== revue :
+  revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 625 fichiers, le disque en a 626
+     · compteurs : en-cours.md dit 718 JSON, le disque en a 719
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-ocr-cegep-64.md; git log --oneline -1 -- reports/rapport-ocr-cegep-64.md; grep -n \"\\.\\./\\.\\./reports\" reports/rapport-ocr-cegep-64.md | head -3", "description": "Vérifier l'état du fichier … [18 caractères tronqués]`
+
+  ```
+?? reports/rapport-ocr-cegep-64.md
+97:> SHA `f57154df…`), restauration à appliquer ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [410 caractères tronqués]`
+
+  ```
+compteurs 626 719
+  revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4036 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"T0\\|AGENTS\" tools/taille_documents.py | head -12", "description": "Voir comment T0 est calculé"}`
+
+  ```
+5:  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+27:    ("T0", "AGENTS.md", 1200),
+28:    ("T0", "docs/pilotage/en-cours.md", 2000),
+32:    ("T0", "docs/methode/*.md", 1200),
+112:            if cat in ("T0", "T1"):
+140:    # T0 : la somme des trois lectures par défaut
+145:    # Le T0 est « AGENTS + en-cours + UN document de tâche », et le document de tâche est un
+146:    # T0 (≤ 1 200 mots) : les trois documents `specifiques` ci-dessus sont des T1, avec leur
+147:    # propre budget. Les compter ici faisait payer 1 579 mots au T0 (organisation-du-depot.md)
+148:    # au lieu des 1 134 du plus gros T0 — un budget faux de 445 mots, dans le sens qui bloque.
+150:    t0 = poids("AGENTS.md") + poids("docs/pilotage/en-cours.md") + max(
+154:        violations.append(f"T0 : {t0} mots (AGENTS + en-cours + une tâche) > budget 4 000")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\ndef mots(p): return len(re.findall(r\"\\S+\", pathlib.Path(p).read_text(encoding='utf-8')))\nprint('AGENTS', mots('AGENTS.md'), '| en-cours', mots('docs/pilotage/en-cours.md'))\nfor p in sorted(p … [124 caractères tronqués]`
+
+  ```
+AGENTS 1196 | en-cours 1666
+1089 contexte.md
+1174 continuite.md
+330 echantillonnage-vdc.md
+666 illustrations.md
+412 miroir.md
+744 mission.md
+1234 modularisation.md
+1579 organisation-du-depot.md
+262 panini-nipada.md
+692 portes.md
+768 rangement.md
+1260 relations-humaines.md
+1068 ressources.md
+524 resultats.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nvieux = \"- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; **pragmatique 432 : 0,9954** ; **rôles : 301/322 ; … [1055 caractères tronqués]`
+
+  ```
+❌ 1 violation(s) :
+     · T0 : 4036 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+  ```
+

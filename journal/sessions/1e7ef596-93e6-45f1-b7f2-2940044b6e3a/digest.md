@@ -16026,3 +16026,96 @@ docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, 
 ⏵ B13 164/164 : la cible par proximité (exact ×13) — j'aligne les pages et l'état, puis commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:60]); continue\n        t=t.replace(old,new)\n    p.writ … [2217 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  T0 max : 3998 mots (budget 4 000)
+  revue de documentation · 625 fiche(s) · 718 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3044 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  en-cours · 1628 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[s/v7 21110849] B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+ 23 files changed, 742 insertions(+), 80 deletions(-)
+ create mode 100644 reports/pensee-cible-proximite.json
+ create mode 100644 reports/rapport-pensee-cible-proximite.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 56 : B13 164/164 (cible par proximité, exact ×13) intégré, T0 3 998
+
+**Cycle 56 — le 164e fait B13 entre dans le pilotage.**
+
+- **B13 164/164 — la cible par proximité** : la règle « la cible d'un segment est le **verbe du GV le plus proche** » remplit les `cible` que le générateur S laissait vides. Sur le même gold que T153 (612 phrases, 239 cibles) : **top1 0,3431 → 0,3975**, **exact 0,0042 → 0,0544** (**×13**), **tête 94/145 (0,6483)** contre 81 (0,5586). Fiche et JSON committés (`21110849`) ; état, roadmap, chantiers et plan-travail passent à 164/164 ; le « Fait » est resserré — **T0 3 998 / 4 000**, `en-cours` **1 628 mots**.
+- **Audit complet** : revue ✅ **625 fiches / 718 JSON / 120 docs / 83 portes** ; **3 044 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅.
+- **2 048** : le run continue (2 400/10 000, GPU1 en charge).
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 62
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 57/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 57 : instantané et audit des sept contrôles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+21110849 B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+6cb09126 ÉTAT — HEURE 16 H 04 ; B13 163/163, D clos, 2 048 À 2 200 PAS
+68a40051 ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1)
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+8f32227d D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0
+d4688bd2 ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/ocr-cegep-64.json
+?? reports/rapport-ocr-cegep-64.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause ·  52 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 264 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<i
+… [751 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [317 caractères tronqués]`
+
+  ```
+revue de documentation · 626 fiche(s) · 719 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1666 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4036 mots (budget 4 000)
+     reports/rapport-ocr-cegep-64.md → ../../reports/rapport-ocr-cegep-64.md
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     reports/rapport-ocr-cegep-64.md → ../../reports/rapport-ocr-cegep-64.md
+---ROPE---
+pas   2700 · perte 1.0690 · PPL val 2.744 · 2759 s
+0, 0 %
+1, 100 %
+  ```
+

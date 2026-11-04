@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 95.5 h |
+| Durée | 95.6 h |
 | Tours | 171 |
-| Messages | 2114 |
-| Appels d'outils | 1818 |
+| Messages | 2125 |
+| Appels d'outils | 1829 |
 | Fichiers touchés | 25 |
-| Commandes | 1495 |
+| Commandes | 1506 |
 | Sous-agents | 2 |
-| Commits | 223 |
+| Commits | 225 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9114,7 +9114,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 
 ### Tour 171 — This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat t … [9197 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'état, la branche et l'écart master/s/v7
 - bash — Lire l'état courant
@@ -9130,7 +9130,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - bash — Lire l'implémentation de l'attachement
 - bash — Lire la mesure de l'attachement
 - bash — Voir où l'attachement est posé
-- … et 15 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
@@ -9215,7 +9215,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1455 autres
+- … et 1466 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9343,7 +9343,7 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 
 ## 5. Erreurs rencontrées
 
-29 sorties en erreur ou divergentes. Les premières :
+30 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -9586,4 +9586,6 @@ La fenêtre de 4 h (11 h 50 → 15 h 50) est écoulée ; l'objectif est marqué 
 - ÉTAT — T0 DANS LE BUDGET (3999 MOTS) ; B13 163/163 APRÈS L'AUTONOMIE" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COM
 - ÉTAT — T0 DANS LE BUDGET (3999) ; LA LIGNE B13 EST À 163/163 APRÈS L'AUTONOMIE" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "163/163 APRÈS"; then ech
 - B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163" -- tools/bloc_linguistique.py tools/pensee/autote
+- B13 — LA CIBLE PAR PROXIMITÉ : EXACT 0,0042 → 0,0544 (×13), TOP1 0,3975, TÊTE 0,6483 ; 164/164" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/r
+- B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164" -- tools/bloc_linguistique.py tools/pensee/autotest.py doc
 

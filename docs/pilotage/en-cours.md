@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 16 h 06 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 16 h 14 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -105,7 +105,7 @@
 |---|---|---|
 | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **625** / **718** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **626** / **719** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 
@@ -127,7 +127,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire) ; **re-split 2/1/1** ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
+**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — **contaminé, à restaurer** : 8 `.PDF` OCRisés ; **2 neufs** (Choquette 6 p, Assurance 1 p), **2 quasi-doublons écartés** (DOC1 22 p, DOC2 20 p) ; le re-split 2/1/1 plaçait **DOC2 en val** avec **18/20 fenêtres de 500 o** déjà dans le train (17 001 o contigus ; 8 Ko exact 0 mais **insuffisant**) ; corpus propre **62 documents** prêt et vérifié (`work/ocr/cegep64/propre/`, SHA `f57154df…`), restauration à appliquer ; [fiche](../../reports/rapport-ocr-cegep-64.md).
 
 ## Les questions ouvertes
 

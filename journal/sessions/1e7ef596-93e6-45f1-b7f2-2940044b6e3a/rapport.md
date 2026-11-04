@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 8.8 h |
-| Tours | 61 |
-| Messages | 554 |
-| Appels d'outils | 758 |
+| Tours | 62 |
+| Messages | 560 |
+| Appels d'outils | 763 |
 | Fichiers touchés | 15 |
-| Commandes | 573 |
+| Commandes | 578 |
 | Sous-agents | 0 |
 | Commits | 77 |
 | Compactages de contexte | 1 |
@@ -145,6 +145,8 @@
 **Tour 60** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 61** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 62** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1767,7 +1769,30 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ B13 164/164 : la cible par proximité (exact ×13) — j'aligne les pages et l'état, puis commit
+⏵ Cycle 56 : B13 164/164 (cible par proximité, exact ×13) intégré, T0 3 998
+
+**Cycle 56 — le 164e fait B13 entre dans le pilotage.**
+
+- **B13 164/164 — la cible par proximité** : la règle « la cible d'un segment est le **verbe du GV le plus proche** » remplit les `cible` que le générateur S laissait vides. Sur le même gold que T153 (612 phrases, 239 cibles) : **top1 0,3431 → 0,3975**, **exact 0,0042 → 0,0544** (**×13**), **tête 94/145 (0,6483)** contre 81 (0,5586). Fiche et JSON committés (`21110849`) ; état, roadmap, chantiers et plan-travail passent à 164/164 ; le « Fait » est resserré — **T0 3 998 / 4 000**, `en-cours` **1 628 mots**.
+- **Audit complet** : revue ✅ **625 fiches / 718 JSON / 120 docs / 83 portes** ; **3 044 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅.
+- **2 048** : le run continue (2 400/10 000, GPU1 en charge).
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 62 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+- bash — Read new OCR fiche and state bloat
+- bash — Inspect clean corpus and restoration plan
+- bash — Restore clean corpus and fix state/link
+
+**Synthèse produite :**
+
+⏵ Restauration du corpus propre à 62 documents (DOC1/DOC2 écartés), état et lien corrigés
 
 ## 3. Travail accompli
 
@@ -1833,7 +1858,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 533 autres
+- … et 538 autres
 
 ## 4. Mesures et résultats marquants
 

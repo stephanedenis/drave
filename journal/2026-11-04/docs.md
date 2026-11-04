@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (46)
+## Commits du jour (47)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -54,10 +54,11 @@
 | 15:57 | `8f32227d` | D — LE RE-SPLIT OCR EST FAIT : 2 TRAIN / 1 VAL / 1 TEST, 8 KO 0 | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 | 16:02 | `68a40051` | ÉTAT — T0 3 999 ; LA LIGNE D EST RESSERRÉE (RE-SPLIT 2/1/1) | `README.md`, `apprentissage.md`, `distribue.md` (+15) |
 | 16:06 | `6cb09126` | ÉTAT — HEURE 16 H 04 ; B13 163/163, D clos, 2 048 À 2 200 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
+| 16:11 | `21110849` | B13 164/164 — LA CIBLE PAR PROXIMITÉ : L'EXACT PASSE DE 0,0042 À 0,0544 (×13) ; ÉTAT, ROADMAP, CHANTIERS, PLAN | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+20) |
 
 ## Chiffres du jour
 
-`0,8385` · `1,014` · `0,176` · `0,8195` · `0,4725` · `0,3469` · `87,2 %` · `0,1283` · `0,3431` · `0,0042` · `×3` · `0,9838`
+`×13` · `0,0042` · `0,0544` · `0,8385` · `1,014` · `0,176` · `0,8195` · `0,4725` · `0,3469` · `87,2 %` · `0,1283` · `0,3431`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -68,7 +69,7 @@
 - `206a4022-ab3c-497d-a5fa-0194931c7fa0` — Tu travailles dans le dépôt (début 2026-11-04 15:56, 0.2 h) → [rapport](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) · [digest](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 43.7 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 6.8 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 95.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 95.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -77,6 +78,7 @@
 - [reports/rapport-n2-production-fenetre.md](../../reports/rapport-n2-production-fenetre.md)
 - [reports/rapport-n2-r12-2048.md](../../reports/rapport-n2-r12-2048.md)
 - [reports/rapport-pensee-attachement.md](../../reports/rapport-pensee-attachement.md)
+- [reports/rapport-pensee-cible-proximite.md](../../reports/rapport-pensee-cible-proximite.md)
 - [reports/rapport-pensee-cibles-500.md](../../reports/rapport-pensee-cibles-500.md)
 - [reports/rapport-pensee-cibles.md](../../reports/rapport-pensee-cibles.md)
 - [reports/rapport-pensee-passifs-corriges.md](../../reports/rapport-pensee-passifs-corriges.md)

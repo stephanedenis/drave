@@ -16,7 +16,8 @@
 - **Fichiers réservés** : `reports/rapport-ocr-pdf-restants.md`,
   `reports/ocr-pdf-restants.json`, `work/ocr/restants*`, `tools/ocr_pdf.py` (lecture seule),
   `journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/`.
-- **Heartbeat** : 2026-11-04 15:35 EST
+- **Heartbeat** : 2026-11-04 16:15 EST
+- **Cycle D2 (supervision)** : le re-split 64 du hub est **contaminé** — DOC2 (val) a 18/20 fenêtres de 500 o dans l'ancien train (17 001 o contigus), DOC1 24/26 ; le 8 Ko exact est 0 mais insuffisant ; **corpus propre 62** prêt dans `work/ocr/cegep64/propre/` (SHA `f57154df…`), restauration à appliquer par le hub ; fiche [ocr-cegep-64](../../../reports/rapport-ocr-cegep-64.md).
 - **Prochaine action** : **intégration par le hub** — `git add reports/rapport-ocr-pdf-restants.md
   reports/ocr-pdf-restants.json docs/pilotage/en-cours.md` ; compteur fiches **623→624**
   (JSON 717 inchangé) ; ligne D (voir la fiche).

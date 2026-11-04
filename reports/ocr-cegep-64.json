@@ -1,0 +1,67 @@
+{
+ "date": "2026-11-04",
+ "ligne": "D",
+ "nature": "corpus OCR CEGEP — intégration des 8 .PDF et contrôle de quasi-duplication",
+ "verdict": "le re-split 64 (2/1/1) est contaminé : DOC2 placé en val est un quasi-doublon de l'ancien train (18/20 fenêtres de 500 o, 17 001 o contigus) ; le contrôle 8 Ko exact est à 0 et ne le voit pas ; le corpus propre 62 (60 + Choquette + Assurance, DOC1/DOC2 écartés) est prêt et vérifié dans work/ocr/cegep64/propre/",
+ "dispositif": {
+  "outil_contamination": "tools/verifie_contamination.py",
+  "unite_8ko": "fenêtres de 8 192 o coupées au mot (--taille-troncon 8192)",
+  "unite_500o": "fenêtres exactes de 500 o, pas de 1 000 o (contrôle de quasi-duplication)",
+  "corpus_64": "data/corpus_ocr_cegep/ (re-split du hub, 2026-11-04 15:57)",
+  "corpus_62": "work/ocr/cegep64/propre/ (préparé, non déployé)"
+ },
+ "corpus_64": {
+  "train": {"octets": 4464947, "sha256": "661e6386fb09ca333778e37dfdff8badd55135ea014d04975714ab8cc445458d"},
+  "val": {"octets": 32220, "sha256": "271117c2b22e63ea63dd2cc3ea26765e862a1793b3d1c37b7a36da5a387dddbe"},
+  "test": {"octets": 12711, "sha256": "2895e30d04b8c377259e5131e61870157f0554a9026eca5fffa18847b7159a5c"},
+  "documents": {"train": 55, "val": 5, "test": 4, "total": 64},
+  "pages": 2031,
+  "caracteres": 4462978,
+  "prefixes_anciens": {
+   "train": {"octets": 4430959, "sha256": "6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310"},
+   "val": {"octets": 12536, "sha256": "dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1"},
+   "test": {"octets": 10524, "sha256": "1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84"}
+  },
+  "suffixes_ajoutes": {"train": 33988, "val": 19684, "test": 2187}
+ },
+ "controle_8ko": {
+  "corpus_64": {"train_troncons": 546, "val": {"troncons": 4, "doublons": 0}, "test": {"troncons": 2, "doublons": 0}, "recouvrement_eval": []},
+  "corpus_62": {"train_troncons": 543, "val": {"troncons": 2, "doublons": 0}, "test": {"troncons": 2, "doublons": 0}, "recouvrement_eval": []},
+  "controle_negatif": {"fenetre_injectee": 8192, "val_troncons": 4, "doublons": 1, "taux": 0.25, "verdict": "le contrôle détecte une fenêtre de 8 Ko injectée ; le 0 du corpus n'est pas un 0 de complaisance"}
+ },
+ "controle_500o": {
+  "baseline_corpus_60": {"val": {"fenetres": 13, "trouvees": 0}, "test": {"fenetres": 11, "trouvees": 0}},
+  "corpus_64": {
+   "DOC2_val": {"fenetres": 20, "trouvees": 18, "offsets_train": [4026047, 4044047], "octets_contigus": 17001, "verdict": "fuite train→val par quasi-doublon"},
+   "DOC1_train": {"fenetres": 26, "trouvees": 24, "octets_contigus": 22001, "fenetre_8ko_exacte": {"train_suffixe_offset": 16365, "train_prefixe_offset": 4007429, "taille": 8188}, "verdict": "quasi-doublon intra-train"},
+   "Choquette_train": {"fenetres": 8, "trouvees": 0, "verdict": "neuf"},
+   "Assurance_test": {"fenetres": 2, "trouvees": 0, "verdict": "neuf"}
+  },
+  "corpus_62": {"val": {"fenetres": 13, "trouvees": 0}, "test": {"fenetres": 11, "trouvees": 0}}
+ },
+ "exclus": {
+  "DOC1": {"pages": 22, "caracteres": 25470, "raison": "quasi-doublon intra-train (24/26 fenêtres, une fenêtre de 8 188 o exacte)"},
+  "DOC2": {"pages": 20, "caracteres": 19101, "raison": "quasi-doublon de l'ancien train (18/20 fenêtres, 17 001 o contigus) ; placé en val par le re-split → fuite"}
+ },
+ "corpus_62_propre": {
+  "train": {"octets": 4440987, "sha256": "f57154df3ca5ecbd487c649c9177fddc7b4ffc2073f3488b8a2d1ad436d3da47"},
+  "val": {"octets": 12536, "sha256": "dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1"},
+  "test": {"octets": 10524, "sha256": "1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84"},
+  "documents": {"train": 55, "val": 4, "test": 3, "total": 62},
+  "pages": 1989,
+  "caracteres": 4418407,
+  "contenu": "ancien train exact (préfixe 6d53a023…) + Choquette (6 p) + Assurance (1 p) ; DOC1 et DOC2 écartés ; val/test anciens intacts"
+ },
+ "restauration": {
+  "commande": ["cp work/ocr/cegep64/propre/train.txt data/corpus_ocr_cegep/train.txt", "cp work/ocr/cegep64/propre/val.txt data/corpus_ocr_cegep/val.txt", "cp work/ocr/cegep64/propre/test.txt data/corpus_ocr_cegep/test.txt"],
+  "hashes_attendus": ["f57154df3ca5ecbd487c649c9177fddc7b4ffc2073f3488b8a2d1ad436d3da47", "dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1", "1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84"],
+  "autorisation": "data/ est réservé par N2 ; la restauration est proposée au hub"
+ },
+ "limites": [
+  "Le 500 o est un contrôle exact de fenêtres, pas un détecteur de paraphrase : une réécriture ou un OCR trop différent passerait.",
+  "La baseline 0/13 et 0/11 ne couvre que val/test contre train ; la duplication intra-train du corpus 60 n'est pas mesurée ici.",
+  "Les deux copies du même document ont été OCRisées deux fois : le texte diffère légèrement, d'où le 0 à 8 Ko et la fuite visible seulement à 500 o.",
+  "Le corpus 62 n'a pas été redéployé : data/ reste l'état 64 contaminé tant que le hub n'a pas appliqué la restauration.",
+  "Les pages (1 989) et caractères (4 418 407) sont dérivés des manifestes OCR, pas recomptés page à page."
+ ]
+}
