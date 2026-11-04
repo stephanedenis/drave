@@ -377,7 +377,11 @@ def _role_gp(prep: str) -> str:
         return "temps"
     if p in {"pour", "afin", "for", "to"}:
         return "but"
-    if p in {"avec", "par", "sans", "with", "by", "without"}:
+    if p in {"par", "by"}:
+        # `par` + GN est l'**agent** d'un passif (`Le chat est mangé par le chien`) ;
+        # `avec`/`sans` restent le moyen.
+        return "agent"
+    if p in {"avec", "sans", "with", "without"}:
         return "moyen"
     if p in {"à", "a", "au", "aux", "to"}:
         return "destinataire"

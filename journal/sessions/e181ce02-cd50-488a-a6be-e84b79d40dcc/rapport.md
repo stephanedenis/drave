@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 94.5 h |
+| Durée | 94.6 h |
 | Tours | 167 |
-| Messages | 2059 |
-| Appels d'outils | 1769 |
+| Messages | 2061 |
+| Appels d'outils | 1771 |
 | Fichiers touchés | 25 |
-| Commandes | 1454 |
+| Commandes | 1455 |
 | Sous-agents | 2 |
-| Commits | 218 |
+| Commits | 219 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8899,7 +8899,7 @@ Je continue la file : prochain round, **le correctif des passifs** — la règle
 
 ### Tour 167 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Lire la fonction de rôle des GP
 - bash — Corriger le rôle de par et tester
@@ -8907,6 +8907,8 @@ Je continue la file : prochain round, **le correctif des passifs** — la règle
 - bash — Trouver la source du rôle moyen
 - bash — Écrire la fiche du correctif des passifs et la porte T159
 - bash — Trim README et passer les portes
+- bash — Committer le correctif des passifs
+- job_output
 
 ## 3. Travail accompli
 
@@ -8987,7 +8989,7 @@ Je continue la file : prochain round, **le correctif des passifs** — la règle
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1414 autres
+- … et 1415 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9353,4 +9355,5 @@ Je continue la file : prochain round, **le correctif des passifs** — la règle
 - B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RELATION GN"; then echo "COMMI
 - B13 — LES 322 GN SANS RÔLE : 129 AVANT LE GV, 172 APRÈS, RELATION 0,8195 ; 160/160" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "322 GN SANS RÔLE"; t
 - B13 — LES PASSIFS : 5/5 FAUX, LA POSITION NE SUFFIT PAS (LE SUJET EST UN PATIENT) ; 161/161" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES PASSIFS
+- B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORRECTIF DES PA
 

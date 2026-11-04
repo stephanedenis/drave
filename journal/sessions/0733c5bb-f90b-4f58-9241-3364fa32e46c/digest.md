@@ -10646,3 +10646,10 @@ pas 13600 · perte 0.8791 · dure 0.9906 · douce 0.2547 · 6443 s
   ```
 
 - **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK", "description": "Wait for the last production arm", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-58]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-58", "timeout_ms": 600000, "wait": true}`

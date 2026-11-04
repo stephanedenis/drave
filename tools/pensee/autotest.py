@@ -2314,6 +2314,13 @@ def t158_passifs() -> tuple[bool, str]:
     return faux == 5, f"passifs : {faux}/5 faux (le sujet est un patient)"
 
 
+def t159_passifs_corriges() -> tuple[bool, str]:
+    """Le correctif des passifs : _role_gp rend agent, le generateur S court-circuite."""
+    from tools.bloc_linguistique import _role_gp
+    return _role_gp("par") == "agent" and _role_gp("avec") == "moyen", (
+        f"par → {_role_gp('par')}, avec → {_role_gp('avec')}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2471,7 +2478,8 @@ def main() -> int:
               ("T155 cibles 500", t155_cibles_500()),
               ("T156 relation GN-GV", t156_relation()),
               ("T157 rôles par position", t157_roles()),
-              ("T158 passifs", t158_passifs())]
+              ("T158 passifs", t158_passifs()),
+              ("T159 correctif passifs", t159_passifs_corriges())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
