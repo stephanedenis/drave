@@ -353,7 +353,7 @@ suivante. **Checkpoint 08 h** : registre, sessions, `git log`, verdict de la pas
 ## 11. La nuit du 03/11 → 04/11 — le plan, et les conflits qu'il évite
 
 **L'état au 03/11 18 h 45.** **N2** a clos sa phase (60 000 pas à 1 024 : **2,9121** ; **2,3911 /
-2,3522** au grand corpus ; distillation native **+0,10** à budget égal) mais **un run tourne
+2,3522** au grand corpus ; distillation native **+0,10** à budget égal — **erratum 04/11** : pas de gain à parité stricte, le +0,14–0,18 était une repondération) mais **un run tourne
 encore** (`kd2-mix512-30k`, les deux GPU à 100 %, fin vers 22 h 40). **S** a repris à 13 h 55 sur
 l'**arbre des référents** ; **L/B13** publie (fusion réparée sur l'API, **/35**) ; **D/R/A** est
 close. Le **roster** de la nuit : N2 (GPU), S (CPU), L/B13 (CPU + API), le hub (pilotage).

@@ -10286,3 +10286,4 @@ background job bash-26 (bash: sleep 2700; cd /home/stephane/GitHub/Qtrinet && da
 
 background job bash-28 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; ls work/n2ac/kdp-1147m-a0.9.pt 2>/dev/null && echo OK09; tail -c 60 work/n2ac/kdpp-mix512-a0.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; tail -c 60 work/n2ac/kdpp-mix512-a0.log; tail -c 60 work/n2ac/pond4-1147m-512.log; tail -c 50 work/n2ac/rope2048-20k.log", "description": "Wait for the weighted control and production pair", "timeo … [14 caractères tronqués]`

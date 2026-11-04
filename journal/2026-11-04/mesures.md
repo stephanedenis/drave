@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 11:50 | `8189c4f3` | S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE | `en-cours.md`, `README.md`, `distribue.md` (+19) |
 | 11:57 | `d390136a` | B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146 | `moteur-de-pensee.md`, `N3-operations-natives.md`, `index.md` (+30) |
 | 12:05 | `25d631fe` | B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+16) |
+| 12:34 | `9593718e` | N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 
 ## Chiffres du jour
 
@@ -35,6 +36,7 @@
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-drvm-n01.md](../../reports/rapport-drvm-n01.md)
 - [reports/rapport-n3-inventaire.md](../../reports/rapport-n3-inventaire.md)
 - [reports/rapport-pensee-defaut-conditionnel.md](../../reports/rapport-pensee-defaut-conditionnel.md)
 - [reports/rapport-pensee-defaut-niveau.md](../../reports/rapport-pensee-defaut-niveau.md)

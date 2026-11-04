@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 91.9 h |
 | Tours | 160 |
-| Messages | 1948 |
-| Appels d'outils | 1673 |
+| Messages | 1950 |
+| Appels d'outils | 1675 |
 | Fichiers touchés | 25 |
-| Commandes | 1376 |
+| Commandes | 1378 |
 | Sous-agents | 2 |
 | Commits | 205 |
 | Compactages de contexte | 5 |
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*45 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8495,7 +8495,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Trim README et passer toutes les portes
 - bash — Committer le seuil du parallèle
 - bash — Lancer la troisième passe API (variance)
-- … et 24 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
@@ -8580,7 +8580,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1336 autres
+- … et 1338 autres
 
 ## 4. Mesures et résultats marquants
 

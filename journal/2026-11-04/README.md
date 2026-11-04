@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**23 commits** · **5 session(s)** · **6 thème(s)**
+**24 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -55,6 +55,7 @@
 | 12:24 | `1b4be681` | ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24 |
 | 12:29 | `d94c3a4b` | PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34 |
 | 12:32 | `84c28889` | ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION |
+| 12:34 | `9593718e` | N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149 |
 
 ## Le récit de la journée (écrit à la main)
 

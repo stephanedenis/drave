@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 5.2 h |
 | Tours | 9 |
-| Messages | 190 |
-| Appels d'outils | 358 |
+| Messages | 193 |
+| Appels d'outils | 361 |
 | Fichiers touchés | 14 |
-| Commandes | 203 |
+| Commandes | 206 |
 | Sous-agents | 0 |
-| Commits | 15 |
+| Commits | 16 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -353,7 +353,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 9 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -369,11 +369,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Verify links, journal, backlog and runs
 - bash — Correct JSON counter and verify
 - bash — Commit corrected JSON counter
-- … et 4 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ L'ERratum N2 est committé ; je repère toutes les affirmations « distillation +0,10 » à corriger
+⏵ Commit de l'ERratum N2 dans l'état, la roadmap et le plan-travail
 
 ## 3. Travail accompli
 
@@ -438,7 +438,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 163 autres
+- … et 166 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -591,4 +591,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34" -m "chantiers.md : B 148/148, L porte B13 148/148, B13 148/1
 - ÉTAT — COMPTEURS 610/697 (WIP B13 t03) ; HEURE 12 H 37" -m "Le nouveau JSON pensee-quatre-modes-432-t03.json (B13, non committé) porte le disque à 697 JSON ; l'
 - ÉTAT — COMPTEURS 610/697 (WIP B13 t03) ; HEURE 12 H 37" -m "Le nouveau JSON pensee-quatre-modes-432-t03.json (B13, non committé) porte le disque à 697 JSON ; l'
+- ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS" -m "Le +0,14–0,18 (et le +0,10 de la production) ve
 

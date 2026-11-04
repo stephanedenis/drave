@@ -6485,3 +6485,86 @@ d94c3a4b PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, 
 … [1669 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ L'ERratum N2 est committé ; je repère toutes les affirmations « distillation +0,10 » à corriger
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; echo \"=== ERRATUM ÉTAT DIFF ===\" ; git show 84c28889 -- docs/pilotage/en-cours.md | head -40 ; echo \"=== LOG ===\" ; git log --oneline -3", "description": "Inspect erratum state diff and latest commits"}`
+
+  ```
+12 h 35
+=== ERRATUM ÉTAT DIFF ===
+commit 84c288899104ba2b885b60c1a4892c02f5a52767
+Author: Stéphane <stephane@localhost>
+Date:   Wed Nov 4 12:32:55 2026 -0500
+
+    ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION
+    
+    Le code d'hier donnait à la tête principale le poids 1 au lieu de 1/4 (l'entraîneur fait la moyenne
+    des quatre têtes). Corrigé, le pas 1 vaut 5,8480 et le pas 50 2,6713 — exactement le bras dur.
+    
+    Paire propre (même code, même harnais, même init, mêmes 33 Mo, seul α change) :
+    α = 0 → 3,7072 / 3,5727 / 3,5251 ; α = 0,9 → 3,6774 / 3,5633 / 3,5208 ; gain −0,030 / −0,009 /
+    −0,004, dans le bruit. Le harnais (passe du professeur + seconde passe de l'élève) déplace la PPL
+    de +0,06 à +0,16 : aucune comparaison entre deux harnais n'est sûre, et c'est ce qui a fabriqué le
+    faux gain.
+    
+    Le paragraphe 4 de la fiche production (distillation −0,10) passe « sous contrôle » : sa paire
+    propre est en cours sur la recette de production (α = 0 et α = 0,9, 15 000 pas). Le contrôle de
+    repondération (poids principal 4× dans l'entraîneur de référence) est lancé
+… [1537 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== AFFIRMATIONS ===\" ; grep -rn \"distillation native\\|distillé : \\|distillé\\*\\*\\|+0,10\\|+0,14\\|0,14–0,18\" docs/ --include=\"*.md\" | grep -v archive | head -20 ; echo \"=== B13 149 ===\" ; grep -rn \"149/149\\|DRVM N … [133 caractères tronqués]`
+
+  ```
+=== AFFIRMATIONS ===
+docs/methode/ressources.md:68:**15,64** de plancher ; la distillation native a une **transition entre 9,23 M et 9,96 M** : négative à **4,04 M**
+docs/pilotage/backlog/R05-tete-balayage.md:4:> **Ligne de roadmap** : R0.4 · **Résultat** : [rapport-r05-balayage.md](../../../reports/rapport-r05-balayage.md) — chemin **classique** mesuré : rappel@10 **0,984** (lexical), **0,702** (paraphrases), 0,1 ms ; **branché dans le pipeline** (`--lecteur span`) : **0,944** sur les questions à valeur contre 0,851 pour l'extractif ; la tête n'est pas ajoutée (même mur que R0.4). `--lecteur auto` : **+0,109** sur un corpus de valeurs, **−0,150** sur un corpus mixte (nombres en mots, classement du span).
+docs/pilotage/programme-r.md:222:   **+0,109** sur un corpus de valeurs (lexical) et **perd −0,150** sur un corpus mixte
+docs/pilotage/plan-travail.md:356:2,3522** au grand corpus ; distillation native **+0,10** à budget égal) mais **un run tourne
+docs/pilotage/roadmap.md:198:| **N2** | la distillation : corpus, professeur, [curriculum](../theorie/glossaire/entrees/curriculum.md) | 🔬 | **N2.h** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,0904**, pas 2,85 ; *
+… [4139 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Propagation de l'ERratum N2 : le +0,10 était une repondération — état, roadmap, plan-travail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:80]); continue\n        t=t.replace(old … [2883 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/plan-travail.md OK
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3994 mots (budget 4 000)
+  revue de documentation · 611 fiche(s) · 698 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2928 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification après propagation : le B13 149/149 a-t-il atterri en même temps ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -4 ; echo \"=== LOCK ===\" ; [ -e .git/index.lock ] && echo \"encore\" || echo \"libre\" ; echo \"=== ÉTAT ===\" ; grep -n \"149/149\\|148/148\\|611\\|698\\|Erratum\\|erratum\" docs/pilotage/en-cours.md | head -8 ; e … [151 caractères tronqués]`
+
+  ```
+9593718e N — DRVM N0.1 : 6/6, LE PAYLOAD CORROMPU EST REFUSÉ (LE HASH MANQUAIT) ; 149/149
+84c28889 ERRATUM — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE : −0,030 / −0,009 / −0,004 ; LE GAIN DE 0,14–0,18 ÉTAIT UNE REPONDÉRATION
+d94c3a4b PILOTAGE — CHANTIERS, PLAN-TRAVAIL ET PORTES ALIGNÉS : B13 148/148, S v7, 83 PORTES ; ÉTAT 12 H 34
+1b4be681 ROADMAP — S v7 (61/61, 144/144, 56 TESTS), B13 148/148, RUNS N2 ET ROPE2048 ; ÉTAT 12 H 24
+=== LOCK ===
+libre
+=== ÉTAT ===
+71:- **Fait** : B13 **148/148** (troisième passe : variance **nulle**, run 3 = run 2 — POS **0,9389**, syntagmes **0,8241**, tête **0,8797**, refus **0** ; le `parallele` passe de **0,9326** à **0,9389** avec la clé ; seuil du parallèle ; défaut conditionnel ; run2 ; élision POS **0,7455**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-de
+… [1913 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de l'ERratum N2 dans l'état, la roadmap et le plan-travail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/plan-travail.md && git commit -m \"ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS\" -m \"Le +0,14–0 … [564 caractères tronqués]`
