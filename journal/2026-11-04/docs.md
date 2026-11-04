@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,20 +23,21 @@
 | 12:56 | `a2926831` | B13 — LA PRAGMATIQUE NEURONALE : ACTE 1,0, NÉGATION 1,0 SUR 130 PHRASES ; 151/151 | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+15) |
 | 13:00 | `d4a35d11` | B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL | `en-cours.md`, `README.md`, `mesures.md` (+7) |
 | 13:08 | `09c5bb49` | B13 152/152 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; ÉTAT ET PILOTAGE | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+15) |
+| 13:17 | `a6292fb1` | B13 153/153 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; ÉTAT, CHANTIERS, ROADMAP | `chantiers.md`, `en-cours.md`, `roadmap.md` (+14) |
 
 ## Chiffres du jour
 
-`0,9954` · `0,9846` · `0,9769` · `0,0074` · `0,9326` · `0,9389`
+`0,0208` · `0,9884` · `0,9954` · `0,9846` · `0,9769` · `0,0074` · `0,9326` · `0,9389`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 44.9 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 45.1 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
 - `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 5.9 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 43.7 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 2.5 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 92.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 92.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
