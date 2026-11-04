@@ -2296,6 +2296,24 @@ def t157_roles() -> tuple[bool, str]:
         f"rôles : {n} sans rôle, {avant} avant le GV, {apres} après")
 
 
+def t158_passifs() -> tuple[bool, str]:
+    """Les passifs : 5/5 faux, la position ne suffit pas."""
+    import tools.bloc_linguistique as bl
+    h = bl.Heuristique()
+    phrases = ["Le chat est mangé par le chien.", "La souris est chassée par le chat.",
+               "Le livre est lu par Paul.", "La lettre est écrite par Marie.",
+               "Le gâteau est fait par le boulanger."]
+    faux = 0
+    for txt in phrases:
+        a = h.analyser(txt, "fr")
+        roles = {(e.valeur, (e.meta or {}).get("role"))
+                 for e in a.etiquettes if e.niveau == "syntagme" and e.type == "GN"}
+        # la position donne 'agent' au sujet : faux pour un passif
+        if ("agent",) == tuple({r for _, r in roles if r}):
+            faux += 1
+    return faux == 5, f"passifs : {faux}/5 faux (le sujet est un patient)"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2452,7 +2470,8 @@ def main() -> int:
               ("T154 cibles", t154_cibles()),
               ("T155 cibles 500", t155_cibles_500()),
               ("T156 relation GN-GV", t156_relation()),
-              ("T157 rôles par position", t157_roles())]
+              ("T157 rôles par position", t157_roles()),
+              ("T158 passifs", t158_passifs())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

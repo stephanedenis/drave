@@ -10613,3 +10613,36 @@ kdpp a=0 fini 13:09:40
   ```
 
 - **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK", "description": "Wait for final production arm", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-56]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-54 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-56", "timeout_ms": 900000, "wait": true}`
+
+  ```
+15:00:52
+kdpp a=0 fini 13:09:40
+[status: completed, exit code: 2]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-56 (bash: sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -3 work/n2ac/kdpp-mix512-a0.9.log; ls -la work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null; ps -eo pid,etime,cmd --no-headers | grep \"[d]istiller_natif\" | cut -c1-60", "description": "Check final arm state"}`
+
+  ```
+15:00:58
+pas 13500 · perte 0.9393 · dure 1.0586 · douce 0.2548 · 6396 s
+pas 13550 · perte 0.9335 · dure 1.0573 · douce 0.2322 · 6420 s
+pas 13600 · perte 0.8791 · dure 0.9906 · douce 0.2547 · 6443 s
+ 470483    01:51:18 /home/stephane/gpu-env/bin/python work/n
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt 2>/dev/null && echo OK", "description": "Wait for the last production arm", "timeoutMs": 1000000}`
