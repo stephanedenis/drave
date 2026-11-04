@@ -10480,3 +10480,10 @@ poids 4× production lancé pid 486649
 background job bash-36 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; tail -c 60 work/n2ac/kdpp-mix512-a0.log; tail -c 60 work/n2ac/pond4-1147m-512.log; tail -c 50 work/n2ac/rope2048-20k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; cat work/n2ac/pond4-mix512-15k.log 2>/dev/null | tail -3", "description": "Wait for corrected production KD and 4x arm", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-47]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-47", "timeout_ms": 2400000, "wait": true}`

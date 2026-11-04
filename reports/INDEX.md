@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **611 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **612 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -512,6 +512,7 @@
 | [rapport-pensee-soustype-variance.md](rapport-pensee-soustype-variance.md) | B13 — la variance du sous-type : 0,9838 à 0,3, le gain tient |
 | [rapport-pensee-sto-seule.md](rapport-pensee-sto-seule.md) | B13 — la politique seule sur le bruit : elle réessaie et atteint le but |
 | [rapport-pensee-stochastique.md](rapport-pensee-stochastique.md) | B13 — la porte stochastique : 80 % d'ouverture, la politique réessaie |
+| [rapport-pensee-tirages.md](rapport-pensee-tirages.md) | B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache masque la variance |
 | [rapport-pensee-tres-rare.md](rapport-pensee-tres-rare.md) | B13 — l'information très rare : utile 1 %, 20/20 |
 | [rapport-pensee-troisieme-passe.md](rapport-pensee-troisieme-passe.md) | B13 — la troisième passe : variance nulle, tous les seuils verts |
 | [rapport-pensee-ultra-rare.md](rapport-pensee-ultra-rare.md) | B13 — l'information ultra-rare : utile 0,1 %, 20/20 |

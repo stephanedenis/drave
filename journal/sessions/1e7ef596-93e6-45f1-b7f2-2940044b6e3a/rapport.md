@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 6.1 h |
-| Tours | 16 |
-| Messages | 276 |
-| Appels d'outils | 460 |
+| Durée | 6.2 h |
+| Tours | 17 |
+| Messages | 282 |
+| Appels d'outils | 467 |
 | Fichiers touchés | 15 |
-| Commandes | 303 |
+| Commandes | 310 |
 | Sous-agents | 0 |
-| Commits | 31 |
+| Commits | 32 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -55,6 +55,8 @@
 **Tour 15** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 16** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -583,7 +585,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 16 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -599,10 +601,35 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Verify cycle 11 checks and counters
 - bash — Update JSON counter and verify review
 - bash — Commit counter 707 update
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Commit compteurs 614/707 et clôture du cycle 11
+⏵ Cycle 11 : backlog N2 corrigé, B13 154/154, compteurs à jour
+
+**Cycle 11 — deux corrections de fond et un fait de plus.**
+
+- **Backlog N2** : la page ne portait que le 200 k et la fenêtre — elle reçoit l'**erratum** (le +0,10 était une **repondération** ; à parité stricte α = 0,9 ne gagne rien ; la repondération vaut **−0,05**) et la **paire propre** (α = 0 : **1,014** en 7 050 s ; α = 0,9 en cours), plus la fiche `rapport-n2-distillation-native`. Commit `67286d12`.
+- **B13 154/154** : la **variance du sous-type** à 0,3 donne **0,9838** (−0,0046 contre 0,9884) — le gain **tient sur deux températures** et reste au-dessus de l'heuristique (0,9676). Commit `8f00b73a` ; l'état, la roadmap (coquille T0–T150 → **T0–T153**), les chantiers et le plan-travail sont à 154.
+- **Compteurs** : l'état passe à **614 / 707** (t03b/t03c) — commit `8a0de643` ; la B13 vient d'ajouter `pensee-tirages` (615 / 708, relevé par la session).
+- **Contrôles** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 972 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 611 mots**, **T0 3 981 / 4 000** ✅.
+
+**Paire propre N2** : α = 0,9 à **2 350 pas** (GPU0 99 %). **WIP** : B13 tirages + t03b/t03c, README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : tirages B13 à committer/intégrer, α = 0,9 à finir, puis la passe complète.
+
+### Tour 17 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Regenerate index and correct time
+- bash — Commit index 612 and corrected time
+
+**Synthèse produite :**
+
+⏵ Commit INDEX 612 et heure corrigée
 
 ## 3. Travail accompli
 
@@ -668,7 +695,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 263 autres
+- … et 270 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -842,4 +869,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - BACKLOG N2 — L'ERRATUM DE LA DISTILLATION (LE +0,10 ÉTAIT UNE REPONDÉRATION) ET LA PAIRE PROPRE DANS LA PAGE" -m "La page N2 ne portait que le 200 k et la fenêt
 - B13 154/154 — LA VARIANCE DU SOUS-TYPE (0,9838 À 0,3, LE GAIN TIENT) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait est committé avec le backlog N2 (6728
 - ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34" -m "La B13 a produit deux JSON de plus (soustype-t03b, t03c) : le disque passe à 707, l'état suit. B13
+- INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)" -m "Le catalogue rattrape la variance du sous-type et les tirages ; l'heure de l'
 
