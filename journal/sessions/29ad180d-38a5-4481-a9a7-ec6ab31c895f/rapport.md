@@ -9,7 +9,7 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 41.6 h |
 | Tours | 15 |
-| Messages | 426 |
+| Messages | 427 |
 | Appels d'outils | 414 |
 | Fichiers touchés | 17 |
 | Commandes | 327 |
@@ -564,7 +564,13 @@ Les 55 tests passent ; le sous-module est poussé en **`230d03a`** et le princip
 
 **Synthèse produite :**
 
-⏵ Ensuite : étendre la banque à neuf paragraphes complets pour que la validation ait du volume, puis l'API et l'UDHR. Je commence par les paires français/anglais.
+⏵ La banque est passée à neuf paragraphes d'Alice, sources anglaises et référents compris ; la page est en ligne.
+
+L'étape suivante était la banque : elle passe de trois à **neuf paragraphes complets**. Les six nouveaux sont l'ouverture (« ALICE, assise auprès de sa sœur… »), la table de verre (« Tout à coup elle rencontra… une petite table à trois pieds »), l'attente à la petite porte, « Buvez-moi », « Je me sens toute drôle… comme un télescope » et le gâteau oublié. Chacun porte son contexte, son antécédent (Alice) et sa **source anglaise** (Project Gutenberg #11) ; la page `/paragraphes` les affiche avec l'arbre, les référents et la source côte à côte. La règle `PROPRE` accepte désormais les majuscules d'« ALICE », sans quoi l'ouverture n'aurait pas eu son antécédent ; les neuf arbres SVG passent le test du cadre et les **55 tests** restent verts.
+
+Il reste à **valider les neuf paragraphes** sur `http://127.0.0.1:8765/paragraphes` : trancher les référents (la page les présélectionne pour les pronoms personnels, et la source anglaise aide — *she / her / herself / it*), puis les quatre verdicts de structure. C'est le geste humain qui manque ; le reste peut avancer sans lui. Ensuite viennent la **rétro-traduction** FR → EN → FR par l'API DeepSeek quand la clé sera là, les **71 langues** de l'UDHR pour un test de référents à plus grande échelle, et la prochaine limite de l'analyseur — le nom après un adjectif **hors lexique** (« Le fait divers surprend »).
+
+Le sous-module est poussé en **`4012729`** et le principal en **`cfb68013`** ; l'état est à **601 fiches / 686 JSON**, la page répond 200 avec les neuf sources. Le serveur tourne (il se relance avec `cd tools/structures && python3 serveur.py`).
 
 ## 3. Travail accompli
 

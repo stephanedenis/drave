@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 41.5 h |
+| Durée | 41.9 h |
 | Tours | 8 |
-| Messages | 734 |
-| Appels d'outils | 684 |
+| Messages | 736 |
+| Appels d'outils | 686 |
 | Fichiers touchés | 27 |
-| Commandes | 507 |
+| Commandes | 508 |
 | Sous-agents | 0 |
 | Commits | 27 |
 | Compactages de contexte | 0 |
@@ -255,7 +255,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 8 — reprends
 
-*12 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Check time, runs, GPU and git state
 - bash — Inspect relaunched runs and reboot commit
@@ -268,10 +268,11 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Compare loss normalization with reference trainer
 - bash — Fix loss normalization and launch parity controls
 - bash — Check parity control alpha=0 progress
+- bash — Wait for the corrected alpha=0 control
 
 **Synthèse produite :**
 
-⏵ Correction de la normalisation et lancement des deux contrôles (α=0 et α=0,9 corrigés)
+⏵ La parité est exacte (5,8480 au pas 1 = le bras dur) ; j'attends le contrôle α=0 puis α=0,9 corrigé
 
 ## 3. Travail accompli
 
@@ -349,7 +350,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 467 autres
+- … et 468 autres
 
 ## 4. Mesures et résultats marquants
 

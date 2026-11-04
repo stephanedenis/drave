@@ -9930,3 +9930,26 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
   ```
 
 - **bash** `{"command": "sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; head -6 work/n2ac/kdp-1147m-a0.log | tail -4; tail -c 60 work/n2ac/kd2-mix512-30k.log", "description": "Check parity control alpha=0 progress", "timeoutMs": 600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-10]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-10", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+10:05:45
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  derniere = float(perte)
+pas     1 · perte 5.8480 · dure 5.5694 · douce 12.2536 · 1 s
+pas    50 · perte 2.6713 · dure 2.8839 · douce 6.4360 · 29 s
+00 · perte 1.3173 · dure 1.1134 · douce 0.3323 · 1925 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La parité est exacte (5,8480 au pas 1 = le bras dur) ; j'attends le contrôle α=0 puis α=0,9 corrigé
+
+- **bash** `{"command": "sleep 2400; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdp.out; tail -c 60 work/n2ac/kdp-1147m-a0.log; tail -c 50 work/n2ac/rope2048-20k.log", "description": "Wait for the corrected alpha=0 control", "timeoutMs": 600000}`

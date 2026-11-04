@@ -1,0 +1,20 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "141/141",
+ "confiance": {
+  "pos": 0.7424,
+  "syn": 0.3165,
+  "tete": 0.4764
+ },
+ "niveau": {
+  "pos": 0.3432,
+  "syn": 0.1378,
+  "tete": 0.4553
+ },
+ "limites": [
+  "le mock n'est pas le réel",
+  "432 phrases",
+  "clé DeepSeek absente"
+ ]
+}

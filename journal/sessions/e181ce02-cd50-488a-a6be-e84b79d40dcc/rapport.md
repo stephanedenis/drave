@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 89.1 h |
+| Durée | 89.6 h |
 | Tours | 156 |
-| Messages | 1841 |
-| Appels d'outils | 1573 |
+| Messages | 1852 |
+| Appels d'outils | 1584 |
 | Fichiers touchés | 25 |
-| Commandes | 1291 |
+| Commandes | 1301 |
 | Sous-agents | 2 |
-| Commits | 195 |
+| Commits | 197 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8234,7 +8234,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 
 ### Tour 156 — reprends
 
-*19 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état après l'interruption
 - bash — Vérifier les fichiers du round 141
@@ -8250,7 +8250,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - bash — Voir où PRIORITE_NIVEAU est utilisé
 - bash — Basculer le défaut et mesurer
 - bash — Rétablir le défaut et mesurer la différence
-- … et 5 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
@@ -8335,7 +8335,7 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1251 autres
+- … et 1261 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8678,4 +8678,6 @@ Je continue : prochain round, **les vrais absents** — ajouter au gold les pron
 - B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORÉFÉRENCE COMME LIEN"; 
 - B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIENS CLASSÉS"; then echo "COMMIT OK 
 - B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES ABSENTS"; then echo "CO
+- B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT DE LA FUSI
+- B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "DÉFAUT DE LA FUSI
 

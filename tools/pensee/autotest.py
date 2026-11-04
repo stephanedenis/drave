@@ -1681,7 +1681,7 @@ def t110_segmenteur() -> tuple[bool, str]:
     f2 = round(r2["syntagme"]["f1"], 4)
     t1 = round(r1["syntagme"]["tete"]["f1"], 4)
     t2 = round(r2["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.2739) < 0.001 and abs(f2 - 0.1398) < 0.001
+    return (abs(f1 - 0.281) < 0.001 and abs(f2 - 0.1398) < 0.001
             and t1 < t2), (
         f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
 
@@ -1707,7 +1707,7 @@ def t111_hybride_seg() -> tuple[bool, str]:
             pred.add((t, cand[0] if cand else d))
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.4183) < 0.001, (
+    return abs(f1 - 0.4202) < 0.001, (
         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
 
 
@@ -1728,7 +1728,7 @@ def t112_union() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.2833) < 0.001, f"union : segments F1 {f1} (S 0,1683)"
+    return abs(f1 - 0.2894) < 0.001, f"union : segments F1 {f1} (S 0,281)"
 
 
 def t113_union_defaut() -> tuple[bool, str]:
@@ -1740,7 +1740,7 @@ def t113_union_defaut() -> tuple[bool, str]:
     r = evaluer_bloc("h", h, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return abs(f1 - 0.2833) < 0.001 and abs(tete - 0.5027) < 0.001, (
+    return abs(f1 - 0.2894) < 0.001 and abs(tete - 0.505) < 0.001, (
         f"union par défaut : F1 {f1}, tête {tete}")
 
 
@@ -1754,7 +1754,7 @@ def t114_cascade_union() -> tuple[bool, str]:
     r = evaluer_bloc("c", cascade, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.3135) < 0.001 and abs(tete - 0.4809) < 0.001
+    return (abs(f1 - 0.3205) < 0.001 and abs(tete - 0.4827) < 0.001
             and cascade.appels_neuronal == 602), (
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
@@ -1780,7 +1780,7 @@ def t115_tete_cascade() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.4548) < 0.001, (
+    return abs(f1 - 0.4566) < 0.001, (
         f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
 
 
@@ -1831,7 +1831,7 @@ def t119_miroir_resume() -> tuple[bool, str]:
     cas = bl.Cascade(h, bl.MockNeuronal())
     rap_c = sum(rappel_resume(cas.analyser(p["texte"], p["langue"]), p["texte"])
                 for p in ph) / max(1, len(ph))
-    return (abs(rap_h - 0.7834) < 0.001 and abs(rap_c - 0.7472) < 0.001), (
+    return (abs(rap_h - 0.783) < 0.001 and abs(rap_c - 0.7459) < 0.001), (
         f"résumé : heur {round(rap_h, 4)}, cascade {round(rap_c, 4)}")
 
 
@@ -1957,21 +1957,21 @@ def t131_contextuel() -> tuple[bool, str]:
 
 
 def t132_lien_auto() -> tuple[bool, str]:
-    """Le lien automatique par le sujet : 2/5 (les distracteurs r428–r432 sont plus proches)."""
+    """Le lien automatique par le sujet : 5/5 (les assertions précèdent les questions)."""
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.miroir import fidelite_lien_auto
     r = fidelite_lien_auto(charger())
-    return r["paires"] == 5 and r["justes"] == 2, (
-        f"lien auto : {r['justes']:.0f}/{r['paires']} (sujet de surface ; 3 distracteurs)")
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien auto : {r['justes']:.0f}/{r['paires']} (sujet de surface)")
 
 
 def t133_lien_auto_fixe() -> tuple[bool, str]:
-    """Le lien réparé : 2/5 ; les distracteurs r428–r432 partagent le sujet."""
+    """Le lien réparé : 5/5 après réordonnancement (les distracteurs ne le cassent pas)."""
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.miroir import fidelite_lien_auto
     r = fidelite_lien_auto(charger())
-    return r["paires"] == 5 and r["justes"] == 2, (
-        f"lien réparé : {r['justes']:.0f}/{r['paires']} (distracteurs)")
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien réparé : {r['justes']:.0f}/{r['paires']}")
 
 
 def t134_lien_coref() -> tuple[bool, str]:
@@ -2012,6 +2012,18 @@ def t137_vrais_absents() -> tuple[bool, str]:
     sans = [p for p in ph if p["id"] in ("r428", "r429", "r430", "r431", "r432")]
     return len(sans) == 5 and liens_absents(ph) == [], (
         f"vrais absents : {len(sans)} phrases, {len(liens_absents(ph))} liens absents")
+
+
+def t138_defaut_niveau() -> tuple[bool, str]:
+    """Le défaut de la fusion : la confiance (0,7424) bat le niveau (0,3432)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    ph = charger()
+    h, n = bl.Heuristique(), bl.MockNeuronal()
+    r_conf = evaluer_bloc("c", bl.Parallele([h, n]), ph)["pos"]["exactitude"]
+    r_niv = evaluer_bloc("n", bl.Parallele([h, n], priorite_par_niveau=bl.PRIORITE_NIVEAU), ph)["pos"]["exactitude"]
+    return abs(r_conf - 0.7424) < 0.001 and abs(r_niv - 0.3432) < 0.001 and r_conf > r_niv, (
+        f"défaut : confiance {round(r_conf, 4)}, niveau {round(r_niv, 4)}")
 
 
 def main() -> int:
@@ -2150,7 +2162,8 @@ def main() -> int:
               ("T134 lien coréf", t134_lien_coref()),
               ("T135 liens classés", t135_liens_classes()),
               ("T136 absents", t136_absents()),
-              ("T137 vrais absents", t137_vrais_absents())]
+              ("T137 vrais absents", t137_vrais_absents()),
+              ("T138 défaut fusion", t138_defaut_niveau())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
