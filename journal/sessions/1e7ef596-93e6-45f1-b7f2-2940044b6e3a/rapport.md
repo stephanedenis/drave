@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 4.6 h |
 | Tours | 5 |
-| Messages | 136 |
-| Appels d'outils | 279 |
+| Messages | 140 |
+| Appels d'outils | 283 |
 | Fichiers touchés | 14 |
-| Commandes | 140 |
+| Commandes | 144 |
 | Sous-agents | 0 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -194,7 +194,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 5 — les sessions ont été démarées et tu dois faire un suivi de tout le dossier docs pourt maintenir la cohérence de la docum … [23 caractères tronqués]
 
-*75 appels d'outils.* Actions notables :
+*79 appels d'outils.* Actions notables :
 
 - bash — Check sessions, recent commits and tree
 - bash — Run documentation review and state freshness
@@ -210,11 +210,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Read current full state
 - bash — Read B13 state-line updates in recent commits
 - bash — Read N3 report conclusion and backlog page
-- … et 47 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
-⏵ Commit de cohérence : N3, faits S/B13, 83e porte, § 12, mandats
+⏵ Commit de l'état 146/146 et des compteurs 608/693
 
 ## 3. Travail accompli
 
@@ -279,7 +279,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 100 autres
+- … et 104 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -396,12 +396,15 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T5** `| **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, [attention](../theorie/glossaire/entrees/attention.md) locale, [FFN](../theorie/glossaire/entrees/ffn.md) creux, 3 têtes précoces | ✅ | aucune — PPL *`
 - **T5** `| **N2** | la distillation : corpus, professeur, [curriculum](../theorie/glossaire/entrees/curriculum.md) | 🔬 | **N2.h** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,0904**, pas `
 - **T5** `90-| `porte-mistral.sh` | 8 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher  |`
+- **T5** `-- **Fait** : types **60/60**, rôles **142/142** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **55 t`
+- **T5** `+- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 t`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
+- **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
 
 ## 6. Commits
 
@@ -410,4 +413,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11" -m "N2 : relancer kd2/rope2048 puis la porte propre. S : poursuivre la validation /paragraph
 - N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS" -m "Les anciens logs sont préservés en .interrompu.log ; 
 - PILOTAGE — N3 INTÉGRÉ, S 61/61 ET B13 145/145 DANS L'ÉTAT ; 83e PORTE, § 12 ET LE SUIVI DOCS" -m "Backlog N3 mesurée, roadmap N3 couvert, 83e porte dans les réf
+- ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE" -m "Le fait B13 146/146 (défaut conditionnel : le niveau si le réel es
 

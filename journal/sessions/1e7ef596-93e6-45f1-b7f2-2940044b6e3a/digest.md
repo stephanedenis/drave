@@ -4932,3 +4932,111 @@ en-cours · 1550 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
 ⏵ Commit de cohérence : N3, faits S/B13, 83e porte, § 12, mandats
 
 - **bash** `{"command": "git diff --cached --name-status ; echo \"---COMMIT---\" ; git commit -m \"PILOTAGE — N3 INTÉGRÉ, S 61/61 ET B13 145/145 DANS L'ÉTAT ; 83e PORTE, § 12 ET LE SUIVI DOCS\" -m \"Backlog N3 mesurée, roadmap N3 couvert, 83e porte dans les références, runbook § 12 ; état 607 fiches / 692 JSON  … [259 caractères tronqués]`
+
+  ```
+M	docs/implantation/moteur-de-pensee.md
+M	docs/pilotage/backlog/N3-operations-natives.md
+M	docs/pilotage/backlog/index.md
+M	docs/pilotage/en-cours.md
+M	docs/pilotage/plan-travail.md
+M	docs/pilotage/references-non-regression.md
+M	docs/pilotage/roadmap.md
+M	journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md
+M	journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+M	journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+M	reports/README.md
+A	reports/pensee-defaut-conditionnel.json
+M	reports/rapport-n3-inventaire.md
+A	reports/rapport-pensee-defaut-conditionnel.md
+M	tools/bloc_linguistique.py
+M	tools/pensee/autotest.py
+---COMMIT---
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at d390136a613c5809690635deddf87ce00954b66e but expected 8189c4f32ee6452b5d3a3ae71ce279f71e020dfd
+[exit code: 128]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un commit de session a déplacé HEAD pendant le mien ; je resynchronise
+
+- **bash** `{"command": "git log --oneline -4 ; echo \"=== d390136a ===\" ; git show --stat d390136a | head -12 ; echo \"=== ÉTAT HEAD B13/S ===\" ; git show HEAD:docs/pilotage/en-cours.md | grep -n \"Fait\\*\\* : B13\\|S — les structures\\|fichiers / JSON\\|Pensée — B13\" | head -6 ; echo \"=== STATUS ===\" ;  … [93 caractères tronqués]`
+
+  ```
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+8189c4f3 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+39b7ef00 ÉTAT — N3 RESTAURÉ APRÈS UNE ÉCRITURE CONCURRENTE ; S GARDE SES 61/61 ET 144/144 ; COMPTEURS 83/606/691
+=== d390136a ===
+commit d390136a613c5809690635deddf87ce00954b66e
+Author: Stéphane <stephane@localhost>
+Date:   Wed Nov 4 11:57:59 2026 -0500
+
+    B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/backlog/N3-operations-natives.md     |  14 +-
+ docs/pilotage/backlog/index.md                     |   2 +-
+ docs/pilotage/en-cours.md                          |  28 +-
+ docs/pilotage/plan-travail.md                      |   9 +
+ docs/pilotage/references-non-regression.md         |   7 +-
+=== ÉTAT HEAD B13/S ===
+51:- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+71:- **Fait** : B13 **145/145** (run2 : refus **0**, niveau **0,9389** ; élis
+… [1560 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit B13 a emporté mes corrections docs ; je vérifie l'état et le fait 146/146
+
+- **bash** `{"command": "git diff -- docs/pilotage/en-cours.md | head -40 ; echo \"=== HEAD 146/145 ===\" ; git show HEAD:docs/pilotage/en-cours.md | grep -n \"146\\|145\\|Ce qu'elle fait\" | head -8 ; echo \"=== d390 état diff ===\" ; git show d390136a -- docs/pilotage/en-cours.md | head -50", "description": " … [45 caractères tronqués]`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index e23de123..4ece79fe 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-04, 11 h 50 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-04, 13 h 50 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -105,7 +105,7 @@
+ |---|---|---|
+ | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **607** / **692** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **608** / **693** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
+ 
+=== HEAD 146/145 ===
+42:- **Ce qu'elle fait** : intégration ; 
+… [6580 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ État : le fait B13 146/146 est committé, je l'ajoute et corrige l'heure
+
+- **bash** `{"command": "date '+%H h %M' ; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.current.md && python3 - <<'PY'\nimport subprocess\np='/tmp/state.current.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.stri … [1624 caractères tronqués]`
+
+  ```
+12 h 02
+  en-cours · 1566 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3936 mots (budget 4 000)
+  revue de documentation · 608 fiche(s) · 693 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de l'état 146/146 et des compteurs 608/693
+
+- **bash** `{"command": "git status --short | head -15 ; echo \"---COMMIT---\" ; git commit -m \"ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE\" -m \"Le fait B13 146/146 (défaut conditionnel : le niveau si le réel est là, la confiance sinon) est committé dans d390136a  … [269 caractères tronqués]`

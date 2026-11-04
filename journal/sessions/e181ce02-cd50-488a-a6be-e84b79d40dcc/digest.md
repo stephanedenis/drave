@@ -34271,3 +34271,58 @@ en-cours patché
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 13 h 45 HNE\", t)\np.write_text( … [815 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-74]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-74", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-defaut-conditionnel.json
+ create mode 100644 reports/rapport-pensee-defaut-conditionnel.md
+COMMIT OK 1
+d390136a B13 — LE DÉFAUT CONDITIONNEL : LE NIVEAU SI LE RÉEL EST LÀ, LA CONFIANCE SINON ; 146/146
+mer 04 nov 2026 11:59:48 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '80,125p' tools/tests/linguistique/qualifier_quatre_modes.py", "description": "Lire les seuils du banc des quatre modes"}`
+
+  ```
+mesures[nom] = _sources(bloc, phrases)
+        mesures[nom]["duree_s"] = round(time.perf_counter() - t1, 2)
+        print(nom, "·", round(time.perf_counter() - t1, 1), "s", flush=True)
+    refus = [p["id"] for p in phrases if compose.analyser(p["texte"], p["langue"]).refus]
+    latences = [float(compose.analyser(p["texte"], p["langue"]).cout.get("duree_s", 0.0))
+                for p in phrases]
+    seuils = {
+        "heuristique": True,
+        "neuronal": all(mesures["neuronal"]["all"]["pos"]["exactitude"] > 0 for _ in [0]),
+        "parallele": mesures["parallele"]["all"]["pos"]["exactitude"]
+                     >= max(mesures["heuristique"]["all"]["pos"]["exactitude"],
+                            mesures["neuronal"]["all"]["pos"]["exactitude"]) - 0.001,
+        "cascade": mesures["cascade"]["all"]["pos"]["exactitude"]
+                   >= mesures["heuristique"]["all"]["pos"]["exactitude"] - 0.001,
+        "parallele_niveau": mesures["parallele_niveau"]["all"]["pos"]["exactitude"]
+                            >= max(mesures["heuristique"]["all"]["pos"]["exactitude"],
+                                   mesures["neuronal"]["all"]["pos"]["exactitude"]) - 0.001,
+        "cascade_n
+… [1550 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text()\nt=t.replace('''        \"parallele\": mesures[\"parallele\"][\"all\"][\"pos\"][\"exactitude\"]\n                 … [7748 caractères tronqués]`
+
+  ```
+seuil corrigé
+état ok
+  revue de documentation · 608 fiche(s) · 693 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2804 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-elision.md`](rapport-pensee-elision.md) | **B13** — l'élision : POS 0,7455, le refus r353 tombe, **144/144** |\\ … [588 caractères tronqués]`

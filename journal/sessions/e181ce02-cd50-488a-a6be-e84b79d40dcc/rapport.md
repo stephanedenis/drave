@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 91.3 h |
 | Tours | 160 |
-| Messages | 1914 |
-| Appels d'outils | 1638 |
+| Messages | 1917 |
+| Appels d'outils | 1641 |
 | Fichiers touchés | 25 |
-| Commandes | 1346 |
+| Commandes | 1349 |
 | Sous-agents | 2 |
 | Commits | 201 |
 | Compactages de contexte | 5 |
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*10 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8490,6 +8490,9 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Corriger compteurs, question et lien cassé
 - bash — Committer le défaut conditionnel
 - job_output
+- bash — Lire les seuils du banc des quatre modes
+- bash — Corriger le seuil et écrire la fiche
+- bash — Trim README et passer toutes les portes
 
 **Synthèse produite :**
 
@@ -8574,7 +8577,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1306 autres
+- … et 1309 autres
 
 ## 4. Mesures et résultats marquants
 
