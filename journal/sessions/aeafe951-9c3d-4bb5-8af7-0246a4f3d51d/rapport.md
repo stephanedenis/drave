@@ -7,13 +7,13 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 6.2 h |
-| Tours | 4 |
-| Messages | 162 |
-| Appels d'outils | 197 |
+| Durée | 6.6 h |
+| Tours | 5 |
+| Messages | 177 |
+| Appels d'outils | 212 |
 | Fichiers touchés | 7 |
-| Commandes | 165 |
-| Sous-agents | 0 |
+| Commandes | 177 |
+| Sous-agents | 1 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
 
@@ -26,6 +26,8 @@
 **Tour 3** — go
 
 **Tour 4** — peux-tu prendre une tâche
+
+**Tour 5** — lance la suite en subagent et supervise la suite des travaux
 
 ## 2. Déroulé, étape par étape
 
@@ -233,6 +235,30 @@ L'**intégration au corpus CEGEP** (60 → 64 documents, 1 982 → 2 031 pages) 
 
 Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --head` ✅ (dernier fait = dernier état), `verifie_backlog` ✅, claim `cpu1` libéré. Les runs N2 (2 048 relancé) n'ont pas été touchés.
 
+### Tour 5 — lance la suite en subagent et supervise la suite des travaux
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Inspect existing CEGEP OCR corpus and manifest
+- bash — Check contamination tool usage
+- bash — Audit CEGEP corpus files and train append
+- bash — Check append junction and new corpus hashes
+- sous-agent — D2 — intégration corpus CEGEP 64
+- bash — Prepare supervision: current log, tree, and state line
+- bash — Check whether the hub already produced the 64-doc fiche
+- list_agents
+- bash — Read contamination tool output format for supervision
+- bash — Check new documents are disjoint from existing splits
+- bash — Confirm duplication of appended text in old train
+- send_message
+- bash — Find lowercase counterparts of the uppercase scans
+- bash — Check old train hash and Choquette context
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Le hash de l'ancien train ne correspond plus au manifeste — je cherche l'original et je cadre la supervision
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -246,6 +272,10 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-inventaire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf-restants.md` | 1 | 0 |
+
+### Sous-agents lancés
+
+- tour 5 — D2 — intégration corpus CEGEP 64
 
 ### Commandes exécutées (échantillon)
 
@@ -289,7 +319,7 @@ Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 125 autres
+- … et 137 autres
 
 ## 4. Mesures et résultats marquants
 

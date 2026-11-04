@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 15 h 49 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 15 h 57 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -127,7 +127,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire ; 22 `.PDF` natifs exclus) ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
+**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire ; 22 `.PDF` natifs exclus) ; **re-split 2/1/1 fait** (train 4,46 M, val 32 220, test 12 711) ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
 
 ## Les questions ouvertes
 

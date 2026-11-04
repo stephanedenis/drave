@@ -3955,3 +3955,221 @@ L'**intégration au corpus CEGEP** (60 → 64 documents, 1 982 → 2 031 pages) 
 
 Vérifications : `revue_documentation` ✅ (624/717/83), `verifie_etat_a_jour --head` ✅ (dernier fait = dernier état), `verifie_backlog` ✅, claim `cpu1` libéré. Les runs N2 (2 048 relancé) n'ont pas été touchés.
 
+
+## Tour 5
+
+### 👤 Utilisateur
+
+lance la suite en subagent et supervise la suite des travaux
+
+### 🤖 Assistant
+
+⏵ Préparation du sous-agent D2 (intégration des 4 documents au corpus CEGEP) : je cadre d'abord le terrain
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l data/corpus_ocr* 2>/dev/null | head; echo ====; python3 - <<'PY'\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json'))\nfor k in ('date','pdfs','scannes','ocrises','pages_ocr','caracteres','troncons','documents','octets … [145 caractères tronqués]`
+
+  ```
+data/corpus_ocr:
+total 15172
+-rw-r--r--. 1 stephane stephane        0  1 nov 20:45 test.txt
+-rw-r--r--. 1 stephane stephane 14596847  2 nov 04:44 train.txt
+-rw-r--r--. 1 stephane stephane   934044  2 nov 05:07 val.txt
+
+data/corpus_ocr_cegep:
+total 4412
+-rw-r--r--. 1 stephane stephane   10524  2 nov 18:06 test.txt
+-rw-r--r--. 1 stephane stephane 4486816  4 nov 15:49 train.txt
+====
+date : 2026-11-02
+pdfs : 91
+scannes : 91
+ocrises : 60
+pages_ocr : 1982
+caracteres : 4408811
+troncons : 573
+documents : {'train': 53, 'val': 4, 'test': 3}
+octets : {'train': 4430959, 'val': 12536, 'test': 10524}
+sha256_train : 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310
+sha256_val : dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1
+sha256_test : 1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools | grep -i contamin; python3 tools/verifie_contamination.py --help 2>&1 | head -20; echo ====; grep -n \"verifie_contamination\" reports/rapport-ocr-cegep.md | head -3", "description": "Check contamination tool usage"}`
+
+  ```
+test_contamination_eurlex.py
+test_contamination.py
+test_contamination_udhr.py
+verifie_contamination.py
+usage: verifie_contamination.py [-h] --train TRAIN [--val VAL] [--test TEST]
+                                [--eval EVAL] [--fenetre FENETRE] [--pas PAS]
+                                [--echantillon ECHANTILLON]
+                                [--taille-troncon TAILLE_TRONCON]
+                                [--sortie SORTIE]
+
+verifie_contamination.py — les fuites entre splits et entre corpus, mesurées.
+POURQUOI CE FICHIER. Un corpus d'entraînement sans contrôle de fuite est un
+corpus qui mentira sur son évaluation. Ce script vérifie deux choses, avec des
+chiffres : 1. **les doublons de tronçons entre splits** : chaque ligne des
+fichiers (tronçon de 8 Ko écrit par `corpus_wikipedia.py`) est hachée ; un
+tronçon qui apparaît dans deux splits est une fuite exacte (les quasi-doublons
+ne sont pas détectés — c'est dit). Pour le **texte intégral**
+(`corpus_wikipedia_texte.py`), l'unité est la **fenêtre** de 8 Ko coupée au
+mot (`--taille-troncon 8192`), parce que les tronçons contiennent des retours
+à la ligne ; 2. **le recouvrement avec les jeux d'évaluation** : des fenêtres
+de `--fen
+… [613 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : le corpus CEGEP a changé à 15 h 49 et `val.txt` semble absent — audit avant de déléguer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find data/corpus_ocr_cegep -maxdepth 1 -type f -printf '%f %s\\n' 2>/dev/null; ls -la data/corpus_ocr_cegep/; echo ====; tail -c 55857 data/corpus_ocr_cegep/train.txt | sha256sum; sha256sum work/ocr/restants/train.txt; echo ====; hea … [101 caractères tronqués]`
+
+  ```
+train.txt 4486816
+val.txt 12536
+test.txt 10524
+total 4412
+drwxr-xr-x. 1 stephane stephane      48  2 nov 16:31 .
+drwxr-xr-x. 1 stephane stephane    2664  2 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane   10524  2 nov 18:06 test.txt
+-rw-r--r--. 1 stephane stephane 4486816  4 nov 15:49 train.txt
+-rw-r--r--. 1 stephane stephane   12536  2 nov 17:27 val.txt
+====
+ba4099c52bf26a75aca13f1e9b8144ce449003224874ee1dd60b556aa8887805  -
+ba4099c52bf26a75aca13f1e9b8144ce449003224874ee1dd60b556aa8887805  work/ocr/restants/train.txt
+====
+2.8寸ILI9341 TFTLCD尺寸图（钢化玻璃TP）
+Customer Approved LES HE W À De | HM
+(AP ATES)
+50.00(Outline)
+49.60(TP) — 0.20 0
+10S 46.00(TP V.A) L- 2.00 e =
+SC 43.20(LCD A.A) -- 3.40 — 3.50 s
+  ```
+
+### 🤖 Assistant
+
+⏵ L'append du hub est bien là (55 857 octets = mes 4 documents) ; je vérifie la jonction avant de déléguer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"dernier octet avant append :\"; dd if=data/corpus_ocr_cegep/train.txt bs=1 skip=4430958 count=3 2>/dev/null | xxd; echo \"premiers octets de l'append :\"; head -c 80 work/ocr/restants/train.txt | xxd | head -2; echo \"premier  … [225 caractères tronqués]`
+
+  ```
+dernier octet avant append :
+00000000: 0a43 68                                  .Ch
+premiers octets de l'append :
+00000000: 4368 6f71 7565 7474 6520 632e 2043 6861  Choquette c. Cha
+00000010: 676e 6f6e 0a43 414e 4144 410a 0a50 524f  gnon.CANADA..PRO
+premier octet à l'offset 4430959 :
+00000000: 43                                       C
+====
+1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84  data/corpus_ocr_cegep/test.txt
+111f79a4ede133e9e50e5057a8b7314820f48c8f750101b8917340dc259dffeb  data/corpus_ocr_cegep/train.txt
+dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1  data/corpus_ocr_cegep/val.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Jonction propre (`\n` puis `C`), val/test intacts — je lance le sous-agent D2 et je supervise
+
+- **subagent** `{"description": "D2 — intégration corpus CEGEP 64", "prompt": "Tu travailles dans le dépôt Drave, racine /home/stephane/Data13TB/stephane/GitHub/Qtrinet (lis AGENTS.md pour le contexte général, mais ton périmètre est strictement celui ci-dessous).\n\nCONTEXTE. La session `aeafe951` a clos la limite  … [4357 caractères tronqués]`
+
+  ```
+started subagent 206a4022-ab3c-497d-a5fa-0194931c7fa0
+  ```
+
+### 🤖 Assistant
+
+⏵ Sous-agent D2 lancé ; je prépare la supervision (état, compteurs, intégration)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; git log --oneline -2; git status --short | head -12; echo ====; grep -n \"D\\*\\* — clos\\|fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md | head", "description": "Prepare supervision: current log, tree, and s … [11 caractères tronqués]`
+
+  ```
+15:56
+d4688bd2 ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)
+7c48a63d ÉTAT — T0 3 997 ; LES HUIT VIEILLES FICHES B13 SORTENT DU FAIT
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+====
+3:**Mis à jour : 2026-11-04, 15 h 49 HNE (heure locale, EST).**
+108:| fichiers / JSON de résultats | **624** / **717** | `reports/*.md` / `reports/*.json` |
+130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 163/163 ; **R0.7** — tagger ; **D** — clos : les 8 `.PDF` OCRisés et **intégrés** au corpus (64 documents, 2 031 p, 4,46 M car. ; 3 doublons, 1 formulaire ; 22 `.PDF` natifs exclus) ; 8 Ko 0 ; [fiche](../../reports/rapport-ocr-pdf-restants.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline d4688bd2 | head -16; echo ====; git log --oneline -3 -- reports/ocr-cegep-64.json reports/rapport-ocr-cegep-64.md; ls -l reports/*cegep-64* 2>/dev/null || echo 'pas encore de fiche 64'", "description": "Chec … [53 caractères tronqués]`
+
+  ```
+d4688bd2 ÉTAT — N2 : PERTE/PPL SÉPARÉES ; D : L'OCR EST INTÉGRÉ AU CORPUS (64 DOCUMENTS, 4,46 M)
+ docs/pilotage/en-cours.md                          |  10 +-
+ journal/2026-11-04/README.md                       |   7 +-
+ journal/2026-11-04/apprentissage.md                |   2 +-
+ journal/2026-11-04/distribue.md                    |   2 +-
+ journal/2026-11-04/docs.md                         |   5 +-
+ journal/2026-11-04/mesures.md                      |   2 +-
+ journal/2026-11-04/modele.md                       |   2 +-
+ journal/2026-11-04/outils.md                       |   2 +-
+ journal/2026-11-04/portes.md                       |   2 +-
+ journal/README.md                                  |   2 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md | 331 +++++++++++++++++++++
+ .../rapport.md                                     |  53 +++-
+ journal/sessions/MANIFEST.md                       |   6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 141 +++++++++
+ 14 files changed, 536 insertions(+), 31 deletions(-)
+====
+pas encore de fiche 64
+  ```
+
+- **list_agents** `{}`
+
+  ```
+206a4022-ab3c-497d-a5fa-0194931c7fa0 [running] — D2 — intégration corpus CEGEP 64
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"print\\|duplication\\|fenetres\\|fenêtres\" tools/verifie_contamination.py | tail -25", "description": "Read contamination tool output format for supervision"}`
+
+  ```
+12:2. **le recouvrement avec les jeux d'évaluation** : des fenêtres de `--fenetre` octets,
+39:    """Les unités de comparaison : les lignes (défaut), ou des fenêtres de `taille` octets.
+96:        return {"fichier": eval_.name, "fenetres": 0, "trouvees": 0, "taux": 0.0}
+106:    return {"fichier": eval_.name, "fenetre": fenetre, "fenetres": len(positions),
+120:                    help="0 = lignes ; 8192 = fenêtres de 8 Ko (texte intégral)")
+133:    print(json.dumps(resultat, ensure_ascii=False, indent=1))
+  ```
+
+### 🤖 Assistant
+
+⏵ Supervision indépendante : les 4 nouveaux documents sont-ils étrangers au train et au val/test existants ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\nimport random\ntr = Path('data/corpus_ocr_cegep/train.txt').read_bytes()\nva = Path('data/corpus_ocr_cegep/val.txt').read_bytes()\nte = Path('data/corpus_ocr_cegep/test.txt').read_bytes()\n … [617 caractères tronqués]`
+
+  ```
+ancien train 4409090 · append 55857 · val 32220 · test 12711
+ancien train: 101/200 fenêtres de 200 o du nouveau texte retrouvées
+val: 0/200 fenêtres de 200 o du nouveau texte retrouvées
+test: 0/200 fenêtres de 200 o du nouveau texte retrouvées
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte sérieuse : 101/200 fenêtres du texte ajouté existent déjà dans l'ancien train — je vérifie avant de conclure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\ntr = Path('data/corpus_ocr_cegep/train.txt').read_bytes()\nn = 55857\nold, new = tr[:-n], tr[-n:]\nfor motif in (b'Choquette', b'PROVINCE DE QU', b'COUR SUP', b'CANADA'):\n    print(motif.d … [677 caractères tronqués]`
+
+  ```
+Choquette old: 7 new: 1
+PROVINCE DE QU old: 1 new: 1
+COUR SUP old: 1 new: 1
+CANADA old: 1 new: 1
+window new[30000:30500] trouvée old[3999195:3999695]
+  new : b'ials 5.0\n\n0.2.2.2 Fiche de travail \xe2\x80\x94 Offres d\xe2\x80\x99emploi\nImprimez et compl\xc3\xa9tez cette fich'
+  old : b'ials 5.0\n\n0.2.2.2 Fiche de travail \xe2\x80\x94 Offres d\xe2\x80\x99emploi\nImprimez et compl\xc3\xa9tez cette fich'
+fenêtres 500 o trouvées : 25 / 56
+  ```
+
