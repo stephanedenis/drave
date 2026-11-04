@@ -321,7 +321,7 @@ ré-exécution.
 | **T149** | et sur le gold 432 ? | acte 0,9954 ; négation 0,9630 < 0,9676 | la fusion garde l'heuristique |
 | **T150** | la fusion par sous-type paie-t-elle ? | double sens **0,9884** (+0,0208) | la granularité était la limite |
 | **T151** | le gain tient-il à 0,3 ? | **0,9838** (−0,0046), toujours > 0,9676 | le sous-type est robuste |
-| **T152** | la variance est-elle réelle ? | 3 tirages à **0,9838** exactement | le cache masque la variance |
+| **T152** | la variance est-elle réelle ? | 3 tirages à **0,9838** exactement | le modèle est déterministe |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le

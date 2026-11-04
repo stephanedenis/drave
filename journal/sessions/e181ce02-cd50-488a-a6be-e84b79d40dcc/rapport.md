@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 93.0 h |
+| Durée | 93.1 h |
 | Tours | 162 |
-| Messages | 2008 |
-| Appels d'outils | 1728 |
+| Messages | 2010 |
+| Appels d'outils | 1730 |
 | Fichiers touchés | 25 |
-| Commandes | 1421 |
+| Commandes | 1422 |
 | Sous-agents | 2 |
-| Commits | 211 |
+| Commits | 212 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8604,7 +8604,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 
 ### Tour 162 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Deuxième tirage à 0,3 (sous-type)
 - bash — Troisième tirage à 0,3 (sous-type)
@@ -8617,6 +8617,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - bash — Voir le cache du client DeepSeek
 - bash — Corriger l'hypothèse du cache dans la fiche des tirages
 - bash — Trim T0 et passer les portes
+- bash — Committer l'erratum des tirages
 
 ## 3. Travail accompli
 
@@ -8697,7 +8698,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1381 autres
+- … et 1382 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9056,4 +9057,5 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "FUSION PAR SOUS-TYPE"; t
 - B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "VARIANCE DU SOUS-TYP
 - B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "TROIS TIRAGES"; then
+- B13 — ERRATUM DES TIRAGES : LE CACHE ÉTAIT INACTIF, LE MODÈLE EST DÉTERMINISTE ; 155/155" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "ERRATUM DES TI
 

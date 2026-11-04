@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 6.3 h |
-| Tours | 19 |
-| Messages | 294 |
-| Appels d'outils | 481 |
+| Durée | 6.4 h |
+| Tours | 22 |
+| Messages | 308 |
+| Appels d'outils | 498 |
 | Fichiers touchés | 15 |
-| Commandes | 324 |
+| Commandes | 341 |
 | Sous-agents | 0 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -61,6 +61,12 @@
 **Tour 18** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 19** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -669,7 +675,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 19 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -679,10 +685,79 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Integrate B13 155 tirages across docs
 - bash — Trim state and stage 155 integration
 - bash — Commit B13 155 tirages integration
+- bash — Verify cycle 14 final checks
 
 **Synthèse produite :**
 
-⏵ Commit B13 155/155 (tirages, cache) et l'intégration
+⏵ Cycle 14 : B13 155/155 intégré (tirages, cache), état et docs verts
+
+**Cycle 14 — le 155e fait B13 entre dans le pilotage.**
+
+- **B13 155/155 — les trois tirages** : à 0,3, trois tirages donnent **0,9838, 0,9838, 0,9838** — variance **nulle**. Ce n'est pas la stabilité du modèle : c'est le **cache de l'API** (mêmes invites, mêmes réponses) ; la variance réelle est **masquée**. Commits `62672792` (B13) et `b710b7e6` (le hub intègre le fait stagé : état, roadmap, chantiers, plan-travail passent à 155/155).
+- **Budget** : le premier ajout poussait T0 à **4 004** — la variance du sous-type sort du « Fait » (elle reste dans les fiches) : **T0 3 993 / 4 000**, `en-cours` **1 623 mots**.
+- **Contrôles** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; journal ✅ ; backlog ✅.
+- **Paire propre N2** : **α = 0,9** à **3 200 pas** (perte 0,958), GPU0 et GPU1 à 99 %.
+
+**WIP** : B13 tirages (retouche), t03b/t03c, README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : les retouches B13 à suivre, α = 0,9 à finir, puis la passe complète.
+
+### Tour 20 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Inspect B13 tirages retouch diff
+
+**Synthèse produite :**
+
+⏵ Cycle 15 : audit vert ; la B13 corrige les tirages (le cache était inactif — c'est le déterminisme)
+
+**Cycle 15 — l'audit est vert, mais la B13 corrige son propre fait.**
+
+- **Audit complet** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 623 mots**, **T0 3 993 / 4 000** ✅.
+- **B13 — retouche des tirages (WIP)** : la fiche et le JSON **invalident l'hypothèse du cache** — le cache était **inactif** (le défaut du client est `cache=False`). Ce n'est donc pas le cache : le modèle est **déterministe sur ces invites** (mêmes réponses malgré 0,3), et la variance réelle **n'est pas mesurable par ce banc**. Le titre de la fiche et le « Fait » de l'état disent encore « le cache masque la variance » → **correction à faire dès le commit B13** (la fiche, le JSON et le README sont modifiés, non committés).
+- **Paire propre N2** : **α = 0,9** à **3 750 pas** (perte 0,854), GPU0 100 % / GPU1 99 %.
+
+**WIP** : B13 tirages (retouche), README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : corriger le fait des tirages (cache → déterminisme) au prochain commit, α = 0,9 à finir, puis la passe complète.
+
+### Tour 21 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state tirages claim and run
+
+**Synthèse produite :**
+
+⏵ Cycle 16 : audit vert ; la retouche des tirages reste à moitié (titre vs corps)
+
+**Cycle 16 — tout est vert, une correction attend son commit.**
+
+- **Audit complet** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 623 mots**, **T0 3 993 / 4 000** ✅.
+- **B13 — retouche des tirages, toujours en WIP** : le **corps** de la fiche et le JSON disent désormais que le **cache était inactif** (`cache=False`) et que le modèle est **déterministe** sur ces invites — mais le **titre** de la fiche dit encore « le cache masque la variance », et le « Fait » de l'état aussi. La correction d'ensemble (titre, JSON, outils, implémentation, README, état) attend le commit B13 ; le hub ne touche pas à la fiche de la session.
+- **Paire propre N2** : **α = 0,9** à **3 900 pas** (perte 1,034), GPU0 99 % / GPU1 99 %.
+
+**WIP** : B13 tirages (titre/retouche), README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : recevoir la retouche committée, corriger le « cache » en « déterminisme » dans l'état et les pages, α = 0,9 à finir, puis la passe complète.
+
+### Tour 22 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check tirages retouche status and run
+- bash — Correct cache claim to determinism in docs
+- bash — Trim state and stage correction
+- bash — Commit cache to determinism correction
+
+**Synthèse produite :**
+
+⏵ Commit correction : le cache était inactif, le modèle est déterministe
 
 ## 3. Travail accompli
 
@@ -748,7 +823,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 284 autres
+- … et 301 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -924,4 +999,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34" -m "La B13 a produit deux JSON de plus (soustype-t03b, t03c) : le disque passe à 707, l'état suit. B13
 - INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)" -m "Le catalogue rattrape la variance du sous-type et les tirages ; l'heure de l'
 - B13 155/155 — LES TROIS TIRAGES À 0,3 : 0,9838 ×3, LE CACHE MASQUE LA VARIANCE ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL" -m "Le fait B13 (rapport-pensee-tirages
+- TIERGES B13 — LE CACHE ÉTAIT INACTIF : LE MODÈLE EST DÉTERMINISTE ; CORRECTION ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La retouche B13 (corps de la fiche + JSON, no
 

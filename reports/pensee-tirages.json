@@ -10,9 +10,9 @@
  "moyenne": 0.9838,
  "ecart_type": 0.0,
  "heuristique": 0.9676,
- "hypothese": "cache de l'API",
+ "hypothese": "modèle déterministe sur ces invites (cache=False vérifié)",
  "limites": [
-  "variance masquée par le cache",
+  "déterminisme du modèle",
   "trois tirages",
   "gold 432"
  ]

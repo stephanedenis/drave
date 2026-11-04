@@ -2215,7 +2215,7 @@ def t152_tirages() -> tuple[bool, str]:
         d = json.loads(f.read_text(encoding="utf-8"))
         val.append(round(d["modes"]["parallele_niveau"]["all"]["pragmatique"]["double_sens"], 4))
     return val == [0.9838, 0.9838, 0.9838], (
-        f"tirages : {val} (écart-type 0, cache)")
+        f"tirages : {val} (écart-type 0, modèle déterministe)")
 
 
 def main() -> int:

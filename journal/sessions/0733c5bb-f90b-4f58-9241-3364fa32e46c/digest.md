@@ -10487,3 +10487,20 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-47", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; tail -c 60 work/n2ac/pond4-mix512-15k.log 2>/dev/null", "description": "Poll corrected production runs"}`
+
+  ```
+13:45:04
+kdpp a=0 fini 13:09:40
+372 · dure 0.9261 · douce 0.2865 · 1888 s
+· perte 1.0059 · 744 s
+pas  5000 · perte 1.0997 · 931 s
+  ```
+
+- **bash** `{"command": "sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; tail -c 45 work/n2ac/pond4-mix512-15k.log", "description": "Wait for both prod … [38 caractères tronqués]`
