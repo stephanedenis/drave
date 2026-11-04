@@ -37886,3 +37886,30 @@ started background job bash-240
   ```
 
 - **job_output** `{"job_id": "bash-240", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ T160 passifs sans par  passif sans par (chunker) : 3/3 patient
+  ✅ T161 cible proximité   proximité : top1 95/239, exact 13/239, tête 94/145
+  ✅ T162 candidats verbes  candidats : top-k 112/239 (0.4686), tête 111/145
+  165/165 portes tenues
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ 165/165 ; je commite et vérifie que le code est bien dans HEAD
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [203 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-candidats-verbes.md reports/pensee-candidats-verbes.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilo … [853 caractères tronqués]`

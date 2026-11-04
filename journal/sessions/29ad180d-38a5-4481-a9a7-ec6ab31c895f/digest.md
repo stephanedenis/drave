@@ -9184,3 +9184,10 @@ Le sous-module est poussé en **`523d8c1`**. Le principal a été très bouscul�
 
 La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:8765/paragraphes` (référents puis structure, la source anglaise à côté), puis la **rétro-traduction API** quand la clé sera là, les **71 langues** de l'UDHR, et les deux limites restantes de la traduction — « de très-bons conseils » (GP français, objet direct anglais) et « Lequel est-ce ? » (*Which way?*).
 
+
+## Tour 18
+
+### 👤 Utilisateur
+
+on a un gros contexte et il semble que la session achève. peut-on clore la session, ou il serait mieux de compacter et continuer?
+

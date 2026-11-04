@@ -1,0 +1,28 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "165/165",
+ "gold": 612,
+ "cibles": 239,
+ "avant": {
+  "topk": 78,
+  "topk_taux": 0.3264,
+  "tete_topk": 77,
+  "tete_topk_taux": 0.531
+ },
+ "apres": {
+  "topk": 112,
+  "topk_taux": 0.4686,
+  "tete_topk": 111,
+  "tete_topk_taux": 0.7655
+ },
+ "inchanges": {
+  "top1": 95,
+  "exact": 13
+ },
+ "limites": [
+  "127 échecs non qualifiés",
+  "pas de classement appris",
+  "gold 612"
+ ]
+}

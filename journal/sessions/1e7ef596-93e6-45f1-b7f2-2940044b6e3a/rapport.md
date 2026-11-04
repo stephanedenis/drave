@@ -7,15 +7,15 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 9.0 h |
-| Tours | 64 |
-| Messages | 572 |
-| Appels d'outils | 773 |
+| Durée | 9.1 h |
+| Tours | 65 |
+| Messages | 583 |
+| Appels d'outils | 779 |
 | Fichiers touchés | 15 |
-| Commandes | 588 |
+| Commandes | 594 |
 | Sous-agents | 0 |
-| Commits | 82 |
-| Compactages de contexte | 1 |
+| Commits | 84 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -151,6 +151,8 @@
 **Tour 63** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 64** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 65** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1844,7 +1846,31 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 59 : audit vert ; je recale l'heure de l'état et commit
+⏵ Cycle 59 : audit vert, heure 16 h 23, état committé
+
+**Cycle 59 — tout est vert, l'heure est recalée.**
+
+- **Audit complet** : revue ✅ **626 fiches / 719 JSON / 120 docs / 83 portes** ; **3 046 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 598 mots**, **T0 3 968 / 4 000** ✅.
+- **État** : l'heure de session (16 h 14) est ramenée à **16 h 23** ; D **restauré à 62 documents**, B13 **164/164**, compteurs 626/719.
+- **2 048** : le run continue (3 200/10 000, GPU1 en charge).
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 65 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+- bash — Read new B13 fiches verb candidates
+- bash — Integrate B13 165 candidats verbes
+- bash — Fix last count and commit B13 165
+- bash — Retry B13 165 commit and verify
+
+**Synthèse produite :**
+
+⏵ Le verrou git est tenu ; je retente le commit du 165
 
 ## 3. Travail accompli
 
@@ -1910,7 +1936,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 548 autres
+- … et 554 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2038,7 +2064,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-16 sorties en erreur ou divergentes. Les premières :
+17 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -2140,4 +2166,6 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 4 000" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
 - D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 ÉCARTÉS) ; T0 3 984" -m "Le corpus propre à 62 documents (60 anciens + Choquette + Assurance, DOC1/DO
 - ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS" -m "Cycle d'audit : les sept contrôles sont verts (626/719, 3046 liens, T0 396
+- B13 165/165 — LES CANDIDATS VERBES : LE TOP-K PASSE DE 0,3264 À 0,4686, LA TÊTE À 0,7655 ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont complets
+- B13 165/165 — LES CANDIDATS VERBES : LE TOP-K PASSE DE 0,3264 À 0,4686, LA TÊTE À 0,7655 ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont complets
 

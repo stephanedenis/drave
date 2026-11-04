@@ -15,10 +15,11 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-candidats-verbes.md`](rapport-pensee-candidats-verbes.md) | **B13** — les candidats verbes : top-k 0,3264 → **0,4686**, tête 0,7655, **165/165** |
+| [`rapport-pensee-cible-proximite.md`](rapport-pensee-cible-proximite.md) | **B13** — la cible par proximité : exact 0,0042 → **0,0544** (×13), **164/164** |
 | [`rapport-pensee-passifs-sans-par.md`](rapport-pensee-passifs-sans-par.md) | **B13** — les passifs sans par : le chunker 3/3, le générateur S ignore, **163/163** |
 | [`rapport-pensee-roles.md`](rapport-pensee-roles.md) | **B13** — les 322 GN sans rôle : 129 avant le GV, 172 après, relation 0,8195, **160/160** |
 | [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |
-| [`rapport-pensee-tirages.md`](rapport-pensee-tirages.md) | **B13** — les trois tirages : 0,9838 exactement, le modèle est déterministe, **155/155** |
 | [`rapport-pensee-soustype-variance.md`](rapport-pensee-soustype-variance.md) | **B13** — la variance du sous-type : double sens 0,9838 à 0,3, **154/154** |
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
 | [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |

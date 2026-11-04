@@ -2342,9 +2342,19 @@ def t161_cible_proximite() -> tuple[bool, str]:
     r = evaluer_bloc("h", bl.Heuristique(), charger())
     a, th = r["attachement"], r["attachement_tete"]
     return (a["cibles"] == 239 and a["top1"] == 95 and a["exact"] == 13
-            and th["top1"] == 94 and a["topk"] == 78), (
+            and th["top1"] == 94), (
         f"proximité : top1 {a['top1']}/239, exact {a['exact']}/239, "
         f"tête {th['top1']}/145")
+
+
+def t162_candidats_verbes() -> tuple[bool, str]:
+    """Les candidats verbes : le top-k passe de 78 à 112 (0,4686)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    r = evaluer_bloc("h", bl.Heuristique(), charger())
+    a, th = r["attachement"], r["attachement_tete"]
+    return (a["topk"] == 112 and th["topk"] == 111 and a["top1"] == 95), (
+        f"candidats : top-k {a['topk']}/239 ({a['topk_taux']}), tête {th['topk']}/145")
 
 
 def main() -> int:
@@ -2507,7 +2517,8 @@ def main() -> int:
               ("T158 passifs", t158_passifs()),
               ("T159 correctif passifs", t159_passifs_corriges()),
               ("T160 passifs sans par", t160_passifs_sans_par()),
-              ("T161 cible proximité", t161_cible_proximite())]
+              ("T161 cible proximité", t161_cible_proximite()),
+              ("T162 candidats verbes", t162_candidats_verbes())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

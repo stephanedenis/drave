@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 43.7 h |
-| Tours | 17 |
-| Messages | 442 |
-| Appels d'outils | 425 |
+| Durée | 48.3 h |
+| Tours | 18 |
+| Messages | 446 |
+| Appels d'outils | 428 |
 | Fichiers touchés | 17 |
-| Commandes | 338 |
+| Commandes | 341 |
 | Sous-agents | 0 |
 | Commits | 40 |
 | Compactages de contexte | 1 |
@@ -52,6 +52,8 @@
 **Tour 16** — continue
 
 **Tour 17** — ensuite?
+
+**Tour 18** — on a un gros contexte et il semble que la session achève. peut-on clore la session, ou il serait mieux de compacter et continuer?
 
 ## 2. Déroulé, étape par étape
 
@@ -614,6 +616,18 @@ Le sous-module est poussé en **`523d8c1`**. Le principal a été très bouscul�
 
 La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:8765/paragraphes` (référents puis structure, la source anglaise à côté), puis la **rétro-traduction API** quand la clé sera là, les **71 langues** de l'UDHR, et les deux limites restantes de la traduction — « de très-bons conseils » (GP français, objet direct anglais) et « Lequel est-ce ? » (*Which way?*).
 
+### Tour 18 — on a un gros contexte et il semble que la session achève. peut-on clore la session, ou il serait mieux de compacter et c … [9 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Read session plan and en-cours for closure
+- bash — Read session report usage and current branch
+- bash — Close session in plan/en-cours, generate report, checks
+
+**Synthèse produite :**
+
+⏵ Je recommande de clore : le cycle est mesuré et poussé, la suite dépend de toi (validation) et de la clé API. Je prépare la clôture propre de la session.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -680,7 +694,7 @@ La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 298 autres
+- … et 301 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -791,6 +805,7 @@ La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:
 - **T14** `2,3430 / 2,3461 à contexte 256/512/1 000/2 000) et le miroir de copie reste à 0,0078 — à 552 Mo`
 - **T14** `49:- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/parag`
 - **T17** `57:- **Fait** : types **61/61**, rôles **144/144** ; **corpus réel** 8,5 %/65,5 % ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`**, **banque 9 paragraphes** ;`
+- **T18** `- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 te`
 
 ## 5. Erreurs rencontrées
 
