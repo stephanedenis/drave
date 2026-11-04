@@ -37958,3 +37958,63 @@ docs/pilotage/chantiers.md:0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**B13** — 164/164\", \"**B13** — 165/165\")\np.write_text(t); print('B13 → 165/165')\nPY\npython3 tools/taille_documents.py … [542 caractères tronqués]`
+
+  ```
+B13 → 165/165
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-245]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-245", "timeout_ms": 600000, "wait": true}`
+
+  ```
+17 files changed, 172 insertions(+), 35 deletions(-)
+COMMIT OK 1
+83c91b24 ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est livré : 165/165, top-k 0,4686 (tête 0,7655), code vérifié dans HEAD
+
+J'ai enchaîné sur **les candidats verbes** (je n'ai pas touché à `master`/`origin` — votre « oui » ne valait pas accord de push à mes yeux).
+
+## Le round
+
+Les `candidats` d'un segment portent maintenant, en plus de son type, les **verbes des trois GV les plus proches**. Mesure sur le gold de T153 (612 phrases, 239 cibles) :
+
+| mesure | avant | **après** | écart |
+|---|---:|---:|---:|
+| top1 | 95 (0,3975) | 95 (0,3975) | 0 |
+| **top-k** | 78 (0,3264) | **112 (0,4686)** | **+34 (+0,1422)** |
+| exact | 13 (0,0544) | 13 (0,0544) | 0 |
+| **tête top-k** | 77/145 (0,5310) | **111/145 (0,7655)** | **+34 (+0,2345)** |
+
+**Ce que ça dit** : le trou n'était pas le classement mais le **rappel** — la bonne cible est désormais dans la liste **76,6 %** du temps quand le span est bon, contre 53,1 % avant. Le top1 ne bouge pas, ce qui est cohérent : ce round n'améliore que les alternatives.
+
+**Contrôle négatif** : 127/239 cibles restent hors des trois verbes proposés, et rien ne qualifie ces échecs (span faux, mauvais GV, cible non verbale ?).
+
+## Artefacts et vérification
+
+- Fiche [`reports/rapport-pensee-candidats-verbes.md`](reports/rapport-pensee-candidats-verbes.md) + JSON, porte **T162**, tableau `docs/implantation/moteur-de-pensee.md`, état aligné sur 165/165.
+- **165/165 portes** (autotest complet avec T162, vert) ; `porte-tableaux`, `revue`, `taille` (T0 3 999), `verifie_en_cours`, `porte-bloc` : toutes vertes.
+- Commits : `f7195ce0` (le round) et `83c91b24` (état), plus `1f74e6cf` et `f661728c` pour les deux rounds précédents. **Vérifié après chaque commit** par `git show HEAD:<fichier>` — leçon de la dérive de tout à l'heure.
+
+## Réserves
+
+- **`candidats` change de sens** : il portait le type (ou le nom de segmentation), il porte aussi des verbes. C'est écrit dans la fiche, section « ce qui pourrait rendre cette fiche fausse ».
+- **La métrique top-k** accepte les sous-chaînes (`vu` ⊂ `aperçu`) — elle est plus généreuse que l'exact.
+- **Les 127 échecs** ne sont pas qualifiés.
+
+## La suite
+
+1. **Qualifier les 127 échecs** (span, GV, cible non verbale) — la prochaine mesure utile, dans mon territoire.
+2. **Le générateur S** : les deux règles de passif, à demander à la session S.
+3. **`master`** : ~70 commits d'avance et un upstream `origin/master` ; si vous voulez que je prépare le merge **et** le push, dites-le explicitement.
+
+Je continue sur les 127 échecs si vous ne dites rien — c'est la ligne suivante de la file.
+

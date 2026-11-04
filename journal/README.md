@@ -82,14 +82,14 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `18b8879c` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.2 h | 1 | 55 | 0 | 0 | [rapport](sessions/18b8879c-f211-43b8-9908-cf65e509b21d/rapport.md) |
 | `18c3f6d0` | Relecture ADVERSARIALE ciblée (10 minut | 2026-10-01 05:20 | 0.1 h | 1 | 38 | 0 | 0 | [rapport](sessions/18c3f6d0-5bb1-45bb-9f94-ab0e7812218d/rapport.md) |
 | `1966e052` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 33 | 0 | 0 | [rapport](sessions/1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445/rapport.md) |
-| `1e7ef596` | Session status update | 2026-11-04 07:25 | 9.1 h | 65 | 779 | 15 | 84 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
+| `1e7ef596` | Session status update | 2026-11-04 07:25 | 9.2 h | 66 | 783 | 15 | 85 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
 | `1f9394fb` | — | 2026-10-29 14:10 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/1f9394fb-6435-4928-9a03-2b258e5a28c5/rapport.md) |
 | `206a4022` | Tu travailles dans le dépôt | 2026-11-04 15:56 | 0.2 h | 1 | 46 | 0 | 0 | [rapport](sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) |
 | `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 74.8 h | 54 | 1227 | 69 | 60 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
 | `22e518ee` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | 1 | 171 | 16 | 0 | [rapport](sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) |
 | `235066f5` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 11:38 | 0.3 h | 1 | 39 | 0 | 0 | [rapport](sessions/235066f5-307a-4285-a882-14bc2d06cb7b/rapport.md) |
 | `27c99b10` | Tu écris un tokenizer BPE | 2026-09-25 19:40 | 0.2 h | 1 | 54 | 1 | 0 | [rapport](sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/rapport.md) |
-| `29ad180d` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 48.3 h | 18 | 429 | 17 | 41 | [rapport](sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) |
+| `29ad180d` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 48.3 h | 18 | 430 | 17 | 42 | [rapport](sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) |
 | `2c2a6595` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 44 | 0 | 0 | [rapport](sessions/2c2a6595-b208-446e-bbd1-d0f49eca45e8/rapport.md) |
 | `2f51f17f` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 17 | 0 | 0 | [rapport](sessions/2f51f17f-f47c-49d5-958f-cafecd3fe01e/rapport.md) |
 | `2fd56aa5` | Dépôt /home/stephane/GitHub/Qtrinet, f | 2026-10-27 18:48 | 0.3 h | 1 | 37 | 0 | 0 | [rapport](sessions/2fd56aa5-7b9b-40b0-9470-05c74b032d55/rapport.md) |

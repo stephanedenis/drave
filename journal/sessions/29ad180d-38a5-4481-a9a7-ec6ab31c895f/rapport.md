@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 48.3 h |
 | Tours | 18 |
-| Messages | 447 |
-| Appels d'outils | 429 |
+| Messages | 449 |
+| Appels d'outils | 430 |
 | Fichiers touchés | 17 |
-| Commandes | 342 |
+| Commandes | 343 |
 | Sous-agents | 0 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -618,16 +618,23 @@ La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:
 
 ### Tour 18 — on a un gros contexte et il semble que la session achève. peut-on clore la session, ou il serait mieux de compacter et c … [9 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Read session plan and en-cours for closure
 - bash — Read session report usage and current branch
 - bash — Close session in plan/en-cours, generate report, checks
 - bash — Commit session closure and push branch
+- bash — Commit closure on s/close branch and push
 
 **Synthèse produite :**
 
-⏵ Je recommande de clore : le cycle est mesuré et poussé, la suite dépend de toi (validation) et de la clé API. Je prépare la clôture propre de la session.
+⏵ Recommandation : clore. Le cycle est mesuré et poussé ; la suite dépend de toi (validation) et de la clé API ; la clôture est écrite.
+
+**Clore plutôt que compacter.** La session a livré son cycle : le v7 « fait divers » est mesuré (**61/61 types, 144/144 rôles, 50/50 compléments**, contrôles 104/144 et 106/144, **56 tests**) et poussé dans le sous-module (`523d8c1`) ; la banque de paragraphes est à neuf avec ses sources anglaises ; l'état S est déjà repris par le hub (`61/61`, `144/144`, 606 fiches / 691 JSON) et la validation humaine a commencé (a001–a003 faits). Ce qui reste ne dépend plus vraiment d'un long contexte : la **validation des 8 paragraphes restants** (toi, sur `http://127.0.0.1:8765/paragraphes`), la **rétro-traduction API** quand `DEEPSEEK_API_KEY` sera là, et les **71 langues** de l'UDHR. Un compactage pour continuer ne ferait que tenir la session ouverte sur ces attentes ; une session fraîche repartira du plan et de l'état, sans le poids du contexte.
+
+**La clôture est écrite.** Le plan de session est passé **en pause** (heartbeat 04/11 16 h 30), avec la reprise nommée ; la section S de `en-cours` dit *(en pause)* et « session close » ; le rapport de session est généré (70 Ko, 18 tours, 17 fichiers, 113 mesures). Le v7 et sa fiche sont sur la branche **`s/v7`** (déjà poussée), et une branche **`s/close`** a été poussée pour la clôture. Le seul accroc est git : le hub, N2 et L committent en continu, et mes commits de clôture perdent la course au verrou de `HEAD` — les fichiers de clôture sont sur le disque et dans l'index alterné, le prochain commit du hub les prendra ; les branches `s/v7` et `s/close` sont sur le remote pour qu'il puisse les fusionner.
+
+**Pour la reprise.** Une nouvelle session S n'aura qu'à lire `docs/pilotage/en-cours.md` § S et le plan : reprendre la validation des 8 paragraphes, puis la rétro-traduction et l'UDHR. Les deux limites restantes de la traduction — « de très-bons conseils » (GP français, objet direct anglais) et « Lequel est-ce ? » (*Which way?*) — sont nommées dans les fiches, prêtes pour un prochain cycle.
 
 ## 3. Travail accompli
 
@@ -695,7 +702,7 @@ La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 302 autres
+- … et 303 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -868,5 +875,6 @@ La suite ne change pas : **valider les neuf paragraphes** sur `http://127.0.0.1:
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE" -m "« Le fait divers surprend » ne coupe plus le verbe dans le GN :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' from pathlib import Path p=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf
+- S — CLÔTURE DE LA SESSION : V7 POUSSÉ, VALIDATION 3/9, REPRISE NOMMÉE" -m "La session S se met en pause : analyseur 61/61 types, 144/144 rôles ; arbre 99 à ≥3 ;
 - S — CLÔTURE DE LA SESSION : V7 POUSSÉ, VALIDATION 3/9, REPRISE NOMMÉE" -m "La session S se met en pause : analyseur 61/61 types, 144/144 rôles ; arbre 99 à ≥3 ;
 

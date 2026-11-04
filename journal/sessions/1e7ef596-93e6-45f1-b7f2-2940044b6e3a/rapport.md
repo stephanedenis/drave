@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 9.1 h |
-| Tours | 65 |
-| Messages | 583 |
-| Appels d'outils | 779 |
+| Durée | 9.2 h |
+| Tours | 66 |
+| Messages | 588 |
+| Appels d'outils | 783 |
 | Fichiers touchés | 15 |
-| Commandes | 594 |
+| Commandes | 597 |
 | Sous-agents | 0 |
-| Commits | 84 |
+| Commits | 85 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -153,6 +153,8 @@
 **Tour 64** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 65** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 66** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1859,7 +1861,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 65 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run seven controls and check rope
@@ -1867,10 +1869,33 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Integrate B13 165 candidats verbes
 - bash — Fix last count and commit B13 165
 - bash — Retry B13 165 commit and verify
+- job_output
 
 **Synthèse produite :**
 
-⏵ Le verrou git est tenu ; je retente le commit du 165
+⏵ Cycle 60 : B13 165/165 (candidats verbes, top-k 0,4686) en HEAD, T0 3 982
+
+**Cycle 60 — le 165e fait B13 entre.**
+
+- **B13 165/165 — les candidats verbes** (`f7195ce0`) : les `candidats` d'un segment portent désormais, en plus de son type, les **verbes des trois GV les plus proches** (`_verbes_proches`). Sur le gold de T153 (612 phrases, 239 cibles) : **top-k 0,3264 → 0,4686**, **tête 0,5310 → 0,7655** ; le top1 (0,3975) et l'exact (0,0544) ne bougent pas — c'est la **liste des alternatives** qui s'enrichit.
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 612 mots**, **T0 3 982 / 4 000** ✅.
+- **D** : le corpus est restauré à **62 documents** (8 Ko 0, 500 o 0).
+- **2 048** : le run continue (3 450/10 000, GPU1 en charge).
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 66 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+- bash — Commit staged pages and state time
+
+**Synthèse produite :**
+
+⏵ Les pages 165 sont stagées ; je recale l'heure de l'état et commit le tout
 
 ## 3. Travail accompli
 
@@ -1936,7 +1961,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 554 autres
+- … et 557 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2168,4 +2193,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS" -m "Cycle d'audit : les sept contrôles sont verts (626/719, 3046 liens, T0 396
 - B13 165/165 — LES CANDIDATS VERBES : LE TOP-K PASSE DE 0,3264 À 0,4686, LA TÊTE À 0,7655 ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont complets
 - B13 165/165 — LES CANDIDATS VERBES : LE TOP-K PASSE DE 0,3264 À 0,4686, LA TÊTE À 0,7655 ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont complets
+- ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens,
 

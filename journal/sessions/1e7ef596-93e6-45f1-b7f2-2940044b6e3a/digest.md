@@ -16931,3 +16931,110 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Le verrou git est tenu ; je retente le commit du 165
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 30); do [ -e .git/index.lock ] || break; sleep 4; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; ls -l .git/index.lock ; pgrep -af \"git (commit|add)\" | head -3 ; else git add reports/rapport-pense … [1106 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 240000ms; moved to background job bash-594]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit du 165 tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-594", "timeout_ms": 180000, "wait": true}`
+
+  ```
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+8c73db9b ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS
+  revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3982 mots (budget 4 000)
+  ✅ 3053 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  en-cours · 1612 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 60 : B13 165/165 (candidats verbes, top-k 0,4686) en HEAD, T0 3 982
+
+**Cycle 60 — le 165e fait B13 entre.**
+
+- **B13 165/165 — les candidats verbes** (`f7195ce0`) : les `candidats` d'un segment portent désormais, en plus de son type, les **verbes des trois GV les plus proches** (`_verbes_proches`). Sur le gold de T153 (612 phrases, 239 cibles) : **top-k 0,3264 → 0,4686**, **tête 0,5310 → 0,7655** ; le top1 (0,3975) et l'exact (0,0544) ne bougent pas — c'est la **liste des alternatives** qui s'enrichit.
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 612 mots**, **T0 3 982 / 4 000** ✅.
+- **D** : le corpus est restauré à **62 documents** (8 Ko 0, 500 o 0).
+- **2 048** : le run continue (3 450/10 000, GPU1 en charge).
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 66
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 61/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 61 : instantané et audit des sept contrôles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+83c91b24 ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+8c73db9b ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS
+3833a604 D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 ÉCARTÉS) ; T0 3 984
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+26e21acf D — LE CORPUS 64 EST CONTAMINÉ : DOC2 (VAL) EST UN QUASI-DOUBLON DU TRAIN, 8 KO INSUFFISANT ; LE CORPUS PROPRE 62 EST PRÊT
+---STATUS---
+M  docs/pilotage/chantiers.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause ·  73 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 285 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_repor
+… [650 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [317 caractères tronqués]`
+
+  ```
+revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1612 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3982 mots (budget 4 000)
+  ✅ 3053 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---ROPE---
+pas   3950 · perte 0.9882 · PPL val 2.666 · 4037 s
+0, 0 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Les pages 165 sont stagées ; je recale l'heure de l'état et commit le tout
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h61.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h61.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\* … [1045 caractères tronqués]`

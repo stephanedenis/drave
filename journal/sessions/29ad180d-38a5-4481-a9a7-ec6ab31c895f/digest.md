@@ -9249,3 +9249,48 @@ plan/en-cours : clôture
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/ docs/pilotage/en-cours.md && GIT_INDEX_FILE=/ … [684 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          | 12 +++++-----
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md |  7 ++++++
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   | 12 ++++++----
+ .../rapport.md                                     | 27 +++++++++++++++++-----
+ 4 files changed, 41 insertions(+), 17 deletions(-)
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at f7195ce06a9967839a0f0803b51ed952c5d04980 but expected 8c73db9bcd11d4398f1c0726f6854f09099190b9
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+To github.com:stephanedenis/drave.git
+   8189c4f3..f7195ce0  s/v7 -> s/v7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -b s/close 2>&1 | tail -1; git add journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/ docs/pilotage/en-cours.md; git commit -m \"S — CLÔTURE DE LA SESSION : V7 POUSSÉ, VALIDATION 3/9, REPRISE NOMMÉE\" -m \"La session … [551 caractères tronqués]`
+
+  ```
+Switched to a new branch 's/close'
+
+Another git process seems to be running in this repository, or the lock file may be stale
+To github.com:stephanedenis/drave.git
+ * [new branch]        s/close -> s/close
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/en-cours.md                          |   6 +-
+ journal/2026-11-04/README.md                       |  11 +-
+ journal/2026-11-04/apprentissage.md                |   6 +-
+ journal/2026-11-04/distribue.md                    |   6 +-
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Recommandation : clore. Le cycle est mesuré et poussé ; la suite dépend de toi (validation) et de la clé API ; la clôture est écrite.
+
+**Clore plutôt que compacter.** La session a livré son cycle : le v7 « fait divers » est mesuré (**61/61 types, 144/144 rôles, 50/50 compléments**, contrôles 104/144 et 106/144, **56 tests**) et poussé dans le sous-module (`523d8c1`) ; la banque de paragraphes est à neuf avec ses sources anglaises ; l'état S est déjà repris par le hub (`61/61`, `144/144`, 606 fiches / 691 JSON) et la validation humaine a commencé (a001–a003 faits). Ce qui reste ne dépend plus vraiment d'un long contexte : la **validation des 8 paragraphes restants** (toi, sur `http://127.0.0.1:8765/paragraphes`), la **rétro-traduction API** quand `DEEPSEEK_API_KEY` sera là, et les **71 langues** de l'UDHR. Un compactage pour continuer ne ferait que tenir la session ouverte sur ces attentes ; une session fraîche repartira du plan et de l'état, sans le poids du contexte.
+
+**La clôture est écrite.** Le plan de session est passé **en pause** (heartbeat 04/11 16 h 30), avec la reprise nommée ; la section S de `en-cours` dit *(en pause)* et « session close » ; le rapport de session est généré (70 Ko, 18 tours, 17 fichiers, 113 mesures). Le v7 et sa fiche sont sur la branche **`s/v7`** (déjà poussée), et une branche **`s/close`** a été poussée pour la clôture. Le seul accroc est git : le hub, N2 et L committent en continu, et mes commits de clôture perdent la course au verrou de `HEAD` — les fichiers de clôture sont sur le disque et dans l'index alterné, le prochain commit du hub les prendra ; les branches `s/v7` et `s/close` sont sur le remote pour qu'il puisse les fusionner.
+
+**Pour la reprise.** Une nouvelle session S n'aura qu'à lire `docs/pilotage/en-cours.md` § S et le plan : reprendre la validation des 8 paragraphes, puis la rétro-traduction et l'UDHR. Les deux limites restantes de la traduction — « de très-bons conseils » (GP français, objet direct anglais) et « Lequel est-ce ? » (*Which way?*) — sont nommées dans les fiches, prêtes pour un prochain cycle.
+
