@@ -9235,3 +9235,70 @@ heure 13 h 35
 ⏵ Commit INDEX 612 et heure corrigée
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add reports/INDEX.md docs/pilotage/en-cours.md && git commit -m \"INDEX — 611 → 612 (VARIANC … [422 caractères tronqués]`
+
+  ```
+[s/v7 2ee74678] INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)
+ 15 files changed, 236 insertions(+), 36 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 12
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [274 caractères tronqués]`
+
+  ```
+2ee74678 INDEX — 611 → 612 (VARIANCE DU SOUS-TYPE, TIRAGES) ; HEURE CORRIGÉE (13 H 35)
+8a0de643 ÉTAT — COMPTEURS 614/707 (B13 t03b/t03c) ; HEURE 13 H 34
+8f00b73a B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-quatre-modes-432-soustype-t03b.json
+?? reports/pensee-quatre-modes-432-soustype-t03c.json
+?? reports/pensee-tirages.json
+?? reports/rapport-pensee-tirages.md
+---REVUE---
+  revue de documentation · 615 fiche(s) · 708 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1611 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3981 mots (budget 4 000)
+---LIENS---
+  ✅ 2973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 12 : INDEX 612, heure corrigée, B13 tirages en WIP
+
+**Cycle 12 — le catalogue à jour, les tirages en attente.**
+
+- **Catalogue** : `reports/INDEX.md` passe de **611 à 612 fiches** — variance du sous-type et tirages. L'heure de l'état, écrite **15 h 15** par l'horloge de session, est ramenée à **13 h 35**. Commit `2ee74678`.
+- **B13 — tirages (WIP)** : la fiche `rapport-pensee-tirages` et son JSON sont encore **non suivis** ; l'état a déjà les compteurs **615 / 708** et reste à **154/154** (dernier fait committé). L'intégration attend le commit B13.
+- **Contrôles** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 611 mots**, **T0 3 981 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **2 700 pas** (perte 0,950), GPU0 à 100 %.
+
+**WIP** : B13 `tirages` + t03b/t03c, README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : tirages à committer/intégrer, α = 0,9 à finir, puis la passe complète.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 13/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

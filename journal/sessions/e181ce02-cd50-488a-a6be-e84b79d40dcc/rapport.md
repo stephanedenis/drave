@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 92.9 h |
+| Durée | 93.0 h |
 | Tours | 162 |
-| Messages | 2003 |
-| Appels d'outils | 1723 |
+| Messages | 2005 |
+| Appels d'outils | 1725 |
 | Fichiers touchés | 25 |
-| Commandes | 1417 |
+| Commandes | 1418 |
 | Sous-agents | 2 |
-| Commits | 210 |
+| Commits | 211 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -8604,7 +8604,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 
 ### Tour 162 — <goal_round> Objective: "Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification  … [945 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Deuxième tirage à 0,3 (sous-type)
 - bash — Troisième tirage à 0,3 (sous-type)
@@ -8612,6 +8612,8 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - bash — Calculer la moyenne et l'écart-type des trois tirages
 - bash — Écrire la fiche des trois tirages et la porte T152
 - bash — Passer toutes les portes
+- bash — Committer les trois tirages
+- job_output
 
 ## 3. Travail accompli
 
@@ -8692,7 +8694,7 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1377 autres
+- … et 1378 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9050,4 +9052,5 @@ Je continue la file : prochain round, **les trois tirages** — la moyenne et l'
 - B13 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; 152/152" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "PRAGMATIQUE
 - B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "FUSION PAR SOUS-TYPE"; t
 - B13 — LA VARIANCE DU SOUS-TYPE : DOUBLE SENS 0,9838 À 0,3, LE GAIN TIENT ; 154/154" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "VARIANCE DU SOUS-TYP
+- B13 — LES TROIS TIRAGES : 0,9838 EXACTEMENT, LE CACHE MASQUE LA VARIANCE ; 155/155" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "TROIS TIRAGES"; then
 

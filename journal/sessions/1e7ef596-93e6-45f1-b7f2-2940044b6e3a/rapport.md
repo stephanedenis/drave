@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 6.2 h |
-| Tours | 17 |
-| Messages | 282 |
-| Appels d'outils | 467 |
+| Tours | 19 |
+| Messages | 290 |
+| Appels d'outils | 477 |
 | Fichiers touchés | 15 |
-| Commandes | 310 |
+| Commandes | 320 |
 | Sous-agents | 0 |
 | Commits | 32 |
 | Compactages de contexte | 1 |
@@ -57,6 +57,10 @@
 **Tour 16** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 17** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -618,7 +622,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 17 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -626,10 +630,55 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check state facts, time and runs
 - bash — Regenerate index and correct time
 - bash — Commit index 612 and corrected time
+- bash — Verify cycle 12 final checks
 
 **Synthèse produite :**
 
-⏵ Commit INDEX 612 et heure corrigée
+⏵ Cycle 12 : INDEX 612, heure corrigée, B13 tirages en WIP
+
+**Cycle 12 — le catalogue à jour, les tirages en attente.**
+
+- **Catalogue** : `reports/INDEX.md` passe de **611 à 612 fiches** — variance du sous-type et tirages. L'heure de l'état, écrite **15 h 15** par l'horloge de session, est ramenée à **13 h 35**. Commit `2ee74678`.
+- **B13 — tirages (WIP)** : la fiche `rapport-pensee-tirages` et son JSON sont encore **non suivis** ; l'état a déjà les compteurs **615 / 708** et reste à **154/154** (dernier fait committé). L'intégration attend le commit B13.
+- **Contrôles** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 611 mots**, **T0 3 981 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **2 700 pas** (perte 0,950), GPU0 à 100 %.
+
+**WIP** : B13 `tirages` + t03b/t03c, README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : tirages à committer/intégrer, α = 0,9 à finir, puis la passe complète.
+
+### Tour 18 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+- bash — Read tirages verdict and staged state diff
+
+**Synthèse produite :**
+
+⏵ Cycle 13 : B13 tirages 155/155 stagé (le cache masque la variance), docs verts
+
+**Cycle 13 — le 155e fait B13 est prêt, avec sa réserve.**
+
+- **B13 — les trois tirages (155/155)** : à température 0,3, trois tirages donnent **0,9838, 0,9838, 0,9838** — **variance nulle**. Mais ce n'est **pas** une preuve de stabilité : c'est le **cache de l'API** (mêmes invites, mêmes réponses) — la variance réelle du modèle est **masquée** par le banc. La fiche `rapport-pensee-tirages` est **stagée** avec son JSON, les outils, l'implémentation et le README ; le commit B13 est imminent. L'état n'a que l'heure de touchée (15 h 20) : le **155** reste à intégrer côté hub, avec la réserve du cache.
+- **Contrôles** : revue ✅ **615 fiches / 708 JSON / 120 docs / 83 portes** ; **2 973 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 611 mots**, **T0 3 981 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **3 100 pas** (perte 0,908), GPU0 et GPU1 à 99 %.
+
+**WIP** : B13 tirages/t03b/t03c (committés sous peu), S `rapport-s-paragraphes.md`. **Le goal reste actif** : 155 à intégrer (cache compris), α = 0,9 à finir, puis la passe complète.
+
+### Tour 19 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run review, state and budget checks
+- bash — Run links, backlog, journal and table gates
+- bash — Check state facts, time and runs
+
+**Synthèse produite :**
+
+⏵ Cycle 14 : instantané, audit et faits committés depuis le cycle 13
 
 ## 3. Travail accompli
 
@@ -695,7 +744,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 270 autres
+- … et 280 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1,0 +1,19 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "155/155",
+ "tirages": [
+  0.9838,
+  0.9838,
+  0.9838
+ ],
+ "moyenne": 0.9838,
+ "ecart_type": 0.0,
+ "heuristique": 0.9676,
+ "hypothese": "cache de l'API",
+ "limites": [
+  "variance masquée par le cache",
+  "trois tirages",
+  "gold 432"
+ ]
+}
