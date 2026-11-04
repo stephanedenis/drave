@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**146 commits** · **6 session(s)** · **7 thème(s)**
+**147 commits** · **6 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 105 | [docs.md](docs.md) |
+| docs | 106 | [docs.md](docs.md) |
 | mesures | 24 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -180,6 +180,7 @@
 | 18:45 | `8586bb93` | ÉTAT — HEURE 20 H 17 ; 2 048 : 2E MOITIÉ À 1 500 PAS ; B13 165/165, D 62 |
 | 18:47 | `bb98b3ba` | ÉTAT — HEURE 20 H 22 ; 2 048 : 2E MOITIÉ À 1 650 PAS ; B13 165/165, D 62 |
 | 18:50 | `631e4d7d` | ÉTAT — HEURE 20 H 27 ; 2 048 : 2E MOITIÉ À 1 800 PAS ; B13 165/165, D 62 |
+| 18:52 | `fe74ab9c` | ÉTAT — HEURE 20 H 32 ; 2 048 : 2E MOITIÉ À 1 950 PAS ; B13 165/165, D 62 |
 
 ## Le récit de la journée (écrit à la main)
 
