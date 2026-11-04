@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 10.2 h |
-| Tours | 91 |
-| Messages | 690 |
-| Appels d'outils | 860 |
+| Durée | 10.3 h |
+| Tours | 92 |
+| Messages | 694 |
+| Appels d'outils | 863 |
 | Fichiers touchés | 15 |
-| Commandes | 674 |
+| Commandes | 677 |
 | Sous-agents | 0 |
-| Commits | 110 |
+| Commits | 111 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -205,6 +205,8 @@
 **Tour 90** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 91** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 92** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2473,7 +2475,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 86 : audit vert ; je recale l'heure et commit
+⏵ Cycle 86 : audit vert, état committé sur `s/v7`, heure 17 h 39
+
+**Cycle 86 — tout est vert.**
+
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 612 mots**, **T0 3 982 / 4 000** ✅.
+- **État** : heure **17 h 39**, B13 **165/165**, D **restauré à 62 documents**, compteurs 627/720, sur **`s/v7`**.
+- **2 048** : le run continue (7 700/10 000, GPU1 en charge ; perte 0,9719).
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 92 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+- bash — Correct time and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 87 : audit vert ; je recale l'heure et commit
 
 ## 3. Travail accompli
 
@@ -2539,7 +2562,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 634 autres
+- … et 637 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2797,4 +2820,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 18 H 17 ; B13 165/165, D RESTAURÉ 62, 2 048 À 7 450 PAS" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3982, en-cours 
 - ÉTAT — HEURE 18 H 21 ; B13 165/165, D RESTAURÉ 62, 2 048 À 7 600 PAS" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3982, en-cours 
 - ÉTAT — HEURE 18 H 25 ; B13 165/165, D RESTAURÉ 62, 2 048 À 7 700 PAS" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3982, en-cours 
+- ÉTAT — HEURE 18 H 29 ; B13 165/165, D RESTAURÉ 62, 2 048 À 7 850 PAS" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3982, en-cours 
 
