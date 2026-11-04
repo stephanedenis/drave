@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 95.7 h |
 | Tours | 172 |
-| Messages | 2129 |
-| Appels d'outils | 1831 |
+| Messages | 2134 |
+| Appels d'outils | 1837 |
 | Fichiers touchés | 25 |
-| Commandes | 1507 |
+| Commandes | 1512 |
 | Sous-agents | 2 |
 | Commits | 225 |
 | Compactages de contexte | 6 |
@@ -9178,6 +9178,19 @@ Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
 
 ### Tour 172 — oui
 
+*6 appels d'outils.* Actions notables :
+
+- bash — Voir les lecteurs de candidats
+- bash — Ajouter les verbes aux candidats et mesurer le top-k
+- bash — Ajouter T162, écrire fiche/JSON/docs/état et vérifier
+- bash — Trim README et vérifier
+- bash — Autotest complet avec T162
+- job_output
+
+**Synthèse produite :**
+
+⏵ Top-k : 78 → **112** (0,3264 → 0,4686) ; tête 77 → **111** (0,7655)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9257,7 +9270,7 @@ Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1467 autres
+- … et 1472 autres
 
 ## 4. Mesures et résultats marquants
 

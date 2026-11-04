@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 16 h 14 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 16 h 23 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,7 +68,7 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **164/164** ; cible par proximité (exact 0,0042 → 0,0544) ; rôles 301/322 ; passifs hors du chemin S ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md).
+- **Fait** : B13 **164/164** ; attachement par proximité (exact 0,0544, top-k 0,4686) ; rôles 301/322 ; passifs hors du chemin S ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md).
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : les **candidats verbes**, puis le **générateur S**.
@@ -105,7 +105,7 @@
 |---|---|---|
 | portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **626** / **719** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **627** / **720** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 

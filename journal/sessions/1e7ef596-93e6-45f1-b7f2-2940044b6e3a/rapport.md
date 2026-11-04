@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 8.9 h |
-| Tours | 62 |
-| Messages | 565 |
-| Appels d'outils | 768 |
+| Durée | 9.0 h |
+| Tours | 64 |
+| Messages | 572 |
+| Appels d'outils | 773 |
 | Fichiers touchés | 15 |
-| Commandes | 583 |
+| Commandes | 588 |
 | Sous-agents | 0 |
-| Commits | 81 |
+| Commits | 82 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -147,6 +147,10 @@
 **Tour 61** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 **Tour 62** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 63** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
+
+**Tour 64** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [678 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1797,7 +1801,50 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ La session OCR a laissé D en « contaminé, à restaurer » ; j'inscris la restauration faite et commit
+⏵ Cycle 57 : corpus CEGEP restauré à 62 documents (DOC1/DOC2 quasi-doublons écartés), T0 3 968
+
+**Cycle 57 — le re-split 64 était contaminé ; le corpus propre à 62 est restauré.**
+
+- **D — la contamination mesurée** (`26e21acf`) : le re-split 2/1/1 plaçait **DOC2 en val** avec **18/20 fenêtres de 500 o déjà dans le train** (17 001 o contigus) ; **DOC1** était un quasi-doublon intra-train (24/26) ; le contrôle **8 Ko exact** (0) était **aveugle**. Le corpus propre à **62 documents** était prêt et vérifié.
+- **La restauration est faite** (`3833a604`) : `data/corpus_ocr_cegep` = **60 anciens + Choquette + Assurance**, DOC1/DOC2 écartés ; **train 4 440 987, val 12 536, test 10 524** ; **8 Ko 0, 500 o 0**. La ligne de D passe de « contaminé, à restaurer » à **« restauré »**.
+- **B13 164/164** : le code de la cible par proximité est entré dans HEAD (`f661728c` ; `_cible_proche`, T153/T161 à jour).
+- **Audit** : revue ✅ **626 fiches / 719 JSON / 120 docs / 83 portes** ; **3 046 liens** ✅ ; backlog ✅ ; journal ✅ ; `en-cours` **1 630 mots**, **T0 3 968 / 4 000** ✅.
+- **2 048** : le run continue (2 700/10 000, GPU1 en charge).
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 63 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+
+**Synthèse produite :**
+
+⏵ Cycle 58 : audit vert, corpus 62 en place, 2 048 à 3 200/10 000
+
+**Cycle 58 — audit vert, le corpus 62 tient.**
+
+- **Audit complet** : revue ✅ **626 fiches / 719 JSON / 120 docs / 83 portes** ; **3 046 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 598 mots**, **T0 3 968 / 4 000** ✅.
+- **D** : le corpus CEGEP est **restauré à 62 documents** (train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; les quasi-doublons DOC1/DOC2 sont écartés et la fiche `rapport-ocr-cegep-64` documente la contamination et la restauration.
+- **B13 164/164** : la cible par proximité (exact ×13) et son code sont dans HEAD.
+- **2 048** : le run est à **3 200/10 000** (3 270 s, GPU1 à 99 %) ; la seconde moitié suivra.
+- **WIP** : B13 (outils, README), S (sous-module + `rapport-s-paragraphes.md`) ; N2 et OCR **en pause**.
+
+**Le goal reste actif** : la fin du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 64 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [958 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+- bash — Correct time and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 59 : audit vert ; je recale l'heure de l'état et commit
 
 ## 3. Travail accompli
 
@@ -1863,7 +1910,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 543 autres
+- … et 548 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2092,4 +2139,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 4 000" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
 - D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 QUASI-DOUBLONS ÉCARTÉS) ; T0 4 000" -m "Le re-split 64 était contaminé : DOC2 en val avait 18/20 fenê
 - D — LE CORPUS CEGEP EST RESTAURÉ À 62 DOCUMENTS (DOC1/DOC2 ÉCARTÉS) ; T0 3 984" -m "Le corpus propre à 62 documents (60 anciens + Choquette + Assurance, DOC1/DO
+- ÉTAT — HEURE 16 H 22 ; D RESTAURÉ (62 DOCUMENTS), B13 164/164, 2 048 À 3 200 PAS" -m "Cycle d'audit : les sept contrôles sont verts (626/719, 3046 liens, T0 396
 

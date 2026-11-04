@@ -37817,3 +37817,72 @@ Sur les 432 réelles seules (184 cibles) : top1 73 (0,3967), exact 13 (0,0707).
 
 Voulez-vous que j'enchaîne sur **les candidats verbes** (mesurable, dans mon territoire) ou que je prépare le **merge/push de `master`** ?
 
+
+## Tour 172
+
+### 👤 Utilisateur
+
+oui
+
+### 🤖 Assistant
+
+⏵ J'enchaîne sur les candidats verbes — je vérifie d'abord qui lit `candidats`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"candidats\" tools/*.py tools/tests/linguistique/*.py tools/pensee/autotest.py | grep -v \"candidats=\\[\" | head -20", "description": "Voir les lecteurs de candidats"}`
+
+  ```
+tools/aligneur_litteraire.py:453:                f"[ERREUR] chapitres {langue} non contigus : {nums} (candidats {stats['lignes_candidates']}, "
+tools/banc_complet.py:93:    candidats: list[dict] = []
+tools/banc_complet.py:109:        candidats.append({"question": question, "indice": texte[:70], "valeur": valeur,
+tools/banc_complet.py:112:    if len(candidats) > n:
+tools/banc_complet.py:113:        pas = len(candidats) / n
+tools/banc_complet.py:114:        candidats = [candidats[int(i * pas)] for i in range(n)]
+tools/banc_complet.py:115:    return candidats[:n]
+tools/bloc_linguistique.py:7:    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+tools/bloc_linguistique.py:19:`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script` et ses `candidats`.
+tools/bloc_linguistique.py:76:    candidats: list[str] = field(default_factory=list)
+tools/bloc_linguistique.py:86:            "candidats": list(self.candidats), "langue": self.langue,
+tools/bloc_linguistique.py:579:                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+tools/bloc_linguistique.py:588:                                 "texte": texte[d:mots[j - 1][1]],
+… [825 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# helper : verbes des GV les plus proches\nt=t.replace('''    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:''',\n' … [3455 caractères tronqués]`
+
+  ```
+candidats verbes posés
+attachement {'cibles': 239, 'labels': 145, 'top1': 95, 'topk': 112, 'exact': 13, 'top1_taux': 0.3975, 'topk_taux': 0.4686, 'exact_taux': 0.0544, 'couverture': 0.6067}
+tête {'cibles': 145, 'labels': 145, 'top1': 94, 'topk': 111, 'top1_taux': 0.6483, 'topk_taux': 0.7655, 'couverture': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Top-k : 78 → **112** (0,3264 → 0,4686) ; tête 77 → **111** (0,7655)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''    return (a[\"cibles\"] == 239 and a[\"top1\"] == 95 and a[\"exact\"] == 13\n            and th[\"top1\"] == 94 and a[\"t … [7906 caractères tronqués]`
+
+  ```
+T161 ajustée, T162 ajoutée
+fiche + JSON + docs + état + README
+  revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncibles=(\"rapport-pensee-passifs.md\",\"rapport-pensee-tirages.md\")\nout=[]; n=0\nfor l in lignes:\n    if any((\ … [281 caractères tronqués]`
+
+  ```
+lignes retirées 1
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | tail -4", "description": "Autotest complet avec T162", "run_in_background": true, "timeoutMs": 5400000}`
+
+  ```
+started background job bash-240
+  ```
+
+- **job_output** `{"job_id": "bash-240", "timeout_ms": 600000, "wait": true}`
