@@ -15,8 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-fusion-soustype.md`](rapport-pensee-fusion-soustype.md) | **B13** — la fusion par sous-type : double sens 0,9884 (+0,0208), **153/153** |
-| [`rapport-pensee-pragmatique-full.md`](rapport-pensee-pragmatique-full.md) | **B13** — la pragmatique sur le gold 432 : acte 0,9954, la fusion garde l'heuristique, **152/152** |
+| [`rapport-pensee-soustype-variance.md`](rapport-pensee-soustype-variance.md) | **B13** — la variance du sous-type : double sens 0,9838 à 0,3, **154/154** |
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
 | [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |
 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |

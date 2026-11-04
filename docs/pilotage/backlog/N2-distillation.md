@@ -1,7 +1,7 @@
 # N2 — Distillation native (50 000 séquences)
 
 > **Statut** : en cours · **Priorité** : P1 · **Programme** : N · **Dépend de** : N1
-> **Ligne de roadmap** : N2 · **Fiches de résultat** : `rapport-n2-200k`, `rapport-n2-r11`, `rapport-n2-fenetre`, `rapport-n2-production-fenetre`
+> **Ligne de roadmap** : N2 · **Fiches de résultat** : `rapport-n2-200k`, `rapport-n2-r11`, `rapport-n2-fenetre`, `rapport-n2-production-fenetre`, `rapport-n2-distillation-native`
 > **Résumé** : Faire tenir le natif sans professeur, sur 50 000 séquences, avec la porte < 2,5 de PPL.
 > **Glossaire** : [distillation](../../theorie/glossaire/entrees/distillation.md) · [professeur / élève](../../theorie/glossaire/entrees/professeur-eleve.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [BPE](../../theorie/glossaire/entrees/bpe.md).
 
@@ -23,6 +23,8 @@ Depuis, deux mesures : le run de **200 000 pas** (1,02 Go) donne **3,1591 / 5,60
 8,0018** (val_fr / littérature / anglais / wikitext2) ; la **fenêtre entraînée 1 024** donne
 **2,4759 / 2,4373** au **grand corpus** — **sous 2,5** — et **2,7856** sur le **corpus propre**.
 512 paie hors domaine, **2 048 ne paie pas** ; le compute ne remplace pas la fenêtre.
+
+La **distillation native** a son **erratum** (04/11) : le gain de **0,14–0,18** était une **repondération** — la tête principale pesait 1 au lieu de 1/4 — ; à **parité stricte**, α = 0,9 ne gagne rien (**−0,030 / −0,009 / −0,004**), et la **repondération** vaut **−0,05**. La **paire propre de production** (α = 0 puis 0,9, 15 000 pas) est en cours : **α = 0** donne **1,014** de perte finale en **7 050 s** ; α = 0,9 tourne.
 
 ## La porte
 

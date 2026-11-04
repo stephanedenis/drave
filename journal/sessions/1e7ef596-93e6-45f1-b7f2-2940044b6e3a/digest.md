@@ -8745,3 +8745,198 @@ heure 13 h 23
 ⏵ Commit INDEX 611 et heure corrigée
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add reports/INDEX.md docs/pilotage/en-cours.md && git commit -m \"INDEX — 608 → 611 (PRAGMAT … [514 caractères tronqués]`
+
+  ```
+[s/v7 bd4298fe] INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)
+ 17 files changed, 318 insertions(+), 48 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 10
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [133 caractères tronqués]`
+
+  ```
+bd4298fe INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)
+4542fe4b PLAN-TRAVAIL — L/B13 PASSE À 153/153 (+ FUSION PAR SOUS-TYPE) ; ÉTAT ALLÉGÉ (T0 3 968)
+a6292fb1 B13 153/153 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; ÉTAT, CHANTIERS, ROADMAP
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-quatre-modes-432-soustype-t03.json
+?? reports/pensee-soustype-variance.json
+?? reports/rapport-pensee-soustype-variance.md
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 614 fiche(s) · 705 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1598 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3968 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---A0.9---\" ; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; nvidia-smi --query-gpu=index,utilization.gpu -- … [75 caractères tronqués]`
+
+  ```
+✅ 2961 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas  1500 · perte 0.9783 · dure 1.0753 · douce 0.3692 · 729 s
+0, 99 %
+1, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 10 : INDEX 611, heure corrigée, B13 154 en attente de commit
+
+**Cycle 10 — le catalogue suit, l'heure se recale.**
+
+- **Catalogue** : `reports/INDEX.md` passe de **608 à 611 fiches** — pragmatique sur le gold 432, fusion par sous-type, variance du sous-type. Le README et l'INDEX étaient en retard de trois fiches ; l'heure de l'état, écrite **15 h 05** par l'horloge de session, est ramenée à **13 h 23**. Commit `bd4298fe`.
+- **B13 — WIP 154/154** : la **variance du sous-type** à 0,3 donne **0,9838** (−0,0046 contre 0,9884) — le gain **tient sur deux températures** et reste au-dessus de l'heuristique (0,9676). Fiche et JSON **pas encore committés** : l'état reste à **153/153** et l'intégration attend le commit B13.
+- **Contrôles** : revue ✅ **614 fiches / 705 JSON / 120 docs / 83 portes** ; **2 961 liens** ✅ ; journal ✅ ; backlog ✅ ; `en-cours` **1 598 mots**, **T0 3 968 / 4 000** ✅.
+- **Paire propre N2** : **α = 0,9** à **1 500 pas** (perte 0,978), GPU0 à 99 %.
+
+**WIP** : B13 `soustype-variance` + t03, `pensee-quatre-modes.json`, README/implémentation ; S `rapport-s-paragraphes.md`. **Le goal reste actif** : 154 à committer/intégrer, α = 0,9 à finir, puis la passe complète.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 11 : instantané, audit et faits committés depuis le cycle 10
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+bd4298fe INDEX — 608 → 611 (PRAGMATIQUE 432, SOUS-TYPE, SOUS-TYPE VARIANCE) ; HEURE CORRIGÉE (13 H 23)
+4542fe4b PLAN-TRAVAIL — L/B13 PASSE À 153/153 (+ FUSION PAR SOUS-TYPE) ; ÉTAT ALLÉGÉ (T0 3 968)
+a6292fb1 B13 153/153 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; ÉTAT, CHANTIERS, ROADMAP
+92769981 B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS GAGNE 0,0208 (0,9884) ; 153/153
+09c5bb49 B13 152/152 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; ÉTAT ET PILOTAGE
+8d0008d5 B13 — LA PRAGMATIQUE SUR LE GOLD 432 : ACTE 0,9954, LA FUSION GARDE L'HEURISTIQUE ; 152/152
+d4a35d11 B13 151/151 — LA PRAGMATIQUE NEURONALE QUALIFIE (1,0 / 1,0 / 0,9846 / 0,9769 SUR 130 PHRASES) ; ÉTAT, ROADMAP, CHANTIERS, PLAN-TRAVAIL
+64674e0d ERRATUM (SUITE) — LA REPONDÉRATION VAUT −0,05, PAS −0,14 : 3,6067 / 3,3984 / 3,3129 CONTRE 3,6452 / 3,4493 / 3,3628
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/pensee/autotest.py
+?? reports/pensee-quatre-modes-432-soustype-t03.json
+?? reports/pensee-soustype-variance.json
+?? reports/rapport-pensee-soustype-variance.md
+?? reports/rapport-s-paragraphes
+… [1032 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 614 fiche(s) · 705 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1598 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3968 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 2961 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 2961 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"B13 \\*\\*15\\|Pensée — B13\\|B13 : 15\\|N2 — actif\\|fichiers / JSON\\|154\" docs/pilotage/en-cours.md | head -8 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512- … [130 caractères tronqués]`
+
+  ```
+13 h 26
+# En ce moment
+
+**Mis à jour : 2026-11-04, 13 h 23 HNE (heure locale, EST).**
+71:- **Fait** : B13 **153/153** ; gold **432** (réel → true) ; **DRVM/native 114/114 + 5/5** ; **DRVM N0.1 6/6** (payload corrompu refusé) ; **sto 5/5** ; **pragmatique 130 qualifie** ; **pragmatique 432 : acte 0,9954 ; la négation (0,9630) et la modalité (0,9722) restent sous l'heuristique, la fusion la garde** ; **fusion par sous-type : le double sens 0,9884 (+0,0208)** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-pensee-variance.md), [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md), [pragmatique 432](../../reports/rapport-pensee-pragmatique-full.md), [sous-type](../../reports/rapport-pensee-fusion-soustype.md).
+95:- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **paire propre** : α = 0 **fini** (perte **1,014**, 7 050 s), α = 0,9 **en cours** ; **repondération 4× : −0,05**.
+97:- **Pensée — B13 (actif)** : **153/153**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
+108:| fichiers / JSON d
+… [336 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 11 : la page backlog N2 porte-t-elle encore le faux +0,10 ? Je vérifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== N2 BACKLOG ===\" ; head -26 docs/pilotage/backlog/N2-distillation.md ; echo \"=== GREP ===\" ; grep -n \"0,10\\|−0,10\\|repondération\\|parité\\|paire propre\" docs/pilotage/backlog/N2-distillation.md | head -8 ; echo \"=== … [124 caractères tronqués]`
+
+  ```
+=== N2 BACKLOG ===
+# N2 — Distillation native (50 000 séquences)
+
+> **Statut** : en cours · **Priorité** : P1 · **Programme** : N · **Dépend de** : N1
+> **Ligne de roadmap** : N2 · **Fiches de résultat** : `rapport-n2-200k`, `rapport-n2-r11`, `rapport-n2-fenetre`, `rapport-n2-production-fenetre`
+> **Résumé** : Faire tenir le natif sans professeur, sur 50 000 séquences, avec la porte < 2,5 de PPL.
+> **Glossaire** : [distillation](../../theorie/glossaire/entrees/distillation.md) · [professeur / élève](../../theorie/glossaire/entrees/professeur-eleve.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [BPE](../../theorie/glossaire/entrees/bpe.md).
+
+## Le besoin
+
+Le student plafonne à 2,708 et la porte < 2,5 n'est pas atteinte. Les 130–256 de contexte sont négatifs ; il faut décider si le levier est la donnée, la capacité ou la hiérarchie.
+
+La **hiérarchie** (l'état de section) a été **écartée** : R11 ne la retient pas. Le levier mesuré le **03/11** est la **fenêtre entraînée** (RoPE) — 1 024 est la recette de production.
+
+## L'état
+
+Le budget est mesuré (N2.d) : 2,9355 → 2,8527, mais **sur un jeu contaminé à 32,8 %**. N2.h a
+refait le mètre : corpus dédupliqué (−22,2 %
+… [926 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Backlog N2 : l'erratum (le +0,10 était une repondération) et la paire propre à ajouter
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, subprocess, re\np=pathlib.Path('docs/pilotage/backlog/N2-distillation.md'); t=p.read_text()\nt=t.replace(\"**Fiches de résultat** : `rapport-n2-200k`, `rapport-n2-r11`, `rapport-n2-fenetre`, `rapport … [1649 caractères tronqués]`
+
+  ```
+N2 backlog OK
+heure 13 h 27
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  revue de documentation · 614 fiche(s) · 705 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2961 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  T0 max : 3968 mots (budget 4 000)
+  en-cours · 1598 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit backlog N2 : erratum et paire propre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 5; done ; if [ -e .git/index.lock ]; then echo \"LOCK PERSISTANT\" ; else git add docs/pilotage/backlog/N2-distillation.md docs/pilotage/en-cours.md && git commit -m \"BA … [516 caractères tronqués]`
