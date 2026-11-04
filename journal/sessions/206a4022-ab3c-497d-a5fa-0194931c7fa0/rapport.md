@@ -9,10 +9,10 @@
 | Début | 2026-11-04 15:56 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 36 |
-| Appels d'outils | 44 |
+| Messages | 38 |
+| Appels d'outils | 46 |
 | Fichiers touchés | 0 |
-| Commandes | 40 |
+| Commandes | 42 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt Drave, racine /home/stephane/Data13TB/stephane/GitHub/Qtrinet (lis AGENTS.md pour le context … [4909 caractères tronqués]
 
-*44 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - bash — Inspecte la racine et les répertoires cibles
 - bash — Date courante et liste des outils
@@ -41,11 +41,11 @@
 - bash — Aide du script de contamination
 - bash — Lecture du script de contamination
 - bash — Traces récentes et état git
-- … et 28 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
-⏵ Correction du script de mesure 500 o
+⏵ Écriture du manifeste `reports/ocr-cegep-64.json`
 
 ## 3. Travail accompli
 
@@ -96,6 +96,7 @@
 - **T1** Contrôle négatif du corpus propre
 - **T1** Baseline 500 o et contrôle du corpus propre
 - **T1** Mesure baseline et propre en 500 o
+- … et 2 autres
 
 ## 4. Mesures et résultats marquants
 

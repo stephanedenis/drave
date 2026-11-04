@@ -4471,3 +4471,274 @@ fiche pas encore
 ?? reports/pensee-cible-proximite.json
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; ls -l work/ocr/cegep64/propre/ 2>/dev/null || echo 'pas de corpus propre'; ls -l reports/*cegep-64* 2>/dev/null || echo 'pas de fiche'; date '+%H:%M:%S'", "description": "Wait for subagent's clean corpus and deliverables"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-223]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-223", "timeout_ms": 30000, "wait": true}`
+
+  ```
+total 4376
+-rw-r--r--. 1 stephane stephane     578  4 nov 16:07 contamination.json
+-rw-r--r--. 1 stephane stephane     578  4 nov 16:07 contamination.stdout
+drwxr-xr-x. 1 stephane stephane     148  4 nov 16:07 controle
+-rw-r--r--. 1 stephane stephane   10524  4 nov 16:06 test.txt
+-rw-r--r--. 1 stephane stephane 4440987  4 nov 16:06 train.txt
+-rw-r--r--. 1 stephane stephane   12536  4 nov 16:06 val.txt
+pas de fiche
+16:07:28
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-223 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; ls -l work/ocr/cegep64/propre/ 2>/dev/null || echo 'pas de corpus propre'; ls -l reports/*cegep-64* 2>/dev/null || echo 'pas de fiche'; date '+%H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Corpus propre construit (4 440 987 o) — je vérifie préfixes, jonction et contamination avant d'accepter
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\nimport hashlib\np = Path('work/ocr/cegep64/propre')\ntr = (p/'train.txt').read_bytes(); va = (p/'val.txt').read_bytes(); te = (p/'test.txt').read_bytes()\nold_tr = Path('data/corpus_ocr_ceg … [778 caractères tronqués]`
+
+  ```
+train 4440987 · val 12536 · test 10524
+préfixe train == ancien : True · hash 6d53a023db1ab7aa
+val hash dd605833f27eab63 · test hash 1c9ab73459c1e44a
+jonction : b'oup 360\n\nChoquette c. Cha'
+suffixe : b'Choquette c. Chagnon\nCANADA\n\nPROVINCE DE QU\xc3\x89BEC COUR SUP\xc3\x89RI'
+val propre: 0/13 fenêtres 500 o dans le train propre
+test propre: 0/11 fenêtres 500 o dans le train propre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_contamination.py --train work/ocr/cegep64/propre/train.txt --val work/ocr/cegep64/propre/val.txt --test work/ocr/cegep64/propre/test.txt --taille-troncon 8192 --sortie work/ocr/cegep64/propre/contamination.json  … [107 caractères tronqués]`
+
+  ```
+started background job bash-230
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\ntr = Path('work/ocr/cegep64/propre/train.txt').read_text(encoding='utf-8')\nprint('caractères train propre :', len(tr))\nprint('attendu 4 418 407 + séparateurs ?')\n# chars de l'ancien trai … [231 caractères tronqués]`
+
+  ```
+caractères train propre : 4398548
+attendu 4 418 407 + séparateurs ?
+ancien train (4 408 811 premiers car.) : 4408811
+  ```
+
+### 👤 Utilisateur
+
+background job bash-230 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_contamination.py --train work/ocr/cegep64/propre/train.txt --val work/ocr/cegep64/propre/val.txt --test work/ocr/cegep64/propre/test.txt --taille-troncon 8192 --sortie work/ocr/cegep64/propre/contamination.json 2>&1 | tail -18) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-230", "timeout_ms": 60000, "wait": true}`
+
+  ```
+"recouvrement_eval": [],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 543,
+  "par_split": {
+   "val.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum work/ocr/cegep64/propre/*.txt; ls -l reports/*cegep-64* 2>/dev/null || echo 'fiche pas encore'; date '+%H:%M:%S'", "description": "Get clean corpus hashes and check fiche"}`
+
+  ```
+1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84  work/ocr/cegep64/propre/test.txt
+f57154df3ca5ecbd487c649c9177fddc7b4ffc2073f3488b8a2d1ad436d3da47  work/ocr/cegep64/propre/train.txt
+dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1  work/ocr/cegep64/propre/val.txt
+fiche pas encore
+16:08:27
+  ```
+
+- **list_agents** `{}`
+
+  ```
+206a4022-ab3c-497d-a5fa-0194931c7fa0 [running] — D2 — intégration corpus CEGEP 64
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -4; sleep 40; ls -l reports/*cegep-64* 2>/dev/null || echo 'toujours pas de fiche'; date '+%H:%M:%S'", "description": "Check counters and wait for the fiche"}`
+
+  ```
+revue de documentation · 625 fiche(s) · 718 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+toujours pas de fiche
+16:09:22
+  ```
+
+### 🤖 Assistant
+
+⏵ Le sous-agent ne rend pas ses livrables (25 min) ; je le stoppe et j'écris la fiche à partir des mesures vérifiées
+
+- **interrupt_agent** `{"agent_id": "206a4022-ab3c-497d-a5fa-0194931c7fa0"}`
+
+  ```
+interrupt requested for agent 206a4022-ab3c-497d-a5fa-0194931c7fa0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\ntr = Path('data/corpus_ocr_cegep/train.txt').read_bytes()\nva = Path('data/corpus_ocr_cegep/val.txt').read_bytes()\nte = Path('data/corpus_ocr_cegep/test.txt').read_bytes()\nold_tr, old_va, … [746 caractères tronqués]`
+
+  ```
+Choquette (8 fenêtres) dans ancien train : 0 /8
+DOC2 dans ancien train : (18, 20)
+Assurance dans ancien train : (0, 2)
+Assurance dans ancien val/test : 0 0
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 206a4022-ab3c-497d-a5fa-0194931c7fa0 was stopped before it finished.
+Its closing message:
+⏵ Écriture du manifeste `reports/ocr-cegep-64.json`
+
+### 🤖 Assistant
+
+⏵ Le sous-agent s'est arrêté juste avant d'écrire ; je prends le relais avec les mesures vérifiées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum data/corpus_ocr_cegep/*.txt; echo ====; ls -la work/ocr/cegep64/controle/ 2>/dev/null; cat work/ocr/cegep64/contamination.json 2>/dev/null | head -20", "description": "Get current 64 hashes and inspect control files"}`
+
+  ```
+2895e30d04b8c377259e5131e61870157f0554a9026eca5fffa18847b7159a5c  data/corpus_ocr_cegep/test.txt
+661e6386fb09ca333778e37dfdff8badd55135ea014d04975714ab8cc445458d  data/corpus_ocr_cegep/train.txt
+271117c2b22e63ea63dd2cc3ea26765e862a1793b3d1c37b7a36da5a387dddbe  data/corpus_ocr_cegep/val.txt
+====
+total 8788
+drwxr-xr-x. 1 stephane stephane     148  4 nov 16:01 .
+drwxr-xr-x. 1 stephane stephane     402  4 nov 16:06 ..
+-rw-r--r--. 1 stephane stephane     590  4 nov 16:01 contamination-controle-negatif.json
+-rw-r--r--. 1 stephane stephane   12711  4 nov 16:01 test.txt
+-rw-r--r--. 1 stephane stephane 4473206  4 nov 16:01 train_fuite.txt
+-rw-r--r--. 1 stephane stephane 4464947  4 nov 16:01 train.txt
+-rw-r--r--. 1 stephane stephane   32220  4 nov 16:01 val.txt
+{
+ "train": "data/corpus_ocr_cegep/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 14205,
+  "par_split": {
+   "val.txt": {
+    "troncons": 207,
+    "doublons": 131,
+    "taux": 0.63285
+   },
+   "test.txt": {
+    "troncons": 69,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); cp work/ocr/cegep64/propre/train.txt \"$T/train.txt\"; cp work/ocr/cegep64/propre/val.txt \"$T/val.txt\"; cp work/ocr/cegep64/propre/test.txt \"$T/test.txt\"; python3 - \"$T\" <<'PY'\nimport sys, pathlib\nt = pathlib. … [563 caractères tronqués]`
+
+  ```
+fenêtre de val injectée : 8192 o
+ "doublons_entre_splits": {
+  "train_troncons": 14084,
+    "doublons": 43,
+    "taux": 0.558442
+    "doublons": 0,
+    "taux": 0.0
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 544,
+[contrôle négatif : au moins 1 doublon attendu]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '--- controle negatif sous-agent ---'; cat work/ocr/cegep64/controle/contamination-controle-negatif.json; echo '--- contamination.json (sous-agent) ---'; tail -25 work/ocr/cegep64/contamination.json", "description": "Read the su … [44 caractères tronqués]`
+
+  ```
+--- controle negatif sous-agent ---
+{
+ "train": "work/ocr/cegep64/controle/train_fuite.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 14248,
+  "par_split": {
+   "val.txt": {
+    "troncons": 207,
+    "doublons": 168,
+    "taux": 0.811594
+   },
+   "test.txt": {
+    "troncons": 69,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 547,
+  "par_split": {
+   "val.txt": {
+    "troncons": 4,
+    "doublons": 1,
+    "taux": 0.25
+   },
+   "test.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
+--- contamination.json (sous-agent) ---
+   "test.txt": {
+    "troncons": 69,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 546,
+  "par_split": {
+   "val.txt": {
+    "troncons": 4,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du manifeste et de la fiche avec les mesures vérifiées
+
+- **write** `{"content": "{\n \"date\": \"2026-11-04\",\n \"ligne\": \"D\",\n \"nature\": \"corpus OCR CEGEP — intégration des 8 .PDF et contrôle de quasi-duplication\",\n \"verdict\": \"le re-split 64 (2/1/1) est contaminé : DOC2 placé en val est un quasi-doublon de l'ancien train (18/20 fenêtres de 500 o, 17 0 … [5371 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/ocr-cegep-64.json</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+

@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 6.7 h |
+| Durée | 6.8 h |
 | Tours | 6 |
-| Messages | 201 |
-| Appels d'outils | 232 |
-| Fichiers touchés | 7 |
-| Commandes | 191 |
+| Messages | 214 |
+| Appels d'outils | 246 |
+| Fichiers touchés | 9 |
+| Commandes | 200 |
 | Sous-agents | 1 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -277,7 +277,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 
 ### Tour 6 — Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message:  RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est  … [1998 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Replay the 8 188-byte window and DOC2 leak offsets
 - send_message
@@ -289,10 +289,15 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - bash — Verify clean corpus prefixes, junction, and 500 o baseline
 - bash — Run 8 Ko contamination check on clean corpus
 - bash — Count characters of the clean train
+- bash — Get clean corpus hashes and check fiche
+- list_agents
+- bash — Check counters and wait for the fiche
+- interrupt_agent
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Corpus propre construit (4 440 987 o) — je vérifie préfixes, jonction et contamination avant d'accepter
+⏵ L'index est tenu par un commit B13 en préparation ; j'attends pour corriger l'état sans le voler
 
 ## 3. Travail accompli
 
@@ -307,6 +312,8 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-inventaire.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf-restants.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/ocr-cegep-64.json` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-cegep-64.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -354,7 +361,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 151 autres
+- … et 160 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1131,3 +1131,130 @@ Livrables : `reports/rapport-ocr-cegep-64.md` (verdict : 2 neufs, 2 quasi-doublo
 
 Timebox : termine et rends le rapport 10 lignes.
 
+### 🤖 Assistant
+
+⏵ Construction du corpus propre (62 docs) dans `work/`, sans toucher `data/`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib, hashlib\nR=pathlib.Path('.')\nbase=R/'data/corpus_ocr_cegep'\nd={n:(base/f'{n}.txt').read_bytes() for n in ('train','val','test')}\ndec={'train':4430959,'val':12536,'test':10524}\nfor n in d:\n    p … [1333 caractères tronqués]`
+
+  ```
+train fin b' 360\n\n' debut_suffixe b'Choquette c. Chagnon\nCANADA\n\nPROVINCE DE'
+val fin b'-GD3\n\n' debut_suffixe b'\nbliques Cisco. Page 1 sur 1\n\n(7\n\nDOC2\no'
+test fin b' 2 |\n\n' debut_suffixe b'\nformations publiques Cisco: Page 2 sur '
+Choquette 7575 Assurance 2021
+train octets 4440987 chars 4398548 sha256 f57154df3ca5ecbd487c649c9177fddc7b4ffc2073f3488b8a2d1ad436d3da47
+val octets 12536 chars 12159 sha256 dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1
+test octets 10524 chars 10355 sha256 1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84
+sep utilise b''
+octet avant Choquette b'0\n\n' debut b'Choquette c. Chagnon\nCANA'
+fin Choquette b'-Julie, le 6 novembre 2012\n\n\\ Procureur de la demanderesse\n\n' debut Assurance b'Assurance pour stagiaires-B2344-11403\nBFL CAN'
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles 8 Ko et 500 o sur le corpus propre, baseline du corpus 60
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/ocr/cegep64/propre/controle && cp work/ocr/cegep64/propre/train.txt work/ocr/cegep64/propre/controle/train.txt && cp work/ocr/cegep64/propre/val.txt work/ocr/cegep64/propre/controle/val.txt && cp work/ocr/cegep64/propre … [601 caractères tronqués]`
+
+  ```
+=== exit 0
+{
+ "train_troncons": 543,
+ "par_split": {
+  "val.txt": {
+   "troncons": 2,
+   "doublons": 0,
+   "taux": 0.0
+  },
+  "test.txt": {
+   "troncons": 2,
+   "doublons": 0,
+   "taux": 0.0
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib\nsys.path.insert(0,'tools'); import verifie_contamination as vc\np=pathlib.Path('work/ocr/cegep64/propre/val.txt'); W1=next(iter(vc.troncons(p,8192)))\ntrain=pathlib.Path('work/ocr/cegep64/propr … [956 caractères tronqués]`
+
+  ```
+W1 len 8189 premiere fenetre == W1 : True dans fenetres: True
+=== exit 0
+{
+ "train_troncons": 544,
+ "par_split": {
+  "val.txt": {
+   "troncons": 2,
+   "doublons": 1,
+   "taux": 0.5
+  },
+  "test.txt": {
+   "troncons": 2,
+   "doublons": 0,
+   "taux": 0.0
+  }
+ }
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle 500 o : baseline du corpus 60 contre le corpus propre 62
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\nR=pathlib.Path('.')\nbase=R/'data/corpus_ocr_cegep'; propre=R/'work/ocr/cegep64/propre'\ndec={'train':4430959,'val':12536,'test':10524}\nold={n:(base/f'{n}.txt').read_bytes()[:dec[n]] for n in … [1298 caractères tronqués]`
+
+  ```
+[stderr]
+  File "<stdin>", line 22
+    t=sum(1 for p in pos if split_find:= ((propre/f'{s}.txt').read_bytes().find(b[p:p+500]) if p+500<=len(b) else -1))!=-1
+                                      ^^
+SyntaxError: invalid syntax
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du script de mesure 500 o
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\nR=pathlib.Path('.')\nbase=R/'data/corpus_ocr_cegep'; propre=R/'work/ocr/cegep64/propre'\ndec={'train':4430959,'val':12536,'test':10524}\nold={n:(base/f'{n}.txt').read_bytes()[:dec[n]] for n in … [1190 caractères tronqués]`
+
+  ```
+baseline60 val: 0/13 fenetres 500 o dans train, offsets []
+baseline60 test: 0/11 fenetres 500 o dans train, offsets []
+propre62 val: 0/13 fenetres 500 o dans train, offsets []
+propre62 test: 0/11 fenetres 500 o dans train, offsets []
+ajout Choquette dans val 0/8
+ajout Assurance dans val 0/2
+ajout Choquette dans test 0/8
+ajout Assurance dans test 0/2
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du manifeste JSON et de la fiche de résultat
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport hashlib, json, pathlib\nR=pathlib.Path('.')\npropre=R/'work/ocr/cegep64/propre'\npref={'train':4430959,'val':12536,'test':10524}\nhashes={}\nfor n in ('train','val','test'):\n    b=(propre/f'{n}.txt').read_b … [816 caractères tronqués]`
+
+  ```
+train 4440987 4398548 f57154df3ca5ecbd487c649c9177fddc7b4ffc2073f3488b8a2d1ad436d3da47
+val 12536 12159 dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1
+test 10524 10355 1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84
+prefixe train_propre == old: True 6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310
+bloc Choquette present: True
+bloc Assurance present: True
+jonction old->Choquette: b'60\n\nChoquette c. Chagnon\nCANAD'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\n# contre-mesure 500 o au pas 250 (plus fin) : baseline 60 et propre 62\nimport pathlib\nR=pathlib.Path('.')\nbase=R/'data/corpus_ocr_cegep'; propre=R/'work/ocr/cegep64/propre'\ndec={'train':4430959,'val':12536,'tes … [515 caractères tronqués]`
+
+  ```
+baseline60 val: 0/49 fenetres 500 o (pas 250) dans train
+baseline60 test: 0/41 fenetres 500 o (pas 250) dans train
+propre62 val: 0/49 fenetres 500 o (pas 250) dans train
+propre62 test: 0/41 fenetres 500 o (pas 250) dans train
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du manifeste `reports/ocr-cegep-64.json`
+
