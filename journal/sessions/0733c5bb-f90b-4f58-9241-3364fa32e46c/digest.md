@@ -10538,3 +10538,31 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-47 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; cat work/n2ac/pond4-mix512-15k.log 2>/dev/null | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-51", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdpp.out; ls work/n2ac/kdpp-mix512-a0.9.pt work/n2ac/pond4-mix512-15k.pt 2>/dev/null; tail -c 45 work/n2ac/kdpp-mix512-a0.9.log; tail -c 45 work/n2ac/pond4-mix512-15k.log", "description": "Poll production arms"}`
+
+  ```
+14:25:30
+kdpp a=0 fini 13:09:40
+work/n2ac/pond4-mix512-15k.pt
+922 · dure 1.0922 · douce 0.3619 · 4302 s
+741045937084937, "duree_s": 2797.7709004879}
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation du bras « poids 4× seul » de production
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/pond4-mix512-15k.pt --rope --longueurs 128,512,1000,2000 --sortie work/n2ac/eval-pond4-mix512.json 2>&1 | grep -E '\"(128|512|1000|2000)\"|litterature|angl … [70 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-53]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-53", "timeout_ms": 300000, "wait": true}`
