@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**94 commits** · **6 session(s)** · **7 thème(s)**
+**95 commits** · **6 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 53 | [docs.md](docs.md) |
+| docs | 54 | [docs.md](docs.md) |
 | mesures | 24 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -128,6 +128,7 @@
 | 16:33 | `83c91b24` | ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET |
 | 16:35 | `1d2cd6af` | ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS |
 | 16:39 | `bb34fbfb` | ÉTAT — HEURE 16 H 44 ; B13 165/165, D RESTAURÉ 62, 2 048 À 4 150 PAS |
+| 16:42 | `3fc2b09a` | ÉTAT — HEURE 16 H 48 ; B13 165/165, D RESTAURÉ 62, 2 048 À 4 350 PAS |
 
 ## Le récit de la journée (écrit à la main)
 
