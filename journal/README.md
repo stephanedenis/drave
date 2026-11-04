@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-04** | [2026-11-04/README.md](2026-11-04/README.md) | — |
+| **2026-11-04** | [2026-11-04/README.md](2026-11-04/README.md) | [docs](2026-11-04/docs.md) |
 | **2026-11-03** | [2026-11-03/README.md](2026-11-03/README.md) | [apprentissage](2026-11-03/apprentissage.md) · [attention](2026-11-03/attention.md) · [distribue](2026-11-03/distribue.md) · [docs](2026-11-03/docs.md) · [memoire](2026-11-03/memoire.md) · [mesures](2026-11-03/mesures.md) · [modele](2026-11-03/modele.md) · [moteur](2026-11-03/moteur.md) · [outils](2026-11-03/outils.md) · [portes](2026-11-03/portes.md) |
 | **2026-11-02** | [2026-11-02/README.md](2026-11-02/README.md) | [apprentissage](2026-11-02/apprentissage.md) · [attention](2026-11-02/attention.md) · [distribue](2026-11-02/distribue.md) · [docs](2026-11-02/docs.md) · [memoire](2026-11-02/memoire.md) · [mesures](2026-11-02/mesures.md) · [modele](2026-11-02/modele.md) · [moteur](2026-11-02/moteur.md) · [outils](2026-11-02/outils.md) · [portes](2026-11-02/portes.md) |
 | **2026-11-01** | [2026-11-01/README.md](2026-11-01/README.md) | [apprentissage](2026-11-01/apprentissage.md) · [attention](2026-11-01/attention.md) · [distribue](2026-11-01/distribue.md) · [docs](2026-11-01/docs.md) · [memoire](2026-11-01/memoire.md) · [mesures](2026-11-01/mesures.md) · [modele](2026-11-01/modele.md) · [moteur](2026-11-01/moteur.md) · [nuit-n2](2026-11-01/nuit-n2.md) · [outils](2026-11-01/outils.md) · [portes](2026-11-01/portes.md) |
@@ -82,7 +82,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `18b8879c` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.2 h | 1 | 55 | 0 | 0 | [rapport](sessions/18b8879c-f211-43b8-9908-cf65e509b21d/rapport.md) |
 | `18c3f6d0` | Relecture ADVERSARIALE ciblée (10 minut | 2026-10-01 05:20 | 0.1 h | 1 | 38 | 0 | 0 | [rapport](sessions/18c3f6d0-5bb1-45bb-9f94-ab0e7812218d/rapport.md) |
 | `1966e052` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 33 | 0 | 0 | [rapport](sessions/1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445/rapport.md) |
-| `1e7ef596` | Session status update | 2026-11-04 07:25 | 1.6 h | 3 | 171 | 9 | 3 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
+| `1e7ef596` | Session status update | 2026-11-04 07:25 | 2.2 h | 4 | 202 | 9 | 4 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
 | `1f9394fb` | — | 2026-10-29 14:10 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/1f9394fb-6435-4928-9a03-2b258e5a28c5/rapport.md) |
 | `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 74.8 h | 54 | 1227 | 69 | 60 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
 | `22e518ee` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | 1 | 171 | 16 | 0 | [rapport](sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) |
@@ -144,6 +144,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
 | `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 25.1 h | 173 | 1021 | 49 | 108 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
+| `aeafe951` | — | 2026-11-04 09:25 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
 | `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
 | `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 26.4 h | 83 | 826 | 25 | 40 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |

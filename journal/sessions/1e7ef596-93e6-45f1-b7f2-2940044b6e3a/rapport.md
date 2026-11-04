@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 1.6 h |
-| Tours | 3 |
-| Messages | 84 |
-| Appels d'outils | 171 |
+| Durée | 2.2 h |
+| Tours | 4 |
+| Messages | 103 |
+| Appels d'outils | 202 |
 | Fichiers touchés | 9 |
-| Commandes | 86 |
+| Commandes | 104 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -24,6 +24,8 @@
 **Tour 2** — background job bash-12 (bash: uptime ; echo "---REBOOT---" ; last reboot 2>/dev/null | head -4 ; echo "---DISK---" ; df -h /home/stephane/Data13TB | tail -1 ; echo "---REGISTRE---" ; grep -rln "nuit-kd2" --include="*.txt" --include="*.md" --include="*.json" . 2>/dev/null | grep -v ".git/" | head) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 **Tour 3** — fais des tâches courtes aprèes avoir analysé l'état de chacune des sessions qui ont été interrompues par le redémarrage.
+
+**Tour 4** — la machine est stabilisée. tu peux reprentre tous les chantiers en parallèle. dis-moi si je dois démarer d'autres sessions dsh
 
 ## 2. Déroulé, étape par étape
 
@@ -96,7 +98,7 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 
 ### Tour 3 — fais des tâches courtes aprèes avoir analysé l'état de chacune des sessions qui ont été interrompues par le redémarrage.
 
-*125 appels d'outils.* Actions notables :
+*127 appels d'outils.* Actions notables :
 
 - job_kill
 - read
@@ -112,11 +114,55 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 - bash — Inspect store fix and Pensée test style
 - bash — Read S untracked validation data
 - bash — Read S export flow and data writers
-- … et 103 autres
+- … et 105 autres
 
 **Synthèse produite :**
 
-⏵ Alignement des prochaines actions des mandats sur l'état du 04/11
+⏵ Bilan par session, tâches courtes exécutées et deux commits de reprise
+
+**Analyse des quatre sessions interrompues par le reboot du 03/11 à 19 h 33**, puis les tâches courtes faites.
+
+| session | état au reboot | tâche courte faite |
+|---|---|---|
+| **Hub `536cd5d6`** | dernier commit 18 h 48 ; état daté 13 h 45 ; index périmé (5 fichiers S *staged en suppression*, journal en retard) ; 4 claims de nuit | index réparé (`git read-tree HEAD`) ; claims libérés ; état au 04/11 ; plan de reprise `1e7ef596` |
+| **S `29ad180d`** | v6 committée à 18 h 48 ; **8 verdicts de référents** (a001–a003) + **8 verdicts banque** (p003, c010, c066, c067) non committés ; sous-module sale | sous-module **`7ccc60f`** ; **55/55 tests** ; banque régénérée **84/67** (SHA `3ca1ac20…`, avant 81/65) ; manifeste committé |
+| **Pensée `e181ce02`** | B13 **140/140**, gold **432**, DRVM committés ; WIP `store.py` FIFO + qualifier BFS 500 ; JSON 500 non suivi mais cité par la fiche | **fix FIFO + 3 tests** (l'ancien code échoue **2/3**) ; qualifier archivé en patch (`work/pensee/`) ; JSON 500 committé |
+| **N2 `0733c5bb`** | phase close à 18 h 30 ; `kd2` **8 250/30 000**, `rope2048` **3 350/20 000**, tués à 19 h 33 **sans checkpoint** ; fiches à placeholders | fiches passées à **« run interrompu, non mesuré »** avec les chiffres exacts ; claim `nuit-kd2` libéré |
+
+**Commits** : `59329788` (intégration, 23 fichiers) et `0582a6e1` (mandats alignés sur l'état). Sous-module S : `7ccc60f`.
+
+**Contrôles** : revue de documentation ✅ tout passe · `en-cours` **1 627 mots** ✅ · T0 **3 997 / 4 000** ✅ · journal **1 943 liens** ✅ · 4 mandats en pause + le hub actif · aucun claim · arbre propre.
+
+**Ce qui reste (pas court)** :
+- **Passe de portes** : la dernière complète est le 03/11 11 h 30 (82, 80/2), avant les commits du soir ; celle du 04/11 a été arrêtée à 08 h 40 pour faire ces tâches → à relancer (1 h 30–2 h).
+- **N2** : `kd2` ≈ 4 h et `rope2048` ≈ 5 h 40, **depuis zéro** (aucun checkpoint) ; la question de la distillation à 30 000 pas reste ouverte.
+- Ensuite : N2 porte propre (0,29) ; S validation `/paragraphes` + rétro-traduction API ; Pensée T132/T133 et gold 200+.
+
+Rien n'est perdu : l'interruption est écrite avec ses chiffres, les validations S sont dans le sous-module, le fix FIFO a son contrôle, et l'état du 04/11 est reprenable.
+
+### Tour 4 — la machine est stabilisée. tu peux reprentre tous les chantiers en parallèle. dis-moi si je dois démarer d'autres sessio … [6 caractères tronqués]
+
+*29 appels d'outils.* Actions notables :
+
+- bash — Search run commands in shell scripts
+- bash — Search session transcript for run command
+- bash — Read run script arguments
+- bash — Read kd2 and rope2048 chain scripts
+- bash — Find the Python environment used by the runs
+- bash — Verify GPU Python environment and corpora
+- bash — Claim GPUs for relaunched N2 runs
+- bash — Relaunch both N2 runs and verify start
+- bash — Check run processes and launch logs
+- bash — Kill racy rope launch and restart cleanly
+- bash — Check run processes, logs and GPU allocation
+- bash — Monitor run progress after one minute
+- job_output
+- edit `docs/pilotage/en-cours.md`
+- … et 15 autres
+
+**Synthèse produite :**
+
+⏵ Commit de la relance des deux runs N2
 
 ## 3. Travail accompli
 
@@ -131,8 +177,8 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 | `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 2 |
 | `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 2 |
 | `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 2 |
-| `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 49 |
+| `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 3 |
+| `docs/pilotage/en-cours.md` | 0 | 60 |
 
 ### Commandes exécutées (échantillon)
 
@@ -176,7 +222,7 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 46 autres
+- … et 64 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -273,6 +319,13 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 - **T3** `| fenêtre 1 024 | 164 Mo | 2,9955 | 2,7201 | 2,6256 | 2,5757 | 2,5429 |`
 - **T3** `| **fenêtre 2 048** | **328 Mo** | {{W128}} | {{W512}} | {{W1000}} | {{W2000}} | {{W4000}} |`
 - **T3** `[still running after 60000ms; moved to background job bash-67]`
+- **T4** `# 30 000 pas (122 Mo), même init mix-60k. Question : un meilleur professeur donne-t-il un`
+- **T4** `0, 274 MiB, 0 %`
+- **T4** `1, 1 MiB, 0 %`
+- **T4** `1, 9948 MiB, 100 %`
+- **T4** `[still running after 60000ms; moved to background job bash-100]`
+- **T4** `0, 5200 MiB, 100 %`
+- **T4** `1, 9950 MiB, 100 %`
 
 ## 5. Erreurs rencontrées
 
@@ -285,4 +338,5 @@ Si tu préfères les runs **avant** la passe, dis-le et je coupe `bash-40` — s
 - S — VALIDATION HUMAINE : 8 VERDICTS DE RÉFÉRENTS SUR /PARAGRAPHES (a001–a003) + 8 VERDICTS BANQUE (p003, c010, c066, c067)" && git log --oneline -1 && git statu
 - REPRISE — LES QUATRE SESSIONS INTERROMPUES SONT TRIÉES ; ÉTAT AU 04/11" -m "N2 : les deux runs de la nuit sont interrompus par le reboot de 19 h 33 (kd2 8 250/3
 - MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11" -m "N2 : relancer kd2/rope2048 puis la porte propre. S : poursuivre la validation /paragraph
+- N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS" -m "Les anciens logs sont préservés en .interrompu.log ; 
 

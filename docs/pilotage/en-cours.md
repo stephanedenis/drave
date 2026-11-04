@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-04, 08 h 50 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-04, 09 h 35 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -26,10 +26,10 @@
 > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
 > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
 >
-> **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU réservés à Drave.
+> **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU à Drave.
 >
 > **Bilan de 08 h du 04/11** : nuit **coupée à 19 h 33** ; quatre sessions en pause, WIP triés ;
-> **passe de 08 h 40 arrêtée** ; runs longs N2 ensuite. [journal du 03/11](../../journal/2026-11-03/README.md).
+> **runs N2 relancés à 09 h 30** (`kd2` gpu0, `rope2048` gpu1) ; **passe complète après** (§ 11). [journal du 03/11](../../journal/2026-11-03/README.md).
 
 ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)*
 
@@ -90,20 +90,19 @@
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient au long.
-- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; distillation native **+0,10** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; distillation native **+0,10** ; **runs relancés à 09 h 30** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [porte](../../reports/rapport-n2-porte-propre.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : **relancer `kd2` (30 000 pas) et `rope2048` (20 000 pas)** — longs,
-  après les tâches courtes ; puis la **porte propre (0,29)**.
+- **Prochaine action** : **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0) et `rope2048`
+  (gpu1) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
-> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md), fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
 
 ## Ce qui est en cours
 
-- **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque **84/67**, **8 verdicts de référents**, **55/55 tests** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`**.
-- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **la nuit est coupée** : `kd2` 8 250/30 000, `rope2048` 3 350/20 000, **sans checkpoint** ; **distillé : −0,10** ; copie 0,0078.
-- **Pensée — B13 (en pause)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5 ; **fix FIFO du store** (+3 tests) ; qualifier fenêtre BFS 500 laissé de côté.
+- **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque **84/67**, **8 verdicts de référents**, **55/55 tests** ; référents **294/371**, page **`/paragraphes`**.
+- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs relancés à 09 h 30** (la nuit était coupée : `kd2` 8 250/30 000, `rope2048` 3 350/20 000) ; **distillé : −0,10** ; copie 0,0078.
+- **Pensée — B13 (en pause)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5 ; **fix FIFO du store** (+3 tests) ; qualifier fenêtre BFS 500 écarté.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (= le max)**.
 
 ## Les chiffres de l'état
@@ -116,7 +115,7 @@
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **599** / **685** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) ; passe du **04/11 08 h 40 arrêtée** (tâches courtes d'abord) | `docs/pilotage/references-non-regression.md` |
+| dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 

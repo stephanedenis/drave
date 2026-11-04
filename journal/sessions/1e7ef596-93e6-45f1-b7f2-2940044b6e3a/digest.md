@@ -3144,3 +3144,433 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/1e7ef5
   ```
 
 - **bash** `{"command": "git add journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md journal/sessions/1e7ef596-93e6- … [449 caractères tronqués]`
+
+  ```
+[master 0582a6e1] MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11
+ 12 files changed, 185 insertions(+), 33 deletions(-)
+ create mode 100644 journal/2026-11-04/docs.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final après les deux commits de reprise
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | head -5 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILLE---\" ; python3 tools/taille_documents. … [92 caractères tronqués]`
+
+  ```
+0582a6e1 MANDATS — LES PROCHAINES ACTIONS SONT ALIGNÉES SUR L'ÉTAT DU 04/11
+59329788 REPRISE — LES QUATRE SESSIONS INTERROMPUES SONT TRIÉES ; ÉTAT AU 04/11
+8854fe8f S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES
+---STATUS---
+---REVUE---
+  revue de documentation · 599 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1627 mots · 7 sections · 4 session(s) · 4 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3997 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6 ; echo \"---JOUR---\" ; grep -m2 -E \"commits|sessions\" journal/2026-11-04/README.md ; echo \"---JOURNAL CHECK---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2", "description": "Check session statuses  … [17 caractères tronqués]`
+
+  ```
+0733c5bb-f90b-4f58 · en pause · 871 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    1e7ef596-93e6-45f1 · actif    ·  11 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 921 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 1159 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · en pause · 2118 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+---JOUR---
+> [l'index des sessions](../README.md#sessions).
+**1 commits** · **1 session(s)** · **1 thème(s)**
+---JOURNAL CHECK---
+  journal · 41 jour(s) · 118 session(s) · 1943 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan par session, tâches courtes exécutées et deux commits de reprise
+
+**Analyse des quatre sessions interrompues par le reboot du 03/11 à 19 h 33**, puis les tâches courtes faites.
+
+| session | état au reboot | tâche courte faite |
+|---|---|---|
+| **Hub `536cd5d6`** | dernier commit 18 h 48 ; état daté 13 h 45 ; index périmé (5 fichiers S *staged en suppression*, journal en retard) ; 4 claims de nuit | index réparé (`git read-tree HEAD`) ; claims libérés ; état au 04/11 ; plan de reprise `1e7ef596` |
+| **S `29ad180d`** | v6 committée à 18 h 48 ; **8 verdicts de référents** (a001–a003) + **8 verdicts banque** (p003, c010, c066, c067) non committés ; sous-module sale | sous-module **`7ccc60f`** ; **55/55 tests** ; banque régénérée **84/67** (SHA `3ca1ac20…`, avant 81/65) ; manifeste committé |
+| **Pensée `e181ce02`** | B13 **140/140**, gold **432**, DRVM committés ; WIP `store.py` FIFO + qualifier BFS 500 ; JSON 500 non suivi mais cité par la fiche | **fix FIFO + 3 tests** (l'ancien code échoue **2/3**) ; qualifier archivé en patch (`work/pensee/`) ; JSON 500 committé |
+| **N2 `0733c5bb`** | phase close à 18 h 30 ; `kd2` **8 250/30 000**, `rope2048` **3 350/20 000**, tués à 19 h 33 **sans checkpoint** ; fiches à placeholders | fiches passées à **« run interrompu, non mesuré »** avec les chiffres exacts ; claim `nuit-kd2` libéré |
+
+**Commits** : `59329788` (intégration, 23 fichiers) et `0582a6e1` (mandats alignés sur l'état). Sous-module S : `7ccc60f`.
+
+**Contrôles** : revue de documentation ✅ tout passe · `en-cours` **1 627 mots** ✅ · T0 **3 997 / 4 000** ✅ · journal **1 943 liens** ✅ · 4 mandats en pause + le hub actif · aucun claim · arbre propre.
+
+**Ce qui reste (pas court)** :
+- **Passe de portes** : la dernière complète est le 03/11 11 h 30 (82, 80/2), avant les commits du soir ; celle du 04/11 a été arrêtée à 08 h 40 pour faire ces tâches → à relancer (1 h 30–2 h).
+- **N2** : `kd2` ≈ 4 h et `rope2048` ≈ 5 h 40, **depuis zéro** (aucun checkpoint) ; la question de la distillation à 30 000 pas reste ouverte.
+- Ensuite : N2 porte propre (0,29) ; S validation `/paragraphes` + rétro-traduction API ; Pensée T132/T133 et gold 200+.
+
+Rien n'est perdu : l'interruption est écrite avec ses chiffres, les validations S sont dans le sous-module, le fix FIFO a son contrôle, et l'état du 04/11 est reprenable.
+
+
+## Tour 4
+
+### 👤 Utilisateur
+
+la machine est stabilisée. tu peux reprentre tous les chantiers en parallèle. dis-moi si je dois démarer d'autres sessions dsh
+
+### 🤖 Assistant
+
+⏵ Recherche des commandes exactes des deux runs N2 interrompus
+
+- **bash** `{"command": "ls work/n2ac/*.sh 2>/dev/null ; echo \"---GREP SCRIPTS---\" ; grep -rn \"kd2-mix512-30k\\|rope2048-20k\\|kd2\\|rope2048\" work/n2ac/*.sh tools/*.sh 2>/dev/null | head -12", "description": "Search run commands in shell scripts"}`
+
+  ```
+work/n2ac/chaine_1024.sh
+work/n2ac/chaine_2048_10k.sh
+work/n2ac/chaine_2048_20k.sh
+work/n2ac/chaine_2048_mix.sh
+work/n2ac/chaine_2048.sh
+work/n2ac/chaine_2048_wiki.sh
+work/n2ac/chaine_capacite_propre.sh
+work/n2ac/chaine_capacite.sh
+work/n2ac/chaine_kd_60k.sh
+work/n2ac/chaine_kd_production.sh
+work/n2ac/chaine_kd.sh
+work/n2ac/chaine_mix2048_long.sh
+work/n2ac/chaine_porte.sh
+work/n2ac/chaine_prod1024_60k.sh
+work/n2ac/chaine_prod1024_long.sh
+work/n2ac/chaine_production.sh
+work/n2ac/chaine_prod_zero.sh
+work/n2ac/chaine_r1.sh
+work/n2ac/chaine_zero.sh
+---GREP SCRIPTS---
+work/n2ac/chaine_2048_10k.sh:10:  --sortie work/n2ac/rope2048-10k.pt --drvm work/n2ac/rope2048-10k.drvm \
+work/n2ac/chaine_2048_10k.sh:11:  > work/n2ac/rope2048-10k.log 2>&1
+work/n2ac/chaine_2048_10k.sh:12:echo "rope2048-10k fini $(date '+%H:%M:%S')"
+work/n2ac/chaine_2048_20k.sh:10:  --sortie work/n2ac/rope2048-20k.pt --drvm work/n2ac/rope2048-20k.drvm \
+work/n2ac/chaine_2048_20k.sh:11:  > work/n2ac/rope2048-20k.log 2>&1
+work/n2ac/chaine_2048_20k.sh:12:echo "rope2048-20k fini $(date '+%H:%M:%S')"
+work/n2ac/chaine_2048.sh:17:  --sortie work/n2ac/rope2048-1.25k.pt --drvm work/n2ac/rope2048-1.25k.drvm \
+work/n2ac/chaine_2048.
+… [357 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"kd2\\|rope2048\" journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md 2>/dev/null | head -10 ; echo \"---ZSTD---\" ; command -v zstd && zstd -dc journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/se … [154 caractères tronqués]`
+
+  ```
+---ZSTD---
+/usr/bin/zstd
+ow 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 \\\\\\n  --init work/n2w/mix-60k.pt --pas 30000 --alpha 0.9 --T 2 \\\\\\n  --sortie work/n2ac/kd2-mix512-30k.pt --drvm work/n2ac/kd2-mix512-30k.drvm \\\\\\n  > work/n2ac/kd2-mix512-30k.log 2>&1\\necho \\\"kd2-mix512-30k fini $(date '+%H:%M:%S')\\\"\\nEOF\\nchmod +x work/n2ac/chaine_kd_60k.sh\\nnohup bash work/n2ac/chaine_kd_60k.sh 0 > work/n2ac/k
+ow 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 \\\\\\n  --init work/n2w/mix-60k.pt --pas 30000 --alpha 0.9 --T 2 \\\\\\n  --sortie work/n2ac/kd2-mix512-30k.pt --drvm work/n2ac/kd2-mix512-30k.drvm \\\\\\n  > work/n2ac/kd2-mix512-30k.log 2>&1\\necho \\\"kd2-mix512-30k fini $(date '+%H:%M:%S')\\\"\\nEOF\\nchmod +x work/n2ac/chaine_kd_60k.sh\\nnohup bash work/n2ac/chaine_kd_60k.sh 0 > work/n2ac/k
+ow 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 \\\\\\n  --init work/n2w/mix-60k.pt --pas 30000 --alpha 0.9 --T 2 \\\\\\n  --sortie work/n2ac/kd2-mix512-30k.pt --drvm work/n2ac/kd2-mix512-30k.drvm \\\\\\n  > work/n2ac/kd2-mix512-30k.log 2>&1\\necho \\\"kd2-mix512-30k fini $(date '+%H:%M:%S')\\\"\\nEOF\\nchmod +x work/n2ac/cha
+… [524 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 work/n2ac/distiller_natif.py --help 2>&1 | head -30 ; echo \"---ROPE---\" ; python3 work/n2ac/entrainer_rope.py --help 2>&1 | head -30", "description": "Read run script arguments"}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2ac/distiller_natif.py", line 27, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+---ROPE---
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2ac/entrainer_rope.py", line 28, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des deux chaînes de runs et de leur environnement
+
+- **bash** `{"command": "cat work/n2ac/chaine_kd_60k.sh ; echo \"=== 2048 20K ===\" ; cat work/n2ac/chaine_2048_20k.sh", "description": "Read kd2 and rope2048 chain scripts"}`
+
+  ```
+#!/usr/bin/env bash
+# chaine_kd_60k.sh — le professeur 60 000 pas (fenêtre 1 024) distillé dans la recette 512,
+# 30 000 pas (122 Mo), même init mix-60k. Question : un meilleur professeur donne-t-il un
+# meilleur élève, et le gain de 0,10 tient-il quand les octets doublent ?
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet || exit 1
+export PYTHONPATH=. CUDA_VISIBLE_DEVICES=${1:-0}
+~/gpu-env/bin/python work/n2ac/distiller_natif.py \
+  --professeur work/n2ac/mix1024-60k.pt \
+  --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal \
+  --seq 512 --window 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 \
+  --init work/n2w/mix-60k.pt --pas 30000 --alpha 0.9 --T 2 \
+  --sortie work/n2ac/kd2-mix512-30k.pt --drvm work/n2ac/kd2-mix512-30k.drvm \
+  > work/n2ac/kd2-mix512-30k.log 2>&1
+echo "kd2-mix512-30k fini $(date '+%H:%M:%S')"
+=== 2048 20K ===
+#!/usr/bin/env bash
+# chaine_2048_20k.sh — le complément 2 048 « mêmes pas » : 20 000 pas, comme le run 1 024 / 20 000.
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet || exit 1
+export PYTHONPATH=. CUDA_VISIBLE_DEVICES=${1:-1}
+~/gpu-env/bin/python work/n2ac/entrainer_rope.py \
+  --corpus da
+… [361 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"venv\\|conda\\|python3\" work/n2ac/chaine_kd_60k.sh work/n2ac/chaine_2048_20k.sh ; echo \"---VENVS---\" ; ls -d ~/.venv* ~/venv* work/venv* 2>/dev/null ; echo \"---TORCH---\" ; ls /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.venv/bin/python 2>/dev/null ; which python3", " … [61 caractères tronqués]`
+
+  ```
+---VENVS---
+---TORCH---
+/usr/bin/python3
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'environnement GPU et réservation des ressources
+
+- **bash** `{"command": "ls -l ~/gpu-env/bin/python 2>&1 ; ~/gpu-env/bin/python -c \"import torch; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), torch.cuda.device_count())\" 2>&1 | tail -2 ; echo \"---DONNÉES---\" ; ls -l data/wiki_mix/propre/train.txt data/wiki_fr/propre/train.txt 2>&1 | … [70 caractères tronqués]`
+
+  ```
+lrwxrwxrwx. 1 stephane stephane 7 31 jui 08:53 /home/stephane/gpu-env/bin/python -> python3
+torch 2.11.0+cu130 cuda True 2
+---DONNÉES---
+-rw-r--r--. 1 stephane stephane  186089472  1 nov 11:54 data/wiki_fr/propre/train.txt
+-rw-r--r--. 1 stephane stephane 1017487092  2 nov 12:25 data/wiki_mix/propre/train.txt
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --claim --session 0733c5bb --job n2-jour --res \"gpu0=exclusive,gpu1=exclusive,cpu0=12,ram=60\" --prio 1 --eta 360 --note \"kd2 30k (gpu0) + rope2048 20k (gpu1), relancés après le reboot\" 2>&1 | tail -4", "description": "Claim GPUs for relaunched N2 runs"}`
+
+  ```
+✅ accordé : 0733c5bb / n2-jour
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance des deux runs N2 sur les deux GPU, logs de l'interruption préservés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv work/n2ac/kd2-mix512-30k.log work/n2ac/kd2-mix512-30k.interrompu.log && mv work/n2ac/rope2048-20k.log work/n2ac/rope2048-20k.interrompu.log && setsid nohup bash work/n2ac/chaine_kd_60k.sh 0 > work/n2ac/kd2-mix512-30k.lancement.log … [407 caractères tronqués]`
+
+  ```
+=== KD2 ===
+=== ROPE ===
+tail: cannot open 'work/n2ac/rope2048-20k.log' for reading: No such file or directory
+=== GPU ===
+0, 274 MiB, 0 %
+1, 1 MiB, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic du démarrage des deux runs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls -l --time-style=\"+%H:%M:%S\" work/n2ac/kd2-mix512-30k*.log work/n2ac/rope2048-20k*.log 2>&1 ; echo \"=== PROC ===\" ; pgrep -af \"chaine_kd_60k|chaine_2048_20k|distiller_natif|entrainer_rope\" | head ; echo \"=== LANCEMENT KD2 === … [314 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 11505 19:30:58 work/n2ac/kd2-mix512-30k.interrompu.log
+-rw-r--r--. 1 stephane stephane     0 09:29:26 work/n2ac/kd2-mix512-30k.lancement.log
+-rw-r--r--. 1 stephane stephane     0 09:29:26 work/n2ac/kd2-mix512-30k.log
+-rw-r--r--. 1 stephane stephane     0 09:29:26 work/n2ac/rope2048-20k.interrompu.log
+-rw-r--r--. 1 stephane stephane     0 09:29:26 work/n2ac/rope2048-20k.lancement.log
+=== PROC ===
+260909 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv work/n2ac/kd2-mix512-30k.log work/n2ac/kd2-mix512-30k.interrompu.log && mv work/n2ac/rope2048-20k.log work/n2ac/rope2048-20k.interrompu.log && setsid nohup bash work/n2ac/chaine_kd_60k.sh 0 > work/n2ac/kd2-mix512-30k.lancement.log 2>&1 & setsid nohup bash work/n2ac/chaine_2048_20k.sh 1 > work/n2ac/rope2048-20k.lancement.log 2>&1 & sleep 30 ; echo "=== KD2 ===" ; tail -3 work/n2ac/kd2-mix512-30k.log 2>&1 ; echo "=== ROPE ===" ; tail -3 work/n2ac/rope2048-20k.log 2>&1 ; echo "=== GPU ===" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader
+260910 bash work/n2ac/chaine_2048_20k.sh 1
+260914 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus dat
+… [1344 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction d'une course au lancement : le run rope est relancé proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; kill 260914 260910 2>/dev/null ; sleep 2 ; pgrep -af \"entrainer_rope|chaine_2048_20k\" | head -3 ; rm -f work/n2ac/rope2048-20k.log ; setsid nohup bash work/n2ac/chaine_2048_20k.sh 1 > work/n2ac/rope2048-20k.lancement.log 2>&1 & slee … [303 caractères tronqués]`
+
+  ```
+260909 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv work/n2ac/kd2-mix512-30k.log work/n2ac/kd2-mix512-30k.interrompu.log && mv work/n2ac/rope2048-20k.log work/n2ac/rope2048-20k.interrompu.log && setsid nohup bash work/n2ac/chaine_kd_60k.sh 0 > work/n2ac/kd2-mix512-30k.lancement.log 2>&1 & setsid nohup bash work/n2ac/chaine_2048_20k.sh 1 > work/n2ac/rope2048-20k.lancement.log 2>&1 & sleep 30 ; echo "=== KD2 ===" ; tail -3 work/n2ac/kd2-mix512-30k.log 2>&1 ; echo "=== ROPE ===" ; tail -3 work/n2ac/rope2048-20k.log 2>&1 ; echo "=== GPU ===" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader
+261301 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; kill 260914 260910 2>/dev/null ; sleep 2 ; pgrep -af "entrainer_rope|chaine_2048_20k" | head -3 ; rm -f work/n2ac/rope2048-20k.log ; setsid nohup bash work/n2ac/chaine_2048_20k.sh 1 > work/n2ac/rope2048-20k.lancement.log 2>&1 & sleep 35 ; echo "=== ROPE ===" ; tail -3 work/n2ac/rope2048-20k.log 2>&1 ; echo "=== KD2 ===" ; tail -3 work/n2ac/kd2-mix512-30k.log 2>&1 ; echo "=== GPU ===" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader
+=== ROPE ===
+=== KD
+… [47 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des processus et des journaux de démarrage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== PROC ===\" ; ps -eo pid,etime,pcpu,pmem,cmd | grep -E \"distiller_natif|entrainer_rope|chaine_kd_60k|chaine_2048_20k\" | grep -v grep ; echo \"=== LOGS ===\" ; ls -l --time-style=\"+%H:%M:%S\" work/n2ac/kd2-mix512-30k.log w … [360 caractères tronqués]`
+
+  ```
+=== PROC ===
+ 260909       02:07  0.0  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mv work/n2ac/kd2-mix512-30k.log work/n2ac/kd2-mix512-30k.interrompu.log && mv work/n2ac/rope2048-20k.log work/n2ac/rope2048-20k.interrompu.log && setsid nohup bash work/n2ac/chaine_kd_60k.sh 0 > work/n2ac/kd2-mix512-30k.lancement.log 2>&1 & setsid nohup bash work/n2ac/chaine_2048_20k.sh 1 > work/n2ac/rope2048-20k.lancement.log 2>&1 & sleep 30 ; echo "=== KD2 ===" ; tail -3 work/n2ac/kd2-mix512-30k.log 2>&1 ; echo "=== ROPE ===" ; tail -3 work/n2ac/rope2048-20k.log 2>&1 ; echo "=== GPU ===" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader
+ 260915       02:07  0.0  0.0 bash work/n2ac/chaine_kd_60k.sh 0
+ 260916       02:07 88.9 10.2 /home/stephane/gpu-env/bin/python work/n2ac/distiller_natif.py --professeur work/n2ac/mix1024-60k.pt --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --seq 512 --window 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2w/mix-60k.pt --pas 30000 --alpha 0.9 --T 2 --sortie work/n2ac/kd2-mix512-30k.pt --drvm work/n2ac/kd2-mix512-30k.drvm
+ 261312       00:47  0.0  0.0 
+… [795 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Surveillance du démarrage effectif des deux runs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sleep 60 ; echo \"=== ROPE ===\" ; tail -3 work/n2ac/rope2048-20k.log 2>&1 ; echo \"=== KD2 ===\" ; tail -3 work/n2ac/kd2-mix512-30k.log 2>&1 ; echo \"=== GPU ===\" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=c … [160 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-100]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la surveillance des runs
+
+- **job_output** `{"job_id": "bash-100", "timeout_ms": 90000, "wait": true}`
+
+  ```
+=== ROPE ===
+  pertes.append(float(perte))
+pas      1 · perte 2.8233 · PPL val 14.313 · 2 s
+pas     50 · perte 1.5211 · PPL val 4.228 · 51 s
+=== KD2 ===
+=== GPU ===
+0, 274 MiB, 0 %
+1, 9950 MiB, 100 %
+=== CPU KD2 ===
+    PID     ELAPSED %CPU %MEM CMD
+ 260916       03:33 93.4 17.4 /home/stephane/gpu-env/bin/python work/n2ac/distiller_natif.py --professeur work/n2ac/mix1024-60k.pt --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --seq 512 --window 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2w/mix-60k.pt --pas 30000 --alpha 0.9 --T 2 --sortie work/n2ac/kd2-mix512-30k.pt --drvm work/n2ac/kd2-mix512-30k.drvm
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-100 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sleep 60 ; echo "=== ROPE ===" ; tail -3 work/n2ac/rope2048-20k.log 2>&1 ; echo "=== KD2 ===" ; tail -3 work/n2ac/kd2-mix512-30k.log 2>&1 ; echo "=== GPU ===" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader ; echo "=== CPU KD2 ===" ; ps -o pid,etime,pcpu,pmem,cmd -p 260916 2>/dev/null | tail -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ État : runs N2 relancés, surveillance en cours
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "**Mis à jour : 2026-11-04, 09 h 35 HNE (heure locale, EST).**", "old_string": "**Mis à jour : 2026-11-04, 08 h 50 HNE (heure locale, EST).**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "> **Bilan de 08 h du 04/11** : nuit **coupée à 19 h 33** ; quatre sessions en pause, WIP triés ;\n> **runs N2 relancés à 09 h 30** (`kd2` gpu0, `rope2048` gpu1) ; **passe complète après** (§ 11). [journal du 03/11](../../journal/2026-11-03/RE … [238 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Ce qu'elle fait** : **60 000 pas à 1 024** ; capacité propre ; distillation native **+0,10** ; **runs relancés à 09 h 30** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.m … [340 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Prochaine action** : **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0) et `rope2048`\n  (gpu1) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.", "old_string": "- **Prochaine action** : **relancer `kd2` (30 000 pa … [105 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **N2 — en pause** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs relancés à 09 h 30** (la nuit était coupée : `kd2` 8 250/30 000, `rope2048` 3 350/20 000) ; **distillé : −0,10** ; copie 0,0078.", "old_st … [235 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) ; passe du **04/11 08 h 40 arrêtée** ; complète après les runs | `docs/pilotage/references-non-regression.md` |", "old_string": "| dernière passe | **03/11  … [171 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "", "old_string": "> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md), fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).\n"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md", "new_string": "- **Prochaine action** : **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du\n  corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.", … [173 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles avant le commit de relance et santé des runs
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|T0 :\" | head -3 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -3 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --ch … [95 caractères tronqués]`
+
+  ```
+T0 max : 4006 mots (budget 4 000)
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+---EN-COURS---
+  en-cours · 1636 mots · 7 sections · 4 session(s) · 4 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---REVUE---
+  revue de documentation · 599 fiche(s) · 685 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---SESSIONS---
+  ✅ plans cohérents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; echo \"=== ROPE ===\" ; tail -2 work/n2ac/rope2048-20k.log 2>&1 ; echo \"=== KD2 ===\" ; tail -2 work/n2ac/kd2-mix512-30k.log 2>&1 ; echo \"=== GPU ===\" ; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader … [161 caractères tronqués]`
+
+  ```
+=== ROPE ===
+pas     50 · perte 1.5211 · PPL val 4.228 · 51 s
+pas    100 · perte 1.3077 · PPL val 3.611 · 102 s
+=== KD2 ===
+pas     1 · perte 6.4214 · dure 2.9589 · douce 4.3959 · 1 s
+pas    50 · perte 1.9738 · dure 1.3008 · douce 0.8769 · 23 s
+=== GPU ===
+0, 5200 MiB, 100 %
+1, 9950 MiB, 100 %
+=== PROC ===
+260916 python work/n2ac/distiller_natif.py --professeur work/n2ac/mix1024-60k.pt --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --seq 512 --window 512 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2w/mix-60k.pt --pas 30000 --alpha 0.9 --T 2 --sortie work/n2ac/kd2-mix512-30k.pt --drvm work/n2ac/kd2-mix512-30k.drvm
+261314 python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --seq 2048 --window 2048 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --init work/n2j/base-wiki-45m.pt --pas 20000 --sortie work/n2ac/rope2048-20k.pt --drvm work/n2ac/rope2048-20k.drvm
+262320 python/' | head -3
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajustement final du budget et commit de relance
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "> **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU à Drave.", "old_string": "> **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU réservés à Drave."}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; complète après les runs | `docs/pilotage/references-non-regression.md` |", "old_string": "| dernière passe | **03/11 11 h 30** (82, **80/2** ; le … [144 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Pensée — B13 (en pause)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5 ; **fix FIFO du store** (+3 tests) ; qualifier fenêtre BFS 500 écarté.", "old_string": "- **Pensée — B13 (en pause)** : … [172 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **S — les structures** : analyseur **60/60**, **142/142** rôles ; corpus **60** ; banque **84/67**, **8 verdicts de référents**, **55/55 tests** ; référents **294/371**, page **`/paragraphes`**.", "old_string": "- **S — les structures** : a … [187 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|T0 :\" | head -3 ; python3 tools/verifie_en_cours.py 2>&1 | head -2", "description": "Verify budget after final cuts"}`
+
+  ```
+T0 max : 3994 mots (budget 4 000)
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 4 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de la relance des deux runs N2
+
+- **bash** `{"command": "git add docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md && git commit -m \"N2 — LES DEUX RUNS SONT RELANCÉS APRÈS LE REBOOT : KD2 GPU0, ROPE2048 GPU1 ; LA PASSE ATTEND LES RUNS\" -m \"Les anciens logs sont préservés en .interrompu.log ; le claim n … [309 caractères tronqués]`
