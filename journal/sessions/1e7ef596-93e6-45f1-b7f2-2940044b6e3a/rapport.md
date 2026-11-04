@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 4.8 h |
+| Durée | 4.9 h |
 | Tours | 7 |
-| Messages | 158 |
-| Appels d'outils | 306 |
+| Messages | 161 |
+| Appels d'outils | 309 |
 | Fichiers touchés | 14 |
-| Commandes | 166 |
+| Commandes | 169 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -279,7 +279,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 7 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [957 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run review, state and budget checks
@@ -288,10 +288,13 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check and regenerate reports catalog
 - bash — Update state time and stage catalog
 - bash — Commit regenerated reports catalog and state
+- bash — Read third-pass result and current status
+- bash — Integrate B13 third pass into state and verify
+- bash — Commit only the state with third-pass fact
 
 **Synthèse produite :**
 
-⏵ Commit du catalogue 606 fiches et de l'état 12 h 16
+⏵ Commit de l'état B13 148/148 (partiel, sans les WIP)
 
 ## 3. Travail accompli
 
@@ -356,7 +359,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 126 autres
+- … et 129 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -496,4 +499,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — N2 : KD2 ~19 400/30 000 (LOG BUFFERISÉ), ROPE2048 4 650/20 000 ; ETA CORRIGÉE (~13 H 30 / ~19–20 H)" -m "Le log kd2 s'arrête à 12 050 pas (11 h 07) alors
 - ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE" -m "Le fait 147/147 et sa fiche (rapport-pensee-seuil-parallele)
 - INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16" -m "Le catalogue généré était périmé de 10 fiches : N3 (inventaire)
+- ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19" -m "La troisième passe (rapport-pensee-troisieme-passe, JSON pe
 

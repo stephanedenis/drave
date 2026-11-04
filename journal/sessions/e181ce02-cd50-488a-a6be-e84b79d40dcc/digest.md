@@ -34449,3 +34449,265 @@ timeout 5400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-04, 14 h 10 HNE\", t)\np.write_text( … [774 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-84]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-84", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 625271c895121d4c9f2a654701c56871392c6898 but expected b58cd52f06cc0874e2558bbdb629264887f57eac
+COMMIT OK 1
+625271c8 INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+mer 04 nov 2026 12:15:30 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo ---; git status --porcelain | head -6; echo ---; git log --oneline -1 -- reports/rapport-pensee-troisieme-passe.md", "description": "Vérifier si mes fichiers sont commités"}`
+
+  ```
+625271c8 INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+b58cd52f ÉTAT — B13 147/147 (SEUIL DU PARALLÈLE : 0,9326 < 0,9389) ; COMPTEURS 609/695 ; HEURE CORRIGÉE
+25d631fe B13 — LE SEUIL DU PARALLÈLE : LA CONFIANCE PLAFONNE SOUS LE MAX (0,9326 < 0,9389) ; 147/147
+29122912 ÉTAT — B13 146/146 (DÉFAUT CONDITIONNEL) ; 608 FICHES / 693 JSON ; HEURE LOCALE CORRIGÉE
+---
+M  journal/2026-11-04/README.md
+M  journal/2026-11-04/docs.md
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---
+625271c8 INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"temperature\\|temp\" tools/tests/linguistique/qualifier_quatre_modes.py | head -5; grep -n \"def demande\" -A 5 tools/llm/deepseek.py | head -8", "description": "Voir la température du transport"}`
+
+  ```
+55:        r = client.demande(invite, temperature=0.0, max_tokens=max(64, int(max_jetons or 256)))
+180:    def demande(self, prompt: str | None = None, *, system: str | None = None,
+181-                messages: list[dict] | None = None, temperature: float = 0.0,
+182-                max_tokens: int = 1024, dry_run: bool = False,
+183-                cache: bool = True) -> ReponseDeepSeek:
+184-        if messages is None:
+185-            messages = []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text()\nt=t.replace('    ap.add_argument(\"--seuil\", type=float, default=0.6)',\n            '    ap.add_argument(\"--s … [720 caractères tronqués]`
+
+  ```
+started background job bash-87
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/drvm*.py 2>/dev/null; grep -n \"^def \\|^class \" tools/drvm.py 2>/dev/null | head -12", "description": "Voir le conteneur DRVM"}`
+
+  ```
+tools/drvm.py
+tools/drvm_trace.py
+40:class DRVMError(ValueError):
+45:class TensorSpec:
+56:class DrvmFile:
+84:def _canonique(manifest: dict[str, Any]) -> bytes:
+89:def _aligne(n: int) -> int:
+93:def _valide(manifest: dict[str, Any]) -> None:
+120:def write_drvm(path: str | os.PathLike, manifest: dict[str, Any],
+166:def read_drvm(path: str | os.PathLike) -> DrvmFile:
+201:def inspecter(path: str | os.PathLike) -> dict[str, Any]:
+214:def main() -> None:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mmap\\|version\\|hash\\|sha\" tools/drvm.py | head -12; echo ---; sed -n '120,166p' tools/drvm.py", "description": "Inspecter le format DRVM"}`
+
+  ```
+7:mmap-ables. Le lecteur refuse une version ou un type de bloc qu'il ne connaît pas.
+10:  en-tête 92 o (magie, version, tailles, offsets, deux SHA-256)
+20:import hashlib
+22:import mmap
+49:    shape: tuple[int, ...] = ()
+58:    _mm: mmap.mmap
+99:    if manifest.get("version") != VERSION:
+100:        raise DRVMError(f"version non supportée : {manifest.get('version')}")
+125:    manifest.setdefault("version", VERSION)
+140:            "shape": list(t.shape), "offset": offset, "nbytes": len(t.data),
+155:        hashlib.sha256(mj).digest(), hashlib.sha256(payload).digest(),
+163:    return hashlib.sha256(p.read_bytes()).hexdigest()
+---
+def write_drvm(path: str | os.PathLike, manifest: dict[str, Any],
+               tensors: list[TensorSpec]) -> str:
+    """Écrit un DRVM et retourne le SHA-256 du fichier."""
+    manifest = json.loads(json.dumps(manifest))  # copie
+    manifest.setdefault("format", "DRVM")
+    manifest.setdefault("version", VERSION)
+    if not tensors:
+        raise DRVMError("aucun tenseur")
+    noms = set()
+    specs = []
+    offset = 0
+    for t in tensors:
+        if t.name in noms:
+            raise DRVMError(f"tenseur dupliqué : {t.name}")
+        noms.add(t.name)
+    
+… [1209 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,60p' tools/drvm.py; echo ---; sed -n '166,215p' tools/drvm.py", "description": "Lire TensorSpec et read_drvm"}`
+
+  ```
+class DRVMError(ValueError):
+    """Erreur de format DRVM."""
+
+
+@dataclass
+class TensorSpec:
+    name: str
+    data: bytes
+    dtype: str = "f32"
+    shape: tuple[int, ...] = ()
+    bloc: str = ""
+    quant: str | None = None
+    sparsity: float = 0.0
+
+
+@dataclass
+class DrvmFile:
+    manifest: dict[str, Any]
+    _mm: mmap.mmap
+    _fichier: Any
+    payload_offset: int = 0
+---
+def read_drvm(path: str | os.PathLike) -> DrvmFile:
+    """Lit un DRVM, vérifie l'en-tête, le manifeste et le payload."""
+    p = Path(path)
+    f = p.open("rb")
+    try:
+        raw = f.read(HEADER.size)
+        if len(raw) != HEADER.size:
+            raise DRVMError("fichier trop court pour l'en-tête")
+        magic, version, hsize, mlen, poff, total, msha, psha = HEADER.unpack(raw)
+        if magic != MAGIC:
+            raise DRVMError(f"mauvaise magie : {magic!r}")
+        if version != VERSION:
+            raise DRVMError(f"version non supportée : {version}")
+        if hsize != HEADER.size or poff < hsize + mlen or poff > total:
+            raise DRVMError("en-tête incohérent")
+        if total != p.stat().st_size:
+            raise DRVMError("taille de fichier incohérente")
+        f.seek(hsize)
+       
+… [1238 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drvm.py --help 2>&1 | head -12; ls tools/tests/ | grep -i \"drvm\\|natif\" | head -5; grep -rn \"N0.1\" tools/tests/ tools/ 2>/dev/null | head -5", "description": "Voir l'outil DRVM et ses tests"}`
+
+  ```
+usage: drvm.py [-h] {inspect} ...
+
+DRVM v0 — conteneur natif Drave
+
+positional arguments:
+  {inspect}
+
+options:
+  -h, --help  show this help message and exit
+qualifier_politique_drvm.py
+qualifier_porte_bouge_drvm.py
+qualifier_porte_drvm.py
+qualifier_porte_fenetre_drvm.py
+qualifier_porte_minute_drvm.py
+tools/tests/documents/corpus/prose/architecture-native.md:92:| **N0.1** | DRVM se lit-il ? | aller-retour octet-à-octet, `mmap`, hash, refus de version |
+tools/tokenizer_kimi/tiktoken.model:1221:IGNvbnN0 1220
+tools/tokenizer_kimi/tiktoken.model:1230:eXN0 1229
+tools/tokenizer_kimi/tiktoken.model:1231:IFN0 1230
+tools/tokenizer_kimi/tiktoken.model:1410:aWN0 1409
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/qualifier_porte_drvm.py 2>&1 | tail -15", "description": "Lancer la porte DRVM N0.1"}`
+
+  ```
+modèle absent : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys, tempfile, pathlib, struct, hashlib\nsys.path.insert(0,'.')\nimport tools.drvm as d\nprint('VERSION', d.VERSION, '| MAGIC', d.MAGIC)\nwith tempfile.TemporaryDirectory() as td:\n    p = pathlib … [1377 caractères tronqués]`
+
+  ```
+VERSION 0 | MAGIC b'DRVM'
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", line 145, in write_drvm
+    _valide(manifest)
+    ~~~~~~~^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", line 96, in _valide
+    raise DRVMError(f"section absente : {section}")
+tools.drvm.DRVMError: section absente : execution
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '93,120p' tools/drvm.py", "description": "Lire la validation du manifeste"}`
+
+  ```
+def _valide(manifest: dict[str, Any]) -> None:
+    for section in SECTIONS:
+        if section not in manifest:
+            raise DRVMError(f"section absente : {section}")
+    if manifest.get("format") != "DRVM":
+        raise DRVMError("format != DRVM")
+    if manifest.get("version") != VERSION:
+        raise DRVMError(f"version non supportée : {manifest.get('version')}")
+    blocs = manifest["graph"].get("blocks")
+    if not isinstance(blocs, list) or not blocs:
+        raise DRVMError("graphe sans bloc")
+    ids = set()
+    for b in blocs:
+        if "id" not in b or "kind" not in b:
+            raise DRVMError(f"bloc incomplet : {b!r}")
+        if b["id"] in ids:
+            raise DRVMError(f"bloc dupliqué : {b['id']}")
+        ids.add(b["id"])
+        if b["kind"] not in BLOCS_CONNUS:
+            raise DRVMError(f"type de bloc inconnu : {b['kind']}")
+    for t in manifest["tensors"]:
+        if t.get("bloc") not in ids:
+            raise DRVMError(f"tenseur rattaché à un bloc inconnu : {t.get('bloc')}")
+        if int(t["nbytes"]) <= 0 or int(t["offset"]) % ALIGNEMENT:
+            raise DRVMError(f"tenseur mal aligné ou vide : {t.get('name')}")
+
+
+def write_drvm(path: str | os.
+… [35 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^SECTIONS\\|^BLOCS_CONNUS\\|^ALIGNEMENT\\|^VERSION\\|^MAGIC\\|^HEADER\" tools/drvm.py; sed -n \"$(grep -n '^SECTIONS' tools/drvm.py | cut -d: -f1),+8p\" tools/drvm.py", "description": "Lire les constantes du format"}`
+
+  ```
+29:MAGIC = b"DRVM"
+30:VERSION = 0
+31:ALIGNEMENT = 64
+32:HEADER = struct.Struct("<4sHH I Q Q 32s 32s")  # 92 octets
+33:BLOCS_CONNUS = {
+37:SECTIONS = ("model", "graph", "tensors", "execution")
+SECTIONS = ("model", "graph", "tensors", "execution")
+
+
+class DRVMError(ValueError):
+    """Erreur de format DRVM."""
+
+
+@dataclass
+class TensorSpec:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys, tempfile, pathlib, hashlib\nsys.path.insert(0,'.')\nimport tools.drvm as d\nprint('VERSION', d.VERSION, '| MAGIC', d.MAGIC, '| blocs connus', sorted(d.BLOCS_CONNUS)[:6])\nman = {\"format\":\" … [1315 caractères tronqués]`
+
+  ```
+VERSION 0 | MAGIC b'DRVM' | blocs connus ['bridge', 'early_head', 'input', 'local_mixer', 'output', 'sparse_ffn']
+1) écrit, sha 8321110274be4d77 octets 476
+2) lu, modele test | tenseurs 1
+3) mmap mmap | taille 476
+4) hash 8321110274be4d77 | inspect v 0
+5) refus version : version non supportée : 2
+6) refus corruption : ÉCHEC
+  ```
+

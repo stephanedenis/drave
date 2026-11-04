@@ -5576,3 +5576,69 @@ en-cours · 1590 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
 ⏵ Commit du catalogue 606 fiches et de l'état 12 h 16
 
 - **bash** `{"command": "git commit -m \"INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16\" -m \"Le catalogue généré était périmé de 10 fiches : N3 (inventaire), S (fait divers, paragraphes), B13 (élision, quatre modes, run2, défaut, défaut conditionnel, seuil parallèl … [280 caractères tronqués]`
+
+  ```
+[s/v7 625271c8] INDEX — LE CATALOGUE PASSE DE 596 À 606 FICHES (N3, S, B13, TROISIÈME PASSE) ; ÉTAT 12 H 16
+ 21 files changed, 1541 insertions(+), 44 deletions(-)
+ create mode 100644 reports/pensee-quatre-modes-432-run3.json
+ create mode 100644 reports/pensee-troisieme-passe.json
+ create mode 100644 reports/rapport-pensee-troisieme-passe.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit a emporté la troisième passe B13 : je lis le fait et l'intègre à l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -22 reports/rapport-pensee-troisieme-passe.md ; echo \"=== JSON ===\" ; head -20 reports/pensee-troisieme-passe.json 2>/dev/null ; echo \"=== STATUS ===\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -12 ;  … [105 caractères tronqués]`
+
+  ```
+# B13 — la troisième passe : variance nulle, tous les seuils verts
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·
+> **Verdict** : ✅ **148/148 portes** : la **troisième passe** API donne **exactement** le run 2
+> (POS 0,9389, syntagmes 0,8241, tête 0,8797, refus 0) — variance **nulle** à température 0.
+> Et le **défaut conditionnel** (T143) est visible : le `parallele` passe de 0,9326 (run 2, sans
+> la clé dans l'environnement) à **0,9389** (run 3, avec la clé) — parce que le défaut prend le
+> `PRIORITE_NIVEAU` quand la clé est là.
+>
+> **Dispositif** : [`qualifier_quatre_modes.py`](../tools/tests/linguistique/qualifier_quatre_modes.py),
+> [`pensee-quatre-modes-432-run3.json`](pensee-quatre-modes-432-run3.json),
+> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-troisieme-passe.json`](pensee-troisieme-passe.json).
+
+## 1. Trois passes
+
+| passe | neuronal POS | `_niveau` POS | `parallele` POS | refus |
+|---|---:|---:|---:|---:|
+| run 1 | 0,9309 | 0,9309 | 0,9280 | 1 |
+| run 2 | **0,9389** | **0,9389** | 0,9326 | **0** |
+| **run 3** | **0,9389** | **0,9389** | **0,9389** | **0** |
+
+**Ce que ça dit** :
+=== JSON ===
+{
+ "date": "20
+… [679 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ État : B13 148/148 (troisième passe, variance nulle) intégré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.p3.md && python3 - <<'PY'\nimport subprocess\np='/tmp/state.p3.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=t.replace(\"**Mis à j … [1917 caractères tronqués]`
+
+  ```
+en-cours · 1603 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3973 mots (budget 4 000)
+  revue de documentation · 609 fiche(s) · 695 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 2914 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de l'état B13 148/148 (partiel, sans les WIP)
+
+- **bash** `{"command": "git commit --only docs/pilotage/en-cours.md -m \"ÉTAT — B13 148/148 (TROISIÈME PASSE : VARIANCE NULLE, PARALLÈLE 0,9326 → 0,9389) ; ÉTAT 12 H 19\" -m \"La troisième passe (rapport-pensee-troisieme-passe, JSON pensee-troisieme-passe) est committée dans 625271c8 (emportée par l'index) ; l … [318 caractères tronqués]`

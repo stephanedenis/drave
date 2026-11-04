@@ -68,8 +68,8 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **147/147** (seuil du parallèle : la confiance plafonne à **0,9326** sous le max **0,9389** ; défaut conditionnel ; run2 ; élision POS **0,7455**, r353 tombé) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [B13](../../reports/rapport-b13-porte-140.md).
-- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35) ; **en cours** : troisième passe (432 run3).
+- **Fait** : B13 **148/148** (troisième passe : variance **nulle**, run 3 = run 2 — POS **0,9389**, syntagmes **0,8241**, tête **0,8797**, refus **0** ; le `parallele` passe de **0,9326** à **0,9389** avec la clé ; seuil du parallèle ; défaut conditionnel ; run2 ; élision POS **0,7455**) ; **quatre modes 0,9309/0,8226/0,8784** ; **fusion : la confiance (0,7424) bat le niveau (0,3432)** ; gold **432** (réel **0,9065/0,4598/0,5633/0,9954** → true) ; **DRVM/native 114/114 + 5/5** ; **sto 5/5** ; fenêtre **non discriminante** ; pragmatique **0,6375** ; fiches [élision](../../reports/rapport-pensee-elision.md), [quatre modes](../../reports/rapport-pensee-quatre-modes-432.md), [défaut](../../reports/rapport-pensee-defaut-niveau.md), [run2](../../reports/rapport-pensee-quatre-modes-run2.md), [défaut conditionnel](../../reports/rapport-pensee-defaut-conditionnel.md), [seuil parallèle](../../reports/rapport-pensee-seuil-parallele.md), [troisième passe](../../reports/rapport-pensee-troisieme-passe.md), [B13](../../reports/rapport-b13-porte-140.md).
+- **Ce qu'elle fait** : gold neuronal rejoué sur l'**API** (mêmes verdicts, latence /35).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **T132/T133**, **gold 200+** ; le qualifier fenêtre attend une version API (serveur local interdit).
 - **Bloquants** : la **pragmatique neuronale** ne qualifie pas ; les **7B locales** sont **interdites** (règle 11) ; reste **gold 200+**.
@@ -94,7 +94,7 @@
 - **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
 - **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **runs actifs** : `kd2` **~19 400** (gpu0, log bufferisé), `rope2048` **4 650/20 000** (gpu1, ≈2 s/pas).
 - **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
-- **Pensée — B13 (actif)** : **147/147**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; fusion : la confiance bat le niveau.
+- **Pensée — B13 (actif)** : **148/148**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; fusion : la confiance bat le niveau.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
 
 ## Les chiffres de l'état
@@ -117,7 +117,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 147/147, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 148/148, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre (0,29)** ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** (`rope2048`) ; la restitution |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -127,7 +127,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 147/147 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
+**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 148/148 ; **R0.7** — tagger ; **D** — OCR clos (8 `.PDF`).
 
 ## Les questions ouvertes
 

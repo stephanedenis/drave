@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 91.6 h |
 | Tours | 160 |
-| Messages | 1927 |
-| Appels d'outils | 1651 |
+| Messages | 1941 |
+| Appels d'outils | 1665 |
 | Fichiers touchés | 25 |
-| Commandes | 1356 |
+| Commandes | 1370 |
 | Sous-agents | 2 |
 | Commits | 203 |
 | Compactages de contexte | 5 |
@@ -8479,7 +8479,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ### Tour 160 — vas-y en automomie pour le 4 prochaines heures
 
-*23 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - get_goal
 - update_goal
@@ -8495,7 +8495,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - bash — Trim README et passer toutes les portes
 - bash — Committer le seuil du parallèle
 - bash — Lancer la troisième passe API (variance)
-- … et 4 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
@@ -8580,7 +8580,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1316 autres
+- … et 1330 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8708,7 +8708,7 @@ Je continue : prochain round, **le défaut `PRIORITE_NIVEAU` conditionné à la 
 
 ## 5. Erreurs rencontrées
 
-26 sorties en erreur ou divergentes. Les premières :
+28 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
