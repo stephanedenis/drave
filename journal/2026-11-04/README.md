@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**64 commits** · **5 session(s)** · **6 thème(s)**
+**65 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 33 | [docs.md](docs.md) |
+| docs | 34 | [docs.md](docs.md) |
 | mesures | 20 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -96,6 +96,7 @@
 | 14:41 | `ff180c3a` | B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159 |
 | 14:45 | `97c6ba26` | ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13) |
 | 14:48 | `85b58e17` | B13 160/160 — LES RÔLES PAR POSITION : 301/322 GN, LA RELATION CALCULABLE POUR 301 (0,4725) ; ÉTAT, ROADMAP, CHANTIERS, PLAN |
+| 14:51 | `c2f1c7da` | ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS |
 
 ## Le récit de la journée (écrit à la main)
 

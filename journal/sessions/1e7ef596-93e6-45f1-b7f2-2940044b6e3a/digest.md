@@ -13344,3 +13344,152 @@ revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 38 : audit vert ; l'heure de session (16 h 15) à recaler — je commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h38.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h38.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [989 caractères tronqués]`
+
+  ```
+heure 14 h 51
+  revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3992 mots (budget 4 000)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-477]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit tourne en arrière-plan ; je collecte le résultat
+
+- **job_output** `{"job_id": "bash-477", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[s/v7 c2f1c7da] ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS
+ 17 files changed, 235 insertions(+), 45 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du cycle 38
+
+- **bash** `{"command": "git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -6 ; echo \"---REVUE---\" ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; echo \"---TAILL … [337 caractères tronqués]`
+
+  ```
+c2f1c7da ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS
+85b58e17 B13 160/160 — LES RÔLES PAR POSITION : 301/322 GN, LA RELATION CALCULABLE POUR 301 (0,4725) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+97c6ba26 ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)
+---STATUS---
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---REVUE---
+  revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3992 mots (budget 4 000)
+---LIENS---
+  ✅ 3016 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---A0.9---
+pas 12650 · perte 0.8767 · dure 1.0018 · douce 0.2233 · 5997 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 38 : audit vert, heure 14 h 53, B13 160/160 stable
+
+**Cycle 38 — tout est vert, l'état est recalé.**
+
+- **Audit complet** : revue ✅ **620 fiches / 713 JSON / 120 docs / 83 portes** ; **3 016 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 622 mots**, **T0 3 992 / 4 000** ✅.
+- **État** : heure ramenée de **16 h 15** (horloge de session) à **14 h 53** ; B13 reste à **160/160** (attachement, cibles, relation, rôles committés), rien de neuf à intégrer.
+- **WIP** : B13 `pensee-quatre-modes.json` + README/implémentation ; S `rapport-s-paragraphes.md`.
+- **Paire propre N2** : **α = 0,9** à **12 650 pas** (perte 0,877), GPU0 99 % (GPU1 libéré).
+
+**Le goal reste actif** : recevoir la prochaine mesure B13 et le fait S, finir α = 0,9, puis lancer la passe complète des portes.
+
+
+## Tour 44
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 39/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 39 : instantané, audit et faits committés depuis le cycle 38
+
+- **bash** `{"command": "git log --oneline -8 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -15 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -6", "description": "Snapshot commits, tree and sessions"}`
+
+  ```
+c2f1c7da ÉTAT — HEURE 14 H 53 ; B13 160/160, N2 α = 0,9 À 12 350 PAS
+85b58e17 B13 160/160 — LES RÔLES PAR POSITION : 301/322 GN, LA RELATION CALCULABLE POUR 301 (0,4725) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+97c6ba26 ÉTAT — HEURE 14 H 45 ; COMPTEURS 620/713 (RÔLES B13)
+ff180c3a B13 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; 159/159
+2fec7c79 ÉTAT — HEURE 14 H 39 ; B13 159/159, N2 α = 0,9 À 10 700 PAS
+e5323bc0 B13 159/159 — LA RELATION GN → GV : 221/637 (0,3469), 322 GN SANS RÔLE ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+9e3e2070 B13 — LES 500 PREMIERS SEGMENTS : 294 GN, 206 GV, LE SVO NU N'A PAS DE CIBLE ; 158/158
+9815d435 ÉTAT — HEURE 14 H 27 ; B13 158/158, N2 α = 0,9 À 9 250 PAS
+---STATUS---
+ M reports/pensee-quatre-modes.json
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 313 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 184 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools
+… [606 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4 ; echo \"---EN-COURS---\" ; python3 tools/verifie_en_cours.py 2>&1 | head -4 ; echo \"---TAILLE---\" ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -2", "description": "Run review, state and budget checks"}`
+
+  ```
+revue de documentation · 620 fiche(s) · 713 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---EN-COURS---
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---TAILLE---
+  T0 max : 3992 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -2 ; echo \"---BACKLOG---\" ; python3 tools/verifie_backlog.py 2>&1 | grep -E \"frontière|cohérent\" ; echo \"---JOURNAL---\" ; python3 tools/verifie_journal.py 2>&1 | tail -2 ; echo \"---TABLEAUX---\" ; bash tools/porte-tableaux.sh 2>&1 | tai … [68 caractères tronqués]`
+
+  ```
+✅ 3016 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+---BACKLOG---
+  frontière (3) : A2.6, N2, N4
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+---JOURNAL---
+  journal · 41 jour(s) · 119 session(s) · 1971 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+---TABLEAUX---
+  ✅ 3016 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; date '+%H h %M' ; head -3 docs/pilotage/en-cours.md ; grep -n \"rôles\\|B13 \\*\\*16\\|B13 : 16\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6 ; echo \"=== A0.9 ===\" ; tail -1 work/n2ac/kdpp-mix512-a0.9.log ; nvidia-smi --qu … [98 caractères tronqués]`
+
+  ```
+14 h 54
+# En ce moment
+
+**Mis à jour : 2026-11-04, 14 h 51 HNE (heure locale, EST).**
+51:- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+54:- **Stratégie** : une règle = trois contrôles.
+56:- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
+71:- **Fait** : B13 **160/160** ; **pragmatique 432 : acte 0,9954 (la fusion garde l'heuristique)** ; **fusion par sous-type : 0,9884** ; **tirages : 0,9838 ×3 (déterminisme)** ; **attachement : top1 0,3431, exact 0,0042** ; **cibles : 1624/1863 (87,2 %) ; 0,1283** ; **relation GN → GV : 221/637 (0,3469) ; 322 GN sans rôle** ; **rôles : 301/322 GN par position (129 avant = agent, 172 après = patient) ; relation calculable pour 301 (0,4725)** ; fiches [DRVM N0.1](../../reports/rapport-drvm-n01.md), [variance](../../reports/rapport-p
+… [932 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 39 : audit vert ; je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp docs/pilotage/en-cours.md /tmp/state.h39.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h39.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\\ … [933 caractères tronqués]`
