@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 15.7 h |
-| Tours | 219 |
-| Messages | 1211 |
-| Appels d'outils | 1249 |
+| Tours | 220 |
+| Messages | 1218 |
+| Appels d'outils | 1255 |
 | Fichiers touchés | 15 |
-| Commandes | 1063 |
+| Commandes | 1069 |
 | Sous-agents | 0 |
-| Commits | 239 |
+| Commits | 240 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -461,6 +461,8 @@
 **Tour 218** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 219** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 220** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5422,7 +5424,31 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 214 : audit vert ; je recale l'heure et commit
+⏵ Cycle 214 : audit vert, 2 048 fini, GPU libres, heure 23 h 05
+
+**Cycle 214 — tout est vert.**
+
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 060 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 608 mots**, **T0 3 978 / 4 000** ✅.
+- **2 048 — fini** (2×10 000 pas, deux drvm) ; **GPUs à 0 %**.
+- **B13 166/166**, D **restauré à 62 documents**, compteurs 628/721, sur **`s/v7`**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la fiche du 2 048 (côté N2), les faits B13/S, puis la passe complète des portes.
+
+### Tour 220 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check reports index
+- bash — Inspect index_reports usage and INDEX count
+- bash — Check INDEX modification state
+- bash — Show INDEX diff
+- bash — Commit regenerated INDEX and state
+
+**Synthèse produite :**
+
+⏵ Cycle 215 : je commit l'INDEX régénéré (615 → 625) avec l'état
 
 ## 3. Travail accompli
 
@@ -5488,7 +5514,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1023 autres
+- … et 1029 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5875,4 +5901,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 04 H 27 ; 2 048 FINI, B13 166/166, D 62" -m "Cycle d'audit : les sept contrôles sont verts (628/721, 3060 liens, T0 3978, en-cours 1608, backlog 3,
 - ÉTAT — HEURE 04 H 32 ; 2 048 FINI, B13 166/166, D 62" -m "Cycle d'audit : les sept contrôles sont verts (628/721, 3060 liens, T0 3978, en-cours 1608, backlog 3,
 - ÉTAT — HEURE 04 H 37 ; 2 048 FINI, B13 166/166, D 62" -m "Cycle d'audit : les sept contrôles sont verts (628/721, 3060 liens, T0 3978, en-cours 1608, backlog 3,
+- INDEX — 615 → 625 FICHES (LES DIX DERNIÈRES FICHES ENTRENT) ; HEURE 04 H 42" -m "L'index de reports/ était resté à 615 fiches ; la régénération par tools/index_
 

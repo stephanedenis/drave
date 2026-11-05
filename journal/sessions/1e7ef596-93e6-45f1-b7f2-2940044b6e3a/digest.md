@@ -30384,3 +30384,147 @@ revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 214 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h214.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h214.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [821 caractères tronqués]`
+
+  ```
+heure 23 h 05
+[s/v7 3ede6bba] ÉTAT — HEURE 04 H 37 ; 2 048 FINI, B13 166/166, D 62
+ 13 files changed, 161 insertions(+), 22 deletions(-)
+3ede6bba ÉTAT — HEURE 04 H 37 ; 2 048 FINI, B13 166/166, D 62
+63608044 ÉTAT — HEURE 04 H 32 ; 2 048 FINI, B13 166/166, D 62
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 214 : audit vert, 2 048 fini, GPU libres, heure 23 h 05
+
+**Cycle 214 — tout est vert.**
+
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 060 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 608 mots**, **T0 3 978 / 4 000** ✅.
+- **2 048 — fini** (2×10 000 pas, deux drvm) ; **GPUs à 0 %**.
+- **B13 166/166**, D **restauré à 62 documents**, compteurs 628/721, sur **`s/v7`**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la fiche du 2 048 (côté N2), les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 220
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 215/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 215 : instantané, audit et état des fiches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+3ede6bba ÉTAT — HEURE 04 H 37 ; 2 048 FINI, B13 166/166, D 62
+63608044 ÉTAT — HEURE 04 H 32 ; 2 048 FINI, B13 166/166, D 62
+634c636f ÉTAT — HEURE 04 H 27 ; 2 048 FINI, B13 166/166, D 62
+58e9e27a ÉTAT — HEURE 04 H 22 ; 2 048 FINI, B13 166/166, D 62
+20282625 ÉTAT — HEURE 04 H 17 ; 2 048 FINI, B13 166/166, D 62
+9b3e836d ÉTAT — HEURE 04 H 12 ; 2 048 FINI, B13 166/166, D 62
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 466 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 678 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 398 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2006 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références),
+… [361 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [287 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1608 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3978 mots (budget 4 000)
+  ✅ 3060 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+--- INDEX REPORTS ---
+  625 fiches → reports/INDEX.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 215 : l'INDEX des fiches est en retard (625 contre 628) ; je vérifie et le régénère
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/index_reports.py --help 2>&1 | head -12 ; echo \"=== INDEX COUNT ===\" ; grep -c \"^- \\[\" reports/INDEX.md 2>/dev/null ; head -8 reports/INDEX.md", "description": "Inspect index_reports usage and INDEX count"}`
+
+  ```
+625 fiches → reports/INDEX.md
+=== INDEX COUNT ===
+0
+# Index des fiches de reports/
+
+> **Généré** par `tools/index_reports.py` — **625 fiches**. Les fichiers
+> d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+> la page d'état, elle, compte tous les `.md` de `reports/`.
+
+| fiche | titre |
+|---|---|
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 215 : l'INDEX compte 625 hors infrastructure ; je vérifie qu'il n'a pas bougé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git status --short reports/INDEX.md ; git diff --stat reports/INDEX.md | tail -2 ; git log --oneline -1 -- reports/INDEX.md", "description": "Check INDEX modification state"}`
+
+  ```
+M reports/INDEX.md
+ reports/INDEX.md | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+731890b3 INDEX — 613 → 615 (CIBLES, CIBLES 500) ; HEURE 14 H 17
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 215 : l'INDEX était périmé (613→625 fiches) ; je vérifie le diff et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git diff reports/INDEX.md | head -30", "description": "Show INDEX diff"}`
+
+  ```
+diff --git a/reports/INDEX.md b/reports/INDEX.md
+index c0d6f213..0e5483c2 100644
+--- a/reports/INDEX.md
++++ b/reports/INDEX.md
+@@ -1,6 +1,6 @@
+ # Index des fiches de reports/
+ 
+-> **Généré** par `tools/index_reports.py` — **615 fiches**. Les fichiers
++> **Généré** par `tools/index_reports.py` — **625 fiches**. Les fichiers
+ > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+ > la page d'état, elle, compte tous les `.md` de `reports/`.
+ 
+@@ -329,7 +329,9 @@
+ | [rapport-native-tetes.md](rapport-native-tetes.md) | N1.4 — les têtes précoces de `drave-n0` : 55,2 / 60,9 / 62,1 % |
+ | [rapport-niah-fragilite.md](rapport-niah-fragilite.md) | Le critère de `porte-indice` ne survit pas à une reconstruction de son entrée |
+ | [rapport-nli-francais-dur.md](rapport-nli-francais-dur.md) | Le NLI français plus dur que XNLI : DACCORD +26,9, GQNLI +56,7 — et le 1,5 B bat le 3 B |
++| [rapport-ocr-cegep-64.md](rapport-ocr-cegep-64.md) | D — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train |
+ | [rapport-ocr-cegep.md](rapport-ocr-cegep.md) | Le corpus OCR du CEGEP — 147 scans détectés, 91 uniques, 1 982 pages océrisées |
++| [rapp
+… [1543 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 215 : je commit l'INDEX régénéré (615 → 625) avec l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h215.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h215.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [983 caractères tronqués]`

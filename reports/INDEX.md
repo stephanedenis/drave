@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **615 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **625 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -329,7 +329,9 @@
 | [rapport-native-tetes.md](rapport-native-tetes.md) | N1.4 — les têtes précoces de `drave-n0` : 55,2 / 60,9 / 62,1 % |
 | [rapport-niah-fragilite.md](rapport-niah-fragilite.md) | Le critère de `porte-indice` ne survit pas à une reconstruction de son entrée |
 | [rapport-nli-francais-dur.md](rapport-nli-francais-dur.md) | Le NLI français plus dur que XNLI : DACCORD +26,9, GQNLI +56,7 — et le 1,5 B bat le 3 B |
+| [rapport-ocr-cegep-64.md](rapport-ocr-cegep-64.md) | D — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train |
 | [rapport-ocr-cegep.md](rapport-ocr-cegep.md) | Le corpus OCR du CEGEP — 147 scans détectés, 91 uniques, 1 982 pages océrisées |
+| [rapport-ocr-pdf-restants.md](rapport-ocr-pdf-restants.md) | D — les 8 `.PDF` restants : 4 documents, 49 pages, 3 doublons — la limite est mesurée |
 | [rapport-ocr-pdf.md](rapport-ocr-pdf.md) | Le corpus OCR — les livres scannés, 20 livres, 15,4 M caractères |
 | [rapport-operateur-negation.md](rapport-operateur-negation.md) | B4.1 — la négation n'est pas une opération portée par l'état |
 | [rapport-optimisations-auto.md](rapport-optimisations-auto.md) | Rapport — détection matérielle et configuration automatique |
@@ -377,11 +379,13 @@
 | [rapport-pensee-bouge.md](rapport-pensee-bouge.md) | B13 — la porte qui bouge : l'horloge dans l'état |
 | [rapport-pensee-bruit.md](rapport-pensee-bruit.md) | B13 — le bruit variable : la politique tient de 50 % à 95 % |
 | [rapport-pensee-bruitee.md](rapport-pensee-bruitee.md) | B13 — l'observation bruitée : 10 % d'erreur casse la politique |
+| [rapport-pensee-candidats-verbes.md](rapport-pensee-candidats-verbes.md) | B13 — les candidats verbes : le top-k passe de 0,3264 à 0,4686 |
 | [rapport-pensee-cascade-reel-432.md](rapport-pensee-cascade-reel-432.md) | B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est true (seuils du contrat) |
 | [rapport-pensee-cascade-tete.md](rapport-pensee-cascade-tete.md) | B13 — la tête de la cascade : la correction dégrade (0,419 contre 0,441) |
 | [rapport-pensee-cascade-union.md](rapport-pensee-cascade-union.md) | B13 — la cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels |
 | [rapport-pensee-cascade-vrai-modele.md](rapport-pensee-cascade-vrai-modele.md) | B13 — la cascade complète avec le vrai modèle : POS 0,9415 / syntagmes 0,6130 / tête 0,7574 / acte 1,0 sur 180 phrases |
 | [rapport-pensee-chaotique.md](rapport-pensee-chaotique.md) | B13 — l'alternance aléatoire : 20/20, v = 0,12 |
+| [rapport-pensee-cible-proximite.md](rapport-pensee-cible-proximite.md) | B13 — la cible par proximité : l'exact passe de 0,0042 à 0,0544 (×13) |
 | [rapport-pensee-cibles-500.md](rapport-pensee-cibles-500.md) | B13 — les 500 premiers segments : 294 GN et 206 GV sans cible |
 | [rapport-pensee-cibles.md](rapport-pensee-cibles.md) | B13 — les cibles de l'attachement : 1624 segments sans cible sur 1863 |
 | [rapport-pensee-concurrentes.md](rapport-pensee-concurrentes.md) | B13 — les routes concurrentes : 0/20 au but 0, 20/20 au but 1 |
@@ -397,6 +401,7 @@
 | [rapport-pensee-defaut-niveau.md](rapport-pensee-defaut-niveau.md) | B13 — le défaut de la fusion : la confiance, pas le niveau |
 | [rapport-pensee-derive.md](rapport-pensee-derive.md) | B13 — la fiabilité qui dérive : v = 0,56, 20/20 |
 | [rapport-pensee-drvf.md](rapport-pensee-drvf.md) | B13 — DRVF `thought` : la trace se relit, la corruption se voit |
+| [rapport-pensee-echecs-attachement.md](rapport-pensee-echecs-attachement.md) | B13 — les 127 échecs qualifiés : 94 de span, 33 de cible |
 | [rapport-pensee-elision.md](rapport-pensee-elision.md) | B13 — l'élision : le bloc coupe `l'écoutent`, le refus tombe |
 | [rapport-pensee-ferme.md](rapport-pensee-ferme.md) | B13 — la porte qui se referme : le moteur repasse |
 | [rapport-pensee-frequent.md](rapport-pensee-frequent.md) | B13 — la bascule fréquente : 1/50, 20/20 |
@@ -465,6 +470,9 @@
 | [rapport-pensee-parite-drvm-native-rejoue.md](rapport-pensee-parite-drvm-native-rejoue.md) | B13 — la parité DRVM/native **rejouée** : checkpoint régénéré en CPU, 5/5 prompts, écart 0,00005 |
 | [rapport-pensee-parite-drvm-native.md](rapport-pensee-parite-drvm-native.md) | B13 — la parité DRVM/native : 114/114 poids, 5/5 prompts, rejouable mais checkpoint volatil |
 | [rapport-pensee-partielle.md](rapport-pensee-partielle.md) | B13 — l'observation partielle : 0/20, la mémoire ne suffit pas |
+| [rapport-pensee-passifs-corriges.md](rapport-pensee-passifs-corriges.md) | B13 — le correctif des passifs : `par` → agent, mais le generateur S court-circuite |
+| [rapport-pensee-passifs-sans-par.md](rapport-pensee-passifs-sans-par.md) | B13 — les passifs sans `par` : le chunker les détecte, le générateur S les ignore |
+| [rapport-pensee-passifs.md](rapport-pensee-passifs.md) | B13 — les passifs : la règle de position se trompe (5/5 faux) |
 | [rapport-pensee-periode.md](rapport-pensee-periode.md) | B13 — la période variable : 2–5 pas, la même politique |
 | [rapport-pensee-phase-devine.md](rapport-pensee-phase-devine.md) | B13 — la phase devinée : 10 % de bruit, 0/20 au but 0 |
 | [rapport-pensee-phase-etat.md](rapport-pensee-phase-etat.md) | B13 — la phase dans l'état : le correctif, 20/20 aux deux buts |
@@ -489,11 +497,13 @@
 | [rapport-pensee-quatre-modes.md](rapport-pensee-quatre-modes.md) | L — la porte des quatre modes sur le gold 432 : le neuronal API domine (0,9309 / 0,8226 / 0,8784), la fusion dégrade (0,928 / 0,802 / 0,857) |
 | [rapport-pensee-rapide.md](rapport-pensee-rapide.md) | B13 — la bascule très fréquente : 1/10, 20/20 |
 | [rapport-pensee-rare.md](rapport-pensee-rare.md) | B13 — l'information rare : utile 10 % du temps, 20/20 |
+| [rapport-pensee-relation.md](rapport-pensee-relation.md) | B13 — la relation GN → GV : 221 sur 637 (0,3469) |
 | [rapport-pensee-reponse-contenu.md](rapport-pensee-reponse-contenu.md) | B13 — la réponse au contenu : 0/19, la frontière du modèle |
 | [rapport-pensee-reponse-dirigee.md](rapport-pensee-reponse-dirigee.md) | B13 — la réponse dirigée : 19/19, la première réponse juste |
 | [rapport-pensee-reponse-extraction.md](rapport-pensee-reponse-extraction.md) | B13 — la réponse par extraction : 19/19, mais ce n'est pas une réponse |
 | [rapport-pensee-reponses.md](rapport-pensee-reponses.md) | B13 — les 19 réponses de référence : le juge a une couverture de 1,0 |
 | [rapport-pensee-reseau.md](rapport-pensee-reseau.md) | B13 — le réseau linéaire : l'imitation échoue, il ne généralise pas seul |
+| [rapport-pensee-roles.md](rapport-pensee-roles.md) | B13 — les 322 GN sans rôle : 129 avant le GV, 172 après |
 | [rapport-pensee-rupture.md](rapport-pensee-rupture.md) | B13 — la rupture : 90 % d'erreur, v = 0,12, 20/20 |
 | [rapport-pensee-sans-none.md](rapport-pensee-sans-none.md) | B13 — la politique sans None : elle tourne, sans but |
 | [rapport-pensee-sans-verbaliser.md](rapport-pensee-sans-verbaliser.md) | Rapport — la pensée sans verbaliser : le journal des mesures 77–168 |
