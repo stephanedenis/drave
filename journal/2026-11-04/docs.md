@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (201)
+## Commits du jour (202)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -209,6 +209,7 @@
 | 22:51 | `9b3e836d` | ÉTAT — HEURE 04 H 12 ; 2 048 FINI, B13 166/166, D 62 | `en-cours.md`, `README.md`, `docs.md` (+4) |
 | 22:53 | `20282625` | ÉTAT — HEURE 04 H 17 ; 2 048 FINI, B13 166/166, D 62 | `en-cours.md`, `README.md`, `apprentissage.md` (+10) |
 | 22:56 | `58e9e27a` | ÉTAT — HEURE 04 H 22 ; 2 048 FINI, B13 166/166, D 62 | `en-cours.md`, `README.md`, `docs.md` (+4) |
+| 22:58 | `634c636f` | ÉTAT — HEURE 04 H 27 ; 2 048 FINI, B13 166/166, D 62 | `en-cours.md`, `README.md`, `apprentissage.md` (+10) |
 
 ## Chiffres du jour
 

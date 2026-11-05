@@ -29946,3 +29946,329 @@ revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 212 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h212.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h212.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [821 caractères tronqués]`
+
+  ```
+heure 22 h 58
+[s/v7 634c636f] ÉTAT — HEURE 04 H 27 ; 2 048 FINI, B13 166/166, D 62
+ 13 files changed, 130 insertions(+), 22 deletions(-)
+634c636f ÉTAT — HEURE 04 H 27 ; 2 048 FINI, B13 166/166, D 62
+58e9e27a ÉTAT — HEURE 04 H 22 ; 2 048 FINI, B13 166/166, D 62
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 212 : audit vert, 2 048 fini, GPU libres, heure 22 h 58
+
+**Cycle 212 — tout est vert.**
+
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 060 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 608 mots**, **T0 3 978 / 4 000** ✅.
+- **2 048 — fini** (2×10 000 pas, deux drvm) ; **GPUs à 0 %**.
+- **B13 166/166**, D **restauré à 62 documents**, compteurs 628/721, sur **`s/v7`**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la fiche du 2 048 (côté N2), les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 218
+
+
+  ```
+docs/pilotage/en-cours.md:71:- **Fait** : B13 **164/164** ; attachement par proximité (exact 0,0544, top-k 0,4686) ; rôles 301/322 ; passifs hors du chemin S ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md).
+docs/pilotage/en-cours.md:97:- **Pensée — B13 (actif)** : **164/164**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
+docs/pilotage/en-cours.md:120:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 164/164, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+docs/pilotage/en-cours.md:130:**N2** — finir `kd2`/`rope2048`, puis la **porte propre (0,29)** ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 164/164 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+docs/pilotage
+… [3958 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 213/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 213 : instantané, audit et suites du 2 048
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+634c636f ÉTAT — HEURE 04 H 27 ; 2 048 FINI, B13 166/166, D 62
+58e9e27a ÉTAT — HEURE 04 H 22 ; 2 048 FINI, B13 166/166, D 62
+20282625 ÉTAT — HEURE 04 H 17 ; 2 048 FINI, B13 166/166, D 62
+9b3e836d ÉTAT — HEURE 04 H 12 ; 2 048 FINI, B13 166/166, D 62
+47295101 ÉTAT — HEURE 04 H 07 ; 2 048 FINI, B13 166/166, D 62
+637cd1ef ÉTAT — HEURE 04 H 02 ; 2 048 FINI, B13 166/166, D 62
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 459 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 671 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 391 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 1999 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références),
+… [361 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [258 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1608 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3978 mots (budget 4 000)
+  ✅ 3060 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+0, 0 %
+1, 0 %
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Long-running goal (`goal-3a308101-e06b-49c2-841d-ee6a5ea6df1f`, revision 1, active, max 1000 rounds): “Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée.”
+- Do not mark complete while sessions still produce facts and the full gate pass hasn't run.
+- Earlier user instructions: report state after the 03/11 19:33 reboot; short tasks per interrupted session; resume all chantiers in parallel; track the whole docs dossier for coherence; no 4th DSH session needed.
+
+## Key Technical Concepts
+- Repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, branch **`s/v7`**, French docs.
+- DSH multi-session: hub holds `en-cours`; sessions commit facts; pre-commit hook `tools/verifie_etat_a_jour.py --index` refuses `reports/`, `roadmap`, `backlog` changes without staged `en-cours`; then `archive_sessions.py`, `session_report.py`, `journal_auto.py`, `git add journal`.
+- Doc gates: `revue_documentation.py`, `verifier_liens.py`, `verifie_backlog.py`, `porte-tableaux.sh`, `verifie_journal.py`, `taille_documents.py`, `verifie_en_cours.py`.
+- Budgets: `en-cours` ≤2000 words; **T0 = AGENTS + en-cours + one task doc ≤4000**; 5 questions max, each needs `→`.
+- Counter rule: state's `fichiers / JSON` must equal disk counts (tool checks them); untracked session WIPs count.
+- GPU rules: GPUs reserved for Drave; professors via DeepSeek API; claims via `tools/ressources.py`, registry `work/ressources.json`.
+
+## Files and Code
+- `docs/pilotage/en-cours.md` — live state; header time corrected each cycle (e.g. `**Mis à jour : 2026-11-04, 20 h 35 HNE …**`); “Fait” at B13 **166/166** (127 échecs qualifiés : 94 span, 33 cible), D **restauré 62**, counters **628 / 721**, N2 section notes the 2 048 run.
+- `docs/pilotage/roadmap.md` — B13 **166/166**, T0–T165; “échecs qualifiés : 127 = 94 span + 33 cible”; D restored 62.
+- `docs/pilotage/chantiers.md` — B13 **166/166**, T0–T165, "127 échecs qualifiés".
+- `docs/pilotage/plan-travail.md` — **166/166**; échecs qualifiés clause.
+- `reports/rapport-pensee-echecs-attachement.md` + `reports/pensee-echecs-attachement.json` — committed (9f3e37eb), B13 166/166 fact.
+- `reports/rapport-pensee-candidats-verbes.md` + JSON — B13 165/165 (top-k 0,3264→0,4686, tête 0,5310→0,7655), committed f7195ce0.
+- `reports/rapport-pensee-cible-proximite.md` + JSON — B13 164/164 (exact 0,0042→0,0544 ×13, top1 0,3975), committed 21110849.
+- `reports/rapport-ocr-cegep-64.md` + `reports/ocr-cegep-64.json` — contamination DOC2 val (18/20 fenêtres de 500 o dans le train, 17 001 o contigus) / DOC1 intra-train (24/26), clean 62-doc corpus; committed 26e21acf/3e736901/3833a604.
+- `data/corpus_ocr_cegep/` — RESTORED to clean 62 docs: `train.txt` 4 440 987, `val.txt` 12 536, `test.txt` 10 524 bytes; 8 Ko 0, 500 o 0 (gitignored).
+- `work/n2ac/rope2048-10k.log` — first half FINISHED: 10 000 pas, 10 224 s, perte finale 0,9409, PPL 2,614, drvm `work/n2ac/rope2048-10k.drvm` sha256 `c50beff6…`.
+- `work/n2ac/rope2048-20k.log` — second half running (init `rope2048-10k.pt`); at 8 150/10 000, 8 327 s, PPL ~2,388, GPU1 100 %.
+- `reports/rapport-s-paragraphes.md` — untracked S WIP; `tools/structures` submodule modified (m) — S WIP.
+- B13 WIP uncommitted: `docs/implantation/moteur-de-pensee.md`, `reports/README.md`, `reports/pensee-quatre-modes.json`, `reports/rapport-pensee-echecs-attachement.md` (mod), `reports/pensee-echecs-attachement.json` (mod), `tools/bloc_linguistique.py`, `tools/pensee/autotest.py`.
+
+## Errors and Fixes
+- **Commit landed on wrong branch `s/close`** (commit 1d2cd
+… [3668 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Long-running goal (`goal-3a308101-e06b-49c2-841d-ee6a5ea6df1f`, revision 1, active, max 1000 rounds): “Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée.”
+- Do not mark complete while sessions still produce facts and the full gate pass hasn't run.
+- Earlier user instructions: report state after the 03/11 19:33 reboot; short tasks per interrupted session; resume all chantiers in parallel; track the whole docs dossier for coherence; no 4th DSH session needed.
+
+## Key Technical Concepts
+- Repo `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, branch **`s/v7`**, French docs.
+- DSH multi-session: hub holds `en-cours`; sessions commit facts; pre-commit hook `tools/verifie_etat_a_jour.py --index` refuses `reports/`, `roadmap`, `backlog` changes without staged `en-cours`; then `archive_sessions.py`, `session_report.py`, `journal_auto.py`, `git add journal`.
+- Doc gates: `revue_documentation.py`, `verifier_liens.py`, `verifie_backlog.py`, `porte-tableaux.sh`, `verifie_journal.py`, `taille_documents.py`, `verifie_en_cours.py`.
+- Budgets: `en-cours` ≤2000 words; **T0 = AGENTS + en-cours + one task doc ≤4000**; 5 questions max, each needs `→`.
+- Counter rule: state's `fichiers / JSON` must equal disk counts (tool checks them); untracked session WIPs count.
+- GPU rules: GPUs reserved for Drave; professors via DeepSeek API; claims via `tools/ressources.py`, registry `work/ressources.json`.
+
+## Files and Code
+- `docs/pilotage/en-cours.md` — live state; header time corrected each cycle (e.g. `**Mis à jour : 2026-11-04, 20 h 35 HNE …**`); “Fait” at B13 **166/166** (127 échecs qualifiés : 94 span, 33 cible), D **restauré 62**, counters **628 / 721**, N2 section notes the 2 048 run.
+- `docs/pilotage/roadmap.md` — B13 **166/166**, T0–T165; “échecs qualifiés : 127 = 94 span + 33 cible”; D restored 62.
+- `docs/pilotage/chantiers.md` — B13 **166/166**, T0–T165, "127 échecs qualifiés".
+- `docs/pilotage/plan-travail.md` — **166/166**; échecs qualifiés clause.
+- `reports/rapport-pensee-echecs-attachement.md` + `reports/pensee-echecs-attachement.json` — committed (9f3e37eb), B13 166/166 fact.
+- `reports/rapport-pensee-candidats-verbes.md` + JSON — B13 165/165 (top-k 0,3264→0,4686, tête 0,5310→0,7655), committed f7195ce0.
+- `reports/rapport-pensee-cible-proximite.md` + JSON — B13 164/164 (exact 0,0042→0,0544 ×13, top1 0,3975), committed 21110849.
+- `reports/rapport-ocr-cegep-64.md` + `reports/ocr-cegep-64.json` — contamination DOC2 val (18/20 fenêtres de 500 o dans le train, 17 001 o contigus) / DOC1 intra-train (24/26), clean 62-doc corpus; committed 26e21acf/3e736901/3833a604.
+- `data/corpus_ocr_cegep/` — RESTORED to clean 62 docs: `train.txt` 4 440 987, `val.txt` 12 536, `test.txt` 10 524 bytes; 8 Ko 0, 500 o 0 (gitignored).
+- `work/n2ac/rope2048-10k.log` — first half FINISHED: 10 000 pas, 10 224 s, perte finale 0,9409, PPL 2,614, drvm `work/n2ac/rope2048-10k.drvm` sha256 `c50beff6…`.
+- `work/n2ac/rope2048-20k.log` — second half running (init `rope2048-10k.pt`); at 8 150/10 000, 8 327 s, PPL ~2,388, GPU1 100 %.
+- `reports/rapport-s-paragraphes.md` — untracked S WIP; `tools/structures` submodule modified (m) — S WIP.
+- B13 WIP uncommitted: `docs/implantation/moteur-de-pensee.md`, `reports/README.md`, `reports/pensee-quatre-modes.json`, `reports/rapport-pensee-echecs-attachement.md` (mod), `reports/pensee-echecs-attachement.json` (mod), `tools/bloc_linguistique.py`, `tools/pensee/autotest.py`.
+
+## Errors and Fixes
+- **Commit landed on wrong branch `s/close`** (commit 1d2cd6af): fixed with `git checkout s/v7; git merge --ff-only s/close`; `s/v7` now head of `s/close`. Commits still land on `s/v7` since.
+- **`git commit` “fatal: cannot lock ref 'HEAD'” / `.git/index.lock` held by session git**: wait loop `for i in $(seq 1 24); do [ -e .git/index.lock ] || break; sleep 4; done`, then retry; or run in background and collect.
+- **Hook “un fait stagé sans docs/pilotage/en-cours.md”**: state's staged diff empty because a session had already committed it; fixed by a new state edit (time/trim/re-mention) + `git add docs/pilotage/en-cours.md`.
+- **T0 overruns (4000, 4003, 4006, 4017)**: trimmed “Fait” clauses (old fiche links, «pragmatique 432», «attachement», «rôles», «passifs», «candidats verbes», «attachement par proximité») until ≤4000; currently 3988.
+- **Clock drift (sessions write +1 h 30–2 h)**: hub rewrites `Mis à jour` every cycle via temp file + `mv` (avoid “file changed since it was read”).
+- **New fiche/JSON changes disk counters**: hub updates state's `fichiers / JSON` and commits; latest 628/721.
+- **Contaminated OCR re-split (2/1/1)**: DOC2 in val was a near-duplicate of train; 8 Ko exact check blind; resolved by restoring clean 62-doc corpus from `work/ocr/cegep64/propre/` (DOC1/DOC2 écartés).
+- **OCR fiche self-links `../../reports/...`** broken: fixed to `./`.
+
+## Pending Jobs
+- **2 048 second half** to finish (~1 850 pas left at 8 150; ETA ~30–40 min) → then record final JSON + drvm + fiche/state/roadmap (N2 fact).
+- B13 (outils, README, implementation) and **S** session facts (submodule `tools/structures`, `rapport-s-paragraphes.md`) — still WIP.
+- **Full gate pass** after sessions close: `JOURNAUX=work/portes/passe-… bash tools/toutes-les-portes.sh` (1 h 30–2 h), read verdict with `awk '$2 != 0'`, compare `docs/pilotage/references-non-regression.md`.
+- INDEX `reports/INDEX.md` regeneration when docs stabilize (last known stale ~615 vs 628 fiches).
+- Goal stays ACTIVE until sessions close facts and full pass done.
+
+## Current Work
+- Round 158 snapshot/audit: all seven controls green — revue **628 fiches / 721 JSON / 120 docs / 83 portes** ✅, **3 060 liens** ✅, backlog frontière 3 ✅, journal ✅, tableaux ✅, `en-cours` **1 618 mots**, **T0 3 988/4 000** ✅.
+- 2 048 second half at **8 150/10 000** (8 327 s, PPL ~2,388, GPU1 100 %).
+- Sessions: hub `1e7ef596` active (528 min); **S `29ad180d` en pause** (248 min); N2 `0733c5bb` en pause (316 min); OCR `aeafe951` en pause (263 min); B13 `e181ce02` active (528 min); `536cd5d6` paused 1856 min.
+- Latest commits: `c71116b9` (état 00 H 02 / real 20:35), `8d068250`, `f23e3c51`, `7b122d8d`, `9f3e37eb` (B13 166), `e13723f6`.
+
+## Next Step
+- Correct the state header to real clock (≈20 h 37), commit `docs/pilotage/en-cours.md` only (message “ÉTAT — HEURE 20 H 37 ; … 2 048 À 8 150 PAS”), then next round re-audit and keep tracking the 2 048 until it finishes.
+
+## Critical Context
+- Commit only explicit paths; never `git add -A`; hook adds journal itself.
+- Session commits frequently sweep hub-staged files and vice-versa; always re-check `git log`/`git status` after a failed commit.
+- Verified clean corpus is the **62-doc** set (Choquette + Assurance only among OCR docs); DOC1/DOC2 remain excluded.
+- B13 fact chain ends: 164 cible proximité (×13) → 165 candidats verbes (top-k 0,4686) → 166 échecs qualifiés (127 = 94 span + 33 cible; correctif repairs only 1).
+- The state's `Fait` currently keeps only the 166 échecs clause + fiches links ([passifs], [cible par proximité], [candidats verbes], [échecs attachement]).
+- No 4th DSH session: A2.6 waits for GPUs, R0.7 in L's mandate; both GPUs now used by 2 048 (GPU1 100 %), GPU0 idle.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Cycle 213 : audit vert ; je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h213.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h213.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [821 caractères tronqués]`
