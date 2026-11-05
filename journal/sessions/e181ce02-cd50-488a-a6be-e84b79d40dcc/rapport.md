@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 99.7 h |
 | Tours | 173 |
-| Messages | 2149 |
-| Appels d'outils | 1850 |
+| Messages | 2152 |
+| Appels d'outils | 1853 |
 | Fichiers touchés | 25 |
-| Commandes | 1523 |
+| Commandes | 1526 |
 | Sous-agents | 2 |
 | Commits | 227 |
 | Compactages de contexte | 6 |
@@ -9238,7 +9238,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 
 ### Tour 173 — continue
 
-*6 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Qualifier les 127 échecs : span ou cible
 - bash — Lire le bloc de construction des syntagmes S
@@ -9246,10 +9246,13 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - bash — Voir les types produits par S et par le chunker
 - bash — Lire la branche union
 - bash — Ajouter les verbes à la branche union et mesurer
+- bash — Nettoyer l'appel et confirmer la mesure
+- bash — Ajouter T163, écrire la fiche des échecs et vérifier
+- bash — Trim README et lancer l'autotest complet
 
 **Synthèse produite :**
 
-⏵ Les 33 sont tous des GP **sans GV dans la segmentation S** : aucun verbe candidat, aucune cible. Je comble avec les GV du chunker
+⏵ Le correctif d'union ne rend que +1 : les 32 restants ont un GV qui couvre la phrase (le verbe n'est pas le dernier mot). Je fige le diagnostic
 
 ## 3. Travail accompli
 
@@ -9330,7 +9333,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1483 autres
+- … et 1486 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -38025,3 +38025,133 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la ligne suivant
 
 continue
 
+### 🤖 Assistant
+
+⏵ Je qualifie les 127 échecs de l'attachement (span ou cible ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, re, json, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\n\nh = bl.Heuristique(); ph = charger()\nspan_fa … [1764 caractères tronqués]`
+
+  ```
+span faux 94 | cible hors des candidats 33 | total 127
+cibles non verbales parmi les 33 ?
+cible absente de la phrase (mot à mot) : 0
+  g016 GP 'in the park' gold saw | propose  | cands ['GP']
+  r025 GP 'to her brother' gold talks | propose  | cands ['GP']
+  r026 GP 'to the teacher' gold listen | propose  | cands ['GP']
+  r027 GP 'on the chair' gold sleeps | propose  | cands ['GP']
+  r031 GP 'at noon' gold leaves | propose  | cands ['GP']
+  r040 GP 'in the park' gold play | propose  | cands ['GP']
+  r050 GP 'en vacances' gold partons | propose  | cands ['GP']
+  r061 GP 'with the ball' gold plays | propose  | cands ['GP']
+  r063 GP 'to the radio' gold listen | propose  | cands ['GP']
+  r064 GP 'to the students' gold talks | propose  | cands ['GP']
+  r067 GP 'in the garden' gold grow | propose  | cands ['GP']
+  r068 GP 'to his sister' gold writes | propose  | cands ['GP']
+  ```
+
+### 🤖 Assistant
+
+⏵ Les 33 sont tous des GP **sans GV dans la segmentation S** : aucun verbe candidat, aucune cible. Je comble avec les GV du chunker
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '702,730p' tools/bloc_linguistique.py", "description": "Lire le bloc de construction des syntagmes S"}`
+
+  ```
+# 5. syntagmes : le générateur S (candidats) ou un chunker simple
+        cands = self._syntagmes_s(texte)
+        cibles_s = self._cibles_s(texte) if cands else {}
+        if cands:
+            for c in cands[:1]:
+                noms = [x.get("nom", "") for x in cands]
+                for s in c.get("segments", []):
+                    att = c.get("attachement") or {}
+                    if att.get("segment") == s.get("texte"):
+                        cible = att.get("cible")
+                    else:
+                        cible = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
+                    if not cible:
+                        gvs = [x for x in c.get("segments", []) if x.get("type") == "GV"]
+                        cible = self._cible_proche(texte, s, gvs)
+                    meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
+                    if cible:
+                        meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
+                    gvs = [x for x in c.get("segments", []) if x.get("type") == "GV"]
+                    candidats = list(noms) + self._verbes_proches(texte, s, gvs)
+                    etiquettes.ap
+… [582 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        if cands:\n            for c in cands[:1]:\n                noms = [x.get(\"nom\", \"\") for x in cands]\n        … [2799 caractères tronqués]`
+
+  ```
+GV du chunker ajoutés au chemin S
+attachement {'cibles': 239, 'labels': 145, 'top1': 95, 'topk': 112, 'exact': 13, 'top1_taux': 0.3975, 'topk_taux': 0.4686, 'exact_taux': 0.0544, 'couverture': 0.6067}
+tête {'cibles': 145, 'labels': 145, 'top1': 94, 'topk': 111, 'top1_taux': 0.6483, 'topk_taux': 0.7655, 'couverture': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt in (\"The boy saw the cat in the park.\", \"Le garçon joue au ballon.\"):\n    c=h._syntagmes_s(txt)\ … [330 caractères tronqués]`
+
+  ```
+The boy saw the cat in the park.
+  S : [('GV', 'The boy saw the cat in the park', 'predicat')]
+  chunker : []
+Le garçon joue au ballon.
+  S : [('GN', 'Le garçon', 'agent'), ('GV', 'joue', 'predicat'), ('GP', 'au ballon', 'destinataire')]
+  chunker : [('GN', 'Le garçon joue', 'groupe nominal'), ('GP', 'au ballon', 'destinataire')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'if cands and self.union' tools/bloc_linguistique.py | cut -d: -f1),+18p\" tools/bloc_linguistique.py", "description": "Lire la branche union"}`
+
+  ```
+if cands and self.union:
+            deja = {(s.get("type"), s.get("debut"), s.get("fin"))
+                    for s in cands[0].get("segments", [])}
+            for s in self._syntagmes_simple(texte, lg):
+                if (s["type"], s["debut"], s["fin"]) in deja:
+                    continue
+                etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
+                                            s["fin"], self.nom, 0.30,
+                                            candidats=[s["type"]], langue=lg, script=script,
+                                            meta={"role": s["role"], "niveau": s["niveau"],
+                                                  "union": True}))
+    
+        # 6. discours / document
+        for d, f, p, _ in self._phrases(texte):
+            mots_p = set(_normaliser(p).split())
+            for relation, marqueurs in CONNECTEURS.items():
+                touche = sorted(mots_p & marqueurs)
+                if touche:
+                    etiquettes.append(Etiquette("discours", "connecteur", touche[0], d, f,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        if cands and self.union:\n            deja = {(s.get(\"type\"), s.get(\"debut\"), s.get(\"fin\"))\n               … [2320 caractères tronqués]`
+
+  ```
+union : verbes et cible ajoutés
+attachement {'cibles': 239, 'labels': 145, 'top1': 96, 'topk': 113, 'exact': 14, 'top1_taux': 0.4017, 'topk_taux': 0.4728, 'exact_taux': 0.0586, 'couverture': 0.6067}
+tête {'cibles': 145, 'labels': 145, 'top1': 96, 'topk': 113, 'top1_taux': 0.6621, 'topk_taux': 0.7793, 'couverture': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le correctif d'union ne rend que +1 : les 32 restants ont un GV qui couvre la phrase (le verbe n'est pas le dernier mot). Je fige le diagnostic
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                cible = (self._cible_proche(texte, s, gvs_u)\n                         or self._cible_proche(texte, s, gv … [499 caractères tronqués]`
+
+  ```
+appel dupliqué retiré
+attachement {'cibles': 239, 'labels': 145, 'top1': 96, 'topk': 113, 'exact': 14, 'top1_taux': 0.4017, 'topk_taux': 0.4728, 'exact_taux': 0.0586, 'couverture': 0.6067}
+tête {'cibles': 145, 'labels': 145, 'top1': 96, 'topk': 113, 'top1_taux': 0.6621, 'topk_taux': 0.7793, 'couverture': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''    return (a[\"cibles\"] == 239 and a[\"top1\"] == 95 and a[\"exact\"] == 13\n            and th[\"top1\"] == 94), (''',\n … [8428 caractères tronqués]`
+
+  ```
+T161/T162 ajustées, T163 ajoutée
+fiche + JSON + docs + état + README
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2815 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
