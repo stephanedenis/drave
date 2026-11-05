@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**191 commits** · **6 session(s)** · **7 thème(s)**
+**192 commits** · **6 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 150 | [docs.md](docs.md) |
-| mesures | 24 | [mesures.md](mesures.md) |
+| mesures | 25 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -225,6 +225,7 @@
 | 20:35 | `c71116b9` | ÉTAT — HEURE 00 H 02 ; B13 166/166, D 62, 2 048 À 8 000 PAS |
 | 20:38 | `0ff35a33` | ÉTAT — HEURE 00 H 07 ; B13 166/166, D 62, 2 048 À 8 150 PAS |
 | 20:40 | `9ab24b73` | ÉTAT — HEURE 00 H 12 ; B13 166/166, D 62, 2 048 À 8 250 PAS |
+| 20:43 | `425754c3` | B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -38209,3 +38209,82 @@ python3 tools/taille_documents.py            EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-echecs-attachement.md reports/pensee-echecs-attachement.json reports/README.md docs/implantation/moteur-de-pensee.md docs/ … [798 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-259]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-259", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[s/v7 425754c3] B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166
+ 21 files changed, 239 insertions(+), 56 deletions(-)
+COMMIT OK 1
+425754c3 B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166
+--- vérif :
+2
+2
+mer 04 nov 2026 20:45:35 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log --oneline -3; git status --porcelain | grep -E \"tools/|reports/pensee|docs/(implantation|pilotage)\" | head -5; python3 tools/taille_documents.py 2>&1 | tail -1", "description": "Vérification finale"}`
+
+  ```
+mer 04 nov 2026 20:45:42 EST
+425754c3 B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166
+9ab24b73 ÉTAT — HEURE 00 H 12 ; B13 166/166, D 62, 2 048 À 8 250 PAS
+0ff35a33 ÉTAT — HEURE 00 H 07 ; B13 166/166, D 62, 2 048 À 8 150 PAS
+ M reports/pensee-quatre-modes.json
+ M tools/structures
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+### 🤖 Assistant
+
+⏵ Round livré : 127 échecs qualifiés (94 span / 33 cible), 166/166, HEAD vérifié
+
+## Le round
+
+**Les 127 échecs de l'attachement sont qualifiés** — et le correctif testé ne fait qu'un point, ce que la fiche dit franchement.
+
+| cause | nombre |
+|---|---:|
+| **span faux** (aucun segment prédit au même span) | **94** |
+| **cible hors des candidats** (span bon) | **33** → **32** après correctif |
+| **tout** | **127** → **126** |
+
+**Ce que j'ai tenté** : ajouter les GV du chunker à ceux du générateur S et remplir les segments d'union. Résultat mesuré : **+1** seulement.
+
+| mesure | avant | après |
+|---|---:|---:|
+| top1 | 95 (0,3975) | **96 (0,4017)** |
+| top-k | 112 (0,4686) | **113 (0,4728)** |
+| exact | 13 (0,0544) | **14 (0,0586)** |
+| tête top1 / top-k | 94 / 111 | **96 / 113** |
+
+**La cause des 32 restants** : le générateur S produit un GV qui couvre **toute la phrase** (`The boy saw the cat in the park`) ; la règle « dernier token du GV » prend alors `park` au lieu de `saw`. Il manque une **identification du verbe** à l'intérieur du GV — c'est le vrai correctif, pas un réglage de proximité.
+
+## Vérification
+
+- **166/166 portes** (T163 ajoutée ; T153/T161/T162 mises à jour après la hausse réelle).
+- `porte-tableaux`, `revue`, `taille` (T0 3 999), `verifie_en_cours`, `porte-bloc` : vertes.
+- Commit **`425754c3`**, vérifié par `git show HEAD:` (T163 présente, `gvs_simple` présent).
+- Fiche [`reports/rapport-pensee-echecs-attachement.md`](reports/rapport-pensee-echecs-attachement.md) + JSON ; état aligné (B13 166/166).
+
+## Réserves
+
+- **94 spans non qualifiés** : leurs causes (S, chunker, ou les deux) ne sont pas mesurées.
+- **Le correctif d'union est marginal** (+1) : je l'ai gardé parce qu'il est déterministe et qu'il remplit des segments qui n'avaient aucune cible, mais il ne change pas la donne.
+- **Le GV-phrase** reste entier : sans lexique verbal, la règle ne sait pas choisir le verbe.
+
+## La suite
+
+1. **Le verbe du GV-phrase** : le vrai correctif des 32 (dans mon territoire).
+2. **Les 94 spans** : qualifier la segmentation.
+3. **Le générateur S** : les passifs (territoire S).
+4. **`master`** : merge + push, seulement si vous le demandez explicitement.
+
+Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
+

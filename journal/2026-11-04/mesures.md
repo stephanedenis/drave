@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (24)
+## Commits du jour (25)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -32,6 +32,7 @@
 | 15:29 | `d72269e0` | B13 163 + N2 — LES PASSIFS SANS par (CHUNKER 3/3, HORS DU CHEMIN S) ; LA PRODUCTION TRANCHE : −0,06 (PAS −0,10) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+22) |
 | 16:00 | `1f74e6cf` | B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 | 16:30 | `f7195ce0` | B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
+| 20:43 | `425754c3` | B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+18) |
 
 ## Chiffres du jour
 
@@ -58,6 +59,7 @@
 - [reports/rapport-pensee-candidats-verbes.md](../../reports/rapport-pensee-candidats-verbes.md)
 - [reports/rapport-pensee-defaut-conditionnel.md](../../reports/rapport-pensee-defaut-conditionnel.md)
 - [reports/rapport-pensee-defaut-niveau.md](../../reports/rapport-pensee-defaut-niveau.md)
+- [reports/rapport-pensee-echecs-attachement.md](../../reports/rapport-pensee-echecs-attachement.md)
 - [reports/rapport-pensee-elision.md](../../reports/rapport-pensee-elision.md)
 - [reports/rapport-pensee-fusion-soustype.md](../../reports/rapport-pensee-fusion-soustype.md)
 - [reports/rapport-pensee-passifs-sans-par.md](../../reports/rapport-pensee-passifs-sans-par.md)

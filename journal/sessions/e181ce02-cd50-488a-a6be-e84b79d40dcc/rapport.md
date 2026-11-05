@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 100.1 h |
 | Tours | 173 |
-| Messages | 2158 |
-| Appels d'outils | 1859 |
+| Messages | 2160 |
+| Appels d'outils | 1860 |
 | Fichiers touchés | 25 |
-| Commandes | 1531 |
+| Commandes | 1532 |
 | Sous-agents | 2 |
 | Commits | 228 |
 | Compactages de contexte | 6 |
@@ -9238,7 +9238,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 
 ### Tour 173 — continue
 
-*15 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Qualifier les 127 échecs : span ou cible
 - bash — Lire le bloc de construction des syntagmes S
@@ -9254,11 +9254,54 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - bash — Ajuster T153 et relancer l'autotest
 - bash — Aligner l'état et passer les portes rapides
 - bash — Committer les échecs qualifiés et vérifier
-- … et 1 autres
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ 166/166 ; je commite le round des échecs et vérifie HEAD
+⏵ Round livré : 127 échecs qualifiés (94 span / 33 cible), 166/166, HEAD vérifié
+
+\## Le round
+
+**Les 127 échecs de l'attachement sont qualifiés** — et le correctif testé ne fait qu'un point, ce que la fiche dit franchement.
+
+| cause | nombre |
+|---|---:|
+| **span faux** (aucun segment prédit au même span) | **94** |
+| **cible hors des candidats** (span bon) | **33** → **32** après correctif |
+| **tout** | **127** → **126** |
+
+**Ce que j'ai tenté** : ajouter les GV du chunker à ceux du générateur S et remplir les segments d'union. Résultat mesuré : **+1** seulement.
+
+| mesure | avant | après |
+|---|---:|---:|
+| top1 | 95 (0,3975) | **96 (0,4017)** |
+| top-k | 112 (0,4686) | **113 (0,4728)** |
+| exact | 13 (0,0544) | **14 (0,0586)** |
+| tête top1 / top-k | 94 / 111 | **96 / 113** |
+
+**La cause des 32 restants** : le générateur S produit un GV qui couvre **toute la phrase** (`The boy saw the cat in the park`) ; la règle « dernier token du GV » prend alors `park` au lieu de `saw`. Il manque une **identification du verbe** à l'intérieur du GV — c'est le vrai correctif, pas un réglage de proximité.
+
+\## Vérification
+
+- **166/166 portes** (T163 ajoutée ; T153/T161/T162 mises à jour après la hausse réelle).
+- `porte-tableaux`, `revue`, `taille` (T0 3 999), `verifie_en_cours`, `porte-bloc` : vertes.
+- Commit **`425754c3`**, vérifié par `git show HEAD:` (T163 présente, `gvs_simple` présent).
+- Fiche [`reports/rapport-pensee-echecs-attachement.md`](reports/rapport-pensee-echecs-attachement.md) + JSON ; état aligné (B13 166/166).
+
+\## Réserves
+
+- **94 spans non qualifiés** : leurs causes (S, chunker, ou les deux) ne sont pas mesurées.
+- **Le correctif d'union est marginal** (+1) : je l'ai gardé parce qu'il est déterministe et qu'il remplit des segments qui n'avaient aucune cible, mais il ne change pas la donne.
+- **Le GV-phrase** reste entier : sans lexique verbal, la règle ne sait pas choisir le verbe.
+
+\## La suite
+
+1. **Le verbe du GV-phrase** : le vrai correctif des 32 (dans mon territoire).
+2. **Les 94 spans** : qualifier la segmentation.
+3. **Le générateur S** : les passifs (territoire S).
+4. **`master`** : merge + push, seulement si vous le demandez explicitement.
+
+Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 
 ## 3. Travail accompli
 
@@ -9339,7 +9382,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1491 autres
+- … et 1492 autres
 
 ## 4. Mesures et résultats marquants
 
