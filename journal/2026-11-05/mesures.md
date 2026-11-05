@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 09:42 | `f8f5bc04` | B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+18) |
 | 10:18 | `23853cb7` | B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 10:39 | `a408a909` | B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
+| 10:49 | `a048cb83` | B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 
 ## Chiffres du jour
 
@@ -34,6 +35,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-pensee-attachement-cible.md](../../reports/rapport-pensee-attachement-cible.md)
 - [reports/rapport-pensee-denominateur.md](../../reports/rapport-pensee-denominateur.md)
+- [reports/rapport-pensee-echecs-cible.md](../../reports/rapport-pensee-echecs-cible.md)
 - [reports/rapport-pensee-lexique-elargi.md](../../reports/rapport-pensee-lexique-elargi.md)
 - [reports/rapport-pensee-lexique-verbal.md](../../reports/rapport-pensee-lexique-verbal.md)
 - [reports/rapport-pensee-spans.md](../../reports/rapport-pensee-spans.md)

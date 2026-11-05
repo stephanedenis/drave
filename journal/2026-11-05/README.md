@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**56 commits** · **4 session(s)** · **8 thème(s)**
+**57 commits** · **4 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 20 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 7 | [mesures.md](mesures.md) |
+| mesures | 8 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -89,10 +89,15 @@
 | 10:22 | `b63addca` | N2 — CLÔTURE DE L'OBJECTIF : LES QUATRE ITEMS SONT CLOS (RUN LONG, CAPACITÉ, 2 048, UN COMMIT PAR FAIT) |
 | 10:39 | `a408a909` | B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174 |
 | 10:41 | `742cf026` | PILOTAGE — B13 174/174 : ATTACHEMENT SPANS 0,8483 (REL → ANTÉCÉDENT, GP → VERBE) ; PLAN, RAPPORT ET JOURNAL À JOUR |
+| 10:49 | `a048cb83` | B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Fin de l'autonomie (11 h 00).** Un négatif de plus, mesuré et **rejeté** : la règle du
+**GP génitif** (`de la voisine` → le nom qu'il complète) fait baisser l'exact (123 → 122) —
+elle est retirée, le code revient à l'état de `a048cb83`. Les 22 échecs restants sont documentés
+(11 hors candidats, 11 mal classés) ; le prochain levier est le **classement appris**.
 **Suite (10 h 20 → 10 h 45).** Trois rounds de plus : le **classement** (la cible réduite à sa
 tête : exact 0,2260 → 0,6438 ; `d8edd1d9`), les **deux conventions** du gold (verbes vs noms ;
 `f70a1b2a`), l'**attachement ciblé** (REL → antécédent, GP → verbe : exact → 0,8082 ; `23853cb7`),

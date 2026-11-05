@@ -40244,3 +40244,56 @@ docs + pilotage + README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **22 échecs : 11 hors candidats, 11 mal classés** ; fiche\", \" ; échecs 11/11 ; fiche\")\np.write_text(t)\nPY\npython3  … [950 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-392]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-392", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-echecs-cible.json
+ create mode 100644 reports/rapport-pensee-echecs-cible.md
+COMMIT OK 1
+a048cb83 B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175
+jeu 05 nov 2026 10:51:05 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 11 : le GP génitif (« de la voisine » → le nom qu'il complète) — je teste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/bloc_175.py && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                    if not cible and s.get(\"type\") == \"GP\":\n       … [1428 caractères tronqués]`
+
+  ```
+GP génitif testé
+exact 122 | top1 126 | topk 134 | verbes {'cibles': 63, 'justes': 60, 'taux': 0.9524} | noms {'cibles': 82, 'justes': 62, 'taux': 0.7561}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le GP génitif est **négatif** (123 → 122) : je reviens à l'état commité et je clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/bloc_175.py tools/bloc_linguistique.py && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\na=eval … [277 caractères tronqués]`
+
+  ```
+retour : 123 126 134
+--- diff attendu nul ci-dessus ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-05, 11 h 00 HNE\", t)\np.write_text( … [1705 caractères tronqués]`
+
+  ```
+consolidation finale écrite
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ⚠ mandat périmé (537 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md journal/2026-11-05/README.md\n  timeout 240 gi … [589 caractères tronqués]`
