@@ -15,8 +15,8 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-05 09:55 EST
-- **Prochaine action** : le **classement des candidats** (exact 0,2260 sur les spans) ; puis les **14 cibles** hors lexique ; les **REL/SUB** sont chez S.
+- **Heartbeat** : 2026-11-05 10:45 EST
+- **Prochaine action** : les **22 échecs** d'attachement (verbes hors lexique, noms cibles) ; puis **documenter la convention** des cibles ; les **REL/SUB** (81 spans) sont chez S.
   200+** ; la porte stochastique/fenêtre attend une version API (serveur local interdit).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
 - **État** : actif

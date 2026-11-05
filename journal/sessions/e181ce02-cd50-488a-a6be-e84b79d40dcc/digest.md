@@ -40132,3 +40132,50 @@ python3 tools/verifier_schemas.py            EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-lexique-elargi.md reports/pensee-lexique-elargi.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage … [784 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-385]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-385", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-lexique-elargi.json
+ create mode 100644 reports/rapport-pensee-lexique-elargi.md
+COMMIT OK 1
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+2
+jeu 05 nov 2026 10:41:14 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation du pilotage avant la clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '^- \\*\\*Fait\\*\\* : B13' docs/pilotage/en-cours.md | cut -d: -f1),+1p\" docs/pilotage/en-cours.md | cut -c1-260; echo \"=== roadmap :\"; grep -n \"État au 05/11\" docs/pilotage/roadmap.md | cut -c1-260; echo \"= … [174 caractères tronqués]`
+
+  ```
+- **Fait** : B13 **174/174** ; attachement : **exactitude spans 0,8690/0,9241/0,8483** (REL → antécédent, GP → verbe, lexique élargi) ; fiches [attachement ciblé](../../reports/rapport-pensee-attachement-cible.md), [lexique élargi](../../reports/rapport-pensee
+- **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
+=== roadmap :
+38:**État au 05/11 09 h 55.** B13 est à **174/174** ; l'**attachement** est mesuré par proximité + lexique verbal : **rendement 0,4812 / 0,5523 / 0,1381** (÷ 239 cibles) et **exactitude spans 0,7877 / 0,9041 / 0,2260** (÷ 146 segments) ; spans perdus **48 REL,
+=== plan :
+18:- **Heartbeat** : 2026-11-05 09:55 EST
+19:- **Prochaine action** : le **classement des candidats** (exact 0,2260 sur les spans) ; puis les **14 cibles** hors lexique ; les **REL/SUB** sont chez S.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# 1) roadmap\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nvieux_debut=\"**État au 05/11 09 h 55.** B13 est à **174/174** ; l'**attachement** est mesuré par proximité + lexique ve … [2453 caractères tronqués]`
+
+  ```
+roadmap mise à jour
+plan mis à jour
+note du jour complétée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md'); t=p.read_text()\nvieux=\"| `f8f5bc04` | le dénominateur : rendement (÷239) et exactitude spans (÷146) ; 170/170 |\" … [1939 caractères tronqués]`

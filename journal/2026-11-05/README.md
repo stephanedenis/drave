@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**54 commits** · **4 session(s)** · **8 thème(s)**
+**55 commits** · **4 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 19 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 6 | [mesures.md](mesures.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -87,10 +87,16 @@
 | 10:18 | `23853cb7` | B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173 |
 | 10:19 | `88861697` | FENÊTRE 2 048 — MESURÉ : À OCTETS CONSTANTS IL NE BAT PAS 1 024 (+0,05 À 128, +0,01 À 4 000) ; À PAS CONSTANTS IL GAGNE 0,08 À 0,10 |
 | 10:22 | `b63addca` | N2 — CLÔTURE DE L'OBJECTIF : LES QUATRE ITEMS SONT CLOS (RUN LONG, CAPACITÉ, 2 048, UN COMMIT PAR FAIT) |
+| 10:39 | `a408a909` | B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Suite (10 h 20 → 10 h 45).** Trois rounds de plus : le **classement** (la cible réduite à sa
+tête : exact 0,2260 → 0,6438 ; `d8edd1d9`), les **deux conventions** du gold (verbes vs noms ;
+`f70a1b2a`), l'**attachement ciblé** (REL → antécédent, GP → verbe : exact → 0,8082 ; `23853cb7`),
+le **lexique élargi** (participes irréguliers et en -é : exact → 0,8483 ; `a408a909`).
+Négatif consigné : la règle « GV auxiliaire écarté » seule ne change rien (118 = 118).
 **Autonomie B13 (08 h 45 → 12 h 00).** Quatre rounds mesurés :
 le **verbe du GV-phrase** (le POS, exact 0,0586 → 0,0962 ; `9ff4adda`), le **lexique verbal**
 (exact 0,0962 → 0,1381, tête 0,9034 ; `d400e188`), les **spans perdus** (48 REL, 33 SUB, 12 GP ;

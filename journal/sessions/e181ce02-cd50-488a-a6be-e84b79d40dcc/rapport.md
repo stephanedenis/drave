@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 114.0 h |
 | Tours | 175 |
-| Messages | 2302 |
-| Appels d'outils | 2007 |
+| Messages | 2306 |
+| Appels d'outils | 2011 |
 | Fichiers touchés | 25 |
-| Commandes | 1657 |
+| Commandes | 1660 |
 | Sous-agents | 2 |
-| Commits | 240 |
+| Commits | 241 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9369,7 +9369,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*130 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9385,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 93 autres
+- … et 96 autres
 
 **Synthèse produite :**
 
-⏵ 174/174 avec les participes en -é (exact 123) ; j'aligne la fiche et je commite
+⏵ Consolidation du pilotage avant la clôture
 
 ## 3. Travail accompli
 
@@ -9470,7 +9470,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1617 autres
+- … et 1620 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9858,4 +9858,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172" -- tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py 
 - B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173" -- tools/bloc_linguistique.py tools/pensee/autotest.p
 - B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapp
+- PILOTAGE — B13 174/174 : ATTACHEMENT SPANS 0,8483 (REL → ANTÉCÉDENT, GP → VERBE) ; PLAN, RAPPORT ET JOURNAL À JOUR" -- docs/pilotage/roadmap.md docs/pilotage/en
 

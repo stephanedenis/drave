@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,10 +14,11 @@
 | 09:35 | `13e8bb2d` | B13 — LES SPANS PERDUS : 48 REL, 33 SUB, 12 GP (81 CHEZ S) ; LE GP EST BORNÉ AU VERBE ; 169/169 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 | 09:42 | `f8f5bc04` | B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+18) |
 | 10:18 | `23853cb7` | B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 10:39 | `a408a909` | B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 
 ## Chiffres du jour
 
-`0,6438` · `0,8082` · `0,9412` · `÷239` · `÷146` · `0,7877` · `0,9041` · `0,2260` · `0,0962` · `0,1381` · `0,9034` · `0,0586`
+`0,8082` · `0,8483` · `0,6438` · `0,9412` · `÷239` · `÷146` · `0,7877` · `0,9041` · `0,2260` · `0,0962` · `0,1381` · `0,9034`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -33,6 +34,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-pensee-attachement-cible.md](../../reports/rapport-pensee-attachement-cible.md)
 - [reports/rapport-pensee-denominateur.md](../../reports/rapport-pensee-denominateur.md)
+- [reports/rapport-pensee-lexique-elargi.md](../../reports/rapport-pensee-lexique-elargi.md)
 - [reports/rapport-pensee-lexique-verbal.md](../../reports/rapport-pensee-lexique-verbal.md)
 - [reports/rapport-pensee-spans.md](../../reports/rapport-pensee-spans.md)
 - [reports/rapport-pensee-verbe-gv.md](../../reports/rapport-pensee-verbe-gv.md)
