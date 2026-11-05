@@ -31079,3 +31079,150 @@ ligne N2 resserrée
 ⏵ Cycle 219 : budget regagné (T0 3 957, en-cours 1 587) ; je commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h219.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h219.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [944 caractères tronqués]`
+
+  ```
+heure 23 h 22
+[s/v7 b3cfbe1f] ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02
+ 13 files changed, 158 insertions(+), 24 deletions(-)
+b3cfbe1f ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02
+b513911b ÉTAT — N2 PASSE EN PAUSE (SESSION ET CHANTIER) ; RUN FINI ; HEURE 04 H 57
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 219 : vérification finale des portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -1 ; python3 tools/verifie_en_cours.py 2>&1 | tail -1 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [185 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3957 mots (budget 4 000)
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ la page vivante date du dernier commit (2026-11-04)
+**Mis à jour : 2026-11-04, 23 h 22 HNE (heure locale, EST).**
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 219 : état resserré, budget regagné, portes vertes, heure 23 h 22
+
+**Cycle 219 — le budget de l'état respire à nouveau.**
+
+- **Ligne N2 resserrée** (`b3cfbe1f`) : ses chiffres de distillation doublonnaient son bilan et celui de 15 h ; ils restent une fois, la ligne pointe vers le bilan et garde les faits du **2 048** et la prochaine action (**porte propre 0,29**).
+- **Budgets** : **T0 3 957 / 4 000** (33 mots regagnés), `en-cours` **1 587 mots** ✅.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 070 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅.
+- **2 048 fini**, deux drvm ; **GPUs à 0 %** ; **B13 166/166**, D **62 documents**, sur **`s/v7`** ; N2, S et OCR en pause, B13 et L actives.
+
+**Le goal reste actif** : la porte propre de N2, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 225
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 220/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 220 : audit et recherche de « en cours » périmés dans le pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -4 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+b3cfbe1f ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02
+b513911b ÉTAT — N2 PASSE EN PAUSE (SESSION ET CHANTIER) ; RUN FINI ; HEURE 04 H 57
+cbbea4a2 COHÉRENCE — LE 2 048 EST FINI PARTOUT ; B13 À 166 ; HEURE 04 H 52
+1d95d1e1 ÉTAT — HEURE 04 H 47 ; INDEX 625, 2 048 FINI, B13 166/166, D 62
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 483 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 695 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 415 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2023 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/READM
+… [305 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [174 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1587 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3957 mots (budget 4 000)
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"en cours\\|clôture en cours\\|à clore\" docs/pilotage/plan-travail.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/en-cours.md | head -12", "description": "Grep in-progress claims"}`
+
+  ```
+docs/pilotage/plan-travail.md:38:| **N2 — le natif (session `0733c5bb`)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1 Go, 60 k pas) : **3,49 / 6,03** — production ; **200 k pas** : val_fr **3,16**, littérature **5,61**, anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées** ; fiche + clôture en cours. |
+docs/pilotage/plan-travail.md:335:| N2 `0733c5bb` | `gpu0`, `cpu0` 12, `ram` 60 | R1.2-1024 en cours ; node 0 |
+docs/pilotage/plan-travail.md:341:**La passe complète en cours** (`work/portes/passe-1102-19h32`, lancée 19 h 32 avec
+docs/pilotage/roadmap.md:15:- **Les états** : ✅ mesuré et écrit · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+docs/pilotage/roadmap.md:133:*Lecture : vert = mesuré/close, orange = en cours/partiel, rouge = bloqué, violet = négatif, gris = gelé.
+docs/pilotage/chantiers.md:24:| 30/10 21 h 47 | « tu es la seule session active. termine les chantiers en cours » | clôture de R0.4, R0.5, R13 ; consolidation de l'état |
+docs/pilotage/en-cours.md:22:## Sessions en cours
+docs/pilotage/en-cours.md:92:
+… [22 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 220 : deux mentions du plan-travail sont périmées (clôture N2, ressources) ; je lis le contexte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '326,342p' docs/pilotage/plan-travail.md", "description": "Read resources table context"}`
+
+  ```
+### 10.7 La nuit du 02/11 → 03/11 (08 h)
+
+**Consigne.** Les quatre sessions actives restent productives jusqu'à 08 h ; aucune n'attend.
+Les claims actifs (02/11 20 h) :
+
+| session | claim | remarque |
+|---|---|---|
+| N2 `0733c5bb` | `gpu0`, `cpu0` 12, `ram` 60 | R1.2-1024 en cours ; node 0 |
+| hub `536cd5d6` | `gpu1`, `cpu1` 8, `ram` 8 | passe de portes ; node 1 |
+| S `29ad180d` | `cpu1` 4, `ram` 8 | homographes/lexique, h033, gold |
+| Pensée `e181ce02` | `cpu1` 4, `ram` 16 | gold 200+, porte mobile |
+| D/R/A `fe3c05f0` | close | place `cpu1` 2 libre si on la rouvre |
+
+**La passe complète en cours** (`work/portes/passe-1102-19h32`, lancée 19 h 32 avec
+`CUDA_VISIBLE_DEVICES=1,0`) est une **exception** : elle partage GPU0 avec N2 (ralentissement
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 220 : je corrige la ligne N2 du plan-travail (2 048 fini, porte propre)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nold=\"**R1.1/R1.2 mesurées** ; fiche + clôture en cours. |\"\nnew=\"**R1.1/R1.2 mesurées** ; **2 048 fini** (2×10 000 pas) ; prochaine … [413 caractères tronqués]`
+
+  ```
+ligne N2 du plan-travail corrigée
+| **N2 — le natif (session `0733c5bb`)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnê
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  T0 max : 3957 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 220 : je commit la correction du plan-travail avec l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h220.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h220.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [915 caractères tronqués]`
