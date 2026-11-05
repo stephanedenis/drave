@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 17.2 h |
-| Tours | 246 |
-| Messages | 1367 |
-| Appels d'outils | 1386 |
+| Tours | 247 |
+| Messages | 1373 |
+| Appels d'outils | 1391 |
 | Fichiers touchés | 15 |
-| Commandes | 1199 |
+| Commandes | 1204 |
 | Sous-agents | 0 |
-| Commits | 266 |
+| Commits | 267 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -515,6 +515,8 @@
 **Tour 245** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 246** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 247** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6090,7 +6092,29 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 241 : je mesure homeostasie et commit l'état
+⏵ Cycle 241 : homeostasie à 8 min 31 (dernière passe 495 s), registre 28/83 sans non-zéro
+
+**Cycle 241 — la porte longue dépasse sa durée habituelle, sans casser la borne.**
+
+- **`porte-homeostasie`** : **8 min 31** d'écoulé (dernière passe : 495 s) ; elle tourne toujours, sous la borne de **30 min**. Le registre reste à **28 entrées**, toutes nulles.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 610 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe (homeostasie puis indice, les deux longues), puis les faits B13/S.
+
+### Tour 247 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check homeostasie
+- bash — Check homeostasie log growth
+- bash — Inspect homeostasie children and memory
+- bash — Commit state with homeostasie evidence
+
+**Synthèse produite :**
+
+⏵ Cycle 242 : homeostasie calcule (8 threads, 3e variante ×1,0) ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6156,7 +6180,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1159 autres
+- … et 1164 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6570,4 +6594,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — PASSE 28/83 (HARNAIS-INVARIANTS 126 S), ZÉRO ROUGE ; HEURE 00 H 34" -m "Le registre compte 28 entrées toutes nulles : greffe (840 s) et harnais-invariant
 - ÉTAT — HEURE 00 H 37 ; PASSE 28/83, HOMEOSTASIE À 5 MIN, ZÉRO NON-ZÉRO" -m "Le registre reste à 28 entrées toutes nulles ; porte-homeostasie (connue longue) tou
 - ÉTAT — HEURE 00 H 40 ; HOMEOSTASIE TOURNE (≈8 MIN), REGISTRE 28/83 SANS NON-ZÉRO" -m "Le registre reste à 28 entrées toutes nulles ; homeostasie approche de sa 
+- ÉTAT — HEURE 00 H 44 ; HOMEOSTASIE CALCULE (3e VARIANTE ×1,0, 8 THREADS)" -m "La porte n'est pas pendue : elle a déjà écrit ses points 1 et 2 (×0 rend le modèle
 
