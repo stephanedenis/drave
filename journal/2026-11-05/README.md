@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**25 commits** · **1 session(s)** · **6 thème(s)**
+**26 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 2 | [distribue.md](distribue.md) |
+| distribue | 3 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 17.9 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.0 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -53,6 +53,7 @@
 | 01:13 | `fbd294b5` | ÉTAT — PASSE 60/83 : LES DEUX ROUGES TOLÉRÉES SONT LÀ (INDICE, MÉLANGE) ; LECTEUR CORRIGÉE ; HEURE 01 H 12 |
 | 01:16 | `2086ea4b` | ÉTAT — HEURE 01 H 16 ; LA PASSE AVANCE (n3-sparsite, OCCUPATIONS) SANS NOUVELLE ROUGE |
 | 01:18 | `8bb43aba` | ÉTAT — HEURE 01 H 19 ; PASSE 62 JOURNAUX, OCR-SCANS VERTE (529 S), AUCUNE NOUVELLE ROUGE |
+| 01:21 | `d2a351d2` | ÉTAT — HEURE 01 H 22 ; PASSE 65 JOURNAUX, PANNES ET PÉRIPHÉRIE VERTES |
 
 ## Le récit de la journée (écrit à la main)
 
