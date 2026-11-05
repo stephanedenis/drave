@@ -1,0 +1,65 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "181/181",
+ "chunker": {
+  "repetitions": [
+   10,
+   20,
+   40,
+   80,
+   160
+  ],
+  "avant_ms": [
+   47.8,
+   152.9,
+   617.8,
+   2609.5,
+   9817.7
+  ],
+  "apres_ms": [
+   4.9,
+   9.8,
+   17.9,
+   34.5,
+   70.8
+  ],
+  "facteurs": [
+   9.8,
+   15.6,
+   34.5,
+   75.6,
+   138.7
+  ]
+ },
+ "defaut": {
+  "repetitions": [
+   20,
+   80,
+   160
+  ],
+  "avant_ms": [
+   157.5,
+   157.3,
+   426.3
+  ],
+  "apres_ms": [
+   27.1,
+   151.2,
+   419.6
+  ],
+  "facteurs": [
+   5.8,
+   1.0,
+   1.0
+  ],
+  "note": "S domine : _cibles_s rappelle _segmente"
+ },
+ "egalite": "0 différence sur 612 phrases, tous champs",
+ "appels": "1+2S → 1 par analyse",
+ "limites": [
+  "banc à phrases répétées",
+  "S non optimisé",
+  "tri par segment restant"
+ ]
+}

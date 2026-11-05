@@ -2,8 +2,9 @@
 
 > **Date** : 2026-11-05 · **Instantané** : [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py)
 > sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65`, commit
-> `e1171032` (branche `s/v7`, arbre de travail modifié) · **Verdict** : ✅ **le O(n²) est
-> confirmé** ; le cache « un chunking + un verbe de GV par analyse » divise le temps par
+> `9d5337ce` (branche `s/v7` ; le fichier mesuré y est committé ; il était encore modifié
+> dans l'arbre au moment du banc) · **Verdict** : ✅ **le O(n²) est confirmé** ;
+> le cache « un chunking + un verbe de GV par analyse » divise le temps par
 > **11,6 à 160 tokens** et **16,9 à 320** sur le chemin chunker seul, par **2,0 / 2,4** sur le
 > chemin par défaut ; **mais** il ne rend pas la complexité strictement linéaire (le tri des GV
 > par segment reste) et il ne gagne presque rien sur le corpus court.
@@ -50,10 +51,11 @@ Les deux chemins sont mesurés séparément, parce qu'ils ne disent pas la même
 
 ## 2. Protocole
 
-- **Instantané** : `tools/bloc_linguistique.py` sha256 `6e843018…`, commit `e1171032`, branche
-  `s/v7`. Le fichier porte des modifications non committées (règles d'attachement récentes,
-  dont `_tete_texte` et `_cible_s_par_genre`) ; le hash a été **revérifié identique après le
-  banc**. Tous les numéros de ligne cités sont ceux de cet instantané.
+- **Instantané** : `tools/bloc_linguistique.py` sha256 `6e843018…`, commit `9d5337ce`, branche
+  `s/v7`. Le fichier mesuré y est committé ; au moment du banc il était encore modifié dans
+  l'arbre, au-dessus de `e1171032` (règles d'attachement récentes, dont `_tete_texte` et
+  `_cible_s_par_genre`). Le hash a été **revérifié identique après le banc** et correspond au
+  contenu de `HEAD`. Tous les numéros de ligne cités sont ceux de cet instantané.
 - **Corpus** : `evaluer_gold.charger()` = 20 « hand » + 432 réelles + 160 synthétiques = **612
   phrases** (402 fr, 210 en), **3 179 mots gold**, **16 371 caractères**, **6,13 tokens
   `_mots`/phrase**, **1,10 segment simple** et **0,186 GV** par phrase en moyenne.
@@ -85,7 +87,7 @@ Les deux chemins sont mesurés séparément, parce qu'ils ne disent pas la même
 
 Mesure ciblée 11 passes. Le banc complet (7 passes) donne 230,6 → 189,4 ms (×1,22) en chunker
 et 385,1 → 396,0 ms (×0,97) en défaut : les deux passages encadrent le bruit de la machine.
-**Le gain corpus est donc faible et non monotone** — ×1,18-1,22 en chunker, ×0,97-1,07 en
+**Le gain corpus est donc faible et variable** — ×1,18-1,22 en chunker, ×0,97-1,07 en
 défaut. Les phrases du gold font 6,1 tokens : le terme quadratique n'a pas le temps de mordre.
 Sur le corpus chunker, V1 (×1,20) fait même un peu mieux que V2 (×1,18) : le cache des verbes
 de GV coûte plus qu'il ne rapporte quand il n'y a que 0,32 appel `_verbe_dans` par phrase.
@@ -354,11 +356,10 @@ n'est donc ni un changement d'algorithme déguisé, ni un artefact de la mesure.
 - **Bruit de mesure.** Xeon E5-2687W v3 partagé, 40 cœurs, temps CPU, 3 à 11 passes. L'OFF
   varie de ×0,90 à ×1,13 selon le point ; lire les facteurs à ±10 % près. Le point 320
   chunker (×18,9 dans une passe antérieure, ×16,9 ici) illustre cette enveloppe.
-- **Instantané de travail.** Le fichier mesuré était modifié (sha256 `6e8430…`, commit
-  `e1171032`) et a changé pendant la préparation (`d9c9d5…` → `6e8430…`). Toutes les mesures
-  et lignes citées portent sur `6e8430…`, revérifié après le banc ; une édition ultérieure
-  invalide les numéros de ligne. Les règles récentes `_tete_texte` et `_cible_s_par_genre`
-  sont incluses dans les temps du chemin défaut.
+- **Instantané de travail.** Le fichier mesuré a changé pendant la préparation (`d9c9d5…` →
+  `6e8430…`) puis a été committé dans `9d5337ce` ; les mesures portent sur `6e8430…`, qui est
+  le contenu de `HEAD`. Une édition ultérieure invalide les numéros de ligne. Les règles
+  récentes `_tete_texte` et `_cible_s_par_genre` sont incluses dans les temps du chemin défaut.
 - **Prototype ≠ patch.** V2 est une sous-classe du banc, pas le patch réel. L'égalité
   612/612 + 10/10 est un contrôle fort, mais le patch hoisté doit être appliqué puis repassé
   par la porte du bloc et une nouvelle mesure.
@@ -371,9 +372,9 @@ n'est donc ni un changement d'algorithme déguisé, ni un artefact de la mesure.
 
 ## 9. Conclusion
 
-- **Le O(n²) est réel, et il y en a deux.** Sur le chemin
-  chunker seul, c'est bien le re-chunking par segment (1+2·S appels) qui domine : le cache le
-  supprime et donne **×11,6 à 160 tokens, ×16,9 à 320, ×33 à 1 280**. Sur le chemin par défaut,
+- **Le O(n²) est réel, et il y en a deux.** Sur le chemin chunker seul, c'est bien le
+  re-chunking par segment (1+2·S appels) qui domine : le cache le supprime et donne
+  **×11,6 à 160 tokens, ×16,9 à 320, ×33 à 1 280**. Sur le chemin par défaut,
   le re-chunking est du code mort ; le coût est le **re-scan des GV par `_verbe_dans`**
   (2 320 appels pour 32 GV à 160), que le cache des verbes ramène aux GV distincts : **×2,0 à
   160, ×2,4 à 320**, plateau ×3,3-3,6 ensuite.
@@ -385,5 +386,5 @@ n'est donc ni un changement d'algorithme déguisé, ni un artefact de la mesure.
   ×1,18-1,22 (chunker) et ×0,97-1,07 (défaut). Le chantier suivant, si la linéarité devient
   l'objectif, est l'index pré-trié des GV — avec un vrai contrôle d'égalité sur les
   recouvrements, car le prototype V3 a échoué 1 fois sur 612.
-- **Aucun fichier existant n'a été modifié par cette mission ; aucun commit n'a été fait.** Les deux livrables
-  sont cette fiche et [`pensee-cout-chunker.json`](pensee-cout-chunker.json).
+- **Aucun fichier existant n'a été modifié par cette mission ; aucun commit n'a été fait.**
+  Les deux livrables sont cette fiche et [`pensee-cout-chunker.json`](pensee-cout-chunker.json).

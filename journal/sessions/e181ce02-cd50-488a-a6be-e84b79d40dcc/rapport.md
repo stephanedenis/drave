@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 117.7 h |
+| Durée | 118.0 h |
 | Tours | 176 |
-| Messages | 2433 |
-| Appels d'outils | 2134 |
+| Messages | 2449 |
+| Appels d'outils | 2147 |
 | Fichiers touchés | 25 |
-| Commandes | 1755 |
+| Commandes | 1767 |
 | Sous-agents | 13 |
-| Commits | 255 |
+| Commits | 256 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*91 appels d'outils.* Actions notables :
+*104 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 69 autres
+- … et 81 autres
 
 **Synthèse produite :**
 
-⏵ Vague 3 : quatre sous-agents (audit v2, 8 échecs, cible vide, cache du chunker)
+⏵ Le cache est complet (égalité 0/612) ; en défaut le coût restant est chez S. Je fige et je commite
 
 ## 3. Travail accompli
 
@@ -9550,7 +9550,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1715 autres
+- … et 1727 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9678,7 +9678,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-33 sorties en erreur ou divergentes. Les premières :
+34 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -9953,4 +9953,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES" -- reports/rapport-contrat-s.md reports/pensee-contrat-s
 - B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES" -- reports/rapport-contrat-s.md reports/pensee-contrat-s
 - ÉTAT — B13 180/180, T0 DANS LE BUDGET ; VAGUE 3 LANCÉE (AUDIT V2, ÉCHECS, REPLIS, CACHE)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='
+- B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181" -- tools/bloc_linguistique.py tools/te
 

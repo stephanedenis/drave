@@ -292,3 +292,386 @@ s/v7
 … [676 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py</path>
+<type>file</type>
+<content>
+1: """evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) + synthétique (160).
+2: 
+3: Trois niveaux : POS (token, exact), syntagmes (exact + **par tête**), pragmatique. Quatre
+4: lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+5: (`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+6: """
+7: from __future__ import annotations
+8: 
+9: import argparse
+10: import json
+11: import pathlib
+12: import sys
+13: from collections import Counter, defaultdict
+14: 
+15: RACINE = pathlib.Path(__file__).resolve().parents[3]
+16: sys.path.insert(0, str(RACINE / "tools"))
+17: import bloc_linguistique as bl  # noqa: E402
+18: 
+19: GOLD = pathlib.Path(__file__).with_name("gold.json")
+20: REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+21: SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
+22: 
+23: 
+24: def charger() -> list[dict]:
+25:     hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+26:     reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
+27:     synth = json.
+… [14748 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique && ls -la gold*.json && python3 -c \"\nimport json\nfor f in ('gold.json','gold_reel.json','gold_synthetique.json'):\n    d=json.loads(open(f,encoding='utf-8').read())\n    print(f, list(d.keys()), len(d['phrase … [146 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 450905  2 nov 13:27 gold_gele.json
+-rw-r--r--. 1 stephane stephane  20009  5 nov 14:14 gold.json
+-rw-r--r--. 1 stephane stephane 470149  2 nov 14:39 gold_reel.json
+-rw-r--r--. 1 stephane stephane 149191  2 nov 12:04 gold_synthetique.json
+gold.json ['version', 'phrases', 'note'] 20
+{"id": "g001", "langue": "fr", "texte": "Le chat dort.", "mots": [{"texte": "Le", "pos": "DET", "debut": 0, "fin": 2}, {"texte": "chat", "pos": "NOUN", "debut": 3, "fin": 7}, {"texte": "dort", "pos": "VERB", "debut": 8, "fin": 12}], "segments": [{"type": "GN", "texte": "Le chat", "role": "agent", "debut": 0, "fin": 7}, {"type": "GV", "texte": "dort", "role": "prédicat", "debut": 8, "fin": 12}], "pragma": {"acte": "assertion"}}
+
+gold_reel.json ['version', 'source', 'note', 'phrases'] 432
+{"id": "r001", "langue": "fr", "texte": "Le chien mange une pomme.", "mots": [{"texte": "Le", "pos": "DET", "debut": 0, "fin": 2}, {"texte": "chien", "pos": "NOUN", "debut": 3, "fin": 8}, {"texte": "mange", "pos": "VERB", "debut": 9, "fin": 14}, {"texte": "une", "pos": "DET", "debut": 15, "fin": 18}, {"texte": "pomme", "pos": "NOUN", "debut": 19, "fin": 24}], "segments": [{"type": "GN", "tex
+… [1042 caractères tronqués]
+  ```
+
+- **bash** `{"command": "mkdir -p /tmp/ech && cat > /tmp/ech/find8.py <<'PY'\nimport json, pathlib, sys\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\"))\nsys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique a … [2388 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/ech/find8.py", line 36, in <module>
+    "tous_segments": [{"type": x.type, "d": x.debut, "f": x.fin, "t": x.texte,
+                                                                      ^^^^^^^
+AttributeError: 'Etiquette' object has no attribute 'texte'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/\"t\": x.texte,/\"t\": phrase[\"texte\"][x.debut:x.fin],/' /tmp/ech/find8.py && python3 /tmp/ech/find8.py 2>&1 | tail -100", "description": "Rerun reproduction script"}`
+
+  ```
+{"cibles": 239, "labels": 145, "exact": 137}
+NB ECHECS: 8
+====================================================================================================
+g002 hand fr | Le chat de la voisine dort.
+  SEG: {'type': 'GP', 'texte': 'de la voisine', 'debut': 8, 'fin': 21, 'role': 'possession', 'cibles': ['chat'], 'cible': 'chat'}
+  CHOISI: '' | CANDIDATS: ['GP']
+  META: {}
+====================================================================================================
+g012 hand fr | Le canard est prêt à manger.
+  SEG: {'type': 'GP', 'texte': 'à manger', 'debut': 19, 'fin': 27, 'role': 'but', 'cibles': ['prêt', 'canard'], 'cible': 'prêt'}
+  CHOISI: 'manger' | CANDIDATS: ['« à manger » → Le canard', '« à manger » → est prêt', 'manger', 'est', 'canard', 'prêt']
+  META: {"segment": "à manger", "cible": "manger"}
+====================================================================================================
+r018 reel fr | La souris est prête à manger.
+  SEG: {'type': 'GP', 'texte': 'à manger', 'debut': 20, 'fin': 28, 'role': 'but', 'cibles': ['prête', 'souris'], 'cible': 'prête'}
+  CHOISI: 'manger' | CANDIDATS: ['« à manger » → La souris', '« à manger » → est prête', 'manger', 
+… [2127 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attachement\\|candidat\\|_cible\\|cible\" tools/bloc_linguistique.py | head -120", "description": "Locate attachment logic lines"}`
+
+  ```
+7:    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+19:`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script` et ses `candidats`.
+76:    candidats: list[str] = field(default_factory=list)
+86:            "candidats": list(self.candidats), "langue": self.langue,
+602:    def _cibles_s(self, texte: str) -> dict:
+603:        """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+606:        `cible_nom`/`cible_gp`/`cible_verbe`. Le défaut retenu est la cible la plus proche
+607:        (GP, puis GN, puis GV), comme le premier candidat de `analyser`.
+614:            return {(s.debut, s.fin, s.type): (s.cible_gp or s.cible_nom or s.cible_verbe)
+621:        """La tête d'un texte de candidat : le verbe plein s'il y en a un, sinon le dernier mot.
+661:    def _cible_proche(texte: str, segment: dict, gvs: list[dict],
+663:        """La cible d'un segment : le **verbe du GV le plus proche** (règle de proximité).
+678:        # un GV réduit à l'auxiliaire (« a », « est ») ne donne pas la cible : on prend le
+690:        """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
+707:    def _cible_s_par_ge
+… [4913 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 540, "limit": 380}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+540:     def _negation(phrase: str) -> bool:
+541:         return bool(re.search(r"\b(?:ne|n['’])\b.{0,40}\b(?:pas|plus|jamais|rien|guère)\b", phrase, re.I)
+542:                     or re.search(r"\b(?:not|no|never|none|nothing|n't)\b", phrase, re.I))
+543: 
+544:     @staticmethod
+545:     def _modalite(phrase: str) -> bool:
+546:         return bool(re.search(r"\b(?:peut|peuvent|peux|pouvons|pouvez|doit|doivent|devons|devez|"
+547:                               r"pourrait|pourraient|pourrais|devrait|devraient|voudrais|voudrait|"
+548:                               r"faut|falloir|might|may|must|should|could|would|can)\b", phrase, re.I))
+549: 
+550:     # -- POS ----------------------------------------------------------------
+551:     def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+552:         lex = POS_FERME.get(langue, POS_FERME["fr"])
+553:         n = _normaliser(mot).split("'")[0].split("’")[0]
+554:         for classe, mots in lex.items():
+555:             if n in mots:
+556:                 return classe, False, 0.92
+557:         if n in VERBES.get(lan
+… [21461 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/ech/trace.py <<'PY'\nimport json, pathlib, sys\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\"))\nimport bloc_linguistique as bl\n\nCAS = {\n \"g002\": \"Le chat de la voisine dort.\",\n \"g012\": \"Le canar … [1548 caractères tronqués]`
+
+  ```
+====================================================================================================
+g002 | Le chat de la voisine dort.
+  S cands (nb): 1
+   cand 0 nom= '« de la voisine dort » → Le chat'
+       GN (0, 7) 'Le chat' role= agent att= None
+       GP (8, 26) 'de la voisine dort' role= possession att= None
+  cibles_s: {(0, 7, 'GN'): None, (8, 26, 'GP'): 'Le chat'}
+  simple: [('GN', 0, 7, 'Le chat'), ('GP', 8, 21, 'de la voisine')]
+  verbes POS: [(22, 26, 'dort')]
+  gvs_simple: []
+====================================================================================================
+g012 | Le canard est prêt à manger.
+  S cands (nb): 2
+   cand 0 nom= '« à manger » → Le canard'
+       GN (0, 9) 'Le canard' role= agent att= None
+       GV (10, 18) 'est prêt' role= predicat att= None
+       GP (19, 27) 'à manger' role= but att= None
+   cand 1 nom= '« à manger » → est prêt'
+       GN (0, 9) 'Le canard' role= agent att= None
+       GV (10, 18) 'est prêt' role= predicat att= None
+       GP (19, 27) 'à manger' role= but att= None
+  cibles_s: {(0, 9, 'GN'): None, (10, 18, 'GV'): 'Le canard', (19, 27, 'GP'): 'Le canard'}
+  simple: [('GN', 0, 9, 'Le canard'), ('GV', 10, 27, 'est prêt 
+… [3509 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/ech/labels.py <<'PY'\nimport json, pathlib, sys\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\"))\nsys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl\nCAS = [\"g002\ … [1096 caractères tronqués]`
+
+  ```
+==============================================================================================================
+g002 | Le chat de la voisine dort.
+  gold segments:
+     GN (0, 7) 'Le chat' cible= None cibles= None
+     GP (8, 21) 'de la voisine' cible= 'chat' cibles= ['chat']
+     GV (22, 26) 'dort' cible= None cibles= None
+  pred syntagmes:
+     GN (0, 7) 'Le chat' conf= 0.55 att= None cand= ['« de la voisine dort » → Le chat', 'chat']
+     GP (8, 21) 'de la voisine' conf= 0.3 att= None cand= ['GP']
+     GP (8, 26) 'de la voisine dort' conf= 0.55 att= {'segment': 'de la voisine dort', 'cible': 'chat'} cand= ['« de la voisine dort » → Le chat', 'chat']
+  pred pos: [('DET', 'Le', 0, 2), ('NOUN', 'chat', 3, 7), ('PREP', 'de', 8, 10), ('DET', 'la', 11, 13), ('NOUN', 'voisine', 14, 21), ('VERB', 'dort', 22, 26)]
+==============================================================================================================
+g012 | Le canard est prêt à manger.
+  gold segments:
+     GN (0, 9) 'Le canard' cible= None cibles= None
+     GV (10, 18) 'est prêt' cible= None cibles= None
+     GP (19, 27) 'à manger' cible= 'prêt' cibles= ['prêt', 'canard']
+  pred syntagmes:
+     GN (0, 9) 'Le canard
+… [5617 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^VERBES\\|^AUXILIAIRES\\|^ADJECTIFS\\|^RELATIFS\\|def _est_verbe\\|^POS_FERME\\|VERBES =\" tools/bloc_linguistique.py | head -20 && echo \"---\" && sed -n '/def _est_verbe/,/^def /p' tools/bloc_linguistique.py | head -40",  … [55 caractères tronqués]`
+
+  ```
+298:POS_FERME = {
+319:VERBES = {
+340:ADJECTIFS = {
+367:RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "whose"}
+369:VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
+374:VERBES_CONNUS = set("""
+422:AUXILIAIRES = set("""
+431:def _est_verbe(mot: str) -> bool:
+---
+def _est_verbe(mot: str) -> bool:
+    """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+    n = _normaliser(mot)
+    if not n:
+        return False
+    if n in VERBES_CONNUS:
+        return True
+    for suf in ("er", "ir", "e", "es", "ent", "ait", "aient", "é", "ée", "és", "i", "u",
+                "ez", "ons", "iez", "ais", "ra", "rai", "ras", "rons", "rez", "ront",
+                "s", "ed", "ing", "en"):
+        if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+            return True
+    # participes en -é/-és/-ée : `accroché` → `accrocher`
+    for suf in ("ées", "ées", "ée", "és", "é"):
+        if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
+            return True
+    return False
+
+
+def _role_gp(prep: str) -> str:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '298,445p' tools/bloc_linguistique.py", "description": "Read lexicons"}`
+
+  ```
+POS_FERME = {
+    "fr": {
+        "DET": set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs quel quelle quels quelles".split()),
+        "PREP": set("à a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis pendant durant contre malgré selon près loin devant derrière après avant".split()),
+        "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split()),
+        "CONJ": set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant qu".split()),
+        "AUX": set("est sont était étaient été être ai as a avons avez ont avait avaient eu avoir suis es sommes êtes".split()),
+        "ADV": set("ne n pas plus jamais rien très bien mal ici hier demain aujourd'hui peut-être fort souvent toujours déjà encore tard tôt ainsi alors aussi".split()),
+        "NUM": set("deux trois quatre cinq six sept huit neuf dix".split()),
+    },
+    "en": {
+        "DET": set("the a an this that these those my your his her its our their".split()),
+        "PREP": set("of to in on at by with from for about into over under between through during w
+… [9759 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-echecs-attachement.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-echecs-attachement.md</path>
+<type>file</type>
+<content>
+1: # B13 — les 127 échecs qualifiés : 94 de span, 33 de cible
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+4: > **166/166 portes** : les **127 échecs** de l'attachement (avant ce round) se répartissent en
+5: > **94 de span** (aucun segment prédit au même span) et **33 de cible** (le span est bon, la cible
+6: > n'est pas dans les candidats) — **32** après le correctif. Le correctif testé — ajouter les GV du chunker aux GV du générateur S et
+7: > remplir les segments d'union — ne répare **qu'un** des 33. Les 32 autres ont un GV qui couvre
+8: > **toute la phrase** : le dernier token n'est pas le verbe (`… in the park` → `park`, pas `saw`).
+9: >
+10: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-echecs-attachement.json`](pensee-echecs-attachement.json).
+13: 
+14: ## 1. La répartition
+15: 
+16: | cause | nombre | part |
+17: |---|
+… [2625 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"r230\\|r309\\|appelle-moi\\|Peut-être qu\" reports/ docs/ journal/ tools/tests/linguistique/ 2>/dev/null | head -40", "description": "Grep for r230/r309 references"}`
+
+  ```
+reports/pensee-topk-diagnostic.json:152:   "raison": "Le candidat est `appelle-moi`, la cible est la base verbale `appelle` : le trait d'union n'est pas découpé.",
+reports/pensee-topk-diagnostic.json:164:    "r230 · SUB « Quand tu arrives » → appelle"
+reports/pensee-topk-diagnostic.json:182:    "r309 · SUB « qu'il viendra » → viendra"
+reports/pensee-topk-diagnostic.json:219:   "detail": "(a) pour un GP, ajouter la tête du GN à gauche (`_tete_nom`) ; (b) si aucun GV, balayer les verbes reconnus dans une fenêtre autour du segment ; (c) découper les enclitiques (`appelle-moi` → `appelle`) ; (d) compléter VERBES_CONNUS (`marche`, `appelle`, `viendra`).",
+reports/pensee-topk-diagnostic.json:836:   "id": "r230",
+reports/pensee-topk-diagnostic.json:842:   "cible_choisie": "appelle-moi",
+reports/pensee-topk-diagnostic.json:845:    "appelle-moi"
+reports/pensee-topk-diagnostic.json:850:   "raison_detail": "Le candidat est `appelle-moi`, la cible est la base verbale `appelle` : le trait d'union n'est pas découpé.",
+reports/pensee-topk-diagnostic.json:1071:   "id": "r309",
+reports/rapport-topk-diagnostic.md:56:| C7 | **candidat tokenisé avec enclitique** (`appelle-moi`) | 1 | 1 | SUB 1 | reel 
+… [3393 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-diagnostic.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-diagnostic.md</path>
+<type>file</type>
+<content>
+1: # B13 — le top-k strict de l'attachement : 57 échecs, dont 45 d'emballage
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+4: > **Verdict** : ✅ **les 57 échecs du top-k strict sont qualifiés** (0 « autre »). Sur les
+5: > **145 segments gold dont le span est prédit**, la cible est dans les candidats **134 fois en
+6: > sous-chaîne** (0,9241) mais **88 fois en égalité exacte** (0,6069) : **57 échecs**. **45** sont
+7: > des **candidats du générateur S non réduits à leur tête** — la cible est déjà dans la chaîne
+8: > « « segment » → … », il suffit d'en extraire la tête ; **8** sont des **verbes anglais hors
+9: > lexique** ; **4** sont de la **couverture locale** (génitif, enclitique, GV mal délimité).
+10: > Le **top-1 est déjà juste 41 fois sur 57** : le top-k strict mesure surtout l'**emballage** des
+11: > candidats, pas le choix de la cible. Trois correctifs **simulés, non appliqués**, couvrent
+12: > **45 + 8 + 4 = 57** — borne haute, mesurée sur le même gold.
+13: >
+14: > **Dispositif** : [`bloc_linguistique.py`](..
+… [12662 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Construit un harnais de mesure des règles (sans toucher au code)
+
+- **bash** `{"command": "cat > /tmp/ech/harness.py <<'PY'\nimport json, pathlib, sys, re\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\"))\nsys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl\nimport ev … [3772 caractères tronqués]`
+
+  ```
+labels: 145 exact: 137
+par type: Counter({'GP': 83, 'SUB': 36, 'REL': 26})
+par source: Counter({'reel': 105, 'synthetique': 30, 'hand': 10})
+cible vide: [('g002', 'GP'), ('s041', 'GP')]
+cible non-verbe pour SUB: [('r202', 'pense', 'pense'), ('r212', 'faut', 'faut'), ('r225', 'crois', 'crois'), ('r227', 'lit', 'lit'), ('r229', 'pleure', 'pleure'), ('r230', 'appelle-moi', 'appelle'), ('r232', 'pense', 'pense'), ('r254', 'restons', 'restons'), ('r266', 'pleure', 'pleure'), ('r274', 'continue', 'continue'), ('r309', 'Peut-être', 'viendra'), ('s022', 'nage', 'nage'), ('s054', 'trouve', 'trouve'), ('s088', 'crie', 'crie'), ('s097', 'commence', 'commence'), ('s103', 'dessine', 'dessine'), ('s124', 'commence', 'commence'), ('s139', 'crie', 'crie')]
+cible auto (dans le segment): [('g012', 'GP', 'manger', 'à manger'), ('r018', 'GP', 'manger', 'à manger'), ('s022', 'SUB', 'nage', 'que vous nage')]
+cible avec trait d'union: [('r230', 'appelle-moi', 'appelle'), ('r309', 'Peut-être', 'viendra')]
+GP role possession: [('g002', 'de la voisine', '', 'chat')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, sys, pathlib\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nph = {p[\"id\"]:p for p in eg.charger()}\nh = bl.Heuristi … [642 caractères tronqués]`
+
+  ```
+==========================================================================================
+s022 | ils nage que vous nage
+ gold: [('GN', 'ils', None), ('GV', 'nage', None), ('SUB', 'que vous nage', 'nage')]
+ pred: [('GV', 0, 8, 'ils nage', None), ('SUB', 9, 22, 'que vous nage', {'segment': 'que vous nage', 'cible': 'nage'}), ('REL', 9, 22, 'que vous nage', {'segment': 'que vous nage', 'cible': 'nage'})]
+==========================================================================================
+r202 | Je pense que tu as raison.
+ gold: [('GN', 'Je', None), ('GV', 'pense', None), ('SUB', 'que tu as raison', 'pense')]
+ pred: [('GV', 0, 8, 'Je pense', None), ('SUB', 9, 25, 'que tu as raison', {'segment': 'que tu as raison', 'cible': 'pense'}), ('REL', 9, 25, 'que tu as raison', {'segment': 'que tu as raison', 'cible': 'pense'})]
+==========================================================================================
+r212 | Il faut que tu partes.
+ gold: [('GN', 'Il', None), ('GV', 'faut', None), ('SUB', 'que tu partes', 'faut')]
+ pred: [('GV', 0, 7, 'Il faut', None), ('SUB', 8, 21, 'que tu partes', {'segment': 'que tu partes', 'cible': 'faut'}), ('REL', 8, 21, 'que tu partes', {'segment'
+… [5990 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/ech/sim_lex.py <<'PY'\nimport json, sys, pathlib\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, evaluer_gold  … [876 caractères tronqués]`
+
+  ```
+skip
+  ```
+
+- **bash** `{"command": "cat > /tmp/ech/sim_lex.py <<'PY'\nimport json, sys, pathlib\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, evaluer_gold  … [4113 caractères tronqués]`
+
+  ```
+base: 145 exact: 137
+V0 base: exact=137 portee=0 gagne=0 perd=0
+   gagne: []
+L1 lexique (rêver/sauter/marcher): exact=139 portee=2 gagne=2 perd=0
+   gagne: ['s108', 's122']
+L2 L1 + GV tokens (non chevauchant): exact=132 portee=11 gagne=2 perd=7
+   gagne: ['s108', 's122']
+   PERD: [('r147', ('attendent', 'porte')), ('r222', ('partirons', 'viens')), ('r227', ('lit', 'dort')), ('r258', ('pars', 'vient')), ('r262', ('travaille', 'dort')), ('r268', ('dansait', 'chantait')), ('r270', ('partons', 'veux'))]
+   neutres: [('g002', ('', 'dort')), ('r230', ('appelle-moi', 'arrives'))]
+L3 L1 + GV tokens (chevauchant): exact=132 portee=13 gagne=3 perd=8
+   gagne: ['s041', 's108', 's122']
+   PERD: [('r041', ('joue', 'au')), ('r147', ('attendent', 'porte')), ('r222', ('partirons', 'viens')), ('r227', ('lit', 'dort')), ('r258', ('pars', 'vient')), ('r262', ('travaille', 'dort')), ('r268', ('dansait', 'chantait')), ('r270', ('partons', 'veux'))]
+   neutres: [('g002', ('', 'dort')), ('r230', ('appelle-moi', 'arrives'))]
+NEG1 placebo verbes hors corpus: exact=137 portee=0 gagne=0 perd=0
+   gagne: []
+NEG2 L1 sans complétion GV: exact=139 portee=2 gagne=2 perd=0
+   gagne: ['s108', 's122']
+  ```
+
+- **bash** `{"command": "cat > /tmp/ech/sim_rules.py <<'PY'\nimport json, sys, pathlib, re\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, evaluer … [5526 caractères tronqués]`
+
+  ```
+R-B1 GP possession -> tete GN gauche (sur L1): exact=141 portee=2 gagne=2 perd=0
+   touches: [('g002', '', 'chat'), ('s041', '', 'marche')]
+R-B2 cible vide -> verbe reconnu le plus proche: exact=141 portee=0 gagne=0 perd=0
+R-C enclitique (appelle-moi -> appelle): exact=142 portee=1 gagne=1 perd=0
+   touches: [('r230', 'appelle-moi', 'appelle')]
+R-D SUB pseudo-GV -> GV suivant / dernier mot du SUB: exact=131 portee=13 gagne=1 perd=12
+   touches: [('r202', 'pense', 'raison'), ('r212', 'faut', 'partes'), ('r225', 'crois', 'raison'), ('r229', 'pleure', 'triste'), ('r232', 'pense', 'partir'), ('r266', 'pleure', 'seule'), ('r309', 'Peut-être', 'viendra'), ('s054', 'trouve', 'écoute'), ('s088', 'crie', 'cherche'), ('s097', 'commence', 'nage'), ('s103', 'dessine', 'range'), ('s124', 'commence', 'compte'), ('s139', 'crie', 'observe')]
+   PERD: ['r202', 'r212', 'r225', 'r229', 'r232', 'r266', 's054', 's088', 's097', 's103', 's124', 's139']
+
+FINAL exact: 131 / 145
+restants faux: [('g012', 'prêt', 'manger'), ('r018', 'prête', 'manger'), ('r202', 'pense', 'raison'), ('r212', 'faut', 'partes'), ('r225', 'crois', 'raison'), ('r229', 'pleure', 'triste'), ('r232', 'pense', 'partir'), ('r266', 'pleu
+… [194 caractères tronqués]
+  ```
+

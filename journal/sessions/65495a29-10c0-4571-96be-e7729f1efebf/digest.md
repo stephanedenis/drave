@@ -2036,3 +2036,177 @@ JSON_VALIDE
  M reports/rapport-cout-chunker.md
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 && echo '--- HEAD contains? ---' && git ls-tree -r --name-only HEAD | grep cout-chunker || true && echo '--- diff stat ---' && git diff --stat -- reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json & … [302 caractères tronqués]`
+
+  ```
+2e08cbc7 B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+e1171032 PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9
+--- HEAD contains? ---
+reports/pensee-cout-chunker.json
+reports/rapport-cout-chunker.md
+--- diff stat ---
+ reports/pensee-cout-chunker.json |  7 ++++---
+ reports/rapport-cout-chunker.md  | 31 +++++++++++++++----------------
+ 2 files changed, 19 insertions(+), 19 deletions(-)
+--- staged ---
+--- files ---
+100644 7a526224606b6db9e299ebf8ffb9f934f8bdd343 0	reports/pensee-cout-chunker.json
+100644 65c8f374566d275d4bbb6589539f97a049104f1b 0	reports/rapport-cout-chunker.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Un commit concurrent a inclus une version antérieure ; je prépare les corrections finales dans l'index (sans commit)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -- reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json 2>&1 && git status --short reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json && git diff --cached --stat -- reports/rapport-cout-chunker.md re … [98 caractères tronqués]`
+
+  ```
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[exit code: 128]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:tools/bloc_linguistique.py | sha256sum && sha256sum tools/bloc_linguistique.py && git diff HEAD --stat -- reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json", "description": "Confirm HEAD file hash and pen … [18 caractères tronqués]`
+
+  ```
+6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65  -
+6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65  tools/bloc_linguistique.py
+ reports/pensee-cout-chunker.json |  7 ++++---
+ reports/rapport-cout-chunker.md  | 31 +++++++++++++++----------------
+ 2 files changed, 19 insertions(+), 19 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD -- reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json | sed -n '1,220p'", "description": "Review pending corrections vs committed versions"}`
+
+  ```
+diff --git a/reports/pensee-cout-chunker.json b/reports/pensee-cout-chunker.json
+index 7a526224..6f987f35 100644
+--- a/reports/pensee-cout-chunker.json
++++ b/reports/pensee-cout-chunker.json
+@@ -7,10 +7,11 @@
+   "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+   "sha256_apres_banc": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+   "fichier_change_pendant_banc": false,
+-  "commit": "e1171032",
++  "commit": "9d5337ce",
+   "branche": "s/v7",
+   "arbre_propre": false,
+-  "note": "fichier modifié dans l'arbre de travail (règles d'attachement récentes) ; toutes les mesures et tous les numéros de ligne portent sur ce sha256, revérifié identique après le banc."
++  "note": "le fichier mesuré est committé dans 9d5337ce (il était encore modifié dans l'arbre, au-dessus de e1171032, au moment du banc) ; toutes les mesures et tous les numéros de ligne portent sur ce sha256, revérifié identique après le banc et identique au contenu de HEAD.",
++  "commit_au_moment_du_banc": "e1171032"
+  },
+  "dispositif": {
+   "banc": "/tmp/bench_final.py",
+@@ -892,7 +893,7 @@
+   "Chemin par défaut : le générateur S répond pour les 612 phrases ; _syntagmes_simple
+… [7512 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-cout-chunker.md'); s=p.read_text(encoding='utf-8')\ns=s.replace(\"> dans l'arbre au moment du banc) · **Verdict** : ✅ **le O(n²) est confirmé** ; le cache « un chunkin … [778 caractères tronqués]`
+
+  ```
+ok
+# Coût des règles d'attachement du chunker — O(n²) réel, cache ×12 à 160 tokens
+
+> **Date** : 2026-11-05 · **Instantané** : [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py)
+> sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65`, commit
+> `9d5337ce` (branche `s/v7` ; le fichier mesuré y est committé ; il était encore modifié
+> dans l'arbre au moment du banc) · **Verdict** : ✅ **le O(n²) est confirmé** ;
+> le cache « un chunking + un verbe de GV par analyse » divise le temps par
+> **11,6 à 160 tokens** et **16,9 à 320** sur le chemin chunker seul, par **2,0 / 2,4** sur le
+> chemin par défaut ; **mais** il ne rend pas la complexité strictement linéaire (le tri des GV
+> par segment reste) et il ne gagne presque rien sur le corpus court.
+  est CPU-bound, mais une machine chargée peut décaler les médianes. Pas de mesure GPU : le
+  bloc heuristique est CPU.
+
+## 9. Conclusion
+
+- **Le O(n²) est réel, et il y en a deux.** Sur le chemin chunker seul, c'est bien le
+  re-chunking par segment (1+2·S appels) qui domine : le cache le supprime et donne **×11,6 à 160 tokens, ×16,9 à 320, ×33 à 1 280**. Sur le chemin par défaut,
+  le re-chunking est du code mort ;
+… [288 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-cout-chunker.md'); s=p.read_text(encoding='utf-8')\ns=s.replace(\"  re-chunking par segment (1+2·S appels) qui domine : le cache le supprime et donne **×11,6 à 160 tok … [435 caractères tronqués]`
+
+  ```
+ok
+168 136 | N | chunker original (ms) | chunker V2 (ms) | gain | surcoût original vs V2 | défaut original (ms)
+315 143 sur le tri quand un GV recouvre le segment). Deux prototypes locaux ont été testés sur l'instantané 
+329 164 | **égalité de sortie** | V1, V2 et OFF identiques à l'original : **612/612** phrases du corpus et *
+330 148 | **OFF vs original, temps** | ratios ×0,90 à ×1,13 selon le point, **médiane ×1,00** ; l'écart est 
+331 135 | **OFF vs original, pente** | 1,667 vs 1,742 (chunker) ; 1,273 vs 1,266 (défaut) : la pente ne bais
+332 151 | **compteurs N=160** | chunker : `_syntagmes_simple` 97 appels → 1 chunking, `_verbe_dans` 640 → 16
+333 142 | **profil N=160** | chunker : 1,447 s → 0,116 s sous cProfile ; défaut : 0,747 s → 0,264 s ; la bai
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation finale des livrables et de l'état git avant remontée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-cout-chunker.json > /dev/null && echo JSON_VALIDE && grep -n '^#\\|^## ' reports/rapport-cout-chunker.md && echo '---' && git diff HEAD --stat -- reports/rapport-cout-chunker.md reports/pensee-cout … [207 caractères tronqués]`
+
+  ```
+JSON_VALIDE
+1:# Coût des règles d'attachement du chunker — O(n²) réel, cache ×12 à 160 tokens
+18:## 1. Ce qui était mesuré
+27:# lignes 913-923 de l'instantané
+52:## 2. Protocole
+77:## 3. Temps mesurés
+79:### 3.1 Les 612 phrases du corpus
+95:### 3.2 Phrases longues — chemin chunker seul (`segmenter_s=False`)
+110:### 3.3 Phrases longues — chemin par défaut (générateur S)
+125:## 4. Complexité empirique
+154:### 4.1 Attribution du coût (cProfile, N=160)
+166:## 5. Surcoût de l'original et gain du cache
+193:### 5.1 Sensibilité à la base : un GV à verbe plein change le gain défaut
+208:## 6. Correctif proposé (non appliqué)
+215:### 6.1 Pseudo-code précis
+218:# Dans Heuristique.analyser, après la ligne 855 (calcul de `verbes`).
+219:# (A) Un seul chunking par analyse.
+221:# (B) Une seule extraction des GV.
+223:# (C) Cache des verbes de GV, local à CET appel d'analyser.
+274:# Dans _cible_proche (lignes 661-686), remplacer les appels des lignes 681 et 685 :
+276:# et ajouter `cache_gv=None` à la signature, après `verbes=None`.
+278:# Dans _verbes_proches (lignes 688-704), remplacer l'appel de la ligne 701 :
+280:# et ajouter `cache_gv=None` à la signature, après `verbes=None`.
+295:### 6.2 Effet at
+… [504 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Remontée du résultat au parent (mesures, correctif, état git)
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "RÉSULTAT — coût du chunker / cache. Livrables : `reports/rapport-cout-chunker.md` (389 l.) et `reports/pensee-cout-chunker.json` (valide). Aucun fichier existant modifié par moi, aucun commit de ma part, aucune écriture dans docs/pilot … [3929 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Livraison du rapport et du JSON, avec état git à reprendre
+
+**Livrables créés** (aucun fichier existant modifié par moi, aucun commit de ma part) :
+- `reports/rapport-cout-chunker.md` — fiche complète (verdict, protocole, tableaux, complexité, correctif, contrôle négatif, limites)
+- `reports/pensee-cout-chunker.json` — données structurées, JSON valide
+
+**Mesures** (instantané `6e8430…`, contenu de HEAD, Xeon, temps CPU, passes entrelacées) :
+
+| | corpus 612 | 20 | 40 | 80 | 160 | 320 |
+|---|---:|---:|---:|---:|---:|---:|
+| chunker seul, original (ms) | 231,4 | 1,75 | 5,04 | 17,29 | 64,82 | 238,00 |
+| chunker seul, cache V2 (ms) | 196,6 | 0,73 | 1,31 | 2,57 | 5,58 | 14,10 |
+| défaut S, original (ms) | 394,4 | 1,98 | 4,23 | 9,89 | 27,83 | 88,38 |
+| défaut S, cache V2 (ms) | 367,6 | 1,58 | 2,99 | 6,08 | 13,94 | 36,88 |
+
+- **Complexité** : pente log-log 1,74 (chunker, 20-160) et 1,27 (défaut), montant à 1,94 / 1,86 sur 160-1 280. `_syntagmes_simple` est appelé **1+2S** fois en chunker (97 à 160, 193 à 320 ; 3,21/phrase sur le corpus), mais **2 fois** seulement en défaut. Le vrai coût défaut est `_verbe_dans` : 2 320 appels pour 32 GV distincts à 160, 8 736 pour 64 à 320.
+- **Gain du cache V2** : **×11,6 à 160** et **×16,9 à 320** en chunker ; **×2,0 / ×2,4** en défaut ; ×33 à 1 280 en chunker, plateau ×3,3-3,6 en défaut. Corpus court : ×1,18 / ×1,07 seulement.
+- **Correctif proposé** (pseudo-code dans la fiche, non appliqué) : hoister `simples`/`gvs_simple` (lignes 853-941), ajouter un `cache_gv` local et `_verbe_gv`, remplacer les appels 681/685/701 et passer `cache_gv` aux sites 887/895/899/916/922/935/940. Sortie identique V1/V2/OFF : **612/612** + **10/10 textes longs**.
+- **Limite** : le `sorted(gvs, key=ecart)` par segment reste ; le cache ne rend pas la courbe strictement linéaire. V3 (index+bisect) et V4 (tri fusionné) testés, plus lents, non retenus ; V3 avait 1 divergence/612.
+
+**État git à reprendre** : le commit concurrent `2e08cbc7` a committé une version **antérieure** de mes deux fichiers. L'arbre de travail contient les corrections finales (référence `9d5337ce`, plages corpus, typo ; 22 insertions/20 suppressions vs HEAD), mais `git add` a échoué sur `.git/index.lock` (processus git actif). Il faut re-`git add` les deux fichiers avant le prochain commit ; je n'ai ni commité ni touché au lock.
+

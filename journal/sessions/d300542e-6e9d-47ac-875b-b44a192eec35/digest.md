@@ -262,3 +262,456 @@ D  journal/sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/rapp
 … [14748 caractères tronqués]
   ```
 
+- **grep** `{"pattern": "def (_cible_proche|_tete_nom|_verbe_dans|_tete_texte)|class Heuristique|attachement", "path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py"}`
+
+  ```
+Found 11 matches
+
+tools/bloc_linguistique.py
+Line 475: class Heuristique:
+Line 620:     def _tete_texte(texte: str) -> str | None:
+Line 635:     def _tete_nom(texte: str, debut: int, fin: int) -> str | None:
+Line 642:     def _verbe_dans(texte: str, debut: int, fin: int,
+Line 661:     def _cible_proche(texte: str, segment: dict, gvs: list[dict],
+Line 690:         """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
+Line 716:             att = c.get("attachement") or {}
+Line 860:             # candidat d'attachement (diagnostic des 33 échecs de T162).
+Line 898:                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
+Line 918:                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
+Line 937:                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 440, "limit": 280}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+440:                 "s", "ed", "ing", "en"):
+441:         if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+442:             return True
+443:     # participes en -é/-és/-ée : `accroché` → `accrocher`
+444:     for suf in ("ées", "ées", "ée", "és", "é"):
+445:         if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
+446:             return True
+447:     return False
+448: 
+449: 
+450: def _role_gp(prep: str) -> str:
+451:     p = prep.casefold()
+452:     if p in {"dans", "sur", "sous", "chez", "vers", "entre", "devant", "derrière", "près", "loin",
+453:              "in", "on", "at", "under", "between"}:
+454:         return "lieu"
+455:     if p in {"pendant", "depuis", "durant", "avant", "après", "during", "since", "before", "after"}:
+456:         return "temps"
+457:     if p in {"pour", "afin", "for", "to"}:
+458:         return "but"
+459:     if p in {"par", "by"}:
+460:         # `par` + GN est l'**agent** d'un passif (`Le chat est mangé par le chien`) ;
+461:         # `avec`/`sans` restent le moyen.
+462:         return "agent"
+463:     if p in {"avec",
+… [12974 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 300, "offset": 720}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+720:                 return att.get("cible")
+721:             if meilleure is None:
+722:                 meilleure = att.get("cible")
+723:         return meilleure
+724: 
+725:     def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+726:         mots = self._mots(texte)
+727:         lex = POS_FERME.get(langue, POS_FERME["fr"])
+728:         segments: list[dict] = []
+729:         i = 0
+730:         while i < len(mots):
+731:             d, f, t, typ = mots[i]
+732:             n = _normaliser(t)
+733:             if typ == "mot" and n in lex.get("DET", set()):
+734:                 j = i + 1
+735:                 while j < len(mots) and mots[j][3] == "mot" and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set()):
+736:                     j += 1
+737:                 role = "groupe nominal"
+738:                 # le passif sans `par` : GN + AUX (être) + participe → le sujet est un patient
+739:                 if j < len(mots) and _normaliser(mots[j][2]) in {
+740:                         "est", "sont", "était", "ét
+… [18000 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des empreintes et lecture du prototype A3 existant
+
+- **bash** `{"command": "sha256sum tools/bloc_linguistique.py; stat -c '%s %y' tools/bloc_linguistique.py; ls tools/tests/linguistique/", "description": "Hash and list linguistics test dir", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65  tools/bloc_linguistique.py
+101568 2026-11-05 13:51:26.638852086 -0500
+anaphore.py
+classement_cible.py
+evaluer_gold.py
+gold_gele.json
+gold.json
+gold.py
+gold_reel.json
+gold_reel.py
+gold_synthetique.json
+gold_synthetique.py
+juge.py
+miroir.py
+__pycache__
+qualifier_cascade.py
+qualifier_frontiere_71.py
+qualifier_lien_appris.py
+qualifier_neuronal.py
+qualifier_pragmatique.py
+qualifier_quatre_modes.py
+qualifier_syntagmes.py
+test_bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "git log --oneline -5 -- tools/bloc_linguistique.py; git diff --stat HEAD -- tools/bloc_linguistique.py", "description": "Recent history of bloc linguistique", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+23853cb7 B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173
+d8edd1d9 B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171
+13e8bb2d B13 — LES SPANS PERDUS : 48 REL, 33 SUB, 12 GP (81 CHEZ S) ; LE GP EST BORNÉ AU VERBE ; 169/169
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/classement_cible.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/classement_cible.py</path>
+<type>file</type>
+<content>
+1: """classement_cible.py — prototype **autonome** d'un classement appris des candidats d'attachement.
+2: 
+3: Le problème. `bloc_linguistique.Heuristique` choisit la cible d'un segment par **type +
+4: proximité** (REL/SUB → antécédent nominal à gauche, GP → verbe du GV le plus proche). Sur les
+5: segments gold dont le span est prédit, cette règle donnait **123/145** en égalité exacte au
+6: début de la session (référence de la consigne) ; un autre agent l'a modifiée pendant la
+7: session (129 puis 137/145) — le run fige l'empreinte du fichier lu, et la fiche rapporte les
+8: deux comparaisons. Ce fichier teste une autre sélection : un **score linéaire appris** sur des
+9: features lisibles, candidat par candidat, sans toucher à `bloc_linguistique.py` (l'intégration
+10: éventuelle est une autre décision).
+11: 
+12: Protocole (fixé ici). Limite assumée : le vivier, la liste des features et l'ordre de la liste
+13: ont été dessinés après une passe exploratoire sur le corpus ; le découpage ne valide donc que
+14: les **poids appris**, pas le dessin des feature
+… [37244 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection des cas cités dans le gold et des prédictions courantes
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\nbase = pathlib.Path('tools/tests/linguistique')\nids = {'g002','s041','g012','r018','s108','s122','r309','r048','r068','r230'}\nfor name in ('gold.json','gold_reel.json','gold_synthetique.json'):\n    d = json.loads((base/name).read_text(encoding= … [615 caractères tronqués]`
+
+  ```
+=== g002 fr | Le chat de la voisine dort.
+    GP (8, 21) 'de la voisine' -> ['chat']
+    mots: [(0, 2, 'Le', 'DET'), (3, 7, 'chat', 'NOUN'), (8, 10, 'de', 'PREP'), (11, 13, 'la', 'DET'), (14, 21, 'voisine', 'NOUN'), (22, 26, 'dort', 'VERB')]
+=== g012 fr | Le canard est prêt à manger.
+    GP (19, 27) 'à manger' -> ['prêt', 'canard']
+    mots: [(0, 2, 'Le', 'DET'), (3, 9, 'canard', 'NOUN'), (10, 13, 'est', 'AUX'), (14, 18, 'prêt', 'ADJ'), (19, 20, 'à', 'PREP'), (21, 27, 'manger', 'VERB')]
+=== r018 fr | La souris est prête à manger.
+    GP (20, 28) 'à manger' -> ['prête', 'souris']
+    mots: [(0, 2, 'La', 'DET'), (3, 9, 'souris', 'NOUN'), (10, 13, 'est', 'AUX'), (14, 19, 'prête', 'ADJ'), (20, 21, 'à', 'PREP'), (22, 28, 'manger', 'VERB')]
+=== r048 fr | Il écrit une lettre à sa sœur.
+    GP (20, 29) 'à sa sœur' -> ['écrit']
+    mots: [(0, 2, 'Il', 'PRON'), (3, 8, 'écrit', 'VERB'), (9, 12, 'une', 'DET'), (13, 19, 'lettre', 'NOUN'), (20, 21, 'à', 'PREP'), (22, 24, 'sa', 'DET'), (25, 29, 'sœur', 'NOUN')]
+=== r068 en | He writes a letter to his sister.
+    GP (19, 32) 'to his sister' -> ['writes']
+    mots: [(0, 2, 'He', 'PRON'), (3, 9, 'writes', 'VERB'), (10, 11, 'a', 'DET'), (12, 18, 'let
+… [1335 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json, pathlib\nsys.dont_write_bytecode = True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nids = {'g002','s041','g012','r018','s108','s122','r309','r048','r068' … [462 caractères tronqués]`
+
+  ```
+=== g002 Le chat de la voisine dort.
+   GN (0, 7) 'Le chat' meta= {'role': 'agent', 'niveau': 0} cands= ['« de la voisine dort » → Le chat', 'chat']
+   GP (8, 21) 'de la voisine' meta= {'role': 'theme', 'niveau': 1, 'union': True} cands= ['GP']
+   GP (8, 26) 'de la voisine dort' meta= {'role': 'possession', 'niveau': 1, 'attachement': {'segment': 'de la voisine dort', 'cible': 'chat'}} cands= ['« de la voisine dort » → Le chat', 'chat']
+=== g012 Le canard est prêt à manger.
+   GN (0, 9) 'Le canard' meta= {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'Le canard', 'cible': 'manger'}} cands= ['« à manger » → Le canard', '« à manger » → est prêt', 'est', 'manger', 'canard', 'prêt']
+   GV (10, 18) 'est prêt' meta= {'role': 'predicat', 'niveau': 0, 'attachement': {'segment': 'est prêt', 'cible': 'canard'}} cands= ['« à manger » → Le canard', '« à manger » → est prêt', 'canard', 'prêt']
+   GV (10, 27) 'est prêt à manger' meta= {'role': 'prédicat', 'niveau': 0, 'union': True} cands= ['GV']
+   GP (19, 27) 'à manger' meta= {'role': 'but', 'niveau': 1, 'attachement': {'segment': 'à manger', 'cible': 'manger'}} cands= ['« à manger » → Le canard', '« à manger » → est prêt', 'manger'
+… [3743 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du banc d'essai : population 145/239 et diagnostic de la règle live
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json, pathlib\nsys.dont_write_bytecode = True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nphrases = charger()\nh = bl.Heuristique()\nn_all=n_labels=0; empties= … [1722 caractères tronqués]`
+
+  ```
+gold segments avec cibles: 239 | span predit: 145
+== vides/absentes sur les 145 ==
+('g002', 'GP', 'de la voisine', ['chat'], 'NOUN', 'GP', {'role': 'theme', 'niveau': 1, 'union': True}, ['GP'])
+('s041', 'GP', 'devant elles', ['marche', 'avocat'], 'VERB', 'GP', {'role': 'lieu', 'niveau': 1, 'union': True}, ['GP'])
+nb vides sur 145: 2
+== pred cible verbe, gold non-verbe ==
+('g012', 'GP', 'à manger', ['prêt', 'canard'], 'manger', 'ADJ')
+('r018', 'GP', 'à manger', ['prête', 'souris'], 'manger', 'ADJ')
+nb: 2
+== echecs exact == 8
+('g002', 'GP', 'de la voisine', ['chat'], '', 'NOUN', None, {'role': 'theme', 'niveau': 1, 'union': True})
+('g012', 'GP', 'à manger', ['prêt', 'canard'], 'manger', 'ADJ', True, {'role': 'but', 'niveau': 1, 'attachement': {'segment': 'à manger', 'cible': 'manger'}})
+('r018', 'GP', 'à manger', ['prête', 'souris'], 'manger', 'ADJ', True, {'role': 'but', 'niveau': 1, 'attachement': {'segment': 'à manger', 'cible': 'manger'}})
+('r230', 'SUB', 'Quand tu arrives', ['appelle'], 'appelle-moi', 'VERB', False, {'role': 'temps', 'niveau': 1, 'attachement': {'segment': 'Quand tu arrives', 'cible': 'appelle-moi'}})
+('r309', 'SUB', "qu'il viendra", ['viendra'], 'Peut-être', 'V
+… [583 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json\nsys.dont_write_bytecode = True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nids={'g002','s041','g012','r018','s108','s122','r309','r048'}\nh=bl.Heuristiqu … [1006 caractères tronqués]`
+
+  ```
+==================== g002 Le chat de la voisine dort.
+cands type <class 'list'> len 1
+ cles cands[0]: ['nom', 'lecture', 'attachement', 'segments']
+  S seg: GN (0, 7) 'Le chat' nom= None att= None
+  S seg: GP (8, 26) 'de la voisine dort' nom= None att= None
+  brute pour 'de la voisine dort' -> Le chat
+ cibles_s: {(0, 7, 'GN'): None, (8, 26, 'GP'): 'Le chat'}
+ simples: [('GN', 0, 7, 'Le chat'), ('GP', 8, 21, 'de la voisine')]
+==================== g012 Le canard est prêt à manger.
+cands type <class 'list'> len 2
+ cles cands[0]: ['nom', 'lecture', 'attachement', 'segments']
+  S seg: GN (0, 9) 'Le canard' nom= None att= None
+  S seg: GV (10, 18) 'est prêt' nom= None att= None
+  S seg: GP (19, 27) 'à manger' nom= None att= None
+  brute pour 'à manger' -> Le canard
+ cibles_s: {(0, 9, 'GN'): None, (10, 18, 'GV'): 'Le canard', (19, 27, 'GP'): 'Le canard'}
+ simples: [('GN', 0, 9, 'Le canard'), ('GV', 10, 27, 'est prêt à manger')]
+==================== r018 La souris est prête à manger.
+cands type <class 'list'> len 2
+ cles cands[0]: ['nom', 'lecture', 'attachement', 'segments']
+  S seg: GN (0, 9) 'La souris' nom= None att= None
+  S seg: GV (10, 19) 'est prête' nom= None att= None
+  S seg: GP
+… [2486 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor p,seg in [('ce calme papier rêve sous le nuage',(0,20)),('mon papier saute vers les montagne',(0,16)),('Le canard est prêt à manger.',(10,27)),('La souris est prêt … [532 caractères tronqués]`
+
+  ```
+'ce calme papier rêve sous le nuage' (0, 20) -> _verbe_dans= 'rêve' tete_texte= ['rêve']
+    ce est_verbe False norm ce dans VERBES? False
+    calme est_verbe False norm calme dans VERBES? False
+    papier est_verbe False norm papier dans VERBES? False
+    rêve est_verbe False norm rêve dans VERBES? False
+    mon est_verbe False norm mon dans VERBES? False
+    saute est_verbe False norm saute dans VERBES? False
+    est est_verbe True norm est dans VERBES? False
+    prêt est_verbe False norm prêt dans VERBES? False
+    manger est_verbe True norm manger dans VERBES? False
+    prête est_verbe False norm prête dans VERBES? False
+'mon papier saute vers les montagne' (0, 16) -> _verbe_dans= 'saute' tete_texte= ['saute']
+    ce est_verbe False norm ce dans VERBES? False
+    calme est_verbe False norm calme dans VERBES? False
+    papier est_verbe False norm papier dans VERBES? False
+    rêve est_verbe False norm rêve dans VERBES? False
+    mon est_verbe False norm mon dans VERBES? False
+    saute est_verbe False norm saute dans VERBES? False
+    est est_verbe True norm est dans VERBES? False
+    prêt est_verbe False norm prêt dans VERBES? False
+    manger est_verbe True norm manger dans VE
+… [1332 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\np=next(x for x in charger() if x['id']=='s108')\nh=bl.Heuristique()\ntexte=p['texte']; … [1004 caractères tronqués]`
+
+  ```
+verbes: [(9, 15, 'papier')]
+seg GN ce calme papier rêve brute= None cible_proche= None
+  attachement S= None
+seg GP sous le nuage brute= 'ce calme papier rêve' cible_proche= None
+  find= 0 verbe_dans= papier
+  attachement S= None
+top-level cands att: [{'segment': 'sous le nuage', 'cible': 'ce calme papier rêve', 'genre': 'GN'}]
+  ```
+
+- **grep** `{"pattern": "g002|s041|r309|repli.*cible|préférer un verbe|prefer.*verbe", "path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports"}`
+
+  ```
+Found 30 matches
+
+reports/rapport-contrat-s.md
+Line 316: | **POS gold vs `CONVENTION_CIBLE`** | SUB : **69/69 VERB** (42 gauche, 26 droite, 1 interne) ; REL : 73 NOUN + 1 PRON, à gauche | la convention écrite (`gold_reel.py:25-32`, « SUB → antécédent, tête du GN à gauche ») est **contredite par les données** ; le 28/36 SUB de l'état initial doit beaucoup au repli `_cible_proche` (les 6 erreurs synthétiques sont les cas où un GN à gauche existe) |
+
+reports/rapport-classement-appris.md
+Line 80: 4. **Les 8 erreurs de la règle live** : `g002` et `s041` (cible vide sur le doublon d'union), `g012` / `r018` (« à manger » → `manger` au lieu de `prêt` / `prête`), `s108` / `s122` (nom à gauche du GP au lieu du verbe), `r309` (« Peut-être qu'il viendra » → `Peut-être` au lieu de `viendra`), `r230`. Le modèle en répare 7, mais introduit `r048` / `r068`.
+Line 100: 2. **Le fallback quand la cible est vide** (g002, s041) : +2 sans risque, indépendant du reste.
+Line 102: 4. **`r309`** : accepter un candidat intérieur quand le segment est une complétive en tête de phrase.
+
+reports/pensee-annotation-independante.json
+Line 1062:      "id": "r309",
+Line 1157:      "id": "g002",
+Line 1270:      "id": "
+… [2094 caractères tronqués]
+  ```
+
+- **grep** `{"pattern": "g002|s041|r309|repli.*cible|préférer un verbe", "path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs"}`
+
+  ```
+No matches found
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des fiches existantes sur la proximité de cible et le diagnostic top-k
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-cible-proximite.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-diagnostic.md", "limit": 140, "offset": 60}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-cible-proximite.md</path>
+<type>file</type>
+<content>
+1: # B13 — la cible par proximité : l'exact passe de 0,0042 à 0,0544 (×13)
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+4: > **164/164 portes** : la règle « la cible d'un segment est le **verbe du GV le plus proche** »
+5: > remplit les `cible` que le générateur S laissait vides. Sur le même gold que T153 (612 phrases,
+6: > **239 cibles**), l'attachement passe de **top1 82 (0,3431)** à **95 (0,3975)**, et surtout de
+7: > **exact 1 (0,0042)** à **13 (0,0544)** — **×13**. La tête fait **94/145 (0,6483)** contre 81
+8: > (0,5586).
+9: >
+10: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_cible_proche`),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-cible-proximite.json`](pensee-cible-proximite.json).
+13: 
+14: ## 1. Avant / après (même gold, 612 phrases, 239 cibles)
+15: 
+16: | mesure | T153 (avant) | **règle de proximité** | écart |
+17: |---|---:|---:|---:|
+18: | top1 | 82 (0,
+… [2577 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-diagnostic.md</path>
+<type>file</type>
+<content>
+60: **Lecture par cause.**
+61: 
+62: - **C1 (26 REL)** : le S nomme l'antécédent dans `« que j'ai lu » → Le livre` ; `_tete_nom`
+63:   rendrait `livre`, mais `candidats` garde la chaîne entière (plus `est`). Exemple :
+64:   `g011` « que j'ai lu » → `livre`, candidats `["« que j'ai lu » → Le livre", "est"]`.
+65: - **C2 (17 GP)** : le S nomme le verbe dans `« dans le jardin » → Les fleurs poussent` ; la
+66:   cible `poussent` est le **dernier token** de la queue. 15/17 ont déjà la bonne cible choisie ;
+67:   **s108** et **s122** choisissent en plus le nom `papier` au lieu de `rêve`/`saute` (la cible
+68:   nominale du S, `cible_nom`, passe avant `cible_verbe`).
+69: - **C3 (2 GP)** : `g012` « à manger » → `prêt`, `r018` → `prête` ; la cible est l'adjectif
+70:   attribut de `est prêt`/`est prête`, la cible choisie est le verbe `manger`.
+71: - **C4 (8 GP anglais)** : `_est_verbe("fly")` est faux (absent de `VERBES_CONNUS`), le POS le
+72:   tague NOUN et le GV du S n'est pas coupé au verbe ; les candidats sont `["GP", "lake"]` au
+73:   lieu de contenir `fly`. Les 8 ve
+… [8517 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-classement-appris.json',encoding='utf-8'))\nids={'g002','s041','g012','r018','s108','s122','r309','r230','r048','r068'}\nfor s in d['segments']:\n    if s['id'] in ids and s['type'] in ('GP','SUB'):\n        print('===',s[' … [482 caractères tronqués]`
+
+  ```
+=== g002 GP 'de la voisine' gold= chat live= '' modele= 'chat' ok True
+    0 'chat' d= 1 cote= gauche verbe_lex= False pos= NOUN score= 0.8858 positif= 1
+    1 'dort' d= 1 cote= droite verbe_lex= True pos= VERB score= 0.485352 positif= 0
+    2 'voisine' d= 0 cote= dedans verbe_lex= False pos= NOUN score= -4.45794 positif= 0
+=== g012 GP 'à manger' gold= prêt live= 'manger' modele= 'prêt' ok True
+    0 'prêt' d= 1 cote= gauche verbe_lex= False pos= ADJ score= 0.969431 positif= 1
+    1 'canard' d= 3 cote= gauche verbe_lex= False pos= NOUN score= -0.875487 positif= 0
+    2 'manger' d= 0 cote= dedans verbe_lex= True pos= VERB score= -1.559971 positif= 0
+=== r018 GP 'à manger' gold= prête live= 'manger' modele= 'prête' ok True
+    0 'prête' d= 1 cote= gauche verbe_lex= False pos= ADJ score= 0.974593 positif= 1
+    1 'souris' d= 3 cote= gauche verbe_lex= False pos= NOUN score= -0.875487 positif= 0
+    2 'manger' d= 0 cote= dedans verbe_lex= True pos= VERB score= -1.559971 positif= 0
+=== r048 GP 'à sa sœur' gold= écrit live= 'écrit' modele= 'lettre' ok False
+    0 'lettre' d= 1 cote= gauche verbe_lex= False pos= NOUN score= 1.066298 positif= 0
+    1 'écrit' d= 3 cote= gauche verbe_lex= Tru
+… [1936 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse exhaustive des 145 cibles : natures, rangs, règles candidates
+
+- **bash** `{"command": "cat > /tmp/explo_replis.py <<'PY'\nimport sys, json, pathlib, re\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nTYPES=('GP','REL','SUB')\nPOS_OUV={'NOUN','PROPN', … [4623 caractères tronqués]`
+
+  ```
+n rows 145
+
+== Q1: vides/absentes ==
+total cibles gold 239 ; spans predits 145
+vides sur 145: 2
+   g002 GP 'de la voisine' gold chat nom
+   s041 GP 'devant elles' gold marche verbe
+239: 239 non predits: 94 Counter({'REL': 48, 'SUB': 33, 'GP': 13}) predits vides: 2 [('g002', 'GP'), ('s041', 'GP')]
+
+== Q1: croisement nature predite x nature gold (sur 145) ==
+  ('', 'nom') 1
+  ('', 'verbe') 1
+  ('adv', 'verbe') 1
+  ('nom', 'nom') 26
+  ('nom', 'verbe') 3
+  ('verbe', 'nom') 2
+  ('verbe', 'verbe') 111
+-- pred nom, gold verbe --
+   r230 SUB 'Quand tu arrives' base 'appelle-moi' gold appelle ok False
+   s108 GP 'sous le nuage' base 'papier' gold rêve ok False
+   s122 GP 'vers les montagne' base 'papier' gold saute ok False
+-- pred verbe, gold non-verbe --
+   g012 GP 'à manger' base 'manger' gold prêt nom ok False
+   r018 GP 'à manger' base 'manger' gold prête nom ok False
+
+== echecs exact ==
+   g002 GP 'de la voisine' base '' [(0, 'chat', 'gauche', 1, 'NOUN'), (1, 'dort', 'droite', 1, 'VERB'), (2, 'voisine', 'dedans', 0, 'NOUN')] gold chat
+   g012 GP 'à manger' base 'manger' [(0, 'prêt', 'gauche', 1, 'ADJ'), (1, 'canard', 'gauche', 3, 'NOUN'), (2, 'manger', 'dedans', 0, 'VERB')] gold prêt
+
+… [919 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat >> /tmp/explo_replis.py <<'PY'\n\ndef top1(pred, cs):\n    return bool(pred and any(c in pred or pred in c for c in cs))\ndef eval_rule(name, fn, scope=None):\n    fixed=[]; reg=[]; ok=0; t1=0; n=0\n    for r in rows:\n        if scope and not scope(r): continue\n        n+=1\n      … [4747 caractères tronqués]`
+
+  ```
+== regles candidates (sur les 145) ==
+rang0 partout                          n=145 exact=139/145 (base 137) top1=142/145 (base 140) fix=7 reg=5 net=+2
+    fix: [('g002', 'GP', '', 'chat'), ('g012', 'GP', 'manger', 'prêt'), ('r018', 'GP', 'manger', 'prête'), ('r309', 'SUB', 'Peut-être', 'viendra'), ('s041', 'GP', '', 'marche'), ('s108', 'GP', 'papier', 'rêve'), ('s122', 'GP', 'papier', 'saute')]
+    REG: [('g003', 'GP', 'vu', 'homme', 'vu'), ('g014', 'GP', 'vu', 'homme', 'vu'), ('g016', 'GP', 'saw', 'man', 'saw'), ('r048', 'GP', 'écrit', 'lettre', 'écrit'), ('r068', 'GP', 'writes', 'letter', 'writes')]
+verbe lexique le plus proche           n=145 exact=117/145 (base 137) top1=119/145 (base 140) fix=0 reg=20 net=-20
+    REG: [('r015', 'REL', 'film', 'sorti', 'film'), ('r054', 'REL', 'livre', 'lis', 'livre'), ('r094', 'REL', 'film', 'vu', 'film'), ('r095', 'REL', 'maison', 'né', 'maison'), ('r201', 'REL', 'homme', 'parle', 'homme'), ('r209', 'REL', 'élève', 'parle', 'élève'), ('r212', 'SUB', 'faut', 'partes', 'faut'), ('r213', 'REL', 'film', 'parle', 'film'), ('r226', 'REL', 'jour', 'partis', 'jour'), ('r227', 'SUB', 'lit', 'dort', 'lit'), ('r232', 'SUB', 'pense', 'devons', 'pense'), 
+… [19624 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat >> /tmp/explo_replis.py <<'PY'\n\nprint('\\n== TOP1 sans exact ==')\nfor r in rows:\n    if r['top1_base'] and not r['ok_base']:\n        print('  ',r['id'],r['type'],'base',repr(r['base']),'gold',r['gold_all'])\n\ndef cote_of(r, tok):\n    return next((c['cote'] for c in r['cands'] … [3549 caractères tronqués]`
+
+  ```
+== TOP1 sans exact ==
+   r230 SUB base 'appelle-moi' gold ['appelle']
+   s108 GP base 'papier' gold ['rêve', 'papier']
+   s122 GP base 'papier' gold ['saute', 'papier']
+
+== variantes autour du rang 0 sur les GP ==
+T2b GP base dedans -> rang0            n=145 exact=139/145 (base 137) top1=142/145 (base 140) fix=2 reg=0 net=+2
+    fix: [('g012', 'GP', 'manger', 'prêt'), ('r018', 'GP', 'manger', 'prête')]
+T2c GP (nom ou dedans) -> rang0        n=145 exact=141/145 (base 137) top1=142/145 (base 140) fix=4 reg=0 net=+4
+    fix: [('g012', 'GP', 'manger', 'prêt'), ('r018', 'GP', 'manger', 'prête'), ('s108', 'GP', 'papier', 'rêve'), ('s122', 'GP', 'papier', 'saute')]
+T2d GP rang0 sauf verbe garde          n=145 exact=141/145 (base 137) top1=142/145 (base 140) fix=4 reg=0 net=+4
+    fix: [('g012', 'GP', 'manger', 'prêt'), ('r018', 'GP', 'manger', 'prête'), ('s108', 'GP', 'papier', 'rêve'), ('s122', 'GP', 'papier', 'saute')]
+T2e GP nom -> gauche plus proche       n=145 exact=139/145 (base 137) top1=140/145 (base 140) fix=2 reg=0 net=+2
+    fix: [('s108', 'GP', 'papier', 'rêve'), ('s122', 'GP', 'papier', 'saute')]
+T2f GP dedans -> gauche plus proche    n=145 exact=139/145 (base 137) top1=142/1
+… [14835 caractères tronqués]
+  ```
+

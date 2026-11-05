@@ -7,12 +7,12 @@
 | Identifiant | `d300542e-6e9d-47ac-875b-b44a192eec35` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.0 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 10 |
+| Messages | 23 |
+| Appels d'outils | 24 |
 | Fichiers touchés | 0 |
-| Commandes | 4 |
+| Commandes | 14 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le … [2218 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Show git state and repo root
 - bash — Line counts of key files
@@ -33,10 +33,19 @@
 - grep
 - bash — Hash and list linguistics test dir
 - bash — Recent history of bloc linguistique
+- bash — Dump gold entries for cited cases
+- bash — Dump current syntagme labels for cited cases
+- bash — Baseline population and failures diagnostic
+- bash — Inspect S generator output internals
+- bash — Test verb detection helpers on key spans
+- bash — Replicate analyser target logic for s108
+- bash — Inspect model candidate scores for key cases
+- bash — Exhaustive 145-target analysis
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des empreintes et lecture du prototype A3 existant
+⏵ Analyse exhaustive des 145 cibles : natures, rangs, règles candidates
 
 ## 3. Travail accompli
 
@@ -51,4 +60,24 @@
 - **T1** Line counts of key files
 - **T1** Hash and list linguistics test dir
 - **T1** Recent history of bloc linguistique
+- **T1** Dump gold entries for cited cases
+- **T1** Dump current syntagme labels for cited cases
+- **T1** Baseline population and failures diagnostic
+- **T1** Inspect S generator output internals
+- **T1** Test verb detection helpers on key spans
+- **T1** Replicate analyser target logic for s108
+- **T1** Inspect model candidate scores for key cases
+- **T1** Exhaustive 145-target analysis
+- **T1** Evaluate candidate rules on 145 targets
+- **T1** Test GP-targeted rules and narrow SUB rule
+
+## 4. Mesures et résultats marquants
+
+- **T1** `rang0 partout                          n=145 exact=139/145 (base 137) top1=142/145 (base 140) fix=7 reg=5 net=+2`
+- **T1** `T1 repli vide rang0                    n=145 exact=139/145 (base 137) top1=142/145 (base 140) fix=2 reg=0 net=+2`
+- **T1** `T2 si base nom -> rang0                n=145 exact=139/145 (base 137) top1=140/145 (base 140) fix=2 reg=0 net=+2`
+- **T1** `== variantes autour du rang 0 sur les GP ==`
+- **T1** `T2b GP base dedans -> rang0            n=145 exact=139/145 (base 137) top1=142/145 (base 140) fix=2 reg=0 net=+2`
+- **T1** `T2c GP (nom ou dedans) -> rang0        n=145 exact=141/145 (base 137) top1=142/145 (base 140) fix=4 reg=0 net=+4`
+- **T1** `T2d GP rang0 sauf verbe garde          n=145 exact=141/145 (base 137) top1=142/145 (base 140) fix=4 reg=0 net=+4`
 

@@ -9,6 +9,10 @@ deux comparaisons. Ce fichier teste une autre sélection : un **score linéaire 
 features lisibles, candidat par candidat, sans toucher à `bloc_linguistique.py` (l'intégration
 éventuelle est une autre décision).
 
+**Statut (2026-11-05)** : prototype **non intégré**. Face à la règle vivante à 137/145, le
+modèle fait 142/145 — gain +5, McNemar 7/2, p = 0,18, IC95 [−0,7 ; +7,6] : non significatif,
+avec 2 régressions. Décision consignée dans `reports/rapport-pensee-attachement-v2.md` § 3.
+
 Protocole (fixé ici). Limite assumée : le vivier, la liste des features et l'ordre de la liste
 ont été dessinés après une passe exploratoire sur le corpus ; le découpage ne valide donc que
 les **poids appris**, pas le dessin des features (voir la fiche).

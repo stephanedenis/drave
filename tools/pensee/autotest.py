@@ -2596,6 +2596,26 @@ def t177_candidats_tete() -> tuple[bool, str]:
         f"candidats têtes : {a['topk_exact']}/145 ({a['topk_exact_taux_span']})")
 
 
+def t178_cache_chunker() -> tuple[bool, str]:
+    """Le cache du chunker : un seul `_syntagmes_simple` par analyse (1+2S → 1)."""
+    import tools.bloc_linguistique as bl
+    appels = {"n": 0}
+    orig = bl.Heuristique._syntagmes_simple
+
+    def compte(self, *a, **k):
+        appels["n"] += 1
+        return orig(self, *a, **k)
+
+    bl.Heuristique._syntagmes_simple = compte
+    try:
+        h = bl.Heuristique(segmenter_s=False)
+        h.analyser(" ".join(["Le garçon joue au ballon dans le jardin."] * 20), "fr")
+    finally:
+        bl.Heuristique._syntagmes_simple = orig
+    return appels["n"] == 1, (
+        f"cache : {appels['n']} chunking(s) pour 20 répétitions (1+2S avant)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2772,7 +2792,8 @@ def main() -> int:
               ("T174 convention documentée", t174_convention_documentee()),
               ("T175 audit attachement", t175_audit_attachement()),
               ("T176 segment précédent", t176_segment_precedent()),
-              ("T177 candidats têtes", t177_candidats_tete())]
+              ("T177 candidats têtes", t177_candidats_tete()),
+              ("T178 cache chunker", t178_cache_chunker())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

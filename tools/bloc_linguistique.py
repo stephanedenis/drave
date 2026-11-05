@@ -658,8 +658,20 @@ class Heuristique:
         return None if strict else (mots[-1][1] if mots else None)
 
     @staticmethod
+    def _verbe_gv(texte: str, g: dict, verbes, cache: dict | None = None):
+        """`_verbe_dans` mémoïsé par span de GV : le même GV est relu pour chaque segment."""
+        cle = (g["debut"], g["fin"])
+        if cache is not None and cle in cache:
+            return cache[cle]
+        v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+        if cache is not None:
+            cache[cle] = v
+        return v
+
+    @staticmethod
     def _cible_proche(texte: str, segment: dict, gvs: list[dict],
-                      verbes: list[tuple[int, int, str]] | None = None) -> str | None:
+                      verbes: list[tuple[int, int, str]] | None = None,
+                      cache: dict | None = None) -> str | None:
         """La cible d'un segment : le **verbe du GV le plus proche** (règle de proximité).
 
         Rend `None` si le segment est lui-même un GV ou s'il n'y a pas de GV. Le verbe est le
@@ -678,15 +690,16 @@ class Heuristique:
         # un GV réduit à l'auxiliaire (« a », « est ») ne donne pas la cible : on prend le
         # premier GV proche dont le verbe est **plein** (mesuré : « a » au lieu de « vu »).
         for g in sorted(gvs, key=ecart):
-            v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+            v = Heuristique._verbe_gv(texte, g, verbes, cache)
             if v and _normaliser(v) not in AUXILIAIRES:
                 return v
         g = min(gvs, key=ecart)
-        return Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+        return Heuristique._verbe_gv(texte, g, verbes, cache)
 
     @staticmethod
     def _verbes_proches(texte: str, segment: dict, gvs: list[dict],
-                        k: int = 3, verbes: list[tuple[int, int, str]] | None = None) -> list[str]:
+                        k: int = 3, verbes: list[tuple[int, int, str]] | None = None,
+                        cache: dict | None = None) -> list[str]:
         """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
         if segment.get("type") == "GV" or not gvs:
             return []
@@ -698,7 +711,7 @@ class Heuristique:
             return 0
         proches: list[str] = []
         for g in sorted(gvs, key=ecart)[:k]:
-            v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+            v = Heuristique._verbe_gv(texte, g, verbes, cache)
             if v and v not in proches:
                 proches.append(v)
         return proches
@@ -855,6 +868,7 @@ class Heuristique:
                   if e.niveau == "pos" and e.type == "VERB"]
         cands = self._syntagmes_s(texte)
         cibles_s = self._cibles_s(texte) if cands else {}
+        cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
         if cands:
             # les GV du chunker complètent ceux du générateur S : sans eux, un GP n'a aucun
             # candidat d'attachement (diagnostic des 33 échecs de T162).
@@ -884,7 +898,7 @@ class Heuristique:
                             elif g.get("type") == "GN":
                                 cible = self._tete_nom(texte, g["debut"], g["fin"])
                     if not cible and s.get("type") == "GP":
-                        cible = self._cible_proche(texte, s, gvs, verbes)
+                        cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
                     if not cible and brute:
                         i = texte.find(brute)
                         if i >= 0:
@@ -892,11 +906,12 @@ class Heuristique:
                     if cible and _normaliser(cible) in AUXILIAIRES:
                         cible = None  # « a » / « est » ne sont pas des cibles
                     if not cible:
-                        cible = self._cible_proche(texte, s, gvs, verbes)
+                        cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
                     if cible:
                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
-                    candidats = list(noms) + self._verbes_proches(texte, s, gvs, verbes=verbes)
+                    candidats = list(noms) + self._verbes_proches(
+                        texte, s, gvs, verbes=verbes, cache=cache_gv)
                     # la **tête** de chaque candidat S (« « … » → Le livre » → livre ; « … → Les
                     # fleurs poussent » → poussent) : mesuré +45 segments au top-k strict.
                     for nom in noms:
@@ -911,15 +926,19 @@ class Heuristique:
                                                 candidats=candidats, langue=lg, script=script,
                                                 meta=meta))
         else:
-            for s in self._syntagmes_simple(texte, lg):
+            # un seul chunking par analyse (le O(n²) mesuré : 1+2S appels avant ce cache)
+            simples = self._syntagmes_simple(texte, lg)
+            gvs_s = [x for x in simples if x["type"] == "GV"]
+            cache_gv: dict = {}
+            for s in simples:
                 meta = {"role": s["role"], "niveau": s["niveau"]}
-                cible = self._cible_proche(texte, s, [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"], verbes)
+                cible = self._cible_proche(texte, s, gvs_s, verbes, cache_gv)
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
-                gvs_s = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.35,
-                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_s, verbes=verbes),
+                                            candidats=[s["type"]] + self._verbes_proches(
+                                                texte, s, gvs_s, verbes=verbes, cache=cache_gv),
                                             langue=lg, script=script, meta=meta))
         # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
         if cands and self.union:
@@ -932,12 +951,13 @@ class Heuristique:
                 if (s["type"], s["debut"], s["fin"]) in deja:
                     continue
                 meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
-                cible = self._cible_proche(texte, s, gvs_u, verbes)
+                cible = self._cible_proche(texte, s, gvs_u, verbes, cache_gv)
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.30,
-                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_u, verbes=verbes),
+                                            candidats=[s["type"]] + self._verbes_proches(
+                                                texte, s, gvs_u, verbes=verbes, cache=cache_gv),
                                             langue=lg, script=script, meta=meta))
     
         # 6. discours / document

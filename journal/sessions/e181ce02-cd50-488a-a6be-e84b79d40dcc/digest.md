@@ -42002,3 +42002,210 @@ started subagent 1b0cf09a-a77a-443d-82e2-68a5d6cacdf0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **vague 1 intégrée** (7 sous-agents) ; 3 divergences de fiches corrigées.\",\n            \" ; vague 1 intégrée (7 sous- … [580 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-985]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-985", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md
+COMMIT OK 1
+de292c7d ÉTAT — B13 180/180, T0 DANS LE BUDGET ; VAGUE 3 LANCÉE (AUDIT V2, ÉCHECS, REPLIS, CACHE)
+jeu 05 nov 2026 14:25:14 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -12 tools/tests/linguistique/classement_cible.py", "description": "Lire l'en-tête du prototype A3"}`
+
+  ```
+"""classement_cible.py — prototype **autonome** d'un classement appris des candidats d'attachement.
+
+Le problème. `bloc_linguistique.Heuristique` choisit la cible d'un segment par **type +
+proximité** (REL/SUB → antécédent nominal à gauche, GP → verbe du GV le plus proche). Sur les
+segments gold dont le span est prédit, cette règle donnait **123/145** en égalité exacte au
+début de la session (référence de la consigne) ; un autre agent l'a modifiée pendant la
+session (129 puis 137/145) — le run fige l'empreinte du fichier lu, et la fiche rapporte les
+deux comparaisons. Ce fichier teste une autre sélection : un **score linéaire appris** sur des
+features lisibles, candidat par candidat, sans toucher à `bloc_linguistique.py` (l'intégration
+éventuelle est une autre décision).
+
+Protocole (fixé ici). Limite assumée : le vivier, la liste des features et l'ordre de la liste
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/classement_cible.py'); t=p.read_text()\nt=t.replace('''Protocole (fixé ici).''',\n'''**Statut (2026-11-05)** : prototype **non intégré**. Face à la règle viva … [465 caractères tronqués]`
+
+  ```
+statut du prototype ajouté
+[exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+Agent 65495a29-10c0-4571-96be-e7729f1efebf sent a message: 
+RÉSULTAT — coût du chunker / cache. Livrables : `reports/rapport-cout-chunker.md` (389 l.) et `reports/pensee-cout-chunker.json` (valide). Aucun fichier existant modifié par moi, aucun commit de ma part, aucune écriture dans docs/pilotage, AGENTS.md, journal/, tools/structures/, data/, tools/entrainer_native.py, tools/native_model.py.
+
+INSTANTANÉ MESURÉ : tools/bloc_linguistique.py sha256 6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65 = contenu de HEAD (9d5337ce puis 2e08cbc7). Banc hors dépôt /tmp/bench_final.py, 82,9 s, Python 3.13.16, Xeon E5-2687W v3, temps CPU, passes entrelacées.
+
+TEMPS MESURÉS (médiane) :
+- Corpus 612 phrases (402 fr/210 en, 6,13 tokens _mots/phrase) : original 231,4 ms (chunker seul) / 394,4 ms (défaut) ; V2 cache 196,6 / 367,6 ms → ×1,18 / ×1,07 (banc 7 passes : ×0,97–1,22, bruit). Gain corpus faible, phrases trop courtes.
+- Longueurs 20/40/80/160/320 tokens, base 10 tokens répétée : chunker seul 1,75/5,04/17,29/64,82/238,00 ms ; défaut 1,98/4,23/9,89/27,83/88,38 ms.
+- Appels `_syntagmes_simple` : chunker 13/25/49/97/193 = 1+2S (3,21/phrase sur le corpus, max 7) ; défaut 2,00/phrase exactement (le re-chunking dans la boucle y est du code mort). `_verbe_dans` : 640 appels pour 16 GV distincts à 160 (×40), 2 304 pour 32 à 320 (×72) en chunker ; 2 320 pour 32 (×72), 8 736 pour 64 (×136) en défaut.
+
+COMPLEXITÉ (pente log-log, R²>0,99) : chunker original 1,74 (20–160), 1,79 (20–320), 1,94 (160–1 280) ; défaut 1,27 / 1,37 / 1,86. Le doublement 160→320 coûte ×3,67 (chunker) et ×3,18 (défaut). Le cache V2 : 0,98 / 1,06 / 1,44 (chunker) et 1,05 / 1,13 / 1,55 (défaut) — le tri `sorted(gvs, key=ecart)` par segment reste O(S·G log G), donc le cache ne linéarise pas complètement. Contrôle OFF (mêmes méthodes, caches désactivés) : ×0,90–1,13, médiane ×1,00, pente 1,67/1,27 = original.
+
+GAIN DU CACHE V2 (borne basse) : ×11,6 à 160 et ×16,9 à 320, ×25,8 à 640, ×33,4 à 1 280 sur le chemin chunker seul ; ×2,0 / ×2,4 / ×3,3–3,6 sur le défaut. V1 (chunking seul) : ×5,5 / ×6,8 en chunker mais ×1,0 en défaut → c'est le cache des verbes de GV qui fait le gain défaut. Égalité de sortie V1/V2/OFF : 612/612 corpus + 10/10 textes longs, champ à champ.
+
+CORRECTIF PROPOSÉ (pseudo-code précis dans la fiche, non appliqué) : dans `Heuristique.analyser` (section 5, lignes 853–941) hoister `simples = self._syntagmes_simple(texte, lg)` et `gvs_simple` une seule fois ; créer `cache_gv = {}` local à l'analyse ; ajouter `_verbe_gv(texte, g, verbes, cache_gv)` et le passer à `_cible_proche`/`_verbes_proches` (remplacer les appels 681/685/701) ; remplacer les sites 861/914/916/919/928/929-930 et passer `cache_gv` aux appels 887/895/899/916/922/935/940. Effet attendu : 1+2S → 1 chunking, S·G appels de verbe → ≤G, sortie identique. Limite : le tri par segment reste ; V3 (index+bisect) et V4 (tri fusionné) testés sur l'instantané antérieur, plus lents et V3 1 divergence/612, non retenus.
+
+ÉTAT GIT IMPORTANT : un commit concurrent 2e08cbc7 a committé une version ANTÉRIEURE de mes deux fichiers. L'arbre de travail contient les corrections finales (référence commit 9d5337ce, typo, plages corpus, 22 insertions/20 suppressions par rapport à HEAD) ; `git status` = ` M` sur les deux fichiers, et `git add` a échoué deux fois sur `.git/index.lock` (autre processus git actif). Merci de faire `git add reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json` (ou un commit de l'arbre) pour prendre la version finale. Je n'ai fait aucun commit et je n'ai pas touché au lock.
+
+NUANCE À RETENIR : la prémisse « `_syntagmes_simple` dans la boucle » est vraie sur le chemin chunker seul (`segmenter_s=False` ou repli S absent) — c'est le O(n²) principal, gain ×12 à 160. Avec le générateur S (défaut de `Heuristique()`), `_syntagmes_simple` n'est appelé que 2 fois/phrase : le O(n²) restant est `_verbe_dans` re-scanné par segment (règle d'attachement), gain ×2–2,4 seulement. De plus, le gain défaut s'effondre à ×1,07–1,13 avec une base à verbe plein (le scan s'arrête au premier GV) : le ×2,0 est un cas à GV auxiliaire. Sur le corpus court, le cache ne gagne presque rien (×1,18/×1,07).
+
+### 👤 Utilisateur
+
+Background subagent 65495a29-10c0-4571-96be-e7729f1efebf finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison du rapport et du JSON, avec état git à reprendre
+
+**Livrables créés** (aucun fichier existant modifié par moi, aucun commit de ma part) :
+- `reports/rapport-cout-chunker.md` — fiche complète (verdict, protocole, tableaux, complexité, correctif, contrôle négatif, limites)
+- `reports/pensee-cout-chunker.json` — données structurées, JSON valide
+
+**Mesures** (instantané `6e8430…`, contenu de HEAD, Xeon, temps CPU, passes entrelacées) :
+
+| | corpus 612 | 20 | 40 | 80 | 160 | 320 |
+|---|---:|---:|---:|---:|---:|---:|
+| chunker seul, original (ms) | 231,4 | 1,75 | 5,04 | 17,29 | 64,82 | 238,00 |
+| chunker seul, cache V2 (ms) | 196,6 | 0,73 | 1,31 | 2,57 | 5,58 | 14,10 |
+| défaut S, original (ms) | 394,4 | 1,98 | 4,23 | 9,89 | 27,83 | 88,38 |
+| défaut S, cache V2 (ms) | 367,6 | 1,58 | 2,99 | 6,08 | 13,94 | 36,88 |
+
+- **Complexité** : pente log-log 1,74 (chunker, 20-160) et 1,27 (défaut), montant à 1,94 / 1,86 sur 160-1 280. `_syntagmes_simple` est appelé **1+2S** fois en chunker (97 à 160, 193 à 320 ; 3,21/phrase sur le corpus), mais **2 fois** seulement en défaut. Le vrai coût défaut est `_verbe_dans` : 2 320 appels pour 32 GV distincts à 160, 8 736 pour 64 à 320.
+- **Gain du cache V2** : **×11,6 à 160** et **×16,9 à 320** en chunker ; **×2,0 / ×2,4** en défaut ; ×33 à 1 280 en chunker, plateau ×3,3-3,6 en défaut. Corpus court : ×1,18 / ×1,07 seulement.
+- **Correctif proposé** (pseudo-code dans la fiche, non appliqué) : hoister `simples`/`gvs_simple` (lignes 853-941), ajouter un `cache_gv` local et `_verbe_gv`, remplacer les appels 681/685/701 et passer `cache_gv` aux sites 887/895/899/916/922/935/940. Sortie identique V1/V2/OFF : **612/612** + **10/10 textes longs**.
+- **Limite** : le `sorted(gvs, key=ecart)` par segment reste ; le cache ne rend pas la courbe strictement linéaire. V3 (index+bisect) et V4 (tri fusionné) testés, plus lents, non retenus ; V3 avait 1 divergence/612.
+
+**État git à reprendre** : le commit concurrent `2e08cbc7` a committé une version **antérieure** de mes deux fichiers. L'arbre de travail contient les corrections finales (référence `9d5337ce`, plages corpus, typo ; 22 insertions/20 suppressions vs HEAD), mais `git add` a échoué sur `.git/index.lock` (processus git actif). Il faut re-`git add` les deux fichiers avant le prochain commit ; je n'ai ni commité ni touché au lock.
+
+### 🤖 Assistant
+
+⏵ A6 confirme le cache (×11,6 en chunker, sortie identique) : je l'implémente et je vérifie l'égalité
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'else:' tools/bloc_linguistique.py | awk -F: '$1>900 && $1<1000 {print $1; exit}'),+16p\" tools/bloc_linguistique.py", "description": "Lire la branche chunker"}`
+
+  ```
+else:
+            for s in self._syntagmes_simple(texte, lg):
+                meta = {"role": s["role"], "niveau": s["niveau"]}
+                cible = self._cible_proche(texte, s, [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"], verbes)
+                if cible:
+                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+                gvs_s = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+                etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
+                                            s["fin"], self.nom, 0.35,
+                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_s, verbes=verbes),
+                                            langue=lg, script=script, meta=meta))
+        # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
+        if cands and self.union:
+            deja = {(s.get("type"), s.get("debut"), s.get("fin"))
+                    for s in cands[0].get("segments", [])}
+            simples = self._syntagmes_simple(texte, lg)
+            gvs_u = ([x for x in cands[0].get("segments", []) if x.get("type") 
+… [8 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, json; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); out=[]\nfor p in charger():\n    a=h.analyse … [419 caractères tronqués]`
+
+  ```
+photo avant : 17776 étiquettes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# 1) helper mémoïsé\nt=t.replace('''    @staticmethod\n    def _cible_proche(texte: str, segment: dict, gvs: list[dict],\n               … [4746 caractères tronqués]`
+
+  ```
+cache posé (chunker)
+temps 653.5 ms | phrases différentes 0 / 612
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:tools/bloc_linguistique.py > /tmp/bloc_old.py && timeout 600 python3 - <<'PY'\nimport sys, time, importlib.util; sys.path.insert(0,'.')\nspec=importlib.util.spec_from_file_location(\"bloc_old\",\"/tmp/bloc_old.py\")\nol … [676 caractères tronqués]`
+
+  ```
+10 old 47.8 ms
+10 new 4.9 ms
+20 old 152.9 ms
+20 new 9.8 ms
+40 old 617.8 ms
+40 new 17.9 ms
+80 old 2609.5 ms
+80 new 34.5 ms
+160 old 9817.7 ms
+160 new 70.8 ms
+  ```
+
+### 🤖 Assistant
+
+⏵ Cache : **0 différence / 612** et ×139 à 160 répétitions. Je pose la porte et la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T177 les têtes des candidats S       top-k strict 88 → 141 (0,9724)\\n\",\n\"  T177 les têtes des candidats S       top-k  … [1510 caractères tronqués]`
+
+  ```
+T178 ajoutée
+  181/181 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent 1b0cf09a-a77a-443d-82e2-68a5d6cacdf0 sent a message: 
+Alerte drift : `tools/bloc_linguistique.py` a été modifié dans l'arbre pendant ma validation (sha 6e8430… → e568c9…, +26/−9). Le diff ajoute `_verbe_gv` + un cache local, mais **seulement dans la branche `else`** (chunker seul) ; la branche `cands` et l'union ne sont pas hoistées. Ce n'est pas moi (mission sans modification). Pour des mesures valides, je gèle le snapshot `HEAD` = `6e8430…` (celui de la fiche) et je mesure dessus ; je signalerai la dérive et les lignes du correctif par rapport à ce snapshot. Si c'est toi qui patches, sache que le patch en cours est partiel et que `_cible_proche(..., verbes, cache_gv)` positionnel marche mais que les sites 861/928/929-930 restent à hoister.
+
+### 🤖 Assistant
+
+⏵ A11 a raison : le cache manque dans les branches S et union. Je le complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        cands = self._syntagmes_s(texte)\n        cibles_s = self._cibles_s(texte) if cands else {}''',\n'''        cands … [2414 caractères tronqués]`
+
+  ```
+cache étendu au chemin S et à l’union
+défaut : temps 569.9 ms | diff 0 / 612
+défaut 20 29.9 ms
+défaut 80 161.1 ms
+défaut 160 469.1 ms
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, time, importlib.util; sys.path.insert(0,'.')\nspec=importlib.util.spec_from_file_location(\"bloc_old\",\"/tmp/bloc_old.py\")\nold=importlib.util.module_from_spec(spec); sys.modules[\"bloc_old … [687 caractères tronqués]`
+
+  ```
+20 reps | défaut old 157.5 ms | new 27.1 ms | × 5.8
+80 reps | défaut old 157.3 ms | new 151.2 ms | × 1.0
+160 reps | défaut old 426.3 ms | new 419.6 ms | × 1.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le cache est complet (égalité 0/612) ; en défaut le coût restant est chez S. Je fige et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-cache-chunker-applique.md <<'MD'\n# B13 — le cache du chunker appliqué : ×139 en chunker, ×1 en défaut (S domine)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdi … [4497 caractères tronqués]`
+
+  ```
+fiche + JSON écrits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T177** | les candidats S sont-ils exploitables ? | **têtes** : top-k strict **0,6069 → 0,9724** (+45) | … [2645 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 180→181: 1
+docs/pilotage/chantiers.md 180→181: 0
+docs/pilotage/en-cours.md 180→181: 1
+docs, pilotage, README
+  ❌ 1 violation(s) :
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **cache appliqué** (×139 en chunker, sortie identique) ; vague 1 intégrée ; 3 divergences corrigées.\",\n            \"  … [1399 caractères tronqués]`

@@ -7,10 +7,11 @@
   "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
   "sha256_apres_banc": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
   "fichier_change_pendant_banc": false,
-  "commit": "e1171032",
+  "commit": "9d5337ce",
   "branche": "s/v7",
   "arbre_propre": false,
-  "note": "fichier modifié dans l'arbre de travail (règles d'attachement récentes) ; toutes les mesures et tous les numéros de ligne portent sur ce sha256, revérifié identique après le banc."
+  "note": "le fichier mesuré est committé dans 9d5337ce (il était encore modifié dans l'arbre, au-dessus de e1171032, au moment du banc) ; toutes les mesures et tous les numéros de ligne portent sur ce sha256, revérifié identique après le banc et identique au contenu de HEAD.",
+  "commit_au_moment_du_banc": "e1171032"
  },
  "dispositif": {
   "banc": "/tmp/bench_final.py",
@@ -892,7 +893,7 @@
   "Chemin par défaut : le générateur S répond pour les 612 phrases ; _syntagmes_simple n'est appelé que 2 fois/phrase. Le re-chunking dans la boucle est du code mort sur ce chemin ; il ne devient chaud que si S est absent (segmenter_s=False) ou échoue.",
   "Le cache seul ne linéarise pas : pente V2 1,44 (chunker) / 1,55 (défaut) sur 160-1280 ; le tri par segment reste. Une vraie linéarité demande un index pré-trié, non retenu en l'état.",
   "Bruit de mesure : Xeon partagé, temps CPU, 3-11 passes ; l'OFF varie de ×0,90 à ×1,13 selon le point (médiane ×1,00). Les facteurs à ±10 % près.",
-  "Instantané de travail : tools/bloc_linguistique.py était modifié (sha256 6e8430…, commit e1171032) et a changé pendant la préparation (d9c9d5… → 6e8430…). Toutes les mesures et lignes citées portent sur 6e8430…, revérifié après le banc ; une édition ultérieure invalide les numéros de ligne.",
+  "Instantané de travail : tools/bloc_linguistique.py a changé pendant la préparation (d9c9d5… → 6e8430…) puis a été committé dans 9d5337ce ; les mesures et lignes citées portent sur 6e8430…, qui est le contenu de HEAD. Une édition ultérieure invalide les numéros de ligne.",
   "Le prototype V2 est une sous-classe de banc, pas le patch réel : l'égalité 612/612 + 10/10 est un contrôle fort, mais le patch hoisté doit être appliqué puis repassé par les portes et une nouvelle mesure.",
   "La clé (debut, fin) du cache de verbe n'est valide que dans un appel d'analyser (texte et verbes constants) ; le pseudo-code crée le dict localement pour cette raison. Pas d'état d'instance, donc pas de course entre threads.",
   "time.process_time exclut les I/O et le temps passé hors CPU ; l'analyse est CPU-bound, mais une machine chargée peut décaler les médianes."

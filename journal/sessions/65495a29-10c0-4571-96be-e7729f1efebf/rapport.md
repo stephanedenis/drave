@@ -7,12 +7,12 @@
 | Identifiant | `65495a29-10c0-4571-96be-e7729f1efebf` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 13:16 |
-| Durée | 1.1 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 76 |
-| Appels d'outils | 90 |
+| Messages | 80 |
+| Appels d'outils | 93 |
 | Fichiers touchés | 1 |
-| Commandes | 83 |
+| Commandes | 85 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2097 caractères tronqués]
 
-*90 appels d'outils.* Actions notables :
+*93 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and root files
 - bash — Count lines and list reports dir
@@ -41,11 +41,31 @@
 - bash — Count gold sentences across loaders
 - bash — Look for existing chunker reports
 - bash — Inspect phrase structure
-- … et 75 autres
+- … et 78 autres
 
 **Synthèse produite :**
 
-⏵ Un commit concurrent a inclus une version antérieure ; je prépare les corrections finales dans l'index (sans commit)
+⏵ Livraison du rapport et du JSON, avec état git à reprendre
+
+**Livrables créés** (aucun fichier existant modifié par moi, aucun commit de ma part) :
+- `reports/rapport-cout-chunker.md` — fiche complète (verdict, protocole, tableaux, complexité, correctif, contrôle négatif, limites)
+- `reports/pensee-cout-chunker.json` — données structurées, JSON valide
+
+**Mesures** (instantané `6e8430…`, contenu de HEAD, Xeon, temps CPU, passes entrelacées) :
+
+| | corpus 612 | 20 | 40 | 80 | 160 | 320 |
+|---|---:|---:|---:|---:|---:|---:|
+| chunker seul, original (ms) | 231,4 | 1,75 | 5,04 | 17,29 | 64,82 | 238,00 |
+| chunker seul, cache V2 (ms) | 196,6 | 0,73 | 1,31 | 2,57 | 5,58 | 14,10 |
+| défaut S, original (ms) | 394,4 | 1,98 | 4,23 | 9,89 | 27,83 | 88,38 |
+| défaut S, cache V2 (ms) | 367,6 | 1,58 | 2,99 | 6,08 | 13,94 | 36,88 |
+
+- **Complexité** : pente log-log 1,74 (chunker, 20-160) et 1,27 (défaut), montant à 1,94 / 1,86 sur 160-1 280. `_syntagmes_simple` est appelé **1+2S** fois en chunker (97 à 160, 193 à 320 ; 3,21/phrase sur le corpus), mais **2 fois** seulement en défaut. Le vrai coût défaut est `_verbe_dans` : 2 320 appels pour 32 GV distincts à 160, 8 736 pour 64 à 320.
+- **Gain du cache V2** : **×11,6 à 160** et **×16,9 à 320** en chunker ; **×2,0 / ×2,4** en défaut ; ×33 à 1 280 en chunker, plateau ×3,3-3,6 en défaut. Corpus court : ×1,18 / ×1,07 seulement.
+- **Correctif proposé** (pseudo-code dans la fiche, non appliqué) : hoister `simples`/`gvs_simple` (lignes 853-941), ajouter un `cache_gv` local et `_verbe_gv`, remplacer les appels 681/685/701 et passer `cache_gv` aux sites 887/895/899/916/922/935/940. Sortie identique V1/V2/OFF : **612/612** + **10/10 textes longs**.
+- **Limite** : le `sorted(gvs, key=ecart)` par segment reste ; le cache ne rend pas la courbe strictement linéaire. V3 (index+bisect) et V4 (tri fusionné) testés, plus lents, non retenus ; V3 avait 1 divergence/612.
+
+**État git à reprendre** : le commit concurrent `2e08cbc7` a committé une version **antérieure** de mes deux fichiers. L'arbre de travail contient les corrections finales (référence `9d5337ce`, plages corpus, typo ; 22 insertions/20 suppressions vs HEAD), mais `git add` a échoué sur `.git/index.lock` (processus git actif). Il faut re-`git add` les deux fichiers avant le prochain commit ; je n'ai ni commité ni touché au lock.
 
 ## 3. Travail accompli
 
@@ -97,7 +117,7 @@
 - **T1** Read an existing report format
 - **T1** Inspect pensee JSON schema
 - **T1** Extract all key figures
-- … et 43 autres
+- … et 45 autres
 
 ## 4. Mesures et résultats marquants
 
