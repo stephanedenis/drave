@@ -3138,3 +3138,42 @@ M donnees/paragraphes-validations.jsonl
 16
   ```
 
+### 🤖 Assistant
+
+⏵ Envoi du résultat au parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Livrables (2 fichiers neufs, aucun code modifié, aucun commit) :\n- reports/rapport-contrat-s.md\n- reports/pensee-contrat-s.json\n\nCONSTAT MESURÉ (gold 612 : 239 cibles, 1863 segments)\n- 94/239 cibles sans segment au bon span : 48 R … [3355 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif final
+
+Livrés (deux fichiers neufs, aucun code modifié, aucun commit) :
+- `reports/rapport-contrat-s.md` — la fiche : contrat `s/v1`, tableaux d'écart, contrôle négatif, limites, suite.
+- `reports/pensee-contrat-s.json` — les mêmes chiffres et le contrat lisible par machine.
+
+**Ce que S ne fournit pas**
+- **Aucune API publique complète** : `analyser()` n'annote que le dernier segment ambigu (GP/REL, jamais SUB) ; `structure()` rend des dicts dont `Segment.dict()` **omet** `cible_nom`/`cible_gp`/`cible_verbe` ; le bloc doit importer `_segmente`/`_tokens`, donc un privé.
+- **Aucun span REL/SUB complet** : 60 absentes, 18 plus larges, 3 plus étroites sur 143 cibles. Les 54 absences anglaises viennent des marqueurs français seulement ; côté français, 18 REL larges (pas de règle « un prédicat par clause »), 2 REL étroites (AUX/adverbe), 6 SUB absentes (`car`, et 5 GN qui avalent le verbe), 1 SUB étroite (adverbe).
+- **Aucune cible typée** : `cible_nom`/`cible_verbe` sont des textes complets (`Le livre`, pas `livre`), sans tête ni direction ; `cible_gp` est mort (4/1101, 0/89 REL/SUB) ; aucune cible à droite, donc les 26 SUB antéposées ne sont pas couvertes.
+- **Ni langue, ni refus, ni confiance/statut** : l'anglais est traité avec les marqueurs français et devient un GV qui avale la phrase.
+
+**Ce que le bloc doit faire**
+- **REL → antécédent nominal à gauche** (`_tete_nom`), **SUB → verbe gouverneur** (`_verbe_dans` / `_cible_proche`, gauche ou droite), **GP → verbe** ; ne jamais prendre le GN sujet pour un SUB.
+- Lire un **`cible` typé** (genre, span, direction) ; ne plus écraser les trois canaux par `cible_gp or cible_nom or cible_verbe` ; une seule segmentation via `structure()`.
+- **Repli de langue** : passer `lg` à S ; si S refuse, chunker ou aucun label + trace. Si S reste en `s/v0`, isoler l'adaptateur et tracer la version.
+
+**L'écart chiffré**
+- **94/239** cibles sans segment au bon span : **48 REL, 33 SUB, 13 GP** ; **81 REL/SUB** = 60 absentes, 19 plus larges, 2 plus étroites. Le bloc n'en répare aucune ; le chunker seul fait **0/143** exact REL/SUB.
+- **S seul : 62/143 exacts (43,4 %)** ; 51 REL et 38 SUB produits contre 74 et 70 dans le gold.
+- **Attachement REL/SUB** : 54/62 (état initial) → **60/62** (état courant, correctif non committé présent dans l'arbre) ; total **123/145 → 137/145 (0,9448)**. Les +6 REL/SUB sont exactement la prédiction ; les +8 GP viennent des autres changements du même lot. Restent 2 erreurs : `appelle-moi` (trait d'union) et `Peut-être qu'il viendra` (cible interne du gold).
+- **Contrôles négatifs** : S coupé 0/143 ; cible au hasard 1/239 (0,0042) ; permutation REL 44 observé vs 1,31 moyen (2000 tirages) ; le 26/26 REL est un effet de sélection (le premier GN fait aussi 26/26), la preuve est la permutation.
+
+**Point d'attention** : `CONVENTION_CIBLE` écrit « SUB → antécédent (tête du GN à gauche) », mais le POS du gold donne **69/69 SUB = VERB** (42 gauche, 26 droite, 1 interne). `_est_verbe` en classait 34 comme noms ; l'évaluateur courant, passé au POS, donne 116 verbes / 29 noms. La convention écrite est à corriger, et le cas interne à trancher.
+
+Priorités restantes : API `s/v1` et champs typés côté S ; règle de fin « un prédicat par clause » ; `langue` + refus explicite ; committer le correctif du bloc et rejouer les portes.
+

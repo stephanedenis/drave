@@ -1,0 +1,880 @@
+{
+ "date_verification": "2026-11-05T13:54:11-05:00",
+ "branche": "s/v7",
+ "ligne": "B13",
+ "objet": "Cohérence des fiches B13 datées du 2026-11-05 avec leurs JSON et les portes",
+ "perimetre": {
+  "fiches": 11,
+  "json": 11,
+  "date_fiches": "2026-11-05",
+  "commits": {
+   "verbe-gv": "9ff4adda",
+   "lexique-verbal": "d400e188",
+   "spans": "13e8bb2d",
+   "denominateur": "f8f5bc04",
+   "classement": "d8edd1d9",
+   "conventions": "f70a1b2a",
+   "attachement-cible": "23853cb7",
+   "lexique-elargi": "a408a909",
+   "echecs-cible": "a048cb83",
+   "topk-strict": "e223a98d",
+   "convention-doc": "0ddd4fb9"
+  },
+  "portes_ciblees": [
+   "T153",
+   "T161",
+   "T162",
+   "T163",
+   "T166",
+   "T167",
+   "T168",
+   "T169",
+   "T172",
+   "T173"
+  ],
+  "portes_fiches": [
+   "T164",
+   "T165",
+   "T170",
+   "T171",
+   "T174"
+  ],
+  "hors_perimetre": [
+   "fiches B13 du 2026-11-04 (passifs, cible par proximité, candidats verbes, échecs d'attachement)",
+   "docs/implantation/moteur-de-pensee.md (valeurs historiques 12 GP), reports/README.md (titres des fiches)",
+   "les 162 autres portes de tools/pensee/autotest.py (non détaillées ici ; suite complète 177/177)"
+  ]
+ },
+ "methode": {
+  "lecture": "fiche + JSON homonyme + git show <commit>:tools/pensee/autotest.py",
+  "valeur_porte": "assertions de autotest.py (jamais les docstrings, plusieurs périmés)",
+  "historique": "commit horodaté + porte du commit + JSON du commit",
+  "execution": "15 portes ciblées puis python3 -m tools.pensee.autotest -> 177/177",
+  "aucune_modification": "aucune fiche, aucun JSON, aucun commit"
+ },
+ "etat_courant": {
+  "portes": "177/177",
+  "cibles": 239,
+  "labels": 145,
+  "top1": 126,
+  "topk": 134,
+  "exact": 123,
+  "global": {
+   "top1": 0.5272,
+   "topk": 0.5607,
+   "exact": 0.5146
+  },
+  "exactitude_spans": {
+   "top1": 0.869,
+   "topk": 0.9241,
+   "exact": 0.8483
+  },
+  "topk_exact": 88,
+  "topk_exact_taux": 0.3682,
+  "topk_exact_taux_span": 0.6069,
+  "verbe": {
+   "cibles": 63,
+   "justes": 60,
+   "taux": 0.9524
+  },
+  "nom": {
+   "cibles": 82,
+   "justes": 63,
+   "taux": 0.7683
+  },
+  "spans_perdus": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13,
+   "total": 94
+  },
+  "couverture": 0.6067,
+  "f1_syntagmes": 0.2862
+ },
+ "synthese": {
+  "fiches_verifiees": 11,
+  "fiches_coherentes": 8,
+  "fiches_avec_divergence": 3,
+  "fiches_historiques": 7,
+  "fiches_actuelles": 4,
+  "paliers_historiques": 7,
+  "divergences_reelles": 7,
+  "detail_divergences": {
+   "valeurs_fausses": 4,
+   "incoherences_denombrement": 2,
+   "attributions_inexactes": 1
+  },
+  "ambiguites_non_comptees": 5,
+  "correction_concurrente": "rapport-pensee-spans.md + pensee-spans.json modifiés par un autre agent ; correction partielle, voir concurrence"
+ },
+ "fiches": [
+  {
+   "id": "verbe-gv",
+   "titre": "le verbe du GV-phrase : l'exact passe de 0,0586 à 0,0962",
+   "fichier": "reports/rapport-pensee-verbe-gv.md",
+   "json": "reports/pensee-verbe-gv.json",
+   "commit": "9ff4adda",
+   "heure": "08:58:36",
+   "portes_fiche": "167/167",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_historique",
+   "verdict": "✅ cohérente — 🕓 historique",
+   "chiffres_cles": {
+    "exact": "23 (0,0962)",
+    "top1": "105 (0,4393)",
+    "topk": "122 (0,5105)",
+    "tete": "105 (0,7241) / 122 (0,8414)",
+    "span": 94,
+    "cible": 23
+   },
+   "note": "Les portes T153/T161/T162/T163/T164 attendaient ces valeurs au commit 9ff4adda ; elles ont été réécrites aux commits suivants."
+  },
+  {
+   "id": "lexique-verbal",
+   "titre": "le lexique verbal : l'exact passe de 0,0962 à 0,1381",
+   "fichier": "reports/rapport-pensee-lexique-verbal.md",
+   "json": "reports/pensee-lexique-verbal.json",
+   "commit": "d400e188",
+   "heure": "09:11:28",
+   "portes_fiche": "168/168",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_historique",
+   "verdict": "✅ cohérente — 🕓 historique",
+   "chiffres_cles": {
+    "exact": "33 (0,1381)",
+    "top1": "115 (0,4812)",
+    "topk": "132 (0,5523)",
+    "tete": "114 (0,7862) / 131 (0,9034)",
+    "span": 94,
+    "cible": 13
+   },
+   "note": "T153 0,1381 et T161 33 au commit ; T162 132/131 ; T163 94/13 ; T165 sémantique."
+  },
+  {
+   "id": "spans",
+   "titre": "les 94 spans : 48 REL, 33 SUB, 12 GP",
+   "fichier": "reports/rapport-pensee-spans.md",
+   "json": "reports/pensee-spans.json",
+   "commit": "13e8bb2d",
+   "heure": "09:35:06",
+   "portes_fiche": "169/169",
+   "portes_actuelles": "177/177",
+   "statut": "divergence_denombrement",
+   "verdict": "⚠️ corps cohérent — ❌ titre/catégories",
+   "chiffres_cles": {
+    "labels": "145 -> 146",
+    "span": "94 -> 93",
+    "cible": "13 -> 14",
+    "REL": 48,
+    "SUB": 33,
+    "GP": 12,
+    "total": 93,
+    "categories": "65/25/3/1 = 94 (attendu après : 65/24/3/1 = 93)"
+   },
+   "note": "Le titre '94 spans : 48+33+12' mélange l'avant (94) et l'après (48+33+12=93). Les catégories 65/25/3/1 somment 94 sous le titre 'Les 93 spans'. Voir divergences S1/S2."
+  },
+  {
+   "id": "denominateur",
+   "titre": "le dénominateur de l'attachement : 239 cibles, 146 segments",
+   "fichier": "reports/rapport-pensee-denominateur.md",
+   "json": "reports/pensee-denominateur.json",
+   "commit": "f8f5bc04",
+   "heure": "09:42:30",
+   "portes_fiche": "170/170",
+   "portes_actuelles": "177/177",
+   "statut": "divergence_attribution",
+   "verdict": "⚠️ chiffres cohérents — ❌ attribution 93 chez S",
+   "chiffres_cles": {
+    "labels": 146,
+    "rendement": "0,4812/0,5523/0,1381",
+    "exactitude_spans": "0,7877/0,9041/0,2260",
+    "sans_segment": 93
+   },
+   "note": "T167 146/0,7877/0,9041/0,2260 au commit. Les 93 se composent de 81 REL/SUB + 12 GP, pas de 93 REL/SUB."
+  },
+  {
+   "id": "classement",
+   "titre": "le classement : l'exact passe de 0,2260 à 0,6438",
+   "fichier": "reports/rapport-pensee-classement.md",
+   "json": "reports/pensee-classement.json",
+   "commit": "d8edd1d9",
+   "heure": "10:02:28",
+   "portes_fiche": "171/171",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_historique",
+   "verdict": "✅ cohérente — 🕓 historique",
+   "chiffres_cles": {
+    "exact": "94 (0,6438)",
+    "top1": "114 (0,7808)",
+    "topk": "132 (0,9041)",
+    "conventions": "51/95, justes 37/57",
+    "echecs": 52
+   },
+   "note": "T168 94/51/95 au commit ; T161 114/94 ; T162 132/131 ; T163 93/14."
+  },
+  {
+   "id": "conventions",
+   "titre": "les deux conventions du gold : verbes 0,7255, noms 0,6000",
+   "fichier": "reports/rapport-pensee-conventions.md",
+   "json": "reports/pensee-conventions.json",
+   "commit": "f70a1b2a",
+   "heure": "10:09:43",
+   "portes_fiche": "172/172",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_historique",
+   "verdict": "✅ cohérente — 🕓 historique",
+   "chiffres_cles": {
+    "verbe": "37/51 (0,7255)",
+    "nom": "57/95 (0,6000)",
+    "total": "94/146 (0,6438)",
+    "echecs": 52
+   },
+   "note": "T169 51/37/0,7255 et 95/57/0,6 au commit. Le 0,6438 est le taux sur 146, pas le rendement ÷239 (0,3933)."
+  },
+  {
+   "id": "attachement-cible",
+   "titre": "l'attachement ciblé : l'exact passe de 0,6438 à 0,8082",
+   "fichier": "reports/rapport-pensee-attachement-cible.md",
+   "json": "reports/pensee-attachement-cible.json",
+   "commit": "23853cb7",
+   "heure": "10:18:01",
+   "portes_fiche": "173/173",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_historique",
+   "verdict": "✅ cohérente — 🕓 historique",
+   "chiffres_cles": {
+    "exact": "118 (0,8082)",
+    "top1": "122 (0,8356)",
+    "topk": "132 (0,9041)",
+    "verbe": "48/51 (0,9412)",
+    "nom": "70/95 (0,7368)",
+    "rendement": "0,5105/0,5523/0,4937",
+    "echecs": 28
+   },
+   "note": "T167 146/0,8356/0,9041/0,8082 ; T168 118/51/95 ; T169 48/51 et 70/95 ; T153 0,5105/0,4937."
+  },
+  {
+   "id": "lexique-elargi",
+   "titre": "le lexique élargi : l'exact passe de 0,8082 à 0,8483",
+   "fichier": "reports/rapport-pensee-lexique-elargi.md",
+   "json": "reports/pensee-lexique-elargi.json",
+   "commit": "a408a909",
+   "heure": "10:39:22",
+   "portes_fiche": "174/174",
+   "portes_actuelles": "177/177",
+   "statut": "divergence_reelle",
+   "verdict": "❌ divergence réelle (4 valeurs fausses)",
+   "chiffres_cles": {
+    "labels": 145,
+    "exact": "123 (0,8483)",
+    "top1": "126 (0,8690)",
+    "topk": "134 (0,9241)",
+    "verbe": "60/63 (0,9524)",
+    "nom": "63/82 (0,7683)",
+    "rendement": "0,5272/0,5607/0,5146"
+   },
+   "note": "La table et les champs JSON sont justes ; la prose et deux champs JSON donnent 62/83/0,7590/23 et un dénominateur 145 pour l'avant (146). Voir divergences L1-L4."
+  },
+  {
+   "id": "echecs-cible",
+   "titre": "les 22 échecs de l'attachement ciblé : 11 hors candidats, 11 mal classés",
+   "fichier": "reports/rapport-pensee-echecs-cible.md",
+   "json": "reports/pensee-echecs-cible.json",
+   "commit": "a048cb83",
+   "heure": "10:49:12",
+   "portes_fiche": "175/175",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_actuelle",
+   "verdict": "✅ cohérente — actuelle",
+   "chiffres_cles": {
+    "labels": 145,
+    "justes": 123,
+    "echecs": 22,
+    "hors": 11,
+    "mal_classes": 11
+   },
+   "note": "T171 123/145 ; T172 11+11 ; par type 14/0/10 + 5/3/1 = 22."
+  },
+  {
+   "id": "topk-strict",
+   "titre": "le top-k strict : 0,6069, pas 0,9241",
+   "fichier": "reports/rapport-pensee-topk-strict.md",
+   "json": "reports/pensee-topk-strict.json",
+   "commit": "e223a98d",
+   "heure": "10:59:08",
+   "portes_fiche": "176/176",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_actuelle",
+   "verdict": "✅ cohérente — actuelle",
+   "chiffres_cles": {
+    "labels": 145,
+    "topk_sous_chaine": "134 (0,9241)",
+    "topk_strict": "88 (0,6069)",
+    "rendement_strict": 0.3682,
+    "succes_sous_chaine": 46,
+    "echecs_strict": 57
+   },
+   "note": "T173 134/88/0,6069/0,9241 ; 46 = 134-88 ; 57 = 145-88."
+  },
+  {
+   "id": "convention-doc",
+   "titre": "la convention des cibles est documentée dans le gold",
+   "fichier": "reports/rapport-pensee-convention-doc.md",
+   "json": "reports/pensee-convention-doc.json",
+   "commit": "0ddd4fb9",
+   "heure": "11:10:13",
+   "portes_fiche": "177/177",
+   "portes_actuelles": "177/177",
+   "statut": "coherente_actuelle",
+   "verdict": "✅ cohérente — actuelle",
+   "chiffres_cles": {
+    "verbe": 63,
+    "nom": 82,
+    "segments": 145,
+    "echecs": 22,
+    "hors": 11,
+    "mal_classes": 11
+   },
+   "note": "T168/T169 63/82 ; T167 145 ; T172 11+11 ; T174 CONVENTION_CIBLE."
+  }
+ ],
+ "controles": [
+  {
+   "fiche": "verbe-gv",
+   "chiffre": "exact",
+   "fiche_valeur": "23 (0,0962)",
+   "json_valeur": "23",
+   "porte_actuelle": "T153/T161/T164 = 123 (0,5146)",
+   "porte_commit": "23 (0,0962)",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "verbe-gv",
+   "chiffre": "top1 / top-k",
+   "fiche_valeur": "105 (0,4393) / 122 (0,5105)",
+   "json_valeur": "105 / 122",
+   "porte_actuelle": "T153/T161 = 126 ; T162 = 134",
+   "porte_commit": "105 / 122",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "verbe-gv",
+   "chiffre": "échecs span / cible",
+   "fiche_valeur": "94 / 23",
+   "json_valeur": "94 / 23",
+   "porte_actuelle": "T163 = 94 / 11",
+   "porte_commit": "94 / 23",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "lexique-verbal",
+   "chiffre": "exact",
+   "fiche_valeur": "33 (0,1381)",
+   "json_valeur": "33",
+   "porte_actuelle": "T153/T161 = 123 (0,5146)",
+   "porte_commit": "33 (0,1381)",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "lexique-verbal",
+   "chiffre": "top1 / top-k",
+   "fiche_valeur": "115 (0,4812) / 132 (0,5523)",
+   "json_valeur": "115 / 132",
+   "porte_actuelle": "T153/T161 = 126 ; T162 = 134",
+   "porte_commit": "115 / 132",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "lexique-verbal",
+   "chiffre": "cible",
+   "fiche_valeur": "13",
+   "json_valeur": "13",
+   "porte_actuelle": "T163 = 11",
+   "porte_commit": "13",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "spans",
+   "chiffre": "labels / span / cible",
+   "fiche_valeur": "145→146 / 94→93 / 13→14",
+   "json_valeur": "145→146 / 94→93 / 13→14",
+   "porte_actuelle": "T167 = 145 ; T163 = 94/11",
+   "porte_commit": "T163 = 93/14 ; T167 (commit suivant) = 146",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "spans",
+   "chiffre": "REL/SUB/GP",
+   "fiche_valeur": "48 / 33 / 12 (93)",
+   "json_valeur": "48 / 33 / 12 (93)",
+   "porte_actuelle": "T166 = 48 / 33 / 13 (94)",
+   "porte_commit": "48 / 33 / 12 (93)",
+   "verdict": "historique_pour_12_GP"
+  },
+  {
+   "fiche": "spans",
+   "chiffre": "titre",
+   "fiche_valeur": "94 spans : 48+33+12=93",
+   "json_valeur": "spans.total = 93",
+   "porte_actuelle": "T166 = 94 = 48+33+13",
+   "porte_commit": "T166 = 93 = 48+33+12",
+   "verdict": "divergence_denombrement"
+  },
+  {
+   "fiche": "spans",
+   "chiffre": "catégories",
+   "fiche_valeur": "65/25/3/1 = 94",
+   "json_valeur": "categories = 65/25/3/1 (somme 94) ; apres.span = 93",
+   "porte_actuelle": "courant 65/24/4/1 = 94 (audit A1)",
+   "porte_commit": "après correctif 65/24/3/1 = 93 (rejoué)",
+   "verdict": "divergence_denombrement"
+  },
+  {
+   "fiche": "denominateur",
+   "chiffre": "labels / rendement / exactitude",
+   "fiche_valeur": "146 ; 0,4812/0,5523/0,1381 ; 0,7877/0,9041/0,2260",
+   "json_valeur": "146 ; idem",
+   "porte_actuelle": "T167 = 145 ; 0,5272/0,5607/0,5146 ; 0,869/0,9241/0,8483",
+   "porte_commit": "T167 = 146 ; 0,7877/0,9041/0,2260",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "denominateur",
+   "chiffre": "93 sans segment (REL/SUB de S)",
+   "fiche_valeur": "93",
+   "json_valeur": "93 (limites : les 93 spans chez S)",
+   "porte_actuelle": "T163 = 94 ; T166 = 48/33/13",
+   "porte_commit": "T163 = 93/14 ; T166 = 48/33/12",
+   "verdict": "divergence_attribution"
+  },
+  {
+   "fiche": "classement",
+   "chiffre": "exact / top1 / top-k",
+   "fiche_valeur": "94 (0,6438) / 114 (0,7808) / 132 (0,9041)",
+   "json_valeur": "94 / 114 / 132",
+   "porte_actuelle": "T168 = 123 ; T161 = 126 ; T162 = 134",
+   "porte_commit": "94 / 114 / 132",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "classement",
+   "chiffre": "conventions",
+   "fiche_valeur": "51/95 ; 37/57",
+   "json_valeur": "51/95 ; 37/57",
+   "porte_actuelle": "T168/T169 = 63/82 ; 60/63",
+   "porte_commit": "51/95 ; 37/57",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "conventions",
+   "chiffre": "verbe / nom / total",
+   "fiche_valeur": "37/51 (0,7255) / 57/95 (0,6000) / 94/146 (0,6438)",
+   "json_valeur": "idem",
+   "porte_actuelle": "T169 = 60/63 / 63/82 ; T168 = 123",
+   "porte_commit": "37/51 / 57/95 / 94",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "attachement-cible",
+   "chiffre": "exact / top1 / top-k",
+   "fiche_valeur": "118 (0,8082) / 122 (0,8356) / 132 (0,9041)",
+   "json_valeur": "118 / 122 / 132",
+   "porte_actuelle": "T167 = 0,8483 / 0,8690 / 0,9241 ; T168 = 123",
+   "porte_commit": "118 / 122 / 132",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "attachement-cible",
+   "chiffre": "verbe / nom",
+   "fiche_valeur": "48/51 (0,9412) / 70/95 (0,7368)",
+   "json_valeur": "0,9412 / 0,7368",
+   "porte_actuelle": "T169 = 60/63 / 63/82",
+   "porte_commit": "48/51 / 70/95",
+   "verdict": "historique"
+  },
+  {
+   "fiche": "lexique-elargi",
+   "chiffre": "exact / top1 / top-k",
+   "fiche_valeur": "123 (0,8483) / 126 (0,8690) / 134 (0,9241)",
+   "json_valeur": "123 / 126 / 134",
+   "porte_actuelle": "T153/T161/T167/T171 = 123 ; T161 = 126 ; T162/T173 = 134",
+   "porte_commit": "123 / 126 / 134",
+   "verdict": "coherent"
+  },
+  {
+   "fiche": "lexique-elargi",
+   "chiffre": "verbe / nom (table)",
+   "fiche_valeur": "60/63 (0,9524) / 63/82 (0,7683)",
+   "json_valeur": "0,9524 / 0,7683",
+   "porte_actuelle": "T169 = 60/63 / 63/82",
+   "porte_commit": "60/63 / 63/82",
+   "verdict": "coherent"
+  },
+  {
+   "fiche": "lexique-elargi",
+   "chiffre": "verbes 51 -> 62",
+   "fiche_valeur": "62",
+   "json_valeur": "note = 62",
+   "porte_actuelle": "T168/T169 = 63",
+   "porte_commit": "63",
+   "verdict": "divergence"
+  },
+  {
+   "fiche": "lexique-elargi",
+   "chiffre": "noms 95 -> 83 ; 0,7590",
+   "fiche_valeur": "83 ; 0,7590",
+   "json_valeur": "0,7683",
+   "porte_actuelle": "T169 = 82 ; 0,7683",
+   "porte_commit": "82 ; 0,7683",
+   "verdict": "divergence"
+  },
+  {
+   "fiche": "lexique-elargi",
+   "chiffre": "23/145 restent faux",
+   "fiche_valeur": "23",
+   "json_valeur": "limites = 23",
+   "porte_actuelle": "T171 = 123/145 -> 22",
+   "porte_commit": "22",
+   "verdict": "divergence"
+  },
+  {
+   "fiche": "lexique-elargi",
+   "chiffre": "145 segments (avant)",
+   "fiche_valeur": "145",
+   "json_valeur": "labels = 145 ; avant.exact_span = 0,8082",
+   "porte_actuelle": "145 (après)",
+   "porte_commit": "146 (avant, 118/146 = 0,8082)",
+   "verdict": "divergence_denominateur"
+  },
+  {
+   "fiche": "echecs-cible",
+   "chiffre": "145 / 123 / 22 ; 11 / 11",
+   "fiche_valeur": "145 / 123 / 22 ; 11 / 11",
+   "json_valeur": "idem",
+   "porte_actuelle": "T171/T172 = 123 / 22 ; 11 / 11",
+   "porte_commit": "123 / 22 ; 11 / 11",
+   "verdict": "coherent"
+  },
+  {
+   "fiche": "topk-strict",
+   "chiffre": "134 / 88 / 0,6069 / 0,9241",
+   "fiche_valeur": "134 / 88 / 0,6069 / 0,9241",
+   "json_valeur": "idem",
+   "porte_actuelle": "T173 = idem",
+   "porte_commit": "idem",
+   "verdict": "coherent"
+  },
+  {
+   "fiche": "convention-doc",
+   "chiffre": "63 / 82 / 145 ; 22 (11/11)",
+   "fiche_valeur": "63 / 82 / 145 ; 22",
+   "json_valeur": "idem",
+   "porte_actuelle": "T168/T169/T167/T172 = idem",
+   "porte_commit": "idem",
+   "verdict": "coherent"
+  }
+ ],
+ "divergences": [
+  {
+   "id": "L1",
+   "fiche": "lexique-elargi",
+   "type": "valeur_fausse",
+   "champ": "cibles verbes (prose)",
+   "valeur_fiche": 62,
+   "valeur_attendue": 63,
+   "ou": [
+    "fiche l. 29",
+    "json note"
+   ],
+   "preuve": "table 60/63 ; T168/T169 ; convention-doc 63",
+   "verdict": "reelle"
+  },
+  {
+   "id": "L2",
+   "fiche": "lexique-elargi",
+   "type": "valeur_fausse",
+   "champ": "cibles noms / taux noms (prose)",
+   "valeur_fiche": "83 ; 0,7590",
+   "valeur_attendue": "82 ; 0,7683",
+   "ou": [
+    "fiche l. 30, 33",
+    "json apres.nom = 0,7683"
+   ],
+   "preuve": "table 63/82 ; T169 ; 0,7590 = 63/83",
+   "verdict": "reelle"
+  },
+  {
+   "id": "L3",
+   "fiche": "lexique-elargi",
+   "type": "valeur_fausse",
+   "champ": "échecs restants",
+   "valeur_fiche": 23,
+   "valeur_attendue": 22,
+   "ou": [
+    "fiche l. 35",
+    "json limites"
+   ],
+   "preuve": "145 - 123 = 22 ; echecs-cible 22 ; T171 123/145",
+   "verdict": "reelle"
+  },
+  {
+   "id": "L4",
+   "fiche": "lexique-elargi",
+   "type": "denominateur",
+   "champ": "segments de la colonne avant",
+   "valeur_fiche": 145,
+   "valeur_attendue": 146,
+   "ou": [
+    "fiche l. 6",
+    "json labels = 145"
+   ],
+   "preuve": "T167 au commit 23853cb7 = 146 ; 118/146 = 0,8082",
+   "verdict": "reelle"
+  },
+  {
+   "id": "S1",
+   "fiche": "spans",
+   "type": "denombrement",
+   "champ": "titre",
+   "valeur_fiche": "94 spans : 48 REL + 33 SUB + 12 GP",
+   "valeur_attendue": "93 = 48+33+12 (corps) ; 94 = total avant le correctif GP",
+   "ou": [
+    "fiche titre (blob 13e8bb2d)",
+    "corps dit 93"
+   ],
+   "preuve": "T163 au commit = 93/14 ; T166 = 48/33/12",
+   "verdict": "reelle"
+  },
+  {
+   "id": "S2",
+   "fiche": "spans",
+   "type": "denombrement",
+   "champ": "catégories + attribution des 65/25",
+   "valeur_fiche": "65/25/3/1 = 94 ; 65 + 25 = 90 attribués aux subordonnées",
+   "valeur_attendue": "65/24/3/1 = 93 après le correctif ; 65/24/4/1 = 94 courant ; 81 REL/SUB seulement (pas 90)",
+   "ou": [
+    "fiche § 1",
+    "json categories"
+   ],
+   "preuve": "audit A1 rejoue 13e8bb2d = 65/24/3/1 ; courant 65/24/4/1",
+   "verdict": "reelle"
+  },
+  {
+   "id": "D1",
+   "fiche": "denominateur",
+   "type": "attribution",
+   "champ": "composition des 93",
+   "valeur_fiche": "93 chez S (REL/SUB)",
+   "valeur_attendue": "81 REL/SUB + 12 GP",
+   "ou": [
+    "fiche § 1, § 2",
+    "json limites"
+   ],
+   "preuve": "T166 au commit = 48 REL + 33 SUB + 12 GP",
+   "verdict": "reelle"
+  }
+ ],
+ "chiffres_historiques": [
+  {
+   "fiche": "verbe-gv",
+   "commit": "9ff4adda",
+   "heure": "08:58:36",
+   "portes": 167,
+   "labels": 145,
+   "top1": 105,
+   "topk": 122,
+   "exact": 23,
+   "span": 94,
+   "cible": 23,
+   "conventions": null
+  },
+  {
+   "fiche": "lexique-verbal",
+   "commit": "d400e188",
+   "heure": "09:11:28",
+   "portes": 168,
+   "labels": 145,
+   "top1": 115,
+   "topk": 132,
+   "exact": 33,
+   "span": 94,
+   "cible": 13,
+   "conventions": null
+  },
+  {
+   "fiche": "spans",
+   "commit": "13e8bb2d",
+   "heure": "09:35:06",
+   "portes": 169,
+   "labels": "145 -> 146",
+   "top1": 115,
+   "topk": 132,
+   "exact": 33,
+   "span": "94 -> 93",
+   "cible": "13 -> 14",
+   "gp": "12 (après le correctif GP)",
+   "conventions": null
+  },
+  {
+   "fiche": "denominateur",
+   "commit": "f8f5bc04",
+   "heure": "09:42:30",
+   "portes": 170,
+   "labels": 146,
+   "top1": 115,
+   "topk": 132,
+   "exact": 33,
+   "span": 93,
+   "cible": 14,
+   "conventions": null
+  },
+  {
+   "fiche": "classement",
+   "commit": "d8edd1d9",
+   "heure": "10:02:28",
+   "portes": 171,
+   "labels": 146,
+   "top1": 114,
+   "topk": 132,
+   "exact": 94,
+   "span": 93,
+   "cible": 14,
+   "conventions": "51/95 ; 37/57"
+  },
+  {
+   "fiche": "conventions",
+   "commit": "f70a1b2a",
+   "heure": "10:09:43",
+   "portes": 172,
+   "labels": 146,
+   "top1": 114,
+   "topk": 132,
+   "exact": 94,
+   "span": 93,
+   "cible": 14,
+   "conventions": "51/95 ; 37/57"
+  },
+  {
+   "fiche": "attachement-cible",
+   "commit": "23853cb7",
+   "heure": "10:18:01",
+   "portes": 173,
+   "labels": 146,
+   "top1": 122,
+   "topk": 132,
+   "exact": 118,
+   "span": 93,
+   "cible": 14,
+   "conventions": "51/95 ; 48/70"
+  }
+ ],
+ "note_chiffres_historiques": "top1/topk/exact sont des numérateurs ; le taux est calculé sur 239 (rendement global) ou sur labels (exactitude spans) selon la ligne ; les deux lectures ne sont pas mélangées.",
+ "dettes_portes": [
+  {
+   "porte": "T162",
+   "docstring": "top-k passe de 78 à 112 (0,4686)",
+   "assertion": "topk == 134 (0,5607)",
+   "statut": "docstring périmé"
+  },
+  {
+   "porte": "T163",
+   "docstring": "94 de span, 33 de cible",
+   "assertion": "span == 94 et cible == 11",
+   "statut": "docstring périmé (33 est l'état d'avant)"
+  },
+  {
+   "porte": "T166",
+   "docstring": "48 REL, 33 SUB, 12 GP",
+   "assertion": "cats['GP'] == 13",
+   "statut": "docstring périmé (12 est l'état post-correctif GP, historique)"
+  },
+  {
+   "porte": "T167",
+   "docstring": "exactitude spans (÷146)",
+   "assertion": "labels == 145",
+   "statut": "docstring périmé"
+  },
+  {
+   "porte": "T168",
+   "docstring": "exact 94",
+   "message": "exact 123/146",
+   "assertion": "exact == 123 ; verbes == 63 ; noms == 82",
+   "statut": "docstring et message périmés"
+  }
+ ],
+ "concurrence": {
+  "constat": "Pendant la vérification (vers 13:43-13:54), un autre agent a modifié deux fichiers de périmètre ; je n'y ai pas touché.",
+  "fichiers": [
+   {
+    "fichier": "reports/pensee-spans.json",
+    "etat": "M (non committé)",
+    "changement": "ajout du bloc `courant` (145 / 0,6067 / 0,2862 / 94 / 48-33-13 / 65-24-4-1), source audit A1"
+   },
+   {
+    "fichier": "reports/rapport-pensee-spans.md",
+    "etat": "M (non committé)",
+    "changement": "titre et table des types passés au courant 94/13, note audit A1"
+   }
+  ],
+  "correction_partielle": [
+   "le chapô dit encore « sont 48 REL, 33 SUB et 12 GP » (le titre/table disent 13)",
+   "la narrative dit encore « plus large (25) » (la table dit 24)",
+   "le tableau « après le GP borné » garde labels 145→146, couverture 0,6067→0,6109, F1 0,2864→0,2869 et top1/top-k/exact 115/132/33 (historiques) alors que la note affirme qu'il donne le courant 145/0,6067/0,2862 et 126/134/123"
+  ],
+  "reference_du_constat": "blob committé 13e8bb2d (git show), pas le worktree",
+  "aucune_modification_de_ma_part": true
+ },
+ "ambiguites_non_comptees": [
+  {
+   "fiche": "verbe-gv",
+   "champ": "« 23/239 restent faux »",
+   "explication": "23 est le résiduel cible hors candidats, pas 23/239 exact faux (216/239)."
+  },
+  {
+   "fiche": "conventions",
+   "champ": "« 0,6438 = 51 × 0,73 + 95 × 0,60 »",
+   "explication": "0,6454 avec 0,73 ; l'égalité exacte utilise 0,7255."
+  },
+  {
+   "fiche": "lexique-elargi",
+   "champ": "« +4 »",
+   "explication": "+5 cibles correctes ou +4,01 points de taux ; unité non dite."
+  },
+  {
+   "fiche": "conventions / denominateur",
+   "champ": "« global »",
+   "explication": "0,6438 sur 146 vs rendement ÷239 (0,3933) ; mot surchargé."
+  },
+  {
+   "fiche": "les 7 premières",
+   "champ": "« T28 les couvrent »",
+   "explication": "phrase de template ; T28 est l'audit des mesures « seule » (tools/pensee/audit.py), pas l'attachement."
+  }
+ ],
+ "limites": [
+  "Les 7 fiches historiques n'ont pas été rejouées en exécutant leur code d'époque : valeurs lues dans la fiche, le JSON et git show <commit>:tools/pensee/autotest.py.",
+  "Un audit parallèle (A1, non committé) a rejoué 4 commits et trouve les mêmes valeurs ; cité comme corroboration, pas source primaire.",
+  "Les 15 portes ciblées et la suite complète ont été exécutées à HEAD (177/177), pas les 177 portes à chaque commit.",
+  "Les docstrings de T162/T163/T166/T167/T168 sont périmés ; les assertions sont la référence.",
+  "docs/implantation/moteur-de-pensee.md (12 GP) et reports/README.md (titres) ne sont pas dans le périmètre ; la roadmap est à jour (13 GP, 177/177).",
+  "Aucune fiche, aucun JSON, aucun commit modifié par moi ; les deux fichiers spans ont bougé sous moi (voir concurrence)."
+ ],
+ "fichiers": {
+  "sorties": [
+   "reports/rapport-coherence-fiches.md",
+   "reports/pensee-coherence-fiches.json"
+  ],
+  "sources": [
+   "reports/rapport-pensee-*.md (11)",
+   "reports/pensee-*.json (11)",
+   "tools/pensee/autotest.py",
+   "tools/tests/linguistique/evaluer_gold.py",
+   "tools/bloc_linguistique.py",
+   "tools/tests/linguistique/gold_reel.py"
+  ],
+  "corroboration_externe": [
+   "reports/pensee-audit-attachement.json",
+   "reports/rapport-audit-attachement.md"
+  ]
+ }
+}

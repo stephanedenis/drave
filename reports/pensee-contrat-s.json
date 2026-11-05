@@ -1,0 +1,412 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "objet": "contrat d'interface L (bloc_linguistique) ↔ S (structures/generateur) pour les subordonnées REL/SUB",
+ "verdict": "mesure faite ; le contrat s/v1 n'est pas tenu par S ; deux états mesurés : initial (bloc sans correctif) et courant (correctif non committé du bloc, 13:51) ; le générateur S n'a pas été modifié",
+ "chiffre": "94 / 239 cibles sans segment au bon span : 48 REL, 33 SUB, 13 GP ; 81 REL/SUB (60 absentes, 19 plus larges, 2 plus étroites) ; S seul : 62/143 exacts (0,4336) ; attachement REL/SUB : 54/62 initial, 60/62 courant ; total 123/145 (0,8483) → 137/145 (0,9448)",
+ "gold": {
+  "phrases": 612,
+  "par_source": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "segments": 1863,
+  "cibles": 239,
+  "cibles_par_type": {
+   "GP": 96,
+   "REL": 74,
+   "SUB": 69
+  },
+  "cibles_rel_sub": 143
+ },
+ "ecart_bloc": {
+  "cibles_sans_span_exact": 94,
+  "par_type": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13
+  },
+  "categories": {
+   "aucun": 65,
+   "plus_large": 25,
+   "plus_etroit": 4,
+   "coupe": 0
+  },
+  "rel_sub": {
+   "total": 81,
+   "aucun": 60,
+   "plus_large": 19,
+   "plus_etroit": 2
+  },
+  "labels_exacts": 145,
+  "lecture": "le bloc ne répare aucune des 81 REL/SUB ; l'union ajoute 15 labels REL, 0 exact"
+ },
+ "s_seul": {
+  "cibles": 143,
+  "exact": 62,
+  "taux": 0.4336,
+  "aucun": 60,
+  "plus_large": 18,
+  "plus_etroit": 3,
+  "echecs": 81,
+  "bloc_avec_union": {
+   "exact": 62,
+   "aucun": 60,
+   "plus_large": 19,
+   "plus_etroit": 2,
+   "echecs": 81
+  },
+  "production": {
+   "REL": 51,
+   "SUB": 38,
+   "GP": 78,
+   "GN": 315,
+   "GV": 619,
+   "total": 1101,
+   "gold": {
+    "REL": 74,
+    "SUB": 70,
+    "GP": 105,
+    "GN": 828,
+    "GV": 712
+   }
+  },
+  "par_langue": {
+   "fr": {
+    "REL": {
+     "cibles": 46,
+     "exact": 26,
+     "echecs": 20
+    },
+    "SUB": {
+     "cibles": 43,
+     "exact": 36,
+     "echecs": 7
+    },
+    "echecs": 27
+   },
+   "en": {
+    "REL": {
+     "cibles": 28,
+     "exact": 0,
+     "echecs": 28
+    },
+    "SUB": {
+     "cibles": 26,
+     "exact": 0,
+     "echecs": 26
+    },
+    "echecs": 54
+   },
+   "tout": {
+    "REL": {
+     "cibles": 74,
+     "exact": 26,
+     "echecs": 48
+    },
+    "SUB": {
+     "cibles": 69,
+     "exact": 36,
+     "echecs": 33
+    },
+    "echecs": 81
+   }
+  },
+  "par_source": {
+   "hand": {
+    "cibles": 3,
+    "exact": 2,
+    "echecs": 1
+   },
+   "reel": {
+    "cibles": 109,
+    "exact": 50,
+    "echecs": 59
+   },
+   "synthetique": {
+    "cibles": 31,
+    "exact": 10,
+    "echecs": 21
+   },
+   "reel_hand": {
+    "cibles": 112,
+    "exact": 52,
+    "echecs": 60
+   },
+   "tout": {
+    "cibles": 143,
+    "exact": 62,
+    "echecs": 81
+   }
+  },
+  "causes_fr": {
+   "REL_plus_large": 18,
+   "REL_plus_etroit": 2,
+   "SUB_absent": 6,
+   "SUB_plus_etroit": 1,
+   "detail": "18 larges = 16 synthétiques + 2 réelles ; 6 absentes = 1 'car' + 5 GN qui avalent le verbe ; 2 REL étroites = AUX(est) + adverbe(ici) ; 1 SUB étroite = adverbe(demain)"
+  },
+  "causes_en": {
+   "REL_absent": 28,
+   "SUB_absent": 26,
+   "detail": "marqueurs anglais (that/where/who/because/although/when/if/while…) absents du lexique français de S"
+  }
+ },
+ "cibles_s": {
+  "champs": [
+   "cible_nom",
+   "cible_gp",
+   "cible_verbe"
+  ],
+  "forme": "textes complets (GN/GV), pas des têtes ; cible_gp = tête du GP le plus proche à gauche ; aucune direction",
+  "sur_spans_exacts": {
+   "REL": {
+    "labels": 26,
+    "nom_non_nul": 26,
+    "nom_juste": 26,
+    "verbe_non_nul": 0,
+    "verbe_juste": 0,
+    "aucune": 0
+   },
+   "SUB": {
+    "labels": 36,
+    "nom_non_nul": 6,
+    "nom_juste": 0,
+    "verbe_non_nul": 23,
+    "verbe_juste": 22,
+    "aucune": 14
+   },
+   "GP": {
+    "labels": 51,
+    "nom_non_nul": 41,
+    "nom_juste": 17,
+    "verbe_non_nul": 34,
+    "verbe_juste": 32,
+    "aucune": 2
+   }
+  },
+  "alignees_tete": {
+   "REL": {
+    "trouvees": 46,
+    "sur": 74,
+    "cible_juste": 46,
+    "canal_nom": 44,
+    "canal_verbe": 2
+   },
+   "SUB": {
+    "trouvees": 37,
+    "sur": 69,
+    "cible_juste": 23,
+    "canal_verbe": 23,
+    "sans_cible_juste": 14
+   }
+  },
+  "cible_gp": {
+   "non_nulles": 4,
+   "total_segments": 1101,
+   "rel_sub": "0/89",
+   "lecture": "canal quasi mort ; ne pas l'utiliser comme cible REL/SUB"
+  },
+  "collage_bloc": "(cible_gp or cible_nom or cible_verbe) dans _cibles_s : priorité GP > nom > verbe, sans type ni direction"
+ },
+ "attachement_bloc": {
+  "labels_exacts": 145,
+  "etat_initial": {
+   "exact": 123,
+   "taux_span": 0.8483,
+   "par_type": {
+    "REL": 26,
+    "SUB": 28,
+    "GP": 69
+   }
+  },
+  "etat_courant": {
+   "exact": 137,
+   "taux_span": 0.9448,
+   "par_type": {
+    "REL": 26,
+    "SUB": 34,
+    "GP": 77
+   },
+   "evaluateur": {
+    "labels": 145,
+    "top1": 140,
+    "exact": 137,
+    "top1_taux_span": 0.9655,
+    "exact_taux_span": 0.9448,
+    "verbe": {
+     "cibles": 116,
+     "justes": 111,
+     "taux": 0.9569
+    },
+    "nom": {
+     "cibles": 29,
+     "justes": 26,
+     "taux": 0.8966
+    }
+   }
+  },
+  "regle_initiale": "REL/SUB → GN le plus à gauche, réduit par _tete_nom ; à défaut _cible_proche ; GP → _cible_proche",
+  "regle_courante": "REL/SUB → segment précédent : GV → _verbe_dans (SUB), GN → _tete_nom (REL) ; puis _cible_proche ; GP → _cible_proche",
+  "gain_observe": {
+   "REL_SUB": "+6 (54 → 60/62)",
+   "GP": "+8 (69 → 77/83)",
+   "total": "+14 (123 → 137/145 ; 0,8483 → 0,9448)",
+   "lecture": "le +6 REL/SUB est la prédiction du contrat ; le +8 GP vient des autres changements du même lot (têtes de candidats, _cible_s_par_genre, lexique élargi)"
+  },
+  "erreurs_sub_initiales": [
+   "6 synthétiques « S V que … » : GN sujet pris pour le verbe gouverneur",
+   "1 impératif : « appelle-moi » non réduit à « appelle »",
+   "1 cas gold : « Peut-être qu'il viendra » → cible interne « viendra »"
+  ],
+  "erreurs_sub_restantes": [
+   "« Quand tu arrives, appelle-moi. » → appelle-moi (trait d'union non séparé) au lieu de appelle",
+   "« Peut-être qu'il viendra. » → Peut-être au lieu de viendra (cible interne du gold)"
+  ]
+ },
+ "controle_negatif": {
+  "sans_s": {
+   "cibles": 143,
+   "exact": 0,
+   "aucun": 135,
+   "plus_large": 8,
+   "lecture": "le chunker seul ne produit aucun REL/SUB exact ; les 62 exacts viennent tous de S"
+  },
+  "hasard": {
+   "juste": 1,
+   "cibles": 239,
+   "taux": 0.0042
+  },
+  "permutation_rel": {
+   "n": 74,
+   "observe": 44,
+   "moyenne": 1.31,
+   "p95": 3,
+   "max": 6,
+   "tirages": 2000,
+   "lecture": "le canal nominal est prédictif sur tout le gold REL, pas seulement sur les 26 exacts"
+  },
+  "premier_gn_sur_26_rel_exactes": {
+   "juste": 26,
+   "n": 26,
+   "lecture": "26/26 n'est pas une preuve de la règle « plus proche » : c'est un effet de sélection ; la preuve est la permutation"
+  },
+  "convention_gold": {
+   "SUB_pos": {
+    "VERB": 69,
+    "NOUN": 0,
+    "gauche": 42,
+    "droite": 26,
+    "interne": 1
+   },
+   "REL_pos": {
+    "NOUN": 73,
+    "PRON": 1,
+    "gauche": 74
+   },
+   "convention_ecrite": "REL/SUB → antécédent (tête du GN à gauche), gold_reel.py:25-32",
+   "contradiction": "SUB : le POS du gold dit 69/69 VERB, la convention écrite dit nom à gauche ; _est_verbe classe 34 cibles SUB comme des noms"
+  },
+  "invariants_s": {
+   "segments": 1101,
+   "texte_ko": 0,
+   "chevauchements": 0,
+   "doublons": 0
+  },
+  "evaluateur_pos": {
+   "avant": "attachement.verbe / nom classés par _est_verbe : 63 verbes / 82 noms (fiches antérieures)",
+   "courant": "POS du gold : 116 verbes / 29 noms (111/116 justes, 26/29)",
+   "lecture": "les 34 cibles SUB que _est_verbe classait comme des noms sont bien des VERB ; le gold ne mêle pas deux conventions pour SUB"
+  }
+ },
+ "contrat": {
+  "version": "s/v1",
+  "constante": "CONTRAT = \"s/v1\"",
+  "entree": "structure(texte, roles=True, langue=None) -> list[dict]",
+  "principe": "S = structure (type, span, marqueur, cible) ; L = lexique (tête) et convention (REL/SUB/GP)",
+  "invariants": [
+   "span demi-ouvert : 0 <= debut < fin <= len(texte) et texte[debut:fin] == texte",
+   "partition : pas de chevauchement, pas de doublon (type, debut, fin), ordre du texte",
+   "déterminisme : même entrée → même sortie, sans mutation",
+   "ensembles fermés : type, statut, sous_type, raison",
+   "refus explicite : statut=refus + raison, jamais None/{} silencieux"
+  ],
+  "champs_segment": {
+   "type": "GN|GV|GP|REL|SUB",
+   "debut": "int",
+   "fin": "int",
+   "texte": "str",
+   "sous_type": "relative|contenu|circonstancielle|autre (REL/SUB)",
+   "marqueur": "{debut,fin,texte}|None (REL/SUB ; élision incluse ; None = relative sans marqueur)",
+   "cible": "cible|None (REL/SUB)",
+   "cibles": "list[cible] optionnel, ordonné",
+   "confiance": "float 0..1",
+   "statut": "sur|ambigu|refus",
+   "langue": "fr|en|und",
+   "role": "str informatif, local à S, non contractuel pour l'attachement",
+   "parent_profondeur_niveau": "affichage/arbre ; parent n'est pas une cible"
+  },
+  "champs_cible": {
+   "genre": "GN|GV|GP",
+   "debut": "int",
+   "fin": "int",
+   "texte": "str",
+   "direction": "gauche|droite|interne",
+   "tete": "str|None (best effort ; L recalcule)",
+   "tete_debut": "int|None",
+   "tete_fin": "int|None",
+   "confiance": "float 0..1 optionnel"
+  },
+  "cible_par_type": {
+   "REL": "genre=GN, direction=gauche, texte=GN antécédent, tete=sa tête (74/74 gold)",
+   "SUB": "genre=GV, direction=gauche|droite|interne, tete=verbe gouverneur (69/69 gold : 42 gauche, 26 droite, 1 interne)",
+   "GP": "genre=GV (verbe gouverneur) ou GN (génitif), direction=gauche"
+  },
+  "a_ne_pas_faire": [
+   "ne pas coller les trois canaux en un seul (le bloc le fait aujourd'hui)",
+   "ne pas imposer la convention nom/verbe : L la choisit",
+   "ne pas produire un GV couvrant la phrase pour une langue non couverte",
+   "ne pas exposer les cibles seulement via des fonctions privées",
+   "ne pas utiliser cible_gp comme cible REL/SUB (0/89)"
+  ],
+  "repli_L": [
+   "REL → _tete_nom du GN antécédent (26/26)",
+   "SUB → _verbe_dans du GV gouverneur, direction gauche ou droite (34/36 observé dans l'état courant)",
+   "GP → _cible_proche (77/83 dans l'état courant)",
+   "langue : passer lg ; si refus, repli chunker ou aucun label + trace",
+   "une seule segmentation : structure() ; si s/v0, adaptateur isolé et meta.contrat=s/v0",
+   "rôle : ne pas l'utiliser pour l'attachement ; sous_type est le champ structurel"
+  ],
+  "refus": {
+   "statut": "refus",
+   "raisons": [
+    "langue_non_couverte",
+    "texte_vide",
+    "conflit",
+    "version"
+   ]
+  }
+ },
+ "limites": [
+  "gold 612 (452 réelles dont 20 gold.py + 160 synthétiques) ; réel seul 52/112 exacts",
+  "les 16 REL larges synthétiques gonflent l'effet « plus large »",
+  "classement des spans heuristique ; un cas change de catégorie entre S et le bloc",
+  "deux états dans l'arbre : correctif non committé du bloc (13:51) + POS de l'évaluateur ; spans 94/81/62 stables, attachement 123/145 → 137/145",
+  "le 93 de la fiche précédente vs 94 courant : écart d'un GP à qualifier (hypothèse : lexique verbal modifié)",
+  "_est_verbe classait 34 cibles SUB comme des noms ; le POS du gold dit 69/69 VERB et l'évaluateur courant donne 116/29",
+  "CONVENTION_CIBLE écrit « SUB → nom à gauche », contredit par les données ; décision d'auteur requise",
+  "règle SUB appliquée par le correctif non committé (34/36) ; 2 échecs restants nommés ; +8 GP du même lot non attribué à cette fiche",
+  "repli anglais non mesuré ; 54 échecs de couverture de langue, pas de découpage français",
+  "script de mesure éphémère (/tmp), non committé ; recette dans la fiche",
+  "portes non rejouées ; le correctif du bloc n'est pas committé ; evaluer_gold.py rejoué (ok: true, 137, 0,9448)"
+ ],
+ "fichiers": [
+  "tools/structures/generateur.py (lu, non modifié)",
+  "tools/bloc_linguistique.py (lu ; correctif non committé du chantier en cours, pas de cette fiche)",
+  "tools/tests/linguistique/evaluer_gold.py (rejoué ; correctif POS non committé du chantier)",
+  "tools/pensee/autotest.py (contient le T175 non committé du chantier)",
+  "reports/rapport-contrat-s.md (fiche)",
+  "reports/pensee-contrat-s.json (ce fichier)"
+ ]
+}

@@ -210,7 +210,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-02](2026-11-02/modele.md) | `0,9415` · `0,6130` · `0,7574` · `1 Go` · `3,5250` |
 | [2026-11-03](2026-11-03/modele.md) | — |
 | [2026-11-04](2026-11-04/modele.md) | — |
-| [2026-11-05](2026-11-05/modele.md) | — |
+| [2026-11-05](2026-11-05/modele.md) | `0,8483` · `0,9448` · `0,6069` · `0,9724` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification
 

@@ -1,0 +1,900 @@
+{
+ "date": "2026-11-05T13:58:19-0500",
+ "titre": "Coût des règles d'attachement du chunker",
+ "verdict": "O(n²) confirmé sur le chemin chunker seul : 1+2S appels à _syntagmes_simple (3,21/phrase sur le gold, 97 à 160 tokens, 193 à 320) ; temps ×3,7 par doublement 160→320. Le cache mesuré (un chunking + un verbe de GV par analyse) donne ×11,6 à 160 et ×16,9 à 320 sur ce chemin, ×2,0 et ×2,4 sur le chemin par défaut. Le chemin par défaut n'appelle _syntagmes_simple que 2 fois/phrase : le re-chunking y est du code mort ; son coût quadratique vient de _verbe_dans (2 320 appels pour 32 GV distincts à 160 ; 8 736 pour 64 à 320), ramenés aux GV distincts par le cache. Le tri sorted(gvs, key=ecart) par segment reste : le cache ne rend pas la complexité strictement linéaire (pente V2 1,44-1,55 sur 160-1280). Sur le corpus court : ×1,18-1,22 (chunker) et ×0,97-1,07 (défaut).",
+ "instantane": {
+  "fichier": "tools/bloc_linguistique.py",
+  "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+  "sha256_apres_banc": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+  "fichier_change_pendant_banc": false,
+  "commit": "e1171032",
+  "branche": "s/v7",
+  "arbre_propre": false,
+  "note": "fichier modifié dans l'arbre de travail (règles d'attachement récentes) ; toutes les mesures et tous les numéros de ligne portent sur ce sha256, revérifié identique après le banc."
+ },
+ "dispositif": {
+  "banc": "/tmp/bench_final.py",
+  "sha256_banc": "6c823a1f5cbcc249e619ef27465f0ff4c8cb2cc4c40b9cb9ba5de5db6b58a7e3",
+  "python": "3.13.16",
+  "cpu": "Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz",
+  "methode": "time.process_time(), rounds entrelacés, médiane ; sortie comparée champ à champ",
+  "duree_banc_s": 82.896,
+  "source_brute": "/tmp/bench_final.json",
+  "variantes": {
+   "original": "Heuristique() tel quel",
+   "V1": "_syntagmes_simple mémoïsé par (texte, langue) dans une sous-classe locale",
+   "V2": "V1 + verbe de chaque GV calculé une fois (cache local (debut, fin)) ; correctif proposé",
+   "OFF": "même sous-classe, caches désactivés : contrôle négatif"
+  },
+  "protocole": [
+   "temps CPU (time.process_time), 2 passes de chauffe puis médiane",
+   "corpus : 11 passes ciblées (et 7 passes dans le banc complet)",
+   "longueurs 20-320 : 9 passes entrelacées ; 640/1280 : 3 passes",
+   "égalité de sortie comparée champ à champ (étiquettes, spans, candidats, meta, unités, trace)"
+  ]
+ },
+ "corpus": {
+  "n": 612,
+  "langues": {
+   "en": 210,
+   "fr": 402
+  },
+  "mots_gold": 3179,
+  "chars": 16371,
+  "tokens_mots_moy": 6.126,
+  "segments_simple_moy": 1.1046,
+  "gv_simple_moy": 0.1863,
+  "mesure_ciblee_11_passes_ms": {
+   "chunker": {
+    "original": 231.4,
+    "V1": 193.3,
+    "V2": 196.6,
+    "OFF": 228.8,
+    "gains": {
+     "V1": 1.197,
+     "V2": 1.177,
+     "OFF": 1.011
+    }
+   },
+   "defaut": {
+    "original": 394.4,
+    "V1": 374.2,
+    "V2": 367.6,
+    "OFF": 393.5,
+    "gains": {
+     "V1": 1.054,
+     "V2": 1.073,
+     "OFF": 1.002
+    }
+   }
+  },
+  "banc_complet_7_passes_ms": {
+   "chunker": {
+    "original": 230.6,
+    "V1": 197.2,
+    "V2": 189.4,
+    "OFF": 228.7,
+    "gains": {
+     "V1": 1.17,
+     "V2": 1.22,
+     "OFF": 1.01
+    }
+   },
+   "defaut": {
+    "original": 385.1,
+    "V1": 371.8,
+    "V2": 396.0,
+    "OFF": 402.4,
+    "gains": {
+     "V1": 1.04,
+     "V2": 0.97,
+     "OFF": 0.96
+    }
+   }
+  },
+  "compteurs_origine": {
+   "False": {
+    "simple_total": 1966,
+    "simple_moy": 3.212418300653595,
+    "simple_min": 1,
+    "simple_max": 7,
+    "verbe_total": 197,
+    "verbe_moy": 0.32189542483660133
+   },
+   "True": {
+    "simple_total": 1224,
+    "simple_moy": 2,
+    "simple_min": 2,
+    "simple_max": 2,
+    "verbe_total": 1967,
+    "verbe_moy": 3.2140522875816995
+   }
+  },
+  "compteurs_v2": {
+   "False": {
+    "appels_simple_moy": 3.212418300653595,
+    "miss_simple_moy": 1,
+    "miss_simple_max": 1,
+    "appels_gv_moy": 0.32189542483660133,
+    "miss_gv_moy": 0.13562091503267973,
+    "miss_gv_max": 2
+   },
+   "True": {
+    "appels_simple_moy": 2,
+    "miss_simple_moy": 1,
+    "miss_simple_max": 1,
+    "appels_gv_moy": 2.6013071895424837,
+    "miss_gv_moy": 0.8856209150326797,
+    "miss_gv_max": 3
+   }
+  },
+  "egalite": {
+   "False": {
+    "V1": "612/612",
+    "V2": "612/612",
+    "OFF": "612/612"
+   },
+   "True": {
+    "V1": "612/612",
+    "V2": "612/612",
+    "OFF": "612/612"
+   }
+  }
+ },
+ "longueurs": {
+  "base": "Le chat de la voisine est sur le toit.",
+  "base_tokens": 10,
+  "note": "base de 10 tokens répétée 2/4/8/16/32 fois ; N exact en tokens _mots",
+  "points": [
+   {
+    "chemin": "chunker",
+    "N": 20,
+    "chars": 77,
+    "segments_simple": 6,
+    "gv_simple": 2,
+    "segments_s": 0,
+    "gv_s": 0,
+    "etiquettes": 87,
+    "temps_ms": {
+     "original": 1.747,
+     "V1": 0.933,
+     "V2": 0.727,
+     "OFF": 1.751
+    },
+    "gains": {
+     "V1": 1.873,
+     "V2": 2.402,
+     "OFF": 0.998
+    },
+    "appels_origine": {
+     "simple": 13,
+     "verbe": 20
+    },
+    "appels_v2": {
+     "appels_simple": 13,
+     "miss_simple": 1,
+     "appels_gv": 20,
+     "miss_gv": 2
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "chunker",
+    "N": 40,
+    "chars": 155,
+    "segments_simple": 12,
+    "gv_simple": 4,
+    "segments_s": 0,
+    "gv_s": 0,
+    "etiquettes": 173,
+    "temps_ms": {
+     "original": 5.038,
+     "V1": 1.95,
+     "V2": 1.315,
+     "OFF": 5.582
+    },
+    "gains": {
+     "V1": 2.583,
+     "V2": 3.832,
+     "OFF": 0.902
+    },
+    "appels_origine": {
+     "simple": 25,
+     "verbe": 64
+    },
+    "appels_v2": {
+     "appels_simple": 25,
+     "miss_simple": 1,
+     "appels_gv": 64,
+     "miss_gv": 4
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "chunker",
+    "N": 80,
+    "chars": 311,
+    "segments_simple": 24,
+    "gv_simple": 8,
+    "segments_s": 0,
+    "gv_s": 0,
+    "etiquettes": 345,
+    "temps_ms": {
+     "original": 17.286,
+     "V1": 4.515,
+     "V2": 2.569,
+     "OFF": 16.386
+    },
+    "gains": {
+     "V1": 3.829,
+     "V2": 6.729,
+     "OFF": 1.055
+    },
+    "appels_origine": {
+     "simple": 49,
+     "verbe": 192
+    },
+    "appels_v2": {
+     "appels_simple": 49,
+     "miss_simple": 1,
+     "appels_gv": 192,
+     "miss_gv": 8
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "chunker",
+    "N": 160,
+    "chars": 623,
+    "segments_simple": 48,
+    "gv_simple": 16,
+    "segments_s": 0,
+    "gv_s": 0,
+    "etiquettes": 689,
+    "temps_ms": {
+     "original": 64.817,
+     "V1": 11.798,
+     "V2": 5.581,
+     "OFF": 57.611
+    },
+    "gains": {
+     "V1": 5.494,
+     "V2": 11.615,
+     "OFF": 1.125
+    },
+    "appels_origine": {
+     "simple": 97,
+     "verbe": 640
+    },
+    "appels_v2": {
+     "appels_simple": 97,
+     "miss_simple": 1,
+     "appels_gv": 640,
+     "miss_gv": 16
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "chunker",
+    "N": 320,
+    "chars": 1247,
+    "segments_simple": 96,
+    "gv_simple": 32,
+    "segments_s": 0,
+    "gv_s": 0,
+    "etiquettes": 1377,
+    "temps_ms": {
+     "original": 238.003,
+     "V1": 34.798,
+     "V2": 14.095,
+     "OFF": 233.01
+    },
+    "gains": {
+     "V1": 6.84,
+     "V2": 16.886,
+     "OFF": 1.021
+    },
+    "appels_origine": {
+     "simple": 193,
+     "verbe": 2304
+    },
+    "appels_v2": {
+     "appels_simple": 193,
+     "miss_simple": 1,
+     "appels_gv": 2304,
+     "miss_gv": 32
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 20,
+    "chars": 77,
+    "segments_simple": 6,
+    "gv_simple": 2,
+    "segments_s": 8,
+    "gv_s": 2,
+    "etiquettes": 91,
+    "temps_ms": {
+     "original": 1.984,
+     "V1": 1.92,
+     "V2": 1.577,
+     "OFF": 1.994
+    },
+    "gains": {
+     "V1": 1.033,
+     "V2": 1.258,
+     "OFF": 0.995
+    },
+    "appels_origine": {
+     "simple": 2,
+     "verbe": 66
+    },
+    "appels_v2": {
+     "appels_simple": 2,
+     "miss_simple": 1,
+     "appels_gv": 63,
+     "miss_gv": 4
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 40,
+    "chars": 155,
+    "segments_simple": 12,
+    "gv_simple": 4,
+    "segments_s": 16,
+    "gv_s": 4,
+    "etiquettes": 181,
+    "temps_ms": {
+     "original": 4.232,
+     "V1": 4.102,
+     "V2": 2.993,
+     "OFF": 4.193
+    },
+    "gains": {
+     "V1": 1.032,
+     "V2": 1.414,
+     "OFF": 1.009
+    },
+    "appels_origine": {
+     "simple": 2,
+     "verbe": 196
+    },
+    "appels_v2": {
+     "appels_simple": 2,
+     "miss_simple": 1,
+     "appels_gv": 189,
+     "miss_gv": 8
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 80,
+    "chars": 311,
+    "segments_simple": 24,
+    "gv_simple": 8,
+    "segments_s": 32,
+    "gv_s": 8,
+    "etiquettes": 361,
+    "temps_ms": {
+     "original": 9.886,
+     "V1": 9.623,
+     "V2": 6.08,
+     "OFF": 9.824
+    },
+    "gains": {
+     "V1": 1.027,
+     "V2": 1.626,
+     "OFF": 1.006
+    },
+    "appels_origine": {
+     "simple": 2,
+     "verbe": 648
+    },
+    "appels_v2": {
+     "appels_simple": 2,
+     "miss_simple": 1,
+     "appels_gv": 633,
+     "miss_gv": 16
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 160,
+    "chars": 623,
+    "segments_simple": 48,
+    "gv_simple": 16,
+    "segments_s": 64,
+    "gv_s": 16,
+    "etiquettes": 721,
+    "temps_ms": {
+     "original": 27.826,
+     "V1": 26.706,
+     "V2": 13.938,
+     "OFF": 28.41
+    },
+    "gains": {
+     "V1": 1.042,
+     "V2": 1.996,
+     "OFF": 0.979
+    },
+    "appels_origine": {
+     "simple": 2,
+     "verbe": 2320
+    },
+    "appels_v2": {
+     "appels_simple": 2,
+     "miss_simple": 1,
+     "appels_gv": 2289,
+     "miss_gv": 32
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 320,
+    "chars": 1247,
+    "segments_simple": 96,
+    "gv_simple": 32,
+    "segments_s": 128,
+    "gv_s": 32,
+    "etiquettes": 1441,
+    "temps_ms": {
+     "original": 88.382,
+     "V1": 89.726,
+     "V2": 36.877,
+     "OFF": 89.098
+    },
+    "gains": {
+     "V1": 0.985,
+     "V2": 2.397,
+     "OFF": 0.992
+    },
+    "appels_origine": {
+     "simple": 2,
+     "verbe": 8736
+    },
+    "appels_v2": {
+     "appels_simple": 2,
+     "miss_simple": 1,
+     "appels_gv": 8673,
+     "miss_gv": 64
+    },
+    "egalite": {
+     "V1": "1/1",
+     "V2": "1/1",
+     "OFF": "1/1"
+    }
+   }
+  ]
+ },
+ "complexite": {
+  "chunker": {
+   "original": {
+    "pente_20_160": 1.7419,
+    "r2_20_160": 0.99759,
+    "pente_20_320": 1.7865,
+    "r2_20_320": 0.99823,
+    "pente_160_1280": 1.9427,
+    "r2_160_1280": 0.99961
+   },
+   "V1": {
+    "pente_20_160": 1.2193,
+    "r2_20_160": 0.99653,
+    "pente_20_320": 1.3039,
+    "r2_20_320": 0.9943
+   },
+   "V2": {
+    "pente_20_160": 0.9785,
+    "r2_20_160": 0.99632,
+    "pente_20_320": 1.0638,
+    "r2_20_320": 0.99207,
+    "pente_160_1280": 1.4383,
+    "r2_160_1280": 0.99829
+   },
+   "OFF": {
+    "pente_20_160": 1.6675,
+    "r2_20_160": 0.99913,
+    "pente_20_320": 1.748,
+    "r2_20_320": 0.99748
+   }
+  },
+  "defaut": {
+   "original": {
+    "pente_20_160": 1.2655,
+    "r2_20_160": 0.99492,
+    "pente_20_320": 1.3672,
+    "r2_20_320": 0.99234,
+    "pente_160_1280": 1.8612,
+    "r2_160_1280": 0.9964
+   },
+   "V1": {
+    "pente_20_160": 1.2625,
+    "r2_20_160": 0.99548,
+    "pente_20_320": 1.3796,
+    "r2_20_320": 0.99098
+   },
+   "V2": {
+    "pente_20_160": 1.0455,
+    "r2_20_160": 0.99657,
+    "pente_20_320": 1.1315,
+    "r2_20_320": 0.9928,
+    "pente_160_1280": 1.5508,
+    "r2_160_1280": 0.99646
+   },
+   "OFF": {
+    "pente_20_160": 1.2727,
+    "r2_20_160": 0.99339,
+    "pente_20_320": 1.3724,
+    "r2_20_320": 0.99193
+   }
+  }
+ },
+ "continuite": {
+  "chunker": {
+   "640": {
+    "N": 640,
+    "original_ms": 957.93,
+    "V2_ms": 37.1,
+    "gain": 25.818
+   },
+   "1280": {
+    "N": 1280,
+    "original_ms": 3748.72,
+    "V2_ms": 112.14,
+    "gain": 33.428
+   }
+  },
+  "defaut": {
+   "640": {
+    "N": 640,
+    "original_ms": 367.28,
+    "V2_ms": 102.41,
+    "gain": 3.586
+   },
+   "1280": {
+    "N": 1280,
+    "original_ms": 1171.87,
+    "V2_ms": 356.82,
+    "gain": 3.284
+   }
+  }
+ },
+ "profils_n160": {
+  "chunker": {
+   "original": {
+    "total_cumtime_s": 1.447,
+    "fonctions": {
+     "_verbes_proches": {
+      "ncalls": 48,
+      "cumtime_s": 0.0394
+     },
+     "_syntagmes_simple": {
+      "ncalls": 97,
+      "cumtime_s": 1.1148
+     },
+     "_cible_proche": {
+      "ncalls": 48,
+      "cumtime_s": 0.2122
+     },
+     "_mots": {
+      "ncalls": 98,
+      "cumtime_s": 0.5133
+     },
+     "_verbe_dans": {
+      "ncalls": 640,
+      "cumtime_s": 0.2393
+     },
+     "_est_verbe": {
+      "ncalls": 7856,
+      "cumtime_s": 0.5182
+     },
+     "_syntagmes_s": {
+      "ncalls": 1,
+      "cumtime_s": 0.0
+     }
+    }
+   },
+   "V2": {
+    "total_cumtime_s": 0.116,
+    "fonctions": {
+     "_verbes_proches": {
+      "ncalls": 48,
+      "cumtime_s": 0.0038
+     },
+     "_syntagmes_simple": {
+      "ncalls": 98,
+      "cumtime_s": 0.0229
+     },
+     "_cible_proche": {
+      "ncalls": 48,
+      "cumtime_s": 0.019
+     },
+     "_mots": {
+      "ncalls": 2,
+      "cumtime_s": 0.0102
+     },
+     "_verbe_dans": {
+      "ncalls": 16,
+      "cumtime_s": 0.0057
+     },
+     "_est_verbe": {
+      "ncalls": 128,
+      "cumtime_s": 0.0079
+     },
+     "_syntagmes_s": {
+      "ncalls": 1,
+      "cumtime_s": 0.0
+     }
+    }
+   }
+  },
+  "defaut": {
+   "original": {
+    "total_cumtime_s": 0.747,
+    "fonctions": {
+     "_verbes_proches": {
+      "ncalls": 80,
+      "cumtime_s": 0.0347
+     },
+     "_syntagmes_simple": {
+      "ncalls": 2,
+      "cumtime_s": 0.0267
+     },
+     "_cible_proche": {
+      "ncalls": 81,
+      "cumtime_s": 0.4922
+     },
+     "_tete_texte": {
+      "ncalls": 192,
+      "cumtime_s": 0.024
+     },
+     "_mots": {
+      "ncalls": 3,
+      "cumtime_s": 0.0187
+     },
+     "_verbe_dans": {
+      "ncalls": 2320,
+      "cumtime_s": 0.4921
+     },
+     "_est_verbe": {
+      "ncalls": 8400,
+      "cumtime_s": 0.4145
+     },
+     "_cible_s_par_genre": {
+      "ncalls": 64,
+      "cumtime_s": 0.0011
+     },
+     "_syntagmes_s": {
+      "ncalls": 1,
+      "cumtime_s": 0.0361
+     }
+    }
+   },
+   "V2": {
+    "total_cumtime_s": 0.264,
+    "fonctions": {
+     "_verbes_proches": {
+      "ncalls": 80,
+      "cumtime_s": 0.0101
+     },
+     "_syntagmes_simple": {
+      "ncalls": 3,
+      "cumtime_s": 0.0224
+     },
+     "_cible_proche": {
+      "ncalls": 81,
+      "cumtime_s": 0.0556
+     },
+     "_tete_texte": {
+      "ncalls": 192,
+      "cumtime_s": 0.024
+     },
+     "_mots": {
+      "ncalls": 2,
+      "cumtime_s": 0.0103
+     },
+     "_verbe_dans": {
+      "ncalls": 63,
+      "cumtime_s": 0.0134
+     },
+     "_est_verbe": {
+      "ncalls": 478,
+      "cumtime_s": 0.0343
+     },
+     "_cible_s_par_genre": {
+      "ncalls": 64,
+      "cumtime_s": 0.0011
+     },
+     "_syntagmes_s": {
+      "ncalls": 1,
+      "cumtime_s": 0.0369
+     }
+    }
+   }
+  }
+ },
+ "controle_negatif": {
+  "egalite": {
+   "corpus": {
+    "False": {
+     "V1": "612/612",
+     "V2": "612/612",
+     "OFF": "612/612"
+    },
+    "True": {
+     "V1": "612/612",
+     "V2": "612/612",
+     "OFF": "612/612"
+    }
+   },
+   "textes_longs_20_320": "V1, V2 et OFF identiques à l’original sur les 5 longueurs × 2 chemins"
+  },
+  "OFF_vs_original": {
+   "ratio_min": 0.9,
+   "ratio_max": 1.13,
+   "ratio_median": 1.0,
+   "note": "les écarts sont le bruit de la machine (Xeon partagé), pas un effet de code ; la pente OFF (1,67 chunker / 1,27 défaut) suit celle de l’original (1,74 / 1,27)."
+  },
+  "profil_N160": {
+   "chunker": {
+    "syntagmes_simple_original": 97,
+    "syntagmes_simple_v2_misses": 1,
+    "verbe_dans_original": 640,
+    "verbe_dans_v2": 16
+   },
+   "defaut": {
+    "syntagmes_simple_original": 2,
+    "syntagmes_simple_v2_misses": 1,
+    "verbe_dans_original": 2320,
+    "verbe_dans_v2": 63
+   }
+  }
+ },
+ "correctif_propose": {
+  "fichier": "tools/bloc_linguistique.py",
+  "fonction": "Heuristique.analyser",
+  "lignes": "853-941 (section 5) ; helpers 642, 661-686, 688-704",
+  "principe": [
+   "A. calculer `simples = self._syntagmes_simple(texte, lg)` une seule fois avant la branche",
+   "B. en dériver `gvs_simple` une seule fois",
+   "C. créer un cache local `cache_gv = {}` par appel d’analyser ; clé (debut, fin)",
+   "D. passer `cache_gv` à `_cible_proche` et `_verbes_proches` ; y remplacer les appels directs à `_verbe_dans` par `_verbe_gv`",
+   "E. remplacer les 5 appels de boucle/union par les variables hoistées"
+  ],
+  "sites": {
+   "861": "gvs_simple = [...] → supprimé (calculé une fois avant la branche)",
+   "914": "for s in self._syntagmes_simple(...) → for s in simples",
+   "916": "liste de GV recalculée dans _cible_proche → gvs_simple",
+   "919": "gvs_s = [...] → supprimé ; utiliser gvs_simple",
+   "928": "simples = self._syntagmes_simple(...) → supprimé (déjà calculé)",
+   "929-930": "gvs_u = ... + [x for x in simples ...] → gvs_s + gvs_simple",
+   "681/685/701": "Heuristique._verbe_dans(...) → Heuristique._verbe_gv(texte, g, verbes, cache_gv)",
+   "887/895/899/916/922/935/940": "ajouter cache_gv=cache_gv aux appels de _cible_proche/_verbes_proches"
+  },
+  "pseudo_code": "# dans Heuristique.analyser, après la ligne 854 (verbes)\nsimples = self._syntagmes_simple(texte, lg)              # (A) 1 chunking\ngvs_simple = [x for x in simples if x[\"type\"] == \"GV\"]  # (B) 1 extraction\ncache_gv = {}                                            # (C) local à l'analyse\ncands = self._syntagmes_s(texte)\ncibles_s = self._cibles_s(texte) if cands else {}\n\n# branche cands : gvs = gvs_s + [x for x in gvs_simple if ...] (inchangé)\n#   cible = self._cible_proche(texte, s, gvs, verbes=verbes, cache_gv=cache_gv)\n#   candidats = list(noms) + self._verbes_proches(texte, s, gvs, verbes=verbes, cache_gv=cache_gv)\n\n# branche else : for s in simples:\n#   cible = self._cible_proche(texte, s, gvs_simple, verbes=verbes, cache_gv=cache_gv)\n#   candidats = [s[\"type\"]] + self._verbes_proches(texte, s, gvs_simple, verbes=verbes, cache_gv=cache_gv)\n\n# union : gvs_u = gvs_s + gvs_simple ; for s in simples: ... cache_gv=cache_gv\n\n@staticmethod\ndef _verbe_gv(texte, g, verbes, cache_gv):\n    if cache_gv is None:\n        return Heuristique._verbe_dans(texte, g[\"debut\"], g[\"fin\"], verbes)\n    cle = (g[\"debut\"], g[\"fin\"])\n    if cle not in cache_gv:\n        cache_gv[cle] = Heuristique._verbe_dans(texte, g[\"debut\"], g[\"fin\"], verbes)\n    return cache_gv[cle]\n",
+  "effet_attendu": {
+   "appels_syntagmes_simple": "chunker : 1+2S → 1 ; défaut : 2 → 1",
+   "appels_verbe_dans_sur_gv": "S·G répétés → au plus G distincts (N=320 : 2 304→32 chunker ; 8 736→64 défaut)",
+   "egalite": "aucune modification de sortie (V2 : 612/612 corpus, 10/10 textes longs)"
+  },
+  "gain_mesure_borne_basse": {
+   "chunker_160": 11.61,
+   "chunker_320": 16.89,
+   "chunker_640": 25.82,
+   "chunker_1280": 33.43,
+   "defaut_160": 2.0,
+   "defaut_320": 2.4,
+   "defaut_640": 3.59,
+   "defaut_1280": 3.28,
+   "corpus_chunker": 1.18,
+   "corpus_defaut": 1.07,
+   "note": "V2 paie encore les appels mémoïsés (3,21/phrase) et les listes par segment ; le patch hoisté supprime ces appels, donc le gain réel devrait être >= V2."
+  },
+  "non_couvert": [
+   "le tri sorted(gvs, key=ecart) par segment reste O(S·G log G) ; pente V2 1,44 (chunker) / 1,55 (défaut) sur 160-1280",
+   "les règles récentes _tete_texte / _cible_s_par_genre ne sont pas cachées (faible part mesurée)",
+   "pas de cache inter-phrases : les textes du corpus sont distincts, un cache global ne gagnerait rien et fuiterait"
+  ]
+ },
+ "sensibilite_base_verbe_plein": {
+  "base": "Le chat de la voisine a vu la souris.",
+  "note": "GV de S « a vu » : verbe plein, _cible_proche s'arrête au premier GV ; pas de GV dans le chunker simple",
+  "mesures": {
+   "chunker": {
+    "160": {
+     "N": 160,
+     "original_ms": 84.986,
+     "V2_ms": 4.639,
+     "gain": 18.321
+    },
+    "320": {
+     "N": 320,
+     "original_ms": 337.718,
+     "V2_ms": 12.911,
+     "gain": 26.157
+    }
+   },
+   "defaut": {
+    "160": {
+     "N": 160,
+     "original_ms": 13.32,
+     "V2_ms": 12.472,
+     "gain": 1.068
+    },
+    "320": {
+     "N": 320,
+     "original_ms": 28.622,
+     "V2_ms": 25.228,
+     "gain": 1.135
+    }
+   }
+  }
+ },
+ "pistes_rejetees": {
+  "V3_index_pre_trie": {
+   "idee": "index gauche/droite + bisect, fusion par distance, pour supprimer le tri par segment",
+   "resultat": "plus lent que V2 en Python pur (fusion/générateur) ; 1 divergence sur 612 (r362, anglais)",
+   "raison": "Timsort C sur <=128 GV bat la fusion Python ; le recouvrement exige un repli exact",
+   "statut": "non retenu",
+   "instantane": "d9c9d5… (antérieur), non re-mesuré sur 6e8430…"
+  },
+  "V4_fusion_cible_candidats": {
+   "idee": "un seul tri par segment, partagé entre _cible_proche et _verbes_proches",
+   "resultat": "plus lent que V2 (surcoût du cache id(gvs) et des lambdas)",
+   "statut": "non retenu",
+   "instantane": "d9c9d5… (antérieur), non re-mesuré sur 6e8430…"
+  }
+ },
+ "limites": [
+  "Base synthétique A (« est sur le toit ») : le GV a pour tête l'auxiliaire « est » ; _cible_proche le saute et scanne tous les GV. C'est un cas défavorable réel (copules), mais il amplifie le coût. Avec la base B à verbe plein, le gain défaut tombe à ×1,07-1,13.",
+  "Corpus court : 6,13 tokens _mots/phrase, 1,10 segment, 0,19 GV. Le gain corpus est faible (×1,18-1,22 chunker, ×0,97-1,07 défaut) ; le O(n²) ne mord pas sur le gold actuel.",
+  "Chemin par défaut : le générateur S répond pour les 612 phrases ; _syntagmes_simple n'est appelé que 2 fois/phrase. Le re-chunking dans la boucle est du code mort sur ce chemin ; il ne devient chaud que si S est absent (segmenter_s=False) ou échoue.",
+  "Le cache seul ne linéarise pas : pente V2 1,44 (chunker) / 1,55 (défaut) sur 160-1280 ; le tri par segment reste. Une vraie linéarité demande un index pré-trié, non retenu en l'état.",
+  "Bruit de mesure : Xeon partagé, temps CPU, 3-11 passes ; l'OFF varie de ×0,90 à ×1,13 selon le point (médiane ×1,00). Les facteurs à ±10 % près.",
+  "Instantané de travail : tools/bloc_linguistique.py était modifié (sha256 6e8430…, commit e1171032) et a changé pendant la préparation (d9c9d5… → 6e8430…). Toutes les mesures et lignes citées portent sur 6e8430…, revérifié après le banc ; une édition ultérieure invalide les numéros de ligne.",
+  "Le prototype V2 est une sous-classe de banc, pas le patch réel : l'égalité 612/612 + 10/10 est un contrôle fort, mais le patch hoisté doit être appliqué puis repassé par les portes et une nouvelle mesure.",
+  "La clé (debut, fin) du cache de verbe n'est valide que dans un appel d'analyser (texte et verbes constants) ; le pseudo-code crée le dict localement pour cette raison. Pas d'état d'instance, donc pas de course entre threads.",
+  "time.process_time exclut les I/O et le temps passé hors CPU ; l'analyse est CPU-bound, mais une machine chargée peut décaler les médianes."
+ ]
+}

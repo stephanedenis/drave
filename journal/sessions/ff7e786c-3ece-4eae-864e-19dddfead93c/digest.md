@@ -2825,3 +2825,143 @@ index 891ee3ec..5537a715 100644
 … [166 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Relevé des valeurs v2 et des notes ajoutées aux fiches (concurrence)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -- reports/README.md | head -50 && echo '=== conventions note ===' && git diff -- reports/rapport-pensee-conventions.md | sed -n '1,30p' && echo '=== v2 dates ===' && stat -c '%y %n' reports/rapport-pensee-attachement-v2.md  … [168 caractères tronqués]`
+
+  ```
+=== conventions note ===
+=== v2 dates ===
+2026-11-05 14:11:11.022393001 -0500 reports/rapport-pensee-attachement-v2.md
+2026-11-05 14:11:29.478550472 -0500 reports/pensee-attachement-v2.json
+2026-11-05 14:11:29.478927691 -0500 reports/rapport-pensee-conventions.md
+2026-11-05 14:11:29.479237582 -0500 reports/rapport-pensee-echecs-cible.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/rapport-pensee-conventions.md reports/rapport-pensee-echecs-cible.md reports/README.md; echo '---diff conventions---'; git diff --stat -- reports/rapport-pensee-conventions.md; git diff -- reports/rapport-p … [194 caractères tronqués]`
+
+  ```
+M  reports/README.md
+M  reports/rapport-pensee-conventions.md
+M  reports/rapport-pensee-echecs-cible.md
+---diff conventions---
+---diff README---
+  ```
+
+### 🤖 Assistant
+
+⏵ État indexé : la v2 est en cours de commit (fichiers stagés)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/ tools/pensee/autotest.py tools/tests/linguistique/gold_reel.py tools/tests/linguistique/evaluer_gold.py tools/bloc_linguistique.py | head -30; echo '--- staged stat ---'; git diff --cached --stat | tail -2 … [46 caractères tronqués]`
+
+  ```
+M  reports/README.md
+A  reports/pensee-annotation-independante.json
+A  reports/pensee-attachement-v2.json
+A  reports/pensee-audit-attachement.json
+A  reports/pensee-classement-appris.json
+ M reports/pensee-quatre-modes.json
+M  reports/pensee-spans.json
+A  reports/pensee-topk-diagnostic.json
+A  reports/rapport-annotation-independante.md
+A  reports/rapport-audit-attachement.md
+A  reports/rapport-classement-appris.md
+A  reports/rapport-pensee-attachement-v2.md
+M  reports/rapport-pensee-conventions.md
+M  reports/rapport-pensee-echecs-cible.md
+M  reports/rapport-pensee-spans.md
+A  reports/rapport-topk-diagnostic.md
+M  tools/bloc_linguistique.py
+M  tools/pensee/autotest.py
+M  tools/tests/linguistique/evaluer_gold.py
+M  tools/tests/linguistique/gold_reel.py
+?? reports/pensee-coherence-fiches.json
+?? reports/pensee-contrat-s.json
+?? reports/pensee-cout-chunker.json
+?? reports/rapport-coherence-fiches.md
+?? reports/rapport-contrat-s.md
+?? reports/rapport-cout-chunker.md
+?? reports/rapport-s-paragraphes.md
+--- staged stat ---
+ reports/pensee-annotation-independante.json        | 1309 ++++
+ reports/pensee-attachement-v2.json                 |   88 +
+ reports/pensee-audit-attachement.json     
+… [1083 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la fiche : la v2 stagée change les portes et la convention (périmètre daté)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "> **Date de vérification** : 2026-11-05T13:54-05:00, **arrêtée avant l'intégration v2 stagée à\n> 14:11** · **Branche** : `s/v7` · **Périmètre** : les **11 fiches B13 datées du 2026-11 … [2613 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "| # | fiche | titre (raccourci) | commit / heure | portes d'alors | portes au 13:54 (pré-v2) | verdict |", "old_string": "| # | fiche | titre (raccourci) | commit / heure | portes d'al … [36 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "La v2 stagée à 14:11 annonce **180/180** et change les valeurs ; la colonne « portes au 13:54 »\nest **pré-v2** (voir § 6.2).\n\nLes 11 fiches portent bien la date **2026-11-05** et la … [151 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "Colonnes : ce que dit la **fiche**, ce que dit le **JSON** homonyme, ce qu'attendait la **porte**\nau moment de la vérification (13:54, **pré-v2**), puis la valeur au commit de la fich … [708 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "## 3. Ce que disait l'état au moment de la vérification (13:33–13:54, pré-v2)", "old_string": "## 3. Ce que dit l'état courant (HEAD, 2026-11-05 ~13:54)"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "**Depuis 14:11, la v2 stagée** donne : portes **180/180** (annoncé), exact **137/145 (0,9448)**,\ntop1 **140 (0,9655)**, top-k **142 (0,9793)**, top-k strict **141 (0,9724)**, verbes * … [962 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^## 6\\. Concurrence/,/^## 7\\. Limites/p' reports/rapport-coherence-fiches.md | head -80", "description": "Read current section 6"}`
+
+  ```
+## 6. Concurrence : deux fichiers modifiés pendant la vérification
+
+Je n'ai modifié **aucun** fichier existant et n'ai fait **aucun** commit. Pendant la
+vérification (vers 13:43–13:54), un **autre agent** a modifié deux fichiers de périmètre :
+
+- `reports/pensee-spans.json` : ajout d'un bloc `courant` (145 labels, couverture 0,6067, F1
+  0,2862, 94 spans, REL 48 / SUB 33 / GP 13, catégories 65/24/4/1), sourcé « audit A1
+  (`pensee-audit-attachement.json`) » ; les blocs `spans`, `categories`, `avant`, `apres`
+  committés restent l'historique. Ce bloc est cohérent avec la mesure courante.
+- `reports/rapport-pensee-spans.md` : titre et table des types passés à l'état courant
+  (94 / 13 GP / catégories 65/24/4/1), avec une note « audit A1 ». **La correction est
+  partielle** : le chapô dit encore « sont 48 REL, 33 SUB et **12 GP** » ; la narrative dit
+  encore « plus large (**25**) » ; et le tableau intitulé « après le GP borné » garde, pour les
+  lignes labels / couverture / F1 / top1-top-k-exact, les valeurs historiques
+  `146 / 0,6109 / 0,2869 / 115-132-33` alors que la note affirme qu'il donne « désormais » le
+  courant (`145 / 0,6067 / 0,2862 / 126-134-123`). C'est une incohérence
+… [648 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "## 6. Concurrence : des fichiers ont bougé pendant/après la vérification\n\nJe n'ai modifié **aucun** fichier existant et n'ai fait **aucun** commit. Deux vagues distinctes\nont modifi … [7049 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "- **Les portes** : les 15 portes ciblées et la suite complète ont été exécutées à HEAD **avant la\n  v2** (177/177). Les valeurs d'alors viennent des assertions des commits, pas d'une  … [624 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+

@@ -11,7 +11,8 @@
   "top1": 122,
   "topk": 132,
   "verbe": 0.9412,
-  "nom": 0.7368
+  "nom": 0.7368,
+  "labels": 146
  },
  "apres": {
   "exact": 123,
@@ -19,16 +20,17 @@
   "top1": 126,
   "topk": 134,
   "verbe": 0.9524,
-  "nom": 0.7683
+  "nom": 0.7683,
+  "labels": 145
  },
  "rendement": {
   "top1": 0.5272,
   "topk": 0.5607,
   "exact": 0.5146
  },
- "note": "la part verbes passe de 51 à 62 cibles par reclassification (_est_verbe), pas par un changement du gold",
+ "note": "la part verbes passe de 51 à 63 cibles par reclassification (_est_verbe), pas par un changement du gold",
  "limites": [
-  "23 échecs",
+  "22 échecs",
   "lexique manuel",
   "top-k lenient",
   "gold 612"

@@ -41741,3 +41741,209 @@ revue de documentation · 647 fiche(s) · 740 JSON · 120 doc(s) · 83 porte(s) 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [2696 caractères tronqués]`
+
+  ```
+compteurs 647 740
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-937]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-937", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-topk-diagnostic.md
+ create mode 100644 tools/tests/linguistique/classement_cible.py
+COMMIT OK 1
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+4
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+Agent c4796573-e2dc-48c2-b832-96f8bfab22c3 sent a message: 
+Livrables (2 fichiers neufs, aucun code modifié, aucun commit) :
+- reports/rapport-contrat-s.md
+- reports/pensee-contrat-s.json
+
+CONSTAT MESURÉ (gold 612 : 239 cibles, 1863 segments)
+- 94/239 cibles sans segment au bon span : 48 REL, 33 SUB, 13 GP. Les 81 REL/SUB = 60 absentes, 19 plus larges, 2 plus étroites. Le bloc n'en répare aucune (le chunker seul fait 0/143 exact REL/SUB ; l'union ajoute 15 labels REL, 0 exact).
+- S seul : 62/143 REL/SUB exacts (43,4 %) ; 51 segments REL et 38 SUB produits, contre 74 et 70 dans le gold. Échecs : 54 anglais (marqueurs that/where/who/because/although/when/if... absents du lexique français de S) + 27 français (18 REL larges par absence de règle « un prédicat par clause », 2 REL étroites sur AUX/adverbe, 6 SUB absentes dont 1 « car » + 5 GN qui avalent le verbe, 1 SUB étroite sur adverbe).
+- Cibles S : `cible_nom`/`cible_verbe` sont des textes complets, sans tête ni direction ; `cible_gp` est mort (4/1101, 0/89 REL/SUB) ; aucune cible à droite, donc les 26 SUB antéposées (gouverneur à droite) ne peuvent pas être fournies. Sur les spans exacts : REL 26/26 juste via `cible_nom` ; SUB 22/23 via `cible_verbe`, 0/6 via `cible_nom`, 14 sans cible.
+- Contrôles négatifs : S coupé 0/143 exact ; hasard 1/239 = 0,0042 ; permutation REL 44 observé vs 1,31 moyen (2000 tirages) ; le 26/26 REL est un effet de sélection (le premier GN de la phrase fait aussi 26/26), la preuve est la permutation.
+
+CONTRAT PROPOSÉ `s/v1` (détail dans la fiche)
+- Entrée publique unique : `structure(texte, roles=True, langue=None) -> list[dict]`, `CONTRAT = "s/v1"` ; `Segment.dict()` doit inclure les cibles (aujourd'hui il les omet) ; plus d'import de `_segmente`/`_tokens` par L.
+- Champs : type/span demi-ouvert/texte/sous_type/marqueur/cible(s)/confiance/statut/langue ; `cible = {genre, debut, fin, texte, direction gauche|droite|interne, tete best effort, tete_debut, tete_fin}` ; refus explicite (`statut=refus` + raison) pour langue non couverte.
+- REL → antécédent nominal à gauche ; SUB → verbe gouverneur (gauche 42/69, droite 26/69, interne 1/69) ; GP → verbe (ou nom pour génitif). S = structure, L = tête lexicale + convention.
+
+ATTENTION — LE BLOC A CHANGÉ PENDANT LA SESSION
+Votre correctif non committé (13:51) applique déjà la règle SUB → segment précédent (GV→verbe, GN→nom) et le POS dans evaluer_gold.py. J'ai mesuré les deux états :
+- initial : 54/62 REL/SUB (28/36 SUB), 123/145 (0,8483) ;
+- courant : 60/62 REL/SUB (34/36 SUB), 137/145 (0,9448) ; le +6 est exactement la prédiction, les +8 GP viennent des autres changements du lot. Restent 2 erreurs SUB : « appelle-moi » (trait d'union) et « Peut-être qu'il viendra » (cible interne du gold).
+
+POINT LE PLUS IMPORTANT POUR VOUS
+`CONVENTION_CIBLE` (gold_reel.py) écrit « SUB → antécédent (tête du GN à gauche) », mais le POS du gold donne 69/69 SUB = VERB (42 gauche, 26 droite, 1 interne). `_est_verbe` en classait 34 comme noms ; votre correctif POS donne 116 verbes / 29 noms. La convention écrite est à corriger, et le cas interne (« Peut-être qu'il viendra » → viendra) à trancher.
+
+CE QUE S DOIT ENCORE FOURNIR (priorité)
+1) l'API publique et les champs typés ci-dessus ; 2) la règle de fin « un prédicat par clause » (les 18 larges + 3 étroites) ; 3) `langue` + refus explicite (les 54 échecs anglais).
+
+La fiche contient le contrat complet, les tableaux d'écart, le contrôle négatif, les limites et la suite. Le JSON porte les mêmes chiffres et le contrat lisible par machine. Je n'ai rien écrit dans tools/structures/ ni modifié de fichier existant.
+
+### 👤 Utilisateur
+
+Background subagent c4796573-e2dc-48c2-b832-96f8bfab22c3 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Récapitulatif final
+
+Livrés (deux fichiers neufs, aucun code modifié, aucun commit) :
+- `reports/rapport-contrat-s.md` — la fiche : contrat `s/v1`, tableaux d'écart, contrôle négatif, limites, suite.
+- `reports/pensee-contrat-s.json` — les mêmes chiffres et le contrat lisible par machine.
+
+**Ce que S ne fournit pas**
+- **Aucune API publique complète** : `analyser()` n'annote que le dernier segment ambigu (GP/REL, jamais SUB) ; `structure()` rend des dicts dont `Segment.dict()` **omet** `cible_nom`/`cible_gp`/`cible_verbe` ; le bloc doit importer `_segmente`/`_tokens`, donc un privé.
+- **Aucun span REL/SUB complet** : 60 absentes, 18 plus larges, 3 plus étroites sur 143 cibles. Les 54 absences anglaises viennent des marqueurs français seulement ; côté français, 18 REL larges (pas de règle « un prédicat par clause »), 2 REL étroites (AUX/adverbe), 6 SUB absentes (`car`, et 5 GN qui avalent le verbe), 1 SUB étroite (adverbe).
+- **Aucune cible typée** : `cible_nom`/`cible_verbe` sont des textes complets (`Le livre`, pas `livre`), sans tête ni direction ; `cible_gp` est mort (4/1101, 0/89 REL/SUB) ; aucune cible à droite, donc les 26 SUB antéposées ne sont pas couvertes.
+- **Ni langue, ni refus, ni confiance/statut** : l'anglais est traité avec les marqueurs français et devient un GV qui avale la phrase.
+
+**Ce que le bloc doit faire**
+- **REL → antécédent nominal à gauche** (`_tete_nom`), **SUB → verbe gouverneur** (`_verbe_dans` / `_cible_proche`, gauche ou droite), **GP → verbe** ; ne jamais prendre le GN sujet pour un SUB.
+- Lire un **`cible` typé** (genre, span, direction) ; ne plus écraser les trois canaux par `cible_gp or cible_nom or cible_verbe` ; une seule segmentation via `structure()`.
+- **Repli de langue** : passer `lg` à S ; si S refuse, chunker ou aucun label + trace. Si S reste en `s/v0`, isoler l'adaptateur et tracer la version.
+
+**L'écart chiffré**
+- **94/239** cibles sans segment au bon span : **48 REL, 33 SUB, 13 GP** ; **81 REL/SUB** = 60 absentes, 19 plus larges, 2 plus étroites. Le bloc n'en répare aucune ; le chunker seul fait **0/143** exact REL/SUB.
+- **S seul : 62/143 exacts (43,4 %)** ; 51 REL et 38 SUB produits contre 74 et 70 dans le gold.
+- **Attachement REL/SUB** : 54/62 (état initial) → **60/62** (état courant, correctif non committé présent dans l'arbre) ; total **123/145 → 137/145 (0,9448)**. Les +6 REL/SUB sont exactement la prédiction ; les +8 GP viennent des autres changements du même lot. Restent 2 erreurs : `appelle-moi` (trait d'union) et `Peut-être qu'il viendra` (cible interne du gold).
+- **Contrôles négatifs** : S coupé 0/143 ; cible au hasard 1/239 (0,0042) ; permutation REL 44 observé vs 1,31 moyen (2000 tirages) ; le 26/26 REL est un effet de sélection (le premier GN fait aussi 26/26), la preuve est la permutation.
+
+**Point d'attention** : `CONVENTION_CIBLE` écrit « SUB → antécédent (tête du GN à gauche) », mais le POS du gold donne **69/69 SUB = VERB** (42 gauche, 26 droite, 1 interne). `_est_verbe` en classait 34 comme noms ; l'évaluateur courant, passé au POS, donne 116 verbes / 29 noms. La convention écrite est à corriger, et le cas interne à trancher.
+
+Priorités restantes : API `s/v1` et champs typés côté S ; règle de fin « un prédicat par clause » ; `langue` + refus explicite ; committer le correctif du bloc et rejouer les portes.
+
+### 🤖 Assistant
+
+⏵ J'intègre les fiches A5 (contrat S), A6 (coût) et A4 (cohérence)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -14 reports/rapport-cout-chunker.md; echo \"=== A4 :\"; head -16 reports/rapport-coherence-fiches.md", "description": "Lire les fiches A6 et A4"}`
+
+  ```
+# Coût des règles d'attachement du chunker — O(n²) réel, cache ×12 à 160 tokens
+
+> **Date** : 2026-11-05 · **Instantané** : [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py)
+> sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65`, commit
+> `e1171032` (branche `s/v7`, arbre de travail modifié) · **Verdict** : ✅ **le O(n²) est
+> confirmé** ; le cache « un chunking + un verbe de GV par analyse » divise le temps par
+> **11,6 à 160 tokens** et **16,9 à 320** sur le chemin chunker seul, par **2,0 / 2,4** sur le
+> chemin par défaut ; **mais** il ne rend pas la complexité strictement linéaire (le tri des GV
+> par segment reste) et il ne gagne presque rien sur le corpus court.
+>
+> **Dispositif** : banc hors dépôt (`/tmp/bench_final.py`, sha256 `6c823a1f…`), 612 phrases de
+> [`evaluer_gold.charger()`](../tools/tests/linguistique/evaluer_gold.py), phrases synthétiques
+> de 20 à 1 280 tokens, variantes V1/V2/OFF ; JSON
+> [`pensee-cout-chunker.json`](pensee-cout-chunker.json). Contexte : la fiche
+=== A4 :
+# Cohérence des fiches B13 du 2026-11-05 — vérification
+
+> **Date de vérification** : 2026-11-05T13:54-05:00 · **Branche** : `s/v7` · **Périmètre** : les
+> **11
+… [1099 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'Divergences' reports/rapport-coherence-fiches.md | head -1 | cut -d: -f1),+22p\" reports/rapport-coherence-fiches.md", "description": "Lire les divergences relevées par A4"}`
+
+  ```
+## 4. Divergences réelles
+
+### 4.1 `lexique-elargi` — 4 valeurs fausses (prose et JSON), la table est juste
+
+La fiche a une table et des champs JSON **corrects** (60/63, 63/82, 0,9524, 0,7683, 123,
+0,8483, 126, 134), mais sa prose garde un état intermédiaire (62/83) et son JSON deux champs
+faux (`note` = 62, `limites` = 23) ; le décompte 145/146 est mélangé dans les deux :
+
+| # | ce qui est écrit | où | valeur fausse | valeur attendue | preuve |
+|---:|---|---|---|---:|---|
+| L1 | « la part verbes passe de 51 à **62** cibles » | fiche l. 29 ; JSON `note` | 62 | **63** | table 60/63 ; T168/T169 ; `convention-doc` |
+| L2 | « la part noms de 95 à **83** » ; « 0,7368 → **0,7590** » | fiche l. 30, 33 | 83 ; 0,7590 | **82** ; **0,7683** | table 63/82 ; T169 ; 0,7590 = 63/83 |
+| L3 | « **23**/145 restent faux » ; « Les **23** échecs » | fiche l. 35 ; JSON `limites` | 23 | **22** (= 145 − 123) | `echecs-cible` (22) ; T171 (123/145) ; doc T171 (22) |
+| L4 | « Sur les **145** segments » pour la colonne « avant » | fiche l. 6 | 145 (avant) | **146** (avant) → 145 (après) | T167 au commit `23853cb7` = 146 ; 118/146 = 0,8082 |
+
+**Pourquoi c'est réel et non historique.** Les valeurs 62/83/0,7590/
+… [670 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '4.3' reports/rapport-coherence-fiches.md | head -1 | cut -d: -f1),+10p\" reports/rapport-coherence-fiches.md; echo \"=== 4.2 :\"; sed -n \"$(grep -n '4.2' reports/rapport-coherence-fiches.md | head -1 | cut -d: -f … [87 caractères tronqués]`
+
+  ```
+| 4 | [`rapport-pensee-denominateur.md`](rapport-pensee-denominateur.md) | 239 cibles, 146 segments | `f8f5bc04` / 09:42 | 170/170 | 177/177 | ⚠️ chiffres cohérents — ❌ attribution « 93 chez S » (cf. § 4.3) |
+| 5 | [`rapport-pensee-classement.md`](rapport-pensee-classement.md) | le classement : exact 0,2260 → 0,6438 | `d8edd1d9` / 10:02 | 171/171 | 177/177 | ✅ cohérente — 🕓 historique |
+| 6 | [`rapport-pensee-conventions.md`](rapport-pensee-conventions.md) | verbes 0,7255, noms 0,6000 | `f70a1b2a` / 10:09 | 172/172 | 177/177 | ✅ cohérente — 🕓 historique |
+| 7 | [`rapport-pensee-attachement-cible.md`](rapport-pensee-attachement-cible.md) | l'attachement ciblé : exact 0,6438 → 0,8082 | `23853cb7` / 10:18 | 173/173 | 177/177 | ✅ cohérente — 🕓 historique |
+| 8 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | le lexique élargi : exact 0,8082 → 0,8483 | `a408a909` / 10:39 | 174/174 | 177/177 | ❌ divergence réelle (cf. § 4.1) |
+| 9 | [`rapport-pensee-echecs-cible.md`](rapport-pensee-echecs-cible.md) | les 22 échecs : 11 hors candidats, 11 mal classés | `a048cb83` / 10:49 | 175/175 | 177/177 | ✅ cohérente — actuelle |
+| 10 | [`rapport-pensee-topk-strict.md`](rappo
+… [2541 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\n# 1) lexique-elargi : les 4 valeurs fausses\np=pathlib.Path('reports/rapport-pensee-lexique-elargi.md'); t=p.read_text()\nt=t.replace(\"la part « verbes » passe de 51 à **62** cibles\", \"la pa … [2085 caractères tronqués]`
+
+  ```
+lexique-elargi et denominateur corrigés
+3
+--- (0 = corrigé)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"62\\*\\* cibles\\|83\\*\\*\\|0,7590\\|23/145\\|23 échecs\" reports/rapport-pensee-lexique-elargi.md | head -5", "description": "Voir les occurrences restantes"}`
+
+  ```
+7:> **exact 118 → 123** (0,8082 → **0,8483**), top1 0,8690, top-k **0,9241**.
+33:- **Les noms baissent en apparence** (0,7368 → 0,7590 en taux, mais 70 → 63 en nombre) : le
+35:- **La négative est explicite** : 23/145 restent faux.
+39:- **Les 23 échecs** : verbes hors lexique (`fly`, `climbs`, `flows`, `wait`, `swims`, `passes`,
+55:1. **Les 23 échecs** : les qualifier (verbes hors lexique, noms cibles).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pensee-lexique-elargi.md'); lignes=p.read_text().splitlines(keepends=True)\nfor i,l in enumerate(lignes):\n    if \"0,7368 → 0,7590\" in l: lignes[i]=l.replace(\"0,736 … [641 caractères tronqués]`
+
+  ```
+1:# B13 — le lexique élargi : l'exact passe de 0,8082 à 0,8483
+7:> **exact 118 → 123** (0,8082 → **0,8483**), top1 0,8690, top-k **0,9241**.
+19:| **exact** | **118 (0,8082)** | **123 (0,8483)** | **+5** |
+21:| noms | 70/95 | **63/82** (0,7683) | −7 |
+33:- **Les noms baissent en apparence** (0,7368 → 0,7683 en taux, mais 70 → 63 en nombre) : le
+--- (vide = ok)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"62\" reports/rapport-pensee-lexique-elargi.md | head -4", "description": "Vérifier la mention 62"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nnouvelles=(\n \"| [`rapport-contrat-s.md`](rapport-contrat-s.md) | **B13** — le contrat `s/v1` : ce que S doit fournir (API, cibles typées, l … [2484 caractères tronqués]`
+
+  ```
+README : retirées 3
+compteurs 647 740
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 1
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 2
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 3
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 4
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+jeu 05 nov 2026 14:19:10 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **180/180** ; attachement **exact spans 0,9448**, **top-k strict 0,9724** ; 3 sous-agents intégrés ; m … [1769 caractères tronqués]`

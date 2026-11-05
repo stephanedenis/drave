@@ -22,7 +22,7 @@
 
 **Ce que ça dit** :
 
-- **La couverture explique la moitié de l'écart** : 93 cibles n'ont pas de segment au bon span
+- **La couverture explique la moitié de l'écart** : 94 cibles n'ont pas de segment au bon span
   (REL/SUB de S) ; les compter comme des échecs d'attachement mélangeait deux problèmes.
 - **Sur les segments qu'on sait segmenter, l'attachement tient** : top-k **90,4 %**, top1
   **78,8 %**, exact **22,6 %** — la bonne cible est presque toujours proposée.

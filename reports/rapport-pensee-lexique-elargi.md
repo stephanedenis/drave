@@ -12,7 +12,7 @@
 
 ## 1. Avant / après (145 segments au bon span)
 
-| mesure | avant | **lexique élargi** | écart |
+| mesure | avant (146) | **lexique élargi** (145) | écart |
 |---|---:|---:|---:|
 | top1 | 122 (0,8356) | **126 (0,8690)** | +4 |
 | top-k | 132 (0,9041) | **134 (0,9241)** | +2 |
@@ -26,17 +26,17 @@ Rendement global (÷ 239 cibles) : top1 0,5272, top-k 0,5607, exact **0,5146**.
 
 - **Les participes irréguliers manquaient** : « vu » n'était pas un verbe pour `_est_verbe`, donc
   « a vu » donnait `a` ; le lexique les reconnaît maintenant.
-- **Attention à la lecture des conventions** : la part « verbes » passe de 51 à **62** cibles et
-  la part « noms » de 95 à **83** — non parce que le gold a changé, mais parce que la
+- **Attention à la lecture des conventions** : la part « verbes » passe de 51 à **63** cibles et
+  la part « noms » de 95 à **82** — non parce que le gold a changé, mais parce que la
   **classification** `_est_verbe` reconnaît plus de cibles comme verbes. Les deux colonnes ne
   sont donc pas comparables d'une fiche à l'autre ; seul l'**exact global** l'est (+4).
-- **Les noms baissent en apparence** (0,7368 → 0,7590 en taux, mais 70 → 63 en nombre) : le
+- **Les noms baissent en apparence** (0,7368 → 0,7683 en taux, mais 70 → 63 en nombre) : le
   déplacement vient de la reclassification.
-- **La négative est explicite** : 23/145 restent faux.
+- **La négative est explicite** : 22/145 restent faux.
 
 ## 2. Ce que ce banc ne dit pas
 
-- **Les 23 échecs** : verbes hors lexique (`fly`, `climbs`, `flows`, `wait`, `swims`, `passes`,
+- **Les 22 échecs** : verbes hors lexique (`fly`, `climbs`, `flows`, `wait`, `swims`, `passes`,
   `get`, `smiles`) et noms cibles hors du GN à gauche.
 - **La couverture du lexique** n'est pas mesurée hors gold.
 - **Le top-k est lenient** (sous-chaînes).
@@ -52,7 +52,7 @@ Rendement global (÷ 239 cibles) : top1 0,5272, top-k 0,5607, exact **0,5146**.
 
 ## 4. La suite
 
-1. **Les 23 échecs** : les qualifier (verbes hors lexique, noms cibles).
+1. **Les 22 échecs** : les qualifier (verbes hors lexique, noms cibles).
 2. **Documenter la convention** dans le gold.
 3. **Les subordonnées** : demander à S (81 spans).
 4. **Politique DRVM/native** : quand les poids seront là.

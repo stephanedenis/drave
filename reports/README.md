@@ -15,14 +15,14 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-contrat-s.md`](rapport-contrat-s.md) | **B13** — le contrat `s/v1` : ce que S doit fournir (API, cibles typées, langue), écarts mesurés |
+| [`rapport-cout-chunker.md`](rapport-cout-chunker.md) | **B13** — le coût du chunker : O(n²) confirmé, cache ×11,6 à 160 tokens |
+| [`rapport-coherence-fiches.md`](rapport-coherence-fiches.md) | **B13** — la cohérence des 11 fiches : 8 justes, 3 divergences réelles (corrigées) |
 | [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) | **B13** — l'attachement v2 : exact **0,9448**, top-k strict **0,9724**, modèle appris rejeté, **180/180** |
 | [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** — l'audit A1 : 14/14 valeurs reproduites, écart 0 |
 | [`rapport-topk-diagnostic.md`](rapport-topk-diagnostic.md) | **B13** — le diagnostic A2 : 57 échecs qualifiés, 3 correctifs (F1 +45) |
 | [`rapport-classement-appris.md`](rapport-classement-appris.md) | **B13** — le classement appris A3 : 142/145, **non significatif** face à 137, rejeté |
 | [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** — l'audit A1 : 14/14 valeurs reproduites, écart 0 ; 3 JSON sur 5 sont des instantanés, **178/178** |
-| [`rapport-pensee-convention-doc.md`](rapport-pensee-convention-doc.md) | **B13** — la convention des cibles documentée dans le gold, **177/177** |
-| [`rapport-pensee-topk-strict.md`](rapport-pensee-topk-strict.md) | **B13** — le top-k strict : **0,6069**, pas 0,9241, **176/176** |
-| [`rapport-pensee-echecs-cible.md`](rapport-pensee-echecs-cible.md) | **B13** — les 22 échecs : 11 hors candidats, 11 mal classés, **175/175** |
 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | **B13** — le lexique élargi : exact 0,8082 → **0,8483**, **174/174** |
 | [`rapport-pensee-spans.md`](rapport-pensee-spans.md) | **B13** — les spans perdus : 48 REL, 33 SUB, 12 GP, **169/169** |
 | [`rapport-pensee-echecs-attachement.md`](rapport-pensee-echecs-attachement.md) | **B13** — les 127 échecs : 94 span, 33 → 32 cible, **166/166** |

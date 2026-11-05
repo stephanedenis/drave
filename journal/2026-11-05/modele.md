@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,13 @@
 | 01:56 | `0bda5c5b` | PASSE 83/83 JOURNAUX ; PORTE-SESSIONS ROUGE PAR LE HEARTBEAT DE e181ce02 ; HEURE 01 H 58 | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 | 02:15 | `b08db744` | ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14 | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 08:37 | `2c432406` | ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; B13 166/166 | `en-cours.md`, `README.md`, `distribue.md` (+13) |
+| 14:14 | `9d5337ce` | B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+49) |
+
+## Chiffres du jour
+
+`0,8483` · `0,9448` · `0,6069` · `0,9724`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
@@ -20,14 +27,26 @@
 - `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 29.8 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
 - `53bc3288-f2c1-4a7d-b1db-88d794074f70` — Tu travailles dans le dépôt (début 2026-11-05 13:16, 1.0 h) → [rapport](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/rapport.md) · [digest](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/digest.md)
 - `63d4c619-63e8-41b9-a183-5c6f1ac05a21` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 0.6 h) → [rapport](../sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/rapport.md) · [digest](../sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/digest.md)
-- `65495a29-10c0-4571-96be-e7729f1efebf` — Tu travailles dans le dépôt (début 2026-11-05 13:16, 1.0 h) → [rapport](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/rapport.md) · [digest](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/digest.md)
+- `65495a29-10c0-4571-96be-e7729f1efebf` — Tu travailles dans le dépôt (début 2026-11-05 13:16, 1.1 h) → [rapport](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/rapport.md) · [digest](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/digest.md)
 - `a8035275-c7b9-4713-a6ab-7b859cd72306` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 0.5 h) → [rapport](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/rapport.md) · [digest](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 27.7 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
 - `c4796573-e2dc-48c2-b832-96f8bfab22c3` — Tu travailles dans le dépôt (début 2026-11-05 13:16, 1.0 h) → [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 117.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 117.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.0 h) → [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md)
 - `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` — — (début 2026-11-05 10:11, 0.0 h) → [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md)
-- `ff7e786c-3ece-4eae-864e-19dddfead93c` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.1 h) → [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md)
+- `ff7e786c-3ece-4eae-864e-19dddfead93c` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.2 h) → [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-annotation-independante.md](../../reports/rapport-annotation-independante.md)
+- [reports/rapport-audit-attachement.md](../../reports/rapport-audit-attachement.md)
+- [reports/rapport-classement-appris.md](../../reports/rapport-classement-appris.md)
+- [reports/rapport-pensee-attachement-v2.md](../../reports/rapport-pensee-attachement-v2.md)
+- [reports/rapport-pensee-conventions.md](../../reports/rapport-pensee-conventions.md)
+- [reports/rapport-pensee-echecs-cible.md](../../reports/rapport-pensee-echecs-cible.md)
+- [reports/rapport-pensee-spans.md](../../reports/rapport-pensee-spans.md)
+- [reports/rapport-topk-diagnostic.md](../../reports/rapport-topk-diagnostic.md)
 
 <!-- notes -->
 

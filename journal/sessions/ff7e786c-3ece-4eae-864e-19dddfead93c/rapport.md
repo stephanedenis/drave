@@ -7,12 +7,12 @@
 | Identifiant | `ff7e786c-3ece-4eae-864e-19dddfead93c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 13:11 |
-| Durée | 1.1 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 92 |
-| Appels d'outils | 115 |
+| Messages | 106 |
+| Appels d'outils | 129 |
 | Fichiers touchés | 2 |
-| Commandes | 83 |
+| Commandes | 85 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **vérifier … [1881 caractères tronqués]
 
-*115 appels d'outils.* Actions notables :
+*129 appels d'outils.* Actions notables :
 
 - bash — Check branch and list reports
 - glob
@@ -41,11 +41,11 @@
 - bash — Read gates T153-T169 bodies
 - bash — Read gates T172-T174 bodies
 - bash — Locate metrics in evaluer_gold.py
-- … et 86 autres
+- … et 100 autres
 
 **Synthèse produite :**
 
-⏵ État indexé : la v2 est en cours de commit (fichiers stagés)
+⏵ Mise à jour de la fiche : la v2 stagée change les portes et la convention (périmètre daté)
 
 ## 3. Travail accompli
 
@@ -53,8 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md` | 1 | 8 |
-| `/tmp/gen_coherence_json.py` | 0 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md` | 1 | 18 |
+| `/tmp/gen_coherence_json.py` | 0 | 7 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +98,7 @@
 - **T1** Find tete values in session log
 - **T1** Verify gold size and target count
 - **T1** Run full autotest suite
-- … et 43 autres
+- … et 45 autres
 
 ## 4. Mesures et résultats marquants
 

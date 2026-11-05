@@ -7,12 +7,12 @@
 | Identifiant | `65495a29-10c0-4571-96be-e7729f1efebf` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 13:16 |
-| Durée | 1.0 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 54 |
-| Appels d'outils | 66 |
+| Messages | 64 |
+| Appels d'outils | 78 |
 | Fichiers touchés | 1 |
-| Commandes | 59 |
+| Commandes | 71 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2097 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*78 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and root files
 - bash — Count lines and list reports dir
@@ -41,11 +41,11 @@
 - bash — Count gold sentences across loaders
 - bash — Look for existing chunker reports
 - bash — Inspect phrase structure
-- … et 51 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Corrections de la fiche (composition du corpus, facteur de doublement, ligne de contrôle)
+⏵ Mise à jour de la référence de commit : l'instantané mesuré est désormais `9d5337ce`
 
 ## 3. Travail accompli
 
@@ -97,7 +97,7 @@
 - **T1** Read an existing report format
 - **T1** Inspect pensee JSON schema
 - **T1** Extract all key figures
-- … et 19 autres
+- … et 31 autres
 
 ## 4. Mesures et résultats marquants
 
