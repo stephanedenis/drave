@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,10 +16,11 @@
 | 00:40 | `ed57f55f` | ÉTAT — PASSE 30/83 : HOMEOSTASIE VERTE (755 S) ET HORLOGE VERTE (31 S) ; HEURE 00 H 47 | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 01:16 | `2086ea4b` | ÉTAT — HEURE 01 H 16 ; LA PASSE AVANCE (n3-sparsite, OCCUPATIONS) SANS NOUVELLE ROUGE | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 01:18 | `8bb43aba` | ÉTAT — HEURE 01 H 19 ; PASSE 62 JOURNAUX, OCR-SCANS VERTE (529 S), AUCUNE NOUVELLE ROUGE | `en-cours.md`, `README.md`, `docs.md` (+4) |
+| 01:32 | `c5701c75` | ÉTAT — HEURE 01 H 33 ; PRÉCHARGEMENT VERTE (214 S), PROFONDEUR-ROUTÉE EN COURS ; 68 JOURNAUX | `en-cours.md`, `README.md`, `portes.md` (+4) |
 
 ## Sessions actives ce jour
 
-- `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 18.1 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
+- `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 18.2 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
 
 <!-- notes -->
 

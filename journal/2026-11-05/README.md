@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**29 commits** · **1 session(s)** · **7 thème(s)**
+**30 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 8 | [docs.md](docs.md) |
+| docs | 9 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.1 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.2 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -58,6 +58,7 @@
 | 01:24 | `bd8b38f3` | ÉTAT — HEURE 01 H 25 ; PASSE 65 JOURNAUX, POIDS-CREUX TOURNE (4 MIN) |
 | 01:27 | `cb51b112` | ÉTAT — HEURE 01 H 27 ; POIDS-CREUX VERTE (376 S), PORTE-PONT TOURNE ; 66 JOURNAUX |
 | 01:29 | `78014667` | ÉTAT — HEURE 01 H 30 ; PORTE-PONT VERTE (99 S), PRÉCHARGEMENT EN COURS ; 67 JOURNAUX |
+| 01:32 | `c5701c75` | ÉTAT — HEURE 01 H 33 ; PRÉCHARGEMENT VERTE (214 S), PROFONDEUR-ROUTÉE EN COURS ; 68 JOURNAUX |
 
 ## Le récit de la journée (écrit à la main)
 
