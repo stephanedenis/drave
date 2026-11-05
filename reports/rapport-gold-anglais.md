@@ -1,4 +1,4 @@
-# B13 — audit du gold anglais : 25 phrases à corriger, 60/94 spans perdus, et la segmentation est la cause
+# B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ⚠️ gold
 > utilisable ; l'échec anglais est la **segmentation**, pas le gold.
@@ -26,9 +26,10 @@ Le gold anglais **n'est pas la cause principale** des échecs d'attachement angl
   cible (36,8 %). Mais ces 60 échecs sont **des spans**, pas des cibles : sur les 28 segments anglais
   trouvés au bon span (tous des GP), l'attachement exact est **28/28**. Les 54 cibles REL/SUB anglaises
   ne sont jamais évaluées parce que **S ne produit aucun REL/SUB en anglais**.
-- **La cause est côté analyseur** : S rend 277 GV anglais (dont 147 couvrent toute la phrase), **0 GN,
-  0 GP, 0 REL, 0 SUB**, et 2 spans exacts sur 702. `_pos` tague 176 occurrences de VERB gold en NOUN
-  (`talks` → NOUN, `brother` → VERB), alors que le gold est juste.
+- **La cause est côté analyseur** : le générateur S (`tools/structures/generateur.py`) rend 277 GV
+  anglais (dont 147 couvrent toute la phrase), **0 GN, 0 GP, 0 REL, 0 SUB**, et 2 spans exacts sur
+  702. `_pos` tague 176 occurrences de VERB gold en NOUN (`talks` → NOUN, `brother` → VERB), alors que
+  le gold est juste.
 - **Priorité** : segmenter l'anglais (S language-aware ou chunker anglais), puis corriger `_pos`, puis
   l'hygiène du gold (7 tags POS durs, 4 cibles après verbe, rôles, phrases non grammaticales).
 
@@ -53,9 +54,9 @@ Contrôles d'intégrité sur le **gold réel** (fr 228, en 204) ; le gold anglai
 | cible dans son propre segment | 1 (`r309`) | 0 |
 | REL dont la cible n'est pas la tête du GN à gauche | 0 | 0 |
 | SUB dont la cible n'est pas un VERB | 0 | 0 |
-| GP dont la cible n'est gouvernée par aucun GV/GN | 0 | 0 (1 cible ADJ, `r038`) |
+| GP dont la cible n'est gouvernée par aucun GV/GN (hors cible ADJ) | 0 (1 ADJ, `r018`) | 0 (1 ADJ, `r038`) |
 | GN contenant un VERB/AUX | 0 | 0 |
-| tags POS divergents (même forme, même fonction) | 7 (`est`×4, `que`×3) | 10 (7 durs + 3 `that`) |
+| tags POS en contradiction avec une autre occurrence | 7 (`est`×4, `que`×3) | 10 (7 durs + 3 `that`) |
 | cibles GP/SUB manquantes | 4 (3 GP après copule, 1 SUB `r429`) | 6 (4 après verbe, 2 après copule) |
 | doublons exacts | 2 (`r019`/`r186`, `r051`/`r189`) | 1 (`r336`/`r358`) |
 | tokens hors segment | 40 dans 36 phrases | 23 dans 20 phrases |
@@ -76,6 +77,9 @@ des GN de phrase entière, par exemple `The dog eats an apple`).
 | F1 syntagmes | 0,3786 | **0,1210** | 0,3654 | **0,1206** |
 | F1 tête | 0,5822 | 0,3614 | 0,5344 | 0,3618 |
 | couverture attachement | 0,7748 | **0,3182** | 0,9070 | **0,3176** |
+| labels au bon span | 117/151 | 28/88 | 78/86 | 27/85 |
+| top1 global | 0,7616 | 0,3182 | 0,8953 | 0,3176 |
+| top-k global | 0,7550 | 0,3182 | 0,8953 | 0,3176 |
 | exact global | 0,7483 | 0,3182 | 0,8953 | 0,3176 |
 | exact sur span | 0,9658 | **1,0000** | 0,9872 | **1,0000** |
 | top-k sur span | 0,9744 | 1,0000 | 0,9872 | 1,0000 |
@@ -103,8 +107,9 @@ en `[23,0 ; 42,1]`, fr `[70,2 ; 83,4]` ; en réel `[22,8 ; 42,3]`, fr réel `[82
 | coupé | 1 | 0 | 1 |
 
 En réel seul, le français ne perd que **8/86** spans (1 aucun, 3 plus larges, 3 plus étroits, 1 coupé),
-l'anglais **58/85** (57 aucun, 1 plus étroit). Les 26 spans français « synthétiques » expliquent
-l'essentiel de l'écart entre 0,907 (réel) et 0,775 (plein) ; le taux anglais, lui, ne bouge pas.
+l'anglais **58/85** (57 aucun, 1 plus étroit). Les 26 spans français ajoutés par le plein (25
+synthétiques + 1 hand) expliquent l'essentiel de l'écart entre 0,907 (réel) et 0,775 (plein) ; le taux
+anglais, lui, ne bouge pas.
 
 **Ce que ça dit** : les échecs anglais sont presque tous des **« aucun »** — REL et SUB ne sont pas
 produits du tout. Les échecs français sont surtout des **« plus large »** — les REL françaises existent
@@ -161,15 +166,15 @@ lieu de `speaks`) ; `r367` est juste (`listen`). Compléter ces cibles ferait **
 
 Les conventions changent avec les **blocs d'annotation**, pas au hasard :
 
-| convention | blocs anciens | blocs récents | exemples |
-|---|---|---|---|
-| relative `that` | CONJ (3) | PRON (11) | `r034`/`r074`/`r114` vs `r214`+ |
-| rôle REL | `qualité` (6) | `sujet`/`objet`/`lieu`/`temps` (22) | `r034`–`r115` vs `r204`+ |
-| copule | GV fusionné (14) | GV `is` + ADJ `attribut` (24) | `r032` `is fast` vs `r214` `is` + `good` |
-| adverbes | dans le GV (10), ADV (8), omis (7) | — | `r197` `play outside`, `r314` `tomorrow`, `r069` `deeply` |
-| négation | dans le GV (2) | ADV séparé (1) | `r029`/`r316` vs `r422` |
-| ponctuation | non tokenisée (201) | PONCT (3) | `r422`/`r427`/`r432` |
-| sujet de copule | agent 12 / patient 28 | pas de règle unique | `r032` agent vs `r291` patient ; `r328` « The book » patient mais « it » agent |
+| convention | constat | exemples |
+|---|---|---|
+| relative `that` | CONJ (3) dans les blocs anciens, PRON (11) dans les récents | `r034`/`r074`/`r114` vs `r214`+ |
+| rôle REL | `qualité` (6) dans les anciens, `sujet`/`objet`/`lieu`/`temps` (22) dans les récents | `r034`–`r115` vs `r204`+ |
+| copule | GV fusionné (14) dans les anciens, GV `is` + attribut séparé (24) dans les récents | `r032` `is fast` vs `r214` `is` + `good` |
+| adverbes | trois traitements : dans le GV (10), ADV (8), omis (7) | `r197` `play outside`, `r314` `tomorrow`, `r069` `deeply` |
+| négation | dans le GV (2) dans les anciens, ADV séparé (1) dans le récent | `r029`/`r316` vs `r422` |
+| ponctuation | non tokenisée (201), PONCT (3) dans le dernier bloc | `r422`/`r427`/`r432` |
+| sujet de copule | 12 agent / 28 patient, sans règle unique | `r032` agent vs `r291` patient ; `r328` « The book » patient mais « it » agent |
 
 Ce n'est pas une incohérence de spans : les têtes restent justes. C'est une **non-uniformité de
 conventions**, qui rend les rôles et les découpages non comparables d'un bloc à l'autre. Une mesure de
@@ -213,9 +218,9 @@ La liste des 25 : `r028`, `r034`, `r074`, `r102`, `r114`, `r165`, `r180`, `r218`
 | faux positif | `flower` | `flower` |
 
 Les cibles sont des **formes de surface réduites**, pas des textes complets : `saw` (pas `see`), `talks`
-(pas `talk`), `book` (pas `The book`), `ready` pour le seul cas adjectival. **Aucune** cible n'est un
-lemme, un multi-mot ou un span complet. Toute mesure future doit donc matcher la **surface**, pas un
-lemme.
+(pas `talk`), `book` (pas `The book`), `ready` pour les deux cas adjectivaux (`r038`, `g020`). Aucune
+cible n'est un lemme, un multi-mot ou un span complet. Toute mesure future doit donc matcher la
+**surface**, pas un lemme.
 
 Le POS gold des cibles est **97/97 correct** à la lecture grammaticale ; `_est_verbe` n'est d'accord
 que sur 81/97. Les 15 faux négatifs sont `rains`, `falls`, `hung`, `eat`, `think`, `stay`, `believe`,
@@ -293,7 +298,7 @@ le vrai problème.
 - **Le snapshot bouge** : les chiffres sont identiques à `dcf7bc91` et `8281d51e`, mais un futur
   segmenteur anglais, un lexique ou une règle de cible peuvent les changer. Le JSON porte les SHA.
 - **Les jugements manuels** (`that`, `sick`, `out`, `front`, `r180`, les coref) peuvent être contestés :
-  un second annotateur pourrait classer `that` en convention plutôt qu'en erreur, ou `to the library`
+  un second annotateur pourrait contester la convention `that` (CONJ vs PRON) ou juger `to the library`
   en destinataire acceptable.
 - **`_est_verbe` dépend du lexique** : les 15 faux négatifs et le faux positif `flower` sont des
   mesures du lexique courant, pas une propriété du gold.

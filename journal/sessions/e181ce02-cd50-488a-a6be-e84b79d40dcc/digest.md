@@ -43556,3 +43556,136 @@ Le gold anglais **n'est pas la cause principale** des échecs d'attachement angl
 ⏵ A14 : le gold anglais est sain, l'échec est la segmentation. J'intègre et je prépare la clôture
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-gold-anglais.md`](rappo … [1885 caractères tronqués]`
+
+  ```
+A14 intégrée 656 749
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1592]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1592", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-gold-anglais.md
+COMMIT OK 1
+028c8281 B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182
+jeu 05 nov 2026 16:09:09 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale complète et alignement des horodatages sur l'horloge réelle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-05, 16 h 10 HNE\", t)\np.write_text( … [975 caractères tronqués]`
+
+  ```
+horodatages alignés sur 16 h 10
+bash tools/porte-tableaux.sh               EXIT=1
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+  182/182 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent b9ea3904-889c-4497-a781-694da7d4987c sent a message: 
+Audit gold anglais terminé. Livrables : `reports/rapport-gold-anglais.md` + `reports/pensee-gold-anglais.json`.
+
+**Verdict : le gold anglais est structurellement sain ; l'échec anglais est la segmentation, pas le gold.**
+- 0 span faux / chevauchement / borne non-token / cible absente ou non-token / GN avalant un verbe. 97/97 cibles anglaises = tokens de surface (`saw`, `talks`), 0 multi-mot, 0 lemme ; POS gold des cibles 97/97 correct.
+- 25/210 phrases anglaises (11,9 %) portent une anomalie ; **16 (7,6 %)** sur les couches mesurées : 10 tags POS divergents (7 durs : `is`×3, `do`, `late`×2, `far` ; 3 de convention `that`), 6 GP sans cible (4 après verbe, 2 après copule), 3 rôles (2 faux + 1 discutable), 1 modalité (`r247`), 3 phrases non grammaticales (`r028`, `r102`, `r165`), 1 doublon (`r336`/`r358`), 6 coref (hors mesure).
+
+**Écarts fr/en (HEAD v3 `dcf7bc91`, code `9544f173`, revérifié à `8281d51e`)** : couverture 0,775 vs **0,318** (plein), 0,907 vs **0,318** (réel) ; exact global 0,748 vs 0,318 ; exact sur span 0,966 vs **1,000** (28/28 anglais, tous GP) ; spans perdus 34/151 fr vs **60/88 en**, dont **28/28 REL et 26/26 SUB anglais**. L'anglais = **60/94 spans perdus (63,8 %)** pour 36,8 % des cibles.
+
+**Cause** : S ne segmente pas l'anglais (277 GV, **0 GN/GP/REL/SUB**, 2/702 spans exacts) ; `_pos` tague 176 VERB gold en NOUN (`talks`→NOUN, `brother`→VERB) alors que le gold est juste. `_est_verbe` n'est d'accord que sur 81/97 cibles (15 FN, FP `flower`) : garder le POS gold.
+
+**Recommandation** : (1) segmentation anglaise d'abord (S language-aware ou chunker anglais) — seul levier des 60 spans ; (2) corriger `_pos` via `VERBES_CONNUS` + contexte (simulation +6,9 pts POS, +14,1 ouvert, attachement inchangé) ; (3) hygiène gold (7 tags, 4 cibles après verbe, rôles `r165`/`r239`/`r180`, modalité `r247`, `r028`/`r102`/`r165`, doublon `r336`/`r358`, coref `r340`/`r368`) ; (4) mesurer fr/en séparément, plein + réel, 239 segments à cible / 282 chaînes, exact-first + exact-any ; (5) ne pas ajuster le lexique au gold. La v2 (137/145) est périmée : v3 = 141/145, anglais inchangé.
+
+**Commit** : `028c8281` (A14) a été créé par un autre agent pendant l'audit ; il contient la version initiale de mes deux fichiers. Mes corrections post-commit du `.md` (titre, tableau des conventions, note ADJ, lignes top1/top-k) sont dans le worktree et **non commitées** ; je n'ai rien commité. Commit `reports/rapport-gold-anglais.md` si tu veux les garder. Le JSON est déjà dans le commit. Je n'ai touché aucun autre fichier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -5", "description": "Voir l'échec de porte-tableaux"}`
+
+  ```
+❌ 2 tableau(x) ne rendront pas (mistune refuse le tableau ENTIER) :
+     reports/rapport-pensee-attachement-v3.md:40 — 5 cellules ≠ 4 attendues
+     reports/rapport-pensee-attachement-v3.md:41 — 5 cellules ≠ 4 attendues
+  1692 fichier(s) examiné(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '34,44p' reports/rapport-pensee-attachement-v3.md", "description": "Voir les lignes 40-41"}`
+
+  ```
+| règle | répare | portée | régression |
+|---|---|---:|---:|
+| **R2** — un GP n'est pas gouverné par un mot de son span (`est prêt à manger` → `prêt`) | g012, r018 | 2 | 0 |
+| **R3** — cible vide d'un GP génitif → tête du GN à gauche (`de la voisine` → `chat`) | g002 | 1 | 0 |
+| **R4** — enclitiques (`appelle-moi` → `appelle`) | r230 | 1 | 0 |
+| R1 — lexique `rêver/sauter/marcher` | s108, s122, s041 | 2–3 | 0 | **non intégrée** (formes prises dans le gold) |
+| R5 — ignorer un pseudo-GV `ADV` | r309 | 1 | 0 | **non intégrée** (n = 1) |
+
+**Ce que ça dit** :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pensee-attachement-v3.md'); t=p.read_text()\nt=t.replace(\"| règle | répare | portée | régression |\\n|---|---|---:|---:|\",\n            \"| règle | répare | portée | … [1431 caractères tronqués]`
+
+  ```
+tableau v3 réparé
+  ✅ 3293 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+### 👤 Utilisateur
+
+Background subagent b9ea3904-889c-4497-a781-694da7d4987c finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Clôture de l'audit gold anglais et livraison du rapport
+
+**Livrables**
+- `reports/rapport-gold-anglais.md` — fiche complète (verdict, tableaux fr/en, annotations suspectes, contrôles, limites, recommandation).
+- `reports/pensee-gold-anglais.json` — chiffres, spans, cibles, anomalies, contrôles (JSON valide).
+
+**Annotations suspectes : 25 phrases anglaises sur 210 (11,9 %)** portent au moins une anomalie ; **16 (7,6 %)** sur les couches réellement mesurées :
+- **10 tags POS divergents** : 7 erreurs probables (`is`×3, `do`, `late`×2, `far`) + 3 dus à la convention `that` (CONJ vs PRON) ;
+- **6 GP sans cible** : 4 après un verbe (`r336`, `r342`, `r358`, `r367`), 2 après copule (`r328`, `r363`) ;
+- **3 rôles** (2 faux : `r165`, `r239` ; 1 discutable : `r180`), **1 modalité** (`r247`), **3 phrases non grammaticales** (`r028`, `r102`, `r165`), **1 doublon** (`r336`/`r358`), **6 coref** suspectes (hors mesure).
+
+**Écarts fr/en** (HEAD v3 `dcf7bc91`, code `9544f173`, revérifié à `8281d51e`) :
+
+| mesure | fr | en |
+|---|---:|---:|
+| couverture attachement (plein) | 0,775 | **0,318** |
+| couverture (réel seul) | 0,907 | **0,318** |
+| exact global | 0,748 | 0,318 |
+| exact sur span | 0,966 | **1,000** (28/28, tous GP) |
+| spans perdus | 34/151 | **60/88** |
+
+Les 60 spans anglais perdus sont **28/28 REL et 26/26 SUB** : l'anglais représente **60/94 spans perdus (63,8 %)** pour 36,8 % des cibles. Le gold est structurellement sain (0 span faux, 0 chevauchement, 0 cible absente/non-token, 0 GN avalant un verbe ; 97/97 cibles = tokens de surface). La cause est l'analyseur : S ne segmente pas l'anglais (277 GV, 0 GN/GP/REL/SUB, 2/702 exacts) et `_pos` tague 176 VERB gold en NOUN (`talks`→NOUN, `brother`→VERB). `_est_verbe` n'est d'accord que sur 81/97 cibles : garder le POS gold.
+
+**Recommandation** : segmenter l'anglais d'abord (S language-aware ou chunker anglais), puis corriger `_pos` (+6,9 pts simulés, attachement inchangé), puis l'hygiène du gold ; mesurer fr/en séparément ; ne pas ajuster le lexique au gold. La v2 (137/145) est périmée : v3 = 141/145, anglais inchangé.
+
+**Commit** : `028c8281` (A14) a intégré mes deux fichiers pendant l'audit. Mes corrections post-commit du rapport (titre, tableau des conventions, note ADJ, lignes top1/top-k) sont dans le worktree et **non commitées** ; je n'ai rien commité. Le JSON est déjà dans le commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Prochaine action** : les **deux règles de spans** de A12 (84/94, in-sample), puis les **4 échecs** ; le gold anglai … [1657 caractères tronqués]`
+
+  ```
+pilotage : anglais prioritaire
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ la page vivante date du dernier commit (2026-11-05)
+[still running after 60000ms; moved to background job bash-1604]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1604", "timeout_ms": 600000, "wait": true}`

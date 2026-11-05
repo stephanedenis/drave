@@ -7,12 +7,12 @@
 | Identifiant | `b9ea3904-889c-4497-a781-694da7d4987c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 1.3 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 91 |
-| Appels d'outils | 101 |
+| Messages | 104 |
+| Appels d'outils | 118 |
 | Fichiers touchés | 2 |
-| Commandes | 87 |
+| Commandes | 94 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*101 appels d'outils.* Actions notables :
+*118 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -41,11 +41,36 @@
 - bash — Read Heuristique implementation
 - bash — Dump English sentence list and duplicates
 - bash — Check spans, overlap, coverage anomalies
-- … et 79 autres
+- … et 95 autres
 
 **Synthèse produite :**
 
-⏵ Writing the English-gold audit report with per-language tables and controls
+⏵ Clôture de l'audit gold anglais et livraison du rapport
+
+**Livrables**
+- `reports/rapport-gold-anglais.md` — fiche complète (verdict, tableaux fr/en, annotations suspectes, contrôles, limites, recommandation).
+- `reports/pensee-gold-anglais.json` — chiffres, spans, cibles, anomalies, contrôles (JSON valide).
+
+**Annotations suspectes : 25 phrases anglaises sur 210 (11,9 %)** portent au moins une anomalie ; **16 (7,6 %)** sur les couches réellement mesurées :
+- **10 tags POS divergents** : 7 erreurs probables (`is`×3, `do`, `late`×2, `far`) + 3 dus à la convention `that` (CONJ vs PRON) ;
+- **6 GP sans cible** : 4 après un verbe (`r336`, `r342`, `r358`, `r367`), 2 après copule (`r328`, `r363`) ;
+- **3 rôles** (2 faux : `r165`, `r239` ; 1 discutable : `r180`), **1 modalité** (`r247`), **3 phrases non grammaticales** (`r028`, `r102`, `r165`), **1 doublon** (`r336`/`r358`), **6 coref** suspectes (hors mesure).
+
+**Écarts fr/en** (HEAD v3 `dcf7bc91`, code `9544f173`, revérifié à `8281d51e`) :
+
+| mesure | fr | en |
+|---|---:|---:|
+| couverture attachement (plein) | 0,775 | **0,318** |
+| couverture (réel seul) | 0,907 | **0,318** |
+| exact global | 0,748 | 0,318 |
+| exact sur span | 0,966 | **1,000** (28/28, tous GP) |
+| spans perdus | 34/151 | **60/88** |
+
+Les 60 spans anglais perdus sont **28/28 REL et 26/26 SUB** : l'anglais représente **60/94 spans perdus (63,8 %)** pour 36,8 % des cibles. Le gold est structurellement sain (0 span faux, 0 chevauchement, 0 cible absente/non-token, 0 GN avalant un verbe ; 97/97 cibles = tokens de surface). La cause est l'analyseur : S ne segmente pas l'anglais (277 GV, 0 GN/GP/REL/SUB, 2/702 exacts) et `_pos` tague 176 VERB gold en NOUN (`talks`→NOUN, `brother`→VERB). `_est_verbe` n'est d'accord que sur 81/97 cibles : garder le POS gold.
+
+**Recommandation** : segmenter l'anglais d'abord (S language-aware ou chunker anglais), puis corriger `_pos` (+6,9 pts simulés, attachement inchangé), puis l'hygiène du gold ; mesurer fr/en séparément ; ne pas ajuster le lexique au gold. La v2 (137/145) est périmée : v3 = 141/145, anglais inchangé.
+
+**Commit** : `028c8281` (A14) a intégré mes deux fichiers pendant l'audit. Mes corrections post-commit du rapport (titre, tableau des conventions, note ADJ, lignes top1/top-k) sont dans le worktree et **non commitées** ; je n'ai rien commité. Le JSON est déjà dans le commit.
 
 ## 3. Travail accompli
 
@@ -54,7 +79,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json` | 0 | 4 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md` | 1 | 8 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +123,7 @@
 - **T1** Test evaluator state dependence
 - **T1** Check for concurrent modifications and file timestamps
 - **T1** Check git HEAD and diffs
-- … et 47 autres
+- … et 54 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -108,6 +133,9 @@
 - **T1** `"gold_anomalies": "25/210 phrases (11,9 %), dont 16 (7,6 %) sur les couches mesurées ; 10 tags POS divergents, 6 GP sans cible, 3 rôles",`
 - **T1** `"anglais_echec": "60/94 spans perdus, 100 % des REL et SUB anglais ; la cause est la segmentation, pas le gold",`
 - **T1** `"est_verbe": "83,5 % d'accord avec le POS gold sur les cibles ; 15 FN, 1 FP (flower) ; garder le POS gold comme référence",`
+- **T1** `cible (36,8 %). Mais ces 60 échecs sont **des spans**, pas des cibles : sur les 28 segments anglais`
+- **T1** `-| tags POS divergents (même forme, même fonction) | 7 (`est`×4, `que`×3) | 10 (7 durs + 3 `that`) |`
+- **T1** `+| tags POS en contradiction avec une autre occurrence | 7 (`est`×4, `que`×3) | 10 (7 durs + 3 `that`) |`
 
 ## 5. Erreurs rencontrées
 

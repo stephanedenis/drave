@@ -2253,3 +2253,223 @@ Created file
 … [23450 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Refining the report: title, convention table, and a few scope labels
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "# B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause", "old_string": "# B13 — audit du gold anglais : 25 phrases à corriger, … [54 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "- **La cause est côté analyseur** : le générateur S (`tools/structures/generateur.py`) rend 277 GV\n  anglais (dont 147 couvrent toute la phrase), **0 GN, 0 GP, 0 REL, 0 SUB**, et 2 spans  … [428 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "| GP dont la cible n'est gouvernée par aucun GV/GN (hors cible ADJ) | 0 (1 ADJ, `r018`) | 0 (1 ADJ, `r038`) |\n| GN contenant un VERB/AUX | 0 | 0 |\n| tags POS en contradiction avec une au … [305 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "En réel seul, le français ne perd que **8/86** spans (1 aucun, 3 plus larges, 3 plus étroits, 1 coupé),\nl'anglais **58/85** (57 aucun, 1 plus étroit). Les 26 spans français ajoutés par le … [462 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "| convention | constat | exemples |\n|---|---|---|\n| relative `that` | CONJ (3) dans les blocs anciens, PRON (11) dans les récents | `r034`/`r074`/`r114` vs `r214`+ |\n| rôle REL | `quali … [1508 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "Les cibles sont des **formes de surface réduites**, pas des textes complets : `saw` (pas `see`), `talks`\n(pas `talk`), `book` (pas `The book`), `ready` pour les deux cas adjectivaux (`r03 … [481 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "- **Les jugements manuels** (`that`, `sick`, `out`, `front`, `r180`, les coref) peuvent être contestés :\n  un second annotateur pourrait contester la convention `that` (CONJ vs PRON) ou j … [310 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-gold-anglais.md')\ntxt=p.read_text()\nlinks=re.findall(r'\\]\\(([^)]+)\\)',txt)\nprint('liens',len(links))\nfor l in links:\n    if l.sta … [760 caractères tronqués]`
+
+  ```
+liens 12
+OK  ../tools/tests/linguistique/gold_reel.py
+OK  ../tools/tests/linguistique/gold_reel.json
+OK  ../tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/bloc_linguistique.py
+OK  pensee-gold-anglais.json
+OK  pensee-gold-anglais.json
+OK  ../tools/tests/linguistique/gold_reel.py
+OK  ../tools/tests/linguistique/gold_reel.json
+OK  ../tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/bloc_linguistique.py
+OK  rapport-pensee-attachement-v3.md
+OK  rapport-pensee-spans.md
+tables avec pipes incohérents []
+  ```
+
+- **bash** `{"command": "ls -l /tmp/gold_metrics.json 2>/dev/null && rm -f /tmp/gold_metrics.json && echo 'scratch supprimé'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/ | grep -E \"gold-anglais\"", "description": "Remove scratch file and check new reports"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 14838  5 nov 15:00 /tmp/gold_metrics.json
+scratch supprimé
+ M reports/rapport-gold-anglais.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/ | grep -i gold; echo '--- ls-files'; git ls-files reports/rapport-gold-anglais.md reports/pensee-gold-anglais.json; echo '--- log'; git log -3 --format='%h %ad %s' --date=iso -- reports/rapport-gold-anglai … [190 caractères tronqués]`
+
+  ```
+M reports/rapport-gold-anglais.md
+--- ls-files
+reports/pensee-gold-anglais.json
+reports/rapport-gold-anglais.md
+--- log
+028c8281 2026-11-05 16:07:04 -0500 B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182
+--- head content
+# B13 — audit du gold anglais : 25 phrases à corriger, 60/94 spans perdus, et la segmentation est la cause
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ⚠️ gold
+> utilisable ; l'échec anglais est la **segmentation**, pas le gold.
+> **Snapshot** : HEAD `dcf7bc91` (v3) mesuré, revérifié à `8281d51e` ; `bloc_linguistique.py` SHA
+> `64b7c520…` puis `9544f173…`, chiffres **identiques** ; `gold_reel.json` SHA `05d4f6df…`.
+> **Dispositif** : [`gold_reel.py`](../tools/tests/linguistique/gold_reel.py) et
+> [`gold_reel.json`](../tools/tests/linguistique/gold_reel.json) (432 phrases réelles : 228 fr, 204 en),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+> [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique()`), comparaison des cibles à
+> `_est_verbe` et au POS gold.
+> **JSON** : [`pensee-gold-a
+… [441 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat -- reports/rapport-gold-anglais.md reports/pensee-gold-anglais.json; echo '--- report diff'; git diff -- reports/rapport-gold-anglais.md | head -120; echo '--- json diff'; git diff -- reports/pensee-gold-anglais.json  … [72 caractères tronqués]`
+
+  ```
+reports/rapport-gold-anglais.md | 44 +++++++++++++++++++++--------------------
+ 1 file changed, 23 insertions(+), 21 deletions(-)
+--- report diff
+diff --git a/reports/rapport-gold-anglais.md b/reports/rapport-gold-anglais.md
+index 70ad6967..55428ab8 100644
+--- a/reports/rapport-gold-anglais.md
++++ b/reports/rapport-gold-anglais.md
+@@ -1,4 +1,4 @@
+-# B13 — audit du gold anglais : 25 phrases à corriger, 60/94 spans perdus, et la segmentation est la cause
++# B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause
+ 
+ > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ⚠️ gold
+ > utilisable ; l'échec anglais est la **segmentation**, pas le gold.
+@@ -26,9 +26,10 @@ Le gold anglais **n'est pas la cause principale** des échecs d'attachement angl
+   cible (36,8 %). Mais ces 60 échecs sont **des spans**, pas des cibles : sur les 28 segments anglais
+   trouvés au bon span (tous des GP), l'attachement exact est **28/28**. Les 54 cibles REL/SUB anglaises
+   ne sont jamais évaluées parce que **S ne produit aucun REL/SUB en anglais**.
+-- **La cause est côté analyseur** : S rend 277 GV angla
+… [6264 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "new_string": "| F1 tête | 0,5822 | 0,3614 | 0,5344 | 0,3618 |\n| couverture attachement | 0,7748 | **0,3182** | 0,9070 | **0,3176** |\n| labels au bon span | 117/151 | 28/88 | 78/86 | 27/85 |\n| top1 gl … [699 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-gold-anglais.md'); txt=p.read_text(); lines=txt.splitlines()\nlinks=re.findall(r'\\]\\(([^)]+)\\)',txt)\nmissing=[l for l in links if not … [738 caractères tronqués]`
+
+  ```
+liens manquants []
+tables pipes incohérents []
+lignes 359
+JSON valide
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git rev-parse --short HEAD; sha256sum tools/bloc_linguistique.py | cut -c1-16; git status --short reports/rapport-gold-anglais.md reports/pensee-gold-anglais.json; git log -2 --format='%h %ad %s' --date=iso -- reports/rapport-g … [67 caractères tronqués]`
+
+  ```
+jeu 05 nov 2026 16:13:25 EST
+028c8281
+9544f173f92e55cc
+ M reports/rapport-gold-anglais.md
+028c8281 2026-11-05 16:07:04 -0500 B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "offset": 69, "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md</path>
+<type>file</type>
+<content>
+69: 
+70: ## 3. Mesures par langue (`Heuristique()`, HEAD `dcf7bc91`)
+71: 
+72: | mesure | fr 402 | en 210 | fr réel 228 | en réel 204 |
+73: |---|---:|---:|---:|---:|
+74: | POS exacte | 0,7518 | 0,7343 | 0,7591 | 0,7278 |
+75: | POS fermé | 0,8956 | 0,9031 | 0,8779 | 0,9018 |
+76: | POS ouvert | 0,6235 | **0,5571** | 0,6334 | **0,5466** |
+77: | F1 syntagmes | 0,3786 | **0,1210** | 0,3654 | **0,1206** |
+78: | F1 tête | 0,5822 | 0,3614 | 0,5344 | 0,3618 |
+79: | couverture attachement | 0,7748 | **0,3182** | 0,9070 | **0,3176** |
+80: | labels au bon span | 117/151 | 28/88 | 78/86 | 27/85 |
+81: | top1 global | 0,7616 | 0,3182 | 0,8953 | 0,3176 |
+82: | top-k global | 0,7550 | 0,3182 | 0,8953 | 0,3176 |
+83: | exact global | 0,7483 | 0,3182 | 0,8953 | 0,3176 |
+84: | exact sur span | 0,9658 | **1,0000** | 0,9872 | **1,0000** |
+85: | top-k sur span | 0,9744 | 1,0000 | 0,9872 | 1,0000 |
+86: | spans perdus | 34/151 | **60/88** | 8/86 | **58/85** |
+87: 
+88: Lecture : l'écart fr/en est de **−45,7 points de couverture** (plein) et **−58,9 points** (réel seul),
+89: alors que l'exac
+… [620 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat -- reports/rapport-gold-anglais.md reports/pensee-gold-anglais.json; git status --short reports/rapport-gold-anglais.md reports/pensee-gold-anglais.json", "description": "Final deliverable diff status"}`
+
+  ```
+reports/rapport-gold-anglais.md | 47 +++++++++++++++++++++++------------------
+ 1 file changed, 26 insertions(+), 21 deletions(-)
+ M reports/rapport-gold-anglais.md
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Audit gold anglais terminé. Livrables : `reports/rapport-gold-anglais.md` + `reports/pensee-gold-anglais.json`.\n\n**Verdict : le gold anglais est structurellement sain ; l'échec anglais est la segmentation, pas le gold.**\n- 0 span fa … [2323 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture de l'audit gold anglais et livraison du rapport
+
+**Livrables**
+- `reports/rapport-gold-anglais.md` — fiche complète (verdict, tableaux fr/en, annotations suspectes, contrôles, limites, recommandation).
+- `reports/pensee-gold-anglais.json` — chiffres, spans, cibles, anomalies, contrôles (JSON valide).
+
+**Annotations suspectes : 25 phrases anglaises sur 210 (11,9 %)** portent au moins une anomalie ; **16 (7,6 %)** sur les couches réellement mesurées :
+- **10 tags POS divergents** : 7 erreurs probables (`is`×3, `do`, `late`×2, `far`) + 3 dus à la convention `that` (CONJ vs PRON) ;
+- **6 GP sans cible** : 4 après un verbe (`r336`, `r342`, `r358`, `r367`), 2 après copule (`r328`, `r363`) ;
+- **3 rôles** (2 faux : `r165`, `r239` ; 1 discutable : `r180`), **1 modalité** (`r247`), **3 phrases non grammaticales** (`r028`, `r102`, `r165`), **1 doublon** (`r336`/`r358`), **6 coref** suspectes (hors mesure).
+
+**Écarts fr/en** (HEAD v3 `dcf7bc91`, code `9544f173`, revérifié à `8281d51e`) :
+
+| mesure | fr | en |
+|---|---:|---:|
+| couverture attachement (plein) | 0,775 | **0,318** |
+| couverture (réel seul) | 0,907 | **0,318** |
+| exact global | 0,748 | 0,318 |
+| exact sur span | 0,966 | **1,000** (28/28, tous GP) |
+| spans perdus | 34/151 | **60/88** |
+
+Les 60 spans anglais perdus sont **28/28 REL et 26/26 SUB** : l'anglais représente **60/94 spans perdus (63,8 %)** pour 36,8 % des cibles. Le gold est structurellement sain (0 span faux, 0 chevauchement, 0 cible absente/non-token, 0 GN avalant un verbe ; 97/97 cibles = tokens de surface). La cause est l'analyseur : S ne segmente pas l'anglais (277 GV, 0 GN/GP/REL/SUB, 2/702 exacts) et `_pos` tague 176 VERB gold en NOUN (`talks`→NOUN, `brother`→VERB). `_est_verbe` n'est d'accord que sur 81/97 cibles : garder le POS gold.
+
+**Recommandation** : segmenter l'anglais d'abord (S language-aware ou chunker anglais), puis corriger `_pos` (+6,9 pts simulés, attachement inchangé), puis l'hygiène du gold ; mesurer fr/en séparément ; ne pas ajuster le lexique au gold. La v2 (137/145) est périmée : v3 = 141/145, anglais inchangé.
+
+**Commit** : `028c8281` (A14) a intégré mes deux fichiers pendant l'audit. Mes corrections post-commit du rapport (titre, tableau des conventions, note ADJ, lignes top1/top-k) sont dans le worktree et **non commitées** ; je n'ai rien commité. Le JSON est déjà dans le commit.
+

@@ -32,13 +32,13 @@ Rendement global (÷ 239 cibles) : top1 **0,5983**, top-k 0,5941, exact **0,5900
 
 ## 2. Les trois règles (et celles qui ne le sont pas)
 
-| règle | répare | portée | régression |
-|---|---|---:|---:|
-| **R2** — un GP n'est pas gouverné par un mot de son span (`est prêt à manger` → `prêt`) | g012, r018 | 2 | 0 |
-| **R3** — cible vide d'un GP génitif → tête du GN à gauche (`de la voisine` → `chat`) | g002 | 1 | 0 |
-| **R4** — enclitiques (`appelle-moi` → `appelle`) | r230 | 1 | 0 |
-| R1 — lexique `rêver/sauter/marcher` | s108, s122, s041 | 2–3 | 0 | **non intégrée** (formes prises dans le gold) |
-| R5 — ignorer un pseudo-GV `ADV` | r309 | 1 | 0 | **non intégrée** (n = 1) |
+| règle | répare | portée | régression | intégrée |
+|---|---|---:|---:|---|
+| **R2** — un GP n'est pas gouverné par un mot de son span (`est prêt à manger` → `prêt`) | g012, r018 | 2 | 0 | oui |
+| **R3** — cible vide d'un GP génitif → tête du GN à gauche (`de la voisine` → `chat`) | g002 | 1 | 0 | oui |
+| **R4** — enclitiques (`appelle-moi` → `appelle`) | r230 | 1 | 0 | oui |
+| R1 — lexique `rêver/sauter/marcher` | s108, s122, s041 | 2–3 | 0 | **non** (formes du gold) |
+| R5 — ignorer un pseudo-GV `ADV` | r309 | 1 | 0 | **non** (n = 1) |
 
 **Ce que ça dit** :
 

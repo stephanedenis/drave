@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**80 commits** · **19 session(s)** · **8 thème(s)**
+**81 commits** · **19 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 11 | [distribue.md](distribue.md) |
 | docs | 30 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 15 | [mesures.md](mesures.md) |
+| mesures | 16 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -36,10 +36,10 @@
 | `a8035275-c7b9-4713-a6ab-7b859cd72306` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.5 h | [rapport](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/rapport.md) · [digest](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 27.7 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
 | `b3d82ad5-bff2-49ec-9ad6-2230e68d8071` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.1 h | [rapport](../sessions/b3d82ad5-bff2-49ec-9ad6-2230e68d8071/rapport.md) · [digest](../sessions/b3d82ad5-bff2-49ec-9ad6-2230e68d8071/digest.md) |
-| `b9ea3904-889c-4497-a781-694da7d4987c` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.3 h | [rapport](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md) · [digest](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/digest.md) |
+| `b9ea3904-889c-4497-a781-694da7d4987c` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.5 h | [rapport](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md) · [digest](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/digest.md) |
 | `c4796573-e2dc-48c2-b832-96f8bfab22c3` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md) |
 | `d300542e-6e9d-47ac-875b-b44a192eec35` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.3 h | [rapport](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) · [digest](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 119.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 119.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.0 h | [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md) |
 | `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` | — | 2026-11-05 10:11 | 0.0 h | [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md) |
 | `ff7e786c-3ece-4eae-864e-19dddfead93c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md) |
@@ -128,6 +128,7 @@
 | 15:55 | `8281d51e` | B13 — LA RECOMMANDATION MULTI-CIBLES D'A13 CONSIGNÉE ; T0 DANS LE BUDGET ; 182/182 |
 | 15:58 | `c80744ce` | PILOTAGE — L'APRÈS-MIDI DES 11 SOUS-AGENTS AU JOURNAL, RAPPORT ET PLAN À JOUR ; 182/182 |
 | 16:02 | `857c783d` | B13 — LA PISTE DES 84 SPANS (A12) MESURÉE ET CONSIGNÉE ; PROCHAINE ACTION LES DEUX RÈGLES ; 182/182 |
+| 16:07 | `028c8281` | B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182 |
 
 ## Le récit de la journée (écrit à la main)
 
