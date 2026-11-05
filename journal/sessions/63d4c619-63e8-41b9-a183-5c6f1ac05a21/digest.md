@@ -719,3 +719,145 @@ role = "groupe nominal"
 … [11110 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Computing failure breakdown and checking report/code commit history
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json\nfrom collections import Counter\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh = bl.Heuristique()\nphrases = charger()\n … [2046 caractères tronqués]`
+
+  ```
+échecs: 22 hors candidats: 11 présents non choisis: 11
+échecs topk lenient: 11 échecs topk strict: 16
+échecs par (type,nature): {('GP', 'nom'): 14, ('SUB', 'nom'): 5, ('SUB', 'verbe'): 3}
+total par (type,nature): {('GP', 'nom'): 38, ('GP', 'verbe'): 45, ('SUB', 'verbe'): 18, ('REL', 'nom'): 26, ('SUB', 'nom'): 18}
+hors par (type,nature): {('GP', 'nom'): 10, ('SUB', 'nom'): 1}
+GP nom 14 verbe 0 hors 10
+SUB nom 5 verbe 3 hors 1
+REL nom 0 verbe 0 hors 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -8 && echo '--- last commits touching bloc_linguistique' && git log -3 --format='%h %ad %s' --date=format:'%Y-%m-%d %H:%M' -- tools/bloc_linguistique.py && echo '--- reports commits' && for f in reports/pensee-attac … [286 caractères tronqués]`
+
+  ```
+dfc860a4 ÉTAT — LE LIEN VERS PLAN-TRAVAIL EST RÉPARÉ (../PLAN-TRAVAIL.MD → PLAN-TRAVAIL.MD) ; LA REVUE DE DOCUMENTATION REPASSE VERTE
+56d70431 ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE
+6bbd9c54 PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL
+0ddd4fb9 B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177
+efaab321 ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS
+e223a98d B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176
+6fe96130 ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP GÉNITIF REJETÉ (123 → 122)
+a048cb83 B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175
+--- last commits touching bloc_linguistique
+a408a909 2026-11-05 10:39 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+23853cb7 2026-11-05 10:18 B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173
+d8edd1d9 2026-11-05 10:02 B13 — LE CLASSEMENT : EXACT 0
+… [414 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Running negative controls (permutation and random-candidate)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, random, statistics\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh = bl.Heuristique()\nphrases = charger()\nlignes = []   … [2651 caractères tronqués]`
+
+  ```
+lignes: 145
+exact observé: 123 / 145
+permutation 1000 : moyenne 1.62 min 0 max 7 taux 0.0112
+candidat aléatoire : moyenne 39.75 taux 0.2742 min 27 max 52
+gold uniforme : moyenne 1.63 taux 0.0112
+harnais attachement_hasard : 1 / 239 = 0.0042
+syntagme P 0.3154 R 0.2619 F1 0.2862
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking code deltas and the S-generator dependency for reproducibility caveats
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff 13e8bb2d..HEAD --stat -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py; echo '---'; git log --oneline 13e8bb2d..HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py; echo '--- sub … [194 caractères tronqués]`
+
+  ```
+tools/bloc_linguistique.py               | 82 +++++++++++++++++++++++++++++---
+ tools/tests/linguistique/evaluer_gold.py | 28 ++++++++++-
+ 2 files changed, 102 insertions(+), 8 deletions(-)
+---
+e223a98d B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+23853cb7 B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173
+f70a1b2a B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172
+d8edd1d9 B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171
+f8f5bc04 B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170
+--- submodule
+ d256888934b017ac024de2a8eed22ecf81e6c799 tools/docwatch (v0.4.1-3-gd256888)
+ 523d8c1e8c6ca29ca415360a71bfab6c5b56102c tools/structures (heads/master)
+ M donnees/paragraphes-validations.jsonl
+523d8c1 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_syntagmes_s\\|_cibles_s\\|import.*structures\\|from tools\" tools/bloc_linguistique.py | head -20; echo ---; python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nprint(bl.__file__)\ni … [130 caractères tronqués]`
+
+  ```
+588:    def _syntagmes_s(self, texte: str) -> list[dict] | None:
+599:    def _cibles_s(self, texte: str) -> dict:
+688:    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+819:        cands = self._syntagmes_s(texte)
+820:        cibles_s = self._cibles_s(texte) if cands else {}
+824:            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+866:            for s in self._syntagmes_simple(texte, lg):
+868:                cible = self._cible_proche(texte, s, [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"], verbes)
+871:                gvs_s = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+880:            simples = self._syntagmes_simple(texte, lg)
+993:        for s in h._syntagmes_simple(texte, lg):
+---
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+    def _syntagmes_s(self, texte: str) -> list[dict] | None:
+        if not self.segmenter_s:
+            return None
+        try:
+            if str(RACINE / "tools/structures") not in sys.path:
+                sys.path.insert(0, str(RACINE / "tools/structures"))
+            import generateur  # le générateur S, importé e
+… [111 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking whether the dirty submodule data affects the measurement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"paragraphes-validations\" tools/structures/*.py tools/structures/*.sh 2>/dev/null | head; echo '--- diff stat'; git -C tools/structures diff --stat; echo '--- sample'; python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.')\n … [336 caractères tronqués]`
+
+  ```
+tools/structures/serveur.py:58:        validations = self._journal("paragraphes-validations.jsonl")
+tools/structures/serveur.py:92:            with (self.dossier / "paragraphes-validations.jsonl").open("a", encoding="utf-8") as f:
+tools/structures/serveur.py:101:        p = self.dossier / "paragraphes-validations.jsonl"
+--- diff stat
+ donnees/paragraphes-validations.jsonl | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+--- sample
+S ok: True
+[{'debut': 0, 'fin': 7, 'texte': 'Le chat', 'type': 'GN', 'role': 'agent', 'niveau': 0, 'parent': None, 'profondeur': 0}, {'debut': 8, 'fin': 27, 'texte': "que j'ai vu dormait", 'type': 'REL', 'role': 'qualite', 'niveau': 1, 'parent': 0, 'profondeur': 1}]
+cibles_s: {(0, 7, 'GN'): None, (8, 27, 'REL'): 'Le chat'}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff 13e8bb2d..HEAD -- tools/bloc_linguistique.py | head -180", "description": "Show code changes since spans report"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index f4b84845..65fb0d76 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -377,11 +377,29 @@ manger mange manges mangent mangeait mangeaient écrire écrit écris écrivent
+ lire lis lisent lisait lisaient dormir dort dorment dormait dormaient partir part pars partent
+ partait partaient venir viens vient viennent venait venaient prendre prend prends prennent
+ prenait prenaient mettre mets met mettent mettait mettaient dire dis dit disent disait disaient
+-voir vois voit voient voyait voyaient savoir sais sait savent savait savaient pouvoir peux peut
++voir vois voit voient voyait voyaient vu vue vus vues savoir sais sait savent savait savaient su
++pouvoir peux peut
+ pouvons peuvent pouvait pouvaient vouloir veux veut voulons veulent voulait voulaient devoir dois
+ doit devons doivent devait devaient faire fais fait font faisait faisaient aller vais va allons
+ vont allait allaient être suis est sommes sont était étaient avoir ai as a avons ont avait avaient
+ chanter chante chantes chantent chantait danser danse danses dansent dansait travailler travaille
++accrocher accroche accroches accrochent 
+… [7785 caractères tronqués]
+  ```
+

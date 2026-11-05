@@ -7,12 +7,12 @@
 | Identifiant | `63d4c619-63e8-41b9-a183-5c6f1ac05a21` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 13:11 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 14 |
-| Appels d'outils | 18 |
+| Messages | 20 |
+| Appels d'outils | 26 |
 | Fichiers touchés | 0 |
-| Commandes | 15 |
+| Commandes | 23 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Python). Mission : **au … [2247 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, and reports dir
 - bash — List linguistique tests and count lines
@@ -41,11 +41,11 @@
 - bash — Compute lost attachment spans by type
 - bash — Find span category protocol and GP fix
 - bash — Search scripts for span categories
-- … et 2 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Searching the autotest for the exact span-category protocol
+⏵ Checking whether the dirty submodule data affects the measurement
 
 ## 3. Travail accompli
 
@@ -71,6 +71,14 @@
 - **T1** Search scripts for span categories
 - **T1** Read T165-T168 autotests
 - **T1** Read syntagme generation and GP handling
+- **T1** Compute target failure breakdown
+- **T1** Check commit history of code and reports
+- **T1** Compute negative controls and F1
+- **T1** Diff code since spans report and submodule state
+- **T1** Inspect S-generator import and source
+- **T1** Check submodule data dependency and S output
+- **T1** Show code changes since spans report
+- **T1** Inspect imports and pin file hashes
 
 ## 4. Mesures et résultats marquants
 

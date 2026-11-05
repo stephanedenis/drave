@@ -580,3 +580,160 @@ if __name__ == "__main__":
                 print("   " + "  " * s["niveau"] + f"{s['texte']!r} [{s['type']} · {s['role']}]")
   ```
 
+### 🤖 Assistant
+
+⏵ Diagnostic fin des cas anglais, sans candidat et SUB
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nph={p.get('id'):p for p in charger()}\nh=bl.Heuristique()\nfor … [1051 caractères tronqués]`
+
+  ```
+================================================================================
+r080 reel 'The birds fly over the lake.' | langue en
+segments gold: [('GP', 'over the lake', 'fly')]
+pred syntagmes: [('GN', 'The birds fly', 0, 13, ['GN', 'lake'], {'segment': 'The birds fly', 'cible': 'lake'}), ('GV', 'The birds fly over the lake', 0, 27, ['structure la plus proche'], None), ('GP', 'over the lake', 14, 27, ['GP', 'lake'], {'segment': 'over the lake', 'cible': 'lake'})]
+pos: [('The', 'DET'), ('birds', 'NOUN'), ('fly', 'NOUN'), ('over', 'PREP'), ('the', 'DET'), ('lake', 'NOUN')]
+simple: [('GN', 'The birds fly'), ('GP', 'over the lake')]
+S candidates: [('structure la plus proche', None)]
+est_verbe cibles: [('fly', False)]
+================================================================================
+r120 reel 'The river flows to the sea.' | langue en
+segments gold: [('GP', 'to the sea', 'flows')]
+pred syntagmes: [('GN', 'The river flows', 0, 15, ['GN', 'river'], {'segment': 'The river flows', 'cible': 'river'}), ('GV', 'The river flows to the sea', 0, 26, ['structure la plus proche'], None), ('GP', 'to the sea', 16, 26, ['GP', 'river'], {'segment': 'to the sea', 'cible': 'river'})]
+po
+… [3656 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de `_est_verbe`, `_pos` et des lexiques anglais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _est_verbe\\|def _pos\\|VERBES_\\|AUXILIAIRES\\s*=\" tools/bloc_linguistique.py | head -40", "description": "Locate verb lexicon and POS function"}`
+
+  ```
+369:VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
+374:VERBES_CONNUS = set("""
+419:AUXILIAIRES = set("""
+428:def _est_verbe(mot: str) -> bool:
+433:    if n in VERBES_CONNUS:
+438:        if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+442:        if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
+548:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+806:                    "ordre" if premier.casefold() in VERBES_IMPERATIFS else "assertion")
+1133:    def _post(self, invite: str, grammaire: str, max_jetons: int) -> str:
+1267:    def _post(self, invite: str, grammaire: str, max_jetons: int) -> str:
+1437:    def _post(self, invite: str, grammaire: str, max_jetons: int) -> str:
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 75, "offset": 369}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 40, "offset": 548}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+369: VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
+370:                         "go take come look give find open close".split())
+371: 
+372: # Un lexique verbal minimal, bilingue, pour arbitrer les classes ouvertes : le POS de surface
+373: # tague « talks » NOUN et « brother » VERB (mesuré le 05/11 sur les 22 GP restants).
+374: VERBES_CONNUS = set("""
+375: parler parle parles parlent parlait parlaient parlerai jouer joue joues jouent jouait jouaient
+376: manger mange manges mangent mangeait mangeaient écrire écrit écris écrivent écrivait écrivaient
+377: lire lis lisent lisait lisaient dormir dort dorment dormait dormaient partir part pars partent
+378: partait partaient venir viens vient viennent venait venaient prendre prend prends prennent
+379: prenait prenaient mettre mets met mettent mettait mettaient dire dis dit disent disait disaient
+380: voir vois voit voient voyait voyaient vu vue vus vues savoir sais sait savent savait savaient su
+381: pouvoir peux peut
+382: pouvons peuvent pouvait pouvaient vouloir veux v
+… [4633 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+548:     def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+549:         lex = POS_FERME.get(langue, POS_FERME["fr"])
+550:         n = _normaliser(mot).split("'")[0].split("’")[0]
+551:         for classe, mots in lex.items():
+552:             if n in mots:
+553:                 return classe, False, 0.92
+554:         if n in VERBES.get(langue, VERBES["fr"]):
+555:             return "VERB", True, 0.72
+556:         if n in ADJECTIFS.get(langue, ADJECTIFS["fr"]):
+557:             return "ADJ", True, 0.68
+558:         if re.fullmatch(r"\d+(?:[.,]\d+)*", mot):
+559:             return "NUM", False, 0.95
+560:         if mot[:1].isupper() and mot[1:].islower() and mot not in {"Le", "La", "Les", "Un", "Une", "The"}:
+561:             return "NOUN", True, 0.55
+562:         if len(n) >= 4 and n.endswith(("ment", "ly")):
+563:             return "ADV", True, 0.45
+564:         if len(n) >= 4 and n.endswith(("tion", "sion", "ness", "ity", "ité", "ance", "ence")):
+565:             return "NOUN", True, 0.45
+566:         if len(n) >= 4 and n.endswith(("er", "ir", "ing", "e
+… [1093 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Simulation des correctifs candidats pour mesurer les gains réels
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nph=charger(); h=bl.Heuristique()\n\ndef colle … [2289 caractères tronqués]`
+
+  ```
+base fails: 57
+F1 fixes fails: 41 / 57
+F1 total exact: 129
+F1b (last token all) total exact: 129 fixes fails: 41
+remaining after F1:
+  g002 fr GP 'de la voisine' -> 'chat' cands ['GP']
+  r080 en GP 'over the lake' -> 'fly' cands ['GP', 'lake']
+  r108 en GP 'on the roof' -> 'climbs' cands ['GP', 'roof']
+  r120 en GP 'to the sea' -> 'flows' cands ['GP', 'river']
+  r156 en GP 'in the water' -> 'swims' cands ['GP', 'water']
+  r166 en GP 'on the train' -> 'get' cands ['GP', 'train']
+  r169 en GP 'at his mother' -> 'smiles' cands ['GP', 'mother']
+  r177 en GP 'in front of the door' -> 'wait' cands ['GP', 'door']
+  r180 en GP 'to the library' -> 'belongs' cands ['GP', 'library']
+  r201 fr REL 'qui parle' -> 'homme' cands ["« qui parle » → L'homme", 'est']
+  r209 fr REL 'dont je parle' -> 'élève' cands ["« dont je parle » → L'élève", 'est']
+  r230 fr SUB 'Quand tu arrives' -> 'appelle' cands ['structure la plus proche', 'appelle-moi']
+  r235 fr REL 'où nous allons' -> 'endroit' cands ["« où nous allons » → L'endroit", 'est']
+  r263 fr REL 'qui vole' -> 'oiseau' cands ["« qui vole » → L'oiseau", 'est']
+  r309 fr SUB "qu'il viendra" -> 'viendra' cands ['structure la plus proche', 'Peut-être'
+… [54 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Simulation du correctif lexique anglais (F2) et contrôle négatif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re, importlib\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nph=charger()\n\nEN = set(\"\"\"fly flies flew f … [1824 caractères tronqués]`
+
+  ```
+baseline labels 145 exact 88
+F2 lexicon EN labels 145 exact 96
+F2 fixes 8 breaks 0 remaining 49
+  + ('r180', 17, 31, 'GP')
+  + ('r166', 18, 30, 'GP')
+  + ('r169', 16, 29, 'GP')
+  + ('r108', 15, 26, 'GP')
+  + ('r177', 19, 39, 'GP')
+  + ('r080', 14, 27, 'GP')
+  + ('r120', 16, 26, 'GP')
+  + ('r156', 15, 27, 'GP')
+remaining after F2: 49
+  g002 fr GP 'de la voisine' -> 'chat' cands ['GP']
+  g011 fr REL "que j'ai lu" -> 'livre' cands ["« que j'ai lu » → Le livre", 'est']
+  g012 fr GP 'à manger' -> 'prêt' cands ['« à manger » → Le canard', '« à manger » → est prêt', 'manger', 'est']
+  r014 fr REL "que j'ai lu" -> 'livre' cands ["« que j'ai lu » → Le livre", 'est']
+  r015 fr REL 'dont elle parle' -> 'film' cands ['« dont elle parle » → Le film', 'sorti']
+  r018 fr GP 'à manger' -> 'prête' cands ['« à manger » → La souris', '« à manger » → est prête', 'manger', 'est']
+  r047 fr GP 'dans le jardin' -> 'poussent' cands ['« dans le jardin » → Les fleurs poussent']
+  r054 fr REL 'que tu lis' -> 'livre' cands ['« que tu lis » → Le livre', 'est']
+  r055 fr REL 'où nous vivons' -> 'ville' cands ['« où nous vivons » → La ville', 'est']
+  r057 fr GP 'contre le facteur' -> 'aboie' cands ['« contre le
+… [3650 caractères tronqués]
+  ```
+

@@ -412,6 +412,14 @@ ont repris (N2 09 h 41, S 09 h 46, L/B13 10 h 14) ; **N3** a clos sa ligne en se
 | **A3** | prototype de classement appris des candidats (fichier neuf, hors bloc) | un prototype dans `tools/tests/` + sa fiche |
 | **A4** | cohérence fiches ↔ JSON ↔ portes | une fiche de cohérence + son JSON |
 
+**Intégration (agent principal)** : pour chaque vague, l'agent principal (1) lit les fiches
+rendues et vérifie qu'elles ne modifient aucun fichier hors de leur périmètre ; (2) rejoue
+**lui-même** les mesures annoncées (une valeur non reproduite est rejetée) ; (3) n'intègre au
+dépôt que ce qui est mesuré, avec une fiche, une porte et un commit vérifié par
+`git show HEAD:<fichier>` ; (4) met à jour `en-cours`, la `roadmap` et le `journal` dans le
+même commit ; (5) consigne les résultats **négatifs** (une règle mesurée qui n'aide pas est
+dite, pas cachée).
+
 **Règles données à chaque sous-agent** : ne pas committer ; ne pas toucher `en-cours`,
 `roadmap`, `chantiers`, `plan-travail`, `AGENTS`, ni `journal/` ; **ne pas écrire** dans
 `tools/structures/` (S), `data/` (D), `tools/entrainer_native.py`/`native_model.py` (N2) ;

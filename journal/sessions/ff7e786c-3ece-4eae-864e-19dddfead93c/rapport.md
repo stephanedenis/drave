@@ -7,12 +7,12 @@
 | Identifiant | `ff7e786c-3ece-4eae-864e-19dddfead93c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 13:11 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 13 |
-| Appels d'outils | 24 |
+| Messages | 21 |
+| Appels d'outils | 36 |
 | Fichiers touchés | 0 |
-| Commandes | 11 |
+| Commandes | 22 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **vérifier … [1881 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Check branch and list reports
 - glob
@@ -40,10 +40,12 @@
 - bash — Dump last five JSONs
 - bash — Read gates T153-T169 bodies
 - bash — Read gates T172-T174 bodies
+- bash — Locate metrics in evaluer_gold.py
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Lecture des portes T153→T174 dans autotest.py
+⏵ Recherche du script de catégorisation des spans (65/25/3/1)
 
 ## 3. Travail accompli
 
@@ -65,4 +67,21 @@
 - **T1** Dump last five JSONs
 - **T1** Read gates T153-T169 bodies
 - **T1** Read gates T172-T174 bodies
+- **T1** Locate metrics in evaluer_gold.py
+- **T1** Check file size and commit history
+- **T1** Run selected gates and print actual values
+- **T1** Count and list B13 fiches dated 2026-11-05
+- **T1** Find generation references and JSON history
+- **T1** Log around spans fiche
+- **T1** Count gate entries
+- **T1** Count gates precisely via AST
+- **T1** Extract each gate at its fiche commit
+- **T1** Find span category logic
+- **T1** Compare GP bounding code at spans commit vs current
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : 172 [exit code: 1]
 

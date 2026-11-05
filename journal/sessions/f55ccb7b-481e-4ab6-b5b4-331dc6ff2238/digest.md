@@ -472,3 +472,67 @@ reel
 … [2991 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Inspection fine de quelques erreurs et du POS gold des cibles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, json, collections\nsys.path.insert(0,\"tools/tests/linguistique\"); sys.path.insert(0,\"tools\")\nfrom evaluer_gold import charger, _pos_map\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nph={p[\" … [834 caractères tronqués]`
+
+  ```
+================================================================================
+r080 The birds fly over the lake.
+mots gold: [('The', 'DET', 0), ('birds', 'NOUN', 4), ('fly', 'VERB', 10), ('over', 'PREP', 14), ('the', 'DET', 19), ('lake', 'NOUN', 23)]
+segments: [('GP', 'over the lake', ['fly'])]
+  SEG GN 'The birds fly' 0 13 | cands ['GN', 'lake'] | meta {'role': 'groupe nominal', 'niveau': 0, 'union': True, 'attachement': {'segment': 'The birds fly', 'cible': 'lake'}}
+  SEG GV 'The birds fly over the lake' 0 27 | cands ['structure la plus proche'] | meta {'role': 'predicat', 'niveau': 0}
+  POS NOUN 'birds' 4 9
+  POS NOUN 'fly' 10 13
+  SEG GP 'over the lake' 14 27 | cands ['GP', 'lake'] | meta {'role': 'complément', 'niveau': 1, 'union': True, 'attachement': {'segment': 'over the lake', 'cible': 'lake'}}
+  POS NOUN 'lake' 23 27
+================================================================================
+r120 The river flows to the sea.
+mots gold: [('The', 'DET', 0), ('river', 'NOUN', 4), ('flows', 'VERB', 10), ('to', 'PREP', 16), ('the', 'DET', 19), ('sea', 'NOUN', 23)]
+segments: [('GP', 'to the sea', ['flows'])]
+  SEG GN 'The river flows' 0 15 | cands ['GN', 'river'] | meta {
+… [3888 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse de la couverture du vivier de candidats et des cas non tokenisables
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, re, json, collections\nsys.path.insert(0,\"tools/tests/linguistique\"); sys.path.insert(0,\"tools\")\nfrom evaluer_gold import charger\nimport bloc_linguistique as bl\n\ndef toks(texte):\n    return [(m … [1695 caractères tronqués]`
+
+  ```
+n 145 multi [] pool_cov Counter({True: 144, False: 1})
+== misses cible non token
+('r230', 'reel', 'Quand tu arrives, appelle-moi.', 'SUB', 'Quand tu arrives', 'appelle')
+== pool manque
+r230 SUB appelle [(9, 16, 'arrives', 'VERB'), (18, 29, 'appelle-moi', 'NOUN')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Revue des 145 cas et test de règles simples de repérage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, re, collections\nsys.path.insert(0,\"tools/tests/linguistique\"); sys.path.insert(0,\"tools\")\nfrom evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique(); ph=charger()\n\ndef  … [3861 caractères tronqués]`
+
+  ```
+segments 145
+plus proche (gauche d'abord): 7/145 = 0.0483
+REL=noms proches, sinon proche: 22/145 = 0.1517
+REL=gauche, sinon proche: 33/145 = 0.2276
+GP 83 nearest 5 truc absent 0
+REL 26 nearest 0 truc absent 0
+SUB 36 nearest 2 truc absent 1
+== SUB détails
+g005 Elle a dit qu'elle viendrait hier. | gold dit | pred dit True | [('viendrait', 'VERB', False, 'I', 0), ('dit', 'VERB', True, 'G', 1), ('a', 'PREP', True, 'G', 2)]
+r202 Je pense que tu as raison. | gold pense | pred pense True | [('as', 'AUX', True, 'I', 0), ('raison', 'NOUN', False, 'I', 0), ('pense', 'NOUN', False, 'G', 1)]
+r207 Quand il pleut, je reste. | gold reste | pred reste True | [('pleut', 'VERB', False, 'I', 0), ('reste', 'NOUN', True, 'D', 3)]
+r208 Elle dit qu'il vient. | gold dit | pred dit True | [('vient', 'VERB', True, 'I', 0), ('dit', 'VERB', True, 'G', 1)]
+r210 Bien qu'il soit tard, il travaille. | gold travaille | pred travaille True | [('soit', 'NOUN', False, 'I', 0), ('travaille', 'NOUN', True, 'D', 3)]
+r211 Je sais que tu viens. | gold sais | pred sais True | [('viens', 'VERB', True, 'I', 0), ('sais', 'NOUN', True, 'G', 1)]
+r212 Il faut que tu partes. | gold faut | pred faut True | [('partes', 'NOUN', True
+… [5191 caractères tronqués]
+  ```
+

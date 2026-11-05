@@ -7,12 +7,12 @@
 | Identifiant | `a8035275-c7b9-4713-a6ab-7b859cd72306` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 13:11 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 13 |
-| Appels d'outils | 15 |
+| Messages | 18 |
+| Appels d'outils | 21 |
 | Fichiers touchés | 0 |
-| Commandes | 11 |
+| Commandes | 15 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2211 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check git status and repo layout
 - bash — Count lines in key files and list reports
@@ -39,10 +39,13 @@
 - bash — Inspect structures generator attachment
 - bash — Read base segmentation and analyser
 - bash — Deep-dive special failure cases
+- bash — Locate verb lexicon and POS function
+- bash — Measure F1 head-reduction gain
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Diagnostic fin des cas anglais, sans candidat et SUB
+⏵ Validation de F1 avec tête à élision et simulation F3
 
 ## 3. Travail accompli
 
@@ -64,4 +67,8 @@
 - **T1** Inspect structures generator attachment
 - **T1** Read base segmentation and analyser
 - **T1** Deep-dive special failure cases
+- **T1** Locate verb lexicon and POS function
+- **T1** Measure F1 head-reduction gain
+- **T1** Simulate English lexicon fix
+- **T1** Measure elision-aware F1 and negative control
 

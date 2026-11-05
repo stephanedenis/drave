@@ -9,10 +9,10 @@
 | Début | 2026-11-05 13:11 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 11 |
+| Messages | 14 |
+| Appels d'outils | 14 |
 | Fichiers touchés | 0 |
-| Commandes | 8 |
+| Commandes | 11 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **prototyp … [2440 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et arborescence
 - read
@@ -36,10 +36,13 @@
 - bash — Extraire les chiffres d'attachement
 - bash — Diagnostic des cas prédits et erreurs
 - bash — Inspecter étiquettes et POS de cas clés
+- bash — Mesurer la couverture du vivier
+- bash — Tester des règles simples sur les 145 cas
+- bash — Déboguer r080
 
 **Synthèse produite :**
 
-⏵ Inspection fine de quelques erreurs et du POS gold des cibles
+⏵ Vérification du calcul « plus proche » (incohérence apparente)
 
 ## 3. Travail accompli
 
@@ -58,4 +61,7 @@
 - **T1** Extraire les chiffres d'attachement
 - **T1** Diagnostic des cas prédits et erreurs
 - **T1** Inspecter étiquettes et POS de cas clés
+- **T1** Mesurer la couverture du vivier
+- **T1** Tester des règles simples sur les 145 cas
+- **T1** Déboguer r080
 

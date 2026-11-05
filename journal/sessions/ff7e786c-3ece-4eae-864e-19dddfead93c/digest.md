@@ -973,3 +973,190 @@ def t171_lexique_elargi() -> tuple[bool, str]:
 … [3621 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Inspection de evaluer_gold.py pour comprendre `labels`, `topk_exact`, conventions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"labels\\|topk_exact\\|taux_span\\|def evaluer_bloc\\|def _attachement\\|verbe\\|nom\\|couverture\" tools/tests/linguistique/evaluer_gold.py | head -80", "description": "Locate metrics in evaluer_gold.py"}`
+
+  ```
+39:    """Le gold **gelé** : une copie figée pour les portes à nombre absolu.
+80:def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+86:    att_n = att_labels = att_top1 = att_topk = att_exact = 0
+87:    att_topk_exact = 0
+89:    att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
+115:        labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+121:            e = labels.get((s["type"], s["debut"], s["fin"]))
+124:            att_labels += 1
+130:            # le gold mêle deux conventions : la cible est un verbe (le gouverneur) ou un nom
+132:            if bl._est_verbe(cibles[0]):
+140:            if any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
+143:            if any(nom == cibles[0] for nom in (e.candidats or [])):
+144:                att_topk_exact += 1
+152:            att_t_labels += 1
+157:            if any(any(c in nom for c in cibles) for nom in (et.candidats or [])):
+166:        "bloc": nom, "phrases": n,
+177:        "attachement": {"cibles": att_n, "labels": att_labels,
+184:                        "top1_taux_span": round(att_top1 / max(1, att_labels), 4),
+185:                        "topk_taux_span": round(a
+… [1004 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l tools/tests/linguistique/evaluer_gold.py && git log --oneline -8 -- reports/rapport-pensee-verbe-gv.md reports/rapport-pensee-convention-doc.md tools/pensee/autotest.py", "description": "Check file size and commit history"}`
+
+  ```
+283 tools/tests/linguistique/evaluer_gold.py
+0ddd4fb9 B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177
+e223a98d B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176
+a048cb83 B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+23853cb7 B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173
+f70a1b2a B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172
+d8edd1d9 B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171
+f8f5bc04 B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du calcul des métriques d'attachement
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py", "offset": 80, "limit": 125}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py</path>
+<type>file</type>
+<content>
+80: def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+81:     tp = fp = fn = ttp = tfp = tfn = 0
+82:     pos_ok = pos_n = pos_ok_ferme = pos_n_ferme = pos_ok_ouvert = pos_n_ouvert = 0
+83:     conf = defaultdict(Counter)
+84:     acte_ok = neg_ok = mod_ok = ds_ok = 0
+85:     fractions = []
+86:     att_n = att_labels = att_top1 = att_topk = att_exact = 0
+87:     att_topk_exact = 0
+88:     att_v_n = att_v_ok = att_n_n = att_n_ok = 0
+89:     att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
+90:     for phrase in phrases:
+91:         a = bloc.analyser(phrase["texte"], phrase["langue"])
+92:         fractions.append(a.fraction_semantique)
+93:         pos = _pos_map(a)
+94:         for mot in phrase["mots"]:
+95:             pred = pos.get((mot["debut"], mot["fin"]), "?")
+96:             pos_n += 1
+97:             pos_ok += int(pred == mot["pos"])
+98:             ferme = mot["pos"] in {"DET", "PREP", "PRON", "CONJ", "AUX", "ADV", "NUM"}
+99:             if ferme:
+100:                 pos_n_ferme += 1
+101:                 pos_ok_ferme += int(pred == m
+… [6340 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution ciblée des portes pour établir l'état réel actuel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 280 python3 - <<'EOF'\nimport time\nfrom tools.pensee import autotest\nnoms = [\"t153_attachement\",\"t161_cible_proximite\",\"t162_candidats_verbes\",\"t163_echecs_attachement\",\n        \"t164_verbe_gv\",\"t165_lexique_ver … [574 caractères tronqués]`
+
+  ```
+t153_attachement: OK | attachement : top1 0.5272, exact 0.5146, couverture 0.6067 | 0.5s
+t161_cible_proximite: OK | proximité : top1 126/239, exact 123/239, tête 126/145 | 0.4s
+t162_candidats_verbes: OK | candidats : top-k 134/239 (0.5607), tête 134/145 | 0.4s
+t163_echecs_attachement: OK | échecs : 94 de span, 11 de cible (33 avant les correctifs) | 0.4s
+t164_verbe_gv: OK | verbe du GV : saw (attendu saw) ; exact 123/239 | 0.4s
+t165_lexique_verbal: OK | lexique : talks True, joue True, brother False ; cible GP talks | 0.0s
+t166_spans: OK | spans : 48 REL, 33 SUB, 13 GP | 0.4s
+t167_denominateur: OK | dénominateur : spans 0.869 / 0.9241 / 0.8483 | 0.4s
+t168_classement: OK | classement : exact 123/146 ; cibles 63 verbes, 82 noms | 0.8s
+t169_conventions: OK | conventions : verbes 60/63 (0.9524), noms 63/82 (0.7683) | 0.4s
+t170_attachement_cible: OK | ciblé : REL « homme » homme, GP « joue » joue | 0.0s
+t171_lexique_elargi: OK | lexique élargi : vu True, accroché True, couru True ; exact 123/145 | 0.4s
+t172_echecs_cible: OK | échecs de cible : 11 hors candidats, 11 mal classés | 0.4s
+t173_topk_strict: OK | top-k : 134 sous-chaîne, 88 exacts (0.6069) | 0.4s
+t174_convention_documentee: OK
+… [66 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche d'autres fiches B13 du jour et de leur mode de génération
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -l \"B13\" reports/rapport-*.md 2>/dev/null | wc -l && grep -l \"B13\" reports/rapport-*.md 2>/dev/null | xargs grep -l \"2026-11-05\" 2>/dev/null | sort", "description": "Count and list B13 fiches dated 2026-11-05"}`
+
+  ```
+206
+reports/rapport-pensee-attachement-cible.md
+reports/rapport-pensee-classement.md
+reports/rapport-pensee-convention-doc.md
+reports/rapport-pensee-conventions.md
+reports/rapport-pensee-denominateur.md
+reports/rapport-pensee-echecs-cible.md
+reports/rapport-pensee-lexique-elargi.md
+reports/rapport-pensee-lexique-verbal.md
+reports/rapport-pensee-spans.md
+reports/rapport-pensee-topk-strict.md
+reports/rapport-pensee-verbe-gv.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"pensee-lexique-elargi\\|pensee-convention-doc\" --include=*.py --include=*.sh --include=*.md . | head -20 && git log --oneline -5 -- reports/pensee-lexique-elargi.json", "description": "Find generation references and JSON  … [9 caractères tronqués]`
+
+  ```
+./reports/README.md:18:| [`rapport-pensee-convention-doc.md`](rapport-pensee-convention-doc.md) | **B13** — la convention des cibles documentée dans le gold, **177/177** |
+./reports/README.md:21:| [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | **B13** — le lexique élargi : exact 0,8082 → **0,8483**, **174/174** |
+./reports/rapport-pensee-lexique-elargi.md:11:> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-lexique-elargi.json`](pensee-lexique-elargi.json).
+./reports/rapport-pensee-lexique-elargi.md:64:- [`pensee-lexique-elargi.json`](pensee-lexique-elargi.json) — avant/après.
+./reports/rapport-pensee-convention-doc.md:11:> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-convention-doc.json`](pensee-convention-doc.json).
+./reports/rapport-pensee-convention-doc.md:57:- [`pensee-convention-doc.json`](pensee-convention-doc.json) — la convention.
+./journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md:40056:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-lexique-elargi.md <<'MD'\n# B13 — le lexique élargi : l'exact passe de 0,8082 à 0,8414\n\n> **Ligne de roadmap** : 
+… [2704 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reconstitution de l'état au commit de la fiche spans
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -20 -- reports/rapport-pensee-spans.md tools/bloc_linguistique.py | head -20", "description": "Log around spans fiche"}`
+
+  ```
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+23853cb7 B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173
+d8edd1d9 B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171
+13e8bb2d B13 — LES SPANS PERDUS : 48 REL, 33 SUB, 12 GP (81 CHEZ S) ; LE GP EST BORNÉ AU VERBE ; 169/169
+d400e188 B13 — LE LEXIQUE VERBAL : EXACT 0,0962 → 0,1381, TÊTE 0,9034 ; 168/168
+9ff4adda B13 — LE VERBE DU GV-PHRASE : EXACT 0,0586 → 0,0962, TOP-K 0,5105, TÊTE 0,8414 ; 167/167
+425754c3 B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166
+f7195ce0 B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165
+f661728c B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164
+1f74e6cf B13 — LES PASSIFS SANS PAR ENTRENT VRAIMENT DANS HEAD : CHUNKER 3/3 PATIENT, T156/T157 À JOUR, T160 ; 163/163
+cc3c73fe B13 — LE CORRECTIF DES PASSIFS : PAR → AGENT, LE GÉNÉRATEUR S COURT-CIRCUITE ; 162/162
+92769981 B13 — LA FUSION PAR SOUS-TYPE : LE DOUBLE SENS 
+… [927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c '              (\"T' tools/pensee/autotest.py; grep -n '(\"T176\\|(\"T175\\|(\"T177' tools/pensee/autotest.py", "description": "Count gate entries"}`
+
+  ```
+172
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comptage exact des portes et vérification du 177/177
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o '(\"T[0-9]' tools/pensee/autotest.py | wc -l && grep -o '(\"T[0-9]*' tools/pensee/autotest.py | sed 's/.*T//' | sort -n | tail -8 && python3 - <<'EOF'\nimport ast\nsrc=open('tools/pensee/autotest.py').read()\ntree=ast.parse(s … [522 caractères tronqués]`
+
+  ```
+177
+167
+168
+169
+170
+171
+172
+173
+174
+portes entries: 177
+first,last: T0 store canonique | T174 convention documentée
+count: 177
+  ```
+

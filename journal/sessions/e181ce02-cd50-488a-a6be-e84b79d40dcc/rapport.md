@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 116.5 h |
+| Durée | 116.6 h |
 | Tours | 176 |
-| Messages | 2353 |
-| Appels d'outils | 2060 |
+| Messages | 2358 |
+| Appels d'outils | 2068 |
 | Fichiers touchés | 25 |
-| Commandes | 1695 |
-| Sous-agents | 6 |
-| Commits | 250 |
+| Commandes | 1698 |
+| Sous-agents | 9 |
+| Commits | 251 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 2 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Vague 1 : quatre sous-agents en parallèle (audit, top-k, classement, cohérence)
+⏵ Vague 2 : trois sous-agents de plus (contrat S, coût du chunker, annotation indépendante)
 
 ## 3. Travail accompli
 
@@ -9500,6 +9500,9 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - tour 176 — Diagnostic du top-k strict
 - tour 176 — Prototype classement appris
 - tour 176 — Cohérence fiches JSON portes
+- tour 176 — Contrat S pour les REL/SUB
+- tour 176 — Coût et cache du chunker
+- tour 176 — Annotation indépendante d'un échantillon
 
 ### Commandes exécutées (échantillon)
 
@@ -9543,7 +9546,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1655 autres
+- … et 1658 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9941,4 +9944,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRANCHE SOUS
 - PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15" -- docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/p
 - PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15" -- docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/p
+- PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9" -- docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>&1 
 

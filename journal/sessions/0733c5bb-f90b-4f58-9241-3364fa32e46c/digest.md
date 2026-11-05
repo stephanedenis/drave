@@ -11412,3 +11412,37 @@ dfc860a4 ÉTAT — LE LIEN VERS PLAN-TRAVAIL EST RÉPARÉ (../PLAN-TRAVAIL.MD �
 [status: completed, exit code: 0]
   ```
 
+### 🤖 Assistant
+
+⏵ Tout est vert — je peux répondre
+
+**Oui — terminé pour ma session.** Vérifié, pas supposé :
+
+## Les preuves
+
+- **Objectif : 4/4**, marqué `complete` — run long de production, capacité sur le corpus propre, complément 2 048, un commit par fait.
+- **Plan de session : `État : terminé`**, heartbeat à jour, réservations rendues (`data/`, `reports/n2-*`, `work/n2ac/`).
+- **Aucun travail non committé** de mon périmètre ; **aucun job en cours**, les deux GPU sont **libres** (1 MiB).
+- **Portes de clôture toutes vertes** : revue de documentation ✅ (639 fiches / 732 JSON), état frais ✅, en-cours reprenable ✅, journal ✅, schémas ✅, T0 à **3 993**.
+- La dernière rouge était un **lien cassé dans l'état** (`../plan-travail.md`) — réparé et committé : **`dfc860a4`**.
+
+## Ce que la session laisse, en une ligne par fait
+
+| fait | chiffre | commit |
+|---|---|---|
+| 200 000 pas sur le mélange | 3,1591 domaine ; porte 2,5 à 1,3–2,7 M pas | `e12c39c1` |
+| R1.1/R1.2, positions relatives | 8,2024 → 3,2545 à 1 000 octets ; fenêtre 512 −0,244 | `2cff8dba` |
+| Loi de la fenêtre + production | 256→1 024 : 3,2545→2,9950 ; prod+512 : 2,7607 à 2 000 | `4527f661`, `e1c1064d` |
+| Run long 60 k à 1 024 | 2,9121 domaine ; 2,3911/2,3522 au grand corpus (**sous 2,5**) | `36195516` |
+| Capacité sur le corpus propre | sature à 2,8662 ; **porte à 0,37** | `ad070205` |
+| Distillation — erratum | rien depuis zéro ; **−0,06 depuis une init** (−0,19 anglais, −0,34 wt2) | `84c28889`, `64674e0d`, `51ab1b36` |
+| Fenêtre 2 048 | à octets constants ne bat pas 1 024 ; à pas constants **−0,10** | `88861697` |
+
+## Ce qui n'est pas terminé (et ne l'a jamais été dans cet objectif)
+
+1. **La porte < 2,5 sur le corpus propre** : 0,29 manquent ; les trois leviers testés (pas, capacité, fenêtre) ne la ferment pas — il faut un **corpus propre plus large**.
+2. **Le run de ~2 M de pas** pour 2,5 en domaine à 128 octets.
+3. **La distillation 30 000 pas** (arrêtée deux fois) — à reprendre avec le code corrigé.
+
+Le dépôt vit par ailleurs : B13 est à **177/177** et le hub a lancé une tranche de quatre sous-agents. Mon périmètre est clos ; à la reprise, la prochaine action désignée est la **porte propre par un corpus plus large**.
+

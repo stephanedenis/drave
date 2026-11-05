@@ -40796,3 +40796,62 @@ Another git process seems to be running in this re
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 5; done; ls .git/index.lock 2>/dev/null; for i in 1 2 3 4 5; do\n  git add docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md journa … [494 caractères tronqués]`
+
+  ```
+23 files changed, 1292 insertions(+), 47 deletions(-)
+COMMIT OK 1
+4a65d44f PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15
+jeu 05 nov 2026 13:16:04 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 2 : trois sous-agents de plus (contrat S, coût du chunker, annotation indépendante)
+
+- **subagent** `{"description": "Contrat S pour les REL/SUB", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : écrire le **contrat d'interface** entre le bloc linguistique (`tools/bloc_linguistique.py`, territoire L) et le générateur de structu … [1732 caractères tronqués]`
+- **subagent** `{"description": "Coût et cache du chunker", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer le coût** des règles d'attachement récentes dans `tools/bloc_linguistique.py` et proposer un correctif de cache, sans modifie … [1522 caractères tronqués]`
+- **subagent** `{"description": "Annotation indépendante d'un échantillon", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **contrôle indépendant** de la convention d'attachement par un échantillon annoté à la main.\n\nContexte : la conventio … [1527 caractères tronqués]`
+
+  ```
+started subagent c4796573-e2dc-48c2-b832-96f8bfab22c3
+  ```
+
+
+  ```
+started subagent 65495a29-10c0-4571-96be-e7729f1efebf
+  ```
+
+
+  ```
+started subagent 53bc3288-f2c1-4a7d-b1db-88d794074f70
+  ```
+
+- **list_agents** `{}`
+
+  ```
+df1b1098-d54e-4763-bfc2-2a8cc1498cec [inactive] — Revue visuelle des 7 schémas
+f55ccb7b-481e-4ab6-b5b4-331dc6ff2238 [running] — Prototype classement appris
+ff7e786c-3ece-4eae-864e-19dddfead93c [running] — Cohérence fiches JSON portes
+a8035275-c7b9-4713-a6ab-7b859cd72306 [running] — Diagnostic du top-k strict
+63d4c619-63e8-41b9-a183-5c6f1ac05a21 [running] — Audit reproductibilité attachement
+53bc3288-f2c1-4a7d-b1db-88d794074f70 [running] — Annotation indépendante d'un échantillon
+c4796573-e2dc-48c2-b832-96f8bfab22c3 [running] — Contrat S pour les REL/SUB
+65495a29-10c0-4571-96be-e7729f1efebf [running] — Coût et cache du chunker
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 45; git status --porcelain | grep -E \"rapport-(audit|topk|classement|coherence|contrat|cout|annotation)|classement_cible|pensee-(audit|topk|classement|coherence|contrat|cout|annotation)\" | head -12; echo \"---\"; ls -la repor … [142 caractères tronqués]`
+
+  ```
+---
+-rw-r--r--. 1 stephane stephane 1633  1 nov 22:03 reports/pensee-audit.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nadd = \"\"\"\n**Intégration (agent principal)** : pour chaque vague, l'agent principal (1) lit les fiches\nrendues et vérifie qu'elle … [869 caractères tronqués]`
+
+  ```
+protocole d’intégration ajouté
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4; do\n  git add docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9\" -- do … [387 caractères tronqués]`
