@@ -920,3 +920,462 @@ Date:   Thu Nov 5 14:14:38 2026 -0500
 (no output)
   ```
 
+### 🤖 Assistant
+
+⏵ Calcul détaillé des taux (a), (b), (c) et des sous-populations
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\n\ndef head(c):\n    h = bl.Heuristique._tete_texte(c)\n    return h if h else c\n\nph=eg.charger(); h=bl … [2462 caractères tronqués]`
+
+  ```
+N 239
+label False 94 Counter({'REL': 48, 'SUB': 33, 'GP': 13})
+label True 145 Counter({'GP': 83, 'SUB': 36, 'REL': 26})
+by type 239
+GP n 96 multi 43 a 77 b 79 c 79
+SUB n 69 multi 0 a 34 b 34 c 34
+REL n 74 multi 0 a 26 b 26 c 26
+by type 145
+GP n 83 multi 36 a 77 b 79 c 79
+SUB n 36 multi 0 a 34 b 34 c 34
+REL n 26 multi 0 a 26 b 26 c 26
+overall 239 a/b/c 137 139 139
+overall 145 a/b/c 137 139 139
+gains b-a 145:
+  s108 GP ['rêve', 'papier'] pred 'papier' seg sous le nuage
+  s122 GP ['saute', 'papier'] pred 'papier' seg vers les montagne
+b true but c false:
+c true but b false:
+multi labeled:
+  g003 GP ['vu', "l'homme"] pred 'vu' a True b True
+  g007 GP ['jouent', 'enfants'] pred 'jouent' a True b True
+  g012 GP ['prêt', 'canard'] pred 'manger' a False b False
+  g016 GP ['saw', 'man'] pred 'saw' a True b True
+  r018 GP ['prête', 'souris'] pred 'manger' a False b False
+  r020 GP ['jouent', 'enfants'] pred 'jouent' a True b True
+  r040 GP ['play', 'children'] pred 'play' a True b True
+  r047 GP ['poussent', 'fleurs'] pred 'poussent' a True b True
+  r067 GP ['grow', 'flowers'] pred 'grow' a True b True
+  r088 GP ['grimpe', 'chat'] pred 'grimpe' a True b True
+  r108 GP ['climbs', 'cat'] pred 
+… [1484 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor c in [\"l'homme\",\"homme\",\"vu\",\"Les fleurs poussent\",\"est prêt\",\"appelle-moi\",\"the man\",\"ready\",\"papier\",\"il\",\"elle\",\"nous\"]:\n    print(repr(c),'->',repr(bl.Heuristique._ … [68 caractères tronqués]`
+
+  ```
+"l'homme" -> 'homme'
+'homme' -> 'homme'
+'vu' -> 'vu'
+'Les fleurs poussent' -> 'poussent'
+'est prêt' -> 'prêt'
+'appelle-moi' -> 'appelle-moi'
+'the man' -> 'man'
+'ready' -> 'ready'
+'papier' -> 'papier'
+'il' -> 'il'
+'elle' -> 'elle'
+'nous' -> 'nous'
+  ```
+
+### 🤖 Assistant
+
+⏵ Calcul des contrôles négatifs (permutations) et des intervalles
+
+- **bash** `{"command": "cat > /tmp/analyse_multicibles.py <<'PY'\nimport sys, json, math, random, hashlib, subprocess, statistics\nfrom collections import Counter, defaultdict\nR = \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"\nsys.path.insert(0, R + \"/tools\")\nsys.path.insert(0, R + \"/tools/tests/lin … [9040 caractères tronqués]`
+
+  ```
+N 239 labels 145
+types Counter({'GP': 96, 'REL': 74, 'SUB': 69}) labels Counter({'GP': 83, 'SUB': 36, 'REL': 26})
+sources Counter({'reel': 171, 'synthetique': 55, 'hand': 13}) labels Counter({'reel': 105, 'synthetique': 30, 'hand': 10})
+multi 43 Counter({'GP': 43})
+multi labels 36 Counter({'GP': 36})
+multi sources Counter({'synthetique': 24, 'reel': 14, 'hand': 5})
+multi sources labels Counter({'synthetique': 20, 'reel': 12, 'hand': 4})
+len dist Counter({1: 196, 2: 43}) labels Counter({1: 109, 2: 36})
+total cibles 282 labels 181
+extras 43 labels 36
+distinct targets 175 first 154
+alts 43 distinct 33 dups [('enfants', 2), ('canard', 2), ('Emma', 2), ('avocat', 2), ('fenêtre', 2), ('étoile', 2), ('chemin', 2), ('nuage', 2), ('papier', 2), ('lettre', 2)]
+head changes targets [('g003', ['vu', "l'homme"], ['vu', 'homme'])]
+pred head changes []
+test c==b True cp==b True cn==b True
+
+239 cibles
+  GP: n=96 multi=43 a=77(0.8021) b=79(0.8229) c=79(0.8229) d=2 (2.08 pts) CIa=[0.711448, 0.869473] CIb=[0.73459, 0.886395]
+  SUB: n=69 multi=0 a=34(0.4928) b=34(0.4928) c=34(0.4928) d=0 (0.00 pts) CIa=[0.378324, 0.607947] CIb=[0.378324, 0.607947]
+  REL: n=74 multi=0 a=26(0.3514) b=26(0.3514) c=26(0.3
+… [4758 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/linguistique/gold.json'))\nfor ph in d['phrases']:\n    if ph['id'] in ('g003','g005','g012'):\n        print(ph['id'], ph['texte'])\n        print(ph['mots'])\n        print(ph['segments'])\nPY", "description": "Inspect g003  … [14 caractères tronqués]`
+
+  ```
+g003 La femme a vu l'homme dans le parc.
+[{'texte': 'La', 'pos': 'DET', 'debut': 0, 'fin': 2}, {'texte': 'femme', 'pos': 'NOUN', 'debut': 3, 'fin': 8}, {'texte': 'a', 'pos': 'AUX', 'debut': 9, 'fin': 10}, {'texte': 'vu', 'pos': 'VERB', 'debut': 11, 'fin': 13}, {'texte': "l'homme", 'pos': 'DET', 'debut': 14, 'fin': 21}, {'texte': 'dans', 'pos': 'PREP', 'debut': 22, 'fin': 26}, {'texte': 'le', 'pos': 'DET', 'debut': 27, 'fin': 29}, {'texte': 'parc', 'pos': 'NOUN', 'debut': 30, 'fin': 34}]
+[{'type': 'GN', 'texte': 'La femme', 'role': 'agent', 'debut': 0, 'fin': 8}, {'type': 'GV', 'texte': 'a vu', 'role': 'prédicat', 'debut': 9, 'fin': 13}, {'type': 'GN', 'texte': "l'homme", 'role': 'patient', 'debut': 14, 'fin': 21}, {'type': 'GP', 'texte': 'dans le parc', 'role': 'lieu', 'debut': 22, 'fin': 34, 'cibles': ['vu', "l'homme"], 'cible': 'vu'}]
+g005 Elle a dit qu'elle viendrait hier.
+[{'texte': 'Elle', 'pos': 'PRON', 'debut': 0, 'fin': 4}, {'texte': 'a', 'pos': 'AUX', 'debut': 5, 'fin': 6}, {'texte': 'dit', 'pos': 'VERB', 'debut': 7, 'fin': 10}, {'texte': "qu'elle", 'pos': 'CONJ', 'debut': 11, 'fin': 18}, {'texte': 'viendrait', 'pos': 'VERB', 'debut': 19, 'fin': 28}, {'texte': 'hier', 'pos
+… [965 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"A13\\|B13\" docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md 2>/dev/null | head -30", "description": "Locate roadmap line for multi-target"}`
+
+  ```
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observ
+… [15845 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, random, statistics, math\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl, evaluer_gold as eg\nph=eg.charger(); h=bl.Heuristique()\nrecs=[]\nfor p in ph:\n    a=h.analyser(p['texte'],p['langue'])\n   … [2128 caractères tronqués]`
+
+  ```
+delta bootstrap 95% 0.0 0.034482758620689655 mean 0.01381448275862069
+delta point 0.013793103448275862
+discordant 2 0 p exact two-sided 0.5
+GP delta 2 / 83 CI 0.0 0.060240963855421686
+SUB delta 0 / 36 CI 0.0 0.0
+REL delta 0 / 26 CI 0.0 0.0
+g012 ['prêt', 'canard'] pred 'manger' cands ['« à manger » → Le canard', '« à manger » → est prêt', 'manger', 'est', 'canard', 'prêt'] topk_a True topk_b True
+r018 ['prête', 'souris'] pred 'manger' cands ['« à manger » → La souris', '« à manger » → est prête', 'manger', 'est', 'souris', 'prête'] topk_a True topk_b True
+s041 ['marche', 'avocat'] pred '' cands ['GP'] topk_a False topk_b False
+s108 ['rêve', 'papier'] pred 'papier' cands ['« sous le nuage » → ce calme papier rêve', 'rêve'] topk_a True topk_b True
+s122 ['saute', 'papier'] pred 'papier' cands ['« vers les montagne » → mon papier saute', 'saute'] topk_a True topk_b True
+  ```
+
+### 🤖 Assistant
+
+⏵ Décomposition par source et vérification des cas gagnés
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl, evaluer_gold as eg\nph=eg.charger(); h=bl.Heuristique(); recs=[]\nfor p in ph:\n    a=h.analyser(p['texte'],p['langue'])\n    labels={(e. … [1966 caractères tronqués]`
+
+  ```
+hand labels 10 a 10 b 10 multi 4 multi_a 4 multi_b 4
+   by type Counter({'GP': 8, 'SUB': 1, 'REL': 1})
+reel labels 105 a 104 b 104 multi 12 multi_a 12 multi_b 12
+   by type Counter({'GP': 55, 'REL': 25, 'SUB': 25})
+synthetique labels 30 a 27 b 29 multi 20 multi_a 17 multi_b 19
+   by type Counter({'GP': 20, 'SUB': 10})
+239 hand 13 a 10 b 10 multi 5
+239 reel 171 a 104 b 104 multi 14
+239 synthetique 55 a 27 b 29 multi 24
+first POS Counter({'VERB': 39, 'ADJ': 4}) alt POS Counter({'NOUN': 41, 'DET': 1, 'PRON': 1})
+multi 239 by src/type Counter({('synthetique', 'GP'): 24, ('reel', 'GP'): 14, ('hand', 'GP'): 5})
+multi 145 by src/type Counter({('synthetique', 'GP'): 20, ('reel', 'GP'): 12, ('hand', 'GP'): 4})
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl, evaluer_gold as eg\nph=eg.charger()\nprint('sources in phrases', collections.Counter(p.get('source') for p in ph))\nh=bl.Heuristique(); r … [1243 caractères tronqués]`
+
+  ```
+sources in phrases Counter({'reel': 432, 'synthetique': 160, 'hand': 20})
+overall 145 141 143
+by src Counter({('reel', True): 104, ('synthetique', True): 27, ('hand', True): 10, ('synthetique', False): 3, ('reel', False): 1})
+by type Counter({('GP', True): 80, ('SUB', True): 35, ('REL', True): 26, ('GP', False): 3, ('SUB', False): 1})
+'reel' 105 104 104
+'synthetique' 30 27 29
+'hand' 10 10 10
+  ```
+
+- **bash** `{"command": "grep -n \"random\\|seed\\|time\\|cache\" tools/bloc_linguistique.py | head -60", "description": "Check for nondeterminism in block"}`
+
+  ```
+43:import time
+137:class RefusNeuronal(RuntimeError):
+708:    def _verbe_gv(texte: str, g: dict, verbes, cache: dict | None = None):
+711:        if cache is not None and cle in cache:
+712:            return cache[cle]
+714:        if cache is not None:
+715:            cache[cle] = v
+721:                      cache: dict | None = None) -> str | None:
+746:            v = Heuristique._verbe_gv(texte, g, verbes, cache)
+750:        return Heuristique._verbe_gv(texte, g, verbes, cache)
+755:                        cache: dict | None = None) -> list[str]:
+767:            v = Heuristique._verbe_gv(texte, g, verbes, cache)
+851:        t0 = time.perf_counter()
+857:                              cout={"octets": len(texte.encode()), "duree_s": round(time.perf_counter() - t0, 6)})
+924:        cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+954:                        cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
+964:                                 or self._cible_proche(texte, s, gvs, verbes, cache_gv))
+970:                        texte, s, gvs, verbes=verbes, cache=cache_gv)
+985:            # un seul chunking par analyse (le O(n²) mesuré : 1+2S appels avant ce cac
+… [2743 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in 1 2 3; do python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl, evaluer_gold as eg\nh=bl.Heuristique(); recs=[]\nfor p in eg.charger():\n    a=h.analyser(p['texte'],p['langue'])\n    labels={(e.t … [563 caractères tronqués]`
+
+  ```
+145 141 143
+145 141 143
+145 141 143
+  ```
+
+- **bash** `{"command": "sha256sum tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py; git status --short tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py; git diff --stat -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py; git diff -- tools/bloc_linguisti … [80 caractères tronqués]`
+
+  ```
+64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa  tools/bloc_linguistique.py
+c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599  tools/tests/linguistique/evaluer_gold.py
+ M tools/bloc_linguistique.py
+ tools/bloc_linguistique.py | 66 +++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 62 insertions(+), 4 deletions(-)
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 07a41ec9..b171b5f2 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -428,9 +428,20 @@ am is are was were be been being have has had having do does did done
+ """.split())
+ 
+ 
++ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
++
++
++def _sans_enclitique(mot: str) -> str:
++    """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
++    for suf in ENCLITIQUES:
++        if mot.endswith(suf) and len(mot) > len(suf):
++            return mot[: -len(suf)]
++    return mot
++
++
+ def _est_verbe(mot: str) -> bool:
+     """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+-    n = _normaliser(mot)
++    n = _normaliser(_sans_enclitique(mot))
+     if no
+… [2726 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un autre agent modifie le bloc en direct : je fige la mesure sur HEAD
+
+- **bash** `{"command": "mkdir -p /tmp/pin_multicibles && git show HEAD:tools/bloc_linguistique.py > /tmp/pin_multicibles/bloc_linguistique.py && git show HEAD:tools/tests/linguistique/gold.json > /tmp/pin_multicibles/gold.json && git show HEAD:tools/tests/linguistique/gold_reel.json > /tmp/pin_multicibles/gold … [283 caractères tronqués]`
+
+  ```
+5640809e8e6bfbd661b86babdf0ed6ce351c8d1bce93a5546f4d22d69575ba2c  /tmp/pin_multicibles/bloc_linguistique.py
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  /tmp/pin_multicibles/gold.json
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  /tmp/pin_multicibles/gold_reel.json
+e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654  /tmp/pin_multicibles/gold_synthetique.json
+---
+15ee10d3cd54dcdf3419144d23445765c8910ba2
+15ee10d3cd54dcdf3419144d23445765c8910ba2 2026-11-05 14:55:27 -0500
+  ```
+
+- **bash** `{"command": "git show HEAD:tools/tests/linguistique/evaluer_gold.py | sha256sum; sha256sum tools/tests/linguistique/evaluer_gold.py; git show HEAD:tools/tests/linguistique/gold_reel.json | sha256sum", "description": "Verify HEAD hashes of evaluer_gold and gold"}`
+
+  ```
+c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599  -
+c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599  tools/tests/linguistique/evaluer_gold.py
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  -
+  ```
+
+- **bash** `{"command": "git log -3 --format='%H %ad %s' --date=iso; git status --short tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py", "description": "Check new HEAD and working state"}`
+
+  ```
+15ee10d3cd54dcdf3419144d23445765c8910ba2 2026-11-05 14:55:27 -0500 PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)
+1ec7286c0aed1bdb64379b96b093c47d7ef554b5 2026-11-05 14:48:04 -0500 PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS
+a914c1e73f5f748a8726222a974f102216755cad 2026-11-05 14:44:19 -0500 FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR
+ M tools/bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, pathlib\nsys.path.insert(0,'/tmp/pin_multicibles')\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nsys.path.insert(0,R+'/tools')\nsys.path.insert(0,R+'/tools/tests/linguistique')\nimport bloc_linguistique as bl\nprint('bl module',bl.__file__)\nimport  … [1061 caractères tronqués]`
+
+  ```
+bl module /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+{'cibles': 239, 'labels': 145, 'top1': 143, 'topk': 142, 'exact': 141, 'exact_taux': 0.59, 'exact_taux_span': 0.9724, 'top1_taux_span': 0.9862, 'topk_exact': 142, 'topk_exact_taux_span': 0.9793}
+manual 145 141 143
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, pathlib\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nsys.path.insert(0,R+'/tools')\nsys.path.insert(0,R+'/tools/tests/linguistique')\nsys.path.insert(0,'/tmp/pin_multicibles')\nimport bloc_linguistique as bl\nprint('bl module',bl.__file__)\nimport  … [1055 caractères tronqués]`
+
+  ```
+bl module /tmp/pin_multicibles/bloc_linguistique.py
+{'cibles': 239, 'labels': 77, 'top1': 0, 'topk': 0, 'exact': 0, 'exact_taux': 0.0, 'exact_taux_span': 0.0, 'top1_taux_span': 0.0, 'topk_exact': 0, 'topk_exact_taux_span': 0.0}
+manual 77 0 0
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' /tmp/pin_multicibles/bloc_linguistique.py; grep -n \"RACINE\\|parents\\|sys.path\\|import generateur\\|from generateur\" /tmp/pin_multicibles/bloc_linguistique.py | head -20", "description": "Inspect pinned block imports and paths"}`
+
+  ```
+#!/usr/bin/env python3
+"""bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+
+Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+
+  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+    substitution et le parallèle sans GPU ;
+  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+    même type d'annotation ;
+  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+    POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
+  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+    étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+    que l'heuristique ne couvre pas.
+
+La sortie est une **annotation typée** — pas le corps de la RSN : chaque étiquette porte son
+`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script`
+… [3787 caractères tronqués]
+  ```
+
+- **bash** `{"command": "mkdir -p /tmp/pin_multicibles/tools && cp /tmp/pin_multicibles/bloc_linguistique.py /tmp/pin_multicibles/tools/bloc_linguistique.py && ln -sfn /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures /tmp/pin_multicibles/tools/structures && ls -la /tmp/pin_multicibles/tools/ &&  … [785 caractères tronqués]`
+
+  ```
+total 104
+drwxr-xr-x. 2 stephane stephane     80  5 nov 15:11 .
+drwxr-xr-x. 4 stephane stephane    160  5 nov 15:11 ..
+-rw-r--r--. 1 stephane stephane 102428  5 nov 15:11 bloc_linguistique.py
+lrwxrwxrwx. 1 stephane stephane     64  5 nov 15:11 structures -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures
+bl module /tmp/pin_multicibles/tools/bloc_linguistique.py RACINE /tmp/pin_multicibles
+{'cibles': 239, 'labels': 145, 'top1': 140, 'topk': 142, 'exact': 137, 'exact_taux': 0.5732, 'exact_taux_span': 0.9448, 'top1_taux_span': 0.9655, 'topk_exact': 141, 'topk_exact_taux_span': 0.9724}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure figée sur HEAD et génération des chiffres définitifs
+
+- **bash** `{"command": "cat > /tmp/analyse_multicibles_pin.py <<'PY'\nimport sys, json, math, random, statistics, pathlib, hashlib, subprocess\nfrom collections import Counter\nR = \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"\nPIN = \"/tmp/pin_multicibles\"\n# pinned block: /tmp/pin_multicibles/tools/bl … [15485 caractères tronqués]`
+
+  ```
+{
+ "meta": {
+  "date": "2026-11-05",
+  "branche": "s/v7",
+  "head": "15ee10d3cd54dcdf3419144d23445765c8910ba2",
+  "head_sujet": "PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)",
+  "pin": {
+   "bloc_linguistique": {
+    "sha256": "5640809e8e6bfbd661b86babdf0ed6ce351c8d1bce93a5546f4d22d69575ba2c",
+    "source": "git show HEAD:tools/bloc_linguistique.py (copie /tmp)"
+   },
+   "evaluer_gold": {
+    "sha256": "c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599",
+    "source": "HEAD (fichier propre)"
+   },
+   "gold": {
+    "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+    "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+    "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+   },
+   "note": "le fichier de travail tools/bloc_linguistique.py a été modifié par un autre agent pendant la session ; la mesure est figée sur HEAD, pas sur le worktree"
+  }
+ },
+ "population": {
+  "phrases": 612,
+  "cibles": 239,
+  "labels": 145,
+  "segments": 1863,
+  "par_type": {
+   "GP": {
+    "cibles": 96,
+    "labels": 83
+   },
+   "SU
+… [6648 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/result_multicibles.json'))\nfor k in ['multicibles']:\n    print('===',k)\n    print(json.dumps(d[k],ensure_ascii=False,indent=1))\nprint('=== definitions 239/145 full')\nfor den in ['239','145']:\n    print(den, json.dumps(d['defini … [549 caractères tronqués]`
+
+  ```
+=== multicibles
+{
+ "cibles": {
+  "n": 43,
+  "multi": 43,
+  "part_multi": 1.0,
+  "alternatives": 43,
+  "alternatives_moyenne": 1.0,
+  "longueur_moyenne": 2.0,
+  "a": 31,
+  "b": 33,
+  "c": 33,
+  "taux_a": 0.72093,
+  "taux_b": 0.767442,
+  "taux_c": 0.767442,
+  "delta_b_a": 2,
+  "delta_b_a_pts": 4.6512,
+  "ic95_a": [
+   0.57309,
+   0.832534
+  ],
+  "ic95_b": [
+   0.622555,
+   0.868463
+  ],
+  "ic95_c": [
+   0.622555,
+   0.868463
+  ],
+  "topk_a": 35,
+  "topk_b": 35,
+  "topk_c": 35
+ },
+ "labels": {
+  "n": 36,
+  "multi": 36,
+  "part_multi": 1.0,
+  "alternatives": 36,
+  "alternatives_moyenne": 1.0,
+  "longueur_moyenne": 2.0,
+  "a": 31,
+  "b": 33,
+  "c": 33,
+  "taux_a": 0.861111,
+  "taux_b": 0.916667,
+  "taux_c": 0.916667,
+  "delta_b_a": 2,
+  "delta_b_a_pts": 5.5556,
+  "ic95_a": [
+   0.713405,
+   0.939182
+  ],
+  "ic95_b": [
+   0.781733,
+   0.971251
+  ],
+  "ic95_c": [
+   0.781733,
+   0.971251
+  ],
+  "topk_a": 35,
+  "topk_b": 35,
+  "topk_c": 35
+ },
+ "par_type_239": {
+  "GP": {
+   "n": 43,
+   "multi": 43,
+   "part_multi": 1.0,
+   "alternatives": 43,
+   "alternatives_moyenne": 1.0,
+   "longueur_moyenne": 2.0,
+   "a": 31,
+   "b": 33,
+   "c": 33,
+   "taux_a": 0.72093,
+   "taux_b": 0.767442,
+   "tau
+… [12326 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, pathlib\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'; PIN='/tmp/pin_multicibles'\nsys.path.insert(0,R+'/tools/tests/linguistique'); sys.path.insert(0,PIN+'/tools')\nimport bloc_linguistique as bl, evaluer_gold as eg\neg.GOLD=pathlib.Path(PIN+'/gold. … [1571 caractères tronqués]`
+
+  ```
+errors under b: 6
+('g002', 'hand', 'GP', 'de la voisine', ['chat'], "''", 'Le chat de la voisine dort.')
+('g012', 'hand', 'GP', 'à manger', ['prêt', 'canard'], "'manger'", 'Le canard est prêt à manger.')
+('r018', 'reel', 'GP', 'à manger', ['prête', 'souris'], "'manger'", 'La souris est prête à manger.')
+('r230', 'reel', 'SUB', 'Quand tu arrives', ['appelle'], "'appelle-moi'", 'Quand tu arrives, appelle-moi.')
+('r309', 'reel', 'SUB', "qu'il viendra", ['viendra'], "'Peut-être'", "Peut-être qu'il viendra.")
+('s041', 'synthetique', 'GP', 'devant elles', ['marche', 'avocat'], "''", 'les avocat marche devant elles')
+errors under a: 1863
+errors under a: 8
+('g002', 'hand', 'GP', 'de la voisine', ['chat'], "''")
+('g012', 'hand', 'GP', 'à manger', ['prêt', 'canard'], "'manger'")
+('r018', 'reel', 'GP', 'à manger', ['prête', 'souris'], "'manger'")
+('r230', 'reel', 'SUB', 'Quand tu arrives', ['appelle'], "'appelle-moi'")
+('r309', 'reel', 'SUB', "qu'il viendra", ['viendra'], "'Peut-être'")
+('s041', 'synthetique', 'GP', 'devant elles', ['marche', 'avocat'], "''")
+('s108', 'synthetique', 'GP', 'sous le nuage', ['rêve', 'papier'], "'papier'")
+('s122', 'synthetique', 'GP', 'vers les montagne', ['sau
+… [27 caractères tronqués]
+  ```
+

@@ -1595,3 +1595,552 @@ started background job bash-1254
 --- status measured files ---
   ```
 
+### 🤖 Assistant
+
+⏵ Post-v2 drift detected in the measured block; isolating the exact v2 blob.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff 9d5337ce..HEAD -- tools/bloc_linguistique.py | head -220", "description": "Show post-v2 changes to bloc_linguistique"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 5cc3858f..07a41ec9 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -657,9 +657,21 @@ class Heuristique:
+                     return v
+         return None if strict else (mots[-1][1] if mots else None)
+ 
++    @staticmethod
++    def _verbe_gv(texte: str, g: dict, verbes, cache: dict | None = None):
++        """`_verbe_dans` mémoïsé par span de GV : le même GV est relu pour chaque segment."""
++        cle = (g["debut"], g["fin"])
++        if cache is not None and cle in cache:
++            return cache[cle]
++        v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
++        if cache is not None:
++            cache[cle] = v
++        return v
++
+     @staticmethod
+     def _cible_proche(texte: str, segment: dict, gvs: list[dict],
+-                      verbes: list[tuple[int, int, str]] | None = None) -> str | None:
++                      verbes: list[tuple[int, int, str]] | None = None,
++                      cache: dict | None = None) -> str | None:
+         """La cible d'un segment : le **verbe du GV le plus proche** (règle de proximité).
+ 
+         Rend `None` si le 
+… [6451 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Replaying the exact v2 blob (9d5337ce) rather than the drifted HEAD.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 9d5337ce:tools/bloc_linguistique.py > /tmp/audit_v2/bloc_v2.py && python3 - <<'PY'\nimport sys, importlib.util, pathlib, json\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\n … [604 caractères tronqués]`
+
+  ```
+{
+ "cibles": 239,
+ "labels": 145,
+ "top1": 140,
+ "topk": 142,
+ "exact": 137,
+ "topk_exact": 141,
+ "top1_taux": 0.5858,
+ "topk_taux": 0.5941,
+ "exact_taux": 0.5732,
+ "top1_taux_span": 0.9655,
+ "topk_taux_span": 0.9793,
+ "exact_taux_span": 0.9448,
+ "topk_exact_taux_span": 0.9724,
+ "verbe": {
+  "cibles": 116,
+  "justes": 111,
+  "taux": 0.9569
+ },
+ "nom": {
+  "cibles": 29,
+  "justes": 26,
+  "taux": 0.8966
+ },
+ "couverture": 0.6067
+}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1254 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (time python3 tools/tests/linguistique/classement_cible.py --json /tmp/audit_v2/classement_rejoue.json) > /tmp/audit_v2/classement.txt 2>&1; echo "exit=$?" >> /tmp/audit_v2/classement.txt) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Replaying v2 ablations and checking the learned-model result.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nSRC=pathlib.Path('/tmp/audit_v2/bloc_v2.py').read_text(encoding='utf-8')\nhead='''                    # la **tête** de chaque candidat S (« « … » → Le livre » → livre ; « … → Les\n                    … [3766 caractères tronqués]`
+
+  ```
+written ['v2_sans_tetes', 'v2_sans_lexique', 'v2_sans_segment', 'v2_sans_genre']
+bloc_v2.py             top1=140 topk=142 exact=137 strict=141 | span 0.9655/0.9793/0.9448/0.9724
+v2_sans_tetes.py       top1=140 topk=142 exact=137 strict= 96 | span 0.9655/0.9793/0.9448/0.6621
+v2_sans_lexique.py     top1=132 topk=134 exact=129 strict=133 | span 0.9103/0.9241/0.8897/0.9172
+v2_sans_segment.py     top1=134 topk=142 exact=131 strict=141 | span 0.9241/0.9793/0.9034/0.9724
+v2_sans_genre.py       top1=140 topk=142 exact=137 strict=141 | span 0.9655/0.9793/0.9448/0.9724
+=== classement appris ===
+== par sens ==
+pairs->impairs: modèle 66/66 (1.0000) | règle 64/66 (0.9697) | hasard 0.3485
+impairs->pairs: modèle 76/79 (0.9620) | règle 73/79 (0.9241) | hasard 0.3671
+== regroupé hors-pli ==
+modèle 142/145 (0.9793) | règle 137/145 (0.9448)
+moyenne des sens: {'modele': 0.981, 'regle_actuelle': 0.9469, 'gain': 0.0341}
+McNemar: {'modele_juste_regle_fausse': 7, 'regle_juste_modele_fausse': 2, 'p_exact': 0.179688}
+bootstrap: {'tirages': 2000, 'difference': 0.0345, 'ic95': [-0.0069, 0.0759]}
+hasard vivier attendu: 0.3876
+repères: {'exactitude_entrainement': 0.9931, 'rang0_justes': 139, 'rang0_taux': 0.958
+… [742 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extracting exact gate docstrings and assertion expectations for the stale-gate table.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, inspect\nsys.path.insert(0,'.')\nfrom tools.pensee import autotest as at\nfor n in ['t153_attachement','t161_cible_proximite','t162_candidats_verbes','t163_echecs_attachement','t164_verbe_gv','t166_spans … [319 caractères tronqués]`
+
+  ```
+### t153_attachement
+L'attachement sur le gold 612 (239 cibles) : top1 0,5272, exact 0,5105.
+### t161_cible_proximite
+La cible par proximité : le verbe du GV le plus proche.
+### t162_candidats_verbes
+Les candidats verbes : le top-k passe de 78 à 112 (0,4686).
+### t163_echecs_attachement
+Les échecs de l'attachement : 94 de span, 33 de cible.
+### t164_verbe_gv
+Le verbe du GV-phrase : le POS VERB, pas le dernier mot.
+### t166_spans
+Les spans perdus : 48 REL, 33 SUB, 12 GP.
+### t167_denominateur
+Le dénominateur : rendement global (÷ 239) et exactitude spans (÷ 146).
+### t168_classement
+Le classement : la cible réduite à sa tête (exact 94) et les deux conventions du gold.
+### t169_conventions
+Les deux conventions du gold : cibles verbes et cibles noms, mesurées séparément.
+### t170_attachement_cible
+L'attachement ciblé : REL → antécédent (nom à gauche), GP → verbe du GV.
+### t172_echecs_cible
+Les échecs de cible : 11 hors candidats, 11 mal classés.
+### t173_topk_strict
+Le top-k strict : 88/145 (0,6069), contre 0,9241 en sous-chaîne.
+### t175_audit_attachement
+L'audit A1 : les 14 valeurs reproduites, écart 0, et le JSON d'audit à jour.
+### t176_segment_precedent
+La règle du segment précé
+… [132 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Computing v2 metric overlap (exact/top1/strict) for the limits section.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nspec=importlib.util.spec_from_file_location('bloc_v2o',pathlib.Path('/tmp/audit_v2 … [1641 caractères tronqués]`
+
+  ```
+overlap (exact,top1,strict):
+  (False, False, False) 3
+  (False, False, True) 2
+  (False, True, False) 1
+  (False, True, True) 2
+  (True, True, True) 137
+top1 sans exact: [('r230', 'SUB', 'appelle', 'appelle-moi'), ('s108', 'GP', 'rêve', 'papier'), ('s122', 'GP', 'saute', 'papier')]
+strict sans exact: 4 dont pred vide 0
+ni exact ni strict: 4
+exact et strict: 137
+exact hors strict: 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the tricky gold segments (multi-cible and substring cases).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph={p['id']:p for p in charger()}\nfor pid in ['s108','s122','r230','g012','r018','g002','s041','r309','s012','s03 … [452 caractères tronqués]`
+
+  ```
+--- s108 ce calme papier rêve sous le nuage
+   GP 'sous le nuage' cibles= ['rêve', 'papier'] mots= [('ce', 'DET'), ('calme', 'ADJ'), ('papier', 'NOUN'), ('rêve', 'VERB'), ('sous', 'PREP'), ('le', 'DET'), ('nuage', 'NOUN')]
+--- s122 mon papier saute vers les montagne
+   GP 'vers les montagne' cibles= ['saute', 'papier'] mots= [('mon', 'DET'), ('papier', 'NOUN'), ('saute', 'VERB'), ('vers', 'PREP'), ('les', 'DET'), ('montagne', 'NOUN')]
+--- r230 Quand tu arrives, appelle-moi.
+   SUB 'Quand tu arrives' cibles= ['appelle'] mots= [('Quand', 'CONJ'), ('tu', 'PRON'), ('arrives', 'VERB'), ('appelle', 'VERB'), ('moi', 'PRON')]
+--- g012 Le canard est prêt à manger.
+   GP 'à manger' cibles= ['prêt', 'canard'] mots= [('Le', 'DET'), ('canard', 'NOUN'), ('est', 'AUX'), ('prêt', 'ADJ'), ('à', 'PREP'), ('manger', 'VERB')]
+--- r018 La souris est prête à manger.
+   GP 'à manger' cibles= ['prête', 'souris'] mots= [('La', 'DET'), ('souris', 'NOUN'), ('est', 'AUX'), ('prête', 'ADJ'), ('à', 'PREP'), ('manger', 'VERB')]
+--- g002 Le chat de la voisine dort.
+   GP 'de la voisine' cibles= ['chat'] mots= [('Le', 'DET'), ('chat', 'NOUN'), ('de', 'PREP'), ('la', 'DET'), ('voisine', 'NOUN'), ('dort', 'VERB')]
+-
+… [1856 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Collecting commit hashes, file hashes, and final state for the audit JSON.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '--- commits ---' && git log -1 --format='v2 %H %ci %s' 9d5337ce && git log -1 --format='head %H %ci %s' HEAD && git log --oneline 9d5337ce..HEAD | cat && echo '--- blob hashes ---' && git rev-parse 9d5337ce:tools/bloc_linguisti … [565 caractères tronqués]`
+
+  ```
+--- commits ---
+v2 9d5337ce1c23c4d70f51490d2fcdfa2c390e3faa 2026-11-05 14:14:38 -0500 B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+head 15ee10d3cd54dcdf3419144d23445765c8910ba2 2026-11-05 14:55:27 -0500 PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)
+15ee10d3 PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)
+1ec7286c PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS
+a914c1e7 FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR
+a2def5ee PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181
+e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181
+de292c7d ÉTAT — B13 180/180, T0 DANS LE BUDGET ; VAGUE 3 LANCÉE (AUDIT V2, ÉCHECS, REPLIS, CACHE)
+2e08cbc7 B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES
+--- blob hashes ---
+5cc3858f871b2057b4875708994cecb
+… [1772 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the six A7 IDs and the eight lexicon gains by segment diff.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' > /tmp/audit_v2/ids.json\nimport sys, importlib.util, pathlib, json\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\ndef load(path):\n    n=pathlib.Path(path).stem\n    spec=importl … [1566 caractères tronqués]`
+
+  ```
+{
+ "segment_fix": [
+  [
+   "s012",
+   "SUB",
+   "écoute"
+  ],
+  [
+   "s030",
+   "SUB",
+   "cherche"
+  ],
+  [
+   "s052",
+   "SUB",
+   "ouvre"
+  ],
+  [
+   "s097",
+   "SUB",
+   "commence"
+  ],
+  [
+   "s124",
+   "SUB",
+   "commence"
+  ],
+  [
+   "s139",
+   "SUB",
+   "crie"
+  ]
+ ],
+ "lexique_fix": [
+  [
+   "r080",
+   "GP",
+   "fly"
+  ],
+  [
+   "r108",
+   "GP",
+   "climbs"
+  ],
+  [
+   "r120",
+   "GP",
+   "flows"
+  ],
+  [
+   "r156",
+   "GP",
+   "swims"
+  ],
+  [
+   "r166",
+   "GP",
+   "get"
+  ],
+  [
+   "r169",
+   "GP",
+   "smiles"
+  ],
+  [
+   "r177",
+   "GP",
+   "wait"
+  ],
+  [
+   "r180",
+   "GP",
+   "belongs"
+  ]
+ ],
+ "tetes_fix": [
+  [
+   "g011",
+   "REL",
+   "livre"
+  ],
+  [
+   "g012",
+   "GP",
+   "prêt"
+  ],
+  [
+   "r014",
+   "REL",
+   "livre"
+  ],
+  [
+   "r015",
+   "REL",
+   "film"
+  ],
+  [
+   "r018",
+   "GP",
+   "prête"
+  ],
+  [
+   "r047",
+   "GP",
+   "poussent"
+  ],
+  [
+   "r054",
+   "REL",
+   "livre"
+  ],
+  [
+   "r055",
+   "REL",
+   "ville"
+  ],
+  [
+   "r057",
+   "GP",
+   "aboie"
+  ],
+  [
+   "r088",
+   "GP",
+   "grimpe"
+  ],
+  [
+   "r094",
+   "REL",
+   "film"
+  ],
+  [
+   "r095",
+   "REL",
+   "maison"
+  ],
+  [
+   "r100",
+   "GP",
+   "coule"
+  ],
+  [
+   "r126",
+   "GP",
+   "nage"
+  ],
+… [1309 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirming span losses are unchanged between the pre-v2 and v2 blobs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib, collections, json\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\ndef spans(path):\n    spec=importlib.util.spec_from_file_locat … [817 caractères tronqués]`
+
+  ```
+{"avant_a408a909": {"GP": 13, "SUB": 33, "REL": 48}, "v2_9d5337ce": {"GP": 13, "SUB": 33, "REL": 48}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the two target files are new, then drafting the audit JSON.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-audit-v2.md reports/pensee-audit-v2.json 2>&1; echo '---'; git status --porcelain reports/rapport-audit-v2.md reports/pensee-audit-v2.json", "description": "Verify target audit files are absent"}`
+
+  ```
+ls: cannot access 'reports/rapport-audit-v2.md': No such file or directory
+ls: cannot access 'reports/pensee-audit-v2.json': No such file or directory
+---
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the pre-v2 11/11 failure split and old rates.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib, collections, json\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nspec=importlib.util.spec_from_file_location('bloc_avant_y',pat … [1191 caractères tronqués]`
+
+  ```
+old rates {'top1': 126, 'top1_taux': 0.5272, 'top1_taux_span': 0.869, 'topk': 134, 'topk_taux': 0.5607, 'topk_taux_span': 0.9241, 'exact': 123, 'exact_taux': 0.5146, 'exact_taux_span': 0.8483, 'topk_exact': 88, 'topk_exact_taux': 0.3682, 'topk_exact_taux_span': 0.6069}
+old failures: 11 hors candidats, 11 mal classés (sous-chaîne)
+  ```
+
+### 🤖 Assistant
+
+⏵ Reproducing the A1 pre-v2 controls for comparison with v2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib, random, statistics, json\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nspec=importlib.util.spec_from_file_location('bloc_avant_c',pathlib.Pa … [1477 caractères tronqués]`
+
+  ```
+permutation mean 1.642 sd 1.321 min 0 max 8 n 1000
+candidat mean 39.754 sd 4.53 min 27 max 52 n 1000
+labels 145 exact 123
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v2/classement_rejoue.json'))\nprint(json.dumps(d['controle_negatif'],ensure_ascii=False,indent=1)[:3000])\nprint('--- resultats ---')\nr=d['resultats']\nprint(json.dumps({k: … [147 caractères tronqués]`
+
+  ```
+{
+ "regle_actuelle_regroupee": {
+  "justes": 137,
+  "taux": 0.9448,
+  "par_type": {
+   "GP": {
+    "n": 83,
+    "justes": 77,
+    "taux": 0.9277
+   },
+   "REL": {
+    "n": 26,
+    "justes": 26,
+    "taux": 1.0
+   },
+   "SUB": {
+    "n": 36,
+    "justes": 34,
+    "taux": 0.9444
+   }
+  }
+ },
+ "hasard_vivier_attendu": 0.3876,
+ "hasard_cibles_distinctes": 0.0097,
+ "mcnemar": {
+  "modele_juste_regle_fausse": 7,
+  "regle_juste_modele_fausse": 2,
+  "p_exact": 0.179688
+ },
+ "bootstrap_difference": {
+  "tirages": 2000,
+  "difference": 0.0345,
+  "ic95": [
+   -0.0069,
+   0.0759
+  ]
+ },
+ "repere": {
+  "exactitude_entrainement": 0.9931,
+  "rang0_justes": 139,
+  "rang0_taux": 0.9586,
+  "rang0_par_type": {
+   "GP": {
+    "n": 83,
+    "justes": 78,
+    "taux": 0.9398
+   },
+   "REL": {
+    "n": 26,
+    "justes": 26,
+    "taux": 1.0
+   },
+   "SUB": {
+    "n": 36,
+    "justes": 35,
+    "taux": 0.9722
+   }
+  }
+ }
+}
+--- resultats ---
+{
+ "regroupe_hors_pli": {
+  "n": 145,
+  "modele": {
+   "justes": 142,
+   "taux": 0.9793,
+   "par_type": {
+    "GP": {
+     "n": 83,
+     "justes": 81,
+     "taux": 0.9759
+    },
+    "REL": {
+     "n": 26,
+     "justes": 26,
+     "taux": 1.0
+    },
+    "SUB": {
+     "n": 36
+… [451 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, random\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\ncibles=[s['cible'] for p in ph for s in p['segments'] if s.get('cible')]\nrng=random.Random(0)\nok … [157 caractères tronqués]`
+
+  ```
+239 1 0.0042
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the audit JSON with all measured values, ablations, and gate findings.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_v2/build_json.py <<'PY'\nimport json, pathlib\n\nd = {\n \"date\": \"2026-11-05\",\n \"ligne\": \"B13\",\n \"objet\": \"audit de la fiche d'attachement v2 (rapport-pensee-attachement-v2.md et pensee-attachement-v2.js … [26410 caractères tronqués]`
+
+  ```
+wrote reports/pensee-audit-v2.json bytes 26145
+comparaison rows 43 ecarts 2
+JSON valide
+987 reports/pensee-audit-v2.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Correcting the JSON verdict counts and rounding notes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/audit_v2/build_json.py')\ns=p.read_text()\ns=s.replace('\"valeurs_comparees\": 31,\\n  \"valeurs_reproduites\": 31,\\n  \"ecarts_numeriques\": 0,',\n            '\"valeurs_compar … [1601 caractères tronqués]`
+
+  ```
+patched generator
+wrote reports/pensee-audit-v2.json bytes 26395
+comparaison rows 43 ecarts 2
+JSON valide
+verdict {
+ "statut": "chiffres reproduits ; reserves documentaires",
+ "valeurs_comparees": 43,
+ "valeurs_reproduites": 43,
+ "ecarts_mesure": 0,
+ "ecarts_arrondi": 2,
+ "detail_arrondi": "p 0,18 (0,179688) et IC [-0,7 ; +7,6] ([-0,69 ; +7,59]) : arrondis de la fiche, pas des erreurs",
+ "erreurs_de_prose": 1,
+ "erreurs_de_table": 1,
+ "portes_citees": 15,
+ "portes_vertes": 15,
+ "portes_docstrings_perimees": 8,
+ "portes_total_commit_v2": 180,
+ "portes_total_head": 181,
+ "resume": "Toutes les mesures revendiquees reproduisent sans ecart d'arrondi, y compris les 14 valeurs de l'audit A1 (T175). Une erreur de prose : 46 des 57 echecs doit se lire 45 (le 46 est l'ecart 134-88 ; 45 tetes candidates sont reparables). Une erreur de table : la colonne avant du split est etiquetee POS gold alors que 63/82 est l
+rows 43 zeros 41 arrondis ['modele_appris.p', 'modele_appris.ic95']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/audit_v2/build_json.py')\ns=p.read_text()\ns=s.replace(\"Toutes les mesures revendiquees reproduisent sans ecart d'arrondi, y compris les 14 valeurs de l'audit A1 (T175).\",\n    … [420 caractères tronqués]`
+
+  ```
+wrote reports/pensee-audit-v2.json bytes 26464
+comparaison rows 43 ecarts 2
+Toutes les mesures revendiquees reproduisent ; les deux seuls ecarts sont des arrondis de la fiche (p 0,18 et IC [-0,7 ; +7,6]), et les 14 valeurs de l'audit A1 (T175) sont intactes. Une erreur de prose : 46 des 57 echecs doit se lire 45 (le 46 est l'ecart 134-88 ; 45 tetes candidates sont reparables). Une erreur de table : la colonne avant du split est etiquetee POS gold alors que 63/82 est l'ancien split lexical ; le POS gold sur l'ancien bloc donne 116/29 (97/116 et 26/29). Huit docstrings de portes sont perimees, dont T168 qui imprime encore /146.
+  ```
+

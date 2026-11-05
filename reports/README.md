@@ -15,6 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-attachement-v3.md`](rapport-pensee-attachement-v3.md) | **B13** — l'attachement v3 : exact **0,9724**, noms 1,0, R2/R3/R4, **181/181** |
+| [`rapport-echecs-v2.md`](rapport-echecs-v2.md) | **B13** — les 8 échecs qualifiés, 5 règles chiffrées (A9) |
 | [`rapport-cache-chunker-applique.md`](rapport-cache-chunker-applique.md) | **B13** — le cache appliqué : **×139** en chunker, ×1 en défaut (S domine), sortie identique, **181/181** |
 | [`rapport-contrat-s.md`](rapport-contrat-s.md) | **B13** — le contrat `s/v1` : ce que S doit fournir (API, cibles typées, langue), écarts mesurés |
 | [`rapport-cout-chunker.md`](rapport-cout-chunker.md) | **B13** — le coût du chunker : O(n²) confirmé, cache ×11,6 à 160 tokens |
@@ -146,7 +148,6 @@
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
-| [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`INDEX.md`](INDEX.md) | **A7.5–A7.26** — 22 fiches de cache KV et de grappe réseau ; l'index exhaustif |
 
 ## Les données brutes

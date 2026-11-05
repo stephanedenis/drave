@@ -1,0 +1,563 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "titre": "Les 8 échecs restants de l'attachement v2 : qualifiés et chiffrés",
+ "verdict": "8/8 échecs qualifiés (0 « autre ») ; 5 règles déterministes simulées les réparent tous, portée mesurée 1 à 2 segments chacune, 0 régression → exact 137 → 145/145. Borne haute : même gold, code non modifié.",
+ "non_applique": true,
+ "gold": {
+  "fichiers": [
+   "tools/tests/linguistique/gold.json (hand, 20)",
+   "tools/tests/linguistique/gold_reel.json (reel, 432)",
+   "tools/tests/linguistique/gold_synthetique.json (synthetique, 160)"
+  ],
+  "phrases": 612,
+  "charger": "evaluer_gold.charger()"
+ },
+ "mesure": {
+  "phrases": 612,
+  "cibles_gold": 239,
+  "segments_span_predit": 145,
+  "base": {
+   "exact": 137,
+   "exact_taux_span": 0.9448,
+   "top1": 140,
+   "top1_taux_span": 0.9655,
+   "topk_sous_chaine": 142,
+   "topk_taux_span": 0.9793,
+   "topk_strict": 141,
+   "topk_strict_taux_span": 0.9724,
+   "couverture": 0.6067
+  },
+  "echecs": 8,
+  "taux_echec": {
+   "sur_145": 0.0552,
+   "sur_239": 0.0335
+  },
+  "rendement_global": {
+   "exact": 0.5732,
+   "top1": 0.5858,
+   "topk": 0.5941
+  }
+ },
+ "conventions": {
+  "exact": "cible choisie == cibles[0] (première cible du gold) ; une égalité stricte après strip.",
+  "hors_candidats_strict": "aucun candidat n'est exactement égal à cibles[0].",
+  "hors_candidats_sous_chaine": "aucun candidat ne contient cibles[0] et cibles[0] ne contient aucun candidat.",
+  "ventilation_v2_rapportee": {
+   "hors_candidats": 3,
+   "mal_classes": 5,
+   "lecture": "sous-chaîne : `appelle` est contenu dans `appelle-moi`."
+  },
+  "ventilation_stricte": {
+   "hors_candidats": 4,
+   "mal_classes": 4,
+   "lecture": "égalité stricte : r230 est un échec de couverture du top-k strict (141/145)."
+  }
+ },
+ "qualification": {
+  "total": 8,
+  "par_type": {
+   "GP": 6,
+   "SUB": 2,
+   "REL": 0
+  },
+  "par_source": {
+   "hand": 2,
+   "reel": 3,
+   "synthetique": 3
+  },
+  "par_cible_gold_pos": {
+   "VERB": 5,
+   "ADJ": 2,
+   "NOUN": 1
+  },
+  "par_cause_principale": {
+   "cible_vide": 2,
+   "cible_absente_des_candidats_strict": 4,
+   "cible_absente_des_candidats_sous_chaine": 3,
+   "presente_mais_mal_choisie_strict": 4,
+   "presente_mais_mal_choisie_sous_chaine": 5,
+   "tokenisation": 1,
+   "auto_attachement": 2,
+   "pos_ou_lexique": 3,
+   "pseudo_gv_du_S": 1,
+   "autre": 0,
+   "tete_gv_adjectivale": 2
+  },
+  "note": "les causes se recoupent : g002 et s041 cumulent « cible vide » et « absente » ; r230 est « tokenisation » et, en strict, « absente » ; s108/s122 choisissent la cible secondaire du gold (`cibles[1]`) donc ne sont des échecs que pour `cibles[0]`."
+ },
+ "echecs": [
+  {
+   "id": "g002",
+   "source": "hand",
+   "langue": "fr",
+   "type": "GP",
+   "span": [
+    8,
+    21
+   ],
+   "segment": "de la voisine",
+   "phrase": "Le chat de la voisine dort.",
+   "cible_gold": "chat",
+   "cible_gold_secondaire": null,
+   "cible_choisie": "",
+   "candidats": [
+    "GP"
+   ],
+   "dans_candidats_strict": false,
+   "dans_candidats_sous_chaine": false,
+   "qualification": "cible vide + absente des candidats",
+   "mecanisme": "GP génitif : le générateur S produit un GP plus large (8-26, « de la voisine dort ») qui porte la cible `chat` ; le GP étroit du chunker (8-21) ne reçoit aucun attachement et sa liste tombe à `['GP']`.",
+   "regle": "R3a",
+   "reparation": "tête du GN de gauche (`chat`) quand la cible est vide et le GP est un génitif (de/du/des).",
+   "portee_regle": 2,
+   "verifie": true,
+   "regle_groupe": "R3"
+  },
+  {
+   "id": "g012",
+   "source": "hand",
+   "langue": "fr",
+   "type": "GP",
+   "span": [
+    19,
+    27
+   ],
+   "segment": "à manger",
+   "phrase": "Le canard est prêt à manger.",
+   "cible_gold": "prêt",
+   "cible_gold_secondaire": "canard",
+   "cible_choisie": "manger",
+   "candidats": [
+    "« à manger » → Le canard",
+    "« à manger » → est prêt",
+    "manger",
+    "est",
+    "canard",
+    "prêt"
+   ],
+   "dans_candidats_strict": true,
+   "dans_candidats_sous_chaine": true,
+   "qualification": "présente mais mal choisie + auto-attachement",
+   "mecanisme": "GP « à manger » : le GV du chunker est « est prêt à manger » (10-27) ; `_verbe_dans` y prend l'infinitif `manger`, qui est **dans** le GP. La cible du gold est l'adjectif attribut `prêt` (tête du GV « est prêt »).",
+   "regle": "R2",
+   "reparation": "un GP ne peut pas être gouverné par un mot de son propre span : écarter les GV dont la tête tombe dedans, prendre la tête du GV extérieur le plus proche (`prêt`).",
+   "portee_regle": 2,
+   "verifie": true,
+   "regle_groupe": "R2"
+  },
+  {
+   "id": "r018",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "span": [
+    20,
+    28
+   ],
+   "segment": "à manger",
+   "phrase": "La souris est prête à manger.",
+   "cible_gold": "prête",
+   "cible_gold_secondaire": "souris",
+   "cible_choisie": "manger",
+   "candidats": [
+    "« à manger » → La souris",
+    "« à manger » → est prête",
+    "manger",
+    "est",
+    "souris",
+    "prête"
+   ],
+   "dans_candidats_strict": true,
+   "dans_candidats_sous_chaine": true,
+   "qualification": "présente mais mal choisie + auto-attachement",
+   "mecanisme": "Même construction que g012 (« est prête à manger ») : la cible est l'adjectif attribut `prête`, la cible choisie est l'infinitif `manger`, interne au GP.",
+   "regle": "R2",
+   "reparation": "même règle R2 (`prête`).",
+   "portee_regle": 2,
+   "verifie": true,
+   "regle_groupe": "R2"
+  },
+  {
+   "id": "r230",
+   "source": "reel",
+   "langue": "fr",
+   "type": "SUB",
+   "span": [
+    0,
+    16
+   ],
+   "segment": "Quand tu arrives",
+   "phrase": "Quand tu arrives, appelle-moi.",
+   "cible_gold": "appelle",
+   "cible_gold_secondaire": null,
+   "cible_choisie": "appelle-moi",
+   "candidats": [
+    "structure la plus proche",
+    "appelle-moi"
+   ],
+   "dans_candidats_strict": false,
+   "dans_candidats_sous_chaine": true,
+   "qualification": "tokenisation (enclitique) ; absente en strict, présente en sous-chaîne",
+   "mecanisme": "`appelle-moi` est **un seul token** pour `_mots` (18-29) ; le gold le découpe (`appelle` 18-25 + `moi` 26-29). La cible vient de `_cible_proche` (GV suivant), `_verbe_dans` retombe sur le dernier mot `appelle-moi` (POS: NOUN).",
+   "regle": "R4",
+   "reparation": "découper l'enclitique du verbe hôte (`appelle-moi` → `appelle`).",
+   "portee_regle": 1,
+   "verifie": true,
+   "regle_groupe": "R4"
+  },
+  {
+   "id": "r309",
+   "source": "reel",
+   "langue": "fr",
+   "type": "SUB",
+   "span": [
+    10,
+    23
+   ],
+   "segment": "qu'il viendra",
+   "phrase": "Peut-être qu'il viendra.",
+   "cible_gold": "viendra",
+   "cible_gold_secondaire": null,
+   "cible_choisie": "Peut-être",
+   "candidats": [
+    "structure la plus proche",
+    "Peut-être"
+   ],
+   "dans_candidats_strict": false,
+   "dans_candidats_sous_chaine": false,
+   "qualification": "absente des candidats + pseudo-GV du S",
+   "mecanisme": "Le S type `Peut-être` (ADV) en GV (0-9). La règle v2 « segment précédent » s'applique et `_verbe_dans` retombe sur le dernier mot `Peut-être`. `viendra` (dans le SUB, 16-23) est tagué NOUN, absent de `VERBES_CONNUS` et des candidats.",
+   "regle": "R5",
+   "reparation": "ignorer un GV d'un seul token étiqueté ADV ; repli sur le dernier mot du SUB (`viendra`).",
+   "portee_regle": 1,
+   "verifie": true,
+   "regle_groupe": "R5"
+  },
+  {
+   "id": "s041",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "span": [
+    18,
+    30
+   ],
+   "segment": "devant elles",
+   "phrase": "les avocat marche devant elles",
+   "cible_gold": "marche",
+   "cible_gold_secondaire": "avocat",
+   "cible_choisie": "",
+   "candidats": [
+    "GP"
+   ],
+   "dans_candidats_strict": false,
+   "dans_candidats_sous_chaine": false,
+   "qualification": "cible vide + verbe hors lexique",
+   "mecanisme": "Aucun GV : `marche` est tagué NOUN (absent de `VERBES_CONNUS`), le S fusionne « les avocat marche » en GN. La liste tombe à `['GP']` et le GP n'a aucune cible.",
+   "regle": "R3b",
+   "reparation": "ajouter `marcher` au lexique verbal ; cible vide → verbe reconnu le plus proche (`marche`, distance 1).",
+   "portee_regle": 2,
+   "verifie": true,
+   "regle_groupe": "R3"
+  },
+  {
+   "id": "s108",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "span": [
+    21,
+    34
+   ],
+   "segment": "sous le nuage",
+   "phrase": "ce calme papier rêve sous le nuage",
+   "cible_gold": "rêve",
+   "cible_gold_secondaire": "papier",
+   "cible_choisie": "papier",
+   "candidats": [
+    "« sous le nuage » → ce calme papier rêve",
+    "rêve"
+   ],
+   "dans_candidats_strict": true,
+   "dans_candidats_sous_chaine": true,
+   "qualification": "présente mais mal choisie + POS/lexique",
+   "mecanisme": "Le POS heuristique tague `papier` VERB (suffixe -er) et `rêve` NOUN ; `_verbe_dans` sur la cible S « ce calme papier rêve » rend donc `papier`. Le gold attend `rêve` (cible secondaire : `papier`).",
+   "regle": "R1",
+   "reparation": "ajouter `rêver` au lexique verbal : `_verbe_dans` (lexique d'abord) rend `rêve`.",
+   "portee_regle": 2,
+   "verifie": true,
+   "regle_groupe": "R1"
+  },
+  {
+   "id": "s122",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "span": [
+    17,
+    34
+   ],
+   "segment": "vers les montagne",
+   "phrase": "mon papier saute vers les montagne",
+   "cible_gold": "saute",
+   "cible_gold_secondaire": "papier",
+   "cible_choisie": "papier",
+   "candidats": [
+    "« vers les montagne » → mon papier saute",
+    "saute"
+   ],
+   "dans_candidats_strict": true,
+   "dans_candidats_sous_chaine": true,
+   "qualification": "présente mais mal choisie + POS/lexique",
+   "mecanisme": "Même mécanique : `papier` VERB (-er), `saute` NOUN (absent du lexique) ; `_verbe_dans` sur « mon papier saute » rend `papier` au lieu de `saute`.",
+   "regle": "R1",
+   "reparation": "ajouter `sauter` au lexique verbal : `_verbe_dans` rend `saute`.",
+   "portee_regle": 2,
+   "verifie": true,
+   "regle_groupe": "R1"
+  }
+ ],
+ "regles": [
+  {
+   "code": "R1",
+   "libelle": "lexique verbal : rêver, sauter, marcher (+ flexions)",
+   "fonction": "VERBES_CONNUS (via `_est_verbe` / `_verbe_dans`)",
+   "repere_145": 2,
+   "repere_239": 13,
+   "portee": 2,
+   "gagne": 2,
+   "neutre": 0,
+   "perd": 0,
+   "exact_apres": 139,
+   "gain_net": 2,
+   "repere_239_detail": "13 segments gold contiennent une forme de ces trois verbes ; 2 seulement sont dans les 145.",
+   "repere_145_detail": [
+    "s108",
+    "s122"
+   ]
+  },
+  {
+   "code": "R2",
+   "libelle": "un GP n'est pas gouverné par un mot de son propre span",
+   "fonction": "Heuristique._cible_proche / _verbe_dans / _tete_texte (branche GP)",
+   "repere_145": 2,
+   "repere_239": 2,
+   "portee": 2,
+   "gagne": 2,
+   "neutre": 0,
+   "perd": 0,
+   "exact_apres": 141,
+   "gain_net": 2,
+   "repere_239_detail": "déclencheur mesurable seulement là où le span est prédit (les 145) : 2.",
+   "repere_145_detail": [
+    "g012",
+    "r018"
+   ]
+  },
+  {
+   "code": "R3",
+   "libelle": "cible vide : (a) génitif → tête du GN gauche ; (b) sinon verbe reconnu le plus proche",
+   "fonction": "Heuristique.analyser (branche 5, meta attachement) ; `_tete_nom` / `_est_verbe`",
+   "repere_145": 2,
+   "repere_239": 4,
+   "portee": 2,
+   "gagne": 2,
+   "neutre": 0,
+   "perd": 0,
+   "exact_apres": 143,
+   "gain_net": 2,
+   "repere_239_detail": "branche (a) : 4 GP de/du/des parmi les 239 (g002, g006, s081, s120), 1 seul dans les 145, précision 2/4 (s081 et s120 attendent le verbe) ; branche (b) : 2 cibles vides (g002, s041), s041 dépend de R1.",
+   "repere_145_detail": [
+    "g002",
+    "s041"
+   ]
+  },
+  {
+   "code": "R4",
+   "libelle": "découper l'enclitique du verbe hôte (appelle-moi → appelle)",
+   "fonction": "Heuristique._mots / _verbe_dans (tokenisation) ; candidats",
+   "repere_145": 1,
+   "repere_239": 1,
+   "portee": 1,
+   "gagne": 1,
+   "neutre": 0,
+   "perd": 0,
+   "exact_apres": 144,
+   "gain_net": 1,
+   "repere_239_detail": "1 seul prédicat à enclitique dans le gold (r230) ; n=1, précision non estimable.",
+   "repere_145_detail": [
+    "r230"
+   ]
+  },
+  {
+   "code": "R5",
+   "libelle": "ignorer un « GV » d'un seul token étiqueté ADV ; repli sur le dernier mot du SUB",
+   "fonction": "Heuristique.analyser (branche SUB, règle du segment précédent)",
+   "repere_145": 1,
+   "repere_239": 1,
+   "portee": 1,
+   "gagne": 1,
+   "neutre": 0,
+   "perd": 0,
+   "exact_apres": 145,
+   "gain_net": 1,
+   "repere_239_detail": "1 seul SUB précédé d'un pseudo-GV ADV dans le gold (r309).",
+   "repere_145_detail": [
+    "r309"
+   ]
+  }
+ ],
+ "cumul": {
+  "regles": 5,
+  "exact_avant": 137,
+  "exact_apres": 145,
+  "gain": 8,
+  "top1_apres": 145,
+  "topk_sous_chaine_apres": 145,
+  "topk_strict_apres": 145,
+  "regressions": 0,
+  "condition": "top-k strict 145/145 à condition d'ajouter la cible réparée aux `candidats` des 4 segments où elle n'y est pas (g002, s041, r230, r309) — non simulé, conséquence directe."
+ },
+ "controles_negatifs": [
+  {
+   "nom": "complétion naïve des GV (tout token VERB devient un GV)",
+   "resultat": {
+    "portee": 13,
+    "gagne": 3,
+    "perd": 8,
+    "exact": 132
+   },
+   "lecture": "la règle « générale » qui vient naturellement coûte 5 points nets : le GV le plus proche devient un verbe du SUB ou de la relative (r041, r147, r222, r227, r258, r262, r268, r270)."
+  },
+  {
+   "nom": "R5 sans la condition ADV (tout SUB précédé d'un pseudo-GV)",
+   "resultat": {
+    "portee": 13,
+    "gagne": 1,
+    "perd": 12,
+    "exact": 131
+   },
+   "lecture": "la condition « un seul token + ADV » est nécessaire : sans elle la règle répare r309 mais casse 12 SUB justes."
+  },
+  {
+   "nom": "placebo lexical (6 verbes corrects hors corpus : bronzer, jardiner, peindre, scier, coudre, tricoter)",
+   "resultat": {
+    "portee": 0,
+    "gagne": 0,
+    "perd": 0,
+    "exact": 137
+   },
+   "lecture": "le gain de R1 est lexical et ciblé, pas un effet de bord d'un lexique plus gros."
+  },
+  {
+   "nom": "R3a (tête du GN gauche) sur ses 4 déclencheurs du gold",
+   "resultat": {
+    "justes": 2,
+    "faux": 2,
+    "detail": "g002 chat ✓, g006 chien ✓, s081 fenêtre ✗ (gold trouve), s120 lettre ✗ (gold prépare)"
+   },
+   "lecture": "2/4 : la branche n'est pas générale ; la variante « GV précédent d'abord, sinon tête du GN » donne 3/4 (s120 reste faux) ; il faut un 3e repli « tête de la cible S » pour 4/4 — trois branches pour quatre cas, non simulé."
+  },
+  {
+   "nom": "R4 placebo (couper à tout trait d'union)",
+   "resultat": {
+    "portee": 2,
+    "gagne": 1,
+    "perd": 0,
+    "exact": 138,
+    "detail": "r230 réparé ; r309 devient Peut (toujours faux)"
+   },
+   "lecture": "sur cet échantillon (n=1) la liste fermée d'enclitiques n'est pas discriminante."
+  },
+  {
+   "nom": "oracle (remplacer la cible par celle du gold)",
+   "resultat": {
+    "exact": 145
+   },
+   "lecture": "plafond trivial : 8/8 par construction n'est pas une performance attendue."
+  },
+  {
+   "nom": "hasard (contrôle déjà dans evaluer_gold)",
+   "resultat": {
+    "top1_taux": 0.0042,
+    "soit": "1/239"
+   },
+   "lecture": "plancher : la règle vivante est à 0,5858, 139× le hasard."
+  }
+ ],
+ "verification_cas_connus": {
+  "r230": {
+   "texte": "Quand tu arrives, appelle-moi.",
+   "gold": "appelle",
+   "choisie": "appelle-moi",
+   "candidats": [
+    "structure la plus proche",
+    "appelle-moi"
+   ],
+   "segments_S": [
+    [
+     "SUB",
+     0,
+     16,
+     "Quand tu arrives"
+    ],
+    [
+     "GV",
+     18,
+     29,
+     "appelle-moi"
+    ]
+   ],
+   "mots_heuristique": [
+    "appelle-moi (18-29)"
+   ],
+   "mots_gold": [
+    "appelle (18-25)",
+    "moi (26-29)"
+   ],
+   "verdict": "confirmé : échec de tokenisation. La règle v2 du segment précédent est inerte (SUB en tête) ; la cible vient du GV suivant, `_verbe_dans` retombe sur le token entier `appelle-moi` (POS heuristique NOUN, `_est_verbe` faux)."
+  },
+  "r309": {
+   "texte": "Peut-être qu'il viendra.",
+   "gold": "viendra",
+   "choisie": "Peut-être",
+   "candidats": [
+    "structure la plus proche",
+    "Peut-être"
+   ],
+   "segments_S": [
+    [
+     "GV",
+     0,
+     9,
+     "Peut-être"
+    ],
+    [
+     "SUB",
+     10,
+     23,
+     "qu'il viendra"
+    ]
+   ],
+   "pos_heuristique": {
+    "Peut-être": "ADV",
+    "viendra": "NOUN"
+   },
+   "verdict": "confirmé : la règle v2 du segment précédent s'applique et prend le dernier mot du pseudo-GV `Peut-être` ; `viendra` est dans le SUB mais tagué NOUN et absent des candidats. C'est un échec de segmentation S doublé d'un trou de lexique, pas le même que r230."
+  }
+ },
+ "limites": [
+  "même gold : les règles sont déduites des 8 échecs qu'elles réparent ; 8/8 est un plafond, pas un gain attendu hors gold.",
+  "portée 1 à 2 segments par règle : aucune n'est validée sur un gold tenu à l'écart.",
+  "R1 est lexicale et les formes (rêve, saute, marche) sont prises dans le gold — même risque de sur-apprentissage que le lexique anglais (+8) de la fiche v2.",
+  "R2 est mesurée sur 2 segments de même construction (g012/r018) — n=2, ce n'est pas une validation.",
+  "R3a est juste 2/4 sur ses déclencheurs du gold ; R3b dépend de R1 et n'a qu'un cas.",
+  "R4 et R5 ont n=1 : aucune précision estimable.",
+  "4 réparations (g002, s041, r230, r309) rendent une cible absente des `candidats` ; sans mise à jour des candidats, top-k strict resterait incohérent (non simulé).",
+  "l'exact ne teste que cibles[0] : s108/s122 choisissent cibles[1] (la cible nominale du S) — ce sont des échecs de convention, pas de compréhension.",
+  "les 94 spans perdus ne bougent pas : le rendement global reste plafonné à 145/239 = 0,6067.",
+  "aucun code modifié, aucune porte jouée : le 8/8 est une simulation en mémoire, pas un diff."
+ ],
+ "methode": "lecture seule : imports de bloc_linguistique et evaluer_gold, greffes en mémoire (VERBES_CONNUS, post-règles sur les annotations), scripts jetables hors dépôt ; aucun fichier existant modifié, aucun commit."
+}

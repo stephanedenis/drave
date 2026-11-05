@@ -7,12 +7,12 @@
 | Identifiant | `3144cf23-6004-46ef-bc3d-f05d81c0cff6` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.2 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 18 |
-| Appels d'outils | 19 |
-| Fichiers touchés | 0 |
-| Commandes | 15 |
+| Messages | 25 |
+| Appels d'outils | 26 |
+| Fichiers touchés | 1 |
+| Commandes | 21 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2227 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and top-level files
 - bash — List linguistic tests and reports directories
@@ -41,11 +41,11 @@
 - bash — Inspect synthetic gold builder and S generator API
 - bash — Read S generator head and tail
 - bash — Compare S generator spans against the 94 lost
-- … et 2 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Examining gold clause tokens and boundary signals in detail
+⏵ Building the local rule simulator (copy of the chunker in /tmp)
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/spans/regles.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -71,4 +72,10 @@
 - **T1** Compare S generator spans against the 94 lost
 - **T1** List chunker-only exact matches by type
 - **T1** Dump token POS sequences of REL/SUB lost spans
+- **T1** Trace chunker segmentation for sample sentences
+- **T1** Measure verb lexicon coverage inside lost clauses
+- **T1** Measure POS-based verb detection on clause verbs
+- **T1** Show synthetic phrases with bare-noun GP gold spans
+- **T1** Check gold GV heads and subject inclusion
+- **T1** Copy chunker to /tmp for local simulation
 

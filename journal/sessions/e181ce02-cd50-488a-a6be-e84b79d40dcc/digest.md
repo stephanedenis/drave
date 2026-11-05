@@ -42458,3 +42458,285 @@ jeu 05 nov 2026 14:55:11 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache ×139 ; vague 1 intégrée.\", \" ; cache ×139 ; vague 1 intégrée ; **roadmap et chantiers passés à la v2**.\")\n … [772 caractères tronqués]`
+
+  ```
+· T0 : 4005 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1256]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1256", "timeout_ms": 600000, "wait": true}`
+
+  ```
+30 files changed, 2203 insertions(+), 156 deletions(-)
+COMMIT OK 1
+15ee10d3 PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache ×139 ; vague 1 intégrée ; **roadmap et chantiers passés à la v2**.\", \" ; cache ×139 ; roadmap et chantiers à la  … [263 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+pensee-echecs-v2.json
+rapport-echecs-v2.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 reports/rapport-echecs-v2.md", "description": "Lire la fiche des 8 échecs (A9)"}`
+
+  ```
+# B13 — les 8 échecs restants de l'attachement v2 : qualifiés, chiffrés, 5 règles pour 145/145
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> Les **8 échecs** de l'exact (137/145) sont qualifiés **un par un** : **2 cibles vides**, **4 cibles
+> absentes des candidats** en lecture stricte (**3** en sous-chaîne), **4 présentes mais mal choisies**,
+> **1 tokenisation**, **0 « autre »**. **5 règles déterministes simulées** (code inchangé) les
+> réparent **tous** — portée mesurée **1 à 2 segments chacune**, **0 régression** → **exact 145/145**.
+> C'est une **borne haute sur le même gold** : les règles sont étroites, deux ne sont pas
+> généralisables en l'état, et top-k strict 145/145 suppose d'ajouter la cible réparée aux candidats.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique`,
+> `_verbe_dans`, `_cible_proche`, `_tete_texte`, `VERBES_CONNUS`),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`) ;
+> JSON [`pensee-echecs-v2.json`](pensee-echecs-v2.json). **Lecture seule** : aucun fichier existant
+> modifié, aucun commit, les simulations tourne
+… [1300 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 3' reports/rapport-echecs-v2.md | head -1 | cut -d: -f1),+30p\" reports/rapport-echecs-v2.md", "description": "Lire les 5 règles proposées par A9"}`
+
+  ```
+## 3. Les règles candidates, chiffrées
+
+Toutes simulées par greffe en mémoire, **appliquées dans l'ordre** ; « portée » = nombre de segments
+dont la cible change, « gain net » = réparés − régressions. Exact cumulé après chaque règle.
+
+| ordre | règle | répare | portée | gain net | exact cumulé |
+|---|---|---|---:|---:|---:|
+| 0 | *(base)* | — | — | — | **137** |
+| 1 | **R1 — lexique verbal** (`rêver`, `sauter`, `marcher` + flexions) | s108, s122 | 2 | **+2** | **139** |
+| 2 | **R2 — un GP n'est pas gouverné par un mot de son span** | g012, r018 | 2 | **+2** | **141** |
+| 3 | **R3 — cible vide** : (a) génitif → tête du GN gauche ; (b) sinon verbe reconnu le plus proche | g002, s041 | 2 | **+2** | **143** |
+| 4 | **R4 — enclitique** (`appelle-moi` → `appelle`) | r230 | 1 | **+1** | **144** |
+| 5 | **R5 — pseudo-GV ADV** : ignorer un « GV » d'un seul token ADV ; repli sur le dernier mot du SUB | r309 | 1 | **+1** | **145** |
+| | **total** | **8/8** | **8** | **+8** | **145/145** |
+
+**R1 — lexique verbal.** `_verbe_dans` essaie le lexique (`_est_verbe`) **avant** le POS ; ajouter
+`rêver`/`sauter`/`marcher` fait rendre `rêve`/`saute` au lieu de `papier` (s108/s122) et `marche` au
+lieu d
+… [1160 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente R2 (pas d'auto-attachement d'un GP) et R4 (enclitiques) de A9
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/bloc_avant_r2r4.py && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# R2 : un GP n'est pas gouverné par un GV entièrement dans son span\nt=t.replac … [2069 caractères tronqués]`
+
+  ```
+R2 et R4 posées
+exact 138 | top1 140 | topk 142 | topk_exact 142
+  ```
+
+### 🤖 Assistant
+
+⏵ R3 : le repli « cible vide » (génitif → tête du GN à gauche, sinon verbe proche)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# helper\nt=t.replace('''    @staticmethod\n    def _tete_texte(texte: str) -> str | None:''',\n'''    @staticmethod\n    def _repli_cib … [3231 caractères tronqués]`
+
+  ```
+R3 posée
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py", line 91, in evaluer_bloc
+    a = bloc.analyser(phrase["texte"], phrase["langue"])
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", line 990, in analyser
+    cible = (self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", line 643, in _repli_cible_gp
+    return Heuristic._tete_nom(texte, g["debut"], g["fin"])
+           ^^^^^^^^^
+NameError: name 'Heuristic' is not defined. Did you mean: 'Heuristique'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/return Heuristic\\._tete_nom(texte, g\\[\"debut\"\\], g\\[\"fin\"\\])/return Heuristique._tete_nom(texte, g[\"debut\"], g[\"fin\"])/' tools/bloc_linguistique.py && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0 … [938 caractères tronqués]`
+
+  ```
+exact 139 | top1 141 | topk 142 | topk_exact 142 | labels 145
+g002 GN gold None | cible None
+g002 GP gold chat | cible chat
+g002 GV gold None | cible None
+g012 GN gold None | cible manger
+g012 GV gold None | cible canard
+g012 GP gold prêt | cible manger
+r018 GN gold None | cible manger
+r018 GV gold None | cible souris
+r018 GP gold prête | cible manger
+r230 SUB gold appelle | cible appelle
+r230 GV gold None | cible None
+  ```
+
+### 🤖 Assistant
+
+⏵ R2 corrigée : rejeter un verbe **dans** le GP et prendre la tête du GV extérieur (g012/r018)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    @staticmethod\n    def _tete_texte(texte: str) -> str | None:''',\n'''    @staticmethod\n    def _cible_hors_span(tex … [2833 caractères tronqués]`
+
+  ```
+R2 hors span posée
+exact 141 | top1 143 | topk 142 | topk_exact 142
+g012 GN gold None | cible manger
+g012 GV gold None | cible canard
+g012 GP gold prêt | cible prêt
+r018 GN gold None | cible manger
+r018 GV gold None | cible souris
+r018 GP gold prête | cible prête
+  ```
+
+### 🤖 Assistant
+
+⏵ R2/R3/R4 appliquées : exact **141/145**. Je mesure tout et je réaligne les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique(), charg … [1022 caractères tronqués]`
+
+  ```
+{'cibles': 239, 'labels': 145, 'top1': 143, 'topk': 142, 'exact': 141, 'topk_exact': 142, 'top1_taux': 0.5983, 'topk_taux': 0.5941, 'exact_taux': 0.59, 'top1_taux_span': 0.9862, 'topk_taux_span': 0.9793, 'exact_taux_span': 0.9724, 'topk_exact_taux_span': 0.9793, 'couverture': 0.6067}
+verbe {'cibles': 116, 'justes': 112, 'taux': 0.9655} | nom {'cibles': 29, 'justes': 29, 'taux': 1.0}
+tête 143 142
+span 94 {'GP': 13, 'SUB': 33, 'REL': 48} | cible hors 3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('abs(r[\"top1_taux\"] - 0.5858) < 0.001\\n            and abs(r[\"exact_taux\"] - 0.5732) < 0.001',\n            'abs(r[\"top1 … [2395 caractères tronqués]`
+
+  ```
+portes réalignées
+  ❌ T171 lexique élargi    lexique élargi : vu True, accroché True, couru True ; exact 141/145
+  ❌ T172 échecs de cible   échecs de cible : 2 hors candidats, 2 mal classés
+  179/181 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent 7263ca42-cd56-4c36-a6dd-8ff2d1024a43 sent a message: 
+B13 — les 8 échecs restants de l'attachement v2 sont qualifiés et chiffrés. Deux fichiers neufs, aucun existant modifié, aucun commit :
+- reports/rapport-echecs-v2.md (fiche)
+- reports/pensee-echecs-v2.json (8 fiches, 5 règles, contrôles)
+
+Base reproduite par evaluer_gold.py : 239 cibles, 145 spans prédits, exact 137 (0,9448), top1 140, top-k 142, top-k strict 141. Les 8 échecs = 5,52 % des 145.
+
+CONVENTION (point important) : la ventilation v2 « 3 hors candidats / 5 mal classés » est la lecture SOUS-CHAÎNE ; en égalité STRICTE c'est 4 / 4, car `appelle` ⊂ `appelle-moi` (r230). Ne pas comparer les deux chiffres sans cette convention.
+
+LES 8, qualifiés (id, source, type, segment → gold / choisi) :
+1. g002 hand GP « de la voisine » → chat / (vide), candidats [GP] : cible vide + absente. Le S a un GP plus large (8-26) qui porte chat ; le GP étroit du chunker n'a rien.
+2. g012 hand GP « à manger » → prêt / manger : présente mal choisie + AUTO-ATTACHEMENT (manger est dans le GP ; prêt est pourtant candidat).
+3. r018 reel GP « à manger » → prête / manger : idem g012.
+4. r230 reel SUB « Quand tu arrives » → appelle / appelle-moi : TOKENISATION (appelle-moi = 1 token heuristique, le gold découpe appelle+moi). Absente en strict, présente en sous-chaîne.
+5. r309 reel SUB « qu'il viendra » → viendra / Peut-être : absente + PSEUDO-GV du S (Peut-être ADV typé GV) ; viendra tagué NOUN, absent des candidats.
+6. s041 synth GP « devant elles » → marche / (vide), candidats [GP] : cible vide + verbe hors lexique (marche NOUN, aucun GV).
+7. s108 synth GP « sous le nuage » → rêve (cibles[1]=papier) / papier : mal choisie + POS/lexique (papier VERB par la règle -er, rêve NOUN).
+8. s122 synth GP « vers les montagne » → saute (cibles[1]=papier) / papier : idem s108.
+Par type GP 6 / SUB 2 / REL 0 ; par source hand 2 / reel 3 / synthétique 3 ; par POS gold de la cible VERB 5 / ADJ 2 / NOUN 1.
+
+RÈGLES CANDIDATES CHIFFRÉES (simulées en mémoire, cumulées, code inchangé) :
+R1 lexique verbal rêver/sauter/marcher → s108,s122 | portée 2 | +2 | 139. (13 segments gold contiennent une de ces formes, 2 dans les 145.)
+R2 un GP n'est pas gouverné par un mot de son span (tête du GV extérieur via _tete_texte) → g012,r018 | portée 2 | +2 | 141.
+R3 cible vide : (a) génitif → tête du GN gauche (g002) ; (b) sinon verbe reconnu le plus proche (s041, dépend de R1) | portée 2 | +2 | 143. ATTENTION (a) n'est juste que 2/4 sur ses 4 déclencheurs du gold (s081/s120 attendent le verbe).
+R4 enclitique appelle-moi→appelle → r230 | portée 1 | +1 | 144.
+R5 ignorer un « GV » mono-token ADV, repli dernier mot du SUB → r309 | portée 1 | +1 | 145.
+TOTAL 5 règles : 137 → 145/145, portée 8, 0 régression. BORNE HAUTE (même gold) ; top-k strict 145/145 seulement si on ajoute la cible réparée aux candidats pour g002, s041, r230, r309 (non simulé).
+
+CONTRÔLES NÉGATIFS : complétion naïve des GV (tout token VERB = GV) = portée 13, +3/−8 → 132 (−5), donc la règle « évidente » est nuisible ; R5 sans condition ADV = portée 13, +1/−12 → 131 ; placebo lexical 0 ; R3a 2/4 ; placebo enclitique +1 (mais r309 devient Peut, toujours faux) ; oracle 145 ; hasard top1 0,0042.
+
+CAS CONNUS : r230 = tokenisation (la règle v2 du segment précédent est INERTE car SUB en tête) ; r309 = la règle v2 s'applique bien mais sur un pseudo-GV ADV — deux causes différentes, pas la même règle.
+
+RECOMMANDATION : intégrer d'abord R1, R2, R4 (les plus défendables) ; R3 et R5 demandent un gold tenu à l'écart avant application (portée 1–2, n=1). Les 94 spans perdus ne bougent pas : plafond global 145/239 = 0,6067.
+
+### 👤 Utilisateur
+
+Background subagent 7263ca42-cd56-4c36-a6dd-8ff2d1024a43 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Bilan final : les 8 échecs qualifiés, 5 règles chiffrées, deux fiches écrites
+
+## Mission remplie
+
+Deux fichiers neufs, **aucun fichier existant modifié, aucun commit** :
+- [`reports/rapport-echecs-v2.md`](reports/rapport-echecs-v2.md) — la fiche
+- [`reports/pensee-echecs-v2.json`](reports/pensee-echecs-v2.json) — les 8 fiches, règles, contrôles
+
+Base reproduite par `evaluer_gold.py` : 239 cibles, **145 spans prédits**, **exact 137 (0,9448)**, top1 140, top-k 142, top-k strict 141. Les 8 échecs = 5,52 % des 145.
+
+### Convention (point de désaccord avec la fiche v2)
+La ventilation v2 « **3 hors candidats / 5 mal classés** » est la lecture **sous-chaîne** ; en **égalité stricte** c'est **4 / 4** (`appelle` ⊂ `appelle-moi`). Le 141/145 du top-k strict correspond au 4/4.
+
+### Les 8 qualifications
+| id | source/type | segment → gold / choisi | qualification |
+|---|---|---|---|
+| g002 | hand GP | `de la voisine` → `chat` / *(vide)* | cible vide + absente |
+| g012 | hand GP | `à manger` → `prêt` / `manger` | mal choisie + auto-attachement |
+| r018 | reel GP | `à manger` → `prête` / `manger` | idem g012 |
+| r230 | reel SUB | `Quand tu arrives` → `appelle` / `appelle-moi` | **tokenisation** (enclitique) |
+| r309 | reel SUB | `qu'il viendra` → `viendra` / `Peut-être` | absente + pseudo-GV du S |
+| s041 | synth GP | `devant elles` → `marche` / *(vide)* | cible vide + verbe hors lexique |
+| s108 | synth GP | `sous le nuage` → `rêve` / `papier` | mal choisie + POS (papier tagué VERB) |
+| s122 | synth GP | `vers les montagne` → `saute` / `papier` | idem s108 |
+
+GP 6 / SUB 2 / REL 0 ; hand 2 / reel 3 / synthétique 3 ; cibles VERB 5 / ADJ 2 / NOUN 1. **0 « autre »**.
+
+### Règles candidates chiffrées (simulées en mémoire, cumulées)
+| règle | répare | portée | gain | exact cumulé |
+|---|---|---:|---:|---:|
+| R1 lexique `rêver/sauter/marcher` | s108, s122 | 2 | +2 | 139 |
+| R2 un GP n'est pas gouverné par un mot de son span | g012, r018 | 2 | +2 | 141 |
+| R3 cible vide : génitif → GN gauche ; sinon verbe proche | g002, s041 | 2 | +2 | 143 |
+| R4 enclitique `appelle-moi` → `appelle` | r230 | 1 | +1 | 144 |
+| R5 ignorer un « GV » mono-token ADV | r309 | 1 | +1 | **145/145** |
+
+**8/8, portée 8, 0 régression** — mais **borne haute sur le même gold** : R3a n'est juste que **2/4** sur ses 4 déclencheurs (s081/s120 attendent le verbe), R4 et R5 ont n=1, R1 est lexicale (formes prises dans le gold). Top-k strict 145/145 seulement si la cible réparée est aussi ajoutée aux candidats (4 cas, non simulé).
+
+### Contrôles négatifs
+- **Complétion naïve des GV** (tout token VERB = GV) : portée 13, **+3/−8 → 132 (−5)** — la règle « évidente » est nuisible.
+- **R5 sans la condition ADV** : portée 13, **+1/−12 → 131**.
+- Placebo lexical 0 ; placebo enclitique +1 ; oracle 145 ; hasard top1 0,0042 (1/239).
+
+### Cas connus vérifiés
+- **r230** : tokenisation pure — `_mots` garde `appelle-moi` (18-29), le gold découpe `appelle`+`moi` ; la règle v2 du segment précédent est **inerte** (SUB en tête).
+- **r309** : la règle v2 **s'applique**, mais sur un `Peut-être` (ADV) typé GV par S ; `viendra` est tagué NOUN, absent du lexique et des candidats. **Deux causes différentes**, pas la même règle.
+
+Les 94 spans perdus ne bougent pas : le rendement global reste plafonné à **145/239 = 0,6067**.
+
+### 👤 Utilisateur
+
+Agent d300542e-6e9d-47ac-875b-b44a192eec35 sent a message: 
+Point de situation (important pour la mesure) : `tools/bloc_linguistique.py` bouge en concurrence pendant ma session. Empreintes observées : 6e843018 (101 568 o, 13:51) → bb020516 (103 191 o, 15:03, baseline 137/145) → 64b7c520 (105 381 o, 15:04, baseline 141/145). Les changements live absorbent déjà une partie des retouches A3 : `_repli_cible_gp` répare g002, `_cible_hors_span` répare g012/r018, `_sans_enclitique` répare r230. Il reste 4 erreurs au baseline 141 : s041 (GP vide), s108/s122 (GP → papier au lieu du verbe), r309 (complétive). Je mesure donc les trois retouches en **marginal** sur l'empreinte courante, et je garde aussi le snapshot A3 137 (où elles valaient +2/+4/+1, combiné +7, 144/145). Marginale attendue : +1/+2/+1, combiné +4 → 145/145. Je fige l'empreinte dans le JSON et je signale la dérive dans la fiche. Si tu veux une empreinte précise (ou si le fichier doit être gelé), dis-le ; sinon je continue sans bloquer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    return ok == (True, True, True, False) and r[\"exact\"] == 137, (',\n            '    return ok == (True, True, True, Fal … [474 caractères tronqués]`
+
+  ```
+T171/T172 ajustées
+  181/181 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ 181/181 avec exact 141 ; je fige la fiche v3 (A9 + R2/R3/R4)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-attachement-v3.md <<'MD'\n# B13 — l'attachement v3 : exact 0,9448 → 0,9724, les noms à 1,0\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **18 … [5696 caractères tronqués]`
+
+  ```
+fiche + JSON v3 écrits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T178** | le chunker était-il en O(n²) ? | **oui** : 1+2S → 1 chunking, **×139** à 160 répétitions, sort … [2512 caractères tronqués]`
+
+  ```
+docs + pilotage + README
+  ❌ 1 violation(s) :
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     · compteurs : en-cours.md dit 741 JSON, le disque en a 746
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; 4 échecs (lexique ou n=1).\", \" ; 4 échecs.\")\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(li … [1345 caractères tronqués]`

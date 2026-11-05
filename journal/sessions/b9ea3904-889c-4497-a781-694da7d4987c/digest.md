@@ -798,3 +798,632 @@ r038 : GN[The mouse]/agent | GV[is ready]/prédicat | GP[to eat]/but→re
 … [15193 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections, re\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang in ('en','fr'):\n    print('='*20,lang,'='*20)\n    miss=collections.Counter … [1011 caractères tronqués]`
+
+  ```
+==================== en ====================
+segments sans cible: {'GP': 6}
+tokens hors segment: 23 types: {('PRON', 'it'): 9, ('ADV', 'tomorrow'): 2, ('ADV', 'hard'): 1, ('ADV', 'deeply'): 1, ('ADV', 'fast'): 1, ('NOUN', 'morning'): 1, ('ADV', 'loudly'): 1, ('CONJ', 'and'): 1, ('CONJ', 'so'): 1, ('CONJ', 'but'): 1, ('AUX', 'Do'): 1, ('PRON', 'them'): 1, ('ADV', 'down'): 1, ('VERB', 'do'): 1}
+   ('r328', 'SANS_CIBLE', 'GP', 'on the table')
+   ('r336', 'SANS_CIBLE', 'GP', 'to her')
+   ('r342', 'SANS_CIBLE', 'GP', 'to her')
+   ('r358', 'SANS_CIBLE', 'GP', 'to her')
+   ('r363', 'SANS_CIBLE', 'GP', 'on the table')
+   ('r367', 'SANS_CIBLE', 'GP', 'to him')
+==================== fr ====================
+segments sans cible: {'GP': 3, 'SUB': 1}
+tokens hors segment: 40 types: {('ADV', 'Ne'): 10, ('PRON', 'le'): 6, ('PRON', 'lui'): 5, ('ADV', 'ne'): 4, ('PRON', "l'"): 3, ('ADV', 'demain'): 2, ('ADV', 'fort'): 1, ('ADV', 'profondément'): 1, ('ADV', 'vite'): 1, ('NOUN', 'matin'): 1, ('CONJ', 'et'): 1, ('CONJ', 'donc'): 1, ('CONJ', 'mais'): 1, ('PRON', 'la'): 1, ('PRON', 'les'): 1, ('PRON', 't'): 1}
+   ('r267', 'SANS_CIBLE', 'GP', 'à moi')
+   ('r324', 'SANS_CIBLE', 'GP', 'sur la table')
+   ('r34
+… [90 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections, re\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang in ('en','fr'):\n    print('='*25,lang,'='*25)\n    typ=collections.Counter( … [1410 caractères tronqués]`
+
+  ```
+========================= en =========================
+cibles: 92 uniques: 67
+typologie: {'token_exact': 92}
+POS gold de la cible: {'VERB': 56, 'NOUN': 35, 'ADJ': 1}
+exemples de cibles uniques: ['barks', 'believe', 'belongs', 'bird', 'book', 'boy', 'bread', 'bridge', 'call', 'car', 'cat', 'children', 'city', 'climbs', 'continue', 'cries', 'danced', 'day', 'dog', 'eat', 'falls', 'film', 'fish', 'flower', 'flowers', 'flows', 'fly', 'get', 'girl', 'goes', 'grow', 'house', 'hung', 'know', 'leave', 'leaves', 'listen', 'listens', 'man', 'mouse']
+========================= fr =========================
+cibles: 93 uniques: 72
+typologie: {'token_exact': 93}
+POS gold de la cible: {'VERB': 56, 'NOUN': 36, 'ADJ': 1}
+exemples de cibles uniques: ['aboie', 'accroché', 'appartient', 'appelle', 'attendent', 'chante', 'chat', 'chien', 'continue', 'coule', 'crois', 'dansait', 'dit', 'dort', 'endroit', 'enfants', 'entre', 'faut', 'fille', 'film', 'fleur', 'fleurs', 'garçon', 'grimpe', 'homme', 'joue', 'jouent', 'jour', 'lieu', 'lit', 'livre', 'maison', 'mangeons', 'montent', 'nage', 'oiseau', 'ouvre', 'pain', 'parle', 'pars']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections, sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang in ('en','fr'): … [933 caractères tronqués]`
+
+  ```
+==================== en ====================
+n 92
+  ('VERB', True) 41
+  ('NOUN', False) 34
+  ('VERB', False) 15
+  ('ADJ', False) 1
+  ('NOUN', True) 1
+FN (gold VERB, _est_verbe faux): 15
+   [('r028', 'GP', 'rains', 'VERB'), ('r102', 'GP', 'falls', 'VERB'), ('r162', 'GP', 'hung', 'VERB'), ('r194', 'GP', 'eat', 'VERB'), ('r205', 'SUB', 'think', 'VERB'), ('r215', 'SUB', 'stay', 'VERB'), ('r240', 'SUB', 'believe', 'VERB'), ('r244', 'SUB', 'cries', 'VERB'), ('r245', 'SUB', 'call', 'VERB'), ('r247', 'SUB', 'think', 'VERB'), ('r249', 'SUB', 'stayed', 'VERB'), ('r279', 'SUB', 'stay', 'VERB'), ('r284', 'SUB', 'goes', 'VERB'), ('r290', 'SUB', 'cries', 'VERB'), ('r298', 'SUB', 'continue', 'VERB')]
+FP (gold non-VERB, _est_verbe vrai): 1
+   [('r297', 'REL', 'flower', 'NOUN')]
+==================== fr ====================
+n 93
+  ('NOUN', False) 36
+  ('VERB', True) 34
+  ('VERB', False) 22
+  ('ADJ', False) 1
+FN (gold VERB, _est_verbe faux): 22
+   [('r008', 'GP', 'pleut', 'VERB'), ('r047', 'GP', 'poussent', 'VERB'), ('r057', 'GP', 'aboie', 'VERB'), ('r060', 'GP', 'volent', 'VERB'), ('r086', 'GP', 'rient', 'VERB'), ('r088', 'GP', 'grimpe', 'VERB'), ('r097', 'GP', 'téléphone', 'VERB'), ('r100', 'GP', '
+… [547 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections, sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang in ('en','fr'): … [783 caractères tronqués]`
+
+  ```
+==================== en ====================
+tokens 1114 conf (gold_VERB,_est_verbe): {(False, False): 833, (True, False): 121, (True, True): 141, (False, True): 19}
+gold VERB / _est_verbe faux: 121 [(('answers', 'VERB'), 1), (('believe', 'VERB'), 1), (('blows', 'VERB'), 2), (('born', 'VERB'), 1), (('bought', 'VERB'), 3), (('brings', 'VERB'), 1), (('call', 'VERB'), 1), (('calls', 'VERB'), 2), (('catches', 'VERB'), 1), (('chases', 'VERB'), 1), (('continue', 'VERB'), 1), (('corrects', 'VERB'), 1), (('covers', 'VERB'), 2), (('crackles', 'VERB'), 1), (('creaks', 'VERB'), 1), (('cries', 'VERB'), 3), (('cross', 'VERB'), 1), (('crosses', 'VERB'), 1), (('delivers', 'VERB'), 1), (('do', 'VERB'), 1), (('dream', 'VERB'), 1), (('dreams', 'VERB'), 1), (('drinks', 'VERB'), 1), (('drives', 'VERB'), 1), (('eat', 'VERB'), 3), (('eats', 'VERB'), 3), (('enters', 'VERB'), 1), (('falls', 'VERB'), 3), (('follows', 'VERB'), 1), (('freezes', 'VERB'), 1), (('go', 'VERB'), 1), (('goes', 'VERB'), 1), (('have', 'VERB'), 1), (('hung', 'VERB'), 1), (('is', 'VERB'), 3), (('laugh', 'VERB'), 2), (('lights', 'VERB'), 2), (('live', 'VERB'), 3), (('lives', 'VERB'), 1), (('mention', 'VERB'), 3), (('mixes', 'VERB'), 1)
+… [3983 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt,lg in [(\"The dog eats an apple.\",\"en\"),(\"She listens to music.\",\"en\"),(\"The book … [433 caractères tronqués]`
+
+  ```
+========== The dog eats an apple.
+S: [{'nom': 'structure la plus proche', 'lecture': 'chaque segment se rattache à la cible la plus proche.', 'attachement': None, 'segments': [{'debut': 0, 'fin': 21, 'texte': 'The dog eats an apple', 'type': 'GV', 'role': 'predicat', 'niveau': 0, 'parent': None, 'profondeur': 0}]}]
+  pos DET 'The' 0 3 cand= [] meta= {'ouvert': False}
+  syntagme GV 'The dog eats an apple' 0 21 cand= ['structure la plus proche'] meta= {'role': 'predicat', 'niveau': 0}
+  syntagme GN 'The dog eats an apple' 0 21 cand= ['GN', 'eats'] meta= {'role': 'groupe nominal', 'niveau': 0, 'union': True, 'attachement': {'segment': 'The dog eats an apple', 'cible': 'eats'}}
+  pos NOUN 'dog' 4 7 cand= ['noun'] meta= {'ouvert': True}
+  pos VERB 'eats' 8 12 cand= ['verb'] meta= {'ouvert': True}
+  pos DET 'an' 13 15 cand= [] meta= {'ouvert': False}
+  pos NOUN 'apple' 16 21 cand= ['noun'] meta= {'ouvert': True}
+========== She listens to music.
+S: [{'nom': 'structure la plus proche', 'lecture': 'chaque segment se rattache à la cible la plus proche.', 'attachement': None, 'segments': [{'debut': 0, 'fin': 20, 'texte': 'She listens to music', 'type': 'GV', 'role': 'predicat', 'niveau': 0, '
+… [2348 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 time python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger()\nh=bl.Heur … [1467 caractères tronqués]`
+
+  ```
+all n= 612
+  pos 0.7455 ferme 0.8984 ouvert 0.6007 tokens 3179
+  seg f1 0.2862 P/R 0.3154 0.2619 tete f1 0.4989
+  att {'cibles': 239, 'labels': 145, 'couverture': 0.6067, 'top1_taux': 0.5858, 'topk_taux': 0.5941, 'exact_taux': 0.5732, 'top1_taux_span': 0.9655, 'topk_taux_span': 0.9793, 'exact_taux_span': 0.9448, 'topk_exact_taux': 0.59, 'topk_exact_taux_span': 0.9724}
+  att v/n {'cibles': 116, 'justes': 111, 'taux': 0.9569} {'cibles': 29, 'justes': 26, 'taux': 0.8966}
+  att tete {'cibles': 145, 'labels': 145, 'top1': 140, 'topk': 142, 'top1_taux': 0.9655, 'topk_taux': 0.9793, 'couverture': 1.0}
+  prag {'acte': 0.9967, 'negation': 0.9771, 'modalite': 0.9886, 'double_sens': 0.9444} frac 0.5551
+fr_all n= 402
+  pos 0.7518 ferme 0.8956 ouvert 0.6235 tokens 2031
+  seg f1 0.3786 P/R 0.4035 0.3566 tete f1 0.5822
+  att {'cibles': 151, 'labels': 117, 'couverture': 0.7748, 'top1_taux': 0.7417, 'topk_taux': 0.755, 'exact_taux': 0.7219, 'top1_taux_span': 0.9573, 'topk_taux_span': 0.9744, 'exact_taux_span': 0.9316, 'topk_exact_taux': 0.7483, 'topk_exact_taux_span': 0.9658}
+  att v/n {'cibles': 88, 'justes': 83, 'taux': 0.9432} {'cibles': 29, 'justes': 26, 'taux': 0.8966}
+  att tete {'cibles': 11
+… [4361 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger()\nsubs={'fr_all':[p for p in  … [753 caractères tronqués]`
+
+  ```
+### segmenter_s= False
+fr_all pos 0.7518 ouvert 0.6235 seg F1 0.1292 tete 0.4573 cov 0.3245 exact_span 0.0 topk_span 0.0
+en_all pos 0.7343 ouvert 0.5571 seg F1 0.1519 tete 0.4537 cov 0.3182 exact_span 0.0 topk_span 0.0
+fr_reel pos 0.7591 ouvert 0.6334 seg F1 0.1345 tete 0.4095 cov 0.2907 exact_span 0.0 topk_span 0.0
+en_reel pos 0.7278 ouvert 0.5466 seg F1 0.1517 tete 0.4551 cov 0.3176 exact_span 0.0 topk_span 0.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger()\nh=bl.Heuristiq … [797 caractères tronqués]`
+
+  ```
+==================== en ====================
+cibles par type: {'GP': 34, 'SUB': 26, 'REL': 28}
+labels par type: {'GP': 28}
+exemples labels: [('g016', 'GP', 'in the park', 'saw'), ('r025', 'GP', 'to her brother', 'talks'), ('r026', 'GP', 'to the teacher', 'listen'), ('r027', 'GP', 'on the chair', 'sleeps'), ('r031', 'GP', 'at noon', 'leaves'), ('r040', 'GP', 'in the park', 'play'), ('r061', 'GP', 'with the ball', 'plays'), ('r063', 'GP', 'to the radio', 'listen'), ('r064', 'GP', 'to the students', 'talks'), ('r067', 'GP', 'in the garden', 'grow'), ('r068', 'GP', 'to his sister', 'writes'), ('r070', 'GP', 'on vacation', 'leave'), ('r072', 'GP', 'at ten', 'opens'), ('r077', 'GP', 'at the postman', 'barks'), ('r080', 'GP', 'over the lake', 'fly'), ('r107', 'GP', 'to her friend', 'writes'), ('r108', 'GP', 'on the roof', 'climbs'), ('r110', 'GP', 'in an office', 'works'), ('r120', 'GP', 'to the sea', 'flows'), ('r156', 'GP', 'in the water', 'swims'), ('r160', 'GP', 'in the morning', 'passes'), ('r166', 'GP', 'on the train', 'get'), ('r168', 'GP', 'to music', 'listens'), ('r169', 'GP', 'at his mother', 'smiles'), ('r177', 'GP', 'in front of the door', 'wait'), ('r180', 'GP', 'to the libra
+… [1907 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-spans.json'))\nprint(json.dumps(d,ensure_ascii=False,indent=1)[:6000])\n\"", "description": "Read span report JSON"}`
+
+  ```
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "169/169",
+ "gold": 612,
+ "cibles": 239,
+ "spans": {
+  "REL": 48,
+  "SUB": 33,
+  "GP": 12,
+  "total": 93
+ },
+ "categories": {
+  "aucun": 65,
+  "plus_large": 25,
+  "plus_etroit": 3,
+  "coupe": 1
+ },
+ "avant": {
+  "labels": 145,
+  "couverture": 0.6067,
+  "f1": 0.2864,
+  "span": 94,
+  "cible": 13
+ },
+ "apres": {
+  "labels": 146,
+  "couverture": 0.6109,
+  "f1": 0.2869,
+  "span": 93,
+  "cible": 14
+ },
+ "limites": [
+  "81 REL/SUB chez S",
+  "dénominateur de l'attachement à corriger",
+  "gold 612"
+ ],
+ "courant": {
+  "date": "2026-11-05",
+  "source": "audit A1 (pensee-audit-attachement.json)",
+  "labels": 145,
+  "couverture": 0.6067,
+  "f1": 0.2862,
+  "span": 94,
+  "types": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13
+  },
+  "categories": {
+   "aucun": 65,
+   "plus_large": 24,
+   "plus_etroit": 4,
+   "coupe": 1
+  },
+  "note": "état courant après le lexique élargi (a408a909) ; les blocs avant/apres restent l'historique"
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger(); h=bl.Heuristique()\n … [1037 caractères tronqués]`
+
+  ```
+en {'label': 28, 'aucun': 59, 'plus_etroit': 1} losts {'SUB': 26, 'GP': 6, 'REL': 28} total 88
+fr {'label': 117, 'plus_large': 25, 'plus_etroit': 3, 'aucun': 6} losts {'GP': 7, 'REL': 20, 'SUB': 7} total 151
+None {'label': 145, 'plus_large': 25, 'aucun': 65, 'plus_etroit': 4} losts {'GP': 13, 'SUB': 33, 'REL': 48} total 239
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger(); h=bl.Heuristique()\nfor lang in ( … [1045 caractères tronqués]`
+
+  ```
+========================= en =========================
+g017 SUB 'that she would come' cible said -> aucun
+g020 GP 'to eat' cible ready -> aucun
+r028 GP 'since yesterday' cible rains -> aucun
+r034 REL 'that I read' cible book -> aucun
+r035 REL 'she talks about' cible film -> aucun
+r038 GP 'to eat' cible ready -> aucun
+r074 REL 'that you read' cible book -> aucun
+r075 REL 'where we live' cible city -> aucun
+r102 GP 'since this morning' cible falls -> aucun
+r114 REL 'that we saw' cible film -> aucun
+r115 REL 'where I was born' cible house -> aucun
+r153 GP 'for the bus' cible wait -> plus_etroit
+      pred GP 'for the' 8 15
+r162 GP 'on the wall' cible hung -> aucun
+r204 REL 'who speaks' cible man -> aucun
+r205 SUB 'that you are right' cible think -> aucun
+r214 REL 'that I read' cible book -> aucun
+r215 SUB 'When it rains' cible stay -> aucun
+r216 SUB 'that he comes' cible says -> aucun
+r217 REL 'whom I mention' cible student -> aucun
+r218 SUB 'Although it is late' cible works -> aucun
+r219 SUB 'that you come' cible know -> aucun
+r220 REL 'that sleeps' cible cat -> aucun
+r236 REL 'where I live' cible village -> aucun
+r237 SUB 'If you come' cible leave -> aucun
+r238 SUB 'because she is h
+… [4590 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt in [\"It rains since yesterday.\",\"The rain falls since this morning.\",\"The painting i … [495 caractères tronqués]`
+
+  ```
+============ It rains since yesterday.
+simple: []
+pred: [('GV', 'It rains since yesterday', 0, 24)]
+============ The rain falls since this morning.
+simple: [('GN', 'The rain falls since this morning')]
+pred: [('GV', 'The rain falls since this morning', 0, 33), ('GN', 'The rain falls since this morning', 0, 33)]
+============ The painting is hung on the wall.
+simple: [('GN', 'The painting'), ('GV', 'is hung on the wall')]
+pred: [('GN', 'The painting', 0, 12), ('GV', 'The painting is hung on the wall', 0, 32), ('GV', 'is hung on the wall', 13, 32)]
+============ We wait for the bus.
+simple: [('GP', 'for the')]
+pred: [('GV', 'We wait for the bus', 0, 19), ('GP', 'for the', 8, 15)]
+============ The mouse is ready to eat.
+simple: [('GN', 'The mouse'), ('GV', 'is ready to eat')]
+pred: [('GN', 'The mouse', 0, 9), ('GV', 'The mouse is ready to eat', 0, 25), ('GV', 'is ready to eat', 10, 25)]
+est_verbe: {'yesterday': False, 'morning': False, 'bus': True, 'eat': False, 'hung': False, 'wall': False, 'a': True, 'this': False, 'the': False}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nps=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\nfor p in ps:\n    if p['langue']!='en': continue\n    print('='*10,p['id'],p['texte'])\n    print(' mots:',[(m['texte'],m['pos']) for m  … [116 caractères tronqués]`
+
+  ```
+========== g015 The cat sleeps.
+ mots: [('The', 'DET'), ('cat', 'NOUN'), ('sleeps', 'VERB')]
+   {'type': 'GN', 'texte': 'The cat', 'role': 'agent', 'debut': 0, 'fin': 7}
+   {'type': 'GV', 'texte': 'sleeps', 'role': 'prédicat', 'debut': 8, 'fin': 14}
+========== g016 The woman saw the man in the park.
+ mots: [('The', 'DET'), ('woman', 'NOUN'), ('saw', 'VERB'), ('the', 'DET'), ('man', 'NOUN'), ('in', 'PREP'), ('the', 'DET'), ('park', 'NOUN')]
+   {'type': 'GN', 'texte': 'The woman', 'role': 'agent', 'debut': 0, 'fin': 9}
+   {'type': 'GV', 'texte': 'saw', 'role': 'prédicat', 'debut': 10, 'fin': 13}
+   {'type': 'GN', 'texte': 'the man', 'role': 'patient', 'debut': 14, 'fin': 21}
+   {'type': 'GP', 'texte': 'in the park', 'role': 'lieu', 'debut': 22, 'fin': 33, 'cibles': ['saw', 'man'], 'cible': 'saw'}
+========== g017 She said that she would come yesterday.
+ mots: [('She', 'PRON'), ('said', 'VERB'), ('that', 'CONJ'), ('she', 'PRON'), ('would', 'AUX'), ('come', 'VERB'), ('yesterday', 'ADV')]
+   {'type': 'GN', 'texte': 'She', 'role': 'agent', 'debut': 0, 'fin': 3}
+   {'type': 'GV', 'texte': 'said', 'role': 'prédicat', 'debut': 4, 'fin': 8}
+   {'type': 'SUB', 'texte': 'that she would come', '
+… [1028 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections, sys\nsys.path.insert(0,'tools/tests/linguistique')\nimport evaluer_gold as eg\nps=eg.charger()\nfor lang in ('en','fr'):\n    print('='*15,lang,'='*15)\n    n=coll … [468 caractères tronqués]`
+
+  ```
+=============== en ===============
+nb de cibles par segment: {0: 614, 2: 9, 1: 79} total cibles 97
+multi: [('g016', 'GP', 'in the park', ['saw', 'man']), ('g020', 'GP', 'to eat', ['ready', 'duck']), ('r038', 'GP', 'to eat', ['ready', 'mouse']), ('r040', 'GP', 'in the park', ['play', 'children']), ('r067', 'GP', 'in the garden', ['grow', 'flowers']), ('r108', 'GP', 'on the roof', ['climbs', 'cat']), ('r156', 'GP', 'in the water', ['swims', 'fish']), ('r162', 'GP', 'on the wall', ['hung', 'painting']), ('r166', 'GP', 'on the train', ['get', 'travelers'])]
+=============== fr ===============
+nb de cibles par segment: {0: 1010, 1: 117, 2: 34} total cibles 185
+multi: [('g003', 'GP', 'dans le parc', ['vu', "l'homme"]), ('g007', 'GP', 'dans le jardin', ['jouent', 'enfants']), ('g012', 'GP', 'à manger', ['prêt', 'canard']), ('r018', 'GP', 'à manger', ['prête', 'souris']), ('r020', 'GP', 'dans le parc', ['jouent', 'enfants']), ('r047', 'GP', 'dans le jardin', ['poussent', 'fleurs']), ('r088', 'GP', 'sur le toit', ['grimpe', 'chat']), ('r126', 'GP', "dans l'eau", ['nage', 'poisson']), ('r132', 'GP', 'au mur', ['accroché', 'tableau']), ('r136', 'GP', 'dans le train', ['montent', 'voyageurs']),
+… [1323 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang in ('en','fr'):\n    print('='*20,lang,'='*20)\n    d=collections.defaultdict(co … [586 caractères tronqués]`
+
+  ```
+==================== en ====================
+formes multi-POS: 7 / 347
+  is           {'AUX': 43, 'VERB': 3} ex: {'AUX': ['r032', 'r034', 'r035'], 'VERB': ['r291', 'r328', 'r363']}
+  that         {'CONJ': 11, 'PRON': 11} ex: {'CONJ': ['r034', 'r074', 'r114'], 'PRON': ['r214', 'r220', 'r243']}
+  her          {'DET': 4, 'PRON': 3} ex: {'DET': ['r025', 'r107', 'r117'], 'PRON': ['r336', 'r342', 'r358']}
+  leaves       {'VERB': 4, 'NOUN': 1} ex: {'VERB': ['r031', 'r296', 'r312'], 'NOUN': ['r173']}
+  when         {'CONJ': 4, 'PRON': 1} ex: {'CONJ': ['r215', 'r245', 'r279'], 'PRON': ['r241']}
+  do           {'AUX': 2, 'VERB': 1} ex: {'AUX': ['r029', 'r314'], 'VERB': ['r422']}
+  fast         {'ADJ': 1, 'ADV': 2} ex: {'ADJ': ['r032'], 'ADV': ['r071', 'r362']}
+==================== fr ====================
+formes multi-POS: 11 / 392
+  le           {'DET': 97, 'PRON': 6} ex: {'DET': ['r001', 'r002', 'r004'], 'PRON': ['r330', 'r339', 'r339']}
+  la           {'DET': 63, 'PRON': 1} ex: {'DET': ['r002', 'r003', 'r007'], 'PRON': ['r329']}
+  est          {'AUX': 42, 'VERB': 4} ex: {'AUX': ['r012', 'r014', 'r015'], 'VERB': ['r267', 'r324', 'r349']}
+  les          {'DET': 24, 'PRON': 1} ex: {'DET': ['r
+… [674 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang,forms in (('en',{'that','is','do','late','far'}),('fr',{'que','est'})):\n    print('='*15,lan … [301 caractères tronqués]`
+
+  ```
+=============== en ===============
+r029 'I do not understand.' [('do', 'AUX', 2)]
+r032 'The car is fast.' [('is', 'AUX', 8)]
+r034 'The book that I read is exciting.' [('that', 'CONJ', 9), ('is', 'AUX', 21)]
+r035 'The film she talks about is out.' [('is', 'AUX', 25)]
+r036 'She is maybe tired.' [('is', 'AUX', 4)]
+r038 'The mouse is ready to eat.' [('is', 'AUX', 10)]
+r074 'The book that you read is long.' [('that', 'CONJ', 9), ('is', 'AUX', 23)]
+r075 'The city where we live is beautiful.' [('is', 'AUX', 23)]
+r078 'The door is open.' [('is', 'AUX', 9)]
+r112 'The sea is calm.' [('is', 'AUX', 8)]
+r114 'The film that we saw was long.' [('that', 'CONJ', 9)]
+r115 'The house where I was born is small.' [('is', 'AUX', 27)]
+r118 'The cake is delicious.' [('is', 'AUX', 9)]
+r162 'The painting is hung on the wall.' [('is', 'AUX', 13)]
+r174 'The room is dark.' [('is', 'AUX', 9)]
+r199 'The train arrives late.' [('late', 'ADV', 18)]
+r204 'The man who speaks is my father.' [('is', 'AUX', 19)]
+r205 'I think that you are right.' [('that', 'CONJ', 8)]
+r214 'The book that I read is good.' [('that', 'PRON', 9), ('is', 'AUX', 21)]
+r216 'She says that he comes.' [('that', 'CONJ', 9)]
+r217 'The student whom 
+… [5912 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, json, copy, collections\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger(); h=bl.Heu … [1254 caractères tronqués]`
+
+  ```
+en corrections 10
+  POS brut 0.7343 corrigé 0.7369 delta 0.0026
+  ouvert brut 0.5571 corrigé 0.5581
+fr corrections 7
+  POS brut 0.7518 corrigé 0.7548 delta 0.003
+  ouvert brut 0.6235 corrigé 0.6258
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger(); h=bl.Heuristique()\n … [1693 caractères tronqués]`
+
+  ```
+#################### full ####################
+en
+  GP {'cibles': 34, 'labels': 28, 'exact': 28, 'top1': 28, 'topk': 28, 'topk_exact': 28} cov=0.824 exact_span=1.000 topk_span=1.000
+  REL {'cibles': 28} cov=0.000 exact_span=0.000 topk_span=0.000
+  SUB {'cibles': 26} cov=0.000 exact_span=0.000 topk_span=0.000
+  échecs de cible sur labels: 0
+fr
+  GP {'cibles': 62, 'labels': 55, 'exact': 52, 'top1': 54, 'topk': 53, 'topk_exact': 53} cov=0.887 exact_span=0.945 topk_span=0.964
+  REL {'cibles': 46, 'labels': 26, 'exact': 26, 'top1': 26, 'topk': 26, 'topk_exact': 26} cov=0.565 exact_span=1.000 topk_span=1.000
+  SUB {'cibles': 43, 'labels': 36, 'exact': 35, 'top1': 35, 'topk': 35, 'topk_exact': 35} cov=0.837 exact_span=0.972 topk_span=0.972
+  échecs de cible sur labels: 3
+    ('r309', 'SUB', "qu'il viendra", ['viendra'], 'Peut-être')
+    ('s108', 'GP', 'sous le nuage', ['rêve', 'papier'], 'papier')
+    ('s122', 'GP', 'vers les montagne', ['saute', 'papier'], 'papier')
+#################### reel ####################
+en
+  GP {'cibles': 32, 'labels': 27, 'exact': 27, 'top1': 27, 'topk': 27, 'topk_exact': 27} cov=0.844 exact_span=1.000 topk_span=1.000
+  REL {'cibles': 28} cov=0.000 exact_span=0
+… [612 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger(); h=bl.Heuristique()\n … [1136 caractères tronqués]`
+
+  ```
+fr official labels 117 exact 113
+  replicate cibles 151 labels 117 exact 113 per {'GP': 55, 'SUB': 36, 'REL': 26}
+  ex ids [('g002', 'GP', 'de la voisine', ['chat'], 'chat'), ('g003', 'GP', 'dans le parc', ['vu', "l'homme"], 'vu'), ('g004', 'GP', 'pour attraper le bus', ['couru'], 'couru'), ('g005', 'SUB', "qu'elle viendrait", ['dit'], 'dit'), ('g007', 'GP', 'dans le jardin', ['jouent', 'enfants'], 'jouent'), ('g010', 'GP', 'ici', ['Viens'], 'Viens'), ('g011', 'REL', "que j'ai lu", ['livre'], 'livre'), ('g012', 'GP', 'à manger', ['prêt', 'canard'], 'prêt'), ('g014', 'GP', 'avec le télescope', ['vu'], 'vu'), ('r005', 'GP', 'à son frère', ['parle'], 'parle'), ('r007', 'GP', 'sur la chaise', ['dort'], 'dort'), ('r008', 'GP', 'depuis hier', ['pleut'], 'pleut'), ('r011', 'GP', 'à midi', ['part'], 'part'), ('r014', 'REL', "que j'ai lu", ['livre'], 'livre'), ('r015', 'REL', 'dont elle parle', ['film'], 'film'), ('r018', 'GP', 'à manger', ['prête', 'souris'], 'prête'), ('r020', 'GP', 'dans le parc', ['jouent', 'enfants'], 'jouent'), ('r041', 'GP', 'au ballon', ['joue'], 'joue'), ('r044', 'GP', 'aux étudiants', ['parle'], 'parle'), ('r047', 'GP', 'dans le jardin', ['poussent', 'fleurs'], 'p
+… [1206 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger(); h=bl.Heuristique()\nfor lg  … [212 caractères tronqués]`
+
+  ```
+fr
+{
+ "cibles": 151,
+ "labels": 117,
+ "top1": 115,
+ "topk": 114,
+ "exact": 113,
+ "top1_taux": 0.7616,
+ "topk_taux": 0.755,
+ "exact_taux": 0.7483,
+ "top1_taux_span": 0.9829,
+ "topk_taux_span": 0.9744,
+ "topk_exact": 114,
+ "topk_exact_taux": 0.755,
+ "topk_exact_taux_span": 0.9744,
+ "exact_taux_span": 0.9658,
+ "verbe": {
+  "cibles": 88,
+  "justes": 84,
+  "taux": 0.9545
+ },
+ "nom": {
+  "cibles": 29,
+  "justes": 29,
+  "taux": 1.0
+ },
+ "couverture": 0.7748
+}
+en
+{
+ "cibles": 88,
+ "labels": 28,
+ "top1": 28,
+ "topk": 28,
+ "exact": 28,
+ "top1_taux": 0.3182,
+ "topk_taux": 0.3182,
+ "exact_taux": 0.3182,
+ "top1_taux_span": 1.0,
+ "topk_taux_span": 1.0,
+ "topk_exact": 28,
+ "topk_exact_taux": 0.3182,
+ "topk_exact_taux_span": 1.0,
+ "exact_taux_span": 1.0,
+ "verbe": {
+  "cibles": 28,
+  "justes": 28,
+  "taux": 1.0
+ },
+ "nom": {
+  "cibles": 0,
+  "justes": 0,
+  "taux": 0.0
+ },
+ "couverture": 0.3182
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for seed in 0 1 2 42; do echo \"seed=$seed\"; PYTHONHASHSEED=$seed PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_lin … [340 caractères tronqués]`
+
+  ```
+seed=0
+fr labels 117 exact 113 top1 115 topk 114 cov 0.7748
+en labels 28 exact 28 top1 28 topk 28 cov 0.3182
+seed=1
+fr labels 117 exact 113 top1 115 topk 114 cov 0.7748
+en labels 28 exact 28 top1 28 topk 28 cov 0.3182
+seed=2
+fr labels 117 exact 113 top1 115 topk 114 cov 0.7748
+en labels 28 exact 28 top1 28 topk 28 cov 0.3182
+seed=42
+fr labels 117 exact 113 top1 115 topk 114 cov 0.7748
+en labels 28 exact 28 top1 28 topk 28 cov 0.3182
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nps=eg.charger()\nfr=[p for p in ps if p['langue']= … [474 caractères tronqués]`
+
+  ```
+fr #1 labels 117 top1 115 exact 113 topk 114 topk_exact 114
+fr #2 labels 117 top1 115 exact 113 topk 114 topk_exact 114
+fr fresh labels 117 top1 115 exact 113 topk 114 topk_exact 114
+all labels 145 top1 143 exact 141 topk 142 topk_exact 142
+fr after all labels 117 top1 115 exact 113 topk 114 topk_exact 114
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/ reports/ docs/ AGENTS.md data/ | head -30; echo '---'; git log -3 --format='%h %ad %s' --date=short -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py; echo '---'; stat -c '%y %n' tools/b … [175 caractères tronqués]`
+
+  ```
+M docs/pilotage/en-cours.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/pensee-audit-v2.json
+?? reports/pensee-cache-chunker.json
+?? reports/pensee-echecs-v2.json
+?? reports/pensee-replis-cible.json
+?? reports/rapport-cache-chunker.md
+?? reports/rapport-echecs-v2.md
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/replis_cible.py
+---
+e0592c59 2026-11-05 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181
+9d5337ce 2026-11-05 B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+e223a98d 2026-11-05 B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176
+---
+2026-11-05 15:04:59.190598153 -0500 tools/bloc_linguistique.py
+2026-11-05 13:51:45.675060894 -0500 tools/tests/linguistique/evaluer_gold.py
+2026-11-02 14:39:32.079131990 -0500 tools/tests/linguistique/gold_reel.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git diff --stat HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/gold_reel.py toolstests 2>/dev/null", "description": "Check git HEAD and diffs"}`
+
+  ```
+15ee10d3cd54dcdf3419144d23445765c8910ba2
+ tools/bloc_linguistique.py | 66 +++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 62 insertions(+), 4 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo '---'; git diff -- tools/bloc_linguistique.py | head -160", "description": "Inspect uncommitted bloc changes"}`
+
+  ```
+jeu 05 nov 2026 15:15:08 EST
+---
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 07a41ec9..b171b5f2 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -428,9 +428,20 @@ am is are was were be been being have has had having do does did done
+ """.split())
+ 
+ 
++ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
++
++
++def _sans_enclitique(mot: str) -> str:
++    """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
++    for suf in ENCLITIQUES:
++        if mot.endswith(suf) and len(mot) > len(suf):
++            return mot[: -len(suf)]
++    return mot
++
++
+ def _est_verbe(mot: str) -> bool:
+     """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+-    n = _normaliser(mot)
++    n = _normaliser(_sans_enclitique(mot))
+     if not n:
+         return False
+     if n in VERBES_CONNUS:
+@@ -616,6 +627,41 @@ class Heuristique:
+         except Exception:
+             return {}
+ 
++    @staticmethod
++    def _repli_cible_gp(texte: str, segment: dict, gns: list[dict]) -> str | None:
++        """Cible vide d'un GP : génitif → tête du GN à gauche (sinon None, l
+… [5095 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,140p' tools/bloc_linguistique.py", "description": "Read module header and RACINE"}`
+
+  ```
+#!/usr/bin/env python3
+"""bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+
+Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+
+  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+    substitution et le parallèle sans GPU ;
+  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+    même type d'annotation ;
+  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+    POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
+  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+    étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+    que l'heuristique ne couvre pas.
+
+La sortie est une **annotation typée** — pas le corps de la RSN : chaque étiquette porte son
+`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script`
+… [3993 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, types, pathlib, hashlib, subprocess, json\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg\nimport bloc_linguistique as bl\n … [942 caractères tronqués]`
+
+  ```
+sha HEAD 5640809e8e6bfbd6 sha WT 64b7c5204f21e4c2 same False
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", line 58, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 1344, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib64/python3.13/dataclasses.py", line 997, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 757, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, types, pathlib, hashlib, subprocess\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg\nimport bloc_linguistique as bl\npath=p … [948 caractères tronqués]`
+
+  ```
+sha HEAD 5640809e8e6bfbd6 sha WT 64b7c5204f21e4c2
+### head
+fr pos 0.7518 f1 0.3786 labels 117 cov 0.7748 top1 112 topk 114 exact 109 topk_exact 113
+en pos 0.7343 f1 0.121 labels 28 cov 0.3182 top1 28 topk 28 exact 28 topk_exact 28
+### wt
+fr pos 0.7518 f1 0.3786 labels 117 cov 0.7748 top1 115 topk 114 exact 113 topk_exact 114
+en pos 0.7343 f1 0.121 labels 28 cov 0.3182 top1 28 topk 28 exact 28 topk_exact 28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang in ('en','fr'):\n    print('='*22,lang,'='*22)\n    roles=collections.defaultdic … [1968 caractères tronqués]`
+
+  ```
+====================== en ======================
+types: {'GN': 314, 'GV': 253, 'GP': 38, 'REL': 28, 'SUB': 25, 'ADJ': 18, 'ADV': 8, 'PONCT': 2}
+  roles GN {'agent': 221, 'patient': 89, 'attribut': 4}
+  roles GV {'prédicat': 253}
+  roles GP {'destinataire': 11, 'lieu': 15, 'temps': 6, 'but': 1, 'moyen': 1, 'cible': 4}
+  roles REL {'qualité': 6, 'sujet': 7, 'objet': 10, 'lieu': 4, 'temps': 1}
+  roles SUB {'complément': 8, 'temps': 6, 'concession': 3, 'condition': 2, 'cause': 6}
+  roles ADJ {'attribut': 18}
+  roles ADV {'attribut': 2, 'temps': 4, 'modalité': 1, 'négation': 1}
+  roles PONCT {'ponctuation': 2}
+cible dans son segment: 0 []
+REL cible != tête du GN gauche: 0
+GP/SUB cible POS inattendue: 0
+====================== fr ======================
+types: {'GN': 344, 'GV': 279, 'GP': 33, 'REL': 29, 'SUB': 28, 'ADJ': 17, 'ADV': 22, 'PONCT': 7}
+  roles GN {'agent': 246, 'patient': 94, 'temps': 1, 'attribut': 3}
+  roles GV {'prédicat': 279}
+  roles GP {'destinataire': 7, 'lieu': 16, 'temps': 5, 'but': 1, 'moyen': 1, 'cible': 1, 'manière': 1, 'attribut': 1}
+  roles REL {'qualité': 6, 'sujet': 6, 'objet': 13, 'lieu': 3, 'temps': 1}
+  roles SUB {'complément': 11, 'temps': 6, 'concession': 3
+… [697 caractères tronqués]
+  ```
+

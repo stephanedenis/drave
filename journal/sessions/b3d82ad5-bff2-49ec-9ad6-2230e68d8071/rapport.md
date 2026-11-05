@@ -7,12 +7,12 @@
 | Identifiant | `b3d82ad5-bff2-49ec-9ad6-2230e68d8071` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.2 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 25 |
-| Appels d'outils | 33 |
+| Messages | 41 |
+| Appels d'outils | 53 |
 | Fichiers touchés | 0 |
-| Commandes | 32 |
+| Commandes | 52 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer l' … [1961 caractères tronqués]
 
-*33 appels d'outils.* Actions notables :
+*53 appels d'outils.* Actions notables :
 
 - bash — Show repo status and branch
 - bash — List linguistique tools and reports
@@ -41,11 +41,11 @@
 - bash — Find multiword target values
 - bash — Check gold_gele counts
 - bash — Run heuristic and inspect predicted targets
-- … et 19 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
-⏵ Calcul détaillé des taux (a), (b), (c) et des sous-populations
+⏵ Mesure figée sur HEAD et génération des chiffres définitifs
 
 ## 3. Travail accompli
 
@@ -88,6 +88,15 @@
 - **T1** Search multi-target mentions in recent reports
 - **T1** Compute detailed per-segment rates
 - **T1** Verify head-reduction helper
+- **T1** Run full analysis with null controls
+- **T1** Inspect g003 tokenization
+- **T1** Locate roadmap line for multi-target
+- **T1** Compute paired uncertainty and inspect key cases
+- **T1** Compute rates by source and POS
+- **T1** Debug per-source discrepancy
+- **T1** Check for nondeterminism in block
+- **T1** Repeat measurement three times
+- … et 12 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -112,4 +121,10 @@
 - **T1** `1. **n = 20** : IC larges (20/20 → 83,9–100 % ; 10/20 → 29,9–70,1 %). On ne conclut pas sur les 239 ; on`
 - **T1** `e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
 - **T1** `(rang 0, ordre gauche→droite→dedans) donne **139/145** (+2). Conclusion : **ne pas intégrer**`
+- **T1** `docs/pilotage/roadmap.md:178:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** +`
+- **T1** `docs/pilotage/roadmap.md:253:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantiq`
+- **T1** `docs/pilotage/chantiers.md:88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,`
+- **T1** `docs/pilotage/chantiers.md:90:| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta + **DRVF `thought`** + **banc anytime**`
+- **T1** `docs/pilotage/plan-travail.md:39:| **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**`
+- **T1** `delta bootstrap 95% 0.0 0.034482758620689655 mean 0.01381448275862069`
 

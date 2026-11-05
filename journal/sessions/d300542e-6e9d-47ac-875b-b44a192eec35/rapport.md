@@ -7,12 +7,12 @@
 | Identifiant | `d300542e-6e9d-47ac-875b-b44a192eec35` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.6 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 33 |
-| Appels d'outils | 34 |
-| Fichiers touchés | 0 |
-| Commandes | 24 |
+| Messages | 54 |
+| Appels d'outils | 56 |
+| Fichiers touchés | 1 |
+| Commandes | 44 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le … [2218 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*56 appels d'outils.* Actions notables :
 
 - bash — Show git state and repo root
 - bash — Line counts of key files
@@ -41,11 +41,11 @@
 - bash — Replicate analyser target logic for s108
 - bash — Inspect model candidate scores for key cases
 - bash — Exhaustive 145-target analysis
-- … et 12 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
-⏵ Génération des listes Q1 (94 spans absents, 2 vides, croisement des natures)
+⏵ Vérification du JSON final (recommandation, dérive, contrôles)
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/replis_cible.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -80,6 +81,23 @@
 - **T1** Check normalisation helper
 - **T1** Inspect JSON thought-record conventions
 - **T1** List unpredicted span ids by type
+- **T1** Run the new prototype end to end
+- **T1** Inspect concurrent change to bloc linguistique
+- **T1** Current fingerprint of bloc
+- **T1** Inspect variant gains and baseline failures in JSON
+- **T1** Inspect unmeasured changes for key variants
+- **T1** Test narrow R2 forms and their surface
+- **T1** Re-check current bloc hash and baseline
+- **T1** Inspect latest accumulated diff
+- **T1** Current baseline failures and key cases
+- **T1** Add narrow R2 and start/end fingerprint
+- **T1** Locate return section for dynamic recommendation
+- **T1** Dynamic recommendation and limits, add no-op control
+- **T1** Fix remaining-error computation and check bloc hash
+- **T1** Run updated prototype on live bloc
+- **T1** Inspect R3 regression and combination details
+- **T1** Check verb recognition for R3 guard
+- … et 4 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -105,4 +123,11 @@
 - **T1** `if self.t1=='rang0': cible=cands[0]['texte']`
 - **T1** `elif self.t2=='rang0':`
 - **T1** `elif self.t2=='rang0_verbe_garde':`
+- **T1** `rang0_partout_A3                 exact 139/145 (0.9586) Δ+2 top1 142/145 (0.9793) Δ+2 reg  5 | surface 472 (12 gold / 460 hors)`
+- **T1** `e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
+- **T1** `== rang0_partout_A3 | exact {'justes': 139, 'n': 145, 'taux': 0.9586, 'gain': 7, 'regressions': 5, 'net': 2} | top1 {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 5, 'regressions': 3, 'net': 2} | m`
+- **T1** `"R1": {"integrer": True, "forme": "GP seulement, rang 0 du vivier",`
+- **T1** `"R2": {"integrer": True, "forme": "rang 0 gardé (verbe gouverneur reconnu "`
+- **T1** `rang0_partout_A3                 exact 139/145 (0.9586) Δ-2 top1 142/145 (0.9793) Δ-1 reg  6 | surface 470 (10 gold / 460 hors)`
+- **T1** `"forme": "GP seulement, rang 0 du vivier",`
 

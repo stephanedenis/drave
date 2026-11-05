@@ -925,3 +925,434 @@ combine_tous     labels=863 changes=122 or=7 autres=115 par_type={'GN': 111, 'GP
 … [108 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Génération des listes Q1 (94 spans absents, 2 vides, croisement des natures)
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nphrases=charger(); h=bl.Heuristique()\ndef cibles(s): return s.get('cibles') or  … [851 caractères tronqués]`
+
+  ```
+GP 13
+   g006, g020, r028, r038, r060, r083, r102, r153, r162, s027, s146, s148, s160
+REL 48
+   r034, r035, r074, r075, r114, r115, r204, r206, r214, r217, r220, r224, r236, r239, r241, r243, r246, r248, r250, r255, r273, r278, r280, r283, r285, r287, r289, r291, r293, r297, r299, r300, s010, s032, s035, s037, s050, s061, s065, s069, s070, s072, s075, s115, s125, s131, s135, s141
+SUB 33
+   g017, r205, r215, r216, r218, r219, r237, r238, r240, r242, r244, r245, r247, r249, r264, r279, r281, r282, r284, r286, r288, r290, r292, r294, r296, r298, r303, r313, s015, s044, s112, s114, s132
+empty [('g002', 'GP', 'de la voisine', ['chat']), ('s041', 'GP', 'devant elles', ['marche', 'avocat'])]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du prototype `tools/tests/linguistique/replis_cible.py`
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/replis_cible.py", "content": "\"\"\"replis_cible.py — prototype **autonome** des trois retouches d'attachement de A3.\n\nLe problème. La fiche `reports/rapport-classement-appris.md` (B13) recommande trois\nretouc … [40486 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/replis_cible.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de la sérialisation JSON et premier run complet du prototype
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/tests/linguistique/replis_cible.py'\ns=open(p,encoding='utf-8').read()\ns=s.replace('''def _empreinte_bloc() -> dict:''','''def _config_json(config: dict) -> dict:\n    \"\"\"Copie sérialisable d'une configuration (les frozensets deviennent des listes).\"\"\"\ … [606 caractères tronqués]`
+
+  ```
+== base ==
+bloc: {'fichier': 'tools/bloc_linguistique.py', 'sha256_16': 'bb0205165cc2b0f8', 'octets': 103191, 'mtime': '2026-11-05T15:03:12'}
+exact 137/145 (0.9448) | top1 140/145 (0.9655) | topk strict 141/239 | exact global 137/239 (0.5732)
+== retouches ==
+R1_repli_vide_GP                 exact 139/145 (0.9586) Δ+2 top1 142/145 (0.9793) Δ+2 reg  0 | surface   3 (2 gold / 1 hors)
+R1_repli_vide_tous_non_GV        exact 139/145 (0.9586) Δ+2 top1 142/145 (0.9793) Δ+2 reg  0 | surface 114 (2 gold / 112 hors)
+R1_dernier_temoin                exact 137/145 (0.9448) Δ+0 top1 141/145 (0.9724) Δ+1 reg  0 | surface   3 (2 gold / 1 hors)
+R1_verbe_lexique_temoin          exact 137/145 (0.9448) Δ+0 top1 140/145 (0.9655) Δ+0 reg  0 | surface   1 (1 gold / 0 hors)
+R2_litterale                     exact 137/145 (0.9448) Δ+0 top1 140/145 (0.9655) Δ+0 reg  0 | surface   3 (0 gold / 3 hors)
+R2_litterale_POS                 exact 131/145 (0.9034) Δ-6 top1 134/145 (0.9241) Δ-6 reg  6 | surface  11 (6 gold / 5 hors)
+R2_litterale_lexique_etendu      exact 139/145 (0.9586) Δ+2 top1 140/145 (0.9655) Δ+0 reg  0 | surface   5 (2 gold / 3 hors)
+R2_preference_tete               exact 141/145 (0.9724) Δ+4 top1
+… [1321 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bloc a changé pendant la session (autre agent) : inspection du diff et de l'impact
+
+- **bash** `{"command": "git status --porcelain tools/bloc_linguistique.py; git diff --stat HEAD -- tools/bloc_linguistique.py; git diff HEAD -- tools/bloc_linguistique.py | head -120", "description": "Inspect concurrent change to bloc linguistique", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+M tools/bloc_linguistique.py
+ tools/bloc_linguistique.py | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 07a41ec9..618994bc 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -428,9 +428,20 @@ am is are was were be been being have has had having do does did done
+ """.split())
+ 
+ 
++ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
++
++
++def _sans_enclitique(mot: str) -> str:
++    """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
++    for suf in ENCLITIQUES:
++        if mot.endswith(suf) and len(mot) > len(suf):
++            return mot[: -len(suf)]
++    return mot
++
++
+ def _est_verbe(mot: str) -> bool:
+     """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+-    n = _normaliser(mot)
++    n = _normaliser(_sans_enclitique(mot))
+     if not n:
+         return False
+     if n in VERBES_CONNUS:
+@@ -644,6 +655,7 @@ class Heuristique:
+                     strict: bool = False) -> str | None:
+         """Le **verbe** du span : le lexique d'abord, puis le POS `VERB`, s
+… [1017 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sha256sum tools/bloc_linguistique.py; stat -c '%s %y' tools/bloc_linguistique.py; git log --oneline -3 -- tools/bloc_linguistique.py", "description": "Current fingerprint of bloc", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+bb0205165cc2b0f880f3df26c65ab56349c77301a7d9325025b35c28e145eb44  tools/bloc_linguistique.py
+103191 2026-11-05 15:03:12.069753012 -0500
+e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8'))\nprint('base',{k:d['base'][k] for k in ('exact','labels','top1','topk_exact','exact_taux_span','top1_taux_span')})\nfor nom,v in d['variantes'].items():\n    print('\\n==',nom,'| exact' … [758 caractères tronqués]`
+
+  ```
+base {'exact': 137, 'labels': 145, 'top1': 140, 'topk_exact': 141, 'exact_taux_span': 0.9448, 'top1_taux_span': 0.9655}
+
+== R1_repli_vide_GP | exact {'justes': 139, 'n': 145, 'taux': 0.9586, 'gain': 2, 'regressions': 0, 'net': 2} | top1 {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 2, 'regressions': 0, 'net': 2} | mcnemar 0.5
+  gains: [('g002', 'GP', '', '->', 'chat', 'gold', 'chat'), ('s041', 'GP', '', '->', 'marche', 'gold', 'marche')]
+  regs : []
+  surface: {'changes': 3, 'dont_gold': 2, 'dont_hors_gold': 1}
+
+== R1_repli_vide_tous_non_GV | exact {'justes': 139, 'n': 145, 'taux': 0.9586, 'gain': 2, 'regressions': 0, 'net': 2} | top1 {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 2, 'regressions': 0, 'net': 2} | mcnemar 0.5
+  gains: [('g002', 'GP', '', '->', 'chat', 'gold', 'chat'), ('s041', 'GP', '', '->', 'marche', 'gold', 'marche')]
+  regs : []
+  surface: {'changes': 114, 'dont_gold': 2, 'dont_hors_gold': 112}
+
+== R1_dernier_temoin | exact {'justes': 137, 'n': 145, 'taux': 0.9448, 'gain': 0, 'regressions': 0, 'net': 0} | top1 {'justes': 141, 'n': 145, 'taux': 0.9724, 'gain': 1, 'regressions': 0, 'net': 1} | mcnemar 1.0
+  gains: []
+  regs : []
+  surface: {'changes': 3, 'd
+… [7702 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8'))\nfor nom in ['R2_preference_tete','R2_litterale','R2_litterale_lexique_etendu','combinaison','combinaison_R2_litterale','R3_completive_large']:\n    v=d['variantes'][nom]\n    print('== … [408 caractères tronqués]`
+
+  ```
+== R2_preference_tete changes 14 gold 4 hors 10
+    r083 GP (9, 22) 'gare' -> 'train' | Le train entre en gare.
+    r121 GP (20, 30) 'jardinier' -> 'plante' | Le jardinier plante des fleurs.
+    r227 GP (0, 13) 'lit' -> 'dort' | Pendant qu'il dort, elle lit.
+    r273 GP (20, 23) 'est' -> 'pousse' | La fleur qui pousse ici est rare.
+    r324 GP (13, 25) 'est' -> 'livre' | Le livre est sur la table ; il est rouge.
+    r336 GP (27, 33) 'her' -> 'speaks' | Paul sees Marie; he speaks to her.
+    r342 GP (27, 33) 'her' -> 'speaks' | Paul sees Marie; he speaks to her; she listens.
+    r349 GP (13, 25) 'est' -> 'livre' | Le livre est sur la table ; je le lis.
+    r358 GP (27, 33) 'her' -> 'speaks' | Paul sees Marie; he speaks to her.
+    r408 GP (16, 22) 'pas' -> 'viens-tu' | Ne viens-tu pas demain ?
+== R2_litterale changes 3 gold 0 hors 3
+    g002 GP (8, 26) 'chat' -> 'dort' | Le chat de la voisine dort.
+    r083 GP (9, 22) 'gare' -> 'entre' | Le train entre en gare.
+    r227 GP (0, 13) 'lit' -> 'dort' | Pendant qu'il dort, elle lit.
+== R2_litterale_lexique_etendu changes 5 gold 2 hors 3
+    g002 GP (8, 26) 'chat' -> 'dort' | Le chat de la voisine dort.
+    r083 GP (9, 22) 'gare' -> 'entr
+… [1468 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test d'une forme étroite de R2 (moins de changements hors gold)
+
+- **bash** `{"command": "cat > /tmp/test_r2_etroite.py <<'PY'\nimport sys, importlib.util, pathlib\nsys.dont_write_bytecode=True\nRACINE=pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,str(RACINE/'tools')); sys.path.insert(0,str(RACINE/'tools/tests/linguistique'))\nspec=import … [3055 caractères tronqués]`
+
+  ```
+dedans                       exact=141/145 top1=143/145 gains=0 regs=0 surface=1 (gold 0/hors 1)
+   gains []
+   hors [('r083', 'gare', '->', 'train')]
+plus_proche                  exact=143/145 top1=143/145 gains=2 regs=0 surface=4 (gold 2/hors 2)
+   gains [('s108', 'papier', '->', 'rêve'), ('s122', 'papier', '->', 'saute')]
+   hors [('r121', 'jardinier', '->', 'plante'), ('r227', 'lit', '->', 'dort')]
+dedans_ou_plus_proche        exact=143/145 top1=143/145 gains=2 regs=0 surface=5 (gold 2/hors 3)
+   gains [('s108', 'papier', '->', 'rêve'), ('s122', 'papier', '->', 'saute')]
+   hors [('r083', 'gare', '->', 'train'), ('r121', 'jardinier', '->', 'plante'), ('r227', 'lit', '->', 'dort')]
+dedans_ou_nom_plus_proche    exact=141/145 top1=143/145 gains=0 regs=0 surface=1 (gold 0/hors 1)
+   gains []
+   hors [('r083', 'gare', '->', 'train')]
+  ```
+
+- **bash** `{"command": "sha256sum tools/bloc_linguistique.py; stat -c '%s %y' tools/bloc_linguistique.py; python3 - <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger, eval … [288 caractères tronqués]`
+
+  ```
+64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa  tools/bloc_linguistique.py
+105381 2026-11-05 15:04:59.190598153 -0500
+{'exact': 141, 'labels': 145, 'top1': 143, 'cibles': 239, 'topk_exact': 142}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bloc a encore bougé (141/145) : nouvelle inspection du diff et des cas réparés
+
+- **bash** `{"command": "git diff HEAD -- tools/bloc_linguistique.py | sed -n '1,220p'", "description": "Inspect latest accumulated diff", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 07a41ec9..b171b5f2 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -428,9 +428,20 @@ am is are was were be been being have has had having do does did done
+ """.split())
+ 
+ 
++ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
++
++
++def _sans_enclitique(mot: str) -> str:
++    """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
++    for suf in ENCLITIQUES:
++        if mot.endswith(suf) and len(mot) > len(suf):
++            return mot[: -len(suf)]
++    return mot
++
++
+ def _est_verbe(mot: str) -> bool:
+     """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+-    n = _normaliser(mot)
++    n = _normaliser(_sans_enclitique(mot))
+     if not n:
+         return False
+     if n in VERBES_CONNUS:
+@@ -616,6 +627,41 @@ class Heuristique:
+         except Exception:
+             return {}
+ 
++    @staticmethod
++    def _repli_cible_gp(texte: str, segment: dict, gns: list[dict]) -> str | None:
++        """Cible vide d'un GP : génitif → tête du GN à gauche (sinon None, le GV tranchera)."""
++        if s
+… [5062 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic du nouveau baseline 141/145 et des cas restants
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nh=bl.Heuristique(); phrases=charger()\ndef cibles(s): return s.get('cibles') or ([s['c … [1209 caractères tronqués]`
+
+  ```
+n 145 exact 141 top1?
+empties [('s041', 'GP', 'devant elles', ['marche', 'avocat'])]
+fails
+   ('r309', 'SUB', "qu'il viendra", ['viendra'], 'Peut-être')
+   ('s041', 'GP', 'devant elles', ['marche', 'avocat'], '')
+   ('s108', 'GP', 'sous le nuage', ['rêve', 'papier'], 'papier')
+   ('s122', 'GP', 'vers les montagne', ['saute', 'papier'], 'papier')
+key cases
+== g002 Le chat de la voisine dort.
+    GN (0, 7) 'Le chat' {'role': 'agent', 'niveau': 0}
+    GP (8, 21) 'de la voisine' {'role': 'theme', 'niveau': 1, 'union': True, 'attachement': {'segment': 'de la voisine', 'cible': 'chat'}}
+    GP (8, 26) 'de la voisine dort' {'role': 'possession', 'niveau': 1, 'attachement': {'segment': 'de la voisine dort', 'cible': 'chat'}}
+== s041 les avocat marche devant elles
+    GN (0, 17) 'les avocat marche' {'role': 'agent', 'niveau': 0}
+    GP (18, 30) 'devant elles' {'role': 'lieu', 'niveau': 1, 'union': True}
+    GN (25, 30) 'elles' {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'elles', 'cible': 'marche'}}
+== g012 Le canard est prêt à manger.
+    GN (0, 9) 'Le canard' {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'Le canard', 'cible': 'manger'}}
+    GV (10, 18) 'est prêt' 
+… [2461 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte au parent sur la dérive du bloc et sauvegarde du snapshot A3 137
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Point de situation (important pour la mesure) : `tools/bloc_linguistique.py` bouge en concurrence pendant ma session. Empreintes observées : 6e843018 (101 568 o, 13:51) → bb020516 (103 191 o, 15:03, baseline 137/145) → 64b7c520 (105 38 … [711 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Sauvegarde du snapshot 137 et ajout de la variante étroite de R2
+
+- **bash** `{"command": "cp reports/pensee-replis-cible.json /tmp/pensee_replis_bb020516.json && python3 - <<'PY'\np='tools/tests/linguistique/replis_cible.py'\ns=open(p,encoding='utf-8').read()\n\n# 1) add R2 etroite branch\ns=s.replace('''                elif self.t2 in (\"litteral\", \"litteral_pos\"):''','' … [7094 caractères tronqués]`
+
+  ```
+patched
+  ```
+
+- **bash** `{"command": "grep -n \"note\\|protocole\\|limites\\|recommandation\\|controle_fidelite\\|R1_repli_vide_GP\\|R2_preference\" tools/tests/linguistique/replis_cible.py | head -40; sed -n '/variantes_principales =/,/^# --------------------------------------------------------------------------- CLI/p' to … [169 caractères tronqués]`
+
+  ```
+425:        {"nom": "R1_repli_vide_GP", "famille": "R1", "principal": True,
+615:    cles = ("R1_repli_vide_GP", "R2_etroite", "R3_completive_etroite",
+656:        "note": ("Prototype autonome : `bloc_linguistique.py` n'est pas modifié ; les "
+659:        "protocole": {
+668:            "controle_fidelite": "un run sans retouche redonne exactement 137/145 et "
+689:        "limites": [
+708:        "recommandation": {
+    variantes_principales = {n: v for n, v in variantes.items() if v["principal"]}
+    combo = variantes["combinaison"]
+    empreinte_fin = _empreinte_bloc()
+    return {
+        "titre": "Trois retouches déterministes de l'attachement (replis de cible)",
+        "date": "2026-11-05",
+        "ligne_roadmap": "B13",
+        "empreinte_bloc_linguistique": empreinte_debut,
+        "empreinte_fin_de_run": empreinte_fin,
+        "bloc_stable_pendant_le_run": (empreinte_debut["sha256_16"]
+                                       == empreinte_fin["sha256_16"]),
+        "note": ("Prototype autonome : `bloc_linguistique.py` n'est pas modifié ; les "
+                 "retouches sont simulées par post-traitement des cibles. Le top-k et "
+                 "les spans sont inchangés par
+… [5055 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/tests/linguistique/replis_cible.py'\ns=open(p,encoding='utf-8').read()\n\n# add no-op control at start of configurations\ns=s.replace('''    return [\n        {\"nom\": \"R1_repli_vide_GP\"''','''    return [\n        {\"nom\": \"temoin_noop\", \"famille\": \" … [12184 caractères tronqués]`
+
+  ```
+patched helpers
+OK
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/tests/linguistique/replis_cible.py'\ns=open(p,encoding='utf-8').read()\ns=s.replace('''def _recommandation(variantes: dict, base_att: dict) -> dict:''','''def _recommandation(variantes: dict, base_att: dict, base_mesures: dict) -> dict:''')\ns=s.replace('''    … [1501 caractères tronqués]`
+
+  ```
+patched
+OK
+64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa  tools/bloc_linguistique.py
+105381 2026-11-05 15:04:59.190598153 -0500
+  ```
+
+### 🤖 Assistant
+
+⏵ Run complet sur l'empreinte live 64b7c520 (baseline 141/145)
+
+- **bash** `{"command": "python3 tools/tests/linguistique/replis_cible.py", "description": "Run updated prototype on live bloc", "timeoutMs": 900000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+== base ==
+bloc: {'fichier': 'tools/bloc_linguistique.py', 'sha256_16': '64b7c5204f21e4c2', 'octets': 105381, 'mtime': '2026-11-05T15:04:59'}
+exact 141/145 (0.9724) | top1 143/145 (0.9862) | topk strict 142/239 | exact global 141/239 (0.5900)
+== retouches ==
+temoin_noop                      exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R1_repli_vide_GP                 exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_repli_vide_tous_non_GV        exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface 113 (1 gold / 112 hors)
+R1_dernier_temoin                exact 141/145 (0.9724) Δ+0 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_verbe_lexique_temoin          exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R2_litterale                     exact 138/145 (0.9517) Δ-3 top1 140/145 (0.9655) Δ-3 reg  3 | surface   6 (3 gold / 3 hors)
+R2_litterale_POS                 exact 132/145 (0.9103) Δ-9 top1 134/145 (0.9241) Δ-9 reg  9 | surface  14 (9 gold / 5 hors)
+R2_litterale_lexique_etendu      exact 140/145 (0.9655) Δ-1 top1
+… [1574 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8'))\nprint('base', {k:d['base'][k] for k in ('exact','labels','top1','topk_exact')})\nfor nom in ['R1_repli_vide_GP','R2_etroite','R2_large','R3_completive_etroite','combinaison','combinais … [840 caractères tronqués]`
+
+  ```
+base {'exact': 141, 'labels': 145, 'top1': 143, 'topk_exact': 142}
+
+== R1_repli_vide_GP exact {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 1, 'regressions': 0, 'net': 1} | top1 {'justes': 144, 'n': 145, 'taux': 0.9931, 'gain': 1, 'regressions': 0, 'net': 1}
+ gains [('s041', 'GP', '', '->', 'marche', 'marche')]
+ regs  []
+ surface {'changes': 2, 'dont_gold': 1, 'dont_hors_gold': 1}
+ hors [('s027', 'GP', '', '->', 'marche')]
+
+== R2_etroite exact {'justes': 143, 'n': 145, 'taux': 0.9862, 'gain': 2, 'regressions': 0, 'net': 2} | top1 {'justes': 143, 'n': 145, 'taux': 0.9862, 'gain': 0, 'regressions': 0, 'net': 0}
+ gains [('s108', 'GP', 'papier', '->', 'rêve', 'rêve'), ('s122', 'GP', 'papier', '->', 'saute', 'saute')]
+ regs  []
+ surface {'changes': 4, 'dont_gold': 2, 'dont_hors_gold': 2}
+ hors [('r121', 'GP', 'jardinier', '->', 'plante'), ('r227', 'GP', 'lit', '->', 'dort')]
+
+== R2_large exact {'justes': 143, 'n': 145, 'taux': 0.9862, 'gain': 2, 'regressions': 0, 'net': 2} | top1 {'justes': 143, 'n': 145, 'taux': 0.9862, 'gain': 0, 'regressions': 0, 'net': 0}
+ gains [('s108', 'GP', 'papier', '->', 'rêve', 'rêve'), ('s122', 'GP', 'papier', '->', 'saute', 'saute')]
+ regs  []
+ surface 
+… [4041 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor w in ['appelle','appelle-moi','Peut-être','viendra','arrives']:\n    print(w,'est_verbe',bl._est_verbe(w),'norm',bl._normaliser(w),'dans VERBES',bl._normaliser(w)  … [142 caractères tronqués]`
+
+  ```
+appelle est_verbe False norm appelle dans VERBES False
+appelle-moi est_verbe False norm appelle-moi dans VERBES False
+Peut-être est_verbe False norm peut-être dans VERBES False
+viendra est_verbe False norm viendra dans VERBES False
+arrives est_verbe True norm arrives dans VERBES True
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de R3 : distinguer la complétive en tête du cas enclitique r230
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/tests/linguistique/replis_cible.py'\ns=open(p,encoding='utf-8').read()\ns=s.replace('''    def _appliquer(self, annotation, texte: str) -> None:\n        for etiquette in annotation.etiquettes:''','''    def _appliquer(self, annotation, texte: str) -> None:\n  … [1325 caractères tronqués]`
+
+  ```
+patched R3
+OK
+64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa  tools/bloc_linguistique.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Run de validation après correction de R3
+
+- **bash** `{"command": "python3 tools/tests/linguistique/replis_cible.py", "description": "Rerun prototype after R3 fix", "timeoutMs": 900000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+== base ==
+bloc: {'fichier': 'tools/bloc_linguistique.py', 'sha256_16': '64b7c5204f21e4c2', 'octets': 105381, 'mtime': '2026-11-05T15:04:59'}
+exact 141/145 (0.9724) | top1 143/145 (0.9862) | topk strict 142/239 | exact global 141/239 (0.5900)
+== retouches ==
+temoin_noop                      exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R1_repli_vide_GP                 exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_repli_vide_tous_non_GV        exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface 113 (1 gold / 112 hors)
+R1_dernier_temoin                exact 141/145 (0.9724) Δ+0 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_verbe_lexique_temoin          exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R2_litterale                     exact 138/145 (0.9517) Δ-3 top1 140/145 (0.9655) Δ-3 reg  3 | surface   6 (3 gold / 3 hors)
+R2_litterale_POS                 exact 132/145 (0.9103) Δ-9 top1 134/145 (0.9241) Δ-9 reg  9 | surface  14 (9 gold / 5 hors)
+R2_litterale_lexique_etendu      exact 140/145 (0.9655) Δ-1 top1
+… [1574 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du JSON final (recommandation, dérive, contrôles)
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8'))\nprint('stable:',d['bloc_stable_pendant_le_run'],'| start',d['empreinte_bloc_linguistique']['sha256_16'],'| end',d['empreinte_fin_de_run']['sha256_16'])\nprint('keys:',list(d.keys()))\n … [671 caractères tronqués]`
+
+  ```
+stable: True | start 64b7c5204f21e4c2 | end 64b7c5204f21e4c2
+keys: ['titre', 'date', 'ligne_roadmap', 'empreinte_bloc_linguistique', 'empreinte_fin_de_run', 'bloc_stable_pendant_le_run', 'note', 'protocole', 'corpus', 'base', 'etat_des_lieux', 'derive_du_bloc', 'retouches', 'variantes', 'principales', 'combinaison', 'segments_145', 'limites', 'recommandation']
+
+PROTOCOLE:
+  population : 612 phrases ; 239 segments gold porteurs d'une cible ; 145 dont le span (type, debut, fin) est prédit
+  mesure : égalité exacte avec cibles[0] et top1 de evaluer_gold (sous-chaîne d'une des cibles), sur 145 (span) et 239 (global)
+  vivier : tokens pleins (POS ouverte ou _est_verbe), auxiliaires exclus ; gauche → droite → dedans, puis distance
+  simulation : sous-classe de Heuristique + post-traitement de meta.attachement.cible ; aucun autre champ modifié
+  controle_fidelite : le témoin no-op redonne exactement 141/145 exact et 143/145 top1 (vérifié avant chaque variante)
+  regression : segment exact avant → faux après ; le gain net = gains - régressions
+  mcnemar : exact bilatéral sur les paires discordantes (descriptif : les cas ont servi à définir les règles)
+
+DERIVE:
+{
+ "empreinte_mesuree": {
+  "
+… [7704 caractères tronqués]
+  ```
+

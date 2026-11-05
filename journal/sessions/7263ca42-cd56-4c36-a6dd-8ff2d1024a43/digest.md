@@ -1123,3 +1123,280 @@ Peut-être qu'il viendra.
  pos: [('ADV', 'Peut-être', 0, 9), ('CONJ', "qu'il", 10, 15), ('NOUN', 'viendra', 16, 23)]
   ```
 
+### 🤖 Assistant
+
+⏵ Rédige le JSON de résultats (8 fiches + règles + contrôles)
+
+- **bash** `{"command": "cat > /tmp/ech/gen_json.py <<'PY'\nimport json, sys, pathlib, re\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, evaluer_ … [16630 caractères tronqués]`
+
+  ```
+écrit: /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-echecs-v2.json 17542 octets
+echecs: ['g002', 'g012', 'r018', 'r230', 'r309', 's041', 's108', 's122']
+assertions OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédige la fiche `rapport-echecs-v2.md`
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "content": "# B13 — les 8 échecs restants de l'attachement v2 : qualifiés, chiffrés, 5 règles pour 145/145\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict … [14267 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nprint(\"prépare dans VERBES_CONNUS:\", \"prépare\" in bl.VERBES_CONN … [982 caractères tronqués]`
+
+  ```
+prépare dans VERBES_CONNUS: False | préparer: False
+_est_verbe('prépare'): False
+_tete_texte('une sombre lettre prépare'): prépare
+segments gold (avec cible) dont la phrase contient une forme ajoutée: 13 ['s003', 's015', 's027', 's032', 's037', 's041', 's047', 's050', 's058', 's061', 's108', 's122', 's132']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# vérifie que R2 appliquée à tous les types ne change pas s022 (déclencheur positionnel)\nimport sys, re\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl … [814 caractères tronqués]`
+
+  ```
+s022 SUB cible: {'segment': 'que vous nage', 'cible': 'nage'}
+token du segment ? True | position du token pred dans le span ? True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re, importlib.util\nspec = importlib.util.spec_from_file_location(\"fm\", \"/tmp/ech/final_measure.py\")\n# on recharge le module sans ré-exécuter la sortie : copie adaptée minimale\nsrc = open(\"/tmp/ec … [623 caractères tronqués]`
+
+  ```
+R2 tous types: portee 2 gagne 2 perd 0
+[('g012', 'manger', 'prêt', 'prêt'), ('r018', 'manger', 'prête', 'prête')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ai le\\|vérbe\\|POS/lexique\\|4/4\\|huer\" reports/rapport-echecs-v2.md reports/pensee-echecs-v2.json", "description": "Locate typos and claims to fix"}`
+
+  ```
+reports/rapport-echecs-v2.md:46:| 7 | **s108** | synthétique | GP | `sous le nuage` | `rêve` (`papier`) | `papier` | `« sous le nuage » → ce calme papier rêve`, `rêve` | **mal choisie** + POS/lexique |
+reports/rapport-echecs-v2.md:47:| 8 | **s122** | synthétique | GP | `vers les montagne` | `saute` (`papier`) | `papier` | `« vers les montagne » → mon papier saute`, `saute` | **mal choisie** + POS/lexique |
+reports/rapport-echecs-v2.md:55:- **5 POS/lexique** (s041, s108, s122 + g012/r018 pour la tête du GV) : `marche`, `rêve`, `saute`
+reports/rapport-echecs-v2.md:106:précédent d'abord, sinon tête du GN » donnerait 4/4 sur ces quatre cas, mais elle n'est pas simulée :
+reports/rapport-echecs-v2.md:124:condition, top-k strict passerait aussi à **145/145** — non simulé, conséquence directe. Ai le
+reports/rapport-echecs-v2.md:144:`appelle-moi`. `_vérbe_dans` retombe sur le token entier (POS heuristique **NOUN**, `_est_verbe`
+reports/pensee-echecs-v2.json:277:   "qualification": "présente mais mal choisie + POS/lexique",
+reports/pensee-echecs-v2.json:278:   "mecanisme": "Le POS hueristique tague `papier` VERB (suffixe -er) et `rêve` NOUN ; `_verbe_dans` sur la cible S « ce calme papier rê
+… [349 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "old_string": "- **5 POS/lexique** (s041, s108, s122 + g012/r018 pour la tête du GV) : `marche`, `rêve`, `saute`\n  sont des verbes du gold tagués **NOUN** (absents de `VERBES_CONNUS`), et `papier` est un n … [493 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "old_string": "— le gold attend `trouve`, s120 `lettre` ✗ — le gold attend `prépare`). Une variante « verbe du GV\nprécédent d'abord, sinon tête du GN » donnerait 4/4 sur ces quatre cas, mais elle n'est pas … [556 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "old_string": "condition, top-k strict passerait aussi à **145/145** — non simulé, conséquence directe. Ai le\ncontraire, top-k strict resterait à 141 et contredirait l'exact.", "new_string": "condition, to … [177 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "old_string": "`appelle-moi`. `_vérbe_dans` retombe sur le token entier (POS heuristique **NOUN**, `_est_verbe`", "new_string": "`appelle-moi`. `_verbe_dans` retombe sur le token entier (POS heuristique **N … [21 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path(\"reports/pensee-echecs-v2.json\")\nd = json.loads(p.read_text(encoding=\"utf-8\"))\n# typo\nfor e in d[\"echecs\"]:\n    if \"hueristique\" in e[\"mecanisme\"]:\n        e[\"m … [1036 caractères tronqués]`
+
+  ```
+ok, JSON valide: 8 échecs
+82:   "pos_ou_lexique": 3,
+85:   "tete_gv_adjectivale": 2
+452:   "lecture": "2/4 : la branche n'est pas générale ; la variante « GV précédent d'abord, sinon tête du GN » donne 3/4 (s120 reste faux) ; il faut un 3e repli « tête de la cible S » pour 4/4 — trois branches pour quatre cas, non simulé."
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md</path>
+<type>file</type>
+<content>
+1: # B13 — les 8 échecs restants de l'attachement v2 : qualifiés, chiffrés, 5 règles pour 145/145
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > Les **8 échecs** de l'exact (137/145) sont qualifiés **un par un** : **2 cibles vides**, **4 cibles
+5: > absentes des candidats** en lecture stricte (**3** en sous-chaîne), **4 présentes mais mal choisies**,
+6: > **1 tokenisation**, **0 « autre »**. **5 règles déterministes simulées** (code inchangé) les
+7: > réparent **tous** — portée mesurée **1 à 2 segments chacune**, **0 régression** → **exact 145/145**.
+8: > C'est une **borne haute sur le même gold** : les règles sont étroites, deux ne sont pas
+9: > généralisables en l'état, et top-k strict 145/145 suppose d'ajouter la cible réparée aux candidats.
+10: >
+11: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique`,
+12: > `_verbe_dans`, `_cible_proche`, `_tete_texte`, `VERBES_CONNUS`),
+13: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `eva
+… [14321 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "new_string": "> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> Les **8 échecs** de l'exact (137/145) sont qualifiés **un par un** (causes non exclus … [1275 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "new_string": "**2**, **0 régression**. Piège latent confirmé : `_verbe_dans(\"est prêt\")` rend **`est`** (l'auxiliaire,\n2ᵉ boucle de `_verbe_dans`), c'est `_tete_texte` qui rend la bonne tête. La règle e … [601 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md", "new_string": "| **complétion naïve des GV** : tout token `VERB` devient un GV | portée 13, **+3 / −8**, exact **132** (−5) | la règle « générale » qui vient naturellement **coûte 5 points** : le GV le plus … [405 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-echecs-v2.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, re, pathlib\nracine = pathlib.Path(\".\").resolve()\n# 1. JSON valide + cohérence\np = pathlib.Path(\"reports/pensee-echecs-v2.json\")\nd = json.loads(p.read_text(encoding=\"utf-8\"))\nprint(\"JSON clés … [977 caractères tronqués]`
+
+  ```
+JSON clés: ['date', 'ligne', 'titre', 'verdict', 'non_applique', 'gold', 'mesure', 'conventions', 'qualification', 'echecs', 'regles', 'cumul', 'controles_negatifs', 'verification_cas_connus', 'limites', 'methode']
+echecs: 8
+  g002  hand        GP   'de la voisine'        gold='chat'     choisie=''             strict=False souple=False regle=R3a
+  g012  hand        GP   'à manger'             gold='prêt'     choisie='manger'       strict=True souple=True regle=R2
+  r018  reel        GP   'à manger'             gold='prête'    choisie='manger'       strict=True souple=True regle=R2
+  r230  reel        SUB  'Quand tu arrives'     gold='appelle'  choisie='appelle-moi'  strict=False souple=True regle=R4
+  r309  reel        SUB  "qu'il viendra"        gold='viendra'  choisie='Peut-être'    strict=False souple=False regle=R5
+  s041  synthetique GP   'devant elles'         gold='marche'   choisie=''             strict=False souple=False regle=R3b
+  s108  synthetique GP   'sous le nuage'        gold='rêve'     choisie='papier'       strict=True souple=True regle=R1
+  s122  synthetique GP   'vers les montagne'    gold='saute'    choisie='papier'       strict=True souple=True regle=R1
+OK   .
+… [1500 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-echecs-v2.json"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-echecs-v2.json</path>
+<type>file</type>
+<content>
+1: {
+2:  "date": "2026-11-05",
+3:  "ligne": "B13",
+4:  "titre": "Les 8 échecs restants de l'attachement v2 : qualifiés et chiffrés",
+5:  "verdict": "8/8 échecs qualifiés (0 « autre ») ; 5 règles déterministes simulées les réparent tous, portée mesurée 1 à 2 segments chacune, 0 régression → exact 137 → 145/145. Borne haute : même gold, code non modifié.",
+6:  "non_applique": true,
+7:  "gold": {
+8:   "fichiers": [
+9:    "tools/tests/linguistique/gold.json (hand, 20)",
+10:    "tools/tests/linguistique/gold_reel.json (reel, 432)",
+11:    "tools/tests/linguistique/gold_synthetique.json (synthetique, 160)"
+12:   ],
+13:   "phrases": 612,
+14:   "charger": "evaluer_gold.charger()"
+15:  },
+16:  "mesure": {
+17:   "phrases": 612,
+18:   "cibles_gold": 239,
+19:   "segments_span_predit": 145,
+20:   "base": {
+21:    "exact": 137,
+22:    "exact_taux_span": 0.9448,
+23:    "top1": 140,
+24:    "top1_taux_span": 0.9655,
+25:    "topk_sous_chaine": 142,
+26:    "topk_taux_span": 0.9793,
+27:    "topk_strict": 141,
+28:    "topk_strict_taux_span": 0.9724,
+29:    "couverture": 0.6067
+30:   },
+… [19298 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path(\"reports/pensee-echecs-v2.json\")\nd = json.loads(p.read_text(encoding=\"utf-8\"))\n# ajoute le groupe de règle pour lever l'ambiguïté R3a/R3b\nfor e in d[\"echecs\"]:\n    e[ … [837 caractères tronqués]`
+
+  ```
+ok
+[('g002', 'R3a', 'R3'), ('g012', 'R2', 'R2'), ('r018', 'R2', 'R2'), ('r230', 'R4', 'R4'), ('r309', 'R5', 'R5'), ('s041', 'R3b', 'R3'), ('s108', 'R1', 'R1'), ('s122', 'R1', 'R1')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('/tmp/ech/sim_final2.json'))\nprint('base',d['base'],'final',d['final'],'restants',d['restants'])\nfor s in d['steps']:\n    print(f\\\"{s['regle']:48} portee={s['portee']:2} gagne={s['gag … [238 caractères tronqués]`
+
+  ```
+base 137 final 145 restants []
+R1 lexique verbal (rêver, sauter, marcher)       portee= 2 gagne=2 perd=0 exact=139
+R2 GP sans auto-attachement                      portee= 2 gagne=2 perd=0 exact=141
+R3a GP possession -> tête du GN gauche           portee= 1 gagne=1 perd=0 exact=142
+R3b cible vide -> verbe reconnu le plus proche   portee= 1 gagne=1 perd=0 exact=143
+R4 enclitique                                    portee= 1 gagne=1 perd=0 exact=144
+R5 SUB pseudo-GV ADV                             portee= 1 gagne=1 perd=0 exact=145
+--- vérif rapport ---
+1:# B13 — les 8 échecs restants de l'attachement v2 : qualifiés, chiffrés, 5 règles pour 145/145
+4:> Les **8 échecs** de l'exact (137/145) sont qualifiés **un par un** (causes non exclusives) :
+8:> **0 régression** → **exact 145/145**. C'est une **borne haute sur le même gold** : les règles sont
+9:> étroites (R3a n'est juste que 2/4, R4 et R5 n'ont qu'un cas), et top-k strict 145/145 suppose
+20:Base reproduite par `evaluer_gold.py` : **239 cibles**, **145 segments au bon span**, **exact 137**
+21:(0,9448), top1 140 (0,9655), top-k 142 (0,9793), **top-k strict 141** (0,9724) ; couverture
+22:**145/239 = 0,6067**. Les 8 échecs = **5,52 %**
+… [1327 caractères tronqués]
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "B13 — les 8 échecs restants de l'attachement v2 sont qualifiés et chiffrés. Deux fichiers neufs, aucun existant modifié, aucun commit :\n- reports/rapport-echecs-v2.md (fiche)\n- reports/pensee-echecs-v2.json (8 fiches, 5 règles, contr … [3376 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan final : les 8 échecs qualifiés, 5 règles chiffrées, deux fiches écrites
+
+## Mission remplie
+
+Deux fichiers neufs, **aucun fichier existant modifié, aucun commit** :
+- [`reports/rapport-echecs-v2.md`](reports/rapport-echecs-v2.md) — la fiche
+- [`reports/pensee-echecs-v2.json`](reports/pensee-echecs-v2.json) — les 8 fiches, règles, contrôles
+
+Base reproduite par `evaluer_gold.py` : 239 cibles, **145 spans prédits**, **exact 137 (0,9448)**, top1 140, top-k 142, top-k strict 141. Les 8 échecs = 5,52 % des 145.
+
+### Convention (point de désaccord avec la fiche v2)
+La ventilation v2 « **3 hors candidats / 5 mal classés** » est la lecture **sous-chaîne** ; en **égalité stricte** c'est **4 / 4** (`appelle` ⊂ `appelle-moi`). Le 141/145 du top-k strict correspond au 4/4.
+
+### Les 8 qualifications
+| id | source/type | segment → gold / choisi | qualification |
+|---|---|---|---|
+| g002 | hand GP | `de la voisine` → `chat` / *(vide)* | cible vide + absente |
+| g012 | hand GP | `à manger` → `prêt` / `manger` | mal choisie + auto-attachement |
+| r018 | reel GP | `à manger` → `prête` / `manger` | idem g012 |
+| r230 | reel SUB | `Quand tu arrives` → `appelle` / `appelle-moi` | **tokenisation** (enclitique) |
+| r309 | reel SUB | `qu'il viendra` → `viendra` / `Peut-être` | absente + pseudo-GV du S |
+| s041 | synth GP | `devant elles` → `marche` / *(vide)* | cible vide + verbe hors lexique |
+| s108 | synth GP | `sous le nuage` → `rêve` / `papier` | mal choisie + POS (papier tagué VERB) |
+| s122 | synth GP | `vers les montagne` → `saute` / `papier` | idem s108 |
+
+GP 6 / SUB 2 / REL 0 ; hand 2 / reel 3 / synthétique 3 ; cibles VERB 5 / ADJ 2 / NOUN 1. **0 « autre »**.
+
+### Règles candidates chiffrées (simulées en mémoire, cumulées)
+| règle | répare | portée | gain | exact cumulé |
+|---|---|---:|---:|---:|
+| R1 lexique `rêver/sauter/marcher` | s108, s122 | 2 | +2 | 139 |
+| R2 un GP n'est pas gouverné par un mot de son span | g012, r018 | 2 | +2 | 141 |
+| R3 cible vide : génitif → GN gauche ; sinon verbe proche | g002, s041 | 2 | +2 | 143 |
+| R4 enclitique `appelle-moi` → `appelle` | r230 | 1 | +1 | 144 |
+| R5 ignorer un « GV » mono-token ADV | r309 | 1 | +1 | **145/145** |
+
+**8/8, portée 8, 0 régression** — mais **borne haute sur le même gold** : R3a n'est juste que **2/4** sur ses 4 déclencheurs (s081/s120 attendent le verbe), R4 et R5 ont n=1, R1 est lexicale (formes prises dans le gold). Top-k strict 145/145 seulement si la cible réparée est aussi ajoutée aux candidats (4 cas, non simulé).
+
+### Contrôles négatifs
+- **Complétion naïve des GV** (tout token VERB = GV) : portée 13, **+3/−8 → 132 (−5)** — la règle « évidente » est nuisible.
+- **R5 sans la condition ADV** : portée 13, **+1/−12 → 131**.
+- Placebo lexical 0 ; placebo enclitique +1 ; oracle 145 ; hasard top1 0,0042 (1/239).
+
+### Cas connus vérifiés
+- **r230** : tokenisation pure — `_mots` garde `appelle-moi` (18-29), le gold découpe `appelle`+`moi` ; la règle v2 du segment précédent est **inerte** (SUB en tête).
+- **r309** : la règle v2 **s'applique**, mais sur un `Peut-être` (ADV) typé GV par S ; `viendra` est tagué NOUN, absent du lexique et des candidats. **Deux causes différentes**, pas la même règle.
+
+Les 94 spans perdus ne bougent pas : le rendement global reste plafonné à **145/239 = 0,6067**.
+

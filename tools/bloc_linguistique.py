@@ -428,9 +428,20 @@ am is are was were be been being have has had having do does did done
 """.split())
 
 
+ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
+
+
+def _sans_enclitique(mot: str) -> str:
+    """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
+    for suf in ENCLITIQUES:
+        if mot.endswith(suf) and len(mot) > len(suf):
+            return mot[: -len(suf)]
+    return mot
+
+
 def _est_verbe(mot: str) -> bool:
     """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
-    n = _normaliser(mot)
+    n = _normaliser(_sans_enclitique(mot))
     if not n:
         return False
     if n in VERBES_CONNUS:
@@ -617,6 +628,41 @@ class Heuristique:
             return {}
 
     @staticmethod
+    def _repli_cible_gp(texte: str, segment: dict, gns: list[dict]) -> str | None:
+        """Cible vide d'un GP : génitif → tête du GN à gauche (sinon None, le GV tranchera)."""
+        if segment.get("type") != "GP":
+            return None
+        premier = (segment.get("texte") or "").split()[:1]
+        prep = _normaliser(premier[0]) if premier else ""
+        if prep not in ("de", "du", "des", "d", "of", "from"):
+            return None
+        gauche = [g for g in gns if g.get("fin", 0) <= segment.get("debut", 0)]
+        if not gauche:
+            return None
+        g = max(gauche, key=lambda x: x["fin"])
+        return Heuristique._tete_nom(texte, g["debut"], g["fin"])
+
+    @staticmethod
+    def _cible_hors_span(texte: str, segment: dict, gvs: list[dict], cible: str | None):
+        """Un GP n'est pas gouverné par un mot de son span : on prend la tête du GV extérieur.
+
+        `est prêt à manger` : `manger` est **dans** le GP `à manger` → on écarte et on prend la
+        tête du GV extérieur `est prêt` → `prêt` (mesuré : g012, r018).
+        """
+        if not cible or segment.get("type") != "GP":
+            return cible
+        span = texte[segment["debut"]:segment["fin"]]
+        if _normaliser(cible) not in _normaliser(span):
+            return cible
+        dehors = [g for g in gvs
+                  if not (g["debut"] >= segment["debut"] and g["fin"] <= segment["fin"])]
+        if not dehors:
+            return cible
+        gauche = [g for g in dehors if g["fin"] <= segment["debut"]]
+        g = max(gauche, key=lambda x: x["fin"]) if gauche else min(dehors, key=lambda x: x["debut"])
+        return Heuristique._tete_texte(texte[g["debut"]:g["fin"]]) or cible
+
+    @staticmethod
     def _tete_texte(texte: str) -> str | None:
         """La tête d'un texte de candidat : le verbe plein s'il y en a un, sinon le dernier mot.
 
@@ -644,6 +690,7 @@ class Heuristique:
                     strict: bool = False) -> str | None:
         """Le **verbe** du span : le lexique d'abord, puis le POS `VERB`, sinon le dernier mot."""
         mots = [(m.start() + debut, m.group()) for m in re.finditer(r"[\wÀ-ÿ'-]+", texte[debut:fin])]
+        mots = [(d, _sans_enclitique(m)) for d, m in mots]
         # le verbe **plein** d'abord : « J'ai vu » donne `vu`, pas `ai`
         for _, m in mots:
             if _est_verbe(m) and _normaliser(m) not in AUXILIAIRES:
@@ -679,6 +726,12 @@ class Heuristique:
         """
         if segment.get("type") == "GV" or not gvs:
             return None
+        if segment.get("type") == "GP":
+            # un GP n'est pas gouverné par un mot de son propre span (« est prêt à manger »)
+            dehors = [g for g in gvs
+                      if not (g["debut"] >= segment["debut"] and g["fin"] <= segment["fin"])]
+            if dehors:
+                gvs = dehors
         # le plus proche, tous côtés mêlés : la variante « GV de gauche d'abord » a été
         # mesurée (2026-11-05) et donne **le même** exact — elle n'est pas retenue.
         def ecart(g: dict) -> int:
@@ -906,7 +959,10 @@ class Heuristique:
                     if cible and _normaliser(cible) in AUXILIAIRES:
                         cible = None  # « a » / « est » ne sont pas des cibles
                     if not cible:
-                        cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
+                        gns_s = [x for x in c.get("segments", []) if x.get("type") == "GN"]
+                        cible = (self._repli_cible_gp(texte, s, gns_s)
+                                 or self._cible_proche(texte, s, gvs, verbes, cache_gv))
+                    cible = self._cible_hors_span(texte, s, gvs, cible)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
                     if cible:
                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
@@ -932,7 +988,8 @@ class Heuristique:
             cache_gv: dict = {}
             for s in simples:
                 meta = {"role": s["role"], "niveau": s["niveau"]}
-                cible = self._cible_proche(texte, s, gvs_s, verbes, cache_gv)
+                cible = (self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                         or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
@@ -951,7 +1008,8 @@ class Heuristique:
                 if (s["type"], s["debut"], s["fin"]) in deja:
                     continue
                 meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
-                cible = self._cible_proche(texte, s, gvs_u, verbes, cache_gv)
+                cible = (self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                         or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],

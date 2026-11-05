@@ -7,12 +7,12 @@
 | Identifiant | `b9ea3904-889c-4497-a781-694da7d4987c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.2 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 19 |
-| Appels d'outils | 23 |
+| Messages | 47 |
+| Appels d'outils | 53 |
 | Fichiers touchés | 0 |
-| Commandes | 19 |
+| Commandes | 49 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*53 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -41,7 +41,7 @@
 - bash — Read Heuristique implementation
 - bash — Dump English sentence list and duplicates
 - bash — Check spans, overlap, coverage anomalies
-- … et 6 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
@@ -75,4 +75,38 @@
 - **T1** Find missing targets and uncovered tokens
 - **T1** Classify target forms and POS
 - **T1** Compare _est_verbe with gold POS on targets
+- **T1** Token-level _est_verbe vs gold POS
+- **T1** Inspect Heuristique output on English samples
+- **T1** Run official metrics per language subset
+- **T1** Control metrics with S generator disabled
+- **T1** Per-type labels for English and French
+- **T1** Read span report JSON
+- **T1** Reproduce span-loss categories per language
+- **T1** List lost spans and overlapping predictions
+- **T1** Inspect GP losses and simple chunker
+- **T1** Inspect English hand gold
+- **T1** Count multi-target segments
+- **T1** Find English forms with multiple POS tags
+- **T1** List contexts of inconsistent POS forms
+- **T1** Measure POS accuracy with corrected gold
+- **T1** Per-type attachment stats and target errors
+- **T1** Reconcile exact counts with official evaluator
+- **T1** Print exact attachment dict
+- **T1** Test hash-seed determinism of metrics
+- **T1** Test evaluator state dependence
+- **T1** Check for concurrent modifications and file timestamps
+- **T1** Check git HEAD and diffs
+- … et 9 autres
+
+## 4. Mesures et résultats marquants
+
+- **T1** `1.40user 0.02system 0:01.43elapsed 100%CPU (0avgtext+0avgdata 30028maxresident)k`
+- **T1** `e0592c59 2026-11-05 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
+
+## 5. Erreurs rencontrées
+
+2 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : sha HEAD 5640809e8e6bfbd6 sha WT 64b7c5204f21e4c2 same False [stderr] Traceback (most recent call last):   File "<stdin>", line 10, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/
+- **T1** : gold pragma distinct values: [stderr] Traceback (most recent call last):   File "<stdin>", line 7, in <module>   File "/usr/lib64/python3.13/collections/__init__.py", line 614, in __init__     self.up
 

@@ -1424,3 +1424,497 @@ gold words 3179 moy 5.1944
 … [3506 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json, hashlib, pathlib, datetime\n\nmain = json.load(open('/tmp/bench_cache_chunker.json'))\npatch = json.load(open('/tmp/bench_patch_et_off.json'))\ncible = json.load(open('/tmp/bench_cible.json'))\n\ndef … [17463 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 104, in <module>
+KeyError: 'sensibilite'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json\np = '/tmp/gen_pensee.py'\n# regenerate the script from the previous heredoc? simpler: rerun with sed on a saved copy\nPYEOF\n# Re-run the generator with the corrected key, saved from shell history is … [75 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Génère reports/pensee-cache-chunker.json à partir des sorties du banc /tmp.\"\"\"\nimport json, hashlib, pathlib, datetime\n\nRACINE = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nmain = json.load(open('/tmp/bench_cache_chunker.json'))\n … [17557 caractères tronqués]`
+
+  ```
+<path>/tmp/gen_pensee.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_pensee.py && python3 -m json.tool reports/pensee-cache-chunker.json > /dev/null && echo JSON_OK && python3 - <<'EOF'\nimport json\np = json.load(open('reports/pensee-cache-chunker.json'))\nprint('clés:', list(p))\npr … [210 caractères tronqués]`
+
+  ```
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-cache-chunker.json 50741 octets
+JSON_OK
+clés: ['date', 'titre', 'verdict', 'instantane', 'dispositif', 'cache', 'corpus', 'temps_corpus', 'egalite', 'longueurs', 'complexite', 'chemin_defaut', 'controle_negatif', 're_mesure_ciblee', 'validation_patch_reel', 'comparaison_fiche', 'correctif', 'limites', 'fichiers']
+verdict: Cache VALIDÉ. Le O(n²) du chemin chunker est confirmé : 1+2·S appels à _syntagmes_simple (97/193/769 à 160/320/1 280 tokens), pente log-log 1,71-2,00, doublement 160→320 ×3,68 (re-mesure 15 passes). L ...
+égalité: {'chunker': {'C1': '612/612', 'C2': '612/612', 'OFF': '612/612', 'FALSIFIE': '113/612'}, 'defaut': {'C1': '612/612', 'C2': '612/612', 'OFF': '612/612', 'FALSIFIE': '290/612'}}
+comparaison: 14 lignes
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport json\np=json.load(open('/tmp/bench_cache_chunker.json'))\nprint([(x['N'],x['chars'],x['segments_simple'],x['gv_simple'],x['segments_s'],x['gv_s']) for x in p['longueurs']['points'] if x['chemin']=='chunker'])\nEOF", "description": "Get length point s … [6 caractères tronqués]`
+
+  ```
+[(20, 76, 6, 2, 8, 2), (40, 152, 12, 4, 16, 4), (80, 304, 24, 8, 32, 8), (160, 608, 48, 16, 64, 16), (320, 1216, 96, 32, 128, 32), (640, 2432, 192, 64, 256, 64), (1280, 4864, 384, 128, 512, 128)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche de validation (corps, tableaux, correctif)
+
+- **write** `{"content": "# Cache du chunker — validation indépendante : ×11,0 à 160 tokens, égalité 612/612\n\n> **Date** : 2026-11-05 · **Instantané mesuré** : `git show HEAD:tools/bloc_linguistique.py`,\n> sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65` — celui de la fiche\n> [`rappo … [21689 caractères tronqués]`
+
+  ```
+<path>/tmp/rapport_body.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "grep -n 'TABLE_\\|DIFF' /tmp/rapport_body.md", "description": "List placeholders in report body"}`
+
+  ```
+118:<!-- TABLE_CORPUS -->
+131:<!-- TABLE_LONG_CHUNKER -->
+135:<!-- TABLE_LONG_DEFAUT -->
+143:<!-- TABLE_REMESURE -->
+156:<!-- TABLE_COMPLEXITE -->
+280:<!-- DIFF -->
+  ```
+
+- **edit** `{"file_path": "/tmp/rapport_body.md", "old_string": "Autrement dit : **le cache de chunking ne change presque rien au chemin par défaut** ; c'est le\ncache des verbes de GV, seconde moitié du correctif de la fiche, qui le change. Si l'on n'applique\nque la mémoïsation de `_syntagmes_simple`, le défa … [479 caractères tronqués]`
+
+  ```
+The file /tmp/rapport_body.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n\nbody = pathlib.Path('/tmp/rapport_body.md').read_text(encoding='utf-8')\ntables = [b.strip() for b in pathlib.Path('/tmp/tables_fr.md').read_text(encoding='utf-8').split('\\n\\n') if b.strip()]\ … [1022 caractères tronqués]`
+
+  ```
+tables trouvées : 7
+table patch ignorée : 1
+écrit reports/rapport-cache-chunker.md 34570 octets, 555 lignes
+# Cache du chunker — validation indépendante : ×11,0 à 160 tokens, égalité 612/612
+
+> **Date** : 2026-11-05 · **Instantané mesuré** : `git show HEAD:tools/bloc_linguistique.py`,
+> sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65` — celui de la fiche
+> [`rapport-cout-chunker.md`](rapport-cout-chunker.md) · **Verdict** : ✅ **le cache est validé**.
+> Le O(n²) du chemin chunker est confirmé (1+2·S appels : 97/193/769 à 160/320/1 280 tokens ;
+> pente 1,71-2,00). La mémoïsation seule de `_syntagmes_simple` donne **×1,24 sur le corpus et
+> ×5,1/×6,9 à 160/320** ; le cache complet de la fiche (chunking + verbes de GV) donne **×11,0 à
+> 160** (re-mesure ×12,2 ; fiche ×11,6), **×18,1-19,5 à 320**, et **×2,06/×2,61** sur le défaut.
+> Égalité stricte : **612/612** sur les deux chemins et **42/42** sur 7 longueurs × 2 chemins ;
+> le comparateur est sensible (cache falsifié : 113/612 et 290/612). Le patch hoisté complet,
+> appliqué à une copie, fait **1 seul chunking par analyse** et rend **612/612 + 14/14**.
+> La fiche ×11,6 est confirmée à ±10 % près ; le cache ne
+… [424 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md", "limit": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md</path>
+<type>file</type>
+<content>
+1: # Cache du chunker — validation indépendante : ×11,0 à 160 tokens, égalité 612/612
+2: 
+3: > **Date** : 2026-11-05 · **Instantané mesuré** : `git show HEAD:tools/bloc_linguistique.py`,
+4: > sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65` — celui de la fiche
+5: > [`rapport-cout-chunker.md`](rapport-cout-chunker.md) · **Verdict** : ✅ **le cache est validé**.
+6: > Le O(n²) du chemin chunker est confirmé (1+2·S appels : 97/193/769 à 160/320/1 280 tokens ;
+7: > pente 1,71-2,00). La mémoïsation seule de `_syntagmes_simple` donne **×1,24 sur le corpus et
+8: > ×5,1/×6,9 à 160/320** ; le cache complet de la fiche (chunking + verbes de GV) donne **×11,0 à
+9: > 160** (re-mesure ×12,2 ; fiche ×11,6), **×18,1-19,5 à 320**, et **×2,06/×2,61** sur le défaut.
+10: > Égalité stricte : **612/612** sur les deux chemins et **42/42** sur 7 longueurs × 2 chemins ;
+11: > le comparateur est sensible (cache falsifié : 113/612 et 290/612). Le patch hoisté complet,
+12: > appliqué à une copie, fait **1 seul chunking par analyse** et rend **612/612 + 14/14**.
+13: 
+… [10582 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md", "offset": 180, "limit": 210}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md</path>
+<type>file</type>
+<content>
+180: 
+181: Ajustement log-log `temps = a · N^p` sur les points mesurés (R² indiqué) :
+182: 
+183: | chemin | variante | 20-160 | R² | 20-320 | R² | 160-1 280 | R² |
+184: |---|---|---:|---:|---:|---:|---:|---:|
+185: | chunker | original | 1,711 | 0,9991 | 1,784 | 0,9979 | 2,004 | 1,0000 |
+186: | chunker | C1 | 1,190 | 0,9904 | 1,279 | 0,9911 | 1,755 | 0,9988 |
+187: | chunker | C2 | 0,951 | 0,9981 | 1,007 | 0,9960 | 1,420 | 0,9943 |
+188: | chunker | OFF | 1,736 | 0,9981 | 1,798 | 0,9979 | 1,958 | 1,0000 |
+189: | défaut | original | 1,325 | 0,9806 | 1,379 | 0,9895 | 1,806 | 0,9996 |
+190: | défaut | C1 | 1,309 | 0,9906 | 1,383 | 0,9930 | 1,810 | 0,9996 |
+191: | défaut | C2 | 1,029 | 0,9957 | 1,112 | 0,9926 | 1,522 | 0,9986 |
+192: | défaut | OFF | 1,353 | 0,9887 | 1,385 | 0,9941 | 1,763 | 0,9979 |
+193: 
+194: Trois lectures :
+195: 
+196: 1. **Le O(n²) est confirmé.** Sur le chunker, la pente 20-160 vaut 1,71 et 20-320 1,78 ; sur
+197:    160-1 280 elle monte à **2,00**. Le doublement 160→320 coûte ×4,04 dans la série 9 passes,
+198:    **×3,68** dans la re-mesure 15 passe
+… [11605 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md", "offset": 390, "limit": 170}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md</path>
+<type>file</type>
+<content>
+390:          proches: list[str] = []
+391:          for g in sorted(gvs, key=ecart)[:k]:
+392: -            v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+393: +            v = Heuristique._verbe_gv(texte, g, verbes, cache_gv)
+394:              if v and v not in proches:
+395:                  proches.append(v)
+396:          return proches
+397: @@ -853,12 +865,16 @@
+398:          # 5. syntagmes : le générateur S (candidats) ou un chunker simple
+399:          verbes = [(e.debut, e.fin, e.valeur) for e in etiquettes
+400:                    if e.niveau == "pos" and e.type == "VERB"]
+401: +        # (A) un seul chunking par analyse, (B) une seule extraction des GV,
+402: +        # (C) cache local des verbes de GV — durée de CET appel d'analyser.
+403: +        simples = self._syntagmes_simple(texte, lg)
+404: +        gvs_simple = [x for x in simples if x["type"] == "GV"]
+405: +        cache_gv: dict = {}
+406:          cands = self._syntagmes_s(texte)
+407:          cibles_s = self._cibles_s(texte) if cands else {}
+408:          if cands:
+409:          
+… [11214 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 && sha256sum tools/bloc_linguistique.py && git show HEAD:tools/bloc_linguistique.py | sha256sum && git show HEAD:tools/bloc_linguistique.py | grep -n \"gvs_simple = \\[x for x in self._syntagmes_simple\\|simples  … [85 caractères tronqués]`
+
+  ```
+15ee10d3 PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)
+64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa  tools/bloc_linguistique.py
+5640809e8e6bfbd661b86babdf0ed6ce351c8d1bce93a5546f4d22d69575ba2c  -
+875:            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+930:            simples = self._syntagmes_simple(texte, lg)
+947:            simples = self._syntagmes_simple(texte, lg)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat -- tools/bloc_linguistique.py && git diff -- tools/bloc_linguistique.py | head -60", "description": "Inspect latest worktree modification"}`
+
+  ```
+tools/bloc_linguistique.py | 66 +++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 62 insertions(+), 4 deletions(-)
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 07a41ec9..b171b5f2 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -428,9 +428,20 @@ am is are was were be been being have has had having do does did done
+ """.split())
+ 
+ 
++ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
++
++
++def _sans_enclitique(mot: str) -> str:
++    """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
++    for suf in ENCLITIQUES:
++        if mot.endswith(suf) and len(mot) > len(suf):
++            return mot[: -len(suf)]
++    return mot
++
++
+ def _est_verbe(mot: str) -> bool:
+     """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+-    n = _normaliser(mot)
++    n = _normaliser(_sans_enclitique(mot))
+     if not n:
+         return False
+     if n in VERBES_CONNUS:
+@@ -616,6 +627,41 @@ class Heuristique:
+         except Exception:
+             return {}
+ 
++    @staticmethod
++    def _repli_cible_gp(texte: str, segment: dict, gns: list[dic
+… [1394 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\np = Path('reports/rapport-cache-chunker.md')\ns = p.read_text(encoding='utf-8')\n\ndef rep(old, new, count=1):\n    global s\n    assert s.count(old) == count, (s.count(old), old[:80])\n … [2730 caractères tronqués]`
+
+  ```
+ok 560 lignes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json\nfrom pathlib import Path\np = Path('reports/pensee-cache-chunker.json')\nd = json.loads(p.read_text(encoding='utf-8'))\n\nd['instantane']['head_apres_banc'] = \"a914c1e7 (puis 5640809e et au-delà ; l … [1995 caractères tronqués]`
+
+  ```
+ok 51473
+JSON_OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\np = Path('reports/rapport-cache-chunker.md')\ns = p.read_text(encoding='utf-8')\nold = \"HEAD a successivement valu `2e08cbc7`, `de292c7d`, `a2def5ee`,\\n`a914c1e7`, `5640809e`.\"\nnew = … [553 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\nimport re\ns = Path('reports/rapport-cache-chunker.md').read_text(encoding='utf-8')\nprint('placeholders restants:', re.findall(r'<!--[^>]*-->', s))\n# lint des tableaux : lignes commenç … [848 caractères tronqués]`
+
+  ```
+placeholders restants: []
+tableaux: 9
+  ok lignes 22 - 30 pipes 4
+  ok lignes 118 - 123 pipes 8
+  ok lignes 136 - 144 pipes 11
+  ok lignes 148 - 156 pipes 11
+  ok lignes 164 - 170 pipes 9
+  ok lignes 183 - 192 pipes 9
+  ok lignes 209 - 214 pipes 4
+  ok lignes 254 - 279 pipes 7
+  INCOHÉRENT 307 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3]
+lien rapport-cout-chunker.md -> True
+lien pensee-cache-chunker.json -> True
+lien ../tools/bloc_linguistique.py -> True
+lignes totales 560
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\\\\|' reports/rapport-cache-chunker.md | head", "description": "Find escaped pipes in report"}`
+
+  ```
+321:| 662, 689 | ajouter `cache_gv: dict \| None = None` à la signature de `_cible_proche` / `_verbes_proches` |
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md", "old_string": "| 662, 689 | ajouter `cache_gv: dict \\| None = None` à la signature de `_cible_proche` / `_verbes_proches` |", "new_string": "| 662, 689 | ajouter un paramètre `cache_gv` (défaut `None`) … [58 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md", "offset": 315, "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md</path>
+<type>file</type>
+<content>
+315: | 919 | supprimer `gvs_s = [x for x in self._syntagmes_simple(...) ...]` ; utiliser `gvs_simple` |
+316: | 922 | `gvs_s` → `gvs_simple`, et ajouter `cache_gv=cache_gv` |
+317: | 928 | supprimer `simples = self._syntagmes_simple(texte, lg)` (déjà hoisté) |
+318: | 929-930 | `gvs_u = gvs_s + gvs_simple` (même concaténation, sans re-filtrer `simples`) |
+319: | 935, 940 | ajouter `cache_gv=cache_gv` |
+320: | 658 (après) | insérer le helper `_verbe_gv` ci-dessous |
+321: | 662, 689 | ajouter `cache_gv: dict \| None = None` à la signature de `_cible_proche` / `_verbes_proches` |
+322: | 681, 685, 701 | `Heuristique._verbe_dans(...)` → `Heuristique._verbe_gv(texte, g, verbes, cache_gv)` |
+323: 
+324: Le helper, copié de la fiche :
+
+(Showing lines 315-324 of 560. Use offset=325 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md", "new_string": "| 662, 689 | ajouter un paramètre `cache_gv` (défaut `None`) à la signature de `_cible_proche` / `_verbes_proches` |", "old_string": "| 662, 689 | ajouter `cache_gv: dict \\| None = None` … [58 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\nimport json, re\ns = Path('reports/rapport-cache-chunker.md').read_text(encoding='utf-8')\nd = json.load(open('reports/pensee-cache-chunker.json'))\n# 1. plus de \\| dans les tableaux\np … [2489 caractères tronqués]`
+
+  ```
+pipes échappés: 0
+tableaux: 9 tous cohérents
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 23, in <module>
+  File "<stdin>", line 18, in num
+ValueError: could not convert string to float: '---:'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\nimport json\ns = Path('reports/rapport-cache-chunker.md').read_text(encoding='utf-8')\nd = json.load(open('reports/pensee-cache-chunker.json'))\nlignes = s.splitlines(); blocs=[]; cour=[ … [2654 caractères tronqués]`
+
+  ```
+corpus original ('DIFF', [245.3, 1.0, 400.8, 395.2, 1.0, 645.8], [245.288, 1.0, 400.8, 395.237, 1.0, 645.81])
+corpus C1 ('DIFF', [198.0, 1.239, 323.6, 388.3, 1.018, 634.5], [198.019, 1.2387, 323.56, 388.287, 1.0179, 634.46])
+corpus C2 ('DIFF', [196.1, 1.251, 320.4, 385.1, 1.026, 629.2], [196.056, 1.2511, 320.35, 385.072, 1.0264, 629.2])
+corpus OFF ('DIFF', [275.6, 0.89, 450.4, 398.4, 0.992, 650.9], [275.648, 0.8899, 450.41, 398.36, 0.9922, 650.92])
+longueurs chunker ok
+longueurs defaut ok
+re-mesure ok
+DIFF complexite chunker C1 [1.19, 0.9904, 1.279, 0.9911, 1.755, 0.9988] [1.1901, 0.99037, 1.2786, 0.99108, 1.7547, 0.99882]
+DIFF complexite chunker C2 [0.951, 0.9981, 1.007, 0.996, 1.42, 0.9943] [0.9511, 0.99808, 1.0073, 0.99604, 1.4198, 0.99435]
+DIFF complexite chunker OFF [1.736, 0.9981, 1.798, 0.9979, 1.958, 1.0] [1.7359, 0.99809, 1.7982, 0.99791, 1.9576, 0.99996]
+DIFF complexite defaut original [1.325, 0.9806, 1.379, 0.9895, 1.806, 0.9996] [1.3246, 0.98061, 1.3786, 0.98945, 1.806, 0.99955]
+DIFF complexite defaut C1 [1.309, 0.9906, 1.383, 0.993, 1.81, 0.9996] [1.3092, 0.99058, 1.3825, 0.99297, 1.8102, 0.9996]
+DIFF complexite defaut C2 [1.029, 0.9957, 1.112, 0.9926, 1.522, 0.9986] [
+… [306 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\np=json.load(open('reports/pensee-cache-chunker.json'))\nprint('date', p['date'])\nprint('instantane', json.dumps(p['instantane'], ensure_ascii=False, indent=1)[:1200])\nprint('dispositif', json.dumps(p … [194 caractères tronqués]`
+
+  ```
+date 2026-11-05T14:59:48-05:00
+instantane {
+ "fichier": "tools/bloc_linguistique.py",
+ "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+ "sha256_source": "git show HEAD:tools/bloc_linguistique.py au moment du gel",
+ "branche": "s/v7",
+ "head_au_gel": "de292c7d",
+ "head_apres_banc": "a914c1e7 (puis 5640809e et au-delà ; l'arbre a encore changé)",
+ "sha256_arbre_debut": "e568c9fbb4e71b02b1f3cea26e07bea921b06152e0a9cd64507abf4813dca445",
+ "sha256_arbre_fin": "e568c9fbb4e71b02b1f3cea26e07bea921b06152e0a9cd64507abf4813dca445",
+ "arbre_modifie_par_la_mission": false,
+ "note": "le fichier de l'arbre a été patché par un autre agent pendant la session (6e8430… → e568c9…, puis d'autres éditions), puis committé (HEAD 5640809e au moment de la rédaction, puis au-delà). Les mesures portent sur le snapshot 6e8430… figé depuis git HEAD, celui de la fiche ; aucun fichier du dépôt n'a été modifié par cette mission."
+}
+dispositif {
+ "banc": "/tmp/bench_cache_chunker.py",
+ "sha256_banc": "15c4506c1a665116b60bcea2b1ed5184c4ff129bc20ec3ccfc7afc68daf5374b",
+ "banc_patch": "/tmp/bench_patch_et_off.py",
+ "sha256_banc_patch": "a3f14e4d4a1eb7cf90a4fbbc9b846c82e48adf874150381ba78d
+… [1067 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json\nfrom pathlib import Path\np = Path('reports/pensee-cache-chunker.json')\nd = json.loads(p.read_text(encoding='utf-8'))\nd['dispositif']['cpu'] = \"Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz\"\nd['ins … [814 caractères tronqués]`
+
+  ```
+ok
+JSON_OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\np=Path('reports/rapport-cache-chunker.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace('### 8.1 Les 15 éditions, sur l\\'instantané `6e8430…`',\n            '### 8.1 Les éditions, sur  … [364 caractères tronqués]`
+
+  ```
+ok
+301:### 8.1 Les éditions, sur l'instantané `6e8430…`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '244,290p' reports/rapport-cache-chunker.md && echo '--- 8.3 ---' && sed -n '500,515p' reports/rapport-cache-chunker.md", "description": "Review counters section and 8.3"}`
+
+  ```
+Autrement dit : **le cache de chunking ne change presque rien au chemin par défaut** ; c'est le
+cache des verbes de GV, seconde moitié du correctif de la fiche, qui le change. Si l'on n'applique
+que la mémoïsation de `_syntagmes_simple`, le défaut reste à ×1,02-1,07.
+
+Les compteurs le confirment (une analyse par point ; `misses` = calculs réels). La colonne
+`_verbe_gv` compte les appels passés par le cache (les GV des listes) ; les appels **directs** à
+`_verbe_dans` des lignes 883 et 891 (31/63/255 selon N sur le défaut) ne sont pas dans ce compteur.
+C1 n'utilise pas `_verbe_gv` (il hérite des helpers d'origine) : ses appels sont ceux de
+l'original, non comptés ici.
+
+| point | variante | `_syntagmes_simple` | misses | `_verbe_gv` | misses |
+|---|---|---:|---:|---:|---:|
+| chunker 160 | original | 97 | 97 | 640 | 640 |
+| chunker 160 | C1 | 97 | 1 | 0 | 0 |
+| chunker 160 | C2 | 97 | 1 | 640 | 16 |
+| chunker 160 | OFF | 97 | 97 | 640 | 640 |
+| défaut 160 | original | 2 | 2 | 2289 | 2289 |
+| défaut 160 | C1 | 2 | 1 | 0 | 0 |
+| défaut 160 | C2 | 2 | 1 | 2289 | 32 |
+| défaut 160 | OFF | 2 | 2 | 2289 | 2289 |
+| chunker 320 | original | 193 | 193 | 2304 | 2304 |
+| chunker 320 | C1 | 193 | 
+… [2381 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\nimport re\np=Path('reports/rapport-cache-chunker.md')\ns=p.read_text(encoding='utf-8')\ns2=re.sub(r'\\| C1 \\| (\\d+) \\| 1 \\| 0 \\| 0 \\|', r'| C1 | \\1 | 1 | — | — |', s)\nprint('remp … [233 caractères tronqués]`
+
+  ```
+remplacements 0 ? lignes C1 11
+136:| N | S | G | original | C1 | C2 | OFF | gain C1 | gain C2 | gain OFF |
+148:| N | S | G | original | C1 | C2 | OFF | gain C1 | gain C2 | gain OFF |
+164:| point | original | C1 | C2 | OFF | gain C1 | gain C2 | gain OFF |
+186:| chunker | C1 | 1,190 | 0,9904 | 1,279 | 0,9911 | 1,755 | 0,9988 |
+190:| défaut | C1 | 1,309 | 0,9906 | 1,383 | 0,9930 | 1,810 | 0,9996 |
+257:| chunker 160 | C1 | 97 | 1 | — | — |
+261:| défaut 160 | C1 | 2 | 1 | — | — |
+265:| chunker 320 | C1 | 193 | 1 | — | — |
+269:| défaut 320 | C1 | 2 | 1 | — | — |
+273:| chunker 1280 | C1 | 769 | 1 | — | — |
+277:| défaut 1280 | C1 | 2 | 1 | — | — |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\ns=Path('reports/rapport-cache-chunker.md').read_text(encoding='utf-8')\nlignes=s.splitlines(); blocs=[]; cour=[]\nfor i,l in enumerate(lignes,1):\n    if l.startswith('|'): cour.append(( … [339 caractères tronqués]`
+
+  ```
+tableaux 9 lignes 560 pipes échappés 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '=== mes deux fichiers ===' && git status --short -- reports/rapport-cache-chunker.md reports/pensee-cache-chunker.json && ls -l reports/rapport-cache-chunker.md reports/pensee-cache-chunker.json && echo '=== aucun fichier suivi … [177 caractères tronqués]`
+
+  ```
+=== mes deux fichiers ===
+?? reports/pensee-cache-chunker.json
+?? reports/rapport-cache-chunker.md
+-rw-r--r--. 1 stephane stephane 51743  5 nov 15:14 reports/pensee-cache-chunker.json
+-rw-r--r--. 1 stephane stephane 35122  5 nov 15:15 reports/rapport-cache-chunker.md
+=== aucun fichier suivi modifié par moi ? ===
+ M reports/pensee-quatre-modes.json
+?? reports/pensee-audit-v2.json
+?? reports/pensee-cache-chunker.json
+?? reports/pensee-echecs-v2.json
+?? reports/pensee-replis-cible.json
+?? reports/rapport-cache-chunker.md
+?? reports/rapport-echecs-v2.md
+?? reports/rapport-s-paragraphes.md
+=== commits ===
+15ee10d3 PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)
+  ```
+
+- **bash** `{"command": "rm -rf /tmp/applytest && mkdir -p /tmp/applytest/tools && cp /tmp/bloc_linguistique_snapshot.py /tmp/applytest/tools/bloc_linguistique.py && cd /tmp/applytest && patch -p1 < /tmp/correctif.diff > /tmp/patch_apply.log 2>&1; echo \"patch exit=$?\"; cat /tmp/patch_apply.log; sha256sum /tmp … [138 caractères tronqués]`
+
+  ```
+patch exit=1
+can't find file to patch at input line 3
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|--- /tmp/bloc_linguistique_snapshot.py	2026-11-05 14:32:45.367941902 -0500
+|+++ /tmp/bloc_linguistique_patche.py	2026-11-05 14:39:35.946375921 -0500
+--------------------------
+File to patch: 
+Skip this patch? [y] 
+Skipping patch.
+7 out of 7 hunks ignored
+6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65  /tmp/applytest/tools/bloc_linguistique.py
+5639a3760adf6d0f879d136cc723eb88979d1970007d08398e7e6589bd575738  /tmp/bloc_linguistique_patche.py
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PYEOF'\nfrom pathlib import Path\nlignes = Path('/tmp/correctif.diff').read_text(encoding='utf-8').splitlines()\nlignes[0] = '--- a/tools/bloc_linguistique.py'\nlignes[1] = '+++ b/tools/bloc_linguistique.py'\nPath('/tmp/correctif_report.diff').write_text('\\n'.jo … [471 caractères tronqués]`
+
+  ```
+patch exit=0
+patching file tools/bloc_linguistique.py
+5639a3760adf6d0f879d136cc723eb88979d1970007d08398e7e6589bd575738  /tmp/applytest/tools/bloc_linguistique.py
+5639a3760adf6d0f879d136cc723eb88979d1970007d08398e7e6589bd575738  /tmp/bloc_linguistique_patche.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\np=json.load(open('reports/pensee-cache-chunker.json'))\nprint('temps_corpus', json.dumps(p['temps_corpus'], ensure_ascii=False)[:900])\nprint('egalite corpus', p['egalite']['corpus'])\nprint('egalite d … [853 caractères tronqués]`
+
+  ```
+temps_corpus {"chunker": {"temps_ms": {"original": 245.288, "C1": 198.019, "C2": 196.056, "OFF": 275.648}, "gains": {"original": 1.0, "C1": 1.2387, "C2": 1.2511, "OFF": 0.8899}, "us_par_phrase": {"original": 400.8, "C1": 323.56, "C2": 320.35, "OFF": 450.41}}, "defaut": {"temps_ms": {"original": 395.237, "C1": 388.287, "C2": 385.072, "OFF": 398.36}, "gains": {"original": 1.0, "C1": 1.0179, "C2": 1.0264, "OFF": 0.9922}, "us_par_phrase": {"original": 645.81, "C1": 634.46, "C2": 629.2, "OFF": 650.92}}}
+egalite corpus {'chunker': {'C1': '612/612', 'C2': '612/612', 'OFF': '612/612', 'FALSIFIE': '113/612'}, 'defaut': {'C1': '612/612', 'C2': '612/612', 'OFF': '612/612', 'FALSIFIE': '290/612'}}
+egalite details keys ['C1', 'C2', 'OFF', 'FALSIFIE']
+correctif sites 14 ['855 (après)', '861', '887/895', '899']
+longueurs points 14 re-mesure 5
+patch compteurs {'chunker_160': {'simple': 1, 'verbe': 16}, 'defaut_160': {'simple': 1, 'verbe': 63}, 'chunker_320': {'simple': 1, 'verbe': 32}, 'defaut_320': {'simple': 1, 'verbe': 127}, 'chunker_1280': {'simple': 1, 'verbe': 128}, 'defaut_1280': {'simple': 1, 'verbe': 511}}
+fichiers {'rapport': 'reports/rapport-cache-chunker.md', 'pensee': 'reports/pensee-
+… [68 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && sha256sum /tmp/correctif_report.diff && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nfrom pathlib import Path\np=Path('reports/rapport-cache-chunker.md')\ns=p.read_text(encoding='utf-8')\nold=\"\"\"Le correctif a été appliqué à une **copie /tmp** … [648 caractères tronqués]`
+
+  ```
+73b1b4b9b1aacc2dcb1fd527ff5a41cd907ad5622356a4a8ad90cc4b28cd15a5  /tmp/correctif_report.diff
+ok
+  ```
+

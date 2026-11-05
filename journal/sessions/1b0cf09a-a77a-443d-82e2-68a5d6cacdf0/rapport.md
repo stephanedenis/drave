@@ -7,12 +7,12 @@
 | Identifiant | `1b0cf09a-a77a-443d-82e2-68a5d6cacdf0` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.5 h |
+| Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 60 |
-| Appels d'outils | 62 |
-| Fichiers touchés | 1 |
-| Commandes | 50 |
+| Messages | 98 |
+| Appels d'outils | 100 |
+| Fichiers touchés | 4 |
+| Commandes | 77 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **valider  … [2074 caractères tronqués]
 
-*62 appels d'outils.* Actions notables :
+*100 appels d'outils.* Actions notables :
 
 - bash — Check repo status and branch
 - bash — List reports and file sizes
@@ -41,11 +41,11 @@
 - bash — Top-level structure of pensee file
 - bash — Inspect key sections of pensee JSON
 - bash — Inspect default-path long points
-- … et 40 autres
+- … et 73 autres
 
 **Synthèse produite :**
 
-⏵ Assemblage des faits mesurés et préparation du JSON de la fiche
+⏵ Rédaction de la fiche de validation (corps, tableaux, correctif)
 
 ## 3. Travail accompli
 
@@ -54,6 +54,9 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/bench_cache_chunker.py` | 1 | 0 |
+| `/tmp/gen_pensee.py` | 1 | 0 |
+| `/tmp/rapport_body.md` | 1 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-cache-chunker.md` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +100,7 @@
 - **T1** Read patch benchmark error
 - **T1** Fix lambda keyword and rerun patch benchmark
 - **T1** Generate markdown tables from benchmark JSON
-- … et 10 autres
+- … et 37 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -161,11 +164,30 @@
 - **T1** `| défaut 640 | 339,03 | 102,59 | ×3,30 | 1/1 |`
 - **T1** `| chunker 1280 | 3809,82 | 86,19 | ×44,20 | 1/1 |`
 - **T1** `| défaut 1280 | 1118,99 | 313,06 | ×3,57 | 1/1 |`
+- **T1** `verdict: Cache VALIDÉ. Le O(n²) du chemin chunker est confirmé : 1+2·S appels à _syntagmes_simple (97/193/769 à 160/320/1 280 tokens), pente log-log 1,71-2,00, doublement 160→320 ×3,68 (re-mesure 15 p`
+- **T1** `# Cache du chunker — validation indépendante : ×11,0 à 160 tokens, égalité 612/612`
+- **T1** `> pente 1,71-2,00). La mémoïsation seule de `_syntagmes_simple` donne **×1,24 sur le corpus et`
+- **T1** `> ×5,1/×6,9 à 160/320** ; le cache complet de la fiche (chunking + verbes de GV) donne **×11,0 à`
+- **T1** `> 160** (re-mesure ×12,2 ; fiche ×11,6), **×18,1-19,5 à 320**, et **×2,06/×2,61** sur le défaut.`
+- **T1** `> Égalité stricte : **612/612** sur les deux chemins et **42/42** sur 7 longueurs × 2 chemins ;`
+- **T1** `> La fiche ×11,6 est confirmée à ±10 % près ; le cache ne linéarise pas (pente 1,42-1,52).`
+- **T1** `que la mémoïsation de `_syntagmes_simple`, le défaut reste à ×1,02-1,07.`
+- **T1** `- **OFF vs original, corpus chunker** : 275,6 ms contre 245,3 ms dans la série 9 passes (×0,89),`
+- **T1** `mais **236,5 ms contre 229,7 ms** dans la re-mesure 11 passes (×0,97) ; l'écart de la première`
+- **T1** `série est un épisode de charge. Le résidu +3-5 % est le surcoût des frames Python de la`
+- **T1** `- **OFF vs original, longueurs** : ratios ×0,91 à ×1,09 (chunker et défaut), médiane proche de`
+- **T1** `1,00. OFF ne montre **jamais** le gain de C2 (×2,3 à ×37 selon le point).`
+- **T1** `cache des verbes en porte l'essentiel), mais le 2→1 manque : environ 2-4 % sur le défaut, pas de`
+- **T1** `quoi changer le ×2. À appliquer sur `6e8430…` ou à fusionner avec ce patch partiel.`
+- **T1** `coût et le gain défaut. Avec la base B à verbe plein, la fiche mesure ×1,07-1,13 : ne pas lire`
+- **T1** `×2,0 comme universel.`
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : False C1 egal True n_etq 18 [stderr] Traceback (most recent call last):   File "<stdin>", line 9, in <module>   File "/tmp/bench_cache_chunker.py", line 84, in analyser     return super().analyser(tex
 - **T1** : diff exit=1 [stderr] Traceback (most recent call last):   File "/tmp/appliquer_correctif.py", line 93, in <module>     rem('return Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)',     ~~
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 104, in <module> KeyError: 'sensibilite' [exit code: 1]
+- **T1** : pipes échappés: 0 tableaux: 9 tous cohérents [stderr] Traceback (most recent call last):   File "<stdin>", line 23, in <module>   File "<stdin>", line 18, in num ValueError: could not convert string t
 

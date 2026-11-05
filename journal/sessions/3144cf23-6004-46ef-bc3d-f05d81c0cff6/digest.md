@@ -647,3 +647,131 @@ chunker miss 162 Counter({'REL': 74, 'SUB': 69, 'GP': 19})
 REL exacts par le chunker seul:
   ```
 
+### 🤖 Assistant
+
+⏵ Examining gold clause tokens and boundary signals in detail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, re, json\nsys.path.insert(0, 'tools'); sys.path.insert(0, 'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nphrases = charger()\nh_true = bl.Heuristique(segm … [1078 caractères tronqués]`
+
+  ```
+==================== REL
+en reel 'that I read'                      :: that/CONJ I/PRON read/VERB                              || is/AUX exciting/ADJ
+en reel 'she talks about'                  :: she/PRON talks/VERB about/PREP                          || is/AUX out/ADV
+en reel 'that you read'                    :: that/CONJ you/PRON read/VERB                            || is/AUX long/ADJ
+en reel 'where we live'                    :: where/PRON we/PRON live/VERB                            || is/AUX beautiful/ADJ
+en reel 'that we saw'                      :: that/CONJ we/PRON saw/VERB                              || was/AUX long/ADJ
+en reel 'where I was born'                 :: where/PRON I/PRON was/AUX born/VERB                     || is/AUX small/ADJ
+en reel 'who speaks'                       :: who/PRON speaks/VERB                                    || is/AUX my/DET father/NOUN
+fr reel "que j'ai vu"                      :: que/PRON j'/PRON ai/AUX vu/VERB                         || dormait/VERB
+en reel 'that I read'                      :: that/PRON I/PRON read/VERB                              || is/AUX good/ADJ
+en reel 'whom I mention'                   :: whom/PRON I/PRON mentio
+… [8383 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Debugging exact chunker behavior on representative sentences
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh = bl.Heuristique(segmenter_s=False)\nfor txt in [\"Le train entre en gare.\", \"The painting is hung on the wall.\", \"The duck is ready to  … [761 caractères tronqués]`
+
+  ```
+== Le train entre en gare.
+    GN 'Le train' 0 8
+    GP 'entre en gare' 9 22
+   tokens: [(0, 2, 'Le'), (3, 8, 'train'), (9, 14, 'entre'), (15, 17, 'en'), (18, 22, 'gare'), (22, 23, '.')]
+   verbe? [('Le', False), ('train', False), ('entre', True), ('en', False), ('gare', False), ('.', False)]
+== The painting is hung on the wall.
+    GN 'The painting' 0 12
+    GV 'is hung on the wall' 13 32
+   tokens: [(0, 3, 'The'), (4, 12, 'painting'), (13, 15, 'is'), (16, 20, 'hung'), (21, 23, 'on'), (24, 27, 'the'), (28, 32, 'wall'), (32, 33, '.')]
+   verbe? [('The', False), ('painting', False), ('is', False), ('hung', False), ('on', False), ('the', False), ('wall', False), ('.', False)]
+== The duck is ready to eat.
+    GN 'The duck' 0 8
+    GV 'is ready to eat' 9 24
+   tokens: [(0, 3, 'The'), (4, 8, 'duck'), (9, 11, 'is'), (12, 17, 'ready'), (18, 20, 'to'), (21, 24, 'eat'), (24, 25, '.')]
+   verbe? [('The', False), ('duck', False), ('is', False), ('ready', False), ('to', False), ('eat', False), ('.', False)]
+== Les oiseaux volent au-dessus du lac.
+    GN 'Les oiseaux volent au-dessus' 0 28
+    GP 'du lac' 29 35
+   tokens: [(0, 3, 'Les'), (4, 11, 'oiseaux'), (12, 18, 'volent'), (19, 28, 'au-dess
+… [2156 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking verb recognition on the clause tokens (key feasibility constraint)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases = charger()\nh_true  … [1343 caractères tronqués]`
+
+  ```
+REL verbes du gold: 46 reconnus par _est_verbe: 18 inconnus: [('live', 3), ('mention', 3), ('bought', 2), ('crie', 2), ('dessine', 2), ('born', 1), ('speaks', 1), ('go', 1), ('achetée', 1), ('pousse', 1), ('eat', 1), ('is', 1), ('cross', 1), ('lives', 1), ('nage', 1)]
+SUB verbes du gold: 24 reconnus par _est_verbe: 16 inconnus: [('rains', 3), ('raining', 1), ('snows', 1), ('crie', 1), ('compte', 1), ('commence', 1)]
+REL Counter({('VERB', False, False): 27, ('VERB', False, True): 18, ('AUX', True, True): 3, ('AUX', True, False): 2, ('VERB', True, False): 1})
+SUB Counter({('VERB', False, True): 16, ('AUX', True, False): 9, ('VERB', False, False): 8, ('AUX', False, False): 2, ('AUX', True, True): 1})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases = charger(); h_true= … [1013 caractères tronqués]`
+
+  ```
+REL verbes gold 46 POS VERB par _pos 18 inconnus [('live', 3), ('mention', 3), ('crie', 2), ('dessine', 2), ('talks', 1), ('born', 1), ('speaks', 1), ('left', 1), ('barks', 1), ('achetée', 1), ('pousse', 1), ('sings', 1), ('flies', 1), ('is', 1), ('grows', 1), ('cross', 1), ('lives', 1), ('nage', 1), ('marche', 1), ('saute', 1)]
+SUB verbes gold 24 POS VERB par _pos 16 inconnus [('arrive', 1), ('leave', 1), ('snows', 1), ('sang', 1), ('want', 1), ('leaves', 1), ('crie', 1), ('compte', 1)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the synthetic gold oddities (GP without preposition)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nfrom evaluer_gold import charger\nphrases=charger()\nfor p in phrases:\n    if p['source']!='synthetique': continue\n    cibles … [419 caractères tronqués]`
+
+  ```
+'mon sombre village marche avec il'
+    GN 'mon sombre village' 0 18 cible= None None
+    GV 'marche avec il' 19 33 cible= None None
+    GP 'il' 31 33 cible= marche ['marche', 'village']
+'ma montagne observe avec les jardin'
+    GN 'ma montagne' 0 11 cible= None None
+    GV 'observe avec les jardin' 12 35 cible= None None
+    GP 'les jardin' 25 35 cible= observe ['observe', 'montagne']
+'le voyage nage pour les ancienne lettre'
+    GN 'le voyage' 0 9 cible= None None
+    GV 'nage pour les ancienne lettre' 10 39 cible= None None
+    GP 'les ancienne lettre' 20 39 cible= nage ['nage', 'voyage']
+'le chemin nage avec le renard'
+    GN 'le chemin' 0 9 cible= None None
+    GV 'nage avec le renard' 10 29 cible= None None
+    GP 'le renard' 20 29 cible= nage ['nage', 'chemin']
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking whether gold GVs include subjects (regression risk for rule b)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases=charger()\nc=Counter()\nex=[]\nfor p in phrases:\n   … [554 caractères tronqués]`
+
+  ```
+GV count 712
+GV commençant par pronom: 0
+top premiers [('est', 42), ('is', 39), ('ne', 24), ('dort', 14), ('nage', 11), ('marche', 11), ('commence', 10), ('reads', 9), ('prépare', 9), ('ferme', 9), ('écoute', 9), ('crie', 9), ('lit', 8), ('sleeps', 8), ('compte', 8)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Building the local rule simulator (copy of the chunker in /tmp)
+
+- **bash** `{"command": "mkdir -p /tmp/spans && cp /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py /tmp/spans/bloc_linguistique_copie.py && ls -l /tmp/spans/", "description": "Copy chunker to /tmp for local simulation"}`
+
+  ```
+total 104
+-rw-------. 1 stephane stephane 105381  5 nov 15:15 bloc_linguistique_copie.py
+  ```
+
+- **write** `{"file_path": "/tmp/spans/regles.py", "content": "\"\"\"Simulation locale des deux règles sur une COPIE du chunker (aucune écriture dans le dépôt).\"\"\"\nfrom __future__ import annotations\n\nimport re\nimport sys\n\nsys.path.insert(0, \"/tmp/spans\")\nimport bloc_linguistique_copie as bl\n\n# ---- … [11489 caractères tronqués]`
+
+  ```
+<path>/tmp/spans/regles.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+

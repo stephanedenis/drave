@@ -7,12 +7,12 @@
 | Identifiant | `3f8f2bb8-781b-44a6-9e14-58025004b6fc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.6 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 56 |
-| Appels d'outils | 66 |
+| Messages | 70 |
+| Appels d'outils | 80 |
 | Fichiers touchés | 0 |
-| Commandes | 56 |
+| Commandes | 70 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2447 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - bash — Check repo state and locate attachment reports
 - read
@@ -41,11 +41,11 @@
 - bash — Show v2 commit stat and bloc diff
 - bash — Inspect lexicon variable and imports
 - bash — Show evaluer_gold and autotest v2 diff
-- … et 43 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ Replaying v2 ablations and checking the learned-model result.
+⏵ Correcting the JSON verdict counts and rounding notes.
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Count head-fixable top-k strict failures pre-v2
 - **T1** Measure F1 and F1+F2 on pre-v2 base
 - **T1** Count gates per commit and show post-v2 diff
-- … et 16 autres
+- … et 30 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -106,6 +106,11 @@
 - **T1** `| **rang 0 seul** (premier de la liste, sans apprentissage) | **139/145** | **0,9586** |`
 - **T1** `- **Modèle contre rang 0** : 3 justes / 0 fausse (g003, g014, g016), **p = 0,25**. Le « appris » ajoute +3 au prior, pas davantage.`
 - **T1** `1. **Le levier est le vivier, pas les poids** : le simple « premier candidat plein de la liste gauche → droite → dedans » fait **139/145** (95,9 %), déjà au-dessus de la règle live (137). Les 25 poids`
+- **T1** `repères: {'exactitude_entrainement': 0.9931, 'rang0_justes': 139, 'rang0_taux': 0.9586, 'rang0_par_type': {'GP': {'n': 83, 'justes': 78, 'taux': 0.9398}, 'REL': {'n': 26, 'justes': 26, 'taux': 1.0}, '`
+- **T1** `e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
+- **T1** `"rang0_justes": 139,`
+- **T1** `"rang0_taux": 0.9586,`
+- **T1** `"rang0_par_type": {`
 
 ## 5. Erreurs rencontrées
 

@@ -1,0 +1,64 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "181/181",
+ "labels": 145,
+ "cibles": 239,
+ "avant": {
+  "exact": 137,
+  "exact_span": 0.9448,
+  "top1": 140,
+  "topk": 142,
+  "topk_exact": 141,
+  "verbe": 0.9569,
+  "nom": 0.8966
+ },
+ "apres": {
+  "exact": 141,
+  "exact_span": 0.9724,
+  "top1": 143,
+  "top1_span": 0.9862,
+  "topk": 142,
+  "topk_span": 0.9793,
+  "topk_exact": 142,
+  "topk_exact_span": 0.9793,
+  "verbe": 0.9655,
+  "nom": 1.0
+ },
+ "rendement": {
+  "top1": 0.5983,
+  "topk": 0.5941,
+  "exact": 0.59
+ },
+ "regles_integrees": {
+  "R2": "un GP n'est pas gouverné par un mot de son span (+2)",
+  "R3": "cible vide génitive → tête du GN à gauche (+1)",
+  "R4": "enclitiques (+1)"
+ },
+ "regles_rejetees": {
+  "R1": "lexique rêver/sauter/marcher (formes du gold)",
+  "R5": "pseudo-GV ADV (n=1)"
+ },
+ "controles_negatifs": {
+  "completion_naive": "132 (−5)",
+  "R5_sans_ADV": "131 (−6)",
+  "R3a": "2/4"
+ },
+ "echecs_restants": [
+  "s041",
+  "s108",
+  "s122",
+  "r309"
+ ],
+ "spans": {
+  "REL": 48,
+  "SUB": 33,
+  "GP": 13,
+  "total": 94
+ },
+ "limites": [
+  "4 échecs (lexique ou n=1)",
+  "94 spans chez S",
+  "gold 612"
+ ]
+}
