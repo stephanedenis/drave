@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **1 session(s)** · **5 thème(s)**
+**22 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,6 +14,7 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
+| mesures | 1 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -48,6 +49,7 @@
 | 00:55 | `390357c7` | ÉTAT — HEURE 01 H 02 ; INDICE EN SECTION 3 (16 MIN), AUCUNE NON-ZÉRO |
 | 00:58 | `bfc8557a` | ÉTAT — HEURE 01 H 05 ; INDICE À 19 MIN, SECTION 3, AUCUNE NON-ZÉRO |
 | 01:01 | `f96916f8` | PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08 |
+| 01:10 | `01107366` | BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE |
 
 ## Le récit de la journée (écrit à la main)
 

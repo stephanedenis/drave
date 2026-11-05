@@ -9,12 +9,12 @@
 | Début | 2026-11-04 07:25 |
 | Durée | 17.8 h |
 | Tours | 256 |
-| Messages | 1426 |
-| Appels d'outils | 1435 |
+| Messages | 1428 |
+| Appels d'outils | 1437 |
 | Fichiers touchés | 15 |
-| Commandes | 1247 |
+| Commandes | 1249 |
 | Sous-agents | 0 |
-| Commits | 276 |
+| Commits | 277 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -6314,7 +6314,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 256 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run controls and check pass progress
@@ -6330,11 +6330,11 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Inspect bench dataset docs entries
 - bash — Test all bench question anchors against files
 - bash — Read questions and current doc text
-- … et 5 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ Cycle 251 : la porte-lecteur est rejouée VERTE après correction d'une ancre ; je commit
+⏵ Cycle 251 : 60 portes passées, les 2 rouges tolérées sont là (indice, mélange) ; je mets l'état à jour
 
 ## 3. Travail accompli
 
@@ -6400,7 +6400,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1207 autres
+- … et 1209 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6824,4 +6824,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 05 ; INDICE À 19 MIN, SECTION 3, AUCUNE NON-ZÉRO" -m "La porte continue ses captures d'état (section 3) ; sa durée dépasse la dernière passe (
 - PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08" -m "porte-indice rend code 1 comme dans les deux passes préc
 - BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE" -m "La passe complète a trouvé la première rouge non tolérée : porte-lec
+- ÉTAT — PASSE 60/83 : LES DEUX ROUGES TOLÉRÉES SONT LÀ (INDICE, MÉLANGE) ; LECTEUR CORRIGÉE ; HEURE 01 H 12" -m "Le registre de la passe compte 60 entrées : port
 

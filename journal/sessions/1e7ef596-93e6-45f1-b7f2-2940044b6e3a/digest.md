@@ -34760,3 +34760,39 @@ EXIT=0
 ⏵ Cycle 251 : la porte-lecteur est rejouée VERTE après correction d'une ancre ; je commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h251.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h251.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [1625 caractères tronqués]`
+
+  ```
+2026-11-05 01 h 10
+[s/v7 01107366] BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE
+ 12 files changed, 466 insertions(+), 23 deletions(-)
+01107366 BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE
+f96916f8 PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08
+porte lecteur exit 0
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je vérifie où en est la passe après la correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; wc -l work/portes/passe-2404-23h45/registre.txt ; awk '$2 != 0' work/portes/passe-2404-23h45/registre.txt ; tail -2 work/portes/passe-2404-23h45.log ; pgrep -af \"toutes-les-portes\" | grep -v pgrep | head -1 ; python3 tools/revue_doc … [201 caractères tronqués]`
+
+  ```
+60 work/portes/passe-2404-23h45/registre.txt
+porte-indice 1 1207
+porte-lecteur 1 0
+porte-melange 1 148
+  porte-occupation-elagage ✅                          62 s  ✅ porte occupation × élagage : la cible annoncée est VÉRIFIÉE dans le fichier exporté
+  porte-occupation-moteur ✅                          61 s  ✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+1119604 bash tools/toutes-les-portes.sh
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3986 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : 60 portes passées, les 2 rouges tolérées sont là (indice, mélange) ; je mets l'état à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h251b.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h251b.md'\nt=open(p).read()\nold=\"**31 passées, 1 rouge tolérée : `porte-indice` 1 207 s**\"\nnew=\"**60 passées ; 2 rouges to … [1329 caractères tronqués]`
