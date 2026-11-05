@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 112.9 h |
+| Durée | 113.0 h |
 | Tours | 175 |
-| Messages | 2222 |
-| Appels d'outils | 1924 |
+| Messages | 2230 |
+| Appels d'outils | 1933 |
 | Fichiers touchés | 25 |
-| Commandes | 1587 |
+| Commandes | 1594 |
 | Sous-agents | 2 |
-| Commits | 233 |
+| Commits | 234 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9369,7 +9369,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*47 appels d'outils.* Actions notables :
+*56 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9385,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 25 autres
+- … et 31 autres
 
 **Synthèse produite :**
 
-⏵ 169/169 ; je commite le round des spans
+⏵ Round 4 : le dénominateur de l'attachement — 239 cibles contre 146 segments, je sépare les deux
 
 ## 3. Travail accompli
 
@@ -9470,7 +9470,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1547 autres
+- … et 1554 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9851,4 +9851,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LE VERBE DU GV-PHRASE : EXACT 0,0586 → 0,0962, TOP-K 0,5105, TÊTE 0,8414 ; 167/167" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport
 - B13 — LE LEXIQUE VERBAL : EXACT 0,0962 → 0,1381, TÊTE 0,9034 ; 168/168" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-lexique-ve
 - B13 — LES SPANS PERDUS : 48 REL, 33 SUB, 12 GP (81 CHEZ S) ; LE GP EST BORNÉ AU VERBE ; 169/169" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/
+- B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170" -- tools/tests/linguistique/evaluer_gold.p
 

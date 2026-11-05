@@ -1,0 +1,24 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "170/170",
+ "gold": 612,
+ "cibles": 239,
+ "labels": 146,
+ "couverture": 0.6109,
+ "rendement": {
+  "top1": 0.4812,
+  "topk": 0.5523,
+  "exact": 0.1381
+ },
+ "exactitude_span": {
+  "top1": 0.7877,
+  "topk": 0.9041,
+  "exact": 0.226
+ },
+ "limites": [
+  "les 93 spans chez S",
+  "classement non appris",
+  "gold 612"
+ ]
+}

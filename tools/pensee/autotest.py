@@ -2423,6 +2423,18 @@ def t166_spans() -> tuple[bool, str]:
         f"spans : {cats['REL']} REL, {cats['SUB']} SUB, {cats['GP']} GP")
 
 
+def t167_denominateur() -> tuple[bool, str]:
+    """Le dénominateur : rendement global (÷ 239) et exactitude spans (÷ 146)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (a["cibles"] == 239 and a["labels"] == 146
+            and abs(a["top1_taux_span"] - 0.7877) < 0.001
+            and abs(a["topk_taux_span"] - 0.9041) < 0.001
+            and abs(a["exact_taux_span"] - 0.226) < 0.001), (
+        f"dénominateur : spans {a['top1_taux_span']} / {a['topk_taux_span']} / {a['exact_taux_span']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2588,7 +2600,8 @@ def main() -> int:
               ("T163 échecs attachement", t163_echecs_attachement()),
               ("T164 verbe du GV", t164_verbe_gv()),
               ("T165 lexique verbal", t165_lexique_verbal()),
-              ("T166 spans perdus", t166_spans())]
+              ("T166 spans perdus", t166_spans()),
+              ("T167 dénominateur", t167_denominateur())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

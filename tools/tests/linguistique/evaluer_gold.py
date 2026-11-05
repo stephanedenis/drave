@@ -162,9 +162,14 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
         "fraction_semantique": round(sum(fractions) / max(1, n), 4) if fractions else 0.0,
         "attachement": {"cibles": att_n, "labels": att_labels,
                         "top1": att_top1, "topk": att_topk, "exact": att_exact,
+                        # rendement global : la cible est-elle trouvée, span compris ?
                         "top1_taux": round(att_top1 / max(1, att_n), 4),
                         "topk_taux": round(att_topk / max(1, att_n), 4),
                         "exact_taux": round(att_exact / max(1, att_n), 4),
+                        # exactitude sur les segments au bon span : l'attachement seul
+                        "top1_taux_span": round(att_top1 / max(1, att_labels), 4),
+                        "topk_taux_span": round(att_topk / max(1, att_labels), 4),
+                        "exact_taux_span": round(att_exact / max(1, att_labels), 4),
                         "couverture": round(att_labels / max(1, att_n), 4)},
         "attachement_tete": {"cibles": att_t_n, "labels": att_t_labels,
                              "top1": att_t_top1, "topk": att_t_topk,
