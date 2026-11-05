@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 112.0 h |
 | Tours | 174 |
-| Messages | 2168 |
-| Appels d'outils | 1868 |
+| Messages | 2177 |
+| Appels d'outils | 1877 |
 | Fichiers touchés | 25 |
-| Commandes | 1539 |
+| Commandes | 1547 |
 | Sous-agents | 2 |
-| Commits | 229 |
+| Commits | 230 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9307,7 +9307,7 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 
 ### Tour 174 — où en est-on?
 
-*8 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'état courant du dépôt
 - bash — Lire le bloc de ma session dans l'état
@@ -9317,6 +9317,13 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - bash — Rafraîchir le heartbeat et vérifier
 - bash — Mettre à jour l'état et committer le heartbeat
 - job_output
+- bash — Voir la violation de budget
+- bash — Voir la structure des références et les budgets
+- bash — Trim des deux documents au-dessus du budget
+- bash — Finir le trim des budgets et vérifier
+- bash — Dernier trim README
+- bash — Lister les dernières lignes pensee du README
+- … et 2 autres
 
 ## 3. Travail accompli
 
@@ -9397,7 +9404,7 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1499 autres
+- … et 1507 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9774,4 +9781,5 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "165/165 (CANDIDA
 - B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pe
 - ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; B13 166/166" -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan
+- DOCS — BUDGETS T1 REVENUS DANS LE CADRE : README 2800, RÉFÉRENCES 2500 (PASSES ANCIENNES RETIRÉES)" -- reports/README.md docs/pilotage/references-non-regression
 

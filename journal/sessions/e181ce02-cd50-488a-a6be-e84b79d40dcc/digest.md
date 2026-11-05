@@ -38384,3 +38384,96 @@ heartbeat rafraîchi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Prochaine action** : les **candidats verbes**, puis le **générateur S**.\",\n            \"- **Prochaine action** : … [1047 caractères tronqués]`
+
+  ```
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/taille_documents.py          EXIT=1
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+[still running after 60000ms; moved to background job bash-267]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-267", "timeout_ms": 600000, "wait": true}`
+
+  ```
+16 files changed, 248 insertions(+), 30 deletions(-)
+COMMIT OK 1
+2c432406 ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; B13 166/166
+jeu 05 nov 2026 08:39:20 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -3", "description": "Voir la violation de budget"}`
+
+  ```
+❌ 2 violation(s) :
+     · reports/README.md : 2924 mots > budget 2800 (T1)
+     · docs/pilotage/references-non-regression.md : 2579 mots > budget 2500 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Passe précédente\" docs/pilotage/references-non-regression.md | head -5; wc -w docs/pilotage/references-non-regression.md reports/README.md", "description": "Voir la structure des références et les budgets"}`
+
+  ```
+13:> **Passe précédente — 2026-11-03 à 11 h 30 :** **82 portes, 80 vertes, 2 rouges**,
+20:> **Passe précédente — 2026-11-03 à 04 h 10 :** 82 portes, 77 vertes, 5 rouges, 1 h 40 — 4 connues +
+27:> **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env., `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) — **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers), dès que le JSON a existé ; aucune régression structurelle. La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
+29:> **Passe précédente — 2026-11-02 à 06 h :** 81 portes, 76 vertes, 5 rouges (`/tmp/portes-…`,
+32:> **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+ 2579 docs/pilotage/references-non-regression.md
+ 2924 reports/README.md
+ 5503 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# 1) références : retirer les deux passes les plus anciennes (historique, pas référence)\np=pathlib.Path('docs/pilotage/references-non-regression.md'); lignes=p.read_text().splitlines(keepends=Tr … [901 caractères tronqués]`
+
+  ```
+références : lignes retirées 2
+README : lignes retirées 2
+     · reports/README.md : 2886 mots > budget 2800 (T1)
+     · docs/pilotage/references-non-regression.md : 2544 mots > budget 2500 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncibles=(\"rapport-pensee-tirages.md\",\"rapport-pensee-variance.md\",\"rapport-pensee-soustype-variance.md\",\"rap … [815 caractères tronqués]`
+
+  ```
+README : lignes retirées 2
+références : lignes retirées 1
+  ❌ 1 violation(s) :
+     · reports/README.md : 2850 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncibles=(\"rapport-pensee-pragmatique-full.md\",\"rapport-pensee-fusion-soustype.md\",\"rapport-pensee-quatre-modes … [392 caractères tronqués]`
+
+  ```
+README : lignes retirées 0
+  ❌ 1 violation(s) :
+     · reports/README.md : 2850 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rapport-pensee\" reports/README.md | tail -8", "description": "Lister les dernières lignes pensee du README"}`
+
+  ```
+63:| [`rapport-pensee-porte.md`](rapport-pensee-porte.md) | **B13** — la porte neuronale : bonne politique 28 nœuds/58 (sonde 5), aveugle 200/483 sans but, **14/14** |
+64:| [`rapport-pensee-labyrinthe.md`](rapport-pensee-labyrinthe.md) | **B13** — le labyrinthe non linéaire : bonne politique 17 nœuds/34 (sonde 2), aveugle 15/24 (sonde 0), **13/13** |
+65:| [`rapport-pensee-necessaire.md`](rapport-pensee-necessaire.md) | **B13** — le neuronal nécessaire : cadenas, sonde seule, avant 3 appels/but, aveugle 20/sans but, **12/12** |
+66:| [`rapport-pensee-operateurs.md`](rapport-pensee-operateurs.md) | **B13** — les opérateurs hétérogènes : 3 genres, A* 23 nœuds/4 appels/coût 48 vs aveugle 1/33, **11/11** |
+67:| [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 360 : POS 0,772, exact 0,190/tête 0,510, **attachement tête 1,0/0,966/0,932** (59 ambiguës), pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
+68:| [`rapport-pensee-banc.md`](rapport-pensee-banc.md) | **B13** — le banc anytime : A* but en 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire, **10/10** |
+69:| [`rapport-pensee-drvf.md`](rapport-pensee-drvf.md) | **B13** —
+… [263 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncibles=(\"rapport-pensee-operateurs.md\",\"rapport-pensee-necessaire.md\",\"rapport-pensee-ac3-alphabeta.md\")\nou … [348 caractères tronqués]`
+
+  ```
+README : lignes retirées 3
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-05, 08 h 45 HNE\", t)\np.write_text( … [631 caractères tronqués]`

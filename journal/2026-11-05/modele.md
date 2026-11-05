@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 01:27 | `cb51b112` | ÉTAT — HEURE 01 H 27 ; POIDS-CREUX VERTE (376 S), PORTE-PONT TOURNE ; 66 JOURNAUX | `en-cours.md`, `README.md`, `modele.md` (+5) |
 | 01:56 | `0bda5c5b` | PASSE 83/83 JOURNAUX ; PORTE-SESSIONS ROUGE PAR LE HEARTBEAT DE e181ce02 ; HEURE 01 H 58 | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 | 02:15 | `b08db744` | ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14 | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 08:37 | `2c432406` | ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; B13 166/166 | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 
 ## Sessions actives ce jour
 

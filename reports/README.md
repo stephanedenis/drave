@@ -19,11 +19,7 @@
 | [`rapport-pensee-candidats-verbes.md`](rapport-pensee-candidats-verbes.md) | **B13** — les candidats verbes : top-k 0,3264 → **0,4686**, tête 0,7655, **165/165** |
 | [`rapport-pensee-cible-proximite.md`](rapport-pensee-cible-proximite.md) | **B13** — la cible par proximité : exact 0,0042 → **0,0544** (×13), top1 0,3975, **164/164** |
 | [`rapport-pensee-passifs-sans-par.md`](rapport-pensee-passifs-sans-par.md) | **B13** — les passifs sans par : le chunker 3/3, le générateur S ignore, **163/163** |
-| [`rapport-pensee-roles.md`](rapport-pensee-roles.md) | **B13** — les 322 GN sans rôle : 129 avant le GV, 172 après, relation 0,8195, **160/160** |
-| [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |
-| [`rapport-pensee-soustype-variance.md`](rapport-pensee-soustype-variance.md) | **B13** — la variance du sous-type : double sens 0,9838 à 0,3, **154/154** |
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
-| [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |
 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
 | [`rapport-n2-distillation-native.md`](rapport-n2-distillation-native.md) | **N2** — l'erratum de la distillation : rien à parité stricte (−0,03/−0,01/−0,004), +0,14–0,18 = repondération ; la paire propre paie −0,06 |
 | [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train ; le corpus propre reste à **62 documents** |
@@ -66,12 +62,9 @@
 | [`rapport-pensee-porte-apprise.md`](rapport-pensee-porte-apprise.md) | **B13** — la porte apprise : Q-table 67 états, 30 nœuds/but, sonde 7, **15/15** |
 | [`rapport-pensee-porte.md`](rapport-pensee-porte.md) | **B13** — la porte neuronale : bonne politique 28 nœuds/58 (sonde 5), aveugle 200/483 sans but, **14/14** |
 | [`rapport-pensee-labyrinthe.md`](rapport-pensee-labyrinthe.md) | **B13** — le labyrinthe non linéaire : bonne politique 17 nœuds/34 (sonde 2), aveugle 15/24 (sonde 0), **13/13** |
-| [`rapport-pensee-necessaire.md`](rapport-pensee-necessaire.md) | **B13** — le neuronal nécessaire : cadenas, sonde seule, avant 3 appels/but, aveugle 20/sans but, **12/12** |
-| [`rapport-pensee-operateurs.md`](rapport-pensee-operateurs.md) | **B13** — les opérateurs hétérogènes : 3 genres, A* 23 nœuds/4 appels/coût 48 vs aveugle 1/33, **11/11** |
 | [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 360 : POS 0,772, exact 0,190/tête 0,510, **attachement tête 1,0/0,966/0,932** (59 ambiguës), pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
 | [`rapport-pensee-banc.md`](rapport-pensee-banc.md) | **B13** — le banc anytime : A* but en 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire, **10/10** |
 | [`rapport-pensee-drvf.md`](rapport-pensee-drvf.md) | **B13** — le DRVF `thought` : 23 597 octets, 93 événements, rejeu identique, corruption refusée, **9/9** |
-| [`rapport-pensee-ac3-alphabeta.md`](rapport-pensee-ac3-alphabeta.md) | **B13** — AC-3 et alpha-bêta : **8/8**, 1 495 nœuds/296 coupes contre 18 730 au minimax |
 | [`rapport-bloc-linguistique.md`](rapport-bloc-linguistique.md) | **R0.7** — le bloc linguistique : 9 niveaux, heuristique/neuronal, **398 langues** à 0,9687, activation 51–76 % |
 | [`rapport-n2-propre.md`](rapport-n2-propre.md) | **N2.h1** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,09** en domaine, pas 2,85 ; **16,7** sur de la littérature jamais vue |
 | [`rapport-n2-diversite.md`](rapport-n2-diversite.md) | **N2.h2** — la diversité française divise la PPL hors dépôt par **4,3** (16,7 → 3,86) pour **+0,17** en domaine |
