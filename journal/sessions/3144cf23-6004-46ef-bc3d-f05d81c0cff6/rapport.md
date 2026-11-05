@@ -7,11 +7,11 @@
 | Identifiant | `3144cf23-6004-46ef-bc3d-f05d81c0cff6` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 1.1 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 66 |
-| Appels d'outils | 68 |
-| Fichiers touchés | 5 |
+| Messages | 67 |
+| Appels d'outils | 69 |
+| Fichiers touchés | 6 |
 | Commandes | 58 |
 | Sous-agents | 0 |
 | Commits | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2227 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and top-level files
 - bash — List linguistic tests and reports directories
@@ -41,11 +41,11 @@
 - bash — Inspect synthetic gold builder and S generator API
 - bash — Read S generator head and tail
 - bash — Compare S generator spans against the 94 lost
-- … et 51 autres
+- … et 52 autres
 
 **Synthèse produite :**
 
-⏵ Generating the JSON companion from the measured data
+⏵ Writing the fiche `reports/rapport-spans-chunker.md`
 
 ## 3. Travail accompli
 
@@ -58,6 +58,7 @@
 | `/tmp/spans/analyse.py` | 1 | 0 |
 | `/tmp/spans/final.py` | 1 | 0 |
 | `/tmp/spans/construire_json.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-chunker.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 

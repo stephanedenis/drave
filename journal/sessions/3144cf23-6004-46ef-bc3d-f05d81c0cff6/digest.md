@@ -2155,3 +2155,80 @@ default 1
 … [332 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Generating the JSON companion from the measured data
+
+- **write** `{"content": "\"\"\"Construit reports/pensee-spans-chunker.json à partir des mesures (/tmp/spans).\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nfrom collections import Counter\n\nA = json.loads(pathlib.Path(\"/tmp/spans/analyse.json\").read_text(encoding=\"utf-8\"))\nF =  … [7688 caractères tronqués]`
+
+  ```
+<path>/tmp/spans/construire_json.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 construire_json.py && python3 -c \"\nimport json\nd=json.load(open('/tmp/spans/pensee-spans-chunker.json'))\nprint('cles', list(d))\nprint('detail', len(d['detail']))\nprint('taille', len(open('/tmp/spans/pensee-spans-chunker.json').read()), 'octets')\n\"", "des … [51 caractères tronqués]`
+
+  ```
+écrit 38775
+{
+ "verdict": {
+  "chunker_seul_sur_94": 0,
+  "regle_a_gain": 79,
+  "regle_b_gain": 41,
+  "regles_ab_gain": 84,
+  "exacts_ab_union": 229,
+  "cibles": 239,
+  "perdus_apres_ab": 10,
+  "regression_spans_deja_bons": 0
+ },
+ "causes": {
+  "primaires": {
+   "frontiere": 7,
+   "autre_pas_de_branche_sub": 33,
+   "avale_gv": 3,
+   "marqueur_hors_lexique_branche": 15,
+   "avale_gn": 31,
+   "tete_avalee_gn": 1,
+   "gold_gp_sans_preposition": 4
+  },
+  "par_type": {
+   "GP|frontiere": 3,
+   "SUB|autre_pas_de_branche_sub": 33,
+   "GP|avale_gv": 3,
+   "GP|marqueur_hors_lexique_branche": 3,
+   "REL|avale_gn": 31,
+   "REL|marqueur_hors_lexique_branche": 12,
+   "REL|frontiere": 4,
+   "REL|tete_avalee_gn": 1,
+   "GP|gold_gp_sans_preposition": 4
+  },
+  "drapeaux_transversaux": {
+   "contenu_dans_un_gn": 45,
+   "contenu_dans_un_gv": 3,
+   "frontiere_sur_meme_type": 12,
+   "tete_avalee": 9,
+   "marqueur_hors_branche": 16
+  }
+ },
+ "controles_negatifs": {
+  "a_sans_frontiere": {
+   "gain": 32,
+   "gain_par_type": {
+    "SUB": 32
+   }
+  },
+  "b_sans_arret_relatif": {
+   "gain": 5,
+   "gain_par_type": {
+    "GP": 5
+   }
+  },
+  "hasard_memes_longueurs_meme_phrase": {
+   "tirages": 5000,
+   "hits_c
+… [719 caractères tronqués]
+  ```
+

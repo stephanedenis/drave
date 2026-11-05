@@ -2009,3 +2009,97 @@ coref overlap {'r336', 'r358'}
 … [2500 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Writing the JSON audit artifact with metrics, spans and anomalies
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, pathlib\n\nd = {\n \"version\": 1,\n \"date\": \"2026-11-05\",\n \"ligne\": \"B13\",\n \"objet\": \"audit de la qualité du gold anglais (210 phrases sur 612)\",\n \"snapshot\": … [22058 caractères tronqués]`
+
+  ```
+écrit reports/pensee-gold-anglais.json 22777 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-gold-anglais.json > /dev/null && echo 'JSON valide' && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-gold-anglais.json'))\nprint(list(d))\nprint('verdict',json.dumps(d['verdict'],ens … [154 caractères tronqués]`
+
+  ```
+JSON valide
+['version', 'date', 'ligne', 'objet', 'snapshot', 'gold', 'metriques', 'spans', 'cibles_en', 'analyseur', 'anomalies', 'controles', 'verdict', 'recommandation']
+verdict {
+ "gold_structurel": "sain : 0 span faux, 0 chevauchement, 0 cible absente/non-token, 0 GN avalant un verbe",
+ "gold_anomalies": "25/210 phrases (11,9 %), dont 16 (7,6 %) sur les couches mesurées ; 10 tags POS divergents, 6 GP sans cible, 3 rôles",
+ "anglais_echec": "60/94 spans perdus, 100 % des REL et SUB anglais ; la cause est la segmentation, pas le gold",
+ "cibles": "97/97 tokens exacts, 0 multi-mots, 0 lemme ; POS gold 97/97 correct ; tête réduite de surface (saw, talks), pas texte complet",
+ "est_verbe": "83,5 % d'accord avec le POS gold sur les cibles ; 15 FN, 1 FP (flower) ; garder le POS gold comme référence",
+ "v2_v3": "v2 (137/145) → v3 (141/145) ; l'anglais est inchangé (28/28 labels, 60 spans)",
+ "recommandation_principale": "segmenter l'anglais (S language-aware ou chunker anglais) avant de retoucher le gold"
+}
+anomalies compte {'total_en': 210, 'couches_mesurees': 16, 'avec_convention_that': 19, 'avec_coref': 24, 'avec_role_discutable': 25, 'taux_25': 0.119, 'liste_25': ['r028', 'r034', 
+… [184 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nen=[p for p in ps if p['langue']=='en']\ncop={'is','are','was','were'}\nc=collections.Cou … [618 caractères tronqués]`
+
+  ```
+{'agent': 12, 'patient': 28}
+agent 12 [('r032', 'The car', 'is fast'), ('r036', 'She', 'is maybe tired'), ('r038', 'The mouse', 'is ready'), ('r078', 'The door', 'is open'), ('r112', 'The sea', 'is calm'), ('r118', 'The cake', 'is delicious'), ('r174', 'The room', 'is dark'), ('r204', 'The man', 'is'), ('r328', 'it', 'is'), ('r362', 'The car', 'is'), ('r370', 'The house', 'is'), ('r397', 'it', 'is')]
+patient 28 [('r034', 'The book', 'is exciting'), ('r035', 'The film', 'is out'), ('r074', 'The book', 'is long'), ('r075', 'The city', 'is beautiful'), ('r114', 'The film', 'was long'), ('r115', 'The house', 'is small'), ('r162', 'The painting', 'is hung'), ('r214', 'The book', 'is'), ('r217', 'The student', 'is'), ('r220', 'The cat', 'is'), ('r236', 'The village', 'is'), ('r241', 'The day', 'was'), ('r243', 'The house', 'is'), ('r246', 'The dog', 'is'), ('r248', 'The girl', 'is'), ('r250', 'The place', 'is'), ('r278', 'The bread', 'is'), ('r283', 'The boy', 'is'), ('r285', 'The table', 'is'), ('r287', 'The bird', 'is'), ('r289', 'The place', 'is'), ('r291', 'The book', 'is'), ('r293', 'The person', 'is'), ('r297', 'The flower', 'is'), ('r299', 'The bridge', 'is'), ('r300', 'The house'
+… [64 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sujet_copule\\|snapshot\\|generateur_commit\\|note.*HEAD\" reports/pensee-gold-anglais.json | head", "description": "Locate fields to adjust in JSON"}`
+
+  ```
+6: "snapshot": {
+12:  "generateur_commit": "523d8c1",
+13:  "note": "HEAD dcf7bc91 = v3 ; le worktree (cache chunker) donne des chiffres identiques, vérifié. La v2 (15ee10d3) donnait 137/145 à l'attachement ; la v3 en donne 141/145, anglais inchangé."
+914:   "sujet_copule": {
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "offset": 6, "limit": 12}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "offset": 910, "limit": 14}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json</path>
+<type>file</type>
+<content>
+6:  "snapshot": {
+7:   "head": "dcf7bc912caeebe940793888d88723f0bbb57f58",
+8:   "head_sujet": "B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181",
+9:   "bloc_head_sha256": "64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa",
+10:   "bloc_worktree_sha256": "9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059",
+11:   "gold_reel_sha256": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+12:   "generateur_commit": "523d8c1",
+13:   "note": "HEAD dcf7bc91 = v3 ; le worktree (cache chunker) donne des chiffres identiques, vérifié. La v2 (15ee10d3) donnait 137/145 à l'attachement ; la v3 en donne 141/145, anglais inchangé."
+14:  },
+15:  "gold": {
+16:   "phrases": 612,
+17:   "fr": 402,
+
+(Showing lines 6-17 of 1139. Use offset=18 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json</path>
+<type>file</type>
+<content>
+910:     "avec": 3,
+911:     "sans": 201,
+912:     "note": "tokenisation PONCT seulement dans le dernier bloc"
+913:    },
+914:    "sujet_copule": {
+915:     "agent_ancien": 6,
+916:     "patient_recent": 19,
+917:     "note": "r032/r036/r078/r112/r118/r174 agent ; r214+ patient ; r362/r370 agent : ce n'est pas une règle unique"
+918:    }
+919:   },
+920:   "coref": {
+921:    "phrases_avec_coref": 44,
+922:    "suspectes": 6,
+923:    "liste": [
+
+(Showing lines 910-923 of 1139. Use offset=924 to continue.)
+</content>
+  ```
+

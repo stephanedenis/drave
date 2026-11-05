@@ -7,12 +7,12 @@
 | Identifiant | `b9ea3904-889c-4497-a781-694da7d4987c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 1.1 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 77 |
-| Appels d'outils | 84 |
-| Fichiers touchés | 0 |
-| Commandes | 80 |
+| Messages | 87 |
+| Appels d'outils | 97 |
+| Fichiers touchés | 1 |
+| Commandes | 86 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*84 appels d'outils.* Actions notables :
+*97 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -41,11 +41,11 @@
 - bash — Read Heuristique implementation
 - bash — Dump English sentence list and duplicates
 - bash — Check spans, overlap, coverage anomalies
-- … et 67 autres
+- … et 76 autres
 
 **Synthèse produite :**
 
-⏵ Discovering the linguistic evaluation code and gold data files
+⏵ Writing the JSON audit artifact with metrics, spans and anomalies
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,13 +97,16 @@
 - **T1** Test evaluator state dependence
 - **T1** Check for concurrent modifications and file timestamps
 - **T1** Check git HEAD and diffs
-- … et 40 autres
+- … et 46 autres
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `1.40user 0.02system 0:01.43elapsed 100%CPU (0avgtext+0avgdata 30028maxresident)k`
 - **T1** `e0592c59 2026-11-05 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
 - **T1** `- un chiffre sans dispositif (« 73 % ») ;`
+- **T1** `"gold_anomalies": "25/210 phrases (11,9 %), dont 16 (7,6 %) sur les couches mesurées ; 10 tags POS divergents, 6 GP sans cible, 3 rôles",`
+- **T1** `"anglais_echec": "60/94 spans perdus, 100 % des REL et SUB anglais ; la cause est la segmentation, pas le gold",`
+- **T1** `"est_verbe": "83,5 % d'accord avec le POS gold sur les cibles ; 15 FN, 1 FP (flower) ; garder le POS gold comme référence",`
 
 ## 5. Erreurs rencontrées
 
