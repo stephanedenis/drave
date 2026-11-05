@@ -31437,3 +31437,214 @@ queue 0
 ⏵ Cycle 221 : j'ajoute la mention GPUs libres et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h221.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h221.md'\nt=open(p).read()\nt=t.replace(\"prochaine : la **porte propre (0,29)**.\", \"prochaine : la **porte propre (0,29)** ;  … [1233 caractères tronqués]`
+
+  ```
+heure 23 h 30
+[s/v7 06c6a918] RESSOURCES — LE CLAIM N2 EST LIBÉRÉ (GPUS LIBRES) ; HEURE 23 H 28
+ 13 files changed, 269 insertions(+), 24 deletions(-)
+06c6a918 RESSOURCES — LE CLAIM N2 EST LIBÉRÉ (GPUS LIBRES) ; HEURE 23 H 28
+789dbdf2 PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3963 mots (budget 4 000)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : vérification finale des portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/verifie_en_cours.py 2>&1 | tail -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3 tools/verifie_journal.py 2>&1 | tail -1 ; bash tools/porte-tableaux.sh 2>&1 | tail -1 ; python3 tools/ressources.py --status 2 … [66 caractères tronqués]`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+
+  Aucune réservation active.
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : chiffres et drvm confirmés, claim GPU libéré, portes vertes
+
+**Cycle 221 — les faits du 2 048 sont re-vérifiés à la source, et la machine est rendue.**
+
+- **Re-dérivation depuis les deux logs** : première moitié **perte 0,9409 / PPL 2,6141 / 10 224 s**, seconde **0,8965 / 2,4953 / 10 221 s** — les chiffres de l'état sont exacts. Les deux **drvm** existent (137 Mo chacun) et leurs **SHA-256** correspondent aux logs (`c50beff6…`, `91a3028…`).
+- **Ressources** : le registre gardait encore une **réservation exclusive gpu0+gpu1** de N2 alors que le run est fini depuis 21 h 09 ; le hub l'a **libérée** (`06c6a918`) — **aucune réservation active**, GPUs à 0 %, l'état le note.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 070 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 590 mots**, **T0 3 963 / 4 000** ✅.
+- **B13 166/166**, D **62 documents**, sur **`s/v7`** ; N2, S et OCR en pause, B13 et L actives.
+
+**Le goal reste actif** : la porte propre de N2, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 227
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 222/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 222 : audit et vérification de chantiers.md (compteurs, 2 048)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -4 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+06c6a918 RESSOURCES — LE CLAIM N2 EST LIBÉRÉ (GPUS LIBRES) ; HEURE 23 H 28
+789dbdf2 PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25
+b3cfbe1f ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02
+b513911b ÉTAT — N2 PASSE EN PAUSE (SESSION ET CHANTIER) ; RUN FINI ; HEURE 04 H 57
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 491 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 703 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 423 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2031 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), rep
+… [315 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [174 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1593 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3963 mots (budget 4 000)
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"2 048\\|2048\\|165\\|166\\|127 échecs\\|clôture\" docs/pilotage/chantiers.md | head -12", "description": "Grep chantiers for stale facts"}`
+
+  ```
+24:| 30/10 21 h 47 | « tu es la seule session active. termine les chantiers en cours » | clôture de R0.4, R0.5, R13 ; consolidation de l'état |
+84:| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **166/166 portes** (6 S fixés ; T132/T133 2/5) | B10.3 (encodeur) ; **B13** : T132/T133, gold 200+ ; porte 166/166 ; pragmatique | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160 synthétiques** (POS 0,7544 à 320 phrases, réel 0,7657, exact 0,194, tête 0,510), **attachement tête 1,0/0,966/0,932** ; **coréférence 116 liens, CV 0,847 ± 0,051** ; cascade **0,9415 / 0,7539 / 1,0** ; **pragmatique neuronale 130 : 1,0 / 1,0 / 0,9846 / 0,9769** — elle qualifie ; **gold 432 : acte 0,9954** ; **variance du sous-type : 0,9838** ; **tirages : 0,9838 ×3 (déterministe sur ces invites)** ; **attachement : top1 0,3431, exact 0,0042** ; **cibles : 186
+… [3430 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 222 : je vérifie reports/README.md (hub) et la cohérence des catégories
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; wc -l reports/README.md ; head -40 reports/README.md", "description": "Read reports README"}`
+
+  ```
+181 reports/README.md
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-pensee-echecs-attachement.md`](rapport-pensee-echecs-attachement.md) | **B13** — les 127 échecs : 94 span, 33 → 32 cible, **166/166** |
+| [`rapport-pensee-candidats-verbes.md`](rapport-pensee-candidats-verbes.md) | **B13** — les candidats verbes : top-k 0,3264 → **0,4686**, 
+… [3301 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 222 : je vérifie que le README cite les fiches récentes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; for f in rapport-ocr-cegep-64 rapport-pensee-cible-proximite rapport-n2-distillation-native rapport-pensee-fusion-reparee rapport-ocr-pdf-restants; do printf \"%-38s \" \"$f\"; grep -c \"$f\" reports/README.md; done ; echo \"=== FIN D … [93 caractères tronqués]`
+
+  ```
+rapport-ocr-cegep-64                   0
+rapport-pensee-cible-proximite         0
+rapport-n2-distillation-native         0
+rapport-pensee-fusion-reparee          0
+rapport-ocr-pdf-restants               0
+=== FIN DU README ===
+  [`deepseek-natif-300.json`](deepseek-natif-300.json) — le banc externe et la distillation à l'échelle ;
+- [`cerveau-mesures.json`](cerveau-mesures.json) — la batterie M1–M9 ;
+- [`restitution-mesures.json`](restitution-mesures.json) · [`hybride-mesures.json`](hybride-mesures.json) ·
+  [`universaux-mesures.json`](universaux-mesures.json) · [`semantique-mesures.json`](semantique-mesures.json) —
+  les blocs B10–B12.
+
+Les JSON de campagne (`traduction-*`, `kfold-*`, `contamination-*`, `pont-*`, `xnli-*`, `plan-*`,
+`registre-*`) sont décrits dans la fiche de la mesure correspondante ; [`INDEX.md`](INDEX.md) donne le
+titre de chaque fiche.
+
+## Les autres fiches
+
+L'index **exhaustif** et **généré** est [`INDEX.md`](INDEX.md) : une ligne par fiche, triée par nom.
+Les fiches qui ne sont pas dans « Les fiches courantes » sont des fiches de campagne, de mesure ou
+d'histoire ; on les ouvre par leur **verdict**, pas en entier.
+
+> Les JSON ajoutés après coup sont dans le 
+… [127 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 222 : je repère les ancrages thématiques du README pour insérer les fiches manquantes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"rapport-n2-\\|rapport-ocr\\|rapport-pensee-fusion\\|rapport-l-\\|bloc-langue\" reports/README.md | head -10 ; echo \"=== LIGNES 40-70 ===\" ; sed -n '40,58p' reports/README.md", "description": "Find thematic anchors in READM … [8 caractères tronqués]`
+
+  ```
+26:| [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
+71:| [`rapport-n2-propre.md`](rapport-n2-propre.md) | **N2.h1** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,09** en domaine, pas 2,85 ; **16,7** sur de la littérature jamais vue |
+72:| [`rapport-n2-diversite.md`](rapport-n2-diversite.md) | **N2.h2** — la diversité française divise la PPL hors dépôt par **4,3** (16,7 → 3,86) pour **+0,17** en domaine |
+73:| [`rapport-n2-longueur.md`](rapport-n2-longueur.md) | **N2.h3** — le verrou de longueur est la **position apprise** : 14,46 → **3,25** à 256 octets ; au-delà, c'est la fenêtre locale |
+74:| [`rapport-n2-capacite.md`](rapport-n2-capacite.md) | **N2.h5** — la capacité (21,65 M) paie **−0,06** en domaine mais ne couvre pas : littérature et longueur inchangées |
+75:| [`rapport-n2-combine.md`](rapport-n2-combine.md) | **N2.h4** — les deux leviers se composent : **3,47** en domaine, **4,10** hors dépôt, **3,49** à 256 octets |
+7
+… [3044 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 222 : je copie les titres exacts depuis l'INDEX pour trois fiches manquantes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -E \"cible-proximite|distillation-native|ocr-cegep-64\" reports/INDEX.md", "description": "Get exact titles from INDEX"}`
+
+  ```
+| [rapport-n2-distillation-native.md](rapport-n2-distillation-native.md) | N2 — La distillation native : le professeur long dans un élève à fenêtre courte |
+| [rapport-ocr-cegep-64.md](rapport-ocr-cegep-64.md) | D — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train |
+| [rapport-pensee-cible-proximite.md](rapport-pensee-cible-proximite.md) | B13 — la cible par proximité : l'exact passe de 0,0042 à 0,0544 (×13) |
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 222 : j'ajoute les trois fiches manquantes au README (B13, N2, D)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\na=\"| [`rapport-pensee-candidats-verbes.md`](rapport-pensee-candidats-verbes.md) | **B13** — les candidats verbes : top-k 0,3264 → **0,4686**, têt … [1277 caractères tronqués]`
+
+  ```
+trois lignes ajoutées
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3073 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  T0 max : 3963 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 222 : je commit le README enrichi avec l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h222.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h222.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [970 caractères tronqués]`

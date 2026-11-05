@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 16.1 h |
-| Tours | 226 |
-| Messages | 1264 |
-| Appels d'outils | 1299 |
+| Durée | 16.2 h |
+| Tours | 227 |
+| Messages | 1274 |
+| Appels d'outils | 1309 |
 | Fichiers touchés | 15 |
-| Commandes | 1113 |
+| Commandes | 1123 |
 | Sous-agents | 0 |
-| Commits | 246 |
+| Commits | 247 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -475,6 +475,8 @@
 **Tour 225** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 226** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 227** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5595,7 +5597,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 226 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run seven controls
@@ -5607,10 +5609,38 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check registry tracking and state GPU mentions
 - bash — List state sections
 - bash — Commit resources release note
+- bash — Final gates and resources status
 
 **Synthèse produite :**
 
-⏵ Cycle 221 : j'ajoute la mention GPUs libres et commit
+⏵ Cycle 221 : chiffres et drvm confirmés, claim GPU libéré, portes vertes
+
+**Cycle 221 — les faits du 2 048 sont re-vérifiés à la source, et la machine est rendue.**
+
+- **Re-dérivation depuis les deux logs** : première moitié **perte 0,9409 / PPL 2,6141 / 10 224 s**, seconde **0,8965 / 2,4953 / 10 221 s** — les chiffres de l'état sont exacts. Les deux **drvm** existent (137 Mo chacun) et leurs **SHA-256** correspondent aux logs (`c50beff6…`, `91a3028…`).
+- **Ressources** : le registre gardait encore une **réservation exclusive gpu0+gpu1** de N2 alors que le run est fini depuis 21 h 09 ; le hub l'a **libérée** (`06c6a918`) — **aucune réservation active**, GPUs à 0 %, l'état le note.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 070 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 590 mots**, **T0 3 963 / 4 000** ✅.
+- **B13 166/166**, D **62 documents**, sur **`s/v7`** ; N2, S et OCR en pause, B13 et L actives.
+
+**Le goal reste actif** : la porte propre de N2, les faits B13/S, puis la passe complète des portes.
+
+### Tour 227 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls
+- bash — Grep chantiers for stale facts
+- bash — Read reports README
+- bash — Check recent fiches in README
+- bash — Find thematic anchors in README rows
+- bash — Get exact titles from INDEX
+- bash — Add three rows to README and verify
+- bash — Commit README additions
+
+**Synthèse produite :**
+
+⏵ Cycle 222 : je commit le README enrichi avec l'état
 
 ## 3. Travail accompli
 
@@ -5676,7 +5706,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1073 autres
+- … et 1083 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6070,4 +6100,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02" -m "Les chiffres de distillation de la ligne N2 doublonnaient son bilan et celui de
 - PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25" -m "La cellule N2 du plan de travail disait fiche + clôture en cours alors que le 2 0
 - RESSOURCES — LE CLAIM N2 EST LIBÉRÉ (GPUS LIBRES) ; HEURE 23 H 28" -m "Le run 2 048 est fini depuis 21 h 09 et les GPUs sont à 0 %, mais le registre gardait une
+- REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 23 H 35" -m "Le README des rapports citait les fiches courantes mais avait
 

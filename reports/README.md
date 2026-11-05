@@ -17,6 +17,7 @@
 |---|---|
 | [`rapport-pensee-echecs-attachement.md`](rapport-pensee-echecs-attachement.md) | **B13** — les 127 échecs : 94 span, 33 → 32 cible, **166/166** |
 | [`rapport-pensee-candidats-verbes.md`](rapport-pensee-candidats-verbes.md) | **B13** — les candidats verbes : top-k 0,3264 → **0,4686**, tête 0,7655, **165/165** |
+| [`rapport-pensee-cible-proximite.md`](rapport-pensee-cible-proximite.md) | **B13** — la cible par proximité : exact 0,0042 → **0,0544** (×13), top1 0,3975, **164/164** |
 | [`rapport-pensee-passifs-sans-par.md`](rapport-pensee-passifs-sans-par.md) | **B13** — les passifs sans par : le chunker 3/3, le générateur S ignore, **163/163** |
 | [`rapport-pensee-roles.md`](rapport-pensee-roles.md) | **B13** — les 322 GN sans rôle : 129 avant le GV, 172 après, relation 0,8195, **160/160** |
 | [`rapport-pensee-attachement.md`](rapport-pensee-attachement.md) | **B13** — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042, **156/156** |
@@ -24,6 +25,8 @@
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
 | [`rapport-pensee-variance.md`](rapport-pensee-variance.md) | **B13** — la variance à 0,3 : **±0,0074 au pire, 7/7 seuils, refus 0**, **150/150** |
 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
+| [`rapport-n2-distillation-native.md`](rapport-n2-distillation-native.md) | **N2** — l'erratum de la distillation : rien à parité stricte (−0,03/−0,01/−0,004), +0,14–0,18 = repondération ; la paire propre paie −0,06 |
+| [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train ; le corpus propre reste à **62 documents** |
 | [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats |
 | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
