@@ -42229,3 +42229,104 @@ jeu 05 nov 2026 14:41:30 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache ×139 en chunker ; vague 1 intégrée ; 3 divergences corrigées.\",\n            \" ; cache ×139 ; vague 1 intégr … [1669 caractères tronqués]`
+
+  ```
+état, journal, plan
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[still running after 60000ms; moved to background job bash-1132]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+Agent ff7e786c-3ece-4eae-864e-19dddfead93c sent a message: 
+Résultat final — vérification des 11 fiches B13 du 2026-11-05.
+
+Livrables (2 fichiers, à jour ; je ne les ai pas committés — ils l'ont été par vous dans 2e08cbc7, puis je les ai mis à jour pour la v2 et les résidus ; ils sont actuellement `M`) :
+- `reports/rapport-coherence-fiches.md` (476 l.)
+- `reports/pensee-coherence-fiches.json` (1 098 l., valide)
+
+Bilan au blob d'origine (13:54) : **11 fiches vérifiées** ; **8 cohérentes** (5 historiques + 3 pré-v2) ; **3 fiches avec divergence réelle, 7 écarts** :
+1. `lexique-elargi` : 62 vs 63, 83/0,7590 vs 82/0,7683, 23 vs 22, 145 (avant) vs 146. Corrigé dans `2e08cbc7`.
+2. `spans` : titre 94 vs 48+33+12=93 ; catégories 65/25/3/1=94 vs total 93 (après correctif 65/24/3/1 ; courant 65/24/4/1) ; 65+25 attribués aux subordonnées (81 REL/SUB). Corrigé partiellement dans `9d5337ce`.
+3. `denominateur` : « 93 chez S (REL/SUB) » alors que 93 = 81 REL/SUB + 12 GP. Corrigé partiellement dans `2e08cbc7`.
+
+**Résidus après vos corrections (à traiter)** :
+- `spans` (HEAD) : le chapô dit encore « 48 REL, 33 SUB et **12 GP** » (titre/table : 13) ; la narrative dit encore « plus large (**25**) » (table : 24) ; 65+25=90 attribués aux 81 REL/SUB.
+- `denominateur` (HEAD) : le corps dit **94** cibles sans segment alors que le tableau/JSON gardent **146 labels** / couverture **0,6109** (239−146=**93**) ; l'attribution « (REL/SUB de S) » reste fausse (94 = 81 REL/SUB + **13 GP**). La correction 93→94 a introduit une incohérence avec le dénominateur.
+- `lexique-elargi` (HEAD) : chapô et titre de §1 disent encore « Sur les **145** segments » (l'avant est 146 ; le tableau dit « avant (146) ») ; le « +4 » reste ambigu.
+
+**Chiffres historiques reconnus** : 7 paliers (verbe-gv 08:58 → attachement-cible 10:18) + les colonnes « avant » de `lexique-elargi`. Les portes T153/T161/T162/T163/T166/T167/T168/T169 ont été réécrites à chaque commit ; les écarts des fiches antérieures avec les valeurs d'aujourd'hui sont historiques, pas des erreurs.
+
+**v2** : committée `9d5337ce` (180/180) ; convention SUB au POS gold, split **116/29**, exact 137/145, top-k strict 0,9724. Les 11 fiches sont **pré-v2** ; je n'ai pas exécuté les 180 portes v2. Les notes v2 de `conventions`/`echecs-cible` le disent ; `lexique-elargi` et `convention-doc` n'en ont pas.
+
+Je n'ai corrigé aucune fiche et n'ai fait aucun commit. Si vous voulez figer les livrables, il faut committer leur version actuelle (`M`).
+
+### 🤖 Assistant
+
+⏵ A4 liste des résidus dans mes corrections : je les traite un par un
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"12 GP\\|plus large (25)\\|65+25\\|Sur les 145 segments\\|+4\\b\" reports/rapport-pensee-spans.md reports/rapport-pensee-denominateur.md reports/rapport-pensee-lexique-elargi.md | head -12", "description": "Localiser les rés … [6 caractères tronqués]`
+
+  ```
+reports/rapport-pensee-spans.md:6:> sont avec un span plus large (25). Le correctif testé — borner le GP au verbe et au relatif —
+reports/rapport-pensee-spans.md:40:> 12 GP) ; le **lexique élargi** (`a408a909`) a ramené l'état courant à **94 spans (48/33/13)**, et
+reports/rapport-pensee-lexique-elargi.md:6:> irréguliers** et une trentaine de verbes courants. Sur les 145 segments au bon span :
+reports/rapport-pensee-lexique-elargi.md:17:| top1 | 122 (0,8356) | **126 (0,8690)** | +4 |
+reports/rapport-pensee-lexique-elargi.md:32:  sont donc pas comparables d'une fiche à l'autre ; seul l'**exact global** l'est (+4).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# spans : chapô (12 GP) et narrative (25)\np=pathlib.Path('reports/rapport-pensee-spans.md'); t=p.read_text()\nt=t.replace(\"> sont avec un span plus large (25). Le correctif testé — borner le GP au  … [2796 caractères tronqués]`
+
+  ```
+résidus corrigés
+reports/rapport-pensee-spans.md:40:> 12 GP) ; le **lexique élargi** (`a408a909`) a ramené l'état courant à **94 spans (48/33/13)**, et
+--- (vide = ok)
+  ```
+
+### 👤 Utilisateur
+
+Background subagent ff7e786c-3ece-4eae-864e-19dddfead93c finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison du résumé final à l'utilisateur
+
+Les deux fichiers sont écrits et validés (JSON valide, `porte-tableaux.sh` vert, 3 225 liens résolus) :
+
+- `reports/rapport-coherence-fiches.md`
+- `reports/pensee-coherence-fiches.json`
+
+## Bilan
+
+- **11 fiches vérifiées** (les 11 `rapport-pensee-*.md` B13 datées du 2026-11-05, avec leurs 11 JSON).
+- **8 fiches cohérentes** avec leur JSON et leur porte d'époque : 5 purement historiques (verbe-gv, lexique-verbal, classement, conventions, attachement-cible) et 3 qui étaient l'état pré-v2 (echecs-cible, topk-strict, convention-doc).
+- **3 fiches présentaient une divergence réelle au blob d'origine, soit 7 écarts** :
+  - `lexique-elargi` : 62 au lieu de 63 ; 83/0,7590 au lieu de 82/0,7683 ; 23 au lieu de 22 ; 145 (avant) au lieu de 146 — 4 écarts.
+  - `spans` : titre « 94 spans » avec une ventilation 48+33+12=93 ; table des catégories 65/25/3/1=94 sous un total de 93 (l'après-correctif est 65/24/3/1) ; 65+25=90 attribués aux subordonnées alors qu'il n'y a que 81 REL/SUB — 2 écarts.
+  - `denominateur` : « 93 chez S (REL/SUB) » alors que 93 = 81 REL/SUB + 12 GP — 1 écart.
+- **7 paliers historiques reconnus** (verbe-gv 08:58 → attachement-cible 10:18), plus les colonnes « avant » de `lexique-elargi`. Les portes T153/T161/T162/T163/T166/T167/T168/T169 ont été réécrites à chaque commit : les écarts des fiches antérieures avec les valeurs d'aujourd'hui sont **historiques, pas des erreurs**.
+
+## Corrections et résidus
+
+Je n'ai corrigé aucune fiche. Le parent a corrigé les 3 fiches dans `9d5337ce` (v2, spans) et `2e08cbc7` (lexique-elargi, denominateur), mais les corrections sont partielles ; **3 résidus subsistent** :
+
+1. `spans` : le chapô dit encore **12 GP** (titre/table : 13) et la narrative **25** (table : 24), avec 65+25 attribués aux 81 REL/SUB.
+2. `denominateur` : le corps dit **94** cibles sans segment, alors que le tableau/JSON gardent **146 labels** et une couverture de **0,6109** (239−146 = 93) ; l'attribution « (REL/SUB de S) » reste fausse (94 = 81 REL/SUB + 13 GP). La correction 93→94 a introduit cette incohérence.
+3. `lexique-elargi` : le chapô et le titre de §1 disent encore « Sur les **145** segments » (l'avant est 146 ; le tableau, lui, dit « avant (146) ») ; le « +4 » reste ambigu.
+
+## Contexte v2
+
+Le commit `9d5337ce` a intégré la **v2** (180/180) : convention SUB au POS gold, split **116/29**, exact **137/145**, top-k strict **0,9724**. Les 11 fiches sont **pré-v2** ; je n'ai pas exécuté les 180 portes v2. Les notes v2 de `conventions` et `echecs-cible` l'expliquent ; `lexique-elargi` et `convention-doc` n'en ont pas.
+
+Mes deux fichiers ont été committés par le parent dans `2e08cbc7`, puis mis à jour par moi pour documenter la v2 et les résidus ; ils sont actuellement `M` (non committés). Aucun commit de ma part, aucune fiche modifiée par moi.
+
+- **job_output** `{"job_id": "bash-1132", "timeout_ms": 300000, "wait": true}`
+
+  ```
+25 files changed, 406 insertions(+), 68 deletions(-)
+COMMIT OK 1
+a2def5ee PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# note v2 sur lexique-elargi (le seul sans note)\np=pathlib.Path('reports/rapport-pensee-lexique-elargi.md'); t=p.read_text()\nnote = \"\"\"\n> **Note du 2026-11-05 (attachement v2)** : cette fic … [1656 caractères tronqués]`

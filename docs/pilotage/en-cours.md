@@ -68,7 +68,7 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **181/181** ; attachement **exact spans 0,9448**, **top-k strict 0,9724** ; cache ×139 ; vague 1 intégrée ; 3 divergences corrigées.
+- **Fait** : B13 **181/181** ; attachement **exact spans 0,9448**, **top-k strict 0,9724** ; cache ×139 ; vague 1 intégrée.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.

@@ -1,23 +1,25 @@
 # Cohérence des fiches B13 du 2026-11-05 — vérification
 
-> **Date de vérification** : 2026-11-05T13:54-05:00, **arrêtée avant l'intégration v2 stagée à
-> 14:11** · **Branche** : `s/v7` · **Périmètre** : les **11 fiches B13 datées du 2026-11-05** et
+> **Date de vérification** : 2026-11-05T13:54-05:00, **arrêtée avant l'intégration v2, committée
+> à 14:11 dans `9d5337ce`** · **Branche** : `s/v7` · **Périmètre** : les **11 fiches B13 datées du 2026-11-05** et
 > leurs 11 JSON homonymes (`reports/`), confrontés aux portes de `tools/pensee/autotest.py`
 > (T153, T161, T162, T163, T166, T167, T168, T169, T172, T173, plus les portes propres des
 > fiches : T164, T165, T170, T171, T174).
 > **Verdict global** : ✅ **8 fiches cohérentes** avec leur JSON et leur porte d'époque ; ❌ **3 fiches
-> portent une divergence réelle** (7 écarts : 4 valeurs fausses dans `lexique-elargi`, 2 incohérences
-> de dénombrement dans `spans`, 1 attribution inexacte dans `denominateur`) ; 🕓 **7 paliers
-> historiques reconnus** (verbe-gv → attachement-cible), plus les colonnes « avant » de
-> `lexique-elargi`.
-> **⚠️ v2 concurrente** : depuis 14:11, une **intégration v2 stagée** (non committée) change les
-> portes (177 → **180**) et la convention SUB (POS gold : **116 verbes / 29 noms**, pas 63/82) ;
-> les valeurs dites « actuelles » ci-dessous sont **pré-v2**. Voir § 6.2.
+> portaient une divergence réelle** (7 écarts : 4 valeurs fausses dans `lexique-elargi`, 2 incohérences
+> de dénombrement dans `spans`, 1 attribution inexacte dans `denominateur`) **au blob d'origine** ;
+> elles ont été **corrigées par le parent** dans `9d5337ce` (v2) et `2e08cbc7` (`lexique-elargi`,
+> `denominateur`) — **je n'ai corrigé aucune fiche**. Les corrections sont partielles : **3 résidus**
+> subsistent (§ 4.5) ; 🕓 **7 paliers historiques reconnus** (verbe-gv → attachement-cible), plus les
+> colonnes « avant » de `lexique-elargi`.
+> **⚠️ v2 committée** : `9d5337ce` (HEAD) change les portes (177 → **180**) et la convention SUB
+> (POS gold : **116 verbes / 29 noms**, pas 63/82) ; les 11 fiches restent **pré-v2**. Voir § 6.2.
 > **Méthode** : lecture des fiches et des JSON ; pour chaque fiche, `git show <commit>:tools/pensee/autotest.py`
 > pour lire la porte **telle qu'elle était au commit** ; exécution des 15 portes ciblées et de la
 > suite complète (`python3 -m tools.pensee.autotest` → **177/177**) à HEAD **avant la v2**.
-> **Aucune fiche modifiée, aucun commit.** Plusieurs fichiers de périmètre ont été modifiés par
-> **d'autres agents** pendant la vérification : voir § 6.
+> **De ma part : aucune fiche modifiée, aucun commit.** Les corrections et les commits sont ceux
+> du parent (`9d5337ce`, `2e08cbc7`) ; plusieurs fichiers de périmètre ont bougé pendant/après la
+> vérification : voir § 6.
 
 ## 1. Les 11 fiches et leur verdict
 
@@ -25,18 +27,20 @@
 |---:|---|---|---|---:|---:|---|
 | 1 | [`rapport-pensee-verbe-gv.md`](rapport-pensee-verbe-gv.md) | le verbe du GV : exact 0,0586 → 0,0962 | `9ff4adda` / 08:58 | 167/167 | 177/177 | ✅ cohérente — 🕓 historique |
 | 2 | [`rapport-pensee-lexique-verbal.md`](rapport-pensee-lexique-verbal.md) | le lexique verbal : exact 0,0962 → 0,1381 | `d400e188` / 09:11 | 168/168 | 177/177 | ✅ cohérente — 🕓 historique |
-| 3 | [`rapport-pensee-spans.md`](rapport-pensee-spans.md) | les 94 spans : 48 REL, 33 SUB, 12 GP (blob committé) | `13e8bb2d` / 09:35 | 169/169 | 177/177 | ⚠️ corps cohérent — ❌ titre/catégories (cf. § 4.2) |
-| 4 | [`rapport-pensee-denominateur.md`](rapport-pensee-denominateur.md) | 239 cibles, 146 segments | `f8f5bc04` / 09:42 | 170/170 | 177/177 | ⚠️ chiffres cohérents — ❌ attribution « 93 chez S » (cf. § 4.3) |
+| 3 | [`rapport-pensee-spans.md`](rapport-pensee-spans.md) | les 94 spans : 48 REL, 33 SUB, 13 GP (état courant ; 93/12 après le correctif GP) | `13e8bb2d` / 09:35 | 169/169 | 177/177 | ⚠️ corrigée partiellement (`9d5337ce`) — résidus 12 GP / 25 (cf. § 4.5) |
+| 4 | [`rapport-pensee-denominateur.md`](rapport-pensee-denominateur.md) | 239 cibles, 146 segments | `f8f5bc04` / 09:42 | 170/170 | 177/177 | ⚠️ corrigée partiellement (`2e08cbc7`) — 94 vs 146 + attribution (cf. § 4.5) |
 | 5 | [`rapport-pensee-classement.md`](rapport-pensee-classement.md) | le classement : exact 0,2260 → 0,6438 | `d8edd1d9` / 10:02 | 171/171 | 177/177 | ✅ cohérente — 🕓 historique |
 | 6 | [`rapport-pensee-conventions.md`](rapport-pensee-conventions.md) | verbes 0,7255, noms 0,6000 | `f70a1b2a` / 10:09 | 172/172 | 177/177 | ✅ cohérente — 🕓 historique |
 | 7 | [`rapport-pensee-attachement-cible.md`](rapport-pensee-attachement-cible.md) | l'attachement ciblé : exact 0,6438 → 0,8082 | `23853cb7` / 10:18 | 173/173 | 177/177 | ✅ cohérente — 🕓 historique |
-| 8 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | le lexique élargi : exact 0,8082 → 0,8483 | `a408a909` / 10:39 | 174/174 | 177/177 | ❌ divergence réelle (cf. § 4.1) |
-| 9 | [`rapport-pensee-echecs-cible.md`](rapport-pensee-echecs-cible.md) | les 22 échecs : 11 hors candidats, 11 mal classés | `a048cb83` / 10:49 | 175/175 | 177/177 | ✅ cohérente — actuelle |
-| 10 | [`rapport-pensee-topk-strict.md`](rapport-pensee-topk-strict.md) | le top-k strict : 0,6069, pas 0,9241 | `e223a98d` / 10:59 | 176/176 | 177/177 | ✅ cohérente — actuelle |
-| 11 | [`rapport-pensee-convention-doc.md`](rapport-pensee-convention-doc.md) | la convention des cibles est documentée | `0ddd4fb9` / 11:10 | 177/177 | 177/177 | ✅ cohérente — actuelle |
+| 8 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | le lexique élargi : exact 0,8082 → 0,8483 | `a408a909` / 10:39 | 174/174 | 177/177 | ⚠️ corrigée (`2e08cbc7`) — résidus 145 / +4 (cf. § 4.5) |
+| 9 | [`rapport-pensee-echecs-cible.md`](rapport-pensee-echecs-cible.md) | les 22 échecs : 11 hors candidats, 11 mal classés | `a048cb83` / 10:49 | 175/175 | 177/177 | ✅ cohérente — actuelle (pré-v2) |
+| 10 | [`rapport-pensee-topk-strict.md`](rapport-pensee-topk-strict.md) | le top-k strict : 0,6069, pas 0,9241 | `e223a98d` / 10:59 | 176/176 | 177/177 | ✅ cohérente — actuelle (pré-v2) |
+| 11 | [`rapport-pensee-convention-doc.md`](rapport-pensee-convention-doc.md) | la convention des cibles est documentée | `0ddd4fb9` / 11:10 | 177/177 | 177/177 | ✅ cohérente — actuelle (pré-v2) |
 
-La v2 stagée à 14:11 annonce **180/180** et change les valeurs ; la colonne « portes au 13:54 »
-est **pré-v2** (voir § 6.2).
+La v2 committée à 14:11 annonce **180/180** et change les valeurs ; la colonne « portes au 13:54 »
+est **pré-v2** (voir § 6.2). Les fiches `conventions` et `echecs-cible` ont reçu une **note v2**
+(indexée) qui supersède respectivement la ligne SUB et les 22 échecs ; `convention-doc` et
+`lexique-elargi` n'en ont pas, mais leur convention/split est pré-v2 (voir § 6.2).
 
 Les 11 fiches portent bien la date **2026-11-05** et la ligne **B13** ; elles sont les seules
 fiches `rapport-pensee-*.md` à contenir cette date (les fiches B13 du 04/11 — passifs, cible par
@@ -54,53 +58,53 @@ interne ou porte d'alors).
 Colonnes : ce que dit la **fiche**, ce que dit le **JSON** homonyme, ce qu'attendait la **porte**
 au moment de la vérification (13:54, **pré-v2**), puis la valeur au commit de la fiche entre
 crochets. Les valeurs entre parenthèses sont les taux ; `—` signifie que le JSON ne stocke pas ce
-champ (le taux est alors recalculé depuis le compte). **La v2 stagée à 14:11 change les
+champ (le taux est alors recalculé depuis le compte). **La v2 committée à 14:11 change les
 assertions** (T153, T161, T162, T163, T164, T167, T168, T169, T171, T173) ; voir § 6.2. Les
 lignes de ce tableau restent la comparaison des fiches à leur commit et aux portes pré-v2.
 
 | Fiche | Chiffre | Fiche (valeur) | JSON | Porte (attendue) | Verdict |
 |---|---|---|---:|---|---|
-| verbe-gv | portes | 167/167 | 167/167 | 177/177 (actuel) ; **167** au commit | 🕓 historique |
+| verbe-gv | portes | 167/167 | 167/167 | 177/177 (pré-v2) ; **167** au commit | 🕓 historique |
 | verbe-gv | exact | 23 (0,0962) | 23 | T153/T161/T164 = 123 (0,5146) ; **[23 / 0,0962]** | 🕓 historique |
 | verbe-gv | top1 / top-k | 105 (0,4393) / 122 (0,5105) | 105 / 122 | T153/T161 = 126 (0,5272) ; T162 = 134 (0,5607) ; **[105 / 122]** | 🕓 historique |
 | verbe-gv | tête top1 / top-k | 105 (0,7241) / 122 (0,8414) | 105 / 122 | T162 = 122 (tête top-k) ; T161 message 105 (tête top1) ; **[105 / 122]** | 🕓 historique |
-| verbe-gv | échecs span / cible | 94 / 23 (total 117) | 94 / 23 | T163 = 94 / 11 (actuel) ; **[94 / 23]** | 🕓 historique |
-| verbe-gv | « 23/239 restent faux » | 23 | `echecs.cible_apres` = 23 | T163 cible = 11 (actuel) ; **23** au commit | ⚠️ ambigu : 23 est le résiduel « cible hors candidats », pas 23/239 exact faux (216/239) |
-| lexique-verbal | portes | 168/168 | 168/168 | 177/177 (actuel) ; **168** au commit | 🕓 historique |
+| verbe-gv | échecs span / cible | 94 / 23 (total 117) | 94 / 23 | T163 = 94 / 11 (pré-v2) ; **[94 / 23]** | 🕓 historique |
+| verbe-gv | « 23/239 restent faux » | 23 | `echecs.cible_apres` = 23 | T163 cible = 11 (pré-v2) ; **23** au commit | ⚠️ ambigu : 23 est le résiduel « cible hors candidats », pas 23/239 exact faux (216/239) |
+| lexique-verbal | portes | 168/168 | 168/168 | 177/177 (pré-v2) ; **168** au commit | 🕓 historique |
 | lexique-verbal | exact | 33 (0,1381) | 33 | T153/T161 = 123 (0,5146) ; **[33 / 0,1381]** | 🕓 historique |
 | lexique-verbal | top1 / top-k | 115 (0,4812) / 132 (0,5523) | 115 / 132 | T153/T161 = 126 (0,5272) ; T162 = 134 (0,5607) ; **[115 / 132]** | 🕓 historique |
 | lexique-verbal | tête top1 / top-k | 114 (0,7862) / 131 (0,9034) | 114 / 131 | T162 = 131 (tête top-k) ; T161 message 114 ; **[114 / 131]** | 🕓 historique |
-| lexique-verbal | cible hors candidats | 13 | 13 | T163 = 11 (actuel) ; **13** au commit | 🕓 historique |
-| spans | portes | 169/169 | 169/169 | 177/177 (actuel) ; **169** au commit | 🕓 historique |
-| spans | labels | 145 → 146 | 145 → 146 | T163 = 93/14 ⇒ **146** labels (commit) ; T167 = **145** (actuel) | 🕓 historique |
-| spans | span / cible | 94 / 13 → 93 / 14 | 94 / 13 → 93 / 14 | T163 = **94 / 11** (actuel) ; **[93 / 14]** | 🕓 historique |
+| lexique-verbal | cible hors candidats | 13 | 13 | T163 = 11 (pré-v2) ; **13** au commit | 🕓 historique |
+| spans | portes | 169/169 | 169/169 | 177/177 (pré-v2) ; **169** au commit | 🕓 historique |
+| spans | labels | 145 → 146 | 145 → 146 | T163 = 93/14 ⇒ **146** labels (commit) ; T167 = **145** (pré-v2) | 🕓 historique |
+| spans | span / cible | 94 / 13 → 93 / 14 | 94 / 13 → 93 / 14 | T163 = **94 / 11** (pré-v2) ; **[93 / 14]** | 🕓 historique |
 | spans | REL / SUB / GP | 48 / 33 / 12 (total 93) | 48 / 33 / 12 (total 93) | T166 = **48 / 33 / 13** (total 94) ; **[48 / 33 / 12]** | 🕓 pour 12 (état post-correctif) ; ❌ pour le titre « 94 » (cf. § 4.2) |
 | spans | catégories | 65 / 25 / 3 / 1 = **94** | 65 / 25 / 3 / 1 = **94** | après le correctif : **65 / 24 / 3 / 1 = 93** (rejoué, audit A1) | ❌ divergence de dénombrement |
 | spans | « 81 des 93 » | 81 | 48 REL + 33 SUB | T166 = 48 + 33 = 81 | ✅ cohérent (le total 93 est historique) |
 | spans | « 65 + 25 subordonnées » | 65 + 25 = 90 | — | 81 REL/SUB seulement | ❌ attribution (65/25 sont tous types, pas seulement les subordonnées) |
-| denominateur | portes | 170/170 | 170/170 | 177/177 (actuel) ; **170** au commit | 🕓 historique |
-| denominateur | labels | 146 | 146 | T167 = **145** (actuel) ; **146** au commit | 🕓 historique |
-| denominateur | rendement (÷239) | 0,4812 / 0,5523 / 0,1381 | idem | T153 = 0,5272 / 0,5607 / 0,5146 (actuel) ; **[0,4812 / 0,1381]** | 🕓 historique |
-| denominateur | exactitude spans (÷146) | 0,7877 / 0,9041 / 0,2260 | idem | T167 = 0,869 / 0,9241 / 0,8483 (actuel) ; **[0,7877 / 0,9041 / 0,2260]** | 🕓 historique |
+| denominateur | portes | 170/170 | 170/170 | 177/177 (pré-v2) ; **170** au commit | 🕓 historique |
+| denominateur | labels | 146 | 146 | T167 = **145** (pré-v2) ; **146** au commit | 🕓 historique |
+| denominateur | rendement (÷239) | 0,4812 / 0,5523 / 0,1381 | idem | T153 = 0,5272 / 0,5607 / 0,5146 (pré-v2) ; **[0,4812 / 0,1381]** | 🕓 historique |
+| denominateur | exactitude spans (÷146) | 0,7877 / 0,9041 / 0,2260 | idem | T167 = 0,869 / 0,9241 / 0,8483 (pré-v2) ; **[0,7877 / 0,9041 / 0,2260]** | 🕓 historique |
 | denominateur | « 93 cibles sans segment (REL/SUB de S) » | 93 | 93 | T163 = 93 au commit ; **94** actuel | 🕓 pour 93 ; ❌ pour l'attribution : 81 REL/SUB + 12 GP (cf. § 4.3) |
-| classement | portes | 171/171 | 171/171 | 177/177 (actuel) ; **171** au commit | 🕓 historique |
-| classement | labels | 146 | 146 | T167 = **145** (actuel) ; **146** au commit | 🕓 historique |
-| classement | exact | 94 (0,6438) | 94 | T168 = 123 (0,8483) (actuel) ; **[94 / 0,6438]** | 🕓 historique |
+| classement | portes | 171/171 | 171/171 | 177/177 (pré-v2) ; **171** au commit | 🕓 historique |
+| classement | labels | 146 | 146 | T167 = **145** (pré-v2) ; **146** au commit | 🕓 historique |
+| classement | exact | 94 (0,6438) | 94 | T168 = 123 (0,8483) (pré-v2) ; **[94 / 0,6438]** | 🕓 historique |
 | classement | top1 / top-k | 114 (0,7808) / 132 (0,9041) | 114 / 132 | T161 = 126 ; T167 = 0,869 / 0,9241 ; **[114 / 132]** | 🕓 historique |
 | classement | conventions | 51 / 95 ; justes 37 / 57 | 51 / 95 ; 37 / 57 | T168/T169 = 63 / 82 ; 60 / 63 | 🕓 historique |
 | classement | échecs | 52 | 52 (`limites`) | 146 − 94 = 52 au commit ; 22 actuel | 🕓 historique |
-| conventions | portes | 172/172 | 172/172 | 177/177 (actuel) ; **172** au commit | 🕓 historique |
-| conventions | verbes | 37/51 (0,7255) | 37/51 (0,7255) | T169 = 60/63 (0,9524) (actuel) ; **[37/51]** | 🕓 historique |
-| conventions | noms | 57/95 (0,6000) | 57/95 (0,6000) | T169 = 63/82 (0,7683) (actuel) ; **[57/95]** | 🕓 historique |
-| conventions | total | 94/146 (0,6438) | 94 (0,6438) | T168 = 123 (0,8483) (actuel) ; **[94]** | 🕓 historique |
+| conventions | portes | 172/172 | 172/172 | 177/177 (pré-v2) ; **172** au commit | 🕓 historique |
+| conventions | verbes | 37/51 (0,7255) | 37/51 (0,7255) | T169 = 60/63 (0,9524) (pré-v2) ; **[37/51]** | 🕓 historique |
+| conventions | noms | 57/95 (0,6000) | 57/95 (0,6000) | T169 = 63/82 (0,7683) (pré-v2) ; **[57/95]** | 🕓 historique |
+| conventions | total | 94/146 (0,6438) | 94 (0,6438) | T168 = 123 (0,8483) (pré-v2) ; **[94]** | 🕓 historique |
 | conventions | « 0,6438 = 51 × 0,73 + 95 × 0,60 » | 0,6438 | — | exact avec 0,7255 ; 0,6454 avec 0,73 | ⚠️ arrondi non bloquant (cf. § 4.4) |
-| attachement-cible | portes | 173/173 | 173/173 | 177/177 (actuel) ; **173** au commit | 🕓 historique |
-| attachement-cible | exact | 118 (0,8082) | 118 | T167 = 0,8483 ; T168 = 123 (actuel) ; **[118 / 0,8082]** | 🕓 historique |
-| attachement-cible | top1 / top-k | 122 (0,8356) / 132 (0,9041) | 122 / 132 | T167 = 0,869 / 0,9241 (actuel) ; **[0,8356 / 0,9041]** | 🕓 historique |
-| attachement-cible | verbes / noms | 48/51 (0,9412) / 70/95 (0,7368) | 0,9412 / 0,7368 | T169 = 60/63 / 63/82 (actuel) ; **[48/51 / 70/95]** | 🕓 historique |
-| attachement-cible | rendement global | 0,5105 / 0,5523 / 0,4937 | idem | T153 = 0,5272 / 0,5607 / 0,5146 (actuel) ; **[0,5105 / 0,4937]** | 🕓 historique |
+| attachement-cible | portes | 173/173 | 173/173 | 177/177 (pré-v2) ; **173** au commit | 🕓 historique |
+| attachement-cible | exact | 118 (0,8082) | 118 | T167 = 0,8483 ; T168 = 123 (pré-v2) ; **[118 / 0,8082]** | 🕓 historique |
+| attachement-cible | top1 / top-k | 122 (0,8356) / 132 (0,9041) | 122 / 132 | T167 = 0,869 / 0,9241 (pré-v2) ; **[0,8356 / 0,9041]** | 🕓 historique |
+| attachement-cible | verbes / noms | 48/51 (0,9412) / 70/95 (0,7368) | 0,9412 / 0,7368 | T169 = 60/63 / 63/82 (pré-v2) ; **[48/51 / 70/95]** | 🕓 historique |
+| attachement-cible | rendement global | 0,5105 / 0,5523 / 0,4937 | idem | T153 = 0,5272 / 0,5607 / 0,5146 (pré-v2) ; **[0,5105 / 0,4937]** | 🕓 historique |
 | attachement-cible | échecs | 28 | 28 | 146 − 118 = 28 au commit ; 22 actuel | 🕓 historique |
-| lexique-elargi | portes | 174/174 | 174/174 | 177/177 (actuel) ; **174** au commit | 🕓 (le compte seul) |
+| lexique-elargi | portes | 174/174 | 174/174 | 177/177 (pré-v2) ; **174** au commit | 🕓 (le compte seul) |
 | lexique-elargi | labels | 145 | 145 | T167 = **145** | ✅ cohérent |
 | lexique-elargi | exact | 123 (0,8483) | 123 | T153/T161/T167/T171 = 123 (0,8483) | ✅ cohérent |
 | lexique-elargi | top1 | 126 (0,8690) | 126 | T153/T161/T167 = 126 (0,8690) | ✅ cohérent |
@@ -112,11 +116,11 @@ lignes de ce tableau restent la comparaison des fiches à leur commit et aux por
 | lexique-elargi | « 23/145 restent faux » | 23 | 23 (`limites`) | T171 = 123/145 ⇒ **22** ; `echecs-cible` dit 22 | ❌ divergence réelle |
 | lexique-elargi | « Sur les 145 segments » (colonne avant) | 145 | `labels` = 145 ; `avant.exact_span` = 0,8082 | T167 au commit précédent = **146** ; 118/146 = 0,8082 | ❌ dénominateur mélangé (146 → 145) |
 | lexique-elargi | « +4 » | 4 | — | 118 → 123 = **+5** (ou +4,01 points de taux) | ⚠️ ambiguïté d'unité |
-| echecs-cible | portes | 175/175 | 175/175 | 177/177 (actuel) ; **175** au commit | 🕓 (le compte seul) |
+| echecs-cible | portes | 175/175 | 175/175 | 177/177 (pré-v2) ; **175** au commit | 🕓 (le compte seul) |
 | echecs-cible | 145 / 123 / 22 | idem | idem | T171/T172 = 123 / 22 | ✅ cohérent |
 | echecs-cible | 11 hors candidats / 11 mal classés | 11 / 11 | 11 / 11 | T172 = 11 / 11 | ✅ cohérent |
 | echecs-cible | par type | GP 14/0/10 ; SUB 5/3/1 ; REL 0/0/0 | idem | 14 + 0 + 5 + 3 = 22 ; hors 10 + 1 = 11 | ✅ cohérent |
-| topk-strict | portes | 176/176 | 176/176 | 177/177 (actuel) ; **176** au commit | 🕓 (le compte seul) |
+| topk-strict | portes | 176/176 | 176/176 | 177/177 (pré-v2) ; **176** au commit | 🕓 (le compte seul) |
 | topk-strict | top-k / strict | 134 (0,9241) / 88 (0,6069) | idem | T173 = 134 / 88 / 0,6069 / 0,9241 | ✅ cohérent |
 | topk-strict | 46 / 57 | 46 / 57 | — | 134 − 88 = 46 ; 145 − 88 = 57 | ✅ cohérent |
 | convention-doc | portes | 177/177 | 177/177 | 177/177 | ✅ cohérent |
@@ -146,7 +150,7 @@ Valeurs mesurées et gates exécutées (15 portes ciblées, puis suite complète
 | échecs de cible | 11 hors candidats / 11 mal classés | T172 |
 | suite complète | 177/177 | `python3 -m tools.pensee.autotest` |
 
-**Depuis 14:11, la v2 stagée** donne : portes **180/180** (annoncé), exact **137/145 (0,9448)**,
+**Depuis 14:11, la v2 committée** donne : portes **180/180** (annoncé), exact **137/145 (0,9448)**,
 top1 **140 (0,9655)**, top-k **142 (0,9793)**, top-k strict **141 (0,9724)**, verbes **116**
 (111 justes, 0,9569), noms **29** (26 justes, 0,8966), **8 échecs** (3 hors, 5 mal classés),
 rendement **0,5858 / 0,5941 / 0,5732**. Elle n'a **pas** été exécutée ici ; ces valeurs sont
@@ -158,6 +162,9 @@ antérieures décrivent l'état d'avant le lexique élargi (sauf le corps de `sp
 l'état post-correctif GP, lui aussi historique).
 
 ## 4. Divergences réelles
+
+Les 7 écarts de cette section sont ceux des **blobs d'origine** (13:54). Ils ont été corrigés
+par le parent dans `2e08cbc7` / `9d5337ce` ; voir § 4.5 pour l'état HEAD et les 3 résidus.
 
 ### 4.1 `lexique-elargi` — 4 valeurs fausses (prose et JSON), la table est juste
 
@@ -184,7 +191,9 @@ entre l'avant (146) et l'après (145)** sans être nommé.
 
 **Ce qu'il faudrait lire (sans corriger la fiche)** : la transition est 146 → 145 labels ;
 118 → 123 corrects ; 0,8082 → 0,8483 ; les cibles verbes passent de 51 à 63 (60 justes, 0,9524),
-les noms de 95 à 82 (63 justes, 0,7683) ; les échecs passent de 28 à 22. Le « +4 » est ambigu :
+les noms de 95 à 82 (63 justes, 0,7683) ; les échecs passent de 28 à 22. **Ces 63/82 sont la
+lecture pré-v2** (`_est_verbe`) ; la v2 lit le POS gold et donne **116/29** (voir § 6.2), ce qui
+ne change pas l'écart 62/83 de la prose mais change la référence. Le « +4 » est ambigu :
 +5 en nombre de cibles correctes, +4,01 points de taux (0,8483 − 0,8082).
 
 ### 4.2 `spans` — deux incohérences de dénombrement (avant/après mélangés)
@@ -240,6 +249,23 @@ d'**attribution**, pas de chiffre.
 - **« (T28 les couvrent) »** : phrase de template répétée dans les 7 premières fiches ; T28 est
   l'audit des mesures « seule » (`tools/pensee/audit.py`, 15 lignes politiques × mondes), il ne
   couvre pas l'attachement. C'est un **faux renvoi** de rédaction, pas un chiffre faux.
+
+### 4.5 État après les corrections concurrentes (HEAD `de292c7d`)
+
+Le parent a corrigé les 3 fiches dans deux commits, **après** cette vérification ; je n'ai
+corrigé aucune fiche. Les corrections sont partielles et laissent 3 résidus.
+
+| fiche | correction | commit | résidu |
+|---|---|---|---|
+| `lexique-elargi` | 62→63, 83→82, 0,7590→0,7683, 23→22 ; JSON `note` 63, `limites` 22, `labels` 146/145 | `2e08cbc7` | le chapô et le titre de § 1 disent encore « Sur les **145** segments » (l'avant est 146 ; le tableau dit « avant (146) ») ; le « +4 » reste ambigu |
+| `spans` | titre 94/13, table des types 13, catégories 24/4, bloc `courant` ; note audit A1 | `9d5337ce` | le chapô dit encore « sont 48 REL, 33 SUB et **12 GP** » (titre/table : 13) ; la narrative dit encore « plus large (**25**) » et attribue 65+25=90 aux subordonnées (81 REL/SUB) ; la ligne top1/top-k/exact 115/132/33 est pré-v2 |
+| `denominateur` | 93→94 ; JSON `limites` « 94 spans : 81 REL/SUB chez S, 13 GP » | `2e08cbc7` | le corps dit **94** cibles sans segment alors que le tableau et le JSON gardent **146 labels** / couverture **0,6109** (239 − 146 = **93**) ; l'attribution « (REL/SUB de S) » reste fausse (94 = 81 REL/SUB + **13 GP**) |
+
+**Ce que ça dit** : les 4 valeurs fausses de `lexique-elargi` et les 2 incohérences de `spans`
+sont corrigées ; la correction de `denominateur` (93→94) **introduit** une incohérence avec son
+propre dénominateur (146 labels) et ne corrige pas l'attribution. Les 3 résidus ci-dessus sont
+les seuls écarts restants sur les 11 fiches **à HEAD**, hors v2 (qui change la convention et les
+portes). Je ne les corrige pas (consigne) ; ils sont signalés pour le parent.
 
 ## 5. Chiffres historiques reconnus
 
@@ -316,15 +342,19 @@ docstring pour la valeur attendue :
   `exact == 123` sur 145 labels.
 - **T153**, **T161**, **T169**, **T172**, **T173**, **T174** : cohérents avec l'état courant.
 
-## 6. Concurrence : deux fichiers modifiés pendant la vérification
+## 6. Concurrence : des fichiers ont bougé pendant/après la vérification
 
-Je n'ai modifié **aucun** fichier existant et n'ai fait **aucun** commit. Pendant la
-vérification (vers 13:43–13:54), un **autre agent** a modifié deux fichiers de périmètre :
+Je n'ai modifié **aucun** fichier existant et n'ai fait **aucun** commit. Deux vagues distinctes
+ont modifié le worktree.
+
+### 6.1 Édition de la fiche `spans` (vers 13:43–13:54)
+
+Un **autre agent** a modifié `reports/pensee-spans.json` et `reports/rapport-pensee-spans.md` :
 
 - `reports/pensee-spans.json` : ajout d'un bloc `courant` (145 labels, couverture 0,6067, F1
   0,2862, 94 spans, REL 48 / SUB 33 / GP 13, catégories 65/24/4/1), sourcé « audit A1
   (`pensee-audit-attachement.json`) » ; les blocs `spans`, `categories`, `avant`, `apres`
-  committés restent l'historique. Ce bloc est cohérent avec la mesure courante.
+  committés restent l'historique. Ce bloc est cohérent avec la mesure pré-v2.
 - `reports/rapport-pensee-spans.md` : titre et table des types passés à l'état courant
   (94 / 13 GP / catégories 65/24/4/1), avec une note « audit A1 ». **La correction est
   partielle** : le chapô dit encore « sont 48 REL, 33 SUB et **12 GP** » ; la narrative dit
@@ -335,34 +365,99 @@ vérification (vers 13:43–13:54), un **autre agent** a modifié deux fichiers 
   la correction partielle ; elle n'est pas de moi.
 
 Le constat du § 4.2 porte sur le **blob committé** (`git show 13e8bb2d:...`), qui est la
-référence historique. L'état du worktree au moment de la rédaction est le suivant :
-`rapport-pensee-spans.md` et `pensee-spans.json` sont `M` (non committés), les autres 10 fiches
-et 10 JSON sont propres. Si la correction doit être validée, il reste à aligner le chapô (12 →
+référence historique. Si la correction doit être validée, il reste à aligner le chapô (12 →
 13 GP), la narrative (25 → 24) et les lignes labels/couverture/F1/top1 du tableau sur l'état
 courant — ou à assumer que ce tableau est l'historique du correctif GP et le dire dans son
 en-tête.
+
+### 6.2 Intégration v2 (committée `9d5337ce`, 14:11)
+
+Un autre agent a **committé** une **intégration v2** (`9d5337ce`) : `tools/bloc_linguistique.py`,
+`tools/tests/linguistique/evaluer_gold.py`, `tools/tests/linguistique/gold_reel.py` et
+`tools/pensee/autotest.py` sont modifiés et **committés**, avec une nouvelle fiche
+[`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) et son JSON, plus les
+fiches des sous-agents A1/A2/A3/A7 et des notes v2 dans `conventions` et `echecs-cible`.
+`reports/README.md` et les docs de pilotage sont aussi touchés. Le commit suivant `2e08cbc7`
+corrige les 3 fiches de cohérence (`lexique-elargi` 62→63, etc., `denominateur` 93→94) et
+committe ce rapport/JSON ; il laisse les 3 résidus du § 4.5. Les valeurs v2 annoncées
+(**180/180**) :
+
+| mesure | pré-v2 (13:54) | v2 (14:11) |
+|---|---:|---:|
+| portes | 177/177 | **180/180** (annoncé ; non exécuté ici) |
+| exact / 145 | 123 (0,8483) | **137 (0,9448)** |
+| top1 / 145 | 126 (0,8690) | **140 (0,9655)** |
+| top-k / 145 | 134 (0,9241) | **142 (0,9793)** |
+| top-k strict / 145 | 88 (0,6069) | **141 (0,9724)** |
+| verbes (POS gold) | 63 (0,9524) | **116, 111 justes (0,9569)** |
+| noms (POS gold) | 82 (0,7683) | **29, 26 justes (0,8966)** |
+| échecs de cible | 22 (11 / 11) | **8 (3 hors, 5 mal classés)** |
+| rendement ÷239 | 0,5272 / 0,5607 / 0,5146 | **0,5858 / 0,5941 / 0,5732** |
+
+Changements d'assertions : T153 **0,5858 / 0,5732** ; T161 **140 / 137** ; T162
+**142 / 142 / 140** ; T163 **94 / 3** ; T164 **137** ; T167 **0,9655 / 0,9793 / 0,9448** ;
+T168 **137 / 116 / 29** ; T169 **116/111 (0,9569), 29/26 (0,8966)** ; T171 **137** ; T173
+**142 / 141 / 0,9724 / 0,9793**. Trois portes nouvelles : **T175** audit attachement, **T176**
+segment précédent, **T177** candidats têtes (177 + 3 = 180).
+
+La v2 **change la convention** : `CONVENTION_CIBLE["SUB"]` passe de « antécédent » à « verbe
+gouverneur (69/69 cibles VERB au POS gold) » ; le split verbe/nom n'est plus `_est_verbe`
+(63/82) mais le **POS gold** (116/29). Les notes v2 ajoutées à `conventions` et `echecs-cible`
+le disent : la ligne SUB du tableau `conventions` est « fausse », et les 22 échecs de
+`echecs-cible` sont l'état **avant** les corrections. `convention-doc` et `lexique-elargi` n'ont
+pas de note v2, mais leur split 63/82 et leur convention SUB sont eux aussi pré-v2.
+
+**Ce que je n'ai pas fait** : je n'ai pas exécuté les 180 portes v2, je n'ai pas vérifié la
+fiche v2 ni ses JSON, et je n'ai **pas corrigé** les fiches — les corrections sont celles du
+parent (`2e08cbc7`, `9d5337ce`). Les valeurs v2 ci-dessus sont celles annoncées par
+`rapport-pensee-attachement-v2.md` et `pensee-attachement-v2.json` (14:11), pas une reproduction.
+Les 3 divergences du § 4 sont celles des blobs d'origine ; elles ont été corrigées, avec les
+3 résidus du § 4.5. La v2 montre que le 63/82 « corrigé » de `lexique-elargi` est lui-même une
+convention pré-v2.
+
+### 6.3 Ce qui reste valide, ce qui est supersédé
+
+- **Valide** : la cohérence des 11 blobs committés avec leur JSON et leur porte d'époque ; les
+  7 paliers historiques ; les 3 divergences réelles du § 4 (au commit) et les 3 résidus du § 4.5.
+- **Supersédé par la v2** : les valeurs dites « actuelles » du § 3 (pré-v2) ; le split 63/82 ;
+  les 22 échecs ; la ligne SUB de `conventions`. La v2 est un **nouvel état**, pas une
+  correction des fiches du 05/11 ; elle ajoute ses propres notes.
+- **État du worktree** : toutes les éditions v2/corrections sont **committées** (`9d5337ce`,
+  `2e08cbc7`) ; au moment de la rédaction, seuls **mes deux fichiers**
+  (`rapport-coherence-fiches.md`, `pensee-coherence-fiches.json`) restent modifiés (non
+  committés) — ils ont été committés une première fois dans `2e08cbc7`, puis mis à jour ici
+  pour la v2 et les résidus.
 
 ## 7. Limites
 
 - **Les 7 fiches historiques n'ont pas été rejouées** en exécutant leur code d'époque : j'ai lu
   leurs valeurs dans la fiche, leur JSON et `git show <commit>:tools/pensee/autotest.py`. C'est
   suffisant pour la cohérence documentaire ; ce n'est pas une reproduction métrologique. Un
-  audit parallèle (A1, `pensee-audit-attachement.json`, non committé) a, lui, rejoué 4 commits
-  et trouve les mêmes valeurs ; il est cité comme **corroboration**, pas comme source primaire.
-- **Les portes** : les 15 portes ciblées et la suite complète ont été exécutées à HEAD
-  (177/177). Les valeurs d'alors viennent des assertions des commits, pas d'une exécution des
-  177 portes à chaque commit.
+  audit parallèle (A1, `pensee-audit-attachement.json`, committé avec la v2) a, lui, rejoué
+  4 commits et trouve les mêmes valeurs ; il est cité comme **corroboration**, pas comme source
+  primaire.
+- **Les portes** : les 15 portes ciblées et la suite complète ont été exécutées à HEAD **avant la
+  v2** (177/177). Les valeurs d'alors viennent des assertions des commits, pas d'une exécution
+  des 177 portes à chaque commit.
+- **La v2 n'est pas vérifiée** : l'intégration committée à 14:11 (`9d5337ce`, **180** portes,
+  convention SUB au POS gold, 116/29) n'a pas été exécutée ni rejouée ; ses valeurs sont celles
+  de sa fiche/JSON (`rapport-pensee-attachement-v2.md`, `pensee-attachement-v2.json`). Le § 3
+  est daté 13:54 (**pré-v2**).
 - **Les docstrings de portes** sont périmées par endroits (§ 5.3) ; je me suis appuyé sur les
   **assertions**, jamais sur les docstrings, pour les valeurs attendues.
 - **Hors périmètre** : `docs/implantation/moteur-de-pensee.md` porte encore « 48 REL, 33 SUB,
   12 GP » à la ligne T166 (valeur historique) et `reports/README.md` reprend les titres des
-  fiches (donc le 12 GP de `spans`) ; la roadmap, elle, est à jour (13 GP, 177/177). Je ne les
-  modifie pas (consigne).
-- **Concurrence** : voir § 6. Les deux fichiers `spans` ont bougé sous moi ; le constat
-  principal est daté par le blob `13e8bb2d`. Aucun autre fichier de périmètre n'a bougé.
-- **Pas de correction** : les valeurs « attendues » du § 4 sont celles des portes, des JSON et
-  de l'arithmétique ; aucune fiche n'a été réécrite. Le fichier `pensee-spans.json` contient
-  désormais un bloc `courant` ajouté par un autre agent ; je ne l'ai pas touché.
+  fiches (donc le 12 GP de `spans`) ; la roadmap, elle, est à jour (13 GP, 180/180 depuis la
+  v2). Je ne les modifie pas (consigne).
+- **Concurrence** : voir § 6. Les fichiers `spans`, `conventions`, `echecs-cible`, `README.md`,
+  les quatre fichiers `tools/...` et les nouveaux fichiers v2 ont bougé sous moi puis ont été
+  **committés** (`9d5337ce`, `2e08cbc7`) ; le constat principal est daté par les blobs
+  d'origine (`spans` : `13e8bb2d`). Aucune de ces éditions n'est de moi ; les 3 résidus du § 4.5
+  restent à traiter.
+- **Pas de correction de ma part** : les valeurs « attendues » du § 4 sont celles des portes,
+  des JSON et de l'arithmétique ; **je n'ai corrigé aucune fiche**. Le parent a corrigé les 3
+  fiches dans `2e08cbc7` / `9d5337ce` (voir § 4.5). Le bloc `courant` de `pensee-spans.json` a
+  été ajouté par un autre agent ; je ne l'ai pas touché.
 
 ## 8. Fichiers
 
@@ -373,5 +468,9 @@ en-tête.
   `t161_cible_proximite` … `t174_convention_documentee`) ;
 - la mesure : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
   [`bloc_linguistique.py`](../tools/bloc_linguistique.py) ;
-- corroboration externe (non committée, autre agent) : `pensee-audit-attachement.json`,
-  `rapport-audit-attachement.md`.
+- corroboration externe (committée avec la v2, autre agent) : `pensee-audit-attachement.json`,
+  `rapport-audit-attachement.md` ;
+- état v2 committé (`9d5337ce`, non vérifié ici) : `rapport-pensee-attachement-v2.md`,
+  `pensee-attachement-v2.json` ;
+- corrections du parent : `2e08cbc7` (`lexique-elargi`, `denominateur`) et `9d5337ce` (v2,
+  `spans`) ; les 3 résidus sont au § 4.5.

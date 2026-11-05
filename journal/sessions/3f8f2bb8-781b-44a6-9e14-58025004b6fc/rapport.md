@@ -7,12 +7,12 @@
 | Identifiant | `3f8f2bb8-781b-44a6-9e14-58025004b6fc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 38 |
-| Appels d'outils | 48 |
+| Messages | 43 |
+| Appels d'outils | 53 |
 | Fichiers touchés | 0 |
-| Commandes | 38 |
+| Commandes | 43 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2447 caractères tronqués]
 
-*48 appels d'outils.* Actions notables :
+*53 appels d'outils.* Actions notables :
 
 - bash — Check repo state and locate attachment reports
 - read
@@ -41,11 +41,11 @@
 - bash — Show v2 commit stat and bloc diff
 - bash — Inspect lexicon variable and imports
 - bash — Show evaluer_gold and autotest v2 diff
-- … et 25 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
-⏵ Verifying the disputed “46 of 57” figure against the A2 diagnostic.
+⏵ Resolving the 180 vs 181 discrepancy in the registry count.
 
 ## 3. Travail accompli
 
@@ -94,6 +94,9 @@
 - **T1** Verify 46/57 head-reduction diagnostic
 - **T1** Count head-fixable failures on pre-v2 state
 - **T1** Count head-fixable top-k strict failures pre-v2
+- **T1** Measure F1 and F1+F2 on pre-v2 base
+- **T1** Count gates per commit and show post-v2 diff
+- … et 3 autres
 
 ## 4. Mesures et résultats marquants
 

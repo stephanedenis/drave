@@ -3,7 +3,7 @@
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **174/174 portes** : `vu`, `couru`, `accroché` n'étaient **pas** reconnus comme verbes — le
 > bloc prenait l'auxiliaire (`a`) pour la cible. Le lexique verbal reçoit les **participes
-> irréguliers** et une trentaine de verbes courants. Sur les 145 segments au bon span :
+> irréguliers** et une trentaine de verbes courants. Sur les 146 segments au bon span (avant) et 145 après :
 > **exact 118 → 123** (0,8082 → **0,8483**), top1 0,8690, top-k **0,9241**.
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`VERBES_CONNUS`),
@@ -14,7 +14,7 @@
 
 | mesure | avant (146) | **lexique élargi** (145) | écart |
 |---|---:|---:|---:|
-| top1 | 122 (0,8356) | **126 (0,8690)** | +4 |
+| top1 | 122 (0,8356) | **126 (0,8690)** | +4 (sur 146 → 145) |
 | top-k | 132 (0,9041) | **134 (0,9241)** | +2 |
 | **exact** | **118 (0,8082)** | **123 (0,8483)** | **+5** |
 | verbes | 48/51 | **60/63** (0,9524) | +12 |
@@ -29,10 +29,14 @@ Rendement global (÷ 239 cibles) : top1 0,5272, top-k 0,5607, exact **0,5146**.
 - **Attention à la lecture des conventions** : la part « verbes » passe de 51 à **63** cibles et
   la part « noms » de 95 à **82** — non parce que le gold a changé, mais parce que la
   **classification** `_est_verbe` reconnaît plus de cibles comme verbes. Les deux colonnes ne
-  sont donc pas comparables d'une fiche à l'autre ; seul l'**exact global** l'est (+4).
+  sont donc pas comparables d'une fiche à l'autre ; seul l'**exact global** l'est (+5 : 118 → 123).
 - **Les noms baissent en apparence** (0,7368 → 0,7683 en taux, mais 70 → 63 en nombre) : le
   déplacement vient de la reclassification.
 - **La négative est explicite** : 22/145 restent faux.
+
+> **Note du 2026-11-05 (attachement v2)** : cette fiche décrit l'état **avant** la vague de
+> sous-agents ; l'attachement v2 donne **exact 137/145 (0,9448)** et **top-k strict 0,9724**.
+> Voir [attachement v2](rapport-pensee-attachement-v2.md).
 
 ## 2. Ce que ce banc ne dit pas
 

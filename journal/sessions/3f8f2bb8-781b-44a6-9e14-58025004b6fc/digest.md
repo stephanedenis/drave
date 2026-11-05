@@ -1261,3 +1261,88 @@ AttributeError: type object 'Heuristique' has no attribute '_tete_texte'
 [exit code: 1]
   ```
 
+### 🤖 Assistant
+
+⏵ Verifying the disputed “46 of 57” figure against the A2 diagnostic.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\nspec=importlib.util.spec_from_file_location … [1469 caractères tronqués]`
+
+  ```
+old: labels 145 exact 123 fail 22
+échecs avec tête candidate == cible : 4 / 57
+détail: [('g012', 'GP', 'prêt'), ('r018', 'GP', 'prête'), ('s108', 'GP', 'rêve'), ('s122', 'GP', 'saute')]
+échecs sous-chaîne (cible dans un candidat) : 11 ; échecs stricts : 22
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\nspec=importlib.util.spec_from_file_location … [1399 caractères tronqués]`
+
+  ```
+labels 145 strict_fail 57
+tête candidate == cible : 45 / 57
+par type des réparables: Counter({'REL': 26, 'GP': 19})
+ids: ['g011', 'g012', 'r014', 'r015', 'r018', 'r047', 'r054', 'r055', 'r057', 'r088', 'r094', 'r095', 'r100', 'r126', 'r139', 'r150', 'r201', 'r203', 'r209', 'r213', 'r221', 'r226', 'r228', 'r231', 'r233', 'r235', 'r253', 'r257', 'r259', 'r261', 'r263', 'r265', 'r267', 'r269', 'r275', 's045', 's047', 's058', 's064', 's108', 's109', 's120', 's122', 's144', 's150']
+  ```
+
+### 🤖 Assistant
+
+⏵ Rebuilding the A2 ladder (F1 heads, F2 lexicon) on the pre-v2 base.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as cur\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nold_src=pathlib.Path('/tmp/audit_v2/bloc_a … [2331 caractères tronqués]`
+
+  ```
+old_F1 {'labels': 145, 'top1': 126, 'topk': 134, 'exact': 123, 'topk_exact': 133} | span 0.8483
+old_F1_F2 {'labels': 145, 'top1': 134, 'topk': 142, 'exact': 131, 'topk_exact': 141} | span 0.9034
+  ```
+
+### 🤖 Assistant
+
+⏵ Counting gates at the v2 commit and HEAD, and identifying the added gate.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in 9d5337ce 2e08cbc7 de292c7d; do echo \"=== $c ===\"; git show $c:tools/pensee/autotest.py > /tmp/audit_v2/at_$c.py; python3 - \"$c\" <<'PY'\nimport ast,sys\nc=sys.argv[1]\nt=ast.parse(open(f'/tmp/audit_v2/at_{c}.py').read())\ … [510 caractères tronqués]`
+
+  ```
+=== 9d5337ce ===
+=== 2e08cbc7 ===
+=== de292c7d ===
+=== diff autotest 9d5337ce..HEAD ===
+diff --git a/tools/pensee/autotest.py b/tools/pensee/autotest.py
+index da05e88c..f4331ec6 100644
+--- a/tools/pensee/autotest.py
++++ b/tools/pensee/autotest.py
+@@ -2596,6 +2596,26 @@ def t177_candidats_tete() -> tuple[bool, str]:
+         f"candidats têtes : {a['topk_exact']}/145 ({a['topk_exact_taux_span']})")
+ 
+ 
++def t178_cache_chunker() -> tuple[bool, str]:
++    """Le cache du chunker : un seul `_syntagmes_simple` par analyse (1+2S → 1)."""
++    import tools.bloc_linguistique as bl
++    appels = {"n": 0}
++    orig = bl.Heuristique._syntagmes_simple
++
++    def compte(self, *a, **k):
++        appels["n"] += 1
++        return orig(self, *a, **k)
++
++    bl.Heuristique._syntagmes_simple = compte
++    try:
++        h = bl.Heuristique(segmenter_s=False)
++        h.analyser(" ".join(["Le garçon joue au ballon dans le jardin."] * 20), "fr")
++    finally:
++        bl.Heuristique._syntagmes_simple = orig
++    return appels["n"] == 1, (
++        f"cache : {appels['n']} chunking(s) pour 20 répétitions (1+2S avant)")
++
++
+ def main() -> int:
+     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1
+… [1035 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in 9d5337ce 2e08cbc7 de292c7d; do git show $c:tools/pensee/autotest.py > /tmp/audit_v2/at_$c.py; python3 - \"$c\" <<'PY'\nimport ast,sys\nc=sys.argv[1]\nt=ast.parse(open(f'/tmp/audit_v2/at_{c}.py').read())\nfor n in t.body:\n   … [385 caractères tronqués]`
+
+  ```
+9d5337ce portes: 180 | derniers: ['T175 audit attachement', 'T176 segment précédent', 'T177 candidats têtes']
+2e08cbc7 portes: 180 | derniers: ['T175 audit attachement', 'T176 segment précédent', 'T177 candidats têtes']
+de292c7d portes: 180 | derniers: ['T175 audit attachement', 'T176 segment précédent', 'T177 candidats têtes']
+  ```
+

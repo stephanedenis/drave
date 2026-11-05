@@ -715,3 +715,60 @@ T2f GP dedans -> gauche plus proche    n=145 exact=139/145 (base 137) top1=142/1
 … [14835 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Prototype de simulation par sous-classe et post-traitement des cibles
+
+- **bash** `{"command": "cat > /tmp/sim_replis.py <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger, evaluer_bloc\n\nPOS_OUV={'NOUN','PROPN','VERB','ADJ'}\nAUX=bl.AUXILIAIR … [7310 caractères tronqués]`
+
+  ```
+phrases 612
+baseline time 0.5
+baseline att: {'cibles': 239, 'labels': 145, 'top1': 140, 'exact': 137, 'topk': 142, 'top1_taux': 0.5858, 'top1_taux_span': 0.9655, 'exact_taux': 0.5732, 'exact_taux_span': 0.9448, 'topk_exact': 141}
+per_seg n 145 ok 137 top1 140
+noop                   exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=0.9s
+T1_rang0               exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s
+   fix ids: []
+   reg ids: []
+T1_dernier(neg)        exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s
+   fix ids: []
+   reg ids: []
+T1_verbe               exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s
+   fix ids: []
+   reg ids: []
+T2_litteral            exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s
+   fix ids: []
+   reg ids: []
+T2_litteral_pos        exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s
+   fix ids: []
+   reg ids: []
+T2_litteral_ext        exact=137/239 (0.5732) 
+… [1989 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/sim_replis.py'\ns=open(p).read()\ns=s.replace(\"\"\"            cible=new\n            # T2\"\"\",\"\"\"            cible=new\n            # T2\"\"\")\n# rewrite modifier applying on a variable 'ancienne' and setting at end\nstart=s.index('    def modifier(self … [3057 caractères tronqués]`
+
+  ```
+phrases 612
+baseline time 0.4
+baseline att: {'cibles': 239, 'labels': 145, 'top1': 140, 'exact': 137, 'topk': 142, 'top1_taux': 0.5858, 'top1_taux_span': 0.9655, 'exact_taux': 0.5732, 'exact_taux_span': 0.9448, 'topk_exact': 141}
+per_seg n 145 ok 137 top1 140
+noop                   exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=0.8s
+T1_rang0               exact=139/239 (0.5816) top1=142/239 (0.5941) span exact=0.9586 top1span=0.9793 fix=2 reg=0 time=0.9s
+   fix ids: [('g002', 'GP', 'chat'), ('s041', 'GP', 'marche')]
+   reg ids: []
+T1_dernier(neg)        exact=137/239 (0.5732) top1=141/239 (0.5900) span exact=0.9448 top1span=0.9724 fix=0 reg=0 time=0.9s
+   fix ids: []
+   reg ids: []
+T1_verbe               exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=0.9s
+   fix ids: []
+   reg ids: []
+T2_litteral            exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=0.9s
+   fix ids: []
+   reg ids: []
+T2_litteral_pos        exact=131/239 (0.5481) top1=134/239 (0.5607) span exact=0.9034 top1span=0.9241 fix=0 reg=6 time=1.0s
+   fix ids: []
+   reg ids: [
+… [2607 caractères tronqués]
+  ```
+

@@ -7,12 +7,12 @@
 | Identifiant | `7263ca42-cd56-4c36-a6dd-8ff2d1024a43` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 28 |
-| Appels d'outils | 27 |
+| Messages | 30 |
+| Appels d'outils | 29 |
 | Fichiers touchés | 0 |
-| Commandes | 21 |
+| Commandes | 23 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **qualifie … [2024 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Check git state and reports listing
 - bash — Check key files exist
@@ -41,7 +41,7 @@
 - bash — Grep for r230/r309 references
 - bash — Dump 145 label records and base counts
 - bash — Inspect SUB cases with self/non-lexicon cibles
-- … et 8 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
@@ -77,6 +77,8 @@
 - **T1** Run final rule sequence with R-E head fix
 - **T1** Count rule triggers over all 239 gold targets
 - **T1** Inspect other de-GP segments
+- **T1** Inspect S attachments for GP de/du cases
+- **T1** Run official evaluator to confirm base numbers
 
 ## 4. Mesures et résultats marquants
 

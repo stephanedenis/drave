@@ -3,7 +3,7 @@
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **169/169 portes** : les échecs d'attachement par **span** (94 à l'état courant ; **93** après le correctif GP, avant le lexique élargi de `a408a909`) sont
 > **48 REL**, **33 SUB** et **13 GP** — les subordonnées ne sont **pas produites** (65 cas) ou le
-> sont avec un span plus large (25). Le correctif testé — borner le GP au verbe et au relatif —
+> sont avec un span plus large (24 à l'état courant ; 25 après le correctif GP). Le correctif testé — borner le GP au verbe et au relatif —
 > gagne **un span** (couverture 0,6067 → 0,6109, F1 0,2864 → 0,2869) mais **perd une cible** :
 > le total des échecs ne bouge pas (107).
 >
@@ -43,7 +43,7 @@
 
 **Ce que ça dit** :
 
-- **Les subordonnées sont le trou** (81 des 94) : REL et SUB ne sont pas produits — c'est
+- **Les subordonnées sont le trou** (81 des 94 ; 65 « aucun » + 25 « plus large » à l'état après le correctif GP, 65 + 24 au courant) : REL et SUB ne sont pas produits — c'est
   l'analyse des subordonnées du **générateur S** (`tools/structures/`), hors de mon territoire.
 - **Le GP avalait le verbe** (`de la voisine dort`) : borné au verbe et au relatif, il gagne un
   span — mais une cible se perd, et le total reste à 107 échecs.

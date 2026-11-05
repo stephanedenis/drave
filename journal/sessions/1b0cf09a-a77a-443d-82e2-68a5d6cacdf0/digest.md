@@ -1066,3 +1066,88 @@ COMPILE_OK
 started background job bash-1127
   ```
 
+- **job_output** `{"job_id": "bash-1127", "timeout_ms": 30000}`
+
+  ```
+EXIT=1
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1127 (bash: cd /tmp && python3 /tmp/bench_patch_et_off.py > /tmp/bench_patch_et_off.out 2>&1; echo "EXIT=$?") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -40 /tmp/bench_patch_et_off.out", "description": "Read patch benchmark error"}`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/bench_patch_et_off.py", line 71, in <module>
+    res_off = mesurer_corpus(mods, False, passes=11, chauffe=2)
+  File "/tmp/bench_patch_et_off.py", line 40, in mesurer_corpus
+    passe_corpus(modules[nom], seg_s, phrases)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bench_patch_et_off.py", line 29, in passe_corpus
+    h = module.Heuristique(segmenter_s=seg_s)
+TypeError: fabrique_off.<locals>.<lambda>() got an unexpected keyword argument 'segmenter_s'
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nfrom pathlib import Path\np = Path('/tmp/bench_patch_et_off.py')\ns = p.read_text()\ns = s.replace('    return lambda seg, n=nom: b.fabrique(n, seg)',\n              '    return lambda segmenter_s, n=nom: b.fabrique(n, segmenter_s)')\np.write_text(s)\nprint … [244 caractères tronqués]`
+
+  ```
+started background job bash-1136
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport json\np = json.load(open('/tmp/bench_cache_chunker.json'))\nL = []\n# corpus\nL.append('### Corpus\\n')\nL.append('| variante | chunker ms | gain | µs/phrase | défaut ms | gain | µs/phrase |')\nL.append('|---|---:|---:|---:|---:|---:|---:|')\nfor a i … [2006 caractères tronqués]`
+
+  ```
+### Corpus
+
+| variante | chunker ms | gain | µs/phrase | défaut ms | gain | µs/phrase |
+|---|---:|---:|---:|---:|---:|---:|
+| original | 245.3 | ×1.000 | 400.8 | 395.2 | ×1.000 | 645.8 |
+| C1 | 198.0 | ×1.239 | 323.6 | 388.3 | ×1.018 | 634.5 |
+| C2 | 196.1 | ×1.251 | 320.4 | 385.1 | ×1.026 | 629.2 |
+| OFF | 275.6 | ×0.890 | 450.4 | 398.4 | ×0.992 | 650.9 |
+
+### Longueurs chunker
+
+| N | S | G | original | C1 | C2 | OFF | gain C1 | gain C2 | gain OFF |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 20 | 6 | 2 | 1.64 | 0.88 | 0.71 | 1.67 | ×1.88 | ×2.32 | ×0.98 |
+| 40 | 12 | 4 | 4.97 | 2.38 | 1.40 | 4.99 | ×2.09 | ×3.55 | ×1.00 |
+| 80 | 24 | 8 | 16.19 | 4.26 | 2.50 | 16.44 | ×3.80 | ×6.46 | ×0.99 |
+| 160 | 48 | 16 | 57.74 | 11.27 | 5.25 | 62.02 | ×5.12 | ×11.00 | ×0.93 |
+| 320 | 96 | 32 | 233.47 | 33.80 | 12.00 | 241.33 | ×6.91 | ×19.46 | ×0.97 |
+| 640 | 192 | 64 | 925.09 | 119.60 | 31.70 | 919.54 | ×7.74 | ×29.18 | ×1.01 |
+| 1280 | 384 | 128 | 3740.44 | 426.46 | 100.93 | 3657.45 | ×8.77 | ×37.06 | ×1.02 |
+
+### Longueurs defaut
+
+| N | S | G | original | C1 | C2 | OFF | gain C1 | gain C2 | gain OFF |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 20 | 6 | 2 | 2.02 | 1.95 
+… [2342 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-1136", "timeout_ms": 60000}`
+
+  ```
+ok
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-1136", "timeout_ms": 90000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,time,pcpu,cmd -C python3 | grep -E 'bench_patch|PID'; uptime", "description": "Check patch benchmark progress"}`
+
+  ```
+PID     ELAPSED     TIME %CPU CMD
+2156698       01:10 00:01:10  100 python3 /tmp/bench_patch_et_off.py
+ 14:43:50  up 1 day 19:09,  2 users,  load average: 13,06, 13,47, 13,26
+  ```
+

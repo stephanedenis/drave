@@ -702,3 +702,206 @@ restants faux: [('g012', 'prêt', 'est'), ('r018', 'prête', 'est')]
 'de la voisine' _tete_texte: 'voisine' _verbe_dans: 'voisine'
   ```
 
+- **bash** `{"command": "cat > /tmp/ech/sim_final.py <<'PY'\nimport json, sys, pathlib, re\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, evaluer … [8791 caractères tronqués]`
+
+  ```
+[
+ {
+  "regle": "R-A lexique verbal",
+  "portee": 2,
+  "gagne": 2,
+  "perd": 0,
+  "exact": 139,
+  "touches": [
+   [
+    "s108",
+    "papier",
+    "rêve"
+   ],
+   [
+    "s122",
+    "papier",
+    "saute"
+   ]
+  ]
+ },
+ {
+  "regle": "R-E GP sans auto-attachement",
+  "portee": 2,
+  "gagne": 2,
+  "perd": 0,
+  "exact": 141,
+  "touches": [
+   [
+    "g012",
+    "manger",
+    "prêt"
+   ],
+   [
+    "r018",
+    "manger",
+    "prête"
+   ]
+  ]
+ },
+ {
+  "regle": "R-B1 GP possession -> tête GN gauche",
+  "portee": 1,
+  "gagne": 1,
+  "perd": 0,
+  "exact": 142,
+  "touches": [
+   [
+    "g002",
+    "",
+    "chat"
+   ]
+  ]
+ },
+ {
+  "regle": "R-B2 cible vide -> verbe proche",
+  "portee": 0,
+  "gagne": 0,
+  "perd": 0,
+  "exact": 142,
+  "touches": []
+ },
+ {
+  "regle": "R-C enclitique",
+  "portee": 1,
+  "gagne": 1,
+  "perd": 0,
+  "exact": 143,
+  "touches": [
+   [
+    "r230",
+    "appelle-moi",
+    "appelle"
+   ]
+  ]
+ },
+ {
+  "regle": "R-D SUB pseudo-GV ADV",
+  "portee": 1,
+  "gagne": 1,
+  "perd": 0,
+  "exact": 144,
+  "touches": [
+   [
+    "r309",
+    "Peut-être",
+    "viendra"
+   ]
+  ]
+ }
+]
+FINAL: 144 / 145
+restants: [('s041', 'marche', '')]
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/ech/sim_
+… [200 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, sys, pathlib, re\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\n\n# --- déclencheurs sur les 239 cibles\nphrases = eg … [2819 caractères tronqués]`
+
+  ```
+{
+ "total": 239,
+ "R-E": {
+  "n": 0,
+  "ids": []
+ },
+ "R-B1": {
+  "n": 4,
+  "ids": [
+   "g002",
+   "g006",
+   "s081",
+   "s120"
+  ]
+ },
+ "R-C": {
+  "n": 0,
+  "ids": []
+ },
+ "R-D": {
+  "n": 1,
+  "ids": [
+   "r309"
+  ]
+ },
+ "R-A": {
+  "n": 13,
+  "ids": [
+   "s003",
+   "s015",
+   "s027",
+   "s032",
+   "s037",
+   "s041",
+   "s047",
+   "s050",
+   "s058",
+   "s061",
+   "s108",
+   "s122",
+   "s132"
+  ]
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nph = {p[\"id\"]:p for p in eg.charger()}\nfor pid in (\"g002\",\"g00 … [474 caractères tronqués]`
+
+  ```
+==========================================================================================
+g002 | Le chat de la voisine dort.
+   GN (0, 7) 'Le chat' cible= []
+   GP (8, 21) 'de la voisine' cible= ['chat']
+   GV (22, 26) 'dort' cible= []
+  POS gold: [('Le', 'DET'), ('chat', 'NOUN'), ('de', 'PREP'), ('la', 'DET'), ('voisine', 'NOUN'), ('dort', 'VERB')]
+==========================================================================================
+g006 | Le chien du voisin aboie la nuit.
+   GN (0, 8) 'Le chien' cible= []
+   GP (9, 18) 'du voisin' cible= ['chien']
+   GV (19, 24) 'aboie' cible= []
+   GN (25, 32) 'la nuit' cible= []
+  POS gold: [('Le', 'DET'), ('chien', 'NOUN'), ('du', 'PREP'), ('voisin', 'NOUN'), ('aboie', 'VERB'), ('la', 'DET'), ('nuit', 'NOUN')]
+==========================================================================================
+s081 | cette secrète fenêtre trouve de Alice
+   GN (0, 21) 'cette secrète fenêtre' cible= []
+   GV (22, 28) 'trouve' cible= []
+   GP (29, 37) 'de Alice' cible= ['trouve', 'fenêtre']
+  POS gold: [('cette', 'DET'), ('secrète', 'ADJ'), ('fenêtre', 'NOUN'), ('trouve', 'VERB'), ('de', 'PREP'), ('Alice', 'NOUN')]
+===================================
+… [385 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re, json\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nph = {p[\"id\"]:p for p in eg.charger()}\nh = bl.Heuristique() … [751 caractères tronqués]`
+
+  ```
+===============================================================================================
+g002 | Le chat de la voisine dort.
+  nom: « de la voisine dort » → Le chat
+    GN (0, 7) 'Le chat'
+    GP (8, 26) 'de la voisine dort'
+  cibles_s: {(0, 7, 'GN'): None, (8, 26, 'GP'): 'Le chat'}
+  gold: [('GN', (0, 7), "'Le chat'", None), ('GP', (8, 21), "'de la voisine'", 'chat'), ('GV', (22, 26), "'dort'", None)]
+===============================================================================================
+g006 | Le chien du voisin aboie la nuit.
+  nom: « du voisin aboie la nuit » → Le chien
+    GN (0, 8) 'Le chien'
+    GP (9, 32) 'du voisin aboie la nuit'
+  cibles_s: {(0, 8, 'GN'): None, (9, 32, 'GP'): 'Le chien'}
+  gold: [('GN', (0, 8), "'Le chien'", None), ('GP', (9, 18), "'du voisin'", 'chien'), ('GV', (19, 24), "'aboie'", None), ('GN', (25, 32), "'la nuit'", None)]
+===============================================================================================
+s081 | cette secrète fenêtre trouve de Alice
+  nom: « de Alice » → cette secrète fenêtre
+    GN (0, 21) 'cette secrète fenêtre'
+    GV (22, 28) 'trouve'
+    GP (29, 37) 'de Alice'
+  cibles_s: {(0, 21, 'GN'): None, (22, 28, 'G
+… [2049 caractères tronqués]
+  ```
+

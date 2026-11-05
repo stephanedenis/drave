@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 118.1 h |
 | Tours | 176 |
-| Messages | 2454 |
-| Appels d'outils | 2150 |
+| Messages | 2457 |
+| Appels d'outils | 2153 |
 | Fichiers touchés | 25 |
-| Commandes | 1770 |
+| Commandes | 1771 |
 | Sous-agents | 13 |
-| Commits | 257 |
+| Commits | 258 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*107 appels d'outils.* Actions notables :
+*110 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,7 +9454,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 84 autres
+- … et 85 autres
 
 **Synthèse produite :**
 
@@ -9550,7 +9550,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1730 autres
+- … et 1731 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9955,4 +9955,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — B13 180/180, T0 DANS LE BUDGET ; VAGUE 3 LANCÉE (AUDIT V2, ÉCHECS, REPLIS, CACHE)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='
 - B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181" -- tools/bloc_linguistique.py tools/te
 - PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181" -- docs/pilotage/en-cours.md journal/2026-11-05/README.md journal/sessions/e181ce02-cd5
+- FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR" -- reports/rapport-coherence-fiches.md reports
 
