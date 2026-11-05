@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 18.3 h |
-| Tours | 266 |
-| Messages | 1470 |
-| Appels d'outils | 1469 |
+| Tours | 267 |
+| Messages | 1474 |
+| Appels d'outils | 1472 |
 | Fichiers touchés | 15 |
-| Commandes | 1281 |
+| Commandes | 1284 |
 | Sous-agents | 0 |
-| Commits | 287 |
+| Commits | 288 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -555,6 +555,8 @@
 **Tour 265** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 266** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 267** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6558,7 +6560,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 261 : profondeur-routée à ~13 min ; je vérifie le calcul et commit
+⏵ Cycle 261 : profondeur-routée calcule à 935 % CPU (9 min 29 pour la seconde profondeur)
+
+**Cycle 261 — la porte lourde est active, pas bloquée.**
+
+- **`porte-profondeur-routee`** : le processus `drave --ppl` (Qwen2.5-0.5B, ctx 8 192) tourne à **935 % CPU**, 812 Mo de RSS, depuis **9 min 29** pour la seconde profondeur ; la porte est sous la borne de 30 min.
+- **Registre** : **68 entrées** — les **deux tolérées** (`indice`, `melange`) et la **rouge de banc corrigée** restent les seules rouges.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 617 mots**, **T0 3 987 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : laisser la porte finir (≈14 portes), mettre à jour les références, puis décider d'une passe propre de confirmation.
+
+### Tour 267 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Update state verdict count and commit
+
+**Synthèse produite :**
+
+⏵ Cycle 262 : profondeur-routée VERTE (700 s), push-paresseux verte ; je mets l'état à jour
 
 ## 3. Travail accompli
 
@@ -6624,7 +6647,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1241 autres
+- … et 1244 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7059,4 +7082,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 36 ; PROFONDEUR-ROUTÉE TOUJOURS EN COURS ; 68 JOURNAUX" -m "La porte de profondeur routée tourne encore, sous la borne de 30 min ; la passe re
 - ÉTAT — HEURE 01 H 39 ; PROFONDEUR-ROUTÉE CALCULE (QWEN 0,5B, CTX 8192) ; 68 JOURNAUX" -m "La porte n'est pas pendue : son journal montre la chaîne hors-ligne à 
 - ÉTAT — HEURE 01 H 45 ; PROFONDEUR-ROUTÉE À 13 MIN, SOUS SA BORNE ; 68 JOURNAUX" -m "La porte calcule les deux profondeurs sur 8 192 jetons ; elle reste sous la 
+- ÉTAT — PASSE 69 VERDICTS : PROFONDEUR-ROUTÉE VERTE (700 S), PUSH-PARESSEUX VERTE ; HEURE 01 H 48" -m "La porte lourde est tenue : 16 couches contre 24 sur 8 192
 

@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**32 commits** · **1 session(s)** · **7 thème(s)**
+**33 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 11 | [docs.md](docs.md) |
+| docs | 12 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
@@ -61,6 +61,7 @@
 | 01:32 | `c5701c75` | ÉTAT — HEURE 01 H 33 ; PRÉCHARGEMENT VERTE (214 S), PROFONDEUR-ROUTÉE EN COURS ; 68 JOURNAUX |
 | 01:35 | `230e3f0f` | ÉTAT — HEURE 01 H 36 ; PROFONDEUR-ROUTÉE TOUJOURS EN COURS ; 68 JOURNAUX |
 | 01:39 | `271f8765` | ÉTAT — HEURE 01 H 39 ; PROFONDEUR-ROUTÉE CALCULE (QWEN 0,5B, CTX 8192) ; 68 JOURNAUX |
+| 01:41 | `f3f4f804` | ÉTAT — HEURE 01 H 45 ; PROFONDEUR-ROUTÉE À 13 MIN, SOUS SA BORNE ; 68 JOURNAUX |
 
 ## Le récit de la journée (écrit à la main)
 
