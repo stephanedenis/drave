@@ -38018,3 +38018,10 @@ Les `candidats` d'un segment portent maintenant, en plus de son type, les **verb
 
 Je continue sur les 127 échecs si vous ne dites rien — c'est la ligne suivante de la file.
 
+
+## Tour 173
+
+### 👤 Utilisateur
+
+continue
+

@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 95.9 h |
-| Tours | 172 |
-| Messages | 2142 |
-| Appels d'outils | 1844 |
+| Durée | 99.7 h |
+| Tours | 173 |
+| Messages | 2149 |
+| Appels d'outils | 1850 |
 | Fichiers touchés | 25 |
-| Commandes | 1517 |
+| Commandes | 1523 |
 | Sous-agents | 2 |
 | Commits | 227 |
 | Compactages de contexte | 6 |
@@ -385,6 +385,8 @@
 **Tour 171** — This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.  <compacted-summary> ## Primary Request and Intent - Goal `goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180 … [8917 caractères tronqués]
 
 **Tour 172** — oui
+
+**Tour 173** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -9234,6 +9236,21 @@ Les `candidats` d'un segment portent maintenant, en plus de son type, les **verb
 Je continue sur les 127 échecs si vous ne dites rien — c'est la
 … [27 caractères tronqués]
 
+### Tour 173 — continue
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Qualifier les 127 échecs : span ou cible
+- bash — Lire le bloc de construction des syntagmes S
+- bash — Compléter avec les GV du chunker et mesurer
+- bash — Voir les types produits par S et par le chunker
+- bash — Lire la branche union
+- bash — Ajouter les verbes à la branche union et mesurer
+
+**Synthèse produite :**
+
+⏵ Les 33 sont tous des GP **sans GV dans la segmentation S** : aucun verbe candidat, aucune cible. Je comble avec les GV du chunker
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9313,7 +9330,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1477 autres
+- … et 1483 autres
 
 ## 4. Mesures et résultats marquants
 

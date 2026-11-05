@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**181 commits** · **6 session(s)** · **7 thème(s)**
+**182 commits** · **6 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 140 | [docs.md](docs.md) |
+| docs | 141 | [docs.md](docs.md) |
 | mesures | 24 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -28,7 +28,7 @@
 | `206a4022-ab3c-497d-a5fa-0194931c7fa0` | Tu travailles dans le dépôt | 2026-11-04 15:56 | 0.2 h | [rapport](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) · [digest](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 48.3 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 6.9 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 95.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 99.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -215,6 +215,7 @@
 | 20:12 | `d9867251` | ÉTAT — HEURE 23 H 12 ; 2 048 : 2E MOITIÉ À 6 650 PAS ; B13 165/165, D 62 |
 | 20:15 | `9b69fb85` | ÉTAT — HEURE 23 H 17 ; 2 048 : 2E MOITIÉ À 6 800 PAS ; B13 165/165, D 62 |
 | 20:17 | `e374a001` | ÉTAT — HEURE 23 H 22 ; 2 048 : 2E MOITIÉ À 6 900 PAS ; B13 165/165, D 62 |
+| 20:19 | `0aeb4211` | ÉTAT — HEURE 23 H 27 ; 2 048 : 2E MOITIÉ À 7 050 PAS ; B13 165/165, D 62 |
 
 ## Le récit de la journée (écrit à la main)
 
