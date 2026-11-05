@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 17.1 h |
-| Tours | 244 |
-| Messages | 1359 |
-| Appels d'outils | 1380 |
+| Tours | 245 |
+| Messages | 1363 |
+| Appels d'outils | 1383 |
 | Fichiers touchés | 15 |
-| Commandes | 1193 |
+| Commandes | 1196 |
 | Sous-agents | 0 |
-| Commits | 264 |
+| Commits | 265 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -511,6 +511,8 @@
 **Tour 243** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 244** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 245** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6045,7 +6047,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 239 : registre à 28/83 (harnais-invariants verte), homeostasie en cours ; je commit
+⏵ Cycle 239 : passe à 28/83 (harnais-invariants 126 s), zéro rouge, heure 00 h 28
+
+**Cycle 239 — la passe compte 28 portes franches.**
+
+- **Passe complète** : **28 / 83**, aucune rouge — `porte-greffe` (840 s) et **`porte-harnais-invariants`** (126 s : installer une reparamétrisation laisse le modèle intact) vertes ; `porte-homeostasie` tourne.
+- **État** : la clause de la passe dit « **28 franches, 0 rouge** » ; **T0 3 980 / 4 000** ✅.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe (≈55 portes, dont `homeostasie` et `indice`), puis les faits B13/S.
+
+### Tour 245 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check homeostasie
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 240 : homeostasie à 5 min d'écoulé ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6111,7 +6134,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1153 autres
+- … et 1156 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6523,4 +6546,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 00 H 28 ; GREFFE PROGRESSE (SECTION 5, 13 MIN), ZÉRO NON-ZÉRO" -m "Le journal de porte-greffe grandit (841 → 1 355 octets) et en est à la section 5
 - ÉTAT — HEURE 00 H 31 ; PORTE-GREFFE VERTE (840 S), REGISTRE 27/83 SANS NON-ZÉRO" -m "La porte longue est franchie : l'injection d'état est branchée et l'état pr
 - ÉTAT — PASSE 28/83 (HARNAIS-INVARIANTS 126 S), ZÉRO ROUGE ; HEURE 00 H 34" -m "Le registre compte 28 entrées toutes nulles : greffe (840 s) et harnais-invariant
+- ÉTAT — HEURE 00 H 37 ; PASSE 28/83, HOMEOSTASIE À 5 MIN, ZÉRO NON-ZÉRO" -m "Le registre reste à 28 entrées toutes nulles ; porte-homeostasie (connue longue) tou
 
