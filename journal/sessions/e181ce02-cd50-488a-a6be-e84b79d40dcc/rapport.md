@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 119.8 h |
+| Durée | 119.9 h |
 | Tours | 176 |
-| Messages | 2550 |
-| Appels d'outils | 2234 |
+| Messages | 2552 |
+| Appels d'outils | 2236 |
 | Fichiers touchés | 25 |
-| Commandes | 1837 |
+| Commandes | 1838 |
 | Sous-agents | 16 |
-| Commits | 272 |
+| Commits | 273 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*191 appels d'outils.* Actions notables :
+*193 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,7 +9454,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 151 autres
+- … et 152 autres
 
 **Synthèse produite :**
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1797 autres
+- … et 1798 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9973,4 +9973,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183" -- tools/tests/linguistique/evaluer_gold.py tools/pen
 - THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis)" -- docs/theorie/modele-natif.md docs/pilotage/en-cours.md 2>&1 
 - ÉTAT — B13 183/183, ATTACHEMENT 0,9724 (FR 0,9658 / EN 1,000) ; 14 SOUS-AGENTS INTÉGRÉS ; L'ANGLAIS EST LE DÉCOUPAGE" -- docs/pilotage/en-cours.md docs/pilotage
+- ÉTAT — TRIM T0 (3 997) ; B13 183/183" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRIM T0"; then echo "COMMIT OK $i"; b
 
