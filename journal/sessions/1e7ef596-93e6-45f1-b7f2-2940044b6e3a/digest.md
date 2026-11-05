@@ -31802,3 +31802,168 @@ date corrigée
 ⏵ Cycle 223 : je commit la date corrigée avec l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h223.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h223.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [850 caractères tronqués]`
+
+  ```
+heure 23 h 38
+[s/v7 fb90bf5f] CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40
+ 8 files changed, 199 insertions(+), 16 deletions(-)
+fb90bf5f CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40
+02c34ad4 REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 23 H 35
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 223 : vérification finale des portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -1 ; python3 tools/verifie_en_cours.py 2>&1 | tail -1 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifie_journal.py 2>&1 | tail -1 ; head -3 … [73 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3963 mots (budget 4 000)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+**Mis à jour : 2026-11-04, 23 h 38 HNE (heure locale, EST).**
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 223 : date de chantiers.md corrigée (20 h 26), portes vertes
+
+**Cycle 223 — une date qui ne correspondait plus à son contenu.**
+
+- **Correction** (`fb90bf5f`) : le bloc « État » de `chantiers.md` annonçait **13 h** alors que son contenu (B13 **166/166**, 127 échecs) date du commit de **20 h 26** ; il porte maintenant la bonne heure.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 073 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 593 mots**, **T0 3 963 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`** ; N2, S et OCR en pause, B13 et L actives.
+
+**Le goal reste actif** : la porte propre de N2, les faits B13/S, puis la passe complète des portes (les références de non-régression attendent d'ailleurs cette passe pour intégrer la 83e porte).
+
+
+## Tour 229
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 224/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 224 : audit, puis je lance la passe complète des portes en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -4 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+fb90bf5f CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40
+02c34ad4 REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 23 H 35
+06c6a918 RESSOURCES — LE CLAIM N2 EST LIBÉRÉ (GPUS LIBRES) ; HEURE 23 H 28
+789dbdf2 PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 500 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 712 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 432 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2040 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), r
+… [317 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [349 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1593 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3963 mots (budget 4 000)
+  ✅ 3073 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+--- PASSES EN COURS ---
+1119404 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E "T0 max" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3 tools/verifie_backlog.py 2>&1 | tail -1 ; python3 tools/verifie_journal.py 2>&1 | tail -1 ; bash tools/porte-tableaux.sh 2>&1 | tail -1 ; echo "--- PASSES EN COURS ---" ; pgrep -af "toutes-les-portes" | head -3 ; nvidia-smi -
+… [68 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 224 : je vérifie l'usage du harnais de portes avant de lancer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -40 tools/toutes-les-portes.sh", "description": "Read gates harness header"}`
+
+  ```
+#!/bin/bash
+# toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+# (`--attn-window` en réparti) que le v7 avait **délibérément retiré** en faisant voyager les
+# trois réglages dans la trame (`main.rs:4432`). La porte ne pouvait donc plus passer — et
+# personne ne l'a vu, parce que les portes étaient lancées **une par une**, à la main, quand
+# on touchait la fonctionnalité du jour. Une porte qu'on croit verte et qui n'a pas tourné est
+# exactement le défaut que ce dépôt traque (un drapeau inerte, une mesure qui ne mesure rien) :
+# ici, appliqué aux instruments eux-mêmes.
+#
+# Ce que fait ce script, et ce qu'aucun autre ne faisait :
+#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+#   2. il ne s'arrête PAS à la première rouge — il veut le tableau, pas la première tuile ;
+#   3. il borne chaque porte dans le temps (`DELAI`, 1800 s par défaut) : une porte qui pend
+#      est une porte ROUGE, pas une porte qu'on attend ;
+#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+#   5. il sort en 1 s'il y a la moindre rouge, en
+… [886 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 224 : je lance la passe complète (83 portes) en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; mkdir -p work/portes ; date \"+%F %H:%M\" > work/portes/passe-2404-23h45.debut ; JOURNAUX=work/portes/passe-2404-23h45 nohup bash tools/toutes-les-portes.sh > work/portes/passe-2404-23h45.log 2>&1 &\necho \"job lancé, pid $!\" ; sleep … [187 caractères tronqués]`
+
+  ```
+started background job bash-1135
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 224 : je confirme que la passe a bien démarré
+
+- **job_output** `{"job_id": "bash-1135", "wait": true, "timeout_ms": 45000}`
+
+  ```
+job lancé, pid 1119604
+=== PASSE COMPLÈTE DES PORTES (83 portes, borne 1800 s) ===
+    journaux : work/portes/passe-2404-23h45
+porte-adaptateur-sortie.log
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 224 : la passe tourne ; j'inscris son lancement dans l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '126,131p' docs/pilotage/en-cours.md ; echo \"---\" ; tail -3 work/portes/passe-2404-23h45.log 2>/dev/null ; ls work/portes/passe-2404-23h45/*.log 2>/dev/null | wc -l", "description": "Read remaining section and pass progress"}`
+
+  ```
+**C1** · **C2** · **C3** · **C4** · **C5** · **C6** · **C7** — hors graphe.
+
+## Ce qui reste
+
+**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 166/166 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+
+---
+=== PASSE COMPLÈTE DES PORTES (83 portes, borne 1800 s) ===
+    journaux : work/portes/passe-2404-23h45
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 224 : j'ajoute le lancement de la passe à l'état et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h224.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h224.md'\nt=open(p).read()\nold=\"[fiche](../../reports/rapport-ocr-cegep-64.md).\"\nnew=\"[fiche](../../reports/rapport-ocr-ceg … [1254 caractères tronqués]`

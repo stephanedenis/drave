@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 16.2 h |
-| Tours | 228 |
-| Messages | 1281 |
-| Appels d'outils | 1316 |
+| Durée | 16.3 h |
+| Tours | 229 |
+| Messages | 1290 |
+| Appels d'outils | 1324 |
 | Fichiers touchés | 15 |
-| Commandes | 1130 |
+| Commandes | 1137 |
 | Sous-agents | 0 |
-| Commits | 248 |
+| Commits | 249 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -479,6 +479,8 @@
 **Tour 227** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 228** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 229** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5655,7 +5657,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 228 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run seven controls
@@ -5663,10 +5665,35 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — Check chantiers state date and last commit
 - bash — Fix chantiers date label
 - bash — Commit chantiers date fix
+- bash — Final gate check
 
 **Synthèse produite :**
 
-⏵ Cycle 223 : je commit la date corrigée avec l'état
+⏵ Cycle 223 : date de chantiers.md corrigée (20 h 26), portes vertes
+
+**Cycle 223 — une date qui ne correspondait plus à son contenu.**
+
+- **Correction** (`fb90bf5f`) : le bloc « État » de `chantiers.md` annonçait **13 h** alors que son contenu (B13 **166/166**, 127 échecs) date du commit de **20 h 26** ; il porte maintenant la bonne heure.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 073 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 593 mots**, **T0 3 963 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`** ; N2, S et OCR en pause, B13 et L actives.
+
+**Le goal reste actif** : la porte propre de N2, les faits B13/S, puis la passe complète des portes (les références de non-régression attendent d'ailleurs cette passe pour intégrer la 83e porte).
+
+### Tour 229 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check for running pass
+- bash — Read gates harness header
+- bash — Launch full gates pass in background
+- job_output
+- bash — Read remaining section and pass progress
+- bash — Record pass launch and commit
+
+**Synthèse produite :**
+
+⏵ Cycle 224 : j'ajoute le lancement de la passe à l'état et commit
 
 ## 3. Travail accompli
 
@@ -5732,7 +5759,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1090 autres
+- … et 1097 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6128,4 +6155,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - RESSOURCES — LE CLAIM N2 EST LIBÉRÉ (GPUS LIBRES) ; HEURE 23 H 28" -m "Le run 2 048 est fini depuis 21 h 09 et les GPUs sont à 0 %, mais le registre gardait une
 - REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 23 H 35" -m "Le README des rapports citait les fiches courantes mais avait
 - CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40" -m "Le bloc État de chantiers.md portait 13 h alors que son contenu (B13 166/166, 127 échecs) a été m
+- PASSE COMPLÈTE LANCÉE À 23 H 45 (83 PORTES) ; ÉTAT À JOUR ; HEURE 23 H 45" -m "Les sept contrôles de documentation sont verts et aucune passe ne tournait : la p
 
