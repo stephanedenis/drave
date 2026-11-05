@@ -7,12 +7,12 @@
 | Identifiant | `d300542e-6e9d-47ac-875b-b44a192eec35` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.4 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 26 |
-| Appels d'outils | 27 |
+| Messages | 33 |
+| Appels d'outils | 34 |
 | Fichiers touchés | 0 |
-| Commandes | 17 |
+| Commandes | 24 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le … [2218 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Show git state and repo root
 - bash — Line counts of key files
@@ -41,11 +41,11 @@
 - bash — Replicate analyser target logic for s108
 - bash — Inspect model candidate scores for key cases
 - bash — Exhaustive 145-target analysis
-- … et 5 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ Mesure de la surface de changement (toutes étiquettes, pas seulement les 145 gold)
+⏵ Génération des listes Q1 (94 spans absents, 2 vides, croisement des natures)
 
 ## 3. Travail accompli
 
@@ -73,6 +73,13 @@
 - **T1** Run evaluator against simulated variants
 - **T1** Fix simulation post-processing and rerun
 - **T1** Count changed labels outside measured set
+- **T1** Debug T2 garde variant on s108
+- **T1** Inspect modifier source
+- **T1** Surface of change by scope
+- **T1** List unmeasured changed labels
+- **T1** Check normalisation helper
+- **T1** Inspect JSON thought-record conventions
+- **T1** List unpredicted span ids by type
 
 ## 4. Mesures et résultats marquants
 
@@ -93,4 +100,9 @@
 - **T1** `T2_rang0 total labels 863`
 - **T1** `T2_rang0_garde   total= 863 changes=  0 dont gold=0 autres=0`
 - **T1** `T2_rang0         total= 863 changes=  7 dont gold=4 autres=3`
+- **T1** `{'t2': 'rang0'} [('GN', 0, 20, {'role': 'agent', 'niveau': 0}), ('GP', 21, 34, {'role': 'lieu', 'niveau': 1, 'attachement': {'segment': 'sous le nuage', 'cible': 'rêve'}})]`
+- **T1** `{'t2': 'rang0_garde'} [('GN', 0, 20, {'role': 'agent', 'niveau': 0}), ('GP', 21, 34, {'role': 'lieu', 'niveau': 1, 'attachement': {'segment': 'sous le nuage', 'cible': 'papier'}})]`
+- **T1** `if self.t1=='rang0': cible=cands[0]['texte']`
+- **T1** `elif self.t2=='rang0':`
+- **T1** `elif self.t2=='rang0_verbe_garde':`
 

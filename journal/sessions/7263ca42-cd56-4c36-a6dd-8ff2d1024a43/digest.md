@@ -949,3 +949,177 @@ N6 :
   s120 GP='de une chanson' tete_GN_gauche='lettre' gold='prépare' FAUX
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nph={p[\"id\"]:p for p in eg.charger()}\nh=bl.Heuristique()\nfor pid in ( … [584 caractères tronqués]`
+
+  ```
+==========================================================================================
+g002 | Le chat de la voisine dort. | cibles: [['chat']]
+   'Le'             gold=DET   heur=DET   est_verbe=False
+   'chat'           gold=NOUN  heur=NOUN  est_verbe=False
+   'de'             gold=PREP  heur=PREP  est_verbe=False
+   'la'             gold=DET   heur=DET   est_verbe=False
+   'voisine'        gold=NOUN  heur=NOUN  est_verbe=False
+   'dort'           gold=VERB  heur=VERB  est_verbe=True
+==========================================================================================
+g012 | Le canard est prêt à manger. | cibles: [['prêt', 'canard']]
+   'Le'             gold=DET   heur=DET   est_verbe=False
+   'canard'         gold=NOUN  heur=NOUN  est_verbe=False
+   'est'            gold=AUX   heur=AUX   est_verbe=True
+   'prêt'           gold=ADJ   heur=ADJ   est_verbe=False
+   'à'              gold=PREP  heur=PREP  est_verbe=False
+   'manger'         gold=VERB  heur=VERB  est_verbe=True
+==========================================================================================
+r018 | La souris est prête à manger. | cibles: [['prête', 'souris']]
+   'La'             gold=DET   heur=DET   
+… [2659 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date -I && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | tail -5 && git log -1 --format='%h %ad %s' --date=short && python3 - <<'PY'\nimport json\nd=json.load(open('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-topk-diagnostic.json'))\nprint(list(d … [74 caractères tronqués]`
+
+  ```
+2026-11-05
+xnli-3b.json
+xnli-3b-l30.json
+xnli-entrainement-3b.json
+xnli-mlp-3b.json
+xnli-train-complet-3b.json
+a914c1e7 2026-11-05 FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR
+['date', 'ligne', 'titre', 'verdict', 'non_applique', 'gold', 'mesure', 'causes', 'correctifs', 'controle_negatif', 'limites', 'segments', 'methode']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-topk-diagnostic.json'))\nprint(json.dumps({k:d[k] for k in d if k!='segments'}, ensure_ascii=False, indent=1)[:3000])\nprint(\"--- un segment ---\")\nfor s in d['segment … [188 caractères tronqués]`
+
+  ```
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "titre": "Top-k strict de l'attachement : 57 échecs qualifiés, 45 d'emballage",
+ "verdict": "57/57 échecs classés (0 « autre ») ; 3 correctifs simulés couvrent 45 + 8 + 4 = 57, soit un plafond de 145/145 en top-k strict — borne haute, même gold, code non modifié.",
+ "non_applique": true,
+ "gold": {
+  "fichier": "tools/tests/linguistique/gold.json + gold_reel.json + gold_synthetique.json",
+  "phrases": 612,
+  "charger": "evaluer_gold.charger()"
+ },
+ "mesure": {
+  "phrases": 612,
+  "cibles_gold": 239,
+  "segments_span_predit": 145,
+  "topk_sous_chaine": 134,
+  "topk_exact": 88,
+  "echecs_stricts": 57,
+  "top1_exact": 123,
+  "taux_span": {
+   "topk_sous_chaine": 0.9241,
+   "topk_exact": 0.6069,
+   "top1_exact": 0.8483
+  },
+  "rendement_239": {
+   "topk_sous_chaine": 0.5607,
+   "topk_exact": 0.3682
+  }
+ },
+ "causes": [
+  {
+   "code": "C1",
+   "libelle": "candidat S non réduit à sa tête — cible nominale",
+   "raison": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "effectif": 26,
+   "dont_sous_chaine": 26,
+   "types": {
+… [4555 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('/tmp/ech/eval_base.json'))\nprint('hasard:', d['attachement_hasard'])\nprint('verdict ok:', d['ok'])\nprint('heur all att:', {k:d['heuristique']['all']['attachement'][k] for k in ('cibles … [239 caractères tronqués]`
+
+  ```
+hasard: {'cibles': 239, 'top1_taux': 0.0042}
+verdict ok: True
+heur all att: {'cibles': 239, 'labels': 145, 'exact': 137, 'top1': 140, 'topk': 142, 'topk_exact': 141, 'couverture': 0.6067}
+hasard vs top1: 139.48
+  ```
+
+- **bash** `{"command": "cat > /tmp/ech/final_measure.py <<'PY'\nimport json, sys, pathlib, re\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, eva … [7240 caractères tronqués]`
+
+  ```
+{
+ "R1 lexique verbal (rêver, sauter, marcher)": {
+  "portee": 2,
+  "gagne": 2,
+  "perd": 0,
+  "exact": 139
+ },
+ "R2 GP sans auto-attachement": {
+  "portee": 2,
+  "gagne": 2,
+  "perd": 0,
+  "exact": 141
+ },
+ "R3a GP possession -> tête du GN gauche": {
+  "portee": 1,
+  "gagne": 1,
+  "perd": 0,
+  "exact": 142
+ },
+ "R3b cible vide -> verbe reconnu le plus proche": {
+  "portee": 1,
+  "gagne": 1,
+  "perd": 0,
+  "exact": 143
+ },
+ "R4 enclitique": {
+  "portee": 1,
+  "gagne": 1,
+  "perd": 0,
+  "exact": 144
+ },
+ "R5 SUB pseudo-GV ADV": {
+  "portee": 1,
+  "gagne": 1,
+  "perd": 0,
+  "exact": 145
+ }
+}
+FINAL: 145 restants: []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"reports\" tools/revue_documentation.py | head -30 && echo \"---\" && grep -n \"def \\|REQUIS\\|lien\" tools/revue_documentation.py | head -40", "description": "Check doc review constraints on reports"}`
+
+  ```
+5:  1. classement : pas de résultats dans docs/ (les fiches sont dans reports/ et citées) ;
+7:  3. annotation : les liens relatifs des docs/ et reports/ résolvent, et leur libellé ne
+30:    r"`((?:docs|reports|tools|journal|data|drave-core|sprints)/"
+76:    return list((RACINE / "reports").glob("*.md"))
+95:            + [RACINE / "reports/07-mesures-couche-commune.md",
+96:               RACINE / "reports/fiche-nuit-17-10.md",
+113:    return len(list((RACINE / "reports").glob("*.json")))
+167:        if not (RACINE / "reports" / nom).exists():
+168:            alertes.append(f"classement : la fiche courante reports/{nom} manque")
+169:    if not (RACINE / "reports/README.md").exists():
+170:        alertes.append("classement : reports/ n'a pas d'index (reports/README.md)")
+219:            if not (re.match(r"^(docs|reports|tools|journal)/", lab)
+---
+7:  3. annotation : les liens relatifs des docs/ et reports/ résolvent, et leur libellé ne
+35:def liens(texte: str):
+39:def cible_generee(f: pathlib.Path, cible: str) -> bool:
+43:def date_dernier_commit() -> str:
+52:def date_dernier_changement(chemin: str) -> str:
+62:def est_carte(p: pathlib.Path) -> bool:
+66:def docs_vivants():
+71:def docs_t
+… [986 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nh=bl.Heuristique()\nfor txt in (\"Quand tu arrives, appelle-moi.\",\"Peu … [292 caractères tronqués]`
+
+  ```
+================================================================================
+Quand tu arrives, appelle-moi.
+ _mots: [(0, 5, 'Quand', 'mot'), (6, 8, 'tu', 'mot'), (9, 16, 'arrives', 'mot'), (16, 17, ',', 'ponctuation'), (18, 29, 'appelle-moi', 'mot'), (29, 30, '.', 'ponctuation')]
+ pos: [('CONJ', 'Quand', 0, 5), ('PRON', 'tu', 6, 8), ('VERB', 'arrives', 9, 16), ('NOUN', 'appelle-moi', 18, 29)]
+================================================================================
+Peut-être qu'il viendra.
+ _mots: [(0, 9, 'Peut-être', 'mot'), (10, 15, "qu'il", 'mot'), (16, 23, 'viendra', 'mot'), (23, 24, '.', 'ponctuation')]
+ pos: [('ADV', 'Peut-être', 0, 9), ('CONJ', "qu'il", 10, 15), ('NOUN', 'viendra', 16, 23)]
+  ```
+

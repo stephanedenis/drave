@@ -7,12 +7,12 @@
 | Identifiant | `3f8f2bb8-781b-44a6-9e14-58025004b6fc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.4 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 45 |
-| Appels d'outils | 55 |
+| Messages | 56 |
+| Appels d'outils | 66 |
 | Fichiers touchés | 0 |
-| Commandes | 45 |
+| Commandes | 56 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2447 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Check repo state and locate attachment reports
 - read
@@ -41,11 +41,11 @@
 - bash — Show v2 commit stat and bloc diff
 - bash — Inspect lexicon variable and imports
 - bash — Show evaluer_gold and autotest v2 diff
-- … et 32 autres
+- … et 43 autres
 
 **Synthèse produite :**
 
-⏵ Compiling the per-type breakdown and split-matrix evidence.
+⏵ Replaying v2 ablations and checking the learned-model result.
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Count head-fixable top-k strict failures pre-v2
 - **T1** Measure F1 and F1+F2 on pre-v2 base
 - **T1** Count gates per commit and show post-v2 diff
-- … et 5 autres
+- … et 16 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -109,10 +109,11 @@
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : exit=1 Traceback (most recent call last):   File "/tmp/audit_v2/ablate.py", line 37, in <module>     res['sans_tetes'] = measure(variant('sans_tetes', SRC.replace(head_block, '')))                    
 - **T1** : File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 32, in <module>     from .coeur import Candidat, Etat ImportError: attempted relative import with no known parent 
 - **T1** : cibles par type {'GP': 96, 'SUB': 69, 'REL': 74} SUB POS (tous, 69) : {'VERB': 69} total 69 SUB non-VERB: [] [stderr] Traceback (most recent call last):   File "<stdin>", line 36, in <module>   File "
 - **T1** : old bloc cold RACINE fix: labels 145 fail 22 strict 123 [stderr] Traceback (most recent call last):   File "<stdin>", line 31, in <module>   File "<stdin>", line 28, in tete AttributeError: type objec
+- **T1** : current                  top1=140 topk=142 exact=137 strict=141 | exact GP/SUB/REL=77/34/26 | strict GP/SUB/REL=81/34/26 | labels=83/36/26 [stderr] Traceback (most recent call last):   File "<stdin>",
 

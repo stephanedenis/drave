@@ -368,3 +368,282 @@ test_bloc_linguistique.py
 … [14748 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Reading the heuristic implementation in detail
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 440, "limit": 420}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+440:                 "s", "ed", "ing", "en"):
+441:         if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+442:             return True
+443:     # participes en -é/-és/-ée : `accroché` → `accrocher`
+444:     for suf in ("ées", "ées", "ée", "és", "é"):
+445:         if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
+446:             return True
+447:     return False
+448: 
+449: 
+450: def _role_gp(prep: str) -> str:
+451:     p = prep.casefold()
+452:     if p in {"dans", "sur", "sous", "chez", "vers", "entre", "devant", "derrière", "près", "loin",
+453:              "in", "on", "at", "under", "between"}:
+454:         return "lieu"
+455:     if p in {"pendant", "depuis", "durant", "avant", "après", "during", "since", "before", "after"}:
+456:         return "temps"
+457:     if p in {"pour", "afin", "for", "to"}:
+458:         return "but"
+459:     if p in {"par", "by"}:
+460:         # `par` + GN est l'**agent** d'un passif (`Le chat est mangé par le chien`) ;
+461:         # `avec`/`sans` restent le moyen.
+462:         return "agent"
+463:     if p in {"avec",
+… [21174 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 180, "offset": 860}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+860:             if (" ou " in p or "«" in p or "“" in p
+861:                     or any(m in _normaliser(p) for m in MOTS_DOUBLE_SENS)):
+862:                 etiquettes.append(Etiquette("pragmatique", "double_sens", "candidat", d, f,
+863:                                             self.nom, 0.25, candidats=["littéral", "figuré"],
+864:                                             langue=lg, script=script))
+865: 
+866:         # 5. syntagmes : le générateur S (candidats) ou un chunker simple
+867:         verbes = [(e.debut, e.fin, e.valeur) for e in etiquettes
+868:                   if e.niveau == "pos" and e.type == "VERB"]
+869:         cands = self._syntagmes_s(texte)
+870:         cibles_s = self._cibles_s(texte) if cands else {}
+871:         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+872:         if cands:
+873:             # les GV du chunker complètent ceux du générateur S : sans eux, un GP n'a aucun
+874:             # candidat d'attachement (diagnostic des 33 échecs de T162).
+875:             gvs_simple = [x for x in self._syntagmes_simple(t
+… [10773 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '140,440p' tools/bloc_linguistique.py", "description": "Read lexicons POS_RELATIFS and helpers"}`
+
+  ```
+# --------------------------------------------------------------------------- profils de langue
+
+
+def _normaliser(texte: str) -> str:
+    return unicodedata.normalize("NFC", texte).casefold()
+
+
+def _trigrammes(texte: str) -> list[str]:
+    t = _normaliser(texte)
+    return [t[i:i + 3] for i in range(max(0, len(t) - 2))]
+
+
+def _profil(texte: str, top: int = 200) -> dict[str, int]:
+    c = collections.Counter(_trigrammes(texte))
+    return dict(c.most_common(top))
+
+
+def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30),
+                         min_train: int = 5, min_test: int = 3,
+                         top: int = 200) -> tuple[dict[str, dict], list[tuple[str, str, str]]]:
+    """Construit des profils de trigrammes par langue et un jeu de test tenu à l'écart.
+
+    Le corpus UDHR est **parallèle** : les articles 0–14 servent de profil, les articles 15–30
+    de test. Un profil est une donnée, pas un prompt : il se versionne et se rejoue.
+    """
+    par_langue: dict[str, list[tuple[int, str, str]]] = collections.defaultdict(list)
+    for ligne in chemin.read_text(encoding="utf-8").splitlines():
+        if not ligne.strip():
+            continue
+        d = js
+… [17253 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reproducing the 94 lost spans with the chunker alone
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, json\nsys.path.insert(0, 'tools')\nsys.path.insert(0, 'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nphrases = charger()\nprint(\"phrases\", len(phrases)) … [1023 caractères tronqués]`
+
+  ```
+phrases 612
+cibles 239
+Counter({'GP': 96, 'REL': 74, 'SUB': 69})
+labels 77 manquants 162
+Counter({'REL': 74, 'SUB': 69, 'GP': 19})
+pred types Counter({'GN': 446, 'GV': 114, 'GP': 99, 'REL': 18})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, json\nsys.path.insert(0, 'tools'); sys.path.insert(0, 'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases = charger()\ … [715 caractères tronqués]`
+
+  ```
+segmenter_s= True n 239 labels 145 manquants 94 Counter({'REL': 48, 'SUB': 33, 'GP': 13})
+segmenter_s= False n 239 labels 77 manquants 162 Counter({'REL': 74, 'SUB': 69, 'GP': 19})
+('Le chien du voisin aboie la nuit.', {'type': 'GP', 'texte': 'du voisin', 'role': 'possession', 'debut': 9, 'fin': 18, 'cibles': ['chien'], 'cible': 'chien'})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0, 'tools'); sys.path.insert(0, 'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases = charger()\nh = b … [693 caractères tronqués]`
+
+  ```
+94 Counter({('reel', 'REL'): 32, ('reel', 'SUB'): 27, ('synthetique', 'REL'): 16, ('reel', 'GP'): 7, ('synthetique', 'SUB'): 5, ('synthetique', 'GP'): 4, ('hand', 'GP'): 2, ('hand', 'SUB'): 1})
+langues Counter({'en': 60, 'fr': 34})
+'Le chien du voisin aboie la nuit.' | GP 'du voisin' 9 18 | hand
+'She said that she would come yesterday.' | SUB 'that she would come' 9 28 | hand
+'The duck is ready to eat.' | GP 'to eat' 18 24 | hand
+'It rains since yesterday.' | GP 'since yesterday' 9 24 | reel
+'The book that I read is exciting.' | REL 'that I read' 9 20 | reel
+'The film she talks about is out.' | REL 'she talks about' 9 24 | reel
+'The mouse is ready to eat.' | GP 'to eat' 19 25 | reel
+'Les oiseaux volent au-dessus du lac.' | GP 'au-dessus du lac' 19 35 | reel
+'The book that you read is long.' | REL 'that you read' 9 22 | reel
+'The city where we live is beautiful.' | REL 'where we live' 9 22 | reel
+'Le train entre en gare.' | GP 'en gare' 15 22 | reel
+'The rain falls since this morning.' | GP 'since this morning' 15 33 | reel
+'The film that we saw was long.' | REL 'that we saw' 9 20 | reel
+'The house where I was born is small.' | REL 'where I was born' 10 26 | reel
+'We wait for the bu
+… [34 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnosing each lost span: markers, chunker output, cause
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, re\nsys.path.insert(0, 'tools'); sys.path.insert(0, 'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases = charger()\nh … [1292 caractères tronqués]`
+
+  ```
+00 fr GP   'du voisin'                      | src=hand       | premier=['du'] | overlap=[('GP', 'du voisin aboie la nuit', 9, 32)] | same_start=[('GP', 'du voisin aboie la nuit')]
+01 en SUB  'that she would come'            | src=hand       | premier=['that'] | overlap=[('GN', 'that she', 9, 17), ('GV', 'would come yesterday', 18, 38)] | same_start=[('GN', 'that she')]
+02 en GP   'to eat'                         | src=hand       | premier=['to'] | overlap=[('GV', 'is ready to eat', 9, 24)] | same_start=[]
+03 en GP   'since yesterday'                | src=reel       | premier=['since'] | overlap=[] | same_start=[]
+04 en REL  'that I read'                    | src=reel       | premier=['that'] | overlap=[('GN', 'The book that I read', 0, 20)] | same_start=[]
+05 en REL  'she talks about'                | src=reel       | premier=['she'] | overlap=[('GN', 'The film she talks', 0, 18), ('GP', 'about is out', 19, 31)] | same_start=[]
+06 en GP   'to eat'                         | src=reel       | premier=['to'] | overlap=[('GV', 'is ready to eat', 10, 25)] | same_start=[]
+07 fr GP   'au-dessus du lac'               | src=reel       | premier=['au-dessus'] | overlap=[('GN', 'Les oiseaux vo
+… [12873 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Quantifying chunker near-misses, markers, and S-generator alignment for the 94
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, re, json\nsys.path.insert(0, 'tools'); sys.path.insert(0, 'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter, defaultdict\nphr … [1907 caractères tronqués]`
+
+  ```
+PREMIERS PAR TYPE
+REL [('qui', 17), ('that', 14), ('where', 6), ('whom', 3), ('who', 2), ('que', 2), ('she', 1), ('dont', 1), ('whose', 1), ('when', 1)]
+SUB [('that', 9), ('que', 5), ('when', 4), ('because', 4), ('although', 3), ('if', 2), ('while', 2), ('as', 2), ("qu'il", 1), ('car', 1)]
+GP [('to', 2), ('since', 2), ('les', 2), ('du', 1), ('au-dessus', 1), ('en', 1), ('for', 1), ('on', 1), ('il', 1), ('le', 1)]
+REL n 48 exact 0 même_span_autre_type 0 même_tête_même_type 4 contenu_dans_segment 43 segment_dans_span 0 aucun_recouvrement 0
+SUB n 33 exact 0 même_span_autre_type 5 même_tête_même_type 0 contenu_dans_segment 5 segment_dans_span 16 aucun_recouvrement 12
+GP n 13 exact 0 même_span_autre_type 0 même_tête_même_type 2 contenu_dans_segment 10 segment_dans_span 2 aucun_recouvrement 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the S generator output and gold provenance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/tests/linguistique/gold_synthetique.py && echo ---- && grep -n \"segments\\|def analyser\\|class Segment\\|def _segmente\\|def _tokens\" tools/structures/generateur.py | head -40", "description": "Inspect synthet … [37 caractères tronqués]`
+
+  ```
+"""gold_synthetique.py — le gold étendu : 160 phrases générées par une grammaire indépendante.
+
+Les 20 phrases de `gold.py` sont **réelles** (écrites à la main) ; celles-ci sont **synthétiques** :
+une grammaire hors du bloc (GN, GV, GP, REL, SUB, question, exclamation, impératif, négation,
+modalité, double sens) et un lexique **disjoint** des listes de l'heuristique (renard, montagne,
+saute, calme…), pour mesurer la **généralisation** des classes ouvertes. La grammaire produit
+l'annotation (POS, segments, pragmatique) ; l'heuristique ne voit que le texte.
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+import random
+
+DET = [("le", "M"), ("la", "F"), ("les", "P"), ("un", "M"), ("une", "F"),
+       ("ce", "M"), ("cette", "F"), ("mon", "M"), ("ma", "F")]
+N = [("renard", "M"), ("montagne", "F"), ("rivière", "F"), ("cheval", "M"), ("fenêtre", "F"),
+     ("cuisine", "F"), ("chemin", "M"), ("village", "M"), ("forêt", "F"), ("nuage", "M"),
+     ("étoile", "F"), ("jardin", "M"), ("papier", "M"), ("lettre", "F"), ("voyage", "M"),
+     ("chanson", "F"), ("canard", "M"), ("livre", "M"), ("avocat", "M")]
+V = [("saute", "S"), ("marche", "S"), ("nage", "S"), ("crie", "S"), ("rê
+… [2479 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/structures/generateur.py && sed -n '520,648p' tools/structures/generateur.py", "description": "Read S generator head and tail"}`
+
+  ```
+#!/usr/bin/env python3
+"""generateur.py — une phrase brute → des structures candidates (v0 heuristique).
+
+Ce n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire valider par
+un humain. Il segmente (GN, GV, GP, REL, SUB), devine des rôles par la préposition, puis produit
+plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+GV le plus proche).
+
+    python3 generateur.py "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 generateur.py --json "..."     # la structure complète
+"""
+from __future__ import annotations
+
+import json
+import re
+import unicodedata
+
+DET = set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses "
+          "notre nos votre vos leur leurs quel quelle quels quelles".split())
+PREP = set("a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis "
+           "pendant durant contre malgre selon pres loin devant derriere apres avant".split())
+RELATIFS = set("qui que qu dont ou quoi".split())
+CONJ = set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant quoique".split())
+COORD = set("et ou mais donc or ni car".split())
+SU
+… [9481 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring what the S generator produces for the 94 lost spans
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, re\nsys.path.insert(0, 'tools'); sys.path.insert(0, 'tools/tests/linguistique'); sys.path.insert(0, 'tools/structures')\nimport bloc_linguistique as bl, generateur\nfrom evaluer_gold import charger\nfro … [1500 caractères tronqués]`
+
+  ```
+Counter({('SUB', 'rien'): 32, ('REL', 'rien'): 28, ('REL', 'contient'): 18, ('GP', 'rien'): 8, ('GP', 'contient'): 4, ('REL', 'contenu'): 2, ('GP', 'contenu'): 1, ('SUB', 'contenu'): 1})
+('GP', 'du voisin', [('GN', 'Le chien'), ('GP', 'du voisin aboie la nuit')])
+('SUB', 'that she would come', [('GV', 'She said that she would come yesterday')])
+('GP', 'to eat', [('GV', 'The duck is ready to eat')])
+('GP', 'since yesterday', [('GV', 'It rains since yesterday')])
+('REL', 'that I read', [('GV', 'The book that I read is exciting')])
+('REL', 'she talks about', [('GV', 'The film she talks about is out')])
+('GP', 'to eat', [('GV', 'The mouse is ready to eat')])
+('GP', 'au-dessus du lac', [('GN', 'Les oiseaux volent au-dessus'), ('GP', 'du lac')])
+('REL', 'that you read', [('GV', 'The book that you read is long')])
+('REL', 'where we live', [('GV', 'The city where we live is beautiful')])
+('GP', 'en gare', [('GN', 'Le train'), ('GV', 'en gare')])
+('GP', 'since this morning', [('GV', 'The rain falls since this morning')])
+('REL', 'that we saw', [('GV', 'The film that we saw was long')])
+('REL', 'where I was born', [('GV', 'The house where I was born is small')])
+('GP', 'for the bus', [('GV',
+… [721 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Breaking down the chunker-only exact matches and gold boundary patterns
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, re\nsys.path.insert(0, 'tools'); sys.path.insert(0, 'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases = charger()\nh … [885 caractères tronqués]`
+
+  ```
+chunker ok 77 Counter({('reel', 'GP'): 52, ('synthetique', 'GP'): 20, ('hand', 'GP'): 5})
+chunker miss 162 Counter({'REL': 74, 'SUB': 69, 'GP': 19})
+
+REL exacts par le chunker seul:
+  ```
+

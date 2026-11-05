@@ -42406,3 +42406,55 @@ plan-travail : vagues documentées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS\" -- docs/pilotag … [408 caractères tronqués]`
+
+  ```
+create mode 100644 journal/sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md
+COMMIT OK 1
+1ec7286c PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS
+jeu 05 nov 2026 14:50:10 EST
+pensee-cache-chunker-applique.json
+rapport-cache-chunker-applique.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attachement\\|0,8483\\|0,9448\\|137/145\" docs/pilotage/chantiers.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md | head -8", "description": "Vérifier les chiffres d'attachement dans le pilotage"}`
+
+  ```
+docs/pilotage/chantiers.md:88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160 synthétiques** (POS 0,7544 à 320 phrases, réel 0,7657, exact 0,194, tête 0,510), **attachement tête 1,0/0,966/0,932** ; **coréférence 116 liens, CV 0,847 ± 0,051** ; cascade **0,9415 / 0,7539 / 1,0** ; **pragmatique neuronale 130 : 1,0 / 1,0 / 0,9846 / 0,9769** — elle qualifie ; **gold 432 : acte 0,9954** ; **variance du sous-type : 0,9838** ; **tirages : 0,9838 ×3 (déterministe sur ces invites)** ; **attachement : top1 0,3431, exact 0,0042** ; **cibles : 1863 segments, 1624 sans cible (87,2 %)** ; **cibles 500 : 294 GN / 206 GV** ; **relation GN → GV : 221/637** ; **rôles par position : 301/322, relation 0,8195 (522/637) surévaluée** ; **correctif `par` → agent (partiel)** ; **sans `par` : chunker 3/3, S ignore** ; **cible par proximité : exact ×13** ; **candidats verbes : top-k 0,4686** ; **127 échecs qualifiés** | **gold 200+** ; **porte B13** (178/178) ; la cascade mesurée | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique)
+… [7238 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/chantiers.md'); t=p.read_text()\nt=t.replace(\"**attachement : top1 0,3431, exact 0,0042**\", \"**attachement v2 : exact 0,9448, top-k strict 0,9724 (137 et 141 sur 145) … [1278 caractères tronqués]`
+
+  ```
+pilotage : lignes B13 alignées sur la v2
+docs/pilotage/chantiers.md:2
+docs/pilotage/roadmap.md:2
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"178/178\\|0,0042\\|127 échecs\" docs/pilotage/chantiers.md docs/pilotage/roadmap.md | cut -c1-200", "description": "Voir les occurrences restantes"}`
+
+  ```
+docs/pilotage/chantiers.md:84:| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/a
+docs/pilotage/chantiers.md:92:**État au 04/11 20 h 26.** B13 **178/178** (6 S fixés ; T132/T133 2/5), gold **432**, coréférence **116 liens** ;
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../
+docs/pilotage/roadmap.md:178:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** +
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# chantiers : la ligne du chantier B (l.84) et l'état (l.92)\np=pathlib.Path('docs/pilotage/chantiers.md'); t=p.read_text()\nt=t.replace(\"État au 04/11 20 h 26.** B13 **178/178**\", \"État au 05/11  … [1348 caractères tronqués]`
+
+  ```
+compteurs restants alignés
+docs/pilotage/chantiers.md:0
+docs/pilotage/roadmap.md:0
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+1ec7286c PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS
+jeu 05 nov 2026 14:55:11 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache ×139 ; vague 1 intégrée.\", \" ; cache ×139 ; vague 1 intégrée ; **roadmap et chantiers passés à la v2**.\")\n … [772 caractères tronqués]`

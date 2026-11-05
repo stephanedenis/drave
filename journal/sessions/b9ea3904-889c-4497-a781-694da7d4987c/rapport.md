@@ -7,12 +7,12 @@
 | Identifiant | `b9ea3904-889c-4497-a781-694da7d4987c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.0 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 15 |
+| Messages | 19 |
+| Appels d'outils | 23 |
 | Fichiers touchés | 0 |
-| Commandes | 11 |
+| Commandes | 19 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -39,6 +39,9 @@
 - bash — Inspect other gold files
 - bash — Read lexicons and _est_verbe
 - bash — Read Heuristique implementation
+- bash — Dump English sentence list and duplicates
+- bash — Check spans, overlap, coverage anomalies
+- … et 6 autres
 
 **Synthèse produite :**
 
@@ -64,4 +67,12 @@
 - **T1** Inspect other gold files
 - **T1** Read lexicons and _est_verbe
 - **T1** Read Heuristique implementation
+- **T1** Dump English sentence list and duplicates
+- **T1** Check spans, overlap, coverage anomalies
+- **T1** Check POS composition, roles, targets
+- **T1** Dump English token POS
+- **T1** Dump English segments and targets
+- **T1** Find missing targets and uncovered tokens
+- **T1** Classify target forms and POS
+- **T1** Compare _est_verbe with gold POS on targets
 

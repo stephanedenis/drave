@@ -7,12 +7,12 @@
 | Identifiant | `7263ca42-cd56-4c36-a6dd-8ff2d1024a43` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.4 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 33 |
-| Appels d'outils | 32 |
+| Messages | 40 |
+| Appels d'outils | 39 |
 | Fichiers touchés | 0 |
-| Commandes | 26 |
+| Commandes | 33 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **qualifie … [2024 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Check git state and reports listing
 - bash — Check key files exist
@@ -41,11 +41,11 @@
 - bash — Grep for r230/r309 references
 - bash — Dump 145 label records and base counts
 - bash — Inspect SUB cases with self/non-lexicon cibles
-- … et 13 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
-⏵ Construit un harnais de mesure des règles (sans toucher au code)
+⏵ Rédige le JSON de résultats (8 fiches + règles + contrôles)
 
 ## 3. Travail accompli
 
@@ -82,6 +82,13 @@
 - **T1** Run negative controls for the rules
 - **T1** Inspect N4 self-attachment types and N6 precision
 - **T1** Compare gold POS and heuristic POS on the 8 cases
+- **T1** Check date, recent reports and JSON keys
+- **T1** Inspect topk diagnostic JSON schema
+- **T1** Read random baseline control
+- **T1** Final cumulative simulation with lexicon retained
+- **T1** Check doc review constraints on reports
+- **T1** Show heuristic tokenization for r230/r309
+- **T1** Generate reports/pensee-echecs-v2.json
 
 ## 4. Mesures et résultats marquants
 

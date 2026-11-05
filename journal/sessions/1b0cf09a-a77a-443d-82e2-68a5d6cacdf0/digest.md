@@ -1285,3 +1285,142 @@ defaut 160 {'original': 32.9637, 'C1': 31.8036, 'C2': 17.2724, 'OFF': 32.9} {'or
 defaut 320 {'original': 98.6097, 'C1': 98.3739, 'C2': 34.8244, 'OFF': 101.2571} {'original': 1.0, 'C1': 1.002, 'C2': 2.832, 'OFF': 0.974}
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 && git status --short -- tools/bloc_linguistique.py && sha256sum tools/bloc_linguistique.py && git show HEAD:tools/bloc_linguistique.py | sha256sum && date '+%Y-%m-%dT%H:%M:%S%z'", "description": "Check repositor … [15 caractères tronqués]`
+
+  ```
+a914c1e7 FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR
+a2def5ee PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181
+5640809e8e6bfbd661b86babdf0ed6ce351c8d1bce93a5546f4d22d69575ba2c  tools/bloc_linguistique.py
+5640809e8e6bfbd661b86babdf0ed6ce351c8d1bce93a5546f4d22d69575ba2c  -
+2026-11-05T14:48:47-0500
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:tools/bloc_linguistique.py > /tmp/bloc_committe.py && diff -u /tmp/bloc_committe.py /tmp/bloc_linguistique_patche.py | head -120; echo '--- stats ---'; diff -u /tmp/bloc_committe.py /tmp/bloc_linguistique_patche.py | gr … [80 caractères tronqués]`
+
+  ```
+--- /tmp/bloc_committe.py	2026-11-05 14:49:02.989917884 -0500
++++ /tmp/bloc_linguistique_patche.py	2026-11-05 14:39:35.946375921 -0500
+@@ -658,20 +658,19 @@
+         return None if strict else (mots[-1][1] if mots else None)
+ 
+     @staticmethod
+-    def _verbe_gv(texte: str, g: dict, verbes, cache: dict | None = None):
+-        """`_verbe_dans` mémoïsé par span de GV : le même GV est relu pour chaque segment."""
++    def _verbe_gv(texte: str, g: dict, verbes, cache_gv: dict | None = None):
++        """Le verbe d'un GV, calculé **une fois par analyse** (clé valide dans un seul texte)."""
++        if cache_gv is None:
++            return Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+         cle = (g["debut"], g["fin"])
+-        if cache is not None and cle in cache:
+-            return cache[cle]
+-        v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+-        if cache is not None:
+-            cache[cle] = v
+-        return v
++        if cle not in cache_gv:
++            cache_gv[cle] = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
++        return cache_gv[cle]
+ 
+     @staticmethod
+     def _cible_proche(texte: str, segment: dict, gv
+… [5797 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_syntagmes_simple\\|cache_gv\\|_verbe_gv\\|gvs_simple\\|gvs_u\" /tmp/bloc_committe.py | sed -n '1,60p'", "description": "Inspect committed patch structure"}`
+
+  ```
+661:    def _verbe_gv(texte: str, g: dict, verbes, cache: dict | None = None):
+693:            v = Heuristique._verbe_gv(texte, g, verbes, cache)
+697:        return Heuristique._verbe_gv(texte, g, verbes, cache)
+714:            v = Heuristique._verbe_gv(texte, g, verbes, cache)
+738:    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+871:        cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+875:            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+880:                gvs = gvs_s + [x for x in gvs_simple if (x["debut"], x["fin"]) not in deja]
+901:                        cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
+909:                        cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
+914:                        texte, s, gvs, verbes=verbes, cache=cache_gv)
+930:            simples = self._syntagmes_simple(texte, lg)
+932:            cache_gv: dict = {}
+935:                cible = self._cible_proche(texte, s, gvs_s, verbes, cache_gv)
+941:                                                texte, s, gvs_s, verbes=verbes, cache=cache_gv),
+947:            simples = self._syntagmes_si
+… [344 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Assemblage des faits mesurés et préparation du JSON de la fiche
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport json, hashlib, pathlib\nmain = json.load(open('/tmp/bench_cache_chunker.json'))\npatch = json.load(open('/tmp/bench_patch_et_off.json'))\ncible = json.load(open('/tmp/bench_cible.json'))\nfor f in ['/tmp/bench_cache_chunker.py','/tmp/bench_patch_et_o … [1313 caractères tronqués]`
+
+  ```
+/tmp/bench_cache_chunker.py 15c4506c1a665116 18817
+/tmp/bench_patch_et_off.py a3f14e4d4a1eb7cf 6696
+/tmp/bench_ciblé.py 37ea4faf37602952 1393
+/tmp/bloc_linguistique_patche.py 5639a3760adf6d0f 102282
+/tmp/correctif.diff 01c27afd11b19be0 8425
+
+corpus {"n": 612, "sources": {"hand": 20, "reel": 432, "synthetique": 160}, "langues": {"fr": 402, "en": 210}, "mots_gold": 3179, "chars": 16371, "tokens_mots_moy": 5.1944, "segments_simple_moy": 1.1062, "gv_simple_moy": 0.1863, "segments_s_moy": 1.799, "gv_s_moy": 1.0114, "s_disponible": 612, "s_disponible_taux": 1.0}
+
+doublings chunker:
+original {160: 57.7365, 320: 233.4713} x 4.044
+C1 {160: 11.274, 320: 33.8022} x 2.998
+C2 {160: 5.2481, 320: 11.9973} x 2.286
+OFF {160: 62.0192, 320: 241.33} x 3.891
+
+doublings defaut:
+original {160: 27.8834, 320: 91.3296} x 3.275
+C1 {160: 27.2727, 320: 89.0711} x 3.266
+C2 {160: 13.5538, 320: 35.0448} x 2.586
+OFF {160: 30.764, 320: 90.2239} x 2.933
+
+cible:
+chunker 160 {'original': 68.311, 'C1': 13.0387, 'C2': 5.6138, 'OFF': 65.383} {'original': 1.0, 'C1': 5.2391, 'C2': 12.1684, 'OFF': 1.0448}
+chunker 320 {'original': 251.1219, 'C1': 37.949, 'C2': 13.8494, 'OFF': 254.0555} {'original': 1.0, 'C1': 6.6174, 'C2': 1
+… [1441 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport sys\nsys.path.insert(0, '/tmp')\nimport bench_cache_chunker as b\nph = b.eg.charger()\nn = sum(len(b.bl.Heuristique._mots(p['texte'])) for p in ph)\nprint('tokens _mots total', n, 'moy', round(n/len(ph),4))\nprint('gold words', sum(len(p['mots']) for … [126 caractères tronqués]`
+
+  ```
+tokens _mots total 3749 moy 6.1258
+gold words 3179 moy 5.1944
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport json, hashlib\ndef h(p): return hashlib.sha256(open(p,'rb').read()).hexdigest()\nfor p in ['/tmp/bench_cache_chunker.py','/tmp/bench_patch_et_off.py','/tmp/bench_ciblé.py','/tmp/bloc_linguistique_patche.py','/tmp/correctif.diff']:\n    print(p, h(p)) … [65 caractères tronqués]`
+
+  ```
+/tmp/bench_cache_chunker.py 15c4506c1a665116b60bcea2b1ed5184c4ff129bc20ec3ccfc7afc68daf5374b
+/tmp/bench_patch_et_off.py a3f14e4d4a1eb7cf90a4fbbc9b846c82e48adf874150381ba78d5f5ab7db3d69
+/tmp/bench_ciblé.py 37ea4faf37602952f918d20b771e04ca3775ff4121926c4a89cc978cb5ba6315
+/tmp/bloc_linguistique_patche.py 5639a3760adf6d0f879d136cc723eb88979d1970007d08398e7e6589bd575738
+/tmp/correctif.diff 01c27afd11b19be09075ce1248674ed57ece65c8d8fc4581d582e346e0da5c51
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF' > /tmp/tables_fr.md\nimport json\nmain = json.load(open('/tmp/bench_cache_chunker.json'))\ncible = json.load(open('/tmp/bench_cible.json'))\npatch = json.load(open('/tmp/bench_patch_et_off.json'))\n\ndef fr(x, n=1, sign=False):\n    s = f\"{x:+.{n}f}\" if si … [3689 caractères tronqués]`
+
+  ```
+| variante | chunker (ms) | gain | µs/phrase | défaut (ms) | gain | µs/phrase |
+|---|---:|---:|---:|---:|---:|---:|
+| original | 245,3 | ×1,000 | 400,8 | 395,2 | ×1,000 | 645,8 |
+| C1 (chunking seul) | 198,0 | ×1,239 | 323,6 | 388,3 | ×1,018 | 634,5 |
+| C2 (chunking + verbes) | 196,1 | ×1,251 | 320,4 | 385,1 | ×1,026 | 629,2 |
+| OFF (caches off) | 275,6 | ×0,890 | 450,4 | 398,4 | ×0,992 | 650,9 |
+
+| N | S | G | original | C1 | C2 | OFF | gain C1 | gain C2 | gain OFF |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 20 | 6 | 2 | 1,64 | 0,88 | 0,71 | 1,67 | ×1,88 | ×2,32 | ×0,98 |
+| 40 | 12 | 4 | 4,97 | 2,38 | 1,40 | 4,99 | ×2,09 | ×3,55 | ×1,00 |
+| 80 | 24 | 8 | 16,19 | 4,26 | 2,50 | 16,44 | ×3,80 | ×6,46 | ×0,99 |
+| 160 | 48 | 16 | 57,74 | 11,27 | 5,25 | 62,02 | ×5,12 | ×11,00 | ×0,93 |
+| 320 | 96 | 32 | 233,47 | 33,80 | 12,00 | 241,33 | ×6,91 | ×19,46 | ×0,97 |
+| 640 | 192 | 64 | 925,09 | 119,60 | 31,70 | 919,54 | ×7,74 | ×29,18 | ×1,01 |
+| 1280 | 384 | 128 | 3740,44 | 426,46 | 100,93 | 3657,45 | ×8,77 | ×37,06 | ×1,02 |
+
+| N | S | G | original | C1 | C2 | OFF | gain C1 | gain C2 | gain OFF |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 20 | 6 | 2 | 2,02 | 1,95 | 1,
+… [3506 caractères tronqués]
+  ```
+

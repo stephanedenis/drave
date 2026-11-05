@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-05, 15 h 10 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-05, 15 h 00 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,7 +68,7 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **181/181** ; attachement **exact spans 0,9448**, **top-k strict 0,9724** ; cache ×139 ; vague 1 intégrée.
+- **Fait** : B13 **181/181** ; attachement **exact spans 0,9448**, **top-k strict 0,9724** ; cache ×139 ; vague 1 intégrée ; **roadmap et chantiers passés à la v2**.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.

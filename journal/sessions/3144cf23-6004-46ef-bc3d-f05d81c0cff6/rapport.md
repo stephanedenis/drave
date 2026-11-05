@@ -7,12 +7,12 @@
 | Identifiant | `3144cf23-6004-46ef-bc3d-f05d81c0cff6` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.0 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 11 |
+| Messages | 18 |
+| Appels d'outils | 19 |
 | Fichiers touchés | 0 |
-| Commandes | 7 |
+| Commandes | 15 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2227 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and top-level files
 - bash — List linguistic tests and reports directories
@@ -35,10 +35,17 @@
 - bash — Read lexicons POS_RELATIFS and helpers
 - bash — Reproduce 239 targets and 94 lost spans
 - bash — Compare default vs chunker-only coverage
+- bash — Inspect the 94 lost spans by source and language
+- bash — Detailed diagnostic of each lost span
+- bash — Compute marker tallies and near-miss features
+- bash — Inspect synthetic gold builder and S generator API
+- bash — Read S generator head and tail
+- bash — Compare S generator spans against the 94 lost
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Reproducing the 94 lost spans with the chunker alone
+⏵ Examining gold clause tokens and boundary signals in detail
 
 ## 3. Travail accompli
 
@@ -56,4 +63,12 @@
 - **T1** Read lexicons POS_RELATIFS and helpers
 - **T1** Reproduce 239 targets and 94 lost spans
 - **T1** Compare default vs chunker-only coverage
+- **T1** Inspect the 94 lost spans by source and language
+- **T1** Detailed diagnostic of each lost span
+- **T1** Compute marker tallies and near-miss features
+- **T1** Inspect synthetic gold builder and S generator API
+- **T1** Read S generator head and tail
+- **T1** Compare S generator spans against the 94 lost
+- **T1** List chunker-only exact matches by type
+- **T1** Dump token POS sequences of REL/SUB lost spans
 

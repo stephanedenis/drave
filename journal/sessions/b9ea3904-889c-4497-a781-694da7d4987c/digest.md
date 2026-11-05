@@ -416,3 +416,385 @@ pensee-anaphore-kappa.
 … [3134 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.py", "limit": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.py</path>
+<type>file</type>
+<content>
+1: """gold_reel.py — 200 phrases réelles (20 françaises, 20 anglaises).
+2: 
+3: Elles ne sont pas des phrases du bloc ni du générateur : elles sont écrites après, avec leurs
+4: POS, leurs segments GN/GV/GP/REL/SUB et leur pragmatique. Le fichier `gold_reel.json` est généré
+5: par `construire()` ; le gold réel total devient **200 phrases** (20 de `gold.py` + 180).
+6: """
+7: from __future__ import annotations
+8: 
+9: import json
+10: import pathlib
+11: 
+12: # La **convention des cibles** d'attachement. Le gold ne la documentait pas ; elle a été lue
+13: # sur les données le 2026-11-05 (T169/T172) et la voici, explicitement :
+14: #
+15: #   - **REL** : la cible est l'**antécédent** — la tête nominale du GN à gauche
+16: #     (« l'homme que j'ai vu » → `homme`) ;
+17: #   - **SUB** : la cible est le **verbe gouverneur** (le POS gold donne 69/69 cibles VERB :
+18: #     « cette étoile écoute que Lucas trouve » → `écoute`), pas un antécédent ;
+19: #   - **GP** : la cible est le **verbe qui gouverne** le complément (« au ballon » → `joue`),
+20: #     ou, pour un génitif,
+… [13575 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('tools/tests/linguistique/gold_reel.json'))\nprint(type(d), list(d.keys()) if isinstance(d,dict) else len(d))\nps=d['phrases']\nprint('n',len(ps))\nprint('keys', ps[0].keys())\nimport coll … [180 caractères tronqués]`
+
+  ```
+<class 'dict'> ['version', 'source', 'note', 'phrases']
+n 432
+keys dict_keys(['id', 'langue', 'texte', 'mots', 'segments', 'pragma', 'source'])
+Counter({'fr': 228, 'en': 204})
+{
+ "id": "r001",
+ "langue": "fr",
+ "texte": "Le chien mange une pomme.",
+ "mots": [
+  {
+   "texte": "Le",
+   "pos": "DET",
+   "debut": 0,
+   "fin": 2
+  },
+  {
+   "texte": "chien",
+   "pos": "NOUN",
+   "debut": 3,
+   "fin": 8
+  },
+  {
+   "texte": "mange",
+   "pos": "VERB",
+   "debut": 9,
+   "fin": 14
+  },
+  {
+   "texte": "une",
+   "pos": "DET",
+   "debut": 15,
+   "fin": 18
+  },
+  {
+   "texte": "pomme",
+   "pos": "NOUN",
+   "debut": 19,
+   "fin": 24
+  }
+ ],
+ "segments": [
+  {
+   "type": "GN",
+   "texte": "Le chien",
+   "role": "agent",
+   "debut": 0,
+   "fin": 8
+  },
+  {
+   "type": "GV",
+   "texte": "mange",
+   "role": "prédicat",
+   "debut": 9,
+   "fin": 14
+  },
+  {
+   "type": "GN",
+   "texte": "une pomme",
+   "role": "patient",
+   "debut": 15,
+   "fin": 24
+  }
+ ],
+ "pragma": {
+  "acte": "assertion"
+ },
+ "source": "reel"
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys, collections\nsys.path.insert(0,'tools/tests/linguistique')\nimport evaluer_gold as eg\nps=eg.charger()\nprint('total',len(ps))\nprint(collections.Counter((p['source'],p['langue']) for p in ps))\nprint('lang … [108 caractères tronqués]`
+
+  ```
+total 612
+Counter({('reel', 'fr'): 228, ('reel', 'en'): 204, ('synthetique', 'fr'): 160, ('hand', 'fr'): 14, ('hand', 'en'): 6})
+langues Counter({'fr': 402, 'en': 210})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -80 tools/tests/linguistique/gold_reel.py", "description": "Show tail of gold_reel.py"}`
+
+  ```
+('r423', 'fr', 'Tu viens demain.',
+     [('Tu', 'PRON'), ('viens', 'VERB'), ('demain', 'ADV'), ('.', 'PONCT')],
+     [('GN', 'Tu', 'agent'), ('GV', 'viens', 'prédicat'), ('ADV', 'demain', 'temps'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r424', 'fr', 'Il mange.',
+     [('Il', 'PRON'), ('mange', 'VERB'), ('.', 'PONCT')],
+     [('GN', 'Il', 'agent'), ('GV', 'mange', 'prédicat'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r425', 'fr', 'Elle dort.',
+     [('Elle', 'PRON'), ('dort', 'VERB'), ('.', 'PONCT')],
+     [('GN', 'Elle', 'agent'), ('GV', 'dort', 'prédicat'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r426', 'fr', 'Ils partent.',
+     [('Ils', 'PRON'), ('partent', 'VERB'), ('.', 'PONCT')],
+     [('GN', 'Ils', 'agent'), ('GV', 'partent', 'prédicat'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r427', 'en', 'You come tomorrow.',
+     [('You', 'PRON'), ('come', 'VERB'), ('tomorrow', 'ADV'), ('.', 'PONCT')],
+     [('GN', 'You', 'agent'), ('GV', 'come', 'prédicat'), ('ADV', 'tomorrow', 'temps'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r428', 'fr', 'Il pleut.',
+     [('Il', 'PRON'), ('pl
+… [4050 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_est_verbe\\|^class Heuristique\\|def analyser\\|VERBES\\|LEXIQUE\" tools/bloc_linguistique.py | head -60", "description": "Locate Heuristique and verb lexicon"}`
+
+  ```
+133:    def analyser(self, texte: str, langue: str | None = None,
+218:    scores = {l: len(mots & set(LEXIQUES[l])) / max(1, len(mots)) for l in LEXIQUES}
+273:LEXIQUES = {
+319:VERBES = {
+369:VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
+374:VERBES_CONNUS = set("""
+431:def _est_verbe(mot: str) -> bool:
+436:    if n in VERBES_CONNUS:
+441:        if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+445:        if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
+475:class Heuristique:
+557:        if n in VERBES.get(langue, VERBES["fr"]):
+630:            if _est_verbe(m) and _normaliser(m) not in AUXILIAIRES:
+649:            if _est_verbe(m) and _normaliser(m) not in AUXILIAIRES:
+652:            if _est_verbe(m):
+766:                       and not _est_verbe(mots[j][2])
+796:    def analyser(self, texte: str, langue: str | None = None,
+856:                    "ordre" if premier.casefold() in VERBES_IMPERATIFS else "assertion")
+1033:    def analyser(self, texte: str, langue: str | None = None,
+1102:    def analyser(self, texte: str, langue: str | None = None,
+1212:    def analyser(self, texte: str, langue: str | None = No
+… [338 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ['gold.json','gold_gele.json','gold_synthetique.json']:\n    d=json.load(open('tools/tests/linguistique/'+f))\n    print(f, list(d.keys()), len(d['phrases']))\n    p=d['phrases'][0]\n    print(' k … [175 caractères tronqués]`
+
+  ```
+gold.json ['version', 'phrases', 'note'] 20
+ keys ['id', 'langue', 'texte', 'mots', 'segments', 'pragma']
+ langues Counter({'fr': 14, 'en': 6})
+gold_gele.json ['gele', 'phrases'] 602
+ keys ['id', 'langue', 'texte', 'mots', 'segments', 'pragma', 'source']
+ langues Counter({'fr': 394, 'en': 208})
+gold_synthetique.json ['version', 'source', 'graine', 'note', 'phrases'] 160
+ keys ['id', 'langue', 'texte', 'pragma', 'source', 'mots', 'segments']
+ langues Counter({'fr': 160})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '250,470p' tools/bloc_linguistique.py", "description": "Read lexicons and _est_verbe"}`
+
+  ```
+for prefixe, code in prefixes:
+        if prefixe in nom:
+            return code
+    return ""
+
+
+def detecter_script(texte: str) -> str:
+    c = collections.Counter(_script_char(ch) for ch in texte if ch.isalpha())
+    c.pop("", None)
+    if not c:
+        return SCRIPT_NEUTRE
+    if c.get("Jpan", 0) or (c.get("Hani", 0) and (c.get("Jpan", 0) or c.get("Hang", 0))):
+        return "Jpan"
+    if c.get("Hang", 0):
+        return "Hang"
+    if c.get("Hani", 0):
+        return "Hani"
+    return c.most_common(1)[0][0]
+
+
+# --------------------------------------------------------------------------- lexiques
+
+
+LEXIQUES = {
+    "fr": set("le la les l un une des de du d à au aux et ou mais donc or ni car que qui quoi "
+              "dont où je tu il elle on nous vous ils elles me te se lui leur mon ma mes ton "
+              "ta tes son sa ses ce cet cette ces est sont était étaient être avoir ai as a "
+              "avons avez ont ne pas plus jamais rien très dans sur sous avec pour par en".split()),
+    "en": set("the a an of to and or but nor for so yet in on at by with from as is are was "
+              "were be been being have has had do does did not no never this that these those "
+ 
+… [13337 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '470,960p' tools/bloc_linguistique.py", "description": "Read Heuristique implementation"}`
+
+  ```
+# --------------------------------------------------------------------------- heuristique
+
+
+class Heuristique:
+    """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+
+    nom = "heuristique"
+
+    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+                 union: bool = True):
+        self.profils = profils
+        self.segmenter_s = segmenter_s
+        self.seuil_ouvert = seuil_ouvert
+        self.seuil_langue = seuil_langue
+        self.union = union
+
+    # -- langues / script ---------------------------------------------------
+    def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
+        langue, conf, _ = detecter_langue(texte, self.profils, indice)
+        script = detecter_script(texte)
+        if conf < self.seuil_langue:
+            return "und", conf, script
+        return langue, conf, script
+
+    # -- tokens -------------------------------------------------------------
+    @staticmethod
+    def _mots(texte: str) -> list[tuple[int, int, str, str]]:
+        motif = re.compile(r"\b[ldmtsnLDMT
+… [24536 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections\nd=json.load(open('tools/tests/linguistique/gold_reel.json'))\nps=d['phrases']\nen=[p for p in ps if p['langue']=='en']\nprint('n en',len(en),'n fr',len(ps)-len(en) … [448 caractères tronqués]`
+
+  ```
+n en 204 n fr 228
+ids dupliques: []
+textes dupliques: [('Le vent souffle fort.', 2), ('La voiture roule vite.', 2), ('Paul sees Marie; he speaks to her.', 2)]
+premiers/derniers ids: ['r001', 'r002', 'r003'] ['r420', 'r421', 'r422']
+r021 | The dog eats an apple.
+r022 | The girl reads the newspaper.
+r023 | We love music.
+r024 | The sun shines.
+r025 | She talks to her brother.
+r026 | The students listen to the teacher.
+r027 | The cat sleeps on the chair.
+r028 | It rains since yesterday.
+r029 | I do not understand.
+r030 | You come tomorrow?
+r031 | The train leaves at noon.
+r032 | The car is fast.
+r033 | They bought a house.
+r034 | The book that I read is exciting.
+r035 | The film she talks about is out.
+r036 | She is maybe tired.
+r037 | We must work.
+r038 | The mouse is ready to eat.
+r039 | The wind blows hard.
+r040 | The children play in the park.
+r061 | The boy plays with the ball.
+r062 | The mother prepares the meal.
+r063 | We listen to the radio.
+r064 | The teacher talks to the students.
+r065 | She watches television.
+r066 | The cat drinks milk.
+r067 | The flowers grow in the garden.
+r068 | He writes a letter to his sister.
+r069 | The baby sleeps deeply.
+r070 | We leave on vacation
+… [6229 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections, re\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfor lang in ('en','fr'):\n    print('='*20, lang, '='*20)\n    for p in ps:\n         … [1852 caractères tronqués]`
+
+  ```
+==================== en ====================
+==================== fr ====================
+r413 'Ne parle-t-elle pas ?'
+    ('GAP_NONTRIVIAL', "' -t-  '")
+r415 'Ne chante-t-il pas ?'
+    ('GAP_NONTRIVIAL', "' -t-  '")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json, collections, re\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nROLES={'GN':{'agent','patient','destinataire','lieu','temps','theme','groupe nominal' … [3954 caractères tronqués]`
+
+  ```
+========================= en =========================
+r063 'We listen to the radio.'
+    ('ROLE_INATTENDU', 'GP', 'to the radio', 'cible')
+r077 'The dog barks at the postman.'
+    ('ROLE_INATTENDU', 'GP', 'at the postman', 'cible')
+r153 'We wait for the bus.'
+    ('ROLE_INATTENDU', 'GP', 'for the bus', 'cible')
+r168 'She listens to music.'
+    ('ROLE_INATTENDU', 'GP', 'to music', 'cible')
+r204 'The man who speaks is my father.'
+    ('ROLE_INATTENDU', 'REL', 'who speaks', 'sujet')
+    ('ROLE_INATTENDU', 'GN', 'my father', 'attribut')
+r214 'The book that I read is good.'
+    ('ROLE_INATTENDU', 'REL', 'that I read', 'objet')
+r215 'When it rains, I stay.'
+    ('ROLE_INATTENDU', 'SUB', 'When it rains', 'temps')
+r217 'The student whom I mention is absent.'
+    ('ROLE_INATTENDU', 'REL', 'whom I mention', 'objet')
+r218 'Although it is late, he works.'
+    ('ROLE_INATTENDU', 'SUB', 'Although it is late', 'concession')
+r220 'The cat that sleeps is black.'
+    ('ROLE_INATTENDU', 'REL', 'that sleeps', 'sujet')
+r236 'The village where I live is small.'
+    ('ROLE_INATTENDU', 'REL', 'where I live', 'lieu')
+r237 'If you come, we will leave.'
+    ('ROLE_INATTENDU', 'SUB', 'If you come', 'conditio
+… [8235 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nen=[p for p in ps if p['langue']=='en']\nfor p in en:\n    toks=' '.join(f\"{m['texte']}/{m['pos']}\"  … [95 caractères tronqués]`
+
+  ```
+r021 | The/DET dog/NOUN eats/VERB an/DET apple/NOUN
+r022 | The/DET girl/NOUN reads/VERB the/DET newspaper/NOUN
+r023 | We/PRON love/VERB music/NOUN
+r024 | The/DET sun/NOUN shines/VERB
+r025 | She/PRON talks/VERB to/PREP her/DET brother/NOUN
+r026 | The/DET students/NOUN listen/VERB to/PREP the/DET teacher/NOUN
+r027 | The/DET cat/NOUN sleeps/VERB on/PREP the/DET chair/NOUN
+r028 | It/PRON rains/VERB since/PREP yesterday/ADV
+r029 | I/PRON do/AUX not/ADV understand/VERB
+r030 | You/PRON come/VERB tomorrow/ADV
+r031 | The/DET train/NOUN leaves/VERB at/PREP noon/NOUN
+r032 | The/DET car/NOUN is/AUX fast/ADJ
+r033 | They/PRON bought/VERB a/DET house/NOUN
+r034 | The/DET book/NOUN that/CONJ I/PRON read/VERB is/AUX exciting/ADJ
+r035 | The/DET film/NOUN she/PRON talks/VERB about/PREP is/AUX out/ADV
+r036 | She/PRON is/AUX maybe/ADV tired/ADJ
+r037 | We/PRON must/AUX work/VERB
+r038 | The/DET mouse/NOUN is/AUX ready/ADJ to/PREP eat/VERB
+r039 | The/DET wind/NOUN blows/VERB hard/ADV
+r040 | The/DET children/NOUN play/VERB in/PREP the/DET park/NOUN
+r061 | The/DET boy/NOUN plays/VERB with/PREP the/DET ball/NOUN
+r062 | The/DET mother/NOUN prepares/VERB the/DET meal/NOUN
+r063 | We/PRON listen/VERB to/PREP the/
+… [10989 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport json\nps=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nen=[p for p in ps if p['langue']=='en']\nfor p in en:\n    segs=' | '.join(f\"{s['type']}[{s['texte']} … [181 caractères tronqués]`
+
+  ```
+r021 : GN[The dog]/agent | GV[eats]/prédicat | GN[an apple]/patient
+r022 : GN[The girl]/agent | GV[reads]/prédicat | GN[the newspaper]/patient
+r023 : GN[We]/agent | GV[love]/prédicat | GN[music]/patient
+r024 : GN[The sun]/agent | GV[shines]/prédicat
+r025 : GN[She]/agent | GV[talks]/prédicat | GP[to her brother]/destinataire→talks
+r026 : GN[The students]/agent | GV[listen]/prédicat | GP[to the teacher]/destinataire→listen
+r027 : GN[The cat]/agent | GV[sleeps]/prédicat | GP[on the chair]/lieu→sleeps
+r028 : GN[It]/agent | GV[rains]/prédicat | GP[since yesterday]/temps→rains
+r029 : GN[I]/agent | GV[do not understand]/prédicat
+r030 : GN[You]/agent | GV[come]/prédicat
+r031 : GN[The train]/agent | GV[leaves]/prédicat | GP[at noon]/temps→leaves
+r032 : GN[The car]/agent | GV[is fast]/prédicat
+r033 : GN[They]/agent | GV[bought]/prédicat | GN[a house]/patient
+r034 : GN[The book]/patient | REL[that I read]/qualité→book | GV[is exciting]/prédicat
+r035 : GN[The film]/patient | REL[she talks about]/qualité→film | GV[is out]/prédicat
+r036 : GN[She]/agent | GV[is maybe tired]/prédicat
+r037 : GN[We]/agent | GV[must work]/prédicat
+r038 : GN[The mouse]/agent | GV[is ready]/prédicat | GP[to eat]/but→re
+… [15193 caractères tronqués]
+  ```
+

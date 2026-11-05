@@ -1436,3 +1436,162 @@ a2def5eeea5c54cb67397c68777f2ff5f5fc7cf1 PILOTAGE — LE CACHE DU CHUNKER AU JOU
 }
   ```
 
+### 🤖 Assistant
+
+⏵ Compiling the per-type breakdown and split-matrix evidence.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' > /tmp/audit_v2/detail.json\nimport sys, json, collections, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger … [3127 caractères tronqués]`
+
+  ```
+courant {"GP": {"labels": 83, "exact": 77, "top1": 77, "topk_sub": 81, "topk_strict": 81}, "SUB": {"labels": 36, "exact": 34, "top1": 35, "topk_sub": 35, "topk_strict": 34}, "REL": {"labels": 26, "exact": 26, "top1": 26, "topk_sub": 26, "topk_strict": 26}}
+avant   {"GP": {"labels": 83, "exact": 69, "top1": 69, "topk_sub": 73, "topk_strict": 54}, "SUB": {"labels": 36, "exact": 28, "top1": 29, "topk_sub": 35, "topk_strict": 34}, "REL": {"labels": 26, "exact": 26, "top1": 26, "topk_sub": 26}}
+matrice avant {"lex=True,pos=True": {"n": 63, "justes": 60}, "lex=True,pos=False": {"n": 0, "justes": 0}, "lex=False,pos=True": {"n": 53, "justes": 37}, "lex=False,pos=False": {"n": 29, "justes": 26}}
+matrice courant {"lex=True,pos=True": {"n": 71, "justes": 71}, "lex=True,pos=False": {"n": 0, "justes": 0}, "lex=False,pos=True": {"n": 45, "justes": 40}, "lex=False,pos=False": {"n": 29, "justes": 26}}
+fails courant:
+  ['g002', 'GP', 'chat', '', False, False]
+  ['g012', 'GP', 'prêt', 'manger', True, True]
+  ['r018', 'GP', 'prête', 'manger', True, True]
+  ['r230', 'SUB', 'appelle', 'appelle-moi', False, True]
+  ['r309', 'SUB', 'viendra', 'Peut-être', False, False]
+  ['s041', 'GP', 'marche', '', Fals
+… [104 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reconciling a discrepancy in the pre-v2 top-k strict count (88 vs 114).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nspec=importlib.util.spec_from_file_location('bloc_avant_x',pathlib.P … [1279 caractères tronqués]`
+
+  ```
+evaluer_bloc old: {'labels': 145, 'top1': 126, 'topk': 134, 'exact': 123, 'topk_exact': 88}
+loop old: n 145 sub 134 strict 88 by {'GP': 54, 'SUB': 34}
+evaluer_bloc old 2e: {'labels': 145, 'top1': 126, 'topk': 134, 'exact': 123, 'topk_exact': 88}
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-measuring each variant in isolated processes for a clean per-type table.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/audit_v2/measure_variant.py <<'PY'\nimport sys, json, pathlib, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\npath = sys.argv[1]\nif path == 'current':\n    im … [2352 caractères tronqués]`
+
+  ```
+current                  top1=140 topk=142 exact=137 strict=141 | exact GP/SUB/REL=77/34/26 | strict GP/SUB/REL=81/34/26 | labels=83/36/26
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+KeyError: 'strict'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor line in open('/tmp/audit_v2/variants.jsonl'):\n    d=json.loads(line); t=d['totaux']; pt=d['par_type']\n    g=lambda typ,k: pt.get(typ,{}).get(k,0)\n    print(f\"{d['path'].split('/')[-1]:24s} top1= … [421 caractères tronqués]`
+
+  ```
+current                  top1=140 topk=142 exact=137 strict=141 | exact GP/SUB/REL=77/34/26 | strict GP/SUB/REL=81/34/26 | labels=83/36/26
+bloc_avant2.py           top1=126 topk=134 exact=123 strict= 88 | exact GP/SUB/REL=69/28/26 | strict GP/SUB/REL=54/34/0 | labels=83/36/26
+old_F1.py                top1=126 topk=134 exact=123 strict=133 | exact GP/SUB/REL=69/28/26 | strict GP/SUB/REL=73/34/26 | labels=83/36/26
+old_F1_F2.py             top1=134 topk=142 exact=131 strict=141 | exact GP/SUB/REL=77/28/26 | strict GP/SUB/REL=81/34/26 | labels=83/36/26
+sans_tetes.py            top1=140 topk=142 exact=137 strict= 96 | exact GP/SUB/REL=77/34/26 | strict GP/SUB/REL=62/34/0 | labels=83/36/26
+sans_lexique.py          top1=132 topk=134 exact=129 strict=133 | exact GP/SUB/REL=69/34/26 | strict GP/SUB/REL=73/34/26 | labels=83/36/26
+sans_segment_total.py    top1=134 topk=142 exact=131 strict=141 | exact GP/SUB/REL=77/28/26 | strict GP/SUB/REL=81/34/26 | labels=83/36/26
+7 /tmp/audit_v2/variants.jsonl
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking target-token ambiguity and multi-target segments.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, collections, json\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\nmulti=0; multi_lab=0; ambiguous=[]; absent=0; occ=collections.Counter()\nfor p in ph:\n … [1648 caractères tronqués]`
+
+  ```
+segments avec cibles>1 : 43 / 239
+cibles absentes des tokens : 0
+occurrences du texte cible : {1: 238, 2: 1}
+cibles avec POS ambigu (plusieurs POS) : 0
+labels avec cibles>1 : 36 /145
+labels avec POS ambigu : 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the learned-model script to see if its block is replayable.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'def main\\|__main__\\|argparse\\|def charger\\|def evaluer\\|def entrainer\\|def cross\\|def bootstrap\\|mcnemar' tools/tests/linguistique/classement_cible.py | head -40 && echo '--- JSON keys ---' && python3 - <<'PY'\nimpor … [299 caractères tronqués]`
+
+  ```
+53:import argparse
+285:def entrainer(segments: list[dict], epochs: int = 6000, lr: float = 0.6,
+359:def evaluer(modele: list[float], segments: list[dict]) -> dict:
+375:def evaluer_regle(segments: list[dict]) -> dict:
+390:def evaluer_hasard(segments: list[dict], rng: random.Random) -> dict:
+399:def _mcnemar_exact(b: int, c: int) -> float:
+453:    def entrainer_sur(parite: int):
+517:    mcnemar = {"modele_juste_regle_fausse": b, "regle_juste_modele_fausse": c,
+518:               "p_exact": _mcnemar_exact(b, c)}
+678:            "mcnemar": mcnemar,
+700:def main() -> int:
+701:    ap = argparse.ArgumentParser(description=__doc__,
+702:                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+742:    print("McNemar:", resultat["controle_negatif"]["mcnemar"])
+758:if __name__ == "__main__":
+--- JSON keys ---
+['titre', 'date', 'graine', 'empreinte_bloc_linguistique', 'note_regle_actuelle', 'hyperparametres', 'corpus', 'protocole', 'features', 'poids', 'resultats', 'controle_negatif', 'stabilite_decoupages_aleatoires', 'limites', 'segments']
+resultats {"sens": {"pairs->impairs": {"entrainement": {"segments": 79, "lignes": 224, "positifs": 79, "negatifs": 145, "epoc
+… [685 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '700,758p' tools/tests/linguistique/classement_cible.py", "description": "Read learned-model CLI main"}`
+
+  ```
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--json", default=str(SORTIE_DEFAUT),
+                    help="chemin du JSON de résultat (défaut : reports/pensee-classement-appris.json)")
+    ap.add_argument("--graine", type=int, default=0)
+    ap.add_argument("--stabilite", type=int, default=10,
+                    help="nombre de découpages aléatoires (0 pour désactiver)")
+    ap.add_argument("--epochs", type=int, default=6000)
+    ap.add_argument("--lr", type=float, default=0.6)
+    ap.add_argument("--l2", type=float, default=0.01)
+    ap.add_argument("--verbeux", action="store_true")
+    args = ap.parse_args()
+
+    phrases = charger()
+    resultat = executer(phrases, graine=args.graine, stabilite=args.stabilite,
+                        epochs=args.epochs, lr=args.lr, l2=args.l2)
+
+    sortie = pathlib.Path(args.json)
+    sortie.parent.mkdir(parents=True, exist_ok=True)
+    sortie.write_text(json.dumps(resultat, ensure_ascii=False, indent=1) + "\n",
+                      encoding="utf-8")
+
+    r = resultat["resultats"]
+    print("== corpus ==")
+   
+… [1939 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Launching the learned-model replay to /tmp and checking post-v2 code drift.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (time python3 tools/tests/linguistique/classement_cible.py --json /tmp/audit_v2/classement_rejoue.json) > /tmp/audit_v2/classement.txt 2>&1; echo \"exit=$?\" >> /tmp/audit_v2/classement.txt", "description": "Replay learned-model clas … [39 caractères tronqués]`
+
+  ```
+started background job bash-1254
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '--- HEAD ---' && git rev-parse HEAD && git log -1 --format='%h %s' | cat && echo '--- drift 9d5337ce..HEAD ---' && git diff --stat 9d5337ce..HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/test … [306 caractères tronqués]`
+
+  ```
+--- HEAD ---
+1ec7286c0aed1bdb64379b96b093c47d7ef554b5
+1ec7286c PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS
+--- drift 9d5337ce..HEAD ---
+ tools/bloc_linguistique.py | 48 ++++++++++++++++++++++++++++++++--------------
+ tools/pensee/autotest.py   | 23 +++++++++++++++++++++-
+ 2 files changed, 56 insertions(+), 15 deletions(-)
+--- status measured files ---
+  ```
+

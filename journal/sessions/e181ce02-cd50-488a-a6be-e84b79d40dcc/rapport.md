@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 118.1 h |
+| Durée | 118.3 h |
 | Tours | 176 |
-| Messages | 2461 |
-| Appels d'outils | 2160 |
+| Messages | 2467 |
+| Appels d'outils | 2166 |
 | Fichiers touchés | 25 |
-| Commandes | 1774 |
+| Commandes | 1779 |
 | Sous-agents | 16 |
-| Commits | 259 |
+| Commits | 261 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*117 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,7 +9454,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 91 autres
+- … et 95 autres
 
 **Synthèse produite :**
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1734 autres
+- … et 1739 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9960,4 +9960,6 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181" -- docs/pilotage/en-cours.md journal/2026-11-05/README.md journal/sessions/e181ce02-cd5
 - FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR" -- reports/rapport-coherence-fiches.md reports
 - PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS" -- docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>&1 | tail -
+- PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)" -- docs/pilotage/chantiers.md docs/pilotage/roadmap.md docs
+- PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)" -- docs/pilotage/chantiers.md docs/pilotage/roadmap.md docs
 

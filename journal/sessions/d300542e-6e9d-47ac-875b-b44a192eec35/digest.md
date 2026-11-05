@@ -772,3 +772,156 @@ T2_litteral_pos        exact=131/239 (0.5481) top1=134/239 (0.5607) span exact=0
 … [2607 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Mesure de la surface de changement (toutes étiquettes, pas seulement les 145 gold)
+
+- **bash** `{"command": "cat > /tmp/surface.py <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nexec(open('/tmp/sim_replis.py').read().split(\"phrases=charger()\")[0])\nphrases=charger()\ndef gold_spans():\n    s=set()\n    for p in phr … [2489 caractères tronqués]`
+
+  ```
+T1 total labels 863
+T2_rang0_garde total labels 863
+T2_rang0 total labels 863
+T3_strict total labels 863
+combine total labels 863
+T1               total= 863 changes=114 dont gold=2 autres=112
+   ex autres: [('g002', 'GN', 0, 7, 'Le chat', '', 'voisine'), ('g006', 'GN', 0, 8, 'Le chien', '', 'voisin'), ('r004', 'GN', 0, 16, 'Le soleil brille', '', 'soleil'), ('r019', 'GN', 0, 20, 'Le vent souffle fort', '', 'vent'), ('r042', 'GN', 0, 24, 'La mère prépare le repas', '', 'mère'), ('r046', 'GN', 0, 12, 'Le chat boit', '', 'lait'), ('r047', 'GN', 0, 19, 'Les fleurs poussent', '', 'jardin'), ('r051', 'GN', 0, 21, 'La voiture roule vite', '', 'voiture'), ('r057', 'GN', 0, 14, 'Le chien aboie', '', 'facteur'), ('r059', 'GN', 0, 30, 'Le cuisinier prépare un gâteau', '', 'cuisinier'), ('r060', 'GN', 0, 28, 'Les oiseaux volent au-dessus', '', 'lac'), ('r081', 'GN', 0, 29, 'Le facteur apporte une lettre', '', 'facteur')]
+T2_rang0_garde   total= 863 changes=  0 dont gold=0 autres=0
+T2_rang0         total= 863 changes=  7 dont gold=4 autres=3
+   ex autres: [('r083', 'GP', 9, 22, 'entre en gare', 'gare', 'train'), ('r121', 'GP', 20, 30, 'des fleurs', 'jardinier', 'plante'), ('r227', 'GP', 0, 13,
+… [157 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nexec(open('/tmp/sim_replis.py').read().split(\"phrases=charger()\")[0])\nprint('est_verbe papier',bl._est_verbe('papier'),'reve',bl._est_verbe('rêve'),' … [369 caractères tronqués]`
+
+  ```
+est_verbe papier False reve False saute False
+{'t2': 'rang0'} [('GN', 0, 20, {'role': 'agent', 'niveau': 0}), ('GP', 21, 34, {'role': 'lieu', 'niveau': 1, 'attachement': {'segment': 'sous le nuage', 'cible': 'rêve'}})]
+{'t2': 'rang0_garde'} [('GN', 0, 20, {'role': 'agent', 'niveau': 0}), ('GP', 21, 34, {'role': 'lieu', 'niveau': 1, 'attachement': {'segment': 'sous le nuage', 'cible': 'papier'}})]
+  ```
+
+- **bash** `{"command": "sed -n '/def modifier/,/def per_seg/p' /tmp/sim_replis.py", "description": "Inspect modifier source"}`
+
+  ```
+def modifier(self,a,texte):
+        pos=_pos(a); mots=bl.Heuristique._mots(texte)
+        for e in a.etiquettes:
+            if e.niveau!='syntagme' or e.type=='GV': continue
+            seg={'type':e.type,'debut':e.debut,'fin':e.fin,'texte':e.valeur}
+            cands=candidats_pour(texte,seg,a)
+            if not cands: continue
+            meta=e.meta or {}; att=meta.get('attachement') or {}
+            ancienne=(att.get('cible') or '').strip()
+            cible=ancienne
+            # T1
+            if self.t1 is not None and not cible:
+                if self.t1=='rang0': cible=cands[0]['texte']
+                elif self.t1=='dernier': cible=cands[-1]['texte']
+                elif self.t1=='verbe': cible=next((c['texte'] for c in cands if self.est_verbe(c['texte'])),'')
+                elif self.t1=='droite': cible=next((c['texte'] for c in cands if c['cote']=='droite'),'')
+            actuel=next((c for c in cands if c['texte']==cible),None)
+            # T2
+            if self.t2 is not None and e.type=='GP' and cible:
+                if self.t2=='litteral':
+                    if not self.est_verbe(cible):
+                        bd=actuel['dist'] if actuel else 99
+         
+… [1554 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/sim_replis.py'\ns=open(p).read()\n# add t2_scope/t1_scope\ns=s.replace(\"def __init__(self, t1=None, t2=None, t3=None, extra_lex=()):\\n        super().__init__()\\n        self.t1=t1; self.t2=t2; self.t3=t3; self.extra=set(extra_lex)\",\n\"def __init__(self, t … [2724 caractères tronqués]`
+
+  ```
+T1_tous          labels=863 changes=114 or=2 autres=112 par_type={'GN': 111, 'GP': 3}
+T1_GP            labels=863 changes=  3 or=2 autres=1 par_type={'GP': 3}
+T2_garde_GP      labels=863 changes=  7 or=4 autres=3 par_type={'GP': 7}
+T2_garde_tous    labels=863 changes=235 or=4 autres=231 par_type={'GN': 227, 'GP': 7, 'REL': 1}
+T2_brut_GP       labels=863 changes=  7 or=4 autres=3 par_type={'GP': 7}
+T2_brut_tous     labels=863 changes=235 or=4 autres=231 par_type={'GN': 227, 'GP': 7, 'REL': 1}
+T3_strict        labels=863 changes=  1 or=1 autres=0 par_type={'SUB': 1}
+combine_GP       labels=863 changes= 11 or=7 autres=4 par_type={'GP': 10, 'SUB': 1}
+combine_tous     labels=863 changes=122 or=7 autres=115 par_type={'GN': 111, 'GP': 10, 'SUB': 1}
+  ```
+
+- **bash** `{"command": "cat > /tmp/surface3.py <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nexec(open('/tmp/sim_replis.py').read().split(\"phrases=charger()\")[0])\nphrases=charger()\ngs=set()\nfor p in phrases:\n    for seg in p[' … [1573 caractères tronqués]`
+
+  ```
+== T1_GP
+   s027 GP (26, 33) 'avec il' -> 'marche' (avant '' )
+       phrase: mon sombre village marche avec il
+       gold segs: [('GP', 31, 33, 'il', ['marche', 'village'])]
+== T2_garde_GP
+   r083 GP (9, 22) 'entre en gare' -> 'train' (avant 'gare' )
+       phrase: Le train entre en gare.
+       gold segs: [('GP', 15, 22, 'en gare', ['entre'])]
+   r121 GP (20, 30) 'des fleurs' -> 'plante' (avant 'jardinier' )
+       phrase: Le jardinier plante des fleurs.
+       gold segs: []
+   r227 GP (0, 13) "Pendant qu'il" -> 'dort' (avant 'lit' )
+       phrase: Pendant qu'il dort, elle lit.
+       gold segs: [('SUB', 0, 18, "Pendant qu'il dort", ['lit'])]
+== combine_GP
+   r083 GP (9, 22) 'entre en gare' -> 'train' (avant 'gare' )
+       phrase: Le train entre en gare.
+       gold segs: [('GP', 15, 22, 'en gare', ['entre'])]
+   r121 GP (20, 30) 'des fleurs' -> 'plante' (avant 'jardinier' )
+       phrase: Le jardinier plante des fleurs.
+       gold segs: []
+   r227 GP (0, 13) "Pendant qu'il" -> 'dort' (avant 'lit' )
+       phrase: Pendant qu'il dort, elle lit.
+       gold segs: [('SUB', 0, 18, "Pendant qu'il dort", ['lit'])]
+   s027 GP (26, 33) 'avec il' -> 'marche' (avant '' )
+       phrase: 
+… [97 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def _normaliser\" -A 12 tools/bloc_linguistique.py | head -20", "description": "Check normalisation helper", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+144:def _normaliser(texte: str) -> str:
+145-    return unicodedata.normalize("NFC", texte).casefold()
+146-
+147-
+148-def _trigrammes(texte: str) -> list[str]:
+149-    t = _normaliser(texte)
+150-    return [t[i:i + 3] for i in range(max(0, len(t) - 2))]
+151-
+152-
+153-def _profil(texte: str, top: int = 200) -> dict[str, int]:
+154-    c = collections.Counter(_trigrammes(texte))
+155-    return dict(c.most_common(top))
+156-
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du format des JSON de pensée et des conventions de fiche
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nfor f in ['reports/pensee-cible-proximite.json','reports/pensee-quatre-modes.json']:\n    d=json.load(open(f,encoding='utf-8'))\n    print('==',f,'keys:',list(d.keys()))\n    for k,v in d.items():\n        if isinstance(v,(str,int,float,bool)) or v is None … [368 caractères tronqués]`
+
+  ```
+== reports/pensee-cible-proximite.json keys: ['date', 'ligne', 'portes', 'gold', 'cibles', 'avant', 'apres', 'inchanges', 'limites']
+   date = '2026-11-04'
+   ligne = 'B13'
+   portes = '164/164'
+   gold = 612
+   cibles = 239
+   avant : dict keys ['top1', 'top1_taux', 'exact', 'exact_taux', 'tete', 'tete_taux']
+   apres : dict keys ['top1', 'top1_taux', 'exact', 'exact_taux', 'tete', 'tete_taux']
+   inchanges : dict keys ['topk', 'couverture']
+   limites : list 3 ex: ['226 échecs non qualifiés']
+== reports/pensee-quatre-modes.json keys: ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail', 'appels', 'api', 'latence_s', 'duree_totale_s', 'limites']
+   date = '2026-11-04 10:37 EST'
+   gold : dict keys ['phrases', 'tokens', 'modalite']
+   modes : dict keys ['heuristique', 'neuronal', 'parallele', 'cascade', 'parallele_niveau', 'cascade_niveau']
+   seuils : dict keys ['heuristique', 'neuronal', 'parallele', 'cascade', 'parallele_niveau', 'cascade_niveau', 'aucun_refus']
+   refus = 0
+   refus_detail : list 0 ex: []
+   appels : dict keys ['pos', 'syntagmes']
+   api : dict keys ['appels', 'tokens', 'latence_s']
+   latence_s : dict keys ['moyenne', 'mediane']
+   duree_totale_s = 0.0
+
+… [108 caractères tronqués]
+  ```
+
