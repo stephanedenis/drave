@@ -1016,3 +1016,53 @@ sed: can't read /tmp/correctif.diff: No such file or directory
 … [494 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nfrom pathlib import Path\np = Path('/tmp/appliquer_correctif.py')\ns = p.read_text()\ns = s.replace(\"\"\"rem('return Heuristique._verbe_dans(texte, g[\"debut\"], g[\"fin\"], verbes)',\n    'return Heuristique._verbe_gv(texte, g, verbes, cache_gv)')\"\"\",\ … [548 caractères tronqués]`
+
+  ```
+ok
+15 remplacements ; ecrit /tmp/bloc_linguistique_patche.py
+diff exit=1
+136 /tmp/correctif.diff
+--- /tmp/bloc_linguistique_snapshot.py	2026-11-05 14:32:45.367941902 -0500
++++ /tmp/bloc_linguistique_patche.py	2026-11-05 14:39:35.946375921 -0500
+@@ -658,8 +658,19 @@
+         return None if strict else (mots[-1][1] if mots else None)
+ 
+     @staticmethod
++    def _verbe_gv(texte: str, g: dict, verbes, cache_gv: dict | None = None):
++        """Le verbe d'un GV, calculé **une fois par analyse** (clé valide dans un seul texte)."""
++        if cache_gv is None:
++            return Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
++        cle = (g["debut"], g["fin"])
++        if cle not in cache_gv:
++            cache_gv[cle] = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
++        return cache_gv[cle]
++
++    @staticmethod
+     def _cible_proche(texte: str, segment: dict, gvs: list[dict],
+-                      verbes: list[tuple[int, int, str]] | None = None) -> str | None:
++                      verbes: list[tuple[int, int, str]] | None = None,
++                      cache_gv: dict | None = None) -> str | None:
+         """La cible d'un segment : le **verbe d
+… [7268 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/bench_patch_et_off.py <<'PYEOF'\n#!/usr/bin/env python3\n\"\"\"Deux contrôles : (1) OFF corpus remesuré, (2) patch hoisté réel sur copie /tmp.\"\"\"\nfrom __future__ import annotations\nimport importlib.util, json, pathlib, platform, statistics, sys, time\nfrom collections im … [6674 caractères tronqués]`
+
+  ```
+OK
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nfrom pathlib import Path\np = Path('/tmp/bench_patch_et_off.py')\ns = p.read_text()\n# fixer les fabriques C1OFF/C2OFF\ns = s.replace('''mods = {n: Mini((lambda seg, n=n: b.fabrique(n, seg))) for n in (\"C1\", \"C2\", \"C1OFF\", \"C2OFF\")}\nmods[\"original … [3514 caractères tronqués]`
+
+  ```
+ok
+COMPILE_OK
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 /tmp/bench_patch_et_off.py > /tmp/bench_patch_et_off.out 2>&1; echo \"EXIT=$?\"", "description": "Run OFF re-measure and real patch benchmark", "run_in_background": true}`
+
+  ```
+started background job bash-1127
+  ```
+

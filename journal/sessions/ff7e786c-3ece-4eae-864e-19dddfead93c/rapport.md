@@ -9,10 +9,10 @@
 | Début | 2026-11-05 13:11 |
 | Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 161 |
-| Appels d'outils | 190 |
+| Messages | 165 |
+| Appels d'outils | 194 |
 | Fichiers touchés | 2 |
-| Commandes | 112 |
+| Commandes | 114 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **vérifier … [1881 caractères tronqués]
 
-*190 appels d'outils.* Actions notables :
+*194 appels d'outils.* Actions notables :
 
 - bash — Check branch and list reports
 - glob
@@ -41,11 +41,39 @@
 - bash — Read gates T153-T169 bodies
 - bash — Read gates T172-T174 bodies
 - bash — Locate metrics in evaluer_gold.py
-- … et 160 autres
+- … et 163 autres
 
 **Synthèse produite :**
 
-⏵ Dernière régénération et contrôle de la fiche (tableaux, liens, § 4.5)
+⏵ Livraison du résumé final à l'utilisateur
+
+Les deux fichiers sont écrits et validés (JSON valide, `porte-tableaux.sh` vert, 3 225 liens résolus) :
+
+- `reports/rapport-coherence-fiches.md`
+- `reports/pensee-coherence-fiches.json`
+
+\## Bilan
+
+- **11 fiches vérifiées** (les 11 `rapport-pensee-*.md` B13 datées du 2026-11-05, avec leurs 11 JSON).
+- **8 fiches cohérentes** avec leur JSON et leur porte d'époque : 5 purement historiques (verbe-gv, lexique-verbal, classement, conventions, attachement-cible) et 3 qui étaient l'état pré-v2 (echecs-cible, topk-strict, convention-doc).
+- **3 fiches présentaient une divergence réelle au blob d'origine, soit 7 écarts** :
+  - `lexique-elargi` : 62 au lieu de 63 ; 83/0,7590 au lieu de 82/0,7683 ; 23 au lieu de 22 ; 145 (avant) au lieu de 146 — 4 écarts.
+  - `spans` : titre « 94 spans » avec une ventilation 48+33+12=93 ; table des catégories 65/25/3/1=94 sous un total de 93 (l'après-correctif est 65/24/3/1) ; 65+25=90 attribués aux subordonnées alors qu'il n'y a que 81 REL/SUB — 2 écarts.
+  - `denominateur` : « 93 chez S (REL/SUB) » alors que 93 = 81 REL/SUB + 12 GP — 1 écart.
+- **7 paliers historiques reconnus** (verbe-gv 08:58 → attachement-cible 10:18), plus les colonnes « avant » de `lexique-elargi`. Les portes T153/T161/T162/T163/T166/T167/T168/T169 ont été réécrites à chaque commit : les écarts des fiches antérieures avec les valeurs d'aujourd'hui sont **historiques, pas des erreurs**.
+
+\## Corrections et résidus
+
+Je n'ai corrigé aucune fiche. Le parent a corrigé les 3 fiches dans `9d5337ce` (v2, spans) et `2e08cbc7` (lexique-elargi, denominateur), mais les corrections sont partielles ; **3 résidus subsistent** :
+
+1. `spans` : le chapô dit encore **12 GP** (titre/table : 13) et la narrative **25** (table : 24), avec 65+25 attribués aux 81 REL/SUB.
+2. `denominateur` : le corps dit **94** cibles sans segment, alors que le tableau/JSON gardent **146 labels** et une couverture de **0,6109** (239−146 = 93) ; l'attribution « (REL/SUB de S) » reste fausse (94 = 81 REL/SUB + 13 GP). La correction 93→94 a introduit cette incohérence.
+3. `lexique-elargi` : le chapô et le titre de §1 disent encore « Sur les **145** segments » (l'avant est 146 ; le tableau, lui, dit « avant (146) ») ; le « +4 » reste ambigu.
+
+\## Contexte v2
+
+Le commit `9d5337ce` a intégré la **v2** (180/180) : convention SUB au POS gold, split **116/29**, exact **137/145**, top-k strict **0,9724**. Les 11 fiches sont **pré-v2** ; je n'ai pas exécuté les 180 porte
+… [349 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -53,7 +81,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md` | 1 | 39 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md` | 1 | 40 |
 | `/tmp/gen_coherence_json.py` | 0 | 20 |
 
 ### Commandes exécutées (échantillon)
@@ -98,7 +126,7 @@
 - **T1** Find tete values in session log
 - **T1** Verify gold size and target count
 - **T1** Run full autotest suite
-- … et 72 autres
+- … et 74 autres
 
 ## 4. Mesures et résultats marquants
 

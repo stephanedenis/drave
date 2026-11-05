@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 118.0 h |
+| Durée | 118.1 h |
 | Tours | 176 |
-| Messages | 2449 |
-| Appels d'outils | 2147 |
+| Messages | 2454 |
+| Appels d'outils | 2150 |
 | Fichiers touchés | 25 |
-| Commandes | 1767 |
+| Commandes | 1770 |
 | Sous-agents | 13 |
-| Commits | 256 |
+| Commits | 257 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*104 appels d'outils.* Actions notables :
+*107 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 81 autres
+- … et 84 autres
 
 **Synthèse produite :**
 
-⏵ Le cache est complet (égalité 0/612) ; en défaut le coût restant est chez S. Je fige et je commite
+⏵ A4 liste des résidus dans mes corrections : je les traite un par un
 
 ## 3. Travail accompli
 
@@ -9550,7 +9550,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1727 autres
+- … et 1730 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9954,4 +9954,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES" -- reports/rapport-contrat-s.md reports/pensee-contrat-s
 - ÉTAT — B13 180/180, T0 DANS LE BUDGET ; VAGUE 3 LANCÉE (AUDIT V2, ÉCHECS, REPLIS, CACHE)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='
 - B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181" -- tools/bloc_linguistique.py tools/te
+- PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181" -- docs/pilotage/en-cours.md journal/2026-11-05/README.md journal/sessions/e181ce02-cd5
 

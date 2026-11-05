@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:22 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 23 |
-| Appels d'outils | 24 |
+| Messages | 25 |
+| Appels d'outils | 26 |
 | Fichiers touchés | 0 |
-| Commandes | 14 |
+| Commandes | 16 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le … [2218 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Show git state and repo root
 - bash — Line counts of key files
@@ -41,11 +41,11 @@
 - bash — Replicate analyser target logic for s108
 - bash — Inspect model candidate scores for key cases
 - bash — Exhaustive 145-target analysis
-- … et 2 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Analyse exhaustive des 145 cibles : natures, rangs, règles candidates
+⏵ Prototype de simulation par sous-classe et post-traitement des cibles
 
 ## 3. Travail accompli
 
@@ -70,6 +70,8 @@
 - **T1** Exhaustive 145-target analysis
 - **T1** Evaluate candidate rules on 145 targets
 - **T1** Test GP-targeted rules and narrow SUB rule
+- **T1** Run evaluator against simulated variants
+- **T1** Fix simulation post-processing and rerun
 
 ## 4. Mesures et résultats marquants
 
@@ -80,4 +82,10 @@
 - **T1** `T2b GP base dedans -> rang0            n=145 exact=139/145 (base 137) top1=142/145 (base 140) fix=2 reg=0 net=+2`
 - **T1** `T2c GP (nom ou dedans) -> rang0        n=145 exact=141/145 (base 137) top1=142/145 (base 140) fix=4 reg=0 net=+4`
 - **T1** `T2d GP rang0 sauf verbe garde          n=145 exact=141/145 (base 137) top1=142/145 (base 140) fix=4 reg=0 net=+4`
+- **T1** `T1_rang0               exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s`
+- **T1** `T2_rang0               exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s`
+- **T1** `T2_rang0_garde         exact=137/239 (0.5732) top1=140/239 (0.5858) span exact=0.9448 top1span=0.9655 fix=0 reg=0 time=1.0s`
+- **T1** `T1_rang0               exact=139/239 (0.5816) top1=142/239 (0.5941) span exact=0.9586 top1span=0.9793 fix=2 reg=0 time=0.9s`
+- **T1** `T2_rang0               exact=141/239 (0.5900) top1=142/239 (0.5941) span exact=0.9724 top1span=0.9793 fix=4 reg=0 time=0.9s`
+- **T1** `T2_rang0_garde         exact=141/239 (0.5900) top1=142/239 (0.5941) span exact=0.9724 top1span=0.9793 fix=4 reg=0 time=0.9s`
 

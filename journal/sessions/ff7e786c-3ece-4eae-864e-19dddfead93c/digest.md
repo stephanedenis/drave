@@ -3693,3 +3693,119 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coheren
 The file /tmp/gen_coherence_json.py has been updated successfully.
   ```
 
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": " }\n}\n\n# --- post-traitement : corrections concurrentes et résidus (HEAD) ---\ndata[\"note_portes\"] = data[\"note_portes\"].replace(\"stagée à 14:11\", \"committée `9d5337ce`\")\ndata[\"v2_concurrente\"][\"statut\"] = \"committée `9d5337c … [2994 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_coherence_json.py && python3 -m json.tool reports/pensee-coherence-fiches.json > /dev/null && echo valid && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-coherence-fiches.json'))\nprint(json.dumps( … [500 caractères tronqués]`
+
+  ```
+written
+valid
+{
+ "fiches_verifiees": 11,
+ "fiches_coherentes": 8,
+ "fiches_avec_divergence": 3,
+ "fiches_historiques": 7,
+ "fiches_actuelles": 4,
+ "paliers_historiques": 7,
+ "divergences_reelles": 7,
+ "detail_divergences": {
+  "valeurs_fausses": 4,
+  "incoherences_denombrement": 2,
+  "attributions_inexactes": 1
+ },
+ "ambiguites_non_comptees": 5,
+ "fiches_supersedees_par_v2": 4,
+ "v2_concurrente": "intégration stagée 14:11 : 177 -> 180 portes, convention SUB au POS gold (116/29), exact 137/145 ; les fiches dites actuelles au 13:54 deviennent pré-v2",
+ "correction_concurrente": "spans (édition partielle) + v2 (tools/gold/autotest/conventions/echecs-cible) ; voir concurrence",
+ "corrections_concurrentes": "9d5337ce (v2, spans) + 2e08cbc7 (lexique-elargi, denominateur) ; je n'ai corrigé aucune fiche",
+ "residus_apres_correction": 3
+}
+residus: 3
+lexique-elargi 2e08cbc7 2
+spans 9d5337ce 3
+denominateur 2e08cbc7 2
+v2 statut: committée `9d5337ce` (HEAD) ; un autre agent
+div corrigées: [('L1', '2e08cbc7'), ('L2', '2e08cbc7'), ('L3', '2e08cbc7'), ('L4', '2e08cbc7'), ('S1', '9d5337ce'), ('S2', '9d5337ce'), ('D1', '2e08cbc7 (partiel : 94 reste incohérent avec 146 labels)')]
+fiches verdicts: [('
+… [218 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"v2_concurrente\": \"intégration committée 9d5337ce : 177 -> 180 portes, convention SUB au POS gold (116/29), exact 137/145 ; les fiches dites actuelles au 13:54 deviennent pré-v2\",\n  \"correction_concurrente\": \"spans (édition partiel … [392 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière régénération et contrôle de la fiche (tableaux, liens, § 4.5)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_coherence_json.py && python3 -m json.tool reports/pensee-coherence-fiches.json > /dev/null && echo \"JSON valid\" && timeout 120 bash tools/porte-tableaux.sh 2>&1 | tail -5; echo \"EXIT=$?\"", "description": "Final r … [26 caractères tronqués]`
+
+  ```
+written
+JSON valid
+  ✅ 1684 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3225 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,22p' reports/rapport-coherence-fiches.md && echo '--- 4.5 ---' && sed -n '/### 4.5/,/## 5\\./p' reports/rapport-coherence-fiches.md", "description": "Read final header and 4.5"}`
+
+  ```
+# Cohérence des fiches B13 du 2026-11-05 — vérification
+
+> **Date de vérification** : 2026-11-05T13:54-05:00, **arrêtée avant l'intégration v2, committée
+> à 14:11 dans `9d5337ce`** · **Branche** : `s/v7` · **Périmètre** : les **11 fiches B13 datées du 2026-11-05** et
+> leurs 11 JSON homonymes (`reports/`), confrontés aux portes de `tools/pensee/autotest.py`
+> (T153, T161, T162, T163, T166, T167, T168, T169, T172, T173, plus les portes propres des
+> fiches : T164, T165, T170, T171, T174).
+> **Verdict global** : ✅ **8 fiches cohérentes** avec leur JSON et leur porte d'époque ; ❌ **3 fiches
+> portaient une divergence réelle** (7 écarts : 4 valeurs fausses dans `lexique-elargi`, 2 incohérences
+> de dénombrement dans `spans`, 1 attribution inexacte dans `denominateur`) **au blob d'origine** ;
+> elles ont été **corrigées par le parent** dans `9d5337ce` (v2) et `2e08cbc7` (`lexique-elargi`,
+> `denominateur`) — **je n'ai corrigé aucune fiche**. Les corrections sont partielles : **3 résidus**
+> subsistent (§ 4.5) ; 🕓 **7 paliers historiques reconnus** (verbe-gv → attachement-cible), plus les
+> colonnes « avant » de `lexique-elargi`.
+> **⚠️ v2 committée** : `9d5337ce` (HEAD) change les port
+… [2325 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "> **De ma part : aucune fiche modifiée, aucun commit.** Les corrections et les commits sont ceux\n> du parent (`9d5337ce`, `2e08cbc7`) ; plusieurs fichiers de périmètre ont bougé penda … [213 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final avant livraison (JSON, tableaux, statut)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-coherence-fiches.json > /dev/null && echo \"JSON valid\" && timeout 120 bash tools/porte-tableaux.sh 2>&1 | tail -4; echo \"EXIT=$?\"", "description": "Final JSON/table validation"}`
+
+  ```
+JSON valid
+  ✅ 1684 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3225 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/rapport-coherence-fiches.md reports/pensee-coherence-fiches.json; git diff --stat -- reports/rapport-coherence-fiches.md reports/pensee-coherence-fiches.json; wc -l reports/rapport-coherence-fiches.md repor … [72 caractères tronqués]`
+
+  ```
+M reports/pensee-coherence-fiches.json
+ M reports/rapport-coherence-fiches.md
+ reports/pensee-coherence-fiches.json | 274 +++++++++++++++++++++++++++++++----
+ reports/rapport-coherence-fiches.md  | 239 +++++++++++++++++++++---------
+ 2 files changed, 415 insertions(+), 98 deletions(-)
+  476 reports/rapport-coherence-fiches.md
+ 1098 reports/pensee-coherence-fiches.json
+ 1574 total
+  ```
+

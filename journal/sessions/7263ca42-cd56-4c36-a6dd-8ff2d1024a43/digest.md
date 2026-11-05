@@ -675,3 +675,30 @@ restants faux: [('g012', 'prêt', 'manger'), ('r018', 'prête', 'manger'), ('r20
 … [194 caractères tronqués]
   ```
 
+- **bash** `{"command": "cat > /tmp/ech/sim_rules2.py <<'PY'\nimport json, sys, pathlib, re\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, evalue … [7257 caractères tronqués]`
+
+  ```
+R-E GP sans auto-attachement: exact=139 portee=2 gagne=0 perd=0
+   touches: [('g012', 'manger', 'est'), ('r018', 'manger', 'est')]
+R-B1 GP de possession -> tete du GN gauche: exact=140 portee=1 gagne=1 perd=0
+   touches: [('g002', '', 'chat')]
+R-B2 cible vide -> verbe reconnu le plus proche: exact=141 portee=1 gagne=1 perd=0
+   touches: [('s041', '', 'marche')]
+R-C enclitique: exact=142 portee=1 gagne=1 perd=0
+   touches: [('r230', 'appelle-moi', 'appelle')]
+R-D SUB pseudo-GV ADV -> GV suivant / dernier mot du SUB: exact=143 portee=1 gagne=1 perd=0
+   touches: [('r309', 'Peut-être', 'viendra')]
+
+FINAL exact: 143 / 145
+restants faux: [('g012', 'prêt', 'est'), ('r018', 'prête', 'est')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, pathlib, re\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nh = bl.Heuristique()\nfor txt, d, f in [(\"Le canard est pr … [396 caractères tronqués]`
+
+  ```
+'est prêt à manger' _tete_texte: 'manger' _verbe_dans: 'manger'
+'est prêt' _tete_texte: 'prêt' _verbe_dans: 'est'
+'est prête' _tete_texte: 'prête' _verbe_dans: 'est'
+'de la voisine' _tete_texte: 'voisine' _verbe_dans: 'voisine'
+  ```
+

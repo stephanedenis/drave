@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:22 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 25 |
-| Appels d'outils | 24 |
+| Messages | 28 |
+| Appels d'outils | 27 |
 | Fichiers touchés | 0 |
-| Commandes | 18 |
+| Commandes | 21 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **qualifie … [2024 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Check git state and reports listing
 - bash — Check key files exist
@@ -41,7 +41,7 @@
 - bash — Grep for r230/r309 references
 - bash — Dump 145 label records and base counts
 - bash — Inspect SUB cases with self/non-lexicon cibles
-- … et 5 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
@@ -74,8 +74,17 @@
 - **T1** Simulate the four fallback rules sequentially
 - **T1** Simulate refined rules sequentially
 - **T1** Check _tete_texte behavior on governing GVs
+- **T1** Run final rule sequence with R-E head fix
+- **T1** Count rule triggers over all 239 gold targets
+- **T1** Inspect other de-GP segments
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `reports/rapport-annotation-independante.md:31:   (`r293`, `s052`, `r230`). Au span exact, il est juste **10/12 = 83,3 %**, cohérent avec le gold entier`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : [  {   "regle": "R-A lexique verbal",   "portee": 2,   "gagne": 2,   "perd": 0,   "exact": 139,   "touches": [    [     "s108",     "papier",     "rêve"    ],    [     "s122",     "papier",     "saute
 

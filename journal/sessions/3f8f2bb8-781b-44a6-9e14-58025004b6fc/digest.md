@@ -1224,3 +1224,40 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'generateur'
   ```
 
+### 🤖 Assistant
+
+⏵ Checking the A2 diagnostic’s 46/57 claim and the A3 learned-model numbers.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '46\\|57\\|45\\|tête' reports/rapport-topk-diagnostic.md | head -40 && echo '=== A3 ===' && sed -n '1,90p' reports/rapport-classement-appris.md", "description": "Read A2 top-k and A3 learned-model reports"}`
+
+  ```
+1:# B13 — le top-k strict de l'attachement : 57 échecs, dont 45 d'emballage
+4:> **Verdict** : ✅ **les 57 échecs du top-k strict sont qualifiés** (0 « autre »). Sur les
+5:> **145 segments gold dont le span est prédit**, la cible est dans les candidats **134 fois en
+6:> sous-chaîne** (0,9241) mais **88 fois en égalité exacte** (0,6069) : **57 échecs**. **45** sont
+7:> des **candidats du générateur S non réduits à leur tête** — la cible est déjà dans la chaîne
+8:> « « segment » → … », il suffit d'en extraire la tête ; **8** sont des **verbes anglais hors
+10:> Le **top-1 est déjà juste 41 fois sur 57** : le top-k strict mesure surtout l'**emballage** des
+12:> **45 + 8 + 4 = 57** — borne haute, mesurée sur le même gold.
+17:> (57 lignes, une par échec) · script de diagnostic exécuté par heredoc, **lecture seule** :
+22:Gold de **612 phrases** (20 `hand` + 432 `reel` + 160 `synthetique`), **239 cibles**, **145
+25:| mesure (sur 145 segments au bon span) | valeur | taux |
+29:| **échecs stricts** | **57** | 0,3931 |
+31:| top-1 exact (rendement sur les 145) | 123 | 0,8483 |
+35:de span : **145/239 = 0,6067**, même si les 57 échecs sont tous réparés.
+37:**Ce que ça dit.** L'écart 134 − 88 = **46
+… [11627 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\n# old bloc with RACINE corrected, cold\nold … [1470 caractères tronqués]`
+
+  ```
+old bloc cold RACINE fix: labels 145 fail 22 strict 123
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 31, in <module>
+  File "<stdin>", line 28, in tete
+AttributeError: type object 'Heuristique' has no attribute '_tete_texte'
+[exit code: 1]
+  ```
+

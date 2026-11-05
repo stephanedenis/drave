@@ -42209,3 +42209,23 @@ docs, pilotage, README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **cache appliqué** (×139 en chunker, sortie identique) ; vague 1 intégrée ; 3 divergences corrigées.\",\n            \"  … [1399 caractères tronqués]`
+
+  ```
+· T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1118]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1118", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-cache-chunker-applique.json
+ create mode 100644 reports/rapport-cache-chunker-applique.md
+COMMIT OK 1
+e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181
+jeu 05 nov 2026 14:41:30 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache ×139 en chunker ; vague 1 intégrée ; 3 divergences corrigées.\",\n            \" ; cache ×139 ; vague 1 intégr … [1669 caractères tronqués]`

@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:22 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 35 |
-| Appels d'outils | 44 |
+| Messages | 38 |
+| Appels d'outils | 48 |
 | Fichiers touchés | 0 |
-| Commandes | 34 |
+| Commandes | 38 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2447 caractères tronqués]
 
-*44 appels d'outils.* Actions notables :
+*48 appels d'outils.* Actions notables :
 
 - bash — Check repo state and locate attachment reports
 - read
@@ -41,11 +41,11 @@
 - bash — Show v2 commit stat and bloc diff
 - bash — Inspect lexicon variable and imports
 - bash — Show evaluer_gold and autotest v2 diff
-- … et 21 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
-⏵ Reading the full gate run and tracing the cold S-generator failure.
+⏵ Verifying the disputed “46 of 57” figure against the A2 diagnostic.
 
 ## 3. Travail accompli
 
@@ -90,16 +90,26 @@
 - **T1** Read _syntagmes_s path setup
 - **T1** Read full autotest results
 - **T1** Trace cold old-bloc S call
+- **T1** Read A2 top-k and A3 learned-model reports
+- **T1** Verify 46/57 head-reduction diagnostic
+- **T1** Count head-fixable failures on pre-v2 state
+- **T1** Count head-fixable top-k strict failures pre-v2
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `[still running after 60000ms; moved to background job bash-1077]`
+- **T1** `> **Ligne de roadmap** : **B13** (moteur de pensée, attachement) · **Date** : 2026-11-05 · **Verdict** : ❌ **ne pas intégrer le classement appris en l'état** ; le signal utile est le **vivier ordonné*`
+- **T1** `> **142/145 (0,9793)** hors-pli contre **137/145 (0,9448)** pour la règle live (empreinte `6e843018`, 13:51) : **+5**, McNemar 7/2, **p = 0,18**, IC 95 % bootstrap **[-0,7 ; +7,6] pts** → **non signif`
+- **T1** `| **rang 0 seul** (premier de la liste, sans apprentissage) | **139/145** | **0,9586** |`
+- **T1** `- **Modèle contre rang 0** : 3 justes / 0 fausse (g003, g014, g016), **p = 0,25**. Le « appris » ajoute +3 au prior, pas davantage.`
+- **T1** `1. **Le levier est le vivier, pas les poids** : le simple « premier candidat plein de la liste gauche → droite → dedans » fait **139/145** (95,9 %), déjà au-dessus de la règle live (137). Les 25 poids`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : exit=1 Traceback (most recent call last):   File "/tmp/audit_v2/ablate.py", line 37, in <module>     res['sans_tetes'] = measure(variant('sans_tetes', SRC.replace(head_block, '')))                    
 - **T1** : File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 32, in <module>     from .coeur import Candidat, Etat ImportError: attempted relative import with no known parent 
 - **T1** : cibles par type {'GP': 96, 'SUB': 69, 'REL': 74} SUB POS (tous, 69) : {'VERB': 69} total 69 SUB non-VERB: [] [stderr] Traceback (most recent call last):   File "<stdin>", line 36, in <module>   File "
+- **T1** : old bloc cold RACINE fix: labels 145 fail 22 strict 123 [stderr] Traceback (most recent call last):   File "<stdin>", line 31, in <module>   File "<stdin>", line 28, in tete AttributeError: type objec
 
