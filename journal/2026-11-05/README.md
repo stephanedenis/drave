@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**13 commits** · **1 session(s)** · **5 thème(s)**
+**14 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 5 | [docs.md](docs.md) |
+| docs | 6 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -40,6 +40,7 @@
 | 00:31 | `f97575b2` | ÉTAT — HEURE 00 H 37 ; PASSE 28/83, HOMEOSTASIE À 5 MIN, ZÉRO NON-ZÉRO |
 | 00:34 | `87ae2eee` | ÉTAT — HEURE 00 H 40 ; HOMEOSTASIE TOURNE (≈8 MIN), REGISTRE 28/83 SANS NON-ZÉRO |
 | 00:37 | `a7dd05e8` | ÉTAT — HEURE 00 H 44 ; HOMEOSTASIE CALCULE (3e VARIANTE ×1,0, 8 THREADS) |
+| 00:40 | `ed57f55f` | ÉTAT — PASSE 30/83 : HOMEOSTASIE VERTE (755 S) ET HORLOGE VERTE (31 S) ; HEURE 00 H 47 |
 
 ## Le récit de la journée (écrit à la main)
 

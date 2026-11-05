@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 00:14 | `69a2db83` | ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18 | `en-cours.md`, `README.md`, `docs.md` (+4) |
 | 00:28 | `fb6a3c86` | ÉTAT — PASSE 28/83 (HARNAIS-INVARIANTS 126 S), ZÉRO ROUGE ; HEURE 00 H 34 | `en-cours.md`, `README.md`, `distribue.md` (+7) |
 | 00:31 | `f97575b2` | ÉTAT — HEURE 00 H 37 ; PASSE 28/83, HOMEOSTASIE À 5 MIN, ZÉRO NON-ZÉRO | `en-cours.md`, `README.md`, `docs.md` (+4) |
+| 00:40 | `ed57f55f` | ÉTAT — PASSE 30/83 : HOMEOSTASIE VERTE (755 S) ET HORLOGE VERTE (31 S) ; HEURE 00 H 47 | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 
 ## Sessions actives ce jour
 

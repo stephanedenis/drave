@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 17.3 h |
-| Tours | 248 |
-| Messages | 1377 |
-| Appels d'outils | 1394 |
+| Tours | 249 |
+| Messages | 1381 |
+| Appels d'outils | 1397 |
 | Fichiers touchés | 15 |
-| Commandes | 1207 |
+| Commandes | 1210 |
 | Sous-agents | 0 |
-| Commits | 268 |
+| Commits | 269 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -519,6 +519,8 @@
 **Tour 247** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 248** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 249** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6137,7 +6139,29 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 243 : homeostasie verte (755 s) et horloge verte ; registre 30/83, zéro non-zéro
+⏵ Cycle 243 : homeostasie verte (755 s), horloge verte, registre 30/83 sans non-zéro
+
+**Cycle 243 — les deux portes longues sont tenues.**
+
+- **`porte-homeostasie` : verte en 755 s** — ×0 exact, activité monotone, dominance reproduite (pas de rouge environnementale).
+- **`porte-horloge` : verte en 31 s** — borne atteinte par **arrêt explicite** (code 5) et **aucune perplexité rendue**.
+- **Registre** : **30 entrées**, toutes nulles ; l'état dit « **30 franches, 0 rouge** ».
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 609 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe (≈53 portes, `indice` la dernière longue), puis les faits B13/S.
+
+### Tour 249 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Commit state while indice runs
+
+**Synthèse produite :**
+
+⏵ Cycle 244 : porte-indice tourne (rouge tolérée connue) ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6203,7 +6227,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1167 autres
+- … et 1170 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6619,4 +6643,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 00 H 40 ; HOMEOSTASIE TOURNE (≈8 MIN), REGISTRE 28/83 SANS NON-ZÉRO" -m "Le registre reste à 28 entrées toutes nulles ; homeostasie approche de sa 
 - ÉTAT — HEURE 00 H 44 ; HOMEOSTASIE CALCULE (3e VARIANTE ×1,0, 8 THREADS)" -m "La porte n'est pas pendue : elle a déjà écrit ses points 1 et 2 (×0 rend le modèle
 - ÉTAT — PASSE 30/83 : HOMEOSTASIE VERTE (755 S) ET HORLOGE VERTE (31 S) ; HEURE 00 H 47" -m "La porte longue est tenue : ×0 exact, activité monotone, dominance r
+- ÉTAT — HEURE 00 H 50 ; PORTE-INDICE TOURNE (ROUGE TOLÉRÉE CONNUE) ; REGISTRE 30/83 SANS NON-ZÉRO" -m "Le harnais est arrivé à porte-indice, l'une des deux rouge
 

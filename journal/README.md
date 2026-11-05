@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-05** | [2026-11-05/README.md](2026-11-05/README.md) | [distribue](2026-11-05/distribue.md) · [docs](2026-11-05/docs.md) · [memoire](2026-11-05/memoire.md) · [portes](2026-11-05/portes.md) |
+| **2026-11-05** | [2026-11-05/README.md](2026-11-05/README.md) | [distribue](2026-11-05/distribue.md) · [docs](2026-11-05/docs.md) · [memoire](2026-11-05/memoire.md) · [moteur](2026-11-05/moteur.md) · [portes](2026-11-05/portes.md) |
 | **2026-11-04** | [2026-11-04/README.md](2026-11-04/README.md) | [apprentissage](2026-11-04/apprentissage.md) · [distribue](2026-11-04/distribue.md) · [docs](2026-11-04/docs.md) · [mesures](2026-11-04/mesures.md) · [modele](2026-11-04/modele.md) · [moteur](2026-11-04/moteur.md) · [outils](2026-11-04/outils.md) · [portes](2026-11-04/portes.md) |
 | **2026-11-03** | [2026-11-03/README.md](2026-11-03/README.md) | [apprentissage](2026-11-03/apprentissage.md) · [attention](2026-11-03/attention.md) · [distribue](2026-11-03/distribue.md) · [docs](2026-11-03/docs.md) · [memoire](2026-11-03/memoire.md) · [mesures](2026-11-03/mesures.md) · [modele](2026-11-03/modele.md) · [moteur](2026-11-03/moteur.md) · [outils](2026-11-03/outils.md) · [portes](2026-11-03/portes.md) |
 | **2026-11-02** | [2026-11-02/README.md](2026-11-02/README.md) | [apprentissage](2026-11-02/apprentissage.md) · [attention](2026-11-02/attention.md) · [distribue](2026-11-02/distribue.md) · [docs](2026-11-02/docs.md) · [memoire](2026-11-02/memoire.md) · [mesures](2026-11-02/mesures.md) · [modele](2026-11-02/modele.md) · [moteur](2026-11-02/moteur.md) · [outils](2026-11-02/outils.md) · [portes](2026-11-02/portes.md) |
@@ -83,7 +83,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `18b8879c` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.2 h | 1 | 55 | 0 | 0 | [rapport](sessions/18b8879c-f211-43b8-9908-cf65e509b21d/rapport.md) |
 | `18c3f6d0` | Relecture ADVERSARIALE ciblée (10 minut | 2026-10-01 05:20 | 0.1 h | 1 | 38 | 0 | 0 | [rapport](sessions/18c3f6d0-5bb1-45bb-9f94-ab0e7812218d/rapport.md) |
 | `1966e052` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 33 | 0 | 0 | [rapport](sessions/1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445/rapport.md) |
-| `1e7ef596` | Session status update | 2026-11-04 07:25 | 17.3 h | 248 | 1394 | 15 | 268 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
+| `1e7ef596` | Session status update | 2026-11-04 07:25 | 17.3 h | 249 | 1397 | 15 | 269 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
 | `1f9394fb` | — | 2026-10-29 14:10 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/1f9394fb-6435-4928-9a03-2b258e5a28c5/rapport.md) |
 | `206a4022` | Tu travailles dans le dépôt | 2026-11-04 15:56 | 0.2 h | 1 | 46 | 0 | 0 | [rapport](sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) |
 | `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 74.8 h | 54 | 1227 | 69 | 60 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
