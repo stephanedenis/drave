@@ -12,7 +12,7 @@
   `tools/ressources.py`, `tools/index_reports.py`, `tools/surveille_sessions.py`, l'index git.
 - **Fichiers réservés** : `docs/pilotage/`, `journal/` (hors `sessions/<id>/`),
   `reports/README.md`, `reports/INDEX.md`, l'index git.
-- **Heartbeat** : 2026-11-04 11:50 EST
+- **Heartbeat** : 2026-11-05 01:55 EST
 - **Prochaine action** : **suivi docs** (N3 intégré, état au 04/11), puis la **passe** après les runs.
 - **État** : actif
 - **Plan** : 1) ~~analyse des quatre sessions~~ ; 2) ~~tâches courtes~~ ; 3) **état au 04/11** ;

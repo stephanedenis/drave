@@ -35950,3 +35950,251 @@ porte-melange 1 148
 ⏵ Cycle 264 : registre, reparti-moteur et ressources vertes ; sauvegarde en cours ; je commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h264.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h264.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [974 caractères tronqués]`
+
+  ```
+2026-11-05 01 h 50
+[s/v7 8676860a] ÉTAT — HEURE 01 H 54 ; PASSE 76 JOURNAUX : REGISTRE, REPARTI-MOTEUR ET RESSOURCES VERTES
+ 7 files changed, 128 insertions(+), 14 deletions(-)
+8676860a ÉTAT — HEURE 01 H 54 ; PASSE 76 JOURNAUX : REGISTRE, REPARTI-MOTEUR ET RESSOURCES VERTES
+86000584 ÉTAT — HEURE 01 H 51 ; PASSE 72 JOURNAUX : R13-BPE ET RÉCURRENCE VERTES, RÉFLEXE EN COURS
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 264 : registre, reparti-moteur et ressources vertes, 7 portes restantes
+
+**Cycle 264 — trois portes de plus, aucune rouge.**
+
+- **Passe** : **76 journaux**, registre 75 — `porte-registre` (18 s : région absente refusée en la nommant), `porte-reparti-moteur` (48 s : le découpage ne change pas la perplexité, écart 0,0000 %), `porte-ressources` (1 s : registre cohérent, GPU réservés à Drave) ; `porte-sauvegarde-modele` tourne.
+- **Rouges** : les **deux tolérées** + la **rouge de banc corrigée** — rien d'autre.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : finir la passe (**7 portes**), mettre à jour les références, puis décider d'une passe propre de confirmation.
+
+
+## Tour 270
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 265/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : audit et verdict final de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+8676860a ÉTAT — HEURE 01 H 54 ; PASSE 76 JOURNAUX : REGISTRE, REPARTI-MOTEUR ET RESSOURCES VERTES
+86000584 ÉTAT — HEURE 01 H 51 ; PASSE 72 JOURNAUX : R13-BPE ET RÉCURRENCE VERTES, RÉFLEXE EN COURS
+e483ba8b ÉTAT — PASSE 69 VERDICTS : PROFONDEUR-ROUTÉE VERTE (700 S), PUSH-PARESSEUX VERTE ; HEURE 01 H 48
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 631 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 843 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 563 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2171 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports
+… [292 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [473 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1616 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3986 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+81
+80 work/portes/passe-2404-23h45/registre.txt
+porte-indice 1 1207
+porte-lecteur 1 0
+porte-melange 1 148
+porte-sessions 1 0
+  porte-sauvegarde-modele ✅                          60 s  ✅ porte sauvegarde du modèle : la perte de validation est la MÊME aux quatre étapes
+  porte-sessions         ❌ code 1                    0 s    ❌ mandat périmé (840 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  porte-speculatif       ✅                          85 s    ✅ porte tenue (invariant exact · taux rendu · témoin à zér
+… [331 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : porte-sessions rouge — heartbeat périmé de e181ce02 ; j'inspecte l'outil
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/sessions.py --help 2>&1 | head -30 ; echo \"=== ÉTAT SESSION ===\" ; python3 tools/sessions.py --status 2>&1 | grep \"e181ce02\" | head -2 ; echo \"=== REFS ===\" ; grep -n \"porte-sessions\" docs/pilotage/references-non … [81 caractères tronqués]`
+
+  ```
+usage: sessions.py [-h] [--racine RACINE] [--status] [--check] [--strict]
+                   [--modele] [--autotest] [--depuis-en-cours]
+
+sessions.py — plans de session : qui fait quoi, avant d'écrire `en-cours`.
+Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
+périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+sessions consultent `--status` avant de claim, et `--check --strict` refuse
+les mandats incomplets, les identifiants dupliqués, les périmètres qui se
+recouvrent et les heartbeats périmés (le `--check` seul les signale). Les
+**fichiers proches** (une réservation imbriquée dans une autre, `data/` ⊃
+`data/structures/`) restent des **avertissements**, même en strict :
+l'imbrication est le régime normal d'un territoire partagé, et une porte qui
+échoue sur toute imbrication est rouge dès qu'une session réserve un sous-
+dossier — mesuré le 02/11, le strict sortait en 1 avec **0 erreur et 4
+avertissements**. `en-cours` reste la seule source de l'état : ce plan est le
+**contrat de travail** qui le précède. Une session arrêtée (reboot, panne)
+passe à `État : en pause` : elle reste dans l'état, son heartbeat n'est plus
+exigé, et la
+… [959 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : je lis le plan de e181ce02 et l'activité récente de son périmètre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -nE \"Heartbeat|heartbeat|État|Etat\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -8 ; echo \"=== MTIMES ===\" ; stat -c \"%y %n\" reports/pensee-quatre-modes.json docs/implantation/moteur-de-pensee.md to … [118 caractères tronqués]`
+
+  ```
+6:> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+18:- **Heartbeat** : 2026-11-04 11:50 EST
+21:- **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
+22:- **État** : actif
+=== MTIMES ===
+2026-11-04 10:37:52.200688027 -0500 reports/pensee-quatre-modes.json
+2026-11-04 20:24:14.147013229 -0500 docs/implantation/moteur-de-pensee.md
+2026-11-04 20:23:40.536676467 -0500 tools/bloc_linguistique.py
+2026-11-05 01:54
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : je liste tous les heartbeats périmés avant d'agir
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/sessions.py --check 2>&1 | head -15 ; echo \"=== PLANS ===\" ; for f in journal/sessions/*/plan.md; do id=$(basename $(dirname $f)); hb=$(grep -m1 \"Heartbeat\" \"$f\" | sed 's/.*: //'); et=$(grep -m1 \"État\" \"$f\" | s … [103 caractères tronqués]`
+
+  ```
+⚠ mandat périmé (845 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ⚠ mandat périmé (845 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+=== PLANS ===
+0733c5bb-f90b-4f58-9241-3364fa32e46c | en pause | 2026-11-04 15:22 HAE
+0b0a6a0d-05f5-4308-800c-4792ddb9cbf2 | terminé | 2026-11-01 08:35 EST
+0b69f616-5c75-4c34-b97a-ae05564812af | terminé | 2026-10-30 22:01 HAE
+1e7ef596-93e6-45f1-b7f2-2940044b6e3a | actif | 2026-11-04 11:50 EST
+22e518ee-81b8-4081-ae1b-f0d7a777a1d7 | terminé | 2026-10-31 11:50 HAE
+29ad180d-38a5-4481-a9a7-ec6ab31c895f | en pause | 2026-11-04 16:30 EST
+536cd5d6-94ac-4057-8fe9-11709a4587c7 | en pause | 2026-11-03 13:42 EST
+71d57f53-8b41-4220-84dd-7bb9eedc88d9 | terminé | 2026-10-30 13:37 HAE
+8156fdcb-5033-4ba4-a5f3-f8a078e6e57e | terminé | 2026-10-30 13:33 HAE
+aeafe951-9c3d-4bb5-8af7-0246a4f3d51d | en pause | 2026-11-04 16:15 EST
+c3d0f0bd-e344-4600-a023-0ed50d25b48b | terminé | 2026-10-30 09:18 HAE
+e181ce02-cd50-488a-a6be-e84b79d40dcc | actif | 2026-11-04 11:50 EST
+fe3c05f0-834b-44f2-8739-501865d652c1 | terminé | 2026-11-02 18:45 EST
+_modele | terminé` quand la session se retire. | <AAAA-MM-JJ HH:MM HAE>
+N2-GPU | terminé | 202
+… [17 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : je regarde le format de heartbeat attendu par l'outil
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"Heartbeat\\|heartbeat\\|strptime\" tools/sessions.py | head -12", "description": "Find heartbeat parsing format"}`
+
+  ```
+5:périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+8:et les heartbeats périmés (le `--check` seul les signale). Les **fichiers
+16:l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+18:`work/ressources.json` : le heartbeat n'est pas exigé ; le registre distingue le
+34:CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+71:    hb = champs.get("heartbeat", "")
+72:    heartbeat = None
+77:            heartbeat = datetime.fromisoformat(brut)
+79:            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+80:        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+84:            "fichiers": fic, "heartbeat": heartbeat, "age": age,
+113:    heartbeat = f"{m.group(1)} {int(m.group(2)):02d}:{m.group(3)} HAE" if m else ""
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : je lis la normalisation du heartbeat
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '64,86p' tools/sessions.py", "description": "Read heartbeat normalization"}`
+
+  ```
+("fichiers reserves", "fichiers réservés"),
+                         ("prochaine", "prochaine action"), ("etat", "état")):
+        if cible not in champs and alias in champs:
+            champs[cible] = champs[alias]
+    sid = champs.get("session") or chemin.parent.name
+    per = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("périmètre", "")) if x.strip()]
+    fic = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("fichiers réservés", "")) if x.strip()]
+    hb = champs.get("heartbeat", "")
+    heartbeat = None
+    age = None
+    try:
+        brut = re.sub(r"\s*(HAE|EDT|EST|UTC[−-]?[0-9]+)\s*$", "", hb).strip()
+        if "T" in brut:
+            heartbeat = datetime.fromisoformat(brut)
+        else:
+            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+    except Exception:
+        pass
+    return {"id": sid, "chemin": chemin, "champs": champs, "perimetre": per,
+            "fichiers": fic, "heartbeat": heartbeat, "age": age,
+            "etat": _cle(champs.get("état", ""))}
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : je rafraîchis mon propre heartbeat (seule session que le hub peut modifier)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib, subprocess, re\np=pathlib.Path('journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md')\nt=p.read_text()\nnow=subprocess.run(['date','+%Y-%m-%d %H:%M'],capture_output=True,text=True).stdout.st … [343 caractères tronqués]`
+
+  ```
+heartbeat hub 2026-11-05 01:55
+  ⚠ mandat périmé (846 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (846 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : seul e181ce02 reste (hors territoire hub) ; je vérifie la fin de passe et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls work/portes/passe-2404-23h45/*.log | wc -l ; wc -l work/portes/passe-2404-23h45/registre.txt ; awk '$2 != 0' work/portes/passe-2404-23h45/registre.txt ; tail -4 work/portes/passe-2404-23h45.log ; pgrep -af \"toutes-les-portes\" | g … [64 caractères tronqués]`
+
+  ```
+83
+82 work/portes/passe-2404-23h45/registre.txt
+porte-indice 1 1207
+porte-lecteur 1 0
+porte-melange 1 148
+porte-sessions 1 0
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-05)
+  porte-tokenizer-kimi   ✅                          10 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                         122 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          32 s    ✅ la trace fausse est détectée et nommée
+1119604 bash tools/toutes-les-portes.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 265 : passe à 83/83 journaux (82 verdicts) ; je commit le heartbeat du hub et l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h265.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h265.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [1269 caractères tronqués]`

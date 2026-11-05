@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**35 commits** · **1 session(s)** · **7 thème(s)**
+**36 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 3 | [distribue.md](distribue.md) |
+| distribue | 4 | [distribue.md](distribue.md) |
 | docs | 14 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.4 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.5 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -64,6 +64,7 @@
 | 01:41 | `f3f4f804` | ÉTAT — HEURE 01 H 45 ; PROFONDEUR-ROUTÉE À 13 MIN, SOUS SA BORNE ; 68 JOURNAUX |
 | 01:44 | `e483ba8b` | ÉTAT — PASSE 69 VERDICTS : PROFONDEUR-ROUTÉE VERTE (700 S), PUSH-PARESSEUX VERTE ; HEURE 01 H 48 |
 | 01:47 | `86000584` | ÉTAT — HEURE 01 H 51 ; PASSE 72 JOURNAUX : R13-BPE ET RÉCURRENCE VERTES, RÉFLEXE EN COURS |
+| 01:50 | `8676860a` | ÉTAT — HEURE 01 H 54 ; PASSE 76 JOURNAUX : REGISTRE, REPARTI-MOTEUR ET RESSOURCES VERTES |
 
 ## Le récit de la journée (écrit à la main)
 
