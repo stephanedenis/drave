@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 15.9 h |
-| Tours | 223 |
-| Messages | 1240 |
-| Appels d'outils | 1276 |
+| Durée | 16.0 h |
+| Tours | 224 |
+| Messages | 1246 |
+| Appels d'outils | 1281 |
 | Fichiers touchés | 15 |
-| Commandes | 1090 |
+| Commandes | 1095 |
 | Sous-agents | 0 |
-| Commits | 243 |
+| Commits | 244 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -469,6 +469,8 @@
 **Tour 222** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 223** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 224** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5517,7 +5519,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 223 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run seven controls
@@ -5525,10 +5527,32 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - bash — List session section headers
 - bash — Align N2 status and verify
 - bash — Commit N2 status and state time
+- bash — Final gate check
 
 **Synthèse produite :**
 
-⏵ Cycle 218 : je recale l'heure et commit le statut N2
+⏵ Cycle 218 : statut N2 aligné (pause) et committé, portes vertes
+
+**Cycle 218 — le statut de N2 est aligné.**
+
+- **Correction de mandat** (`b513911b`) : la section de session et le libellé du chantier N2 disaient « actif » alors que la session est **en pause** depuis 477 min et que le **2 048 est fini** ; ils disent maintenant **en pause**, la **porte propre (0,29)** restant la prochaine action à sa reprise.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 070 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 620 mots**, **T0 3 990 / 4 000** ✅.
+- **2 048 fini**, deux drvm ; **GPUs à 0 %** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : la porte propre de N2, les faits B13/S, puis la passe complète des portes.
+
+### Tour 224 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls
+- bash — Trim N2 line and verify budgets
+- bash — Commit trimmed state
+
+**Synthèse produite :**
+
+⏵ Cycle 219 : budget regagné (T0 3 957, en-cours 1 587) ; je commit
 
 ## 3. Travail accompli
 
@@ -5594,7 +5618,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1050 autres
+- … et 1055 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5985,4 +6009,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 04 H 47 ; INDEX 625, 2 048 FINI, B13 166/166, D 62" -m "Cycle d'audit : les sept contrôles sont verts (628/721, 3070 liens, T0 3978, en-cours 1608,
 - COHÉRENCE — LE 2 048 EST FINI PARTOUT ; B13 À 166 ; HEURE 04 H 52" -m "Trois mentions périmées sont alignées : la prochaine action de N2 est la porte propre (0,
 - ÉTAT — N2 PASSE EN PAUSE (SESSION ET CHANTIER) ; RUN FINI ; HEURE 04 H 57" -m "Le statut de la session N2 et le libellé de son chantier disent maintenant en pau
+- ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02" -m "Les chiffres de distillation de la ligne N2 doublonnaient son bilan et celui de
 

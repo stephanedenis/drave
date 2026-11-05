@@ -82,7 +82,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `18b8879c` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.2 h | 1 | 55 | 0 | 0 | [rapport](sessions/18b8879c-f211-43b8-9908-cf65e509b21d/rapport.md) |
 | `18c3f6d0` | Relecture ADVERSARIALE ciblée (10 minut | 2026-10-01 05:20 | 0.1 h | 1 | 38 | 0 | 0 | [rapport](sessions/18c3f6d0-5bb1-45bb-9f94-ab0e7812218d/rapport.md) |
 | `1966e052` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 33 | 0 | 0 | [rapport](sessions/1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445/rapport.md) |
-| `1e7ef596` | Session status update | 2026-11-04 07:25 | 15.9 h | 223 | 1276 | 15 | 243 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
+| `1e7ef596` | Session status update | 2026-11-04 07:25 | 16.0 h | 224 | 1281 | 15 | 244 | [rapport](sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) |
 | `1f9394fb` | — | 2026-10-29 14:10 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/1f9394fb-6435-4928-9a03-2b258e5a28c5/rapport.md) |
 | `206a4022` | Tu travailles dans le dépôt | 2026-11-04 15:56 | 0.2 h | 1 | 46 | 0 | 0 | [rapport](sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) |
 | `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 74.8 h | 54 | 1227 | 69 | 60 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
