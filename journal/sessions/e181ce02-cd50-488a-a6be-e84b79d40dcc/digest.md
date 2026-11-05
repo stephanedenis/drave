@@ -39712,3 +39712,92 @@ python3 tools/taille_documents.py            EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-classement.md reports/pensee-classement.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cour … [803 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-352]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-352", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-classement.json
+ create mode 100644 reports/rapport-pensee-classement.md
+COMMIT OK 1
+d8edd1d9 B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171
+2
+jeu 05 nov 2026 10:04:20 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 7 : scinder la mesure par nature de cible (verbe vs nom) — la convention du gold
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('''    att_n = att_labels = att_top1 = att_topk = att_exact = 0''',\n'''    att_n = att_labels = att_top1 = at … [1754 caractères tronqués]`
+
+  ```
+mesure scindée
+exact 94 | verbe {'cibles': 51, 'justes': 37, 'taux': 0.7255} | nom {'cibles': 95, 'justes': 57, 'taux': 0.6}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T168 le classement de la cible        exact 33 → 94 : la cible S convertie en son verbe\\n\",\n\"  T168 le classement de l … [1501 caractères tronqués]`
+
+  ```
+started background job bash-354
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-conventions.md <<'MD'\n# B13 — les deux conventions du gold : verbes 0,7255, noms 0,6000\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **172/ … [6326 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 171→172: 5
+docs/pilotage/chantiers.md 171→172: 6
+docs/pilotage/en-cours.md 171→172: 4
+docs + pilotage + README
+  revue de documentation · 634 fiche(s) · 727 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\nout=[]; n=0\nfor l in lignes:\n    if \"(rapport-pensee-banc.md)\" in l or \"(rapport-pensee-porte.md)\" in l:\n   … [285 caractères tronqués]`
+
+  ```
+retirées 0
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ok
+  ```
+
+- **job_output** `{"job_id": "bash-354", "timeout_ms": 900000, "wait": true}`
+
+  ```
+T169 ajoutée
+  ✅ T168 classement        classement : exact 94/146 ; cibles 51 verbes, 95 noms
+  ✅ T169 conventions       conventions : verbes 37/51 (0.7255), noms 57/95 (0.6)
+  172/172 portes tenues
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rapport-pensee\" reports/README.md | sed -n '1,4p' | cut -c1-90; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nfor nom in (\"rapport-pensee-operateurs.md\",\"rapport-pensee-nece … [392 caractères tronqués]`
+
+  ```
+18:| [`rapport-pensee-conventions.md`](rapport-pensee-conventions.md) | **B13** — les deux
+19:| [`rapport-pensee-classement.md`](rapport-pensee-classement.md) | **B13** — le classem
+20:| [`rapport-pensee-denominateur.md`](rapport-pensee-denominateur.md) | **B13** — le dén
+21:| [`rapport-pensee-spans.md`](rapport-pensee-spans.md) | **B13** — les spans perdus : 4
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=[i for i,l in enumerate(lignes) if l.startswith(\"| [`rapport-\")]\nprint('dernière ligne fiche :', idx[-1], l … [300 caractères tronqués]`
+
+  ```
+dernière ligne fiche : 152 | [`rapport-routeur-m1-m2.md`](rapport-routeur-m1-m2.md) | **B23** — routeur M1→
+retirée
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\"; do eval \"$t\" >/tmp/cb 2>&1;  … [1085 caractères tronqués]`

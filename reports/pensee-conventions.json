@@ -1,0 +1,27 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "172/172",
+ "gold": 612,
+ "labels": 146,
+ "verbe": {
+  "cibles": 51,
+  "justes": 37,
+  "taux": 0.7255
+ },
+ "nom": {
+  "cibles": 95,
+  "justes": 57,
+  "taux": 0.6
+ },
+ "tout": {
+  "justes": 94,
+  "taux": 0.6438
+ },
+ "limites": [
+  "convention du gold non documentée",
+  "52 échecs non qualifiés",
+  "top-k lenient",
+  "gold 612"
+ ]
+}

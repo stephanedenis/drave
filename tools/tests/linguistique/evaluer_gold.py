@@ -84,6 +84,7 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
     acte_ok = neg_ok = mod_ok = ds_ok = 0
     fractions = []
     att_n = att_labels = att_top1 = att_topk = att_exact = 0
+    att_v_n = att_v_ok = att_n_n = att_n_ok = 0
     att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
     for phrase in phrases:
         a = bloc.analyser(phrase["texte"], phrase["langue"])
@@ -122,8 +123,17 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
             att_labels += 1
             att = (e.meta or {}).get("attachement") or {}
             cible = (att.get("cible") or "").strip()
-            if cible == cibles[0]:
+            juste = cible == cibles[0]
+            if juste:
                 att_exact += 1
+            # le gold mêle deux conventions : la cible est un verbe (le gouverneur) ou un nom
+            # (l'antécédent d'un REL, la tête d'un GP). On mesure les deux séparément.
+            if bl._est_verbe(cibles[0]):
+                att_v_n += 1
+                att_v_ok += int(juste)
+            else:
+                att_n_n += 1
+                att_n_ok += int(juste)
             if cible and any(c in cible or cible in c for c in cibles):
                 att_top1 += 1
             if any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
@@ -170,6 +180,10 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                         "top1_taux_span": round(att_top1 / max(1, att_labels), 4),
                         "topk_taux_span": round(att_topk / max(1, att_labels), 4),
                         "exact_taux_span": round(att_exact / max(1, att_labels), 4),
+                        "verbe": {"cibles": att_v_n, "justes": att_v_ok,
+                                  "taux": round(att_v_ok / max(1, att_v_n), 4)},
+                        "nom": {"cibles": att_n_n, "justes": att_n_ok,
+                                "taux": round(att_n_ok / max(1, att_n_n), 4)},
                         "couverture": round(att_labels / max(1, att_n), 4)},
         "attachement_tete": {"cibles": att_t_n, "labels": att_t_labels,
                              "top1": att_t_top1, "topk": att_t_topk,

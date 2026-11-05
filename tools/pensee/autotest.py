@@ -2459,6 +2459,18 @@ def t168_classement() -> tuple[bool, str]:
         f"classement : exact {r['exact']}/146 ; cibles {verbes} verbes, {noms} noms")
 
 
+def t169_conventions() -> tuple[bool, str]:
+    """Les deux conventions du gold : cibles verbes et cibles noms, mesurées séparément."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    v, n = a["verbe"], a["nom"]
+    return (v["cibles"] == 51 and v["justes"] == 37 and abs(v["taux"] - 0.7255) < 0.001
+            and n["cibles"] == 95 and n["justes"] == 57 and abs(n["taux"] - 0.6) < 0.001), (
+        f"conventions : verbes {v['justes']}/{v['cibles']} ({v['taux']}), "
+        f"noms {n['justes']}/{n['cibles']} ({n['taux']})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2626,7 +2638,8 @@ def main() -> int:
               ("T165 lexique verbal", t165_lexique_verbal()),
               ("T166 spans perdus", t166_spans()),
               ("T167 dénominateur", t167_denominateur()),
-              ("T168 classement", t168_classement())]
+              ("T168 classement", t168_classement()),
+              ("T169 conventions", t169_conventions())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

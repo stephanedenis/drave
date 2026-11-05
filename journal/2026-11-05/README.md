@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**49 commits** · **2 session(s)** · **7 thème(s)**
+**50 commits** · **2 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 16 | [docs.md](docs.md) |
+| docs | 17 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
@@ -24,7 +24,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.9 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 113.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 113.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -79,6 +79,7 @@
 | 09:35 | `13e8bb2d` | B13 — LES SPANS PERDUS : 48 REL, 33 SUB, 12 GP (81 CHEZ S) ; LE GP EST BORNÉ AU VERBE ; 169/169 |
 | 09:42 | `f8f5bc04` | B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170 |
 | 09:47 | `8f472d00` | PILOTAGE — B13 170/170 DÉCRIT PAR SES DEUX LECTURES ; RAPPORT DE SESSION NETTOYÉ ; PLAN ET JOURNAL À JOUR |
+| 10:02 | `d8edd1d9` | B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171 |
 
 ## Le récit de la journée (écrit à la main)
 

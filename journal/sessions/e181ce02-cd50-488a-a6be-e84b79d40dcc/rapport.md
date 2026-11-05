@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 113.4 h |
+| Durée | 113.5 h |
 | Tours | 175 |
-| Messages | 2265 |
-| Appels d'outils | 1968 |
+| Messages | 2273 |
+| Appels d'outils | 1977 |
 | Fichiers touchés | 25 |
-| Commandes | 1624 |
+| Commandes | 1631 |
 | Sous-agents | 2 |
-| Commits | 237 |
+| Commits | 238 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9369,7 +9369,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*91 appels d'outils.* Actions notables :
+*100 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9385,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 61 autres
+- … et 68 autres
 
 **Synthèse produite :**
 
-⏵ Le gold mélange deux conventions (95 noms, 51 verbes) : je réécris la fiche en conséquence
+⏵ Round 7 : scinder la mesure par nature de cible (verbe vs nom) — la convention du gold
 
 ## 3. Travail accompli
 
@@ -9470,7 +9470,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1584 autres
+- … et 1591 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9855,4 +9855,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapp
 - PILOTAGE — B13 170/170 DÉCRIT PAR SES DEUX LECTURES ; RAPPORT DE SESSION NETTOYÉ ; PLAN ET JOURNAL À JOUR" -- docs/pilotage/roadmap.md docs/pilotage/en-cours.md
 - B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171" -- tools/bloc_linguistique
+- B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172" -- tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py 
 
