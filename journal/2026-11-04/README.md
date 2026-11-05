@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**259 commits** · **6 session(s)** · **8 thème(s)**
+**260 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 211 | [docs.md](docs.md) |
+| docs | 212 | [docs.md](docs.md) |
 | mesures | 26 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -294,6 +294,7 @@
 | 23:43 | `1d779118` | PASSE COMPLÈTE LANCÉE À 23 H 45 (83 PORTES) ; ÉTAT À JOUR ; HEURE 23 H 45 |
 | 23:46 | `5ee22829` | ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ |
 | 23:50 | `46c5c792` | REPORTS/README — OCR PDF RESTANTS ET FUSION RÉPARÉE ENTRENT ; PASSE 11/83 ; HEURE 23 H 52 |
+| 23:53 | `988ddf55` | ÉTAT — HEURE 23 H 56 ; PASSE 14/83, AUCUNE ROUGE ; LES SEPT CONTRÔLES VERTS |
 
 ## Le récit de la journée (écrit à la main)
 

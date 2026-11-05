@@ -32271,3 +32271,94 @@ revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 227 : passe à 14/83 sans rouge ; je commit l'état (heure)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h227.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h227.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [847 caractères tronqués]`
+
+  ```
+heure 23 h 53
+[s/v7 988ddf55] ÉTAT — HEURE 23 H 56 ; PASSE 14/83, AUCUNE ROUGE ; LES SEPT CONTRÔLES VERTS
+ 14 files changed, 132 insertions(+), 23 deletions(-)
+988ddf55 ÉTAT — HEURE 23 H 56 ; PASSE 14/83, AUCUNE ROUGE ; LES SEPT CONTRÔLES VERTS
+46c5c792 REPORTS/README — OCR PDF RESTANTS ET FUSION RÉPARÉE ENTRENT ; PASSE 11/83 ; HEURE 23 H 52
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 227 : passe à 14/83 sans rouge, sept contrôles verts
+
+**Cycle 227 — la passe continue proprement.**
+
+- **Passe complète** : **14 portes / 83**, **aucune rouge** (`adaptateur-sortie`, `bloc-tableaux`, `budget`, `bus`, `c4-retard`, `cerveau`… ; la dernière franchie en 10 s).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 605 mots**, **T0 3 975 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict, puis les faits B13/S.
+
+
+## Tour 233
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 228/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 228 : audit, suivi de la passe et recherche de portes « vertes sans avoir tourné »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+988ddf55 ÉTAT — HEURE 23 H 56 ; PASSE 14/83, AUCUNE ROUGE ; LES SEPT CONTRÔLES VERTS
+46c5c792 REPORTS/README — OCR PDF RESTANTS ET FUSION RÉPARÉE ENTRENT ; PASSE 11/83 ; HEURE 23 H 52
+5ee22829 ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 514 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 726 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 446 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2054 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    aeafe
+… [249 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [320 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1605 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3975 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+--- PASSE ---
+15
+  porte-cerveau          ✅                          10 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-consolidation    ✅                          84 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -l -iE \"skip|absent|non lanc|impossible|introuvable|⚠\" work/portes/passe-2404-23h45/*.log 2>/dev/null | head -8 ; echo \"--- occurrences ---\" ; grep -ihE \"skip|absent|non lanc|introuvable\" work/portes/passe-2404-23h45/*.log  … [66 caractères tronqués]`
+
+  ```
+work/portes/passe-2404-23h45/porte-balayage.log
+work/portes/passe-2404-23h45/porte-bloc-maths.log
+--- occurrences ---
+✅ contrôle négatif : un terme absent ne rend rien
+5. refus       : 8/8 nommés (macro_inconnue, accolade_ouverte, caractere_inconnu, syntaxe, division_zero, racine_negative, non_lineaire, variable_absente)
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 228 : aucune porte sautée, passe à 15/83 ; je commit l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h228.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h228.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [898 caractères tronqués]`

@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 16.5 h |
-| Tours | 232 |
-| Messages | 1305 |
-| Appels d'outils | 1337 |
+| Tours | 233 |
+| Messages | 1309 |
+| Appels d'outils | 1341 |
 | Fichiers touchés | 15 |
-| Commandes | 1150 |
+| Commandes | 1154 |
 | Sous-agents | 0 |
-| Commits | 252 |
+| Commits | 253 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -487,6 +487,8 @@
 **Tour 231** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 232** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 233** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5765,7 +5767,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 227 : passe à 14/83 sans rouge ; je commit l'état (heure)
+⏵ Cycle 227 : passe à 14/83 sans rouge, sept contrôles verts
+
+**Cycle 227 — la passe continue proprement.**
+
+- **Passe complète** : **14 portes / 83**, **aucune rouge** (`adaptateur-sortie`, `bloc-tableaux`, `budget`, `bus`, `c4-retard`, `cerveau`… ; la dernière franchie en 10 s).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 605 mots**, **T0 3 975 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict, puis les faits B13/S.
+
+### Tour 233 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Scan gate logs for skips
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 228 : aucune porte sautée, passe à 15/83 ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -5831,7 +5854,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1110 autres
+- … et 1114 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6231,4 +6254,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ" -m "Les tailles du corpus propre sont exactes (4 440 987 / 12 536 / 10 524 octets) et les fe
 - REPORTS/README — OCR PDF RESTANTS ET FUSION RÉPARÉE ENTRENT ; PASSE 11/83 ; HEURE 23 H 52" -m "Les deux dernières fiches récentes absentes du tableau des fiches
 - ÉTAT — HEURE 23 H 56 ; PASSE 14/83, AUCUNE ROUGE ; LES SEPT CONTRÔLES VERTS" -m "La passe complète avance sans rouge (adaptateur-sortie, bloc-tableaux, budget, 
+- ÉTAT — HEURE 23 H 58 ; PASSE 15/83, AUCUNE PORTE SAUTÉE ; HEURE À JOUR" -m "La passe a franchi consolidation (84 s) et cerveau (10 s) sans rouge. Un balayage de
 
