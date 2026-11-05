@@ -92,7 +92,7 @@
 ## Ce qui est en cours
 
 - **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
-- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **kd2** arrêté, **2 048 : 1re moitié finie** (10 000 pas, 10 224 s, drvm `c50beff6`), 2e en cours ; **perte d'entraînement** : α = 0 **1,014**, α = 0,9 **0,8385** (−0,176) ; **PPL de validation** : α = 0 **3,1500**, α = 0,9 **3,1119** (−0,06 ; −0,19 anglais) ; la distillation **paie** sur le PPL ; **repondération 4× : −0,05**.
+- **N2 — actif** : **1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **kd2** arrêté, **2 048 fini** (2×10 000 pas ; drvm `c50beff6` + `91a3028…` ; 10 224 + 10 221 s) ; la distillation complète est mesurée ; **perte d'entraînement** : α = 0 **1,014**, α = 0,9 **0,8385** (−0,176) ; **PPL de validation** : α = 0 **3,1500**, α = 0,9 **3,1119** (−0,06 ; −0,19 anglais) ; la distillation **paie** sur le PPL ; **repondération 4× : −0,05**.
 - **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
 - **Pensée — B13 (actif)** : **165/165**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
