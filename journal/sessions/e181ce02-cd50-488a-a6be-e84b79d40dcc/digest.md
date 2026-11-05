@@ -39922,3 +39922,51 @@ portes ajustées, T170 ajoutée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [1207 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+[still running after 60000ms; moved to background job bash-368]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-368", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-attachement-cible.json
+ create mode 100644 reports/rapport-pensee-attachement-cible.md
+COMMIT OK 1
+23853cb7 B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173
+2
+jeu 05 nov 2026 10:19:57 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 9 : les 28 échecs restants — je les qualifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); cat=collections.Counter(); ex=[]\nfor … [824 caractères tronqués]`
+
+  ```
+{('GP', 'nom'): 19, ('SUB', 'nom'): 6, ('SUB', 'verbe'): 3}
+   ('g002', 'GP', 'de la voisine', 'chat', '')
+   ('g003', 'GP', 'dans le parc', 'vu', 'a')
+   ('g004', 'GP', 'pour attraper le bus', 'couru', 'a')
+   ('g012', 'GP', 'à manger', 'prêt', 'manger')
+   ('r018', 'GP', 'à manger', 'prête', 'manger')
+   ('r080', 'GP', 'over the lake', 'fly', 'lake')
+   ('r108', 'GP', 'on the roof', 'climbs', 'roof')
+   ('r120', 'GP', 'to the sea', 'flows', 'river')
+   ('r132', 'GP', 'au mur', 'accroché', 'au')
+   ('r153', 'GP', 'for the bus', 'wait', 'bus')
+   ('r156', 'GP', 'in the water', 'swims', 'water')
+   ('r160', 'GP', 'in the morning', 'passes', 'morning')
+  ```
+

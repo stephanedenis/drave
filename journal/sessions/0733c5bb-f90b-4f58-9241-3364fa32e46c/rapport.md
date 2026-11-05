@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 66.1 h |
 | Tours | 9 |
-| Messages | 843 |
-| Appels d'outils | 778 |
+| Messages | 848 |
+| Appels d'outils | 783 |
 | Fichiers touchés | 27 |
-| Commandes | 573 |
+| Commandes | 577 |
 | Sous-agents | 0 |
-| Commits | 35 |
+| Commits | 36 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -318,15 +318,19 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 
 ### Tour 9 — où en est-on?
 
-*3 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check 2048 run and repo state
 - bash — Evaluate both 2048 checkpoints
 - job_output
+- bash — Read current 2048 fiche section structure
+- bash — Fill 2048 complement with results
+- bash — Update verdict and state with 2048 results
+- bash — Commit the measured 2048 complement
 
 **Synthèse produite :**
 
-⏵ Les deux moitiés du 2 048 ont fini le 04/11 ; je les évalue maintenant
+⏵ Résultats complets : à octets constants 2 048 ne bat pas 1 024 ; à pas constants il gagne
 
 ## 3. Travail accompli
 
@@ -404,7 +408,7 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 533 autres
+- … et 537 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -585,6 +589,7 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 - cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add reports/rapport-n2-production-fenetre.md re
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.re
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") vieux = "**p
+- cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 

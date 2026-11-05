@@ -3,8 +3,10 @@
 > **Ligne de roadmap** : R1 (la fenêtre native) · **Date** : 2026-11-03 · **Verdict** : à
 > **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à
 > **1 024** — à 2 000 octets, 3,2459 (fenêtre 256) → 2,9728 (512) → **2,9449** (1 024) — et
-> **2 048 ne la bat pas** (2,9630) : à budget d'octets fixé, doubler encore la fenêtre divise les
-> **pas** par deux (1 250 contre 2 500) et le gain s'annule. À **pas constants** (20 000), la même
+> **2 048 ne la bat pas** à octets constants (2,9630 ; et au complément 164 Mo, 3,0466 contre
+> 2,9955) : à budget d'octets fixé, doubler encore la fenêtre divise les **pas** par deux et le
+> gain s'annule — **à pas constants en revanche, 2 048 gagne 0,08 à 0,10** (2,9121 contre 2,9955
+> à 128 octets, 2,4383 contre 2,5429 à 4 000). À **pas constants** (20 000), la même
 > recette à fenêtre **1 024** voit **8× plus d'octets** et **écrase** tout : **2,9955** à 128
 > octets, **2,6256** à 1 000, **2,5429** à 4 000 — à **0,13** et **0,04** de 2,5 en domaine
 > (`val_fr`, pas le corpus propre : ce n'est pas la porte, c'en est le voisinage). La fenêtre et
@@ -149,12 +151,32 @@ le débit passe de **22 306** octets/s (fenêtre 256) à **22 730** (512), **21 
 donc le débit ne perd que **13 %** de 256 à 2 048. La fenêtre est presque gratuite à cette
 taille — elle ne le resterait pas à plus grande échelle.
 
-## 5. Le complément 2 048 « mêmes pas » — run interrompu, non mesuré
+## 5. Le complément 2 048, mesuré en deux moitiés (10 000 puis 20 000 pas)
 
-Le point 2 048 à **20 000 pas** (328 Mo, deux fois les octets du run 1 024 de référence) a été
-lancé le **03/11 vers 18 h 33** et **interrompu par le reboot à 19 h 33**, après **3 350 pas**
-(PPL de validation 2,694–2,731). **Aucun checkpoint n'a été écrit** : le point 2 048 à pas
-constants **reste non mesuré**.
+Le reboot du 03/11 et la contention du 04/11 avaient interrompu ce complément deux fois ; il a
+été relancé **en deux segments de 10 000 pas** (un point de contrôle par segment) et mesuré :
+
+| run (wiki_fr, RoPE, init `base-wiki-45m`) | octets vus | 128 | 512 | 1 000 | 2 000 | 4 000 |
+|---|---:|---:|---:|---:|---:|---:|
+| fenêtre 1 024, 2 500 pas | 20,5 Mo | 3,3878 | 3,1098 | 2,9950 | 2,9449 | 2,9108 |
+| **fenêtre 2 048, 10 000 pas** | **164 Mo** | 3,0466 | 2,7581 | 2,6501 | 2,5914 | 2,5513 |
+| fenêtre 1 024, 20 000 pas | 164 Mo | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |
+| **fenêtre 2 048, 20 000 pas** | **328 Mo** | **2,9121** | **2,6360** | **2,5375** | **2,4779** | **2,4383** |
+
+**Deux réponses nettes :**
+
+1. **À octets constants (164 Mo), 2 048 ne bat pas 1 024** — il est **derrière partout**
+   (3,0466 contre 2,9955 à 128 ; 2,6501 contre 2,6256 à 1 000 ; 2,5513 contre 2,5429 à 4 000),
+   mais l'écart **se referme avec la longueur** (+0,051 à 128, +0,008 à 4 000). À budget d'octets
+   fixé, la fenêtre 1 024 reste le **point d'équilibre** : 2 048 paie sa division par deux des pas.
+2. **À pas constants (20 000), 2 048 gagne** — 328 Mo contre 164 : **−0,083 à 128, −0,094 à 512,
+   −0,088 à 1 000, −0,098 à 2 000, −0,105 à 4 000**. Le gain est **uniforme**, et il est le plus
+   fort **au bout de la fenêtre** : c'est bien la longueur qui paie.
+
+**Synthèse de la loi de la fenêtre** (à 33 Mo pour les tailles, à 20,5 Mo pour la loi) : le saut
+128 → 1 024 vaut **−0,4 à −0,5** à 4 000 octets ; le saut 1 024 → 2 048, **à octets constants, ne
+vaut rien** et **à pas constants, vaut −0,10**. La fenêtre est un levier **jusqu'à ce que les pas
+manquent** — et le budget décide de où se trouve le point d'équilibre.
 
 ## Fichiers
 

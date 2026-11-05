@@ -79,11 +79,11 @@
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2** — la production et la capacité.
-- **Plan** : 1 024, capacité.
+- **Plan** : fenêtre.
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient.
-- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α = 0 → **3,1500**, α = 0,9 → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération 4× : −0,05** ; **2 048 relancé** (2×10 000 pas) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** : **3,1500** → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération : −0,05** ; **2 048 mesuré** : à octets constants il ne bat pas 1 024 ; à pas constants **−0,10** ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
 - **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
 - **Bloquants** : aucun.

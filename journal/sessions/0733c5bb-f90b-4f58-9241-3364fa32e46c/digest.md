@@ -11121,3 +11121,89 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-76", "timeout_ms": 400000, "wait": true}`
+
+  ```
+"128": 3.0466,
+   "256": 2.8973,
+   "512": 2.7581,
+   "1000": 2.6501,
+   "2000": 2.5914,
+   "4000": 2.5513
+   "128": 3.3881,
+   "256": 3.2102,
+   "512": 3.0804,
+   "1000": 2.9656,
+   "2000": 2.9116,
+   "4000": 2.9146
+ "permute_fr": 192.1869,
+ "litterature": 5.5253,
+ "anglais": 7.978,
+ "wikitext2": 8.8691,
+=== rope2048-20k ===
+   "128": 2.9121,
+   "256": 2.7701,
+   "512": 2.636,
+   "1000": 2.5375,
+   "2000": 2.4779,
+   "4000": 2.4383
+   "128": 3.2679,
+   "256": 3.1021,
+   "512": 2.9718,
+   "1000": 2.8539,
+   "2000": 2.8013,
+   "4000": 2.8075
+ "permute_fr": 184.906,
+ "litterature": 5.3959,
+ "anglais": 7.4224,
+ "wikitext2": 8.415,
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultats complets : à octets constants 2 048 ne bat pas 1 024 ; à pas constants il gagne
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"^## \" reports/rapport-n2-r12-2048.md; sed -n '/## 5. Le complément/,/^## /p' reports/rapport-n2-r12-2048.md | head -20", "description": "Read current 2048 fiche section structure"}`
+
+  ```
+14:## La question
+21:## Le dispositif
+35:## 1. À octets constants : le gain s'arrête à 1 024
+55:## 2. À pas constants : la fenêtre rend chaque octet plus utile
+92:## 3. Le contrôle « même texte » : la fenêtre reste la borne
+98:## 3 bis. La fenêtre paie à toutes les capacités testées
+115:## 4. Le miroir de copie reste muet
+123:## Ce que ça change
+134:## Ce qui pourrait le rendre faux
+152:## 5. Le complément 2 048 « mêmes pas » — run interrompu, non mesuré
+159:## Fichiers
+## 5. Le complément 2 048 « mêmes pas » — run interrompu, non mesuré
+
+Le point 2 048 à **20 000 pas** (328 Mo, deux fois les octets du run 1 024 de référence) a été
+lancé le **03/11 vers 18 h 33** et **interrompu par le reboot à 19 h 33**, après **3 350 pas**
+(PPL de validation 2,694–2,731). **Aucun checkpoint n'a été écrit** : le point 2 048 à pas
+constants **reste non mesuré**.
+
+## Fichiers
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\ni = t.index(\"## 5. Le complément 2 048 « mêmes pas » — run interrompu, non mesuré\")\nj = t.index(\"## Fichiers\")\nneuf = \" … [2537 caractères tronqués]`
+
+  ```
+§5 réécrit avec les résultats
+json : 13 clés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\n# le verdict doit intégrer le complément\nvieux = \"\"\"> **2 048 ne la bat pas** (2,9630) : à budget d'octets fixé, doubl … [1728 caractères tronqués]`
+
+  ```
+verdict complété
+compteurs 635 728
+  T0 max : 4013 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 635 fiche(s) · 728 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**2 048 mesuré** : à octets constants il ne bat pas 1 024 (+0,05 à 128, +0,01 à 4 000), à pas constants il gagne ** … [2024 caractères tronqués]`
