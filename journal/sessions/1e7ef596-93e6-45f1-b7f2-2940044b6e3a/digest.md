@@ -24036,3 +24036,87 @@ pas   6050 · perte 0.9578 · PPL val 2.424 · 6183 s
 ⏵ Cycle 143 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h143.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h143.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [864 caractères tronqués]`
+
+  ```
+heure 20 h 02
+[s/v7 bccebf41] ÉTAT — HEURE 22 H 52 ; 2 048 : 2E MOITIÉ À 6 050 PAS ; B13 165/165, D 62
+ 7 files changed, 124 insertions(+), 14 deletions(-)
+bccebf41 ÉTAT — HEURE 22 H 52 ; 2 048 : 2E MOITIÉ À 6 050 PAS ; B13 165/165, D 62
+d838ecae ÉTAT — HEURE 22 H 47 ; 2 048 : 2E MOITIÉ À 5 900 PAS ; B13 165/165, D 62
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 143 : audit vert, seconde moitié du 2 048 à 6 050/10 000, heure 20 h 02
+
+**Cycle 143 — tout est vert.**
+
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 623 mots**, **T0 3 993 / 4 000** ✅.
+- **2 048** : la seconde moitié est à **6 050/10 000** (6 183 s, GPU1 à 100 %).
+- **B13 165/165**, D **restauré à 62 documents**, compteurs 627/720, sur **`s/v7`**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la seconde moitié du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 149
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 144/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 144 : instantané, audit et suivi de la seconde moitié du 2 048
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+bccebf41 ÉTAT — HEURE 22 H 52 ; 2 048 : 2E MOITIÉ À 6 050 PAS ; B13 165/165, D 62
+d838ecae ÉTAT — HEURE 22 H 47 ; 2 048 : 2E MOITIÉ À 5 900 PAS ; B13 165/165, D 62
+18b07b72 ÉTAT — HEURE 22 H 42 ; 2 048 : 2E MOITIÉ À 5 750 PAS ; B13 165/165, D 62
+b6190ea1 ÉTAT — HEURE 22 H 37 ; 2 048 : 2E MOITIÉ À 5 600 PAS ; B13 165/165, D 62
+74726568 ÉTAT — HEURE 22 H 32 ; 2 048 : 2E MOITIÉ À 5 450 PAS ; B13 165/165, D 62
+5f11c55e ÉTAT — HEURE 22 H 27 ; 2 048 : 2E MOITIÉ À 5 300 PAS ; B13 165/165, D 62
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 283 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 495 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 215 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au c
+… [481 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [345 caractères tronqués]`
+
+  ```
+revue de documentation · 627 fiche(s) · 720 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3993 mots (budget 4 000)
+  ✅ 3053 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---ROPE 2E ---
+pas   6150 · perte 0.9726 · PPL val 2.417 · 6285 s
+pas   6200 · perte 0.9573 · PPL val 2.422 · 6336 s
+0, 0 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 144 : audit vert ; je recale l'heure et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h144.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h144.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [864 caractères tronqués]`
