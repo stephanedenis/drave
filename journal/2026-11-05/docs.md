@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,22 +25,26 @@
 | 02:05 | `8dbff305` | ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES » | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 09:47 | `8f472d00` | PILOTAGE — B13 170/170 DÉCRIT PAR SES DEUX LECTURES ; RAPPORT DE SESSION NETTOYÉ ; PLAN ET JOURNAL À JOUR | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
 | 10:02 | `d8edd1d9` | B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+18) |
+| 10:09 | `f70a1b2a` | B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 
 ## Chiffres du jour
 
-`0,2260` · `0,6438`
+`0,7255` · `0,6000` · `0,2260` · `0,6438`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 66.1 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
 - `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 18.9 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 113.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 113.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` — — (début 2026-11-05 10:11, 0.0 h) → [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-pensee-classement.md](../../reports/rapport-pensee-classement.md)
+- [reports/rapport-pensee-conventions.md](../../reports/rapport-pensee-conventions.md)
 
 <!-- notes -->
 

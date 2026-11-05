@@ -39801,3 +39801,124 @@ retirée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\"; do eval \"$t\" >/tmp/cb 2>&1;  … [1085 caractères tronqués]`
+
+  ```
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+[still running after 60000ms; moved to background job bash-359]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-359", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-conventions.json
+ create mode 100644 reports/rapport-pensee-conventions.md
+COMMIT OK 1
+f70a1b2a B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172
+4
+jeu 05 nov 2026 10:11:37 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 8 : l'attachement nominal — l'antécédent du REL est-il le nom à gauche ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, re, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); stats=collections.Counter(); ex=[ … [1116 caractères tronqués]`
+
+  ```
+{'total': 62, 'gn_gauche': 32, 'tete_juste': 22}
+   ('r201', 'REL', 'homme', "L'homme", "L'homme")
+   ('r209', 'REL', 'élève', "L'élève", "L'élève")
+   ('r235', 'REL', 'endroit', "L'endroit", "L'endroit")
+   ('r263', 'REL', 'oiseau', "L'oiseau", "L'oiseau")
+   ('s012', 'SUB', 'écoute', 'étoile', 'cette douce étoile')
+   ('s030', 'SUB', 'cherche', 'lettre', 'les rapide lettre')
+   ('s052', 'SUB', 'ouvre', 'cuisine', 'cette ancienne cuisine')
+   ('s097', 'SUB', 'commence', 'chanson', 'ma chanson')
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); stats=collections.Counter(); ex=[]\nf … [822 caractères tronqués]`
+
+  ```
+{'total': 146, 'cible_elision': 6, 'juste': 0}
+  ('g003', 'GP', 'vu', "l'homme")
+  ('g014', 'GP', 'vu', "l'homme")
+  ('r201', 'REL', 'homme', "L'homme")
+  ('r209', 'REL', 'élève', "L'élève")
+  ('r235', 'REL', 'endroit', "L'endroit")
+  ('r263', 'REL', 'oiseau', "L'oiseau")
+  ```
+
+### 🤖 Assistant
+
+⏵ Test : REL → antécédent (nom à gauche, élision gérée) ; GP → verbe du GV. Je mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/bloc_94.py && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# helper : tête nominale (élision séparée)\nt=t.replace('''    @staticmethod\n    def _ … [2847 caractères tronqués]`
+
+  ```
+règle REL/GP posée
+exact 118 | top1 122 | topk 132
+verbe {'cibles': 51, 'justes': 48, 'taux': 0.9412} | nom {'cibles': 95, 'justes': 70, 'taux': 0.7368}
+  ```
+
+### 🤖 Assistant
+
+⏵ Exact **94 → 118** (0,8082 sur les spans), verbes 0,9412, noms 0,7368 — je fige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\na=evaluer_bloc('h', bl.Heuristique(), charger())['attach … [359 caractères tronqués]`
+
+  ```
+{'cibles': 239, 'labels': 146, 'top1': 122, 'topk': 132, 'exact': 118, 'top1_taux': 0.5105, 'topk_taux': 0.5523, 'exact_taux': 0.4937, 'top1_taux_span': 0.8356, 'topk_taux_span': 0.9041, 'exact_taux_span': 0.8082}
+tête {'cibles': 146, 'labels': 146, 'top1': 122, 'topk': 131, 'top1_taux': 0.8356, 'topk_taux': 0.8973, 'couverture': 1.0}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\n# T153\nt=t.replace('abs(r[\"top1_taux\"] - 0.477) < 0.001\\n            and abs(r[\"exact_taux\"] - 0.3933) < 0.001',\n            'abs(r … [3494 caractères tronqués]`
+
+  ```
+started background job bash-364
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-attachement-cible.md <<'MD'\n# B13 — l'attachement ciblé : l'exact passe de 0,6438 à 0,8082\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **1 … [4053 caractères tronqués]`
+
+  ```
+fiche + JSON écrits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T169** | une seule convention de cible ? | **non** : verbes 37/51 (0,7255), noms 57/95 (0,6000) | le go … [3019 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 172→173: 5
+docs/pilotage/chantiers.md 172→173: 6
+docs/pilotage/en-cours.md 172→173: 4
+README : ligne retirée
+  revue de documentation · 635 fiche(s) · 728 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; spans perdus : 48 REL, 33 SUB, 12 GP ; fiches [conventions]\", \" ; fiches [conventions]\")\np.write_text(t)\nPY\npython … [120 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **job_output** `{"job_id": "bash-364", "timeout_ms": 900000, "wait": true}`
+
+  ```
+portes ajustées, T170 ajoutée
+  ✅ T169 conventions       conventions : verbes 48/51 (0.9412), noms 70/95 (0.7368)
+  ✅ T170 attachement ciblé ciblé : REL « homme » homme, GP « joue » joue
+  173/173 portes tenues
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [1207 caractères tronqués]`

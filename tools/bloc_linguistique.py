@@ -592,6 +592,13 @@ class Heuristique:
             return {}
 
     @staticmethod
+    def _tete_nom(texte: str, debut: int, fin: int) -> str | None:
+        """La tête nominale d'un span : le dernier mot, **élision séparée** (`L'homme` → `homme`)."""
+        mots = re.findall(r"\b[ldmtsnLDMTNS]['’](?=\w)|[\wÀ-ÿ]+(?:['’\-][\wÀ-ÿ]+)*",
+                          texte[debut:fin])
+        return mots[-1] if mots else None
+
+    @staticmethod
     def _verbe_dans(texte: str, debut: int, fin: int,
                     verbes: list[tuple[int, int, str]] | None = None,
                     strict: bool = False) -> str | None:
@@ -800,7 +807,16 @@ class Heuristique:
                     brute = (att.get("cible") if att.get("segment") == s.get("texte")
                              else cibles_s.get((s.get("debut"), s.get("fin"), s.get("type"))))
                     cible = None
-                    if brute:
+                    if s.get("type") in ("REL", "SUB"):
+                        # le relatif/subordonné se rattache au **nom à gauche** (son antécédent)
+                        gns = [x for x in c.get("segments", []) if x.get("type") == "GN"
+                               and x.get("fin", 0) <= s.get("debut", 0)]
+                        if gns:
+                            g = max(gns, key=lambda x: x["fin"])
+                            cible = self._tete_nom(texte, g["debut"], g["fin"])
+                    if not cible and s.get("type") == "GP":
+                        cible = self._cible_proche(texte, s, gvs, verbes)
+                    if not cible and brute:
                         i = texte.find(brute)
                         if i >= 0:
                             cible = self._verbe_dans(texte, i, i + len(brute), verbes)

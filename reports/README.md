@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-attachement-cible.md`](rapport-pensee-attachement-cible.md) | **B13** — l'attachement ciblé : exact 0,6438 → **0,8082**, **173/173** |
 | [`rapport-pensee-conventions.md`](rapport-pensee-conventions.md) | **B13** — les deux conventions du gold : verbes 0,7255, noms 0,6000, **172/172** |
 | [`rapport-pensee-classement.md`](rapport-pensee-classement.md) | **B13** — le classement : exact 0,2260 → **0,6438**, **171/171** |
 | [`rapport-pensee-denominateur.md`](rapport-pensee-denominateur.md) | **B13** — le dénominateur : rendement 0,1381 vs exactitude spans **0,2260**, **170/170** |
@@ -149,7 +150,6 @@
 | [`rapport-sous-familles-autres.md`](rapport-sous-familles-autres.md) | **C3.2e** — sous-familles des autres familles : uralic 46,7→100 %, benue 88 %, austro 60,3 %, afro ouest 53,5 % |
 | [`rapport-ie-sous-familles.md`](rapport-ie-sous-familles.md) | **C3.2d** — sous-familles IE : 54,6–100 % ; l'IE à 14,7 % est un effet de composition |
 | [`rapport-familles-9.md`](rapport-familles-9.md) | **C3.2c** — 9 familles : 7/9 > 30 %, moyenne 69,5 %, contrôle 0 ; indo-européen 14,7 %, uralic 46,7 % |
-| [`rapport-routeur-confiance.md`](rapport-routeur-confiance.md) | **B24** — routeur confiance : typo 63,7 % (+7,5), espaces 34,2 % (−7,5), oracle 79,45 % |
 
 ## Les données brutes
 

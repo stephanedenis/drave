@@ -1,0 +1,36 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "173/173",
+ "gold": 612,
+ "cibles": 239,
+ "labels": 146,
+ "avant": {
+  "exact": 94,
+  "exact_span": 0.6438,
+  "top1": 114,
+  "top1_span": 0.7808,
+  "verbe": 0.7255,
+  "nom": 0.6
+ },
+ "apres": {
+  "exact": 118,
+  "exact_span": 0.8082,
+  "top1": 122,
+  "top1_span": 0.8356,
+  "verbe": 0.9412,
+  "nom": 0.7368
+ },
+ "rendement": {
+  "top1": 0.5105,
+  "topk": 0.5523,
+  "exact": 0.4937
+ },
+ "regle": "REL/SUB → antécédent (tête du GN à gauche, élision séparée) ; GP → verbe du GV",
+ "limites": [
+  "28 échecs non qualifiés",
+  "convention non documentée",
+  "top-k lenient",
+  "gold 612"
+ ]
+}

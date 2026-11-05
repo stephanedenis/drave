@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 47.3 h |
-| Tours | 8 |
-| Messages | 839 |
-| Appels d'outils | 775 |
+| Durée | 66.1 h |
+| Tours | 9 |
+| Messages | 843 |
+| Appels d'outils | 778 |
 | Fichiers touchés | 27 |
-| Commandes | 571 |
+| Commandes | 573 |
 | Sous-agents | 0 |
 | Commits | 35 |
 | Compactages de contexte | 0 |
@@ -43,6 +43,8 @@
 **Tour 7** — <goal_round> Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identi … [912 caractères tronqués]
 
 **Tour 8** — reprends
+
+**Tour 9** — où en est-on?
 
 ## 2. Déroulé, étape par étape
 
@@ -314,6 +316,18 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 **En vol** : le complément **2 048** en deux segments de 10 000 pas (checkpoint à chaque segment, pour survivre aux reboots) — sortie ~18 h 20 puis ~21 h 10. C'est le dernier item de l'o
 … [191 caractères tronqués]
 
+### Tour 9 — où en est-on?
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check 2048 run and repo state
+- bash — Evaluate both 2048 checkpoints
+- job_output
+
+**Synthèse produite :**
+
+⏵ Les deux moitiés du 2 048 ont fini le 04/11 ; je les évalue maintenant
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -390,7 +404,7 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 531 autres
+- … et 533 autres
 
 ## 4. Mesures et résultats marquants
 

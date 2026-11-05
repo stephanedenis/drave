@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 113.5 h |
+| Durée | 113.6 h |
 | Tours | 175 |
-| Messages | 2273 |
-| Appels d'outils | 1977 |
+| Messages | 2283 |
+| Appels d'outils | 1988 |
 | Fichiers touchés | 25 |
-| Commandes | 1631 |
+| Commandes | 1640 |
 | Sous-agents | 2 |
-| Commits | 238 |
+| Commits | 239 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9369,7 +9369,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*100 appels d'outils.* Actions notables :
+*111 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9385,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 68 autres
+- … et 76 autres
 
 **Synthèse produite :**
 
-⏵ Round 7 : scinder la mesure par nature de cible (verbe vs nom) — la convention du gold
+⏵ Exact **94 → 118** (0,8082 sur les spans), verbes 0,9412, noms 0,7368 — je fige
 
 ## 3. Travail accompli
 
@@ -9470,7 +9470,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1591 autres
+- … et 1600 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9856,4 +9856,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PILOTAGE — B13 170/170 DÉCRIT PAR SES DEUX LECTURES ; RAPPORT DE SESSION NETTOYÉ ; PLAN ET JOURNAL À JOUR" -- docs/pilotage/roadmap.md docs/pilotage/en-cours.md
 - B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171" -- tools/bloc_linguistique
 - B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172" -- tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py 
+- B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173" -- tools/bloc_linguistique.py tools/pensee/autotest.p
 

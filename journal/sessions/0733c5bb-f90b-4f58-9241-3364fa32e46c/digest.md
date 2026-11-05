@@ -11074,3 +11074,50 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 
 **Portes** : revue verte, T0 à 3 989, état frais et cohérent, journal vert, 623 fiches / 717 JSON. GPU 0 libre, GPU 1 au 2 048. Objectif laissé **actif** pour le dernier complément.
 
+
+## Tour 9
+
+### 👤 Utilisateur
+
+où en est-on?
+
+### 🤖 Assistant
+
+⏵ Point de situation : runs, dépôt, état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M'; echo \"=== 2 048 ===\"; cat work/n2ac/prod2048_2x10k.out 2>/dev/null; ls work/n2ac/rope2048-10k.pt work/n2ac/rope2048-20k.pt 2>/dev/null; tail -c 60 work/n2ac/rope2048-10k.log 2>/dev/null; echo \"=== GPU ===\"; nvidia-smi --que … [162 caractères tronqués]`
+
+  ```
+2026-11-05 10:11
+=== 2 048 ===
+rope2048-10k fini 18:18:06
+rope2048-20k fini 21:09:19
+work/n2ac/rope2048-10k.pt
+work/n2ac/rope2048-20k.pt
+c0eb68277fcebd5bb0f4da69",
+ "duree_s": 10224.105374336243
+}
+=== GPU ===
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+=== git ===
+f70a1b2a B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172
+d8edd1d9 B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD MÊLE DEUX CONVENTIONS (51 VERBES, 95 NOMS) ; 171/171
+8f472d00 PILOTAGE — B13 170/170 DÉCRIT PAR SES DEUX LECTURES ; RAPPORT DE SESSION NETTOYÉ ; PLAN ET JOURNAL À JOUR
+f8f5bc04 B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170
+13e8bb2d B13 — LES SPANS PERDUS : 48 REL, 33 SUB, 12 GP (81 CHEZ S) ; LE GP EST BORNÉ AU VERBE ; 169/169
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux moitiés du 2 048 ont fini le 04/11 ; je les évalue maintenant
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in rope2048-10k rope2048-20k; do echo \"=== $m ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/$m.pt --rope --longueurs 128,256,512,1000,2000,4000 --sortie work/n2ac/eval-$m.json 2>&1 | grep … [136 caractères tronqués]`
+
+  ```
+=== rope2048-10k ===
+[still running after 60000ms; moved to background job bash-76]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-76", "timeout_ms": 400000, "wait": true}`
