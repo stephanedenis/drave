@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 18.1 h |
-| Tours | 262 |
-| Messages | 1453 |
-| Appels d'outils | 1456 |
+| Tours | 263 |
+| Messages | 1457 |
+| Appels d'outils | 1459 |
 | Fichiers touchés | 15 |
-| Commandes | 1268 |
+| Commandes | 1271 |
 | Sous-agents | 0 |
-| Commits | 283 |
+| Commits | 284 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -547,6 +547,8 @@
 **Tour 261** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 262** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 263** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6468,7 +6470,27 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 257 : porte-pont verte (99 s), préchargement en cours ; je commit
+⏵ Cycle 257 : porte-pont verte (99 s), passe à 67 journaux, préchargement en cours
+
+**Cycle 257 — le pont est tenu.**
+
+- **Passe** : **67 journaux** — `porte-pont` **verte en 99 s** (448 fibres : +2,81 % ; 392 : +25,35 % — la marche est entre les deux) ; `porte-prechargement` tourne. Rouges : les **deux tolérées** + la **rouge de banc corrigée**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 617 mots**, **T0 3 987 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : finir la passe (≈15 portes), mettre à jour les références, puis décider d'une passe propre de confirmation.
+
+### Tour 263 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 258 : préchargement verte (214 s), profondeur-routée en cours ; je commit
 
 ## 3. Travail accompli
 
@@ -6534,7 +6556,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1228 autres
+- … et 1231 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6965,4 +6987,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 25 ; PASSE 65 JOURNAUX, POIDS-CREUX TOURNE (4 MIN)" -m "porte-ocr (58 s) et porte-ocr-scans (529 s) sont vertes ; porte-poids-creux tourne dep
 - ÉTAT — HEURE 01 H 27 ; POIDS-CREUX VERTE (376 S), PORTE-PONT TOURNE ; 66 JOURNAUX" -m "Le noyau creux est exact et paie la sparsité (paires divisées) : la porte
 - ÉTAT — HEURE 01 H 30 ; PORTE-PONT VERTE (99 S), PRÉCHARGEMENT EN COURS ; 67 JOURNAUX" -m "Le pont est tenu en 99 s (448 fibres +2,81 %, 392 fibres +25,35 %, la 
+- ÉTAT — HEURE 01 H 33 ; PRÉCHARGEMENT VERTE (214 S), PROFONDEUR-ROUTÉE EN COURS ; 68 JOURNAUX" -m "La porte du préchargement est tenue en 214 s ; la passe est à 
 
