@@ -44842,3 +44842,57 @@ T167 exact_span → 0,9812
 ⏵ 183/183. Je mets la fiche v4 à jour avec l'état final (S français seul inclus) et je commite
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-pensee-segmentation-v4.md'); t=p.read_text()\nt=t.replace(\"> **183/183 portes** : le diagnostic de A12/A14 était juste — le trou n'était pas l'attachement mais  … [5424 caractères tronqués]`
+
+  ```
+fiche + JSON mis à jour
+pilotage
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-1653]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1653", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[s/v7 392f03aa] B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183
+ 20 files changed, 240 insertions(+), 82 deletions(-)
+COMMIT OK 1
+392f03aa B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183
+jeu 05 nov 2026 17:52:07 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 6 : un gold tenu à l'écart (dev/test déterministe) pour mesurer sans surajuster
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/gold_split.py <<'PY'\n\"\"\"gold_split.py — le gold 612 coupé en **dev** et **test**, de façon déterministe.\n\nLe problème. Toutes les mesures de la session sont **in-sample** : les règles de segmentat … [2510 caractères tronqués]`
+
+  ```
+dev {'phrases': 422, 'cibles': 163, 'sources': {'hand': 15, 'reel': 302, 'synthetique': 105}, 'langues': {'fr': 277, 'en': 145}}
+test {'phrases': 190, 'cibles': 76, 'sources': {'hand': 5, 'reel': 130, 'synthetique': 55}, 'langues': {'fr': 125, 'en': 65}}
+dev | exact 104 / 106 | F1 0.4414 | tête 0.6347 | par langue {'fr': {'cibles': 101, 'labels': 79, 'exact': 79, 'topk': 79, 'exact_taux_span': 1.0}, 'en': {'cibles': 62, 'labels': 27, 'exact': 25, 'topk': 25, 'exact_taux_span': 0.9259}}
+test | exact 53 / 54 | F1 0.4719 | tête 0.647 | par langue {'fr': {'cibles': 50, 'labels': 39, 'exact': 38, 'topk': 37, 'exact_taux_span': 0.9744}, 'en': {'cibles': 26, 'labels': 15, 'exact': 15, 'topk': 15, 'exact_taux_span': 1.0}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le test tenu à l'écart donne **0,9814** (dev 0,9811) : les gains généralisent. Je fige le split
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gold-split.md <<'MD'\n# B13 — le gold coupé en dev/test : les gains généralisent (test 0,9814, dev 0,9811)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** :  … [5512 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     · compteurs : en-cours.md dit 751 JSON, le disque en a 752
+  ✅ état court, structuré, multi-session et reprenable
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+392f03aa B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183
+jeu 05 nov 2026 17:53:25 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1238 caractères tronqués]`

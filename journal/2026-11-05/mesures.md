@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (21)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -28,10 +28,11 @@
 | 16:24 | `841e0e71` | B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 | 16:27 | `b12616c3` | THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis) | `en-cours.md`, `modele-natif.md`, `README.md` (+6) |
 | 17:27 | `cceacc1a` | B13 — LA SEGMENTATION D'ABORD : F1 0,2862 → 0,4194, EXACT 158/160 (0,9875), COUVERTURE 160/239, FR 0,9915 / EN 0,9762 ; 183/183 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
+| 17:50 | `392f03aa` | B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 
 ## Chiffres du jour
 
-`0,2862` · `0,4194` · `0,9875` · `0,9915` · `0,9762` · `0,9658` · `1,000` · `×11,0` · `0,9448` · `0,9724` · `×139` · `×1`
+`0,4194` · `0,4539` · `0,6432` · `0,9915` · `0,9524` · `0,2862` · `0,9875` · `0,9762` · `0,9658` · `1,000` · `×11,0` · `0,9448`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

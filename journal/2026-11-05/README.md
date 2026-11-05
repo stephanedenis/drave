@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**88 commits** · **19 session(s)** · **8 thème(s)**
+**89 commits** · **19 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 12 | [distribue.md](distribue.md) |
 | docs | 32 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 20 | [mesures.md](mesures.md) |
+| mesures | 21 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -136,6 +136,7 @@
 | 16:32 | `704f00d7` | ÉTAT — TRIM T0 (3 997) ; B13 183/183 |
 | 16:35 | `ad4ecca3` | ÉTAT — T0 À 4 000 ; LE PROTOTYPE DES REPLIS (A10) ENTRE AVEC SON STATUT « NON INTÉGRÉ » |
 | 17:27 | `cceacc1a` | B13 — LA SEGMENTATION D'ABORD : F1 0,2862 → 0,4194, EXACT 158/160 (0,9875), COUVERTURE 160/239, FR 0,9915 / EN 0,9762 ; 183/183 |
+| 17:50 | `392f03aa` | B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 

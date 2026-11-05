@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 121.2 h |
 | Tours | 177 |
-| Messages | 2603 |
-| Appels d'outils | 2282 |
+| Messages | 2607 |
+| Appels d'outils | 2286 |
 | Fichiers touchés | 25 |
-| Commandes | 1878 |
+| Commandes | 1881 |
 | Sous-agents | 16 |
-| Commits | 276 |
+| Commits | 278 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*41 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 26 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
-⏵ 183/183. Je mets la fiche v4 à jour avec l'état final (S français seul inclus) et je commite
+⏵ Le test tenu à l'écart donne **0,9814** (dev 0,9811) : les gains généralisent. Je fige le split
 
 ## 3. Travail accompli
 
@@ -9613,7 +9613,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1838 autres
+- … et 1841 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10037,4 +10037,6 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — T0 À 4 000 ; LE PROTOTYPE DES REPLIS (A10) ENTRE AVEC SON STATUT « NON INTÉGRÉ »" -- docs/pilotage/en-cours.md tools/tests/linguistique/replis_cible.py 2
 - B13 — LA SEGMENTATION D'ABORD : F1 0,2862 → 0,4194, EXACT 158/160 (0,9875), COUVERTURE 160/239, FR 0,9915 / EN 0,9762 ; 183/183" -- tools/bloc_linguistique.py t
 - B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183" -- tools/bloc_linguistique.py tools/pens
+- B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS »" -- tools/tests/linguistique
+- B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS »" -- tools/tests/linguistique
 

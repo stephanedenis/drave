@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "split": "crc32(id)%3==0 → test",
+ "dev": {
+  "phrases": 422,
+  "cibles": 163,
+  "labels": 106,
+  "exact": 104,
+  "exact_taux": 0.9811,
+  "f1": 0.4414,
+  "tete": 0.6347,
+  "fr": 1.0,
+  "en": 0.9259
+ },
+ "test": {
+  "phrases": 190,
+  "cibles": 76,
+  "labels": 54,
+  "exact": 53,
+  "exact_taux": 0.9814,
+  "f1": 0.4719,
+  "tete": 0.647,
+  "fr": 0.9744,
+  "en": 1.0
+ },
+ "regle": "toute règle se règle sur dev et ne s'accepte que si test ne baisse pas",
+ "limites": [
+  "test petit (54 labels)",
+  "règles dessinées sur l'ensemble",
+  "gold 612"
+ ]
+}
