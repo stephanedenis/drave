@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (209)
+## Commits du jour (210)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -217,6 +217,7 @@
 | 23:19 | `b513911b` | ÉTAT — N2 PASSE EN PAUSE (SESSION ET CHANTIER) ; RUN FINI ; HEURE 04 H 57 | `en-cours.md`, `README.md`, `apprentissage.md` (+10) |
 | 23:22 | `b3cfbe1f` | ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02 | `en-cours.md`, `README.md`, `apprentissage.md` (+10) |
 | 23:38 | `fb90bf5f` | CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40 | `chantiers.md`, `en-cours.md`, `README.md` (+5) |
+| 23:46 | `5ee22829` | ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
 
 ## Chiffres du jour
 

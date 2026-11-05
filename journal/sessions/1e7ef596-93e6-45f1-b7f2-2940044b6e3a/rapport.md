@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 16.4 h |
-| Tours | 230 |
-| Messages | 1295 |
-| Appels d'outils | 1328 |
+| Tours | 231 |
+| Messages | 1301 |
+| Appels d'outils | 1334 |
 | Fichiers touchés | 15 |
-| Commandes | 1141 |
+| Commandes | 1147 |
 | Sous-agents | 0 |
-| Commits | 250 |
+| Commits | 251 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -483,6 +483,8 @@
 **Tour 229** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 230** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 231** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5716,7 +5718,31 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 225 : corpus D vérifié (tailles et doublons nuls) ; je commit l'état
+⏵ Cycle 225 : passe en cours (10/83), corpus D re-vérifié, portes vertes
+
+**Cycle 225 — la passe avance, le corpus D tient ses chiffres.**
+
+- **Passe complète** : **10 portes sur 83** franches (dont `porte-adaptateur-sortie` 77 s, `porte-bloc-tableaux`, `porte-budget`), aucune rouge pour l'instant ; elle tourne toujours en arrière-plan.
+- **Corpus D re-vérifié sur disque** : tailles exactes (**4 440 987 / 12 536 / 10 524** octets) et **aucune fenêtre dupliquée** (8 Ko : 0, 500 o : 0) — l'état dit vrai.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 073 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 605 mots**, **T0 3 975 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'à son verdict, puis les faits B13/S.
+
+### Tour 231 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Get titles and check README absence
+- bash — Find L rows and OCR anchor
+- bash — Add two rows and verify links
+- bash — Commit README additions and state
+
+**Synthèse produite :**
+
+⏵ Cycle 226 : je commit le README (les deux dernières fiches) et l'état
 
 ## 3. Travail accompli
 
@@ -5782,7 +5808,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1101 autres
+- … et 1107 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5910,7 +5936,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-17 sorties en erreur ou divergentes. Les premières :
+18 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -6180,4 +6206,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40" -m "Le bloc État de chantiers.md portait 13 h alors que son contenu (B13 166/166, 127 échecs) a été m
 - PASSE COMPLÈTE LANCÉE À 23 H 45 (83 PORTES) ; ÉTAT À JOUR ; HEURE 23 H 45" -m "Les sept contrôles de documentation sont verts et aucune passe ne tournait : la p
 - ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ" -m "Les tailles du corpus propre sont exactes (4 440 987 / 12 536 / 10 524 octets) et les fe
+- REPORTS/README — OCR PDF RESTANTS ET FUSION RÉPARÉE ENTRENT ; PASSE 11/83 ; HEURE 23 H 52" -m "Les deux dernières fiches récentes absentes du tableau des fiches
 

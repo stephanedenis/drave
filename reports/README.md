@@ -27,6 +27,8 @@
 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
 | [`rapport-n2-distillation-native.md`](rapport-n2-distillation-native.md) | **N2** — l'erratum de la distillation : rien à parité stricte (−0,03/−0,01/−0,004), +0,14–0,18 = repondération ; la paire propre paie −0,06 |
 | [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train ; le corpus propre reste à **62 documents** |
+| [`rapport-ocr-pdf-restants.md`](rapport-ocr-pdf-restants.md) | **D** — les 8 `.PDF` restants : 4 documents, 49 pages, 3 doublons — la limite est mesurée |
+| [`rapport-pensee-fusion-reparee.md`](rapport-pensee-fusion-reparee.md) | **L** — la fusion réparée : par niveau (neuronal POS/syntagmes, heuristique pragmatique) — 0,9309 / 0,8226 / 0,8784 / 0,9954, le maximum des deux |
 | [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats |
 | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |

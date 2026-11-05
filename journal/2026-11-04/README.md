@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**257 commits** · **6 session(s)** · **8 thème(s)**
+**258 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 209 | [docs.md](docs.md) |
+| docs | 210 | [docs.md](docs.md) |
 | mesures | 26 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -292,6 +292,7 @@
 | 23:35 | `02c34ad4` | REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 23 H 35 |
 | 23:38 | `fb90bf5f` | CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40 |
 | 23:43 | `1d779118` | PASSE COMPLÈTE LANCÉE À 23 H 45 (83 PORTES) ; ÉTAT À JOUR ; HEURE 23 H 45 |
+| 23:46 | `5ee22829` | ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ |
 
 ## Le récit de la journée (écrit à la main)
 

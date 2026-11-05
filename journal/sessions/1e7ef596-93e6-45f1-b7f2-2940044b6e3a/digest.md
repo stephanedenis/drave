@@ -32067,3 +32067,124 @@ test taille 10524 dup8k 0 dup500 0
 ⏵ Cycle 225 : corpus D vérifié (tailles et doublons nuls) ; je commit l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h225.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h225.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [981 caractères tronqués]`
+
+  ```
+heure 23 h 46
+[s/v7 5ee22829] ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ
+ 14 files changed, 150 insertions(+), 24 deletions(-)
+5ee22829 ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ
+1d779118 PASSE COMPLÈTE LANCÉE À 23 H 45 (83 PORTES) ; ÉTAT À JOUR ; HEURE 23 H 45
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          55 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+10
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 225 : passe en cours (10/83), corpus D re-vérifié, portes vertes
+
+**Cycle 225 — la passe avance, le corpus D tient ses chiffres.**
+
+- **Passe complète** : **10 portes sur 83** franches (dont `porte-adaptateur-sortie` 77 s, `porte-bloc-tableaux`, `porte-budget`), aucune rouge pour l'instant ; elle tourne toujours en arrière-plan.
+- **Corpus D re-vérifié sur disque** : tailles exactes (**4 440 987 / 12 536 / 10 524** octets) et **aucune fenêtre dupliquée** (8 Ko : 0, 500 o : 0) — l'état dit vrai.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 073 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 605 mots**, **T0 3 975 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'à son verdict, puis les faits B13/S.
+
+
+## Tour 231
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 226/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 226 : audit, suivi de la passe, et deux fiches encore absentes du README
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+5ee22829 ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ
+1d779118 PASSE COMPLÈTE LANCÉE À 23 H 45 (83 PORTES) ; ÉTAT À JOUR ; HEURE 23 H 45
+fb90bf5f CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 507 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 719 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 439 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2047 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    aeafe951-9c3d-4bb5 · en pause · 454 min
+… [215 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [377 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1605 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3975 mots (budget 4 000)
+  ✅ 3073 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+--- PASSE ---
+9
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          55 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -E \"ocr-pdf-restants|fusion-reparee\" reports/INDEX.md ; grep -c \"rapport-ocr-pdf-restants\\|rapport-pensee-fusion-reparee\" reports/README.md", "description": "Get titles and check README absence"}`
+
+  ```
+| [rapport-ocr-pdf-restants.md](rapport-ocr-pdf-restants.md) | D — les 8 `.PDF` restants : 4 documents, 49 pages, 3 doublons — la limite est mesurée |
+| [rapport-pensee-fusion-reparee.md](rapport-pensee-fusion-reparee.md) | L — la fusion réparée : par niveau (neuronal POS/syntagmes, heuristique pragmatique) — 0,9309 / 0,8226 / 0,8784 / 0,9954, le maximum des deux |
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 226 : j'ajoute les deux dernières fiches au README (OCR PDF restants, fusion réparée)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"\\*\\*L\\*\\*\" reports/README.md | head -3 ; grep -n \"rapport-ocr-cegep-64\" reports/README.md", "description": "Find L rows and OCR anchor"}`
+
+  ```
+29:| [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train ; le corpus propre reste à **62 documents** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 226 : insertion des deux lignes et vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\na=\"| [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublo … [810 caractères tronqués]`
+
+  ```
+deux lignes ajoutées
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+11
+  porte-bus              ✅                          92 s    ✅ le canal diffusé par fichier change la région du milieu
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 226 : je commit le README (les deux dernières fiches) et l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h226.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h226.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [950 caractères tronqués]`
