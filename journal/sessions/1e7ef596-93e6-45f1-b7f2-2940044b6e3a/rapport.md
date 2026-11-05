@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 16.8 h |
-| Tours | 238 |
-| Messages | 1331 |
-| Appels d'outils | 1358 |
+| Tours | 239 |
+| Messages | 1336 |
+| Appels d'outils | 1362 |
 | Fichiers touchés | 15 |
-| Commandes | 1171 |
+| Commandes | 1175 |
 | Sous-agents | 0 |
-| Commits | 258 |
+| Commits | 259 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -499,6 +499,8 @@
 **Tour 237** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 238** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 239** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5905,7 +5907,29 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 233 : j'inscris l'avancement (27/83, 0 rouge) dans l'état et commit
+⏵ Cycle 233 : passe à 27/83 (gain 273 s, 0 rouge), l'état suit l'avancement
+
+**Cycle 233 — l'état porte maintenant l'avancement de la passe.**
+
+- **Passe complète** : **27 / 83**, aucune rouge — `porte-gain` tenue en 273 s (drapeau vivant mais conditionnel : 0 casse, 24 améliorent).
+- **État** : la clause de la passe dit désormais « **27 franches, 0 rouge** » ; **T0 3 980 / 4 000** ✅, `en-cours` **1 611 mots**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict (≈56 portes restantes, dont les longues), puis les faits B13/S.
+
+### Tour 239 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Check actual pass launch time
+- bash — Fix pass start time and commit
+
+**Synthèse produite :**
+
+⏵ Cycle 234 : la passe a démarré à 23 h 43, pas 23 h 45 ; je corrige et commit
 
 ## 3. Travail accompli
 
@@ -5971,7 +5995,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1131 autres
+- … et 1135 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6377,4 +6401,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 00 H 09 ; PASSE 24/83, ZÉRO ROUGE ; PORTE-ÉTAT VERTE" -m "La passe a franchi épisodique (229 s) et état (0 s : aucun fait commité après le dernier 
 - ÉTAT — HEURE 00 H 12 ; PASSE 26/83, ZÉRO ROUGE ; FLUX ET FUSION VERTES" -m "La passe a franchi flux (29 s, mode 4) et fusion (9 s, v1 refusée code 2). Toujours 
 - ÉTAT — PASSE 27/83 (GAIN 273 S), ZÉRO ROUGE ; L'AVANCEMENT EST DANS L'ÉTAT ; HEURE 00 H 15" -m "La clause de la passe porte désormais son avancement (27 franche
+- ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18" -m "Le nom du dossier disait 23 h 45, le fichier .debut et le premier journa
 

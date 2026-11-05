@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**3 commits** · **1 session(s)** · **3 thème(s)**
+**4 commits** · **1 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 1 | [docs.md](docs.md) |
+| docs | 2 | [docs.md](docs.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -28,6 +28,7 @@
 | 00:02 | `fa3a112c` | ÉTAT — NOUS SOMMES LE 05/11, 00 H 02 HNE ; PASSE 22/83 |
 | 00:05 | `9c40151d` | ÉTAT — HEURE 00 H 09 ; PASSE 24/83, ZÉRO ROUGE ; PORTE-ÉTAT VERTE |
 | 00:08 | `ef59244c` | ÉTAT — HEURE 00 H 12 ; PASSE 26/83, ZÉRO ROUGE ; FLUX ET FUSION VERTES |
+| 00:11 | `58e3e05d` | ÉTAT — PASSE 27/83 (GAIN 273 S), ZÉRO ROUGE ; L'AVANCEMENT EST DANS L'ÉTAT ; HEURE 00 H 15 |
 
 ## Le récit de la journée (écrit à la main)
 
