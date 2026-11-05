@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 18.6 h |
-| Tours | 271 |
-| Messages | 1498 |
-| Appels d'outils | 1492 |
+| Tours | 272 |
+| Messages | 1503 |
+| Appels d'outils | 1496 |
 | Fichiers touchés | 15 |
-| Commandes | 1304 |
+| Commandes | 1308 |
 | Sous-agents | 0 |
-| Commits | 292 |
+| Commits | 293 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -565,6 +565,8 @@
 **Tour 270** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 271** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 272** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6681,7 +6683,30 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 266 : dernière porte = vision ; je mesure son écoulé et commit l'état
+⏵ Cycle 266 : vision (dernière porte) tourne à 4 min, heartbeat du hub à jour
+
+**Cycle 266 — la 83e porte est la dernière.**
+
+- **Passe** : **82 verdicts** au registre ; la dernière, **`porte-vision`**, tourne depuis ~5 min (mmproj-Qwen2-VL-2B, premier test passé : un modèle sans tour de vision est refusé en le disant).
+- **Rouges** : `indice` et `melange` **tolérées** ; `lecteur` **corrigée** ; `sessions` **de coordination** (heartbeat de e181ce02).
+- **Heartbeats** : le hub (1e7ef596) est à jour ; `sessions.py --check` ne signale plus que **e181ce02**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : attendre le verdict de vision, puis mettre à jour les **références de non-régression** avec les quatre rouges catégorisées et statuer sur la confirmation.
+
+### Tour 272 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and read pass verdict
+- bash — Check vision gate progress
+- bash — Check vision child and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 267 : vision à 7 min, sous sa borne ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6747,7 +6772,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1264 autres
+- … et 1268 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7187,4 +7212,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 54 ; PASSE 76 JOURNAUX : REGISTRE, REPARTI-MOTEUR ET RESSOURCES VERTES" -m "Trois portes de plus sans rouge : région absente refusée en la nom
 - PASSE 83/83 JOURNAUX ; PORTE-SESSIONS ROUGE PAR LE HEARTBEAT DE e181ce02 ; HEURE 01 H 58" -m "Le harnais a lancé les 83 portes. porte-sessions rend 1 : le heart
 - ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR" -m "Le registre compte 82 verdicts : indice, lecteur, melange et ses
+- ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE" -m "La dernière porte calcule encore, sous la borne de 30 min ; le premier 
 
