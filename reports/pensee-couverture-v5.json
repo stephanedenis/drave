@@ -17,28 +17,30 @@
  },
  "apres": {
   "labels": 187,
-  "exact": 185,
-  "exact_span": 0.9893,
-  "topk": 160,
+  "exact": 186,
+  "exact_span": 0.9947,
+  "topk": 161,
   "couverture": 0.7824,
   "f1": 0.5156,
-  "f1_s": 0.4577,
-  "f1_chunker": 0.5341,
+  "f1_s": 0.4582,
+  "f1_chunker": 0.5351,
   "tete": 0.6826,
   "fr": 0.9921,
-  "en": 0.9833,
+  "en": 1.0,
   "spans": {
    "REL": 24,
    "SUB": 12,
    "GP": 16,
    "total": 52
   },
-  "echecs_cible": 27
+  "echecs_cible": 1,
+  "topk_taux": 0.6736,
+  "candidats_manquants": 26
  },
  "dev": {
-  "exact": 125,
+  "exact": 126,
   "labels": 126,
-  "f1": 0.5079,
+  "f1": 0.5091,
   "couverture": 0.773
  },
  "test": {
@@ -53,7 +55,8 @@
   "POS VERB dans le chunker",
   "déterminants élidés",
   "prépositions anglaises + live",
-  "segment précédent dans l'union et le chunker"
+  "segment précédent dans l'union et le chunker",
+  "candidats du précédent (antécédent REL, verbe SUB)"
  ],
  "limites": [
   "52 spans",

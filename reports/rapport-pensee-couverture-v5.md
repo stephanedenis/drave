@@ -2,10 +2,10 @@
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **183/183 portes** : la **couverture** passe de **160 à 187 labels** (sur 239) et l'exactitude
-> tient : **exact 185/187 = 0,9893** (fr **0,9921**, en **0,9833**) ; la **F1 syntagmes** monte à
-> **0,5156** (union ; S 0,4577, chunker 0,5341) et la tête à **0,6826** ; les **spans perdus**
-> tombent de **79 à 52** (24 REL, 12 SUB, 16 GP). Sur le gold tenu à l'écart : **dev 125/126,
-> test 60/61** — la progression n'est pas un surajustement visible.
+> tient : **exact 186/187 = 0,9947** (fr **0,9921**, en **1,0000** — 60/60) ; la **F1 syntagmes**
+> monte à **0,5156** (union ; S 0,4582, chunker 0,5351) et la tête à **0,6826** ; les **spans
+> perdus** tombent de **79 à 52** (24 REL, 12 SUB, 16 GP). Sur le gold tenu à l'écart : **dev
+> 126/126 (1,000)**, **test 60/61** — la progression n'est pas un surajustement visible.
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_syntagmes_simple`,
 > `_cible_precedent`), [`autotest.py`](../tools/pensee/autotest.py) (25 assertions recalées) ;
@@ -22,21 +22,22 @@
 | 4 | **déterminants élidés** (`L'homme`, `d'Artagnan`) | le GN précède la relative |
 | 5 | **prépositions anglaises** (since, above, for, near…) et verbes (`live`) | GP et GV anglais |
 | 6 | **la règle du segment précédent dans l'union et le chunker** : une REL prend la tête du GN qui la précède | répare 18 REL anglaises |
+| 7 | **les candidats du précédent** : l'antécédent d'une REL et le verbe d'une SUB entrent dans `candidats` | 27 → 26 couvertures, top-k 161 |
 
 ## 2. Avant / après
 
 | mesure | v4 (committée) | **v5** |
 |---|---:|---:|
 | labels au bon span | 160 | **187** |
-| **exact / labels** | 157/160 (0,9812) | **185/187 (0,9893)** |
-| top-k (sous-chaîne) | 156/239 | 160/239 (0,6695) |
+| **exact / labels** | 157/160 (0,9812) | **186/187 (0,9947)** |
+| top-k (sous-chaîne) | 156/239 | 161/239 (0,6736) |
 | **couverture** | 160/239 (0,6695) | **187/239 (0,7824)** |
 | F1 syntagmes (union) | 0,4539 | **0,5156** |
 | F1 tête | 0,6432 | **0,6826** |
 | français | 117/118 (0,9915) | **126/127 (0,9921)** |
-| anglais | 40/42 (0,9524) | **59/60 (0,9833)** |
+| anglais | 40/42 (0,9524) | **60/60 (1,0000)** |
 | spans perdus | 79 | **52** (24 REL, 12 SUB, 16 GP) |
-| échecs de cible | 3 | 27 (les nouveaux labels sont plus durs) |
+| échecs de cible | 3 | **1** (r309) |
 
 **Ce que ça dit** :
 

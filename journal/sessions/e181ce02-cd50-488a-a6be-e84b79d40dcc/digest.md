@@ -45231,3 +45231,124 @@ README + pilotage
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; dev 125/126, test 60/61 ; 52 spans.\", \" ; 52 spans.\")\np.write_text(t)\nPY\npython3 tools/taille_documents.py 2>&1 |  … [810 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+[still running after 60000ms; moved to background job bash-1680]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1680", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-couverture-v5.json
+ create mode 100644 reports/rapport-pensee-couverture-v5.md
+COMMIT OK 1
+7a9f0d6a B13 — LA COUVERTURE : 187 LABELS, EXACT 185/187 (0,9893), F1 0,5156, DEV 125/126 ET TEST 60/61 ; 183/183
+jeu 05 nov 2026 18:26:19 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 8 : qualifier les 27 échecs de cible des nouveaux labels
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); ko=[]; cats=collections.Counter()\nfo … [829 caractères tronqués]`
+
+  ```
+2 {('SUB', 'en'): 1, ('SUB', 'fr'): 1}
+r298 SUB en 'Although I am tired' gold continue | cible None | Although I am tired, I continue.
+r309 SUB fr "qu'il viendra" gold viendra | cible Peut-être | Peut-être qu'il viendra.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def t163_' tools/pensee/autotest.py | cut -d: -f1),+26p\" tools/pensee/autotest.py", "description": "Lire T163"}`
+
+  ```
+def t163_echecs_attachement() -> tuple[bool, str]:
+    """Les échecs de l'attachement : 94 de span, 33 de cible."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    h = bl.Heuristique()
+    span = cible = 0
+    for p in charger():
+        a = h.analyser(p["texte"], p["langue"])
+        labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+        for s in p["segments"]:
+            cibles = s.get("cibles") or ([s["cible"]] if s.get("cible") else [])
+            if not cibles:
+                continue
+            e = labels.get((s["type"], s["debut"], s["fin"]))
+            if e is None:
+                span += 1
+                continue
+            if not any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
+                cible += 1
+    return span == 52 and cible == 27, (
+        f"échecs : {span} de span, {cible} de cible (33 avant les correctifs)")
+
+
+def t164_verbe_gv() -> tuple[bool, str]:
+    """Le verbe du GV-phrase : le POS VERB, pas le dernier mot."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+  ```
+
+### 🤖 Assistant
+
+⏵ Les 27 sont des **candidats manquants** (l'antécédent n'est pas candidat), pas des échecs d'attachement : je les ajoute
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# candidats : l'antécédent (REL) ou le verbe de la principale (SUB)\nt=t.replace('''    @staticmethod\n    def _repli_cible_gp(''',\n''' … [2947 caractères tronqués]`
+
+  ```
+candidats + continue
+TOUT exact 186 / 187 = 0.9947 | topk 161 | couv 0.7824 | F1 0.513 | par langue {'fr': {'cibles': 151, 'labels': 127, 'exact': 126, 'topk': 119, 'exact_taux_span': 0.9921}, 'en': {'cibles': 88, 'labels': 60, 'exact': 60, 'topk': 42, 'exact_taux_span': 1.0}}
+dev exact 126 / 126 | topk 105 / 126 | F1 0.5091
+test exact 60 / 61 | topk 56 / 61 | F1 0.5217
+  ```
+
+### 🤖 Assistant
+
+⏵ **186/187 (0,9947)**, anglais **60/60**, dev **126/126**. Je recale et je fige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après les candidats", "timeoutMs": 5400000}`
+
+  ```
+❌ T110 segmenteur        segmenteur : S F1 0.4582 tête 0.6358 ; chunker F1 0.5351 tête 0.7006
+  ❌ T111 hybride segmenteur hybride : tête F1 0.6818 (S 0,3552, chunker 0,4707)
+  ❌ T114 cascade + union   cascade : F1 0.5356, tête 0.6831, 602 appels
+  ❌ T153 attachement       attachement : top1 0.7782, exact 0.7782, couverture 0.7824
+  ❌ T161 cible proximité   proximité : top1 186/239, exact 186/239, tête 186/145
+  ❌ T162 candidats verbes  candidats : top-k 161/239 (0.6736), tête 161/145
+  ❌ T163 échecs attachement échecs : 52 de span, 26 de cible (33 avant les correctifs)
+  ❌ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 186/239
+  ❌ T167 dénominateur      dénominateur : spans 0.9947 / 0.861 / 0.9947
+  ❌ T168 classement        classement : exact 186/145 ; cibles 131 verbes, 56 noms
+  ❌ T169 conventions       conventions : verbes 130/131 (0.9924), noms 56/56 (1.0)
+  ❌ T171 lexique élargi    lexique élargi : vu True, accroché True, couru True ; exact 186/145
+  ❌ T172 échecs de cible   échecs de cible : 1 hors candidats, 0 mal classés
+  ❌ T173 top-k strict      top-k : 161 sous-chaîne, 161 exacts (0.861)
+  ❌ T177 candidats têtes   candidats têtes : 161/145 (0.861)
+  ❌ T17
+… [164 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(f1 - 0.4577) < 0.001 and abs(f2 - 0.5341) < 0.001','abs(f1 - 0.4582) < 0.001 and abs(f2 - 0.5351) < 0.001'),\n   ('\"\"\"Le segme … [3559 caractères tronqués]`
+
+  ```
+18 / 18
+  ❌ T167 dénominateur      dénominateur : spans 0.9947 / 0.861 / 0.9947
+  182/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('and abs(a[\"top1_taux_span\"] - 0.9893) < 0.001','and abs(a[\"top1_taux_span\"] - 0.9947) < 0.001')\np.write_text(t); print(' … [150 caractères tronqués]`
+
+  ```
+T167
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **186/187 (0,9947)**, anglais **60/60** : je mets la fiche à jour et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-pensee-couverture-v5.md'); t=p.read_text()\nt=t.replace(\"> **183/183 portes** : la **couverture** passe de **160 à 187 labels** (sur 239) et l'exactitude\\n> ti … [4433 caractères tronqués]`

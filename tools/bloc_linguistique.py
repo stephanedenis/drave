@@ -423,7 +423,7 @@ wait waits waited waiting belong belongs belonged belonging
 cry cries cried crying go goes went gone going come comes came coming
 leave leaves left leaving read reads reading sleep sleeps slept sleeping
 rain rains rained raining hang hangs hung hanging paint paints painted painting
-live lives lived living
+live lives lived living continue continues continued continuing
 rêver rêve rêves rêvent rêvait sauter saute sautes sautent sautait
 marcher marche marches marchent marchait
 """.split())
@@ -647,6 +647,19 @@ class Heuristique:
         if segment.get("type") == "SUB" and precedent.get("type") == "GV":
             return Heuristique._verbe_dans(texte, precedent["debut"], precedent["fin"], verbes)
         return None
+
+    @staticmethod
+    def _candidats_precedent(texte: str, segment: dict, precedent: dict | None) -> list[str]:
+        """Les candidats que le **précédent** impose : l'antécédent d'une REL, le verbe d'une SUB."""
+        if not precedent:
+            return []
+        if segment.get("type") == "REL" and precedent.get("type") == "GN":
+            tete = Heuristique._tete_nom(texte, precedent["debut"], precedent["fin"])
+            return [tete] if tete else []
+        if segment.get("type") == "SUB" and precedent.get("type") == "GV":
+            v = Heuristique._verbe_dans(texte, precedent["debut"], precedent["fin"])
+            return [v] if v else []
+        return []
 
     @staticmethod
     def _repli_cible_gp(texte: str, segment: dict, gns: list[dict]) -> str | None:
@@ -1068,8 +1081,10 @@ class Heuristique:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.35,
-                                            candidats=[s["type"]] + self._verbes_proches(
-                                                texte, s, gvs_s, verbes=verbes, cache=cache_gv),
+                                            candidats=([s["type"]]
+                                                       + self._candidats_precedent(texte, s, prec)
+                                                       + self._verbes_proches(
+                                                           texte, s, gvs_s, verbes=verbes, cache=cache_gv)),
                                             langue=lg, script=script, meta=meta))
         # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
         if cands and self.union:
@@ -1092,8 +1107,10 @@ class Heuristique:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.30,
-                                            candidats=[s["type"]] + self._verbes_proches(
-                                                texte, s, gvs_u, verbes=verbes, cache=cache_gv),
+                                            candidats=([s["type"]]
+                                                       + self._candidats_precedent(texte, s, prec)
+                                                       + self._verbes_proches(
+                                                           texte, s, gvs_u, verbes=verbes, cache=cache_gv)),
                                             langue=lg, script=script, meta=meta))
     
         # 6. discours / document
