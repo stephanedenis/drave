@@ -538,7 +538,19 @@ class Heuristique:
             return {}
 
     @staticmethod
-    def _cible_proche(texte: str, segment: dict, gvs: list[dict]) -> str | None:
+    def _verbe_dans(texte: str, debut: int, fin: int,
+                    verbes: list[tuple[int, int, str]] | None = None) -> str | None:
+        """Le **premier verbe** du span (POS `VERB`), sinon son dernier mot."""
+        if verbes:
+            for d, f, v in verbes:
+                if d >= debut and f <= fin:
+                    return v
+        mots = re.findall(r"[\wÀ-ÿ'-]+", texte[debut:fin])
+        return mots[-1] if mots else None
+
+    @staticmethod
+    def _cible_proche(texte: str, segment: dict, gvs: list[dict],
+                      verbes: list[tuple[int, int, str]] | None = None) -> str | None:
         """La cible d'un segment : le **verbe du GV le plus proche** (règle de proximité).
 
         Rend `None` si le segment est lui-même un GV ou s'il n'y a pas de GV. Le verbe est le
@@ -553,12 +565,11 @@ class Heuristique:
                 return g["debut"] - segment["fin"]
             return 0
         g = min(gvs, key=ecart)
-        mots = re.findall(r"[\wÀ-ÿ'-]+", texte[g["debut"]:g["fin"]])
-        return mots[-1] if mots else None
+        return Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
 
     @staticmethod
     def _verbes_proches(texte: str, segment: dict, gvs: list[dict],
-                        k: int = 3) -> list[str]:
+                        k: int = 3, verbes: list[tuple[int, int, str]] | None = None) -> list[str]:
         """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
         if segment.get("type") == "GV" or not gvs:
             return []
@@ -568,12 +579,12 @@ class Heuristique:
             if g["debut"] >= segment["fin"]:
                 return g["debut"] - segment["fin"]
             return 0
-        verbes: list[str] = []
+        proches: list[str] = []
         for g in sorted(gvs, key=ecart)[:k]:
-            mots = re.findall(r"[\wÀ-ÿ'-]+", texte[g["debut"]:g["fin"]])
-            if mots and mots[-1] not in verbes:
-                verbes.append(mots[-1])
-        return verbes
+            v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+            if v and v not in proches:
+                proches.append(v)
+        return proches
 
     def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
         mots = self._mots(texte)
@@ -700,6 +711,8 @@ class Heuristique:
                                             langue=lg, script=script))
 
         # 5. syntagmes : le générateur S (candidats) ou un chunker simple
+        verbes = [(e.debut, e.fin, e.valeur) for e in etiquettes
+                  if e.niveau == "pos" and e.type == "VERB"]
         cands = self._syntagmes_s(texte)
         cibles_s = self._cibles_s(texte) if cands else {}
         if cands:
@@ -718,11 +731,11 @@ class Heuristique:
                     else:
                         cible = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
                     if not cible:
-                        cible = self._cible_proche(texte, s, gvs)
+                        cible = self._cible_proche(texte, s, gvs, verbes)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
                     if cible:
                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
-                    candidats = list(noms) + self._verbes_proches(texte, s, gvs)
+                    candidats = list(noms) + self._verbes_proches(texte, s, gvs, verbes=verbes)
                     etiquettes.append(Etiquette("syntagme", s.get("type", "GN"),
                                                 s.get("texte", ""), s.get("debut", 0),
                                                 s.get("fin", 0), self.nom,
@@ -732,13 +745,13 @@ class Heuristique:
         else:
             for s in self._syntagmes_simple(texte, lg):
                 meta = {"role": s["role"], "niveau": s["niveau"]}
-                cible = self._cible_proche(texte, s, [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"])
+                cible = self._cible_proche(texte, s, [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"], verbes)
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 gvs_s = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.35,
-                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_s),
+                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_s, verbes=verbes),
                                             langue=lg, script=script, meta=meta))
         # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
         if cands and self.union:
@@ -751,12 +764,12 @@ class Heuristique:
                 if (s["type"], s["debut"], s["fin"]) in deja:
                     continue
                 meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
-                cible = self._cible_proche(texte, s, gvs_u)
+                cible = self._cible_proche(texte, s, gvs_u, verbes)
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.30,
-                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_u),
+                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_u, verbes=verbes),
                                             langue=lg, script=script, meta=meta))
     
         # 6. discours / document

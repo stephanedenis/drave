@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-verbe-gv.md`](rapport-pensee-verbe-gv.md) | **B13** — le verbe du GV : exact 0,0586 → **0,0962**, tête 0,8414, **167/167** |
 | [`rapport-pensee-echecs-attachement.md`](rapport-pensee-echecs-attachement.md) | **B13** — les 127 échecs : 94 span, 33 → 32 cible, **166/166** |
 | [`rapport-pensee-candidats-verbes.md`](rapport-pensee-candidats-verbes.md) | **B13** — les candidats verbes : top-k 0,3264 → **0,4686**, tête 0,7655, **165/165** |
 | [`rapport-pensee-cible-proximite.md`](rapport-pensee-cible-proximite.md) | **B13** — la cible par proximité : exact 0,0042 → **0,0544** (×13), top1 0,3975, **164/164** |
@@ -61,7 +62,6 @@
 | [`rapport-pensee-courbe.md`](rapport-pensee-courbe.md) | **B13** — la courbe : 15/15 buts (50–800 épisodes × 3 graines), 30 nœuds, Q 52–83, **16/16** |
 | [`rapport-pensee-porte-apprise.md`](rapport-pensee-porte-apprise.md) | **B13** — la porte apprise : Q-table 67 états, 30 nœuds/but, sonde 7, **15/15** |
 | [`rapport-pensee-porte.md`](rapport-pensee-porte.md) | **B13** — la porte neuronale : bonne politique 28 nœuds/58 (sonde 5), aveugle 200/483 sans but, **14/14** |
-| [`rapport-pensee-labyrinthe.md`](rapport-pensee-labyrinthe.md) | **B13** — le labyrinthe non linéaire : bonne politique 17 nœuds/34 (sonde 2), aveugle 15/24 (sonde 0), **13/13** |
 | [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 360 : POS 0,772, exact 0,190/tête 0,510, **attachement tête 1,0/0,966/0,932** (59 ambiguës), pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
 | [`rapport-pensee-banc.md`](rapport-pensee-banc.md) | **B13** — le banc anytime : A* but en 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire, **10/10** |
 | [`rapport-pensee-drvf.md`](rapport-pensee-drvf.md) | **B13** — le DRVF `thought` : 23 597 octets, 93 événements, rejeu identique, corruption refusée, **9/9** |

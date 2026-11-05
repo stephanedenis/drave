@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 112.0 h |
-| Tours | 174 |
-| Messages | 2177 |
-| Appels d'outils | 1877 |
+| Durée | 112.3 h |
+| Tours | 175 |
+| Messages | 2198 |
+| Appels d'outils | 1898 |
 | Fichiers touchés | 25 |
-| Commandes | 1547 |
+| Commandes | 1565 |
 | Sous-agents | 2 |
-| Commits | 230 |
+| Commits | 231 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -39,6 +39,8 @@
 … [193 caractères tronqués]
 - **complete** — Session L/B13 en autonomie du 2026-11-04, 4 h (11 h 50 → 15 h 50 EST) : finir la qualification neuronale de L (PRIORITE_NIVEAU conditionné à la clé, seuils du banc, passes API de confirmation), mesurer le réel (l'API DeepSeek), tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pa
 … [193 caractères tronqués]
+- **create** — Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrir
+… [30 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -389,6 +391,8 @@
 **Tour 173** — continue
 
 **Tour 174** — où en est-on?
+
+**Tour 175** — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les conflits
 
 ## 2. Déroulé, étape par étape
 
@@ -9325,6 +9329,68 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - bash — Lister les dernières lignes pensee du README
 - … et 2 autres
 
+**Synthèse produite :**
+
+⏵ Point de situation : reprise à 08 h 42, B13 166/166, la passe de nuit a tourné
+
+\## Où nous sommes
+
+**Jeudi 5 novembre, 08 h 42 EST.** La session est restée inactive depuis hier soir (mon dernier round : 04/11 20 h 45). Le hub a travaillé entre-temps.
+
+| élément | état |
+|---|---|
+| **B13 (Pensée)** | **166/166 portes** ; attachement : top1 0,4017, top-k 0,4728, exact 0,0586 |
+| **Dernier round livré** | les 127 échecs qualifiés : **94 de span**, **33 de cible** (32 après correctif) |
+| **Passe de nuit (hub)** | 83 portes, **79 vertes, 4 rouges** : `indice`, `melange` (tolérées), `lecteur` (corrigée), `sessions` (mon heartbeat) |
+| **Mon heartbeat** | **rafraîchi à 08 h 36** — la porte `sessions` est verte pour moi |
+| **Budgets de docs** | T1 remis dans le cadre : README 2 800, références 2 500 |
+| **Branche** | `s/v7` ; `master` est à **292 commits** derrière |
+| **Non commité** | 7 éléments d'autres sessions (dont `tools/structures` et une fiche S non suivie) |
+
+\## Ce que je viens de faire (reprise)
+
+1. **Heartbeat** de `e181ce02` rafraîchi (il était périmé de 1 247 min) → commit `2c432406`.
+2. **Prochaine action** corrigée dans l'état (elle disait encore « candidats verbes »).
+3. **Budgets T1** : le hub avait laissé `reports/README.md` à 2 924 mots (budget 2 800) et `references-non-regression.md` à 2 579 (budget 2 500) — retiré des fiches anciennes et les passes les plus anciennes → **2 800 / 2 500**, porte verte → commit `353706f2`.
+
+\## Ce qui reste rouge (et à qui)
+
+- **`porte-indice`** et **`porte-melange`** : les deux rouges structurelles connues, tolérées par `references-non-regression.md`.
+- **Le heartbeat du hub** (`1e7ef596`) : périmé de 402 min — c'est son `plan.md`, je n'y touche pas.
+- **`master`** : 292 commits de retard. Merge + push seulement si vous le demandez explicitement.
+
+\## La suite (dans mon territoire)
+
+1. **Le verbe du GV-phrase** : les 32 échecs de cible restants (le GV couvre la phrase, le dernier token n'est pas le verbe).
+2. **Les 94 spans** : qualifier la segmentation (S ou chunker).
+3. **Les passifs** : à demander à la session S (`generateur.py`).
+
+Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
+
+### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
+
+*21 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Voir le journal du jour et la conversion S
+- bash — Trouver la conversion S et les champs de cible
+- bash — Lire les champs du segment S et la cible verbe
+- bash — Vérifier si le POS tague le verbe
+- bash — Situer le POS dans analyser
+- bash — Lire l'ordre des étapes de l'analyse
+- bash — Adapter les helpers au verbe du POS
+- bash — Passer les verbes POS aux helpers et mesurer
+- bash — Recalculer la répartition des échecs
+- bash — Comprendre les exigences du journal
+- bash — Voir les compteurs de portes dans le pilotage
+- bash — Ajuster les portes et lancer l'autotest
+- bash — Écrire la fiche et le JSON du verbe du GV
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ 167/167 (T164 : « saw ») ; je commite le round avec le pilotage à jour
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9404,7 +9470,7 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1507 autres
+- … et 1525 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9532,7 +9598,7 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 
 ## 5. Erreurs rencontrées
 
-30 sorties en erreur ou divergentes. Les premières :
+31 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -9782,4 +9848,5 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pe
 - ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; B13 166/166" -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan
 - DOCS — BUDGETS T1 REVENUS DANS LE CADRE : README 2800, RÉFÉRENCES 2500 (PASSES ANCIENNES RETIRÉES)" -- reports/README.md docs/pilotage/references-non-regression
+- B13 — LE VERBE DU GV-PHRASE : EXACT 0,0586 → 0,0962, TOP-K 0,5105, TÊTE 0,8414 ; 167/167" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport
 

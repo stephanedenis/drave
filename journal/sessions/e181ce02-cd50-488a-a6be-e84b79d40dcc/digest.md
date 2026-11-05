@@ -38477,3 +38477,355 @@ README : lignes retirées 3
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-05, 08 h 45 HNE\", t)\np.write_text( … [631 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-275]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-275", "timeout_ms": 600000, "wait": true}`
+
+  ```
+9 files changed, 116 insertions(+), 23 deletions(-)
+COMMIT OK 1
+353706f2 DOCS — BUDGETS T1 REVENUS DANS LE CADRE : README 2800, RÉFÉRENCES 2500 (PASSES ANCIENNES RETIRÉES)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+jeu 05 nov 2026 08:41:59 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de situation : reprise à 08 h 42, B13 166/166, la passe de nuit a tourné
+
+## Où nous sommes
+
+**Jeudi 5 novembre, 08 h 42 EST.** La session est restée inactive depuis hier soir (mon dernier round : 04/11 20 h 45). Le hub a travaillé entre-temps.
+
+| élément | état |
+|---|---|
+| **B13 (Pensée)** | **166/166 portes** ; attachement : top1 0,4017, top-k 0,4728, exact 0,0586 |
+| **Dernier round livré** | les 127 échecs qualifiés : **94 de span**, **33 de cible** (32 après correctif) |
+| **Passe de nuit (hub)** | 83 portes, **79 vertes, 4 rouges** : `indice`, `melange` (tolérées), `lecteur` (corrigée), `sessions` (mon heartbeat) |
+| **Mon heartbeat** | **rafraîchi à 08 h 36** — la porte `sessions` est verte pour moi |
+| **Budgets de docs** | T1 remis dans le cadre : README 2 800, références 2 500 |
+| **Branche** | `s/v7` ; `master` est à **292 commits** derrière |
+| **Non commité** | 7 éléments d'autres sessions (dont `tools/structures` et une fiche S non suivie) |
+
+## Ce que je viens de faire (reprise)
+
+1. **Heartbeat** de `e181ce02` rafraîchi (il était périmé de 1 247 min) → commit `2c432406`.
+2. **Prochaine action** corrigée dans l'état (elle disait encore « candidats verbes »).
+3. **Budgets T1** : le hub avait laissé `reports/README.md` à 2 924 mots (budget 2 800) et `references-non-regression.md` à 2 579 (budget 2 500) — retiré des fiches anciennes et les passes les plus anciennes → **2 800 / 2 500**, porte verte → commit `353706f2`.
+
+## Ce qui reste rouge (et à qui)
+
+- **`porte-indice`** et **`porte-melange`** : les deux rouges structurelles connues, tolérées par `references-non-regression.md`.
+- **Le heartbeat du hub** (`1e7ef596`) : périmé de 402 min — c'est son `plan.md`, je n'y touche pas.
+- **`master`** : 292 commits de retard. Merge + push seulement si vous le demandez explicitement.
+
+## La suite (dans mon territoire)
+
+1. **Le verbe du GV-phrase** : les 32 échecs de cible restants (le GV couvre la phrase, le dernier token n'est pas le verbe).
+2. **Les 94 spans** : qualifier la segmentation (S ou chunker).
+3. **Les passifs** : à demander à la session S (`generateur.py`).
+
+Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
+
+
+## Tour 175
+
+### 👤 Utilisateur
+
+oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les conflits
+
+- **create_goal** `{"objective": "Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés … [70 caractères tronqués]`
+
+> **Objectif** (create) : Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrire dans les territoires S/D/N2.
+
+
+  ```
+{"goal":{"id":"goal-213b1a5d-97aa-4f75-86df-853bcc7892b8","revision":1,"objective":"Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrire dans les territoires S/D/N2.","phase":"active","roundsStarted":0,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/ | tail -3; ls journal/2026-11-05/ 2>/dev/null | head; echo \"--- conversion S :\"; sed -n \"$(grep -n 'def _syntagmes_s' tools/bloc_linguistique.py | cut -d: -f1),+22p\" tools/bloc_linguistique.py", "description": "Voir l … [38 caractères tronqués]`
+
+  ```
+README.md
+sessions
+THEMES.md
+distribue.md
+docs.md
+memoire.md
+mesures.md
+modele.md
+moteur.md
+portes.md
+README.md
+--- conversion S :
+[stderr]
+sed: -e expression #1, char 4: unknown command: '
+'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _syntagmes_s\\|cible_verbe\\|cible_gp\" tools/bloc_linguistique.py | head -8; echo ---; grep -n \"cible_verbe\" tools/structures/generateur.py | head -4", "description": "Trouver la conversion S et les champs de cible"}`
+
+  ```
+512:    def _syntagmes_s(self, texte: str) -> list[dict] | None:
+527:        `cible_nom`/`cible_gp`/`cible_verbe`. Le défaut retenu est la cible la plus proche
+535:            return {(s.debut, s.fin, s.type): (s.cible_gp or s.cible_nom or s.cible_verbe)
+578:    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+---
+295:                 "cible_verbe", "parent", "profondeur")
+302:        self.cible_verbe = None  # le GV le plus proche à gauche
+496:            if g.type == "GV" and s.cible_verbe is None:
+497:                s.cible_verbe = g.texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '285,320p' tools/structures/generateur.py; echo ---; sed -n '470,510p' tools/structures/generateur.py", "description": "Lire les champs du segment S et la cible verbe"}`
+
+  ```
+return "source"
+    if prep == "sans":
+        return "maniere"
+    if prep == "en":
+        return "lieu"
+    return "complement"
+
+
+class Segment:
+    __slots__ = ("debut", "fin", "type", "role", "niveau", "texte", "cible_nom", "cible_gp",
+                 "cible_verbe", "parent", "profondeur")
+
+    def __init__(self, debut, fin, texte, typ, role, niveau=0):
+        self.debut, self.fin, self.texte = debut, fin, texte
+        self.type, self.role, self.niveau = typ, role, niveau
+        self.cible_nom = None   # le GN le plus proche à gauche
+        self.cible_gp = None    # la tête du GP le plus proche à gauche
+        self.cible_verbe = None  # le GV le plus proche à gauche
+        self.parent = None      # l'index du segment père dans la liste
+        self.profondeur = 0     # la profondeur dans l'arbre (le GV racine = 0)
+
+    def dict(self):
+        return {"debut": self.debut, "fin": self.fin, "texte": self.texte,
+                "type": self.type, "role": self.role, "niveau": self.niveau,
+                "parent": self.parent, "profondeur": self.profondeur}
+
+
+def _consomme(toks, i, classes):
+    j = i
+    while j < len(toks) and toks[j].cls in classes:
+        j += 1
+    ret
+… [1883 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 : le verbe du GV-phrase — je regarde si le POS étiquette déjà le verbe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt, lg in ((\"The boy saw the cat in the park.\", \"en\"), (\"Le garçon joue au ballon.\", \"fr\")):\n   … [191 caractères tronqués]`
+
+  ```
+The boy saw the cat in the park. 
+  POS : [('The', 'DET'), ('boy', 'NOUN'), ('saw', 'VERB'), ('the', 'DET'), ('cat', 'NOUN'), ('in', 'PREP'), ('the', 'DET'), ('park', 'NOUN')]
+Le garçon joue au ballon. 
+  POS : [('Le', 'DET'), ('garçon', 'NOUN'), ('joue', 'VERB'), ('au', 'PREP'), ('ballon', 'NOUN')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '# 5. syntagmes' tools/bloc_linguistique.py | cut -d: -f1),-14p\" tools/bloc_linguistique.py 2>/dev/null | head -20; grep -n \"niveau.*pos\\|# 4\\|# 3\" tools/bloc_linguistique.py | sed -n '1,8p'", "description": " … [29 caractères tronqués]`
+
+  ```
+673:                # 3. morphème (candidat, basse confiance)
+679:        # 4. phrase + pragmatique
+894:            "\"etiquettes\":[{\"niveau\":\"phrase|pragmatique|syntagme|pos\","
+1512:                 seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique"),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '660,700p' tools/bloc_linguistique.py", "description": "Lire l'ordre des étapes de l'analyse"}`
+
+  ```
+i = j
+
+        # 2. mot + POS fermées / ouvertes
+        mots = self._mots(texte)
+        for d, f, t, typ in mots:
+            etiquettes.append(Etiquette("mot", typ, t, d, f, self.nom, 0.98, langue=lg, script=script))
+            if typ == "mot":
+                classe, ouvert, conf = self._pos(lg, t)
+                etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, conf,
+                                            candidats=[] if not ouvert else [classe.lower()],
+                                            langue=lg, script=script, meta={"ouvert": ouvert}))
+                if ouvert:
+                    unites.append(Span(d, f))
+                # 3. morphème (candidat, basse confiance)
+                for genre, md, mf, aff in self._morphemes(t):
+                    etiquettes.append(Etiquette("morphème", genre, aff, d + md, d + mf,
+                                                self.nom, 0.32, candidats=[genre],
+                                                langue=lg, script=script))
+
+        # 4. phrase + pragmatique
+        for d, f, p, typ in self._phrases(texte):
+            etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.85,
+            
+… [1373 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le POS tague bien `saw`/`joue` en VERB : je prends le premier verbe **dans** le GV
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n\n# 1) helper : le premier verbe dans un span, sinon le dernier mot\nt=t.replace('''    @staticmethod\n    def _cible_proche(texte: str, … [2196 caractères tronqués]`
+
+  ```
+helpers patchés
+541:    def _verbe_dans(texte: str, debut: int, fin: int,
+571:    def _verbes_proches(texte: str, segment: dict, gvs: list[dict],
+582:        proches: list[str] = []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# calcul des verbes POS avant l'étape 5\nt=t.replace('''        # 5. syntagmes : le générateur S (candidats) ou un chunker simple\n      … [2192 caractères tronqués]`
+
+  ```
+appels mis à jour
+attachement {'cibles': 239, 'labels': 145, 'top1': 105, 'topk': 122, 'exact': 23, 'top1_taux': 0.4393, 'topk_taux': 0.5105, 'exact_taux': 0.0962, 'couverture': 0.6067}
+tête {'cibles': 145, 'labels': 145, 'top1': 105, 'topk': 122, 'top1_taux': 0.7241, 'topk_taux': 0.8414, 'couverture': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain : exact 0,0586 → **0,0962** (23/239), tête 0,7241/0,8414 — je mesure la nouvelle répartition
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, re, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); span=cible=0; types=collections.C … [988 caractères tronqués]`
+
+  ```
+span 94 | cible 23 | total 117
+types des échecs de cible {'GP': 22, 'SUB': 1}
+  ('r025', 'GP', 'to her brother', 'talks', 'brother', ['GP', 'brother'])
+  ('r031', 'GP', 'at noon', 'leaves', 'noon', ['GP', 'noon'])
+  ('r040', 'GP', 'in the park', 'play', 'park', ['GP', 'park'])
+  ('r064', 'GP', 'to the students', 'talks', 'teacher', ['GP', 'teacher'])
+  ('r067', 'GP', 'in the garden', 'grow', 'garden', ['GP', 'garden'])
+  ('r068', 'GP', 'to his sister', 'writes', 'letter', ['GP', 'letter'])
+  ('r070', 'GP', 'on vacation', 'leave', 'vacation', ['GP', 'vacation'])
+  ('r077', 'GP', 'at the postman', 'barks', 'postman', ['GP', 'postman'])
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/verifie_journal.py; echo \"=== journal du jour :\"; sed -n '1,25p' journal/2026-11-05/README.md", "description": "Comprendre les exigences du journal"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_journal.py — un dossier par jour, et les sessions ancrées.
+
+Règles vérifiées :
+  1. aucun fichier `journal/AAAA-MM-JJ*.md` à la racine : chaque jour est un **dossier** ;
+  2. chaque dossier `journal/AAAA-MM-JJ/` a un `README.md` ;
+  3. chaque `README.md` de jour porte une section « Sessions DSH » et un lien vers
+     `../README.md#sessions` ;
+  4. chaque `journal/sessions/<id>/rapport.md` porte le bloc « Journaux » avec un lien vers
+     son jour (ou le journal), vers `en-cours.md` et vers l'index des sessions ;
+  5. les liens relatifs de `journal/README.md`, `journal/THEMES.md`, des `README.md` de jour
+     et des rapports de session résolvent.
+
+Usage : python3 tools/verifie_journal.py   (code 0 = journal propre)
+"""
+from __future__ import annotations
+import pathlib
+import re
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+JOURNAL = RACINE / "journal"
+DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# les liens markdown, sans les ancres ni les liens externes
+LIEN = re.compile(r"\]\(([^)#]+?)(?:#[^)]*)?\)")
+EXTERNE = ("http://", "https://", "mailto:", "#")
+
+
+def liens(texte: str) -> list[str]:
+    return [c for c in LIEN.findall(texte)
+          
+… [1274 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"166/166\" docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/en-cours.md 2>/dev/null; grep -n \"T0–T163\\|T0–T162\" docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/implantation/moteur-de-pensee.md 2> … [85 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md:3
+docs/pilotage/chantiers.md:4
+docs/pilotage/en-cours.md:4
+docs/implantation/moteur-de-pensee.md:354:| **6** | `tools/pensee/autotest.py` | T0–T163, contrôles négatifs | toutes |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\n# T153\nt=t.replace('abs(r[\"top1_taux\"] - 0.4017) < 0.001\\n            and abs(r[\"exact_taux\"] - 0.0586) < 0.001',\n            'abs( … [3135 caractères tronqués]`
+
+  ```
+started background job bash-287
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-verbe-gv.md <<'MD'\n# B13 — le verbe du GV-phrase : l'exact passe de 0,0586 à 0,0962\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **167/167  … [3873 caractères tronqués]`
+
+  ```
+fiche + JSON écrits
+-rw-r--r--. 1 stephane stephane  523  5 nov 08:53 reports/pensee-verbe-gv.json
+-rw-r--r--. 1 stephane stephane 3207  5 nov 08:53 reports/rapport-pensee-verbe-gv.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pensee-verbe-gv.md'); t=p.read_text()\nt=t.replace(\"## 5. Fichiers\", \"## 6. Fichiers\")\np.write_text(t)\n# docs implantation\np=pathlib.Path('docs/implantation/mot … [1170 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 166→167: 5
+docs/pilotage/chantiers.md 166→167: 6
+docs/pilotage/en-cours.md 166→167: 4
+     · compteurs : en-cours.md dit 628 fichiers, le disque en a 629
+     · compteurs : en-cours.md dit 721 JSON, le disque en a 722
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n# compteurs\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub … [1616 caractères tronqués]`
+
+  ```
+en-cours à jour 629 722
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4009 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; le **verbe du GV** (POS) répare 9 des 33 ; échecs restants : **94 de span, 23 de cible** ; fiches [candidats verbes](../ … [520 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **job_output** `{"job_id": "bash-287", "timeout_ms": 900000, "wait": true}`
+
+  ```
+portes T153-T164 ajustées
+  ✅ T162 candidats verbes  candidats : top-k 122/239 (0.5105), tête 122/145
+  ✅ T163 échecs attachement échecs : 94 de span, 23 de cible (33 avant les correctifs)
+  ✅ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 23/239
+  167/167 portes tenues
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ 167/167 (T164 : « saw ») ; je commite le round avec le pilotage à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\",\n\"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-pensee-verbe-gv.md`](rappo … [880 caractères tronqués]`
+
+  ```
+README : ajout + retirées 1
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-verbe-gv.md reports/pensee-verbe-gv.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [893 caractères tronqués]`

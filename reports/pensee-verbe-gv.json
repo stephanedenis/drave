@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "167/167",
+ "gold": 612,
+ "cibles": 239,
+ "avant": {
+  "top1": 96,
+  "topk": 113,
+  "exact": 14,
+  "tete_top1": 96,
+  "tete_topk": 113
+ },
+ "apres": {
+  "top1": 105,
+  "topk": 122,
+  "exact": 23,
+  "tete_top1": 105,
+  "tete_topk": 122
+ },
+ "echecs": {
+  "span": 94,
+  "cible_avant": 32,
+  "cible_apres": 23
+ },
+ "cause_23": "le POS tague le verbe en NOUN (play, talks, leaves...)",
+ "limites": [
+  "94 spans non qualifiés",
+  "POS verbe/nom anglais",
+  "gold 612"
+ ]
+}
