@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 99.9 h |
+| Durée | 100.0 h |
 | Tours | 173 |
-| Messages | 2154 |
-| Appels d'outils | 1855 |
+| Messages | 2155 |
+| Appels d'outils | 1856 |
 | Fichiers touchés | 25 |
-| Commandes | 1528 |
+| Commandes | 1529 |
 | Sous-agents | 2 |
 | Commits | 227 |
 | Compactages de contexte | 6 |
@@ -9238,7 +9238,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 
 ### Tour 173 — continue
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Qualifier les 127 échecs : span ou cible
 - bash — Lire le bloc de construction des syntagmes S
@@ -9251,6 +9251,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - bash — Trim README et lancer l'autotest complet
 - bash — Ajuster T163 à 32 et relancer l'autotest
 - bash — Identifier la porte rouge
+- bash — Ajuster T153 et relancer l'autotest
 
 **Synthèse produite :**
 
@@ -9335,7 +9336,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1488 autres
+- … et 1489 autres
 
 ## 4. Mesures et résultats marquants
 
