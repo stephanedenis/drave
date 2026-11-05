@@ -2631,6 +2631,18 @@ def t179_multi_cibles() -> tuple[bool, str]:
         f"multi-cibles : exact {a['exact']}/145, exact_any {a['exact_any']}/145")
 
 
+def t180_par_langue() -> tuple[bool, str]:
+    """La mesure par langue : l'exact tient dans les deux langues, la couverture anglaise non."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    lg = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]["par_langue"]
+    fr, en = lg["fr"], lg["en"]
+    return (fr["cibles"] == 151 and fr["labels"] == 117 and fr["exact"] == 113
+            and en["cibles"] == 88 and en["labels"] == 28 and en["exact"] == 28), (
+        f"langues : fr {fr['exact']}/{fr['labels']}, en {en['exact']}/{en['labels']} "
+        f"({en['labels']}/{en['cibles']} labels)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2809,7 +2821,8 @@ def main() -> int:
               ("T176 segment précédent", t176_segment_precedent()),
               ("T177 candidats têtes", t177_candidats_tete()),
               ("T178 cache chunker", t178_cache_chunker()),
-              ("T179 multi-cibles", t179_multi_cibles())]
+              ("T179 multi-cibles", t179_multi_cibles()),
+              ("T180 par langue", t180_par_langue())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -86,6 +86,8 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
     att_n = att_labels = att_top1 = att_topk = att_exact = 0
     att_topk_exact = 0
     att_exact_any = 0
+    par_langue = {"fr": {"cibles": 0, "labels": 0, "exact": 0, "topk": 0},
+                  "en": {"cibles": 0, "labels": 0, "exact": 0, "topk": 0}}
     att_v_n = att_v_ok = att_n_n = att_n_ok = 0
     att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
     for phrase in phrases:
@@ -114,20 +116,25 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
         tfp += len(pred_tete - gold_tete)
         tfn += len(gold_tete - pred_tete)
         labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+        langue = phrase.get("langue", "fr")
+        bloc_langue = par_langue.get(langue, par_langue["fr"])
         for s in phrase["segments"]:
             cibles = s.get("cibles") or ([s["cible"]] if s.get("cible") else [])
             if not cibles:
                 continue
             att_n += 1
+            bloc_langue["cibles"] += 1
             e = labels.get((s["type"], s["debut"], s["fin"]))
             if e is None:
                 continue
             att_labels += 1
+            bloc_langue["labels"] += 1
             att = (e.meta or {}).get("attachement") or {}
             cible = (att.get("cible") or "").strip()
             juste = cible == cibles[0]
             if juste:
                 att_exact += 1
+                bloc_langue["exact"] += 1
             # le gold admet parfois plusieurs cibles (43/96 GP) : mesure secondaire
             if cible in cibles:
                 att_exact_any += 1
@@ -147,6 +154,7 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                 att_top1 += 1
             if any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
                 att_topk += 1
+                bloc_langue["topk"] += 1
             # le top-k **strict** : un candidat est exactement la cible (pas une sous-chaîne)
             if any(nom == cibles[0] for nom in (e.candidats or [])):
                 att_topk_exact += 1
@@ -201,7 +209,11 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                                   "taux": round(att_v_ok / max(1, att_v_n), 4)},
                         "nom": {"cibles": att_n_n, "justes": att_n_ok,
                                 "taux": round(att_n_ok / max(1, att_n_n), 4)},
-                        "couverture": round(att_labels / max(1, att_n), 4)},
+                        "couverture": round(att_labels / max(1, att_n), 4),
+                        "par_langue": {lg: {"cibles": v["cibles"], "labels": v["labels"],
+                                            "exact": v["exact"], "topk": v["topk"],
+                                            "exact_taux_span": round(v["exact"] / max(1, v["labels"]), 4)}
+                                       for lg, v in par_langue.items()}},
         "attachement_tete": {"cibles": att_t_n, "labels": att_t_labels,
                              "top1": att_t_top1, "topk": att_t_topk,
                              "top1_taux": round(att_t_top1 / max(1, att_t_n), 4),

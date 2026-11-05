@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 119.6 h |
+| Durée | 119.8 h |
 | Tours | 176 |
-| Messages | 2539 |
-| Appels d'outils | 2223 |
+| Messages | 2544 |
+| Appels d'outils | 2228 |
 | Fichiers touchés | 25 |
-| Commandes | 1829 |
+| Commandes | 1833 |
 | Sous-agents | 16 |
-| Commits | 269 |
+| Commits | 270 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*180 appels d'outils.* Actions notables :
+*185 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 143 autres
+- … et 147 autres
 
 **Synthèse produite :**
 
-⏵ Vérification finale complète et alignement des horodatages sur l'horloge réelle
+⏵ Dernier round mesuré : la mesure **par langue** (recommandation A14), sans toucher au bloc
 
 ## 3. Travail accompli
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1789 autres
+- … et 1793 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9970,4 +9970,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LA PISTE DES 84 SPANS (A12) MESURÉE ET CONSIGNÉE ; PROCHAINE ACTION LES DEUX RÈGLES ; 182/182" -- reports/rapport-spans-chunker.md reports/pensee-spans-ch
 - B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182" -- reports/rapport-gold-anglais.md reports/pensee-
 - B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182" -- reports/rapport-gold-anglais.md reports/rapport-pensee-
+- B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183" -- tools/tests/linguistique/evaluer_gold.py tools/pen
 

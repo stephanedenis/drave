@@ -43689,3 +43689,41 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1604", "timeout_ms": 600000, "wait": true}`
+
+  ```
+20 files changed, 465 insertions(+), 75 deletions(-)
+COMMIT OK 1
+e1903e2d B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182
+jeu 05 nov 2026 16:18:13 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier round mesuré : la mesure **par langue** (recommandation A14), sans toucher au bloc
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('''    att_exact_any = 0''',\n'''    att_exact_any = 0\n    par_langue = {\"fr\": {\"cibles\": 0, \"labels\":  … [2364 caractères tronqués]`
+
+  ```
+mesure par langue ajoutée
+par langue {'fr': {'cibles': 151, 'labels': 117, 'exact': 113, 'topk': 114, 'exact_taux_span': 0.9658}, 'en': {'cibles': 88, 'labels': 28, 'exact': 28, 'topk': 28, 'exact_taux_span': 1.0}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T179 la mesure multi-cibles          exact 141/145, exact_any 143/145 (43 GP ont deux cibles)\\n\",\n\"  T179 la mesure mu … [5044 caractères tronqués]`
+
+  ```
+T180 ajoutée
+fiche + JSON écrits
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T179** | le gold admet-il plusieurs cibles ? | **oui** : 43/96 GP ; exact 141 → **exact_any 143/145 (0, … [2252 caractères tronqués]`
+
+  ```
+docs + pilotage + README
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; par langue fr 113/117, en 28/28 (28 labels/88) ; 4 échecs.\", \" ; fr 113/117, en 28/28 ; 4 échecs.\")\np.write_text(t)\ … [1044 caractères tronqués]`
