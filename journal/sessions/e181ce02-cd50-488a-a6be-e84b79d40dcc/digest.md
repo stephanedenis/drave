@@ -43266,3 +43266,74 @@ docs + fiche + pilotage + README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **182/182** ; attachement **v3 : exact spans 0,9724**, **top-k strict 0,9793**, noms 1,0 ; cache ×139 ; ca … [1775 caractères tronqués]`
+
+  ```
+· T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1552]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1552", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-multicibles.md
+ create mode 100644 reports/rapport-replis-cible.md
+COMMIT OK 1
+e59ba071 B13 — MULTI-CIBLES (EXACT_ANY 143/145), AUDITS A8/A10/A13 INTÉGRÉS, DOCSTRINGS ET CODE MORT NETTOYÉS ; 182/182
+jeu 05 nov 2026 15:52:24 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache ×139 ; 4 échecs.\", \" ; 4 échecs.\")\np.write_text(t)\nPY\npython3 tools/taille_documents.py 2>&1 | tail -1; slee … [128 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+Agent b3d82ad5-bff2-49ec-9ad6-2230e68d8071 sent a message: 
+Résultat — multi-cibles du gold (B13/A13), mesure seule, aucun commit.
+
+PIN. Principal : HEAD b1b1292f (V3), tools/bloc_linguistique.py sha256 9da6dee7…, gold inchangé (gold_reel 05d4f6df…). Contexte A7 : pin V2 15ee10d3, bloc 5640809e… (exact publié 0,9448). Le worktree (bloc 9544f173…) est encore modifié par un autre agent : non mesuré.
+
+POPULATION. 239 cibles (96 GP / 69 SUB / 74 REL), 145 labels au bon span (83 / 36 / 26). Multi : 43/239 (17,99 %) et 36/145 (24,83 %), tous GP, toujours exactement 2 cibles. 43 alternatives, 33 distinctes ; moyenne 0,180 alternative/cible sur 239, 0,248 sur 145, 1,0 parmi les multi. Premières cibles 39 VERB + 4 ADJ ; alternatives 41 NOUN + 1 PRON + 1 forme élidée.
+
+TROIS TAUX V3 (145) : (a) cible == cibles[0] : 141/145 = 97,24 % ; (b) cible in cibles : 143/145 = 98,62 % ; (c) cible == tête d'une cible : 143/145 = 98,62 %. Écart (b−a) = +2 cas, +1,38 pt ; par type GP 80/83 → 82/83 (+2, +2,41 pt), SUB 35/36 inchangé, REL 26/26 inchangé. (c) = (b) : no-op.
+TROIS TAUX V3 (239) : (a) 141/239 = 59,00 % ; (b) 143/239 = 59,83 % ; (c) 143/239 = 59,83 % ; +2 (+0,84 pt).
+V2 (contexte A7) : 137/145 = 94,48 % → 139/145 = 95,86 % ; 137/239 → 139/239 ; même +2, mêmes cas.
+
+GAINS ET CONTRÔLE. Les 2 gains sont s108 et s122 (GP synthétiques), où le bloc choisit « papier », la 2e cible. Sur hand+reel : 114/115 = 99,13 %, écart 0. V3 a corrigé g002/g012/r018/r230 ; il reste s041 (multi, cible vide) et r309 (SUB). Contrôle négatif 1000 tirages, graine 20261105 : P1 global observé 143/145 vs null 1,251 (p=0,001) ; P2 alternatives observé 35/36 vs null 33,086 (p=0,001 ; exact 1/903 = 0,0011). Mais McNemar p=0,5 et bootstrap du delta [0 ; +3,45] pt : l'écart est réel sur 2 cas, pas un gain de population.
+
+RECOMMANDATION. Adopter (b) `cible in cibles` pour exact et topk_exact ; annoncer 143/145 = 98,62 % (span) et 143/239 = 59,83 % (rendement), avec « +2 cas, dont 2 synthétiques ». Ne pas ajouter (c) (no-op). Documenter CONVENTION_CIBLE (GP multi = [gouverneur, tête nominale]) et décider si l'attachement nominal compte ; sinon nettoyer le gold. Corriger s041 et r309 à part. Si (b), reclasser le split verbe/nom par la cible appariée : 114/112 verbe, 31/31 nom (au lieu de 116/112 et 29/29).
+
+FICHIERS. reports/rapport-multicibles.md (318 lignes, tables validées, liens OK) et reports/pensee-multicibles.json (JSON valide, blocs V3 + v2_contexte_A7). Ils apparaissent `A` dans l'index (staging du hub, pas de commit de ma part) ; aucun fichier existant modifié par moi. La fiche pinne b1b1292f ; le worktree 9544f… n'est pas inclus.
+
+### 👤 Utilisateur
+
+Background subagent b3d82ad5-bff2-49ec-9ad6-2230e68d8071 finished and will do no further work unless you send it more.
+Its closing message:
+Mesure faite, sans modifier le code ni committer. Fiche : `reports/rapport-multicibles.md` · JSON : `reports/pensee-multicibles.json`.
+
+**Pin** : HEAD `b1b1292f` (V3, bloc `9da6dee7…`). Le worktree `9544f…`, encore modifié par un autre agent, n'est pas inclus. Le pin V2 `15ee10d3` (`5640809e…`, contexte A7) sert de comparaison.
+
+**Les trois taux — 145 segments au bon span**
+| définition | taux |
+|---|---:|
+| (a) `cible == cibles[0]` | **141/145 = 97,24 %** |
+| (b) `cible in cibles` | **143/145 = 98,62 %** |
+| (c) `cible == tête d'une cible` | **143/145 = 98,62 %** |
+
+Écart (b−a) : **+2 cas, +1,38 pt** ; GP 80/83 → 82/83 (+2,41 pt), SUB 35/36 et REL 26/26 inchangés. **(c) = (b)** : la réduction à la tête est un no-op sur ce gold.
+
+**Sur 239 cibles** : (a) 141/239 = 59,00 % ; (b) 143/239 = 59,83 % ; (c) 143/239 ; +2 (+0,84 pt). **Contexte V2** : 137/145 = 94,48 % → 139/145 = 95,86 %, même +2 et mêmes cas.
+
+**Les 2 gains** sont `s108` et `s122`, deux GP **synthétiques** où le bloc choisit `papier`, la 2e cible. Sur hand+reel : 114/115 = 99,13 %, **écart 0**. Contrôle négatif (1 000 tirages) : P1 p=0,001 ; P2 p=0,001 (exact 1/903) ; mais McNemar p=0,5 et bootstrap [0 ; +3,45] pt : correction réelle de 2 cas, pas gain de population.
+
+**Recommandation** : adopter **(b)** pour `exact` et `topk_exact` — annoncer **143/145 = 98,62 %** et **143/239 = 59,83 %**, avec la mention « +2 cas, dont 2 synthétiques ». **Ne pas ajouter (c)** (no-op). Documenter `CONVENTION_CIBLE` (GP multi = `[gouverneur, tête nominale]`) et décider si l'attachement nominal compte ; sinon nettoyer le gold. Corriger à part `s041` (cible vide) et `r309` (SUB). Si (b) est adopté, reclasser le split verbe/nom par la cible appariée : **114/112 verbe, 31/31 nom**.
+
+Aucun fichier existant modifié ; aucun commit. Les deux fichiers sont neufs (index : `A`, sans commit de ma part).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pensee-attachement-v3.md'); t=p.read_text()\nt=t.replace(\"| exact multi-cibles (`cible in cibles`) | — | **143/145 (0,9862)** | mesure secondaire (A13) |\",\n\"| exac … [1069 caractères tronqués]`

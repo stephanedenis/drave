@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 119.2 h |
+| Durée | 119.3 h |
 | Tours | 176 |
-| Messages | 2514 |
-| Appels d'outils | 2204 |
+| Messages | 2519 |
+| Appels d'outils | 2207 |
 | Fichiers touchés | 25 |
-| Commandes | 1814 |
+| Commandes | 1816 |
 | Sous-agents | 16 |
-| Commits | 264 |
+| Commits | 265 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*161 appels d'outils.* Actions notables :
+*164 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,7 +9454,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 128 autres
+- … et 130 autres
 
 **Synthèse produite :**
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1774 autres
+- … et 1776 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9681,7 +9681,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-35 sorties en erreur ou divergentes. Les premières :
+36 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -9965,4 +9965,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapp
 - B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181" -- tools/bloc_linguistique.py tools/p
 - B13 — MULTI-CIBLES (EXACT_ANY 143/145), AUDITS A8/A10/A13 INTÉGRÉS, DOCSTRINGS ET CODE MORT NETTOYÉS ; 182/182" -- tools/bloc_linguistique.py tools/tests/lingui
+- B13 — LA RECOMMANDATION MULTI-CIBLES D'A13 CONSIGNÉE ; T0 DANS LE BUDGET ; 182/182" -- reports/rapport-pensee-attachement-v3.md docs/pilotage/en-cours.md 2>&1 |
 

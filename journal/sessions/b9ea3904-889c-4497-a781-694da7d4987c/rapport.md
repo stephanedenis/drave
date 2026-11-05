@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:47 |
 | Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 76 |
-| Appels d'outils | 83 |
+| Messages | 77 |
+| Appels d'outils | 84 |
 | Fichiers touchés | 0 |
-| Commandes | 79 |
+| Commandes | 80 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*83 appels d'outils.* Actions notables :
+*84 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -41,7 +41,7 @@
 - bash — Read Heuristique implementation
 - bash — Dump English sentence list and duplicates
 - bash — Check spans, overlap, coverage anomalies
-- … et 66 autres
+- … et 67 autres
 
 **Synthèse produite :**
 
@@ -96,12 +96,13 @@
 - **T1** Test evaluator state dependence
 - **T1** Check for concurrent modifications and file timestamps
 - **T1** Check git HEAD and diffs
-- … et 39 autres
+- … et 40 autres
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `1.40user 0.02system 0:01.43elapsed 100%CPU (0avgtext+0avgdata 30028maxresident)k`
 - **T1** `e0592c59 2026-11-05 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
+- **T1** `- un chiffre sans dispositif (« 73 % ») ;`
 
 ## 5. Erreurs rencontrées
 

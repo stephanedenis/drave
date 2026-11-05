@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:47 |
 | Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 65 |
-| Appels d'outils | 92 |
+| Messages | 68 |
+| Appels d'outils | 95 |
 | Fichiers touchés | 1 |
-| Commandes | 76 |
+| Commandes | 78 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer l' … [1961 caractères tronqués]
 
-*92 appels d'outils.* Actions notables :
+*95 appels d'outils.* Actions notables :
 
 - bash — Show repo status and branch
 - bash — List linguistique tools and reports
@@ -41,11 +41,30 @@
 - bash — Find multiword target values
 - bash — Check gold_gele counts
 - bash — Run heuristic and inspect predicted targets
-- … et 76 autres
+- … et 79 autres
 
 **Synthèse produite :**
 
-⏵ Validation de la fiche V3 et de la cohérence avec le JSON
+Mesure faite, sans modifier le code ni committer. Fiche : `reports/rapport-multicibles.md` · JSON : `reports/pensee-multicibles.json`.
+
+**Pin** : HEAD `b1b1292f` (V3, bloc `9da6dee7…`). Le worktree `9544f…`, encore modifié par un autre agent, n'est pas inclus. Le pin V2 `15ee10d3` (`5640809e…`, contexte A7) sert de comparaison.
+
+**Les trois taux — 145 segments au bon span**
+| définition | taux |
+|---|---:|
+| (a) `cible == cibles[0]` | **141/145 = 97,24 %** |
+| (b) `cible in cibles` | **143/145 = 98,62 %** |
+| (c) `cible == tête d'une cible` | **143/145 = 98,62 %** |
+
+Écart (b−a) : **+2 cas, +1,38 pt** ; GP 80/83 → 82/83 (+2,41 pt), SUB 35/36 et REL 26/26 inchangés. **(c) = (b)** : la réduction à la tête est un no-op sur ce gold.
+
+**Sur 239 cibles** : (a) 141/239 = 59,00 % ; (b) 143/239 = 59,83 % ; (c) 143/239 ; +2 (+0,84 pt). **Contexte V2** : 137/145 = 94,48 % → 139/145 = 95,86 %, même +2 et mêmes cas.
+
+**Les 2 gains** sont `s108` et `s122`, deux GP **synthétiques** où le bloc choisit `papier`, la 2e cible. Sur hand+reel : 114/115 = 99,13 %, **écart 0**. Contrôle négatif (1 000 tirages) : P1 p=0,001 ; P2 p=0,001 (exact 1/903) ; mais McNemar p=0,5 et bootstrap [0 ; +3,45] pt : correction réelle de 2 cas, pas gain de population.
+
+**Recommandation** : adopter **(b)** pour `exact` et `topk_exact` — annoncer **143/145 = 98,62 %** et **143/239 = 59,83 %**, avec la mention « +2 cas, dont 2 synthétiques ». **Ne pas ajouter (c)** (no-op). Documenter `CONVENTION_CIBLE` (GP multi = `[gouverneur, tête nominale]`) et décider si l'attachement nominal compte ; sinon nettoyer le gold. Corriger à part `s041` (cible vide) et `r309` (SUB). Si (b) est adopté, reclasser le split verbe/nom par la cible appariée : **114/112 verbe, 31/31 nom**.
+
+Aucun fichier existant modifié ; aucun commit. Les deux fichiers sont neufs (index : `A`, sans commit de ma part).
 
 ## 3. Travail accompli
 
@@ -97,7 +116,7 @@
 - **T1** Debug per-source discrepancy
 - **T1** Check for nondeterminism in block
 - **T1** Repeat measurement three times
-- … et 36 autres
+- … et 38 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -153,4 +172,5 @@
 - **T1** `137 (94,48 %) 1`
 - **T1** `139 (95,86 %) 1`
 - **T1** `2026-11-05 15:29:19 -0500 B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
+- **T1** `b1b1292f7983a5f7349bc81dc92404be5cd99a36 B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
 

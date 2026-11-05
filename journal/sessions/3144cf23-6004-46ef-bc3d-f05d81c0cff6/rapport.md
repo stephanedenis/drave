@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:47 |
 | Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 62 |
-| Appels d'outils | 64 |
-| Fichiers touchés | 4 |
-| Commandes | 55 |
+| Messages | 66 |
+| Appels d'outils | 68 |
+| Fichiers touchés | 5 |
+| Commandes | 58 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2227 caractères tronqués]
 
-*64 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and top-level files
 - bash — List linguistic tests and reports directories
@@ -41,11 +41,11 @@
 - bash — Inspect synthetic gold builder and S generator API
 - bash — Read S generator head and tail
 - bash — Compare S generator spans against the 94 lost
-- … et 47 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
-⏵ Measuring the attachment effect (secondary) for each rule
+⏵ Generating the JSON companion from the measured data
 
 ## 3. Travail accompli
 
@@ -57,6 +57,7 @@
 | `/tmp/spans/simuler.py` | 1 | 0 |
 | `/tmp/spans/analyse.py` | 1 | 0 |
 | `/tmp/spans/final.py` | 1 | 0 |
+| `/tmp/spans/construire_json.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -100,7 +101,7 @@
 - **T1** Inspect sibling report and existing style
 - **T1** Read prior 94-span fiche
 - **T1** Read prior pensee-spans JSON
-- … et 15 autres
+- … et 18 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -108,7 +109,8 @@
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module> TypeError: Heuristique._pos() missing 1 required positional argument: 'mot' [exit code: 1]
+- **T1** : 94 langue Counter({'en': 60, 'fr': 34}) source Counter({('reel', 'REL'): 32, ('reel', 'SUB'): 27, ('synthetique', 'REL'): 16, ('reel', 'GP'): 7, ('synthetique', 'SUB'): 5, ('synthetique', 'GP'): 4, ('
 

@@ -1975,3 +1975,37 @@ en coref phrases 44 / 204
 fr coref phrases 47 / 228
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\npos_hard={'r291','r328','r363','r422','r218','r313','r250'}\nthat={'r034','r074','r114'}\nmissing={'r328','r336','r342','r358','r363','r367'}\nmissing_verb={'r336','r342','r358','r367'}\nroles_clear={'r165','r239'}\ … [762 caractères tronqués]`
+
+  ```
+base16 16 ['r028', 'r102', 'r165', 'r218', 'r239', 'r247', 'r250', 'r291', 'r313', 'r328', 'r336', 'r342', 'r358', 'r363', 'r367', 'r422']
++that 19 ['r028', 'r034', 'r074', 'r102', 'r114', 'r165', 'r218', 'r239', 'r247', 'r250', 'r291', 'r313', 'r328', 'r336', 'r342', 'r358', 'r363', 'r367', 'r422']
++coref 24 ['r028', 'r034', 'r074', 'r102', 'r114', 'r165', 'r218', 'r239', 'r247', 'r250', 'r291', 'r313', 'r328', 'r333', 'r336', 'r340', 'r341', 'r342', 'r358', 'r361', 'r363', 'r367', 'r368', 'r422']
++deb 25 ['r028', 'r034', 'r074', 'r102', 'r114', 'r165', 'r180', 'r218', 'r239', 'r247', 'r250', 'r291', 'r313', 'r328', 'r333', 'r336', 'r340', 'r341', 'r342', 'r358', 'r361', 'r363', 'r367', 'r368', 'r422']
+missing all 6
+overlap missing/pos {'r328', 'r363'}
+coref overlap {'r336', 'r358'}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' docs/methode/resultats.md", "description": "Read results method guide"}`
+
+  ```
+# Ce qu'un résultat doit porter
+
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). À lire **avant d'écrire une fiche**, un JSON de
+> résultats, ou un message de commit.
+
+## Les cinq pièces d'un résultat
+
+1. **Le chiffre** — la valeur, avec son [unité](../theorie/glossaire/entrees/unite.md) et son arrondi utile (jamais plus de chiffres que l'instrument n'en
+   [porte](../theorie/glossaire/entrees/porte.md)) ;
+2. **La mesure qui le produit** — le calcul exact, la métrique ([chrF](../theorie/glossaire/entrees/chrf.md), précision, rappel, [AUC](../theorie/glossaire/entrees/auc.md)…), et ce qu'elle ne
+   mesure pas ;
+3. **Le dispositif** — quel [corpus](../theorie/glossaire/entrees/corpus.md) (et sa provenance), quel modèle (taille, [quantification](../theorie/glossaire/entrees/quantification.md), date de coupure),
+   quelles **couches de neurones** sondées, quel découpage, **quelle unité de mesure** (unité de sens ou unité
+   grammaticale ; si c'est un [jeton](../theorie/glossaire/entrees/jeton.md), le dire comme **technique**), quels réglages (prompt, gabarit, longueur de
+   sortie, graine) ;
+4. **Le [contrôle négatif](../theorie/glossaire/entrees/controle-negatif.md)
+… [2500 caractères tronqués]
+  ```
+

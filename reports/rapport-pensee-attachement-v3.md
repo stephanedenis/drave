@@ -23,6 +23,11 @@
 | **cibles noms (POS gold)** | 26/29 (0,8966) | **29/29 (1,0000)** | **+3** |
 | exact multi-cibles (`cible in cibles`) | — | **143/145 (0,9862)** | mesure secondaire (A13) |
 
+> **Note A13 (multi-cibles)** : le gold admet deux cibles pour **43/96 GP** ; adopter `cible in cibles`
+> donnerait **143/145 (98,62 %)** et 143/239 (59,83 %), avec « +2 cas, dont 2 synthétiques »
+> (s108, s122) — McNemar p=0,5 : correction de 2 cas, pas un gain de population. L'exact
+> conservateur (`cibles[0]`) reste la mesure principale ; `exact_any` est publié à côté (T179).
+
 Rendement global (÷ 239 cibles) : top1 **0,5983**, top-k 0,5941, exact **0,5900**.
 
 ## 2. Les trois règles (et celles qui ne le sont pas)

@@ -1960,3 +1960,198 @@ reports/rapport-pensee-spans.md:51:- **La négative est explicite** : 107 échec
 … [16108 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Computing per-type F1, ablations, and remaining misses for the report
+
+- **write** `{"content": "\"\"\"Derniers chiffres pour la fiche : P/R/F1 par type, ablations, hasard sur les cibles.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport random\nimport sys\nfrom collections import Counter, defaultdict\n\nROOT = pathlib.Path(\"/home/stephane/Data13TB/s … [4203 caractères tronqués]`
+
+  ```
+<path>/tmp/spans/final.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && timeout 900 python3 final.py 2>&1 | head -120", "description": "Run final metrics script"}`
+
+  ```
+AB manque 10
+   GP 'since yesterday' | reel
+   GP 'since this morning' | reel
+   GP 'au-dessus du lac' | reel
+   GP 'les ancienne lettre' | synthetique
+   GP 'le renard' | synthetique
+   GP 'on the wall' | reel
+   GP 'les jardin' | synthetique
+   GP 'il' | synthetique
+   REL 'she talks about' | reel
+   SUB 'that she would come' | hand
+hasard cibles 304 / 5000
+A0 F1 {'tp': 217, 'fp': 597, 'fn': 1646, 'p': 0.2666, 'r': 0.1165, 'f1': 0.1621} AB0 F1 {'tp': 364, 'fp': 346, 'fn': 1499, 'p': 0.5127, 'r': 0.1954, 'f1': 0.2829}
+{
+ "per_type": {
+  "default": {
+   "REL": {
+    "tp": 26,
+    "fp": 40,
+    "fn": 48,
+    "p": 0.3939,
+    "r": 0.3514,
+    "f1": 0.3714
+   },
+   "SUB": {
+    "tp": 37,
+    "fp": 1,
+    "fn": 33,
+    "p": 0.9737,
+    "r": 0.5286,
+    "f1": 0.6852
+   },
+   "GP": {
+    "tp": 89,
+    "fp": 33,
+    "fn": 16,
+    "p": 0.7295,
+    "r": 0.8476,
+    "f1": 0.7841
+   },
+   "GN": {
+    "tp": 208,
+    "fp": 429,
+    "fn": 620,
+    "p": 0.3265,
+    "r": 0.2512,
+    "f1": 0.284
+   },
+   "GV": {
+    "tp": 128,
+    "fp": 556,
+    "fn": 584,
+    "p": 0.1871,
+    "r": 0.1798,
+    "f1": 0.1834
+   }
+  },
+  "A": {
+   "REL": {
+    "tp": 73,
+    "fp": 40,
+    "fn": 1,
+    "p": 0.646,
+    "
+… [766 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/spans/final.json'))\nfor mode,types in d['per_type'].items():\n    print(\"==\",mode)\n    for t,v in types.items():\n        print(f\"  {t}: P {v['p']:.4f} R {v['r']:.4f} F1 {v['f1']:.4f} (tp {v['tp']} fp {v['fp']} … [74 caractères tronqués]`
+
+  ```
+== default
+  REL: P 0.3939 R 0.3514 F1 0.3714 (tp 26 fp 40 fn 48)
+  SUB: P 0.9737 R 0.5286 F1 0.6852 (tp 37 fp 1 fn 33)
+  GP: P 0.7295 R 0.8476 F1 0.7841 (tp 89 fp 33 fn 16)
+  GN: P 0.3265 R 0.2512 F1 0.2840 (tp 208 fp 429 fn 620)
+  GV: P 0.1871 R 0.1798 F1 0.1834 (tp 128 fp 556 fn 584)
+== A
+  REL: P 0.6460 R 0.9865 F1 0.7807 (tp 73 fp 40 fn 1)
+  SUB: P 0.8734 R 0.9857 F1 0.9262 (tp 69 fp 10 fn 1)
+  GP: P 0.7295 R 0.8476 F1 0.7841 (tp 89 fp 33 fn 16)
+  GN: P 0.3265 R 0.2512 F1 0.2840 (tp 208 fp 429 fn 620)
+  GV: P 0.1871 R 0.1798 F1 0.1834 (tp 128 fp 556 fn 584)
+== B
+  REL: P 0.6019 R 0.8378 F1 0.7006 (tp 62 fp 41 fn 12)
+  SUB: P 0.9737 R 0.5286 F1 0.6852 (tp 37 fp 1 fn 33)
+  GP: P 0.7287 R 0.8952 F1 0.8034 (tp 94 fp 35 fn 11)
+  GN: P 0.5688 R 0.3696 F1 0.4480 (tp 306 fp 232 fn 522)
+  GV: P 0.2101 R 0.2051 F1 0.2075 (tp 146 fp 549 fn 566)
+== AB
+  REL: P 0.7374 R 0.9865 F1 0.8439 (tp 73 fp 26 fn 1)
+  SUB: P 0.8734 R 0.9857 F1 0.9262 (tp 69 fp 10 fn 1)
+  GP: P 0.7287 R 0.8952 F1 0.8034 (tp 94 fp 35 fn 11)
+  GN: P 0.5688 R 0.3696 F1 0.4480 (tp 306 fp 232 fn 522)
+  GV: P 0.2101 R 0.2051 F1 0.2075 (tp 146 fp 549 fn 566)
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring the attachment effect (secondary) for each rule
+
+- **bash** `{"command": "cd /tmp/spans && timeout 1200 python3 - <<'EOF' 2>&1 | tail -40\nimport sys, pathlib, json\nROOT=pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,str(ROOT/'tools')); sys.path.insert(0,str(ROOT/'tools/tests/linguistique')); sys.path.insert(0,'/tmp/spans' … [1069 caractères tronqués]`
+
+  ```
+"topk_taux": 0.6192,
+   "exact_taux": 0.6025,
+   "top1_taux_span": 0.7849,
+   "topk_taux_span": 0.7957,
+   "exact_taux_span": 0.7742,
+   "topk_exact_taux": 0.6192,
+   "topk_exact_taux_span": 0.7957
+  },
+  "tete": {
+   "couverture": 1.0,
+   "top1_taux": 0.7957,
+   "topk_taux": 0.8065
+  }
+ },
+ "AB": {
+  "syntagme": {
+   "precision": 0.4468,
+   "rappel": 0.3693,
+   "f1": 0.4043
+  },
+  "att": {
+   "cibles": 239,
+   "labels": 229,
+   "couverture": 0.9582,
+   "top1_taux": 0.6485,
+   "topk_taux": 0.7071,
+   "exact_taux": 0.6402,
+   "top1_taux_span": 0.6769,
+   "topk_taux_span": 0.738,
+   "exact_taux_span": 0.6681,
+   "topk_exact_taux": 0.7071,
+   "topk_exact_taux_span": 0.738
+  },
+  "tete": {
+   "couverture": 1.0,
+   "top1_taux": 0.6856,
+   "topk_taux": 0.7467
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/spans/attachement.json'))\nfor k,v in d.items():\n    a=v['att']; t=v['tete']\n    print(k, 'labels',a['labels'],'couv',a['couverture'],'top1',a['top1_taux'],'topk',a['topk_taux'],'exact',a['exact_taux'],\n          … [242 caractères tronqués]`
+
+  ```
+default labels 145 couv 0.6067 top1 0.5983 topk 0.5941 exact 0.59 | span top1 0.9862 topk 0.9793 exact 0.9724 | tete couv 1.0 top1 0.9862 topk 0.9793
+A labels 224 couv 0.9372 top1 0.6485 topk 0.6946 exact 0.6402 | span top1 0.692 topk 0.7411 exact 0.683 | tete couv 1.0 top1 0.7009 topk 0.75
+B labels 186 couv 0.7782 top1 0.6109 topk 0.6192 exact 0.6025 | span top1 0.7849 topk 0.7957 exact 0.7742 | tete couv 1.0 top1 0.7957 topk 0.8065
+AB labels 229 couv 0.9582 top1 0.6485 topk 0.7071 exact 0.6402 | span top1 0.6769 topk 0.738 exact 0.6681 | tete couv 1.0 top1 0.6856 topk 0.7467
+  ```
+
+### 🤖 Assistant
+
+⏵ Collecting the last distributions and checking deliverable paths
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\nimport json\nfrom collections import Counter\nd=json.load(open('/tmp/spans/analyse.json'))\nrows=d['detail']\nprint(len(rows))\nprint(\"langue\", Counter(r['langue'] for r in rows))\nprint(\"source\", Counter((r['source'],r['type']) for r in rows))\np … [551 caractères tronqués]`
+
+  ```
+94
+langue Counter({'en': 60, 'fr': 34})
+source Counter({('reel', 'REL'): 32, ('reel', 'SUB'): 27, ('synthetique', 'REL'): 16, ('reel', 'GP'): 7, ('synthetique', 'SUB'): 5, ('synthetique', 'GP'): 4, ('hand', 'GP'): 2, ('hand', 'SUB'): 1})
+source total Counter({'reel': 66, 'synthetique': 25, 'hand': 3})
+causes par type {'GP|frontiere': 3, 'SUB|autre_pas_de_branche_sub': 33, 'GP|avale_gv': 3, 'GP|marqueur_hors_lexique_branche': 3, 'REL|avale_gn': 31, 'REL|marqueur_hors_lexique_branche': 12, 'REL|frontiere': 4, 'REL|tete_avalee_gn': 1, 'GP|gold_gp_sans_preposition': 4}
+modes
+A_seul 211 79 {'SUB': 32, 'REL': 47} perdus 0 P 0.3776 R 0.1664 F1 0.231 FP 511 FN 1553
+A_S 224 79 {'SUB': 32, 'REL': 47} perdus 0 P 0.3468 R 0.3043 F1 0.3242 FP 1068 FN 1296
+B_seul 147 41 {'REL': 36, 'GP': 5} perdus 0 P 0.6229 R 0.2598 F1 0.3667 FP 293 FN 1379
+B_S 186 41 {'REL': 36, 'GP': 5} perdus 0 P 0.4291 R 0.3462 F1 0.3832 FP 858 FN 1218
+AB_seul 219 84 {'SUB': 32, 'REL': 47, 'GP': 5} perdus 0 P 0.6639 R 0.299 F1 0.4123 FP 282 FN 1306
+AB_S 229 84 {'SUB': 32, 'REL': 47, 'GP': 5} perdus 0 P 0.4468 R 0.3693 F1 0.4043 FP 852 FN 1175
+chunker_seul 77 0 {} perdus 0 P 0.2585 R 0.0939 F1 0.1378 FP 502 FN 1688
+default 1
+… [332 caractères tronqués]
+  ```
+
