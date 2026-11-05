@@ -2534,6 +2534,16 @@ def t173_topk_strict() -> tuple[bool, str]:
         f"({a['topk_exact_taux_span']})")
 
 
+def t174_convention_documentee() -> tuple[bool, str]:
+    """La convention des cibles est documentée dans le gold et couvre les cinq types."""
+    from ..tests.linguistique.gold_reel import CONVENTION_CIBLE
+    attendus = {"REL", "SUB", "GP", "GN", "GV"}
+    return (attendus <= set(CONVENTION_CIBLE)
+            and "antécédent" in CONVENTION_CIBLE["REL"]
+            and "gouvern" in CONVENTION_CIBLE["GP"]), (
+        f"convention : {sorted(attendus & set(CONVENTION_CIBLE))} documentée")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2706,7 +2716,8 @@ def main() -> int:
               ("T170 attachement ciblé", t170_attachement_cible()),
               ("T171 lexique élargi", t171_lexique_elargi()),
               ("T172 échecs de cible", t172_echecs_cible()),
-              ("T173 top-k strict", t173_topk_strict())]
+              ("T173 top-k strict", t173_topk_strict()),
+              ("T174 convention documentée", t174_convention_documentee())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

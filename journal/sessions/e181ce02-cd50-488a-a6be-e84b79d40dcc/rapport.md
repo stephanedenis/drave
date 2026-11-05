@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 114.4 h |
+| Durée | 114.5 h |
 | Tours | 175 |
-| Messages | 2328 |
-| Appels d'outils | 2033 |
+| Messages | 2335 |
+| Appels d'outils | 2040 |
 | Fichiers touchés | 25 |
-| Commandes | 1678 |
+| Commandes | 1684 |
 | Sous-agents | 2 |
-| Commits | 245 |
+| Commits | 246 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9369,7 +9369,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*156 appels d'outils.* Actions notables :
+*163 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9385,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 114 autres
+- … et 120 autres
 
 **Synthèse produite :**
 
-⏵ Round 13 : réduire les candidats de S à leur tête — le top-k strict doit monter
+⏵ Round 14 : documenter la convention des cibles dans le gold (le point ouvert de T169)
 
 ## 3. Travail accompli
 
@@ -9470,7 +9470,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1638 autres
+- … et 1644 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9863,4 +9863,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP GÉNITIF REJETÉ (123 → 122)" -- docs/pilotage/en-cours.md journal/sessions/e181ce0
 - B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176" -- tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py repo
 - ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS" -- docs/pilotage/roadmap.md docs/pilotage/en-cours.md journa
+- B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177" -- tools/tests/linguistique/gold_reel.py tools/pensee/a
 

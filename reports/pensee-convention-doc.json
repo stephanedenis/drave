@@ -1,0 +1,21 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "177/177",
+ "convention": {
+  "REL": "antécédent (tête du GN à gauche)",
+  "SUB": "antécédent",
+  "GP": "verbe gouverneur ; nom complété pour un génitif",
+  "GN_GV": "nom ou verbe dont le segment dépend"
+ },
+ "mesure": {
+  "verbes": 63,
+  "noms": 82,
+  "segments": 145
+ },
+ "limites": [
+  "convention reconstruite depuis les données",
+  "22 échecs inchangés",
+  "gold 612"
+ ]
+}

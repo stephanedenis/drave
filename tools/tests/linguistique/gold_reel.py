@@ -9,6 +9,28 @@ from __future__ import annotations
 import json
 import pathlib
 
+# La **convention des cibles** d'attachement. Le gold ne la documentait pas ; elle a été lue
+# sur les données le 2026-11-05 (T169/T172) et la voici, explicitement :
+#
+#   - **REL / SUB** : la cible est l'**antécédent** — la tête nominale du GN à gauche
+#     (« l'homme que j'ai vu » → `homme`), jamais un verbe ;
+#   - **GP** : la cible est le **verbe qui gouverne** le complément (« au ballon » → `joue`),
+#     ou, pour un génitif, le **nom qu'il complète** (« de la voisine » → `chat`) ;
+#   - **GN / GV** : la cible, quand elle existe, est le **nom ou le verbe** dont le segment
+#     dépend (36 cibles verbes, 82 cibles noms mesurées sur 145 segments).
+#
+# Deux conventions coexistent donc dans le même champ `cible` : la mesure les publie
+# séparément (`evaluer_gold` → `attachement.verbe` / `attachement.nom`) et le taux global
+# n'est comparable qu'à convention constante.
+CONVENTION_CIBLE = {
+    "REL": "antécédent (tête du GN à gauche)",
+    "SUB": "antécédent (tête du GN à gauche)",
+    "GP": "verbe gouverneur, ou nom complété pour un génitif",
+    "GN": "nom ou verbe dont le segment dépend",
+    "GV": "nom ou verbe dont le segment dépend",
+    "note": "deux conventions dans le même champ ; mesurées séparément (verbe / nom)",
+}
+
 PHRASES = [
     ("r001", "fr", "Le chien mange une pomme.",
      [("Le", "DET"), ("chien", "NOUN"), ("mange", "VERB"), ("une", "DET"), ("pomme", "NOUN")],

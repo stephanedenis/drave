@@ -40426,3 +40426,99 @@ en-cours et plan à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md\n  timeout 240 git commit -m \"ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTA … [501 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-406]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-406", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[s/v7 efaab321] ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS
+ 17 files changed, 97 insertions(+), 29 deletions(-)
+COMMIT OK 1
+efaab321 ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS
+jeu 05 nov 2026 11:04:03 EST
+s/v7
+310
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 13 : enrichir les candidats (verbe du GV voisin **et** tête du GN à gauche)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/bloc_176b.py && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# helper : tête du GN le plus proche à gauche\nt=t.replace('''    def _syntagmes_simp … [1739 caractères tronqués]`
+
+  ```
+têtes de GN ajoutées aux candidats
+topk strict 88 0.6069 | lenient 134 | exact 123
+  ```
+
+### 🤖 Assistant
+
+⏵ L'enrichissement des candidats est **neutre** (88 = 88) : je reviens à HEAD et je clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/bloc_176b.py tools/bloc_linguistique.py && git status --porcelain tools/bloc_linguistique.py | head -1; echo \"--- (vide = arbre = HEAD) ---\"; timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bl … [360 caractères tronqués]`
+
+  ```
+--- (vide = arbre = HEAD) ---
+HEAD : exact 123 | topk 134 | topk strict 88 | labels 145
+jeu 05 nov 2026 11:04:28 EST
+efaab321 ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 14 : documenter la convention des cibles dans le gold (le point ouvert de T169)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,25p' tools/tests/linguistique/gold_reel.py", "description": "Lire l'en-tête du gold réel"}`
+
+  ```
+"""gold_reel.py — 200 phrases réelles (20 françaises, 20 anglaises).
+
+Elles ne sont pas des phrases du bloc ni du générateur : elles sont écrites après, avec leurs
+POS, leurs segments GN/GV/GP/REL/SUB et leur pragmatique. Le fichier `gold_reel.json` est généré
+par `construire()` ; le gold réel total devient **200 phrases** (20 de `gold.py` + 180).
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+
+PHRASES = [
+    ("r001", "fr", "Le chien mange une pomme.",
+     [("Le", "DET"), ("chien", "NOUN"), ("mange", "VERB"), ("une", "DET"), ("pomme", "NOUN")],
+     [("GN", "Le chien", "agent"), ("GV", "mange", "prédicat"), ("GN", "une pomme", "patient")], {"acte": "assertion"}),
+    ("r002", "fr", "La fille lit le journal.",
+     [("La", "DET"), ("fille", "NOUN"), ("lit", "VERB"), ("le", "DET"), ("journal", "NOUN")],
+     [("GN", "La fille", "agent"), ("GV", "lit", "prédicat"), ("GN", "le journal", "patient")], {"acte": "assertion"}),
+    ("r003", "fr", "Nous aimons la musique.",
+     [("Nous", "PRON"), ("aimons", "VERB"), ("la", "DET"), ("musique", "NOUN")],
+     [("GN", "Nous", "agent"), ("GV", "aimons", "prédicat"), ("GN", "la musique", "patient")], {"acte": "assertion"}),
+… [239 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nt=t.replace('''from __future__ import annotations\n\nimport json\nimport pathlib''',\n'''from __future__ import annotations\n … [2956 caractères tronqués]`
+
+  ```
+convention documentée
+T174 ajoutée
+  177/177 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-convention-doc.md <<'MD'\n# B13 — la convention des cibles est documentée dans le gold\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **177/17 … [5858 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 176→177: 5
+docs/pilotage/chantiers.md 176→177: 6
+docs/pilotage/en-cours.md 176→177: 4
+docs + pilotage + README
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\"; do eval \"$t\" >/tmp/ce 2>&1; printf '%-42s EXIT=%s\\n' \"$t\" \"$?\ … [994 caractères tronqués]`

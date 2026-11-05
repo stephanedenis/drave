@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-convention-doc.md`](rapport-pensee-convention-doc.md) | **B13** — la convention des cibles documentée dans le gold, **177/177** |
 | [`rapport-pensee-topk-strict.md`](rapport-pensee-topk-strict.md) | **B13** — le top-k strict : **0,6069**, pas 0,9241, **176/176** |
 | [`rapport-pensee-echecs-cible.md`](rapport-pensee-echecs-cible.md) | **B13** — les 22 échecs : 11 hors candidats, 11 mal classés, **175/175** |
 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | **B13** — le lexique élargi : exact 0,8082 → **0,8483**, **174/174** |
@@ -149,7 +150,6 @@
 | [`INDEX.md`](INDEX.md) | **A7.5–A7.26** — 22 fiches de cache KV et de grappe réseau ; l'index exhaustif |
 | [`rapport-m6-moteur.md`](rapport-m6-moteur.md) | **B27** — M6 moteur : exact 100 %, conflit 0 ; le cue désigne le canal, pas de compétition |
 | [`rapport-m6-conflit2.md`](rapport-m6-conflit2.md) | **B26** — M6 conflit : 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition |
-| [`rapport-m8-rejeu.md`](rapport-m8-rejeu.md) | **B25** — M8 rejeu : exact 0, champs 74,6 %, rejeu 0, hybride 0 sur 6 codes tenus |
 
 ## Les données brutes
 
