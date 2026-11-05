@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 17.9 h |
-| Tours | 257 |
-| Messages | 1432 |
-| Appels d'outils | 1440 |
+| Tours | 258 |
+| Messages | 1436 |
+| Appels d'outils | 1443 |
 | Fichiers touchés | 15 |
-| Commandes | 1252 |
+| Commandes | 1255 |
 | Sous-agents | 0 |
-| Commits | 278 |
+| Commits | 279 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -537,6 +537,8 @@
 **Tour 256** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 257** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 258** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6357,7 +6359,27 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 252 : la passe avance (n3-sparsite, occupations) ; je compte et commit
+⏵ Cycle 252 : la passe enchaîne les vertes (61/83), aucune nouvelle rouge
+
+**Cycle 252 — après les rouges connues, la passe enchaîne les vertes.**
+
+- **Passe** : **61 journaux**, registre 60 verdicts — `n3-sparsite` (6 s), `occupation × élagage` (62 s), `occupation du moteur` (61 s). Les seules rouges restent les **deux tolérées** (`indice`, `melange`) plus la **rouge de banc déjà corrigée et rejouée verte**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 617 mots**, **T0 3 987 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : finir la passe (≈22 portes), mettre à jour les références avec la rouge corrigée et sa rejoue, puis décider d'une passe propre de confirmation.
+
+### Tour 258 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 253 : ocr-scans verte (529 s), passe à 62 journaux ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6423,7 +6445,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1212 autres
+- … et 1215 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6849,4 +6871,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE" -m "La passe complète a trouvé la première rouge non tolérée : porte-lec
 - ÉTAT — PASSE 60/83 : LES DEUX ROUGES TOLÉRÉES SONT LÀ (INDICE, MÉLANGE) ; LECTEUR CORRIGÉE ; HEURE 01 H 12" -m "Le registre de la passe compte 60 entrées : port
 - ÉTAT — HEURE 01 H 16 ; LA PASSE AVANCE (n3-sparsite, OCCUPATIONS) SANS NOUVELLE ROUGE" -m "Après les deux tolérées et la rouge de banc corrigée, la passe enchaî
+- ÉTAT — HEURE 01 H 19 ; PASSE 62 JOURNAUX, OCR-SCANS VERTE (529 S), AUCUNE NOUVELLE ROUGE" -m "La passe a franchi porte-ocr-scans en 529 s (familles, colonnes et
 
