@@ -34089,3 +34089,100 @@ revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 247 : indice à 13 min (durée historique ~13-17 min) ; je commit l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h247.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h247.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [970 caractères tronqués]`
+
+  ```
+2026-11-05 00 h 52
+[s/v7 6f73c791] ÉTAT — HEURE 00 H 59 ; INDICE À 13 MIN, DANS SA DURÉE HISTORIQUE
+ 11 files changed, 128 insertions(+), 20 deletions(-)
+6f73c791 ÉTAT — HEURE 00 H 59 ; INDICE À 13 MIN, DANS SA DURÉE HISTORIQUE
+2faf2fa1 ÉTAT — HEURE 00 H 57 ; 83 PORTES OUTILLÉES, INDICE TOUJOURS EN COURS
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 247 : indice à 13 min, dans sa durée historique, registre 30/83 sans non-zéro
+
+**Cycle 247 — la porte lente est dans ses temps connus.**
+
+- **`porte-indice`** : **13 min** d'écoulé — exactement la plage des passes précédentes (821 s puis 1 027 s). Elle rendra son verdict (rouge structurelle tolérée attendue) et le harnais **continue**, il ne s'arrête pas à la première rouge.
+- **Registre** : **30 entrées**, toutes nulles ; `awk '$2 != 0'` ne rend rien.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 610 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : lire le verdict d'indice, laisser la passe finir, comparer aux références, puis les faits B13/S.
+
+
+## Tour 253
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 248/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 248 : audit et verdict d'indice (premier non-zéro attendu ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+6f73c791 ÉTAT — HEURE 00 H 59 ; INDICE À 13 MIN, DANS SA DURÉE HISTORIQUE
+2faf2fa1 ÉTAT — HEURE 00 H 57 ; 83 PORTES OUTILLÉES, INDICE TOUJOURS EN COURS
+b84b55e1 ÉTAT — HEURE 00 H 54 ; INDICE À 7 MIN, REGISTRE 30/83 SANS NON-ZÉRO
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 573 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 785 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 505 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2113 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    aeafe951-9c3d-4bb5 · en pause · 520 
+… [218 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [450 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1610 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3980 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+30 work/portes/passe-2404-23h45/registre.txt
+  porte-homeostasie      ✅                         755 s    ✅ porte tenue (×0 exact · activité monotone · dominance reproduite)
+  porte-horloge          ✅                          31 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 248 : je mesure indice (≈15 min) et vérifie sa progression
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ps -o pid,etime,pcpu,cmd -p $(pgrep -f \"porte-indice.sh\" | head -1) 2>/dev/null ; ls -l --time-style=\"+%H:%M:%S\" work/portes/passe-2404-23h45/porte-indice.log 2>/dev/null ; tail -3 work/portes/passe-2404-23h45/porte-indice.log 2>/ … [135 caractères tronqués]`
+
+  ```
+PID     ELAPSED %CPU CMD
+1427249       15:57  0.0 timeout 1800 bash tools/porte-indice.sh
+-rw-r--r--. 1 stephane stephane 690 00:54:45 work/portes/passe-2404-23h45/porte-indice.log
+    capture d'état    : position(s) [1469] écrite(s) dans /tmp/tmp.4aUW2swYF1/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  témoin   capture d'état    : position(s) [1440] écrite(s) dans /tmp/tmp.4aUW2swYF1/etatC.*
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 248 : indice en section 3 (captures d'état) ; je commit l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h248.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h248.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [969 caractères tronqués]`
