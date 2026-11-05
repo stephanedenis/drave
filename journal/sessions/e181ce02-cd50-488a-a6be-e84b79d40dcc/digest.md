@@ -38175,3 +38175,4 @@ T163 à 32 et fiche ajustée
   165/166 portes tenues
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep \"❌\"; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Identifier la porte rouge", "timeoutMs": 5400000}`
