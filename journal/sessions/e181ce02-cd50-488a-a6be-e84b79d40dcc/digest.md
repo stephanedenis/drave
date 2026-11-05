@@ -38155,3 +38155,4 @@ fiche + JSON + docs + état + README
   ✅ état court, structuré, multi-session et reprenable
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncible=\"(rapport-pensee-cible-proximite.md)\"\nout=[]; n=0\nfor l in lignes:\n    if cible in l:\n        n+=1; co … [276 caractères tronqués]`

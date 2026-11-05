@@ -1,0 +1,30 @@
+{
+ "date": "2026-11-04",
+ "ligne": "B13",
+ "portes": "166/166",
+ "echecs": {
+  "span": 94,
+  "cible": 33,
+  "total": 127
+ },
+ "avant": {
+  "top1": 95,
+  "topk": 112,
+  "exact": 13,
+  "tete_top1": 94,
+  "tete_topk": 111
+ },
+ "apres": {
+  "top1": 96,
+  "topk": 113,
+  "exact": 14,
+  "tete_top1": 96,
+  "tete_topk": 113
+ },
+ "cause_32": "le GV couvre la phrase : le dernier token n'est pas le verbe",
+ "limites": [
+  "les 94 spans non qualifiés",
+  "pas d'identification du verbe",
+  "gold 612"
+ ]
+}

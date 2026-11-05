@@ -24794,3 +24794,119 @@ pas   7300 · perte 0.9978 · PPL val 2.412 · 7459 s
 ⏵ Cycle 152 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h152.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h152.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [864 caractères tronqués]`
+
+  ```
+heure 20 h 23
+[s/v7 e13723f6] ÉTAT — HEURE 23 H 37 ; 2 048 : 2E MOITIÉ À 7 300 PAS ; B13 165/165, D 62
+ 15 files changed, 275 insertions(+), 31 deletions(-)
+e13723f6 ÉTAT — HEURE 23 H 37 ; 2 048 : 2E MOITIÉ À 7 300 PAS ; B13 165/165, D 62
+14df28a1 ÉTAT — HEURE 23 H 32 ; 2 048 : 2E MOITIÉ À 7 150 PAS ; B13 165/165, D 62
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 152 : audit vert, seconde moitié du 2 048 à 7 300/10 000, heure 20 h 23
+
+**Cycle 152 — tout est vert.**
+
+- **Audit complet** : revue ✅ **627 fiches / 720 JSON / 120 docs / 83 portes** ; **3 053 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 623 mots**, **T0 3 993 / 4 000** ✅.
+- **2 048** : la seconde moitié est à **7 300/10 000** (7 459 s, GPU1 à 100 %).
+- **B13 165/165**, D **restauré à 62 documents**, compteurs 627/720, sur **`s/v7`**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la seconde moitié du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 158
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 153/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 153 : instantané, audit et suivi de la seconde moitié du 2 048
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+e13723f6 ÉTAT — HEURE 23 H 37 ; 2 048 : 2E MOITIÉ À 7 300 PAS ; B13 165/165, D 62
+14df28a1 ÉTAT — HEURE 23 H 32 ; 2 048 : 2E MOITIÉ À 7 150 PAS ; B13 165/165, D 62
+0aeb4211 ÉTAT — HEURE 23 H 27 ; 2 048 : 2E MOITIÉ À 7 050 PAS ; B13 165/165, D 62
+e374a001 ÉTAT — HEURE 23 H 22 ; 2 048 : 2E MOITIÉ À 6 900 PAS ; B13 165/165, D 62
+9b69fb85 ÉTAT — HEURE 23 H 17 ; 2 048 : 2E MOITIÉ À 6 800 PAS ; B13 165/165, D 62
+d9867251 ÉTAT — HEURE 23 H 12 ; 2 048 : 2E MOITIÉ À 6 650 PAS ; B13 165/165, D 62
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/pensee-echecs-attachement.json
+?? reports/rapport-pensee-echecs-attachement.md
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 304 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 516 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, repor
+… [720 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [345 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3993 mots (budget 4 000)
+  ✅ 3060 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---ROPE 2E ---
+pas   7400 · perte 0.9435 · PPL val 2.401 · 7561 s
+pas   7450 · perte 0.9195 · PPL val 2.404 · 7612 s
+0, 0 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Une nouvelle fiche B13 (« echecs-attachement ») est apparue (628/721) ; je lis le verdict
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -10 reports/rapport-pensee-echecs-attachement.md 2>/dev/null ; echo \"=== ÉTAT ===\" ; head -3 docs/pilotage/en-cours.md ; grep -n \"fichiers / JSON\\|B13 \\*\\*16\" docs/pilotage/en-cours.md | head -3", "description": "Read new  … [28 caractères tronqués]`
+
+  ```
+# B13 — les 127 échecs qualifiés : 94 de span, 33 de cible
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
+> **166/166 portes** : les **127 échecs** de l'attachement se répartissent en **94 de span**
+> (aucun segment prédit au même span) et **33 de cible** (le span est bon, la cible n'est pas
+> dans les candidats). Le correctif testé — ajouter les GV du chunker aux GV du générateur S et
+> remplir les segments d'union — ne répare **qu'un** des 33. Les 32 autres ont un GV qui couvre
+> **toute la phrase** : le dernier token n'est pas le verbe (`… in the park` → `park`, pas `saw`).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+=== ÉTAT ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 16 h 50 HNE (heure locale, EST).**
+71:- **Fait** : B13 **165/165** ; **candidats verbes : top-k 0,4686, tête 0,7655** ; attachement par proximité (exact 0,0544) ; rôles 301/322 ; passifs hors du chemin S ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md), [candidats verbes](../../reports/rapport-pensee-candidats-verbes.md).
+108:| fichiers / J
+… [74 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 166/166 : les 127 échecs qualifiés (94 span, 33 cible) — j'intègre dans l'état et les pages
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:50]); continue\n        t=t.replace(old,new)\n    p.writ … [2853 caractères tronqués]`
