@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 17.4 h |
-| Tours | 251 |
-| Messages | 1389 |
-| Appels d'outils | 1403 |
+| Durée | 17.5 h |
+| Tours | 252 |
+| Messages | 1393 |
+| Appels d'outils | 1406 |
 | Fichiers touchés | 15 |
-| Commandes | 1216 |
+| Commandes | 1219 |
 | Sous-agents | 0 |
-| Commits | 271 |
+| Commits | 272 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -525,6 +525,8 @@
 **Tour 250** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 251** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 252** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6207,7 +6209,27 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 246 : je vérifie le compte réel des portes (83) puis commit l'état
+⏵ Cycle 246 : 83 portes vérifiées sur disque, indice toujours en cours
+
+**Cycle 246 — le décompte des portes est vérifié à la source.**
+
+- **83 scripts `tools/porte-*.sh`** sur disque, **31 journaux** déjà écrits, **30 verdicts** au registre — tous nuls. `porte-indice` (rouge structurelle tolérée) tourne encore.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 610 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : laisser la passe finir, lire le registre et le comparer aux références, puis les faits B13/S.
+
+### Tour 252 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check indice
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 247 : indice à 13 min (durée historique ~13-17 min) ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6273,7 +6295,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1176 autres
+- … et 1179 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6692,4 +6714,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 00 H 50 ; PORTE-INDICE TOURNE (ROUGE TOLÉRÉE CONNUE) ; REGISTRE 30/83 SANS NON-ZÉRO" -m "Le harnais est arrivé à porte-indice, l'une des deux rouge
 - ÉTAT — HEURE 00 H 54 ; INDICE À 7 MIN, REGISTRE 30/83 SANS NON-ZÉRO" -m "porte-indice (rouge structurelle tolérée, ~820-1 030 s les passes précédentes) tourne d
 - ÉTAT — HEURE 00 H 57 ; 83 PORTES OUTILLÉES, INDICE TOUJOURS EN COURS" -m "Le décompte est vérifié sur disque : 83 scripts tools/porte-*.sh, 31 journaux déjà écr
+- ÉTAT — HEURE 00 H 59 ; INDICE À 13 MIN, DANS SA DURÉE HISTORIQUE" -m "porte-indice approche de sa durée des passes précédentes (821 s puis 1 027 s) ; elle rendr
 
