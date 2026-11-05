@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**85 commits** · **19 session(s)** · **8 thème(s)**
+**86 commits** · **19 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 12 | [distribue.md](distribue.md) |
-| docs | 30 | [docs.md](docs.md) |
+| docs | 31 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 19 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
@@ -133,6 +133,7 @@
 | 16:24 | `841e0e71` | B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183 |
 | 16:27 | `b12616c3` | THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis) |
 | 16:30 | `16733886` | ÉTAT — B13 183/183, ATTACHEMENT 0,9724 (FR 0,9658 / EN 1,000) ; 14 SOUS-AGENTS INTÉGRÉS ; L'ANGLAIS EST LE DÉCOUPAGE |
+| 16:32 | `704f00d7` | ÉTAT — TRIM T0 (3 997) ; B13 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 

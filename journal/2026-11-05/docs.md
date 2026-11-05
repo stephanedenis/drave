@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (30)
+## Commits du jour (31)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -38,6 +38,7 @@
 | 14:55 | `15ee10d3` | PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181) | `chantiers.md`, `en-cours.md`, `roadmap.md` (+27) |
 | 15:50 | `e59ba071` | B13 — MULTI-CIBLES (EXACT_ANY 143/145), AUDITS A8/A10/A13 INTÉGRÉS, DOCSTRINGS ET CODE MORT NETTOYÉS ; 182/182 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+36) |
 | 15:58 | `c80744ce` | PILOTAGE — L'APRÈS-MIDI DES 11 SOUS-AGENTS AU JOURNAL, RAPPORT ET PLAN À JOUR ; 182/182 | `en-cours.md`, `README.md`, `attention.md` (+16) |
+| 16:32 | `704f00d7` | ÉTAT — TRIM T0 (3 997) ; B13 183/183 | `en-cours.md`, `README.md`, `attention.md` (+12) |
 
 ## Chiffres du jour
 

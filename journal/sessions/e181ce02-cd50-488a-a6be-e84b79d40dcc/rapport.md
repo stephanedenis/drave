@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 119.9 h |
 | Tours | 176 |
-| Messages | 2552 |
-| Appels d'outils | 2236 |
+| Messages | 2554 |
+| Appels d'outils | 2238 |
 | Fichiers touchés | 25 |
-| Commandes | 1838 |
+| Commandes | 1839 |
 | Sous-agents | 16 |
-| Commits | 273 |
+| Commits | 274 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*193 appels d'outils.* Actions notables :
+*195 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,7 +9454,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 152 autres
+- … et 153 autres
 
 **Synthèse produite :**
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1798 autres
+- … et 1799 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9974,4 +9974,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis)" -- docs/theorie/modele-natif.md docs/pilotage/en-cours.md 2>&1 
 - ÉTAT — B13 183/183, ATTACHEMENT 0,9724 (FR 0,9658 / EN 1,000) ; 14 SOUS-AGENTS INTÉGRÉS ; L'ANGLAIS EST LE DÉCOUPAGE" -- docs/pilotage/en-cours.md docs/pilotage
 - ÉTAT — TRIM T0 (3 997) ; B13 183/183" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRIM T0"; then echo "COMMIT OK $i"; b
+- ÉTAT — T0 À 4 000 ; LE PROTOTYPE DES REPLIS (A10) ENTRE AVEC SON STATUT « NON INTÉGRÉ »" -- docs/pilotage/en-cours.md tools/tests/linguistique/replis_cible.py 2
 

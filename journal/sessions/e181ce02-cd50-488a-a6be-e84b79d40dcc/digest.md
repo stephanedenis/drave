@@ -43829,3 +43829,32 @@ jeu 05 nov 2026 16:32:15 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; attachement v3 **exact spans 0,9724** (fr 0,9658 / en 1,000), **top-k strict 0,9793**, noms  … [1336 caractères tronqués]`
+
+  ```
+· T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1613]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1613", "timeout_ms": 600000, "wait": true}`
+
+  ```
+15 files changed, 55 insertions(+), 24 deletions(-)
+COMMIT OK 1
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=1
+704f00d7 ÉTAT — TRIM T0 (3 997) ; B13 183/183
+jeu 05 nov 2026 16:34:53 EST
+ M tools/structures
+?? tools/tests/linguistique/replis_cible.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; attachement **exact spans 0,9724** (fr 0,9658 / en 1,000), top-k strict 0,9793, multi-cibles … [1659 caractères tronqués]`
