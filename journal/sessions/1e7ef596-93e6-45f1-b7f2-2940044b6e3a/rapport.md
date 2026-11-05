@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 18.2 h |
-| Tours | 264 |
-| Messages | 1461 |
-| Appels d'outils | 1462 |
+| Tours | 265 |
+| Messages | 1466 |
+| Appels d'outils | 1466 |
 | Fichiers touchés | 15 |
-| Commandes | 1274 |
+| Commandes | 1278 |
 | Sous-agents | 0 |
-| Commits | 285 |
+| Commits | 286 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -551,6 +551,8 @@
 **Tour 263** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 264** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 265** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6512,7 +6514,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 259 : profondeur-routée tourne depuis plusieurs minutes ; je mesure et commit
+⏵ Cycle 259 : profondeur-routée à 4 min, passe à 68 journaux, audit vert
+
+**Cycle 259 — une porte en cours, le reste vert.**
+
+- **Passe** : **68 journaux** ; `porte-profondeur-routee` tourne depuis **4 min**, sous la borne de 30 min. Rouges : les **deux tolérées** + la **rouge de banc corrigée**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 617 mots**, **T0 3 987 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : finir la passe (≈14 portes), mettre à jour les références, puis décider d'une passe propre de confirmation.
+
+### Tour 265 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Check routed-depth gate progress
+- bash — Commit state with gate evidence
+
+**Synthèse produite :**
+
+⏵ Cycle 260 : profondeur-routée calcule (Qwen 0,5B, ctx 8192) ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6578,7 +6601,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1234 autres
+- … et 1238 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7011,4 +7034,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 30 ; PORTE-PONT VERTE (99 S), PRÉCHARGEMENT EN COURS ; 67 JOURNAUX" -m "Le pont est tenu en 99 s (448 fibres +2,81 %, 392 fibres +25,35 %, la 
 - ÉTAT — HEURE 01 H 33 ; PRÉCHARGEMENT VERTE (214 S), PROFONDEUR-ROUTÉE EN COURS ; 68 JOURNAUX" -m "La porte du préchargement est tenue en 214 s ; la passe est à 
 - ÉTAT — HEURE 01 H 36 ; PROFONDEUR-ROUTÉE TOUJOURS EN COURS ; 68 JOURNAUX" -m "La porte de profondeur routée tourne encore, sous la borne de 30 min ; la passe re
+- ÉTAT — HEURE 01 H 39 ; PROFONDEUR-ROUTÉE CALCULE (QWEN 0,5B, CTX 8192) ; 68 JOURNAUX" -m "La porte n'est pas pendue : son journal montre la chaîne hors-ligne à 
 

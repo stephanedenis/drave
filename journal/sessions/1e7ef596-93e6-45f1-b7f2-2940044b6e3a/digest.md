@@ -35497,3 +35497,105 @@ porte-melange 1 148
 ⏵ Cycle 259 : profondeur-routée tourne depuis plusieurs minutes ; je mesure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ps -o etime,pcpu,cmd -p $(pgrep -f \"bash tools/porte-profondeur-routee.sh\" | head -1) 2>/dev/null | tail -1 ; cp docs/pilotage/en-cours.md /tmp/state.h259.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h259.md'\nt=open … [1048 caractères tronqués]`
+
+  ```
+04:02  0.0 timeout 1800 bash tools/porte-profondeur-routee.sh
+2026-11-05 01 h 35
+[s/v7 230e3f0f] ÉTAT — HEURE 01 H 36 ; PROFONDEUR-ROUTÉE TOUJOURS EN COURS ; 68 JOURNAUX
+ 13 files changed, 132 insertions(+), 22 deletions(-)
+230e3f0f ÉTAT — HEURE 01 H 36 ; PROFONDEUR-ROUTÉE TOUJOURS EN COURS ; 68 JOURNAUX
+c5701c75 ÉTAT — HEURE 01 H 33 ; PRÉCHARGEMENT VERTE (214 S), PROFONDEUR-ROUTÉE EN COURS ; 68 JOURNAUX
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 259 : profondeur-routée à 4 min, passe à 68 journaux, audit vert
+
+**Cycle 259 — une porte en cours, le reste vert.**
+
+- **Passe** : **68 journaux** ; `porte-profondeur-routee` tourne depuis **4 min**, sous la borne de 30 min. Rouges : les **deux tolérées** + la **rouge de banc corrigée**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 617 mots**, **T0 3 987 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : finir la passe (≈14 portes), mettre à jour les références, puis décider d'une passe propre de confirmation.
+
+
+## Tour 265
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 260/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 260 : audit et suivi de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+230e3f0f ÉTAT — HEURE 01 H 36 ; PROFONDEUR-ROUTÉE TOUJOURS EN COURS ; 68 JOURNAUX
+c5701c75 ÉTAT — HEURE 01 H 33 ; PRÉCHARGEMENT VERTE (214 S), PROFONDEUR-ROUTÉE EN COURS ; 68 JOURNAUX
+78014667 ÉTAT — HEURE 01 H 30 ; PORTE-PONT VERTE (99 S), PRÉCHARGEMENT EN COURS ; 67 JOURNAUX
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 616 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 828 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 548 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2156 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de p
+… [267 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [478 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1617 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3987 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+68
+67 work/portes/passe-2404-23h45/registre.txt
+porte-indice 1 1207
+porte-lecteur 1 0
+porte-melange 1 148
+  porte-pont             ✅                          99 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-prechargement    ✅                         214 s    PORTE TENUE
+1582904 bash tools/porte-profondeur-routee.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 260 : profondeur-routée à ~6 min ; je vérifie sa progression
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ps -o etime,pcpu -p 1582904 2>/dev/null | tail -1 ; ls -l --time-style=\"+%H:%M:%S\" work/portes/passe-2404-23h45/porte-profondeur-routee.log 2>/dev/null ; tail -3 work/portes/passe-2404-23h45/porte-profondeur-routee.log 2>/dev/null ; … [83 caractères tronqués]`
+
+  ```
+06:44  0.0
+-rw-r--r--. 1 stephane stephane 1113 01:32:22 work/portes/passe-2404-23h45/porte-profondeur-routee.log
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+
+=== 2. capturer les deux profondeurs sur 8192 jetons ===
+1585456 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/porte-profondeur-routee/corpus.ids --limit 8192 --ctx 8192 --threads 8 --couches 0:16 --tete-partielle --etat-sortie /tmp/porte-profondeur-routee/e16/etat --etat-pos 4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,
+… [39123 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 260 : profondeur-routée calcule (Qwen 0,5B, ctx 8192) ; je commit l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h260.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h260.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [1014 caractères tronqués]`
