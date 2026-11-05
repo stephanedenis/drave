@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 18.5 h |
-| Tours | 270 |
-| Messages | 1493 |
-| Appels d'outils | 1488 |
+| Durée | 18.6 h |
+| Tours | 271 |
+| Messages | 1498 |
+| Appels d'outils | 1492 |
 | Fichiers touchés | 15 |
-| Commandes | 1300 |
+| Commandes | 1304 |
 | Sous-agents | 0 |
-| Commits | 291 |
+| Commits | 292 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -563,6 +563,8 @@
 **Tour 269** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 270** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 271** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6657,7 +6659,29 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 265 : passe à 83/83 journaux (82 verdicts) ; je commit le heartbeat du hub et l'état
+⏵ Cycle 265 : les 83 portes ont tourné ; seule rouge nouvelle, le heartbeat de e181ce02 (hors territoire hub)
+
+**Cycle 265 — la passe a lancé les 83 portes.**
+
+- **Journalisation** : **83 journaux**, registre 82 — la dernière porte (`trace`) est verte (32 s), `topologie` verte (122 s), `tableaux` verte (1 s), `tokenizer-kimi` verte (10 s).
+- **Rouges** : `indice` (1 207 s) et `melange` (148 s) — **tolérées** ; `lecteur` — **corrigée et rejouée verte** ; **`sessions`** — « mandat périmé (846 min) : **e181ce02** — heartbeat à rafraîchir ».
+- **Ce que le hub peut faire** : `journal/sessions/<id>/` **n'est pas son territoire** ; il a rafraîchi **son propre** heartbeat (1e7ef596), et la porte ne signale plus que **e181ce02** (session Pensée/L : 14 h sans heartbeat, 5 h 30 sans mouvement dans son périmètre). C'est une **rouge de coordination**, pas une régression du dépôt.
+- **Audit** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+
+**Le goal reste actif** : attendre le verdict final du harnais, mettre à jour les **références de non-régression** avec les quatre rouges catégorisées, et statuer sur une passe de confirmation (la rouge de coordination persistera tant que e181ce02 ne rafraîchit pas).
+
+### Tour 271 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and read pass verdict
+- bash — Find gate missing verdict and harness child
+- bash — Check vision and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 266 : dernière porte = vision ; je mesure son écoulé et commit l'état
 
 ## 3. Travail accompli
 
@@ -6723,7 +6747,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1260 autres
+- … et 1264 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7162,4 +7186,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 51 ; PASSE 72 JOURNAUX : R13-BPE ET RÉCURRENCE VERTES, RÉFLEXE EN COURS" -m "BPE natif réversible (52 s) et boucle déterministe (19 s) sont te
 - ÉTAT — HEURE 01 H 54 ; PASSE 76 JOURNAUX : REGISTRE, REPARTI-MOTEUR ET RESSOURCES VERTES" -m "Trois portes de plus sans rouge : région absente refusée en la nom
 - PASSE 83/83 JOURNAUX ; PORTE-SESSIONS ROUGE PAR LE HEARTBEAT DE e181ce02 ; HEURE 01 H 58" -m "Le harnais a lancé les 83 portes. porte-sessions rend 1 : le heart
+- ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR" -m "Le registre compte 82 verdicts : indice, lecteur, melange et ses
 
