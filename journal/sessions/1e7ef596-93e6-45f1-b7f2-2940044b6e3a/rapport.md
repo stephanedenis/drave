@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 18.7 h |
-| Tours | 273 |
-| Messages | 1508 |
-| Appels d'outils | 1500 |
+| Tours | 274 |
+| Messages | 1515 |
+| Appels d'outils | 1506 |
 | Fichiers touchés | 15 |
-| Commandes | 1312 |
+| Commandes | 1318 |
 | Sous-agents | 0 |
-| Commits | 294 |
+| Commits | 295 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -569,6 +569,8 @@
 **Tour 272** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 273** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 274** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6730,7 +6732,31 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 268 : vision à 10 min ; le harnais écrira « X vertes, Y rouges » et listera les rouges ; je commit
+⏵ Cycle 268 : vision à 10 min 40, le bilan du harnais viendra en « X vertes, Y rouges »
+
+**Cycle 268 — la dernière porte est encore au calcul.**
+
+- **`porte-vision`** : **10 min 40** d'écoulé, sous la borne de 30 min ; le banc mmproj tourne avec 32 couches. Le harnais écrira ensuite son bilan (`--- X vertes, Y rouges ---`) et relira les six dernières lignes de chaque rouge.
+- **Rouges attendues** : `indice` et `melange` (tolérées), `lecteur` (corrigée), `sessions` (coordination e181ce02).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : lire le bilan, mettre à jour les **références de non-régression** avec les quatre rouges catégorisées.
+
+### Tour 274 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and read pass summary
+- bash — Read references table sections
+- bash — Read gates table header
+- bash — Update non-regression references
+- bash — Commit pass verdict in references and state
+
+**Synthèse produite :**
+
+⏵ Cycle 269 : la passe est finie, je l'inscris dans l'état et commit
 
 ## 3. Travail accompli
 
@@ -6796,7 +6822,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1272 autres
+- … et 1278 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7238,4 +7264,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR" -m "Le registre compte 82 verdicts : indice, lecteur, melange et ses
 - ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE" -m "La dernière porte calcule encore, sous la borne de 30 min ; le premier 
 - ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES »" -m "Le harnais écrit le bilan sur la sortie standard et dans le regis
+- PASSE COMPLÈTE FINIE — 83 PORTES, 79 VERTES, 4 ROUGES CATÉGORISÉES ; RÉFÉRENCES ET ÉTAT À JOUR" -m "Bilan du harnais : 79 vertes, 4 rouges, 2 h 29, journaux wor
 

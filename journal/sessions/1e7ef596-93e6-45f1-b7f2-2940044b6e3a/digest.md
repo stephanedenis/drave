@@ -36526,3 +36526,156 @@ for g in $portes; do
 ⏵ Cycle 268 : vision à 10 min ; le harnais écrira « X vertes, Y rouges » et listera les rouges ; je commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ps -o etime -p 1751852 2>/dev/null | tail -1 ; cp docs/pilotage/en-cours.md /tmp/state.h268.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h268.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,t … [1104 caractères tronqués]`
+
+  ```
+10:40
+2026-11-05 02 h 05
+[s/v7 8dbff305] ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES »
+ 13 files changed, 171 insertions(+), 23 deletions(-)
+8dbff305 ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES »
+c69b55bc ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 268 : vision à 10 min 40, le bilan du harnais viendra en « X vertes, Y rouges »
+
+**Cycle 268 — la dernière porte est encore au calcul.**
+
+- **`porte-vision`** : **10 min 40** d'écoulé, sous la borne de 30 min ; le banc mmproj tourne avec 32 couches. Le harnais écrira ensuite son bilan (`--- X vertes, Y rouges ---`) et relira les six dernières lignes de chaque rouge.
+- **Rouges attendues** : `indice` et `melange` (tolérées), `lecteur` (corrigée), `sessions` (coordination e181ce02).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : lire le bilan, mettre à jour les **références de non-régression** avec les quatre rouges catégorisées.
+
+
+## Tour 274
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 269/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 269 : bilan final de la passe et verdict de vision
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+8dbff305 ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES »
+c69b55bc ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE
+cae0cb74 ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 646 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    1e7ef596-93e6-45f1 · actif    ·  13 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 578 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2186 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, 
+… [281 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -1 ; python3 tools/verifie_en_cours.py 2>&1 | tail -1 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [399 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3986 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+  --- porte-melange ---
+    === 1. prélever l'état FINAL depuis l'INFÉRENCE (même numérotation) ===
+        capture d'état    : position(s) [1470] (depuis la fin d'une invite de 1471 jetons) écrite(s) dans /tmp/tmp.wuho68wbFK/etatA
+        capture d'état    : position(s) [1470] (depuis la fin d'une invite de 1471 jetons) écrite(s) dans /tmp/tmp.wuho68wbFK/etatB
+    === 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+      ❌ l'état de A ne rend pas le code de A dans une
+         invite qui n'en contient aucun : le mélange ne pourrait rien dire
+  --- porte-sessions ---
+    autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, manda
+… [389 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 269 : la passe est FINIE — 79 vertes, 4 rouges ; je lis les références pour les mettre à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '60,90p' docs/pilotage/references-non-regression.md ; echo \"=== 120-154 ===\" ; sed -n '120,154p' docs/pilotage/references-non-regression.md", "description": "Read references table sections"}`
+
+  ```
+| `porte-bloc-linguistique.sh` | 12 s | ✅ porte bloc linguistique verte |
+| `porte-bloc-maths.sh` | 1 s | ✅ porte bloc maths verte |
+| `porte-bloc-tableaux.sh` | 1 s | ✅ porte bloc tableaux verte |
+| `porte-budget.sh` | 45 s | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |
+| `porte-bus.sh` | 78 s | ✅ le canal diffusé par fichier change la région du milieu |
+| `porte-bus-socket.sh` | 97 s | ✅ le bus du pilote agit (113.0068 -> 148.9144) |
+| `porte-c4-retard.sh` | 29 s | PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne |
+| `porte-cerveau.sh` | 8 s | ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe) |
+| `porte-consolidation.sh` | 66 s | ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier) |
+| `porte-coupe.sh` | 131 s | ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit pour  |
+| `porte-cycle-c2.sh` | 122 s | ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe · |
+| `porte-deepseek.sh` | 0 s | ✅ le banc DeepSeek tient hors réseau : adaptateur, 
+… [4961 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 269 : je lis l'en-tête du tableau des portes pour savoir quoi mettre à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '36,60p' docs/pilotage/references-non-regression.md", "description": "Read gates table header"}`
+
+  ```
+> 25/10 04 h 51, sont conservées dans
+> [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
+
+## 1. Ce qui se vérifie en une commande
+
+| quoi | commande | attendu |
+|---|---|---|
+| tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
+| toutes les portes | `tools/toutes-les-portes.sh` | **83 portes** (82 à la dernière passe complète ; la 83e, `porte-n3-inventaire`, testée verte le 04/11) ; dernière passe **80 vertes, 2 rouges** (03/11 11 h 30, machine au repos) : les 2 connues (`indice`, `melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** |
+| une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
+
+> **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs
+> documentés) : le récit et les tableaux sont dans
+> [`historique-passes-portes.md`](../../reports/historique-passes-portes.md).
+
+## 2. Les repères imprimés par chaque porte
+
+| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-11-03 11:30) |
+|---|---:|---|
+| `porte-adaptateur-sortie.sh` | 64 s | ✅ porte tenue (écriture fidèle · invariant · effet · refus) |
+| `porte-audit-
+… [399 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 269 : je mets à jour les références de non-régression avec la passe finie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\n\nbloc = \"\"\"> **Dernière passe complète — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,\n> 4 rou … [2575 caractères tronqués]`
+
+  ```
+références mises à jour
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 269 : la passe est finie, je l'inscris dans l'état et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h269.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h269.md'\nt=open(p).read()\nold=\"**la passe complète** tourne depuis 23 h 43 (83 portes, `work/portes/passe-2404-23h45` ; **69  … [1912 caractères tronqués]`

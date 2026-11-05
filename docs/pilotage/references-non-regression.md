@@ -1,6 +1,16 @@
 # Références de non-régression
 
-> **Dernière passe complète — 2026-11-03 à 11 h 30 :** **82 portes, 80 vertes, 2 rouges**,
+> **Dernière passe complète — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
+> 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
+> (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
+> (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt** : `porte-lecteur` (0 s)
+> échouait sur une ancre du banc pilote (« < 2,5 ») que la réécriture de la roadmap du 04/11
+> (« sous 2,5 ») avait rendue introuvable — **corrigée et rejouée verte** ; `porte-sessions` (0 s)
+> signale les heartbeats périmés du hub et de `e181ce02` au moment de la passe — le hub l'a rafraîchi
+> à 01 h 55, **`e181ce02` reste à rafraîchir par sa session**. Longues vertes : `greffe` **840 s**,
+> `homeostasie` **755 s**, `profondeur-routee` **700 s**, `vision` **670 s**, `ocr-scans` **529 s**.
+
+> **Passe précédente — 2026-11-03 à 11 h 30 :** **82 portes, 80 vertes, 2 rouges**,
 > **1 h 48** (journaux durables `work/portes/passe-0303-11h30`), **machine au repos** (GPU libres ;
 > seuls des claims CPU). Les **2 rouges sont les connues, structurelles** : `porte-indice` (821 s),
 > `porte-melange` (102 s). `porte-homeostasie` **verte** (495 s, LoRA régénéré), `porte-reparti-moteur`
@@ -11,8 +21,8 @@
 > `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
 >
 > **83e porte — 04/11 :** `porte-n3-inventaire` (1 s) ajoutée et **verte** dans la passe N3
-> (17/17, 92 s, 0 rouge, `work/portes-n3-cloture/registre.txt`) ; elle entrera dans la prochaine
-> passe complète (83 portes).
+> (17/17, 92 s, 0 rouge, `work/portes-n3-cloture/registre.txt`) ; elle est entrée **verte** dans la
+> passe complète du 04/11–05/11 (83 portes).
 
 > **Passe précédente — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**, **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env., `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) — **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers), dès que le JSON a existé ; aucune régression structurelle. La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
 
@@ -41,7 +51,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **83 portes** (82 à la dernière passe complète ; la 83e, `porte-n3-inventaire`, testée verte le 04/11) ; dernière passe **80 vertes, 2 rouges** (03/11 11 h 30, machine au repos) : les 2 connues (`indice`, `melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **83 portes** ; dernière passe **79 vertes, 4 rouges** (04/11 23 h 43 → 05/11 02 h 12, machine au repos) : 2 connues (`indice`, `melange`), 1 **corrigée** (`lecteur`, ancre du banc), 1 de **coordination** (`sessions`, heartbeat de `e181ce02`) · ⚠ **ne jamais lire une porte à travers un `tail`** |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs
