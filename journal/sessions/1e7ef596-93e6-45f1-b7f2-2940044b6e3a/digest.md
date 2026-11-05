@@ -34796,3 +34796,90 @@ porte-melange 1 148
 ⏵ Cycle 251 : 60 portes passées, les 2 rouges tolérées sont là (indice, mélange) ; je mets l'état à jour
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h251b.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h251b.md'\nt=open(p).read()\nold=\"**31 passées, 1 rouge tolérée : `porte-indice` 1 207 s**\"\nnew=\"**60 passées ; 2 rouges to … [1329 caractères tronqués]`
+
+  ```
+2026-11-05 01 h 13
+[s/v7 fbd294b5] ÉTAT — PASSE 60/83 : LES DEUX ROUGES TOLÉRÉES SONT LÀ (INDICE, MÉLANGE) ; LECTEUR CORRIGÉE ; HEURE 01 H 12
+ 8 files changed, 73 insertions(+), 14 deletions(-)
+ create mode 100644 journal/2026-11-05/mesures.md
+fbd294b5 ÉTAT — PASSE 60/83 : LES DEUX ROUGES TOLÉRÉES SONT LÀ (INDICE, MÉLANGE) ; LECTEUR CORRIGÉE ; HEURE 01 H 12
+01107366 BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE
+  T0 max : 3987 mots (budget 4 000)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : rouge non tolérée trouvée et corrigée — banc de lecture réparé, passe à 60/83
+
+**Cycle 251 — la passe a fait son travail : elle a trouvé une vraie dérive.**
+
+- **`porte-lecteur` rouge en 0 s** : « gold introuvable : `docs/pilotage/roadmap.md` · `< 2,5` ». Le banc pilote ancre une question sur la chaîne « < 2,5 » ; le commit **68c1ecc1** (04/11) a réécrit la roadmap en « **passe sous 2,5** » et **aucune passe n'avait tourné depuis le 03/11** — la dérive est restée invisible. C'est exactement ce que la passe complète existe pour attraper.
+- **Correction minimale** (`01107366`) : l'ancre devient « sous 2,5 » (question, réponse et barème inchangés) ; **porte rejouée verte** — contrôlée **1,000** contre aléatoire 0,5, closed-book 0,0. J'ai aussi vérifié les autres ancres : `document-graph` était un faux positif (les passages sont sans backticks).
+- **Passe** : **60 / 83** — les **deux rouges tolérées** sont là (`indice` 1 207 s, `melange` 148 s) ; **23 portes restent**.
+- **Audit** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog ✅ ; journal ✅ ; `en-cours` **1 611 mots**, **T0 3 987 / 4 000** ✅.
+
+**Le goal reste actif** : finir la passe, mettre à jour les références (avec la rouge corrigée et sa rejoue), et décider d'une seconde passe propre pour le verdict définitif.
+
+
+## Tour 257
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 252/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 252 : audit et suivi de la fin de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+fbd294b5 ÉTAT — PASSE 60/83 : LES DEUX ROUGES TOLÉRÉES SONT LÀ (INDICE, MÉLANGE) ; LECTEUR CORRIGÉE ; HEURE 01 H 12
+01107366 BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE
+f96916f8 PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 594 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 806 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 526 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2134 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/R
+… [309 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [368 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1617 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3987 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+60 work/portes/passe-2404-23h45/registre.txt
+porte-indice 1 1207
+porte-lecteur 1 0
+porte-melange 1 148
+  porte-n3-sparsite      ✅                           6 s  PORTE TENUE : kwta et top_k agissent séparément · A déterministe
+  porte-occupation-elagage ✅                          62 s  ✅ porte occupation × élagage : la cible annoncée est VÉRIFIÉE dans le fichier exporté
+  porte-occupation-moteur ✅                          61 s  ✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 252 : la passe avance (n3-sparsite, occupations) ; je compte et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls work/portes/passe-2404-23h45/*.log | wc -l ; cp docs/pilotage/en-cours.md /tmp/state.h252.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h252.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True, … [1041 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 17.8 h |
-| Tours | 256 |
-| Messages | 1428 |
-| Appels d'outils | 1437 |
+| Durée | 17.9 h |
+| Tours | 257 |
+| Messages | 1432 |
+| Appels d'outils | 1440 |
 | Fichiers touchés | 15 |
-| Commandes | 1249 |
+| Commandes | 1252 |
 | Sous-agents | 0 |
-| Commits | 277 |
+| Commits | 278 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -535,6 +535,8 @@
 **Tour 255** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 256** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 257** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6334,7 +6336,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 251 : 60 portes passées, les 2 rouges tolérées sont là (indice, mélange) ; je mets l'état à jour
+⏵ Cycle 251 : rouge non tolérée trouvée et corrigée — banc de lecture réparé, passe à 60/83
+
+**Cycle 251 — la passe a fait son travail : elle a trouvé une vraie dérive.**
+
+- **`porte-lecteur` rouge en 0 s** : « gold introuvable : `docs/pilotage/roadmap.md` · `< 2,5` ». Le banc pilote ancre une question sur la chaîne « < 2,5 » ; le commit **68c1ecc1** (04/11) a réécrit la roadmap en « **passe sous 2,5** » et **aucune passe n'avait tourné depuis le 03/11** — la dérive est restée invisible. C'est exactement ce que la passe complète existe pour attraper.
+- **Correction minimale** (`01107366`) : l'ancre devient « sous 2,5 » (question, réponse et barème inchangés) ; **porte rejouée verte** — contrôlée **1,000** contre aléatoire 0,5, closed-book 0,0. J'ai aussi vérifié les autres ancres : `document-graph` était un faux positif (les passages sont sans backticks).
+- **Passe** : **60 / 83** — les **deux rouges tolérées** sont là (`indice` 1 207 s, `melange` 148 s) ; **23 portes restent**.
+- **Audit** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog ✅ ; journal ✅ ; `en-cours` **1 611 mots**, **T0 3 987 / 4 000** ✅.
+
+**Le goal reste actif** : finir la passe, mettre à jour les références (avec la rouge corrigée et sa rejoue), et décider d'une seconde passe propre pour le verdict définitif.
+
+### Tour 257 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Count logs and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 252 : la passe avance (n3-sparsite, occupations) ; je compte et commit
 
 ## 3. Travail accompli
 
@@ -6400,7 +6423,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1209 autres
+- … et 1212 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6825,4 +6848,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08" -m "porte-indice rend code 1 comme dans les deux passes préc
 - BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE" -m "La passe complète a trouvé la première rouge non tolérée : porte-lec
 - ÉTAT — PASSE 60/83 : LES DEUX ROUGES TOLÉRÉES SONT LÀ (INDICE, MÉLANGE) ; LECTEUR CORRIGÉE ; HEURE 01 H 12" -m "Le registre de la passe compte 60 entrées : port
+- ÉTAT — HEURE 01 H 16 ; LA PASSE AVANCE (n3-sparsite, OCCUPATIONS) SANS NOUVELLE ROUGE" -m "Après les deux tolérées et la rouge de banc corrigée, la passe enchaî
 
