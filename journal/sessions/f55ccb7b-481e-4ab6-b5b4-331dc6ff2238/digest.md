@@ -386,3 +386,89 @@ gold_synthetique.json dict_keys(['version', 'source', 'graine', 'note', 'phrases
 … [16095 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Mesure du socle actuel et analyse des cibles gold
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/tests/linguistique/evaluer_gold.py 2>&1 | tail -20", "description": "Lancer l'évaluation gold actuelle", "timeoutMs": 300000}`
+
+  ```
+"cibles": 136,
+    "labels": 136,
+    "top1": 118,
+    "topk": 126,
+    "top1_taux": 0.8676,
+    "topk_taux": 0.9265,
+    "couverture": 1.0
+   }
+  },
+  "reel": {
+   "bloc": "parallele",
+   "phrases": 452,
+   "pos": {
+    "exactitude": 0.7512,
+    "exactitude_ferme": 0.8885,
+    "exactitude_ouvert": 0.6061,
+    "tokens": 2480,
+    "confusions": {
+     "ADJ"
+heuristique all: {"pos": {"exactitude": 0.7455, "exactitude_ferme": 0.8984, "exactitude_ouvert": 0.6007, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 21, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 617, "ADJ": 17, "VERB": 47, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 111, "NOUN": 3}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 314, "NOUN": 447, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.3154, "rappel": 0.2619, "f1": 0.2862, "tp": 488, "fp": 1059, "fn": 1375, "tete": {"precision": 0.5862, "rappel": 0.4342, "f1": 0.4989, "
+… [212 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, json, pathlib, collections\nsys.path.insert(0,\"tools/tests/linguistique\"); sys.path.insert(0,\"tools\")\nfrom evaluer_gold import charger\nimport bloc_linguistique as bl\nph = charger()\nprint(\"phras … [853 caractères tronqués]`
+
+  ```
+phrases 612 tokens 3179
+segments avec cibles 239 Counter({'GP': 96, 'REL': 74, 'SUB': 69})
+== GP
+('hand', 'g002', 'Le chat de la voisine dort.', 'GP', 'de la voisine', ['chat'], 'possession')
+('hand', 'g003', "La femme a vu l'homme dans le parc.", 'GP', 'dans le parc', ['vu', "l'homme"], 'lieu')
+('hand', 'g004', 'Il a couru pour attraper le bus.', 'GP', 'pour attraper le bus', ['couru'], 'but')
+('hand', 'g006', 'Le chien du voisin aboie la nuit.', 'GP', 'du voisin', ['chien'], 'possession')
+('hand', 'g007', 'Les enfants jouent dans le jardin.', 'GP', 'dans le jardin', ['jouent', 'enfants'], 'lieu')
+('hand', 'g010', 'Viens ici !', 'GP', 'ici', ['Viens'], 'lieu')
+== SUB
+('hand', 'g005', "Elle a dit qu'elle viendrait hier.", 'SUB', "qu'elle viendrait", ['dit'], 'contenu')
+('hand', 'g017', 'She said that she would come yesterday.', 'SUB', 'that she would come', ['said'], 'contenu')
+('reel', 'r202', 'Je pense que tu as raison.', 'SUB', 'que tu as raison', ['pense'], 'complément')
+('reel', 'r205', 'I think that you are right.', 'SUB', 'that you are right', ['think'], 'complément')
+('reel', 'r207', 'Quand il pleut, je reste.', 'SUB', 'Quand il pleut', ['reste'], 'temps')
+('reel', 'r208', 
+… [672 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction du détail d'attachement et vérification des spans prédits
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/eval_gold.json >/dev/null 2>&1; python3 - <<'EOF'\nimport json\nd=json.load(open(\"/tmp/eval_gold.json\"))\nfor bloc in (\"heuristique\",):\n    for scope in (\"all\",\"ree … [306 caractères tronqués]`
+
+  ```
+heuristique all {'cibles': 239, 'labels': 145, 'top1': 126, 'topk': 134, 'topk_exact': 88, 'exact': 123, 'exact_taux_span': 0.8483, 'top1_taux_span': 0.869, 'topk_taux_span': 0.9241}
+heuristique reel {'cibles': 184, 'labels': 115, 'top1': 103, 'topk': 105, 'topk_exact': 69, 'exact': 102, 'exact_taux_span': 0.887, 'top1_taux_span': 0.8957, 'topk_taux_span': 0.913}
+heuristique hand {'cibles': 13, 'labels': 10, 'top1': 8, 'topk': 9, 'topk_exact': 7, 'exact': 8, 'exact_taux_span': 0.8, 'top1_taux_span': 0.8, 'topk_taux_span': 0.9}
+heuristique synthetique {'cibles': 55, 'labels': 30, 'top1': 23, 'topk': 29, 'topk_exact': 19, 'exact': 21, 'exact_taux_span': 0.7, 'top1_taux_span': 0.7667, 'topk_taux_span': 0.9667}
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic des 145 cas prédits : nature et position de la cible gold
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, json, pathlib, collections, re\nsys.path.insert(0,\"tools/tests/linguistique\"); sys.path.insert(0,\"tools\")\nfrom evaluer_gold import charger, _seg, _pos_map, _tete\nimport bloc_linguistique as bl\n\n … [2819 caractères tronqués]`
+
+  ```
+labels 145 ok 123
+nature Counter({('GP', 'verbe'): 45, ('GP', 'nom'): 38, ('REL', 'nom'): 26, ('SUB', 'verbe'): 18, ('SUB', 'nom'): 18})
+ok par type/nature Counter({('GP', 'verbe', True): 45, ('REL', 'nom', True): 26, ('GP', 'nom', True): 24, ('SUB', 'verbe', True): 15, ('GP', 'nom', False): 14, ('SUB', 'nom', True): 13, ('SUB', 'nom', False): 5, ('SUB', 'verbe', False): 3})
+side Counter({('GP', 'gauche'): 83, ('SUB', 'gauche'): 22, ('REL', 'gauche'): 22, ('SUB', 'droite'): 12, ('REL', ''): 4, ('SUB', ''): 1, ('SUB', 'dedans'): 1})
+prep GP Counter({'à': 13, 'to': 9, 'in': 8, 'dans': 7, 'vers': 6, 'at': 5, 'sur': 4, 'on': 4, 'de': 3, 'pour': 3, 'avec': 3, 'devant': 3, 'sous': 3, 'depuis': 2, 'au': 2, 'aux': 2, 'ici': 1, 'en': 1, 'contre': 1, 'with': 1, 'over': 1, 'chez': 1})
+posg Counter({('GP', '?'): 82, ('SUB', '?'): 36, ('REL', '?'): 26, ('GP', 'VERB'): 1})
+occ Counter({1: 139, 0: 5, 2: 1})
+== erreurs
+hand g002 GP | Le chat de la voisine dort. | de la voisine | gold chat nom gauche | pred  | cands ['GP']
+hand g012 GP | Le canard est prêt à manger. | à manger | gold prêt nom gauche | pred manger | cands ['« à manger » → Le canard', '« à manger » → est prêt', 'manger', 'est']
+reel 
+… [2991 caractères tronqués]
+  ```
+

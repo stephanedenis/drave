@@ -431,3 +431,545 @@ reports/rapport-pensee-verbe-gv.md
 … [3697 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture des 11 fiches (chiffres, verdicts, tableaux)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-verbe-gv.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-lexique-verbal.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-spans.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-denominateur.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-verbe-gv.md</path>
+<type>file</type>
+<content>
+1: # B13 — le verbe du GV-phrase : l'exact passe de 0,0586 à 0,0962
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **167/167 portes** : quand le générateur S produit un GV qui couvre **toute la phrase**
+5: > (`The boy saw the cat in the park`), la règle « dernier token » prenait `park` au lieu de `saw`.
+6: > Le bloc prend désormais le **premier token étiqueté `VERB`** à l'intérieur du GV. Sur le gold
+7: > de T153 (612 phrases, 239 cibles) : **exact 14 → 23 (0,0586 → 0,0962)**, top1 **96 → 105**
+8: > (0,4393), top-k **113 → 122** (0,5105), tête **0,7241 / 0,8414**.
+9: >
+10: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_verbe_dans`),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-verbe-gv.json`](pensee-verbe-gv.json).
+13: 
+14: ## 1. Avant / après (même gold, 239 cibles)
+15: 
+16: | mesure | avant | **verbe du GV** | écart |
+17: |---|---:|---:|---:|
+18: | top1 | 96 (0,4017) | 
+… [2363 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-lexique-verbal.md</path>
+<type>file</type>
+<content>
+1: # B13 — le lexique verbal : l'exact passe de 0,0962 à 0,1381
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **168/168 portes** : le POS de surface se trompe sur les classes ouvertes anglaises
+5: > (`talks` → `NOUN`, `brother` → `VERB`). Un **lexique verbal bilingue** (≈ 200 formes, avec
+6: > désinences) arbitre : le verbe est le premier mot du GV qui appartient au lexique, sinon le
+7: > premier `VERB` du POS, sinon le dernier mot. Sur le gold de T153 (612 phrases, 239 cibles) :
+8: > **exact 23 → 33 (0,1381)**, top1 **115 (0,4812)**, top-k **132 (0,5523)**, tête **0,7862 /
+9: > 0,9034**.
+10: >
+11: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`VERBES_CONNUS`,
+12: > `_est_verbe`), [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+13: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-lexique-verbal.json`](pensee-lexique-verbal.json).
+14: 
+15: ## 1. Avant / après (même gold, 239 cibles)
+16: 
+17: | mesure | avant | **lexique verbal*
+… [2541 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-spans.md</path>
+<type>file</type>
+<content>
+1: # B13 — les 94 spans : 48 REL, 33 SUB, 12 GP
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **169/169 portes** : les échecs d'attachement par **span** (93 après le correctif) sont
+5: > **48 REL**, **33 SUB** et **12 GP** — les subordonnées ne sont **pas produites** (65 cas) ou le
+6: > sont avec un span plus large (25). Le correctif testé — borner le GP au verbe et au relatif —
+7: > gagne **un span** (couverture 0,6067 → 0,6109, F1 0,2864 → 0,2869) mais **perd une cible** :
+8: > le total des échecs ne bouge pas (107).
+9: >
+10: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-spans.json`](pensee-spans.json).
+13: 
+14: ## 1. Les 93 spans
+15: 
+16: | type | échecs de span |
+17: |---|---:|
+18: | **REL** | **48** |
+19: | **SUB** | **33** |
+20: | **GP** | **12** |
+21: | **tout** | **93** |
+22: 
+23: | catégorie | nombre |
+24: |---|---:|
+25: 
+… [2337 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-denominateur.md</path>
+<type>file</type>
+<content>
+1: # B13 — le dénominateur de l'attachement : 239 cibles, 146 segments
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **170/170 portes** : les taux d'attachement étaient divisés par **239** (toutes les cibles)
+5: > alors que `top1`, `top-k` et `exact` ne mesurent que les **146 segments prédits au bon span**.
+6: > Les deux lectures sont désormais nommées : **rendement global** (0,4812 / 0,5523 / 0,1381) et
+7: > **exactitude sur les spans** (0,7877 / 0,9041 / 0,2260). Aucune mesure ne change ; c'est la
+8: > lecture qui devient honnête.
+9: >
+10: > **Dispositif** : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+11: > [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-denominateur.json`](pensee-denominateur.json).
+13: 
+14: ## 1. Les deux lectures
+15: 
+16: | mesure | rendement global (÷ 239) | **exactitude spans (÷ 146)** |
+17: |---|---:|---:|
+18: | top1 | 0,4812 | **0,7877** |
+19: | top-k | 0,5523 | **0,9
+… [1944 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des fiches restantes (classement → convention-doc)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-classement.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-conventions.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-attachement-cible.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-lexique-elargi.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-classement.md</path>
+<type>file</type>
+<content>
+1: # B13 — le classement : l'exact passe de 0,2260 à 0,6438 — et le gold mélange deux conventions
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **171/171 portes** : la cible de S était souvent un **GN entier** (« Le garçon », « Les enfants
+5: > jouent ») ; elle est désormais **réduite à sa tête** (le verbe plein du texte de la cible s'il y
+6: > en a un, sinon son dernier mot). Sur les 146 segments au bon span : **exact 33 → 94**
+7: > (0,2260 → **0,6438**). Mais le contrôle révèle que le gold **mélange deux conventions** :
+8: > **51 cibles verbes**, **95 cibles noms** (antécédents de REL, têtes de GP).
+9: >
+10: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-classement.json`](pensee-classement.json).
+13: 
+14: ## 1. Avant / après (146 segments au bon span)
+15: 
+16: | mesure | avant | **cible réduite à sa tête** | écart |
+17: |---
+… [2733 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-conventions.md</path>
+<type>file</type>
+<content>
+1: # B13 — les deux conventions du gold : verbes 0,7255, noms 0,6000
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **172/172 portes** : la cible d'attachement du gold n'est pas homogène — **51 cibles sont des
+5: > verbes** (le gouverneur : `joue`, `vu`) et **95 sont des noms** (l'antécédent d'un REL, la tête
+6: > d'un GP : `livre`, `frère`). Mesurées séparément : **verbes 37/51 (0,7255)**, **noms 57/95
+7: > (0,6000)**. Le 0,6438 global de T168 était la moyenne de deux choses différentes.
+8: >
+9: > **Dispositif** : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+10: > [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+11: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-conventions.json`](pensee-conventions.json).
+12: 
+13: ## 1. Les deux mesures
+14: 
+15: | nature de la cible | cibles | justes | taux |
+16: |---|---:|---:|---:|
+17: | **verbe** (le gouverneur) | 51 | 37 | **0,7255** |
+18: | **nom** (antécédent de REL, tête de GP) | 95 | 57 | **0,6000** |
+19
+… [2102 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-attachement-cible.md</path>
+<type>file</type>
+<content>
+1: # B13 — l'attachement ciblé : l'exact passe de 0,6438 à 0,8082
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **173/173 portes** : la nature de la cible dépend du **type du segment**, et la règle le dit
+5: > maintenant : pour un **REL/SUB**, l'attachement est l'**antécédent** (la tête du GN à gauche,
+6: > élision séparée : `L'homme` → `homme`) ; pour un **GP**, c'est le **verbe du GV** le plus
+7: > proche. Sur les 146 segments au bon span : **exact 94 → 118** (0,6438 → **0,8082**), top1
+8: > 0,8356, top-k 0,9041. Par convention : **verbes 48/51 (0,9412)**, **noms 70/95 (0,7368)**.
+9: >
+10: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_tete_nom`),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-attachement-cible.json`](pensee-attachement-cible.json).
+13: 
+14: ## 1. Avant / après (146 segments au bon span)
+15: 
+16: | mesure | avant | **attachement ciblé** | écart 
+… [2494 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-lexique-elargi.md</path>
+<type>file</type>
+<content>
+1: # B13 — le lexique élargi : l'exact passe de 0,8082 à 0,8483
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **174/174 portes** : `vu`, `couru`, `accroché` n'étaient **pas** reconnus comme verbes — le
+5: > bloc prenait l'auxiliaire (`a`) pour la cible. Le lexique verbal reçoit les **participes
+6: > irréguliers** et une trentaine de verbes courants. Sur les 145 segments au bon span :
+7: > **exact 118 → 123** (0,8082 → **0,8483**), top1 0,8690, top-k **0,9241**.
+8: >
+9: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`VERBES_CONNUS`),
+10: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+11: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-lexique-elargi.json`](pensee-lexique-elargi.json).
+12: 
+13: ## 1. Avant / après (145 segments au bon span)
+14: 
+15: | mesure | avant | **lexique élargi** | écart |
+16: |---|---:|---:|---:|
+17: | top1 | 122 (0,8356) | **126 (0,8690)** | +4 |
+18: | top-k | 132 (0,9041) | **134 (0,9241)** | +2 |
+1
+… [2421 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des 3 dernières fiches (échecs-cible, topk-strict, convention-doc)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-echecs-cible.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-topk-strict.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-convention-doc.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-echecs-cible.md</path>
+<type>file</type>
+<content>
+1: # B13 — les 22 échecs de l'attachement ciblé : 11 hors candidats, 11 mal classés
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **175/175 portes** : sur les 145 segments au bon span, **123** ont la bonne cible et **22** ne
+5: > l'ont pas. Ces 22 se partagent en **11 cibles absentes des candidats** et **11 cibles présentes
+6: > mais non choisies**. Les absences sont surtout des **verbes anglais hors lexique** (`fly`,
+7: > `climbs`, `flows`, `swims`, `get`, `smiles`, `wait`) et quelques **noms que le GP complète**
+8: > (`chat` de « de la voisine »).
+9: >
+10: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+12: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-echecs-cible.json`](pensee-echecs-cible.json).
+13: 
+14: ## 1. La répartition
+15: 
+16: | catégorie | nombre |
+17: |---|---:|
+18: | cible **absente** des candidats | **11** |
+19: | cible **présente** mais non choisie | **11** 
+… [2369 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-topk-strict.md</path>
+<type>file</type>
+<content>
+1: # B13 — le top-k strict : 0,6069, pas 0,9241
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **176/176 portes** : le top-k publié jusqu'ici acceptait les **sous-chaînes** (`vu` ⊂ `aperçu`,
+5: > `a` ⊂ `parle`) et affichait **0,9241** ; en **égalité exacte**, la bonne cible n'est dans les
+6: > candidats que **88 fois sur 145** — **0,6069**. L'écart de 32 points est un artefact de mesure,
+7: > pas un résultat.
+8: >
+9: > **Dispositif** : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+10: > [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+11: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-topk-strict.json`](pensee-topk-strict.json).
+12: 
+13: ## 1. Les deux top-k (145 segments au bon span)
+14: 
+15: | mesure | sous-chaîne | **égalité exacte** |
+16: |---|---:|---:|
+17: | top-k (count) | 134 | **88** |
+18: | taux sur les spans | 0,9241 | **0,6069** |
+19: | rendement (÷ 239) | 0,5607 | **0,3682** |
+20: 
+21: **Ce que ça dit** :
+22: 
+23: - **Le top-k lenient 
+… [1794 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-convention-doc.md</path>
+<type>file</type>
+<content>
+1: # B13 — la convention des cibles est documentée dans le gold
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **177/177 portes** : le gold ne disait pas ce qu'était une `cible` ; la lecture des données
+5: > (T169, T172) est désormais **écrite dans le gold** (`CONVENTION_CIBLE`) et vérifiée par une
+6: > porte. REL/SUB → **antécédent** (tête du GN à gauche) ; GP → **verbe gouverneur**, ou **nom
+7: > complété** pour un génitif ; GN/GV → nom ou verbe dont le segment dépend.
+8: >
+9: > **Dispositif** : [`gold_reel.py`](../tools/tests/linguistique/gold_reel.py),
+10: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+11: > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-convention-doc.json`](pensee-convention-doc.json).
+12: 
+13: ## 1. Ce qui est écrit
+14: 
+15: | type | convention de la cible |
+16: |---|---|
+17: | **REL** | antécédent (tête du GN à gauche) |
+18: | **SUB** | antécédent (tête du GN à gauche) |
+19: | **GP** | verbe gouverneur ; nom complété pour un géni
+… [1860 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle des JSON homonymes (chiffres bruts et métadonnées)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in verbe-gv lexique-verbal spans denominateur classement conventions; do echo \"===== pensee-$f.json =====\"; cat \"reports/pensee-$f.json\"; echo; done", "description": "Dump first six JSONs"}`
+
+  ```
+===== pensee-verbe-gv.json =====
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "167/167",
+ "gold": 612,
+ "cibles": 239,
+ "avant": {
+  "top1": 96,
+  "topk": 113,
+  "exact": 14,
+  "tete_top1": 96,
+  "tete_topk": 113
+ },
+ "apres": {
+  "top1": 105,
+  "topk": 122,
+  "exact": 23,
+  "tete_top1": 105,
+  "tete_topk": 122
+ },
+ "echecs": {
+  "span": 94,
+  "cible_avant": 32,
+  "cible_apres": 23
+ },
+ "cause_23": "le POS tague le verbe en NOUN (play, talks, leaves...)",
+ "limites": [
+  "94 spans non qualifiés",
+  "POS verbe/nom anglais",
+  "gold 612"
+ ]
+}
+
+===== pensee-lexique-verbal.json =====
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "168/168",
+ "gold": 612,
+ "cibles": 239,
+ "avant": {
+  "top1": 105,
+  "topk": 122,
+  "exact": 23,
+  "tete_top1": 105,
+  "tete_topk": 122
+ },
+ "apres": {
+  "top1": 115,
+  "topk": 132,
+  "exact": 33,
+  "tete_top1": 114,
+  "tete_topk": 131
+ },
+ "echecs": {
+  "span": 94,
+  "cible_avant": 23,
+  "cible_apres": 13
+ },
+ "cause_13": "verbes hors lexique (fly, climbs, flows, wait, swims, passes, get, smiles)",
+ "limites": [
+  "lexique écrit à la main",
+  "13 verbes non ajoutés (fuite de test)",
+  "94 spans",
+  "gold 612"
+ ]
+}
+
+===== pensee-spans.json =====
+… [2167 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in attachement-cible lexique-elargi echecs-cible topk-strict convention-doc; do echo \"===== pensee-$f.json =====\"; cat \"reports/pensee-$f.json\"; echo; done", "description": "Dump last five JSONs"}`
+
+  ```
+===== pensee-attachement-cible.json =====
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "173/173",
+ "gold": 612,
+ "cibles": 239,
+ "labels": 146,
+ "avant": {
+  "exact": 94,
+  "exact_span": 0.6438,
+  "top1": 114,
+  "top1_span": 0.7808,
+  "verbe": 0.7255,
+  "nom": 0.6
+ },
+ "apres": {
+  "exact": 118,
+  "exact_span": 0.8082,
+  "top1": 122,
+  "top1_span": 0.8356,
+  "verbe": 0.9412,
+  "nom": 0.7368
+ },
+ "rendement": {
+  "top1": 0.5105,
+  "topk": 0.5523,
+  "exact": 0.4937
+ },
+ "regle": "REL/SUB → antécédent (tête du GN à gauche, élision séparée) ; GP → verbe du GV",
+ "limites": [
+  "28 échecs non qualifiés",
+  "convention non documentée",
+  "top-k lenient",
+  "gold 612"
+ ]
+}
+
+===== pensee-lexique-elargi.json =====
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "174/174",
+ "gold": 612,
+ "cibles": 239,
+ "labels": 145,
+ "avant": {
+  "exact": 118,
+  "exact_span": 0.8082,
+  "top1": 122,
+  "topk": 132,
+  "verbe": 0.9412,
+  "nom": 0.7368
+ },
+ "apres": {
+  "exact": 123,
+  "exact_span": 0.8483,
+  "top1": 126,
+  "topk": 134,
+  "verbe": 0.9524,
+  "nom": 0.7683
+ },
+ "rendement": {
+  "top1": 0.5272,
+  "topk": 0.5607,
+  "exact": 0.5146
+ },
+ "note": "la part verbes passe de 51 à 62 cibles pa
+… [1628 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des portes T153→T174 dans autotest.py
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2221,2470p' tools/pensee/autotest.py", "description": "Read gates T153-T169 bodies"}`
+
+  ```
+def t153_attachement() -> tuple[bool, str]:
+    """L'attachement sur le gold 612 (239 cibles) : top1 0,5272, exact 0,5105."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.5272) < 0.001
+            and abs(r["exact_taux"] - 0.5146) < 0.001), (
+        f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
+        f"couverture {r['couverture']}")
+
+
+def t154_cibles() -> tuple[bool, str]:
+    """Les cibles de l'attachement : 1624 segments sans cible sur 1863."""
+    from ..tests.linguistique.evaluer_gold import charger
+    ph = charger()
+    tot = sum(len(p["segments"]) for p in ph)
+    sans = sum(1 for p in ph for s in p["segments"] if not s.get("cible"))
+    return tot == 1863 and sans == 1624, (
+        f"cibles : {sans}/{tot} segments sans cible (couverture {round((tot-sans)/tot,4)})")
+
+
+def t155_cibles_500() -> tuple[bool, str]:
+    """Les 500 premiers segments : 294 GN, 206 GV."""
+    from ..tests.linguistique.evaluer_gold import charger
+    ph = charger()
+    n = 0
+    gn = g
+… [10188 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2470,2565p' tools/pensee/autotest.py", "description": "Read gates T172-T174 bodies"}`
+
+  ```
+f"conventions : verbes {v['justes']}/{v['cibles']} ({v['taux']}), "
+        f"noms {n['justes']}/{n['cibles']} ({n['taux']})")
+
+
+def t170_attachement_cible() -> tuple[bool, str]:
+    """L'attachement ciblé : REL → antécédent (nom à gauche), GP → verbe du GV."""
+    import tools.bloc_linguistique as bl
+    h = bl.Heuristique()
+    a = h.analyser("L'homme que j'ai vu dort.", "fr")
+    rel = [e for e in a.etiquettes if e.niveau == "syntagme" and e.type == "REL"]
+    cible = ((rel[0].meta or {}).get("attachement") or {}).get("cible") if rel else None
+    b = h.analyser("Le garçon joue au ballon.", "fr")
+    gp = [e for e in b.etiquettes if e.niveau == "syntagme" and e.type == "GP"]
+    cible2 = ((gp[0].meta or {}).get("attachement") or {}).get("cible") if gp else None
+    return cible == "homme" and cible2 == "joue", (
+        f"ciblé : REL « homme » {cible}, GP « joue » {cible2}")
+
+
+def t171_lexique_elargi() -> tuple[bool, str]:
+    """Le lexique élargi : participes irréguliers et verbes courants (« vu » n'était pas un verbe)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    ok = (bl._est_verbe("vu"), bl._est_verbe
+… [3621 caractères tronqués]
+  ```
+

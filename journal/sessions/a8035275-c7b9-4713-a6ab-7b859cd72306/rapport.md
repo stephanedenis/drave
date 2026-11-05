@@ -9,10 +9,10 @@
 | Début | 2026-11-05 13:11 |
 | Durée | 0.0 h |
 | Tours | 1 |
-| Messages | 10 |
-| Appels d'outils | 10 |
+| Messages | 13 |
+| Appels d'outils | 15 |
 | Fichiers touchés | 0 |
-| Commandes | 8 |
+| Commandes | 11 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2211 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check git status and repo layout
 - bash — Count lines in key files and list reports
@@ -36,10 +36,13 @@
 - bash — Dump details for 57 strict failures
 - bash — Locate S generator and cibles_s
 - bash — Find the literal source of structure la plus proche
+- bash — Inspect structures generator attachment
+- bash — Read base segmentation and analyser
+- bash — Deep-dive special failure cases
 
 **Synthèse produite :**
 
-⏵ Inspection du générateur S et de `_cibles_s` pour expliquer les cas S
+⏵ Diagnostic fin des cas anglais, sans candidat et SUB
 
 ## 3. Travail accompli
 
@@ -58,4 +61,7 @@
 - **T1** Dump details for 57 strict failures
 - **T1** Locate S generator and cibles_s
 - **T1** Find the literal source of structure la plus proche
+- **T1** Inspect structures generator attachment
+- **T1** Read base segmentation and analyser
+- **T1** Deep-dive special failure cases
 

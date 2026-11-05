@@ -9,10 +9,10 @@
 | Début | 2026-11-05 13:11 |
 | Durée | 0.0 h |
 | Tours | 1 |
-| Messages | 12 |
-| Appels d'outils | 14 |
+| Messages | 14 |
+| Appels d'outils | 18 |
 | Fichiers touchés | 0 |
-| Commandes | 11 |
+| Commandes | 15 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Python). Mission : **au … [2247 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, and reports dir
 - bash — List linguistique tests and count lines
@@ -39,10 +39,13 @@
 - bash — Run evaluer_bloc on 612 gold phrases
 - bash — Check code state and submodule status
 - bash — Compute lost attachment spans by type
+- bash — Find span category protocol and GP fix
+- bash — Search scripts for span categories
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Computing lost spans by type against gold segments
+⏵ Searching the autotest for the exact span-category protocol
 
 ## 3. Travail accompli
 
@@ -64,6 +67,10 @@
 - **T1** Run evaluer_bloc on 612 gold phrases
 - **T1** Check code state and submodule status
 - **T1** Compute lost attachment spans by type
+- **T1** Find span category protocol and GP fix
+- **T1** Search scripts for span categories
+- **T1** Read T165-T168 autotests
+- **T1** Read syntagme generation and GP handling
 
 ## 4. Mesures et résultats marquants
 

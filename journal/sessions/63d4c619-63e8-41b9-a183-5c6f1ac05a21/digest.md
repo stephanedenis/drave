@@ -417,3 +417,305 @@ reports/pensee-candidats-verbes
 … [2563 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Inspecting Heuristique, annotation and gold structures
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 60, "limit": 150}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 400, "limit": 100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+60:     debut: int
+61:     fin: int
+62: 
+63:     def json(self) -> dict:
+64:         return {"debut": self.debut, "fin": self.fin}
+65: 
+66: 
+67: @dataclass
+68: class Etiquette:
+69:     niveau: str
+70:     type: str
+71:     valeur: str
+72:     debut: int
+73:     fin: int
+74:     source: str = "heuristique"
+75:     confiance: float = 0.5
+76:     candidats: list[str] = field(default_factory=list)
+77:     langue: str = "und"
+78:     script: str = SCRIPT_NEUTRE
+79:     meta: dict = field(default_factory=dict)
+80: 
+81:     def json(self) -> dict:
+82:         return {
+83:             "niveau": self.niveau, "type": self.type, "valeur": self.valeur,
+84:             "debut": self.debut, "fin": self.fin, "source": self.source,
+85:             "confiance": round(float(self.confiance), 4),
+86:             "candidats": list(self.candidats), "langue": self.langue,
+87:             "script": self.script, "meta": dict(self.meta),
+88:         }
+89: 
+90: 
+91: @dataclass
+92: class Annotation:
+93:     texte: str
+94:     langue: str = "und"
+95:     script: str = SCRIPT_NEUTRE
+96:     etique
+… [5441 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+400: bu cru sue pu voulu dû venue venu partie parti sorti mort née né ouvert offerte souffert couru
+401: reçu aperçu déçu attendu entendu répondu perdu rendu vendu descendu monté resté tombé arrivé
+402: entré rentré retourné passé tenu obtenu devenu revenu
+403: travailles travaillent travaillait regarder regarde regardes regardent regardait écouter écoute
+404: écoutes écoutent écoutait aimer aime aimes aiment aimait finir finis finit finissent finissait
+405: grandir grandis grandit grandissent ouvrir ouvre ouvres ouvrent ouvrait fermer ferme fermes
+406: ferment fermait donner donne donnes donnent donnait chercher cherche cherches cherchent trouvait
+407: talk talks talked talking play plays played playing leave leaves left leaving write writes wrote
+408: written writing read reads reading listen listens listened listening sleep sleeps slept sleeping
+409: grow grows grew grown growing bark barks barked barking run runs ran running walk walks walked
+410: walking sing sings sang sung singing dance dances danced dancing work works worked working
+411: watch watches watched 
+… [4317 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Searching for the scripts that generated these reports
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"pensee-spans\\|pensee-topk-strict\\|pensee-attachement-cible\\|pensee-conventions\\|pensee-echecs-cible\" --include=*.py --include=*.sh --include=*.md . | head -40", "description": "Find generators/references of the repor … [4 caractères tronqués]`
+
+  ```
+./reports/README.md
+./reports/rapport-pensee-spans.md
+./reports/rapport-pensee-conventions.md
+./reports/rapport-pensee-attachement-cible.md
+./reports/rapport-pensee-echecs-cible.md
+./reports/rapport-pensee-topk-strict.md
+./journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+./journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+./journal/sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/digest.md
+./journal/sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md
+./journal/2026-11-05/docs.md
+./journal/2026-11-05/mesures.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nfor n in [\"gold.json\",\"gold_reel.json\",\"gold_synthetique.json\",\"gold_gele.json\"]:\n    p=pathlib.Path(\"tools/tests/linguistique\")/n\n    d=json.loads(p.read_text(encoding=\"utf-8\"))\ … [100 caractères tronqués]`
+
+  ```
+gold.json phrases= 20
+gold_reel.json phrases= 432
+gold_synthetique.json phrases= 160
+gold_gele.json phrases= 602
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading companion markdown sheets for measurement protocol
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-attachement-cible.md reports/rapport-pensee-conventions.md reports/rapport-pensee-topk-strict.md reports/rapport-pensee-spans.md reports/rapport-pensee-echecs-cible.md; do echo \"===== $f\"; cat \"$f\" … [62 caractères tronqués]`
+
+  ```
+===== reports/rapport-pensee-attachement-cible.md
+# B13 — l'attachement ciblé : l'exact passe de 0,6438 à 0,8082
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **173/173 portes** : la nature de la cible dépend du **type du segment**, et la règle le dit
+> maintenant : pour un **REL/SUB**, l'attachement est l'**antécédent** (la tête du GN à gauche,
+> élision séparée : `L'homme` → `homme`) ; pour un **GP**, c'est le **verbe du GV** le plus
+> proche. Sur les 146 segments au bon span : **exact 94 → 118** (0,6438 → **0,8082**), top1
+> 0,8356, top-k 0,9041. Par convention : **verbes 48/51 (0,9412)**, **noms 70/95 (0,7368)**.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_tete_nom`),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-attachement-cible.json`](pensee-attachement-cible.json).
+
+## 1. Avant / après (146 segments au bon span)
+
+| mesure | avant | **attachement ciblé** | écart |
+|---|---:|---:|---:|
+| top1 | 114 (0,7808) | **122 (0,8356)** | +8 |
+| top-k | 132 (0,9041) | 132 (0,9041) | 0 |
+| **exact** | **94 (0,6
+… [14039 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Running the canonical evaluer_bloc measurement on the 612 phrases
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.')\nfrom tools.bloc_linguistique import Heuristique\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nphrases = charger()\nprint(\"phrases\", len(ph … [460 caractères tronqués]`
+
+  ```
+phrases 612
+{
+ "cibles": 239,
+ "labels": 145,
+ "top1": 126,
+ "topk": 134,
+ "exact": 123,
+ "top1_taux": 0.5272,
+ "topk_taux": 0.5607,
+ "exact_taux": 0.5146,
+ "top1_taux_span": 0.869,
+ "topk_taux_span": 0.9241,
+ "topk_exact": 88,
+ "topk_exact_taux": 0.3682,
+ "topk_exact_taux_span": 0.6069,
+ "exact_taux_span": 0.8483,
+ "verbe": {
+  "cibles": 63,
+  "justes": 60,
+  "taux": 0.9524
+ },
+ "nom": {
+  "cibles": 82,
+  "justes": 63,
+  "taux": 0.7683
+ },
+ "couverture": 0.6067
+}
+attachement_tete {"cibles": 145, "labels": 145, "top1": 126, "topk": 134, "top1_taux": 0.869, "topk_taux": 0.9241, "couverture": 1.0}
+syntagme {"precision": 0.3154, "rappel": 0.2619, "f1": 0.2862, "tp": 488, "fp": 1059, "fn": 1375, "tete": {"precision": 0.5862, "rappel": 0.4342, "f1": 0.4989, "tp": 809, "fp": 571, "fn": 1054}}
+pos 0.7455 tokens 3179
+[stderr]
+
+real	0m0,544s
+user	0m0,518s
+sys	0m0,025s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/structures tools/bloc_linguistique.py tools/tests/linguistique/ && git -C tools/structures status --short 2>/dev/null | head -5; git log -1 --format='%H %ad %s' --date=iso", "description": "Check code state a … [21 caractères tronqués]`
+
+  ```
+m tools/structures
+ M donnees/paragraphes-validations.jsonl
+56d70431dbdeac1faa6bf06959ffea8dc4ba4e23 2026-11-05 13:09:13 -0500 ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE
+  ```
+
+### 🤖 Assistant
+
+⏵ Computing lost spans by type against gold segments
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 - <<'PY'\nimport sys, json\nfrom collections import Counter\nsys.path.insert(0,'.')\nfrom tools.bloc_linguistique import Heuristique\nfrom tools.tests.linguistique.evaluer_gold import charger\nphrases = charger()\nh = He … [2137 caractères tronqués]`
+
+  ```
+segments total par type: {'GN': 828, 'GV': 712, 'GP': 105, 'SUB': 70, 'REL': 74, 'ADJ': 35, 'ADV': 30, 'PONCT': 9}
+sans cible: {'GN': 828, 'GV': 712, 'ADJ': 35, 'ADV': 30, 'GP': 9, 'PONCT': 9, 'SUB': 1} avec cible: 239
+perdus par type: {'GP': 13, 'SUB': 33, 'REL': 48} total: 94
+categories: {'plus_large': 25, 'aucun': 65, 'plus_etroit': 4} total: 94
+
+ ('GP', 'aucun') 5
+    ('The duck is ready to eat.', {'type': 'GP', 'texte': 'to eat', 'role': 'but', 'debut': 18, 'fin': 24, 'cibles': ['ready', 'duck'], 'cible': 'ready'}, [])
+    ('It rains since yesterday.', {'type': 'GP', 'texte': 'since yesterday', 'role': 'temps', 'debut': 9, 'fin': 24, 'cibles': ['rains'], 'cible': 'rains'}, [])
+
+ ('GP', 'plus_etroit') 2
+    ('Les oiseaux volent au-dessus du lac.', {'type': 'GP', 'texte': 'au-dessus du lac', 'role': 'lieu', 'debut': 19, 'fin': 35, 'cibles': ['volent'], 'cible': 'volent'}, [(29, 35)])
+    ('We wait for the bus.', {'type': 'GP', 'texte': 'for the bus', 'role': 'cible', 'debut': 8, 'fin': 19, 'cibles': ['wait'], 'cible': 'wait'}, [(8, 15)])
+
+ ('GP', 'plus_large') 6
+    ('Le chien du voisin aboie la nuit.', {'type': 'GP', 'texte': 'du voisin', 'role': 'possession', 'debut': 9, 'fin'
+… [1800 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Searching the autotest for the exact span-category protocol
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"plus_etroit\\|plus large\\|plus_large\\|coupe\\|perdus\\|spans\" tools/pensee/autotest.py | head -40; echo ---; grep -n \"RELATIFS\\|_tete_nom\\|_verbe_dans\" tools/bloc_linguistique.py | head", "description": "Find span c … [29 caractères tronqués]`
+
+  ```
+12:  T6  alpha-bêta décide               gagner en un coup, bloquer, couper ; le minimax exact
+14:  T6  alpha-bêta décide               gagner en un coup, bloquer, couper ; le minimax exact
+190:    """Gagner en un coup, bloquer, et couper : le minimax exact visite plus de nœuds."""
+207:    coupe = ab.noeuds < mm.noeuds and ab.coupes > 0
+208:    ok = gagne and win == 2 and bloque and rate and coupe
+210:                f"alpha-bêta {ab.noeuds} nœuds/{ab.coupes} coupes vs minimax {mm.noeuds}")
+1819:    return abs(fid - 1.0) < 1e-9, f"restitution POS + spans : {round(fid, 4)}"
+2406:def t166_spans() -> tuple[bool, str]:
+2407:    """Les spans perdus : 48 REL, 33 SUB, 12 GP."""
+2415:        spans = {(e.type, e.debut, e.fin) for e in a.etiquettes if e.niveau == "syntagme"}
+2420:            if (s["type"], s["debut"], s["fin"]) not in spans:
+2423:        f"spans : {cats['REL']} REL, {cats['SUB']} SUB, {cats['GP']} GP")
+2427:    """Le dénominateur : rendement global (÷ 239) et exactitude spans (÷ 146)."""
+2435:        f"dénominateur : spans {a['top1_taux_span']} / {a['topk_taux_span']} / {a['exact_taux_span']}")
+2664:              ("T118 restitution spans", t118_miroir_espaces()),
+2712:      
+… [758 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"plus_etroit\\|plus_large\" --include=*.py tools/ | head -20", "description": "Search scripts for span categories"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2360,2460p' tools/pensee/autotest.py", "description": "Read T165-T168 autotests"}`
+
+  ```
+"""Les échecs de l'attachement : 94 de span, 33 de cible."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    h = bl.Heuristique()
+    span = cible = 0
+    for p in charger():
+        a = h.analyser(p["texte"], p["langue"])
+        labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+        for s in p["segments"]:
+            cibles = s.get("cibles") or ([s["cible"]] if s.get("cible") else [])
+            if not cibles:
+                continue
+            e = labels.get((s["type"], s["debut"], s["fin"]))
+            if e is None:
+                span += 1
+                continue
+            if not any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
+                cible += 1
+    return span == 94 and cible == 11, (
+        f"échecs : {span} de span, {cible} de cible (33 avant les correctifs)")
+
+
+def t164_verbe_gv() -> tuple[bool, str]:
+    """Le verbe du GV-phrase : le POS VERB, pas le dernier mot."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    h = bl.Heuristique()
+    a = h.analyser("The boy saw the cat i
+… [3595 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '700,900p' tools/bloc_linguistique.py", "description": "Read syntagme generation and GP handling"}`
+
+  ```
+role = "groupe nominal"
+                # le passif sans `par` : GN + AUX (être) + participe → le sujet est un patient
+                if j < len(mots) and _normaliser(mots[j][2]) in {
+                        "est", "sont", "était", "étaient", "été", "sera", "seront",
+                        "suis", "es", "sommes", "êtes"}:
+                    role = "patient"
+                segments.append({"type": "GN", "role": role, "niveau": 0,
+                                 "debut": d, "fin": mots[j - 1][1],
+                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                i = j
+                continue
+            if typ == "mot" and n in lex.get("PREP", set()) and i + 1 < len(mots):
+                j = i + 1
+                # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
+                # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and not _est_verbe(mots[j][2])
+                       and _normaliser(mots[j][2]) not in RELATIFS):
+                    j += 1
+                segments.append({"type": "GP", "role": _role_gp(
+… [11110 caractères tronqués]
+  ```
+

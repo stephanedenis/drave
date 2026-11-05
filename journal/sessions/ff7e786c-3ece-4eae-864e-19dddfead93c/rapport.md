@@ -9,10 +9,10 @@
 | Début | 2026-11-05 13:11 |
 | Durée | 0.0 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 20 |
+| Messages | 13 |
+| Appels d'outils | 24 |
 | Fichiers touchés | 0 |
-| Commandes | 7 |
+| Commandes | 11 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **vérifier … [1881 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Check branch and list reports
 - glob
@@ -36,10 +36,14 @@
 - bash — Find gate function definitions
 - bash — Read gate registration block
 - read
+- bash — Dump first six JSONs
+- bash — Dump last five JSONs
+- bash — Read gates T153-T169 bodies
+- bash — Read gates T172-T174 bodies
 
 **Synthèse produite :**
 
-⏵ Lecture des 3 dernières fiches (échecs-cible, topk-strict, convention-doc)
+⏵ Lecture des portes T153→T174 dans autotest.py
 
 ## 3. Travail accompli
 
@@ -57,4 +61,8 @@
 - **T1** Locate gate references in autotest
 - **T1** Find gate function definitions
 - **T1** Read gate registration block
+- **T1** Dump first six JSONs
+- **T1** Dump last five JSONs
+- **T1** Read gates T153-T169 bodies
+- **T1** Read gates T172-T174 bodies
 

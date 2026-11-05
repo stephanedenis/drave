@@ -366,3 +366,217 @@ gold.json 20
 {"id": "g001", "langue": "fr", "texte": "Le chat dort.", "mots": [{"texte": "Le", "pos": "DET", "debut": 0, "fin": 2}, {"texte": "chat", "pos": "NOUN", "debut": 3, "fin": 7}, {"texte": "dort", "pos": "VERB", "debut": 8, "fin": 12}], "segments": [{"type": "GN", "texte": "Le chat", "role": "agent", "debut": 0, "fin": 7}, {"type": "GV", "texte": "dort", "role": "prédicat", "debut": 8, "fin": 12}], "pragma": {"acte": "assertion"}}
   ```
 
+### 🤖 Assistant
+
+⏵ Reproduction des chiffres 145 / 134 / 88 par script heredoc
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nsys.path.insert(0,'tools/tests/linguistique')\nfrom evaluer_gold import charger\nph = charger()\nprint('phrases', len(ph))\n … [899 caractères tronqués]`
+
+  ```
+phrases 612
+cibles 239 labels 145 sous-chaine 134 exact 88
+Counter({'reel': 432, 'synthetique': 160, 'hand': 20})
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction des 57 échecs stricts et premiers motifs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nph=charger(); h=bl.Heuristique()\nrows=[]\n … [1215 caractères tronqués]`
+
+  ```
+57 echecs stricts; 46 en sous-chaine
+---
+hand g002 GP 'de la voisine' | cible= 'chat' | choisie= '' | substr= False
+  cands= ['GP']
+---
+hand g011 REL "que j'ai lu" | cible= 'livre' | choisie= 'livre' | substr= True
+  cands= ["« que j'ai lu » → Le livre", 'est']
+---
+hand g012 GP 'à manger' | cible= 'prêt' | choisie= 'manger' | substr= True
+  cands= ['« à manger » → Le canard', '« à manger » → est prêt', 'manger', 'est']
+---
+reel r014 REL "que j'ai lu" | cible= 'livre' | choisie= 'livre' | substr= True
+  cands= ["« que j'ai lu » → Le livre", 'est']
+---
+reel r015 REL 'dont elle parle' | cible= 'film' | choisie= 'film' | substr= True
+  cands= ['« dont elle parle » → Le film', 'sorti']
+---
+reel r018 GP 'à manger' | cible= 'prête' | choisie= 'manger' | substr= True
+  cands= ['« à manger » → La souris', '« à manger » → est prête', 'manger', 'est']
+---
+reel r047 GP 'dans le jardin' | cible= 'poussent' | choisie= 'poussent' | substr= True
+  cands= ['« dans le jardin » → Les fleurs poussent']
+---
+reel r054 REL 'que tu lis' | cible= 'livre' | choisie= 'livre' | substr= True
+  cands= ['« que tu lis » → Le livre', 'est']
+---
+reel r055 REL 'où nous vivons' | cible= 'ville' | choisie= 'ville' | s
+… [6636 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection du générateur S et de `_cibles_s` pour expliquer les cas S
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"structure la plus proche\\|def _cibles_s\\|def _syntagmes_s\\|attachement\" tools/bloc_linguistique.py | head -40", "description": "Locate S generator and cibles_s"}`
+
+  ```
+588:    def _syntagmes_s(self, texte: str) -> list[dict] | None:
+599:    def _cibles_s(self, texte: str) -> dict:
+672:        """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
+688:    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+823:            # candidat d'attachement (diagnostic des 33 échecs de T162).
+834:                    att = c.get("attachement") or {}
+857:                        meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
+870:                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+889:                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"structure la plus proche\" tools/ | head -10", "description": "Find the literal source of structure la plus proche"}`
+
+  ```
+tools/structures/donnees/phrases_generees.json:912:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:4781:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:6176:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:7031:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:7376:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:7415:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:7851:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:9870:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:9917:     "nom": "structure la plus proche",
+tools/structures/donnees/phrases_generees.json:11109:     "nom": "structure la plus proche",
+[stderr]
+grep: tools/structures/__pycache__/generateur.cpython-313.pyc: binary file matches
+grep: write error: Broken pipe
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 40, "offset": 580}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+580:                 break
+581:         for pre in PREFIXES:
+582:             if len(n) > len(pre) + 2 and n.startswith(pre):
+583:                 sortie.append(("préfixe", 0, len(pre), pre))
+584:                 break
+585:         return sortie
+586: 
+587:     # -- syntagmes ----------------------------------------------------------
+588:     def _syntagmes_s(self, texte: str) -> list[dict] | None:
+589:         if not self.segmenter_s:
+590:             return None
+591:         try:
+592:             if str(RACINE / "tools/structures") not in sys.path:
+593:                 sys.path.insert(0, str(RACINE / "tools/structures"))
+594:             import generateur  # le générateur S, importé en lecture seule
+595:             return generateur.analyser(texte)
+596:         except Exception:
+597:             return None
+598: 
+599:     def _cibles_s(self, texte: str) -> dict:
+600:         """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+601: 
+602:         Lecture seule de l'API interne du S : `_tokens`/`_segmente` rendent les `Segment` avec
+603:    
+… [944 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/structures/ && grep -n \"attachement\" tools/structures/generateur.py | head -20", "description": "Inspect structures generator attachment"}`
+
+  ```
+arbre_svg.py
+candidats_corpus.py
+construire_donnees.py
+donnees
+exporter_corpus.py
+generateur.py
+llm.py
+mesure_analyseur.py
+mesure_arbre.py
+mesure_corpus.py
+__pycache__
+README.md
+serveur.py
+static
+tests
+verifier_corpus.py
+6:plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+485:    # les cibles d'attachement : GN, tête du GP et GV les plus proches à gauche
+506:    """Le rôle change avec l'attachement : instrument/attribut, possession/thème."""
+550:        attachement = ({"segment": s.texte, "cible": cible[1], "genre": cible[0]}
+557:        clé = json.dumps([[(x.debut, x.fin, x.type, x.role, x.niveau) for x in segs], attachement],
+562:        candidats.append({"nom": nom, "lecture": lecture, "attachement": attachement,
+622:    """La structure de base, sans variantes d'attachement ; `roles=False` coupe les règles.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "limit": 120, "offset": 480}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py</path>
+<type>file</type>
+<content>
+480:                     break
+481:             for g in segs[k + 1:]:
+482:                 if g.type == "GP" and _norm(g.texte).split()[:1] == ["par"]:
+483:                     g.role = "agent"
+484:                     break
+485:     # les cibles d'attachement : GN, tête du GP et GV les plus proches à gauche
+486:     def _tete_gp(g):
+487:         mots = [m for m in MOTIF.finditer(texte, g.debut, g.fin) if m.group().strip()
+488:                 and _norm(m.group()) not in PREP | DET]
+489:         return mots[-1].group() if mots else None
+490:     for k, s in enumerate(segs):
+491:         for g in reversed(segs[:k]):
+492:             if g.type == "GN" and s.cible_nom is None:
+493:                 s.cible_nom = g.texte
+494:             if g.type == "GP" and s.cible_gp is None:
+495:                 s.cible_gp = _tete_gp(g)
+496:             if g.type == "GV" and s.cible_verbe is None:
+497:                 s.cible_verbe = g.texte
+498:     construire_arbre(segs)
+499:     return segs
+500: 
+501: 
+502: ROLES_AMBIGUS = {"pour": ["cause"]}
+503: 
+504: 
+505: def _role_attache(
+… [4853 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 620,720p tools/structures/generateur.py", "description": "Read base segmentation and analyser"}`
+
+  ```
+def structure(texte: str, roles: bool = True) -> list[dict]:
+    """La structure de base, sans variantes d'attachement ; `roles=False` coupe les règles.
+
+    C'est ce que mesure `mesure_analyseur.py` : la segmentation et les rôles, pas le choix
+    d'un candidat. `roles=False` rend les rôles par défaut (le contrôle « règles coupées »).
+    """
+    segs = _segmente(texte, _tokens(texte))
+    sortie = []
+    for s in segs:
+        d = s.dict()
+        if not roles and s.type in ROLES_DEFAUT:
+            d["role"] = ROLES_DEFAUT[s.type]
+        sortie.append(d)
+    return sortie
+
+
+if __name__ == "__main__":
+    import sys
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    texte = args[0] if args else "Le chat de la voisine qui dort sur le toit se réveille."
+    cs = analyser(texte)
+    if "--json" in sys.argv:
+        print(json.dumps(cs, ensure_ascii=False, indent=1))
+    else:
+        for c in cs:
+            print(f"- {c['nom']}")
+            for s in c["segments"]:
+                print("   " + "  " * s["niveau"] + f"{s['texte']!r} [{s['type']} · {s['role']}]")
+  ```
+

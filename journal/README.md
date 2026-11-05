@@ -116,7 +116,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `56f3ba0f` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:30 | 0.9 h | 1 | 144 | 7 | 0 | [rapport](sessions/56f3ba0f-66b3-4728-a4cd-201951538ed1/rapport.md) |
 | `5c1bbea7` | Tu es relecteur ADVERSE. Tu | 2026-10-02 09:52 | 0.1 h | 1 | 52 | 0 | 0 | [rapport](sessions/5c1bbea7-1d14-47b6-a48c-fea15f2b857e/rapport.md) |
 | `5ce3f080` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 15:32 | 0.3 h | 1 | 77 | 9 | 0 | [rapport](sessions/5ce3f080-2d3d-467a-8ee1-df697f3f3e68/rapport.md) |
-| `63d4c619` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.0 h | 1 | 14 | 0 | 0 | [rapport](sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/rapport.md) |
+| `63d4c619` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.0 h | 1 | 18 | 0 | 0 | [rapport](sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/rapport.md) |
 | `6551e4dc` | Tu es un relecteur adverse. | 2026-10-01 11:57 | 0.1 h | 1 | 63 | 2 | 0 | [rapport](sessions/6551e4dc-b73d-4df7-8fc4-b8c9fdbb0688/rapport.md) |
 | `657779e6` | Dépôt /home/stephane/GitHub/Qtrinet, f | 2026-10-27 18:48 | 0.8 h | 1 | 61 | 2 | 0 | [rapport](sessions/657779e6-ad04-4f29-9baf-dcbfd7d819df/rapport.md) |
 | `67637ea9` | MISSION STRICTEMENT EN LECTURE SEULE. | 2026-10-08 09:19 | 0.0 h | 1 | 28 | 0 | 0 | [rapport](sessions/67637ea9-78c6-4c20-a77c-0f90ee2a9ddc/rapport.md) |
@@ -144,7 +144,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a117a3c1` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:30 | 0.7 h | 1 | 83 | 4 | 0 | [rapport](sessions/a117a3c1-8325-4a63-8e8f-14fea0bce484/rapport.md) |
 | `a4277668` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/a4277668-3825-4797-bf0b-d7addcbb569d/rapport.md) |
 | `a4eaa4c8` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 38 | 0 | 0 | [rapport](sessions/a4eaa4c8-11e2-4ca3-bcb1-b28919cb601a/rapport.md) |
-| `a8035275` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.0 h | 1 | 10 | 0 | 0 | [rapport](sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/rapport.md) |
+| `a8035275` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.0 h | 1 | 15 | 0 | 0 | [rapport](sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/rapport.md) |
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
 | `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 25.1 h | 173 | 1021 | 49 | 108 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
@@ -182,11 +182,11 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `f2de810a` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.2 h | 1 | 63 | 0 | 0 | [rapport](sessions/f2de810a-b765-444d-b3cc-d8fce1ba2105/rapport.md) |
 | `f2f82297` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 12:03 | 0.6 h | 1 | 106 | 2 | 0 | [rapport](sessions/f2f82297-793b-4538-952f-cb8da809229c/rapport.md) |
 | `f3ca67c4` | MISSION STRICTEMENT EN LECTURE SEULE. | 2026-10-08 09:19 | 0.0 h | 1 | 46 | 0 | 0 | [rapport](sessions/f3ca67c4-b171-4eee-9e14-29f9dd1c8c23/rapport.md) |
-| `f55ccb7b` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.0 h | 1 | 9 | 0 | 0 | [rapport](sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) |
+| `f55ccb7b` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.1 h | 1 | 11 | 0 | 0 | [rapport](sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) |
 | `fba448b3` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 26 | 0 | 0 | [rapport](sessions/fba448b3-e237-4eb3-b77d-fcbf7da1c93d/rapport.md) |
 | `fbdbd6fb` | — | 2026-11-05 10:11 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) |
 | `fc167f70` | Projet Drave continuer | 2026-10-14 13:07 | 118.4 h | 187 | 2339 | 80 | 279 | [rapport](sessions/fc167f70-be8b-4c63-be5e-3c0d3c0ba1c3/rapport.md) |
 | `fd4b8df1` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.6 h | 1 | 90 | 6 | 0 | [rapport](sessions/fd4b8df1-abc9-4dd6-94df-fcf484cc9017/rapport.md) |
 | `fe3c05f0` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 44.8 h | 390 | 1633 | 29 | 99 | [rapport](sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) |
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |
-| `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.0 h | 1 | 20 | 0 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
+| `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.0 h | 1 | 24 | 0 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
