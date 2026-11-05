@@ -7,12 +7,12 @@
 | Identifiant | `b3d82ad5-bff2-49ec-9ad6-2230e68d8071` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.5 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 41 |
-| Appels d'outils | 53 |
+| Messages | 44 |
+| Appels d'outils | 56 |
 | Fichiers touchés | 0 |
-| Commandes | 52 |
+| Commandes | 55 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer l' … [1961 caractères tronqués]
 
-*53 appels d'outils.* Actions notables :
+*56 appels d'outils.* Actions notables :
 
 - bash — Show repo status and branch
 - bash — List linguistique tools and reports
@@ -41,11 +41,11 @@
 - bash — Find multiword target values
 - bash — Check gold_gele counts
 - bash — Run heuristic and inspect predicted targets
-- … et 39 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
-⏵ Mesure figée sur HEAD et génération des chiffres définitifs
+⏵ Écriture du JSON de résultats
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Debug per-source discrepancy
 - **T1** Check for nondeterminism in block
 - **T1** Repeat measurement three times
-- … et 12 autres
+- … et 15 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -127,4 +127,6 @@
 - **T1** `docs/pilotage/chantiers.md:90:| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta + **DRVF `thought`** + **banc anytime**`
 - **T1** `docs/pilotage/plan-travail.md:39:| **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**`
 - **T1** `delta bootstrap 95% 0.0 0.034482758620689655 mean 0.01381448275862069`
+- **T1** `"definition": "adopter (b) cible in cibles pour exact et topk_exact ; conserver les deux dénominateurs (239 rendement, 145 span) et annoncer 139/145 = 95,86 % et 139/239 = 58,16 %, avec la mention « +`
+- **T1** `"split": "si (b) est adopté, classer verbe/nom par la cible appariée : 114/111 verbe (97,37 %), 31/28 nom (90,32 %) au lieu de 116/111 et 29/26",`
 

@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-cache-chunker.md`](rapport-cache-chunker.md) | **B13** — la validation A11 du cache : ×11,0 à 160 tokens, égalité 612/612, cache falsifié détecté |
 | [`rapport-pensee-attachement-v3.md`](rapport-pensee-attachement-v3.md) | **B13** — l'attachement v3 : exact **0,9724**, noms 1,0, R2/R3/R4, **181/181** |
 | [`rapport-echecs-v2.md`](rapport-echecs-v2.md) | **B13** — les 8 échecs qualifiés, 5 règles chiffrées (A9) |
 | [`rapport-cache-chunker-applique.md`](rapport-cache-chunker-applique.md) | **B13** — le cache appliqué : **×139** en chunker, ×1 en défaut (S domine), sortie identique, **181/181** |
@@ -147,7 +148,6 @@
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
-| [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`INDEX.md`](INDEX.md) | **A7.5–A7.26** — 22 fiches de cache KV et de grappe réseau ; l'index exhaustif |
 
 ## Les données brutes

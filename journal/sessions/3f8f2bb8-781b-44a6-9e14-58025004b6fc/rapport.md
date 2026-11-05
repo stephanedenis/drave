@@ -7,12 +7,12 @@
 | Identifiant | `3f8f2bb8-781b-44a6-9e14-58025004b6fc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.9 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 70 |
-| Appels d'outils | 80 |
-| Fichiers touchés | 0 |
-| Commandes | 70 |
+| Messages | 84 |
+| Appels d'outils | 95 |
+| Fichiers touchés | 1 |
+| Commandes | 82 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2447 caractères tronqués]
 
-*80 appels d'outils.* Actions notables :
+*95 appels d'outils.* Actions notables :
 
 - bash — Check repo state and locate attachment reports
 - read
@@ -41,11 +41,11 @@
 - bash — Show v2 commit stat and bloc diff
 - bash — Inspect lexicon variable and imports
 - bash — Show evaluer_gold and autotest v2 diff
-- … et 57 autres
+- … et 70 autres
 
 **Synthèse produite :**
 
-⏵ Correcting the JSON verdict counts and rounding notes.
+⏵ Tightening the JSON concurrency fields so “HEAD” cannot be read as v3.
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v2.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +97,7 @@
 - **T1** Count head-fixable top-k strict failures pre-v2
 - **T1** Measure F1 and F1+F2 on pre-v2 base
 - **T1** Count gates per commit and show post-v2 diff
-- … et 30 autres
+- … et 42 autres
 
 ## 4. Mesures et résultats marquants
 

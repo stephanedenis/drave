@@ -7,12 +7,12 @@
 | Identifiant | `3144cf23-6004-46ef-bc3d-f05d81c0cff6` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.5 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 25 |
-| Appels d'outils | 26 |
-| Fichiers touchés | 1 |
-| Commandes | 21 |
+| Messages | 40 |
+| Appels d'outils | 41 |
+| Fichiers touchés | 2 |
+| Commandes | 34 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2227 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and top-level files
 - bash — List linguistic tests and reports directories
@@ -41,11 +41,11 @@
 - bash — Inspect synthetic gold builder and S generator API
 - bash — Read S generator head and tail
 - bash — Compare S generator spans against the 94 lost
-- … et 9 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ Building the local rule simulator (copy of the chunker in /tmp)
+⏵ Fixing marker sets per language, relative/determiner ambiguity, proper nouns
 
 ## 3. Travail accompli
 
@@ -53,7 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/tmp/spans/regles.py` | 1 | 0 |
+| `/tmp/spans/regles.py` | 2 | 0 |
+| `/tmp/spans/simuler.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -78,4 +79,23 @@
 - **T1** Show synthetic phrases with bare-noun GP gold spans
 - **T1** Check gold GV heads and subject inclusion
 - **T1** Copy chunker to /tmp for local simulation
+- **T1** Probe verb/POS recognition of tricky words
+- **T1** Probe POS recognition correctly
+- **T1** List all sentences containing lost spans
+- **T1** Execute first simulation run
+- **T1** Fix POS helper and rerun simulation
+- **T1** Show simulation summary head
+- **T1** Rerun with corrected baselines
+- **T1** Run simulation showing exit code
+- **T1** Inspect script tail after edit
+- **T1** Append main guard and rerun
+- **T1** Show union results and AB misses
+- **T1** Debug rule outputs on missed examples
+- **T1** Apply principled fixes and rerun
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module> TypeError: Heuristique._pos() missing 1 required positional argument: 'mot' [exit code: 1]
 

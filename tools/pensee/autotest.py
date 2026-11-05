@@ -2607,13 +2607,18 @@ def t178_cache_chunker() -> tuple[bool, str]:
         return orig(self, *a, **k)
 
     bl.Heuristique._syntagmes_simple = compte
+    txt = " ".join(["Le garçon joue au ballon dans le jardin."] * 20)
     try:
-        h = bl.Heuristique(segmenter_s=False)
-        h.analyser(" ".join(["Le garçon joue au ballon dans le jardin."] * 20), "fr")
+        appels["n"] = 0
+        bl.Heuristique(segmenter_s=False).analyser(txt, "fr")
+        chunker = appels["n"]
+        appels["n"] = 0
+        bl.Heuristique().analyser(txt, "fr")
+        defaut = appels["n"]
     finally:
         bl.Heuristique._syntagmes_simple = orig
-    return appels["n"] == 1, (
-        f"cache : {appels['n']} chunking(s) pour 20 répétitions (1+2S avant)")
+    return chunker == 1 and defaut == 1, (
+        f"cache : {chunker} chunking chunker, {defaut} défaut (1+2S avant)")
 
 
 def main() -> int:

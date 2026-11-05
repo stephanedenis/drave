@@ -922,10 +922,11 @@ class Heuristique:
         cands = self._syntagmes_s(texte)
         cibles_s = self._cibles_s(texte) if cands else {}
         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+        # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
+        # le O(n²) mesuré venait des re-chunkings (A6, A11) — sortie identique (T178).
+        simples = self._syntagmes_simple(texte, lg)
+        gvs_simple = [x for x in simples if x["type"] == "GV"]
         if cands:
-            # les GV du chunker complètent ceux du générateur S : sans eux, un GP n'a aucun
-            # candidat d'attachement (diagnostic des 33 échecs de T162).
-            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
             for c in cands[:1]:
                 noms = [x.get("nom", "") for x in cands]
                 gvs_s = [x for x in c.get("segments", []) if x.get("type") == "GV"]
@@ -982,9 +983,7 @@ class Heuristique:
                                                 candidats=candidats, langue=lg, script=script,
                                                 meta=meta))
         else:
-            # un seul chunking par analyse (le O(n²) mesuré : 1+2S appels avant ce cache)
-            simples = self._syntagmes_simple(texte, lg)
-            gvs_s = [x for x in simples if x["type"] == "GV"]
+            gvs_s = gvs_simple
             cache_gv: dict = {}
             for s in simples:
                 meta = {"role": s["role"], "niveau": s["niveau"]}
@@ -1001,9 +1000,8 @@ class Heuristique:
         if cands and self.union:
             deja = {(s.get("type"), s.get("debut"), s.get("fin"))
                     for s in cands[0].get("segments", [])}
-            simples = self._syntagmes_simple(texte, lg)
             gvs_u = ([x for x in cands[0].get("segments", []) if x.get("type") == "GV"]
-                     + [x for x in simples if x["type"] == "GV"])
+                     + gvs_simple)
             for s in simples:
                 if (s["type"], s["debut"], s["fin"]) in deja:
                     continue

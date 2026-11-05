@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 118.7 h |
+| Durée | 118.8 h |
 | Tours | 176 |
-| Messages | 2484 |
-| Appels d'outils | 2180 |
+| Messages | 2495 |
+| Appels d'outils | 2189 |
 | Fichiers touchés | 25 |
-| Commandes | 1792 |
+| Commandes | 1800 |
 | Sous-agents | 16 |
-| Commits | 262 |
+| Commits | 263 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*137 appels d'outils.* Actions notables :
+*146 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 108 autres
+- … et 116 autres
 
 **Synthèse produite :**
 
-⏵ 181/181 avec exact 141 ; je fige la fiche v3 (A9 + R2/R3/R4)
+⏵ J'intègre la validation A11 du cache et je commite le hoisting complet
 
 ## 3. Travail accompli
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1752 autres
+- … et 1760 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9963,4 +9963,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)" -- docs/pilotage/chantiers.md docs/pilotage/roadmap.md docs
 - PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)" -- docs/pilotage/chantiers.md docs/pilotage/roadmap.md docs
 - B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapp
+- B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181" -- tools/bloc_linguistique.py tools/p
 

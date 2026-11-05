@@ -1,7 +1,7 @@
 # B13 — le cache du chunker appliqué : ×139 en chunker, ×1 en défaut (S domine)
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
-> **181/181 portes** : le **O(n²)** du chunker est supprimé — `_syntagmes_simple` était appelé
+> **181/181 portes** : le **O(n²)** du chunker est supprimé (1+2S → **1**, dans **les deux chemins** depuis le hoisting complet : T178) — `_syntagmes_simple` était appelé
 > **1+2S fois** par analyse (3,21/phrase sur le corpus, 193 fois à 320 tokens), il l'est **une
 > fois** ; les verbes de GV sont **mémoïsés par span** (`_verbe_gv`). Résultat mesuré : **×139 à
 > 160 répétitions** sur le chemin chunker, sortie **identique** (0 différence sur 612 phrases).
@@ -12,6 +12,13 @@
 > `cache_gv`, branche chunker hoistée), [`autotest.py`](../tools/pensee/autotest.py) (T178),
 > bancs hors dépôt ; fiche amont [coût du chunker](rapport-cout-chunker.md) (A6, cache simulé) ;
 > JSON [`pensee-cache-chunker-applique.json`](pensee-cache-chunker-applique.json).
+
+> **Validation indépendante (A11, `rapport-cache-chunker.md`)** : sur l'instantané `6e8430…`,
+> le cache complet donne **×11,0 à 160 tokens** (×12,2 en re-mesure), **×18,1–19,5 à 320**,
+> **×29–37 à 640–1 280** en chunker ; **×2,06 à 160** en défaut ; l'**égalité est vérifiée**
+> 612/612 et 42/42 (7 longueurs × 2 chemins), et un **cache falsifié** est détecté (113/612
+> chunker, 290/612 défaut) — le comparateur est sensible. La mémoïsation seule vaut ×5,1 ;
+> c'est le cache des verbes de GV qui apporte le second facteur.
 
 ## 1. Temps (base de 16 tokens répétée, chemin chunker `segmenter_s=False`)
 

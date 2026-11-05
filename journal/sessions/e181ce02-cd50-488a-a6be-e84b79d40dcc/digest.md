@@ -42740,3 +42740,156 @@ docs + pilotage + README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; 4 échecs (lexique ou n=1).\", \" ; 4 échecs.\")\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(li … [1345 caractères tronqués]`
+
+  ```
+trim + compteurs 651 746
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1398]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1398", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-echecs-v2.md
+ create mode 100644 reports/rapport-pensee-attachement-v3.md
+COMMIT OK 1
+dcf7bc91 B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181
+jeu 05 nov 2026 15:21:00 EST
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+Agent 1b0cf09a-a77a-443d-82e2-68a5d6cacdf0 sent a message: 
+Validation du cache terminée. Livrables neufs, non committés : `reports/rapport-cache-chunker.md` (560 l., diff complet) et `reports/pensee-cache-chunker.json`. Aucun fichier existant modifié ; aucun commit.
+
+Mesures sur le snapshot `6e8430…` (celui de la fiche), figé depuis `git HEAD` parce que l'arbre a été patché par un autre agent pendant la session (puis HEAD a bougé : 5640809e, etc.).
+
+GAIN (cache complet C2 = chunking + verbes de GV) : chunker ×11,0 à 160 tokens (9 passes), ×12,2 en re-mesure 15 passes — fiche ×11,6, donc confirmé à ±10 % ; ×18,1-19,5 à 320 (fiche ×16,9) ; ×29-37 à 640-1 280. Défaut : ×2,06 à 160, ×2,61-2,83 à 320. Corpus : ×1,25 chunker, ×1,03 défaut. **La mémoïsation seule (C1) ne donne que ×5,1 à 160 chunker et ×1,02-1,07 sur le défaut** : c'est le cache des verbes qui apporte le second facteur.
+
+ÉGALITÉ : OUI. C1/C2/OFF = 612/612 sur les deux chemins (chunker et défaut), 42/42 sur 7 longueurs × 2 chemins. Patch hoisté réel (copie /tmp) : 612/612 + 14/14, 1 seul chunking par analyse. Comparateur sensible : cache falsifié 113/612 (chunker) et 290/612 (défaut). Portée par analyse vérifiée (2 analyses du même texte = 2 misses).
+
+CORRECTIF EXACT (contre 6e8430, lignes de la fiche) : hoister `simples`/`gvs_simple`/`cache_gv` après le calcul de `verbes` (après 855) ; supprimer les re-chunkings 861, 919, 928 ; `for s in simples` (914) ; `gvs_simple` en 916/922 ; union `gvs_u = gvs_s + gvs_simple` (929-930) ; `cache_gv` aux appels 887/895/899/935/940 ; ajouter `_verbe_gv` après 658 ; `cache_gv=None` aux signatures 662/689 ; remplacer `_verbe_dans` en 681/685/701 par `_verbe_gv`. Diff complet §8.2, applique proprement (fichier patché sha256 `5639a376…`).
+
+ATTENTION : le fichier committé HEAD (5640809e) est un patch partiel : le défaut garde 2 chunkings (lignes 875 et 947) ; le correctif complet les ramène à 1. L'arbre courant a encore bougé (64b7c520…, éditions hors cache) : relire la note d'état §2.1/§8.3 avant d'appliquer.
+
+### 👤 Utilisateur
+
+Background subagent 1b0cf09a-a77a-443d-82e2-68a5d6cacdf0 finished and will do no further work unless you send it more.
+Its closing message:
+✅ **Cache validé.** Deux fichiers neufs, non committés, aucun fichier existant modifié :
+
+- [`reports/rapport-cache-chunker.md`](reports/rapport-cache-chunker.md) — protocole, temps, complexité, égalité, contrôles négatifs, limites, diff complet.
+- [`reports/pensee-cache-chunker.json`](reports/pensee-cache-chunker.json) — données structurées.
+
+## Facteur de gain (mesures sur `6e8430…`, snapshot de la fiche)
+
+| mesure | résultat |
+|---|---|
+| cache complet C2 (chunking + verbes), chunker, 160 tokens | **×11,0** (9 passes), **×12,2** (15 passes) — fiche ×11,6, confirmé à ±10 % |
+| idem, 320 tokens | **×18,1-19,5** (fiche ×16,9) |
+| idem, 640-1 280 tokens | **×29-37** |
+| défaut S, 160 / 320 tokens | **×2,06** / **×2,61-2,83** |
+| corpus 612 phrases | **×1,25** chunker, **×1,03** défaut |
+| mémoïsation seule C1 (`_syntagmes_simple`) | ×5,1 à 160, ×6,9 à 320 ; défaut ×1,02-1,07 |
+
+**Nuance importante :** le ×11,6 n'est pas obtenu par la seule mémoïsation du chunker (×5,1). Il faut aussi le cache des verbes de GV (C2) ; sur le défaut, c'est même lui qui porte tout le gain, le 2→1 chunking ne valant que 2-4 %.
+
+## Égalité : **OUI**
+
+- C1, C2 et OFF : **612/612** sur les deux chemins (chunker seul et défaut S).
+- **42/42** sur 7 longueurs × 2 chemins.
+- Patch hoisté réel : **612/612 + 14/14**, **1 seul chunking** par analyse.
+- Comparateur sensible : cache falsifié détecté (113/612 chunker, 290/612 défaut) ; cache bien recréé à chaque `analyser`.
+
+## Correctif exact à appliquer (contre `6e8430…`)
+
+Hoister `simples`/`gvs_simple`/`cache_gv` après le calcul de `verbes` (après 855), supprimer les re-chunkings **861, 919, 928**, remplacer **914** par `for s in simples`, utiliser `gvs_simple` en **916/922**, poser `gvs_u = gvs_s + gvs_simple` (**929-930**), passer `cache_gv` en **887/895/899/935/940**, ajouter `_verbe_gv` après **658**, ajouter `cache_gv=None` aux signatures **662/689**, remplacer `_verbe_dans` par `_verbe_gv` en **681/685/701**. Le diff complet est au § 8.2 ; il s'applique proprement (fichier patché sha256 `5639a376…`).
+
+⚠️ Le fichier committé dans HEAD (`5640809e`) est un patch **partiel** : le chemin défaut garde deux chunkings (lignes 875 et 947). L'arbre courant a encore bougé depuis (`64b7c520…`) : relire la note d'état § 2.1/§ 8.3 avant d'appliquer. **Rien n'a été committé.**
+
+### 🤖 Assistant
+
+⏵ A11 signale que le défaut garde **2 chunkings** : je hoiste `simples` une seule fois pour tous les chemins
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_syntagmes_simple(texte, lg)\" tools/bloc_linguistique.py | head; echo ---; sed -n \"$(grep -n 'verb = ' tools/bloc_linguistique.py | head -1 | cut -d: -f1),+6p\" tools/bloc_linguistique.py 2>/dev/null; grep -n \"verbes = \ … [93 caractères tronqués]`
+
+  ```
+928:            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+986:            simples = self._syntagmes_simple(texte, lg)
+1004:            simples = self._syntagmes_simple(texte, lg)
+1119:        for s in h._syntagmes_simple(texte, lg):
+---
+920:        verbes = [(e.debut, e.fin, e.valeur) for e in etiquettes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '918,935p' tools/bloc_linguistique.py; echo \"=== 984-1010 :\"; sed -n '984,1010p' tools/bloc_linguistique.py", "description": "Lire les trois sites d'appel"}`
+
+  ```
+# 5. syntagmes : le générateur S (candidats) ou un chunker simple
+        verbes = [(e.debut, e.fin, e.valeur) for e in etiquettes
+                  if e.niveau == "pos" and e.type == "VERB"]
+        cands = self._syntagmes_s(texte)
+        cibles_s = self._cibles_s(texte) if cands else {}
+        cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+        if cands:
+            # les GV du chunker complètent ceux du générateur S : sans eux, un GP n'a aucun
+            # candidat d'attachement (diagnostic des 33 échecs de T162).
+            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+            for c in cands[:1]:
+                noms = [x.get("nom", "") for x in cands]
+                gvs_s = [x for x in c.get("segments", []) if x.get("type") == "GV"]
+                deja = {(x["debut"], x["fin"]) for x in gvs_s}
+                gvs = gvs_s + [x for x in gvs_simple if (x["debut"], x["fin"]) not in deja]
+                for s in c.get("segments", []):
+                    # la cible de S **convertie en son verbe** : « Les enfants jouent » →
+=== 984-1010 :
+        else:
+            # un seul chunking par analyse (le O(n²) mesuré : 1
+… [1646 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# hoisting : un seul chunking pour tous les chemins\nt=t.replace('''        cands = self._syntagmes_s(texte)\n        cibles_s = self._c … [2785 caractères tronqués]`
+
+  ```
+chunking hoisté
+exact 141 | top1 143 | topk 142 | topk_exact 142
+photo après hoist : 17776
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:tools/bloc_linguistique.py > /tmp/bloc_head.py && timeout 900 python3 - <<'PY'\nimport sys, json, importlib.util; sys.path.insert(0,'.')\nspec=importlib.util.spec_from_file_location(\"bloc_head\",\"/tmp/bloc_head.py\")\ … [737 caractères tronqués]`
+
+  ```
+phrases différentes : 612 / 612
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/bloc_head.py tools/_cmp_head.py && cp tools/bloc_linguistique.py tools/_cmp_new.py && timeout 900 python3 - <<'PY'\nimport sys, json; sys.path.insert(0,'.')\nimport tools._cmp_head as old, tools._cmp_new as new\nfrom tools.te … [641 caractères tronqués]`
+
+  ```
+phrases différentes : 0 / 612
+nettoyé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''    bl.Heuristique._syntagmes_simple = compte\n    try:\n        h = bl.Heuristique(segmenter_s=False)\n        h.analyser( … [1034 caractères tronqués]`
+
+  ```
+T178 étendue aux deux chemins
+  181/181 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, time; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nbase = \"Le garçon joue au ballon dans le jardin de la voisine qui dort sur le toit.\"\nfor n in (20, 80, 160):\n    txt =  … [279 caractères tronqués]`
+
+  ```
+défaut 20 30.6 ms
+défaut 80 149.1 ms
+défaut 160 431.7 ms
+  ```
+
+### 🤖 Assistant
+
+⏵ J'intègre la validation A11 du cache et je commite le hoisting complet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-cache-chunker-applique.md'); t=p.read_text()\nnote = \"\"\"\n> **Validation indépendante (A11, `rapport-cache-chunker.md`)** : sur l'instantané `6e8430…`,\n> le cache  … [3115 caractères tronqués]`

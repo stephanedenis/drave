@@ -775,3 +775,535 @@ Created file
 </content>
   ```
 
+### 🤖 Assistant
+
+⏵ Refining the rule implementations (verb cues, type decision, GV boundaries)
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\n# quick probes of the copy's resources on the tricky words\nimport sys; sys.path.insert(0,'/tmp/spans')\nimport bloc_linguistique_copie as bl\nfor w in ['sombre','village','aboie','bus','hung','mention','arrive','arrives','marche','compte','crie','des … [416 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+TypeError: Heuristique._pos() missing 1 required positional argument: 'mot'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\nimport sys; sys.path.insert(0,'/tmp/spans')\nimport bloc_linguistique_copie as bl\nh=bl.Heuristique(segmenter_s=False)\nfr=['sombre','village','aboie','marche','compte','crie','dessine','observe','saute','commence','trouve','nage','prépare','roule','a … [325 caractères tronqués]`
+
+  ```
+sombre est_verbe= False pos= NOUN ADJ= False
+village est_verbe= False pos= NOUN ADJ= False
+aboie est_verbe= False pos= VERB ADJ= False
+marche est_verbe= False pos= NOUN ADJ= False
+compte est_verbe= False pos= NOUN ADJ= False
+crie est_verbe= False pos= NOUN ADJ= False
+dessine est_verbe= False pos= NOUN ADJ= False
+observe est_verbe= False pos= NOUN ADJ= False
+saute est_verbe= False pos= NOUN ADJ= False
+commence est_verbe= False pos= VERB ADJ= False
+trouve est_verbe= False pos= VERB ADJ= False
+nage est_verbe= False pos= NOUN ADJ= False
+prépare est_verbe= False pos= NOUN ADJ= False
+roule est_verbe= False pos= NOUN ADJ= False
+achetée est_verbe= False pos= NOUN ADJ= False
+hung est_verbe= False pos= NOUN ADJ= False
+mention est_verbe= False pos= NOUN ADJ= False
+born est_verbe= False pos= NOUN ADJ= False
+snows est_verbe= False pos= NOUN ADJ= False
+call est_verbe= False pos= NOUN ADJ= False
+cross est_verbe= False pos= NOUN ADJ= False
+lives est_verbe= False pos= NOUN ADJ= False
+grows est_verbe= True pos= NOUN ADJ= False
+speaks est_verbe= False pos= NOUN ADJ= False
+sings est_verbe= True pos= NOUN ADJ= False
+flies est_verbe= True pos= NOUN ADJ= False
+bus est_verbe= True pos= NOUN ADJ= False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nphrases=charger(); h=bl.Heuristique(segmenter_s=True)\nmiss=[ … [524 caractères tronqués]`
+
+  ```
+'Le chien du voisin aboie la nuit.' fr hand
+'She said that she would come yesterday.' en hand
+'The duck is ready to eat.' en hand
+'It rains since yesterday.' en reel
+'The book that I read is exciting.' en reel
+'The film she talks about is out.' en reel
+'The mouse is ready to eat.' en reel
+'Les oiseaux volent au-dessus du lac.' fr reel
+'The book that you read is long.' en reel
+'The city where we live is beautiful.' en reel
+'Le train entre en gare.' fr reel
+'The rain falls since this morning.' en reel
+'The film that we saw was long.' en reel
+'The house where I was born is small.' en reel
+'We wait for the bus.' en reel
+'The painting is hung on the wall.' en reel
+'The man who speaks is my father.' en reel
+'I think that you are right.' en reel
+"Le chat que j'ai vu dormait." fr reel
+'The book that I read is good.' en reel
+'When it rains, I stay.' en reel
+'She says that he comes.' en reel
+'The student whom I mention is absent.' en reel
+'Although it is late, he works.' en reel
+'I know that you come.' en reel
+'The cat that sleeps is black.' en reel
+"L'homme dont la voiture est rouge arrive." fr reel
+'The village where I live is small.' en reel
+'If you come, we will leave.' en reel
+'She sing
+… [2849 caractères tronqués]
+  ```
+
+- **write** `{"content": "\"\"\"Simulation locale des deux règles sur une COPIE du chunker (aucune écriture dans le dépôt).\"\"\"\nfrom __future__ import annotations\n\nimport re\nimport sys\n\nsys.path.insert(0, \"/tmp/spans\")\nimport bloc_linguistique_copie as bl\n\nREL_ONLY = {\"qui\", \"dont\", \"où\", \"ou … [11173 caractères tronqués]`
+
+  ```
+<path>/tmp/spans/regles.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Running the baseline vs rule simulations
+
+- **write** `{"content": "\"\"\"Mesure locale : couverture des 94 spans perdus + régression sur les spans déjà bons.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport sys\nfrom collections import Counter, defaultdict\n\nROOT = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/ … [5164 caractères tronqués]`
+
+  ```
+<path>/tmp/spans/simuler.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && timeout 900 python3 simuler.py 2>&1 | tail -120", "description": "Execute first simulation run"}`
+
+  ```
+cibles 239 bons défaut 145 perdus 94
+94 par type Counter({'REL': 48, 'SUB': 33, 'GP': 13})
+chunker seul exact total 77 Counter({'GP': 77})
+chunker seul sur les 94 0
+chunker seul sur les 145 77
+global chunker seul {'tp': 175, 'fp': 502, 'fn': 1688, 'precision': 0.2585, 'rappel': 0.0939, 'f1': 0.1378}
+Traceback (most recent call last):
+  File "/tmp/spans/simuler.py", line 152, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/spans/simuler.py", line 119, in main
+    runs[f"{nom}_{'S' if seg else 'seul'}"] = run(h)
+                                              ~~~^^^
+  File "/tmp/spans/simuler.py", line 32, in run
+    out.append((p, h.analyser(p["texte"], p["langue"])))
+                   ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/spans/bloc_linguistique_copie.py", line 986, in analyser
+    simples = self._syntagmes_simple(texte, lg)
+  File "/tmp/spans/regles.py", line 267, in _syntagmes_simple
+    return segments_a(self, texte, langue)
+  File "/tmp/spans/regles.py", line 163, in segments_a
+    for s in clauses_a(texte, langue):
+             ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/tmp/spans/regles.py", line 148, in clauses_a
+    type_ = type_marqueur(mots, i, langue, lex)
+  File "/tmp/sp
+… [434 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\nimport re\np='/tmp/spans/regles.py'\ns=open(p).read()\ns=s.replace('''def _classe(langue: str, mot: str) -> str:\n    return bl.Heuristique._pos(langue, mot)[0]''','''_H = bl.Heuristique(segmenter_s=False)\n\n\ndef _classe(langue: str, mot: str) -> st … [191 caractères tronqués]`
+
+  ```
+REL qui ferme
+   REL where we live
+   REL where she lives
+   REL where I was born
+   REL que j'ai achetée
+   REL qui ouvre
+   REL qui crie
+   REL qui compte
+   REL qui ferme
+   REL qui dessine
+   REL whom I mention
+   REL where I live
+   REL whom I mention
+   REL qui ferme
+   REL qui crie
+   REL qui ferme
+   REL qui observe
+   REL qui dessine
+  perdus sur 145: [('GP', 6, 9), ('GP', 11, 31), ('SUB', 0, 11), ('SUB', 0, 13), ('SUB', 0, 13), ('SUB', 0, 14), ('SUB', 0, 14), ('SUB', 0, 16), ('SUB', 0, 17), ('SUB', 0, 17), ('SUB', 0, 18), ('SUB', 0, 19), ('SUB', 0, 20), ('SUB', 0, 20), ('SUB', 0, 24), ('SUB', 7, 18), ('SUB', 8, 20), ('SUB', 8, 21), ('SUB', 9, 20), ('SUB', 9, 21), ('SUB', 9, 22), ('SUB', 9, 23), ('SUB', 9, 25), ('SUB', 9, 31), ('SUB', 10, 23), ('SUB', 10, 32), ('SUB', 10, 38), ('SUB', 11, 28), ('SUB', 12, 35), ('SUB', 12, 38), ('SUB', 12, 41), ('SUB', 14, 41), ('SUB', 15, 41), ('SUB', 20, 42), ('SUB', 21, 37), ('SUB', 26, 42), ('SUB', 26, 44), ('SUB', 29, 57)]
+
+== gains AB_seul
+   GP for the bus
+   GP du voisin
+   GP to eat
+   GP to eat
+   GP on the wall
+   REL qui commence
+   REL qui marche
+   REL qui trouve
+   REL who sings
+   REL whose car is red
+   REL who speaks
+   RE
+… [1699 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && timeout 900 python3 simuler.py 2>&1 | sed -n '1,120p'", "description": "Show simulation summary head"}`
+
+  ```
+cibles 239 bons défaut 145 perdus 94
+94 par type Counter({'REL': 48, 'SUB': 33, 'GP': 13})
+chunker seul exact total 77 Counter({'GP': 77})
+chunker seul sur les 94 0
+chunker seul sur les 145 77
+global chunker seul {'tp': 175, 'fp': 502, 'fn': 1688, 'precision': 0.2585, 'rappel': 0.0939, 'f1': 0.1378}
+{
+ "A_seul": {
+  "exact_total": 202,
+  "exact_par_type": {
+   "REL": 68,
+   "GP": 77,
+   "SUB": 57
+  },
+  "gain_94": 73,
+  "gain_94_par_type": {
+   "SUB": 31,
+   "REL": 42
+  },
+  "perdus_sur_145": 16,
+  "perdus_sur_145_detail": [
+   [
+    "GP",
+    6,
+    9
+   ],
+   [
+    "GP",
+    11,
+    31
+   ],
+   [
+    "GP",
+    19,
+    27
+   ],
+   [
+    "GP",
+    20,
+    28
+   ],
+   [
+    "GP",
+    22,
+    37
+   ],
+   [
+    "GP",
+    24,
+    30
+   ],
+   [
+    "SUB",
+    0,
+    17
+   ],
+   [
+    "SUB",
+    0,
+    18
+   ],
+   [
+    "SUB",
+    0,
+    20
+   ],
+   [
+    "SUB",
+    0,
+    20
+   ],
+   [
+    "SUB",
+    0,
+    24
+   ],
+   [
+    "SUB",
+    9,
+    25
+   ],
+   [
+    "SUB",
+    9,
+    31
+   ],
+   [
+    "SUB",
+    10,
+    23
+   ],
+   [
+    "SUB",
+    11,
+    28
+   ],
+   [
+    "SUB",
+    26,
+    42
+   ]
+  ],
+  "exact_sur_145": 129,
+  "exact_sur_77": 77,
+  "global": {
+   "tp": 301,
+   "fp": 524,
+
+… [181 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Computing clean per-mode gains and regressions against the right baseline
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/simuler.py'\ns=open(p).read()\n# replace the final output block\nstart=s.index('    runs = {}')\nnew='''    runs = {}\n    for nom, cls in ((\"A\", R.HA), (\"B\", R.HB), (\"AB\", R.HAB)):\n        for seg in (False, True):\n            h … [1863 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && timeout 900 python3 simuler.py; echo \"EXIT=$?\"", "description": "Run simulation showing exit code"}`
+
+  ```
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && tail -30 simuler.py && grep -n \"__main__\\|def main\" simuler.py", "description": "Inspect script tail after edit"}`
+
+  ```
+ok = exactes(r, cibles_all)
+        gain = ok & set(cibles94)
+        # bonne base de comparaison : mode seul -> 77 ; mode S -> 145
+        base = ok0 if nom.endswith("_seul") else ok_default
+        perdus = set(base) - ok
+        out[nom] = {
+            "exact_total": len(ok),
+            "exact_par_type": dict(Counter(t for _, t, _, _ in ok)),
+            "gain_94": len(gain),
+            "gain_94_par_type": dict(Counter(t for _, t, _, _ in gain)),
+            "base": len(base), "perdus_base": len(perdus),
+            "perdus_detail": sorted((t, d, f) for _, t, d, f in perdus),
+            "global": f1_global(r),
+        }
+    print(json.dumps(out, ensure_ascii=False, indent=1))
+
+    for nom in ("A_seul", "B_seul", "AB_seul", "A_S", "B_S", "AB_S"):
+        ok = exactes(runs[nom], cibles_all)
+        gain = ok & set(cibles94)
+        print("\n==", nom, "gain", len(gain), Counter(t for _, t, _, _ in gain),
+              "base_perdus", out[nom]["perdus_base"], out[nom]["perdus_detail"])
+    # manquants de AB (union) sur les 94
+    ok = exactes(runs["AB_S"], cibles_all)
+    manque = set(cibles94) - ok
+    print("\nAB_S manque", len(manque), Counter(t for _, t, _, _ in manque))
+    
+… [208 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && printf '\\n\\nif __name__ == \"__main__\":\\n    main()\\n' >> simuler.py && timeout 900 python3 simuler.py 2>&1 | sed -n '1,140p'", "description": "Append main guard and rerun"}`
+
+  ```
+cibles 239 bons défaut 145 perdus 94
+94 par type Counter({'REL': 48, 'SUB': 33, 'GP': 13})
+chunker seul exact total 77 Counter({'GP': 77})
+chunker seul sur les 94 0
+chunker seul sur les 145 77
+global chunker seul {'tp': 175, 'fp': 502, 'fn': 1688, 'precision': 0.2585, 'rappel': 0.0939, 'f1': 0.1378}
+{
+ "A_seul": {
+  "exact_total": 202,
+  "exact_par_type": {
+   "REL": 68,
+   "SUB": 57,
+   "GP": 77
+  },
+  "gain_94": 73,
+  "gain_94_par_type": {
+   "REL": 42,
+   "SUB": 31
+  },
+  "base": 77,
+  "perdus_base": 0,
+  "perdus_detail": [],
+  "global": {
+   "tp": 301,
+   "fp": 524,
+   "fn": 1562,
+   "precision": 0.3648,
+   "rappel": 0.1616,
+   "f1": 0.224
+  }
+ },
+ "A_S": {
+  "exact_total": 218,
+  "exact_par_type": {
+   "REL": 68,
+   "SUB": 67,
+   "GP": 83
+  },
+  "gain_94": 73,
+  "gain_94_par_type": {
+   "REL": 42,
+   "SUB": 31
+  },
+  "base": 145,
+  "perdus_base": 0,
+  "perdus_detail": [],
+  "global": {
+   "tp": 561,
+   "fp": 1081,
+   "fn": 1302,
+   "precision": 0.3417,
+   "rappel": 0.3011,
+   "f1": 0.3201
+  }
+ },
+ "B_seul": {
+  "exact_total": 145,
+  "exact_par_type": {
+   "REL": 59,
+   "GP": 86
+  },
+  "gain_94": 38,
+  "gain_94_par_type": {
+   "REL": 33,
+   "GP": 5
+  },
+  "base": 77,
+  "perdus_
+… [1066 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && timeout 900 python3 simuler.py > /tmp/spans/sortie.txt 2>&1; sed -n '140,260p' /tmp/spans/sortie.txt", "description": "Show union results and AB misses"}`
+
+  ```
+},
+  "base": 145,
+  "perdus_base": 0,
+  "perdus_detail": [],
+  "global": {
+   "tp": 690,
+   "fp": 872,
+   "fn": 1173,
+   "precision": 0.4417,
+   "rappel": 0.3704,
+   "f1": 0.4029
+  }
+ },
+ "default": {
+  "exact_total": 145,
+  "exact_par_type": {
+   "GP": 83,
+   "REL": 26,
+   "SUB": 36
+  },
+  "gain_94": 0,
+  "gain_94_par_type": {},
+  "base": 145,
+  "perdus_base": 0,
+  "perdus_detail": [],
+  "global": {
+   "tp": 488,
+   "fp": 1059,
+   "fn": 1375,
+   "precision": 0.3154,
+   "rappel": 0.2619,
+   "f1": 0.2862
+  }
+ },
+ "chunker_seul": {
+  "exact_total": 77,
+  "exact_par_type": {
+   "GP": 77
+  },
+  "gain_94": 0,
+  "gain_94_par_type": {},
+  "base": 77,
+  "perdus_base": 0,
+  "perdus_detail": [],
+  "global": {
+   "tp": 175,
+   "fp": 502,
+   "fn": 1688,
+   "precision": 0.2585,
+   "rappel": 0.0939,
+   "f1": 0.1378
+  }
+ }
+}
+
+== A_seul gain 73 Counter({'REL': 42, 'SUB': 31}) base_perdus 0 []
+
+== B_seul gain 38 Counter({'REL': 33, 'GP': 5}) base_perdus 0 []
+
+== AB_seul gain 78 Counter({'REL': 42, 'SUB': 31, 'GP': 5}) base_perdus 0 []
+
+== A_S gain 73 Counter({'REL': 42, 'SUB': 31}) base_perdus 0 []
+
+== B_S gain 38 Counter({'REL': 33, 'GP': 5}) base_perdus 0 []
+
+== AB_S gain 78 Counter({'REL': 42, '
+… [463 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Debugging the remaining misses (single-word relatives, "en gare")
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\nimport sys, pathlib\nROOT=pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,str(ROOT/'tools')); sys.path.insert(0,str(ROOT/'tools/tests/linguistique')); sys.path.insert(0,'/tmp/spans')\nimport regles as R, bloc_linguis … [880 caractères tronqués]`
+
+  ```
+== The dog that barks is mean.
+ tokens [('The', 'the'), ('dog', 'dog'), ('that', 'that'), ('barks', 'barks'), ('is', 'is'), ('mean', 'mean'), ('.', '.')]
+  A: REL 'that barks is mean' 8 26
+  B: GN 'The dog' 0 7
+  B: GN 'that barks' 8 18
+  B: GV 'is mean' 19 26
+   noyau The None
+   noyau dog None
+   noyau that None
+   noyau barks None
+   noyau is aux
+   noyau mean verb
+== The cat that sleeps is black.
+ tokens [('The', 'the'), ('cat', 'cat'), ('that', 'that'), ('sleeps', 'sleeps'), ('is', 'is'), ('black', 'black'), ('.', '.')]
+  A: REL 'that sleeps is black' 8 28
+  B: GN 'The cat' 0 7
+  B: GN 'that sleeps' 8 19
+  B: GV 'is black' 20 28
+   noyau The None
+   noyau cat None
+   noyau that None
+   noyau sleeps None
+   noyau is aux
+   noyau black verb
+== The car that I bought runs.
+ tokens [('The', 'the'), ('car', 'car'), ('that', 'that'), ('I', 'i'), ('bought', 'bought'), ('runs', 'runs'), ('.', '.')]
+  A: SUB 'car that I bought' 4 21
+  B: GN 'The car' 0 7
+  B: GN 'that I' 8 14
+   noyau The None
+   noyau car None
+   noyau that None
+   noyau I None
+   noyau bought verb
+   noyau runs verb
+== Le train entre en gare.
+ tokens [('Le', 'le'), ('train', 'train'), ('entre', 'entre'), ('en', 'en'),
+… [552 caractères tronqués]
+  ```
+

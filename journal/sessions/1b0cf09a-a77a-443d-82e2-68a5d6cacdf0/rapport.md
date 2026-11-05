@@ -9,7 +9,7 @@
 | Début | 2026-11-05 14:22 |
 | Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 98 |
+| Messages | 99 |
 | Appels d'outils | 100 |
 | Fichiers touchés | 4 |
 | Commandes | 77 |
@@ -45,7 +45,36 @@
 
 **Synthèse produite :**
 
-⏵ Rédaction de la fiche de validation (corps, tableaux, correctif)
+✅ **Cache validé.** Deux fichiers neufs, non committés, aucun fichier existant modifié :
+
+- [`reports/rapport-cache-chunker.md`](reports/rapport-cache-chunker.md) — protocole, temps, complexité, égalité, contrôles négatifs, limites, diff complet.
+- [`reports/pensee-cache-chunker.json`](reports/pensee-cache-chunker.json) — données structurées.
+
+\## Facteur de gain (mesures sur `6e8430…`, snapshot de la fiche)
+
+| mesure | résultat |
+|---|---|
+| cache complet C2 (chunking + verbes), chunker, 160 tokens | **×11,0** (9 passes), **×12,2** (15 passes) — fiche ×11,6, confirmé à ±10 % |
+| idem, 320 tokens | **×18,1-19,5** (fiche ×16,9) |
+| idem, 640-1 280 tokens | **×29-37** |
+| défaut S, 160 / 320 tokens | **×2,06** / **×2,61-2,83** |
+| corpus 612 phrases | **×1,25** chunker, **×1,03** défaut |
+| mémoïsation seule C1 (`_syntagmes_simple`) | ×5,1 à 160, ×6,9 à 320 ; défaut ×1,02-1,07 |
+
+**Nuance importante :** le ×11,6 n'est pas obtenu par la seule mémoïsation du chunker (×5,1). Il faut aussi le cache des verbes de GV (C2) ; sur le défaut, c'est même lui qui porte tout le gain, le 2→1 chunking ne valant que 2-4 %.
+
+\## Égalité : **OUI**
+
+- C1, C2 et OFF : **612/612** sur les deux chemins (chunker seul et défaut S).
+- **42/42** sur 7 longueurs × 2 chemins.
+- Patch hoisté réel : **612/612 + 14/14**, **1 seul chunking** par analyse.
+- Comparateur sensible : cache falsifié détecté (113/612 chunker, 290/612 défaut) ; cache bien recréé à chaque `analyser`.
+
+\## Correctif exact à appliquer (contre `6e8430…`)
+
+Hoister `simples`/`gvs_simple`/`cache_gv` après le calcul de `verbes` (après 855), supprimer les re-chunkings **861, 919, 928**, remplacer **914** par `for s in simples`, utiliser `gvs_simple` en **916/922**, poser `gvs_u = gvs_s + gvs_simple` (**929-930**), passer `cache_gv` en **887/895/899/935/940**, ajouter `_verbe_gv` après **658**, ajouter `cache_gv=None` aux signatures **662/689**, remplacer `_verbe_dans` par `_verbe_gv` en **681/685/701**. Le diff complet est au § 8.2 ; il s'applique proprement (fichier patché sha256 `5639a376…`).
+
+⚠️ Le fichier committé dans HEAD (`5640809e`) est un patch **partiel** : le chemin défaut garde deux chunkings (lignes 875 et 947). L'arbre courant a encore bougé depuis (`64b7c520…`) : relire la note d'état § 2.1/§ 8.3 avant d'appliquer. **Rien n'a été committé.**
 
 ## 3. Travail accompli
 

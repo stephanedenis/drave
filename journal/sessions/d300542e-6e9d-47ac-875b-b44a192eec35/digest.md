@@ -1356,3 +1356,219 @@ DERIVE:
 … [7704 caractères tronqués]
   ```
 
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee_replis_bb020516.json',encoding='utf-8'))\nprint('base',{k:d['base'][k] for k in ('exact','labels','top1','topk_exact')})\nfor nom in ['R1_repli_vide_GP','R2_preference_tete','R3_completive_etroite','combinaison']:\n    v=d['va … [584 caractères tronqués]`
+
+  ```
+base {'exact': 137, 'labels': 145, 'top1': 140, 'topk_exact': 141}
+R1_repli_vide_GP exact {'justes': 139, 'n': 145, 'taux': 0.9586, 'gain': 2, 'regressions': 0, 'net': 2} top1 {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 2, 'regressions': 0, 'net': 2} surface 3 2 1
+  gains [('g002', '', '->', 'chat'), ('s041', '', '->', 'marche')]
+  regs  []
+R2_preference_tete exact {'justes': 141, 'n': 145, 'taux': 0.9724, 'gain': 4, 'regressions': 0, 'net': 4} top1 {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 2, 'regressions': 0, 'net': 2} surface 14 4 10
+  gains [('g012', 'manger', '->', 'prêt'), ('r018', 'manger', '->', 'prête'), ('s108', 'papier', '->', 'rêve'), ('s122', 'papier', '->', 'saute')]
+  regs  []
+R3_completive_etroite exact {'justes': 138, 'n': 145, 'taux': 0.9517, 'gain': 1, 'regressions': 0, 'net': 1} top1 {'justes': 141, 'n': 145, 'taux': 0.9724, 'gain': 1, 'regressions': 0, 'net': 1} surface 1 1 0
+  gains [('r309', 'Peut-être', '->', 'viendra')]
+  regs  []
+combinaison exact {'justes': 144, 'n': 145, 'taux': 0.9931, 'gain': 7, 'regressions': 0, 'net': 7} top1 {'justes': 145, 'n': 145, 'taux': 1.0, 'gain': 5, 'regressions': 0, 'net': 5} surface 18 7 11
+  gains [('g002', 
+… [598 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nettoyage des textes et ajout du snapshot A3 137 au JSON
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/tests/linguistique/replis_cible.py'\ns=open(p,encoding='utf-8').read()\n\n# docstring stale sentence\ns=s.replace('''Ce que le banc ne fait pas. Il ne touche ni au span, ni au vivier de `candidats` (le top-k\nreste donc inchangé), ni au lexique. Il simule la * … [5422 caractères tronqués]`
+
+  ```
+patched
+OK
+  ```
+
+- **bash** `{"command": "sha256sum tools/bloc_linguistique.py; stat -c '%s %y' tools/bloc_linguistique.py; python3 tools/tests/linguistique/replis_cible.py", "description": "Regenerate final JSON with snapshot", "timeoutMs": 900000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa  tools/bloc_linguistique.py
+105381 2026-11-05 15:04:59.190598153 -0500
+== base ==
+bloc: {'fichier': 'tools/bloc_linguistique.py', 'sha256_16': '64b7c5204f21e4c2', 'octets': 105381, 'mtime': '2026-11-05T15:04:59'}
+exact 141/145 (0.9724) | top1 143/145 (0.9862) | topk strict 142/239 | exact global 141/239 (0.5900)
+== retouches ==
+temoin_noop                      exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R1_repli_vide_GP                 exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_repli_vide_tous_non_GV        exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface 113 (1 gold / 112 hors)
+R1_dernier_temoin                exact 141/145 (0.9724) Δ+0 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_verbe_lexique_temoin          exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R2_litterale                     exact 138/145 (0.9517) Δ-3 top1 140/145 (0.9655) Δ-3 reg  3 | surface   6 (3 gold / 3 hors)
+R2_litterale_POS                 exact 132/145 (0.910
+… [1710 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, os\np='reports/pensee-replis-cible.json'\nd=json.load(open(p,encoding='utf-8'))\nprint('size',os.path.getsize(p),'bytes')\nprint('stable',d['bloc_stable_pendant_le_run'])\nprint('snapshot:',json.dumps(d['snapshot_a3_137'],ensure_ascii=False,indent=1)[:2500 … [418 caractères tronqués]`
+
+  ```
+size 269963 bytes
+stable True
+snapshot: {
+ "empreinte": "bb020516",
+ "octets": 103191,
+ "mtime": "2026-11-05T15:03:12",
+ "note": "mesure intermédiaire de ce prototype, avant l'intégration live ; baseline 137 = les 8 erreurs de la fiche A3. R2 y est la forme large (rang 0 gardé), R3 la forme étroite.",
+ "baseline": {
+  "exact_145": 137,
+  "top1_145": 140,
+  "topk_exact": 141,
+  "cibles": 239
+ },
+ "erreurs_baseline": [
+  "g002",
+  "g012",
+  "r018",
+  "r230",
+  "r309",
+  "s041",
+  "s108",
+  "s122"
+ ],
+ "R1": {
+  "gain": 2,
+  "regressions": 0,
+  "net": 2,
+  "gains": [
+   "g002",
+   "s041"
+  ],
+  "surface": {
+   "changes": 3,
+   "dont_gold": 2,
+   "dont_hors_gold": 1
+  }
+ },
+ "R2_large": {
+  "gain": 4,
+  "regressions": 0,
+  "net": 4,
+  "gains": [
+   "g012",
+   "r018",
+   "s108",
+   "s122"
+  ],
+  "surface": {
+   "changes": 14,
+   "dont_gold": 4,
+   "dont_hors_gold": 10
+  }
+ },
+ "R3": {
+  "gain": 1,
+  "regressions": 0,
+  "net": 1,
+  "gains": [
+   "r309"
+  ],
+  "surface": {
+   "changes": 1,
+   "dont_gold": 1,
+   "dont_hors_gold": 0
+  }
+ },
+ "combinaison": {
+  "gain": 7,
+  "regressions": 0,
+  "net": 7,
+  "exact_145": "144/145 (0,9931)",
+  "top1_145": "145/145 (1,0000)",
+  "gains": [
+   "g00
+… [2414 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction des listes finales (gains, régressions, contrôles) pour la fiche
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8'))\ndef show(nom):\n    v=d['variantes'][nom]\n    print('\\n==',nom,'|',v['definition'])\n    print(' exact',v['detail']['exact_145'],'| top1',v['detail']['top1_145'],'| mcnemar',v['mcnem … [1009 caractères tronqués]`
+
+  ```
+== temoin_noop | témoin de fidélité : aucune retouche
+ exact {'justes': 141, 'n': 145, 'taux': 0.9724, 'gain': 0, 'regressions': 0, 'net': 0} | top1 {'justes': 143, 'n': 145, 'taux': 0.9862, 'gain': 0, 'regressions': 0, 'net': 0} | mcnemar 1.0
+ gains []
+ regs  []
+ surface 0 gold 0 hors 0 par type {}
+
+== R1_repli_vide_GP | cible vide sur un GP → rang 0 du vivier (gauche d'abord)
+ exact {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 1, 'regressions': 0, 'net': 1} | top1 {'justes': 144, 'n': 145, 'taux': 0.9931, 'gain': 1, 'regressions': 0, 'net': 1} | mcnemar 1.0
+ gains [('s041', 'GP', "''", '->', "'marche'", 'gold', 'marche')]
+ regs  []
+ surface 2 gold 1 hors 1 par type {'GP': 2}
+
+== R1_repli_vide_tous_non_GV | même repli sur tous les types non-GV (surface large)
+ exact {'justes': 142, 'n': 145, 'taux': 0.9793, 'gain': 1, 'regressions': 0, 'net': 1} | top1 {'justes': 144, 'n': 145, 'taux': 0.9931, 'gain': 1, 'regressions': 0, 'net': 1} | mcnemar 1.0
+ gains [('s041', 'GP', "''", '->', "'marche'", 'gold', 'marche')]
+ regs  []
+ surface 113 gold 1 hors 112 par type {'GN': 111, 'GP': 2}
+
+== R1_dernier_temoin | témoin : dernier candidat au lieu du rang 0
+ exact {'justes': 141, 'n': 145
+… [10007 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8'))\ne=d['etat_des_lieux']\nprint('par_type_239',json.dumps(e['par_type_239'],ensure_ascii=False))\nprint('absents',e['spans_non_predits']['total'],{k:len(v) for k,v in e['spans_non_predits … [352 caractères tronqués]`
+
+  ```
+par_type_239 {"GP": {"cibles": 96, "spans_predits": 83, "vides": 1, "absents": 13}, "REL": {"cibles": 74, "spans_predits": 26, "vides": 0, "absents": 48}, "SUB": {"cibles": 69, "spans_predits": 36, "vides": 0, "absents": 33}}
+absents 94 {'GP': 13, 'REL': 48, 'SUB': 33}
+GP g006, g020, r028, r038, r060, r083, r102, r153, r162, s027, s146, s148, s160
+REL r034, r035, r074, r075, r114, r115, r204, r206, r214, r217, r220, r224, r236, r239, r241, r243, r246, r248, r250, r255, r273, r278, r280, r283, r285, r287, r289, r291, r293, r297, r299, r300, s010, s032, s035, s037, s050, s061, s065, s069, s070, s072, s075, s115, s125, s131, s135, s141
+SUB g017, r205, r215, r216, r218, r219, r237, r238, r240, r242, r244, r245, r247, r249, r264, r279, r281, r282, r284, r286, r288, r290, r292, r294, r296, r298, r303, r313, s015, s044, s112, s114, s132
+vides {'total': 1, 'liste': [{'id': 's041', 'type': 'GP', 'segment': 'devant elles', 'gold': 'marche', 'gold_all': ['marche', 'avocat']}]}
+cross {'autre→verbe': 1, 'nom→nom': 29, 'nom→verbe': 2, 'verbe→verbe': 112, 'vide→verbe': 1}
+top1only [{'id': 's108', 'type': 'GP', 'segment': 'sous le nuage', 'cible': 'papier', 'gold_all': ['rêve', 'papier']}, {'id': 
+… [106 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche `reports/rapport-replis-cible.md`
+
+- **write** `{"content": "# B13 — les trois retouches A3 sur le live : +1, +2, +1, et 145/145 exact/top1\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, attachement) · **Date** : 2026-11-05 · **Verdict** : ✅ **R1 (repli cible vide, GP)** et **R3 (complétive en tête, SUB)** à intégrer ; ⚠️ **R2** : ❌ sous  … [15301 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-replis-cible.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final des fichiers, de l'état git et de la reproductibilité
+
+- **bash** `{"command": "git status --porcelain | grep -E 'replis_cible|rapport-replis-cible|pensee-replis-cible|bloc_linguistique|__pycache__' || true; echo '---'; ls -l tools/tests/linguistique/replis_cible.py reports/rapport-replis-cible.md reports/pensee-replis-cible.json; echo '---'; sha256sum tools/bloc_l … [144 caractères tronqués]`
+
+  ```
+M  tools/bloc_linguistique.py
+?? reports/pensee-replis-cible.json
+?? reports/rapport-replis-cible.md
+?? tools/tests/linguistique/replis_cible.py
+---
+-rw-r--r--. 1 stephane stephane 269963  5 nov 15:21 reports/pensee-replis-cible.json
+-rw-------. 1 stephane stephane  15755  5 nov 15:28 reports/rapport-replis-cible.md
+-rw-------. 1 stephane stephane  48559  5 nov 15:20 tools/tests/linguistique/replis_cible.py
+---
+9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059  tools/bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport replis_cible as rc\nprint('module importable, fonctions:', [f for f in ('executer','HeuristiqueReplis','main') if hasattr(rc,f)])\nd=json.l … [540 caractères tronqués]`
+
+  ```
+module importable, fonctions: ['executer', 'HeuristiqueReplis', 'main']
+base 141 145 143 142
+R1_repli_vide_GP 142 144 1 0
+R2_etroite 143 143 2 0
+R3_completive_etroite 142 144 1 0
+combinaison 145 145 4 0
+  ```
+

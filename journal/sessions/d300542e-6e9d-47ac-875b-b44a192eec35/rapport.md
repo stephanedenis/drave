@@ -7,12 +7,12 @@
 | Identifiant | `d300542e-6e9d-47ac-875b-b44a192eec35` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.9 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 54 |
-| Appels d'outils | 56 |
-| Fichiers touchés | 1 |
-| Commandes | 44 |
+| Messages | 64 |
+| Appels d'outils | 68 |
+| Fichiers touchés | 2 |
+| Commandes | 55 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le … [2218 caractères tronqués]
 
-*56 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Show git state and repo root
 - bash — Line counts of key files
@@ -41,11 +41,11 @@
 - bash — Replicate analyser target logic for s108
 - bash — Inspect model candidate scores for key cases
 - bash — Exhaustive 145-target analysis
-- … et 34 autres
+- … et 46 autres
 
 **Synthèse produite :**
 
-⏵ Vérification du JSON final (recommandation, dérive, contrôles)
+⏵ Mise à jour de l'empreinte finale (9da6dee7) et de l'historique de dérive
 
 ## 3. Travail accompli
 
@@ -54,6 +54,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/replis_cible.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-replis-cible.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +98,7 @@
 - **T1** Run updated prototype on live bloc
 - **T1** Inspect R3 regression and combination details
 - **T1** Check verb recognition for R3 guard
-- … et 4 autres
+- … et 15 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -130,4 +131,12 @@
 - **T1** `"R2": {"integrer": True, "forme": "rang 0 gardé (verbe gouverneur reconnu "`
 - **T1** `rang0_partout_A3                 exact 139/145 (0.9586) Δ-2 top1 142/145 (0.9793) Δ-1 reg  6 | surface 470 (10 gold / 460 hors)`
 - **T1** `"forme": "GP seulement, rang 0 du vivier",`
+- **T1** `"note": "mesure intermédiaire de ce prototype, avant l'intégration live ; baseline 137 = les 8 erreurs de la fiche A3. R2 y est la forme large (rang 0 gardé), R3 la forme étroite.",`
+- **T1** `variantes ['temoin_noop', 'R1_repli_vide_GP', 'R1_repli_vide_tous_non_GV', 'R1_dernier_temoin', 'R1_verbe_lexique_temoin', 'R2_litterale', 'R2_litterale_POS', 'R2_litterale_lexique_etendu', 'R2_large'`
+- **T1** `== R1_repli_vide_GP | cible vide sur un GP → rang 0 du vivier (gauche d'abord)`
+- **T1** `== R1_dernier_temoin | témoin : dernier candidat au lieu du rang 0`
+- **T1** `== R1_verbe_lexique_temoin | témoin : premier verbe reconnu du lexique au lieu du rang 0`
+- **T1** `== R2_large | large : GP → rang 0, sauf verbe gouverneur reconnu hors segment (forme qui valait +4 sur le baseline A3)`
+- **T1** `== combinaison_R2_large | comparaison : R1 + R2 large (rang 0 gardé) + R3`
+- **T1** `== rang0_partout_A3 | contrôle A3 §7.1 : rang 0 pour tous les segments, sans garde`
 

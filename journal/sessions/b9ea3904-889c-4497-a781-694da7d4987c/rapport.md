@@ -7,12 +7,12 @@
 | Identifiant | `b9ea3904-889c-4497-a781-694da7d4987c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.5 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 47 |
-| Appels d'outils | 53 |
+| Messages | 57 |
+| Appels d'outils | 64 |
 | Fichiers touchés | 0 |
-| Commandes | 49 |
+| Commandes | 60 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*53 appels d'outils.* Actions notables :
+*64 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -41,7 +41,7 @@
 - bash — Read Heuristique implementation
 - bash — Dump English sentence list and duplicates
 - bash — Check spans, overlap, coverage anomalies
-- … et 36 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Test evaluator state dependence
 - **T1** Check for concurrent modifications and file timestamps
 - **T1** Check git HEAD and diffs
-- … et 9 autres
+- … et 20 autres
 
 ## 4. Mesures et résultats marquants
 

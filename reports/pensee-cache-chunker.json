@@ -1,0 +1,2643 @@
+{
+ "date": "2026-11-05T14:59:48-05:00",
+ "titre": "Cache du chunker — validation indépendante",
+ "verdict": "Cache VALIDÉ. Le O(n²) du chemin chunker est confirmé : 1+2·S appels à _syntagmes_simple (97/193/769 à 160/320/1 280 tokens), pente log-log 1,71-2,00, doublement 160→320 ×3,68 (re-mesure 15 passes). La mémoïsation seule de _syntagmes_simple (C1) donne ×1,24 sur le corpus et ×5,1/×6,9 à 160/320 sur le chemin chunker ; le cache complet de la fiche, chunking + verbes de GV (C2), donne ×11,0 (re-mesure ×12,2) à 160, ×18,1-19,5 à 320, ×29-37 à 640-1 280 ; sur le défaut, ×1,02-1,07 pour le chunking seul et ×1,91-2,06 à 160, ×2,61-2,83 à 320 pour le cache complet. Égalité stricte : C1, C2 et OFF 612/612 sur les deux chemins, 42/42 sur 7 longueurs × 2 chemins ; le comparateur est sensible (cache falsifié : 113/612 chunker et 290/612 défaut). Le patch hoisté complet, appliqué à une copie /tmp, rend 612/612 + 14/14, 1 seul chunking par analyse (compteur) et 5,15 ms à 160 tokens (C2 : 5,25 ; fiche : 5,58). La fiche ×11,6 à 160 est confirmée à ±10 % près ; le cache ne linéarise pas (pente C2 1,42-1,52 sur 160-1 280), le tri par segment reste.",
+ "instantane": {
+  "fichier": "tools/bloc_linguistique.py",
+  "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+  "sha256_source": "git show HEAD:tools/bloc_linguistique.py au moment du gel",
+  "branche": "s/v7",
+  "head_au_gel": "de292c7d",
+  "head_apres_banc": "a914c1e7 (puis 5640809e et au-delà ; l'arbre a encore changé)",
+  "arbre_modifie_par_la_mission": false,
+  "note": "le fichier de l'arbre a été patché par un autre agent pendant la session (6e8430… → e568c9…, puis d'autres éditions), puis committé (HEAD 5640809e au moment de la rédaction, puis au-delà). Les mesures portent sur le snapshot 6e8430… figé depuis git HEAD, celui de la fiche ; aucun fichier du dépôt n'a été modifié par cette mission.",
+  "sha256_arbre_avant_patch": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+  "sha256_arbre_au_debut_du_banc": "e568c9fbb4e71b02b1f3cea26e07bea921b06152e0a9cd64507abf4813dca445",
+  "sha256_arbre_a_la_fin_du_banc": "e568c9fbb4e71b02b1f3cea26e07bea921b06152e0a9cd64507abf4813dca445"
+ },
+ "dispositif": {
+  "banc": "/tmp/bench_cache_chunker.py",
+  "sha256_banc": "15c4506c1a665116b60bcea2b1ed5184c4ff129bc20ec3ccfc7afc68daf5374b",
+  "banc_patch": "/tmp/bench_patch_et_off.py",
+  "sha256_banc_patch": "a3f14e4d4a1eb7cf90a4fbbc9b846c82e48adf874150381ba78d5f5ab7db3d69",
+  "banc_cible": "/tmp/bench_ciblé.py",
+  "sha256_banc_cible": "37ea4faf37602952f918d20b771e04ca3775ff4121926c4a89cc978cb5ba6315",
+  "python": "3.13.16",
+  "cpu": "Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz",
+  "methode": "time.process_time(), variantes entrelacées, médiane ; corpus 9 passes (2 de chauffe), longueurs 9 passes (20-320) et 3 passes (640-1 280) ; re-mesure ciblée 15 passes",
+  "duree_s": 132.685,
+  "sortie_brute": "/tmp/bench_cache_chunker.json",
+  "hors_depot": true
+ },
+ "cache": {
+  "C1": "sous-classe locale de Heuristique : _syntagmes_simple(texte, langue) mémoïsé par (texte, langue) dans un dict créé au début de chaque analyser et jeté à la fin",
+  "C2": "C1 + _verbe_gv : le verbe de chaque GV (clé (debut, fin)) calculé une fois par analyse ; copies de _cible_proche/_verbes_proches, seul l'appel au verbe change",
+  "OFF": "même sous-classe que C2, les deux caches désactivés : contrôle négatif",
+  "cle_simple": "(texte, langue)",
+  "cle_verbe": "(debut, fin), valide dans un seul appel d'analyser (texte et verbes constants)",
+  "portee": "par appel d'analyser, aucun état d'instance persistant",
+  "fichiers_depot_modifies": false
+ },
+ "corpus": {
+  "n": 612,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "langues": {
+   "fr": 402,
+   "en": 210
+  },
+  "mots_gold": 3179,
+  "chars": 16371,
+  "tokens_mots_moy": 6.1258,
+  "segments_simple_moy": 1.1062,
+  "gv_simple_moy": 0.1863,
+  "segments_s_moy": 1.799,
+  "gv_s_moy": 1.0114,
+  "s_disponible": 612,
+  "s_disponible_taux": 1.0,
+  "tokens_mots_total": 3749,
+  "mots_gold_moy": 5.1944
+ },
+ "temps_corpus": {
+  "chunker": {
+   "temps_ms": {
+    "original": 245.288,
+    "C1": 198.019,
+    "C2": 196.056,
+    "OFF": 275.648
+   },
+   "gains": {
+    "original": 1.0,
+    "C1": 1.2387,
+    "C2": 1.2511,
+    "OFF": 0.8899
+   },
+   "us_par_phrase": {
+    "original": 400.8,
+    "C1": 323.56,
+    "C2": 320.35,
+    "OFF": 450.41
+   }
+  },
+  "defaut": {
+   "temps_ms": {
+    "original": 395.237,
+    "C1": 388.287,
+    "C2": 385.072,
+    "OFF": 398.36
+   },
+   "gains": {
+    "original": 1.0,
+    "C1": 1.0179,
+    "C2": 1.0264,
+    "OFF": 0.9922
+   },
+   "us_par_phrase": {
+    "original": 645.81,
+    "C1": 634.46,
+    "C2": 629.2,
+    "OFF": 650.92
+   }
+  }
+ },
+ "egalite": {
+  "champs_compares": [
+   "niveau",
+   "type",
+   "valeur",
+   "debut",
+   "fin",
+   "source",
+   "confiance",
+   "candidats",
+   "langue",
+   "script",
+   "meta",
+   "unites_semantiques",
+   "fraction_semantique",
+   "trace",
+   "langue/script de l'annotation",
+   "refus",
+   "contexte"
+  ],
+  "note": "comparaison de Annotation.json() ; cout.duree_s est le seul champ écarté (il mesure le temps, pas l'analyse)",
+  "corpus": {
+   "chunker": {
+    "C1": "612/612",
+    "C2": "612/612",
+    "OFF": "612/612",
+    "FALSIFIE": "113/612"
+   },
+   "defaut": {
+    "C1": "612/612",
+    "C2": "612/612",
+    "OFF": "612/612",
+    "FALSIFIE": "290/612"
+   }
+  },
+  "corpus_details": {
+   "chunker": {
+    "C1": {
+     "ok": 612,
+     "n": 612,
+     "exemples_divergence": []
+    },
+    "C2": {
+     "ok": 612,
+     "n": 612,
+     "exemples_divergence": []
+    },
+    "OFF": {
+     "ok": 612,
+     "n": 612,
+     "exemples_divergence": []
+    },
+    "FALSIFIE": {
+     "ok": 113,
+     "n": 612,
+     "exemples_divergence": [
+      {
+       "texte": "Le chat dort.",
+       "champs": [
+        "cout",
+        "etiquettes(18!=17)",
+        "trace"
+       ]
+      },
+      {
+       "texte": "Le chat de la voisine dort.",
+       "champs": [
+        "cout",
+        "etiquettes(31!=30)",
+        "trace"
+       ]
+      },
+      {
+       "texte": "La femme a vu l'homme dans le parc.",
+       "champs": [
+        "cout",
+        "etiquettes(44!=43)",
+        "trace"
+       ]
+      }
+     ]
+    }
+   },
+   "defaut": {
+    "C1": {
+     "ok": 612,
+     "n": 612,
+     "exemples_divergence": []
+    },
+    "C2": {
+     "ok": 612,
+     "n": 612,
+     "exemples_divergence": []
+    },
+    "OFF": {
+     "ok": 612,
+     "n": 612,
+     "exemples_divergence": []
+    },
+    "FALSIFIE": {
+     "ok": 290,
+     "n": 612,
+     "exemples_divergence": [
+      {
+       "texte": "Le chat dort.",
+       "champs": [
+        "cout",
+        "etiquettes(20!=19)",
+        "trace"
+       ]
+      },
+      {
+       "texte": "Le chat de la voisine dort.",
+       "champs": [
+        "cout",
+        "etiquettes(32!=31)",
+        "trace"
+       ]
+      },
+      {
+       "texte": "Il a couru pour attraper le bus.",
+       "champs": [
+        "cout",
+        "etiquettes(39!=38)",
+        "trace"
+       ]
+      }
+     ]
+    }
+   }
+  },
+  "longueurs": "C1, C2 et OFF : 42/42 (7 longueurs × 2 chemins × 3 variantes)",
+  "patch_reel": {
+   "corpus_chunker": "612/612",
+   "corpus_defaut": "612/612",
+   "longueurs": "14/14 (7 longueurs × 2 chemins)"
+  },
+  "comparateur_falsifie": {
+   "mutation": "la sous-classe CacheFalsifie retire le dernier segment du résultat mémoïsé",
+   "chunker": "113/612",
+   "defaut": "290/612",
+   "champs_divergents": [
+    "cout",
+    "etiquettes(44!=43)",
+    "trace"
+   ],
+   "conclusion": "le comparateur n'est pas vide : une altération du cache est détectée"
+  },
+  "portee_cache": {
+   "analyse1": {
+    "analyses": 1,
+    "simple_appels": 3,
+    "simple_calc": 1,
+    "simple_hits": 2
+   },
+   "analyse2": {
+    "analyses": 1,
+    "simple_appels": 3,
+    "simple_calc": 1,
+    "simple_hits": 2
+   },
+   "note": "simple_calc=1 à chaque analyse => pas d'état entre analyses"
+  },
+  "compteurs_note": "C1 n'utilise pas _verbe_gv : ses appels _verbe_dans sont ceux de l'original et ne sont pas comptés dans la colonne verbe. Les compteurs _verbe_gv de C2/OFF excluent les appels directs à _verbe_dans des lignes 883 et 891 (31/63/255 selon N sur le défaut) ; le total patch réel est 63/127/511."
+ },
+ "longueurs": {
+  "base": "Le chat de la voisine est sur le toit.",
+  "points": [
+   {
+    "chemin": "chunker",
+    "N": 20,
+    "chars": 76,
+    "segments_simple": 6,
+    "gv_simple": 2,
+    "segments_s": 8,
+    "gv_s": 2,
+    "etiquettes": 86,
+    "temps_ms": {
+     "original": 1.6413,
+     "C1": 0.8752,
+     "C2": 0.7077,
+     "OFF": 1.6723
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 1.8753,
+     "C2": 2.3192,
+     "OFF": 0.9815
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 13,
+      "simple_calc": 1,
+      "simple_hits": 12
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 13,
+      "simple_calc": 1,
+      "simple_hits": 12,
+      "verbe_appels": 20,
+      "verbe_calc": 2,
+      "verbe_hits": 18
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 13,
+      "simple_calc": 13,
+      "verbe_appels": 20,
+      "verbe_calc": 20
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 13,
+      "simple_calc": 13,
+      "verbe_appels": 20,
+      "verbe_calc": 20
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "defaut",
+    "N": 20,
+    "chars": 76,
+    "segments_simple": 6,
+    "gv_simple": 2,
+    "segments_s": 8,
+    "gv_s": 2,
+    "etiquettes": 90,
+    "temps_ms": {
+     "original": 2.0173,
+     "C1": 1.954,
+     "C2": 1.6025,
+     "OFF": 2.0347
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 1.0324,
+     "C2": 1.2588,
+     "OFF": 0.9914
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "simple_hits": 1
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "verbe_appels": 63,
+      "verbe_calc": 4,
+      "verbe_hits": 59,
+      "simple_hits": 1
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 63,
+      "verbe_calc": 63
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 63,
+      "verbe_calc": 63
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "chunker",
+    "N": 40,
+    "chars": 152,
+    "segments_simple": 12,
+    "gv_simple": 4,
+    "segments_s": 16,
+    "gv_s": 4,
+    "etiquettes": 170,
+    "temps_ms": {
+     "original": 4.9741,
+     "C1": 2.3819,
+     "C2": 1.4001,
+     "OFF": 4.9888
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 2.0883,
+     "C2": 3.5527,
+     "OFF": 0.9971
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 25,
+      "simple_calc": 1,
+      "simple_hits": 24
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 25,
+      "simple_calc": 1,
+      "simple_hits": 24,
+      "verbe_appels": 64,
+      "verbe_calc": 4,
+      "verbe_hits": 60
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 25,
+      "simple_calc": 25,
+      "verbe_appels": 64,
+      "verbe_calc": 64
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 25,
+      "simple_calc": 25,
+      "verbe_appels": 64,
+      "verbe_calc": 64
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "defaut",
+    "N": 40,
+    "chars": 152,
+    "segments_simple": 12,
+    "gv_simple": 4,
+    "segments_s": 16,
+    "gv_s": 4,
+    "etiquettes": 178,
+    "temps_ms": {
+     "original": 4.0449,
+     "C1": 3.9044,
+     "C2": 2.9205,
+     "OFF": 4.1024
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 1.036,
+     "C2": 1.385,
+     "OFF": 0.986
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "simple_hits": 1
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "verbe_appels": 189,
+      "verbe_calc": 8,
+      "verbe_hits": 181,
+      "simple_hits": 1
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 189,
+      "verbe_calc": 189
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 189,
+      "verbe_calc": 189
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "chunker",
+    "N": 80,
+    "chars": 304,
+    "segments_simple": 24,
+    "gv_simple": 8,
+    "segments_s": 32,
+    "gv_s": 8,
+    "etiquettes": 338,
+    "temps_ms": {
+     "original": 16.1915,
+     "C1": 4.2609,
+     "C2": 2.5047,
+     "OFF": 16.4367
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 3.8,
+     "C2": 6.4644,
+     "OFF": 0.9851
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 49,
+      "simple_calc": 1,
+      "simple_hits": 48
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 49,
+      "simple_calc": 1,
+      "simple_hits": 48,
+      "verbe_appels": 192,
+      "verbe_calc": 8,
+      "verbe_hits": 184
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 49,
+      "simple_calc": 49,
+      "verbe_appels": 192,
+      "verbe_calc": 192
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 49,
+      "simple_calc": 49,
+      "verbe_appels": 192,
+      "verbe_calc": 192
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "defaut",
+    "N": 80,
+    "chars": 304,
+    "segments_simple": 24,
+    "gv_simple": 8,
+    "segments_s": 32,
+    "gv_s": 8,
+    "etiquettes": 354,
+    "temps_ms": {
+     "original": 14.8828,
+     "C1": 12.541,
+     "C2": 6.0333,
+     "OFF": 14.0878
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 1.1867,
+     "C2": 2.4668,
+     "OFF": 1.0564
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "simple_hits": 1
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "verbe_appels": 633,
+      "verbe_calc": 16,
+      "verbe_hits": 617,
+      "simple_hits": 1
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 633,
+      "verbe_calc": 633
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 633,
+      "verbe_calc": 633
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "chunker",
+    "N": 160,
+    "chars": 608,
+    "segments_simple": 48,
+    "gv_simple": 16,
+    "segments_s": 64,
+    "gv_s": 16,
+    "etiquettes": 674,
+    "temps_ms": {
+     "original": 57.7365,
+     "C1": 11.274,
+     "C2": 5.2481,
+     "OFF": 62.0192
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 5.1212,
+     "C2": 11.0014,
+     "OFF": 0.9309
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 97,
+      "simple_calc": 1,
+      "simple_hits": 96
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 97,
+      "simple_calc": 1,
+      "simple_hits": 96,
+      "verbe_appels": 640,
+      "verbe_calc": 16,
+      "verbe_hits": 624
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 97,
+      "simple_calc": 97,
+      "verbe_appels": 640,
+      "verbe_calc": 640
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 97,
+      "simple_calc": 97,
+      "verbe_appels": 640,
+      "verbe_calc": 640
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "defaut",
+    "N": 160,
+    "chars": 608,
+    "segments_simple": 48,
+    "gv_simple": 16,
+    "segments_s": 64,
+    "gv_s": 16,
+    "etiquettes": 706,
+    "temps_ms": {
+     "original": 27.8834,
+     "C1": 27.2727,
+     "C2": 13.5538,
+     "OFF": 30.764
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 1.0224,
+     "C2": 2.0572,
+     "OFF": 0.9064
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "simple_hits": 1
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "verbe_appels": 2289,
+      "verbe_calc": 32,
+      "verbe_hits": 2257,
+      "simple_hits": 1
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 2289,
+      "verbe_calc": 2289
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 2289,
+      "verbe_calc": 2289
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "chunker",
+    "N": 320,
+    "chars": 1216,
+    "segments_simple": 96,
+    "gv_simple": 32,
+    "segments_s": 128,
+    "gv_s": 32,
+    "etiquettes": 1346,
+    "temps_ms": {
+     "original": 233.4713,
+     "C1": 33.8022,
+     "C2": 11.9973,
+     "OFF": 241.33
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 6.907,
+     "C2": 19.4603,
+     "OFF": 0.9674
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 193,
+      "simple_calc": 1,
+      "simple_hits": 192
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 193,
+      "simple_calc": 1,
+      "simple_hits": 192,
+      "verbe_appels": 2304,
+      "verbe_calc": 32,
+      "verbe_hits": 2272
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 193,
+      "simple_calc": 193,
+      "verbe_appels": 2304,
+      "verbe_calc": 2304
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 193,
+      "simple_calc": 193,
+      "verbe_appels": 2304,
+      "verbe_calc": 2304
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "defaut",
+    "N": 320,
+    "chars": 1216,
+    "segments_simple": 96,
+    "gv_simple": 32,
+    "segments_s": 128,
+    "gv_s": 32,
+    "etiquettes": 1410,
+    "temps_ms": {
+     "original": 91.3296,
+     "C1": 89.0711,
+     "C2": 35.0448,
+     "OFF": 90.2239
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 1.0254,
+     "C2": 2.6061,
+     "OFF": 1.0123
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "simple_hits": 1
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "verbe_appels": 8673,
+      "verbe_calc": 64,
+      "verbe_hits": 8609,
+      "simple_hits": 1
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 8673,
+      "verbe_calc": 8673
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 8673,
+      "verbe_calc": 8673
+     }
+    },
+    "passes": 9,
+    "chauffe": 2
+   },
+   {
+    "chemin": "chunker",
+    "N": 640,
+    "chars": 2432,
+    "segments_simple": 192,
+    "gv_simple": 64,
+    "segments_s": 256,
+    "gv_s": 64,
+    "etiquettes": 2690,
+    "temps_ms": {
+     "original": 925.0889,
+     "C1": 119.5977,
+     "C2": 31.7043,
+     "OFF": 919.5434
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 7.735,
+     "C2": 29.1787,
+     "OFF": 1.006
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 385,
+      "simple_calc": 1,
+      "simple_hits": 384
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 385,
+      "simple_calc": 1,
+      "simple_hits": 384,
+      "verbe_appels": 8704,
+      "verbe_calc": 64,
+      "verbe_hits": 8640
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 385,
+      "simple_calc": 385,
+      "verbe_appels": 8704,
+      "verbe_calc": 8704
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 385,
+      "simple_calc": 385,
+      "verbe_appels": 8704,
+      "verbe_calc": 8704
+     }
+    },
+    "passes": 3,
+    "chauffe": 1
+   },
+   {
+    "chemin": "defaut",
+    "N": 640,
+    "chars": 2432,
+    "segments_simple": 192,
+    "gv_simple": 64,
+    "segments_s": 256,
+    "gv_s": 64,
+    "etiquettes": 2818,
+    "temps_ms": {
+     "original": 344.9601,
+     "C1": 321.5787,
+     "C2": 103.4046,
+     "OFF": 317.6523
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 1.0727,
+     "C2": 3.336,
+     "OFF": 1.086
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "simple_hits": 1
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "verbe_appels": 33729,
+      "verbe_calc": 128,
+      "verbe_hits": 33601,
+      "simple_hits": 1
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 33729,
+      "verbe_calc": 33729
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 33729,
+      "verbe_calc": 33729
+     }
+    },
+    "passes": 3,
+    "chauffe": 1
+   },
+   {
+    "chemin": "chunker",
+    "N": 1280,
+    "chars": 4864,
+    "segments_simple": 384,
+    "gv_simple": 128,
+    "segments_s": 512,
+    "gv_s": 128,
+    "etiquettes": 5378,
+    "temps_ms": {
+     "original": 3740.4436,
+     "C1": 426.4628,
+     "C2": 100.9346,
+     "OFF": 3657.4491
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 8.7709,
+     "C2": 37.0581,
+     "OFF": 1.0227
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 769,
+      "simple_calc": 1,
+      "simple_hits": 768
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 769,
+      "simple_calc": 1,
+      "simple_hits": 768,
+      "verbe_appels": 33792,
+      "verbe_calc": 128,
+      "verbe_hits": 33664
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 769,
+      "simple_calc": 769,
+      "verbe_appels": 33792,
+      "verbe_calc": 33792
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 769,
+      "simple_calc": 769,
+      "verbe_appels": 33792,
+      "verbe_calc": 33792
+     }
+    },
+    "passes": 3,
+    "chauffe": 1
+   },
+   {
+    "chemin": "defaut",
+    "N": 1280,
+    "chars": 4864,
+    "segments_simple": 384,
+    "gv_simple": 128,
+    "segments_s": 512,
+    "gv_s": 128,
+    "etiquettes": 5634,
+    "temps_ms": {
+     "original": 1161.8002,
+     "C1": 1164.8107,
+     "C2": 318.288,
+     "OFF": 1188.6368
+    },
+    "gains": {
+     "original": 1.0,
+     "C1": 0.9974,
+     "C2": 3.6502,
+     "OFF": 0.9774
+    },
+    "egalite": {
+     "C1": "1/1",
+     "C2": "1/1",
+     "OFF": "1/1"
+    },
+    "appels": {
+     "C1": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "simple_hits": 1
+     },
+     "C2": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 1,
+      "verbe_appels": 132993,
+      "verbe_calc": 256,
+      "verbe_hits": 132737,
+      "simple_hits": 1
+     },
+     "OFF": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 132993,
+      "verbe_calc": 132993
+     },
+     "original": {
+      "analyses": 1,
+      "simple_appels": 2,
+      "simple_calc": 2,
+      "verbe_appels": 132993,
+      "verbe_calc": 132993
+     }
+    },
+    "passes": 3,
+    "chauffe": 1
+   }
+  ],
+  "re_mesure_15_passes": [
+   {
+    "chemin": "chunker",
+    "N": 160,
+    "median_ms": {
+     "original": 68.311,
+     "C1": 13.0387,
+     "C2": 5.6138,
+     "OFF": 65.383
+    },
+    "min_ms": {
+     "original": 61.982,
+     "C1": 11.4077,
+     "C2": 5.3405,
+     "OFF": 62.2175
+    },
+    "gains_median": {
+     "original": 1.0,
+     "C1": 5.2391,
+     "C2": 12.1684,
+     "OFF": 1.0448
+    },
+    "passes_ms": {
+     "original": [
+      68.06,
+      72.61,
+      65.68,
+      61.98,
+      64.92,
+      76.5,
+      72.22,
+      71.11,
+      68.31,
+      68.24,
+      67.8,
+      69.88,
+      71.19,
+      72.16,
+      63.09
+     ],
+     "C1": [
+      12.97,
+      11.64,
+      12.77,
+      12.23,
+      13.14,
+      13.37,
+      15.11,
+      12.68,
+      13.1,
+      15.3,
+      12.86,
+      13.04,
+      11.41,
+      13.7,
+      17.3
+     ],
+     "C2": [
+      6.04,
+      5.38,
+      8.75,
+      8.58,
+      5.61,
+      5.77,
+      5.49,
+      5.41,
+      5.51,
+      5.34,
+      5.59,
+      8.22,
+      6.14,
+      6.18,
+      5.48
+     ],
+     "OFF": [
+      63.37,
+      62.22,
+      68.49,
+      72.7,
+      64.53,
+      68.95,
+      65.38,
+      64.45,
+      65.19,
+      65.19,
+      64.97,
+      67.39,
+      65.66,
+      69.92,
+      65.83
+     ]
+    }
+   },
+   {
+    "chemin": "chunker",
+    "N": 320,
+    "median_ms": {
+     "original": 251.1219,
+     "C1": 37.949,
+     "C2": 13.8494,
+     "OFF": 254.0555
+    },
+    "min_ms": {
+     "original": 240.1433,
+     "C1": 34.2857,
+     "C2": 12.2474,
+     "OFF": 229.2958
+    },
+    "gains_median": {
+     "original": 1.0,
+     "C1": 6.6174,
+     "C2": 18.1323,
+     "OFF": 0.9885
+    },
+    "passes_ms": {
+     "original": [
+      267.1,
+      252.55,
+      248.53,
+      251.65,
+      242.7,
+      251.12,
+      249.77,
+      253.94,
+      250.43,
+      249.32,
+      271.32,
+      251.24,
+      253.86,
+      246.65,
+      240.14
+     ],
+     "C1": [
+      35.2,
+      35.79,
+      39.4,
+      51.1,
+      39.4,
+      44.97,
+      34.29,
+      41.4,
+      36.04,
+      35.33,
+      40.48,
+      37.95,
+      37.75,
+      44.31,
+      36.75
+     ],
+     "C2": [
+      12.73,
+      14.81,
+      21.14,
+      14.02,
+      12.59,
+      15.22,
+      12.34,
+      12.52,
+      13.35,
+      12.65,
+      16.65,
+      13.85,
+      17.32,
+      12.25,
+      19.2
+     ],
+     "OFF": [
+      254.26,
+      319.15,
+      257.33,
+      254.06,
+      273.92,
+      278.17,
+      255.03,
+      243.48,
+      247.86,
+      244.5,
+      250.17,
+      249.55,
+      254.08,
+      229.3,
+      242.77
+     ]
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 80,
+    "median_ms": {
+     "original": 10.5866,
+     "C1": 10.3634,
+     "C2": 6.3923,
+     "OFF": 10.7935
+    },
+    "min_ms": {
+     "original": 10.3061,
+     "C1": 10.1871,
+     "C2": 6.2277,
+     "OFF": 10.4798
+    },
+    "gains_median": {
+     "original": 1.0,
+     "C1": 1.0215,
+     "C2": 1.6561,
+     "OFF": 0.9808
+    },
+    "passes_ms": {
+     "original": [
+      10.44,
+      21.99,
+      10.5,
+      10.59,
+      10.85,
+      10.65,
+      10.5,
+      10.49,
+      10.73,
+      16.9,
+      10.54,
+      10.51,
+      11.86,
+      10.31,
+      16.31
+     ],
+     "C1": [
+      10.25,
+      21.58,
+      10.54,
+      10.25,
+      10.29,
+      10.24,
+      14.1,
+      10.26,
+      10.19,
+      18.31,
+      20.23,
+      13.62,
+      11.42,
+      10.3,
+      10.36
+     ],
+     "C2": [
+      8.66,
+      12.78,
+      6.38,
+      6.23,
+      6.4,
+      6.24,
+      7.95,
+      6.31,
+      6.35,
+      12.85,
+      7.53,
+      6.27,
+      6.39,
+      6.31,
+      6.47
+     ],
+     "OFF": [
+      10.79,
+      18.46,
+      10.73,
+      10.8,
+      10.83,
+      10.48,
+      14.56,
+      10.7,
+      10.7,
+      22.42,
+      10.61,
+      10.55,
+      16.31,
+      10.59,
+      10.89
+     ]
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 160,
+    "median_ms": {
+     "original": 32.9637,
+     "C1": 31.8036,
+     "C2": 17.2724,
+     "OFF": 32.9
+    },
+    "min_ms": {
+     "original": 28.5943,
+     "C1": 28.074,
+     "C2": 13.7295,
+     "OFF": 29.1347
+    },
+    "gains_median": {
+     "original": 1.0,
+     "C1": 1.0365,
+     "C2": 1.9085,
+     "OFF": 1.0019
+    },
+    "passes_ms": {
+     "original": [
+      32.96,
+      42.1,
+      28.59,
+      36.93,
+      34.72,
+      37.54,
+      32.56,
+      32.74,
+      32.78,
+      42.84,
+      29.07,
+      32.55,
+      33.6,
+      35.71,
+      29.15
+     ],
+     "C1": [
+      28.48,
+      31.8,
+      28.28,
+      31.66,
+      35.5,
+      35.86,
+      36.48,
+      28.31,
+      28.07,
+      32.1,
+      33.57,
+      29.75,
+      33.44,
+      28.13,
+      55.65
+     ],
+     "C2": [
+      17.89,
+      13.89,
+      22.55,
+      17.27,
+      17.7,
+      16.2,
+      17.59,
+      13.77,
+      17.29,
+      14.3,
+      21.6,
+      17.44,
+      14.01,
+      13.73,
+      13.97
+     ],
+     "OFF": [
+      33.52,
+      32.9,
+      36.38,
+      31.6,
+      32.61,
+      32.39,
+      29.41,
+      32.87,
+      41.87,
+      33.32,
+      33.01,
+      39.25,
+      29.36,
+      43.58,
+      29.13
+     ]
+    }
+   },
+   {
+    "chemin": "defaut",
+    "N": 320,
+    "median_ms": {
+     "original": 98.6097,
+     "C1": 98.3739,
+     "C2": 34.8244,
+     "OFF": 101.2571
+    },
+    "min_ms": {
+     "original": 89.3357,
+     "C1": 87.1043,
+     "C2": 32.9463,
+     "OFF": 89.9052
+    },
+    "gains_median": {
+     "original": 1.0,
+     "C1": 1.0024,
+     "C2": 2.8316,
+     "OFF": 0.9739
+    },
+    "passes_ms": {
+     "original": [
+      106.08,
+      109.44,
+      99.17,
+      93.32,
+      92.39,
+      101.22,
+      89.34,
+      98.62,
+      105.34,
+      94.65,
+      105.32,
+      94.85,
+      97.64,
+      98.61,
+      97.67
+     ],
+     "C1": [
+      91.15,
+      94.26,
+      97.12,
+      101.14,
+      100.05,
+      99.08,
+      88.04,
+      96.43,
+      104.49,
+      91.52,
+      108.5,
+      126.51,
+      98.37,
+      87.1,
+      102.04
+     ],
+     "C2": [
+      60.37,
+      33.82,
+      33.5,
+      33.5,
+      35.42,
+      33.72,
+      43.25,
+      34.29,
+      38.92,
+      34.82,
+      39.46,
+      36.31,
+      32.95,
+      42.96,
+      33.87
+     ],
+     "OFF": [
+      130.3,
+      89.91,
+      102.23,
+      99.86,
+      136.81,
+      101.26,
+      96.66,
+      103.1,
+      106.2,
+      111.55,
+      109.4,
+      100.99,
+      90.73,
+      92.34,
+      90.52
+     ]
+    }
+   }
+  ]
+ },
+ "complexite": {
+  "chunker": {
+   "original": {
+    "20_160": {
+     "pente": 1.7112,
+     "r2": 0.99906
+    },
+    "20_320": {
+     "pente": 1.7842,
+     "r2": 0.9979
+    },
+    "160_1280": {
+     "pente": 2.0039,
+     "r2": 0.99999
+    }
+   },
+   "C1": {
+    "20_160": {
+     "pente": 1.1901,
+     "r2": 0.99037
+    },
+    "20_320": {
+     "pente": 1.2786,
+     "r2": 0.99108
+    },
+    "160_1280": {
+     "pente": 1.7547,
+     "r2": 0.99882
+    }
+   },
+   "C2": {
+    "20_160": {
+     "pente": 0.9511,
+     "r2": 0.99808
+    },
+    "20_320": {
+     "pente": 1.0073,
+     "r2": 0.99604
+    },
+    "160_1280": {
+     "pente": 1.4198,
+     "r2": 0.99435
+    }
+   },
+   "OFF": {
+    "20_160": {
+     "pente": 1.7359,
+     "r2": 0.99809
+    },
+    "20_320": {
+     "pente": 1.7982,
+     "r2": 0.99791
+    },
+    "160_1280": {
+     "pente": 1.9576,
+     "r2": 0.99996
+    }
+   }
+  },
+  "defaut": {
+   "original": {
+    "20_160": {
+     "pente": 1.3246,
+     "r2": 0.98061
+    },
+    "20_320": {
+     "pente": 1.3786,
+     "r2": 0.98945
+    },
+    "160_1280": {
+     "pente": 1.806,
+     "r2": 0.99955
+    }
+   },
+   "C1": {
+    "20_160": {
+     "pente": 1.3092,
+     "r2": 0.99058
+    },
+    "20_320": {
+     "pente": 1.3825,
+     "r2": 0.99297
+    },
+    "160_1280": {
+     "pente": 1.8102,
+     "r2": 0.9996
+    }
+   },
+   "C2": {
+    "20_160": {
+     "pente": 1.0288,
+     "r2": 0.99568
+    },
+    "20_320": {
+     "pente": 1.1116,
+     "r2": 0.99264
+    },
+    "160_1280": {
+     "pente": 1.5222,
+     "r2": 0.99856
+    }
+   },
+   "OFF": {
+    "20_160": {
+     "pente": 1.3535,
+     "r2": 0.98874
+    },
+    "20_320": {
+     "pente": 1.3848,
+     "r2": 0.99408
+    },
+    "160_1280": {
+     "pente": 1.7632,
+     "r2": 0.99792
+    }
+   }
+  }
+ },
+ "chemin_defaut": {
+  "s_disponible": "612/612",
+  "appels_syntagmes_simple_par_phrase_original": 2,
+  "appels_corpus": {
+   "original": 1224,
+   "C1": 1224,
+   "C2": 1224,
+   "misses_C1_C2": 612
+  },
+  "gain_chunking_seul": {
+   "corpus": 1.0179,
+   "longueurs": {
+    "20": 1.0324,
+    "40": 1.036,
+    "80": 1.1867,
+    "160": 1.0224,
+    "320": 1.0254,
+    "640": 1.0727,
+    "1280": 0.9974
+   }
+  },
+  "gain_cache_complet": {
+   "corpus": 1.0264,
+   "longueurs": {
+    "20": 1.2588,
+    "40": 1.385,
+    "80": 2.4668,
+    "160": 2.0572,
+    "320": 2.6061,
+    "640": 3.336,
+    "1280": 3.6502
+   }
+  },
+  "verdict": "le cache de chunking seul ne change presque rien sur le défaut (2 appels → 1, ×1,02-1,07) ; le gain ×2 vient du cache des verbes de GV, pas du rechunking, qui est du code mort sur ce chemin."
+ },
+ "controle_negatif": {
+  "OFF_corpus_chunker_9_passes_ms": 275.648,
+  "OFF_corpus_chunker_11_passes_ms": 236.539,
+  "OFF_corpus_original_11_passes_ms": 229.671,
+  "OFF_corpus_ratio_11_passes": 1.0299,
+  "OFF_longueurs_ratios": {
+   "chunker": {
+    "20": 0.9815,
+    "40": 0.9971,
+    "80": 0.9851,
+    "160": 0.9309,
+    "320": 0.9674,
+    "640": 1.006,
+    "1280": 1.0227
+   },
+   "defaut": {
+    "20": 0.9914,
+    "40": 0.986,
+    "80": 1.0564,
+    "160": 0.9064,
+    "320": 1.0123,
+    "640": 1.086,
+    "1280": 0.9774
+   }
+  },
+  "OFF_egalite": "612/612 sur les deux chemins ; C1OFF et C2OFF revérifiés 612/612",
+  "conclusion": "OFF suit l'original à ±10 % (il ne montre jamais le gain ×5-×19) ; le gain vient donc du cache, pas d'un changement de chemin de mesure. Le résidu +3-5 % est le surcoût des frames Python de la sous-classe.",
+  "OFF_corpus_chunker_9_passes_ratio": 1.1238,
+  "note_outlier": "le ratio 0,89 de la série 9 passes est un outlier de charge ; la re-mesure 11 passes donne 236,5 / 229,7 = 0,97. Le résidu +3-5 % est le surcoût des frames Python de la sous-classe, pas un effet de cache."
+ },
+ "re_mesure_ciblee": [
+  {
+   "chemin": "chunker",
+   "N": 160,
+   "median_ms": {
+    "original": 68.311,
+    "C1": 13.0387,
+    "C2": 5.6138,
+    "OFF": 65.383
+   },
+   "min_ms": {
+    "original": 61.982,
+    "C1": 11.4077,
+    "C2": 5.3405,
+    "OFF": 62.2175
+   },
+   "gains_median": {
+    "original": 1.0,
+    "C1": 5.2391,
+    "C2": 12.1684,
+    "OFF": 1.0448
+   },
+   "passes_ms": {
+    "original": [
+     68.06,
+     72.61,
+     65.68,
+     61.98,
+     64.92,
+     76.5,
+     72.22,
+     71.11,
+     68.31,
+     68.24,
+     67.8,
+     69.88,
+     71.19,
+     72.16,
+     63.09
+    ],
+    "C1": [
+     12.97,
+     11.64,
+     12.77,
+     12.23,
+     13.14,
+     13.37,
+     15.11,
+     12.68,
+     13.1,
+     15.3,
+     12.86,
+     13.04,
+     11.41,
+     13.7,
+     17.3
+    ],
+    "C2": [
+     6.04,
+     5.38,
+     8.75,
+     8.58,
+     5.61,
+     5.77,
+     5.49,
+     5.41,
+     5.51,
+     5.34,
+     5.59,
+     8.22,
+     6.14,
+     6.18,
+     5.48
+    ],
+    "OFF": [
+     63.37,
+     62.22,
+     68.49,
+     72.7,
+     64.53,
+     68.95,
+     65.38,
+     64.45,
+     65.19,
+     65.19,
+     64.97,
+     67.39,
+     65.66,
+     69.92,
+     65.83
+    ]
+   }
+  },
+  {
+   "chemin": "chunker",
+   "N": 320,
+   "median_ms": {
+    "original": 251.1219,
+    "C1": 37.949,
+    "C2": 13.8494,
+    "OFF": 254.0555
+   },
+   "min_ms": {
+    "original": 240.1433,
+    "C1": 34.2857,
+    "C2": 12.2474,
+    "OFF": 229.2958
+   },
+   "gains_median": {
+    "original": 1.0,
+    "C1": 6.6174,
+    "C2": 18.1323,
+    "OFF": 0.9885
+   },
+   "passes_ms": {
+    "original": [
+     267.1,
+     252.55,
+     248.53,
+     251.65,
+     242.7,
+     251.12,
+     249.77,
+     253.94,
+     250.43,
+     249.32,
+     271.32,
+     251.24,
+     253.86,
+     246.65,
+     240.14
+    ],
+    "C1": [
+     35.2,
+     35.79,
+     39.4,
+     51.1,
+     39.4,
+     44.97,
+     34.29,
+     41.4,
+     36.04,
+     35.33,
+     40.48,
+     37.95,
+     37.75,
+     44.31,
+     36.75
+    ],
+    "C2": [
+     12.73,
+     14.81,
+     21.14,
+     14.02,
+     12.59,
+     15.22,
+     12.34,
+     12.52,
+     13.35,
+     12.65,
+     16.65,
+     13.85,
+     17.32,
+     12.25,
+     19.2
+    ],
+    "OFF": [
+     254.26,
+     319.15,
+     257.33,
+     254.06,
+     273.92,
+     278.17,
+     255.03,
+     243.48,
+     247.86,
+     244.5,
+     250.17,
+     249.55,
+     254.08,
+     229.3,
+     242.77
+    ]
+   }
+  },
+  {
+   "chemin": "defaut",
+   "N": 80,
+   "median_ms": {
+    "original": 10.5866,
+    "C1": 10.3634,
+    "C2": 6.3923,
+    "OFF": 10.7935
+   },
+   "min_ms": {
+    "original": 10.3061,
+    "C1": 10.1871,
+    "C2": 6.2277,
+    "OFF": 10.4798
+   },
+   "gains_median": {
+    "original": 1.0,
+    "C1": 1.0215,
+    "C2": 1.6561,
+    "OFF": 0.9808
+   },
+   "passes_ms": {
+    "original": [
+     10.44,
+     21.99,
+     10.5,
+     10.59,
+     10.85,
+     10.65,
+     10.5,
+     10.49,
+     10.73,
+     16.9,
+     10.54,
+     10.51,
+     11.86,
+     10.31,
+     16.31
+    ],
+    "C1": [
+     10.25,
+     21.58,
+     10.54,
+     10.25,
+     10.29,
+     10.24,
+     14.1,
+     10.26,
+     10.19,
+     18.31,
+     20.23,
+     13.62,
+     11.42,
+     10.3,
+     10.36
+    ],
+    "C2": [
+     8.66,
+     12.78,
+     6.38,
+     6.23,
+     6.4,
+     6.24,
+     7.95,
+     6.31,
+     6.35,
+     12.85,
+     7.53,
+     6.27,
+     6.39,
+     6.31,
+     6.47
+    ],
+    "OFF": [
+     10.79,
+     18.46,
+     10.73,
+     10.8,
+     10.83,
+     10.48,
+     14.56,
+     10.7,
+     10.7,
+     22.42,
+     10.61,
+     10.55,
+     16.31,
+     10.59,
+     10.89
+    ]
+   }
+  },
+  {
+   "chemin": "defaut",
+   "N": 160,
+   "median_ms": {
+    "original": 32.9637,
+    "C1": 31.8036,
+    "C2": 17.2724,
+    "OFF": 32.9
+   },
+   "min_ms": {
+    "original": 28.5943,
+    "C1": 28.074,
+    "C2": 13.7295,
+    "OFF": 29.1347
+   },
+   "gains_median": {
+    "original": 1.0,
+    "C1": 1.0365,
+    "C2": 1.9085,
+    "OFF": 1.0019
+   },
+   "passes_ms": {
+    "original": [
+     32.96,
+     42.1,
+     28.59,
+     36.93,
+     34.72,
+     37.54,
+     32.56,
+     32.74,
+     32.78,
+     42.84,
+     29.07,
+     32.55,
+     33.6,
+     35.71,
+     29.15
+    ],
+    "C1": [
+     28.48,
+     31.8,
+     28.28,
+     31.66,
+     35.5,
+     35.86,
+     36.48,
+     28.31,
+     28.07,
+     32.1,
+     33.57,
+     29.75,
+     33.44,
+     28.13,
+     55.65
+    ],
+    "C2": [
+     17.89,
+     13.89,
+     22.55,
+     17.27,
+     17.7,
+     16.2,
+     17.59,
+     13.77,
+     17.29,
+     14.3,
+     21.6,
+     17.44,
+     14.01,
+     13.73,
+     13.97
+    ],
+    "OFF": [
+     33.52,
+     32.9,
+     36.38,
+     31.6,
+     32.61,
+     32.39,
+     29.41,
+     32.87,
+     41.87,
+     33.32,
+     33.01,
+     39.25,
+     29.36,
+     43.58,
+     29.13
+    ]
+   }
+  },
+  {
+   "chemin": "defaut",
+   "N": 320,
+   "median_ms": {
+    "original": 98.6097,
+    "C1": 98.3739,
+    "C2": 34.8244,
+    "OFF": 101.2571
+   },
+   "min_ms": {
+    "original": 89.3357,
+    "C1": 87.1043,
+    "C2": 32.9463,
+    "OFF": 89.9052
+   },
+   "gains_median": {
+    "original": 1.0,
+    "C1": 1.0024,
+    "C2": 2.8316,
+    "OFF": 0.9739
+   },
+   "passes_ms": {
+    "original": [
+     106.08,
+     109.44,
+     99.17,
+     93.32,
+     92.39,
+     101.22,
+     89.34,
+     98.62,
+     105.34,
+     94.65,
+     105.32,
+     94.85,
+     97.64,
+     98.61,
+     97.67
+    ],
+    "C1": [
+     91.15,
+     94.26,
+     97.12,
+     101.14,
+     100.05,
+     99.08,
+     88.04,
+     96.43,
+     104.49,
+     91.52,
+     108.5,
+     126.51,
+     98.37,
+     87.1,
+     102.04
+    ],
+    "C2": [
+     60.37,
+     33.82,
+     33.5,
+     33.5,
+     35.42,
+     33.72,
+     43.25,
+     34.29,
+     38.92,
+     34.82,
+     39.46,
+     36.31,
+     32.95,
+     42.96,
+     33.87
+    ],
+    "OFF": [
+     130.3,
+     89.91,
+     102.23,
+     99.86,
+     136.81,
+     101.26,
+     96.66,
+     103.1,
+     106.2,
+     111.55,
+     109.4,
+     100.99,
+     90.73,
+     92.34,
+     90.52
+    ]
+   }
+  }
+ ],
+ "validation_patch_reel": {
+  "fichier": "/tmp/bloc_linguistique_patche.py",
+  "sha256": "5639a3760adf6d0f879d136cc723eb88979d1970007d08398e7e6589bd575738",
+  "diff": "/tmp/correctif.diff",
+  "sha256_diff": "01c27afd11b19be09075ce1248674ed57ece65c8d8fc4581d582e346e0da5c51",
+  "corpus": {
+   "chunker": {
+    "original": {
+     "median_ms": 232.886,
+     "min_ms": 214.252,
+     "passes_ms": [
+      214.25,
+      249.88,
+      236.25,
+      223.19,
+      227.16,
+      264.71,
+      305.55,
+      232.89,
+      232.83
+     ]
+    },
+    "patch": {
+     "median_ms": 198.171,
+     "min_ms": 181.249,
+     "passes_ms": [
+      227.71,
+      183.05,
+      198.17,
+      184.86,
+      189.39,
+      202.09,
+      216.14,
+      209.77,
+      181.25
+     ]
+    }
+   },
+   "defaut": {
+    "original": {
+     "median_ms": 414.738,
+     "min_ms": 391.057,
+     "passes_ms": [
+      464.2,
+      414.74,
+      422.13,
+      414.01,
+      391.06,
+      419.93,
+      400.05,
+      422.82,
+      397.44
+     ]
+    },
+    "patch": {
+     "median_ms": 373.237,
+     "min_ms": 360.321,
+     "passes_ms": [
+      433.98,
+      373.24,
+      360.32,
+      371.1,
+      401.81,
+      365.36,
+      401.28,
+      417.33,
+      362.86
+     ]
+    }
+   }
+  },
+  "longueurs": [
+   {
+    "chemin": "chunker",
+    "N": 20,
+    "temps_ms": {
+     "original": 2.3312,
+     "patch": 0.8946
+    },
+    "gain": 2.6059,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "defaut",
+    "N": 20,
+    "temps_ms": {
+     "original": 2.0354,
+     "patch": 1.5902
+    },
+    "gain": 1.28,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "chunker",
+    "N": 40,
+    "temps_ms": {
+     "original": 4.9365,
+     "patch": 1.2213
+    },
+    "gain": 4.042,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "defaut",
+    "N": 40,
+    "temps_ms": {
+     "original": 4.2705,
+     "patch": 2.9296
+    },
+    "gain": 1.4577,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "chunker",
+    "N": 80,
+    "temps_ms": {
+     "original": 16.1676,
+     "patch": 2.3474
+    },
+    "gain": 6.8874,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "defaut",
+    "N": 80,
+    "temps_ms": {
+     "original": 10.0239,
+     "patch": 6.0307
+    },
+    "gain": 1.6621,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "chunker",
+    "N": 160,
+    "temps_ms": {
+     "original": 66.2486,
+     "patch": 5.1514
+    },
+    "gain": 12.8603,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "defaut",
+    "N": 160,
+    "temps_ms": {
+     "original": 28.0119,
+     "patch": 13.4467
+    },
+    "gain": 2.0832,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "chunker",
+    "N": 320,
+    "temps_ms": {
+     "original": 266.2058,
+     "patch": 13.1849
+    },
+    "gain": 20.1902,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "defaut",
+    "N": 320,
+    "temps_ms": {
+     "original": 93.0477,
+     "patch": 37.1228
+    },
+    "gain": 2.5065,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "chunker",
+    "N": 640,
+    "temps_ms": {
+     "original": 964.3879,
+     "patch": 41.3983
+    },
+    "gain": 23.2954,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "defaut",
+    "N": 640,
+    "temps_ms": {
+     "original": 339.0267,
+     "patch": 102.5884
+    },
+    "gain": 3.3047,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "chunker",
+    "N": 1280,
+    "temps_ms": {
+     "original": 3809.8211,
+     "patch": 86.1891
+    },
+    "gain": 44.2031,
+    "egalite": "1/1"
+   },
+   {
+    "chemin": "defaut",
+    "N": 1280,
+    "temps_ms": {
+     "original": 1118.9935,
+     "patch": 313.0633
+    },
+    "gain": 3.5743,
+    "egalite": "1/1"
+   }
+  ],
+  "compteurs": {
+   "chunker_160": {
+    "simple": 1,
+    "verbe": 16
+   },
+   "defaut_160": {
+    "simple": 1,
+    "verbe": 63
+   },
+   "chunker_320": {
+    "simple": 1,
+    "verbe": 32
+   },
+   "defaut_320": {
+    "simple": 1,
+    "verbe": 127
+   },
+   "chunker_1280": {
+    "simple": 1,
+    "verbe": 128
+   },
+   "defaut_1280": {
+    "simple": 1,
+    "verbe": 511
+   }
+  },
+  "egalite": {
+   "chunker": "612/612",
+   "defaut": "612/612"
+  },
+  "lecture": "le patch hoisté fait 1 seul appel à _syntagmes_simple par analyse et retombe sur les compteurs de la fiche ; les temps cachés sont au niveau de C2 (5,15 ms à 160 chunker) ; les ratios de cette passe sont gonflés par une ligne de base original plus lente (66,2 ms à 160), lire les temps."
+ },
+ "comparaison_fiche": [
+  {
+   "grandeur": "O(n²) chunker (1+2S, pente)",
+   "fiche": "1,74 (20-160), 1,94 (160-1 280)",
+   "mesure": "1,71 (20-160), 2,00 (160-1 280), 1+2S exact",
+   "verdict": "confirmé"
+  },
+  {
+   "grandeur": "gain chunker 160",
+   "fiche": 11.615,
+   "mesure": [
+    11.001,
+    12.168
+   ],
+   "verdict": "confirmé à ±10 %"
+  },
+  {
+   "grandeur": "gain chunker 320",
+   "fiche": 16.886,
+   "mesure": [
+    18.132,
+    19.46
+   ],
+   "verdict": "confirmé (mesure supérieure)"
+  },
+  {
+   "grandeur": "gain chunker 640",
+   "fiche": 25.82,
+   "mesure": [
+    29.179
+   ],
+   "verdict": "confirmé à ±13 %"
+  },
+  {
+   "grandeur": "gain chunker 1 280",
+   "fiche": 33.43,
+   "mesure": [
+    37.058
+   ],
+   "verdict": "confirmé à ±11 %"
+  },
+  {
+   "grandeur": "gain défaut 160",
+   "fiche": 1.996,
+   "mesure": [
+    1.909,
+    2.057
+   ],
+   "verdict": "confirmé"
+  },
+  {
+   "grandeur": "gain défaut 320",
+   "fiche": 2.397,
+   "mesure": [
+    2.606,
+    2.832
+   ],
+   "verdict": "confirmé"
+  },
+  {
+   "grandeur": "gain défaut 640",
+   "fiche": 3.59,
+   "mesure": [
+    3.336
+   ],
+   "verdict": "confirmé à ±7 %"
+  },
+  {
+   "grandeur": "gain défaut 1 280",
+   "fiche": 3.28,
+   "mesure": [
+    3.65
+   ],
+   "verdict": "confirmé à ±11 %"
+  },
+  {
+   "grandeur": "gain corpus chunker",
+   "fiche": [
+    1.177,
+    1.22
+   ],
+   "mesure": [
+    1.251
+   ],
+   "verdict": "confirmé"
+  },
+  {
+   "grandeur": "gain corpus défaut",
+   "fiche": [
+    0.97,
+    1.073
+   ],
+   "mesure": [
+    1.026
+   ],
+   "verdict": "confirmé"
+  },
+  {
+   "grandeur": "égalité corpus",
+   "fiche": "612/612 + 10/10",
+   "mesure": "612/612 + 42/42 + patch 612/612",
+   "verdict": "confirmé"
+  },
+  {
+   "grandeur": "pente C2 160-1 280",
+   "fiche": [
+    1.438,
+    1.551
+   ],
+   "mesure": [
+    1.42,
+    1.522
+   ],
+   "verdict": "confirmé : le cache ne linéarise pas"
+  },
+  {
+   "grandeur": "correctif sans état d'instance",
+   "fiche": "cache local par analyse",
+   "mesure": "vérifié : 1 miss par analyse, 2 analyses du même texte = 2 miss",
+   "verdict": "confirmé"
+  }
+ ],
+ "correctif": {
+  "fichier": "tools/bloc_linguistique.py",
+  "snapshot": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+  "lignes": "853-941 (section 5) ; helpers 642-658, 661-685, 688-704",
+  "principe": [
+   "(A) calculer simples = self._syntagmes_simple(texte, lg) une seule fois, après le calcul de verbes",
+   "(B) en dériver gvs_simple = [x for x in simples if x['type'] == 'GV'] une seule fois",
+   "(C) créer cache_gv: dict = {} localement dans analyser",
+   "(D) passer cache_gv à _cible_proche et _verbes_proches ; y remplacer les appels directs à _verbe_dans par _verbe_gv",
+   "(E) remplacer les appels de boucle/union par les variables hoistées"
+  ],
+  "sites": {
+   "855 (après)": "insérer simples, gvs_simple, cache_gv",
+   "861": "supprimer gvs_simple = [...] (déjà hoisté)",
+   "887/895": "ajouter cache_gv=cache_gv à _cible_proche",
+   "899": "ajouter cache_gv=cache_gv à _verbes_proches",
+   "914": "for s in self._syntagmes_simple(texte, lg) → for s in simples",
+   "916": "liste de GV recalculée → gvs_simple, + cache_gv",
+   "919": "supprimer gvs_s = [...] (utiliser gvs_simple)",
+   "922": "gvs_s → gvs_simple, + cache_gv",
+   "928": "supprimer simples = self._syntagmes_simple(texte, lg) (déjà hoisté)",
+   "929-930": "gvs_u = gvs_s + gvs_simple",
+   "935/940": "ajouter cache_gv=cache_gv",
+   "658 (après)": "insérer _verbe_gv",
+   "662/689": "ajouter cache_gv: dict | None = None à la signature",
+   "681/685/701": "Heuristique._verbe_dans(...) → Heuristique._verbe_gv(texte, g, verbes, cache_gv)"
+  },
+  "helper": "@staticmethod\ndef _verbe_gv(texte, g, verbes, cache_gv: dict | None = None):\n    if cache_gv is None:\n        return Heuristique._verbe_dans(texte, g['debut'], g['fin'], verbes)\n    cle = (g['debut'], g['fin'])\n    if cle not in cache_gv:\n        cache_gv[cle] = Heuristique._verbe_dans(texte, g['debut'], g['fin'], verbes)\n    return cache_gv[cle]",
+  "effet_attendu": {
+   "syntagmes_simple": "chunker : 1+2S → 1 ; défaut : 2 → 1",
+   "verbe_dans_GV": "chunker : 640 appels de GV → 16 (N=160) ; défaut : 2 289 appels de GV → 32 misses (+31 appels directs hors cache, soit 63 appels _verbe_dans au total ; la fiche compte 2 320 = 2 289 + 31).",
+   "egalite": "612/612 corpus et 14/14 longueurs (patch réel mesuré)"
+  },
+  "note_head": "HEAD 5640809e contient déjà un patch partiel : la branche chunker et les verbes sont cachés, mais le chemin défaut garde 2 chunkings (ligne 875 pour gvs_simple, ligne 947 pour l'union). Le correctif complet ci-dessus les ramène à 1 ; c'est le seul écart fonctionnel avec le patch committé."
+ },
+ "limites": [
+  "Base synthétique A (auxiliaire « est ») : le GV est sauté par _cible_proche, ce qui amplifie le coût et le gain défaut. Avec une base B à verbe plein, la fiche mesure ×1,07-1,13 : ne pas lire ×2,0 comme universel.",
+  "Corpus court : 6,13 tokens _mots/phrase, 1,11 segment simple, 0,19 GV ; le O(n²) ne mord pas. Le gain corpus est ×1,24-1,25 (chunker) et ×1,03 (défaut), pas le gain long.",
+  "Bruit de mesure : Xeon E5-2687W partagé, charge 13-14, time.process_time, 9-15 passes. La ligne de base original varie de 58 à 68 ms à 160 tokens, donc le ratio varie de ×11,0 à ×12,2 alors que le temps caché reste 5,2-5,6 ms. Lire les facteurs à ±10-15 %.",
+  "Le cache seul ne linéarise pas : pente C2 1,42 (chunker) / 1,52 (défaut) sur 160-1 280 ; le tri sorted(gvs, key=ecart) par segment reste. Une vraie linéarité demande l'index pré-trié (non retenu par la fiche).",
+  "La sous-classe C2 est une borne basse du patch : elle conserve les 1+2S appels (mémoïsés) et les listes reconstruites par segment. Le patch hoisté réel, mesuré à part, fait 1 appel et 5,15 ms à 160 ; les ratios du patch sont bruités par la ligne de base.",
+  "Le patch a été appliqué à une copie /tmp, pas au dépôt : l'égalité 612/612 + 14/14 est un contrôle fort, mais il ne remplace pas les portes du bloc ni une mesure après commit.",
+  "Instantané de travail : le fichier de l'arbre a changé pendant la session (6e8430 → e568c9, puis d'autres éditions) et HEAD a bougé (2e08cbc7 → de292c7d → a2def5ee → a914c1e7 → 5640809e, puis au-delà). Les numéros de ligne du correctif sont ceux de 6e8430 ; une édition ultérieure les invalide.",
+  "Le patch committé (5640809e) diffère du correctif complet : il cache les verbes et hoiste la branche chunker, mais laisse 2 chunkings sur le défaut (gvs_simple + union). Le gain défaut reste acquis (cache des verbes), mais le 2→1 manque.",
+  "Mesure CPU seulement : time.process_time exclut les I/O ; l'analyse est CPU-bound, mais une machine chargée décale les médianes. Pas de mesure GPU.",
+  "Clé (debut, fin) valide seulement dans un appel d'analyser ; un cache d'instance serait faux si le texte change et risqué en multi-thread. Le pseudo-code crée le dict localement."
+ ],
+ "fichiers": {
+  "rapport": "reports/rapport-cache-chunker.md",
+  "pensee": "reports/pensee-cache-chunker.json",
+  "autres_fichiers_ecrits": [],
+  "commits": 0
+ }
+}

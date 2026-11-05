@@ -1379,3 +1379,81 @@ errors under a: 8
 … [27 caractères tronqués]
   ```
 
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, pathlib, collections\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'; PIN='/tmp/pin_multicibles'\nsys.path.insert(0,R+'/tools/tests/linguistique'); sys.path.insert(0,PIN+'/tools')\nimport bloc_linguistique as bl, evaluer_gold as eg\neg.GOLD=pathlib.Pat … [1783 caractères tronqués]`
+
+  ```
+current split (first cible POS):
+('ADJ', False) 2
+('NOUN', False) 1
+('NOUN', True) 26
+('VERB', False) 5
+('VERB', True) 111
+matched split:
+('ADJ', False) 2
+('NOUN', False) 1
+('NOUN', True) 28
+('VERB', False) 3
+('VERB', True) 111
+current verb 116 113 nom 29 26
+matched verb 114 111 nom 31 28
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'/tmp/pin_multicibles/tools')\nimport json\nfiles=['gold.json','gold_reel.json','gold_synthetique.json']\nrows=[]\nfor f in files:\n    d=json.load(open('/tmp/pin_multicibles/'+f))\n    for p in d['phrases … [659 caractères tronqués]`
+
+  ```
+total 43 alt in agent head 15
+NO ('g003', 'gold.json', ['vu', "l'homme"], ['La femme'], False, "La femme a vu l'homme dans le parc.")
+NO ('g016', 'gold.json', ['saw', 'man'], ['The woman'], False, 'The woman saw the man in the park.')
+NO ('r132', 'gold_reel.json', ['accroché', 'tableau'], [], False, 'Le tableau est accroché au mur.')
+NO ('r162', 'gold_reel.json', ['hung', 'painting'], [], False, 'The painting is hung on the wall.')
+NO ('s001', 'gold_synthetique.json', ['compte', 'nous'], [], False, 'nous compte avec il')
+NO ('s003', 'gold_synthetique.json', ['saute', 'Emma'], [], False, 'Emma saute vers Hugo')
+NO ('s019', 'gold_synthetique.json', ['finit', 'cuisine'], [], False, 'cette secrète cuisine finit sous un cheval')
+NO ('s027', 'gold_synthetique.json', ['marche', 'village'], [], False, 'mon sombre village marche avec il')
+NO ('s041', 'gold_synthetique.json', ['marche', 'avocat'], [], False, 'les avocat marche devant elles')
+NO ('s045', 'gold_synthetique.json', ['nage', 'canard'], [], False, 'un ancien canard nage avec cette cuisine')
+NO ('s047', 'gold_synthetique.json', ['rêve', 'fenêtre'], [], False, 'une sombre fenêtre rêve pour un secret chemin')
+NO ('s058', 'gold_synthe
+… [1815 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des fichiers cibles avant écriture
+
+- **bash** `{"command": "ls -la reports/rapport-multicibles.md reports/pensee-multicibles.json 2>&1; git status --short reports/ | tail -20", "description": "Check target files for collisions"}`
+
+  ```
+ls: cannot access 'reports/rapport-multicibles.md': No such file or directory
+ls: cannot access 'reports/pensee-multicibles.json': No such file or directory
+ M reports/pensee-quatre-modes.json
+?? reports/pensee-audit-v2.json
+?? reports/pensee-cache-chunker.json
+?? reports/pensee-replis-cible.json
+?? reports/rapport-audit-v2.md
+?? reports/rapport-cache-chunker.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du JSON de résultats
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\nsrc = json.load(open('/tmp/result_multicibles.json'))\nres = {\n \"date\": src[\"meta\"][\"date\"],\n \"ligne\": \"B13 (attachement) / A13 (multi-cibles)\",\n \"branche\": src[\"meta\"][\"branche\"],\n \"head\": src[\"meta\"][\"head\"],\n \"head_s … [5167 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-multicibles.json 25178 octets
+{
+ "date": "2026-11-05",
+ "head": "15ee10d3cd54dcdf3419144d23445765c8910ba2",
+ "statut": "mesure seule ; aucun fichier existant modifié ; aucun commit",
+ "recommandation": {
+  "definition": "adopter (b) cible in cibles pour exact et topk_exact ; conserver les deux dénominateurs (239 rendement, 145 span) et annoncer 139/145 = 95,86 % et 139/239 = 58,16 %, avec la mention « +2 cas, dont 2 synthétiques »",
+  "tete": "ne pas adopter (c) : no-op sur le gold actuel (=(b)) ; à réévaluer seulement si le gold encode des cibles multi-tokens",
+  "gold": "documenter dans CONVENTION_CIBLE que GP multi = [gouverneur, tête nominale] ; décider si l'attachement nominal compte. Si non, nettoyer le gold plutôt que garder une liste cibles qui ne correspond pas à la mesure",
+  "echecs": "corriger à part g012/r018 (gouverneur adjectival : le bloc prend manger) et s041 (cible vide) ; (b) n'en corrige aucun",
+  "split": "si (b) est adopté, classer verbe/nom par la cible appariée : 114/111 verbe (97,37 %), 31/28 nom (90,32 %) au lieu de 116/111 et 29/26",
+  "test": "ajouter un test de non-régression multi-cibles (s
+… [385 caractères tronqués]
+  ```
+

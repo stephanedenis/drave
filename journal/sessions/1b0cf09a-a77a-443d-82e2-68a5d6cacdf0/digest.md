@@ -1918,3 +1918,71 @@ fichiers {'rapport': 'reports/rapport-cache-chunker.md', 'pensee': 'reports/pens
 ok
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '--- fichiers ---' && wc -l reports/rapport-cache-chunker.md && wc -c reports/rapport-cache-chunker.md reports/pensee-cache-chunker.json && echo '--- json ---' && python3 -m json.tool reports/pensee-cache-chunker.json > /dev/nul … [845 caractères tronqués]`
+
+  ```
+--- fichiers ---
+560 reports/rapport-cache-chunker.md
+35160 reports/rapport-cache-chunker.md
+51743 reports/pensee-cache-chunker.json
+86903 total
+--- json ---
+JSON_OK
+--- git ---
+?? reports/pensee-cache-chunker.json
+?? reports/rapport-cache-chunker.md
+--- tableaux ---
+tableaux 9 incohérents []
+placeholders False
+--- patch diff applicable ---
+6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65  /tmp/bloc_linguistique_snapshot.py
+5639a3760adf6d0f879d136cc723eb88979d1970007d08398e7e6589bd575738  /tmp/bloc_linguistique_patche.py
+5639a3760adf6d0f879d136cc723eb88979d1970007d08398e7e6589bd575738  /tmp/applytest/tools/bloc_linguistique.py
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Validation du cache terminée. Livrables neufs, non committés : `reports/rapport-cache-chunker.md` (560 l., diff complet) et `reports/pensee-cache-chunker.json`. Aucun fichier existant modifié ; aucun commit.\n\nMesures sur le snapshot  … [1753 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **present** `{"files": [{"path": "reports/rapport-cache-chunker.md", "description": "Fiche de validation du cache : protocole, temps, complexité, égalité, contrôles négatifs, limites, correctif exact avec diff."}, {"path": "reports/pensee-cache-chunker.json", "description": "JSON structuré de la validation : ins … [75 caractères tronqués]`
+
+  ```
+Presented reports/rapport-cache-chunker.md
+Presented reports/pensee-cache-chunker.json
+  ```
+
+### 🤖 Assistant
+
+✅ **Cache validé.** Deux fichiers neufs, non committés, aucun fichier existant modifié :
+
+- [`reports/rapport-cache-chunker.md`](reports/rapport-cache-chunker.md) — protocole, temps, complexité, égalité, contrôles négatifs, limites, diff complet.
+- [`reports/pensee-cache-chunker.json`](reports/pensee-cache-chunker.json) — données structurées.
+
+## Facteur de gain (mesures sur `6e8430…`, snapshot de la fiche)
+
+| mesure | résultat |
+|---|---|
+| cache complet C2 (chunking + verbes), chunker, 160 tokens | **×11,0** (9 passes), **×12,2** (15 passes) — fiche ×11,6, confirmé à ±10 % |
+| idem, 320 tokens | **×18,1-19,5** (fiche ×16,9) |
+| idem, 640-1 280 tokens | **×29-37** |
+| défaut S, 160 / 320 tokens | **×2,06** / **×2,61-2,83** |
+| corpus 612 phrases | **×1,25** chunker, **×1,03** défaut |
+| mémoïsation seule C1 (`_syntagmes_simple`) | ×5,1 à 160, ×6,9 à 320 ; défaut ×1,02-1,07 |
+
+**Nuance importante :** le ×11,6 n'est pas obtenu par la seule mémoïsation du chunker (×5,1). Il faut aussi le cache des verbes de GV (C2) ; sur le défaut, c'est même lui qui porte tout le gain, le 2→1 chunking ne valant que 2-4 %.
+
+## Égalité : **OUI**
+
+- C1, C2 et OFF : **612/612** sur les deux chemins (chunker seul et défaut S).
+- **42/42** sur 7 longueurs × 2 chemins.
+- Patch hoisté réel : **612/612 + 14/14**, **1 seul chunking** par analyse.
+- Comparateur sensible : cache falsifié détecté (113/612 chunker, 290/612 défaut) ; cache bien recréé à chaque `analyser`.
+
+## Correctif exact à appliquer (contre `6e8430…`)
+
+Hoister `simples`/`gvs_simple`/`cache_gv` après le calcul de `verbes` (après 855), supprimer les re-chunkings **861, 919, 928**, remplacer **914** par `for s in simples`, utiliser `gvs_simple` en **916/922**, poser `gvs_u = gvs_s + gvs_simple` (**929-930**), passer `cache_gv` en **887/895/899/935/940**, ajouter `_verbe_gv` après **658**, ajouter `cache_gv=None` aux signatures **662/689**, remplacer `_verbe_dans` par `_verbe_gv` en **681/685/701**. Le diff complet est au § 8.2 ; il s'applique proprement (fichier patché sha256 `5639a376…`).
+
+⚠️ Le fichier committé dans HEAD (`5640809e`) est un patch **partiel** : le chemin défaut garde deux chunkings (lignes 875 et 947). L'arbre courant a encore bougé depuis (`64b7c520…`) : relire la note d'état § 2.1/§ 8.3 avant d'appliquer. **Rien n'a été committé.**
+
