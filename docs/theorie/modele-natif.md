@@ -616,6 +616,28 @@ qui les trancherait :
 pas une couche ; la neutralité est un **couple** avec l'informativité, pas une vertu. Ces trois phrases sont la
 partie stable du document.
 
+## 12 bis. L'attachement : trois notions à ne pas confondre
+
+L'**attachement** dit à quoi un segment se rattache ; il ne dit pas ce que le segment **est**.
+Trois notions se confondent facilement, et les confondre fausse la lecture :
+
+- **le rôle** est une propriété du segment (`agent`, `patient`, `lieu`…) ; **la cible** est
+  l'unité à laquelle il se rattache (le verbe qui le gouverne, l'antécédent d'un relatif, le nom
+  qu'un génitif complète). Un segment peut avoir un rôle juste et une cible fausse, et
+  réciproquement.
+- **la convention** doit être **écrite avant d'être mesurée**. Un complément se rattache à son
+  verbe ; un relatif à son antécédent ; un génitif au nom qu'il complète. Sans cette écriture,
+  la même annotation peut être jugée juste ou fausse selon la lecture — et le gold lui-même
+  peut mêler deux conventions dans un seul champ.
+- **la mesure a deux lectures** : le **rendement** (la cible est-elle trouvée, découpage
+  compris) et l'**exactitude** (la cible est-elle juste **quand le segment est au bon span**).
+  Les confondre fait passer un échec de **découpage** pour un échec d'**attachement** : c'est
+  le découpage qui manque, pas la règle.
+
+La conséquence pratique : un attachement ne se juge jamais seul. Il se juge **par langue**, **par
+type de cible** (verbe ou nom) et **à couverture publiée** — sinon le chiffre global mélange la
+qualité de la règle et la réussite du segmenteur.
+
 ## 13. Où lire la suite
 
 - **Le format** : [`architecture-native.md`](architecture-native.md) · [`format-flux.md`](../implantation/format-flux.md) ·

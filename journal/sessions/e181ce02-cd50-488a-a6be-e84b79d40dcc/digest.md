@@ -43727,3 +43727,58 @@ docs + pilotage + README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; par langue fr 113/117, en 28/28 (28 labels/88) ; 4 échecs.\", \" ; fr 113/117, en 28/28 ; 4 échecs.\")\np.write_text(t)\ … [1044 caractères tronqués]`
+
+  ```
+· T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1608]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1608", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-pensee-par-langue.md
+COMMIT OK 1
+841e0e71 B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183
+jeu 05 nov 2026 16:26:59 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier round : la leçon conceptuelle de l'attachement dans la théorie (sans chiffres)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; fr 113/117, en 28/28 ; 4 échecs.\", \" ; 4 échecs.\")\np.write_text(t)\nPY\npython3 tools/taille_documents.py 2>&1 | tai … [124 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+485:## 8. Ce qui est original
+546:## 9. Les portes N
+567:## 10. Les anti-patrons
+585:## 11. Ce qui pourrait rendre ce document faux
+600:## 12. Les questions ouvertes
+619:## 13. Où lire la suite
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '600,620p' docs/theorie/modele-natif.md", "description": "Lire les questions ouvertes du doc"}`
+
+  ```
+## 12. Les questions ouvertes
+
+Ce document dit ce qui est **défini** ; il ne dit pas que tout est **résolu**. Les questions qui restent, et ce
+qui les trancherait :
+
+| question | ce qui la trancherait |
+|---|---|
+| **canoniser à l'échelle** : combien de modalités, et comment composer des RSN de modalités différentes ? | un canoniseur multi-modal, mesuré sur des paires parallèles |
+| **l'algèbre de l'annotation** : comment composer langue, format, confiance et ambiguïté sans fuite ? | un monoïde d'annotation implanté, avec une preuve de non-fuite |
+| **la neutralité relative** : quel corpus, quelle puissance, quel adversaire ? | une sonde adversariale sur un corpus équilibré, avec un seuil |
+| **le coût de la séparation** : deux fois le travail, une latence ; la RSN est-elle un goulot ? | une mesure de bout en bout, en temps réel |
+| **le composite** : un `surface → rsn` contient une mémoire N2 ; fuit-il ? | un test de bout en bout + une preuve de composition |
+| **le rejeu distribué** : la pile tient sur une machine ; deux nœuds ? | un rejeu à deux nœuds, diff à zéro |
+| **la substitution** : que faire des annotations incompatibles ? | un protocole de raffinement avec tolérance déc
+… [284 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/modele-natif.md'); t=p.read_text()\nbloc = \"\"\"\n## 12 bis. L'attachement : trois notions à ne pas confondre\n\nL'**attachement** dit à quoi un segment se rattache ; il … [2176 caractères tronqués]`

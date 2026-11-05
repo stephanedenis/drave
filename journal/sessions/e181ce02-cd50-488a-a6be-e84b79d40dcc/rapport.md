@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 119.8 h |
 | Tours | 176 |
-| Messages | 2544 |
-| Appels d'outils | 2228 |
+| Messages | 2548 |
+| Appels d'outils | 2232 |
 | Fichiers touchés | 25 |
-| Commandes | 1833 |
+| Commandes | 1836 |
 | Sous-agents | 16 |
-| Commits | 270 |
+| Commits | 271 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*185 appels d'outils.* Actions notables :
+*189 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 147 autres
+- … et 150 autres
 
 **Synthèse produite :**
 
-⏵ Dernier round mesuré : la mesure **par langue** (recommandation A14), sans toucher au bloc
+⏵ Dernier round : la leçon conceptuelle de l'attachement dans la théorie (sans chiffres)
 
 ## 3. Travail accompli
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1793 autres
+- … et 1796 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9971,4 +9971,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182" -- reports/rapport-gold-anglais.md reports/pensee-
 - B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182" -- reports/rapport-gold-anglais.md reports/rapport-pensee-
 - B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183" -- tools/tests/linguistique/evaluer_gold.py tools/pen
+- THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis)" -- docs/theorie/modele-natif.md docs/pilotage/en-cours.md 2>&1 
 

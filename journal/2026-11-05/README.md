@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**82 commits** · **19 session(s)** · **8 thème(s)**
+**83 commits** · **19 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 11 | [distribue.md](distribue.md) |
 | docs | 30 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 17 | [mesures.md](mesures.md) |
+| mesures | 18 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -130,6 +130,7 @@
 | 16:02 | `857c783d` | B13 — LA PISTE DES 84 SPANS (A12) MESURÉE ET CONSIGNÉE ; PROCHAINE ACTION LES DEUX RÈGLES ; 182/182 |
 | 16:07 | `028c8281` | B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182 |
 | 16:16 | `e1903e2d` | B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182 |
+| 16:24 | `841e0e71` | B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 

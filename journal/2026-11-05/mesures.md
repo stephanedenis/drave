@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,10 +25,11 @@
 | 16:02 | `857c783d` | B13 — LA PISTE DES 84 SPANS (A12) MESURÉE ET CONSIGNÉE ; PROCHAINE ACTION LES DEUX RÈGLES ; 182/182 | `en-cours.md`, `roadmap.md`, `README.md` (+19) |
 | 16:07 | `028c8281` | B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182 | `en-cours.md`, `README.md`, `attention.md` (+18) |
 | 16:16 | `e1903e2d` | B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
+| 16:24 | `841e0e71` | B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 
 ## Chiffres du jour
 
-`×11,0` · `0,9448` · `0,9724` · `×139` · `×1` · `0,6069` · `0,9241` · `0,8082` · `0,8483` · `0,6438` · `0,9412` · `÷239`
+`0,9658` · `1,000` · `×11,0` · `0,9448` · `0,9724` · `×139` · `×1` · `0,6069` · `0,9241` · `0,8082` · `0,8483` · `0,6438`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -70,6 +71,7 @@
 - [reports/rapport-pensee-echecs-cible.md](../../reports/rapport-pensee-echecs-cible.md)
 - [reports/rapport-pensee-lexique-elargi.md](../../reports/rapport-pensee-lexique-elargi.md)
 - [reports/rapport-pensee-lexique-verbal.md](../../reports/rapport-pensee-lexique-verbal.md)
+- [reports/rapport-pensee-par-langue.md](../../reports/rapport-pensee-par-langue.md)
 - [reports/rapport-pensee-spans.md](../../reports/rapport-pensee-spans.md)
 - [reports/rapport-pensee-topk-strict.md](../../reports/rapport-pensee-topk-strict.md)
 - [reports/rapport-pensee-verbe-gv.md](../../reports/rapport-pensee-verbe-gv.md)
