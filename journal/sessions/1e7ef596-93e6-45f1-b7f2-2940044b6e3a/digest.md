@@ -24910,3 +24910,99 @@ pas   7450 · perte 0.9195 · PPL val 2.404 · 7612 s
 ⏵ B13 166/166 : les 127 échecs qualifiés (94 span, 33 cible) — j'intègre dans l'état et les pages
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\ndef rep(path, pairs):\n    p=pathlib.Path(path); t=p.read_text(); miss=[]\n    for old,new in pairs:\n        if old not in t: miss.append(old[:50]); continue\n        t=t.replace(old,new)\n    p.writ … [2853 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md OK
+docs/pilotage/roadmap.md OK
+docs/pilotage/chantiers.md OK
+docs/pilotage/plan-travail.md OK
+  T0 max : 4000 mots (budget 4 000)
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 3060 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[s/v7 9f3e37eb] B13 166/166 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (LE CORRECTIF N'EN RÉPARE QU'UN) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+ 13 files changed, 267 insertions(+), 27 deletions(-)
+ create mode 100644 reports/pensee-echecs-attachement.json
+ create mode 100644 reports/rapport-pensee-echecs-attachement.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 153 : B13 166/166 (127 échecs qualifiés) intégré, T0 4 000
+
+**Cycle 153 — le 166e fait B13 entre dans le pilotage.**
+
+- **B13 166/166 — les 127 échecs qualifiés** : ils se répartissent en **94 de span** (aucun segment prédit au même span) et **33 de cible** (le span est bon, la cible manque). Le correctif testé (GV du chunker + segments d'union) n'en répare **qu'un** ; les **32 autres** ont un GV qui couvre **toute la phrase** — le dernier token n'est pas le verbe (`… in the park` → `park`, pas `saw`). Fiche et JSON committés (`9f3e37eb`) ; état et pages à 166/166.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 060 liens** ✅ ; backlog ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 630 mots**, **T0 4 000 / 4 000** ✅ (au plafond).
+- **2 048** : le run est à **7 450/10 000** (7 612 s, GPU1 à 100 %).
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la seconde moitié du 2 048, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 159
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 154/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 154 : instantané, audit et trim du T0 (à 4 000)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+9f3e37eb B13 166/166 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (LE CORRECTIF N'EN RÉPARE QU'UN) ; ÉTAT, ROADMAP, CHANTIERS, PLAN
+e13723f6 ÉTAT — HEURE 23 H 37 ; 2 048 : 2E MOITIÉ À 7 300 PAS ; B13 165/165, D 62
+14df28a1 ÉTAT — HEURE 23 H 32 ; 2 048 : 2E MOITIÉ À 7 150 PAS ; B13 165/165, D 62
+0aeb4211 ÉTAT — HEURE 23 H 27 ; 2 048 : 2E MOITIÉ À 7 050 PAS ; B13 165/165, D 62
+e374a001 ÉTAT — HEURE 23 H 22 ; 2 048 : 2E MOITIÉ À 6 900 PAS ; B13 165/165, D 62
+9b69fb85 ÉTAT — HEURE 23 H 17 ; 2 048 : 2E MOITIÉ À 6 800 PAS ; B13 165/165, D 62
+---STATUS---
+ M docs/implantation/moteur-de-pensee.md
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 307 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 519 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/in
+… [659 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [333 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4000 mots (budget 4 000)
+  ✅ 3060 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+---ROPE 2E ---
+pas   7550 · perte 0.9735 · PPL val 2.399 · 7715 s
+pas   7600 · perte 0.9825 · PPL val 2.406 · 7766 s
+0, 0 %
+1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 154 : T0 au plafond ; je retire deux clauses anciennes du « Fait » et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"candidats verbes : top-k 0,4686 ; \", \"\")\nt=t.replace(\"attachement par proximité (exact 0,0544) ; \", \"\")\np.write_tex … [720 caractères tronqués]`

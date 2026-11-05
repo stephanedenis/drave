@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 13.0 h |
-| Tours | 158 |
-| Messages | 959 |
-| Appels d'outils | 1062 |
+| Durée | 13.1 h |
+| Tours | 159 |
+| Messages | 963 |
+| Appels d'outils | 1065 |
 | Fichiers touchés | 15 |
-| Commandes | 876 |
+| Commandes | 879 |
 | Sous-agents | 0 |
-| Commits | 177 |
+| Commits | 178 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -339,6 +339,8 @@
 **Tour 157** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 158** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 159** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4015,7 +4017,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ B13 166/166 : les 127 échecs qualifiés (94 span, 33 cible) — j'intègre dans l'état et les pages
+⏵ Cycle 153 : B13 166/166 (127 échecs qualifiés) intégré, T0 4 000
+
+**Cycle 153 — le 166e fait B13 entre dans le pilotage.**
+
+- **B13 166/166 — les 127 échecs qualifiés** : ils se répartissent en **94 de span** (aucun segment prédit au même span) et **33 de cible** (le span est bon, la cible manque). Le correctif testé (GV du chunker + segments d'union) n'en répare **qu'un** ; les **32 autres** ont un GV qui couvre **toute la phrase** — le dernier token n'est pas le verbe (`… in the park` → `park`, pas `saw`). Fiche et JSON committés (`9f3e37eb`) ; état et pages à 166/166.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 060 liens** ✅ ; backlog ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 630 mots**, **T0 4 000 / 4 000** ✅ (au plafond).
+- **2 048** : le run est à **7 450/10 000** (7 612 s, GPU1 à 100 %).
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la seconde moitié du 2 048, les faits B13/S, puis la passe complète des portes.
+
+### Tour 159 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run seven controls and check rope
+- bash — Trim T0 and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 154 : T0 au plafond ; je retire deux clauses anciennes du « Fait » et commit
 
 ## 3. Travail accompli
 
@@ -4081,7 +4104,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 836 autres
+- … et 839 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4406,4 +4429,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 23 H 32 ; 2 048 : 2E MOITIÉ À 7 150 PAS ; B13 165/165, D 62" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3993, en-co
 - ÉTAT — HEURE 23 H 37 ; 2 048 : 2E MOITIÉ À 7 300 PAS ; B13 165/165, D 62" -m "Cycle d'audit : les sept contrôles sont verts (627/720, 3053 liens, T0 3993, en-co
 - B13 166/166 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (LE CORRECTIF N'EN RÉPARE QU'UN) ; ÉTAT, ROADMAP, CHANTIERS, PLAN" -m "La fiche et le JSON sont
+- ÉTAT — T0 3 987 ; LE FAIT EST RESSERRÉ (166/166) ; 2 048 À 7 600 PAS" -m "L'état reste sous le plafond : les clauses des 164-165 sortent du « Fait » (les fiches
 

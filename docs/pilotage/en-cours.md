@@ -68,7 +68,7 @@
 - **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 mesuré.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **166/166** ; **127 échecs qualifiés : 94 de span, 33 de cible (le correctif n'en répare qu'un)** ; candidats verbes : top-k 0,4686 ; attachement par proximité (exact 0,0544) ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md), [candidats verbes](../../reports/rapport-pensee-candidats-verbes.md), [échecs attachement](../../reports/rapport-pensee-echecs-attachement.md).
+- **Fait** : B13 **166/166** ; **127 échecs qualifiés : 94 de span, 33 de cible (le correctif n'en répare qu'un)** ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md), [candidats verbes](../../reports/rapport-pensee-candidats-verbes.md), [échecs attachement](../../reports/rapport-pensee-echecs-attachement.md).
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : les **candidats verbes**, puis le **générateur S**.

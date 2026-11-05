@@ -38156,3 +38156,14 @@ fiche + JSON + docs + état + README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ncible=\"(rapport-pensee-cible-proximite.md)\"\nout=[]; n=0\nfor l in lignes:\n    if cible in l:\n        n+=1; co … [276 caractères tronqués]`
+
+  ```
+retirées 1
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ T161 cible proximité   proximité : top1 96/239, exact 14/239, tête 96/145
+  ✅ T162 candidats verbes  candidats : top-k 113/239 (0.4728), tête 113/145
+  ❌ T163 échecs attachement échecs : 94 de span, 32 de cible
+  164/166 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    return span == 94 and cible == 33, f\"échecs : {span} de span, {cible} de cible\"',\n            '    return span = … [1670 caractères tronqués]`
