@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 16.9 h |
-| Tours | 241 |
-| Messages | 1346 |
-| Appels d'outils | 1370 |
+| Durée | 17.0 h |
+| Tours | 242 |
+| Messages | 1351 |
+| Appels d'outils | 1374 |
 | Fichiers touchés | 15 |
-| Commandes | 1183 |
+| Commandes | 1187 |
 | Sous-agents | 0 |
-| Commits | 261 |
+| Commits | 262 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -505,6 +505,8 @@
 **Tour 240** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 241** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 242** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5976,7 +5978,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 236 : greffe toujours en cours (4 min), zéro non-zéro ; je commit l'état
+⏵ Cycle 236 : greffe toujours en cours, registre 26/83 sans non-zéro, heure 00 h 20
+
+**Cycle 236 — l'attente est bornée et surveillée.**
+
+- **Passe complète** : registre **26 entrées**, toutes à zéro ; **`porte-greffe`** (connue longue, ~700 s) tourne depuis huit minutes sous la borne de **1 800 s** — pas de blocage, juste la porte lente.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 610 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict, puis les faits B13/S.
+
+### Tour 242 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass registry
+- bash — Check greffe elapsed and log growth
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 237 : greffe progresse (section 5, 13 min) ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -6042,7 +6065,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1143 autres
+- … et 1147 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6451,4 +6474,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18" -m "Le nom du dossier disait 23 h 45, le fichier .debut et le premier journa
 - ÉTAT — HEURE 00 H 21 ; REGISTRE 26/83 SANS NON-ZÉRO ; GREFFE EN COURS" -m "Le registre partiel de la passe est lisible et awk '\$2 != 0' ne rend rien : 26 porte
 - ÉTAT — HEURE 00 H 24 ; GREFFE TOUJOURS EN COURS, AUCUNE NON-ZÉRO" -m "Le registre reste à 26 entrées, toutes nulles ; porte-greffe (connue longue, ~700 s) tourn
+- ÉTAT — HEURE 00 H 28 ; GREFFE PROGRESSE (SECTION 5, 13 MIN), ZÉRO NON-ZÉRO" -m "Le journal de porte-greffe grandit (841 → 1 355 octets) et en est à la section 5
 

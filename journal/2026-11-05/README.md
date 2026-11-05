@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**6 commits** · **1 session(s)** · **4 thème(s)**
+**7 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,14 +13,14 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
-| memoire | 1 | [memoire.md](memoire.md) |
+| memoire | 2 | [memoire.md](memoire.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 16.9 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 17.0 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -32,6 +32,7 @@
 | 00:11 | `58e3e05d` | ÉTAT — PASSE 27/83 (GAIN 273 S), ZÉRO ROUGE ; L'AVANCEMENT EST DANS L'ÉTAT ; HEURE 00 H 15 |
 | 00:14 | `69a2db83` | ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18 |
 | 00:17 | `43c86221` | ÉTAT — HEURE 00 H 21 ; REGISTRE 26/83 SANS NON-ZÉRO ; GREFFE EN COURS |
+| 00:20 | `06af762e` | ÉTAT — HEURE 00 H 24 ; GREFFE TOUJOURS EN COURS, AUCUNE NON-ZÉRO |
 
 ## Le récit de la journée (écrit à la main)
 
