@@ -40362,3 +40362,67 @@ docs + pilotage + README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **top-k strict 0,6069** (le 0,9241 était des sous-chaînes) ; fiches [échecs de cible](../../reports/rapport-pensee-echec … [1255 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-401]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-401", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-topk-strict.json
+ create mode 100644 reports/rapport-pensee-topk-strict.md
+COMMIT OK 1
+e223a98d B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176
+jeu 05 nov 2026 11:00:59 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 13 : réduire les candidats de S à leur tête — le top-k strict doit monter
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique(); c=h._syntagmes_s(\"La femme a vu l'homme dans le parc.\")\nprint([x.get(\"nom\") for x in c][:3])\nprint([ (s … [124 caractères tronqués]`
+
+  ```
+["« dans le parc » → l'homme", '« dans le parc » → a vu']
+[('GN', 'La femme'), ('GV', 'a vu'), ('GN', "l'homme"), ('GP', 'dans le parc')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/bloc_176.py && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                    candidats = list(noms) + self._verbes_proches(texte … [1421 caractères tronqués]`
+
+  ```
+candidats réduits ajoutés
+topk strict 88 0.6069 | topk lenient 134 0.9241 | exact 123
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/bloc_176.py tools/bloc_linguistique.py && git status --porcelain tools/bloc_linguistique.py | head -1; timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.l … [521 caractères tronqués]`
+
+  ```
+état HEAD : 123 134 88 145
+=== cohérence du pilotage :
+docs/pilotage/en-cours.md:4
+docs/pilotage/roadmap.md:3
+docs/pilotage/chantiers.md:4
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nvieux=\"et **exactitude spans 0,8690 / 0,9241 / 0,8483** (÷ 145 segments) ;\"\nneuf=\"et **exactitude spans 0,8690 / 0,9241 / 0,8483** … [1381 caractères tronqués]`
+
+  ```
+roadmap : top-k strict ajouté
+en-cours et plan à jour
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+     sources et images relatives.
+  ⚠ mandat périmé (547 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md\n  timeout 240 git commit -m \"ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTA … [501 caractères tronqués]`

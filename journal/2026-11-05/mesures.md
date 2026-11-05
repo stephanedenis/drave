@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,10 +16,11 @@
 | 10:18 | `23853cb7` | B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082, VERBES 0,9412 ; 173/173 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 10:39 | `a408a909` | B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 | 10:49 | `a048cb83` | B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
+| 10:59 | `e223a98d` | B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 
 ## Chiffres du jour
 
-`0,8082` · `0,8483` · `0,6438` · `0,9412` · `÷239` · `÷146` · `0,7877` · `0,9041` · `0,2260` · `0,0962` · `0,1381` · `0,9034`
+`0,6069` · `0,9241` · `0,8082` · `0,8483` · `0,6438` · `0,9412` · `÷239` · `÷146` · `0,7877` · `0,9041` · `0,2260` · `0,0962`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -27,7 +28,7 @@
 
 - `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 66.2 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
 - `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 18.9 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 114.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 114.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` — — (début 2026-11-05 10:11, 0.0 h) → [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md)
 
 ## Mesures et rapports touchés
@@ -39,6 +40,7 @@
 - [reports/rapport-pensee-lexique-elargi.md](../../reports/rapport-pensee-lexique-elargi.md)
 - [reports/rapport-pensee-lexique-verbal.md](../../reports/rapport-pensee-lexique-verbal.md)
 - [reports/rapport-pensee-spans.md](../../reports/rapport-pensee-spans.md)
+- [reports/rapport-pensee-topk-strict.md](../../reports/rapport-pensee-topk-strict.md)
 - [reports/rapport-pensee-verbe-gv.md](../../reports/rapport-pensee-verbe-gv.md)
 
 <!-- notes -->
