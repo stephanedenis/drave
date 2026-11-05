@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,6 +31,7 @@
 | 10:51 | `6fe96130` | ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP GÉNITIF REJETÉ (123 → 122) | `en-cours.md`, `README.md`, `mesures.md` (+5) |
 | 11:02 | `efaab321` | ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS | `en-cours.md`, `roadmap.md`, `README.md` (+14) |
 | 11:10 | `0ddd4fb9` | B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+20) |
+| 13:06 | `6bbd9c54` | PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL | `en-cours.md`, `plan-travail.md`, `README.md` (+14) |
 
 ## Chiffres du jour
 

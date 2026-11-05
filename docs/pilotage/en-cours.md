@@ -65,14 +65,14 @@
 - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
 - **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
 - **Plan** : B13, bloc linguistique.
-- **Ambition** : un runtime cognitif tracé.
 - **Stratégie** : v0 mesuré.
+- **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **177/177** ; attachement : **exactitude spans 0,8690/0,9241/0,8483** (REL → antécédent, GP → verbe, lexique élargi) ; échecs 11/11 ; **top-k strict 0,6069** ; fiche [top-k strict](../../reports/rapport-pensee-topk-strict.md).
+- **Fait** : B13 **177/177** ; attachement **spans 0,8690/0,9241/0,8483**, **top-k strict 0,6069** ; convention documentée (T174).
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.
-- **Sous-agents** : 4 mandats (audit, top-k, classement, cohérence), [plan-travail](../plan-travail.md) § 9.
+- **Sous-agents** : 4 mandats, [plan-travail](../plan-travail.md) § 9.
 - **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 

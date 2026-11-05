@@ -40681,3 +40681,39 @@ chemins retirés de la table
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.\",\n            \"- **Sous-agents** : 4 manda … [958 caractères tronqués]`
+
+  ```
+❌ 1 violation(s) :
+     · T0 : 4011 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-417]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-417", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[s/v7 6bbd9c54] PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL
+ 17 files changed, 374 insertions(+), 33 deletions(-)
+COMMIT OK 1
+6bbd9c54 PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Sous-agents** : 4 mandats (audit, top-k, classement, cohérence), [plan-travail](../plan-travail.md) § 9.\\n\",\n        … [303 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · session « Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif ; heartbeat à rafraîchir)* » ne dit pas « **Ambition** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Objectif final** : un moteur de pensée v0.\", \"- **Ambition** : un runtime cognitif tracé.\\n- **Objectif final** : un … [587 caractères tronqués]`
+
+  ```
+ambition restaurée, Fait resserré
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4; do\n  git add docs/pilotage/en-cours.md\n  timeout 240 git commit -m \"ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE\" -- docs/pilotage/en-cours.md 2>&1 | tail -1\n  if git log -1 --format='%s' | gre … [175 caractères tronqués]`

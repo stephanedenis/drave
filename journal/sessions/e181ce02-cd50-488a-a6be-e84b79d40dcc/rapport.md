@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 116.5 h |
 | Tours | 176 |
-| Messages | 2345 |
-| Appels d'outils | 2049 |
+| Messages | 2349 |
+| Appels d'outils | 2053 |
 | Fichiers touchés | 25 |
-| Commandes | 1689 |
+| Commandes | 1692 |
 | Sous-agents | 2 |
-| Commits | 247 |
+| Commits | 248 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9446,6 +9446,9 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Éviter les chemins morts dans plan-travail
 - bash — Pointer les sous-agents dans l'état et committer
 - job_output
+- bash — Trim T0
+- bash — Restaurer Ambition et resserrer la ligne Fait
+- bash — Committer l'état et lancer la vague
 
 ## 3. Travail accompli
 
@@ -9526,7 +9529,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1649 autres
+- … et 1652 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9921,4 +9924,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS" -- docs/pilotage/roadmap.md docs/pilotage/en-cours.md journa
 - B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177" -- tools/tests/linguistique/gold_reel.py tools/pensee/a
 - PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL" -- docs/pilotage/plan-travail.md docs
+- ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRANCHE SOUS
 

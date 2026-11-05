@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**61 commits** · **5 session(s)** · **8 thème(s)**
+**62 commits** · **5 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 23 | [docs.md](docs.md) |
+| docs | 24 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 9 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
@@ -95,6 +95,7 @@
 | 10:59 | `e223a98d` | B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176 |
 | 11:02 | `efaab321` | ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS |
 | 11:10 | `0ddd4fb9` | B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177 |
+| 13:06 | `6bbd9c54` | PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL |
 
 ## Le récit de la journée (écrit à la main)
 
