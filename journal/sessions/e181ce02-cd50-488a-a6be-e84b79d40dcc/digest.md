@@ -38167,3 +38167,11 @@ retirées 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    return span == 94 and cible == 33, f\"échecs : {span} de span, {cible} de cible\"',\n            '    return span = … [1670 caractères tronqués]`
+
+  ```
+T163 à 32 et fiche ajustée
+  ✅ T162 candidats verbes  candidats : top-k 113/239 (0.4728), tête 113/145
+  ✅ T163 échecs attachement échecs : 94 de span, 32 de cible (33 avant le correctif d'union)
+  165/166 portes tenues
+  ```
+
