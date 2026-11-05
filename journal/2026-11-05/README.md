@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **1 session(s)** · **4 thème(s)**
+**13 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,13 +14,14 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 17.2 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 17.3 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -38,6 +39,7 @@
 | 00:28 | `fb6a3c86` | ÉTAT — PASSE 28/83 (HARNAIS-INVARIANTS 126 S), ZÉRO ROUGE ; HEURE 00 H 34 |
 | 00:31 | `f97575b2` | ÉTAT — HEURE 00 H 37 ; PASSE 28/83, HOMEOSTASIE À 5 MIN, ZÉRO NON-ZÉRO |
 | 00:34 | `87ae2eee` | ÉTAT — HEURE 00 H 40 ; HOMEOSTASIE TOURNE (≈8 MIN), REGISTRE 28/83 SANS NON-ZÉRO |
+| 00:37 | `a7dd05e8` | ÉTAT — HEURE 00 H 44 ; HOMEOSTASIE CALCULE (3e VARIANTE ×1,0, 8 THREADS) |
 
 ## Le récit de la journée (écrit à la main)
 
