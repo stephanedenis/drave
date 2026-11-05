@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 116.5 h |
 | Tours | 176 |
-| Messages | 2349 |
-| Appels d'outils | 2053 |
+| Messages | 2353 |
+| Appels d'outils | 2060 |
 | Fichiers touchés | 25 |
-| Commandes | 1692 |
-| Sous-agents | 2 |
-| Commits | 248 |
+| Commandes | 1695 |
+| Sous-agents | 6 |
+| Commits | 250 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9449,6 +9449,16 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Trim T0
 - bash — Restaurer Ambition et resserrer la ligne Fait
 - bash — Committer l'état et lancer la vague
+- sous-agent — Audit reproductibilité attachement
+- sous-agent — Diagnostic du top-k strict
+- sous-agent — Prototype classement appris
+- sous-agent — Cohérence fiches JSON portes
+- bash — Noter la vague dans le journal
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ Vague 1 : quatre sous-agents en parallèle (audit, top-k, classement, cohérence)
 
 ## 3. Travail accompli
 
@@ -9486,6 +9496,10 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 - tour 1 — Revue visuelle des 7 schémas
 - tour 1 — Test revue visuelle
+- tour 176 — Audit reproductibilité attachement
+- tour 176 — Diagnostic du top-k strict
+- tour 176 — Prototype classement appris
+- tour 176 — Cohérence fiches JSON portes
 
 ### Commandes exécutées (échantillon)
 
@@ -9529,7 +9543,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1652 autres
+- … et 1655 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9925,4 +9939,6 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177" -- tools/tests/linguistique/gold_reel.py tools/pensee/a
 - PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL" -- docs/pilotage/plan-travail.md docs
 - ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRANCHE SOUS
+- PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15" -- docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/p
+- PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15" -- docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/p
 

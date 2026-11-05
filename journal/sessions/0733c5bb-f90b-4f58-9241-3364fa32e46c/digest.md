@@ -11328,3 +11328,68 @@ Revue de documentation **verte**, état frais, T0 à **3 992**, journal vert, **
 2. **Un run de ~2 M de pas** pour 2,5 en domaine à 128 octets, avec la recette fenêtre (le compute y mène en 5 doublements).
 3. **La distillation 30 000 pas** (arrêtée deux fois) : à reprendre avec le code corrigé si le levier le justifie.
 
+
+## Tour 10
+
+### 👤 Utilisateur
+
+terminé?
+
+### 🤖 Assistant
+
+⏵ Vérification finale avant de répondre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M'; echo \"=== travail non committé (hors fichiers d'autres sessions) ===\"; git status --short | grep -vE \"journal/|tools/pensee|tools/structures|reports/(pensee|s-|rapport-s)\" | head -10; echo \"=== HEAD ===\"; git log --onelin … [242 caractères tronqués]`
+
+  ```
+2026-11-05 13:11
+=== travail non committé (hors fichiers d'autres sessions) ===
+=== HEAD ===
+56d70431 ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE
+6bbd9c54 PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL
+0ddd4fb9 B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177
+=== GPU / jobs ===
+0, 1 MiB
+1, 1 MiB
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"=== portes de clôture ===\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 to … [275 caractères tronqués]`
+
+  ```
+=== portes de clôture ===
+  ❌ 1 anomalie(s) :
+     · annotation : docs/pilotage/en-cours.md → ../plan-travail.md (cassé)
+  ✅ aucun fait commité après le dernier état
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+=== plan de session ===
+- **Heartbeat** : 2026-11-05 10:22 HAE
+- **État** : terminé
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière rouge : un lien cassé dans l'état — je le répare
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"\\.\\./plan-travail.md\" docs/pilotage/en-cours.md; ls docs/pilotage/plan-travail.md", "description": "Locate broken link in state"}`
+
+  ```
+75:- **Sous-agents** : 4 mandats, [plan-travail](../plan-travail.md) § 9.
+docs/pilotage/plan-travail.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"- **Sous-agents** : 4 mandats, [plan-travail](../plan-travail.md) § 9.\"\nneuf = \"- **Sous-agents** : 4 mandats, [plan-t … [299 caractères tronqués]`
+
+  ```
+lien réparé
+  revue de documentation · 639 fiche(s) · 732 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3993 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG'\nÉTAT — LE LIEN VERS PLAN-TRAVAIL EST RÉPARÉ (../PLAN-TRAVAIL.MD → PLAN-TRAVAIL.MD) ; … [265 caractères tronqués]`

@@ -40717,3 +40717,57 @@ ambition restaurée, Fait resserré
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4; do\n  git add docs/pilotage/en-cours.md\n  timeout 240 git commit -m \"ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE\" -- docs/pilotage/en-cours.md 2>&1 | tail -1\n  if git log -1 --format='%s' | gre … [175 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-420]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-420", "timeout_ms": 600000, "wait": true}`
+
+  ```
+7 files changed, 56 insertions(+), 14 deletions(-)
+COMMIT OK 1
+56d70431 ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE
+jeu 05 nov 2026 13:11:06 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 1 : quatre sous-agents en parallèle (audit, top-k, classement, cohérence)
+
+- **subagent** `{"description": "Audit reproductibilité attachement", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Python). Mission : **audit de reproductibilité** de la mesure d'attachement du bloc linguistique.\n\nContexte : `tools/tests/linguistique/ … [1682 caractères tronqués]`
+- **subagent** `{"description": "Diagnostic du top-k strict", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnostiquer les 57 échecs du top-k strict** de l'attachement.\n\nContexte : `tools/tests/linguistique/evaluer_gold.py` expose `ch … [1638 caractères tronqués]`
+- **subagent** `{"description": "Prototype classement appris", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **prototype autonome d'un classement appris** des candidats d'attachement.\n\nContexte : `tools/tests/linguistique/evaluer_gold.py`  … [1869 caractères tronqués]`
+- **subagent** `{"description": "Cohérence fiches JSON portes", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **vérifier la cohérence** des fiches B13 du 2026-11-05 avec leurs JSON et avec les valeurs attendues par les portes.\n\nÀ faire :\n … [1308 caractères tronqués]`
+
+  ```
+started subagent 63d4c619-63e8-41b9-a183-5c6f1ac05a21
+  ```
+
+
+  ```
+started subagent a8035275-c7b9-4713-a6ab-7b859cd72306
+  ```
+
+
+  ```
+started subagent f55ccb7b-481e-4ab6-b5b4-331dc6ff2238
+  ```
+
+
+  ```
+started subagent ff7e786c-3ece-4eae-864e-19dddfead93c
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-05/README.md'); t=p.read_text()\nadd = \"\"\"**Tranche sous-agents (11 h 40 → 18 h).** Quatre mandats lancés en parallèle, coordonnés par\nle dossier pilotage (`plan-t … [640 caractères tronqués]`
+
+  ```
+note de vague ajoutée
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+56d70431 ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE
+jeu 05 nov 2026 13:12:12 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-05, 13 h 15 HNE\", t)\np.write_text( … [846 caractères tronqués]`

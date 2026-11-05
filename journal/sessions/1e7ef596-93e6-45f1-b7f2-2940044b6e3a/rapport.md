@@ -7,9 +7,9 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 18.9 h |
-| Tours | 275 |
-| Messages | 1523 |
+| Durée | 29.8 h |
+| Tours | 276 |
+| Messages | 1525 |
 | Appels d'outils | 1512 |
 | Fichiers touchés | 15 |
 | Commandes | 1322 |
@@ -575,6 +575,8 @@
 **Tour 274** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 275** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 276** — terminé?
 
 ## 2. Déroulé, étape par étape
 
@@ -6814,6 +6816,22 @@ Les **références de non-régression** portent la nouvelle passe et la précéd
 
 1. **`e181ce02`** : rafraîchir son heartbeat dans `journal/sessions/e181ce02-cd50-488a-a6be-e84b7
 … [723 caractères tronqués]
+
+### Tour 276 — terminé?
+
+**Synthèse produite :**
+
+Oui — **terminé** de mon côté.
+
+- **Goal clôturé** après la **passe complète** : 83 portes, **79 vertes**, 4 rouges toutes catégorisées (2 structurelles tolérées, 1 dérive de banc corrigée et rejouée verte, 1 coordination).
+- **Docs et pilotage cohérents et commités** : revue verte (628 fiches / 721 JSON / 120 docs / 83 portes), 3 075 liens, backlog, journal, tableaux, `en-cours` et T0 sous budget ; état à jour au 05/11 02 h 15.
+- **Machine au repos** : GPUs libres, aucune réservation.
+
+Il reste deux choses **hors de mon territoire** (je n'y touche pas) :
+1. **`e181ce02`** doit rafraîchir son heartbeat (ou être passée « en pause ») — sinon `porte-sessions` restera rouge à la prochaine passe ;
+2. les **deux WIP de sessions en pause** (`reports/pensee-quatre-modes.json` pour B13/L ; `reports/rapport-s-paragraphes.md` + `tools/structures` pour S) — à committer ou écarter par leurs sessions.
+
+Si vous reprenez les sessions, dites-le-moi : je rouvrirai un suivi de cohérence (et éventuellement une passe de confirmation).
 
 ## 3. Travail accompli
 

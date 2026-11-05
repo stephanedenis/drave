@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 66.2 h |
-| Tours | 9 |
-| Messages | 854 |
-| Appels d'outils | 788 |
+| Durée | 69.0 h |
+| Tours | 10 |
+| Messages | 860 |
+| Appels d'outils | 794 |
 | Fichiers touchés | 27 |
-| Commandes | 579 |
+| Commandes | 584 |
 | Sous-agents | 0 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -47,6 +47,8 @@
 **Tour 8** — reprends
 
 **Tour 9** — où en est-on?
+
+**Tour 10** — terminé?
 
 ## 2. Déroulé, étape par étape
 
@@ -377,6 +379,21 @@ Relancé en deux segments de 10 000 pas (après deux interruptions), il donne :
 `84c28889` (erratum) · `64674e0d` (repondération −0,05) · `51ab1b36` (production −0,06) · `2b0832ca` (clôture + correction perte/PPL dans l'état) · `b67
 … [752 caractères tronqués]
 
+### Tour 10 — terminé?
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check for uncommitted work and running jobs
+- bash — Run all closure gates
+- bash — Locate broken link in state
+- bash — Fix the broken link and rerun review
+- bash — Commit link fix and confirm review green
+- job_output
+
+**Synthèse produite :**
+
+⏵ Dernière rouge : un lien cassé dans l'état — je le répare
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -453,7 +470,7 @@ Relancé en deux segments de 10 000 pas (après deux interruptions), il donne :
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 539 autres
+- … et 544 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -581,7 +598,7 @@ Relancé en deux segments de 10 000 pas (après deux interruptions), il donne :
 
 ## 5. Erreurs rencontrées
 
-25 sorties en erreur ou divergentes. Les premières :
+26 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md:20686:- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.
 - **T1** : (no output) [exit code: 1]
@@ -638,4 +655,5 @@ Relancé en deux segments de 10 000 pas (après deux interruptions), il donne :
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-33
+- cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q 
 
