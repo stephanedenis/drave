@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 16.6 h |
-| Tours | 234 |
-| Messages | 1313 |
-| Appels d'outils | 1344 |
+| Tours | 235 |
+| Messages | 1318 |
+| Appels d'outils | 1348 |
 | Fichiers touchés | 15 |
-| Commandes | 1157 |
+| Commandes | 1161 |
 | Sous-agents | 0 |
-| Commits | 254 |
+| Commits | 255 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -491,6 +491,8 @@
 **Tour 233** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 234** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 235** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5803,15 +5805,37 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 234 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Snapshot commits, tree and sessions
 - bash — Run controls and check pass reds
 - bash — Commit state time update
+- bash — Check journal day rollover
 
 **Synthèse produite :**
 
-⏵ Cycle 229 : passe à 16/83, zéro rouge ; je commit l'état
+⏵ Cycle 229 : passe à 16/83, journal bascule au 05/11 (UTC), portes vertes
+
+**Cycle 229 — la passe avance, le journal passe la journée.**
+
+- **Passe complète** : **16 / 83**, **aucune rouge** — `porte-coupe` tenue en 162 s (le coût du pont va de +0,52 % à +17,09 % selon la coupe : il y a un bon endroit).
+- **Journal** : le dossier `2026-11-05` vient d'être créé par `journal_auto.py` (bascule UTC alors qu'il est 23 h 58 locale) ; la porte reste verte — 42 jours, 120 sessions, 1 988 liens.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; tableaux ✅ ; `en-cours` **1 605 mots**, **T0 3 975 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict (≈67 portes restantes), puis les faits B13/S.
+
+### Tour 235 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check local date and snapshot
+- bash — Run controls and check pass progress
+- bash — Update state date and commit
+
+**Synthèse produite :**
+
+⏵ Cycle 230 : le jour local a changé (05/11 00 h 02) ; je mets l'état à la bonne date
 
 ## 3. Travail accompli
 
@@ -5877,7 +5901,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1117 autres
+- … et 1121 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6279,4 +6303,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 23 H 56 ; PASSE 14/83, AUCUNE ROUGE ; LES SEPT CONTRÔLES VERTS" -m "La passe complète avance sans rouge (adaptateur-sortie, bloc-tableaux, budget, 
 - ÉTAT — HEURE 23 H 58 ; PASSE 15/83, AUCUNE PORTE SAUTÉE ; HEURE À JOUR" -m "La passe a franchi consolidation (84 s) et cerveau (10 s) sans rouge. Un balayage de
 - ÉTAT — HEURE 00 H 01 ; PASSE 16/83, ZÉRO ROUGE ; COUPE 162 S" -m "La passe a franchi coupe (162 s) : le coût du pont va de +0,52 % à +17,09 % selon la coupe, il
+- ÉTAT — NOUS SOMMES LE 05/11, 00 H 02 HNE ; PASSE 22/83" -m "Le jour local a changé : l'en-tête de la page vivante passe au 2026-11-05, en accord avec le dossier
 
