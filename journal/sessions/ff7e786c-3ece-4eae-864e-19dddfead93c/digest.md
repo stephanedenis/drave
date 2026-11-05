@@ -2965,3 +2965,145 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coheren
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "- **Concurrence** : voir § 6. Les fichiers `spans`, `conventions`, `echecs-cible`, `README.md`,\n  les quatre fichiers `tools/...` et les nouveaux fichiers v2 ont bougé sous moi ; le c … [313 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md", "new_string": "- corroboration externe (non committée, autre agent) : `pensee-audit-attachement.json`,\n  `rapport-audit-attachement.md` ;\n- état v2 concurrent (14:11, non vérifié ici) : `rapport-pe … [199 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sed -n '1,75p' /tmp/gen_coherence_json.py", "description": "Read generator header"}`
+
+  ```
+import json
+
+data = {
+ "date_verification": "2026-11-05T13:54:11-05:00",
+ "branche": "s/v7",
+ "ligne": "B13",
+ "objet": "Cohérence des fiches B13 datées du 2026-11-05 avec leurs JSON et les portes",
+ "perimetre": {
+  "fiches": 11,
+  "json": 11,
+  "date_fiches": "2026-11-05",
+  "commits": {
+   "verbe-gv": "9ff4adda", "lexique-verbal": "d400e188", "spans": "13e8bb2d",
+   "denominateur": "f8f5bc04", "classement": "d8edd1d9", "conventions": "f70a1b2a",
+   "attachement-cible": "23853cb7", "lexique-elargi": "a408a909",
+   "echecs-cible": "a048cb83", "topk-strict": "e223a98d", "convention-doc": "0ddd4fb9"
+  },
+  "portes_ciblees": ["T153", "T161", "T162", "T163", "T166", "T167", "T168", "T169", "T172", "T173"],
+  "portes_fiches": ["T164", "T165", "T170", "T171", "T174"],
+  "hors_perimetre": [
+   "fiches B13 du 2026-11-04 (passifs, cible par proximité, candidats verbes, échecs d'attachement)",
+   "docs/implantation/moteur-de-pensee.md (valeurs historiques 12 GP), reports/README.md (titres des fiches)",
+   "les 162 autres portes de tools/pensee/autotest.py (non détaillées ici ; suite complète 177/177)"
+  ]
+ },
+ "methode": {
+  "lecture": "fiche + JSON homonyme + git show <commit>:tools/pensee
+… [2106 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": " \"etat_verifie_pre_v2\": {\n  \"date\": \"2026-11-05T13:54\",\n  \"note\": \"état au moment de la vérification, AVANT la v2 stagée à 14:11 ; voir v2_concurrente\",\n  \"portes\": \"177/177\",", "old_string": " \"etat_courant\": {\n  \"porte … [19 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"couverture\": 0.6067,\n  \"f1_syntagmes\": 0.2862\n },\n \"v2_concurrente\": {\n  \"date\": \"2026-11-05T14:11\",\n  \"statut\": \"stagée (indexée, non committée) ; un autre agent\",\n  \"portes\": \"180/180 (annoncé ; non exécuté ici)\" … [3354 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"ambiguites_non_comptees\": 5,\n  \"fiches_supersedees_par_v2\": 4,\n  \"v2_concurrente\": \"intégration stagée 14:11 : 177 -> 180 portes, convention SUB au POS gold (116/29), exact 137/145 ; les fiches dites actuelles au 13:54 deviennent … [353 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"execution\": \"15 portes ciblées puis python3 -m tools.pensee.autotest -> 177/177 à HEAD avant la v2 ; les 180 portes v2 ne sont pas exécutées\",", "old_string": "  \"execution\": \"15 portes ciblées puis python3 -m tools.pensee.autotest … [16 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "   \"les 162 autres portes de tools/pensee/autotest.py (non détaillées ici ; suite complète 177/177 pré-v2) et les 3 portes v2 (T175-T177)\"", "old_string": "   \"les 162 autres portes de tools/pensee/autotest.py (non détaillées ici ; suite  … [21 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n '\"concurrence\"' /tmp/gen_coherence_json.py && sed -n '340,380p' /tmp/gen_coherence_json.py", "description": "Locate concurrence block"}`
+
+  ```
+340: "concurrence": {
+ "concurrence": {
+  "constat": "Pendant la vérification (vers 13:43-13:54), un autre agent a modifié deux fichiers de périmètre ; je n'y ai pas touché.",
+  "fichiers": [
+   {"fichier": "reports/pensee-spans.json", "etat": "M (non committé)", "changement": "ajout du bloc `courant` (145 / 0,6067 / 0,2862 / 94 / 48-33-13 / 65-24-4-1), source audit A1"},
+   {"fichier": "reports/rapport-pensee-spans.md", "etat": "M (non committé)", "changement": "titre et table des types passés au courant 94/13, note audit A1"}
+  ],
+  "correction_partielle": [
+   "le chapô dit encore « sont 48 REL, 33 SUB et 12 GP » (le titre/table disent 13)",
+   "la narrative dit encore « plus large (25) » (la table dit 24)",
+   "le tableau « après le GP borné » garde labels 145→146, couverture 0,6067→0,6109, F1 0,2864→0,2869 et top1/top-k/exact 115/132/33 (historiques) alors que la note affirme qu'il donne le courant 145/0,6067/0,2862 et 126/134/123"
+  ],
+  "reference_du_constat": "blob committé 13e8bb2d (git show), pas le worktree",
+  "aucune_modification_de_ma_part": True
+ },
+ "ambiguites_non_comptees": [
+  {"fiche": "verbe-gv", "champ": "« 23/239 restent faux »", "explication": "23 est le rés
+… [2117 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": " \"concurrence\": {\n  \"constat\": \"Pendant/après la vérification, deux vagues : (1) édition de la fiche spans vers 13:43-13:54 ; (2) intégration v2 stagée à 14:11. Je n'ai touché à aucun de ces fichiers.\",\n  \"fichiers\": [\n   {\"fichi … [3872 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"Les 15 portes ciblées et la suite complète ont été exécutées à HEAD avant la v2 (177/177), pas les 177 portes à chaque commit.\",\n  \"La v2 stagée à 14:11 (180 portes, convention SUB au POS gold, 116/29, exact 137/145) n'a pas été exécu … [278 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"Les 15 portes ciblées et la suite complète ont été exécutées à HEAD avant la v2 (177/177), pas les 177 portes à chaque commit.\",\n  \"La v2 stagée à 14:11 (180 portes, convention SUB au POS gold, 116/29, exact 137/145) n'a pas été exécu … [290 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n -A12 '\"limites\": \\[' /tmp/gen_coherence_json.py | tail -15", "description": "Read JSON limites block"}`
+
+  ```
+379: "limites": [
+380-  "Les 7 fiches historiques n'ont pas été rejouées en exécutant leur code d'époque : valeurs lues dans la fiche, le JSON et git show <commit>:tools/pensee/autotest.py.",
+381-  "Un audit parallèle (A1, non committé) a rejoué 4 commits et trouve les mêmes valeurs ; cité comme corroboration, pas source primaire.",
+382-  "Les 15 portes ciblées et la suite complète ont été exécutées à HEAD avant la v2 (177/177), pas les 177 portes à chaque commit.",
+383-  "La v2 stagée à 14:11 (180 portes, convention SUB au POS gold, 116/29, exact 137/145) n'a pas été exécutée ni rejouée ; ses valeurs sont celles de sa fiche/JSON. Elle peut être committée après ce rapport ; le § 3 est daté 13:54 (pré-v2).",
+384-  "La v2 stagée à 14:11 (180 portes, convention SUB au POS gold, 116/29, exact 137/145) n'a pas été exécutée ni rejouée ; ses valeurs sont celles de sa fiche/JSON. Elle peut être committée après ce rapport ; le § 3 est daté 13:54 (pré-v2).",
+385-  "Les docstrings de T162/T163/T166/T167/T168 sont périmés ; les assertions sont la référence.",
+386-  "docs/implantation/moteur-de-pensee.md (12 GP) et reports/README.md (titres) ne sont pas dans le périmètre ; la roadmap est à jour
+… [357 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"La v2 stagée à 14:11 (180 portes, convention SUB au POS gold, 116/29, exact 137/145) n'a pas été exécutée ni rejouée ; ses valeurs sont celles de sa fiche/JSON. Elle peut être committée après ce rapport ; le § 3 est daté 13:54 (pré-v2).\ … [1401 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/gen_coherence_json.py", "new_string": "  \"corroboration_externe\": [\"reports/pensee-audit-attachement.json\", \"reports/rapport-audit-attachement.md\"],\n  \"v2_concurrente\": [\"reports/rapport-pensee-attachement-v2.md\", \"reports/pensee-attachement-v2.json\"]", "old_string": … [118 caractères tronqués]`
+
+  ```
+The file /tmp/gen_coherence_json.py has been updated successfully.
+  ```
+

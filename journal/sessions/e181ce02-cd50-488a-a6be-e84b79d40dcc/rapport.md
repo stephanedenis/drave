@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 117.7 h |
 | Tours | 176 |
-| Messages | 2430 |
-| Appels d'outils | 2127 |
+| Messages | 2433 |
+| Appels d'outils | 2134 |
 | Fichiers touchés | 25 |
-| Commandes | 1753 |
-| Sous-agents | 9 |
-| Commits | 254 |
+| Commandes | 1755 |
+| Sous-agents | 13 |
+| Commits | 255 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*84 appels d'outils.* Actions notables :
+*91 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 64 autres
+- … et 69 autres
 
 **Synthèse produite :**
 
-⏵ J'intègre les fiches A5 (contrat S), A6 (coût) et A4 (cohérence)
+⏵ Vague 3 : quatre sous-agents (audit v2, 8 échecs, cible vide, cache du chunker)
 
 ## 3. Travail accompli
 
@@ -9503,6 +9503,10 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - tour 176 — Contrat S pour les REL/SUB
 - tour 176 — Coût et cache du chunker
 - tour 176 — Annotation indépendante d'un échantillon
+- tour 176 — Audit de l'attachement v2
+- tour 176 — Qualifier les 8 échecs restants
+- tour 176 — Prototype de la cible vide
+- tour 176 — Cache du chunker mesuré
 
 ### Commandes exécutées (échantillon)
 
@@ -9546,7 +9550,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1713 autres
+- … et 1715 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9948,4 +9952,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180" -- tools/bloc_li
 - B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES" -- reports/rapport-contrat-s.md reports/pensee-contrat-s
 - B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES" -- reports/rapport-contrat-s.md reports/pensee-contrat-s
+- ÉTAT — B13 180/180, T0 DANS LE BUDGET ; VAGUE 3 LANCÉE (AUDIT V2, ÉCHECS, REPLIS, CACHE)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='
 

@@ -1896,3 +1896,143 @@ e1171032 PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER
 … [737 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Mise à jour de la référence de commit : l'instantané mesuré est désormais `9d5337ce`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-cout-chunker.md'); s=p.read_text(encoding='utf-8')\ns=s.replace(\"`e1171032` (branche `s/v7`, arbre de travail modifié) · **Verdict**\", \"`9d5337ce` (branche `s … [2730 caractères tronqués]`
+
+  ```
+ok
+JSON_VALIDE
+reports/rapport-cout-chunker.md:5:> `9d5337ce` (branche `s/v7` ; le fichier mesuré y est committé ; il était encore modifié dans l'arbre au moment du banc) · **Verdict** : ✅ **le O(n²) est
+reports/rapport-cout-chunker.md:53:- **Instantané** : `tools/bloc_linguistique.py` sha256 `6e843018…`, commit `9d5337ce`, branche
+reports/rapport-cout-chunker.md:55:  l'arbre, au-dessus de `e1171032` (règles d'attachement récentes, dont `_tete_texte` et
+reports/rapport-cout-chunker.md:359:  `6e8430…`) puis a été committé dans `9d5337ce` ; les mesures portent sur `6e8430…`, qui est
+reports/pensee-cout-chunker.json:10:  "commit": "9d5337ce",
+reports/pensee-cout-chunker.json:13:  "note": "le fichier mesuré est committé dans 9d5337ce (il était encore modifié dans l'arbre, au-dessus de e1171032, au moment du banc) ; toutes les mesures et tous les numéros de ligne portent sur ce sha256, revérifié identique après le banc et identique au contenu de HEAD.",
+reports/pensee-cout-chunker.json:14:  "commit_au_moment_du_banc": "e1171032"
+reports/pensee-cout-chunker.json:896:  "Instantané de travail : tools/bloc_linguistique.py était modifié (sha256 6e8430…, commit e1171032) et a changé pendant l
+… [173 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-cout-chunker.json'); d=json.loads(p.read_text(encoding='utf-8'))\nfor i,l in enumerate(d['limites']):\n    if l.startswith('Instantané de travail'):\n        d['l … [630 caractères tronqués]`
+
+  ```
+ok
+JSON_VALIDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && git log --oneline -2 && git status --short reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json tools/bloc_linguistique.py && git diff --cached --stat -- reports/rapport-cout-chunke … [90 caractères tronqués]`
+
+  ```
+6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65  tools/bloc_linguistique.py
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+e1171032 PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9
+AM reports/pensee-cout-chunker.json
+AM reports/rapport-cout-chunker.md
+ reports/pensee-cout-chunker.json | 900 +++++++++++++++++++++++++++++++++++++++
+ reports/rapport-cout-chunker.md  | 389 +++++++++++++++++
+ 2 files changed, 1289 insertions(+)
+  ```
+
+### 🤖 Assistant
+
+⏵ Indexation explicite des deux livrables (sans commit) pour éviter une version périmée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -- reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json && git status --short reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json tools/bloc_linguistique.py && git log --oneline -1", "description": "S … [44 caractères tronqués]`
+
+  ```
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[exit code: 128]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2 && git status --short reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json tools/bloc_linguistique.py 2>&1; echo '---'; git log --oneline -2 2>&1; echo '---'; sha256sum tools/bloc_linguistique.py", "description":  … [33 caractères tronqués]`
+
+  ```
+AM reports/pensee-cout-chunker.json
+AM reports/rapport-cout-chunker.md
+---
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+e1171032 PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9
+---
+6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65  tools/bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -- reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json 2>&1 && git status --short reports/rapport-cout-chunker.md reports/pensee-cout-chunker.json", "description": "Retry staging final report versions"}`
+
+  ```
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[exit code: 128]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,70p' reports/rapport-cout-chunker.md && echo '--- fin ---' && tail -20 reports/rapport-cout-chunker.md", "description": "Final read of header and conclusion"}`
+
+  ```
+# Coût des règles d'attachement du chunker — O(n²) réel, cache ×12 à 160 tokens
+
+> **Date** : 2026-11-05 · **Instantané** : [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py)
+> sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65`, commit
+> `9d5337ce` (branche `s/v7` ; le fichier mesuré y est committé ; il était encore modifié dans l'arbre au moment du banc) · **Verdict** : ✅ **le O(n²) est
+> confirmé** ; le cache « un chunking + un verbe de GV par analyse » divise le temps par
+> **11,6 à 160 tokens** et **16,9 à 320** sur le chemin chunker seul, par **2,0 / 2,4** sur le
+> chemin par défaut ; **mais** il ne rend pas la complexité strictement linéaire (le tri des GV
+> par segment reste) et il ne gagne presque rien sur le corpus court.
+>
+> **Dispositif** : banc hors dépôt (`/tmp/bench_final.py`, sha256 `6c823a1f…`), 612 phrases de
+> [`evaluer_gold.charger()`](../tools/tests/linguistique/evaluer_gold.py), phrases synthétiques
+> de 20 à 1 280 tokens, variantes V1/V2/OFF ; JSON
+> [`pensee-cout-chunker.json`](pensee-cout-chunker.json). Contexte : la fiche
+> [`rapport-bloc-linguistique.md`](rapport-bloc-linguistique.md) décrit le bloc, pas son coût.
+
+## 1. C
+… [4783 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-cout-chunker.md'); s=p.read_text(encoding='utf-8')\ns=s.replace(\"> `9d5337ce` (branche `s/v7` ; le fichier mesuré y est committé ; il était encore modifié dans l'arbr … [930 caractères tronqués]`
+
+  ```
+ok
+# Coût des règles d'attachement du chunker — O(n²) réel, cache ×12 à 160 tokens
+
+> **Date** : 2026-11-05 · **Instantané** : [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py)
+> sha256 `6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65`, commit
+> `9d5337ce` (branche `s/v7` ; le fichier mesuré y est committé ; il était encore modifié
+> dans l'arbre au moment du banc) · **Verdict** : ✅ **le O(n²) est confirmé** ; le cache « un chunking + un verbe de GV par analyse » divise le temps par
+> **11,6 à 160 tokens** et **16,9 à 320** sur le chemin chunker seul, par **2,0 / 2,4** sur le
+> chemin par défaut ; **mais** il ne rend pas la complexité strictement linéaire (le tri des GV
+> par segment reste) et il ne gagne presque rien sur le corpus court.
+>
+> **Dispositif** : banc hors dépôt (`/tmp/bench_final.py`, sha256 `6c823a1f…`), 612 phrases de
+> [`evaluer_gold.charger()`](../tools/tests/linguistique/evaluer_gold.py), phrases synthétiques
+  10/10) et ne crée aucun état d'instance. C'est le premier pas à appliquer.
+- **Ne pas promettre la linéarité ni un gain corpus.** Le tri `sorted(gvs)` par segment reste
+  et maintient une pente 1,44-1,55 au-delà de 320 tokens ;
+… [456 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nbase=pathlib.Path('tools/tests/linguistique')\nfor f in ('gold.json','gold_reel.json','gold_synthetique.json'):\n    d=json.loads((base/f).read_text(encoding='utf-8'))\n    ph=d.get('phrases',[ … [320 caractères tronqués]`
+
+  ```
+gold.json 20 14 6
+gold_reel.json 432 228 204
+gold_synthetique.json 160 160 0
+3663be6cea2f22e2 tools/tests/linguistique/gold.json
+05d4f6dfae67dc72 tools/tests/linguistique/gold_reel.json
+e3e704ce9cb599db tools/tests/linguistique/gold_synthetique.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-cout-chunker.md'); s=p.read_text(encoding='utf-8')\ns=s.replace('**Le gain corpus est donc faible et non monotone**', '**Le gain corpus est donc faible et variable**') … [275 caractères tronqués]`
+
+  ```
+ok
+JSON_VALIDE
+ M reports/pensee-cout-chunker.json
+ M reports/rapport-cout-chunker.md
+  ```
+

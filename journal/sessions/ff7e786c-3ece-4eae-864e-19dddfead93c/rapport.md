@@ -9,10 +9,10 @@
 | Début | 2026-11-05 13:11 |
 | Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 106 |
-| Appels d'outils | 129 |
+| Messages | 121 |
+| Appels d'outils | 144 |
 | Fichiers touchés | 2 |
-| Commandes | 85 |
+| Commandes | 89 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **vérifier … [1881 caractères tronqués]
 
-*129 appels d'outils.* Actions notables :
+*144 appels d'outils.* Actions notables :
 
 - bash — Check branch and list reports
 - glob
@@ -41,11 +41,11 @@
 - bash — Read gates T153-T169 bodies
 - bash — Read gates T172-T174 bodies
 - bash — Locate metrics in evaluer_gold.py
-- … et 100 autres
+- … et 115 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de la fiche : la v2 stagée change les portes et la convention (périmètre daté)
+⏵ Régénération du JSON avec la v2 concurrente et validation
 
 ## 3. Travail accompli
 
@@ -53,8 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md` | 1 | 18 |
-| `/tmp/gen_coherence_json.py` | 0 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches.md` | 1 | 20 |
+| `/tmp/gen_coherence_json.py` | 0 | 16 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +98,7 @@
 - **T1** Find tete values in session log
 - **T1** Verify gold size and target count
 - **T1** Run full autotest suite
-- … et 45 autres
+- … et 49 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -111,6 +111,7 @@
 - **T1** `l'égalité n'est exacte qu'avec 0,7255 (37/51) : (51 × 0,7255 + 95 × 0,60) / 146 = 0,6438.`
 - **T1** `- **La mesure globale cachait l'écart** : 0,6438 = moyenne pondérée (51 × 0,73 + 95 × 0,60).`
 - **T1** `(rang 0, ordre gauche→droite→dedans) donne **139/145** (+2). Conclusion : **ne pas intégrer**`
+- **T1** `{"fiche": "conventions", "champ": "« 0,6438 = 51 × 0,73 + 95 × 0,60 »", "explication": "0,6454 avec 0,73 ; l'égalité exacte utilise 0,7255."},`
 
 ## 5. Erreurs rencontrées
 

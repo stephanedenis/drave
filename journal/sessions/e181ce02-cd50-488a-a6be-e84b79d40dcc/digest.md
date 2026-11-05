@@ -41947,3 +41947,58 @@ jeu 05 nov 2026 14:19:10 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **180/180** ; attachement **exact spans 0,9448**, **top-k strict 0,9724** ; 3 sous-agents intégrés ; m … [1769 caractères tronqués]`
+
+  ```
+état mis à jour
+     · T0 : 4016 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-964]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-964", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-contrat-s.md
+ create mode 100644 reports/rapport-cout-chunker.md
+COMMIT OK 1
+2e08cbc7 B13 — LA VAGUE 1 COMPLÈTE : CONTRAT S, COÛT DU CHUNKER, COHÉRENCE DES FICHES ; 3 DIVERGENCES CORRIGÉES
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 3 : quatre sous-agents (audit v2, 8 échecs, cible vide, cache du chunker)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **vague 1 complète** (7 sous-agents : audit 14/14, top-k +45, annotation 20/20, classement rejeté, contrat S, coût O(n²) … [296 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **subagent** `{"description": "Audit de l'attachement v2", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer l'attachement v2** (l'intégration du 2026-11-05 14 h) et vérifier que ses chiffres et ses portes sont justes.\n\nContexte :  … [1875 caractères tronqués]`
+- **subagent** `{"description": "Qualifier les 8 échecs restants", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **qualifier et chiffrer les 8 échecs restants** de l'attachement (état v2 du 2026-11-05).\n\nContexte : `tools/bloc_linguistique … [1456 caractères tronqués]`
+- **subagent** `{"description": "Prototype de la cible vide", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le **repli « cible vide »** de l'attachement et deux autres retouches déterministes, sans modifier le code du dépôt.\n\nConte … [1645 caractères tronqués]`
+- **subagent** `{"description": "Cache du chunker mesuré", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **valider le cache du chunker** proposé par la fiche `reports/rapport-cout-chunker.md` (O(n²) confirmé, cache ×11,6 à 160 tokens) — sans … [1498 caractères tronqués]`
+
+  ```
+started subagent 3f8f2bb8-781b-44a6-9e14-58025004b6fc
+  ```
+
+
+  ```
+started subagent 7263ca42-cd56-4c36-a6dd-8ff2d1024a43
+  ```
+
+
+  ```
+started subagent d300542e-6e9d-47ac-875b-b44a192eec35
+  ```
+
+
+  ```
+started subagent 1b0cf09a-a77a-443d-82e2-68a5d6cacdf0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **vague 1 intégrée** (7 sous-agents) ; 3 divergences de fiches corrigées.\",\n            \" ; vague 1 intégrée (7 sous- … [580 caractères tronqués]`
