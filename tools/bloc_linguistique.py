@@ -935,7 +935,9 @@ class Heuristique:
         # 5. syntagmes : le générateur S (candidats) ou un chunker simple
         verbes = [(e.debut, e.fin, e.valeur) for e in etiquettes
                   if e.niveau == "pos" and e.type == "VERB"]
-        cands = self._syntagmes_s(texte)
+        # le générateur S est **français** : il ne segmente pas l'anglais (A14) — on ne
+        # l'interroge que pour le français, sinon ses segments polluent l'union.
+        cands = self._syntagmes_s(texte) if (langue or lg) == "fr" else []
         cibles_s = self._cibles_s(texte) if cands else {}
         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
         # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
@@ -952,7 +954,9 @@ class Heuristique:
                     # la cible de S **convertie en son verbe** : « Les enfants jouent » →
                     # `jouent` (le gold attend le verbe, pas le GN) ; à défaut, le GV le plus
                     # proche. Mesuré : 82 cibles justes dans les candidats, 33 choisies avant.
-                    brute = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
+                    # le générateur S est **français** : ses cibles ne valent rien pour l'anglais
+                    brute = (cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
+                             if lg == "fr" else None)
                     cible = None
                     if s.get("type") in ("REL", "SUB"):
                         # REL/SUB : c'est le **segment précédent** qui tranche — après un GV

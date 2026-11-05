@@ -2,17 +2,17 @@
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **183/183 portes** : le diagnostic de A12/A14 était juste — le trou n'était pas l'attachement mais le
-> **découpage**. Six corrections générales du chunker font passer la **F1 syntagmes de 0,2862 à
-> 0,4194**, la **tête de 0,4989 à 0,5930**, et la **couverture de 145 à 160 labels** (sur 239) ;
-> l'attachement suit : **exact 158/160 = 0,9875**, **top-k 158/239**, par langue **fr 0,9915**
-> (117/118) et **en 0,9762** (41/42) — l'anglais passe de **28 à 42 labels**.
+> **découpage**. Sept corrections générales font passer la **F1 syntagmes de 0,2862 à 0,4539**
+> (union ; S 0,4285, chunker 0,4143), la **tête de 0,4989 à 0,6432**, et la **couverture de 145 à
+> 160 labels** (sur 239) ; l'attachement suit : **exact 157/160 = 0,9812**, **top-k 156/239**,
+> par langue **fr 0,9915** (117/118) et **en 0,9524** (40/42) — l'anglais passe de **28 à 42 labels**.
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_syntagmes_simple`,
 > `_verbe_dans`, `_cible_hors_span`), [`autotest.py`](../tools/pensee/autotest.py) (38 assertions
 > recalées) ; fiches amont [spans](rapport-spans-chunker.md) (A12), [gold anglais](rapport-gold-anglais.md)
 > (A14) ; JSON [`pensee-segmentation-v4.json`](pensee-segmentation-v4.json).
 
-## 1. Les six corrections
+## 1. Les sept corrections
 
 | # | correction | effet mesuré |
 |---|---|---|
@@ -22,29 +22,30 @@
 | 4 | **GP préposition + infinitif** (« à manger », « to eat ») | répare g012/r018 |
 | 5 | **`_cible_hors_span` partout** (union et chunker, GP **et** SUB) | exact 144 → 152, anglais 30 → 38 |
 | 6 | **`_verbe_dans` ne rend plus un auxiliaire** ; lexique de verbes communs (`go`, `cry`, `read`, `sleep`…, `rêver`, `sauter`, `marcher`) | exact 152 → 158 |
+| 7 | **S ne segmente que le français** (langue déclarée) : ses segments anglais polluaient l'union | F1 0,4194 → **0,4539**, tête 0,5930 → **0,6432** |
 
 ## 2. Les mesures (avant / après)
 
 | mesure | avant (v3) | **après (v4)** |
 |---|---:|---:|
-| F1 syntagmes | 0,2862 | **0,4194** |
-| F1 tête | 0,4989 | **0,5930** |
+| F1 syntagmes (union) | 0,2862 | **0,4539** |
+| F1 tête | 0,4989 | **0,6432** |
 | labels au bon span | 145 | **160** |
-| **exact / labels** | 141/145 (**0,9724**) | **158/160 (0,9875)** |
-| top-k (sous-chaîne) | 142/239 | **158/239 (0,6611)** |
+| **exact / labels** | 141/145 (**0,9724**) | **157/160 (0,9812)** |
+| top-k (sous-chaîne) | 142/239 | **156/239 (0,6527)** |
 | couverture (labels / cibles) | 145/239 (0,6067) | **160/239 (0,6695)** |
 | français (exact / spans) | 113/117 (0,9658) | **117/118 (0,9915)** |
-| anglais (exact / spans) | 28/28 (1,000) | **41/42 (0,9762)** |
+| anglais (exact / spans) | 28/28 (1,000) | **40/42 (0,9524)** |
 | spans perdus | 94 (48 REL, 33 SUB, 13 GP) | **79 (48 REL, 21 SUB, 10 GP)** |
-| échecs de cible | 4 | **2** (r162, r309) |
+| échecs de cible | 4 | **3 hors candidats** (r162, r309, r194) |
 
 **Ce que ça dit** :
 
 - **Les 15 labels gagnés** viennent du découpage (REL/SUB anglais et français), pas d'un lexique.
 - **L'anglais rattrape** : 28 → 42 labels, et l'exact tient (41/42).
 - **Le rendement global monte** (0,6067 → 0,6695) sans perdre l'exactitude (0,9724 → 0,9875).
-- **Les deux échecs restants** : `r162` (GP « on the wall » attaché au nom à gauche) et `r309`
-  (pseudo-GV `Peut-être` du générateur S).
+- **Les échecs restants** : `r162` (GP « on the wall », attaché au nom à gauche), `r309`
+  (pseudo-GV `Peut-être`), `r194` (GP) — 3 hors candidats, 0 mal classé.
 
 ## 3. Ce que ce banc ne dit pas
 

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-05, 17 h 25 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-05, 18 h 00 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,7 +68,7 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **segmentation** F1 **0,4194**, attachement **exact 158/160 (0,9875)**, couverture **160/239**, fr 0,9915 / en 0,9762 ; **2 échecs**, 79 spans.
+- **Fait** : B13 **183/183** ; **segmentation** F1 **0,4539**, tête 0,6432, attachement **exact 157/160 (0,9812)**, couverture **160/239**, fr 0,9915 / en 0,9524 ; 3 échecs, 79 spans.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.

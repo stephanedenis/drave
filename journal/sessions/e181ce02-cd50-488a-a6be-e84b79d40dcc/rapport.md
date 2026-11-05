@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 120.8 h |
+| Durée | 121.2 h |
 | Tours | 177 |
-| Messages | 2591 |
-| Appels d'outils | 2270 |
+| Messages | 2603 |
+| Appels d'outils | 2282 |
 | Fichiers touchés | 25 |
-| Commandes | 1867 |
+| Commandes | 1878 |
 | Sous-agents | 16 |
-| Commits | 275 |
+| Commits | 276 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*29 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 15 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
-⏵ Round majeur : exact **158/160**, F1 **0,4194**, couverture **160/239**. Je fige la fiche v4 et je commite
+⏵ 183/183. Je mets la fiche v4 à jour avec l'état final (S français seul inclus) et je commite
 
 ## 3. Travail accompli
 
@@ -9613,7 +9613,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1827 autres
+- … et 1838 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10036,4 +10036,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — TRIM T0 (3 997) ; B13 183/183" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRIM T0"; then echo "COMMIT OK $i"; b
 - ÉTAT — T0 À 4 000 ; LE PROTOTYPE DES REPLIS (A10) ENTRE AVEC SON STATUT « NON INTÉGRÉ »" -- docs/pilotage/en-cours.md tools/tests/linguistique/replis_cible.py 2
 - B13 — LA SEGMENTATION D'ABORD : F1 0,2862 → 0,4194, EXACT 158/160 (0,9875), COUVERTURE 160/239, FR 0,9915 / EN 0,9762 ; 183/183" -- tools/bloc_linguistique.py t
+- B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183" -- tools/bloc_linguistique.py tools/pens
 
