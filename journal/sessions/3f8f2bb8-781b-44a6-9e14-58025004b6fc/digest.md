@@ -2416,3 +2416,334 @@ index f4331ec6..17c522e2 100644
 … [5207 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Updating the report for the v3 integration that landed after the v2 measurements.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-audit-v2.md'); s=p.read_text()\nrepls=[]\nrepls.append((\n\"\"\"> blob ; **aucun fichier existant n'a été modifié, aucun commit**. HEAD a bougé pendant\n> l'audit (de  … [7410 caractères tronqués]`
+
+  ```
+md patched, len 20306
+json patched
+JSON valide
+17:> une intégration v3 (`dcf7bc91`, 15:18) a atterri** : elle change les valeurs (exact 141/145,
+44:  revendiquées. Le registre v2 a **180** portes. **Depuis, v3 `dcf7bc91` a réécrit la plupart
+46:  **181** portes ; le run complet au moment de l'audit (avant v3) donnait **181/181**, et le
+47:  commit v3 annonce 181/181 avec ses valeurs — hors périmètre. Huit docstrings sont périmées
+201:après), run complet **181/181** en 5 min 17 s **au moment de l'audit (avant v3)**. La mention
+205:**Depuis, v3 `dcf7bc91` (15:18) a réécrit les assertions** : T153 0,5983/0,59 ; T161 top1 143,
+209:comparée aux portes du HEAD** : les mêmes numéros de porte y attendent les valeurs v3.
+280:  mémoïsation (`bb020516…` contre `6e843018…` au v2) : mêmes chiffres. **Puis v3 `dcf7bc91` a
+282:  Les chiffres v2 de cette fiche sont donc **historiques** ; v3 est hors périmètre et ne doit
+296:  **n'audite pas v3** (`dcf7bc91`), arrivé après les mesures.
+315:- [`rapport-pensee-attachement-v3.md`](rapport-pensee-attachement-v3.md) — l'état suivant,
+  ```
+
+### 🤖 Assistant
+
+⏵ Tightening the JSON concurrency fields so “HEAD” cannot be read as v3.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-v2.json'); d=json.loads(p.read_text())\nprint(json.dumps(d['dispositif'],ensure_ascii=False,indent=1)[:2000])\nprint('--- portes total ---')\nprint(json.dum … [189 caractères tronqués]`
+
+  ```
+{
+ "branche": "s/v7",
+ "commit_v2": "9d5337ce1c23c4d70f51490d2fcdfa2c390e3faa",
+ "commit_v2_date": "2026-11-05 14:14:38 -0500",
+ "commit_v2_sujet": "B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180",
+ "head_audit": "15ee10d3cd54dcdf3419144d23445765c8910ba2",
+ "head_audit_date": "2026-11-05 14:55:27 -0500",
+ "head_a_bouge_pendant_audit": "de de292c7d a 15ee10d3 (commits concurrents : cache, T178, fiches, pilotage) ; les fichiers mesures sont propres au HEAD final",
+ "sha256_bloc_v2": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65",
+ "sha256_bloc_head": "bb0205165cc2b0f880f3df26c65ab56349c77301a7d9325025b35c28e145eb44",
+ "sha256_evaluer_gold": "c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599",
+ "sha256_gold": {
+  "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+  "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+  "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+ },
+ "appel": "sys.path.insert(0,'.'); import tools.bloc_linguistique as bl; from tool
+… [978 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-v2.json'); d=json.loads(p.read_text())\nd['dispositif']['head_a_bouge_pendant_audit']=\"de de292c7d a 15ee10d3 pendant les mesures v2 (commits concurrents : … [1091 caractères tronqués]`
+
+  ```
+patched
+JSON valide
+de de292c7d a 15ee10d3 pendant les mesures v2 (commits concurrents : cache, T178, fiches, pilotage) ; puis v3 dcf7bc91 apres les mesures. Les mesures v2 sont sur le blob 9d5337ce.
+nge les valeurs. Les ablations ont ete faites sur des copies /tmp du blob v2, jamais sur le fichier du depot. v3 (dcf7bc91) est arrive apres les mesures et n'est pas melange au v2.
+T178 (cache chunker) ajoutee apres le v2 ; run complet au moment de l'audit (avant v3) : 181/181 en 5 min 17 s. v3 dcf7bc91 (15:18) conserve 181 portes mais reecrit les assertions.
+  ```
+
+### 🤖 Assistant
+
+⏵ Final consistency pass: links, JSON, and HEAD/v3 wording.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, re, pathlib\nmd=pathlib.Path('reports/rapport-audit-v2.md').read_text()\nlinks=re.findall(r'\\[[^\\]]+\\]\\(([^)]+)\\)', md)\nbad=[]\nfor l in links:\n    if l.startswith('http') or l.startswith('#'): c … [739 caractères tronqués]`
+
+  ```
+links 14 bad []
+json keys 16 comparison 43
+v3 fields: dcf7bc912caeebe940793888d88723f0bbb57f58 9da6dee7118c v3 (dcf7bc91, 15:18) a reecrit les assertions : T153 0,5983/0,59 ; T161 top1 143
+resume:  donne 116/29 (97/116 et 26/29). Huit docstrings de portes sont perimees, dont T168 qui imprime encore /146. v3 (dcf7bc91) est arrive apres les mesures : les chiffres v2 sont historiques, les portes du HEAD attendent v3.
+--- HEAD mentions in MD ---
+14:> blob ; **aucun fichier existant n'a été modifié, aucun commit**. HEAD a bougé pendant
+45:  de ces assertions** (exact 141, top1 143, noms 29/29, strict 142, T172 2/2) et le HEAD a
+200:**Portes au total** : **180** au commit v2 ; **181** au HEAD (T178, cache du chunker, ajoutée
+202:« 180/180 » de la fiche est donc un **instantané daté** : juste au commit v2, périmée au HEAD.
+209:comparée aux portes du HEAD** : les mêmes numéros de porte y attendent les valeurs v3.
+279:- **Le HEAD a bougé** (de `de292c7d` à `15ee10d3`) et le bloc v2-compatible a reçu une
+305:  `6e843018…`, le HEAD `bb020516…` (mémoïsation seule).
+--- file status ---
+?? reports/pensee-audit-v2.json
+?? reports/rapport-audit-v2.md
+  316 reports/rapport-audit-v2.md
+ 1003 reports
+… [33 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing the last stale “HEAD = memoization” line in the files section.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-audit-v2.md'); s=p.read_text()\nold=\"\"\"- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — le bloc ; le blob v2 est\n  `6e843018…`, le HEAD `bb020516…` (mém … [517 caractères tronqués]`
+
+  ```
+patched
+- [`pensee-audit-v2.json`](pensee-audit-v2.json) — les 43 comparaisons, la décomposition, les
+  contrôles et le détail des portes.
+- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — le bloc ; le blob v2 mesuré est
+  `6e843018…`. Le HEAD v2-compatible était `bb020516…` (mémoïsation seule) ; le HEAD v3
+  actuel est `9da6dee7…` (hors périmètre).
+- [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) — `charger()`,
+  `evaluer_bloc`.
+JSON valide
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v2.json'))\ndef walk(o,path=''):\n    if isinstance(o,dict):\n        for k,v in o.items(): yield from walk(v,path+'/'+k)\n    elif isinstance(o,list):\n        fo … [249 caractères tronqués]`
+
+  ```
+/verdict/resume : Toutes les mesures revendiquees reproduisent ; les deux seuls ecarts sont des arrondis de la fiche (p 0,18 et IC [-0,7 ; +7,6]), et les 14 valeurs de l'audit A1 (T175) sont intactes. Une erreur de prose : 46 des 57 echecs doit se lire 45 (l
+/dispositif/methode : Le blob exact du commit v2 (git show 9d5337ce:tools/bloc_linguistique.py) a ete charge depuis /tmp avec RACINE force a la racine du depot (indispensable pour que l'import de generateur, dans tools/structures, resolve). Le HEAD au moment des
+/portes/non_couverts[3] : le compte 180/180 : la liste des portes est imprimee, pas assertee ; le HEAD est a 181/181
+/limites[6] : Le HEAD a bouge pendant l'audit (de292c7d -> 15ee10d3) et le bloc courant a recu une memoisation (sha256 bb020516... contre 6e843018... au v2) : les valeurs sont identiques, verifie sur le blob v2 exact et sur le HEAD.
+/limites[10] : v3 (dcf7bc91, 15:18) est arrive apres les mesures v2 : exact 141/145, top1 143, noms 29/29, strict 142 ; il reecrit les assertions des memes portes. Les chiffres v2 de cette fiche sont historiques et ne doivent pas etre compares aux portes
+  ```
+
+### 🤖 Assistant
+
+⏵ Removing the last stale claim that the current HEAD is v2-equivalent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-v2.json'); d=json.loads(p.read_text())\nold=\"Le HEAD a bouge pendant l'audit (de292c7d -> 15ee10d3) et le bloc courant a recu une memoisation (sha256 bb020 … [1061 caractères tronqués]`
+
+  ```
+patched
+JSON valide
+Le HEAD a bouge pendant l'audit (de292c7d -> 15ee10d3) et le bloc v2-compatible a recu une memoisation (sha256 bb020516... contre 6e843018... au v2) : les valeurs v2 sont identiques, verifie sur le blob v2 exact et sur ce HEAD v2-compatible. Puis v3 (dcf7bc91) est arrive apres les mesures et change les valeurs ; voir la limite suivante.
+le compte 180/180 : la liste des portes est imprimee, pas assertee ; le HEAD v3 est a 181/181 (valeurs v3)
+  ```
+
+### 🤖 Assistant
+
+⏵ Final numeric cross-check between the JSON and the raw measurements.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, importlib.util, pathlib\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nd=json.load(open('reports/pensee-audit-v2.json'))\nspec=importlib.util.spec … [1733 caractères tronqués]`
+
+  ```
+OK  cibles 239 239
+OK  labels 145 145
+OK  top1 140 140
+OK  topk 142 142
+OK  exact 137 137
+OK  strict 141 141
+OK  top1_span 0.9655 0.9655
+OK  topk_span 0.9793 0.9793
+OK  exact_span 0.9448 0.9448
+OK  strict_span 0.9724 0.9724
+OK  verbe 111/116 111/116
+OK  nom 26/29 26/29
+raw variants {"bloc_v2": {"top1": 140, "topk": 142, "exact": 137, "strict": 141}, "v2_sans_tetes": {"top1": 140, "topk": 142, "exact": 137, "strict": 96}, "v2_sans_lexique": {"top1": 132, "topk": 134, "exact": 129, "strict": 133}, "v2_sans_segment": {"top1": 134, "topk": 142, "exact": 131, "strict": 141}, "v2_sans_genre": {"top1": 140, "topk": 142, "exact": 137, "strict": 141}}
+json variants {"avant_a408a909": {"top1": 126, "topk": 134, "exact": 123, "strict": 88}, "avant_plus_tetes": {"top1": 126, "topk": 134, "exact": 123, "strict": 133}, "avant_plus_tetes_plus_lexique": {"top1": 134, "topk": 142, "exact": 131, "strict": 141}, "v2": {"top1": 140, "topk": 142, "exact": 137, "strict": 141}, "v2_sans_tetes": {"top1": 140, "topk": 142, "exact": 137, "strict": 96}, "v2_sans_lexique": {"top1": 132, "topk": 134, "exact": 129, "strict": 133}, "v2_sans_segment": {"top1": 134, "topk": 142, "exact": 131, "strict": 141}, "v2_s
+… [70 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirming the v3 numbers cited in the concurrency note against the v3 fiche.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,30p' reports/rapport-pensee-attachement-v3.md 2>/dev/null && echo '--- v3 json ---' && python3 - <<'PY'\nimport json\ntry:\n d=json.load(open('reports/pensee-attachement-v3.json'))\n print(json.dumps({k:d[k] for k in d if k … [200 caractères tronqués]`
+
+  ```
+# B13 — l'attachement v3 : exact 0,9448 → 0,9724, les noms à 1,0
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **181/181 portes** : trois règles **générales** issues du diagnostic des 8 échecs (A9) sont
+> intégrées — **R2** (un GP n'est pas gouverné par un mot de son span), **R3** (cible vide :
+> génitif → tête du GN à gauche), **R4** (enclitique `appelle-moi` → `appelle`). Sur les 145
+> segments au bon span : **exact 137 → 141 (0,9724)**, top1 **140 → 143 (0,9862)**, top-k 142
+> (0,9793), **top-k strict 142 (0,9793)** ; les **cibles noms atteignent 29/29 = 1,0**.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_cible_hors_span`,
+> `_repli_cible_gp`, `_sans_enclitique`), [`autotest.py`](../tools/pensee/autotest.py) ;
+> fiche A9 [échecs v2](rapport-echecs-v2.md) ; JSON [`pensee-attachement-v3.json`](pensee-attachement-v3.json).
+
+## 1. Avant / après (145 segments au bon span)
+
+| mesure | v2 | **v3** | écart |
+|---|---:|---:|---:|
+| top1 | 140 (0,9655) | **143 (0,9862)** | +3 |
+| top-k | 142 (0,9793) | 142 (0,9793) | 0 |
+| **exact** | **137 (0,9448)** | **141 (0,9724)** | **+4** |
+| top-k strict
+… [645 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Final read of the JSON verdict and gate blocks before reporting.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v2.json'))\nprint(json.dumps(d['verdict'],ensure_ascii=False,indent=1))\nprint('--- portes summary ---')\nprint(json.dumps({k:d['portes'][k] for k in ('total_commi … [401 caractères tronqués]`
+
+  ```
+{
+ "statut": "chiffres reproduits ; reserves documentaires",
+ "valeurs_comparees": 43,
+ "valeurs_reproduites": 43,
+ "ecarts_mesure": 0,
+ "ecarts_arrondi": 2,
+ "detail_arrondi": "p 0,18 (0,179688) et IC [-0,7 ; +7,6] ([-0,69 ; +7,59]) : arrondis de la fiche, pas des erreurs",
+ "erreurs_de_prose": 1,
+ "erreurs_de_table": 1,
+ "portes_citees": 15,
+ "portes_vertes": 15,
+ "portes_docstrings_perimees": 8,
+ "portes_total_commit_v2": 180,
+ "portes_total_head": 181,
+ "resume": "Toutes les mesures revendiquees reproduisent ; les deux seuls ecarts sont des arrondis de la fiche (p 0,18 et IC [-0,7 ; +7,6]), et les 14 valeurs de l'audit A1 (T175) sont intactes. Une erreur de prose : 46 des 57 echecs doit se lire 45 (le 46 est l'ecart 134-88 ; 45 tetes candidates sont reparables). Une erreur de table : la colonne avant du split est etiquetee POS gold alors que 63/82 est l'ancien split lexical ; le POS gold sur l'ancien bloc donne 116/29 (97/116 et 26/29). Huit docstrings de portes sont perimees, dont T168 qui imprime encore /146. v3 (dcf7bc91) est arrive apres les mesures : les chiffres v2 sont historiques, les portes du HEAD attendent v3.",
+ "portes_total_head_commit": "dcf7bc91",
+ "portes_total
+… [1734 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Sending the self-contained audit result to the parent agent.
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "AUDIT V2 TERMINÉ — deux fichiers neufs : reports/rapport-audit-v2.md et reports/pensee-audit-v2.json. Aucun fichier existant modifié, aucun commit.\n\nVERDICT : les chiffres v2 reproduisent tous, sur le blob exact 9d5337ce (sha256 6e84 … [3037 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking HEAD one last time and confirming the two deliverables are intact.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git log -1 --format='%h %s' | cat && echo '--- deliverables ---' && ls -l reports/rapport-audit-v2.md reports/pensee-audit-v2.json && python3 -m json.tool reports/pensee-audit-v2.json > /dev/null && echo 'JSON v … [142 caractères tronqués]`
+
+  ```
+b1b1292f7983a5f7349bc81dc92404be5cd99a36
+b1b1292f B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181
+--- deliverables ---
+-rw-r--r--. 1 stephane stephane 28371  5 nov 15:32 reports/pensee-audit-v2.json
+-rw-------. 1 stephane stephane 20912  5 nov 15:32 reports/rapport-audit-v2.md
+JSON valide
+?? reports/pensee-audit-v2.json
+?? reports/rapport-audit-v2.md
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD advanced again (cache commit after v3); checking gate drift and fixing the “current” wording.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat dcf7bc91..HEAD -- tools/bloc_linguistique.py tools/pensee/autotest.py && git diff --stat 15ee10d3..HEAD -- tools/bloc_linguistique.py tools/pensee/autotest.py && sha256sum tools/bloc_linguistique.py && git show HEAD:t … [140 caractères tronqués]`
+
+  ```
+tools/bloc_linguistique.py | 14 ++++++--------
+ tools/pensee/autotest.py   | 13 +++++++++----
+ 2 files changed, 15 insertions(+), 12 deletions(-)
+ tools/bloc_linguistique.py | 80 +++++++++++++++++++++++++++++++++++++++-------
+ tools/pensee/autotest.py   | 43 ++++++++++++++-----------
+ 2 files changed, 92 insertions(+), 31 deletions(-)
+9544f173f92e55ccb6eed7b9f096f4a6bf100449d3b1d7875440a23badbda7ff  tools/bloc_linguistique.py
+2226:    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.5983) < 0.001
+2344:    return (a["cibles"] == 239 and a["top1"] == 143 and a["exact"] == 141), (
+2434:            and abs(a["exact_taux_span"] - 0.9724) < 0.001), (
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing the final “current HEAD = v3” wording after the post-v3 cache commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-audit-v2.md'); s=p.read_text()\nold=\"\"\"- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — le bloc ; le blob v2 mesuré est\n  `6e843018…`. Le HEAD v2- … [1309 caractères tronqués]`
+
+  ```
+md patched
+json patched
+JSON valide
+- [`pensee-audit-v2.json`](pensee-audit-v2.json) — les 43 comparaisons, la décomposition, les
+  contrôles et le détail des portes.
+- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — le bloc ; le blob v2 mesuré est
+  `6e843018…`. Le HEAD v2-compatible était `bb020516…` (mémoïsation seule) ; le commit v3
+  `dcf7bc91` est `9da6dee7…` (hors périmètre), et le HEAD a encore avancé (`b1b1292f`, cache
+  T178) après v3.
+- [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) — `charger()`,
+  `evaluer_bloc`.
+  ```
+
+### 🤖 Assistant
+
+⏵ Normalizing file permissions to match the reports directory.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod 644 reports/rapport-audit-v2.md reports/pensee-audit-v2.json && ls -l reports/rapport-audit-v2.md reports/pensee-audit-v2.json && python3 -m json.tool reports/pensee-audit-v2.json > /dev/null && echo 'JSON valide' && python3 -  … [367 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 28567  5 nov 15:39 reports/pensee-audit-v2.json
+-rw-r--r--. 1 stephane stephane 20984  5 nov 15:39 reports/rapport-audit-v2.md
+JSON valide
+links 14 bad []
+  ```
+
+### 🤖 Assistant
+
+⏵ Delivering the audit summary.
+
+## Livrables
+
+Deux fichiers neufs, aucun fichier existant modifié, aucun commit :
+
+- `reports/rapport-audit-v2.md`
+- `reports/pensee-audit-v2.json` (JSON valide, 43 comparaisons)
+
+L'audit porte sur le **commit v2 `9d5337ce`**, avec le blob exact `git show 9d5337ce:tools/bloc_linguistique.py` (sha256 `6e843018…`) chargé depuis `/tmp` et `RACINE` forcé à la racine.
+
+## Verdict
+
+**Toutes les valeurs v2 reproduisent** : labels 145, top1 140, top-k 142, exact 137, top-k strict 141 ; taux 0,9655 / 0,9793 / 0,9448 / 0,9724 ; rendement 0,5858 / 0,5941 / 0,5732 ; split 116/111 (0,9569) et 29/26 (0,8966) ; 8 échecs (3/5) ; spans 94 = 48/33/13 ; avant 126/134/123/88 ; gold 612. Le modèle appris a été rejoué : 142/145, +5, McNemar 7/2, p = 0,1797, IC [-0,69 ; +7,59] → rejeté, conforme.
+
+**Deux arrondis seulement** : `p = 0,18` pour `0,179688` ; IC `[-0,7 ; +7,6]` pour `[-0,69 ; +7,59]`.
+
+## Écarts documentaires
+
+1. **« 46 des 57 échecs » → 45.** A2 dit 45 ; le comptage indépendant donne 45 têtes candidates égales à la cible. Le 46 est `134 − 88` (sous-chaîne vs strict), une autre quantité. Le gain « +45 » est correct.
+2. **Colonne avant du split** : elle est étiquetée « (POS gold) » mais **63/82 est l'ancien split lexical** (`_est_verbe`, lexique pré-v2). Le POS gold sur l'ancien bloc donne **116/97 (0,8362)** et **29/26 (0,8966)**. Le « **+48 cibles** » est `111 − 63`, un mélange de justes et de cibles ; ce n'est pas un gain. Le JSON nomme correctement les valeurs avant `verbe_est` / `nom_est`.
+3. **Attributions incomplètes** : le segment précédent fait **+6 exact et +6 top1** ; le lexique fait **+8 exact/+8 top1/+8 top-k/+8 strict** ; les têtes font **+45 strict (26 REL + 19 GP), 0 exact**. Les totaux 137/140/142/141 sont justes, mais le tableau des corrections omet +6 top1 et +8 top-k/strict. Le helper `_cible_s_par_genre`, ajouté au v2, a **0 effet mesuré** et n'est pas documenté.
+
+## Portes
+
+- **Au commit v2, les 15 portes citées passent** (T153, T161–T164, T166–T170, T172, T173, T175–T177). Registre v2 : **180** portes. Run complet au moment de l'audit (avant v3) : **181/181**.
+- **8 docstrings périmées** : T153, T162, T163, T166, T167, T168, T172, T173. T168 imprime encore `/146` au lieu de `/145` ; T163 dit « 33 avant les correctifs » alors que 33 était un compte d'exacts à `d400e188` (A1 compte 22 échecs).
+- **Chiffres non couverts** : `topk_taux` 0,5941 ; les taux avant et le split nom 82/63 ; le 69/69 SUB = VERB ; le compte 180/180 ; les chiffres du modèle appris ; le 46/57.
+- **Concurrence importante** : après les mesures, le dépôt est passé à la **v3 `dcf7bc91`** (exact 141/145, top1 143, noms 29/29, strict 142, T172 2/2) ; les mêmes portes ont été réécrites pour v3. Le HEAD a encore avancé (`b1b1292f`, cache T178). **La fiche v2 et ses 180/180 sont historiques : ne pas les comparer aux portes du HEAD.**
+
+## Contrôles
+
+- **Permutation des cibles** (1 000 tirages) : moyenne 1,786/145, max 8, observé 137 → `p < 0,001`.
+- **Candidat aléatoire** (1 000 tirages) : moyenne 58,566/145, max 75, observé 137 → `p < 0,001` ; sans les têtes : 43,742. Le +45 des têtes vient bien de la réduction des candidats, mais gonfle la ligne de base du candidat aléatoire de **+10,2 pts** : le top-k strict est une **couverture de candidats**, pas une exactitude.
+- **Recouvrement** : 137 exact = strict = top1 ; 4 stricts-sans-exact ; 1 top1-only (r230) ; 3 ni l'un ni l'autre.
+
+## Limites
+
+Le replay pré-v2 depuis `/tmp` exige `RACINE` = racine (sinon 77 labels / 0 exact) ; le lexique +8 est une borne haute (les 8 cibles anglaises exactement) ; 36/145 labels multi-cibles ; le split 3/5 utilise la sous-chaîne (4/4 en strict) ; F3 (+4/+4 selon A2) n'est ni intégré ni discuté.
+

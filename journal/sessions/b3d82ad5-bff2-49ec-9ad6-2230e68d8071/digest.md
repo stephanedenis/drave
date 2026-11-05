@@ -1457,3 +1457,571 @@ ls: cannot access 'reports/pensee-multicibles.json': No such file or directory
 … [385 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche `rapport-multicibles.md`
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "content": "# Multi-cibles du gold et mesure d'attachement — 43 GP, +2 exact\n\n> **Ligne de roadmap** : **B13** (attachement, moteur de pensée) · tâche **A13** (multi-cibles) ·\n> **Date** : 2026-11-05 · … [18483 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la fiche, des tableaux et de la cohérence JSON
+
+- **bash** `{"command": "python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-multicibles.md')\nlines=p.read_text(encoding='utf-8').splitlines()\n# validate markdown tables: separator row column count == header\nerrs=[]; in_table=False\nfor i,l in enumerate(lines):\n    if l.strip().startswith( … [1005 caractères tronqués]`
+
+  ```
+table separator mismatches: []
+lines 294 code fences 2
+trailing spaces 0
+43/96 1
+44,79 2
+43/239 0
+17,99 1
+36/83 0
+43,37 1
+36/145 0
+24,83 1
+137/145 2
+94,48 5
+139/145 6
+95,86 8
++1,38 5
+137/239 1
+57,32 3
+139/239 2
+58,16 5
++0,84 3
+1/903 3
+111/114 0
+114/111 2
+31/36 1
+33/36 2
+  ```
+
+- **bash** `{"command": "git status --short reports/ | grep -E 'multicibles' ; ls -la reports/rapport-multicibles.md reports/pensee-multicibles.json; python3 -c \"import json; d=json.load(open('reports/pensee-multicibles.json')); print('json ok', len(d), 'clés')\"", "description": "Check new files and JSON vali … [6 caractères tronqués]`
+
+  ```
+?? reports/pensee-multicibles.json
+?? reports/rapport-multicibles.md
+-rw-r--r--. 1 stephane stephane 25178  5 nov 15:27 reports/pensee-multicibles.json
+-rw-------. 1 stephane stephane 18678  5 nov 15:32 reports/rapport-multicibles.md
+json ok 20 clés
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections de précision dans la fiche
+
+- **bash** `{"command": "grep -n \"141/239\\|huit métriques\\|12 GP multi\\|Total.*239.*43\\|Total.*145.*36\" reports/rapport-multicibles.md", "description": "Locate lines to correct"}`
+
+  ```
+55:| **Total** | **239** | **43** | **17,99** | **43** | **0,180** | **145** | **36** | **24,83** | **36** | **0,248** |
+96:- **Le top-k strict ne bouge pas** : **141/239** (0,9724 au span) sous (a), (b) et (c). Pour
+100:- **Conséquence de méthode** : sur les huit métriques d'attachement, seuls `exact` et
+142:| **Total** | **145** | **36** | **137 (94,48 %)** | **139 (95,86 %)** | **+2 (+1,38 pt)** |
+145:écart **0**. Les 12 GP multi réels labellisés choisissent **tous** la première cible (le verbe) ;
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "old_string": "| **Total** | **239** | **43** | **17,99** | **43** | **0,180** | **145** | **36** | **24,83** | **36** | **0,248** |\n\n- **Toutes** les multi ont **exactement 2 cibles**", "new_string": " … [356 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "old_string": "- **Le top-k strict ne bouge pas** : **141/239** (0,9724 au span) sous (a), (b) et (c). Pour\n  s108/s122, le premier gouverneur (`rêve`/`saute`) est déjà dans les candidats ; seul le **cho … [978 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "old_string": "écart **0**. Les 12 GP multi réels labellisés choisissent **tous** la première cible (le verbe) ;\nles 2 choix nominaux sont dans deux phrases synthétiques agrammaticales. C'est le point le … [493 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md</path>
+<type>file</type>
+<content>
+1: # Multi-cibles du gold et mesure d'attachement — 43 GP, +2 exact
+2: 
+3: > **Ligne de roadmap** : **B13** (attachement, moteur de pensée) · tâche **A13** (multi-cibles) ·
+4: > **Date** : 2026-11-05 · **Branche** : `s/v7` · **HEAD** : `15ee10d3` · **Statut** : mesure seule ;
+5: > aucun fichier existant modifié ; aucun commit.
+6: >
+7: > **Verdict.** Les multi-cibles sont **réelles et structurées** : **43/96 GP** (44,79 %) ont deux
+8: > cibles, toutes de la forme `[gouverneur, tête nominale]` ; aucune REL/SUB n'en a. Mais leur effet
+9: > sur la mesure d'attachement est **faible** : sur les 145 segments au bon span, l'exact passe de
+10: > **137/145 = 94,48 %** (définition actuelle `cible == cibles[0]`) à **139/145 = 95,86 %**
+11: > (`cible in cibles`), soit **+2 cas, +1,38 pt**. Sur les 239 cibles, **57,32 % → 58,16 %**
+12: > (+0,84 pt). La définition par **tête** (c) est un **no-op** : `(c) = (b)`, 139/145.
+13: >
+14: > Les deux gains sont **s108** et **s122**, deux GP **synthétiques** où le bloc a choisi la cible
+15: > nominale (`papier`) que le gold autorise ; sur
+… [7338 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "offset": 121, "limit": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md</path>
+<type>file</type>
+<content>
+121: | **s108** | **synth** | **GP** | **sous le nuage** | `[rêve, papier]` | **`papier`** | **faux** | **juste** |
+122: | **s122** | **synth** | **GP** | **vers les montagne** | `[saute, papier]` | **`papier`** | **faux** | **juste** |
+123: 
+124: - Les **8 échecs** de l'exact sous (a) deviennent **6** sous (b) : (b) corrige **s108** et
+125:   **s122** et n'introduit **aucune** régression (`a` juste ⇒ `b` juste, par construction).
+126: - Les **3 échecs multi** (g012, r018, s041) **ne sont pas corrigés par (b)** : g012/r018 sont des
+127:   constructions à **gouverneur adjectival** (`être prêt à`), où le bloc prend l'infinitif
+128:   `manger` (ni `prêt`, ni `canard`) ; s041 est une **cible vide**. Ce sont des chantiers séparés.
+129: - Les 3 autres échecs (g002 génitif sans cible, r230 enclitique, r309 mauvais segment) ne sont
+130:   **pas** des multi-cibles.
+131: 
+132: Décomposition :
+133: 
+134: | sous-population | n | (a) | (b) | Δ |
+135: |---|---:|---:|---:|---:|
+136: | multi (> 1 cible) | 36 | 31 (86,11 %) | **33 (91,67 %)** | **+2 (+5,56 pt)** |
+137: | mono-cibl
+… [10567 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nettoyage des ambiguïtés de notation et de deux anglicismes
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "- **Bloc** : `Heuristique` seul — c'est lui qui produit les 145 labels et le chiffre publié\n  `exact = 0,9448`. La cascade et le neuronal ne sont pas mesurés ici.", "old_string": "- **Bloc … [170 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "  **ciblé** : il teste si les alternatives sont les bonnes, pas seulement si la métrique est\n  non-triviale.", "old_string": "  **ciblé** : il teste si les alternatives sont les bonnes, pa … [46 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "- **P1** : le null est très bas (max 6/145) parce que le pool de cibles est fait de verbes\n  largement uniques ; la métrique n'est donc pas satisfaite par hasard. Le gain nul (moyenne\n  0 … [340 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "- **Les 2 gains sont synthétiques** (s108, s122) ; sur hand+reel, l'écart est **0 cas sur 115**.\n  Le gold synthétique est agrammatical (« ce calme papier rêve », « vers les montagne ») :  … [277 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "- **Bloc heuristique seul** : la cascade et le neuronal ne sont pas mesurés ; leurs cibles\n  peuvent différer.", "old_string": "- **Bloc heuristique seul** : la cascade (136 labels) et le  … [66 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "- **Le split verbe/nom actuel** classe par `cibles[0]` ; sous (b), s108/s122 sont justes via une\n  cible **NOUN** et resteraient dans le seau « verbe » si on ne reclasse pas par la cible\n … [500 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "5. **Si (b) est adopté, reclasser le split verbe/nom par la cible appariée** (**114 cibles\n   verbe / 111 justes**, **31 noms / 28 justes**) ; sinon les 2 gains nominaux restent comptés\n  … [221 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md", "new_string": "- La branche « **verbe plein** » ne se déclenche jamais sur le gold : **aucune cible n'est une\n  locution verbale multi-token** (toutes sont des tokens simples, dont `l'homme`, un token él … [578 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final de cohérence entre la fiche, le JSON et la mesure
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\na=json.load(open('/tmp/result_multicibles.json'))\nb=json.load(open('reports/pensee-multicibles.json'))\nfor k in ['population','multicibles','definitions','cas','tete','controle_negatif','incertitude']:\n    same = a[k]==b[k]\n    print(k, same)\n    if n … [2151 caractères tronqués]`
+
+  ```
+population True
+multicibles True
+definitions True
+cas True
+tete True
+controle_negatif True
+incertitude True
+239 137 139 139 0.573222 0.58159
+145 137 139 139 0.944828 0.958621
+GP145 77 79 83
+SUB145 34 34 36
+REL145 26 26 26
+multi/single 31 33 106 106
+sources {'hand': (8, 8, 10), 'reel': (102, 102, 105), 'synthetique': (27, 29, 30)}
+ctrl P1 1.23 0.000999
+ctrl P2 31.086 0.00110742
+delta CI [0.0, 3.4483] {'n01': 2, 'n10': 0, 'p_exact_bilateral': 0.5}
+split {'actuel': {'verbe': {'cibles': 116, 'justes': 111, 'taux': 0.9569}, 'nom': {'cibles': 29, 'justes': 26, 'taux': 0.8966}}, 'si_b_par_cible_appariee': {'verbe': {'cibles': 114, 'justes': 111, 'taux': 0.9737}, 'nom': {'cibles': 31, 'justes': 28, 'taux': 0.9032}}, 'note': 'le split actuel classe par cibles[0] ; sous (b), s108/s122 sont justes via une cible NOUN et resteraient dans le seau verbe si on ne reclasse pas par la cible appariée.'}
+---
+15:> nominale (`papier`) que le gold autorise ; sur hand+reel, `(a) = (b) = 110/115 = 95,65 %`.
+147:**Le +2 est entièrement synthétique.** Sur hand+reel (115 labels), `(a) = (b) = 110/115 = 95,65 %`,
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-multicibles.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['multicibles']['lecture']={\n \"cibles\": \"rendement sur les 43 multi : 31/43 choisissent la première cible, 33/43 une cible quelconque ; les 7 non  … [575 caractères tronqués]`
+
+  ```
+ok 25604
+{'cibles': 'rendement sur les 43 multi : 31/43 choisissent la première cible, 33/43 une cible quelconque ; les 7 non labellisés comptent faux', 'labels': "exactitude conditionnelle au span sur les 36 multi labellisés : 31/36 première cible, 33/36 n'importe laquelle", 'tailles': 'toutes les multi ont exactement 2 cibles (196 mono + 43 multi = 239) ; sur les labels, 109 mono + 36 multi = 145'}
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/porte-tableaux.sh 2>/dev/null || echo 'no script'; ls tools | grep -i tableau", "description": "Inspect table gate"}`
+
+  ```
+#!/bin/bash
+# porte-tableaux.sh — un tableau Markdown qui ne rend pas est un tableau qui n'existe PAS.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 13/10, le premier tableau de `docs/etat-cerveau.md` s'affichait
+# comme du TEXTE dans docwatch : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
+# **4 cellules pour 5 colonnes** — un lien qui avait glissé d'une colonne. Le rendu (mistune,
+# puis markdown_it, puis markdown) refuse alors le tableau ENTIER, sans rien dire : les 13 lignes
+# disparaissent de la page et personne ne le voit, parce que le texte est toujours là, en gris.
+#
+# CE QU'ELLE VÉRIFIE (trois conditions, toutes nécessaires au rendu) :
+#   1. l'en-tête et le séparateur d'un tableau ont le MÊME nombre de cellules ;
+#   2. chaque ligne du corps a ce nombre de cellules ;
+#   3. aucun `\|` ne subsiste : mistune ne le déséchappe NI dans un espace de code NI dans la
+#      prose (il s'affiche alors littéralement). Pour une barre de valeur absolue dans du code,
+#      on écrit `∣` (U+2223), qui rend partout et ne casse pas la lecture.
+# Les tableaux DANS une citation (`> | … |`) sont valides et vérifiés aussi.
+#
+# CE QU'ELLE NE VÉRIFIE PAS : les tableaux « écrasés » sur une se
+… [2614 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport re, pathlib, json\np=pathlib.Path('reports/rapport-multicibles.md')\nlines=p.read_text(encoding='utf-8').splitlines()\nerrs=[]\nfor i,l in enumerate(lines):\n    s=l.strip()\n    if s.startswith('|') and s.endswith('|'):\n        cols=len(s.strip('|').split('|') … [1028 caractères tronqués]`
+
+  ```
+table mismatches []
+43/239 cibles (17,99 %) 1
+36/145 labels (24,83 %) 1
+43/96 (44,79 %) 1
+36/83 (43,37 %) 1
+137 (94,48 %) 3
+139 (95,86 %) 4
+141/239** (0,5900) 1
+141/145 au span** (0,9724) 1
+114 cibles verbe / 111 justes 1
+31 noms / 28 justes 2
+1/903 = 0,0011 2
+0 cas sur 115 1
+31 fois la première cible 1
+33/36 (91,67 %) 1
+31,086/36 (86,35 %) 1
+1,23/145 (0,85 %) 1
+fences 2
+link pensee-multicibles.json ok
+link pensee-multicibles.json ok
+link rapport-multicibles.md ok
+link pensee-multicibles.json ok
+  ```
+
+- **bash** `{"command": "CIBLES=\"reports/rapport-multicibles.md\" bash tools/porte-tableaux.sh; echo \"exit=$?\"", "description": "Run table gate on new fiche"}`
+
+  ```
+✅ 1 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3272 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final du pin, des fichiers et des taux
+
+- **bash** `{"command": "git rev-parse HEAD; echo '--- status (ours + forbidden paths)'; git status --short reports/rapport-multicibles.md reports/pensee-multicibles.json docs/pilotage/ AGENTS.md journal/ data/ tools/entrainer_native.py tools/native_model.py; echo '--- diff stat existing'; git diff --stat | tai … [148 caractères tronqués]`
+
+  ```
+b1b1292f7983a5f7349bc81dc92404be5cd99a36
+--- status (ours + forbidden paths)
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/digest.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/rapport.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+D  journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/digest.md
+D  journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/rapport.md
+D  journal/sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/digest.md
+D  journal/sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/rapport.md
+D  journal/sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/digest.md
+D  journal/sessi
+… [3671 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, pathlib, json\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'; PIN='/tmp/pin_multicibles'\nsys.path.insert(0,R+'/tools/tests/linguistique'); sys.path.insert(0,PIN+'/tools')\nimport bloc_linguistique as bl, evaluer_gold as eg\neg.GOLD=pathlib.Path(PIN+' … [920 caractères tronqués]`
+
+  ```
+evaluer_bloc pinné: cibles 239 labels 145 exact 137 0.9448
+239 137 139 139 0.573222 0.58159 0.58159 2
+145 137 139 139 0.944828 0.958621 0.958621 2
+JSON cohérent avec evaluer_bloc et avec les cas
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a bougé : je vérifie si le bloc mesuré a changé
+
+- **bash** `{"command": "git log -5 --format='%H %ad %s' --date=iso; echo '---'; git show --stat --oneline b1b1292f | head -30; echo '---'; sha256sum tools/bloc_linguistique.py; git show HEAD:tools/bloc_linguistique.py | sha256sum; git show 15ee10d3:tools/bloc_linguistique.py | sha256sum", "description": "Inspe … [30 caractères tronqués]`
+
+  ```
+b1b1292f7983a5f7349bc81dc92404be5cd99a36 2026-11-05 15:29:19 -0500 B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181
+dcf7bc912caeebe940793888d88723f0bbb57f58 2026-11-05 15:18:56 -0500 B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181
+15ee10d3cd54dcdf3419144d23445765c8910ba2 2026-11-05 14:55:27 -0500 PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)
+1ec7286c0aed1bdb64379b96b093c47d7ef554b5 2026-11-05 14:48:04 -0500 PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS
+a914c1e73f5f748a8726222a974f102216755cad 2026-11-05 14:44:19 -0500 FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR
+---
+b1b1292f B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181
+ docs/pilotage/en-cours.md                          |    6 +-
+ journal/2026-11-05/README.md                       |   17 +-
+ journal/2026-11-05/attention.md                    |   12 +-
+ journal/2026-11-05/distribue.
+… [1833 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff -- tools/bloc_linguistique.py | head -120", "description": "Inspect current worktree block diff"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 8d0ca1f8..5a13e97a 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -769,25 +769,6 @@ class Heuristique:
+                 proches.append(v)
+         return proches
+ 
+-    @staticmethod
+-    def _cible_s_par_genre(cands: list[dict], texte_seg: str, type_seg: str) -> str | None:
+-        """La cible de S pour ce segment, en préférant le **genre** attendu par le type.
+-
+-        Le gold attache un **SUB** à un verbe (`genre: GV`) et un **REL** à un nom
+-        (`genre: GN`) ; S propose les deux lectures, la première n'est pas toujours la bonne.
+-        """
+-        voulu = "GV" if type_seg == "SUB" else "GN" if type_seg == "REL" else None
+-        meilleure = None
+-        for c in cands:
+-            att = c.get("attachement") or {}
+-            if att.get("segment") != texte_seg:
+-                continue
+-            if voulu is None or att.get("genre") == voulu:
+-                return att.get("cible")
+-            if meilleure is None:
+-                meilleure = att.get("cible")
+-        return meilleure
+-
+     def _syntagmes_simple(self, texte: str, langue: str) -> list[dict
+… [879 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dépôt est passé en V3 : je mesure aussi le HEAD courant pour ne pas figer un chiffre périmé
+
+- **bash** `{"command": "mkdir -p /tmp/pin_v3/tools && git show HEAD:tools/bloc_linguistique.py > /tmp/pin_v3/tools/bloc_linguistique.py && ln -sfn /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures /tmp/pin_v3/tools/structures && git show HEAD:tools/tests/linguistique/gold.json > /tmp/pin_v3/gold … [450 caractères tronqués]`
+
+  ```
+9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059  /tmp/pin_v3/tools/bloc_linguistique.py
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  /tmp/pin_v3/gold.json
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  /tmp/pin_v3/gold_reel.json
+e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654  /tmp/pin_v3/gold_synthetique.json
+---
+c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599  -
+c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599  tools/tests/linguistique/evaluer_gold.py
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, pathlib\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'; PIN='/tmp/pin_v3'\nsys.path.insert(0,R+'/tools/tests/linguistique'); sys.path.insert(0,PIN+'/tools')\nimport bloc_linguistique as bl, evaluer_gold as eg\nprint('bl',bl.__file__)\neg.GOLD=pathlib. … [432 caractères tronqués]`
+
+  ```
+bl /tmp/pin_v3/tools/bloc_linguistique.py
+{'cibles': 239, 'labels': 145, 'exact': 141, 'exact_taux': 0.59, 'exact_taux_span': 0.9724, 'top1_taux_span': 0.9862, 'topk_taux_span': 0.9793, 'topk_exact_taux_span': 0.9793}
+verbe {'cibles': 116, 'justes': 112, 'taux': 0.9655} nom {'cibles': 29, 'justes': 29, 'taux': 1.0}
+  ```
+
+- **bash** `{"command": "sed 's#/tmp/pin_multicibles#/tmp/pin_v3#g; s#/tmp/result_multicibles.json#/tmp/result_multicibles_v3.json#g' /tmp/analyse_multicibles_pin.py > /tmp/analyse_multicibles_v3.py && python3 /tmp/analyse_multicibles_v3.py > /tmp/v3_out.txt 2>&1; tail -5 /tmp/v3_out.txt; python3 - <<'PY'\nimpo … [1643 caractères tronqués]`
+
+  ```
+0.658449
+   ]
+  }
+ }
+}
+=== v2 15ee10d3cd54dcdf3419144d23445765c8910ba2 5640809e
+239 a/b/c 137 139 139 taux 0.573222 0.58159 0.58159 d 2
+145 a/b/c 137 139 139 taux 0.944828 0.958621 0.958621 d 2
+  GP 83 36 77 79 79 0.927711 0.951807
+  SUB 36 0 34 34 34 0.944444 0.944444
+  REL 26 0 26 26 26 1.0 1.0
+ multi/single {'multi': (31, 33, 36), 'single': (106, 106, 109)}
+ sources {'hand': (8, 8, 10), 'reel': (102, 102, 105), 'synthetique': (27, 29, 30)}
+ gains [('s108', ['rêve', 'papier'], 'papier'), ('s122', ['saute', 'papier'], 'papier')]
+ echecs_multi [('g012', ['prêt', 'canard'], 'manger'), ('r018', ['prête', 'souris'], 'manger'), ('s041', ['marche', 'avocat'], '')]
+ tete [{'id': 'g003', 'cibles': ['vu', "l'homme"], 'tetes': ['vu', 'homme']}] [] {'pred_et_cibles_reduites': 139, 'pred_reduite_cibles_brutes': 139, 'pred_brute_cibles_reduites': 139}
+ topk 141 141 141 141
+ P1 1.23 139
+ P2 31.086 33 0.00110742
+ incert {'delta_b_a_145': 0.013793, 'bootstrap_95_delta_pts': [0.0, 3.4483], 'mcnemar': {'n01': 2, 'n10': 0, 'p_exact_bilateral': 0.5}, 'wilson_a_145': [0.894913, 0.971781], 'wilson_b_145': [0.912669, 0.9809], 'wilson_a_239': [0.509844, 0.634283], 'wilson_b_239': [0.518242, 0.642356]}
+==
+… [1098 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bascule de la fiche sur le HEAD V3 courant, avec comparaison V2
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/result_multicibles_v3.json'))\nprint(json.dumps({k:d[k] for k in ('meta','population')},ensure_ascii=False,indent=1)[:3000])\nprint('=== defs')\nfor den in ['239','145']:\n    x=d['definitions'][den]\n    print(den,json.dumps(x,ensur … [876 caractères tronqués]`
+
+  ```
+{
+ "meta": {
+  "date": "2026-11-05",
+  "branche": "s/v7",
+  "head": "b1b1292f7983a5f7349bc81dc92404be5cd99a36",
+  "head_sujet": "B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181",
+  "pin": {
+   "bloc_linguistique": {
+    "sha256": "9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059",
+    "source": "git show HEAD:tools/bloc_linguistique.py (copie /tmp)"
+   },
+   "evaluer_gold": {
+    "sha256": "c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599",
+    "source": "HEAD (fichier propre)"
+   },
+   "gold": {
+    "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+    "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+    "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+   },
+   "note": "le fichier de travail tools/bloc_linguistique.py a été modifié par un autre agent pendant la session ; la mesure est figée sur HEAD, pas sur le worktree"
+  }
+ },
+ "population": {
+  "phrases": 612,
+  "cibles": 239,
+  "labels": 145,
+  "segments": 1863,
+  "par_type": {
+   "GP": {
+    "cibles": 96,
+    "la
+… [8867 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, pathlib, collections\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'; PIN='/tmp/pin_v3'\nsys.path.insert(0,R+'/tools/tests/linguistique'); sys.path.insert(0,PIN+'/tools')\nimport bloc_linguistique as bl, evaluer_gold as eg\neg.GOLD=pathlib.Path(PIN+'/g … [1837 caractères tronqués]`
+
+  ```
+a errors [('r309', 'reel', 'SUB', "qu'il viendra", ['viendra'], "'Peut-être'"), ('s041', 'synthetique', 'GP', 'devant elles', ['marche', 'avocat'], "''"), ('s108', 'synthetique', 'GP', 'sous le nuage', ['rêve', 'papier'], "'papier'"), ('s122', 'synthetique', 'GP', 'vers les montagne', ['saute', 'papier'], "'papier'")]
+b errors [('r309', 'reel', 'SUB', "qu'il viendra", ['viendra'], "'Peut-être'"), ('s041', 'synthetique', 'GP', 'devant elles', ['marche', 'avocat'], "''")]
+current Counter({('VERB', True): 112, ('NOUN', True): 27, ('VERB', False): 4, ('ADJ', True): 2})
+matched Counter({('VERB', True): 112, ('NOUN', True): 29, ('ADJ', True): 2, ('VERB', False): 2})
+current verb 116 114 nom 29 29
+matched verb 114 112 nom 31 31
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du JSON V3 (primaire) avec le contexte V2
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\nv3 = json.load(open('/tmp/result_multicibles_v3.json'))\nv2 = json.load(open('/tmp/result_multicibles.json'))\n# compact V2 block\ndef slim(den):\n    x = v2['definitions'][den]\n    return {k: x[k] for k in ('n','multi','a','b','c','taux_a','taux … [10613 caractères tronqués]`
+
+  ```
+written 32232
+ok ['date', 'ligne', 'branche', 'head', 'head_sujet', 'statut', 'pin', 'population', 'multicibles', 'definitions', 'cas', 'tete', 'topk_strict', 'split_verbe_nom', 'controle_negatif', 'incertitude', 'v2_contexte_A7', 'note_concurrence', 'limites', 'recommandation', 'reproduction']
+141 143 4 2
+  ```
+
+### 🤖 Assistant
+
+⏵ Réécriture de la fiche sur le pin V3, avec la comparaison V2
+
+- **write** `{"content": "# Multi-cibles du gold et mesure d'attachement — 43 GP, +2 exact en V2 et V3\n\n> **Ligne de roadmap** : **B13** (attachement, moteur de pensée) · tâche **A13** (multi-cibles) ·\n> **Date** : 2026-11-05 · **Branche** : `s/v7` · **HEAD de mesure** : `b1b1292f` (V3) · **Statut** :\n> mesu … [20107 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation de la fiche V3 et de la cohérence avec le JSON
+
+- **bash** `{"command": "CIBLES=\"reports/rapport-multicibles.md\" bash tools/porte-tableaux.sh; echo \"exit=$?\"", "description": "Run table gate on V3 fiche"}`
+
+  ```
+✅ 1 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3272 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+exit=0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport re, pathlib, json\np=pathlib.Path('reports/rapport-multicibles.md')\nlines=p.read_text(encoding='utf-8').splitlines()\nerrs=[]\nfor i,l in enumerate(lines):\n    s=l.strip()\n    if s.startswith('|') and s.endswith('|'):\n        cols=len(s.strip('|').split('|') … [1590 caractères tronqués]`
+
+  ```
+table mismatches []
+43/239 cibles (17,99 %) 1
+36/145 labels (24,83 %) 1
+43/96 (44,79 %) 1
+36/83 (43,37 %) 1
+141 (97,24 %) 4
+143 (98,62 %) 5
+142/239** (0,5941) 1
+142/145 au span** (0,9793) 1
+114 cibles verbe / 112 justes 1
+31 noms / 31 justes 2
+1/903 = 0,0011 2
+0 cas sur 115 1
+33 fois la première cible 1
+35/36 (97,22 %) 1
+33,086/36 (91,91 %) 1
+1,251/145 (0,86 %) 1
+137 (94,48 %) 1
+139 (95,86 %) 1
+fences 2
+link pensee-multicibles.json ok
+link pensee-multicibles.json ok
+link rapport-multicibles.md ok
+link pensee-multicibles.json ok
+json head b1b1292f7983a5f7349bc81dc92404be5cd99a36
+json 145 141 143 0.972414 0.986207
+json 239 141 143 0.589958 0.598326
+json topk {'239': {'a': 142, 'b': 142, 'c': 142, 'n': 239}, '145': {'a': 142, 'b': 142, 'c': 142, 'n': 145}, 'note': 'le top-k strict ne bouge pas : pour s108/s122, le premier gouverneur (rêve/saute) est déjà dans les candidats ; seul le choix de la cible (exact) change. Le top1 et le top-k tolérant utilisent déjà toutes les cibles.'}
+json split {'actuel': {'verbe': {'cibles': 116, 'justes': 112, 'taux': 0.9655}, 'nom': {'cibles': 29, 'justes': 29, 'taux': 1.0}}, 'si_b_par_cible_appariee': {'verbe': {'cibles': 114, 'justes': 112, 'taux': 0
+… [680 caractères tronqués]
+  ```
+

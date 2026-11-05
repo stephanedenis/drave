@@ -85,6 +85,7 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
     fractions = []
     att_n = att_labels = att_top1 = att_topk = att_exact = 0
     att_topk_exact = 0
+    att_exact_any = 0
     att_v_n = att_v_ok = att_n_n = att_n_ok = 0
     att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
     for phrase in phrases:
@@ -127,6 +128,9 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
             juste = cible == cibles[0]
             if juste:
                 att_exact += 1
+            # le gold admet parfois plusieurs cibles (43/96 GP) : mesure secondaire
+            if cible in cibles:
+                att_exact_any += 1
             # le gold mêle deux conventions : la cible est un verbe (le gouverneur) ou un nom
             # (l'antécédent d'un REL, la tête d'un GP). On mesure les deux séparément — en
             # suivant le **POS du gold** (plus fiable que le lexique : « poussent », « aboie »
@@ -184,6 +188,8 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                         "top1_taux": round(att_top1 / max(1, att_n), 4),
                         "topk_taux": round(att_topk / max(1, att_n), 4),
                         "exact_taux": round(att_exact / max(1, att_n), 4),
+                        "exact_any": att_exact_any,
+                        "exact_any_taux_span": round(att_exact_any / max(1, att_labels), 4),
                         # exactitude sur les segments au bon span : l'attachement seul
                         "top1_taux_span": round(att_top1 / max(1, att_labels), 4),
                         "topk_taux_span": round(att_topk / max(1, att_labels), 4),

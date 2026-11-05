@@ -769,25 +769,6 @@ class Heuristique:
                 proches.append(v)
         return proches
 
-    @staticmethod
-    def _cible_s_par_genre(cands: list[dict], texte_seg: str, type_seg: str) -> str | None:
-        """La cible de S pour ce segment, en préférant le **genre** attendu par le type.
-
-        Le gold attache un **SUB** à un verbe (`genre: GV`) et un **REL** à un nom
-        (`genre: GN`) ; S propose les deux lectures, la première n'est pas toujours la bonne.
-        """
-        voulu = "GV" if type_seg == "SUB" else "GN" if type_seg == "REL" else None
-        meilleure = None
-        for c in cands:
-            att = c.get("attachement") or {}
-            if att.get("segment") != texte_seg:
-                continue
-            if voulu is None or att.get("genre") == voulu:
-                return att.get("cible")
-            if meilleure is None:
-                meilleure = att.get("cible")
-        return meilleure
-
     def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
         mots = self._mots(texte)
         lex = POS_FERME.get(langue, POS_FERME["fr"])
@@ -936,8 +917,7 @@ class Heuristique:
                     # la cible de S **convertie en son verbe** : « Les enfants jouent » →
                     # `jouent` (le gold attend le verbe, pas le GN) ; à défaut, le GV le plus
                     # proche. Mesuré : 82 cibles justes dans les candidats, 33 choisies avant.
-                    brute = (self._cible_s_par_genre(cands, s.get("texte", ""), s.get("type", ""))
-                             or cibles_s.get((s.get("debut"), s.get("fin"), s.get("type"))))
+                    brute = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
                     cible = None
                     if s.get("type") in ("REL", "SUB"):
                         # REL/SUB : c'est le **segment précédent** qui tranche — après un GV

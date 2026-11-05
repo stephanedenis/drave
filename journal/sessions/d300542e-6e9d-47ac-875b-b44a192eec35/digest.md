@@ -1572,3 +1572,264 @@ R3_completive_etroite 142 144 1 0
 combinaison 145 145 4 0
   ```
 
+### 🤖 Assistant
+
+⏵ Le bloc a rebougé (9da6dee7) : vérification de l'impact avant de figer
+
+- **bash** `{"command": "sha256sum tools/bloc_linguistique.py; stat -c '%s %y' tools/bloc_linguistique.py; git diff HEAD -- tools/bloc_linguistique.py | sed -n '1,260p'", "description": "Inspect newest bloc diff", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059  tools/bloc_linguistique.py
+105156 2026-11-05 15:22:00.127553628 -0500
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index b171b5f2..8d0ca1f8 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -922,10 +922,11 @@ class Heuristique:
+         cands = self._syntagmes_s(texte)
+         cibles_s = self._cibles_s(texte) if cands else {}
+         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
++        # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
++        # le O(n²) mesuré venait des re-chunkings (A6, A11) — sortie identique (T178).
++        simples = self._syntagmes_simple(texte, lg)
++        gvs_simple = [x for x in simples if x["type"] == "GV"]
+         if cands:
+-            # les GV du chunker complètent ceux du générateur S : sans eux, un GP n'a aucun
+-            # candidat d'attachement (diagnostic des 33 échecs de T162).
+-            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
+             for c in cands[:1]:
+                 noms = [x.get("nom", "") for x in cands]
+      
+… [1238 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.dont_write_bytecode=True\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger, evaluer_bloc\ne=evaluer_bloc('h',bl.Heuristique(),charger())\nprint({k:e['attachement' … [214 caractères tronqués]`
+
+  ```
+{'exact': 141, 'labels': 145, 'top1': 143, 'cibles': 239, 'topk_exact': 142, 'exact_taux_span': 0.9724, 'top1_taux_span': 0.9862}
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-run sur l'empreinte 9da6dee7 (refactor de cache, sortie annoncée identique)
+
+- **bash** `{"command": "python3 tools/tests/linguistique/replis_cible.py 2>&1 | tail -30; echo '---'; sha256sum tools/bloc_linguistique.py", "description": "Rerun final simulation on newest bloc", "timeoutMs": 900000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+== base ==
+bloc: {'fichier': 'tools/bloc_linguistique.py', 'sha256_16': '9da6dee7118cfa57', 'octets': 105156, 'mtime': '2026-11-05T15:22:00'}
+exact 141/145 (0.9724) | top1 143/145 (0.9862) | topk strict 142/239 | exact global 141/239 (0.5900)
+== retouches ==
+temoin_noop                      exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R1_repli_vide_GP                 exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_repli_vide_tous_non_GV        exact 142/145 (0.9793) Δ+1 top1 144/145 (0.9931) Δ+1 reg  0 | surface 113 (1 gold / 112 hors)
+R1_dernier_temoin                exact 141/145 (0.9724) Δ+0 top1 144/145 (0.9931) Δ+1 reg  0 | surface   2 (1 gold / 1 hors)
+R1_verbe_lexique_temoin          exact 141/145 (0.9724) Δ+0 top1 143/145 (0.9862) Δ+0 reg  0 | surface   0 (0 gold / 0 hors)
+R2_litterale                     exact 138/145 (0.9517) Δ-3 top1 140/145 (0.9655) Δ-3 reg  3 | surface   6 (3 gold / 3 hors)
+R2_litterale_POS                 exact 132/145 (0.9103) Δ-9 top1 134/145 (0.9241) Δ-9 reg  9 | surface  14 (9 gold / 5 hors)
+R2_litterale_lexique_etendu      exact 140/145 (0.9655) Δ-1 top1
+… [1671 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'empreinte finale (9da6dee7) et de l'historique de dérive
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/tests/linguistique/replis_cible.py'\ns=open(p,encoding='utf-8').read()\ns=s.replace('''                {\"empreinte\": \"bb020516\", \"octets\": 103191,\n                 \"mtime\": \"2026-11-05T15:03:12\", \"baseline_exact\": 137,\n                 \"retouche … [2013 caractères tronqués]`
+
+  ```
+patched
+3:> **Ligne de roadmap** : **B13** (moteur de pensée, attachement) · **Date** : 2026-11-05 · **Verdict** : ✅ **R1 (repli cible vide, GP)** et **R3 (complétive en tête, SUB)** à intégrer ; ⚠️ **R2** : ❌ sous sa forme littérale (« préférer un verbe »), ✅ sous sa forme **étroite** (« tête la plus proche »), qui répare les mêmes cas. Sur l'empreinte live `9da6dee7`, les trois valent **+4 net, 0 régression** et amènent à **145/145 exact (1,0000)** et **145/145 top1** ; sur les **239 cibles** : **145/239 (0,6067)**, plafond des 94 spans non prédits. Sur le baseline A3 `bb020516` (137/145), les mêmes retouches valaient **+2/+4/+1 = +7** (144/145, top1 145/145) : le live a déjà absorbé `g002`, `g012`/`r018` et `r230`.
+5:> **Dispositif** : [`replis_cible.py`](../tools/tests/linguistique/replis_cible.py), JSON [`pensee-replis-cible.json`](pensee-replis-cible.json). [`bloc_linguistique.py`](../tools/bloc_linguistique.py) **non modifié** ; son empreinte est figée dans le JSON (`9da6dee7`, 105 156 octets, 15:22:00). Le bloc a bougé pendant la session (`6e843018` → `bb020516` → `9da6dee7`) : les chiffres sont une photo de la dernière empreinte, stable pendant le run.
+13:- **Dérive** : le
+… [580 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-replis-cible.md'\nr=open(p,encoding='utf-8').read()\nr=r.replace('(`6e843018` → `bb020516` → `9da6dee7`)', '(`6e843018` → `bb020516` → `64b7c520` → `9da6dee7`)')\nr=r.replace('`6e843018` → `bb020516` → `9da6dee7` pendant la session', '`6e843018` → `b … [219 caractères tronqués]`
+
+  ```
+5:> **Dispositif** : [`replis_cible.py`](../tools/tests/linguistique/replis_cible.py), JSON [`pensee-replis-cible.json`](pensee-replis-cible.json). [`bloc_linguistique.py`](../tools/bloc_linguistique.py) **non modifié** ; son empreinte est figée dans le JSON (`9da6dee7`, 105 156 octets, 15:22:00). Le bloc a bougé pendant la session (`6e843018` → `bb020516` → `64b7c520` → `9da6dee7`) : les chiffres sont une photo de la dernière empreinte, stable pendant le run.
+135:- **Le bloc bouge** : `6e843018` → `bb020516` → `64b7c520` → `9da6dee7` pendant la session ; si le worktree change encore, relancer le prototype. Le JSON fige l'empreinte et `bloc_stable_pendant_le_run=true`.
+  ```
+
+### 🤖 Assistant
+
+⏵ Run final de régénération du JSON (empreinte courante + historique complet)
+
+- **bash** `{"command": "sha256sum tools/bloc_linguistique.py; python3 tools/tests/linguistique/replis_cible.py >/tmp/final_run.log 2>&1; tail -8 /tmp/final_run.log; echo '---'; sha256sum tools/bloc_linguistique.py; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf … [577 caractères tronqués]`
+
+  ```
+9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059  tools/bloc_linguistique.py
+== état des lieux ==
+239 cibles : 145 spans prédits, 94 absents, 1 vides au span prédit, 144 remplis
+croisement nature: {'autre→verbe': 1, 'nom→nom': 29, 'nom→verbe': 2, 'verbe→verbe': 112, 'vide→verbe': 1}
+nom→verbe: [('s108', 'papier', 'rêve'), ('s122', 'papier', 'saute')]
+verbe→non-verbe: []
+== combinaison ==
+exact 145/145 (1.0000) | top1 145/145 (1.0000) | global exact 145/239 (0.6067) | top1 145/239 (0.6067)
+JSON -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-replis-cible.json
+---
+9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059  tools/bloc_linguistique.py
+fingerprint 9da6dee7118cfa57 105156 2026-11-05T15:22:00
+stable True
+history ['6e843018', 'bb020516', '64b7c520']
+base 141 143 combo {'justes': 145, 'n': 145, 'taux': 1.0, 'gain': 4, 'regressions': 0, 'net': 4} {'justes': 145, 'n': 145, 'taux': 1.0, 'gain': 2, 'regressions': 0, 'net': 2}
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle croisé fiche ↔ JSON (annexe, tableaux, chiffres clés)
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, re, pathlib\nmd=pathlib.Path('reports/rapport-replis-cible.md').read_text(encoding='utf-8')\nd=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8'))\n# extract appendix ids\nannexe=md.split('## Annexe')[1]\nids=re.findall(r'`([a-z]\\d{3})`', … [840 caractères tronqués]`
+
+  ```
+ids annexe 94 uniques 94
+ids json 94 uniques 94
+manquants []
+en trop []
+141/145 1
+143/145 1
+145/145 8
+145/239 4
+142/145 1
+144/145 3
+0,6067 2
+0,9931 2
++4 net 1
++7 3
+ok R2_preference_tete
+ok +7 du combiné
+ok 137/145 exact et 140/145
+ok 4 étiquettes changées (2 gold / 2 hors)
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture finale de la fiche avant transmission
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-replis-cible.md", "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-replis-cible.md</path>
+<type>file</type>
+<content>
+1: # B13 — les trois retouches A3 sur le live : +1, +2, +1, et 145/145 exact/top1
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, attachement) · **Date** : 2026-11-05 · **Verdict** : ✅ **R1 (repli cible vide, GP)** et **R3 (complétive en tête, SUB)** à intégrer ; ⚠️ **R2** : ❌ sous sa forme littérale (« préférer un verbe »), ✅ sous sa forme **étroite** (« tête la plus proche »), qui répare les mêmes cas. Sur l'empreinte live `9da6dee7`, les trois valent **+4 net, 0 régression** et amènent à **145/145 exact (1,0000)** et **145/145 top1** ; sur les **239 cibles** : **145/239 (0,6067)**, plafond des 94 spans non prédits. Sur le baseline A3 `bb020516` (137/145), les mêmes retouches valaient **+2/+4/+1 = +7** (144/145, top1 145/145) : le live a déjà absorbé `g002`, `g012`/`r018` et `r230`.
+4: >
+5: > **Dispositif** : [`replis_cible.py`](../tools/tests/linguistique/replis_cible.py), JSON [`pensee-replis-cible.json`](pensee-replis-cible.json). [`bloc_linguistique.py`](../tools/bloc_linguistique.py) **non modifié** ; son empreinte est figée dans le JSON (`9da6d
+… [9972 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-replis-cible.md", "offset": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-replis-cible.md</path>
+<type>file</type>
+<content>
+120: | R2 littérale | 138 | -3 | 3 | 6 | défait `g002`/`g012`/`r018` |
+121: | R2 littérale + lexique | 140 | -1 | 3 | 8 | +2 `s108`/`s122` mais 3 régressions |
+122: | R2 POS | 132 | -9 | 9 | 14 | le POS n'est pas un détecteur de verbe sûr |
+123: | R2 large | 143 | +2 | 0 | 12 | même gain que l'étroite, 10 changements hors gold |
+124: | R3 large | 109 | -32 | 33 | 36 | toute complétive → intérieur : catastrophe |
+125: | rang 0 partout (A3 §7.1) | 139 | -2 | 6 | 470 | `g003`, `g014`, `g016`, `r048`, `r068`, `r230` ; 460 changements hors gold |
+126: | combiné R2 large | 145 | +4 | 0 | 15 | 11 hors gold |
+127: | combiné R2 littérale | 140 | -1 | 3 | 9 | interaction : `g002` perdu |
+128: 
+129: Lecture : les gains viennent du **scope** et des **gardes**, pas d'une règle générique « verbe » ou « rang 0 ».
+130: 
+131: ## 8. Ce qui pourrait rendre cette fiche fausse
+132: 
+133: - **145 segments, 4 gains marginaux** : les règles ont été dessinées sur les cas réparés (HARKing) ; aucun gold tenu à l'écart. Le +4 est une **borne haute**, pas une estimation.
+134: - **Simulation 
+… [4104 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale : aucun import externe, fichiers neufs uniquement, JSON stable
+
+- **bash** `{"command": "grep -R \"replis_cible\\|pensee-replis-cible\" --exclude-dir=.git --exclude-dir=__pycache__ -l . | sort; echo '---'; git status --porcelain | grep -E 'replis_cible|rapport-replis-cible|pensee-replis-cible'; echo '---'; python3 -m py_compile tools/tests/linguistique/replis_cible.py && ec … [321 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1491]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-1491", "reason": "Recherche récursive trop lente sur les données ; vérifications ciblées suffisantes"}`
+
+  ```
+requested cancellation of job bash-1491
+  ```
+
+- **bash** `{"command": "grep -R \"replis_cible\" tools reports --exclude-dir=__pycache__ -l; echo '---'; git status --porcelain | grep -E 'replis_cible|rapport-replis-cible|pensee-replis-cible'; echo '---'; python3 -m py_compile tools/tests/linguistique/replis_cible.py && echo 'compile ok'; python3 -c \"import … [304 caractères tronqués]`
+
+  ```
+tools/tests/linguistique/replis_cible.py
+reports/rapport-replis-cible.md
+---
+?? reports/pensee-replis-cible.json
+?? reports/rapport-replis-cible.md
+?? tools/tests/linguistique/replis_cible.py
+---
+compile ok
+json ok True 9da6dee7118cfa57
+  ```
+
+- **bash** `{"command": "ls -l tools/tests/linguistique/__pycache__/ 2>/dev/null | grep replis || true; pwd", "description": "Locate pyc artifact from compile check", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+-rw-------. 1 stephane stephane  54532  5 nov 15:36 replis_cible.cpython-313.pyc
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet
+  ```
+
+- **bash** `{"command": "target=\"$(realpath tools/tests/linguistique/__pycache__/replis_cible.cpython-313.pyc)\"; echo \"$target\"; case \"$target\" in /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/__pycache__/replis_cible.cpython-313.pyc) rm -f \"$target\" && echo removed;; *) echo  … [250 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/__pycache__/replis_cible.cpython-313.pyc
+removed
+no replis pyc left
+  ```
+
+### 🤖 Assistant
+
+⏵ Transmission du résultat final au parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Mission terminée — 3 fichiers neufs, aucun fichier existant modifié, aucun commit :\n- tools/tests/linguistique/replis_cible.py (prototype autonome, non importé)\n- reports/rapport-replis-cible.md (fiche)\n- reports/pensee-replis-cible … [2111 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-1491 [bash] killed — grep -R "replis_cible\|pensee-replis-cible" --exclude-dir=.git --exclude-dir=__pycache__ -l . | sort; echo '---'; git status --porcelain | grep -E 'replis_cible|rapport-replis-cible|pensee-replis-cible'; echo '---'; python3 -m py_compile tools/tests/linguistique/replis_cible.py && echo 'compile ok'; python3 -c "import json; d=json.load(open('reports/pensee-replis-cible.json',encoding='utf-8')); print('json ok', d['bloc_stable_pendant_le_run'], d['empreinte_bloc_linguistique']['sha256_16'])"
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif final et fichiers livrés
+
+**Trois fichiers neufs, aucun fichier existant modifié, aucun commit** (le `M tools/bloc_linguistique.py` du worktree vient d'un autre agent, je n'y ai pas touché) :
+
+- [`tools/tests/linguistique/replis_cible.py`](tools/tests/linguistique/replis_cible.py) — prototype autonome (sous-classe + post-traitement des cibles), non importé ailleurs.
+- [`reports/rapport-replis-cible.md`](reports/rapport-replis-cible.md) — fiche : protocole, Q1, tableau par retouche, contrôles négatifs, limites, recommandation.
+- [`reports/pensee-replis-cible.json`](reports/pensee-replis-cible.json) — résultats, 145 audits, snapshot A3 137, dérive des empreintes.
+
+**Empreinte mesurée** : `tools/bloc_linguistique.py = 9da6dee7` (105 156 o, 15:22:00), stable pendant le run. Le bloc a bougé pendant la session (`6e843018 → bb020516 → 64b7c520 → 9da6dee7`) : le live a déjà absorbé `g002` (`_repli_cible_gp`), `g012`/`r018` (`_cible_hors_span`) et `r230` (`_sans_enclitique`).
+
+**Baseline live** : 141/145 exact, 143/145 top1, 142/239 top-k strict. **Baseline A3** (snapshot `bb020516`) : 137/145. 
+
+**Q1** : sur 145 → 144 cibles remplies, **1 vide** (`s041`) ; sur 239 → **94 absentes** (48 REL, 33 SUB, 13 GP) + 1 vide = 95 sans cible utilisable. **2 cas nom prédit / verbe gold** : `s108` (`papier` vs `rêve`), `s122` (`papier` vs `saute`) ; sur le snapshot A3 il y avait aussi `r230` (depuis réparé), et 2 cas inverse (`g012`, `r018`, depuis réparés).
+
+| retouche | gain live | régressions | net live | net A3 (137) | recommandation |
+|---|---:|---:|---:|---:|---|
+| R1 repli cible vide (GP only) | +1 (`s041`) | 0 | **+1** | +2 (`g002`, `s041`) | ✅ intégrer |
+| R2 étroite (tête proche, GP) | +2 (`s108`, `s122`) | 0 | **+2** | +4 (forme large, 4 cas) | ✅ intégrer |
+| R2 littérale (« préférer un verbe ») | 0 | 3 (`g002`, `g012`, `r018`) | **-3** | 0 | ❌ ne pas intégrer |
+| R3 étroite (complétive en tête) | +1 (`r309`) | 0 | **+1** | +1 | ✅ intégrer |
+| **combiné** | **+4** | **0** | **+4** | **+7** | **145/145 exact, 145/145 top1** |
+
+Le combiné atteint **145/145 exact (1,0000)** et **145/145 top1** sur les 145, et **145/239 (0,6067)** sur les 239 : le plafond global reste les 94 spans non prédits. La R2 large de A3 donne le même +2 marginal que l'étroite mais change 12 étiquettes (10 hors gold) contre 4 (2 hors gold : `r121`, `r227`) ; la R2 littérale est néfaste (elle défait `g002`/`g012`/`r018`). La R3 large coûte 33 régressions. Le +4 live (contre +7 sur A3) est une **borne haute** (règles dessinées sur les cas) : avant intégration, gold tenu à l'écart, revue de `s027`/`r121`/`r227`, portes. Le top-k reste **142/239 strict**.
+

@@ -1,0 +1,1682 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13 (attachement) / A13 (multi-cibles)",
+ "branche": "s/v7",
+ "head": "b1b1292f7983a5f7349bc81dc92404be5cd99a36",
+ "head_sujet": "B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181",
+ "statut": "mesure seule ; aucun fichier existant modifié ; aucun commit",
+ "pin": {
+  "bloc_linguistique": {
+   "sha256": "9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059",
+   "source": "git show HEAD:tools/bloc_linguistique.py (copie /tmp)"
+  },
+  "evaluer_gold": {
+   "sha256": "c4d2dbc07b4e4c0b1c81889b61fd517d5d5953b4a3efae2094834a398ac5d599",
+   "source": "HEAD (fichier propre)"
+  },
+  "gold": {
+   "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+   "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+   "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+  },
+  "note": "le fichier de travail tools/bloc_linguistique.py a été modifié par un autre agent pendant la session ; la mesure est figée sur HEAD, pas sur le worktree"
+ },
+ "population": {
+  "phrases": 612,
+  "cibles": 239,
+  "labels": 145,
+  "segments": 1863,
+  "par_type": {
+   "GP": {
+    "cibles": 96,
+    "labels": 83
+   },
+   "SUB": {
+    "cibles": 69,
+    "labels": 36
+   },
+   "REL": {
+    "cibles": 74,
+    "labels": 26
+   }
+  },
+  "par_source": {
+   "hand": {
+    "cibles": 13,
+    "labels": 10
+   },
+   "reel": {
+    "cibles": 171,
+    "labels": 105
+   },
+   "synthetique": {
+    "cibles": 55,
+    "labels": 30
+   }
+  },
+  "couverture": 0.606695
+ },
+ "multicibles": {
+  "cibles": {
+   "n": 43,
+   "multi": 43,
+   "part_multi": 1.0,
+   "alternatives": 43,
+   "alternatives_moyenne": 1.0,
+   "longueur_moyenne": 2.0,
+   "a": 33,
+   "b": 35,
+   "c": 35,
+   "taux_a": 0.767442,
+   "taux_b": 0.813953,
+   "taux_c": 0.813953,
+   "delta_b_a": 2,
+   "delta_b_a_pts": 4.6512,
+   "ic95_a": [
+    0.622555,
+    0.868463
+   ],
+   "ic95_b": [
+    0.67383,
+    0.902582
+   ],
+   "ic95_c": [
+    0.67383,
+    0.902582
+   ],
+   "topk_a": 35,
+   "topk_b": 35,
+   "topk_c": 35
+  },
+  "labels": {
+   "n": 36,
+   "multi": 36,
+   "part_multi": 1.0,
+   "alternatives": 36,
+   "alternatives_moyenne": 1.0,
+   "longueur_moyenne": 2.0,
+   "a": 33,
+   "b": 35,
+   "c": 35,
+   "taux_a": 0.916667,
+   "taux_b": 0.972222,
+   "taux_c": 0.972222,
+   "delta_b_a": 2,
+   "delta_b_a_pts": 5.5556,
+   "ic95_a": [
+    0.781733,
+    0.971251
+   ],
+   "ic95_b": [
+    0.858303,
+    0.99508
+   ],
+   "ic95_c": [
+    0.858303,
+    0.99508
+   ],
+   "topk_a": 35,
+   "topk_b": 35,
+   "topk_c": 35
+  },
+  "par_type_239": {
+   "GP": {
+    "n": 43,
+    "multi": 43,
+    "part_multi": 1.0,
+    "alternatives": 43,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 33,
+    "b": 35,
+    "c": 35,
+    "taux_a": 0.767442,
+    "taux_b": 0.813953,
+    "taux_c": 0.813953,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 4.6512,
+    "ic95_a": [
+     0.622555,
+     0.868463
+    ],
+    "ic95_b": [
+     0.67383,
+     0.902582
+    ],
+    "ic95_c": [
+     0.67383,
+     0.902582
+    ],
+    "topk_a": 35,
+    "topk_b": 35,
+    "topk_c": 35
+   },
+   "SUB": {
+    "n": 0,
+    "multi": 0,
+    "part_multi": null,
+    "alternatives": 0,
+    "alternatives_moyenne": null,
+    "longueur_moyenne": null,
+    "a": 0,
+    "b": 0,
+    "c": 0,
+    "taux_a": null,
+    "taux_b": null,
+    "taux_c": null,
+    "delta_b_a": 0,
+    "delta_b_a_pts": null,
+    "ic95_a": [
+     null,
+     null
+    ],
+    "ic95_b": [
+     null,
+     null
+    ],
+    "ic95_c": [
+     null,
+     null
+    ],
+    "topk_a": 0,
+    "topk_b": 0,
+    "topk_c": 0
+   },
+   "REL": {
+    "n": 0,
+    "multi": 0,
+    "part_multi": null,
+    "alternatives": 0,
+    "alternatives_moyenne": null,
+    "longueur_moyenne": null,
+    "a": 0,
+    "b": 0,
+    "c": 0,
+    "taux_a": null,
+    "taux_b": null,
+    "taux_c": null,
+    "delta_b_a": 0,
+    "delta_b_a_pts": null,
+    "ic95_a": [
+     null,
+     null
+    ],
+    "ic95_b": [
+     null,
+     null
+    ],
+    "ic95_c": [
+     null,
+     null
+    ],
+    "topk_a": 0,
+    "topk_b": 0,
+    "topk_c": 0
+   }
+  },
+  "par_type_145": {
+   "GP": {
+    "n": 36,
+    "multi": 36,
+    "part_multi": 1.0,
+    "alternatives": 36,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 33,
+    "b": 35,
+    "c": 35,
+    "taux_a": 0.916667,
+    "taux_b": 0.972222,
+    "taux_c": 0.972222,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 5.5556,
+    "ic95_a": [
+     0.781733,
+     0.971251
+    ],
+    "ic95_b": [
+     0.858303,
+     0.99508
+    ],
+    "ic95_c": [
+     0.858303,
+     0.99508
+    ],
+    "topk_a": 35,
+    "topk_b": 35,
+    "topk_c": 35
+   },
+   "SUB": {
+    "n": 0,
+    "multi": 0,
+    "part_multi": null,
+    "alternatives": 0,
+    "alternatives_moyenne": null,
+    "longueur_moyenne": null,
+    "a": 0,
+    "b": 0,
+    "c": 0,
+    "taux_a": null,
+    "taux_b": null,
+    "taux_c": null,
+    "delta_b_a": 0,
+    "delta_b_a_pts": null,
+    "ic95_a": [
+     null,
+     null
+    ],
+    "ic95_b": [
+     null,
+     null
+    ],
+    "ic95_c": [
+     null,
+     null
+    ],
+    "topk_a": 0,
+    "topk_b": 0,
+    "topk_c": 0
+   },
+   "REL": {
+    "n": 0,
+    "multi": 0,
+    "part_multi": null,
+    "alternatives": 0,
+    "alternatives_moyenne": null,
+    "longueur_moyenne": null,
+    "a": 0,
+    "b": 0,
+    "c": 0,
+    "taux_a": null,
+    "taux_b": null,
+    "taux_c": null,
+    "delta_b_a": 0,
+    "delta_b_a_pts": null,
+    "ic95_a": [
+     null,
+     null
+    ],
+    "ic95_b": [
+     null,
+     null
+    ],
+    "ic95_c": [
+     null,
+     null
+    ],
+    "topk_a": 0,
+    "topk_b": 0,
+    "topk_c": 0
+   }
+  },
+  "par_source_239": {
+   "hand": {
+    "n": 5,
+    "multi": 5,
+    "part_multi": 1.0,
+    "alternatives": 5,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 4,
+    "b": 4,
+    "c": 4,
+    "taux_a": 0.8,
+    "taux_b": 0.8,
+    "taux_c": 0.8,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.375535,
+     0.963776
+    ],
+    "ic95_b": [
+     0.375535,
+     0.963776
+    ],
+    "ic95_c": [
+     0.375535,
+     0.963776
+    ],
+    "topk_a": 4,
+    "topk_b": 4,
+    "topk_c": 4
+   },
+   "reel": {
+    "n": 14,
+    "multi": 14,
+    "part_multi": 1.0,
+    "alternatives": 14,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 12,
+    "b": 12,
+    "c": 12,
+    "taux_a": 0.857143,
+    "taux_b": 0.857143,
+    "taux_c": 0.857143,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.600586,
+     0.959906
+    ],
+    "ic95_b": [
+     0.600586,
+     0.959906
+    ],
+    "ic95_c": [
+     0.600586,
+     0.959906
+    ],
+    "topk_a": 12,
+    "topk_b": 12,
+    "topk_c": 12
+   },
+   "synthetique": {
+    "n": 24,
+    "multi": 24,
+    "part_multi": 1.0,
+    "alternatives": 24,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 17,
+    "b": 19,
+    "c": 19,
+    "taux_a": 0.708333,
+    "taux_b": 0.791667,
+    "taux_c": 0.791667,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 8.3333,
+    "ic95_a": [
+     0.508323,
+     0.850854
+    ],
+    "ic95_b": [
+     0.595295,
+     0.907552
+    ],
+    "ic95_c": [
+     0.595295,
+     0.907552
+    ],
+    "topk_a": 19,
+    "topk_b": 19,
+    "topk_c": 19
+   }
+  },
+  "par_source_145": {
+   "hand": {
+    "n": 4,
+    "multi": 4,
+    "part_multi": 1.0,
+    "alternatives": 4,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 4,
+    "b": 4,
+    "c": 4,
+    "taux_a": 1.0,
+    "taux_b": 1.0,
+    "taux_c": 1.0,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.510109,
+     1.0
+    ],
+    "ic95_b": [
+     0.510109,
+     1.0
+    ],
+    "ic95_c": [
+     0.510109,
+     1.0
+    ],
+    "topk_a": 4,
+    "topk_b": 4,
+    "topk_c": 4
+   },
+   "reel": {
+    "n": 12,
+    "multi": 12,
+    "part_multi": 1.0,
+    "alternatives": 12,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 12,
+    "b": 12,
+    "c": 12,
+    "taux_a": 1.0,
+    "taux_b": 1.0,
+    "taux_c": 1.0,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.757506,
+     1.0
+    ],
+    "ic95_b": [
+     0.757506,
+     1.0
+    ],
+    "ic95_c": [
+     0.757506,
+     1.0
+    ],
+    "topk_a": 12,
+    "topk_b": 12,
+    "topk_c": 12
+   },
+   "synthetique": {
+    "n": 20,
+    "multi": 20,
+    "part_multi": 1.0,
+    "alternatives": 20,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 17,
+    "b": 19,
+    "c": 19,
+    "taux_a": 0.85,
+    "taux_b": 0.95,
+    "taux_c": 0.95,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 10.0,
+    "ic95_a": [
+     0.639581,
+     0.947631
+    ],
+    "ic95_b": [
+     0.763869,
+     0.991119
+    ],
+    "ic95_c": [
+     0.763869,
+     0.991119
+    ],
+    "topk_a": 19,
+    "topk_b": 19,
+    "topk_c": 19
+   }
+  },
+  "tailles": {
+   "1": 196,
+   "2": 43
+  },
+  "tailles_labels": {
+   "1": 109,
+   "2": 36
+  },
+  "alternatives_distinctes": 33,
+  "alternatives_dupliquees": {
+   "enfants": 2,
+   "canard": 2,
+   "Emma": 2,
+   "avocat": 2,
+   "fenêtre": 2,
+   "étoile": 2,
+   "chemin": 2,
+   "nuage": 2,
+   "papier": 2,
+   "lettre": 2
+  },
+  "premieres_pos": {
+   "VERB": 39,
+   "ADJ": 4
+  },
+  "alternatives_pos": {
+   "DET": 1,
+   "NOUN": 41,
+   "PRON": 1
+  },
+  "non_labels": [
+   {
+    "id": "g020",
+    "src": "hand",
+    "type": "GP",
+    "seg": "to eat",
+    "cibles": [
+     "ready",
+     "duck"
+    ]
+   },
+   {
+    "id": "r038",
+    "src": "reel",
+    "type": "GP",
+    "seg": "to eat",
+    "cibles": [
+     "ready",
+     "mouse"
+    ]
+   },
+   {
+    "id": "r162",
+    "src": "reel",
+    "type": "GP",
+    "seg": "on the wall",
+    "cibles": [
+     "hung",
+     "painting"
+    ]
+   },
+   {
+    "id": "s027",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "il",
+    "cibles": [
+     "marche",
+     "village"
+    ]
+   },
+   {
+    "id": "s146",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "les jardin",
+    "cibles": [
+     "observe",
+     "montagne"
+    ]
+   },
+   {
+    "id": "s148",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "les ancienne lettre",
+    "cibles": [
+     "nage",
+     "voyage"
+    ]
+   },
+   {
+    "id": "s160",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "le renard",
+    "cibles": [
+     "nage",
+     "chemin"
+    ]
+   }
+  ],
+  "lecture": {
+   "cibles": "rendement sur les 43 multi : 33/43 choisissent la première cible, 35/43 une cible quelconque ; les 7 non labellisés comptent faux",
+   "labels": "exactitude conditionnelle au span sur les 36 multi labellisés : 33/36 première cible, 35/36 n'importe laquelle",
+   "tailles": "toutes les multi ont exactement 2 cibles (196 mono + 43 multi = 239) ; sur les labels, 109 mono + 36 multi = 145"
+  }
+ },
+ "definitions": {
+  "239": {
+   "n": 239,
+   "multi": 43,
+   "part_multi": 0.179916,
+   "alternatives": 43,
+   "alternatives_moyenne": 0.179916,
+   "longueur_moyenne": 1.179916,
+   "a": 141,
+   "b": 143,
+   "c": 143,
+   "taux_a": 0.589958,
+   "taux_b": 0.598326,
+   "taux_c": 0.598326,
+   "delta_b_a": 2,
+   "delta_b_a_pts": 0.8368,
+   "ic95_a": [
+    0.526659,
+    0.650412
+   ],
+   "ic95_b": [
+    0.535093,
+    0.658449
+   ],
+   "ic95_c": [
+    0.535093,
+    0.658449
+   ],
+   "topk_a": 142,
+   "topk_b": 142,
+   "topk_c": 142
+  },
+  "145": {
+   "n": 145,
+   "multi": 36,
+   "part_multi": 0.248276,
+   "alternatives": 36,
+   "alternatives_moyenne": 0.248276,
+   "longueur_moyenne": 1.248276,
+   "a": 141,
+   "b": 143,
+   "c": 143,
+   "taux_a": 0.972414,
+   "taux_b": 0.986207,
+   "taux_c": 0.986207,
+   "delta_b_a": 2,
+   "delta_b_a_pts": 1.3793,
+   "ic95_a": [
+    0.931221,
+    0.989221
+   ],
+   "ic95_b": [
+    0.951107,
+    0.996209
+   ],
+   "ic95_c": [
+    0.951107,
+    0.996209
+   ],
+   "topk_a": 142,
+   "topk_b": 142,
+   "topk_c": 142
+  },
+  "par_type_239": {
+   "GP": {
+    "n": 96,
+    "multi": 43,
+    "part_multi": 0.447917,
+    "alternatives": 43,
+    "alternatives_moyenne": 0.447917,
+    "longueur_moyenne": 1.447917,
+    "a": 80,
+    "b": 82,
+    "c": 82,
+    "taux_a": 0.833333,
+    "taux_b": 0.854167,
+    "taux_c": 0.854167,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 2.0833,
+    "ic95_a": [
+     0.74629,
+     0.894726
+    ],
+    "ic95_b": [
+     0.769982,
+     0.911098
+    ],
+    "ic95_c": [
+     0.769982,
+     0.911098
+    ],
+    "topk_a": 81,
+    "topk_b": 81,
+    "topk_c": 81
+   },
+   "SUB": {
+    "n": 69,
+    "multi": 0,
+    "part_multi": 0.0,
+    "alternatives": 0,
+    "alternatives_moyenne": 0.0,
+    "longueur_moyenne": 1.0,
+    "a": 35,
+    "b": 35,
+    "c": 35,
+    "taux_a": 0.507246,
+    "taux_b": 0.507246,
+    "taux_c": 0.507246,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.392053,
+     0.621676
+    ],
+    "ic95_b": [
+     0.392053,
+     0.621676
+    ],
+    "ic95_c": [
+     0.392053,
+     0.621676
+    ],
+    "topk_a": 35,
+    "topk_b": 35,
+    "topk_c": 35
+   },
+   "REL": {
+    "n": 74,
+    "multi": 0,
+    "part_multi": 0.0,
+    "alternatives": 0,
+    "alternatives_moyenne": 0.0,
+    "longueur_moyenne": 1.0,
+    "a": 26,
+    "b": 26,
+    "c": 26,
+    "taux_a": 0.351351,
+    "taux_b": 0.351351,
+    "taux_c": 0.351351,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.252382,
+     0.464992
+    ],
+    "ic95_b": [
+     0.252382,
+     0.464992
+    ],
+    "ic95_c": [
+     0.252382,
+     0.464992
+    ],
+    "topk_a": 26,
+    "topk_b": 26,
+    "topk_c": 26
+   }
+  },
+  "par_type_145": {
+   "GP": {
+    "n": 83,
+    "multi": 36,
+    "part_multi": 0.433735,
+    "alternatives": 36,
+    "alternatives_moyenne": 0.433735,
+    "longueur_moyenne": 1.433735,
+    "a": 80,
+    "b": 82,
+    "c": 82,
+    "taux_a": 0.963855,
+    "taux_b": 0.987952,
+    "taux_c": 0.987952,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 2.4096,
+    "ic95_a": [
+     0.899041,
+     0.987632
+    ],
+    "ic95_b": [
+     0.934864,
+     0.99787
+    ],
+    "ic95_c": [
+     0.934864,
+     0.99787
+    ],
+    "topk_a": 81,
+    "topk_b": 81,
+    "topk_c": 81
+   },
+   "SUB": {
+    "n": 36,
+    "multi": 0,
+    "part_multi": 0.0,
+    "alternatives": 0,
+    "alternatives_moyenne": 0.0,
+    "longueur_moyenne": 1.0,
+    "a": 35,
+    "b": 35,
+    "c": 35,
+    "taux_a": 0.972222,
+    "taux_b": 0.972222,
+    "taux_c": 0.972222,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.858303,
+     0.99508
+    ],
+    "ic95_b": [
+     0.858303,
+     0.99508
+    ],
+    "ic95_c": [
+     0.858303,
+     0.99508
+    ],
+    "topk_a": 35,
+    "topk_b": 35,
+    "topk_c": 35
+   },
+   "REL": {
+    "n": 26,
+    "multi": 0,
+    "part_multi": 0.0,
+    "alternatives": 0,
+    "alternatives_moyenne": 0.0,
+    "longueur_moyenne": 1.0,
+    "a": 26,
+    "b": 26,
+    "c": 26,
+    "taux_a": 1.0,
+    "taux_b": 1.0,
+    "taux_c": 1.0,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.871271,
+     1.0
+    ],
+    "ic95_b": [
+     0.871271,
+     1.0
+    ],
+    "ic95_c": [
+     0.871271,
+     1.0
+    ],
+    "topk_a": 26,
+    "topk_b": 26,
+    "topk_c": 26
+   }
+  },
+  "par_source_145": {
+   "hand": {
+    "n": 10,
+    "multi": 4,
+    "part_multi": 0.4,
+    "alternatives": 4,
+    "alternatives_moyenne": 0.4,
+    "longueur_moyenne": 1.4,
+    "a": 10,
+    "b": 10,
+    "c": 10,
+    "taux_a": 1.0,
+    "taux_b": 1.0,
+    "taux_c": 1.0,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.722467,
+     1.0
+    ],
+    "ic95_b": [
+     0.722467,
+     1.0
+    ],
+    "ic95_c": [
+     0.722467,
+     1.0
+    ],
+    "topk_a": 9,
+    "topk_b": 9,
+    "topk_c": 9
+   },
+   "reel": {
+    "n": 105,
+    "multi": 12,
+    "part_multi": 0.114286,
+    "alternatives": 12,
+    "alternatives_moyenne": 0.114286,
+    "longueur_moyenne": 1.114286,
+    "a": 104,
+    "b": 104,
+    "c": 104,
+    "taux_a": 0.990476,
+    "taux_b": 0.990476,
+    "taux_c": 0.990476,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.948014,
+     0.998317
+    ],
+    "ic95_b": [
+     0.948014,
+     0.998317
+    ],
+    "ic95_c": [
+     0.948014,
+     0.998317
+    ],
+    "topk_a": 104,
+    "topk_b": 104,
+    "topk_c": 104
+   },
+   "synthetique": {
+    "n": 30,
+    "multi": 20,
+    "part_multi": 0.666667,
+    "alternatives": 20,
+    "alternatives_moyenne": 0.666667,
+    "longueur_moyenne": 1.666667,
+    "a": 27,
+    "b": 29,
+    "c": 29,
+    "taux_a": 0.9,
+    "taux_b": 0.966667,
+    "taux_c": 0.966667,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 6.6667,
+    "ic95_a": [
+     0.743789,
+     0.9654
+    ],
+    "ic95_b": [
+     0.833296,
+     0.994091
+    ],
+    "ic95_c": [
+     0.833296,
+     0.994091
+    ],
+    "topk_a": 29,
+    "topk_b": 29,
+    "topk_c": 29
+   }
+  },
+  "multi_vs_single_145": {
+   "multi": {
+    "n": 36,
+    "multi": 36,
+    "part_multi": 1.0,
+    "alternatives": 36,
+    "alternatives_moyenne": 1.0,
+    "longueur_moyenne": 2.0,
+    "a": 33,
+    "b": 35,
+    "c": 35,
+    "taux_a": 0.916667,
+    "taux_b": 0.972222,
+    "taux_c": 0.972222,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 5.5556,
+    "ic95_a": [
+     0.781733,
+     0.971251
+    ],
+    "ic95_b": [
+     0.858303,
+     0.99508
+    ],
+    "ic95_c": [
+     0.858303,
+     0.99508
+    ],
+    "topk_a": 35,
+    "topk_b": 35,
+    "topk_c": 35
+   },
+   "single": {
+    "n": 109,
+    "multi": 0,
+    "part_multi": 0.0,
+    "alternatives": 0,
+    "alternatives_moyenne": 0.0,
+    "longueur_moyenne": 1.0,
+    "a": 108,
+    "b": 108,
+    "c": 108,
+    "taux_a": 0.990826,
+    "taux_b": 0.990826,
+    "taux_c": 0.990826,
+    "delta_b_a": 0,
+    "delta_b_a_pts": 0.0,
+    "ic95_a": [
+     0.949854,
+     0.998379
+    ],
+    "ic95_b": [
+     0.949854,
+     0.998379
+    ],
+    "ic95_c": [
+     0.949854,
+     0.998379
+    ],
+    "topk_a": 107,
+    "topk_b": 107,
+    "topk_c": 107
+   }
+  }
+ },
+ "cas": {
+  "gains_b_sur_a": [
+   {
+    "id": "s108",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "sous le nuage",
+    "cibles": [
+     "rêve",
+     "papier"
+    ],
+    "pred": "papier",
+    "premier": "rêve",
+    "index_gagne": 1
+   },
+   {
+    "id": "s122",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "vers les montagne",
+    "cibles": [
+     "saute",
+     "papier"
+    ],
+    "pred": "papier",
+    "premier": "saute",
+    "index_gagne": 1
+   }
+  ],
+  "regressions_a_sur_b": [],
+  "echecs_multi": [
+   {
+    "id": "s041",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "devant elles",
+    "cibles": [
+     "marche",
+     "avocat"
+    ],
+    "pred": ""
+   }
+  ],
+  "n_gains": 2,
+  "n_regressions": 0,
+  "n_echecs_multi": 1,
+  "echecs_a": [
+   {
+    "id": "r309",
+    "src": "reel",
+    "type": "SUB",
+    "seg": "qu'il viendra",
+    "cibles": [
+     "viendra"
+    ],
+    "pred": "Peut-être"
+   },
+   {
+    "id": "s041",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "devant elles",
+    "cibles": [
+     "marche",
+     "avocat"
+    ],
+    "pred": ""
+   },
+   {
+    "id": "s108",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "sous le nuage",
+    "cibles": [
+     "rêve",
+     "papier"
+    ],
+    "pred": "papier"
+   },
+   {
+    "id": "s122",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "vers les montagne",
+    "cibles": [
+     "saute",
+     "papier"
+    ],
+    "pred": "papier"
+   }
+  ],
+  "echecs_b": [
+   {
+    "id": "r309",
+    "src": "reel",
+    "type": "SUB",
+    "seg": "qu'il viendra",
+    "cibles": [
+     "viendra"
+    ],
+    "pred": "Peut-être"
+   },
+   {
+    "id": "s041",
+    "src": "synthetique",
+    "type": "GP",
+    "seg": "devant elles",
+    "cibles": [
+     "marche",
+     "avocat"
+    ],
+    "pred": ""
+   }
+  ],
+  "n_echecs_a": 4,
+  "n_echecs_b": 2
+ },
+ "tete": {
+  "definition": "Heuristique._tete_texte (verbe plein sinon dernier mot)",
+  "cibles_reduites": [
+   {
+    "id": "g003",
+    "cibles": [
+     "vu",
+     "l'homme"
+    ],
+    "tetes": [
+     "vu",
+     "homme"
+    ]
+   }
+  ],
+  "predictions_reduites": [],
+  "c_egale_b_239": true,
+  "c_egale_b_145": true,
+  "variantes_145": {
+   "pred_et_cibles_reduites": 143,
+   "pred_reduite_cibles_brutes": 143,
+   "pred_brute_cibles_reduites": 143
+  }
+ },
+ "topk_strict": {
+  "239": {
+   "a": 142,
+   "b": 142,
+   "c": 142,
+   "n": 239
+  },
+  "145": {
+   "a": 142,
+   "b": 142,
+   "c": 142,
+   "n": 145
+  },
+  "note": "le top-k strict ne bouge pas : pour s108/s122, le premier gouverneur (rêve/saute) est déjà dans les candidats ; seul le choix de la cible (exact) change. Le top1 et le top-k tolérant utilisent déjà toutes les cibles."
+ },
+ "split_verbe_nom": {
+  "actuel": {
+   "verbe": {
+    "cibles": 116,
+    "justes": 112,
+    "taux": 0.9655
+   },
+   "nom": {
+    "cibles": 29,
+    "justes": 29,
+    "taux": 1.0
+   }
+  },
+  "si_b_par_cible_appariee": {
+   "verbe": {
+    "cibles": 114,
+    "justes": 112,
+    "taux": 0.9825
+   },
+   "nom": {
+    "cibles": 31,
+    "justes": 31,
+    "taux": 1.0
+   }
+  },
+  "note": "le split actuel classe par cibles[0] ; sous (b), s108/s122 sont justes via une cible NOUN et resteraient dans le seau verbe si on ne reclasse pas par la cible appariée."
+ },
+ "controle_negatif": {
+  "graine": 20261105,
+  "tirages": 1000,
+  "p1_global": {
+   "description": "permutation des 239 listes de cibles entre les 239 segments (longueurs conservées), recalcul de (b) sur les 145 labels",
+   "observe": 143,
+   "n": 145,
+   "taux_observe": 0.986207,
+   "null": {
+    "n": 1000,
+    "moyenne": 1.251,
+    "ecart_type": 1.115347,
+    "min": 0,
+    "max": 6,
+    "q2_5": 0.0,
+    "q50": 1.0,
+    "q97_5": 4.0
+   },
+   "p": {
+    "nb_sup_egal": 0,
+    "p": 0.000999,
+    "p_min": 0.000999
+   },
+   "gain_observe": 2,
+   "gain_null": {
+    "n": 1000,
+    "moyenne": 0.023,
+    "ecart_type": 0.149903,
+    "min": 0,
+    "max": 1,
+    "q2_5": 0.0,
+    "q50": 0.0,
+    "q97_5": 0.0
+   },
+   "p_gain": {
+    "nb_sup_egal": 0,
+    "p": 0.000999,
+    "p_min": 0.000999
+   },
+   "a_null": {
+    "n": 1000,
+    "moyenne": 1.228,
+    "ecart_type": 1.104543,
+    "min": 0,
+    "max": 6,
+    "q2_5": 0.0,
+    "q50": 1.0,
+    "q97_5": 4.0
+   }
+  },
+  "p2_alternatives": {
+   "description": "permutation des 43 alternatives entre les 43 GP multi (premières cibles fixées), recalcul de (b) sur les 36 labels multi",
+   "observe": 35,
+   "n": 36,
+   "taux_observe": 0.972222,
+   "baseline_a": 33,
+   "null": {
+    "n": 1000,
+    "moyenne": 33.086,
+    "ecart_type": 0.280364,
+    "min": 33,
+    "max": 34,
+    "q2_5": 33.0,
+    "q50": 33.0,
+    "q97_5": 34.0
+   },
+   "p": {
+    "nb_sup_egal": 0,
+    "p": 0.000999,
+    "p_min": 0.000999
+   },
+   "gain_observe": 2,
+   "gain_null": {
+    "n": 1000,
+    "moyenne": 0.086,
+    "ecart_type": 0.280364,
+    "min": 0,
+    "max": 1,
+    "q2_5": 0.0,
+    "q50": 0.0,
+    "q97_5": 1.0
+   },
+   "p_gain": {
+    "nb_sup_egal": 0,
+    "p": 0.000999,
+    "p_min": 0.000999
+   },
+   "p_exact_comb": 0.00110742,
+   "note": "les deux alternatives « papier » doivent tomber sur s108 et s122 : 2/(43*42) = 1/903"
+  }
+ },
+ "incertitude": {
+  "delta_b_a_145": 0.013793,
+  "bootstrap_95_delta_pts": [
+   0.0,
+   3.4483
+  ],
+  "mcnemar": {
+   "n01": 2,
+   "n10": 0,
+   "p_exact_bilateral": 0.5
+  },
+  "wilson_a_145": [
+   0.931221,
+   0.989221
+  ],
+  "wilson_b_145": [
+   0.951107,
+   0.996209
+  ],
+  "wilson_a_239": [
+   0.526659,
+   0.650412
+  ],
+  "wilson_b_239": [
+   0.535093,
+   0.658449
+  ]
+ },
+ "v2_contexte_A7": {
+  "head": "15ee10d3cd54dcdf3419144d23445765c8910ba2",
+  "head_sujet": "PILOTAGE — LES LIGNES B13 DU ROADMAP ET DES CHANTIERS PASSENT À LA V2 (ATTACHEMENT 0,9448, 181/181)",
+  "bloc_sha256": "5640809e8e6bfbd661b86babdf0ed6ce351c8d1bce93a5546f4d22d69575ba2c",
+  "definitions": {
+   "239": {
+    "n": 239,
+    "multi": 43,
+    "a": 137,
+    "b": 139,
+    "c": 139,
+    "taux_a": 0.573222,
+    "taux_b": 0.58159,
+    "taux_c": 0.58159,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 0.8368,
+    "ic95_a": [
+     0.509844,
+     0.634283
+    ],
+    "ic95_b": [
+     0.518242,
+     0.642356
+    ]
+   },
+   "145": {
+    "n": 145,
+    "multi": 36,
+    "a": 137,
+    "b": 139,
+    "c": 139,
+    "taux_a": 0.944828,
+    "taux_b": 0.958621,
+    "taux_c": 0.958621,
+    "delta_b_a": 2,
+    "delta_b_a_pts": 1.3793,
+    "ic95_a": [
+     0.894913,
+     0.971781
+    ],
+    "ic95_b": [
+     0.912669,
+     0.9809
+    ]
+   }
+  },
+  "par_type_145": {
+   "GP": {
+    "n": 83,
+    "multi": 36,
+    "a": 77,
+    "b": 79,
+    "taux_a": 0.927711,
+    "taux_b": 0.951807,
+    "delta_b_a_pts": 2.4096
+   },
+   "SUB": {
+    "n": 36,
+    "multi": 0,
+    "a": 34,
+    "b": 34,
+    "taux_a": 0.944444,
+    "taux_b": 0.944444,
+    "delta_b_a_pts": 0.0
+   },
+   "REL": {
+    "n": 26,
+    "multi": 0,
+    "a": 26,
+    "b": 26,
+    "taux_a": 1.0,
+    "taux_b": 1.0,
+    "delta_b_a_pts": 0.0
+   }
+  },
+  "multi_vs_single_145": {
+   "multi": {
+    "n": 36,
+    "a": 31,
+    "b": 33,
+    "taux_a": 0.861111,
+    "taux_b": 0.916667,
+    "delta_b_a_pts": 5.5556
+   },
+   "single": {
+    "n": 109,
+    "a": 106,
+    "b": 106,
+    "taux_a": 0.972477,
+    "taux_b": 0.972477,
+    "delta_b_a_pts": 0.0
+   }
+  },
+  "par_source_145": {
+   "hand": {
+    "n": 10,
+    "multi": 4,
+    "a": 8,
+    "b": 8,
+    "taux_a": 0.8,
+    "taux_b": 0.8,
+    "delta_b_a_pts": 0.0
+   },
+   "reel": {
+    "n": 105,
+    "multi": 12,
+    "a": 102,
+    "b": 102,
+    "taux_a": 0.971429,
+    "taux_b": 0.971429,
+    "delta_b_a_pts": 0.0
+   },
+   "synthetique": {
+    "n": 30,
+    "multi": 20,
+    "a": 27,
+    "b": 29,
+    "taux_a": 0.9,
+    "taux_b": 0.966667,
+    "delta_b_a_pts": 6.6667
+   }
+  },
+  "echecs": {
+   "a": [
+    {
+     "id": "g002",
+     "src": "hand",
+     "type": "GP",
+     "seg": "de la voisine",
+     "cibles": [
+      "chat"
+     ],
+     "pred": ""
+    },
+    {
+     "id": "g012",
+     "src": "hand",
+     "type": "GP",
+     "seg": "à manger",
+     "cibles": [
+      "prêt",
+      "canard"
+     ],
+     "pred": "manger"
+    },
+    {
+     "id": "r018",
+     "src": "reel",
+     "type": "GP",
+     "seg": "à manger",
+     "cibles": [
+      "prête",
+      "souris"
+     ],
+     "pred": "manger"
+    },
+    {
+     "id": "r230",
+     "src": "reel",
+     "type": "SUB",
+     "seg": "Quand tu arrives",
+     "cibles": [
+      "appelle"
+     ],
+     "pred": "appelle-moi"
+    },
+    {
+     "id": "r309",
+     "src": "reel",
+     "type": "SUB",
+     "seg": "qu'il viendra",
+     "cibles": [
+      "viendra"
+     ],
+     "pred": "Peut-être"
+    },
+    {
+     "id": "s041",
+     "src": "synthetique",
+     "type": "GP",
+     "seg": "devant elles",
+     "cibles": [
+      "marche",
+      "avocat"
+     ],
+     "pred": ""
+    },
+    {
+     "id": "s108",
+     "src": "synthetique",
+     "type": "GP",
+     "seg": "sous le nuage",
+     "cibles": [
+      "rêve",
+      "papier"
+     ],
+     "pred": "papier"
+    },
+    {
+     "id": "s122",
+     "src": "synthetique",
+     "type": "GP",
+     "seg": "vers les montagne",
+     "cibles": [
+      "saute",
+      "papier"
+     ],
+     "pred": "papier"
+    }
+   ],
+   "b": [
+    {
+     "id": "g002",
+     "src": "hand",
+     "type": "GP",
+     "seg": "de la voisine",
+     "cibles": [
+      "chat"
+     ],
+     "pred": ""
+    },
+    {
+     "id": "g012",
+     "src": "hand",
+     "type": "GP",
+     "seg": "à manger",
+     "cibles": [
+      "prêt",
+      "canard"
+     ],
+     "pred": "manger"
+    },
+    {
+     "id": "r018",
+     "src": "reel",
+     "type": "GP",
+     "seg": "à manger",
+     "cibles": [
+      "prête",
+      "souris"
+     ],
+     "pred": "manger"
+    },
+    {
+     "id": "r230",
+     "src": "reel",
+     "type": "SUB",
+     "seg": "Quand tu arrives",
+     "cibles": [
+      "appelle"
+     ],
+     "pred": "appelle-moi"
+    },
+    {
+     "id": "r309",
+     "src": "reel",
+     "type": "SUB",
+     "seg": "qu'il viendra",
+     "cibles": [
+      "viendra"
+     ],
+     "pred": "Peut-être"
+    },
+    {
+     "id": "s041",
+     "src": "synthetique",
+     "type": "GP",
+     "seg": "devant elles",
+     "cibles": [
+      "marche",
+      "avocat"
+     ],
+     "pred": ""
+    }
+   ],
+   "multi": [
+    "g012",
+    "r018",
+    "s041"
+   ],
+   "note": "8 échecs sous (a), 6 sous (b) ; les correctifs V3 (dcf7bc91) ont supprimé g002, g012, r018, r230"
+  },
+  "topk_strict_145": 141,
+  "topk_strict_239": 141,
+  "tete": {
+   "c_egale_b_145": true,
+   "variantes_145": {
+    "pred_et_cibles_reduites": 139,
+    "pred_reduite_cibles_brutes": 139,
+    "pred_brute_cibles_reduites": 139
+   }
+  },
+  "controle_negatif": {
+   "p1_observe": 139,
+   "p1_null_moyenne": 1.23,
+   "p2_observe": 33,
+   "p2_null_moyenne": 31.086,
+   "p2_exact": 0.00110742
+  },
+  "incertitude": {
+   "delta_b_a_145": 0.013793,
+   "bootstrap_95_delta_pts": [
+    0.0,
+    3.4483
+   ],
+   "mcnemar": {
+    "n01": 2,
+    "n10": 0,
+    "p_exact_bilateral": 0.5
+   },
+   "wilson_a_145": [
+    0.894913,
+    0.971781
+   ],
+   "wilson_b_145": [
+    0.912669,
+    0.9809
+   ],
+   "wilson_a_239": [
+    0.509844,
+    0.634283
+   ],
+   "wilson_b_239": [
+    0.518242,
+    0.642356
+   ]
+  },
+  "note": "le delta (b−a) est +2 dans les deux pins ; mêmes cas gagnés s108/s122. V3 a corrigé 4 échecs hors multi et réduit les échecs multi de 3 à 1 (s041)."
+ },
+ "note_concurrence": "la mesure est figée sur HEAD b1b1292f (V3, bloc 9da6dee7…). Le worktree tools/bloc_linguistique.py est encore modifié (sha256 9544f173…, retrait de _cible_s_par_genre) par un autre agent ; il n'est pas mesuré. Le commit V3 dcf7bc91 a déjà corrigé g002/g012/r018/r230, ce qui explique le passage de 137 à 141 sous (a).",
+ "limites": [
+  "mesure figée sur HEAD b1b1292f (V3, bloc 9da6dee7…) ; le worktree (9544f173…) n'est pas inclus",
+  "2 gains sur 145, tous deux synthétiques (s108, s122) ; sur hand+reel, (a) = (b) = 114/115 = 99,13 %",
+  "IC95 du delta (b−a) : [0 ; +3,45] pt ; McNemar exact bilatéral p=0,5 (unilatéral 0,25) : l'écart est réel sur 2 cas, pas un gain de population",
+  "la seconde cible est une tête nominale (41 NOUN, 1 PRON, 1 forme élidée), pas le gouverneur : compter l'attachement nominal est une convention, pas une vérité linguistique",
+  "7 multi sans label (g020, r038, r162, s027, s146, s148, s160) ; 94 segments sans label au total ; le dénominateur 239 les compte faux",
+  "bloc heuristique seul ; la cascade et le neuronal ne sont pas mesurés",
+  "la définition (c) est dégénérée sur ce gold : toutes les cibles sont mono-token sauf « l'homme » ; elle ne teste pas la réduction de tête",
+  "le gold peut ne pas lister toutes les alternatives ; on mesure les 43 déclarées",
+  "les phrases synthétiques sont agrammaticales (« ce calme papier rêve », « vers les montagne ») ; le gold réel ne montre aucun gain",
+  "le split verbe/nom actuel classe par cibles[0] ; sous (b), il faut le reclasser par la cible appariée",
+  "le pin V2 (15ee10d3, bloc 5640…) donne 137 → 139, même delta +2 et mêmes gains : l'effet est invariant, mais le taux de base dépend de la version du bloc"
+ ],
+ "recommandation": {
+  "definition": "adopter (b) cible in cibles pour exact et topk_exact ; conserver les deux dénominateurs (239 rendement, 145 span) et annoncer 143/145 = 98,62 % et 143/239 = 59,83 %, avec la mention « +2 cas, dont 2 synthétiques »",
+  "tete": "ne pas adopter (c) : no-op sur le gold actuel (=(b)) ; à réévaluer seulement si le gold encode des cibles multi-tokens",
+  "gold": "documenter dans CONVENTION_CIBLE que GP multi = [gouverneur, tête nominale] ; décider si l'attachement nominal compte. Si non, nettoyer le gold plutôt que garder une liste cibles qui ne correspond pas à la mesure",
+  "echecs": "corriger à part s041 (cible vide) et r309 (SUB « Peut-être » au lieu de « viendra ») ; (b) n'en corrige aucun. g012/r018 sont déjà corrigés par V3",
+  "split": "si (b) est adopté, classer verbe/nom par la cible appariée : 114 cibles verbe / 112 justes (98,25 %), 31 noms / 31 justes (100 %) au lieu de 116/112 et 29/29",
+  "test": "ajouter un test de non-régression multi-cibles (s108/s122 justes sous (b), pas sous (a)) et rejouer les portes ; aucun code modifié dans cette fiche"
+ },
+ "reproduction": {
+  "graine": 20261105,
+  "tirages": 1000,
+  "principe": "sys.path vers une copie HEAD de tools/bloc_linguistique.py (RACINE reconstruite, tools/structures lié au dépôt), charger() sur les trois gold, Heuristique().analyser, lire meta.attachement.cible, comparer à cibles[0] / cibles / têtes",
+  "note": "le détail des 43 multi, des 2 gains, des 2 échecs restants et du pin V2 est dans multicibles, cas et v2_contexte_A7"
+ }
+}

@@ -42893,3 +42893,376 @@ défaut 160 431.7 ms
 ⏵ J'intègre la validation A11 du cache et je commite le hoisting complet
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-cache-chunker-applique.md'); t=p.read_text()\nnote = \"\"\"\n> **Validation indépendante (A11, `rapport-cache-chunker.md`)** : sur l'instantané `6e8430…`,\n> le cache  … [3115 caractères tronqués]`
+
+  ```
+fiche cache : validation A11 ajoutée
+README + état 653 747
+     · T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1453]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1453", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-cache-chunker.json
+ create mode 100644 reports/rapport-cache-chunker.md
+COMMIT OK 1
+b1b1292f B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181
+jeu 05 nov 2026 15:31:23 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache validé par A11 (×11,0, égalité 612/612) ; 4 échecs.\", \" ; cache validé (×11,0) ; 4 échecs.\")\np.write_text(t)\n … [278 caractères tronqués]`
+
+  ```
+· T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+pensee-audit-v2.json
+pensee-multicibles.json
+pensee-replis-cible.json
+rapport-audit-v2.md
+rapport-multicibles.md
+rapport-replis-cible.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -18 reports/rapport-audit-v2.md; echo \"=== REPLIS :\"; head -16 reports/rapport-replis-cible.md", "description": "Lire les verdicts A8 et A10"}`
+
+  ```
+# Audit B13 — l'attachement v2 : 43 valeurs rejouées, 2 arrondis, 1 erreur de prose (46 → 45), 8 docstrings de portes périmées
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅ **chiffres reproduits** ;
+> ⚠️ **réserves documentaires** (§ 3, § 4, § 6) — aucune ne change les totaux.
+>
+> **Audité** : commit **`9d5337ce`** (2026-11-05 14:14), fiche
+> [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) et JSON
+> [`pensee-attachement-v2.json`](pensee-attachement-v2.json).
+>
+> **Dispositif** : depuis la racine, `sys.path.insert(0, '.')` ;
+> `evaluer_bloc("h", Heuristique(), charger())` ; le **blob exact du commit v2**
+> (`git show 9d5337ce:tools/bloc_linguistique.py`, sha256 `6e843018…`) chargé depuis `/tmp`
+> avec `RACINE` forcé à la racine du dépôt. Les ablations sont des copies `/tmp` du même
+> blob ; **aucun fichier existant n'a été modifié, aucun commit**. HEAD a bougé pendant
+> l'audit (de `de292c7d` à `15ee10d3`) ; jusqu'à ce point, le bloc courant (sha256 `bb020516…`)
+> ne différait que par la mémoïsation et redonnait les mêmes chiffres. **Après les mesures v2,
+> une intégration v3 (`dcf7bc91`, 15:18) a atter
+… [2782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 3' reports/rapport-replis-cible.md | head -1 | cut -d: -f1),+26p\" reports/rapport-replis-cible.md", "description": "Lire les trois retouches de A10"}`
+
+  ```
+## 3. R1 — repli cible vide
+
+**Règle** : si un segment non-`GV` n'a pas de cible et que le vivier n'est pas vide, prendre le **rang 0** (token plein le plus proche, gauche → droite → dedans, puis distance). Forme retenue : **GP seulement**.
+
+**Résultat live** : exact **142/145 (+1, `s041` → `marche`)**, top1 **144/145 (+1)**, **0 régression**, **net +1** ; 239 : 142/239 exact (0,5941), 144/239 top1 (0,6025). Surface : **2 étiquettes changées** (1 gold `s041`, 1 hors gold `s027` « avec il » → `marche`).
+
+**Snapshot A3 137** : +2 (`g002` → `chat`, `s041` → `marche`), 0 régression, net +2 ; 3 changements (2 gold / 1 hors). Le live a déjà `g002` ; le marginal est `s041`.
+
+**Contrôles** :
+
+- dernier candidat : 0 exact, +1 top1 (`s041` → `avocat`, cible alternative du gold), 2 changements → remplir ne suffit pas, le choix compte ;
+- premier verbe du lexique : 0 gain, 0 changement (`marche` et `chat` ne sont pas reconnus) ;
+- tous non-GV : +1 exact mais **113 changements** (112 hors gold, surtout des GN) → le scope GP est ce qui rend R1 minimal.
+
+**Lecture** : le repli est **non régressif par construction sur les 145** (remplacer vide par non-vide ne peut pas baisser l'exact — vide était 
+… [1024 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 3' reports/rapport-audit-v2.md | head -1 | cut -d: -f1),+22p\" reports/rapport-audit-v2.md", "description": "Lire les réserves de A8"}`
+
+  ```
+## 3. D'où viennent les +14 et les +53
+
+Le point le plus utile de l'audit : les trois corrections sont **réelles, additives et
+exactement mesurables**. Chaque ligne suivante est une copie `/tmp` du blob v2 avec une seule
+correction désactivée, mesurée dans un processus séparé.
+
+| variante | top1 | top-k | exact | top-k strict |
+|---|---:|---:|---:|---:|
+| avant (`a408a909`) | 126 | 134 | 123 | 88 |
+| + têtes des candidats | 126 | 134 | 123 | 133 |
+| + têtes + lexique anglais | 134 | 142 | 131 | 141 |
+| **v2** (les trois) | **140** | **142** | **137** | **141** |
+| v2 − têtes | 140 | 142 | 137 | **96** |
+| v2 − lexique | 132 | 134 | 129 | 133 |
+| v2 − segment précédent | 134 | 142 | 131 | 141 |
+| v2 − helper `_cible_s_par_genre` | 140 | 142 | 137 | 141 |
+
+| correction | gain mesuré | répartition | ids |
+|---|---|---|---|
+| **têtes des candidats** | **+45 top-k strict**, 0 exact | 26 REL + 19 GP | 45 segments (liste au JSON) |
+| **lexique anglais** | **+8 exact, +8 top1, +8 top-k, +8 strict** | 8 GP | r080, r108, r120, r156, r166, r169, r177, r180 |
+| **segment précédent** | **+6 exact, +6 top1** | 6 SUB | s012, s030, s052, s097, s124, s139 |
+| helper `_cible_s_par_genre` | **0** | —
+… [51 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ A8 trouve du code mort (`_cible_s_par_genre`, 0 effet) et 8 docstrings de portes périmées : je nettoie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"\"\"' tools/pensee/autotest.py | grep -E \"0,|[\\\"']\" | grep -E \"T1[0-9][0-9]\" | head -20; echo \"===\"; python3 - <<'PY'\nimport re, pathlib\nt=pathlib.Path('tools/pensee/autotest.py').read_text()\n# docstrings de por … [328 caractères tronqués]`
+
+  ```
+===
+t30_graines :: La robustesse : 5 graines, 5/5 sur le bruit et 5/5 sur la porte stable.
+t32_mobile_graines :: La porte mobile sur 5 graines : 5/5 aux deux positions.
+t35_bouge_graines :: La porte qui bouge sur 5 graines : 5/5 buts en 10 pas.
+t38_phase_graines :: La période qui change sur 5 graines : 5/5 buts.
+t39_aleatoire :: La porte aléatoire : elle saute à 20 % par pas ; la politique réussit 20/20.
+t40_hasard :: Le hasard variable : entraînée à 20 %, la politique réussit 20/20 à 20–60 %.
+t41_partielle :: L'observation partielle : 0/20 buts, la mémoire ne suffit pas (négatif).
+t42_croyance :: La croyance : 0/20 buts, la distribution seule ne suffit pas (négatif).
+t43_curieuse :: La curiosité : 0/20 buts, le bonus de certitude ne suffit pas (négatif).
+t44_observatrice :: L'action observer : 20/20 buts, le geste qui révèle la porte.
+t45_bruitee :: L'observation bruitée : 0/20 buts, 10 % d'erreur casse la politique (négatif).
+t46_votante :: L'observation votante : deux looks, 20/20 buts (1 % d'erreur effective).
+t47_votante3 :: Trois looks : 20/20 buts (4000 épisodes), 0,1 % d'erreur.
+t48_bayes :: La croyance bayésienne : 20/20 buts avec un seul look (mise à jour pondérée).
+t49_b
+… [8074 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 6' reports/rapport-audit-v2.md | head -1 | cut -d: -f1),+24p\" reports/rapport-audit-v2.md", "description": "Lire la liste des docstrings périmées"}`
+
+  ```
+## 6. Les portes
+
+**Au commit v2 `9d5337ce`, les 15 portes citées passent** (exécution individuelle, 2026-11-05) :
+
+| porte | attendu | mesuré | état |
+|---|---|---|---|
+| T153 | cibles 239 ; top1 0,5858 ; exact 0,5732 | 0,5858 ; 0,5732 | ✅ |
+| T161 | cibles 239 ; top1 140 ; exact 137 | 140 ; 137 | ✅ |
+| T162 | top-k 142 ; tête 142 ; top1 140 | 142 ; 142 ; 140 | ✅ |
+| T163 | span 94 ; cible 3 | 94 ; 3 | ✅ |
+| T164 | cible `saw` ; exact 137 | `saw` ; 137 | ✅ |
+| T166 | 48 REL ; 33 SUB ; 13 GP | 48 ; 33 ; 13 | ✅ |
+| T167 | 239 ; 145 ; 0,9655 ; 0,9793 ; 0,9448 | identiques | ✅ |
+| T168 | exact 137 ; verbes 116 ; noms 29 | 137 ; 116 ; 29 | ✅ |
+| T169 | 116/111/0,9569 ; 29/26/0,8966 | identiques | ✅ |
+| T170 | REL `homme` ; GP `joue` | `homme` ; `joue` | ✅ |
+| T172 | 3 hors ; 5 mal classés | 3 ; 5 | ✅ |
+| T173 | 142 ; 141 ; 0,9724 ; 0,9793 | identiques | ✅ |
+| T175 | audit 14/14 ; écarts 0 ; 126/134/123/88 ; 60 | 14/14 ; 0 | ✅ |
+| T176 | s052 `ouvre` ; s012 `écoute` | `ouvre` ; `écoute` | ✅ |
+| T177 | strict 141 ; 0,9724 | 141 ; 0,9724 | ✅ |
+
+**Portes au total** : **180** au commit v2 ; **181** au HEAD (T178, cache du chunker, ajoutée
+après), run complet **181/181** en 5 min 17 s **au m
+… [136 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"docstring\\|46 → 45\\|46\\b\" reports/rapport-audit-v2.md | head -8; sed -n \"$(grep -n 'docstrings' reports/rapport-audit-v2.md | head -1 | cut -d: -f1),+14p\" reports/rapport-audit-v2.md", "description": "Trouver la liste … [26 caractères tronqués]`
+
+  ```
+1:# Audit B13 — l'attachement v2 : 43 valeurs rejouées, 2 arrondis, 1 erreur de prose (46 → 45), 8 docstrings de portes périmées
+34:- **Une erreur de prose** : « **46** des 57 échecs étaient des candidats non réduits à leur
+35:  tête » doit se lire « **45** ». Le 46 est l'écart `134 − 88` (sous-chaîne vs strict) ; le
+47:  commit v3 annonce 181/181 avec ses valeurs — hors périmètre. Huit docstrings sont périmées
+48:  (T153, T162, T163, T166, T167, T168, T172, T173) ; T168 imprime encore « /146 » et T163
+118:**L'erreur « 46 des 57 »** : sur les 57 échecs du top-k strict avant, **45** ont un candidat
+120:Le **46** est `134 − 88`, l'écart sous-chaîne/strict, une autre quantité. A2 dit bien 45 ;
+208:docstrings n'ont pas été corrigées et sont encore plus périmées. **La fiche v2 ne doit pas être
+# Audit B13 — l'attachement v2 : 43 valeurs rejouées, 2 arrondis, 1 erreur de prose (46 → 45), 8 docstrings de portes périmées
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅ **chiffres reproduits** ;
+> ⚠️ **réserves documentaires** (§ 3, § 4, § 6) — aucune ne change les totaux.
+>
+> **Audité** : commit **`9d5337ce`** (2026-11-05 14:14), fiche
+… [656 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige les 8 docstrings (A8), l'erreur de prose et le code mort, puis j'intègre les fiches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# 1) fiche v2 : 46 → 45\np=pathlib.Path('reports/rapport-pensee-attachement-v2.md'); t=p.read_text()\nt=t.replace(\"46 des 57 échecs étaient des candidats non réduits à leur\", \"45 des 57 échecs … [2623 caractères tronqués]`
+
+  ```
+docstrings corrigées : 7
+code mort retiré
+  181/181 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent 3f8f2bb8-781b-44a6-9e14-58025004b6fc sent a message: 
+AUDIT V2 TERMINÉ — deux fichiers neufs : reports/rapport-audit-v2.md et reports/pensee-audit-v2.json. Aucun fichier existant modifié, aucun commit.
+
+VERDICT : les chiffres v2 reproduisent tous, sur le blob exact 9d5337ce (sha256 6e843018) chargé depuis /tmp avec RACINE=racine : labels 145, top1 140, topk 142, exact 137, strict 141 ; taux 0,9655/0,9793/0,9448/0,9724 ; rendement 0,5858/0,5941/0,5732 ; split 116/111 (0,9569) et 29/26 (0,8966) ; 8 échecs (3/5) ; spans 94 = 48/33/13 ; avant 126/134/123/88 (0,8690/0,9241/0,8483/0,6069) ; gold 612 = 20+432+160. 43 comparaisons, 0 écart de mesure, 2 arrondis seulement (p 0,18 vs 0,179688 ; IC [-0,7;+7,6] vs [-0,69;+7,59]). Modèle appris rejoué : 142/145, règle 137, +5, McNemar 7/2, p=0,1797, IC [-0,69;+7,59], rejeté.
+
+ÉCARTS DOCUMENTAIRES :
+1) Fiche §2 : « 46 des 57 échecs » doit se lire 45. A2 dit 45 ; comptage indépendant 45 têtes réparables. Le 46 est 134−88 (sous-chaîne vs strict), autre quantité. Le +45 est correct.
+2) Fiche §1 : la colonne avant « (POS gold) » est l'ancien split lexical 63/82, pas POS gold. POS gold sur l'ancien bloc = 116/97 (0,8362) et 29/26. Le « +48 cibles » = 111−63, mélange justes/cibles : pas un gain. Le JSON nomme bien verbe_est/nom_est.
+3) Découpage des gains : segment +6 exact ET +6 top1 ; lexique +8 exact/top1/topk/strict ; têtes +45 strict (26 REL+19 GP), 0 exact. Les totaux 137/140/142/141 sont justes, mais le tableau des corrections omet +6 top1 et +8 topk/strict.
+4) _cible_s_par_genre (ajouté v2) : 0 effet mesuré, non documenté.
+
+PORTES :
+- Au commit v2, les 15 citées passent (T153, T161-T164, T166-T170, T172, T173, T175-T177). Registre v2 = 180 ; run complet au moment de l'audit (avant v3) = 181/181.
+- 8 docstrings périmées : T153, T162, T163, T166, T167, T168, T172, T173. T168 imprime /146 au lieu de /145 ; T163 « 33 avant les correctifs » (33 = exacts à d400e188 ; A1 compte 22 échecs).
+- Chiffres non couverts : topk_taux 0,5941 ; taux avant et split nom 82/63 ; 69/69 SUB ; 180/180 ; modèle appris ; 46/57.
+- CONCURRENCE IMPORTANTE : après les mesures, le dépôt est passé à la V3 (dcf7bc91, 15:18) : exact 141/145, top1 143, noms 29/29, strict 142, T172 2/2 ; les mêmes portes ont été réécrites pour v3. La fiche v2 et ses 180/180 sont historiques ; ne pas comparer aux portes du HEAD. Le HEAD v2-compatible (15ee10d3, bloc bb020516) donnait les mêmes chiffres que le blob v2 ; le HEAD v3 est 9da6dee7.
+
+CONTRÔLES : permutation 1000 tirages moyenne 1,786/145 (max 8) vs 137 (p<0,001) ; candidat aléatoire moyenne 58,566/145 (max 75) vs 137 (p<0,001) ; sans têtes 43,742. Le +45 des têtes est bien la réduction des candidats, mais gonfle la ligne de base du candidat aléatoire de +10,2 pts : top-k strict = couverture, pas exactitude. Recouvrement : 137 exact=strict=top1 ; 4 stricts-sans-exact ; 1 top1-only (r230) ; 3 ni l'un ni l'autre.
+
+LIMITES : replay pré-v2 depuis /tmp exige RACINE=racine (sinon 77 labels / 0 exact) ; top-k strict = couverture ; lexique +8 = borne haute (les 8 cibles anglaises exactement) ; 36/145 multi-cibles ; 3/5 sous-chaîne (4/4 strict) ; F3 (+4/+4 selon A2) non intégré ni discuté.
+
+Fichiers : reports/rapport-audit-v2.md (316 lignes), reports/pensee-audit-v2.json (1003 lignes), JSON valide, liens OK.
+
+### 👤 Utilisateur
+
+Agent d300542e-6e9d-47ac-875b-b44a192eec35 sent a message: 
+Mission terminée — 3 fichiers neufs, aucun fichier existant modifié, aucun commit :
+- tools/tests/linguistique/replis_cible.py (prototype autonome, non importé)
+- reports/rapport-replis-cible.md (fiche)
+- reports/pensee-replis-cible.json (résultats, 145 audits, snapshot A3, dérive)
+
+Empreinte mesurée : tools/bloc_linguistique.py = 9da6dee7 (105 156 o, 15:22:00), stable pendant le run. Le bloc a bougé pendant la session (6e843018 → bb020516 → 64b7c520 → 9da6dee7) ; le live a déjà absorbé g002 (_repli_cible_gp), g012/r018 (_cible_hors_span) et r230 (_sans_enclitique). Je n'ai pas touché au bloc ; un autre agent l'a modifié.
+
+Baseline live : 141/145 exact, 143/145 top1, 142/239 top-k strict. Baseline A3 (snapshot bb020516) : 137/145.
+Q1 live : 145 spans prédits → 144 remplis, 1 vide (s041) ; 239 → 94 absents (48 REL, 33 SUB, 13 GP) + 1 vide = 95 sans cible utilisable. 2 cas nom prédit / verbe gold : s108 (papier vs rêve), s122 (papier vs saute). Sur le snapshot A3 : 2 vides (g002, s041), 3 nom→verbe (r230, s108, s122), 2 verbe→nom (g012, r018).
+
+Gains nets sur le live :
+- R1 repli cible vide (GP seulement) : +1 (s041), 0 régression, net +1 ; 2 changements (dont s027 hors gold). Sur A3 : +2 (g002, s041).
+- R2 étroite (tête la plus proche, GP) : +2 (s108, s122), 0 régression, net +2 ; 4 changements (r121, r227 hors gold). La R2 large de A3 vaut aussi +2 sur le live mais 12 changements (10 hors gold). La R2 littérale « préférer un verbe » est négative : net -3 (elle défait g002/g012/r018), et -9 avec le POS.
+- R3 étroite (complétive en tête) : +1 (r309), 0 régression, net +1 ; 1 changement. La R3 large est net -32 (33 régressions).
+- Combiné : 145/145 exact (1,0000), 145/145 top1, 0 régression ; 145/239 (0,6067). Sur le baseline A3 137 : combiné +7 → 144/145 exact, 145/145 top1.
+
+Recommandation : intégrer R1 GP-only, R2 étroite et R3 étroite ; ne pas intégrer R2 littérale ni R3 large ; la R2 large n'apporte rien de plus que l'étroite et change 12 étiquettes. Le +4 live (contre +7 sur A3) est marginal parce que le live a déjà absorbé 3 cas. Le top-k reste 142/239 ; le plafond 145/239 vient des 94 spans non prédits. Le +4 est une borne haute (règles dessinées sur les cas) : avant intégration, gold tenu à l'écart, revue de s027/r121/r227, portes. Détail et listes des 94 ids dans la fiche/le JSON.
+
+### 👤 Utilisateur
+
+Background subagent d300542e-6e9d-47ac-875b-b44a192eec35 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Récapitulatif final et fichiers livrés
+
+**Trois fichiers neufs, aucun fichier existant modifié, aucun commit** (le `M tools/bloc_linguistique.py` du worktree vient d'un autre agent, je n'y ai pas touché) :
+
+- [`tools/tests/linguistique/replis_cible.py`](tools/tests/linguistique/replis_cible.py) — prototype autonome (sous-classe + post-traitement des cibles), non importé ailleurs.
+- [`reports/rapport-replis-cible.md`](reports/rapport-replis-cible.md) — fiche : protocole, Q1, tableau par retouche, contrôles négatifs, limites, recommandation.
+- [`reports/pensee-replis-cible.json`](reports/pensee-replis-cible.json) — résultats, 145 audits, snapshot A3 137, dérive des empreintes.
+
+**Empreinte mesurée** : `tools/bloc_linguistique.py = 9da6dee7` (105 156 o, 15:22:00), stable pendant le run. Le bloc a bougé pendant la session (`6e843018 → bb020516 → 64b7c520 → 9da6dee7`) : le live a déjà absorbé `g002` (`_repli_cible_gp`), `g012`/`r018` (`_cible_hors_span`) et `r230` (`_sans_enclitique`).
+
+**Baseline live** : 141/145 exact, 143/145 top1, 142/239 top-k strict. **Baseline A3** (snapshot `bb020516`) : 137/145. 
+
+**Q1** : sur 145 → 144 cibles remplies, **1 vide** (`s041`) ; sur 239 → **94 absentes** (48 REL, 33 SUB, 13 GP) + 1 vide = 95 sans cible utilisable. **2 cas nom prédit / verbe gold** : `s108` (`papier` vs `rêve`), `s122` (`papier` vs `saute`) ; sur le snapshot A3 il y avait aussi `r230` (depuis réparé), et 2 cas inverse (`g012`, `r018`, depuis réparés).
+
+| retouche | gain live | régressions | net live | net A3 (137) | recommandation |
+|---|---:|---:|---:|---:|---|
+| R1 repli cible vide (GP only) | +1 (`s041`) | 0 | **+1** | +2 (`g002`, `s041`) | ✅ intégrer |
+| R2 étroite (tête proche, GP) | +2 (`s108`, `s122`) | 0 | **+2** | +4 (forme large, 4 cas) | ✅ intégrer |
+| R2 littérale (« préférer un verbe ») | 0 | 3 (`g002`, `g012`, `r018`) | **-3** | 0 | ❌ ne pas intégrer |
+| R3 étroite (complétive en tête) | +1 (`r309`) | 0 | **+1** | +1 | ✅ intégrer |
+| **combiné** | **+4** | **0** | **+4** | **+7** | **145/145 exact, 145/145 top1** |
+
+Le combiné atteint **145/145 exact (1,0000)** et **145/145 top1** sur les 145, et **145/239 (0,6067)** sur les 239 : le plafond global reste les 94 spans non prédits. La R2 large de A3 donne le même +2 marginal que l'étroite mais change 12 étiquettes (10 hors gold) contre 4 (2 hors gold : `r121`, `r227`) ; la R2 littérale est néfaste (elle défait `g002`/`g012`/`r018`). La R3 large coûte 33 régressions. Le +4 live (contre +7 sur A3) est une **borne haute** (règles dessinées sur les cas) : avant intégration, gold tenu à l'écart, revue de `s027`/`r121`/`r227`, portes. Le top-k reste **142/239 strict**.
+
+### 👤 Utilisateur
+
+Background subagent 3f8f2bb8-781b-44a6-9e14-58025004b6fc finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Delivering the audit summary.
+
+## Livrables
+
+Deux fichiers neufs, aucun fichier existant modifié, aucun commit :
+
+- `reports/rapport-audit-v2.md`
+- `reports/pensee-audit-v2.json` (JSON valide, 43 comparaisons)
+
+L'audit porte sur le **commit v2 `9d5337ce`**, avec le blob exact `git show 9d5337ce:tools/bloc_linguistique.py` (sha256 `6e843018…`) chargé depuis `/tmp` et `RACINE` forcé à la racine.
+
+## Verdict
+
+**Toutes les valeurs v2 reproduisent** : labels 145, top1 140, top-k 142, exact 137, top-k strict 141 ; taux 0,9655 / 0,9793 / 0,9448 / 0,9724 ; rendement 0,5858 / 0,5941 / 0,5732 ; split 116/111 (0,9569) et 29/26 (0,8966) ; 8 échecs (3/5) ; spans 94 = 48/33/13 ; avant 126/134/123/88 ; gold 612. Le modèle appris a été rejoué : 142/145, +5, McNemar 7/2, p = 0,1797, IC [-0,69 ; +7,59] → rejeté, conforme.
+
+**Deux arrondis seulement** : `p = 0,18` pour `0,179688` ; IC `[-0,7 ; +7,6]` pour `[-0,69 ; +7,59]`.
+
+## Écarts documentaires
+
+1. **« 46 des 57 échecs » → 45.** A2 dit 45 ; le comptage indépendant donne 45 têtes candidates égales à la cible. Le 46 est `134 − 88` (sous-chaîne vs strict), une autre quantité. Le gain « +45 » est correct.
+2. **Colonne avant du split** : elle est étiquetée « (POS gold) » mais **63/82 est l'ancien split lexical** (`_est_verbe`, lexique pré-v2). Le POS gold sur l'ancien bloc donne **116/97 (0,8362)** et **29/26 (0,8966)**. Le « **+48 cibles** » est `111 − 63`, un mélange de justes et de cibles ; ce n'est pas un gain. Le JSON nomme correctement les valeurs avant `verbe_est` / `nom_est`.
+3. **Attributions incomplètes** : le segment précédent fait **+6 exact et +6 top1** ; le lexique fait **+8 exact/+8 top1/+8 top-k/+8 strict** ; les têtes font **+45 strict (26 REL + 19 GP), 0 exact**. Les totaux 137/140/142/141 sont justes, mais le tableau des corrections omet +6 top1 et +8 top-k/strict. Le helper `_cible_s_par_genre`, ajouté au v2, a **0 effet mesuré** et n'est pas documenté.
+
+## Portes
+
+- **Au commit v2, les 15 portes citées passent** (T153, T161–T164, T166–T170, T172, T173, T175–T177). Registre v2 : **180** portes. Run complet au moment de l'audit (avant v3) : **181/181**.
+- **8 docstrings périmées** : T153, T162, T163, T166, T167, T168, T172, T173. T168 imprime encore `/146` au lieu de `/145` ; T163 dit « 33 avant les correctifs » alors que 33 était un compte d'exacts à `d400e188` (A1 compte 22 échecs).
+- **Chiffres non couverts** : `topk_taux` 0,5941 ; les taux avant et le split nom 82/63 ; le 69/69 SUB = VERB ; le compte 180/180 ; les chiffres du modèle appris ; le 46/57.
+- **Concurrence importante** : après les mesures, le dépôt est passé à la **v3 `dcf7bc91`** (exact 141/145, top1 143, noms 29/29, strict 142, T172 2/2) ; les mêmes portes ont été réécrites pour v3. Le HEAD a encore avancé (`b1b1292f`, cache T178). **La fiche v2 et ses 180/180 sont historiques : ne pas les comparer aux portes du HEAD.**
+
+## Contrôles
+
+- **Permutation des cibles** (1 000 tirages) : moyenne 1,786/145, max 8, observé 137 → `p < 0,001`.
+- **Candidat aléatoire** (1 000 tirages) : moyenne 58,566/145, max 75, observé 137 → `p < 0,001` ; sans les têtes : 43,742. Le +45 des têtes vient bien de la réduction des candidats, mais gonfle la ligne de base du candidat aléatoire de **+10,2 pts** : le top-k strict est une **couverture de candidats**, pas une exactitude.
+- **Recouvrement** : 137 exact = strict = top1 ; 4 stricts-sans-exact ; 1 top1-only (r230) ; 3 ni l'un ni l'autre.
+
+## Limites
+
+Le replay pré-v2 depuis `/tmp` exige `RACINE` = racine (sinon 77 labels / 0 exact) ; le lexique +8 est une borne haute (les 8 cibles anglaises exactement) ; 36/145 labels multi-cibles ; le split 3/5 utilise la sous-chaîne (4/4 en strict) ; F3 (+4/+4 selon A2) n'est ni intégré ni discuté.
+
+### 🤖 Assistant
+
+⏵ A10 atteint 145/145 mais par 3 règles étroites dessinées sur les cas : je le consigne comme **borne haute non intégrée**
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -14 reports/rapport-multicibles.md", "description": "Lire le verdict de A13 (multi-cibles)"}`
+
+  ```
+# Multi-cibles du gold et mesure d'attachement — 43 GP, +2 exact
+
+> **Ligne de roadmap** : **B13** (attachement, moteur de pensée) · tâche **A13** (multi-cibles) ·
+> **Date** : 2026-11-05 · **Branche** : `s/v7` · **HEAD** : `15ee10d3` · **Statut** : mesure seule ;
+> aucun fichier existant modifié ; aucun commit.
+>
+> **Verdict.** Les multi-cibles sont **réelles et structurées** : **43/96 GP** (44,79 %) ont deux
+> cibles, toutes de la forme `[gouverneur, tête nominale]` ; aucune REL/SUB n'en a. Mais leur effet
+> sur la mesure d'attachement est **faible** : sur les 145 segments au bon span, l'exact passe de
+> **137/145 = 94,48 %** (définition actuelle `cible == cibles[0]`) à **139/145 = 95,86 %**
+> (`cible in cibles`), soit **+2 cas, +1,38 pt**. Sur les 239 cibles, **57,32 % → 58,16 %**
+> (+0,84 pt). La définition par **tête** (c) est un **no-op** : `(c) = (b)`, 139/145.
+>
+> Les deux gains sont **s108** et **s122**, deux GP **synthétiques** où le bloc a choisi la cible
+  ```
+
+### 🤖 Assistant
+
+⏵ A13 : 43 GP ont deux cibles valides — j'ajoute la **mesure multi-cibles** (sans changer l'exact principal)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('''    att_n = att_labels = att_top1 = att_topk = att_exact = 0\n    att_topk_exact = 0''',\n'''    att_n = at … [1276 caractères tronqués]`
+
+  ```
+mesure multi-cibles ajoutée
+exact 141 | exact_any 143 | taux span 0.9724 0.9862
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T178 le cache du chunker             un seul chunking par analyse (1+2S → 1), sortie identique\\n\",\n\"  T178 le cache du … [4487 caractères tronqués]`
+
+  ```
+T179 ajoutée
+docs + fiche + pilotage + README
+  ❌ 1 violation(s) :
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; cache validé ; **multi-cibles 143/145** ; 4 échecs.\", \" ; cache validé ; multi-cibles 143/145 ; 4 échecs.\")\np.write_ … [214 caractères tronqués]`
+
+  ```
+· T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  182/182 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-260", "description": "Voir la ligne Fait"}`
+
+  ```
+71:- **Fait** : B13 **182/182** ; attachement **v3 : exact spans 0,9724**, **top-k strict 0,9793**, noms 1,0 ; cache ×139 ; cache validé ; multi-cibles 143/145 ; 4 échecs.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **182/182** ; attachement **v3 : exact spans 0,9724**, **top-k strict 0,9793**, noms 1,0 ; cache ×139 ; ca … [1775 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `d300542e-6e9d-47ac-875b-b44a192eec35` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 1.1 h |
+| Durée | 1.3 h |
 | Tours | 1 |
-| Messages | 64 |
-| Appels d'outils | 68 |
+| Messages | 77 |
+| Appels d'outils | 80 |
 | Fichiers touchés | 2 |
-| Commandes | 55 |
+| Commandes | 62 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le … [2218 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - bash — Show git state and repo root
 - bash — Line counts of key files
@@ -41,11 +41,34 @@
 - bash — Replicate analyser target logic for s108
 - bash — Inspect model candidate scores for key cases
 - bash — Exhaustive 145-target analysis
-- … et 46 autres
+- … et 55 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de l'empreinte finale (9da6dee7) et de l'historique de dérive
+⏵ Récapitulatif final et fichiers livrés
+
+**Trois fichiers neufs, aucun fichier existant modifié, aucun commit** (le `M tools/bloc_linguistique.py` du worktree vient d'un autre agent, je n'y ai pas touché) :
+
+- [`tools/tests/linguistique/replis_cible.py`](tools/tests/linguistique/replis_cible.py) — prototype autonome (sous-classe + post-traitement des cibles), non importé ailleurs.
+- [`reports/rapport-replis-cible.md`](reports/rapport-replis-cible.md) — fiche : protocole, Q1, tableau par retouche, contrôles négatifs, limites, recommandation.
+- [`reports/pensee-replis-cible.json`](reports/pensee-replis-cible.json) — résultats, 145 audits, snapshot A3 137, dérive des empreintes.
+
+**Empreinte mesurée** : `tools/bloc_linguistique.py = 9da6dee7` (105 156 o, 15:22:00), stable pendant le run. Le bloc a bougé pendant la session (`6e843018 → bb020516 → 64b7c520 → 9da6dee7`) : le live a déjà absorbé `g002` (`_repli_cible_gp`), `g012`/`r018` (`_cible_hors_span`) et `r230` (`_sans_enclitique`).
+
+**Baseline live** : 141/145 exact, 143/145 top1, 142/239 top-k strict. **Baseline A3** (snapshot `bb020516`) : 137/145. 
+
+**Q1** : sur 145 → 144 cibles remplies, **1 vide** (`s041`) ; sur 239 → **94 absentes** (48 REL, 33 SUB, 13 GP) + 1 vide = 95 sans cible utilisable. **2 cas nom prédit / verbe gold** : `s108` (`papier` vs `rêve`), `s122` (`papier` vs `saute`) ; sur le snapshot A3 il y avait aussi `r230` (depuis réparé), et 2 cas inverse (`g012`, `r018`, depuis réparés).
+
+| retouche | gain live | régressions | net live | net A3 (137) | recommandation |
+|---|---:|---:|---:|---:|---|
+| R1 repli cible vide (GP only) | +1 (`s041`) | 0 | **+1** | +2 (`g002`, `s041`) | ✅ intégrer |
+| R2 étroite (tête proche, GP) | +2 (`s108`, `s122`) | 0 | **+2** | +4 (forme large, 4 cas) | ✅ intégrer |
+| R2 littérale (« préférer un verbe ») | 0 | 3 (`g002`, `g012`, `r018`) | **-3** | 0 | ❌ ne pas intégrer |
+| R3 étroite (complétive en tête) | +1 (`r309`) | 0 | **+1** | +1 | ✅ intégrer |
+| **combiné** | **+4** | **0** | **+4** | **+7** | **145/145 exact, 145/145 top1** |
+
+Le combiné atteint **145/145 exact (1,0000)** et **145/145 top1** sur les 145, et **145/239 (0,6067)** sur les 239 : le plafond global reste les 94 spans non prédits. La R2 large de A3 donne le même +2 marginal que l'étroite mais change 12 étiquettes (10 hors gold) contre 4 (2 hors gold : `r121`, `r227`) ; la R2 littérale est néfaste (elle défait `g002`/`g012`/`r018`). La R3 large coûte 33 régressions. Le +4 live (contre +7 sur A
+… [173 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -98,7 +121,7 @@
 - **T1** Run updated prototype on live bloc
 - **T1** Inspect R3 regression and combination details
 - **T1** Check verb recognition for R3 guard
-- … et 15 autres
+- … et 22 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -139,4 +162,5 @@
 - **T1** `== R2_large | large : GP → rang 0, sauf verbe gouverneur reconnu hors segment (forme qui valait +4 sur le baseline A3)`
 - **T1** `== combinaison_R2_large | comparaison : R1 + R2 large (rang 0 gardé) + R3`
 - **T1** `== rang0_partout_A3 | contrôle A3 §7.1 : rang 0 pour tous les segments, sans garde`
+- **T1** `[still running after 60000ms; moved to background job bash-1491]`
 

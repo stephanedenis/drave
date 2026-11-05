@@ -15,6 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-audit-v2.md`](rapport-audit-v2.md) | **B13** — l'audit A8 de la v2 : 43 valeurs reproduites, 2 arrondis, 1 prose (46→45) |
+| [`rapport-replis-cible.md`](rapport-replis-cible.md) | **B13** — les replis A10 : 145/145 par 3 règles étroites, **borne haute non intégrée** |
+| [`rapport-multicibles.md`](rapport-multicibles.md) | **B13** — les multi-cibles A13 : 43/96 GP, exact_any 143/145 |
 | [`rapport-cache-chunker.md`](rapport-cache-chunker.md) | **B13** — la validation A11 du cache : ×11,0 à 160 tokens, égalité 612/612, cache falsifié détecté |
 | [`rapport-pensee-attachement-v3.md`](rapport-pensee-attachement-v3.md) | **B13** — l'attachement v3 : exact **0,9724**, noms 1,0, R2/R3/R4, **181/181** |
 | [`rapport-echecs-v2.md`](rapport-echecs-v2.md) | **B13** — les 8 échecs qualifiés, 5 règles chiffrées (A9) |
@@ -142,12 +145,9 @@
 | [`rapport-drvm-parite.md`](rapport-drvm-parite.md) | **N0.3b** — DRVM ↔ checkpoint : **114/114** tenseurs identiques |
 | [`rapport-native-pont.md`](rapport-native-pont.md) | **N1.6** — pont : PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** |
 | [`rapport-native-pensee.md`](rapport-native-pensee.md) | **N1.5** — pensée contractante **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** |
-| [`rapport-native-tetes.md`](rapport-native-tetes.md) | **N1.4** — têtes précoces : **55,15 / 60,94 / 62,13 %** contre **62,55 %** pour la principale, témoin **0,39 %** |
-| [`rapport-native-n0.md`](rapport-native-n0.md) | **N1.2** — `drave-n0` 11,37 M : PPL **3,353** en 10 000 pas, DRVM 110 tenseurs |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |
-| [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`INDEX.md`](INDEX.md) | **A7.5–A7.26** — 22 fiches de cache KV et de grappe réseau ; l'index exhaustif |
 
 ## Les données brutes

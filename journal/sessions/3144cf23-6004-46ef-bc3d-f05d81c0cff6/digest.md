@@ -1307,3 +1307,656 @@ global chunker seul {'tp': 175, 'fp': 502, 'fn': 1688, 'precision': 0.2585, 'rap
 … [552 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Fixing marker sets per language, relative/determiner ambiguity, proper nouns
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/regles.py'\ns=open(p).read()\n\ns=s.replace('''REL_ONLY = {\"qui\", \"dont\", \"où\", \"ou\", \"which\", \"who\", \"whom\", \"whose\", \"where\"}\nSUB_ONLY = {\"because\", \"although\", \"while\", \"if\", \"since\", \"car\", \"parce\", \ … [7433 caractères tronqués]`
+
+  ```
+== A_seul gain 79 Counter({'REL': 47, 'SUB': 32}) base_perdus 0 []
+== B_seul gain 53 Counter({'REL': 47, 'GP': 6}) base_perdus 0 []
+== AB_seul gain 85 Counter({'REL': 47, 'SUB': 32, 'GP': 6}) base_perdus 0 []
+== A_S gain 79 Counter({'REL': 47, 'SUB': 32}) base_perdus 0 []
+== B_S gain 53 Counter({'REL': 47, 'GP': 6}) base_perdus 0 []
+== AB_S gain 85 Counter({'REL': 47, 'SUB': 32, 'GP': 6}) base_perdus 0 []
+AB_S manque 9 Counter({'GP': 7, 'SUB': 1, 'REL': 1})
+    GP 'since yesterday'
+    GP 'since this morning'
+    GP 'au-dessus du lac'
+    GP 'le renard'
+    GP 'les ancienne lettre'
+    GP 'les jardin'
+    GP 'il'
+    REL 'she talks about'
+    SUB 'that she would come'
+  ```
+
+### 🤖 Assistant
+
+⏵ Making rule B strictly boundary-based (original marker lexicon, infinitive split only)
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/regles.py'\ns=open(p).read()\n# B : lexique de marqueurs d'origine (pas d'extension) + RELATIFS d'origine pour le GN\ns=s.replace('''RELATIFS_ETENDUS = {\"qui\", \"que\", \"qu\", \"dont\", \"où\", \"ou\", \"which\", \"that\", \"who\",\n  … [2236 caractères tronqués]`
+
+  ```
+== A_seul gain 79 Counter({'REL': 47, 'SUB': 32}) base_perdus 0 []
+== B_seul gain 41 Counter({'REL': 36, 'GP': 5}) base_perdus 0 []
+== AB_seul gain 84 Counter({'REL': 47, 'SUB': 32, 'GP': 5}) base_perdus 0 []
+== A_S gain 79 Counter({'REL': 47, 'SUB': 32}) base_perdus 0 []
+== B_S gain 41 Counter({'REL': 36, 'GP': 5}) base_perdus 0 []
+== AB_S gain 84 Counter({'REL': 47, 'SUB': 32, 'GP': 5}) base_perdus 0 []
+AB_S manque 10 Counter({'GP': 8, 'SUB': 1, 'REL': 1})
+    GP 'since yesterday'
+    GP 'since this morning'
+    GP 'au-dessus du lac'
+    GP 'le renard'
+    GP 'les ancienne lettre'
+    GP 'on the wall'
+    GP 'les jardin'
+    GP 'il'
+    REL 'she talks about'
+    SUB 'that she would come'
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && sed -n '/^{/,/^}/p' /tmp/spans/sortie.txt | python3 -c \"\nimport sys, json\nd=json.load(sys.stdin)\nfor k,v in d.items():\n    print(k, 'exact',v['exact_total'],'gain94',v['gain_94'],v['gain_94_par_type'],'base',v['base'],'perdus',v['perdus_base'],'P',v['global']['prec … [177 caractères tronqués]`
+
+  ```
+A_seul exact 211 gain94 79 {'SUB': 32, 'REL': 47} base 77 perdus 0 P 0.3776 R 0.1664 F1 0.231 TP 310 FP 511 FN 1553
+A_S exact 224 gain94 79 {'SUB': 32, 'REL': 47} base 145 perdus 0 P 0.3468 R 0.3043 F1 0.3242 TP 567 FP 1068 FN 1296
+B_seul exact 147 gain94 41 {'GP': 5, 'REL': 36} base 77 perdus 0 P 0.6229 R 0.2598 F1 0.3667 TP 484 FP 293 FN 1379
+B_S exact 186 gain94 41 {'GP': 5, 'REL': 36} base 145 perdus 0 P 0.4291 R 0.3462 F1 0.3832 TP 645 FP 858 FN 1218
+AB_seul exact 219 gain94 84 {'SUB': 32, 'REL': 47, 'GP': 5} base 77 perdus 0 P 0.6639 R 0.299 F1 0.4123 TP 557 FP 282 FN 1306
+AB_S exact 229 gain94 84 {'SUB': 32, 'REL': 47, 'GP': 5} base 145 perdus 0 P 0.4468 R 0.3693 F1 0.4043 TP 688 FP 852 FN 1175
+default exact 145 gain94 0 {} base 145 perdus 0 P 0.3154 R 0.2619 F1 0.2862 TP 488 FP 1059 FN 1375
+chunker_seul exact 77 gain94 0 {} base 77 perdus 0 P 0.2585 R 0.0939 F1 0.1378 TP 175 FP 502 FN 1688
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the house style for `reports/pensee-*.json` fiches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/pensee-*.json | head -20 && echo ---- && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-quatre-modes.json'))\nprint(type(d), list(d)[:20] if isinstance(d,dict) else len(d))\nprint(json.dumps(d, ensure_ascii=F … [86 caractères tronqués]`
+
+  ```
+reports/pensee-absents.json
+reports/pensee-ac3-alphabeta.json
+reports/pensee-adaptive.json
+reports/pensee-aleatoire.json
+reports/pensee-alternance.json
+reports/pensee-anaphore-103.json
+reports/pensee-anaphore-68.json
+reports/pensee-anaphore-bilan.json
+reports/pensee-anaphore-chaines.json
+reports/pensee-anaphore-corrige.json
+reports/pensee-anaphore-cv-graines.json
+reports/pensee-anaphore-cv.json
+reports/pensee-anaphore-hybride.json
+reports/pensee-anaphore.json
+reports/pensee-anaphore-kappa.json
+reports/pensee-anaphore-limite.json
+reports/pensee-anaphore-meta.json
+reports/pensee-anaphore-objets.json
+reports/pensee-anaphore-pieges.json
+reports/pensee-anaphore-pondere.json
+----
+<class 'dict'> ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail', 'appels', 'api', 'latence_s', 'duree_totale_s', 'limites']
+{
+ "date": "2026-11-04 10:37 EST",
+ "gold": {
+  "phrases": 3,
+  "tokens": 14,
+  "modalite": "api-deepseek (deepseek-chat), aucun serveur local"
+ },
+ "modes": {
+  "heuristique": {
+   "all": {
+    "pos": {
+     "exactitude": 0.8571,
+     "exactitude_ferme": 1.0,
+     "exactitude_ouvert": 0.75,
+     "tokens": 14,
+     "confusions": {
+      "DET": {
+       "DET": 5
+      },
+      "NO
+… [2611 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' reports/rapport-s-paragraphes.md 2>/dev/null; echo \"----\"; ls reports/rapport-*chunk* reports/rapport-*span* 2>/dev/null; echo \"----\"; sed -n '1,50p' reports/rapport-bloc-linguistique.md 2>/dev/null", "description" … [46 caractères tronqués]`
+
+  ```
+# S — La banque de paragraphes passe à neuf : six paires d'Alice, sources anglaises et référents
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : la banque passe de **3 à 9
+> paragraphes complets**. Les six nouveaux — l'ouverture d'Alice, la table de verre, l'attente à
+> la petite porte, « Buvez-moi », « Je me sens toute drôle » et le gâteau oublié — portent chacun
+> leur **contexte**, leur **antécédent** (Alice) et leur **source anglaise** (Project Gutenberg
+> #11). La page `/paragraphes` en affiche neuf, avec l'arbre, les référents et la source ; les
+> **55 tests** passent.
+
+## Les six paires
+
+| id | cible (français) | source (anglais) | réf. |
+|---|---|---|---:|
+| a004 | « ALICE, assise auprès de sa sœur… commençait à s'ennuyer… » | *Alice was beginning to get very tired…* | 1 |
+| a005 | « Tout à coup elle rencontra… une petite table à trois pieds, en verre massif… » | *Suddenly she came upon a little three-legged table…* | 3 |
+| a006 | « Comme cela n'avançait à rien… elle retourna vers la table… » | *There seemed to be no use in waiting by the little door…* | 4 |
+| a007 | « C'est bien facile à dire « Buvez-moi », mais Alice était trop fine… » | *It was all ve
+… [5529 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading the prior fiche on the 94 spans (context alignment)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,160p' reports/rapport-pensee-spans.md", "description": "Read prior 94-span fiche"}`
+
+  ```
+# B13 — les 94 spans : 48 REL, 33 SUB, 13 GP (état courant ; 93/12 après le correctif GP, avant le lexique élargi)
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **169/169 portes** : les échecs d'attachement par **span** (94 à l'état courant ; **93** après le correctif GP, avant le lexique élargi de `a408a909`) sont
+> **48 REL**, **33 SUB** et **13 GP** — les subordonnées ne sont **pas produites** (65 cas) ou le
+> sont avec un span plus large (24 à l'état courant ; 25 après le correctif GP). Le correctif testé — borner le GP au verbe et au relatif —
+> gagne **un span** (couverture 0,6067 → 0,6109, F1 0,2864 → 0,2869) mais **perd une cible** :
+> le total des échecs ne bouge pas (107).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-spans.json`](pensee-spans.json).
+
+## 1. Les 94 spans
+
+| type | échecs de span |
+|---|---:|
+| **REL** | **48** |
+| **SUB** | **33** |
+| **GP** | **13** |
+| **tout** | **94** |
+
+| catégorie | nombre |
+|---|---:|
+| aucun segment du même type |
+… [2667 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-spans.json'))\nprint(json.dumps(d, ensure_ascii=False, indent=1)[:4000])\n\"", "description": "Read prior pensee-spans JSON"}`
+
+  ```
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "169/169",
+ "gold": 612,
+ "cibles": 239,
+ "spans": {
+  "REL": 48,
+  "SUB": 33,
+  "GP": 12,
+  "total": 93
+ },
+ "categories": {
+  "aucun": 65,
+  "plus_large": 25,
+  "plus_etroit": 3,
+  "coupe": 1
+ },
+ "avant": {
+  "labels": 145,
+  "couverture": 0.6067,
+  "f1": 0.2864,
+  "span": 94,
+  "cible": 13
+ },
+ "apres": {
+  "labels": 146,
+  "couverture": 0.6109,
+  "f1": 0.2869,
+  "span": 93,
+  "cible": 14
+ },
+ "limites": [
+  "81 REL/SUB chez S",
+  "dénominateur de l'attachement à corriger",
+  "gold 612"
+ ],
+ "courant": {
+  "date": "2026-11-05",
+  "source": "audit A1 (pensee-audit-attachement.json)",
+  "labels": 145,
+  "couverture": 0.6067,
+  "f1": 0.2862,
+  "span": 94,
+  "types": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13
+  },
+  "categories": {
+   "aucun": 65,
+   "plus_large": 24,
+   "plus_etroit": 4,
+   "coupe": 1
+  },
+  "note": "état courant après le lexique élargi (a408a909) ; les blocs avant/apres restent l'historique"
+ }
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Reproducing the prior same-type categories and computing cause flags
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases=charger()\nh_true=bl … [1246 caractères tronqués]`
+
+  ```
+Counter({'aucun': 65, 'plus_large': 25, 'plus_etroit': 4})
+== plus_large 25
+    ('GP', 'du voisin', [(9, 32)], [(9, 32)])
+    ('GP', 'en gare', [(9, 22)], [(9, 22)])
+    ('REL', "que j'ai vu", [(8, 27)], [(8, 27)])
+    ('REL', 'dont la voiture est rouge', [(8, 23), (8, 40)], [(8, 23), (8, 40)])
+    ('REL', "que j'ai achetée", [(11, 33)], [(11, 33)])
+    ('REL', 'qui nage', [(10, 26)], [(10, 26)])
+== aucun 65
+    ('SUB', 'that she would come', [], [])
+    ('GP', 'to eat', [], [])
+    ('GP', 'since yesterday', [], [])
+    ('REL', 'that I read', [], [])
+    ('REL', 'she talks about', [], [])
+    ('GP', 'to eat', [], [])
+== plus_etroit 4
+    ('GP', 'au-dessus du lac', [(29, 35)], [(29, 35)])
+    ('GP', 'for the bus', [(8, 15)], [(8, 15)])
+    ('SUB', "qu'il vient demain", [(8, 19)], [(8, 19)])
+    ('REL', 'qui pousse ici', [(9, 19)], [(9, 19)])
+  ```
+
+### 🤖 Assistant
+
+⏵ Computing per-span cause flags (chunker-only) for all 94
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, json\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nfrom collections import Counter\nphrases=charger(); h_t … [3267 caractères tronqués]`
+
+  ```
+total 94
+Counter({('REL', 'avale_gn'): 39, ('SUB', 'autre'): 27, ('GP', 'avale_gv_gp'): 9, ('SUB', 'avale_gn'): 5, ('REL', 'frontiere'): 4, ('REL', 'zero_relatif'): 3, ('GP', 'frontiere'): 2, ('REL', 'autre'): 2, ('GP', 'marqueur_absent'): 1, ('GP', 'avale_gn'): 1, ('SUB', 'marqueur_absent'): 1})
+Counter({'avale_gn': 45, 'autre': 29, 'avale_gv_gp': 9, 'frontiere': 6, 'zero_relatif': 3, 'marqueur_absent': 2})
+GP 'du voisin' | avale_gv_gp | first du | same_start [('GP', 9, 32)] | narrow 0 | cont ['GP'] | absent False
+SUB 'that she would come' | autre | first that | same_start [] | narrow 0 | cont [] | absent False
+GP 'to eat' | avale_gv_gp | first to | same_start [] | narrow 0 | cont ['GV'] | absent False
+GP 'since yesterday' | marqueur_absent | first since | same_start [] | narrow 0 | cont [] | absent True
+REL 'she talks about' | zero_relatif | first she | same_start [] | narrow 0 | cont [] | absent True
+GP 'to eat' | avale_gv_gp | first to | same_start [] | narrow 0 | cont ['GV'] | absent False
+GP 'au-dessus du lac' | frontiere | first au-dessus | same_start [] | narrow 1 | cont [] | absent True
+GP 'en gare' | avale_gv_gp | first en | same_start [] | narrow 0 | cont ['GP'] | absent
+… [4072 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Computing final cause table, oracle boundary, and negative controls
+
+- **write** `{"content": "\"\"\"Analyse finale : causes des 94, oracle de frontière, contrôles négatifs. Sortie JSON /tmp.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport sys\nfrom collections import Counter, defaultdict\n\nROOT = pathlib.Path(\"/home/stephane/Data13TB/stephane/G … [12672 caractères tronqués]`
+
+  ```
+<path>/tmp/spans/analyse.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/analyse.py'\ns=open(p).read()\ns=s.replace(\"    a = dict(DEFAULT)[c[0]]\", \"    a = {id(pp): aa for pp, aa in DEFAULT}[c[0]]\")\ns=s.replace(\"    a0 = dict(BASE0)[c[0]]\", \"    a0 = {id(pp): aa for pp, aa in BASE0}[c[0]]\")\nopen(p,' … [122 caractères tronqués]`
+
+  ```
+{
+ "gold": {
+  "phrases": 612,
+  "cibles": 239,
+  "cibles_par_type": {
+   "GP": 96,
+   "SUB": 69,
+   "REL": 74
+  }
+ },
+ "default": {
+  "labels": 145,
+  "perdus": 94,
+  "perdus_par_type": {
+   "GP": 13,
+   "SUB": 33,
+   "REL": 48
+  }
+ },
+ "categories_meme_type": {
+  "plus_large": 24,
+  "aucun": 65,
+  "plus_etroit": 4,
+  "coupe": 1
+ },
+ "causes": {
+  "frontiere": 6,
+  "autre": 29,
+  "avale_gv": 2,
+  "marqueur_hors_lexique_branche": 18,
+  "avale_gn": 39
+ },
+ "causes_par_type": {
+  "GP|frontiere": 2,
+  "SUB|autre": 27,
+  "GP|avale_gv": 2,
+  "GP|marqueur_hors_lexique_branche": 9,
+  "REL|avale_gn": 34,
+  "REL|marqueur_hors_lexique_branche": 8,
+  "REL|frontiere": 4,
+  "REL|autre": 2,
+  "SUB|marqueur_hors_lexique_branche": 1,
+  "SUB|avale_gn": 5
+ },
+ "marqueurs": {
+  "GP": {
+   "du": 1,
+   "to": 2,
+   "since": 2,
+   "au-dessus": 1,
+   "en": 1,
+   "for": 1,
+   "on": 1,
+   "il": 1,
+   "les": 2,
+   "le": 1
+  },
+  "SUB": {
+   "that": 9,
+   "when": 4,
+   "although": 3,
+   "if": 2,
+   "because": 4,
+   "while": 2,
+   "as": 2,
+   "qu'il": 1,
+   "car": 1,
+   "que": 5
+  },
+  "REL": {
+   "that": 14,
+   "she": 1,
+   "where": 6,
+   "who": 2,
+   "que": 2,
+   "whom": 3,
+   "dont": 1,
+   "whose": 1,
+   "w
+… [2366 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/spans/analyse.json'))\nfrom collections import defaultdict\ng=defaultdict(list)\nfor r in d['detail']:\n    g[r['cause']].append(r)\nfor c, rows in g.items():\n    print(\"==\",c,len(rows))\n    for r in rows:\n     … [218 caractères tronqués]`
+
+  ```
+== frontiere 6
+   GP 'du voisin' | premier du | hors False | gn False | gv False | front True
+   GP 'for the bus' | premier for | hors False | gn False | gv False | front True
+   REL 'dont la voiture est rouge' | premier dont | hors False | gn False | gv False | front True
+   REL 'qui marche' | premier qui | hors False | gn False | gv False | front True
+   REL 'qui commence' | premier qui | hors False | gn False | gv False | front True
+   REL 'qui trouve' | premier qui | hors False | gn False | gv False | front True
+== autre 29
+   SUB 'that she would come' | premier that | hors False | gn False | gv False | front False
+   SUB 'that you are right' | premier that | hors False | gn False | gv False | front False
+   SUB 'When it rains' | premier when | hors False | gn False | gv False | front False
+   SUB 'that he comes' | premier that | hors False | gn False | gv False | front False
+   SUB 'Although it is late' | premier although | hors False | gn False | gv False | front False
+   SUB 'that you come' | premier that | hors False | gn False | gv False | front False
+   SUB 'If you come' | premier if | hors False | gn False | gv False | front False
+   SUB 'because she is happy' | premier 
+… [7015 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing language-specific flag logic for the final cause table
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/analyse.py'\ns=open(p).read()\nold = '''    if c[1] == \"REL\":\n        hors = first not in orig.RELATIFS and b not in orig.RELATIFS\n        zero = hors and first not in {\"where\", \"when\"} and first not in DET\n    else:\n        ho … [3496 caractères tronqués]`
+
+  ```
+{
+ "gold": {
+  "phrases": 612,
+  "cibles": 239,
+  "cibles_par_type": {
+   "GP": 96,
+   "SUB": 69,
+   "REL": 74
+  }
+ },
+ "default": {
+  "labels": 145,
+  "perdus": 94,
+  "perdus_par_type": {
+   "GP": 13,
+   "SUB": 33,
+   "REL": 48
+  }
+ },
+ "categories_meme_type": {
+  "plus_large": 24,
+  "aucun": 65,
+  "plus_etroit": 4,
+  "coupe": 1
+ },
+ "causes": {
+  "frontiere": 6,
+  "autre_pas_de_branche_sub": 28,
+  "avale_gv": 3,
+  "marqueur_hors_lexique_branche": 16,
+  "avale_gn": 36,
+  "gold_gp_sans_preposition": 5
+ },
+ "causes_par_type": {
+  "GP|frontiere": 2,
+  "SUB|autre_pas_de_branche_sub": 27,
+  "GP|avale_gv": 3,
+  "GP|marqueur_hors_lexique_branche": 3,
+  "REL|avale_gn": 31,
+  "REL|marqueur_hors_lexique_branche": 12,
+  "GP|gold_gp_sans_preposition": 5,
+  "REL|frontiere": 4,
+  "SUB|marqueur_hors_lexique_branche": 1,
+  "REL|autre_pas_de_branche_sub": 1,
+  "SUB|avale_gn": 5
+ },
+ "marqueurs": {
+  "GP": {
+   "du": 1,
+   "to": 2,
+   "since": 2,
+   "au-dessus": 1,
+   "en": 1,
+   "for": 1,
+   "on": 1,
+   "il": 1,
+   "les": 2,
+   "le": 1
+  },
+  "SUB": {
+   "that": 9,
+   "when": 4,
+   "although": 3,
+   "if": 2,
+   "because": 4,
+   "while": 2,
+   "as": 2,
+   "qu'il": 1,
+   "car": 1,
+   "que": 5
+  },
+ 
+… [485 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/analyse.py'\ns=open(p).read()\ns=s.replace('''        hors = (first not in prep_l and b not in prep_l\n                and first not in det_l and first not in pron_l)\n        sans_prep = (first in det_l or first in pron_l)\n    tete_ava … [1535 caractères tronqués]`
+
+  ```
+causes {'frontiere': 7, 'tete_avalee_gn': 5, 'avale_gv': 3, 'marqueur_hors_lexique_branche': 16, 'avale_gn': 36, 'autre_pas_de_branche_sub': 23, 'gold_gp_sans_preposition': 4}
+causes_par_type {
+"GP|frontiere": 3,
+"SUB|tete_avalee_gn": 4,
+"GP|avale_gv": 3,
+"GP|marqueur_hors_lexique_branche": 3,
+"REL|avale_gn": 31,
+"REL|marqueur_hors_lexique_branche": 12,
+"SUB|autre_pas_de_branche_sub": 23,
+"REL|frontiere": 4,
+"SUB|marqueur_hors_lexique_branche": 1,
+"REL|tete_avalee_gn": 1,
+"SUB|avale_gn": 5,
+"GP|gold_gp_sans_preposition": 4
+}
+oracle {'REL': {'n': 48, 'ok': 48}, 'SUB': {'n': 33, 'ok': 32}}
+negatifs {'sans_frontiere': {'gain': 32, 'gain_par_type': {'SUB': 32}}, 'sans_arret_relatif': {'gain': 5, 'gain_par_type': {'GP': 5}}, 'hasard_2000': 107, 'decale_1': 0}
+flags gn 45 gv 3 hors 16 front 12 tete 9 zero 4
+MODE
+A_seul 211 79 {'REL': 47, 'SUB': 32} perdus 0 P 0.3776 R 0.1664 F1 0.231 FP 511
+A_S 224 79 {'REL': 47, 'SUB': 32} perdus 0 P 0.3468 R 0.3043 F1 0.3242 FP 1068
+B_seul 147 41 {'REL': 36, 'GP': 5} perdus 0 P 0.6229 R 0.2598 F1 0.3667 FP 293
+B_S 186 41 {'REL': 36, 'GP': 5} perdus 0 P 0.4291 R 0.3462 F1 0.3832 FP 858
+AB_seul 219 84 {'REL': 47, 'SUB': 32, 'GP': 5} perdus 0 P 0.6639 R 0
+… [236 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/analyse.py'\ns=open(p).read()\nold='''    if sans_prep:\n        cause = \"gold_gp_sans_preposition\"\n    elif hors:\n        cause = \"marqueur_hors_lexique_branche\"\n    elif same_wide or same_narrow or same_start:\n        cause = \ … [1957 caractères tronqués]`
+
+  ```
+causes {'frontiere': 7, 'autre_pas_de_branche_sub': 33, 'avale_gv': 3, 'marqueur_hors_lexique_branche': 15, 'avale_gn': 31, 'tete_avalee_gn': 1, 'gold_gp_sans_preposition': 4}
+{
+"GP|frontiere": 3,
+"SUB|autre_pas_de_branche_sub": 33,
+"GP|avale_gv": 3,
+"GP|marqueur_hors_lexique_branche": 3,
+"REL|avale_gn": 31,
+"REL|marqueur_hors_lexique_branche": 12,
+"REL|frontiere": 4,
+"REL|tete_avalee_gn": 1,
+"GP|gold_gp_sans_preposition": 4
+}
+flags gn 45 gv 3 hors 16 front 12 tete 9
+MODES
+A_seul 211 79 {'SUB': 32, 'REL': 47} perdus 0 P 0.3776 R 0.1664 F1 0.231 FP 511 FN 1553
+A_S 224 79 {'SUB': 32, 'REL': 47} perdus 0 P 0.3468 R 0.3043 F1 0.3242 FP 1068 FN 1296
+B_seul 147 41 {'REL': 36, 'GP': 5} perdus 0 P 0.6229 R 0.2598 F1 0.3667 FP 293 FN 1379
+B_S 186 41 {'REL': 36, 'GP': 5} perdus 0 P 0.4291 R 0.3462 F1 0.3832 FP 858 FN 1218
+AB_seul 219 84 {'SUB': 32, 'REL': 47, 'GP': 5} perdus 0 P 0.6639 R 0.299 F1 0.4123 FP 282 FN 1306
+AB_S 229 84 {'SUB': 32, 'REL': 47, 'GP': 5} perdus 0 P 0.4468 R 0.3693 F1 0.4043 FP 852 FN 1175
+chunker_seul 77 0 {} perdus 0 P 0.2585 R 0.0939 F1 0.1378 FP 502 FN 1688
+default 145 0 {} perdus 0 P 0.3154 R 0.2619 F1 0.2862 FP 1059 FN 1375
+FP A 9
+   ['SUB', "qu'elle viendrait hi
+… [576 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the 9 false positives added by rule (a)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nfrom evaluer_gold import charger\nphrases=charger()\nfor txt in [\"Elle a dit qu'elle viendrait hier.\",\"Bien qu'il soit tard, … [493 caractères tronqués]`
+
+  ```
+== Elle a dit qu'elle viendrait hier. hand fr
+    GN 'Elle' 0 4 cible= None None
+    GV 'a dit' 5 10 cible= None None
+    SUB "qu'elle viendrait" 11 28 cible= dit ['dit']
+== Bien qu'il soit tard, il travaille. reel fr
+    SUB "Bien qu'il soit tard" 0 20 cible= travaille ['travaille']
+    GN 'il' 22 24 cible= None None
+    GV 'travaille' 25 34 cible= None None
+== Pendant qu'il dort, elle lit. reel fr
+    SUB "Pendant qu'il dort" 0 18 cible= lit ['lit']
+    GN 'elle' 20 24 cible= None None
+    GV 'lit' 25 28 cible= None None
+== Je pense que nous devons partir. reel fr
+    GN 'Je' 0 2 cible= None None
+    GV 'pense' 3 8 cible= None None
+    SUB 'que nous devons partir' 9 31 cible= pense ['pense']
+== Bien qu'il pleuve, il sort. reel fr
+    SUB "Bien qu'il pleuve" 0 17 cible= sort ['sort']
+    GN 'il' 19 21 cible= None None
+    GV 'sort' 22 26 cible= None None
+== Pendant qu'elle dort, il travaille. reel fr
+    SUB "Pendant qu'elle dort" 0 20 cible= travaille ['travaille']
+    GN 'il' 22 24 cible= None None
+    GV 'travaille' 25 34 cible= None None
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking roadmap line L and the reports naming convention
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \\|L[0-9]\\|ligne L\\|territoire L\" docs/pilotage/roadmap.md | head -40", "description": "Find roadmap line L"}`
+
+  ```
+13:## Comment lire cette roadmap
+26:## En un coup d'œil
+54:## L'ordre du jour (carpe diem)
+85:## Le Gantt indicatif
+138:## Programme A — Le moteur (la drave, les flux)
+159:## Programme B — L'intelligence (les deux étages)
+187:## Programme N — Le natif (DRVM, `drave-n0`, distillation)
+219:## Programme R
+231:### Les six phases
+242:### R0 — le lecteur v0 (système, sans entraînement)
+263:### R1 — la fenêtre native
+277:### R2 — la mémoire
+287:### R3 — la restitution
+297:### R4 — les blocs structurels
+309:### R5 — la lecture croisée et le multilingue
+316:### Ce que R ne fait pas
+333:## La file « jamais en attente »
+346:## Ce qui est bloqué, et par quoi
+358:## Les questions ouvertes
+370:## Le détail et l'histoire
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/rapport-*.md | tail -15 && grep -rl \"territoire L\" docs reports 2>/dev/null | head", "description": "Look for territory L references"}`
+
+  ```
+reports/rapport-transport-liste.md
+reports/rapport-travail-reel.md
+reports/rapport-typoglycemie.md
+reports/rapport-universaux.md
+reports/rapport-v41-couches-brouillon.md
+reports/rapport-v41-mhc.md
+reports/rapport-v4-couches-0-1.md
+reports/rapport-v4-hca.md
+reports/rapport-v4-reparti.md
+reports/rapport-v4-yarn-compresse.md
+reports/rapport-valeur-unaire.md
+reports/rapport-vie-quatre-jours.md
+reports/rapport-vision-qwen2vl.md
+reports/rapport-vitesse-v41.md
+reports/rapport-vram-transfert.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"territoire\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/rapport-pensee-spans.md 2>/dev/null | head -20; echo ----; grep -rln \"territoire L\\|territoire.*chunker\" . --include=*.md 2>/dev/null | head", "des … [47 caractères tronqués]`
+
+  ```
+reports/rapport-pensee-spans.md:47:  l'analyse des subordonnées du **générateur S** (`tools/structures/`), hors de mon territoire.
+reports/rapport-pensee-spans.md:51:- **La négative est explicite** : 107 échecs, dont 81 hors de mon territoire.
+----
+./journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+./journal/sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md
+./journal/sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md
+./journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/digest.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -i \"territoire\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | head -20; echo ----; sed -n '1,80p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md", "description": "Read parent session dig … [13 caractères tronqués]`
+
+  ```
+9454:5: > ordre) : **qui fait quoi, dans quel territoire, à quelle cadence, et comment on surveille les
+9983:> **Objectif** (create) : Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.
+9987:{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":1,"objective":"Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suiva
+… [16108 caractères tronqués]
+  ```
+

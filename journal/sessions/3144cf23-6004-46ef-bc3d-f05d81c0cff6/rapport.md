@@ -7,12 +7,12 @@
 | Identifiant | `3144cf23-6004-46ef-bc3d-f05d81c0cff6` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.7 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 40 |
-| Appels d'outils | 41 |
-| Fichiers touchés | 2 |
-| Commandes | 34 |
+| Messages | 62 |
+| Appels d'outils | 64 |
+| Fichiers touchés | 4 |
+| Commandes | 55 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer  … [2227 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*64 appels d'outils.* Actions notables :
 
 - bash — Show git status, branch, and top-level files
 - bash — List linguistic tests and reports directories
@@ -41,11 +41,11 @@
 - bash — Inspect synthetic gold builder and S generator API
 - bash — Read S generator head and tail
 - bash — Compare S generator spans against the 94 lost
-- … et 24 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
-⏵ Fixing marker sets per language, relative/determiner ambiguity, proper nouns
+⏵ Measuring the attachment effect (secondary) for each rule
 
 ## 3. Travail accompli
 
@@ -55,6 +55,8 @@
 |---|---|---|
 | `/tmp/spans/regles.py` | 2 | 0 |
 | `/tmp/spans/simuler.py` | 1 | 0 |
+| `/tmp/spans/analyse.py` | 1 | 0 |
+| `/tmp/spans/final.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -92,6 +94,17 @@
 - **T1** Show union results and AB misses
 - **T1** Debug rule outputs on missed examples
 - **T1** Apply principled fixes and rerun
+- **T1** Rerun with strict rule B lexicons
+- **T1** Summarize metrics per mode
+- **T1** Inspect existing pensee JSON structure
+- **T1** Inspect sibling report and existing style
+- **T1** Read prior 94-span fiche
+- **T1** Read prior pensee-spans JSON
+- … et 15 autres
+
+## 4. Mesures et résultats marquants
+
+- **T1** `> substituables, un parallèle et une cascade, une activation sémantique à **51–76 %** ; la`
 
 ## 5. Erreurs rencontrées
 

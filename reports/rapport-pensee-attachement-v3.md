@@ -21,6 +21,7 @@
 | top-k strict | 141 (0,9724) | **142 (0,9793)** | +1 |
 | cibles verbes (POS gold) | 111/116 (0,9569) | **112/116 (0,9655)** | +1 |
 | **cibles noms (POS gold)** | 26/29 (0,8966) | **29/29 (1,0000)** | **+3** |
+| exact multi-cibles (`cible in cibles`) | — | **143/145 (0,9862)** | mesure secondaire (A13) |
 
 Rendement global (÷ 239 cibles) : top1 **0,5983**, top-k 0,5941, exact **0,5900**.
 

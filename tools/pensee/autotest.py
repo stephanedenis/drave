@@ -2205,7 +2205,7 @@ def t151_soustype_variance() -> tuple[bool, str]:
 
 
 def t152_tirages() -> tuple[bool, str]:
-    """Les trois tirages : 0,9838 exactement, le cache masque la variance."""
+    """Les trois tirages : 0,9838 exactement — le modèle est déterministe sur ces invites."""
     import json
     import pathlib
     racine = pathlib.Path(__file__).resolve().parents[2]
@@ -2219,7 +2219,7 @@ def t152_tirages() -> tuple[bool, str]:
 
 
 def t153_attachement() -> tuple[bool, str]:
-    """L'attachement sur le gold 612 (239 cibles) : top1 0,5272, exact 0,5105."""
+    """L'attachement sur le gold 612 (239 cibles) : top1 0,5983, exact 0,5900."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
@@ -2347,7 +2347,7 @@ def t161_cible_proximite() -> tuple[bool, str]:
 
 
 def t162_candidats_verbes() -> tuple[bool, str]:
-    """Les candidats verbes : le top-k passe de 78 à 112 (0,4686)."""
+    """Les candidats verbes : le top-k atteint 142/145 (0,9793) après les têtes."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())
@@ -2404,7 +2404,7 @@ def t165_lexique_verbal() -> tuple[bool, str]:
 
 
 def t166_spans() -> tuple[bool, str]:
-    """Les spans perdus : 48 REL, 33 SUB, 12 GP."""
+    """Les spans perdus : 48 REL, 33 SUB, 13 GP (94)."""
     import collections
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger
@@ -2436,7 +2436,7 @@ def t167_denominateur() -> tuple[bool, str]:
 
 
 def t168_classement() -> tuple[bool, str]:
-    """Le classement : la cible réduite à sa tête (exact 94) et les deux conventions du gold."""
+    """Le classement : la cible réduite à sa tête et les deux conventions du gold (POS gold)."""
     import tools.bloc_linguistique as bl
     h = bl.Heuristique()
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
@@ -2458,7 +2458,7 @@ def t168_classement() -> tuple[bool, str]:
             else:
                 noms += 1
     return (r["exact"] == 141 and verbes == 116 and noms == 29), (
-        f"classement : exact {r['exact']}/146 ; cibles {verbes} verbes, {noms} noms")
+        f"classement : exact {r['exact']}/145 ; cibles {verbes} verbes, {noms} noms")
 
 
 def t169_conventions() -> tuple[bool, str]:
@@ -2499,7 +2499,7 @@ def t171_lexique_elargi() -> tuple[bool, str]:
 
 
 def t172_echecs_cible() -> tuple[bool, str]:
-    """Les échecs de cible : 11 hors candidats, 11 mal classés."""
+    """Les échecs de cible : 2 hors candidats, 2 mal classés (exact 141/145)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger
     h = bl.Heuristique()
@@ -2525,7 +2525,7 @@ def t172_echecs_cible() -> tuple[bool, str]:
 
 
 def t173_topk_strict() -> tuple[bool, str]:
-    """Le top-k strict : 88/145 (0,6069), contre 0,9241 en sous-chaîne."""
+    """Le top-k strict : 142/145 (0,9793), égal au sous-chaîne depuis les têtes de candidats."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
@@ -2619,6 +2619,16 @@ def t178_cache_chunker() -> tuple[bool, str]:
         bl.Heuristique._syntagmes_simple = orig
     return chunker == 1 and defaut == 1, (
         f"cache : {chunker} chunking chunker, {defaut} défaut (1+2S avant)")
+
+
+def t179_multi_cibles() -> tuple[bool, str]:
+    """La mesure multi-cibles : 43 GP du gold ont deux cibles ; exact_any = 143/145."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (a["exact"] == 141 and a["exact_any"] == 143
+            and abs(a["exact_any_taux_span"] - 0.9862) < 0.001), (
+        f"multi-cibles : exact {a['exact']}/145, exact_any {a['exact_any']}/145")
 
 
 def main() -> int:
@@ -2798,7 +2808,8 @@ def main() -> int:
               ("T175 audit attachement", t175_audit_attachement()),
               ("T176 segment précédent", t176_segment_precedent()),
               ("T177 candidats têtes", t177_candidats_tete()),
-              ("T178 cache chunker", t178_cache_chunker())]
+              ("T178 cache chunker", t178_cache_chunker()),
+              ("T179 multi-cibles", t179_multi_cibles())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

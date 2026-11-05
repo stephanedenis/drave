@@ -7,12 +7,12 @@
 | Identifiant | `b3d82ad5-bff2-49ec-9ad6-2230e68d8071` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 0.7 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 44 |
-| Appels d'outils | 56 |
-| Fichiers touchés | 0 |
-| Commandes | 55 |
+| Messages | 65 |
+| Appels d'outils | 92 |
+| Fichiers touchés | 1 |
+| Commandes | 76 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer l' … [1961 caractères tronqués]
 
-*56 appels d'outils.* Actions notables :
+*92 appels d'outils.* Actions notables :
 
 - bash — Show repo status and branch
 - bash — List linguistique tools and reports
@@ -41,11 +41,11 @@
 - bash — Find multiword target values
 - bash — Check gold_gele counts
 - bash — Run heuristic and inspect predicted targets
-- … et 42 autres
+- … et 76 autres
 
 **Synthèse produite :**
 
-⏵ Écriture du JSON de résultats
+⏵ Validation de la fiche V3 et de la cohérence avec le JSON
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-multicibles.md` | 2 | 11 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +97,7 @@
 - **T1** Debug per-source discrepancy
 - **T1** Check for nondeterminism in block
 - **T1** Repeat measurement three times
-- … et 15 autres
+- … et 36 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -129,4 +130,27 @@
 - **T1** `delta bootstrap 95% 0.0 0.034482758620689655 mean 0.01381448275862069`
 - **T1** `"definition": "adopter (b) cible in cibles pour exact et topk_exact ; conserver les deux dénominateurs (239 rendement, 145 span) et annoncer 139/145 = 95,86 % et 139/239 = 58,16 %, avec la mention « +`
 - **T1** `"split": "si (b) est adopté, classer verbe/nom par la cible appariée : 114/111 verbe (97,37 %), 31/28 nom (90,32 %) au lieu de 116/111 et 29/26",`
+- **T1** `142:| **Total** | **145** | **36** | **137 (94,48 %)** | **139 (95,86 %)** | **+2 (+1,38 pt)** |`
+- **T1** `15:> nominale (`papier`) que le gold autorise ; sur hand+reel, `(a) = (b) = 110/115 = 95,65 %`.`
+- **T1** `147:**Le +2 est entièrement synthétique.** Sur hand+reel (115 labels), `(a) = (b) = 110/115 = 95,65 %`,`
+- **T1** `43/239 cibles (17,99 %) 1`
+- **T1** `36/145 labels (24,83 %) 1`
+- **T1** `43/96 (44,79 %) 1`
+- **T1** `36/83 (43,37 %) 1`
+- **T1** `137 (94,48 %) 3`
+- **T1** `139 (95,86 %) 4`
+- **T1** `33/36 (91,67 %) 1`
+- **T1** `31,086/36 (86,35 %) 1`
+- **T1** `1,23/145 (0,85 %) 1`
+- **T1** `b1b1292f7983a5f7349bc81dc92404be5cd99a36 2026-11-05 15:29:19 -0500 B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
+- **T1** `b1b1292f B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
+- **T1** `"head_sujet": "B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181",`
+- **T1** `141 (97,24 %) 4`
+- **T1** `143 (98,62 %) 5`
+- **T1** `35/36 (97,22 %) 1`
+- **T1** `33,086/36 (91,91 %) 1`
+- **T1** `1,251/145 (0,86 %) 1`
+- **T1** `137 (94,48 %) 1`
+- **T1** `139 (95,86 %) 1`
+- **T1** `2026-11-05 15:29:19 -0500 B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
 
