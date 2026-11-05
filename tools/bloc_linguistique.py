@@ -398,6 +398,15 @@ find finds found finding open opens opened opening close closes closed closing
 """.split())
 
 
+AUXILIAIRES = set("""
+suis es est sommes êtes sont étais était étions étiez étaient été sera serai seras seront
+serais serait serions seriez seraient sois soit soyons soyez soient étant
+ai as a avons avez ont avais avait avions aviez avaient aurai auras aura aurons aurez auront
+aurais aurait aurions auriez auraient aie aies ait ayons ayez aient ayant eu
+am is are was were be been being have has had having do does did done
+""".split())
+
+
 def _est_verbe(mot: str) -> bool:
     """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
     n = _normaliser(mot)
@@ -584,9 +593,14 @@ class Heuristique:
 
     @staticmethod
     def _verbe_dans(texte: str, debut: int, fin: int,
-                    verbes: list[tuple[int, int, str]] | None = None) -> str | None:
+                    verbes: list[tuple[int, int, str]] | None = None,
+                    strict: bool = False) -> str | None:
         """Le **verbe** du span : le lexique d'abord, puis le POS `VERB`, sinon le dernier mot."""
         mots = [(m.start() + debut, m.group()) for m in re.finditer(r"[\wÀ-ÿ'-]+", texte[debut:fin])]
+        # le verbe **plein** d'abord : « J'ai vu » donne `vu`, pas `ai`
+        for _, m in mots:
+            if _est_verbe(m) and _normaliser(m) not in AUXILIAIRES:
+                return m
         for _, m in mots:
             if _est_verbe(m):
                 return m
@@ -594,7 +608,7 @@ class Heuristique:
             for d, f, v in verbes:
                 if d >= debut and f <= fin:
                     return v
-        return mots[-1][1] if mots else None
+        return None if strict else (mots[-1][1] if mots else None)
 
     @staticmethod
     def _cible_proche(texte: str, segment: dict, gvs: list[dict],
@@ -606,6 +620,8 @@ class Heuristique:
         """
         if segment.get("type") == "GV" or not gvs:
             return None
+        # le plus proche, tous côtés mêlés : la variante « GV de gauche d'abord » a été
+        # mesurée (2026-11-05) et donne **le même** exact (33) — elle n'est pas retenue.
         def ecart(g: dict) -> int:
             if g["fin"] <= segment["debut"]:
                 return segment["debut"] - g["fin"]
@@ -777,11 +793,17 @@ class Heuristique:
                 deja = {(x["debut"], x["fin"]) for x in gvs_s}
                 gvs = gvs_s + [x for x in gvs_simple if (x["debut"], x["fin"]) not in deja]
                 for s in c.get("segments", []):
+                    # la cible de S **convertie en son verbe** : « Les enfants jouent » →
+                    # `jouent` (le gold attend le verbe, pas le GN) ; à défaut, le GV le plus
+                    # proche. Mesuré : 82 cibles justes dans les candidats, 33 choisies avant.
                     att = c.get("attachement") or {}
-                    if att.get("segment") == s.get("texte"):
-                        cible = att.get("cible")
-                    else:
-                        cible = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
+                    brute = (att.get("cible") if att.get("segment") == s.get("texte")
+                             else cibles_s.get((s.get("debut"), s.get("fin"), s.get("type"))))
+                    cible = None
+                    if brute:
+                        i = texte.find(brute)
+                        if i >= 0:
+                            cible = self._verbe_dans(texte, i, i + len(brute), verbes)
                     if not cible:
                         cible = self._cible_proche(texte, s, gvs, verbes)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}

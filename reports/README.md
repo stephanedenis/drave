@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-classement.md`](rapport-pensee-classement.md) | **B13** — le classement : exact 0,2260 → **0,6438**, **171/171** |
 | [`rapport-pensee-denominateur.md`](rapport-pensee-denominateur.md) | **B13** — le dénominateur : rendement 0,1381 vs exactitude spans **0,2260**, **170/170** |
 | [`rapport-pensee-spans.md`](rapport-pensee-spans.md) | **B13** — les spans perdus : 48 REL, 33 SUB, 12 GP, **169/169** |
 | [`rapport-pensee-lexique-verbal.md`](rapport-pensee-lexique-verbal.md) | **B13** — le lexique verbal : exact 0,0962 → **0,1381**, tête 0,9034, **168/168** |

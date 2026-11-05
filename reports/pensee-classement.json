@@ -1,0 +1,51 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "171/171",
+ "gold": 612,
+ "cibles": 239,
+ "labels": 146,
+ "avant": {
+  "exact": 33,
+  "exact_span": 0.226,
+  "top1": 115,
+  "top1_span": 0.7877
+ },
+ "apres": {
+  "exact": 94,
+  "exact_span": 0.6438,
+  "top1": 114,
+  "top1_span": 0.7808
+ },
+ "rendement": {
+  "top1": 0.477,
+  "topk": 0.5523,
+  "exact": 0.3933
+ },
+ "conventions": {
+  "verbe": 51,
+  "nom_autre": 95,
+  "justes_verbe": 37,
+  "justes_nom": 57,
+  "par_type": {
+   "GP": {
+    "verbe": 36,
+    "nom": 48
+   },
+   "REL": {
+    "verbe": 0,
+    "nom": 26
+   },
+   "SUB": {
+    "verbe": 15,
+    "nom": 21
+   }
+  }
+ },
+ "limites": [
+  "le gold mélange deux conventions",
+  "52 échecs non qualifiés",
+  "top-k lenient",
+  "gold 612"
+ ]
+}

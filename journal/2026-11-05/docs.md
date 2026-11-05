@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,11 +23,12 @@
 | 01:44 | `e483ba8b` | ÉTAT — PASSE 69 VERDICTS : PROFONDEUR-ROUTÉE VERTE (700 S), PUSH-PARESSEUX VERTE ; HEURE 01 H 48 | `en-cours.md`, `README.md`, `docs.md` (+4) |
 | 01:47 | `86000584` | ÉTAT — HEURE 01 H 51 ; PASSE 72 JOURNAUX : R13-BPE ET RÉCURRENCE VERTES, RÉFLEXE EN COURS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 02:05 | `8dbff305` | ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES » | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 09:47 | `8f472d00` | PILOTAGE — B13 170/170 DÉCRIT PAR SES DEUX LECTURES ; RAPPORT DE SESSION NETTOYÉ ; PLAN ET JOURNAL À JOUR | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
 
 ## Sessions actives ce jour
 
 - `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — Session status update (début 2026-11-04 07:25, 18.9 h) → [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 113.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 113.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 <!-- notes -->
 
