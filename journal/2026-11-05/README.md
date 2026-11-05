@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**18 commits** · **1 session(s)** · **5 thème(s)**
+**19 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
-| memoire | 8 | [memoire.md](memoire.md) |
+| memoire | 9 | [memoire.md](memoire.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -21,7 +21,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 17.5 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 17.6 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -45,6 +45,7 @@
 | 00:46 | `b84b55e1` | ÉTAT — HEURE 00 H 54 ; INDICE À 7 MIN, REGISTRE 30/83 SANS NON-ZÉRO |
 | 00:49 | `2faf2fa1` | ÉTAT — HEURE 00 H 57 ; 83 PORTES OUTILLÉES, INDICE TOUJOURS EN COURS |
 | 00:52 | `6f73c791` | ÉTAT — HEURE 00 H 59 ; INDICE À 13 MIN, DANS SA DURÉE HISTORIQUE |
+| 00:55 | `390357c7` | ÉTAT — HEURE 01 H 02 ; INDICE EN SECTION 3 (16 MIN), AUCUNE NON-ZÉRO |
 
 ## Le récit de la journée (écrit à la main)
 

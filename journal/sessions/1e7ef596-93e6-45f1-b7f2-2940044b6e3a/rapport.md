@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 17.5 h |
-| Tours | 253 |
-| Messages | 1398 |
-| Appels d'outils | 1410 |
+| Durée | 17.6 h |
+| Tours | 254 |
+| Messages | 1402 |
+| Appels d'outils | 1413 |
 | Fichiers touchés | 15 |
-| Commandes | 1223 |
+| Commandes | 1226 |
 | Sous-agents | 0 |
-| Commits | 273 |
+| Commits | 274 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -529,6 +529,8 @@
 **Tour 252** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 253** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 254** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6253,7 +6255,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 248 : indice en section 3 (captures d'état) ; je commit l'état
+⏵ Cycle 248 : indice en section 3 (16 min), registre toujours sans non-zéro
+
+**Cycle 248 — indice progresse section par section.**
+
+- **`porte-indice`** : **16 min**, en **section 3** (« la mémoire interroge A, avec puis sans l'indice extérieur »), captures d'état écrites ; loin de la borne de 30 min.
+- **Registre** : **30 entrées**, toutes nulles.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 610 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : lire le verdict d'indice, laisser la passe finir, comparer aux références, puis les faits B13/S.
+
+### Tour 254 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check indice verdict
+- bash — Check indice and commit state
+
+**Synthèse produite :**
+
+⏵ Cycle 249 : indice à ~19 min, je vérifie sa section et commit l'état
 
 ## 3. Travail accompli
 
@@ -6319,7 +6342,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1183 autres
+- … et 1186 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6740,4 +6763,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 00 H 57 ; 83 PORTES OUTILLÉES, INDICE TOUJOURS EN COURS" -m "Le décompte est vérifié sur disque : 83 scripts tools/porte-*.sh, 31 journaux déjà écr
 - ÉTAT — HEURE 00 H 59 ; INDICE À 13 MIN, DANS SA DURÉE HISTORIQUE" -m "porte-indice approche de sa durée des passes précédentes (821 s puis 1 027 s) ; elle rendr
 - ÉTAT — HEURE 01 H 02 ; INDICE EN SECTION 3 (16 MIN), AUCUNE NON-ZÉRO" -m "porte-indice progresse : elle en est à la section 3 (la mémoire interroge A avec puis 
+- ÉTAT — HEURE 01 H 05 ; INDICE À 19 MIN, SECTION 3, AUCUNE NON-ZÉRO" -m "La porte continue ses captures d'état (section 3) ; sa durée dépasse la dernière passe (
 
