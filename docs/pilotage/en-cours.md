@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-05, 01 h 01 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-05, 01 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

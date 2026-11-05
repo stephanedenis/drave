@@ -34355,3 +34355,408 @@ porte-indice 1 1207
 ⏵ Cycle 250 : porte-indice est ROUGE en 1 207 s — la rouge tolérée connue ; je l'inscris
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h250.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h250.md'\nt=open(p).read()\nold=\"**30 franches, 0 rouge**\"\nnew=\"**31 passées, 1 rouge tolérée : `porte-indice` 1 207 s**\"\n … [1260 caractères tronqués]`
+
+  ```
+2026-11-05 01 h 01
+[s/v7 f96916f8] PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08
+ 7 files changed, 127 insertions(+), 14 deletions(-)
+f96916f8 PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08
+bfc8557a ÉTAT — HEURE 01 H 05 ; INDICE À 19 MIN, SECTION 3, AUCUNE NON-ZÉRO
+  T0 max : 3986 mots (budget 4 000)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 250 : porte-indice rouge en 1 207 s — la rouge tolérée connue, pas une régression
+
+**Cycle 250 — la première rouge est celle qu'on attendait.**
+
+- **`porte-indice` : rouge, code 1, 1 207 s** — « l'indice extérieur tombe à 482 jetons de l'aiguille ». C'est exactement la **rouge structurelle tolérée** de [`references-non-regression.md`](docs/pilotage/references-non-regression.md) (comme `porte-melange`), pas une régression.
+- **Registre** : **31 portes** — **30 vertes, 1 rouge tolérée** ; l'état le dit désormais (`f96916f8`) et le harnais **continue**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 612 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la suite de la passe (≈52 portes, `melange` la seconde tolérée), puis comparer le registre final aux références et intégrer les faits B13/S.
+
+
+## Tour 256
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 251/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : audit et suivi de la passe après indice
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+f96916f8 PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08
+bfc8557a ÉTAT — HEURE 01 H 05 ; INDICE À 19 MIN, SECTION 3, AUCUNE NON-ZÉRO
+390357c7 ÉTAT — HEURE 01 H 02 ; INDICE EN SECTION 3 (16 MIN), AUCUNE NON-ZÉRO
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 582 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 794 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 514 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2122 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    aea
+… [251 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [378 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1616 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3986 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+36 work/portes/passe-2404-23h45/registre.txt
+porte-indice 1 1207
+porte-lecteur 1 0
+  porte-lecteur          ❌ code 1                    0 s  ❌ porte lecteur ROUGE (code 1)
+  porte-lecture          ✅                           2 s  ✅ porte lecture verte
+  porte-m5-brouillon     ✅                           1 s    ✅ brouillon déclaré (cibles [37,38,39]) et porté : 75 tenseurs, 41 263 M poids
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : porte-lecteur est rouge en 0 s — hors liste tolérée ; j'inspecte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cat work/portes/passe-2404-23h45/porte-lecteur.log | head -40 ; echo \"=== GREP REFS ===\" ; grep -n \"lecteur\" docs/pilotage/references-non-regression.md | head -5", "description": "Read porte-lecteur failure log"}`
+
+  ```
+=== PORTE R0.2 — LE CONTRÔLEUR DE LECTURE ===
+gold introuvable : docs/pilotage/roadmap.md · < 2,5
+❌ porte lecteur ROUGE (code 1)
+=== GREP REFS ===
+68:| `porte-consolidation.sh` | 66 s | ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier) |
+88:| `porte-lecteur.sh` | 0 s | ✅ porte lecteur verte |
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je lis la porte-lecteur pour comprendre le « gold introuvable »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '1,60p' tools/porte-lecteur.sh", "description": "Read porte-lecteur script"}`
+
+  ```
+#!/bin/bash
+# porte-lecteur.sh — R0.2 : à 30 % du budget, le contrôleur retrouve la réponse.
+#
+# POURQUOI CETTE PORTE EXISTE. Un contrôleur de lecture peut sembler bon et ne rien
+# sélectionner : sans comparaison à la lecture intégrale, sans contrôle aléatoire et sans
+# contrôle « sans but », on mesure une impression. Cette porte exige les quatre à la fois :
+# récupération ≥ 90 % à 30 % du budget, réponse préservée, hasard nettement plus bas, et
+# closed-book silencieux.
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE R0.2 — LE CONTRÔLEUR DE LECTURE ==="
+python3 tools/banc_lecture.py --porte
+CODE=$?
+[ "$CODE" = 0 ] && echo "✅ porte lecteur verte" || echo "❌ porte lecteur ROUGE (code $CODE)"
+exit "$CODE"
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je reproduis la porte seule pour voir le détail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/banc_lecture.py --porte 2>&1 | head -30 ; echo \"EXIT $?\"", "description": "Run lecture gate alone"}`
+
+  ```
+gold introuvable : docs/pilotage/roadmap.md · < 2,5
+EXIT 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je cherche la déclaration de gold que la porte lit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"gold\" docs/pilotage/roadmap.md | head -8 ; echo \"=== BANC ===\" ; grep -n \"gold introuvable\\|roadmap\\|GOLD\\|--porte\" tools/banc_lecture.py | head -20", "description": "Find gold declaration and reader logic"}`
+
+  ```
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + 
+… [7659 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : le gold « < 2,5 » aurait-il disparu de roadmap.md par nos edits ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -S\"< 2,5\" -- docs/pilotage/roadmap.md | head -5 ; echo \"=== SHOW ===\" ; git show cbbea4a2 -- docs/pilotage/roadmap.md | head -30 ; echo \"=== GREP ACTUEL ===\" ; grep -c \"< 2,5\" docs/pilotage/roadmap.md", "desc … [57 caractères tronqués]`
+
+  ```
+68c1ecc1 ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373)
+3026dc6a NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE
+e2227509 N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+a4309c32 N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %
+3b9162d1 DOCS — UNE ROADMAP UNIQUE (A/B/N/R), ANALYSE LECTURE RAPIDE, BACKLOG 29 FICHES
+=== SHOW ===
+commit cbbea4a2443730abf1c774f64cbece34a3cfc2aa
+Author: Stéphane <stephane@localhost>
+Date:   Wed Nov 4 23:15:47 2026 -0500
+
+    COHÉRENCE — LE 2 048 EST FINI PARTOUT ; B13 À 166 ; HEURE 04 H 52
+    
+    Trois mentions périmées sont alignées : la prochaine action de N2 est la porte propre (0,29), la ligne R ne dit plus arrêté à 6 400/20 000 mais fini (2×10 000 pas), et la question de la nuit est répondue (perte 0,9409 → 0,8965 ; PPL 2,614 → 2,4953). La roadmap suit ; B13 passe à 166/166.
+
+diff --git a/docs/pilotage/roadmap.md b/docs/pilotage/roadmap.md
+index 96a6622a..ec518710 100644
+--- a/docs/pilotage/roadmap.md
++++ b/docs/pilotage/roadmap.md
+@@ -30,7 +30,7 @@
+ | *
+… [7487 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je lis la logique du banc autour du gold
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '55,95p' tools/banc_lecture.py", "description": "Read banc_lecture gold logic"}`
+
+  ```
+communs = sum((a & b).values())
+    if not communs:
+        return 0.0
+    precision = communs / sum(a.values())
+    rappel = communs / sum(b.values())
+    return 2 * precision * rappel / (precision + rappel)
+
+
+def normalise(texte: str) -> str:
+    """Comparaison de valeurs : les séparateurs de milliers et la virgule décimale ne sont
+    pas des différences. « 3 663 », « 3.663 » et « 3,663 » sont la même réponse — sans cette
+    règle, un modèle juste était compté faux, et le banc mesurait la typographie."""
+    texte = texte.lower()
+    texte = re.sub(r"(?<=\d)[\s.,](?=\d)", "", texte)
+    return re.sub(r"\s+", " ", texte).strip()
+
+
+def charge(documents: list[dict]) -> list[dict]:
+    """Chaque question reçoit son passage gold, résolu par l'indice. Un indice absent est une
+    ERREUR du banc, pas un cas à ignorer : un gold introuvable ferait mesurer du vide."""
+    for document in documents:
+        chemin = RACINE / document["chemin"]
+        manifeste = graphe_document.manifeste(chemin)
+        document["passages"] = lc.passages(manifeste)
+        document["index"] = lc.Index(document["passages"])
+        document["octets"] = sum(p["octets"] for p in document["passages"])
+      
+… [846 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je localise le jeu de données du banc qui cite la roadmap
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -rln \"pilotage/roadmap.md\" data/ tools/ 2>/dev/null | head -5 ; echo \"=== COMMIT 68c1ecc1 ===\" ; git show 68c1ecc1 -- docs/pilotage/roadmap.md | grep -E \"^[-+].*2,5\" | head -4 ; git log -1 --format=\"%ad\" --date=format:\"% … [83 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1238]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : le grep sur data/ est trop large ; je l'arrête et je cible le jeu de données
+
+- **job_kill** `{"job_id": "bash-1238", "reason": "grep récursif trop large sur data/"}`
+
+  ```
+requested cancellation of job bash-1238
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je cherche le jeu de données par défaut dans banc_lecture.py
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"data/\\|DATASET\\|documents\\|json\" tools/banc_lecture.py | head -15", "description": "Find dataset path in banc script"}`
+
+  ```
+26:  python3 tools/banc_lecture.py --json rapports/r02-banc-lecture.json
+32:import json
+48:BANC = RACINE / "tools/tests/documents/bench-pilote.json"
+72:def charge(documents: list[dict]) -> list[dict]:
+75:    for document in documents:
+87:    return documents
+165:def banc(documents: list[dict]) -> dict:
+174:    for document in documents:
+203:    for type_ in sorted({d["type"] for d in documents}):
+214:            "questions": len(details), "types": sorted({d["type"] for d in documents}),
+288:    ap.add_argument("--json", type=pathlib.Path)
+300:        raise SystemExit("la porte est extractive : le modèle se mesure avec --json, pas en porte")
+305:        return affiche(json.loads(args.depuis.read_text(encoding="utf-8")), conclure=False)
+306:    documents = charge(json.loads(args.banc.read_text(encoding="utf-8"))["documents"])
+308:        for document in documents:
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : j'inspecte le banc pilote (jeu de données de la porte)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"roadmap\" tools/tests/documents/bench-pilote.json | head -5 ; echo \"=== 2,5 ===\" ; grep -n '< 2,5\\|2,5' tools/tests/documents/bench-pilote.json | head -5 ; echo \"=== DOCS DANS LE BANC ===\" ; python3 - <<'PY'\nimport jso … [251 caractères tronqués]`
+
+  ```
+58:      "chemin": "docs/pilotage/roadmap.md",
+=== 2,5 ===
+68:          "indice": "< 2,5",
+69:          "valeur": "2,5"
+=== DOCS DANS LE BANC ===
+docs/implantation/format-flux.md 4
+docs/theorie/vision.md 4
+docs/pilotage/roadmap.md 4
+docs/implantation/document-graph.md 4
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : le banc ancre une question sur « < 2,5 », disparu de la roadmap ; je vérifie les 4 questions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport json, pathlib\nd=json.load(open('tools/tests/documents/bench-pilote.json'))\nfor doc in d['documents']:\n    t=pathlib.Path(doc['chemin']).read_text(errors='replace')\n    print('==', doc['chemin'])\n    for q … [229 caractères tronqués]`
+
+  ```
+== docs/implantation/format-flux.md
+OK  '4 octets' -> '4'
+OK  '3 663 octets' -> '3 663'
+OK  '99,9997' -> '99,9997'
+OK  '14 octets' -> '14'
+== docs/theorie/vision.md
+OK  'billots' -> 'billots'
+OK  'structure bat la taille' -> 'structure bat la taille'
+OK  'cinq axes' -> 'cinq'
+OK  'flux des listes' -> 'flux des listes'
+== docs/pilotage/roadmap.md
+OK  '2,6998' -> '2,6998'
+MANQUE '< 2,5' -> '2,5'
+OK  'N5 est gelé' -> 'N5'
+OK  '51 pages' -> '51'
+== data/onu/pdf/A_RES_80_1-fr.pdf
+MANQUE '19 septembre 2025' -> '19 septembre 2025'
+MANQUE 'quatre-vingtième session' -> 'quatre-vingtième'
+MANQUE '80/1.' -> '80/1'
+MANQUE 'Point 7 de l’ordre du jour' -> 'point 7'
+== docs/implantation/document-graph.md
+OK  '"outil": "graphe_document.py"' -> 'graphe_document.py'
+MANQUE 'type blanc est émis' -> 'blanc'
+OK  'Les six invariants' -> 'six'
+OK  'source.sha256' -> 'sha256'
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : deux ancres ont dérivé (roadmap, document-graph) ; je lis les questions et les textes actuels
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/documents/bench-pilote.json'))\nfor doc in d['documents']:\n    if doc['chemin'] in ('docs/pilotage/roadmap.md','docs/implantation/document-graph.md'):\n        print('==',  … [445 caractères tronqués]`
+
+  ```
+== docs/pilotage/roadmap.md
+ Q: Quel est le meilleur score de perplexité de N2 ? | indice: '2,6998' | valeur: '2,6998'
+ Q: Quelle porte N2 doit-elle franchir ? | indice: '< 2,5' | valeur: '2,5'
+ Q: Quelle ligne d'échelle est suspendue ? | indice: 'N5 est gelé' | valeur: 'N5'
+ Q: Combien de pages R0.1 a-t-il découpées ? | indice: '51 pages' | valeur: '51'
+== docs/implantation/document-graph.md
+ Q: Quel outil est déclaré dans le manifeste ? | indice: '"outil": "graphe_document.py"' | valeur: 'graphe_document.py'
+ Q: Quel type de région porte les séparateurs ? | indice: 'type blanc est émis' | valeur: 'blanc'
+ Q: Combien d'invariants le manifeste doit-il respecter ? | indice: 'Les six invariants' | valeur: 'six'
+ Q: Quel champ identifie le fichier source ? | indice: 'source.sha256' | valeur: 'sha256'
+=== DOCUMENT-GRAPH : type blanc ===
+52:`code`, `maths`, `figure`, `legende`, `note`, `blanc`. Le type `blanc` est émis par le cœur
+67:4. **Types** — un type du vocabulaire, jamais vide (sauf `blanc`, qui vaut exactement `\n`).
+=== ROADMAP : 2,5 ===
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules
+… [4003 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : je corrige les deux ancres du banc (roadmap : « sous 2,5 » ; document-graph : avec backticks)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/documents/bench-pilote.json'); t=p.read_text()\na='\"indice\": \"< 2,5\"'\nb='\"indice\": \"sous 2,5\"'\nc='\"indice\": \"type blanc est émis\"'\nd='\"indice\": \"type `bla … [265 caractères tronqués]`
+
+  ```
+deux ancres corrigées
+gold introuvable : docs/implantation/document-graph.md · type `blanc` est émis
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : la phrase est peut-être coupée entre passages ; j'inspecte les passages réels
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '30,50p' tools/banc_lecture.py", "description": "Read banc imports"}`
+
+  ```
+import argparse
+import json
+import pathlib
+import random
+import re
+import sys
+from collections import Counter, defaultdict
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import graphe_document  # noqa: E402
+import lecteur_controleur as lc  # noqa: E402
+
+LECTEUR = "extractif"  # "extractif" (R0.2) ou "modele" (R0.3)
+CRITERE = "bm25"       # "bm25" (R0.2) ou "couverture" (le critère qui n'est pas celui du lecteur)
+SANS_HASARD = False    # le contrôle aléatoire coûte 300 générations de plus
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+BANC = RACINE / "tools/tests/documents/bench-pilote.json"
+BUDGETS = (0.10, 0.30, 0.50)
+GRAINE = 20261029
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport sys, pathlib\nsys.path.insert(0,'tools')\nimport graphe_document, lecteur_controleur as lc\np=pathlib.Path('docs/implantation/document-graph.md')\nm=graphe_document.manifeste(p)\nps=lc.passages(m)\nprint('pass … [176 caractères tronqués]`
+
+  ```
+passages 69
+--- 30 'Le vocabulaire des types est fermé : titre, section, paragraphe, liste, tableau, code, maths, figure, legende, note, blanc.'
+--- 31 "Le type blanc est émis par le cœur (un \\n entre deux régions), jamais par un parseur : c'est ce qui permet à la partition d'être exacte sans que chaque parseur ait à gérer les séparateurs."
+--- 38 'Types — un type du vocabulaire, jamais vide (sauf blanc, qui vaut exactement \\n).'
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : la phrase existe sans backticks dans les passages ; je rétablis l'ancre d'origine
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/documents/bench-pilote.json'); t=p.read_text()\nt=t.replace('\"indice\": \"type `blanc` est émis\"','\"indice\": \"type blanc est émis\"')\np.write_text(t); print('ancre do … [163 caractères tronqués]`
+
+  ```
+ancre document-graph rétablie
+  technique  controlee_0.50     1.000  0.784   0.750     3764
+  technique  aleatoire_0.30     0.500  0.538   0.500     3131
+  technique  melangee_0.30      1.000  0.784   0.750     2567
+  technique  sans_but           0.500  0.000   0.000     2295
+  technique  closed_book        0.000  0.000   0.000        0
+
+✅ à 30 % du budget, la lecture contrôlée récupère ≥ 90 % des passages de la
+   lecture intégrale, garde son F1, et les quatre contrôles négatifs échouent.
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 251 : la porte-lecteur est rejouée VERTE après correction d'une ancre ; je commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h251.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h251.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [1625 caractères tronqués]`

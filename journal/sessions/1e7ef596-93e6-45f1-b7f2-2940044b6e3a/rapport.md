@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 17.6 h |
-| Tours | 255 |
-| Messages | 1406 |
-| Appels d'outils | 1416 |
+| Durée | 17.8 h |
+| Tours | 256 |
+| Messages | 1426 |
+| Appels d'outils | 1435 |
 | Fichiers touchés | 15 |
-| Commandes | 1229 |
+| Commandes | 1247 |
 | Sous-agents | 0 |
-| Commits | 275 |
+| Commits | 276 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -533,6 +533,8 @@
 **Tour 254** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 255** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 256** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6299,7 +6301,40 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 250 : porte-indice est ROUGE en 1 207 s — la rouge tolérée connue ; je l'inscris
+⏵ Cycle 250 : porte-indice rouge en 1 207 s — la rouge tolérée connue, pas une régression
+
+**Cycle 250 — la première rouge est celle qu'on attendait.**
+
+- **`porte-indice` : rouge, code 1, 1 207 s** — « l'indice extérieur tombe à 482 jetons de l'aiguille ». C'est exactement la **rouge structurelle tolérée** de [`references-non-regression.md`](docs/pilotage/references-non-regression.md) (comme `porte-melange`), pas une régression.
+- **Registre** : **31 portes** — **30 vertes, 1 rouge tolérée** ; l'état le dit désormais (`f96916f8`) et le harnais **continue**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 612 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la suite de la passe (≈52 portes, `melange` la seconde tolérée), puis comparer le registre final aux références et intégrer les faits B13/S.
+
+### Tour 256 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*19 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Read porte-lecteur failure log
+- bash — Read porte-lecteur script
+- bash — Run lecture gate alone
+- bash — Find gold declaration and reader logic
+- bash — Check whether our edit removed the gold span
+- bash — Read banc_lecture gold logic
+- bash — Find dataset reference and removal commit
+- job_kill
+- bash — Find dataset path in banc script
+- bash — Inspect bench dataset docs entries
+- bash — Test all bench question anchors against files
+- bash — Read questions and current doc text
+- … et 5 autres
+
+**Synthèse produite :**
+
+⏵ Cycle 251 : la porte-lecteur est rejouée VERTE après correction d'une ancre ; je commit
 
 ## 3. Travail accompli
 
@@ -6365,7 +6400,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1189 autres
+- … et 1207 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6493,7 +6528,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-18 sorties en erreur ou divergentes. Les premières :
+19 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -6788,4 +6823,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 02 ; INDICE EN SECTION 3 (16 MIN), AUCUNE NON-ZÉRO" -m "porte-indice progresse : elle en est à la section 3 (la mémoire interroge A avec puis 
 - ÉTAT — HEURE 01 H 05 ; INDICE À 19 MIN, SECTION 3, AUCUNE NON-ZÉRO" -m "La porte continue ses captures d'état (section 3) ; sa durée dépasse la dernière passe (
 - PASSE — PORTE-INDICE ROUGE (1 207 S) : LA ROUGE TOLÉRÉE CONNUE, PAS UNE RÉGRESSION ; HEURE 01 H 08" -m "porte-indice rend code 1 comme dans les deux passes préc
+- BANC DE LECTURE — L'ANCRE « < 2,5 » DEVIENT « SOUS 2,5 » ; PORTE-LECTEUR REJOUÉE VERTE" -m "La passe complète a trouvé la première rouge non tolérée : porte-lec
 

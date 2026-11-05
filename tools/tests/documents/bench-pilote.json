@@ -65,7 +65,7 @@
         },
         {
           "question": "Quelle porte N2 doit-elle franchir ?",
-          "indice": "< 2,5",
+          "indice": "sous 2,5",
           "valeur": "2,5"
         },
         {
