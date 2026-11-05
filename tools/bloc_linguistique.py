@@ -364,6 +364,8 @@ CONNECTEURS = {
     "but": set("pour afin pour que afin que in order to so that".split()),
 }
 
+RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "whose"}
+
 VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
                         "go take come look give find open close".split())
 
@@ -657,7 +659,11 @@ class Heuristique:
                 continue
             if typ == "mot" and n in lex.get("PREP", set()) and i + 1 < len(mots):
                 j = i + 1
-                while j < len(mots) and mots[j][3] == "mot":
+                # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
+                # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and not _est_verbe(mots[j][2])
+                       and _normaliser(mots[j][2]) not in RELATIFS):
                     j += 1
                 segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
                                  "debut": d, "fin": mots[j - 1][1],

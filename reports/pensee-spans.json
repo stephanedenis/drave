@@ -1,0 +1,38 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "169/169",
+ "gold": 612,
+ "cibles": 239,
+ "spans": {
+  "REL": 48,
+  "SUB": 33,
+  "GP": 12,
+  "total": 93
+ },
+ "categories": {
+  "aucun": 65,
+  "plus_large": 25,
+  "plus_etroit": 3,
+  "coupe": 1
+ },
+ "avant": {
+  "labels": 145,
+  "couverture": 0.6067,
+  "f1": 0.2864,
+  "span": 94,
+  "cible": 13
+ },
+ "apres": {
+  "labels": 146,
+  "couverture": 0.6109,
+  "f1": 0.2869,
+  "span": 93,
+  "cible": 14
+ },
+ "limites": [
+  "81 REL/SUB chez S",
+  "dénominateur de l'attachement à corriger",
+  "gold 612"
+ ]
+}
