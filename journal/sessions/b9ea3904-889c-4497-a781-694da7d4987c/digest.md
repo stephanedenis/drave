@@ -2214,3 +2214,42 @@ JSON valide
 {'agent': 12, 'patient': 28, 'note': 'pas de règle unique : r032/r036/r078/r112/r118/r174 agent, r034/r035/r074/r075/r114/r115 et r214+ patient ; r328 « The book » patient mais « it » agent, r362/r370 agent'}
   ```
 
+### 🤖 Assistant
+
+⏵ Writing the English-gold audit report with per-language tables and controls
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md", "content": "# B13 — audit du gold anglais : 25 phrases à corriger, 60/94 spans perdus, et la segmentation est la cause\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11 … [23019 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md</path>
+<type>file</type>
+<content>
+1: # B13 — audit du gold anglais : 25 phrases à corriger, 60/94 spans perdus, et la segmentation est la cause
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ⚠️ gold
+4: > utilisable ; l'échec anglais est la **segmentation**, pas le gold.
+5: > **Snapshot** : HEAD `dcf7bc91` (v3) mesuré, revérifié à `8281d51e` ; `bloc_linguistique.py` SHA
+6: > `64b7c520…` puis `9544f173…`, chiffres **identiques** ; `gold_reel.json` SHA `05d4f6df…`.
+7: > **Dispositif** : [`gold_reel.py`](../tools/tests/linguistique/gold_reel.py) et
+8: > [`gold_reel.json`](../tools/tests/linguistique/gold_reel.json) (432 phrases réelles : 228 fr, 204 en),
+9: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+10: > [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique()`), comparaison des cibles à
+11: > `_est_verbe` et au POS gold.
+12: > **JSON** : [`pensee-gold-anglais.json`](pensee-gold-anglais.json).
+13: 
+14: ## 1. Verdict
+15: 
+16: Le gold anglais **n'est pas la cause principale*
+… [23450 caractères tronqués]
+  ```
+

@@ -1,0 +1,1144 @@
+{
+ "version": 1,
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "objet": "audit de la qualité du gold anglais (210 phrases sur 612)",
+ "snapshot": {
+  "head": "dcf7bc912caeebe940793888d88723f0bbb57f58",
+  "head_mesure": "dcf7bc912caeebe940793888d88723f0bbb57f58",
+  "head_reverifie": "8281d51e659332154597761b362441dcda164522",
+  "head_sujet": "B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181",
+  "bloc_head_sha256": "64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa",
+  "bloc_head_sha256_reverifie": "9544f173f92e55ccb6eed7b9f096f4a6bf100449d3b1d7875440a23badbda7ff",
+  "bloc_worktree_sha256": "9544f173f92e55ccb6eed7b9f096f4a6bf100449d3b1d7875440a23badbda7ff",
+  "gold_reel_sha256": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+  "generateur_commit": "523d8c1",
+  "mesure_le": "2026-11-05 ~15:30 EST",
+  "note": "Mesures au HEAD dcf7bc91 (bloc 64b7c520) ; revérifiées au HEAD 8281d51e (bloc 9544f173) : chiffres fr/en identiques. La v2 (15ee10d3) donnait 137/145 à l'attachement ; la v3 en donne 141/145, anglais inchangé."
+ },
+ "gold": {
+  "phrases": 612,
+  "fr": 402,
+  "en": 210,
+  "reel": 432,
+  "reel_fr": 228,
+  "reel_en": 204,
+  "hand_fr": 14,
+  "hand_en": 6,
+  "synthetique_fr": 160,
+  "tokens": 3179,
+  "tokens_fr": 2031,
+  "tokens_en": 1148,
+  "segments": 1863,
+  "segments_fr": 1161,
+  "segments_en": 702,
+  "segments_a_cible": 239,
+  "segments_a_cible_fr": 151,
+  "segments_a_cible_en": 88,
+  "chaines_cibles": 282,
+  "chaines_cibles_fr": 185,
+  "chaines_cibles_en": 97,
+  "segments_multi_cibles": 43,
+  "segments_multi_cibles_fr": 34,
+  "segments_multi_cibles_en": 9
+ },
+ "metriques": {
+  "fr": {
+   "phrases": 402,
+   "pos": {
+    "exactitude": 0.7518,
+    "ferme": 0.8956,
+    "ouvert": 0.6235,
+    "tokens": 2031
+   },
+   "syntagme": {
+    "f1": 0.3786,
+    "precision": 0.4035,
+    "rappel": 0.3566,
+    "tete_f1": 0.5822
+   },
+   "pragmatique": {
+    "acte": 0.9975,
+    "negation": 0.9652,
+    "modalite": 0.99,
+    "double_sens": 0.9179
+   },
+   "attachement": {
+    "cibles": 151,
+    "labels": 117,
+    "couverture": 0.7748,
+    "top1_taux": 0.7616,
+    "topk_taux": 0.755,
+    "exact_taux": 0.7483,
+    "top1_taux_span": 0.9829,
+    "topk_taux_span": 0.9744,
+    "exact_taux_span": 0.9658,
+    "topk_exact_taux_span": 0.9744,
+    "verbe": {
+     "cibles": 88,
+     "justes": 84,
+     "taux": 0.9545
+    },
+    "nom": {
+     "cibles": 29,
+     "justes": 29,
+     "taux": 1.0
+    }
+   },
+   "spans_perdus": {
+    "total": 34,
+    "REL": 20,
+    "SUB": 7,
+    "GP": 7
+   }
+  },
+  "en": {
+   "phrases": 210,
+   "pos": {
+    "exactitude": 0.7343,
+    "ferme": 0.9031,
+    "ouvert": 0.5571,
+    "tokens": 1148
+   },
+   "syntagme": {
+    "f1": 0.121,
+    "precision": 0.142,
+    "rappel": 0.1054,
+    "tete_f1": 0.3614
+   },
+   "pragmatique": {
+    "acte": 0.9952,
+    "negation": 1.0,
+    "modalite": 0.9857,
+    "double_sens": 0.9952
+   },
+   "attachement": {
+    "cibles": 88,
+    "labels": 28,
+    "couverture": 0.3182,
+    "top1_taux": 0.3182,
+    "topk_taux": 0.3182,
+    "exact_taux": 0.3182,
+    "top1_taux_span": 1.0,
+    "topk_taux_span": 1.0,
+    "exact_taux_span": 1.0,
+    "topk_exact_taux_span": 1.0,
+    "verbe": {
+     "cibles": 28,
+     "justes": 28,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": 0.0
+    }
+   },
+   "spans_perdus": {
+    "total": 60,
+    "REL": 28,
+    "SUB": 26,
+    "GP": 6
+   }
+  },
+  "fr_reel": {
+   "phrases": 228,
+   "pos": {
+    "exactitude": 0.7591,
+    "ferme": 0.8779,
+    "ouvert": 0.6334,
+    "tokens": 1258
+   },
+   "syntagme": {
+    "f1": 0.3654,
+    "precision": 0.4081,
+    "rappel": 0.3307,
+    "tete_f1": 0.5344
+   },
+   "attachement": {
+    "cibles": 86,
+    "labels": 78,
+    "couverture": 0.907,
+    "top1_taux": 0.8953,
+    "topk_taux": 0.8953,
+    "exact_taux": 0.8953,
+    "top1_taux_span": 0.9872,
+    "topk_taux_span": 0.9872,
+    "exact_taux_span": 0.9872,
+    "topk_exact_taux_span": 0.9872,
+    "verbe": {
+     "cibles": 52,
+     "justes": 51,
+     "taux": 0.9808
+    },
+    "nom": {
+     "cibles": 26,
+     "justes": 26,
+     "taux": 1.0
+    }
+   },
+   "spans_perdus": {
+    "total": 8,
+    "REL": 4,
+    "SUB": 2,
+    "GP": 2
+   }
+  },
+  "en_reel": {
+   "phrases": 204,
+   "pos": {
+    "exactitude": 0.7278,
+    "ferme": 0.9018,
+    "ouvert": 0.5466,
+    "tokens": 1117
+   },
+   "syntagme": {
+    "f1": 0.1206,
+    "precision": 0.1417,
+    "rappel": 0.105,
+    "tete_f1": 0.3618
+   },
+   "attachement": {
+    "cibles": 85,
+    "labels": 27,
+    "couverture": 0.3176,
+    "top1_taux": 0.3176,
+    "topk_taux": 0.3176,
+    "exact_taux": 0.3176,
+    "top1_taux_span": 1.0,
+    "topk_taux_span": 1.0,
+    "exact_taux_span": 1.0,
+    "topk_exact_taux_span": 1.0,
+    "verbe": {
+     "cibles": 27,
+     "justes": 27,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": 0.0
+    }
+   },
+   "spans_perdus": {
+    "total": 58,
+    "REL": 28,
+    "SUB": 25,
+    "GP": 5
+   }
+  }
+ },
+ "spans": {
+  "full": {
+   "fr": {
+    "cibles": 151,
+    "labels": 117,
+    "perdus": 34,
+    "categories": {
+     "aucun": 6,
+     "plus_large": 24,
+     "plus_etroit": 3,
+     "coupe": 1
+    }
+   },
+   "en": {
+    "cibles": 88,
+    "labels": 28,
+    "perdus": 60,
+    "categories": {
+     "aucun": 59,
+     "plus_large": 0,
+     "plus_etroit": 1,
+     "coupe": 0
+    }
+   },
+   "total": {
+    "cibles": 239,
+    "labels": 145,
+    "perdus": 94,
+    "categories": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 4,
+     "coupe": 1
+    },
+    "par_type": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13
+    }
+   }
+  },
+  "reel": {
+   "fr": {
+    "cibles": 86,
+    "labels": 78,
+    "perdus": 8,
+    "categories": {
+     "aucun": 1,
+     "plus_large": 3,
+     "plus_etroit": 3,
+     "coupe": 1
+    }
+   },
+   "en": {
+    "cibles": 85,
+    "labels": 27,
+    "perdus": 58,
+    "categories": {
+     "aucun": 57,
+     "plus_large": 0,
+     "plus_etroit": 1,
+     "coupe": 0
+    }
+   },
+   "note": "L'anglais réel perd 58/85 (68,2 %) ; le français réel 8/86 (9,3 %). Les 60 spans anglais pleins sont 28 REL, 26 SUB, 6 GP."
+  }
+ },
+ "cibles_en": {
+  "full": {
+   "chaines": 97,
+   "segments": 88,
+   "uniques": 70,
+   "typologie": {
+    "token_exact": 97,
+    "multi_mots": 0,
+    "lemme": 0,
+    "absent": 0
+   },
+   "pos_gold": {
+    "VERB": 58,
+    "NOUN": 37,
+    "ADJ": 2
+   },
+   "multi_cibles": {
+    "segments": 9,
+    "chaines_par_segment": 2
+   }
+  },
+  "reel": {
+   "chaines": 92,
+   "segments": 85,
+   "uniques": 67,
+   "typologie": {
+    "token_exact": 92,
+    "multi_mots": 0,
+    "lemme": 0,
+    "absent": 0
+   },
+   "pos_gold": {
+    "VERB": 56,
+    "NOUN": 35,
+    "ADJ": 1
+   },
+   "multi_cibles": {
+    "segments": 7,
+    "chaines_par_segment": 2
+   }
+  },
+  "est_verbe": {
+   "full": {
+    "TP": 43,
+    "TN": 38,
+    "FN": 15,
+    "FP": 1,
+    "accuracy": 0.8351,
+    "rappel_verbe": 0.7414,
+    "precision_verbe": 0.9773,
+    "FN_formes": [
+     "rains",
+     "falls",
+     "hung",
+     "eat",
+     "think",
+     "stay",
+     "believe",
+     "cries",
+     "call",
+     "stayed",
+     "goes",
+     "continue"
+    ],
+    "FP_formes": [
+     "flower"
+    ]
+   },
+   "reel": {
+    "TP": 41,
+    "TN": 35,
+    "FN": 15,
+    "FP": 1,
+    "accuracy": 0.8261,
+    "rappel_verbe": 0.7321,
+    "precision_verbe": 0.9762
+   }
+  },
+  "analyseur_pos_sur_cibles": {
+   "verbe_gold": 58,
+   "pred_VERB": 17,
+   "pred_NOUN": 41,
+   "note": "17/58 seulement des verbes-cibles anglais sont tagués VERB par _pos."
+  }
+ },
+ "analyseur": {
+  "s_anglais": {
+   "segments": 277,
+   "types": {
+    "GV": 277
+   },
+   "phrase_entiere": 147,
+   "exacts": 2,
+   "gold_segments": 702,
+   "exacts_taux": 0.0028,
+   "exacts_ids": [
+    "r032 GV is fast",
+    "r245 GV call me"
+   ]
+  },
+  "s_francais": {
+   "segments": 824,
+   "types": {
+    "GN": 315,
+    "GV": 342,
+    "GP": 78,
+    "SUB": 38,
+    "REL": 51
+   },
+   "phrase_entiere": 100,
+   "exacts": 410,
+   "gold_segments": 1161,
+   "exacts_taux": 0.3531
+  },
+  "types_predits_en": {
+   "GV": 323,
+   "GN": 164,
+   "GP": 34,
+   "REL": 0,
+   "SUB": 0,
+   "ADJ": 0,
+   "ADV": 0,
+   "PONCT": 0
+  },
+  "types_gold_en": {
+   "GN": 321,
+   "GV": 259,
+   "GP": 40,
+   "REL": 28,
+   "SUB": 26,
+   "ADJ": 18,
+   "ADV": 8,
+   "PONCT": 2
+  },
+  "types_predits_fr": {
+   "GN": 473,
+   "GV": 361,
+   "GP": 88,
+   "SUB": 38,
+   "REL": 66,
+   "ADJ": 0,
+   "ADV": 0,
+   "PONCT": 0
+  },
+  "types_gold_fr": {
+   "GN": 507,
+   "GV": 453,
+   "GP": 65,
+   "REL": 46,
+   "SUB": 44,
+   "ADJ": 17,
+   "ADV": 22,
+   "PONCT": 7
+  },
+  "pos_confusions_en": [
+   {
+    "gold": "VERB",
+    "pred": "NOUN",
+    "n": 176,
+    "formes": [
+     "leave",
+     "sings",
+     "writes",
+     "speaks",
+     "sees",
+     "leaves",
+     "play",
+     "runs"
+    ]
+   },
+   {
+    "gold": "NOUN",
+    "pred": "VERB",
+    "n": 38,
+    "formes": [
+     "letter",
+     "teacher",
+     "mother",
+     "sister",
+     "morning",
+     "river",
+     "flower"
+    ]
+   },
+   {
+    "gold": "ADV",
+    "pred": "NOUN",
+    "n": 16,
+    "formes": [
+     "late",
+     "out",
+     "maybe",
+     "fast",
+     "hard",
+     "outside",
+     "far"
+    ]
+   },
+   {
+    "gold": "PRON",
+    "pred": "DET",
+    "n": 14,
+    "formes": [
+     "that",
+     "her"
+    ]
+   },
+   {
+    "gold": "CONJ",
+    "pred": "DET",
+    "n": 12,
+    "formes": [
+     "that"
+    ]
+   },
+   {
+    "gold": "ADJ",
+    "pred": "NOUN",
+    "n": 12,
+    "formes": [
+     "right",
+     "fast",
+     "calm",
+     "dark",
+     "absent",
+     "mean"
+    ]
+   },
+   {
+    "gold": "PRON",
+    "pred": "NOUN",
+    "n": 8,
+    "formes": [
+     "where",
+     "whose",
+     "mine"
+    ]
+   },
+   {
+    "gold": "VERB",
+    "pred": "ADJ",
+    "n": 5,
+    "formes": [
+     "live",
+     "arrive"
+    ]
+   },
+   {
+    "gold": "NOUN",
+    "pred": "ADJ",
+    "n": 5,
+    "formes": [
+     "table",
+     "meal"
+    ]
+   },
+   {
+    "gold": "VERB",
+    "pred": "AUX",
+    "n": 4,
+    "formes": [
+     "is",
+     "have",
+     "do"
+    ]
+   },
+   {
+    "gold": "ADJ",
+    "pred": "VERB",
+    "n": 4,
+    "formes": [
+     "tired",
+     "exciting",
+     "open"
+    ]
+   }
+  ],
+  "pos_confusions_fr": [
+   {
+    "gold": "VERB",
+    "pred": "NOUN",
+    "n": 271
+   },
+   {
+    "gold": "ADJ",
+    "pred": "NOUN",
+    "n": 68
+   },
+   {
+    "gold": "PRON",
+    "pred": "?",
+    "n": 30
+   },
+   {
+    "gold": "CONJ",
+    "pred": "PRON",
+    "n": 25
+   },
+   {
+    "gold": "PONCT",
+    "pred": "?",
+    "n": 22
+   },
+   {
+    "gold": "VERB",
+    "pred": "?",
+    "n": 15
+   },
+   {
+    "gold": "CONJ",
+    "pred": "?",
+    "n": 13
+   },
+   {
+    "gold": "NOUN",
+    "pred": "ADJ",
+    "n": 12
+   },
+   {
+    "gold": "PRON",
+    "pred": "DET",
+    "n": 11
+   },
+   {
+    "gold": "NOUN",
+    "pred": "VERB",
+    "n": 9
+   },
+   {
+    "gold": "ADV",
+    "pred": "NOUN",
+    "n": 5
+   },
+   {
+    "gold": "AUX",
+    "pred": "PREP",
+    "n": 4
+   }
+  ],
+  "pos_patch_simulation": {
+   "regle": "si _pos rend NOUN, _est_verbe vrai et mot hors {a, as, bus, flower, leaves, open} → VERB",
+   "en_avant": 0.7343,
+   "en_apres": 0.8031,
+   "en_delta": 0.0688,
+   "en_ouvert_avant": 0.5571,
+   "en_ouvert_apres": 0.6982,
+   "fr_avant": 0.7518,
+   "fr_apres": 0.776,
+   "fr_delta": 0.0242,
+   "attachement_inchange": true,
+   "note": "Borne haute, stoplist ajustée sur les faux positifs du gold ; à ne pas intégrer telle quelle."
+  }
+ },
+ "anomalies": {
+  "pos": {
+   "tags_divergents": 10,
+   "erreurs_probables": 7,
+   "convention_that": 3,
+   "phrases": 10,
+   "liste": [
+    {
+     "ids": [
+      "r291",
+      "r328",
+      "r363"
+     ],
+     "token": "is",
+     "gold": "VERB",
+     "attendu": "AUX",
+     "classe": "erreur",
+     "raison": "même phrase a is/AUX (r291, r328) ; 43 is/AUX contre 3 is/VERB"
+    },
+    {
+     "ids": [
+      "r422"
+     ],
+     "token": "do",
+     "gold": "VERB",
+     "attendu": "AUX",
+     "classe": "erreur",
+     "raison": "do/AUX en r029 et r314 ; le GV de r422 exclut do"
+    },
+    {
+     "ids": [
+      "r218",
+      "r313"
+     ],
+     "token": "late",
+     "gold": "ADV",
+     "attendu": "ADJ",
+     "classe": "erreur",
+     "raison": "attribut du sujet ; late/ADV est correct en r199 et r365 (adverbial)"
+    },
+    {
+     "ids": [
+      "r250"
+     ],
+     "token": "far",
+     "gold": "ADV",
+     "attendu": "ADJ",
+     "classe": "erreur",
+     "raison": "attribut du sujet (is far)"
+    },
+    {
+     "ids": [
+      "r034",
+      "r074",
+      "r114"
+     ],
+     "token": "that",
+     "gold": "CONJ",
+     "attendu": "PRON",
+     "classe": "convention",
+     "raison": "relative : 11 relatives that/PRON dans les blocs récents ; 8 complétives that/CONJ"
+    }
+   ]
+  },
+  "cibles": {
+   "gp_sans_cible": 6,
+   "apres_verbe": 4,
+   "apres_copule": 2,
+   "phrases": 6,
+   "segments": [
+    {
+     "id": "r336",
+     "gp": "to her",
+     "attendu": "speaks",
+     "type": "omission_apres_verbe"
+    },
+    {
+     "id": "r342",
+     "gp": "to her",
+     "attendu": "speaks",
+     "type": "omission_apres_verbe"
+    },
+    {
+     "id": "r358",
+     "gp": "to her",
+     "attendu": "speaks",
+     "type": "omission_apres_verbe_doublon"
+    },
+    {
+     "id": "r367",
+     "gp": "to him",
+     "attendu": "listen",
+     "type": "omission_apres_verbe"
+    },
+    {
+     "id": "r328",
+     "gp": "on the table",
+     "attendu": null,
+     "type": "copule_sans_verbe_lexical"
+    },
+    {
+     "id": "r363",
+     "gp": "on the table",
+     "attendu": null,
+     "type": "copule_sans_verbe_lexical"
+    }
+   ],
+   "note": "Les 3 omissions r336/r342/r358 sont mal attachées par l'analyseur (cible her) ; r367 est juste (listen). Ajouter les 6 cibles fait baisser l'exact mesuré de 0,3182 à 0,3085."
+  },
+  "roles": {
+   "faux": 2,
+   "discutables": 1,
+   "liste": [
+    {
+     "id": "r165",
+     "segment": "GN noon",
+     "role": "patient",
+     "attendu": "temps",
+     "classe": "faux",
+     "raison": "adjoint temporel, pas patient ; phrase « The bell rings noon » non grammaticale"
+    },
+    {
+     "id": "r239",
+     "segment": "REL whose car is red",
+     "role": "objet",
+     "attendu": "possessif",
+     "classe": "faux",
+     "raison": "whose est un déterminant possessif, pas un objet"
+    },
+    {
+     "id": "r180",
+     "segment": "GP to the library",
+     "role": "destinataire",
+     "attendu": "possesseur/thème",
+     "classe": "discutable",
+     "raison": "belongs to marque l'appartenance, pas la réception"
+    }
+   ]
+  },
+  "pragma": {
+   "modalite_manquante": 1,
+   "liste": [
+    {
+     "id": "r247",
+     "fait": "must",
+     "attendu": "modalite=true",
+     "raison": "r037 « We must work » porte modalite=true ; r247 non"
+    }
+   ]
+  },
+  "donnees": {
+   "non_grammaticales": 3,
+   "phrases": [
+    {
+     "id": "r028",
+     "texte": "It rains since yesterday.",
+     "raison": "present simple avec since ; attendu « It has been raining since yesterday »"
+    },
+    {
+     "id": "r102",
+     "texte": "The rain falls since this morning.",
+     "raison": "même problème"
+    },
+    {
+     "id": "r165",
+     "texte": "The bell rings noon.",
+     "raison": "attendu « at noon »"
+    }
+   ],
+   "doublon_exact": {
+    "ids": [
+     "r336",
+     "r358"
+    ],
+    "texte": "Paul sees Marie; he speaks to her.",
+    "difference": "coref r336={her:marie} ; r358={he:paul, her:marie}"
+   },
+   "tokens_hors_segment": {
+    "tokens": 23,
+    "phrases": 20,
+    "par_pos": {
+     "PRON": 10,
+     "ADV": 7,
+     "CONJ": 3,
+     "AUX": 1,
+     "NOUN": 1,
+     "VERB": 1
+    },
+    "exemples": [
+     "it (9)",
+     "them (1)",
+     "tomorrow (2)",
+     "hard",
+     "deeply",
+     "fast",
+     "loudly",
+     "down",
+     "and",
+     "so",
+     "but",
+     "Do (r314)",
+     "morning (r076)",
+     "do (r422)"
+    ]
+   },
+   "ponct": {
+    "phrases_avec_ponct": 3,
+    "phrases_sans_ponct": 201,
+    "ids": [
+     "r422",
+     "r427",
+     "r432"
+    ],
+    "note": "r422 a un token PONCT mais pas de segment PONCT ; r427/r432 en ont un."
+   },
+   "multi_cibles": {
+    "segments": 9,
+    "chaines": 18,
+    "type": "GP",
+    "ids": [
+     "g016",
+     "g020",
+     "r038",
+     "r040",
+     "r067",
+     "r108",
+     "r156",
+     "r162",
+     "r166"
+    ],
+    "note": "cible 1 = verbe (ou ADJ ready), cible 2 = tête nominale du GN à gauche ; evaluer_gold ne lit que cible 1 pour l'exact."
+   },
+   "imbrique": [
+    {
+     "id": "r291",
+     "fait": "REL « that is on the table » contient un GP « on the table » non annoté",
+     "raison": "annotation plate ; ce n'est pas un span faux"
+    }
+   ]
+  },
+  "conventions": {
+   "rel_roles": {
+    "qualite": 6,
+    "fonction": 22,
+    "note": "qualité : r034, r035, r074, r075, r114, r115 ; fonction : r204+ (sujet 7, objet 10, lieu 4, temps 1)"
+   },
+   "copule": {
+    "total": 38,
+    "gv_fusionne": 14,
+    "gv_plus_attribut": 24,
+    "note": "fusionné : r032, r034, r035, r036, r038, r074, r075, r078, r112, r114, r115, r118, r162, r174 ; séparé : r204+"
+   },
+   "adverbes": {
+    "dans_gv": 10,
+    "adv_segment": 8,
+    "hors_segment": 7,
+    "note": "trois traitements ; ex. play outside (GV), tomorrow (ADV r314), deeply (hors segment r069)"
+   },
+   "negation": {
+    "dans_gv": 2,
+    "adv_separe": 1,
+    "note": "r029/r316 dans le GV ; r422 n't en ADV"
+   },
+   "ponct": {
+    "avec": 3,
+    "sans": 201,
+    "note": "tokenisation PONCT seulement dans le dernier bloc"
+   },
+   "sujet_copule": {
+    "agent": 12,
+    "patient": 28,
+    "note": "pas de règle unique : r032/r036/r078/r112/r118/r174 agent, r034/r035/r074/r075/r114/r115 et r214+ patient ; r328 « The book » patient mais « it » agent, r362/r370 agent"
+   }
+  },
+  "coref": {
+   "phrases_avec_coref": 44,
+   "suspectes": 6,
+   "liste": [
+    {
+     "id": "r340",
+     "coref": {
+      "they": "mouse"
+     },
+     "attendu": "les trois animaux (chat, chien, souris)"
+    },
+    {
+     "id": "r368",
+     "coref": {
+      "they": "paul"
+     },
+     "attendu": "Marie et Paul"
+    },
+    {
+     "id": "r333",
+     "fait": "deux it, une seule entrée coref",
+     "attendu": "it1=chat, it2=souris"
+    },
+    {
+     "id": "r341",
+     "fait": "deux it et deux she, une entrée par forme",
+     "attendu": "clé par span, pas par chaîne"
+    },
+    {
+     "id": "r361",
+     "fait": "deux it, une seule entrée",
+     "attendu": "it1=chien, it2=chat"
+    },
+    {
+     "id": "r336/r358",
+     "fait": "doublon avec coref différent",
+     "attendu": "même texte, mêmes annotations"
+    }
+   ],
+   "note": "coref non évaluée par evaluer_gold ; à séparer de l'audit POS/cibles."
+  },
+  "compte_phrases": {
+   "total_en": 210,
+   "couches_mesurees": 16,
+   "avec_convention_that": 19,
+   "avec_coref": 24,
+   "avec_role_discutable": 25,
+   "taux_25": 0.119,
+   "liste_25": [
+    "r028",
+    "r034",
+    "r074",
+    "r102",
+    "r114",
+    "r165",
+    "r180",
+    "r218",
+    "r239",
+    "r247",
+    "r250",
+    "r291",
+    "r313",
+    "r328",
+    "r333",
+    "r336",
+    "r340",
+    "r341",
+    "r342",
+    "r358",
+    "r361",
+    "r363",
+    "r367",
+    "r368",
+    "r422"
+   ]
+  }
+ },
+ "controles": {
+  "hasard_cible": {
+   "en": 0.0341,
+   "fr": 0.0066,
+   "methode": "evaluer_gold.attachement_hasard : cible tirée au hasard, appariement par sous-chaîne"
+  },
+  "permutation_cible_sur_labels": {
+   "en": {
+    "n": 28,
+    "moyenne": 0.0425,
+    "min": 0.0,
+    "max": 0.1786
+   },
+   "fr": {
+    "n": 117,
+    "moyenne": 0.0464,
+    "min": 0.0,
+    "max": 0.1282
+   }
+  },
+  "pos_majoritaire": {
+   "en": {
+    "classe": "VERB",
+    "taux": 0.2343
+   },
+   "fr": {
+    "classe": "VERB",
+    "taux": 0.2575
+   }
+  },
+  "pos_corrige": {
+   "en": {
+    "avant": 0.7343,
+    "apres": 0.7369,
+    "delta": 0.0026
+   },
+   "fr": {
+    "avant": 0.7518,
+    "apres": 0.7548,
+    "delta": 0.003
+   }
+  },
+  "drop_5_phrases_en": {
+   "ids": [
+    "r028",
+    "r102",
+    "r165",
+    "r336",
+    "r358"
+   ],
+   "pos": 0.7384,
+   "f1": 0.1209,
+   "couverture": 0.3256,
+   "exact_taux": 0.3256
+  },
+  "ajout_cibles_manquantes_en": {
+   "quatre_apres_verbe": {
+    "cibles": 92,
+    "labels": 32,
+    "exact": 29,
+    "couverture": 0.3478,
+    "exact_taux": 0.3152,
+    "exact_span": 0.9062
+   },
+   "six_avec_copule": {
+    "cibles": 94,
+    "labels": 32,
+    "exact": 29,
+    "couverture": 0.3404,
+    "exact_taux": 0.3085
+   }
+  },
+  "exact_any": {
+   "en": {
+    "labels": 28,
+    "exact_first": 28,
+    "exact_any": 28
+   },
+   "fr": {
+    "labels": 117,
+    "exact_first": 113,
+    "exact_any": 115,
+    "gagnes": [
+     "s108",
+     "s122"
+    ]
+   }
+  },
+  "s_sans": {
+   "en": {
+    "couverture": 0.3182,
+    "exact_span": 0.0
+   },
+   "fr": {
+    "couverture": 0.3245,
+    "exact_span": 0.0
+   },
+   "note": "Heuristique(segmenter_s=False) : le chunker seul trouve des GP mais pas de cible (pas de GV lexical)."
+  },
+  "wilson_95": {
+   "en_couverture": [
+    23.0,
+    42.1
+   ],
+   "fr_couverture": [
+    70.2,
+    83.4
+   ],
+   "en_exact_span": [
+    87.9,
+    100.0
+   ],
+   "fr_exact_span": [
+    91.5,
+    98.7
+   ],
+   "en_reel_couverture": [
+    22.8,
+    42.3
+   ],
+   "fr_reel_couverture": [
+    82.7,
+    95.2
+   ]
+  }
+ },
+ "verdict": {
+  "gold_structurel": "sain : 0 span faux, 0 chevauchement, 0 cible absente/non-token, 0 GN avalant un verbe",
+  "gold_anomalies": "25/210 phrases (11,9 %), dont 16 (7,6 %) sur les couches mesurées ; 10 tags POS divergents, 6 GP sans cible, 3 rôles",
+  "anglais_echec": "60/94 spans perdus, 100 % des REL et SUB anglais ; la cause est la segmentation, pas le gold",
+  "cibles": "97/97 tokens exacts, 0 multi-mots, 0 lemme ; POS gold 97/97 correct ; tête réduite de surface (saw, talks), pas texte complet",
+  "est_verbe": "83,5 % d'accord avec le POS gold sur les cibles ; 15 FN, 1 FP (flower) ; garder le POS gold comme référence",
+  "v2_v3": "v2 (137/145) → v3 (141/145) ; l'anglais est inchangé (28/28 labels, 60 spans)",
+  "recommandation_principale": "segmenter l'anglais (S language-aware ou chunker anglais) avant de retoucher le gold"
+ },
+ "recommandation": [
+  "1. Segmentation anglaise d'abord : S ne produit que 277 GV en anglais (0 GN/GP/REL/SUB, 2/702 exact) ; 54/88 cibles anglaises sont REL/SUB. Rendre S language-aware ou ajouter un chunker anglais ; ne pas réécrire le gold pour cela.",
+  "2. Corriger _pos (couche POS, pas attachement) : consulter VERBES_CONNUS avec une règle de contexte (pas une stoplist ajustée au gold) ; simulation +6,9 pts POS, +14,1 pts ouvert, attachement inchangé.",
+  "3. Hygiène du gold : 7 tags durs (is×3, do, late×2, far), normaliser that (3 CONJ→PRON) ou versionner, 4 cibles GP après verbe, 2 GP de copule à trancher, rôles r165/r239/r180, modalité r247, phrases r028/r102/r165, doublon r336/r358, coref r340/r368 et clé par span.",
+  "4. Mesure : publier fr/en séparément (evaluer_gold ne le fait pas), full et réel seul, 239 segments à cible / 282 chaînes, exact-first et exact-any (fr +2), et remplacer la référence v2 par v3 (141/145).",
+  "5. Ne pas ajouter de formes anglaises au lexique pour coller au gold ; le lexique actuel explique 15 FN de _est_verbe, mais le vrai levier est la segmentation et une POS contextuelle."
+ ]
+}

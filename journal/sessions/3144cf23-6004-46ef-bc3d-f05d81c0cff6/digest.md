@@ -2335,3 +2335,174 @@ REL — pas retrouver les mêmes.
 31:  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**.
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='reports/rapport-spans-chunker.md'\ns=open(p, encoding='utf-8').read()\nold = \"  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**.\\n\"\nnew = (\"  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP* … [418 caractères tronqués]`
+
+  ```
+ok
+
+- **Gold** : `charger()` = 612 phrases (20 `hand`, 432 `reel`, 160 `synthetique`) ; **239**
+  segments porteurs d'une cible (REL 74, SUB 69, GP 96), dont **94** sans segment prédit au bon
+  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**. Les **81 REL/SUB** sont le
+  territoire du générateur S (48 + 33) ; le mode par défaut les rate quand même au bon span,
+  et le chunker seul n'en produit aucun.
+- **Chunker seul** : `Heuristique(segmenter_s=False)`, c'est-à-dire `_syntagmes_simple` : GN, GP,
+  GV, REL, et **aucune branche SUB**.
+- **Copie locale** : `tools/bloc_linguistique.py` copié dans `/tmp/spans/`, jamais modifié dans
+  le dépôt ; les deux règles sont des sous-classes qui remplacent `_syntagmes_simple`. La
+  simulation est donc **hors du code de production** : rien n'est committé, aucun fichier
+  ```
+
+### 🤖 Assistant
+
+⏵ Validating tables, links, JSON/report consistency, and git status
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib, re\nrep=pathlib.Path('reports/rapport-spans-chunker.md').read_text(encoding='utf-8')\njs=json.loads(pathlib.Path('reports/pensee-spans-chunker.json').read_text(encoding='utf-8'))\n# tables\nli … [1049 caractères tronqués]`
+
+  ```
+tables mal formées: []
+liens ok
+----
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/digest.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/rapport.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+D  journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/digest.md
+D  journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/rapport.md
+D  journal/sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/digest.md
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 25, in <module>
+TypeError: 'in <string>' requires string as left operand, not int
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\nrep=pathlib.Path('reports/rapport-spans-chunker.md').read_text(encoding='utf-8')\njs=json.loads(pathlib.Path('reports/pensee-spans-chunker.json').read_text(encoding='utf-8'))\nfor k in ('94',' … [545 caractères tronqués]`
+
+  ```
+94 rapport True json True
+48 rapport True json True
+33 rapport True json True
+13 rapport True json True
+239 rapport True json True
+145 rapport True json True
+77 rapport True json True
+79 rapport True json True
+41 rapport True json True
+84 rapport True json True
+229 rapport True json True
+89,4 rapport True json False
+6,08 rapport True json False
+causes somme 94
+detail 94 manquants 10 fp_a 9
+verdict {'chunker_seul_sur_94': 0, 'regle_a_gain': 79, 'regle_b_gain': 41, 'regles_ab_gain': 84, 'exacts_ab_union': 229, 'cibles': 239, 'perdus_apres_ab': 10, 'regression_spans_deja_bons': 0}
+mots rapport 2836
+====
+M  reports/README.md
+ M reports/pensee-quatre-modes.json
+A  reports/pensee-spans-chunker.json
+AM reports/rapport-spans-chunker.md
+?? reports/pensee-gold-anglais.json
+?? reports/rapport-s-paragraphes.md
+====
+ reports/rapport-spans-chunker.md                   |    4 +-
+ tools/structures                                   |    0
+ 22 files changed, 6613 insertions(+), 380 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Reviewing the final fiche end-to-end for consistency
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-chunker.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-chunker.md</path>
+<type>file</type>
+<content>
+1: # Chunker seul et les 94 spans REL/SUB/GP — 0 exact, deux règles en récupèrent 84 sans perdre un span déjà bon
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Territoire** : **L** (bloc
+4: > linguistique, chunker) · **Date** : 2026-11-05 · **Verdict** : sur les **94** cibles du gold
+5: > sans segment prédit au bon span (**48 REL, 33 SUB, 13 GP**), le chunker seul
+6: > (`Heuristique(segmenter_s=False)`) en couvre **0 exactement** — et c'est structurel : le mode
+7: > par défaut est l'union du générateur S et du chunker, donc un span exact du chunker serait déjà
+8: > bon. Deux règles simulées sur une copie locale en récupèrent **84/94** (47 REL, 32 SUB, 5 GP),
+9: > soit **229/239** cibles au bon span, **sans perdre aucun** des 77 spans déjà exacts du chunker
+10: > seul ni des 145 du mode par défaut. Le prix est mesuré : +9 faux positifs pour (a), −201 pour
+11: > (b), −207 pour (a)+(b).
+12: >
+13: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (lecture seule),
+14: > [`evaluer_gold.py`](../tools/tests/linguistique
+… [15484 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='reports/rapport-spans-chunker.md'\ns=open(p, encoding='utf-8').read()\ns=s.replace(\"parce qu'il ne avale\\nplus le verbe ni la relative.\",\n            \"parce qu'il n'avale\\nplus le verbe ni la relative.\")\ … [718 caractères tronqués]`
+
+  ```
+171:donc 0/145 est structurel. Le coût réel est le **FP ajouté** : +9 pour (a) (5 SUB de « bien
+174:GN n'avale plus les verbes), −207 pour (a)+(b). En mode chunker seul, les 77 spans exacts sont
+187:(a) ne touche ni GN, ni GV, ni GP ; (b) fait monter le GN de 0,284 à 0,448 parce qu'il n'avale
+241:   `frontiere()` ; ajouter `since` et `au-dessus` au lexique PREP, et le détachement du PP pour
+  ```
+
+### 🤖 Assistant
+
+⏵ Final check of the JSON detail and then reporting to the parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nfrom collections import Counter\nd=json.load(open('reports/pensee-spans-chunker.json'))\nassert len(d['detail'])==94\nc=Counter(r['cause'] for r in d['detail'])\nprint(\"detail causes\", dict(c))\nprin … [490 caractères tronqués]`
+
+  ```
+detail causes {'regle_de_fin_de_clause': 7, 'type_sub_absent': 33, 'segment_avale_par_un_gv': 3, 'marqueur_hors_lexique_branche': 15, 'segment_avale_par_un_gn': 31, 'tete_avalee_par_le_gn': 1, 'gold_gp_sans_preposition': 4}
+agg causes    {'regle_de_fin_de_clause': 7, 'type_sub_absent': 33, 'segment_avale_par_un_gv': 3, 'marqueur_hors_lexique_branche': 15, 'segment_avale_par_un_gn': 31, 'tete_avalee_par_le_gn': 1, 'gold_gp_sans_preposition': 4}
+match True
+types detail Counter({'REL': 48, 'SUB': 33, 'GP': 13})
+regles {'a_marqueur_frontiere': 79, 'b_un_predicat_par_clause': 41, 'ab': 84}
+perdus 0
+61
+  259 reports/rapport-spans-chunker.md
+ 1993 reports/pensee-spans-chunker.json
+ 2252 total
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Mission terminée. Deux fichiers NEUFS uniquement, rien committé, aucun fichier existant modifié :\n- reports/rapport-spans-chunker.md (fiche : verdict, tableaux, règles, contrôles négatifs, limites)\n- reports/pensee-spans-chunker.json … [2912 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture — livrables écrits et résultat transmis au parent
+
+Mission terminée. J'ai écrit **deux fichiers neufs seulement**, sans committer ni modifier de fichier existant :
+
+- `reports/rapport-spans-chunker.md` — fiche complète (verdict, tableaux, règles, contrôles négatifs, limites)
+- `reports/pensee-spans-chunker.json` — agrégats + détail des 94 spans
+
+**Chunker seul** (`Heuristique(segmenter_s=False)`) sur les 94 spans perdus : **0 exact** (0 REL, 0 SUB, 0 GP). C'est structurel : le mode par défaut est l'union S + chunker, donc un span exact du chunker serait déjà compté bon. Sur tout le gold, il ne produit que **77 exacts, tous GP**.
+
+**Causes primaires (94)** : avalé par un GN **31** (REL) · type SUB absent **33** · marqueur hors lexique/branche **15** (REL 12 : where 6, whom 3, whose 1, when 1, zéro 1 ; GP 3) · fin de clause/frontière **7** (REL 4, GP 3) · tête avalée par le GN **1** · avalé par un GV **3** (GP) · gold GP sans préposition **4**.
+
+**Couverture des deux règles** :
+- (a) marqueur + frontière : **+79/94** (47 REL, 32 SUB, 0 GP) → **224/239**
+- (b) un prédicat par clause : **+41/94** (36 REL, 0 SUB, 5 GP) → **186/239**
+- (a)+(b) : **+84/94** (47 REL, 32 SUB, 5 GP) → **229/239 (95,8 %)**
+
+**Régression** : 0 des 77 spans exacts du chunker seul perdu, 0/145 en union ; le prix est le FP (1059 → 852, −207) ; F1 global 0,2862 → 0,4043 ; F1 REL 0,371 → 0,844, SUB 0,685 → 0,926.
+
+**Contrôles** : sans frontière, (a) ne gagne que 32 SUB (0 REL, F1 0,162) ; sans l'arrêt du GN sur le relatif, (b) ne gagne que 5 GP (0 REL, F1 0,283) ; hasard mêmes longueurs 6,08 % ; décalage +1 = 0/94 ; oracle frontière tête donnée REL 48/48, SUB 32/33. L'attachement global monte (top-k 0,594 → 0,707) mais le top-k conditionnel au bon span tombe de 0,979 à 0,738 : les 84 spans récupérés sont plus durs à attacher.
+
+Limite majeure : mesure **in-sample**, sur copie locale, portes non lancées — à ne pas committer sans gold tenu à l'écart.
+

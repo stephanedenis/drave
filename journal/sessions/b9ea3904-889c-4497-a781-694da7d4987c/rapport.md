@@ -7,11 +7,11 @@
 | Identifiant | `b9ea3904-889c-4497-a781-694da7d4987c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:47 |
-| Durée | 1.2 h |
+| Durée | 1.3 h |
 | Tours | 1 |
-| Messages | 89 |
-| Appels d'outils | 99 |
-| Fichiers touchés | 1 |
+| Messages | 91 |
+| Appels d'outils | 101 |
+| Fichiers touchés | 2 |
 | Commandes | 87 |
 | Sous-agents | 0 |
 | Commits | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*99 appels d'outils.* Actions notables :
+*101 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -41,11 +41,11 @@
 - bash — Read Heuristique implementation
 - bash — Dump English sentence list and duplicates
 - bash — Check spans, overlap, coverage anomalies
-- … et 78 autres
+- … et 79 autres
 
 **Synthèse produite :**
 
-⏵ Writing the JSON audit artifact with metrics, spans and anomalies
+⏵ Writing the English-gold audit report with per-language tables and controls
 
 ## 3. Travail accompli
 
@@ -54,6 +54,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json` | 0 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-anglais.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 

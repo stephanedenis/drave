@@ -43457,3 +43457,102 @@ A12 intégrée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add reports/rapport-spans-chunker.md reports/pensee-spans-chunker.json reports/README.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md\n  timeout 240 git commit -m \"B13 — LA PISTE DES 84 SPANS (A12) ME … [499 caractères tronqués]`
+
+  ```
+create mode 100644 reports/rapport-spans-chunker.md
+COMMIT OK 1
+857c783d B13 — LA PISTE DES 84 SPANS (A12) MESURÉE ET CONSIGNÉE ; PROCHAINE ACTION LES DEUX RÈGLES ; 182/182
+pensee-gold-anglais.json
+rapport-gold-anglais.md
+  ```
+
+### 👤 Utilisateur
+
+Agent 3144cf23-6004-46ef-bc3d-f05d81c0cff6 sent a message: 
+Mission terminée. Deux fichiers NEUFS uniquement, rien committé, aucun fichier existant modifié :
+- reports/rapport-spans-chunker.md (fiche : verdict, tableaux, règles, contrôles négatifs, limites)
+- reports/pensee-spans-chunker.json (agrégats + détail des 94 spans)
+
+Dispositif : gold charger() = 612 phrases, 239 cibles ; 94 perdues (48 REL, 33 SUB, 13 GP) ; copie locale du chunker dans /tmp/spans/, règles simulées par sous-classes ; tools/bloc_linguistique.py non touché.
+
+RÉSULTAT PRINCIPAL
+- Chunker seul (segmenter_s=False) sur les 94 : 0 exact (0 REL, 0 SUB, 0 GP). C'est structurel : le défaut est l'union S+chunker, donc un span exact du chunker serait déjà bon. Sur tout le gold, le chunker seul fait 77 exacts, tous GP (0 REL/SUB).
+- Marqueurs en tête des 94 — REL : qui 17, that 14, where 6, whom 3, who 2, que 2, dont 1, whose 1, when 1, zéro 1. SUB : that 9, que 5, when 4, because 4, although 3, if 2, while 2, as 2, car 1, qu'il 1. GP : to 2, since 2, les 2, du 1, au-dessus 1, en 1, for 1, on 1, il 1, le 1.
+
+EFFECTIFS PAR CAUSE (partition, total 94)
+- segment avalé par un GN : 31 (REL 31)
+- type SUB absent (aucune branche) : 33 (SUB 33)
+- marqueur hors lexique/branche : 15 (REL 12 = where 6, whom 3, whose 1, when 1, zéro 1 ; GP 3 = since 2, au-dessus 1)
+- règle de fin de clause / frontière : 7 (REL 4, GP 3)
+- tête avalée par le GN : 1 (REL)
+- segment avalé par un GV : 3 (GP)
+- gold : GP sans préposition : 4 (GP)
+Drapeaux transversaux : 45 spans contenus dans un GN, 16 têtes hors branche. Les catégories « même type » du défaut reproduisent la fiche B13 : 65 aucun / 24 plus large / 4 plus étroit / 1 coupé.
+
+COUVERTURE DES DEUX RÈGLES (mesurée sur les 94, en chunker seul et en union)
+- (a) marqueur de tête + frontière : +79/94 (47/48 REL, 32/33 SUB, 0/13 GP) → 224/239 exacts.
+- (b) un prédicat par clause : +41/94 (36/48 REL, 0/33 SUB, 5/13 GP) → 186/239.
+- (a)+(b) : +84/94 (47 REL, 32 SUB, 5 GP) → 229/239, soit 95,8 %.
+- Régression : 0 des 77 spans exacts du chunker seul perdu ; 0/145 en union (structurel, l'union ajoute) ; le prix est le FP : 1059 → 852 (−207) ; F1 global 0,2862 → 0,4043 ; F1 REL 0,371 → 0,844, SUB 0,685 → 0,926, GP 0,784 → 0,803.
+- Contrôles négatifs : sans frontière, (a) ne gagne que 32 SUB (0 REL), F1 0,162 ; sans l'arrêt du GN sur le relatif, (b) ne gagne que 5 GP (0 REL), F1 0,283 ; hasard mêmes longueurs 6,08 % (304/5000) contre 89,4 % ; décalage +1 = 0/94 ; oracle frontière tête donnée REL 48/48, SUB 32/33.
+- Attachement (secondaire) : couverture 0,6067 → 0,9582, top-k global 0,5941 → 0,7071, mais top-k conditionnel au span juste 0,9793 → 0,7380 : les 84 spans récupérés sont plus durs à attacher.
+- Restent 10 : 4 GP gold sans préposition, 3 GP lexicaux (since×2, au-dessus), 1 GP détachement PP (on the wall), 1 REL zéro (she talks about), 1 SUB adverbe final (that she would come).
+
+LIMITE MAJEURE : les règles ont été conçues et itérées sur ce même gold (in-sample) ; la copie locale n'est pas portée dans le code ; les portes ne sont pas lancées. Ne pas committer la règle sans un gold tenu à l'écart. Les deux fichiers sont dans reports/.
+
+### 👤 Utilisateur
+
+Background subagent 3144cf23-6004-46ef-bc3d-f05d81c0cff6 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Clôture — livrables écrits et résultat transmis au parent
+
+Mission terminée. J'ai écrit **deux fichiers neufs seulement**, sans committer ni modifier de fichier existant :
+
+- `reports/rapport-spans-chunker.md` — fiche complète (verdict, tableaux, règles, contrôles négatifs, limites)
+- `reports/pensee-spans-chunker.json` — agrégats + détail des 94 spans
+
+**Chunker seul** (`Heuristique(segmenter_s=False)`) sur les 94 spans perdus : **0 exact** (0 REL, 0 SUB, 0 GP). C'est structurel : le mode par défaut est l'union S + chunker, donc un span exact du chunker serait déjà compté bon. Sur tout le gold, il ne produit que **77 exacts, tous GP**.
+
+**Causes primaires (94)** : avalé par un GN **31** (REL) · type SUB absent **33** · marqueur hors lexique/branche **15** (REL 12 : where 6, whom 3, whose 1, when 1, zéro 1 ; GP 3) · fin de clause/frontière **7** (REL 4, GP 3) · tête avalée par le GN **1** · avalé par un GV **3** (GP) · gold GP sans préposition **4**.
+
+**Couverture des deux règles** :
+- (a) marqueur + frontière : **+79/94** (47 REL, 32 SUB, 0 GP) → **224/239**
+- (b) un prédicat par clause : **+41/94** (36 REL, 0 SUB, 5 GP) → **186/239**
+- (a)+(b) : **+84/94** (47 REL, 32 SUB, 5 GP) → **229/239 (95,8 %)**
+
+**Régression** : 0 des 77 spans exacts du chunker seul perdu, 0/145 en union ; le prix est le FP (1059 → 852, −207) ; F1 global 0,2862 → 0,4043 ; F1 REL 0,371 → 0,844, SUB 0,685 → 0,926.
+
+**Contrôles** : sans frontière, (a) ne gagne que 32 SUB (0 REL, F1 0,162) ; sans l'arrêt du GN sur le relatif, (b) ne gagne que 5 GP (0 REL, F1 0,283) ; hasard mêmes longueurs 6,08 % ; décalage +1 = 0/94 ; oracle frontière tête donnée REL 48/48, SUB 32/33. L'attachement global monte (top-k 0,594 → 0,707) mais le top-k conditionnel au bon span tombe de 0,979 à 0,738 : les 84 spans récupérés sont plus durs à attacher.
+
+Limite majeure : mesure **in-sample**, sur copie locale, portes non lancées — à ne pas committer sans gold tenu à l'écart.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 reports/rapport-gold-anglais.md", "description": "Lire le verdict de A14"}`
+
+  ```
+# B13 — audit du gold anglais : 25 phrases à corriger, 60/94 spans perdus, et la segmentation est la cause
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ⚠️ gold
+> utilisable ; l'échec anglais est la **segmentation**, pas le gold.
+> **Snapshot** : HEAD `dcf7bc91` (v3) mesuré, revérifié à `8281d51e` ; `bloc_linguistique.py` SHA
+> `64b7c520…` puis `9544f173…`, chiffres **identiques** ; `gold_reel.json` SHA `05d4f6df…`.
+> **Dispositif** : [`gold_reel.py`](../tools/tests/linguistique/gold_reel.py) et
+> [`gold_reel.json`](../tools/tests/linguistique/gold_reel.json) (432 phrases réelles : 228 fr, 204 en),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+> [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique()`), comparaison des cibles à
+> `_est_verbe` et au POS gold.
+> **JSON** : [`pensee-gold-anglais.json`](pensee-gold-anglais.json).
+
+## 1. Verdict
+
+Le gold anglais **n'est pas la cause principale** des échecs d'attachement anglais.
+
+- **Structurellement, il est sain** : 0 span qui ne correspond pas au texte, 0 chevauchement, 0 borne
+  non alignée sur un token, 0 cible a
+… [160 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ A14 : le gold anglais est sain, l'échec est la segmentation. J'intègre et je prépare la clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-gold-anglais.md`](rappo … [1885 caractères tronqués]`
