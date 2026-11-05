@@ -26526,3 +26526,132 @@ revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Le 2 048 est FINI (2×10 000 pas, 2 drvm) ; j'inscris la clôture dans l'état et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; tail -12 work/n2ac/rope2048-20k.log ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**2 048 : 1re moitié finie** (10 000 pas, 10 224 s, drvm `c50beff6`), 2e en cours\", \ … [937 caractères tronqués]`
+
+  ```
+"graine": 1,
+ "window": 2048,
+ "positions": "rope",
+ "init": "work/n2ac/rope2048-10k.pt",
+ "perte_finale": 0.8965461254119873,
+ "ppl_val": 2.4953209637199847,
+ "jetons_val": 131072,
+ "tetes": true,
+ "drvm": "work/n2ac/rope2048-20k.drvm",
+ "sha256_drvm": "91a302872988691e1a489ea1dea88a3e1787bd6ababaf637041ef2f3c1c6c529",
+ "duree_s": 10220.861443519592
+}
+N2 ligne OK
+  T0 max : 3995 mots (budget 4 000)
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[s/v7 e4eb0c42] 2 048 — LE RUN EST FINI (2×10 000 PAS, DEUX DRVM) ; LA DISTILLATION COMPLÈTE EST MESURÉE
+ 13 files changed, 137 insertions(+), 22 deletions(-)
+e4eb0c42 2 048 — LE RUN EST FINI (2×10 000 PAS, DEUX DRVM) ; LA DISTILLATION COMPLÈTE EST MESURÉE
+b57703fb ÉTAT — HEURE 01 H 07 ; B13 166/166, D 62, 2 048 À 9 950 PAS
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 171 : le 2 048 est FINI (2×10 000 pas, deux drvm), distillation complète mesurée
+
+**Cycle 171 — le 2 048 est fini, la distillation complète est mesurée.**
+
+- **2 048 — les deux moitiés sont faites** : première moitié 10 000 pas (10 224 s, drvm `c50beff6`, **perte 0,9409**, PPL val 2,614) ; seconde 10 000 pas (**10 221 s**, drvm `91a3028…`, **perte 0,8965**, **PPL val 2,4953**). Le corpus complet (propre, 62 documents) a servi ; état N2 mis à jour (`e4eb0c42`).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 060 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 618 mots**, **T0 3 995 / 4 000** ✅.
+- **B13 166/166**, D **restauré à 62 documents**, compteurs 628/721, sur **`s/v7`**.
+- **Sessions** : S, N2 et OCR **en pause** ; B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la fiche du 2 048 (côté N2), les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 177
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 172/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 172 : instantané, audit et suites du 2 048
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -6 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+e4eb0c42 2 048 — LE RUN EST FINI (2×10 000 PAS, DEUX DRVM) ; LA DISTILLATION COMPLÈTE EST MESURÉE
+b57703fb ÉTAT — HEURE 01 H 07 ; B13 166/166, D 62, 2 048 À 9 950 PAS
+bdddb4dc ÉTAT — HEURE 01 H 02 ; B13 166/166, D 62, 2 048 À 9 800 PAS
+efdc3645 ÉTAT — HEURE 00 H 57 ; B13 166/166, D 62, 2 048 À 9 650 PAS
+b67c328c ÉTAT — HEURE 00 H 52 ; B13 166/166, D 62, 2 048 À 9 500 PAS
+4108a5f8 ÉTAT — HEURE 00 H 47 ; B13 166/166, D 62, 2 048 À 9 400 PAS
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 352 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 564 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 284 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 1892 m
+… [432 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -2 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [258 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ❌ 1 anomalie(s) :
+  T0 max : 3995 mots (budget 4 000)
+  ✅ 3060 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+0, 0 %
+1, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ La revue signale 1 anomalie ; je l'identifie avant de committer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | grep -B2 -A6 \"anomalie\" | head -15 ; echo \"=== STATE COUNTERS ===\" ; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md ; echo \"=== DISK ===\" ; ls reports/*.md | wc -l ; ls reports/ … [58 caractères tronqués]`
+
+  ```
+=== STATE COUNTERS ===
+108:| fichiers / JSON de résultats | **628** / **721** | `reports/*.md` / `reports/*.json` |
+=== DISK ===
+628
+721
+  ```
+
+### 🤖 Assistant
+
+⏵ Je relance la revue pour lire l'anomalie complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -8 ; echo \"=== EN-COURS 1625 ? ===\" ; head -3 docs/pilotage/en-cours.md ; python3 tools/verifie_en_cours.py 2>&1 | head -3", "description": "Read full review output"}`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== EN-COURS 1625 ? ===
+# En ce moment
+
+**Mis à jour : 2026-11-04, 21 h 08 HNE (heure locale, EST).**
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N2 — actif** : **1 024** = recette de production (2,48–2,9
+  ```
+
+### 🤖 Assistant
+
+⏵ L'anomalie est la puce N2 > 80 mots ; je la resserre et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**1 024** = recette de production (2,48–2,91 ; sous 2,5 au grand corpus) ; **kd2** arrêté, **2 048 fini**\", \"**1 024** = r … [970 caractères tronqués]`

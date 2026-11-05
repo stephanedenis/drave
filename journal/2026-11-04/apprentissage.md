@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,10 +12,11 @@
 | 12:38 | `6b0e9c83` | ERRATUM N2 — LA DISTILLATION NATIVE NE GAGNE RIEN À PARITÉ STRICTE ; ÉTAT, ROADMAP ET PLAN-TRAVAIL CORRIGÉS | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+9) |
 | 13:27 | `67286d12` | BACKLOG N2 — L'ERRATUM DE LA DISTILLATION (LE +0,10 ÉTAIT UNE REPONDÉRATION) ET LA PAIRE PROPRE DANS LA PAGE | `moteur-de-pensee.md`, `N2-distillation.md`, `en-cours.md` (+19) |
 | 15:20 | `51ab1b36` | PRODUCTION — LA DISTILLATION VAUT −0,06 À PARITÉ STRICTE (PAS −0,10) : 3,1119 / 2,8462 / 2,7388 / 2,6968 | `en-cours.md`, `README.md`, `apprentissage.md` (+18) |
+| 21:11 | `e4eb0c42` | 2 048 — LE RUN EST FINI (2×10 000 PAS, DEUX DRVM) ; LA DISTILLATION COMPLÈTE EST MESURÉE | `en-cours.md`, `README.md`, `apprentissage.md` (+10) |
 
 ## Chiffres du jour
 
-`3,1119` · `2,8462` · `2,7388` · `2,6968` · `0,030` · `0,009` · `0,004`
+`×10000` · `3,1119` · `2,8462` · `2,7388` · `2,6968` · `0,030` · `0,009` · `0,004`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

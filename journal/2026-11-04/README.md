@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**203 commits** · **6 session(s)** · **7 thème(s)**
+**204 commits** · **6 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 4 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 5 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 161 | [docs.md](docs.md) |
 | mesures | 25 | [mesures.md](mesures.md) |
@@ -237,6 +237,7 @@
 | 21:03 | `efdc3645` | ÉTAT — HEURE 00 H 57 ; B13 166/166, D 62, 2 048 À 9 650 PAS |
 | 21:06 | `bdddb4dc` | ÉTAT — HEURE 01 H 02 ; B13 166/166, D 62, 2 048 À 9 800 PAS |
 | 21:08 | `b57703fb` | ÉTAT — HEURE 01 H 07 ; B13 166/166, D 62, 2 048 À 9 950 PAS |
+| 21:11 | `e4eb0c42` | 2 048 — LE RUN EST FINI (2×10 000 PAS, DEUX DRVM) ; LA DISTILLATION COMPLÈTE EST MESURÉE |
 
 ## Le récit de la journée (écrit à la main)
 
