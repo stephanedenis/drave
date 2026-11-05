@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 16.7 h |
-| Tours | 236 |
-| Messages | 1323 |
-| Appels d'outils | 1352 |
+| Tours | 237 |
+| Messages | 1327 |
+| Appels d'outils | 1355 |
 | Fichiers touchés | 15 |
-| Commandes | 1165 |
+| Commandes | 1168 |
 | Sous-agents | 0 |
-| Commits | 256 |
+| Commits | 257 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -495,6 +495,8 @@
 **Tour 235** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 236** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 237** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5859,7 +5861,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 231 : passe à 24/83 (dont porte-etat verte) ; je commit l'état
+⏵ Cycle 231 : passe à 24/83 sans rouge, porte-état verte, journal du 05/11 en place
+
+**Cycle 231 — la discipline d'état tient.**
+
+- **Passe complète** : **24 / 83**, aucune rouge — `porte-episodique` tenue en 229 s, et **`porte-etat` verte en 0 s** : aucun fait commité après le dernier état.
+- **Journal du 05/11** : le dossier du jour s'étoffe (`docs.md`), l'index suit ; porte journal verte.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; tableaux ✅ ; `en-cours` **1 605 mots**, **T0 3 975 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict (≈59 portes restantes), puis les faits B13/S.
+
+### Tour 237 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 232 : passe à 26/83, zéro rouge ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -5925,7 +5948,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1125 autres
+- … et 1128 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6329,4 +6352,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 00 H 01 ; PASSE 16/83, ZÉRO ROUGE ; COUPE 162 S" -m "La passe a franchi coupe (162 s) : le coût du pont va de +0,52 % à +17,09 % selon la coupe, il
 - ÉTAT — NOUS SOMMES LE 05/11, 00 H 02 HNE ; PASSE 22/83" -m "Le jour local a changé : l'en-tête de la page vivante passe au 2026-11-05, en accord avec le dossier
 - ÉTAT — HEURE 00 H 09 ; PASSE 24/83, ZÉRO ROUGE ; PORTE-ÉTAT VERTE" -m "La passe a franchi épisodique (229 s) et état (0 s : aucun fait commité après le dernier 
+- ÉTAT — HEURE 00 H 12 ; PASSE 26/83, ZÉRO ROUGE ; FLUX ET FUSION VERTES" -m "La passe a franchi flux (29 s, mode 4) et fusion (9 s, v1 refusée code 2). Toujours 
 
