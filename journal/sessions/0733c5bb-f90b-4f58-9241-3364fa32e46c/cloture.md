@@ -169,3 +169,22 @@ bloc `erratum`.
 contention) — non mesurés, à reprendre si le levier le justifie.
 
 **Commits** : `84c28889` (erratum), `64674e0d` (repondération −0,05), `51ab1b36` (production −0,06).
+
+## 05/11 — le complément 2 048 est mesuré
+
+Relancé en **deux segments de 10 000 pas** (checkpoint à chaque segment, après deux interruptions),
+le complément 2 048 est arrivé :
+
+| run (wiki_fr, RoPE) | octets | 128 | 1 000 | 4 000 |
+|---|---:|---:|---:|---:|
+| 2 048, 10 000 pas | 164 Mo | 3,0466 | 2,6501 | 2,5513 |
+| **1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,6256** | **2,5429** |
+| **2 048, 20 000 pas** | **328 Mo** | **2,9121** | **2,5375** | **2,4383** |
+
+**À octets constants, 2 048 ne bat pas 1 024** (+0,051 à 128, +0,008 à 4 000 : l'écart se referme
+avec la longueur). **À pas constants, il gagne 0,08 à 0,10**, uniformément. Synthèse de la loi :
+128 → 1 024 vaut −0,4 à −0,5 à 4 000 octets ; 1 024 → 2 048 ne vaut rien à octets constants et
+−0,10 à pas constants — **la fenêtre paie jusqu'à ce que les pas manquent**.
+
+Commit `88861697`. **Les quatre items de l'objectif de la session sont clos** : run long de
+production, capacité sur le corpus propre, complément 2 048, et un commit par fait.

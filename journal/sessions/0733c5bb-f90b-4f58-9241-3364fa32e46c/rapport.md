@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 66.1 h |
+| Durée | 66.2 h |
 | Tours | 9 |
-| Messages | 848 |
-| Appels d'outils | 783 |
+| Messages | 851 |
+| Appels d'outils | 786 |
 | Fichiers touchés | 27 |
-| Commandes | 577 |
+| Commandes | 579 |
 | Sous-agents | 0 |
-| Commits | 36 |
+| Commits | 37 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -318,7 +318,7 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 
 ### Tour 9 — où en est-on?
 
-*8 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Check 2048 run and repo state
 - bash — Evaluate both 2048 checkpoints
@@ -327,10 +327,12 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 - bash — Fill 2048 complement with results
 - bash — Update verdict and state with 2048 results
 - bash — Commit the measured 2048 complement
+- bash — Write 2048 closure and terminate the plan
+- bash — Commit closure and final checks
 
 **Synthèse produite :**
 
-⏵ Résultats complets : à octets constants 2 048 ne bat pas 1 024 ; à pas constants il gagne
+⏵ Clôture : récit, plan, vérifications finales
 
 ## 3. Travail accompli
 
@@ -408,7 +410,7 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 537 autres
+- … et 539 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -592,4 +594,5 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") t = t.replac
+- cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-33
 

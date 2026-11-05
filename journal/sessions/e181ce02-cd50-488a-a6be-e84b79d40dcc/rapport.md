@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 113.7 h |
 | Tours | 175 |
-| Messages | 2288 |
-| Appels d'outils | 1993 |
+| Messages | 2296 |
+| Appels d'outils | 2001 |
 | Fichiers touchés | 25 |
-| Commandes | 1645 |
+| Commandes | 1652 |
 | Sous-agents | 2 |
 | Commits | 239 |
 | Compactages de contexte | 6 |
@@ -9369,7 +9369,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*116 appels d'outils.* Actions notables :
+*124 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9385,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 81 autres
+- … et 88 autres
 
 **Synthèse produite :**
 
-⏵ Round 9 : la cible prend « a » (GV auxiliaire) — je préfère un verbe plein parmi les GV proches
+⏵ Exact **118 → 122**, top-k 134, verbes 0,9516 — je fige le round du lexique élargi
 
 ## 3. Travail accompli
 
@@ -9470,7 +9470,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1605 autres
+- … et 1612 autres
 
 ## 4. Mesures et résultats marquants
 

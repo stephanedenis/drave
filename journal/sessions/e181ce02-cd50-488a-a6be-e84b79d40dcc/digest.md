@@ -39970,3 +39970,80 @@ jeu 05 nov 2026 10:19:57 EST
    ('r160', 'GP', 'in the morning', 'passes', 'morning')
   ```
 
+### 🤖 Assistant
+
+⏵ Round 9 : la cible prend « a » (GV auxiliaire) — je préfère un verbe plein parmi les GV proches
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        # le plus proche, tous côtés mêlés : la variante « GV de gauche d'abord » a été\n        # mesurée (2026-11-05) e … [1869 caractères tronqués]`
+
+  ```
+GV auxiliaire écarté
+exact 118 | top1 122 | topk 132 | verbe {'cibles': 51, 'justes': 48, 'taux': 0.9412} | nom {'cibles': 95, 'justes': 70, 'taux': 0.7368}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                    if not cible and brute:\n                        i = texte.find(brute)\n                        if i  … [1172 caractères tronqués]`
+
+  ```
+auxiliaire rejeté comme cible
+exact 118 | top1 122 | topk 132 | verbe {'cibles': 51, 'justes': 48, 'taux': 0.9412} | nom {'cibles': 95, 'justes': 70, 'taux': 0.7368}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=[p for p in charger() if p[\"id\"] in (\"g003\",\"r132\")]\nfor p i … [407 caractères tronqués]`
+
+  ```
+g003 La femme a vu l'homme dans le parc.
+    GN 'La femme' | cible 'a' | cands ["« dans le parc » → l'homme", '« dans le parc » → a vu', 'a']
+    GV 'a vu' | cible 'femme' | cands ["« dans le parc » → l'homme", '« dans le parc » → a vu']
+    GP "a vu l'homme dans le parc | cible 'a' | cands ['GP', 'a']
+    GN "l'homme" | cible 'femme' | cands ["« dans le parc » → l'homme", '« dans le parc » → a vu', 'a']
+    GP 'dans le parc' | cible 'a' | cands ["« dans le parc » → l'homme", '« dans le parc » → a vu', 'a']
+r132 Le tableau est accroché au mur.
+    GN 'Le tableau' | cible 'au' | cands ['« au mur » → Le tableau', '« au mur » → est accroché', 'est']
+    GV 'est accroché' | cible 'tableau' | cands ['« au mur » → Le tableau', '« au mur » → est accroché']
+    GV 'est accroché au mur' | cible None | cands ['GV']
+    GP 'au mur' | cible 'au' | cands ['« au mur » → Le tableau', '« au mur » → est accroché', 'au']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\na=bl.Heuristique().analyser(\"La femme a vu l'homme dans le parc.\", \"fr\")\nfor e in a.etiquettes:\n    if e.niveau==\"syntagme … [132 caractères tronqués]`
+
+  ```
+"a vu l'homme dans le parc" 9 34 | meta {'role': 'destinataire', 'niveau': 1, 'union': True, 'attachement': {'segment': "a vu l'homme dans le parc", 'cible': 'a'}}
+'dans le parc' 22 34 | meta {'role': 'lieu', 'niveau': 1, 'attachement': {'segment': 'dans le parc', 'cible': 'a'}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bloc prend « a » parce que « vu » manque au lexique (participe irrégulier). J'ajoute les irréguliers courants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''voir vois voit voient voyait voyaient savoir sais sait savent savait savaient pouvoir peux peut''',\n'''voir vois voit vo … [2372 caractères tronqués]`
+
+  ```
+participes et verbes courants ajoutés
+exact 122 | top1 126 | topk 134 | verbe {'cibles': 62, 'justes': 59, 'taux': 0.9516} | nom {'cibles': 83, 'justes': 63, 'taux': 0.759}
+  ```
+
+### 🤖 Assistant
+
+⏵ Exact **118 → 122**, top-k 134, verbes 0,9516 — je fige le round du lexique élargi
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique(), charger())\na=r['a … [365 caractères tronqués]`
+
+  ```
+{'top1': 126, 'topk': 134, 'exact': 122, 'top1_taux': 0.5272, 'topk_taux': 0.5607, 'exact_taux': 0.5105, 'top1_taux_span': 0.869, 'topk_taux_span': 0.9241, 'exact_taux_span': 0.8414}
+tête {'top1': 126, 'topk': 134, 'top1_taux': 0.869, 'topk_taux': 0.9241}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\na=evaluer_bloc('h', bl.Heuristique(), charger())['attach … [606 caractères tronqués]`
+
+  ```
+cibles 239 labels 145 couverture 0.6067
+span 94
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); span=cible=0\nfor p in charger():\n    x=h.analyse … [533 caractères tronqués]`
+
+  ```
+span 94 | cible 11
+  ```
+

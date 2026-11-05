@@ -11207,3 +11207,35 @@ compteurs 635 728
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**2 048 mesuré** : à octets constants il ne bat pas 1 024 (+0,05 à 128, +0,01 à 4 000), à pas constants il gagne ** … [2024 caractères tronqués]`
+
+  ```
+compacté
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-80]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-80", "timeout_ms": 180000, "wait": true}`
+
+  ```
+88861697 FENÊTRE 2 048 — MESURÉ : À OCTETS CONSTANTS IL NE BAT PAS 1 024 (+0,05 À 128, +0,01 À 4 000) ; À PAS CONSTANTS IL GAGNE 0,08 À 0,10
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : récit, plan, vérifications finales
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat >> journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md <<'EOF'\n\n## 05/11 — le complément 2 048 est mesuré\n\nRelancé en **deux segments de 10 000 pas** (checkpoint à chaque segment, après deux interruptions),\nle complément 2 048 es … [1848 caractères tronqués]`
+
+  ```
+plan terminé
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ❌ mandat périmé (507 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md && git commit -q -F - -- journal/sessions/0 … [798 caractères tronqués]`
