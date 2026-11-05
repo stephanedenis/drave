@@ -30625,3 +30625,204 @@ revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 216 : audit vert ; je recale l'heure et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h216.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h216.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [832 caractères tronqués]`
+
+  ```
+heure 23 h 10
+[s/v7 1d95d1e1] ÉTAT — HEURE 04 H 47 ; INDEX 625, 2 048 FINI, B13 166/166, D 62
+ 13 files changed, 147 insertions(+), 23 deletions(-)
+1d95d1e1 ÉTAT — HEURE 04 H 47 ; INDEX 625, 2 048 FINI, B13 166/166, D 62
+87690c26 INDEX — 615 → 625 FICHES (LES DIX DERNIÈRES FICHES ENTRENT) ; HEURE 04 H 42
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 216 : audit vert, INDEX à 625, 2 048 fini, heure 23 h 10
+
+**Cycle 216 — tout est vert.**
+
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 070 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 608 mots**, **T0 3 978 / 4 000** ✅.
+- **INDEX** à jour : **625 fiches** (`87690c26`).
+- **2 048 — fini** (2×10 000 pas, deux drvm) ; **GPUs à 0 %**.
+- **B13 166/166**, D **restauré à 62 documents**, sur **`s/v7`** ; S, N2 et OCR **en pause**, B13 et L (Pensée) actives.
+
+**Le goal reste actif** : la fiche du 2 048 (côté N2), les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 222
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 217/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : audit, puis je regarde si le 2 048 a déjà sa fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -5 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -10 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descrip … [45 caractères tronqués]`
+
+  ```
+1d95d1e1 ÉTAT — HEURE 04 H 47 ; INDEX 625, 2 048 FINI, B13 166/166, D 62
+87690c26 INDEX — 615 → 625 FICHES (LES DIX DERNIÈRES FICHES ENTRENT) ; HEURE 04 H 42
+3ede6bba ÉTAT — HEURE 04 H 37 ; 2 048 FINI, B13 166/166, D 62
+63608044 ÉTAT — HEURE 04 H 32 ; 2 048 FINI, B13 166/166, D 62
+634c636f ÉTAT — HEURE 04 H 27 ; 2 048 FINI, B13 166/166, D 62
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 471 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 683 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 403 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2011 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `ses
+… [333 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [174 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1608 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3978 mots (budget 4 000)
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls reports/ | grep -i \"2048\\|n2ac\\|rope\" ; echo \"---\" ; grep -rl \"2 048\\|2048\" reports/*.md 2>/dev/null | head -5", "description": "Look for existing 2048 fiche"}`
+
+  ```
+n2-r12-2048.json
+rapport-n2-r12-2048.md
+---
+reports/aiguille-30b.md
+reports/INDEX.md
+reports/rapport-aiguille.md
+reports/rapport-aiguille-topk.md
+reports/rapport-budget-decision.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : une fiche 2 048 existe ; je vérifie si elle couvre le run fini
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; head -40 reports/rapport-n2-r12-2048.md ; echo \"=== JSON ===\" ; head -40 reports/n2-r12-2048.json", "description": "Read existing 2048 fiche"}`
+
+  ```
+# R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données gagnent
+
+> **Ligne de roadmap** : R1 (la fenêtre native) · **Date** : 2026-11-03 · **Verdict** : à
+> **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à
+> **1 024** — à 2 000 octets, 3,2459 (fenêtre 256) → 2,9728 (512) → **2,9449** (1 024) — et
+> **2 048 ne la bat pas** (2,9630) : à budget d'octets fixé, doubler encore la fenêtre divise les
+> **pas** par deux (1 250 contre 2 500) et le gain s'annule. À **pas constants** (20 000), la même
+> recette à fenêtre **1 024** voit **8× plus d'octets** et **écrase** tout : **2,9955** à 128
+> octets, **2,6256** à 1 000, **2,5429** à 4 000 — à **0,13** et **0,04** de 2,5 en domaine
+> (`val_fr`, pas le corpus propre : ce n'est pas la porte, c'en est le voisinage). La fenêtre et
+> le compute ne s'opposent pas : la fenêtre **rend chaque octet plus utile**, et c'est le produit
+> des deux qui compte.
+
+## La question
+
+La fiche [`rapport-n2-fenetre`](rapport-n2-fenetre.md) a mesuré la loi à trois points (256, 512,
+1 024) à octets constants et conclu que 1 024 gagnait là où la fenêtre sert. Deux qu
+… [1771 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : je vérifie ce que roadmap/chantiers disent du 2 048
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"2 048\\|2 048\\|2048\" docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>/dev/null | head -20", "description": "Grep 2048 mentions in pilotage"}`
+
+  ```
+docs/pilotage/roadmap.md:33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 000 octets, fenêtre **−0,244**) ; la suite : **1 024 octets entraînés** ; **`rope2048`** arrêté à 6 400/20 000 (paire propre) ; R2/R3 attendent N5/N4 |
+docs/pilotage/roadmap.md:45:→ 2,9950** (256/512/1 024 à 1 000 octets), **2,9449** à 2 000 pour 1 024, et la **2 048** s'arrête à
+docs/pilotage/roadmap.md:47:wikitext2 7,90) ; le run **20 k** de la 2 048 finit à **2,6609** de PPL val ; la **fenêtre 1 024** passe **sous 2,5** au grand corpus (**2,4759 / 2,4373**), la porte **propre** reste **2,7856** ; **R1.1/R1.2** mesurées.
+docs/pilotage/roadmap.md:74:   **propre** reste à **2,7856** ; 512 paie hors domaine, **2 048 ne paie pas**. Suite : la porte
+docs/pilotage/plan-travail.md:397:04/11, le hub `1e7ef596` a rouvert l'état, relancé `kd2`/`rope2048` (09 h 30) et trois 
+… [2319 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : trois mentions du 2 048 sont périmées ; je lis les blocs à corriger
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '80,100p' docs/pilotage/en-cours.md ; echo \"=== TABLE ===\" ; sed -n '118,126p' docs/pilotage/en-cours.md ; echo \"=== QUESTIONS ===\" ; sed -n '130,142p' docs/pilotage/en-cours.md ; echo \"=== ROADMAP 30-36 ===\" ; sed -n '30 … [73 caractères tronqués]`
+
+  ```
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — la production et la capacité.
+- **Plan** : 1 024, capacité.
+- **Ambition** : la longueur et la capacité.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
+- **Objectif final** : la production qui tient.
+- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α = 0 → **3,1500**, α = 0,9 → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération 4× : −0,05** ; **2 048 relancé** (2×10 000 pas) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : le **2 048** (fin ~21 h) ; ensuite la **porte propre (0,29)**.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/0733c5b
+… [10232 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : je corrige les mentions périmées (2 048 fini, B13 166) dans l'état et la roadmap
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; sed -n '94,99p' docs/pilotage/en-cours.md", "description": "Read exact in-progress lines"}`
+
+  ```
+- **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
+- **N2 — actif** : **1 024** = recette de production ; **2 048 fini** (2×10 000 pas ; drvm `c50beff6` + `91a3028…`) ; la distillation est mesurée ; **perte d'entraînement** : α = 0 **1,014**, α = 0,9 **0,8385** (−0,176) ; **PPL de validation** : α = 0 **3,1500**, α = 0,9 **3,1119** (−0,06 ; −0,19 anglais) ; la distillation **paie** sur le PPL ; **repondération 4× : −0,05**.
+- **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
+- **Pensée — B13 (actif)** : **165/165**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; la fusion garde l'heuristique.
+- **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : j'applique les corrections de cohérence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nsubs=[\n(\"- **Pensée — B13 (actif)** : **165/165**\", \"- **Pensée — B13 (actif)** : **166/166**\"),\n(\"- **Prochaine action** : le **2  … [1474 caractères tronqués]`
+
+  ```
+substitutions OK
+docs/pilotage/en-cours.md:8:> **Reboot du 03/11 19 h 33** : la nuit a été coupée (`kd2` **8 250/30 000**, `rope2048`
+docs/pilotage/en-cours.md:31:> **Bilan de 15 h** : reprises à 09 h ; **runs N2 arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **perte α=0,9 0,8385 (−0,176), PPL 3,1119 (−0,06)** ;
+docs/pilotage/en-cours.md:86:- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** (code biaisé, trop lents) ; **paire propre de production** finie : α = 0 → **3,1500**, α = 0,9 → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération 4× : −0,05** ; **2 048 relancé** (2×10 000 pas) ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+docs/pilotage/en-cours.md:88:- **Prochaine action** : le **2 048** (fin ~21 h) ; ensuite la **porte propre (0,29)**.
+docs/pilotage/en-cours.md:95:- **N2 — actif** : **1 024** = recette de production ; **2 048 fini** (2×10 000 pas ; drvm `c50beff6`
+… [2598 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : une ligne a manqué (point final) ; je la corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Prochaine action** : le **2 048** (fin ~21 h) ; ensuite la **porte propre (0,29)**.\", \"- **Prochaine action** : la **p … [360 caractères tronqués]`
+
+  ```
+ligne 88 OK
+- **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
+  T0 max : 3988 mots (budget 4 000)
+  en-cours · 1618 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 217 : je recale l'heure et commit les corrections
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h217.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h217.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [974 caractères tronqués]`
