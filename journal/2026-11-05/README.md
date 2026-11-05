@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**26 commits** · **1 session(s)** · **6 thème(s)**
+**27 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,6 +15,7 @@
 | docs | 8 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -54,6 +55,7 @@
 | 01:16 | `2086ea4b` | ÉTAT — HEURE 01 H 16 ; LA PASSE AVANCE (n3-sparsite, OCCUPATIONS) SANS NOUVELLE ROUGE |
 | 01:18 | `8bb43aba` | ÉTAT — HEURE 01 H 19 ; PASSE 62 JOURNAUX, OCR-SCANS VERTE (529 S), AUCUNE NOUVELLE ROUGE |
 | 01:21 | `d2a351d2` | ÉTAT — HEURE 01 H 22 ; PASSE 65 JOURNAUX, PANNES ET PÉRIPHÉRIE VERTES |
+| 01:24 | `bd8b38f3` | ÉTAT — HEURE 01 H 25 ; PASSE 65 JOURNAUX, POIDS-CREUX TOURNE (4 MIN) |
 
 ## Le récit de la journée (écrit à la main)
 

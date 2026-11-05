@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 18.0 h |
-| Tours | 260 |
-| Messages | 1445 |
-| Appels d'outils | 1450 |
+| Tours | 261 |
+| Messages | 1449 |
+| Appels d'outils | 1453 |
 | Fichiers touchés | 15 |
-| Commandes | 1262 |
+| Commandes | 1265 |
 | Sous-agents | 0 |
-| Commits | 281 |
+| Commits | 282 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -543,6 +543,8 @@
 **Tour 259** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 260** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 261** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6424,7 +6426,27 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 255 : porte-poids-creux tourne (4 min) ; je commit l'état
+⏵ Cycle 255 : poids-creux tourne (4 min), OCR et OCR-scans vertes, passe à 65 journaux
+
+**Cycle 255 — la passe est dans les portes lourdes.**
+
+- **Passe** : **65 journaux** ; `porte-ocr` (58 s) et `porte-ocr-scans` (529 s) vertes ; **`porte-poids-creux`** tourne depuis 4 min, sous la borne du harnais. Rouges : les **deux tolérées** + la **rouge de banc corrigée**.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 617 mots**, **T0 3 987 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : finir la passe (≈17 portes), mettre à jour les références, puis décider d'une passe propre de confirmation.
+
+### Tour 261 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 256 : poids-creux verte (376 s), porte-pont tourne ; je commit
 
 ## 3. Travail accompli
 
@@ -6490,7 +6512,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1222 autres
+- … et 1225 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6919,4 +6941,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 19 ; PASSE 62 JOURNAUX, OCR-SCANS VERTE (529 S), AUCUNE NOUVELLE ROUGE" -m "La passe a franchi porte-ocr-scans en 529 s (familles, colonnes et
 - ÉTAT — HEURE 01 H 22 ; PASSE 65 JOURNAUX, PANNES ET PÉRIPHÉRIE VERTES" -m "porte-pannes tenue (55 s : pair absent, échec annoncé en 3 s, aucune perplexité) et p
 - ÉTAT — HEURE 01 H 25 ; PASSE 65 JOURNAUX, POIDS-CREUX TOURNE (4 MIN)" -m "porte-ocr (58 s) et porte-ocr-scans (529 s) sont vertes ; porte-poids-creux tourne dep
+- ÉTAT — HEURE 01 H 27 ; POIDS-CREUX VERTE (376 S), PORTE-PONT TOURNE ; 66 JOURNAUX" -m "Le noyau creux est exact et paie la sparsité (paires divisées) : la porte
 
