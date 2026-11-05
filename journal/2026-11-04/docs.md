@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (144)
+## Commits du jour (145)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -152,6 +152,7 @@
 | 20:21 | `14df28a1` | ÉTAT — HEURE 23 H 32 ; 2 048 : 2E MOITIÉ À 7 150 PAS ; B13 165/165, D 62 | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
 | 20:23 | `e13723f6` | ÉTAT — HEURE 23 H 37 ; 2 048 : 2E MOITIÉ À 7 300 PAS ; B13 165/165, D 62 | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
 | 20:26 | `9f3e37eb` | B13 166/166 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (LE CORRECTIF N'EN RÉPARE QU'UN) ; ÉTAT, ROADMAP, CHANTIERS, PLAN | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+10) |
+| 20:29 | `7b122d8d` | ÉTAT — T0 3 987 ; LE FAIT EST RESSERRÉ (166/166) ; 2 048 À 7 600 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
 
 ## Chiffres du jour
 
