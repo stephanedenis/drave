@@ -36405,3 +36405,124 @@ porte de la vision — mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf
 ⏵ Cycle 267 : vision à 7 min, sous sa borne ; je commit l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; pgrep -P 1751853 -a 2>/dev/null | head -2 ; cp docs/pilotage/en-cours.md /tmp/state.h267.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h267.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text … [1051 caractères tronqués]`
+
+  ```
+1751859 timeout 2400 env DRAVE_VISION_POIDS=all DRAVE_VISION_COUCHES=32 DRAVE_VISION_FUSION=1 ./drave-core/target/release/drave models/vision/mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf --banc-vision /tmp/porte-vision/tour.bin
+2026-11-05 02 h 02
+[s/v7 c69b55bc] ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE
+ 7 files changed, 148 insertions(+), 14 deletions(-)
+c69b55bc ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE
+cae0cb74 ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 267 : vision calcule sur le banc mmproj (32 couches), 82 verdicts, 7 min
+
+**Cycle 267 — la dernière porte tourne sur le banc vision.**
+
+- **`porte-vision`** : le processus `drave --banc-vision` utilise **mmproj-Qwen2-VL-2B-Instruct-Q8_0** avec `DRAVE_VISION_COUCHES=32` et `DRAVE_VISION_FUSION=1` ; premier test déjà vert (modèle sans tour de vision refusé en le disant), écoulé 7 min.
+- **Passe** : **82 verdicts** au registre ; les quatre rouges restent `indice` et `melange` (tolérées), `lecteur` (corrigée), `sessions` (coordination e181ce02).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : attendre vision, puis mettre à jour les **références de non-régression** avec les quatre rouges catégorisées.
+
+
+## Tour 273
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 268/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 268 : verdict de vision et bilan de la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+c69b55bc ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE
+cae0cb74 ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR
+0bda5c5b PASSE 83/83 JOURNAUX ; PORTE-SESSIONS ROUGE PAR LE HEARTBEAT DE e181ce02 ; HEURE 01 H 58
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 643 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    1e7ef596-93e6-45f1 · actif    ·  10 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 575 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2183 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, o
+… [280 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -1 ; python3 tools/verifie_en_cours.py 2>&1 | tail -1 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [427 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3986 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+82 work/portes/passe-2404-23h45/registre.txt
+porte-indice 1 1207
+porte-lecteur 1 0
+porte-melange 1 148
+porte-sessions 1 0
+  porte-registre         ✅                          18 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-reparti-moteur   ✅                          48 s  PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  porte-ressources       ✅                           1 s  ✅ porte ressources verte : autotest 9 cas, registre cohérent, GPU réservés à Drave
+  porte-sauvegarde-modele ✅                          60 s  ✅ porte sauvegarde du modèle : la perte de validation est la MÊME aux quatre étapes
+  porte-sessions         ❌ code
+… [826 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 268 : je lis la fin du harnais pour savoir quel bilan il imprime
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; tail -40 tools/toutes-les-portes.sh", "description": "Read harness summary code"}`
+
+  ```
+vertes=0; rouges=0; liste_rouges=""
+echo "=== PASSE COMPLÈTE DES PORTES ($(printf '%s\n' $portes | grep -c . ) portes, borne ${DELAI} s) ==="
+echo "    journaux : $JOURNAUX"
+for g in $portes; do
+    nom=$(basename "$g" .sh)
+    j="$JOURNAUX/$nom.log"
+    t0=$(date +%s)
+    timeout "$DELAI" bash "$g" > "$j" 2>&1
+    code=$?
+    dt=$(( $(date +%s) - t0 ))
+    # la dernière ligne ✅ dit CE QUE la porte a verrouillé ; sinon la dernière ❌, sinon la queue
+    dernier=$(grep -E "✅|❌|ÉCHEC|TENUE" "$j" | tail -1 | cut -c1-96)
+    if [ "$code" = 0 ]; then
+        vertes=$((vertes+1)); marque="✅"
+    else
+        rouges=$((rouges+1)); liste_rouges="$liste_rouges $nom"
+        [ "$code" = 124 ] && marque="⏱ (borne ${DELAI} s dépassée)" || marque="❌ code $code"
+    fi
+    printf '  %-22s %-26s %4d s  %s\n' "$nom" "$marque" "$dt" "$dernier"
+    # ⚠️ LE REGISTRE, ET POURQUOI IL EXISTE. La synthèse ci-dessous part sur la SORTIE STANDARD ✗ — et
+    # une passe lancée avec `| tail` (ou dont on ne garde que la fin ✓) la perd ✗✓ : il ne reste alors
+    # que les journaux par porte, où le verdict ne se lit qu'au MARQUEUR (❌ ✓) — or l'audit du 16/10 a
+    # montré que le marqueur n'est PAS le critère ✓ (
+… [823 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 268 : vision à 10 min ; le harnais écrira « X vertes, Y rouges » et listera les rouges ; je commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ps -o etime -p 1751852 2>/dev/null | tail -1 ; cp docs/pilotage/en-cours.md /tmp/state.h268.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h268.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,t … [1104 caractères tronqués]`

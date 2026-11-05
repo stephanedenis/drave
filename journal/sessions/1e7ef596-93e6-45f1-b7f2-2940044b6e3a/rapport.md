@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 18.6 h |
-| Tours | 272 |
-| Messages | 1503 |
-| Appels d'outils | 1496 |
+| Durée | 18.7 h |
+| Tours | 273 |
+| Messages | 1508 |
+| Appels d'outils | 1500 |
 | Fichiers touchés | 15 |
-| Commandes | 1308 |
+| Commandes | 1312 |
 | Sous-agents | 0 |
-| Commits | 293 |
+| Commits | 294 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -567,6 +567,8 @@
 **Tour 271** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 272** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 273** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6706,7 +6708,29 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 267 : vision à 7 min, sous sa borne ; je commit l'état
+⏵ Cycle 267 : vision calcule sur le banc mmproj (32 couches), 82 verdicts, 7 min
+
+**Cycle 267 — la dernière porte tourne sur le banc vision.**
+
+- **`porte-vision`** : le processus `drave --banc-vision` utilise **mmproj-Qwen2-VL-2B-Instruct-Q8_0** avec `DRAVE_VISION_COUCHES=32` et `DRAVE_VISION_FUSION=1` ; premier test déjà vert (modèle sans tour de vision refusé en le disant), écoulé 7 min.
+- **Passe** : **82 verdicts** au registre ; les quatre rouges restent `indice` et `melange` (tolérées), `lecteur` (corrigée), `sessions` (coordination e181ce02).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : attendre vision, puis mettre à jour les **références de non-régression** avec les quatre rouges catégorisées.
+
+### Tour 273 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and read pass verdict
+- bash — Read harness summary code
+- bash — Commit state and note harness summary
+
+**Synthèse produite :**
+
+⏵ Cycle 268 : vision à 10 min ; le harnais écrira « X vertes, Y rouges » et listera les rouges ; je commit
 
 ## 3. Travail accompli
 
@@ -6772,7 +6796,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1268 autres
+- … et 1272 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6900,7 +6924,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ## 5. Erreurs rencontrées
 
-19 sorties en erreur ou divergentes. Les premières :
+20 sorties en erreur ou divergentes. Les premières :
 
 - **T3** : (§ 3) sépare les deux.  ## Fichiers  - Modèles : `work/n2ac/mix512-15k.pt`, `mix1024-7.5k.pt`, `mix2048-3.75k.pt`,   `mix512-zero-15k.pt` ; `mix1024-30k.pt` **non écrit — run interrompu** ; témoins   
 - **T5** : M	docs/implantation/moteur-de-pensee.md M	docs/pilotage/backlog/N3-operations-natives.md M	docs/pilotage/backlog/index.md M	docs/pilotage/en-cours.md M	docs/pilotage/plan-travail.md M	docs/pilotage/re
@@ -7213,4 +7237,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - PASSE 83/83 JOURNAUX ; PORTE-SESSIONS ROUGE PAR LE HEARTBEAT DE e181ce02 ; HEURE 01 H 58" -m "Le harnais a lancé les 83 portes. porte-sessions rend 1 : le heart
 - ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR" -m "Le registre compte 82 verdicts : indice, lecteur, melange et ses
 - ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE" -m "La dernière porte calcule encore, sous la borne de 30 min ; le premier 
+- ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES »" -m "Le harnais écrit le bilan sur la sortie standard et dans le regis
 
