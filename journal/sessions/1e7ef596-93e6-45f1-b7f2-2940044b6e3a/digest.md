@@ -31226,3 +31226,214 @@ ligne N2 du plan-travail corrigée
 ⏵ Cycle 220 : je commit la correction du plan-travail avec l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h220.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h220.md'\nt=open(p).read()\nh=subprocess.run(['date','+%H h %M'],capture_output=True,text=True).stdout.strip()\nt=re.sub(r\"\\*\ … [915 caractères tronqués]`
+
+  ```
+heure 23 h 25
+[s/v7 789dbdf2] PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25
+ 8 files changed, 193 insertions(+), 16 deletions(-)
+789dbdf2 PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25
+b3cfbe1f ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 220 : vérification finale des portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -1 ; python3 tools/verifie_en_cours.py 2>&1 | tail -1 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; head -3  … [72 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3957 mots (budget 4 000)
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+**Mis à jour : 2026-11-04, 23 h 25 HNE (heure locale, EST).**
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 220 : plan-travail corrigé, heure réelle rétablie, portes vertes
+
+**Cycle 220 — le plan de travail ne ment plus sur N2.**
+
+- **Correction** (`789dbdf2`) : la cellule N2 du plan de travail disait « fiche + clôture en cours » ; elle dit **2 048 fini (2×10 000 pas)** et **prochaine action : porte propre (0,29)**. Les claims datés de la nuit du 02/11 restent l'histoire, intacts.
+- **Heure réelle rétablie** : l'état et les messages de commit portent maintenant l'heure locale (**23 h 25**), plus l'heure dérivée qui avait glissé.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 070 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 587 mots**, **T0 3 957 / 4 000** ✅.
+- **2 048 fini**, deux drvm ; **GPUs à 0 %** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : la porte propre de N2, les faits B13/S, puis la passe complète des portes.
+
+
+## Tour 226
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 221/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : audit, puis je re-dérive les chiffres du 2 048 depuis les deux JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -4 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+789dbdf2 PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25
+b3cfbe1f ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02
+b513911b ÉTAT — N2 PASSE EN PAUSE (SESSION ET CHANTIER) ; RUN FINI ; HEURE 04 H 57
+cbbea4a2 COHÉRENCE — LE 2 048 EST FINI PARTOUT ; B13 À 166 ; HEURE 04 H 52
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 487 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 699 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 419 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2027 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), rep
+… [315 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [174 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1587 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3957 mots (budget 4 000)
+  ✅ 3070 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-04)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport json,re\nfor f in ['work/n2ac/rope2048-10k.log','work/n2ac/rope2048-20k.log']:\n    t=open(f, errors='replace').read()\n    i=t.rfind('\\n{')\n    try:\n        d=json.loads(t[i:])\n        print(f, {k:d.get(k … [204 caractères tronqués]`
+
+  ```
+work/n2ac/rope2048-10k.log {'perte_finale': 0.9408763647079468, 'ppl_val': 2.6140776459917356, 'duree_s': 10224.105374336243, 'sha256_drvm': 'c50beff61dc067b80690e9769e503e2c4e8e5184c0eb68277fcebd5bb0f4da69', 'drvm': 'work/n2ac/rope2048-10k.drvm', 'jetons_val': 131072}
+work/n2ac/rope2048-20k.log {'perte_finale': 0.8965461254119873, 'ppl_val': 2.4953209637199847, 'duree_s': 10220.861443519592, 'sha256_drvm': '91a302872988691e1a489ea1dea88a3e1787bd6ababaf637041ef2f3c1c6c529', 'drvm': 'work/n2ac/rope2048-20k.drvm', 'jetons_val': 131072}
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : les chiffres du 2 048 sont confirmés ; je vérifie les drvm et les claims GPU
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls -l work/n2ac/*.drvm 2>/dev/null ; sha256sum work/n2ac/rope2048-10k.drvm work/n2ac/rope2048-20k.drvm 2>/dev/null ; echo \"=== CLAIMS ===\" ; python3 tools/ressources.py --status 2>&1 | head -15", "description": "Verify drvm hashes a … [20 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 17:31 work/n2ac/absolu-pos1152.drvm
+-rw-r--r--. 1 stephane stephane  47283932  3 nov 04:04 work/n2ac/cap-1147m-128.drvm
+-rw-r--r--. 1 stephane stephane  47283932  3 nov 03:33 work/n2ac/cap-1147m-512.drvm
+-rw-r--r--. 1 stephane stephane  86612892  3 nov 03:55 work/n2ac/cap-2165m-128.drvm
+-rw-r--r--. 1 stephane stephane  86612892  3 nov 03:26 work/n2ac/cap-2165m-512.drvm
+-rw-r--r--. 1 stephane stephane 137224476  3 nov 02:45 work/n2ac/mix1024-30k.drvm
+-rw-r--r--. 1 stephane stephane 137224476  3 nov 17:22 work/n2ac/mix1024-60k.drvm
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 21:50 work/n2ac/mix1024-7.5k.drvm
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 19:33 work/n2ac/mix-200k.drvm
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 23:51 work/n2ac/mix2048-3.75k.drvm
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 20:54 work/n2ac/mix512-15k.drvm
+-rw-r--r--. 1 stephane stephane 137224476  3 nov 03:49 work/n2ac/mix512-zero-15k.drvm
+-rw-r--r--. 1 stephane stephane 137224476  4 nov 14:14 work/n2ac/pond4-mix512-15k.drvm
+-rw-r--r--. 1 stephane stephane  47283932  4 nov 12:57 work/n2ac/pondere.drvm
+-rw-r--r--. 1 stephane stephane  4728
+… [2560 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : un claim GPU de N2 semble encore actif alors que le run est fini ; j'inspecte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/ressources.py --help 2>&1 | head -20 ; echo \"=== JSON CLAIM ===\" ; python3 -c \"\nimport json;d=json.load(open('work/ressources.json'))\nfor r in d.get('reservations',[]):\n    print(r)\n\" 2>&1 | head -10", "descripti … [46 caractères tronqués]`
+
+  ```
+usage: ressources.py [-h] [--ledger LEDGER] [--status] [--claim] [--release]
+                     [--check] [--strict] [--suggest] [--actual] [--autotest]
+                     [--session SESSION] [--job JOB] [--res RES] [--prio PRIO]
+                     [--eta ETA] [--note NOTE]
+
+ressources.py — le registre des ressources de Hauru et le protocole de claim.
+
+Pourquoi. Le pilotage réservait des **fichiers** (`sessions.py`) et surveillait les
+**fichiers en mouvement** (`surveille_sessions.py`), mais pas la **machine** : deux
+sessions pouvaient lancer deux entraînements sur le même GPU, ou saturer le même
+NVMe, sans le voir. Ce registre rend les ressources explicites, les réserve et met
+en file ce qui ne tient pas — pour éviter les attentes inutiles et les simultanéités
+intenses.
+
+Capacités (Hauru, 2026-11-02) :
+  gpu0 / gpu1 : 1 job exclusif, 16 Gio de VRAM, NUMA 0 (0-9,20-29)
+  cpu0        : 20 fils (0-9,20-29), réserve 4 → 16 fils utilisables
+  cpu1        : 20 fils (10-19,30-39), réserve 4 → 16 fils utilisables
+  ram         : 125 Gio, réserve 16 → 109 Gio utilisables
+  nvme_system : 1 IO lourde, / (Fanxiang 1 To : /, /home, /FastNVMe)
+=== JSON CLAIM ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : je lis la structure du registre pour dater le claim
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 - <<'PY'\nimport json;d=json.load(open('work/ressources.json'))\nprint(list(d.keys()))\nfor k,v in d.items():\n    if isinstance(v,list):\n        print(k, len(v))\n        for x in v[:4]: print('  ', x)\nPY", "description": " … [31 caractères tronqués]`
+
+  ```
+['claims', 'queue']
+claims 1
+   {'id': '0733c5bb:n2-jour:1793814807', 'session': '0733c5bb', 'job': 'n2-jour', 'res': {'gpu0': 'exclusive', 'gpu1': 'exclusive', 'cpu0': 12, 'ram': 60}, 'prio': 1, 'eta_min': 720, 'created': '2026-11-04T12:53:27', 'note': 'kd2 + rope2048 ; rope ~19–20 h'}
+queue 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : je libère le claim GPU de N2 (run fini, GPUs à 0 %) avec une trace
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/ressources.py --release --session 0733c5bb --job n2-jour --note \"run 2 048 fini (20 000 pas, 21 h 09) ; libération par le hub\" 2>&1 | tail -8 ; echo \"=== STATUS ===\" ; python3 tools/ressources.py --status 2>&1 | tail … [44 caractères tronqués]`
+
+  ```
+✅ libéré : 1 réservation(s) de 0733c5bb / n2-jour
+=== STATUS ===
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1933 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Aucune réservation active.
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : je vérifie si le registre est suivi par git
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git ls-files work/ressources.json ; git status --short work/ressources.json ; git check-ignore -v work/ressources.json 2>&1 | head -2 ; grep -n \"claim\\|GPU\\|gpu\" docs/pilotage/en-cours.md | head -8", "description": "Check registry … [34 caractères tronqués]`
+
+  ```
+.gitignore:23:work/	work/ressources.json
+29:> **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU à Drave.
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : j'inscris la libération du claim dans l'état et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; grep -n \"^## \" docs/pilotage/en-cours.md ; grep -n \"ressources\" docs/pilotage/en-cours.md | head -4", "description": "List state sections"}`
+
+  ```
+22:## Sessions en cours
+92:## Ce qui est en cours
+100:## Les chiffres de l'état
+112:## Les chantiers et leurs bloquants
+128:## Ce qui reste
+132:## Les questions ouvertes
+140:## La carte
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 221 : j'ajoute la mention GPUs libres et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h221.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h221.md'\nt=open(p).read()\nt=t.replace(\"prochaine : la **porte propre (0,29)**.\", \"prochaine : la **porte propre (0,29)** ;  … [1233 caractères tronqués]`

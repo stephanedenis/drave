@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**252 commits** · **6 session(s)** · **7 thème(s)**
+**253 commits** · **6 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,14 +17,14 @@
 | mesures | 26 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 1 | [portes.md](portes.md) |
+| portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 47.3 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 16.0 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 16.1 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 | `206a4022-ab3c-497d-a5fa-0194931c7fa0` | Tu travailles dans le dépôt | 2026-11-04 15:56 | 0.2 h | [rapport](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) · [digest](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 48.3 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 6.9 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
@@ -286,6 +286,7 @@
 | 23:15 | `cbbea4a2` | COHÉRENCE — LE 2 048 EST FINI PARTOUT ; B13 À 166 ; HEURE 04 H 52 |
 | 23:19 | `b513911b` | ÉTAT — N2 PASSE EN PAUSE (SESSION ET CHANTIER) ; RUN FINI ; HEURE 04 H 57 |
 | 23:22 | `b3cfbe1f` | ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02 |
+| 23:25 | `789dbdf2` | PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25 |
 
 ## Le récit de la journée (écrit à la main)
 
