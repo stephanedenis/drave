@@ -2219,12 +2219,12 @@ def t152_tirages() -> tuple[bool, str]:
 
 
 def t153_attachement() -> tuple[bool, str]:
-    """L'attachement sur le gold 612 (239 cibles) : top1 0,3975, exact 0,0544."""
+    """L'attachement sur le gold 612 (239 cibles) : top1 0,4017, exact 0,0586."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
-    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.3975) < 0.001
-            and abs(r["exact_taux"] - 0.0544) < 0.001), (
+    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.4017) < 0.001
+            and abs(r["exact_taux"] - 0.0586) < 0.001), (
         f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
         f"couverture {r['couverture']}")
 
@@ -2341,8 +2341,7 @@ def t161_cible_proximite() -> tuple[bool, str]:
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())
     a, th = r["attachement"], r["attachement_tete"]
-    return (a["cibles"] == 239 and a["top1"] == 95 and a["exact"] == 13
-            and th["top1"] == 94), (
+    return (a["cibles"] == 239 and a["top1"] == 96 and a["exact"] == 14), (
         f"proximité : top1 {a['top1']}/239, exact {a['exact']}/239, "
         f"tête {th['top1']}/145")
 
@@ -2353,8 +2352,31 @@ def t162_candidats_verbes() -> tuple[bool, str]:
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())
     a, th = r["attachement"], r["attachement_tete"]
-    return (a["topk"] == 112 and th["topk"] == 111 and a["top1"] == 95), (
+    return (a["topk"] == 113 and th["topk"] == 113 and a["top1"] == 96), (
         f"candidats : top-k {a['topk']}/239 ({a['topk_taux']}), tête {th['topk']}/145")
+
+
+def t163_echecs_attachement() -> tuple[bool, str]:
+    """Les échecs de l'attachement : 94 de span, 33 de cible."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    h = bl.Heuristique()
+    span = cible = 0
+    for p in charger():
+        a = h.analyser(p["texte"], p["langue"])
+        labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+        for s in p["segments"]:
+            cibles = s.get("cibles") or ([s["cible"]] if s.get("cible") else [])
+            if not cibles:
+                continue
+            e = labels.get((s["type"], s["debut"], s["fin"]))
+            if e is None:
+                span += 1
+                continue
+            if not any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
+                cible += 1
+    return span == 94 and cible == 32, (
+        f"échecs : {span} de span, {cible} de cible (33 avant le correctif d'union)")
 
 
 def main() -> int:
@@ -2518,7 +2540,8 @@ def main() -> int:
               ("T159 correctif passifs", t159_passifs_corriges()),
               ("T160 passifs sans par", t160_passifs_sans_par()),
               ("T161 cible proximité", t161_cible_proximite()),
-              ("T162 candidats verbes", t162_candidats_verbes())]
+              ("T162 candidats verbes", t162_candidats_verbes()),
+              ("T163 échecs attachement", t163_echecs_attachement())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -703,8 +703,14 @@ class Heuristique:
         cands = self._syntagmes_s(texte)
         cibles_s = self._cibles_s(texte) if cands else {}
         if cands:
+            # les GV du chunker complètent ceux du générateur S : sans eux, un GP n'a aucun
+            # candidat d'attachement (diagnostic des 33 échecs de T162).
+            gvs_simple = [x for x in self._syntagmes_simple(texte, lg) if x["type"] == "GV"]
             for c in cands[:1]:
                 noms = [x.get("nom", "") for x in cands]
+                gvs_s = [x for x in c.get("segments", []) if x.get("type") == "GV"]
+                deja = {(x["debut"], x["fin"]) for x in gvs_s}
+                gvs = gvs_s + [x for x in gvs_simple if (x["debut"], x["fin"]) not in deja]
                 for s in c.get("segments", []):
                     att = c.get("attachement") or {}
                     if att.get("segment") == s.get("texte"):
@@ -712,12 +718,10 @@ class Heuristique:
                     else:
                         cible = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
                     if not cible:
-                        gvs = [x for x in c.get("segments", []) if x.get("type") == "GV"]
                         cible = self._cible_proche(texte, s, gvs)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
                     if cible:
                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
-                    gvs = [x for x in c.get("segments", []) if x.get("type") == "GV"]
                     candidats = list(noms) + self._verbes_proches(texte, s, gvs)
                     etiquettes.append(Etiquette("syntagme", s.get("type", "GN"),
                                                 s.get("texte", ""), s.get("debut", 0),
@@ -740,14 +744,20 @@ class Heuristique:
         if cands and self.union:
             deja = {(s.get("type"), s.get("debut"), s.get("fin"))
                     for s in cands[0].get("segments", [])}
-            for s in self._syntagmes_simple(texte, lg):
+            simples = self._syntagmes_simple(texte, lg)
+            gvs_u = ([x for x in cands[0].get("segments", []) if x.get("type") == "GV"]
+                     + [x for x in simples if x["type"] == "GV"])
+            for s in simples:
                 if (s["type"], s["debut"], s["fin"]) in deja:
                     continue
+                meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
+                cible = self._cible_proche(texte, s, gvs_u)
+                if cible:
+                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.30,
-                                            candidats=[s["type"]], langue=lg, script=script,
-                                            meta={"role": s["role"], "niveau": s["niveau"],
-                                                  "union": True}))
+                                            candidats=[s["type"]] + self._verbes_proches(texte, s, gvs_u),
+                                            langue=lg, script=script, meta=meta))
     
         # 6. discours / document
         for d, f, p, _ in self._phrases(texte):

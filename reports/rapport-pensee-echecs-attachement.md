@@ -1,9 +1,9 @@
 # B13 — les 127 échecs qualifiés : 94 de span, 33 de cible
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-04 · **Verdict** : ✅
-> **166/166 portes** : les **127 échecs** de l'attachement se répartissent en **94 de span**
-> (aucun segment prédit au même span) et **33 de cible** (le span est bon, la cible n'est pas
-> dans les candidats). Le correctif testé — ajouter les GV du chunker aux GV du générateur S et
+> **166/166 portes** : les **127 échecs** de l'attachement (avant ce round) se répartissent en
+> **94 de span** (aucun segment prédit au même span) et **33 de cible** (le span est bon, la cible
+> n'est pas dans les candidats) — **32** après le correctif. Le correctif testé — ajouter les GV du chunker aux GV du générateur S et
 > remplir les segments d'union — ne répare **qu'un** des 33. Les 32 autres ont un GV qui couvre
 > **toute la phrase** : le dernier token n'est pas le verbe (`… in the park` → `park`, pas `saw`).
 >
@@ -16,8 +16,8 @@
 | cause | nombre | part |
 |---|---:|---:|
 | **span faux** (aucun segment prédit au même span) | **94** | 74,0 % |
-| **cible hors des candidats** (span bon) | **33** | 26,0 % |
-| **tout** | **127** | 100 % |
+| **cible hors des candidats** (span bon) | **33** → **32** après le correctif | 26,0 % |
+| **tout** | **127** → **126** après | 100 % |
 
 | mesure | avant ce round | **après le correctif d'union** |
 |---|---:|---:|

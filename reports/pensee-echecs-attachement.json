@@ -4,8 +4,10 @@
  "portes": "166/166",
  "echecs": {
   "span": 94,
-  "cible": 33,
-  "total": 127
+  "cible_avant": 33,
+  "cible_apres": 32,
+  "total_avant": 127,
+  "total_apres": 126
  },
  "avant": {
   "top1": 95,

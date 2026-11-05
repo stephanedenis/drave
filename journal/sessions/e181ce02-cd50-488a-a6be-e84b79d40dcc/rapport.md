@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 100.0 h |
+| Durée | 100.1 h |
 | Tours | 173 |
-| Messages | 2155 |
-| Appels d'outils | 1856 |
+| Messages | 2158 |
+| Appels d'outils | 1859 |
 | Fichiers touchés | 25 |
-| Commandes | 1529 |
+| Commandes | 1531 |
 | Sous-agents | 2 |
-| Commits | 227 |
+| Commits | 228 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9238,7 +9238,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 
 ### Tour 173 — continue
 
-*12 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Qualifier les 127 échecs : span ou cible
 - bash — Lire le bloc de construction des syntagmes S
@@ -9252,10 +9252,13 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - bash — Ajuster T163 à 32 et relancer l'autotest
 - bash — Identifier la porte rouge
 - bash — Ajuster T153 et relancer l'autotest
+- bash — Aligner l'état et passer les portes rapides
+- bash — Committer les échecs qualifiés et vérifier
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Le correctif d'union ne rend que +1 : les 32 restants ont un GV qui couvre la phrase (le verbe n'est pas le dernier mot). Je fige le diagnostic
+⏵ 166/166 ; je commite le round des échecs et vérifie HEAD
 
 ## 3. Travail accompli
 
@@ -9336,7 +9339,7 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1489 autres
+- … et 1491 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9711,4 +9714,5 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 - B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164" -- tools/bloc_linguistique.py tools/pensee/autotest.py doc
 - B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-candida
 - ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "165/165 (CANDIDA
+- B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pe
 

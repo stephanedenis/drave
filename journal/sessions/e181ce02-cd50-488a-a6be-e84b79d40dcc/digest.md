@@ -38183,3 +38183,29 @@ EXIT=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('abs(r[\"top1_taux\"] - 0.3975) < 0.001\\n            and abs(r[\"exact_taux\"] - 0.0544) < 0.001',\n            'abs(r[\"top1 … [474 caractères tronqués]`
+
+  ```
+T153 ajustée
+  ✅ T162 candidats verbes  candidats : top-k 113/239 (0.4728), tête 113/145
+  ✅ T163 échecs attachement échecs : 94 de span, 32 de cible (33 avant le correctif d'union)
+  166/166 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ 166/166 ; je commite le round des échecs et vérifie HEAD
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**B13** — 165/165\", \"**B13** — 166/166\")\np.write_text(t)\nPY\nfor t in \"bash tools/porte-tableaux.sh\" \"python3 tools … [397 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-echecs-attachement.md reports/pensee-echecs-attachement.json reports/README.md docs/implantation/moteur-de-pensee.md docs/ … [798 caractères tronqués]`

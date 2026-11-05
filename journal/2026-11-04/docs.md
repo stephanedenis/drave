@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (149)
+## Commits du jour (150)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -157,6 +157,7 @@
 | 20:33 | `8d068250` | ÉTAT — HEURE 23 H 57 ; B13 166/166, D 62, 2 048 À 7 850 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
 | 20:35 | `c71116b9` | ÉTAT — HEURE 00 H 02 ; B13 166/166, D 62, 2 048 À 8 000 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
 | 20:38 | `0ff35a33` | ÉTAT — HEURE 00 H 07 ; B13 166/166, D 62, 2 048 À 8 150 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
+| 20:40 | `9ab24b73` | ÉTAT — HEURE 00 H 12 ; B13 166/166, D 62, 2 048 À 8 250 PAS | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
 
 ## Chiffres du jour
 
@@ -171,7 +172,7 @@
 - `206a4022-ab3c-497d-a5fa-0194931c7fa0` — Tu travailles dans le dépôt (début 2026-11-04 15:56, 0.2 h) → [rapport](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) · [digest](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 48.3 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` — Reprendre le plan de session et exécuter l'action (début 2026-11-04 09:25, 6.9 h) → [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 100.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 100.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
