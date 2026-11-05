@@ -40179,3 +40179,68 @@ note du jour complétée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md'); t=p.read_text()\nvieux=\"| `f8f5bc04` | le dénominateur : rendement (÷239) et exactitude spans (÷146) ; 170/170 |\" … [1939 caractères tronqués]`
+
+  ```
+rapport complété
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-388]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-388", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[s/v7 742cf026] PILOTAGE — B13 174/174 : ATTACHEMENT SPANS 0,8483 (REL → ANTÉCÉDENT, GP → VERBE) ; PLAN, RAPPORT ET JOURNAL À JOUR
+ 10 files changed, 75 insertions(+), 19 deletions(-)
+COMMIT OK 1
+742cf026 PILOTAGE — B13 174/174 : ATTACHEMENT SPANS 0,8483 (REL → ANTÉCÉDENT, GP → VERBE) ; PLAN, RAPPORT ET JOURNAL À JOUR
+jeu 05 nov 2026 10:43:36 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 10 : les 22 échecs restants — diagnostic avant la clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); cat=collections.Counter(); ex=[]\nfor … [956 caractères tronqués]`
+
+  ```
+('GP', 'nom', 'dans') 4
+('GP', 'nom', 'hors') 10
+('SUB', 'nom', 'dans') 4
+('SUB', 'nom', 'hors') 1
+('SUB', 'verbe', 'dans') 3
+   ('g002', 'GP', 'de la voisine', 'chat', '', False)
+   ('g012', 'GP', 'à manger', 'prêt', 'manger', True)
+   ('r018', 'GP', 'à manger', 'prête', 'manger', True)
+   ('r080', 'GP', 'over the lake', 'fly', 'lake', False)
+   ('r108', 'GP', 'on the roof', 'climbs', 'roof', False)
+   ('r120', 'GP', 'to the sea', 'flows', 'river', False)
+   ('r156', 'GP', 'in the water', 'swims', 'water', False)
+   ('r166', 'GP', 'on the train', 'get', 'train', False)
+   ('r169', 'GP', 'at his mother', 'smiles', 'mother', False)
+   ('r177', 'GP', 'in front of the do', 'wait', 'door', False)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-echecs-cible.md <<'MD'\n# B13 — les 22 échecs de l'attachement ciblé : 11 hors candidats, 11 mal classés\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict … [5778 caractères tronqués]`
+
+  ```
+T172 ajoutée
+  175/175 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T171** | les participes irréguliers ? | **oui** : « vu », « accroché » ; exact **0,8082 → 0,8483** | 22 … [2625 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 174→175: 5
+docs/pilotage/chantiers.md 174→175: 6
+docs/pilotage/en-cours.md 174→175: 4
+docs + pilotage + README
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **22 échecs : 11 hors candidats, 11 mal classés** ; fiche\", \" ; échecs 11/11 ; fiche\")\np.write_text(t)\nPY\npython3  … [950 caractères tronqués]`

@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "175/175",
+ "labels": 145,
+ "justes": 123,
+ "echecs": 22,
+ "repartition": {
+  "hors_candidats": 11,
+  "mal_classes": 11
+ },
+ "par_type": {
+  "GP": {
+   "nom": 14,
+   "verbe": 0,
+   "hors": 10
+  },
+  "SUB": {
+   "nom": 5,
+   "verbe": 3,
+   "hors": 1
+  },
+  "REL": {
+   "nom": 0,
+   "verbe": 0,
+   "hors": 0
+  }
+ },
+ "limites": [
+  "11 présents non classés",
+  "verbes anglais hors lexique (non ajoutés : fuite)",
+  "gold 612"
+ ]
+}

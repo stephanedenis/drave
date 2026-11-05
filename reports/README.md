@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-echecs-cible.md`](rapport-pensee-echecs-cible.md) | **B13** — les 22 échecs : 11 hors candidats, 11 mal classés, **175/175** |
 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | **B13** — le lexique élargi : exact 0,8082 → **0,8483**, **174/174** |
 | [`rapport-pensee-attachement-cible.md`](rapport-pensee-attachement-cible.md) | **B13** — l'attachement ciblé : exact 0,6438 → **0,8082**, **173/173** |
 | [`rapport-pensee-conventions.md`](rapport-pensee-conventions.md) | **B13** — les deux conventions du gold : verbes 0,7255, noms 0,6000, **172/172** |
@@ -149,7 +150,6 @@
 | [`rapport-m6-conflit2.md`](rapport-m6-conflit2.md) | **B26** — M6 conflit : 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition |
 | [`rapport-m8-rejeu.md`](rapport-m8-rejeu.md) | **B25** — M8 rejeu : exact 0, champs 74,6 %, rejeu 0, hybride 0 sur 6 codes tenus |
 | [`rapport-sous-familles-autres.md`](rapport-sous-familles-autres.md) | **C3.2e** — sous-familles des autres familles : uralic 46,7→100 %, benue 88 %, austro 60,3 %, afro ouest 53,5 % |
-| [`rapport-ie-sous-familles.md`](rapport-ie-sous-familles.md) | **C3.2d** — sous-familles IE : 54,6–100 % ; l'IE à 14,7 % est un effet de composition |
 
 ## Les données brutes
 

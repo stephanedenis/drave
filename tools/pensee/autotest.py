@@ -2496,6 +2496,32 @@ def t171_lexique_elargi() -> tuple[bool, str]:
         f"lexique élargi : vu {ok[0]}, accroché {ok[1]}, couru {ok[2]} ; exact {r['exact']}/145")
 
 
+def t172_echecs_cible() -> tuple[bool, str]:
+    """Les échecs de cible : 11 hors candidats, 11 mal classés."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    h = bl.Heuristique()
+    hors = dans = 0
+    for p in charger():
+        a = h.analyser(p["texte"], p["langue"])
+        labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+        for s in p["segments"]:
+            cibles = s.get("cibles") or ([s["cible"]] if s.get("cible") else [])
+            if not cibles:
+                continue
+            e = labels.get((s["type"], s["debut"], s["fin"]))
+            if e is None:
+                continue
+            att = (e.meta or {}).get("attachement") or {}
+            if att.get("cible", "") == cibles[0]:
+                continue
+            if any(cibles[0] in c for c in (e.candidats or [])):
+                dans += 1
+            else:
+                hors += 1
+    return (hors == 11 and dans == 11), f"échecs de cible : {hors} hors candidats, {dans} mal classés"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2666,7 +2692,8 @@ def main() -> int:
               ("T168 classement", t168_classement()),
               ("T169 conventions", t169_conventions()),
               ("T170 attachement ciblé", t170_attachement_cible()),
-              ("T171 lexique élargi", t171_lexique_elargi())]
+              ("T171 lexique élargi", t171_lexique_elargi()),
+              ("T172 échecs de cible", t172_echecs_cible())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
