@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**254 commits** · **6 session(s)** · **8 thème(s)**
+**255 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 5 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 208 | [docs.md](docs.md) |
 | mesures | 26 | [mesures.md](mesures.md) |
@@ -289,6 +289,7 @@
 | 23:22 | `b3cfbe1f` | ÉTAT — LA LIGNE N2 EST RESSERRÉE (T0 3 957, EN-COURS 1 587) ; HEURE 05 H 02 |
 | 23:25 | `789dbdf2` | PLAN-TRAVAIL — LA LIGNE N2 DIT 2 048 FINI ET PORTE PROPRE ; HEURE 23 H 25 |
 | 23:30 | `06c6a918` | RESSOURCES — LE CLAIM N2 EST LIBÉRÉ (GPUS LIBRES) ; HEURE 23 H 28 |
+| 23:35 | `02c34ad4` | REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 23 H 35 |
 
 ## Le récit de la journée (écrit à la main)
 
