@@ -7,12 +7,12 @@
 | Identifiant | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 09:25 |
-| Durée | 6.9 h |
-| Tours | 6 |
-| Messages | 224 |
-| Appels d'outils | 255 |
+| Durée | 27.7 h |
+| Tours | 7 |
+| Messages | 227 |
+| Appels d'outils | 256 |
 | Fichiers touchés | 9 |
-| Commandes | 208 |
+| Commandes | 209 |
 | Sous-agents | 1 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -30,6 +30,8 @@
 **Tour 5** — lance la suite en subagent et supervise la suite des travaux
 
 **Tour 6** — Agent 206a4022-ab3c-497d-a5fa-0194931c7fa0 sent a message:  RÉSULTAT DUR, à rejouer : le contrôle 8 Ko entre splits est bien 0 (546/4/2 fenêtres, 0 doublon) et mon contrôle négatif est OK (fenêtre de val injectée = 1 doublon trouvé, 25 %). MAIS le contrôle de non-duplication croisée que tu m'as demandé (point 4) trouve une fuite réelle, invisible à 8 Ko :  - DOC2 (19 101 car., 20 p) est en **val** … [1718 caractères tronqués]
+
+**Tour 7** — terminé?
 
 ## 2. Déroulé, étape par étape
 
@@ -332,6 +334,41 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 2. **La branche** : `s/v7` est **75 c
 … [498 caractères tronqués]
 
+### Tour 7 — terminé?
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check whether restore and branch merge happened
+
+**Synthèse produite :**
+
+⏵ Oui — vérifié : le corpus est restauré et l'état dit « D — restauré »
+
+**Oui, terminé — et la restauration que je proposais a été appliquée.**
+
+\## La preuve, vérifiée à l'instant
+
+- **`data/corpus_ocr_cegep/` porte exactement le corpus propre 62** que j'avais préparé :
+  - `train.txt` **4 440 987** o, SHA `f57154df…` ;
+  - `val.txt` **12 536** o, SHA `dd605833…` ;
+  - `test.txt` **10 524** o, SHA `1c9ab734…`.
+- **`en-cours` dit « D — restauré »** : 62 documents (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés), **8 Ko 0, 500 o 0**, avec le lien vers ma fiche.
+- La fiche `rapport-ocr-cegep-64.md` et le manifeste sont committés (`26e21acf`), la revue documentaire et le hook d'état sont verts.
+
+\## Ce que la supervision a livré
+
+- La **fuite réelle** que le 8 Ko ne voyait pas : DOC2 (val) 18/20 fenêtres de 500 o déjà dans le train, 17 001 o contigus ; DOC1 24/26 ; la baseline du corpus 60 était 0/13 et 0/11.
+- Le **corpus propre 62** (2 neufs, 2 écartés) vérifié : 8 Ko 0, 500 o 0, anciens splits intacts.
+- La **correction de l'état** : D n'est plus « clos 64 docs / 8 Ko 0 » mais « restauré 62 docs / 8 Ko 0 / 500 o 0 ».
+- Le sous-agent a fourni les mesures (contrôle négatif, fenêtres par document) ; il s'est arrêté avant d'écrire, j'ai rédigé les livrables à partir de ses chiffres vérifiés et des miens.
+
+\## Deux points hors de mon périmètre, pour le hub
+
+- **La branche** : `s/v7` est **311 commits devant `master`** (fast-forward possible, `s/v7..master` = 0). Tout le travail de la journée est sur `s/v7` ; `master` est resté à `af28eadd`. À merger/pousser — c'est la décision du hub.
+- **La passe** : 79 vertes / 4 rouges ; `indice` et `melange` sont les rouges tolérées, `lecteur` corrigée, `sessions` signale le heartbeat de `e181ce02` (pas le mien).
+
+Rien de la tâche D2 ne reste ouvert de mon côté.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -394,7 +431,7 @@ Dès qu'il rend, je vérifie ses chiffres contre les miens, je corrige la fiche 
 - **T2** Show chantier frontier tool output
 - **T2** Check N3 service report and its remaining work
 - **T2** Inspect N3 gate headers
-- … et 168 autres
+- … et 169 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -399,3 +399,21 @@ ont repris (N2 09 h 41, S 09 h 46, L/B13 10 h 14) ; **N3** a clos sa ligne en se
 (11 h 30–11 h 38). Le suivi docs tourne à chaque cycle : `revue_documentation.py`,
 `verifie_en_cours.py`, `taille_documents.py`, `verifie_journal.py`, `verifier_liens.py`,
 `porte-tableaux.sh` ; la **passe complète** attend la fin des runs (règle § 11).
+
+## 9. La tranche autonome du 05/11 (11 h 15 → 18 h) et ses sous-agents
+
+**L'agent principal (Pensée, `e181ce02`) tient seul ce dossier** : `en-cours`, `roadmap`,
+`chantiers`, ce plan et le `journal`. Les **sous-agents** ne les écrivent **jamais**.
+
+| sous-agent | mandat | sortie (fichier neuf) |
+|---|---|---|
+| **A1** | audit de reproductibilité de l'attachement (labels, exact, top-k, conventions, spans) | une fiche d'audit + son JSON, dans `reports/` |
+| **A2** | diagnostic du top-k strict (57 échecs) | une fiche de diagnostic + son JSON |
+| **A3** | prototype de classement appris des candidats (fichier neuf, hors bloc) | un prototype dans `tools/tests/` + sa fiche |
+| **A4** | cohérence fiches ↔ JSON ↔ portes | une fiche de cohérence + son JSON |
+
+**Règles données à chaque sous-agent** : ne pas committer ; ne pas toucher `en-cours`,
+`roadmap`, `chantiers`, `plan-travail`, `AGENTS`, ni `journal/` ; **ne pas écrire** dans
+`tools/structures/` (S), `data/` (D), `tools/entrainer_native.py`/`native_model.py` (N2) ;
+n'écrire **que** les fichiers de sa sortie ; rendre un résumé chiffré et les commandes
+exactes pour reproduire ; si une mesure ne reproduit pas, le dire au lieu de l'arrondir.

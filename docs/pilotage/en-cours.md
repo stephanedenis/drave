@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-05, 11 h 30 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-05, 11 h 40 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -72,6 +72,7 @@
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.
+- **Sous-agents** : 4 mandats (audit, top-k, classement, cohérence), [plan-travail](../plan-travail.md) § 9.
 - **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 

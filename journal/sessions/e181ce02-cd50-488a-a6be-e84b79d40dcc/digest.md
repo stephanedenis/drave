@@ -40522,3 +40522,162 @@ docs + pilotage + README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\"; do eval \"$t\" >/tmp/ce 2>&1; printf '%-42s EXIT=%s\\n' \"$t\" \"$?\ … [994 caractères tronqués]`
+
+  ```
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+[still running after 60000ms; moved to background job bash-412]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-412", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-convention-doc.json
+ create mode 100644 reports/rapport-pensee-convention-doc.md
+COMMIT OK 1
+0ddd4fb9 B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177
+jeu 05 nov 2026 11:12:06 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale puis clôture de l'autonomie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s'; git status --porcelain | grep -E \"tools/(bloc|pensee|tests)|reports/rapport-pensee|docs/(implantation|pilotage)\" | head -3; echo \"--- (vide = mes fichiers sont committés) ---\"; python3 tools/rev … [214 caractères tronqués]`
+
+  ```
+jeu 05 nov 2026 11:12:16 EST
+0ddd4fb9 B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177
+--- (vide = mes fichiers sont committés) ---
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+0ddd4fb9 B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDEN
+efaab321 ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LE
+e223a98d B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 1
+6fe96130 ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP 
+a048cb83 B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175
+742cf026 PILOTAGE — B13 174/174 : ATTACHEMENT SPANS 0,8483 (REL → ANTÉCÉDENT, GP → VERBE
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-213b1a5d-97aa-4f75-86df-853bcc7892b8","revision":1,"objective":"Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrire dans les territoires S/D/N2.","phase":"active","roundsStarted":0,"maxGoalRounds":40},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-213b1a5d-97aa-4f75-86df-853bcc7892b8", "revision": 1}`
+
+> **Objectif** (complete) : Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrire dans les territoires S/D/N2.
+
+
+  ```
+{"goal":{"id":"goal-213b1a5d-97aa-4f75-86df-853bcc7892b8","revision":2,"objective":"Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrire dans les territoires S/D/N2.","phase":"complete","roundsStarted":0,"maxGoalRounds":40},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Autonomie close : 14 rounds, B13 **177/177**, attachement spans **0,8483**
+
+## Le résultat
+
+**177/177 portes** (163 au départ), `porte-bloc` verte, `revue` ✅, `taille` ✅ (T0 3 997), `en-cours` ✅, `journal` ✅, `tableaux` ✅. HEAD **`0ddd4fb9`** ; mes fichiers sont tous committés (arbre propre), branche `s/v7`.
+
+## Les 14 rounds
+
+| # | round | résultat | commit |
+|---|---|---|---|
+| 1 | le verbe du GV-phrase | exact 0,0586 → **0,0962** | `9ff4adda` |
+| 2 | le lexique verbal | exact → **0,1381**, tête 0,9034 | `d400e188` |
+| 3 | les spans perdus | **48 REL, 33 SUB, 12 GP** ; GP borné | `13e8bb2d` |
+| 4 | le dénominateur | rendement ÷239 vs exactitude spans ÷146 | `f8f5bc04` |
+| 5 | le classement (cible réduite à sa tête) | exact → **0,6438** | `d8edd1d9` |
+| 6 | les deux conventions du gold | verbes vs noms, mesurés | `f70a1b2a` |
+| 7 | l'attachement ciblé | REL → antécédent, GP → verbe ; exact → **0,8082** | `23853cb7` |
+| 8 | le lexique élargi (participes) | exact → **0,8483** | `a408a909` |
+| 9 | les 22 échecs | **11 hors candidats, 11 mal classés** | `a048cb83` |
+| 10 | le top-k strict | **0,6069**, pas 0,9241 | `e223a98d` |
+| 11 | la convention documentée | `CONVENTION_CIBLE` dans le gold | `0ddd4fb9` |
+| + | consolidation pilotage (2×) | roadmap, plan, rapport, journal | `8f472d00`, `742cf026` |
+
+**Négatifs mesurés et rejetés** : GV de gauche d'abord (neutre), GP génitif (123 → 122, retiré), enrichissement des candidats (neutre, retiré), GV auxiliaire seul (neutre).
+
+## Le pilotage, tenu à jour à chaque round
+
+- **`en-cours`** : mon bloc (Fait + prochaine action) et le timestamp à chaque round ; compteurs recalculés.
+- **`roadmap`** : le paragraphe « État au 05/11 » réécrit deux fois (avant : 0,4812/0,5523/0,1381 ; maintenant : 0,5272/0,5607/0,5146, spans 0,8690/0,9241/0,8483, top-k strict 0,6069).
+- **`chantiers`** : compteurs 163 → 177.
+- **`plan.md`** : heartbeat rafraîchi trois fois, prochaine action recâblée à chaque étape.
+- **`rapport.md`** : section « Commits » nettoyée (elle contenait des lignes de commandes brutes) et remplacée par un tableau curaté des rounds.
+- **`journal/2026-11-05`** : notes datées à chaque bloc de rounds.
+- **`reports/README.md`** : une ligne par fiche, budget T1 maintenu sous 2 800 à chaque ajout.
+
+## Réserves
+
+- **La convention des cibles est reconstruite** depuis les données, pas déclarée par l'auteur du gold — c'est écrit dans la fiche et dans le code.
+- **La classification verbe/nom dépend de `_est_verbe`** : la part « verbes » est passée de 51 à 63 cibles par reclassification, pas par changement du gold.
+- **22 échecs restent** (11 hors candidats, 11 mal classés) ; les 11 « présents » demandent un classement appris, pas une règle.
+- **Les 81 spans REL/SUB** sont chez **S** (`tools/structures/`) : je n'y ai pas touché.
+- **`master` est à 310 commits derrière `s/v7`** ; un merge local ne suffirait pas (upstream `origin/master`) — **je n'ai rien poussé**.
+
+## Ce que je suggère ensuite
+
+1. **`master`** : merge + push, si vous m'y autorisez explicitement.
+2. **S** : production des REL/SUB (81 spans) et les deux règles de passif.
+3. **Le classement appris** : les 11 cibles présentes mais mal choisies — le seul levier qui reste sur l'attachement.
+
+
+## Tour 176
+
+### 👤 Utilisateur
+
+continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide du dossier pilotage que tu entretiens avec l'agent principal
+
+- **create_goal** `{"max_goal_rounds": 80, "objective": "Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement (classement appris, candidats, échecs restants), les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan- … [192 caractères tronqués]`
+
+> **Objectif** (create) : Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement (classement appris, candidats, échecs restants), les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et intègre les résultats des sous-agents avec portes et commits vérifiés ; ne pas écrire dans les territoires S/D/N2 ; chaque vague produit un résultat mesuré et un commit.
+
+
+  ```
+{"goal":{"id":"goal-09d4af4d-b70f-4233-8c2f-6f9e345be6a5","revision":1,"objective":"Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement (classement appris, candidats, échecs restants), les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et intègre les résultats des sous-agents avec portes et commits vérifiés ; ne pas écrire dans les territoires S/D/N2 ; chaque vague produit un résultat mesuré et un commit.","phase":"active","roundsStarted":0,"maxGoalRounds":80},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -w docs/pilotage/plan-travail.md; grep -n \"^## \" docs/pilotage/plan-travail.md | head -8; python3 tools/taille_documents.py 2>&1 | tail -2", "description": "Voir plan-travail et le budget"}`
+
+  ```
+4763 docs/pilotage/plan-travail.md
+15:## 1. Où ce plan se situe
+30:## 2. Les quatre sessions et le rôle d'intégration
+53:## 3. Les territoires — qui écrit quoi
+78:## 4. La cadence et l'écriture de l'état
+107:## 5. Les règles de la machine partagée
+123:## 6. La surveillance
+142:## 7. La balance, et les bascules
+155:## 8. La mise en route
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nbloc = \"\"\"\n## 9. La tranche autonome du 05/11 (11 h 15 → 18 h) et ses sous-agents\n\n**L'agent principal (Pensée, `e181ce02`) tie … [1469 caractères tronqués]`
+
+  ```
+plan-travail : section sous-agents ajoutée
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · chemin mort : docs/pilotage/plan-travail.md:413 → reports/rapport-coherence-fiches.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nt=t.replace(\"| **A1** | audit de reproductibilité de l'attachement (labels, exact, top-k, conventions, spans) | `reports/rapport-aud … [1170 caractères tronqués]`
+
+  ```
+chemins retirés de la table
+  revue de documentation · 639 fiche(s) · 732 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.\",\n            \"- **Sous-agents** : 4 manda … [958 caractères tronqués]`

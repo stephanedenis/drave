@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 114.5 h |
-| Tours | 175 |
-| Messages | 2335 |
-| Appels d'outils | 2040 |
+| Durée | 116.5 h |
+| Tours | 176 |
+| Messages | 2345 |
+| Appels d'outils | 2049 |
 | Fichiers touchés | 25 |
-| Commandes | 1684 |
+| Commandes | 1689 |
 | Sous-agents | 2 |
-| Commits | 246 |
+| Commits | 247 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -41,6 +41,10 @@
 … [193 caractères tronqués]
 - **create** — Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrir
 … [30 caractères tronqués]
+- **complete** — Autonomie B13 du 2026-11-05 (08 h 45 → 12 h 00 EST) : le verbe du GV-phrase et les 94 spans de l'attachement, mesures et fiches ; tenir le dossier pilotage à jour à chaque round (en-cours, roadmap, chantiers, plan-travail, journal) pour éviter les conflits ; portes et commits vérifiés ; ne pas écrir
+… [30 caractères tronqués]
+- **create** — Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement (classement appris, candidats, échecs restants), les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et intègre les résul
+… [152 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -393,6 +397,8 @@
 **Tour 174** — où en est-on?
 
 **Tour 175** — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les conflits
+
+**Tour 176** — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide du dossier pilotage que tu entretiens avec l'agent principal
 
 ## 2. Déroulé, étape par étape
 
@@ -9369,7 +9375,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*163 appels d'outils.* Actions notables :
+*166 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9391,61 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 120 autres
+- … et 123 autres
 
 **Synthèse produite :**
 
-⏵ Round 14 : documenter la convention des cibles dans le gold (le point ouvert de T169)
+⏵ Autonomie close : 14 rounds, B13 **177/177**, attachement spans **0,8483**
+
+\## Le résultat
+
+**177/177 portes** (163 au départ), `porte-bloc` verte, `revue` ✅, `taille` ✅ (T0 3 997), `en-cours` ✅, `journal` ✅, `tableaux` ✅. HEAD **`0ddd4fb9`** ; mes fichiers sont tous committés (arbre propre), branche `s/v7`.
+
+\## Les 14 rounds
+
+| # | round | résultat | commit |
+|---|---|---|---|
+| 1 | le verbe du GV-phrase | exact 0,0586 → **0,0962** | `9ff4adda` |
+| 2 | le lexique verbal | exact → **0,1381**, tête 0,9034 | `d400e188` |
+| 3 | les spans perdus | **48 REL, 33 SUB, 12 GP** ; GP borné | `13e8bb2d` |
+| 4 | le dénominateur | rendement ÷239 vs exactitude spans ÷146 | `f8f5bc04` |
+| 5 | le classement (cible réduite à sa tête) | exact → **0,6438** | `d8edd1d9` |
+| 6 | les deux conventions du gold | verbes vs noms, mesurés | `f70a1b2a` |
+| 7 | l'attachement ciblé | REL → antécédent, GP → verbe ; exact → **0,8082** | `23853cb7` |
+| 8 | le lexique élargi (participes) | exact → **0,8483** | `a408a909` |
+| 9 | les 22 échecs | **11 hors candidats, 11 mal classés** | `a048cb83` |
+| 10 | le top-k strict | **0,6069**, pas 0,9241 | `e223a98d` |
+| 11 | la convention documentée | `CONVENTION_CIBLE` dans le gold | `0ddd4fb9` |
+| + | consolidation pilotage (2×) | roadmap, plan, rapport, journal | `8f472d00`, `742cf026` |
+
+**Négatifs mesurés et rejetés** : GV de gauche d'abord (neutre), GP génitif (123 → 122, retiré), enrichissement des candidats (neutre, retiré), GV auxiliaire seul (neutre).
+
+\## Le pilotage, tenu à jour à chaque round
+
+- **`en-cours`** : mon bloc (Fait + prochaine action) et le timestamp à chaque round ; compteurs recalculés.
+- **`roadmap`** : le paragraphe « État au 05/11 » réécrit deux fois (avant : 0,4812/0,5523/0,1381 ; maintenant : 0,5272/0,5607/0,5146, spans 0,8690/0,9241/0,8483, top-k strict 0,6069).
+- **`chantiers`** : compteurs 163 → 177.
+- **`plan.md`** : heartbeat rafraîchi trois fois, prochaine action recâblée à chaque étape.
+- **`rapport.md`** : section « Commits » nettoyée (elle contenait des lignes de commandes brutes) et remplacée par un tableau curaté des rounds.
+- **`journal/2026-11-05`** : notes datées à chaque bloc de rounds.
+- **`reports/README.md`** : une ligne par fiche, budget T1 maintenu sous 2 800 à chaque ajout.
+
+\## Réserves
+
+- **La convention des cibles est reconstruite** depuis les données, pas déclarée par l'auteur du gold — c'est écrit dans la fiche et dans le code.
+- **La classification verbe/nom dépend de `_est_verbe`** : la par
+… [739 caractères tronqués]
+
+### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Voir plan-travail et le budget
+- bash — Documenter la coordination des sous-agents
+- bash — Éviter les chemins morts dans plan-travail
+- bash — Pointer les sous-agents dans l'état et committer
+- job_output
 
 ## 3. Travail accompli
 
@@ -9470,7 +9526,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1644 autres
+- … et 1649 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9864,4 +9920,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176" -- tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py repo
 - ÉTAT — B13 176/176 : TOP-K STRICT 0,6069 DANS LE PILOTAGE ; PROCHAINE ACTION LES CANDIDATS RÉDUITS" -- docs/pilotage/roadmap.md docs/pilotage/en-cours.md journa
 - B13 — LA CONVENTION DES CIBLES EST DOCUMENTÉE DANS LE GOLD (REL/SUB → ANTÉCÉDENT, GP → VERBE) ; 177/177" -- tools/tests/linguistique/gold_reel.py tools/pensee/a
+- PILOTAGE — LA TRANCHE 11 H 15 → 18 H LANCE QUATRE SOUS-AGENTS (AUDIT, TOP-K, CLASSEMENT, COHÉRENCE) ; § 9 DU PLAN-TRAVAIL" -- docs/pilotage/plan-travail.md docs
 
