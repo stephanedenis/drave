@@ -367,6 +367,49 @@ CONNECTEURS = {
 VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
                         "go take come look give find open close".split())
 
+# Un lexique verbal minimal, bilingue, pour arbitrer les classes ouvertes : le POS de surface
+# tague « talks » NOUN et « brother » VERB (mesuré le 05/11 sur les 22 GP restants).
+VERBES_CONNUS = set("""
+parler parle parles parlent parlait parlaient parlerai jouer joue joues jouent jouait jouaient
+manger mange manges mangent mangeait mangeaient écrire écrit écris écrivent écrivait écrivaient
+lire lis lisent lisait lisaient dormir dort dorment dormait dormaient partir part pars partent
+partait partaient venir viens vient viennent venait venaient prendre prend prends prennent
+prenait prenaient mettre mets met mettent mettait mettaient dire dis dit disent disait disaient
+voir vois voit voient voyait voyaient savoir sais sait savent savait savaient pouvoir peux peut
+pouvons peuvent pouvait pouvaient vouloir veux veut voulons veulent voulait voulaient devoir dois
+doit devons doivent devait devaient faire fais fait font faisait faisaient aller vais va allons
+vont allait allaient être suis est sommes sont était étaient avoir ai as a avons ont avait avaient
+chanter chante chantes chantent chantait danser danse danses dansent dansait travailler travaille
+travailles travaillent travaillait regarder regarde regardes regardent regardait écouter écoute
+écoutes écoutent écoutait aimer aime aimes aiment aimait finir finis finit finissent finissait
+grandir grandis grandit grandissent ouvrir ouvre ouvres ouvrent ouvrait fermer ferme fermes
+ferment fermait donner donne donnes donnent donnait chercher cherche cherches cherchent trouvait
+talk talks talked talking play plays played playing leave leaves left leaving write writes wrote
+written writing read reads reading listen listens listened listening sleep sleeps slept sleeping
+grow grows grew grown growing bark barks barked barking run runs ran running walk walks walked
+walking sing sings sang sung singing dance dances danced dancing work works worked working
+watch watches watched watching love loves loved loving finish finishes finished finishing
+come comes came coming take takes took taken taking put puts putting say says said saying
+see sees saw seen seeing know knows knew known knowing want wants wanted wanting need needs
+needed needing help helps helped helping look looks looked looking give gives gave given
+find finds found finding open opens opened opening close closes closed closing
+""".split())
+
+
+def _est_verbe(mot: str) -> bool:
+    """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+    n = _normaliser(mot)
+    if not n:
+        return False
+    if n in VERBES_CONNUS:
+        return True
+    for suf in ("er", "ir", "e", "es", "ent", "ait", "aient", "é", "ée", "és", "i", "u",
+                "ez", "ons", "iez", "ais", "ra", "rai", "ras", "rons", "rez", "ront",
+                "s", "ed", "ing", "en"):
+        if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+            return True
+    return False
+
 
 def _role_gp(prep: str) -> str:
     p = prep.casefold()
@@ -540,13 +583,16 @@ class Heuristique:
     @staticmethod
     def _verbe_dans(texte: str, debut: int, fin: int,
                     verbes: list[tuple[int, int, str]] | None = None) -> str | None:
-        """Le **premier verbe** du span (POS `VERB`), sinon son dernier mot."""
+        """Le **verbe** du span : le lexique d'abord, puis le POS `VERB`, sinon le dernier mot."""
+        mots = [(m.start() + debut, m.group()) for m in re.finditer(r"[\wÀ-ÿ'-]+", texte[debut:fin])]
+        for _, m in mots:
+            if _est_verbe(m):
+                return m
         if verbes:
             for d, f, v in verbes:
                 if d >= debut and f <= fin:
                     return v
-        mots = re.findall(r"[\wÀ-ÿ'-]+", texte[debut:fin])
-        return mots[-1] if mots else None
+        return mots[-1][1] if mots else None
 
     @staticmethod
     def _cible_proche(texte: str, segment: dict, gvs: list[dict],

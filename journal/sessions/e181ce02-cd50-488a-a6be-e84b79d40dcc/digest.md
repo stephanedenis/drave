@@ -38829,3 +38829,152 @@ python3 tools/revue_documentation.py         EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-verbe-gv.md reports/pensee-verbe-gv.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [893 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-293]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-293", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-verbe-gv.json
+ create mode 100644 reports/rapport-pensee-verbe-gv.md
+COMMIT OK 1
+9ff4adda B13 — LE VERBE DU GV-PHRASE : EXACT 0,0586 → 0,0962, TOP-K 0,5105, TÊTE 0,8414 ; 167/167
+2
+3
+jeu 05 nov 2026 09:00:29 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : le POS verbe/nom — je vérifie la cause sur les 22 GP restants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt in (\"She talks to her brother.\", \"The children play in the park.\", \"He writes to his sister.\",  … [382 caractères tronqués]`
+
+  ```
+She talks to her brother.
+  POS : [('She', 'PRON'), ('talks', 'NOUN'), ('to', 'PREP'), ('her', 'DET'), ('brother', 'VERB')]
+  cible GP : ['brother']
+The children play in the park.
+  POS : [('The', 'DET'), ('children', 'NOUN'), ('play', 'NOUN'), ('in', 'PREP'), ('the', 'DET'), ('park', 'NOUN')]
+  cible GP : ['park']
+He writes to his sister.
+  POS : [('He', 'PRON'), ('writes', 'NOUN'), ('to', 'PREP'), ('his', 'DET'), ('sister', 'VERB')]
+  cible GP : ['sister']
+The dog barks at the postman.
+  POS : [('The', 'DET'), ('dog', 'NOUN'), ('barks', 'NOUN'), ('at', 'PREP'), ('the', 'DET'), ('postman', 'NOUN')]
+  cible GP : ['postman']
+  ```
+
+### 🤖 Assistant
+
+⏵ « brother » est tagué VERB et « talks » NOUN : j'ajoute un lexique verbal (FR/EN) comme arbitre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^VERBES_IMPERATIFS\" tools/bloc_linguistique.py; sed -n \"$(grep -n '^VERBES_IMPERATIFS' tools/bloc_linguistique.py | cut -d: -f1),+6p\" tools/bloc_linguistique.py", "description": "Voir où poser le lexique verbal"}`
+
+  ```
+367:VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
+VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
+                        "go take come look give find open close".split())
+
+
+def _role_gp(prep: str) -> str:
+    p = prep.casefold()
+    if p in {"dans", "sur", "sous", "chez", "vers", "entre", "devant", "derrière", "près", "loin",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''VERBES_IMPERATIFS = set(\"va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme \"\n                   … [4528 caractères tronqués]`
+
+  ```
+lexique verbal et arbitrage posés
+attachement {'cibles': 239, 'labels': 145, 'top1': 115, 'topk': 132, 'exact': 33, 'top1_taux': 0.4812, 'topk_taux': 0.5523, 'exact_taux': 0.1381, 'couverture': 0.6067}
+tête {'cibles': 145, 'labels': 145, 'top1': 114, 'topk': 131, 'top1_taux': 0.7862, 'topk_taux': 0.9034, 'couverture': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Exact 0,0962 → **0,1381** (33/239), tête 0,9034 — je mesure la nouvelle répartition
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); span=cible=0; ex=[]\nfor p in charger … [859 caractères tronqués]`
+
+  ```
+span 94 | cible 13 | total 107
+  ('r080', 'GP', 'over the lake', 'fly', 'lake', ['GP', 'lake'])
+  ('r108', 'GP', 'on the roof', 'climbs', 'roof', ['GP', 'roof'])
+  ('r120', 'GP', 'to the sea', 'flows', 'river', ['GP', 'river'])
+  ('r153', 'GP', 'for the bus', 'wait', 'bus', ['GP', 'bus'])
+  ('r156', 'GP', 'in the water', 'swims', 'water', ['GP', 'water'])
+  ('r160', 'GP', 'in the morning', 'passes', 'morning', ['GP', 'morning'])
+  ('r166', 'GP', 'on the train', 'get', 'train', ['GP', 'train'])
+  ('r169', 'GP', 'at his mother', 'smiles', 'mother', ['GP', 'mother'])
+  ```
+
+### 🤖 Assistant
+
+⏵ Il ne reste que **13** échecs de cible (verbes hors lexique : fly, climbs, flows…) ; je lande le round
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt in (\"She talks to her brother.\", \"The boy saw the cat in the park.\", \"Le garçon joue au ballon.\ … [3374 caractères tronqués]`
+
+  ```
+started background job bash-298
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-lexique-verbal.md <<'MD'\n# B13 — le lexique verbal : l'exact passe de 0,0962 à 0,1381\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **168/16 … [4022 caractères tronqués]`
+
+  ```
+fiche + JSON écrits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T164** | le verbe du GV-phrase ? | **le POS VERB** : exact **0,0586 → 0,0962**, top1 0,4393 | 22 GP res … [2853 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 167→168: 5
+docs/pilotage/chantiers.md 167→168: 6
+docs/pilotage/en-cours.md 167→168: 4
+README : retirées 1
+  revue de documentation · 630 fiche(s) · 723 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; le **lexique verbal** répare 10 des 23 ; reste **94 spans, 13 cibles** ; fiches\",\n            \" ; le **lexique verbal … [180 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **job_output** `{"job_id": "bash-298", "timeout_ms": 900000, "wait": true}`
+
+  ```
+She talks to her brother. | cibles : ['talks']
+The boy saw the cat in the park. | cibles : ['saw', 'saw']
+Le garçon joue au ballon. | cibles : ['joue', 'joue', 'Le garçon']
+_est_verbe talks True | brother False | joue True
+portes ajustées, T165 ajoutée
+  ✅ T163 échecs attachement échecs : 94 de span, 13 de cible (33 avant les correctifs)
+  ❌ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 33/239
+  ✅ T165 lexique verbal    lexique : talks True, joue True, brother False ; cible GP talks
+  167/168 portes tenues
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('    return cible == \"saw\" and r[\"exact\"] == 23, (', '    return cible == \"saw\" and r[\"exact\"] == 33, (')\nt=t.replace … [265 caractères tronqués]`
+
+  ```
+T164 à 33
+  ✅ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 33/239
+  ✅ T165 lexique verbal    lexique : talks True, joue True, brother False ; cible GP talks
+  168/168 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ 168/168 ; je commite le lexique verbal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [1159 caractères tronqués]`

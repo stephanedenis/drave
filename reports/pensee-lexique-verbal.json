@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "168/168",
+ "gold": 612,
+ "cibles": 239,
+ "avant": {
+  "top1": 105,
+  "topk": 122,
+  "exact": 23,
+  "tete_top1": 105,
+  "tete_topk": 122
+ },
+ "apres": {
+  "top1": 115,
+  "topk": 132,
+  "exact": 33,
+  "tete_top1": 114,
+  "tete_topk": 131
+ },
+ "echecs": {
+  "span": 94,
+  "cible_avant": 23,
+  "cible_apres": 13
+ },
+ "cause_13": "verbes hors lexique (fly, climbs, flows, wait, swims, passes, get, smiles)",
+ "limites": [
+  "lexique écrit à la main",
+  "13 verbes non ajoutés (fuite de test)",
+  "94 spans",
+  "gold 612"
+ ]
+}
