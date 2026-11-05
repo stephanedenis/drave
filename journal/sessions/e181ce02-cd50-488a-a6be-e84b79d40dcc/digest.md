@@ -39254,3 +39254,183 @@ grep: warning: stray \ before -
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [1158 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+[still running after 60000ms; moved to background job bash-322]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-322", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-denominateur.json
+ create mode 100644 reports/rapport-pensee-denominateur.md
+COMMIT OK 1
+f8f5bc04 B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170
+3
+jeu 05 nov 2026 09:44:22 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 : le classement — la cible est-elle le GV de gauche, de droite, ou le plus proche ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, re, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\nstats=collections.Counter()\nfor  … [1280 caractères tronqués]`
+
+  ```
+{'total': 146, 'gauche juste': 51, 'droite juste': 11, "l'un des deux": 62, 'aucun': 84}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le GV de **gauche** donne 51 cibles justes contre 33 aujourd'hui : je change la règle (gauche d'abord)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        if segment.get(\"type\") == \"GV\" or not gvs:\n            return None\n        def ecart(g: dict) -> int:\n     … [2301 caractères tronqués]`
+
+  ```
+règle de gauche posée
+attachement {'cibles': 239, 'labels': 146, 'top1': 95, 'topk': 112, 'exact': 13, 'top1_taux': 0.3975, 'topk_taux': 0.4686, 'exact_taux': 0.0544, 'top1_taux_span': 0.6507, 'topk_taux_span': 0.7671, 'exact_taux_span': 0.089, 'couverture': 0.6109}
+tête {'cibles': 146, 'labels': 146, 'top1': 94, 'topk': 111, 'top1_taux': 0.6438, 'topk_taux': 0.7603, 'couverture': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        gauche = [g for g in gvs if g[\"fin\"] <= segment[\"debut\"]]\n        droite = [g for g in gvs if g[\"debut\"] > … [2031 caractères tronqués]`
+
+  ```
+englobants ajoutés
+attachement {'cibles': 239, 'labels': 146, 'top1': 115, 'topk': 132, 'exact': 33, 'top1_taux': 0.4812, 'topk_taux': 0.5523, 'exact_taux': 0.1381, 'top1_taux_span': 0.7877, 'topk_taux_span': 0.9041, 'exact_taux_span': 0.226, 'couverture': 0.6109}
+tête {'cibles': 146, 'labels': 146, 'top1': 114, 'topk': 131, 'top1_taux': 0.7808, 'topk_taux': 0.8973, 'couverture': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ La règle de gauche est **neutre** (33 exact dans les deux cas) : je reviens à la règle simple et je le consigne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        # le complément suit son verbe : le GV **à gauche** d'abord (mesuré : 51 cibles justes\n        # contre 33 pour  … [2448 caractères tronqués]`
+
+  ```
+règle simple restaurée
+top1 115 topk 132 exact 33 | spans 0.7877 0.9041 0.226
+✅ porte bloc linguistique verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 : consolidation du pilotage — je remets roadmap, chantiers, plan et rapport à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '36,40p' docs/pilotage/roadmap.md; echo \"=== chantiers :\"; grep -n \"B13\" docs/pilotage/chantiers.md | tail -3 | cut -c1-300; echo \"=== plan :\"; grep -n \"Prochaine action\\|Heartbeat\" journal/sessions/e181ce02-cd50-488a … [98 caractères tronqués]`
+
+  ```
+| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR est clos** (limite : 8 scans `.PDF`, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A) |
+
+**État au 04/11 13 h.** B13 est à **170/170** (troisième passe, variance nulle ; seuil du parallèle ; défaut conditionnel) (6 S fixés ; T132/T133 2/5 ; gold 432, 116 liens) ; le **gold neuronal rejoué sur l'API DeepSeek** donne les **mêmes verdicts**, **latence /35** ;
+la **cascade vrai modèle** tient sur **180 phrases** (POS **0,9415**, syntagmes **0,6130**, tête
+**0,7574**, acte **1,0**) mais sur le **gold réel 432** elle donne **0,9065 / 0,4598 / 0,5633 /
+=== chantiers :
+181:| 5 | **gold 200+** et **porte B13** | B13 | la pragmatique neuronale est mesurée (négatif) ; la cascade et 
+… [375 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"notes\" journal/2026-11-05/README.md | head -4; sed -n \"$(grep -n 'notes' journal/2026-11-05/README.md | tail -1 | cut -d: -f1),+12p\" journal/2026-11-05/README.md; echo \"=== rapport tail :\"; tail -12 journal/sessions/e1 … [117 caractères tronqués]`
+
+  ```
+5:> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+83:<!-- notes -->
+85:<!-- /notes -->
+<!-- /notes -->
+=== rapport tail :
+- B13 — LA CIBLE PAR PROXIMITÉ : EXACT 0,0042 → 0,0544 (×13), TOP1 0,3975, TÊTE 0,6483 ; 164/164" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/r
+- B13 — LE CODE DE LA CIBLE PAR PROXIMITÉ ENTRE DANS HEAD : _cible_proche, T153 À JOUR, T161 ; 164/164" -- tools/bloc_linguistique.py tools/pensee/autotest.py doc
+- B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-candida
+- ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "165/165 (CANDIDA
+- B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pe
+- ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; B13 166/166" -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan
+- DOCS — BUDGETS T1 REVENUS DANS LE CADRE : README 2800, RÉFÉREN
+… [750 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md; grep -n \"^## \\|^# \" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md | tail -8; echo \"--- lignes cassées (commandes) :\"; grep -c '^\\- .*\"  … [139 caractères tronqués]`
+
+  ```
+9855 journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+1:# Session e181ce02 — Documentation Drave avec diagrammes et implémentation
+20:## Objectifs déclarés
+45:## 1. Ce qui a été demandé
+397:## 2. Déroulé, étape par étape
+9394:## 3. Travail accompli
+9475:## 4. Mesures et résultats marquants
+9599:## 5. Erreurs rencontrées
+9619:## 6. Commits
+--- lignes cassées (commandes) :
+9
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '9619,9660p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md | cut -c1-160", "description": "Lire la section Commits du rapport"}`
+
+  ```
+## 6. Commits
+
+- DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX" 2>&1 | tail -30; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- PENSÉE — TOUR 1-2 : LA RSN PLURIELLE ET L'ARBRE D'ÉTATS" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- PENSÉE — TOURS 5-10 : CONTRAT, ANYTIME, MÉTA, MÉMOIRE, MESURE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — TROIS SESSIONS, PLAN/AMBITION
+… [4151 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '9615,9619p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md | cut -c1-120; echo \"=== derniers vrais commits B13 (git) :\"; git log --oneline --grep=\"B13\" -12 | cut -c1-95", "description": "Vérifier la coup … [29 caractères tronqués]`
+
+  ```
+- **T40** : 28f5d388 B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25 ok [stderr] Tracebac
+- **T41** : de6dbe0e B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26 ok [stderr] Traceback (most r
+- **T65** : 332cc56a B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50 ok [stderr] Traceback (m
+
+## 6. Commits
+=== derniers vrais commits B13 (git) :
+f8f5bc04 B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 
+13e8bb2d B13 — LES SPANS PERDUS : 48 REL, 33 SUB, 12 GP (81 CHEZ S) ; LE GP EST BORNÉ AU VERBE 
+d400e188 B13 — LE LEXIQUE VERBAL : EXACT 0,0962 → 0,1381, TÊTE 0,9034 ; 168/168
+9ff4adda B13 — LE VERBE DU GV-PHRASE : EXACT 0,0586 → 0,0962, TOP-K 0,5105, TÊTE 0,8414 ; 167/1
+2c432406 ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; 
+b08db744 ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14
+fb90bf5f CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40
+02c34ad4 REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 
+cbbea4a2 COHÉRENCE — LE 2 048 EST FINI PARTOUT ; B13 À 166 ; HEURE 0
+… [203 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md')\nlignes=p.read_text(encoding='utf-8').splitlines(keepends=True)\n# couper avant \"## 6. Commits\"\ni=next(k for k,l  … [1387 caractères tronqués]`
+
+  ```
+section 6 curatée ; 9618 lignes gardées
+  journal · 42 jour(s) · 120 session(s) · 2012 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) roadmap : l'état B13\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nvieux=\"**État au 04/11 13 h.** B13 est à **170/170** (troisième passe, variance nulle ; seuil du parallèle ; d … [2030 caractères tronqués]`
+
+  ```
+roadmap à jour
+plan à jour
+note du jour ajoutée
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-05, 10 h 00 HNE\", t)\np.write_text( … [842 caractères tronqués]`
