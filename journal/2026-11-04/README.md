@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**220 commits** · **6 session(s)** · **7 thème(s)**
+**221 commits** · **6 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 5 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
-| docs | 177 | [docs.md](docs.md) |
+| docs | 178 | [docs.md](docs.md) |
 | mesures | 25 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -24,7 +24,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 47.3 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 14.5 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 14.6 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
 | `206a4022-ab3c-497d-a5fa-0194931c7fa0` | Tu travailles dans le dépôt | 2026-11-04 15:56 | 0.2 h | [rapport](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/rapport.md) · [digest](../sessions/206a4022-ab3c-497d-a5fa-0194931c7fa0/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 48.3 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 6.9 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
@@ -254,6 +254,7 @@
 | 21:48 | `1aa969f9` | ÉTAT — HEURE 02 H 12 ; 2 048 FINI, B13 166/166, D 62 |
 | 21:51 | `2a6f0ef9` | ÉTAT — HEURE 02 H 17 ; 2 048 FINI, B13 166/166, D 62 |
 | 21:53 | `82ec31ed` | ÉTAT — HEURE 02 H 22 ; 2 048 FINI, B13 166/166, D 62 |
+| 21:56 | `9b63ef71` | ÉTAT — HEURE 02 H 27 ; 2 048 FINI, B13 166/166, D 62 |
 
 ## Le récit de la journée (écrit à la main)
 
