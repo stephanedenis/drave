@@ -36777,3 +36777,70 @@ c69b55bc ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VER
 ⏵ Cycle 270 : dernier alignement (heartbeat de e181ce02 dans l'état), puis je clôture le goal
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h270.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h270.md'\nt=open(p).read()\nold=\"### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3  … [1579 caractères tronqués]`
+
+  ```
+2026-11-05 02 h 15
+[s/v7 b08db744] ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14
+ 13 files changed, 154 insertions(+), 25 deletions(-)
+b08db744 ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14
+14d2ac7d PASSE COMPLÈTE FINIE — 83 PORTES, 79 VERTES, 4 ROUGES CATÉGORISÉES ; RÉFÉRENCES ET ÉTAT À JOUR
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3994 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 270 : la passe est passée et la reprise est au repos ; je clôture le goal
+
+- **update_goal** `{"goal_id": "goal-3a308101-e06b-49c2-841d-ee6a5ea6df1f", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée.
+
+
+  ```
+{"goal":{"id":"goal-3a308101-e06b-49c2-841d-ee6a5ea6df1f","revision":2,"objective":"Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée.","phase":"complete","roundsStarted":270,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+**Goal clôturé — la reprise est au repos et la passe complète est passée.**
+
+## Le résultat principal
+
+La passe complète des portes a tourné de bout en bout, lancée à **23 h 43** et finie à **02 h 12** (2 h 29), journaux durables dans `work/portes/passe-2404-23h45` :
+
+- **83 portes, 79 vertes, 4 rouges** — vérifié indépendamment : 83 lignes de verdict au registre, 79 codes 0, 4 non-zéro, **aucun journal vide, aucun journal sans marqueur**.
+- **Les 4 rouges, catégorisées** :
+  1. `porte-indice` (1 207 s) et 2. `porte-melange` (148 s) — les **deux structurelles connues**, tolérées par les références ;
+  3. `porte-lecteur` — une **vraie dérive** trouvée par la passe : le banc pilote ancrait une question sur la chaîne `« < 2,5 »` que la réécriture de la roadmap du 04/11 a remplacée par « sous 2,5 ». Ancre corrigée (`tools/tests/documents/bench-pilote.json`, commit `01107366`), porte **rejouée verte** (contrôlée 1,000 contre aléatoire 0,5, closed-book 0,0) ;
+  4. `porte-sessions` — **coordination, pas régression** : les heartbeats du hub et de `e181ce02` étaient périmés au moment de la passe. Le hub a rafraîchi le sien ; **celui de `e181ce02` reste à rafraîchir par sa session** (le hub n'écrit pas dans `journal/sessions/<id>/`).
+
+Les **références de non-régression** portent la nouvelle passe et la précédente en historique (`14d2ac7d`) ; l'état est à jour (`b08db744`, en-tête **2026-11-05, 02 h 15 HNE**).
+
+## Ce qui a été corrigé pendant la nuit
+
+- **INDEX des rapports** : 615 → **625 fiches** (`87690c26`) ; **README des rapports** : cinq fiches récentes ajoutées (cible par proximité, erratum distillation, OCR CEGEP 64, OCR PDF restants, fusion réparée).
+- **2 048** : chiffres re-dérivés depuis les deux logs et les deux drvm (SHA vérifiés : `c50beff6…`, `91a3028…` ; pertes 0,9409 → 0,8965 ; PPL 2,614 → 2,4953) ; « 2 048 fini » aligné dans l'état, la roadmap, le plan de travail et les chantiers.
+- **Ressources** : claim GPU exclusif `n2-jour` libéré après la fin du run — **aucune réservation active**.
+- **Dates** : « 13 h » → 20 h 26 dans `chantiers.md` ; heure de départ de la passe corrigée (23 h 43) ; passage au 05/11 à minuit local.
+- **Statuts** : N2 session + chantier « en pause » ; B13 à 166/166 ; statut de `e181ce02` annoté « heartbeat à rafraîchir ».
+- **Budgets** : `en-cours` ramené à ~1 610 mots, **T0 3 994 / 4 000**.
+
+## Ce que vous devez regarder / faire
+
+1. **`e181ce02`** : rafraîchir son heartbeat dans `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` (ou la passer « en pause ») — c'est la seule rouge non résolue de la passe, et le hub n'a pas le droit d'y écrire.
+2. **Deux WIP non commités, laissés dans leur territoire** : `reports/pensee-quatre-modes.json` (B13/L, modifié hier 10 h 37) et `reports/rapport-s-paragraphes.md` + `tools/structures` (S, 09 h 46). À committer si leur session les assume, sinon à écarter.
+3. Si une session reprend, la cohérence devra être re-suivie (un nouveau goal peut être ouvert) ; le présent goal est clôturé, **270 rounds sur 1 000**.
+
+**État final** : `s/v7`, sept contrôles de documentation verts (628 fiches / 721 JSON / 120 docs / 83 portes, **3 075 liens**, backlog frontière 3), GPUs libres, aucune réservation.
+

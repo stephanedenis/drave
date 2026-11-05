@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 100.1 h |
-| Tours | 173 |
-| Messages | 2160 |
-| Appels d'outils | 1860 |
+| Durée | 112.0 h |
+| Tours | 174 |
+| Messages | 2168 |
+| Appels d'outils | 1868 |
 | Fichiers touchés | 25 |
-| Commandes | 1532 |
+| Commandes | 1539 |
 | Sous-agents | 2 |
-| Commits | 228 |
+| Commits | 229 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -387,6 +387,8 @@
 **Tour 172** — oui
 
 **Tour 173** — continue
+
+**Tour 174** — où en est-on?
 
 ## 2. Déroulé, étape par étape
 
@@ -9303,6 +9305,19 @@ Je continue sur les 127 échecs si vous ne dites rien — c'est la
 
 Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 
+### Tour 174 — où en est-on?
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Inspecter l'état courant du dépôt
+- bash — Lire le bloc de ma session dans l'état
+- bash — Lire le bilan de la passe et les rouges tolérées
+- bash — Voir l'état du heartbeat de session
+- bash — Trouver la ligne heartbeat de mon plan
+- bash — Rafraîchir le heartbeat et vérifier
+- bash — Mettre à jour l'état et committer le heartbeat
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9382,7 +9397,7 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1492 autres
+- … et 1499 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9758,4 +9773,5 @@ Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 - B13 — LES CANDIDATS VERBES : TOP-K 0,3264 → 0,4686, TÊTE 0,7655 ; 165/165" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-candida
 - ÉTAT — B13 165/165 (CANDIDATS VERBES) ; T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "165/165 (CANDIDA
 - B13 — LES 127 ÉCHECS QUALIFIÉS : 94 DE SPAN, 33 DE CIBLE (32 APRÈS L'UNION) ; 166/166" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pe
+- ÉTAT — e181ce02 REPREND : HEARTBEAT 08 H 36, PROCHAINE ACTION LE VERBE DU GV-PHRASE ; B13 166/166" -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan
 

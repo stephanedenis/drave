@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-04 11:50 EST
+- **Heartbeat** : 2026-11-05 08:36 EST
 - **Prochaine action** : le **fix FIFO** est testé (3/3) ; reprendre **T132/T133** et le **gold
   200+** ; la porte stochastique/fenêtre attend une version API (serveur local interdit).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.

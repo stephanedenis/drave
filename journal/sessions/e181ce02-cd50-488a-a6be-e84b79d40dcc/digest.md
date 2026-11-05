@@ -38288,3 +38288,99 @@ mer 04 nov 2026 20:45:42 EST
 
 Je continue sur **le verbe du GV-phrase** si vous ne dites rien.
 
+
+## Tour 174
+
+### 👤 Utilisateur
+
+où en est-on?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git branch --show-current; git log --oneline -6; echo \"--- mon dernier commit :\"; git log --oneline -1 --author=\"$(git config user.name)\" 2>/dev/null | head -2; echo \"--- écart master ← s/v7 :\"; git log --oneline master.. … [134 caractères tronqués]`
+
+  ```
+jeu 05 nov 2026 08:36:47 EST
+s/v7
+b08db744 ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14
+14d2ac7d PASSE COMPLÈTE FINIE — 83 PORTES, 79 VERTES, 4 ROUGES CATÉGORISÉES ; RÉFÉRENCES ET ÉTAT À JOUR
+8dbff305 ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES »
+c69b55bc ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE
+cae0cb74 ÉTAT — HEURE 02 H 01 ; 83 PORTES LANCÉES, VISION EST LA DERNIÈRE ; HEARTBEAT DU HUB À JOUR
+0bda5c5b PASSE 83/83 JOURNAUX ; PORTE-SESSIONS ROUGE PAR LE HEARTBEAT DE e181ce02 ; HEURE 01 H 58
+--- mon dernier commit :
+b08db744 ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14
+--- écart master ← s/v7 :
+292
+--- travail non commité :
+7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'e181ce02' docs/pilotage/en-cours.md | head -1 | cut -d: -f1),+13p\" docs/pilotage/en-cours.md; echo \"=== en-tête :\"; sed -n '1,6p' docs/pilotage/en-cours.md", "description": "Lire le bloc de ma session dans l'ét … [4 caractères tronqués]`
+
+  ```
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif ; heartbeat à rafraîchir)*
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
+- **Plan** : B13, bloc linguistique.
+- **Ambition** : un runtime cognitif tracé.
+- **Stratégie** : v0 mesuré.
+- **Objectif final** : un moteur de pensée v0.
+- **Fait** : B13 **166/166** ; **127 échecs qualifiés : 94 de span, 33 de cible (le correctif n'en répare qu'un)** ; fiches [passifs](../../reports/rapport-pensee-passifs.md), [cible par proximité](../../reports/rapport-pensee-cible-proximite.md), [candidats verbes](../../reports/rapport-pensee-candidats-verbes.md), [échecs attachement](../../reports/rapport-pensee-echecs-attachement.md).
+- **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
+- **Ce que font les autres** : **N2**, **S**, **hub**.
+- **Prochaine action** : les **candidats verbes**, puis le **générateur S**.
+- **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.
+- **Journal** : [la session](../..
+… [279 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dernière passe\\|rouges catégorisées\\|83 portes\\|79 vertes\" docs/pilotage/en-cours.md | head -4; echo \"--- références non-régression :\"; grep -n \"rouge\" docs/pilotage/references-non-regression.md | head -6; echo \"-- … [118 caractères tronqués]`
+
+  ```
+110:| dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
+130:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 166/166 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md) ; **la passe complète est finie** (`work/portes/passe-2404-23h45` ; **79 vertes, 4 rouges** : `indice`, `melange` tolérées ; `lecteur` corrigée ; `sessions` → heartbeat de `e181ce02` à rafraîchir).
+--- références non-régression :
+4:> 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
+5:> (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
+6:> (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt
+… [626 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --help 2>&1 | head -14; echo \"=== check :\"; python3 tools/sessions.py --check 2>&1 | tail -4", "description": "Voir l'état du heartbeat de session"}`
+
+  ```
+usage: sessions.py [-h] [--racine RACINE] [--status] [--check] [--strict]
+                   [--modele] [--autotest] [--depuis-en-cours]
+
+sessions.py — plans de session : qui fait quoi, avant d'écrire `en-cours`.
+Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
+périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+sessions consultent `--status` avant de claim, et `--check --strict` refuse
+les mandats incomplets, les identifiants dupliqués, les périmètres qui se
+recouvrent et les heartbeats périmés (le `--check` seul les signale). Les
+**fichiers proches** (une réservation imbriquée dans une autre, `data/` ⊃
+`data/structures/`) restent des **avertissements**, même en strict :
+l'imbrication est le régime normal d'un territoire partagé, et une porte qui
+échoue sur toute imbrication est rouge dès qu'une session réserve un sous-
+dossier — mesuré le 02/11, le strict sortait en 1 avec **0 erreur et 4
+=== check :
+  ⚠ mandat périmé (402 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ⚠ mandat périmé (1247 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -i \"heartbeat\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -4", "description": "Trouver la ligne heartbeat de mon plan"}`
+
+  ```
+6:> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+18:- **Heartbeat** : 2026-11-04 11:50 EST
+21:- **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=t.replace(\"- **Heartbeat** : 2026-11-04 11:50 EST\", \"- **Heartbeat** : 2026-11-05 08:36 EST\")\n … [155 caractères tronqués]`
+
+  ```
+heartbeat rafraîchi
+  ⚠ mandat périmé (402 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Prochaine action** : les **candidats verbes**, puis le **générateur S**.\",\n            \"- **Prochaine action** : … [1047 caractères tronqués]`

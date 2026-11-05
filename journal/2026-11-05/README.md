@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**41 commits** · **1 session(s)** · **7 thème(s)**
+**42 commits** · **2 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 15 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
-| modele | 3 | [modele.md](modele.md) |
+| modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -23,7 +23,8 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.8 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 18.9 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 112.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -70,6 +71,7 @@
 | 02:02 | `c69b55bc` | ÉTAT — HEURE 02 H 04 ; VISION À 7 MIN (PREMIER TEST PASSÉ), 82 VERDICTS AU REGISTRE |
 | 02:05 | `8dbff305` | ÉTAT — HEURE 02 H 07 ; VISION TOURNE (10 MIN), LE BILAN VIENDRA EN « X VERTES, Y ROUGES » |
 | 02:09 | `14d2ac7d` | PASSE COMPLÈTE FINIE — 83 PORTES, 79 VERTES, 4 ROUGES CATÉGORISÉES ; RÉFÉRENCES ET ÉTAT À JOUR |
+| 02:15 | `b08db744` | ÉTAT — e181ce02 PORTE SON HEARTBEAT À RAFRAÎCHIR ; PASSE FINIE ; HEURE 02 H 14 |
 
 ## Le récit de la journée (écrit à la main)
 

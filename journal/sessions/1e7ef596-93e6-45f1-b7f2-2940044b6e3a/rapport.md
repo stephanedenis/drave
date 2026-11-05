@@ -7,10 +7,10 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 18.8 h |
+| Durée | 18.9 h |
 | Tours | 275 |
-| Messages | 1520 |
-| Appels d'outils | 1511 |
+| Messages | 1523 |
+| Appels d'outils | 1512 |
 | Fichiers touchés | 15 |
 | Commandes | 1322 |
 | Sous-agents | 0 |
@@ -20,6 +20,8 @@
 ## Objectifs déclarés
 
 - **create** — Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par l
+… [207 caractères tronqués]
+- **complete** — Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par l
 … [207 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -6775,16 +6777,43 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 ### Tour 275 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Snapshot, sessions and WIP mtimes
 - bash — Run seven doc controls
 - get_goal
 - bash — Final state edit and commit
+- update_goal
 
 **Synthèse produite :**
 
-⏵ Cycle 270 : dernier alignement (heartbeat de e181ce02 dans l'état), puis je clôture le goal
+**Goal clôturé — la reprise est au repos et la passe complète est passée.**
+
+\## Le résultat principal
+
+La passe complète des portes a tourné de bout en bout, lancée à **23 h 43** et finie à **02 h 12** (2 h 29), journaux durables dans `work/portes/passe-2404-23h45` :
+
+- **83 portes, 79 vertes, 4 rouges** — vérifié indépendamment : 83 lignes de verdict au registre, 79 codes 0, 4 non-zéro, **aucun journal vide, aucun journal sans marqueur**.
+- **Les 4 rouges, catégorisées** :
+  1. `porte-indice` (1 207 s) et 2. `porte-melange` (148 s) — les **deux structurelles connues**, tolérées par les références ;
+  3. `porte-lecteur` — une **vraie dérive** trouvée par la passe : le banc pilote ancrait une question sur la chaîne `« < 2,5 »` que la réécriture de la roadmap du 04/11 a remplacée par « sous 2,5 ». Ancre corrigée (`tools/tests/documents/bench-pilote.json`, commit `01107366`), porte **rejouée verte** (contrôlée 1,000 contre aléatoire 0,5, closed-book 0,0) ;
+  4. `porte-sessions` — **coordination, pas régression** : les heartbeats du hub et de `e181ce02` étaient périmés au moment de la passe. Le hub a rafraîchi le sien ; **celui de `e181ce02` reste à rafraîchir par sa session** (le hub n'écrit pas dans `journal/sessions/<id>/`).
+
+Les **références de non-régression** portent la nouvelle passe et la précédente en historique (`14d2ac7d`) ; l'état est à jour (`b08db744`, en-tête **2026-11-05, 02 h 15 HNE**).
+
+\## Ce qui a été corrigé pendant la nuit
+
+- **INDEX des rapports** : 615 → **625 fiches** (`87690c26`) ; **README des rapports** : cinq fiches récentes ajoutées (cible par proximité, erratum distillation, OCR CEGEP 64, OCR PDF restants, fusion réparée).
+- **2 048** : chiffres re-dérivés depuis les deux logs et les deux drvm (SHA vérifiés : `c50beff6…`, `91a3028…` ; pertes 0,9409 → 0,8965 ; PPL 2,614 → 2,4953) ; « 2 048 fini » aligné dans l'état, la roadmap, le plan de travail et les chantiers.
+- **Ressources** : claim GPU exclusif `n2-jour` libéré après la fin du run — **aucune réservation active**.
+- **Dates** : « 13 h » → 20 h 26 dans `chantiers.md` ; heure de départ de la passe corrigée (23 h 43) ; passage au 05/11 à minuit local.
+- **Statuts** : N2 session + chantier « en pause » ; B13 à 166/166 ; statut de `e181ce02` annoté « heartbeat à rafraîchir ».
+- **Budgets** : `en-cours` ramené à ~1 610 mots, **T0 3 994 / 4 000**.
+
+\## Ce que vous devez regarder / faire
+
+1. **`e181ce02`** : rafraîchir son heartbeat dans `journal/sessions/e181ce02-cd50-488a-a6be-e84b7
+… [723 caractères tronqués]
 
 ## 3. Travail accompli
 
