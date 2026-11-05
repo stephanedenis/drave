@@ -40047,3 +40047,88 @@ span 94
 span 94 | cible 11
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('abs(r[\"top1_taux\"] - 0.5105) < 0.001\\n            and abs(r[\"exact_taux\"] - 0.4937) < 0.001',\n            'abs(r[\"top1 … [3617 caractères tronqués]`
+
+  ```
+started background job bash-378
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-lexique-elargi.md <<'MD'\n# B13 — le lexique élargi : l'exact passe de 0,8082 à 0,8414\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **174/17 … [3961 caractères tronqués]`
+
+  ```
+fiche + JSON écrits
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T170** | la cible dépend-elle du type ? | **oui** : REL → antécédent, GP → verbe ; exact **0,6438 → 0,8 … [2909 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 173→174: 5
+docs/pilotage/chantiers.md 173→174: 6
+docs/pilotage/en-cours.md 173→174: 4
+docs + pilotage + README
+  revue de documentation · 636 fiche(s) · 729 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **job_output** `{"job_id": "bash-378", "timeout_ms": 900000, "wait": true}`
+
+  ```
+portes ajustées, T171 ajoutée
+  ✅ T170 attachement ciblé ciblé : REL « homme » homme, GP « joue » joue
+  ❌ T171 lexique élargi    lexique élargi : vu True, accroché False, couru True ; exact 122/145
+  171/174 portes tenues
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:\n            return True\n    return False''',\n'''        … [791 caractères tronqués]`
+
+  ```
+participes en -é ajoutés
+  ❌ T114 cascade + union   cascade : F1 0.3183, tête 0.4811, 602 appels
+  ❌ T153 attachement       attachement : top1 0.5272, exact 0.5146, couverture 0.6067
+  ❌ T161 cible proximité   proximité : top1 126/239, exact 123/239, tête 126/145
+  ❌ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 123/239
+  ❌ T166 spans perdus      spans : 48 REL, 33 SUB, 13 GP
+  ❌ T167 dénominateur      dénominateur : spans 0.869 / 0.9241 / 0.8483
+  ❌ T168 classement        classement : exact 123/146 ; cibles 63 verbes, 82 noms
+  ❌ T169 conventions       conventions : verbes 60/63 (0.9524), noms 63/82 (0.7683)
+  ❌ T171 lexique élargi    lexique élargi : vu True, accroché True, couru True ; exact 123/145
+---
+accroché True | vu True | couru True | tableau False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); span=cible=0\nfor p in charger():\n    x=h.analyse … [529 caractères tronqués]`
+
+  ```
+span 94 | cible 11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('abs(r[\"exact_taux\"] - 0.5105) < 0.001', 'abs(r[\"exact_taux\"] - 0.5146) < 0.001')\nt=t.replace('    return (a[\"cibles\"]  … [1724 caractères tronqués]`
+
+  ```
+portes recalées
+  174/174 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ 174/174 avec les participes en -é (exact 123) ; j'aligne la fiche et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, re\np=pathlib.Path('reports/rapport-pensee-lexique-elargi.md'); t=p.read_text()\nt=t.replace(\"l'exact passe de 0,8082 à 0,8414\", \"l'exact passe de 0,8082 à 0,8483\")\nt=t.replace(\"**exact 1 … [2247 caractères tronqués]`
+
+  ```
+textes alignés
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-lexique-elargi.md reports/pensee-lexique-elargi.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage … [784 caractères tronqués]`

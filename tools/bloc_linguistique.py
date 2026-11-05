@@ -377,11 +377,29 @@ manger mange manges mangent mangeait mangeaient écrire écrit écris écrivent 
 lire lis lisent lisait lisaient dormir dort dorment dormait dormaient partir part pars partent
 partait partaient venir viens vient viennent venait venaient prendre prend prends prennent
 prenait prenaient mettre mets met mettent mettait mettaient dire dis dit disent disait disaient
-voir vois voit voient voyait voyaient savoir sais sait savent savait savaient pouvoir peux peut
+voir vois voit voient voyait voyaient vu vue vus vues savoir sais sait savent savait savaient su
+pouvoir peux peut
 pouvons peuvent pouvait pouvaient vouloir veux veut voulons veulent voulait voulaient devoir dois
 doit devons doivent devait devaient faire fais fait font faisait faisaient aller vais va allons
 vont allait allaient être suis est sommes sont était étaient avoir ai as a avons ont avait avaient
 chanter chante chantes chantent chantait danser danse danses dansent dansait travailler travaille
+accrocher accroche accroches accrochent accrochait porter porte portes portent portait montrer
+montre montres montrent montrait tomber tombe tombes tombent tombait rester reste restes restent
+restait arriver arrive arrives arrivent arrivait entrer entre entres entrent entrait rentrer
+rentre rentres rentrent rentrait retourner retourne retournes retournent retournait passer passe
+passes passent passait monter monte montes montent montait descendre descends descend descendent
+descendait sortir sors sort sortent sortait perdre perds perd perdent perdait rendre rends rend
+rendent rendait vendre vends vend vendent vendait attendre attends attend attendent attendait
+entendre entends entend entendent entendait répondre réponds répond répondent répondait recevoir
+reçois reçoit reçoivent recevait apercevoir aperçois aperçoit aperçoivent offrir offre offres
+offrent offrait couvrir couvre couvres couvrent couvrait souffrir souffre souffres souffrent
+courir cours court courent courait mourir meurs meurt meurent mourait naître nais naît naissent
+tenaient obtenir obtiens obtient obtiennent devenir deviens devient deviennent revenir reviens
+revient reviennent souvenir souviens souvient souviennent
+pris prise prises mis mise mises dit dite dits fait faite faits eu été lue lus écrit écrite
+bu cru sue pu voulu dû venue venu partie parti sorti mort née né ouvert offerte souffert couru
+reçu aperçu déçu attendu entendu répondu perdu rendu vendu descendu monté resté tombé arrivé
+entré rentré retourné passé tenu obtenu devenu revenu
 travailles travaillent travaillait regarder regarde regardes regardent regardait écouter écoute
 écoutes écoutent écoutait aimer aime aimes aiment aimait finir finis finit finissent finissait
 grandir grandis grandit grandissent ouvrir ouvre ouvres ouvrent ouvrait fermer ferme fermes
@@ -418,6 +436,10 @@ def _est_verbe(mot: str) -> bool:
                 "ez", "ons", "iez", "ais", "ra", "rai", "ras", "rons", "rez", "ront",
                 "s", "ed", "ing", "en"):
         if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+            return True
+    # participes en -é/-és/-ée : `accroché` → `accrocher`
+    for suf in ("ées", "ées", "ée", "és", "é"):
+        if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
             return True
     return False
 
@@ -628,13 +650,19 @@ class Heuristique:
         if segment.get("type") == "GV" or not gvs:
             return None
         # le plus proche, tous côtés mêlés : la variante « GV de gauche d'abord » a été
-        # mesurée (2026-11-05) et donne **le même** exact (33) — elle n'est pas retenue.
+        # mesurée (2026-11-05) et donne **le même** exact — elle n'est pas retenue.
         def ecart(g: dict) -> int:
             if g["fin"] <= segment["debut"]:
                 return segment["debut"] - g["fin"]
             if g["debut"] >= segment["fin"]:
                 return g["debut"] - segment["fin"]
             return 0
+        # un GV réduit à l'auxiliaire (« a », « est ») ne donne pas la cible : on prend le
+        # premier GV proche dont le verbe est **plein** (mesuré : « a » au lieu de « vu »).
+        for g in sorted(gvs, key=ecart):
+            v = Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
+            if v and _normaliser(v) not in AUXILIAIRES:
+                return v
         g = min(gvs, key=ecart)
         return Heuristique._verbe_dans(texte, g["debut"], g["fin"], verbes)
 
@@ -820,6 +848,8 @@ class Heuristique:
                         i = texte.find(brute)
                         if i >= 0:
                             cible = self._verbe_dans(texte, i, i + len(brute), verbes)
+                    if cible and _normaliser(cible) in AUXILIAIRES:
+                        cible = None  # « a » / « est » ne sont pas des cibles
                     if not cible:
                         cible = self._cible_proche(texte, s, gvs, verbes)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}

@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | **B13** — le lexique élargi : exact 0,8082 → **0,8483**, **174/174** |
 | [`rapport-pensee-attachement-cible.md`](rapport-pensee-attachement-cible.md) | **B13** — l'attachement ciblé : exact 0,6438 → **0,8082**, **173/173** |
 | [`rapport-pensee-conventions.md`](rapport-pensee-conventions.md) | **B13** — les deux conventions du gold : verbes 0,7255, noms 0,6000, **172/172** |
 | [`rapport-pensee-classement.md`](rapport-pensee-classement.md) | **B13** — le classement : exact 0,2260 → **0,6438**, **171/171** |
@@ -149,7 +150,6 @@
 | [`rapport-m8-rejeu.md`](rapport-m8-rejeu.md) | **B25** — M8 rejeu : exact 0, champs 74,6 %, rejeu 0, hybride 0 sur 6 codes tenus |
 | [`rapport-sous-familles-autres.md`](rapport-sous-familles-autres.md) | **C3.2e** — sous-familles des autres familles : uralic 46,7→100 %, benue 88 %, austro 60,3 %, afro ouest 53,5 % |
 | [`rapport-ie-sous-familles.md`](rapport-ie-sous-familles.md) | **C3.2d** — sous-familles IE : 54,6–100 % ; l'IE à 14,7 % est un effet de composition |
-| [`rapport-familles-9.md`](rapport-familles-9.md) | **C3.2c** — 9 familles : 7/9 > 30 %, moyenne 69,5 %, contrôle 0 ; indo-européen 14,7 %, uralic 46,7 % |
 
 ## Les données brutes
 

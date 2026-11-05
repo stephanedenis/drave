@@ -1,0 +1,36 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "174/174",
+ "gold": 612,
+ "cibles": 239,
+ "labels": 145,
+ "avant": {
+  "exact": 118,
+  "exact_span": 0.8082,
+  "top1": 122,
+  "topk": 132,
+  "verbe": 0.9412,
+  "nom": 0.7368
+ },
+ "apres": {
+  "exact": 123,
+  "exact_span": 0.8483,
+  "top1": 126,
+  "topk": 134,
+  "verbe": 0.9524,
+  "nom": 0.7683
+ },
+ "rendement": {
+  "top1": 0.5272,
+  "topk": 0.5607,
+  "exact": 0.5146
+ },
+ "note": "la part verbes passe de 51 à 62 cibles par reclassification (_est_verbe), pas par un changement du gold",
+ "limites": [
+  "23 échecs",
+  "lexique manuel",
+  "top-k lenient",
+  "gold 612"
+ ]
+}

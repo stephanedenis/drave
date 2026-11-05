@@ -11239,3 +11239,92 @@ plan terminé
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/cloture.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md && git commit -q -F - -- journal/sessions/0 … [798 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-82]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-82", "timeout_ms": 180000, "wait": true}`
+
+  ```
+b63addca N2 — CLÔTURE DE L'OBJECTIF : LES QUATRE ITEMS SONT CLOS (RUN LONG, CAPACITÉ, 2 048, UN COMMIT PAR FAIT)
+=== revue ===
+  revue de documentation · 636 fiche(s) · 729 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== fraîcheur ===
+  ✅ aucun fait commité après le dernier état
+=== T0 ===
+  T0 max : 3992 mots (budget 4 000)
+[status: completed, exit code: 0]
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-55b01e7d-d2e4-41ba-a43a-82d810df1670","revision":3,"objective":"Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes.","phase":"active","roundsStarted":1,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-55b01e7d-d2e4-41ba-a43a-82d810df1670", "revision": 3}`
+
+> **Objectif** (complete) : Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes.
+
+
+  ```
+{"goal":{"id":"goal-55b01e7d-d2e4-41ba-a43a-82d810df1670","revision":4,"objective":"Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 34,3 M) à fenêtre 512 et octets constants, depuis une init aléatoire identique, pour savoir si la porte 2,5 se gagne par la capacité ; (3) si le temps : un complément sur la fenêtre 2 048 (mêmes pas) ; (4) chaque fait : mesure + contrôle négatif + fiche dans reports/ + ligne dans en-cours + commit explicite (git add explicite). Ne pas toucher roadmap/chantiers/AGENTS ; en-cours en éditions minimales ; rendre la ligne d'état et les hashes.","phase":"complete","roundsStarted":1,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Objectif clos : voici le point complet
+
+## Où on en est
+
+**L'objectif de la session est clos (4/4 items)** et marqué terminé. Voici ce qui s'est passé depuis hier.
+
+### 04/11 — l'erratum de la distillation
+
+Le reboot du 03/11 avait tué mes deux runs. En les reprenant, un **contrôle de parité de la perte** a révélé un biais dans mon distillateur : il donnait à la tête principale le poids **1** au lieu de **1/4** (l'entraîneur de référence fait la moyenne des quatre têtes). Mes « gains » de distillation étaient donc gonflés. Trois expériences ont décomposé :
+
+| bras | 128 | 512 | 1 000 | 2 000 |
+|---|---:|---:|---:|---:|
+| 11,47 M depuis zéro : α = 0 → α = 0,9 | 3,7072 → 3,6774 | 3,5727 → 3,5633 | 3,5251 → 3,5208 | — |
+| 11,47 M : repondération 4× seule | 3,6067 | 3,3984 | 3,3129 | — |
+| **production : α = 0 → α = 0,9** | 3,1500 → **3,1119** | 2,9069 → **2,8462** | 2,8006 → **2,7388** | 2,7618 → **2,6968** |
+| vieux code (gonflé) | 3,0550 | 2,8062 | 2,7015 | 2,6601 |
+
+**Conclusion** : la distillation **paie depuis une initialisation entraînée** (−0,06 en domaine, **−0,19 en anglais, −0,34 sur wikitext2**) mais **ne paie rien depuis zéro**. Le chiffre du 03/11 (−0,10 à −0,52) était gonflé 2× par l'échelle de perte du vieux code.
+
+### 05/11 — le complément 2 048, mesuré
+
+Relancé en deux segments de 10 000 pas (après deux interruptions), il donne :
+
+| run (wiki_fr, RoPE) | octets | 128 | 1 000 | 4 000 |
+|---|---:|---:|---:|---:|
+| 2 048, 10 000 pas | 164 Mo | 3,0466 | 2,6501 | 2,5513 |
+| **1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,6256** | **2,5429** |
+| **2 048, 20 000 pas** | **328 Mo** | **2,9121** | **2,5375** | **2,4383** |
+
+**À octets constants, 2 048 ne bat pas 1 024** (+0,05 à 128, +0,01 à 4 000) ; **à pas constants, il gagne 0,08 à 0,10**. Synthèse de la loi : 128 → 1 024 vaut −0,4 à −0,5 à 4 000 octets ; 1 024 → 2 048 ne vaut rien à octets constants et −0,10 à pas constants — **la fenêtre paie jusqu'à ce que les pas manquent**.
+
+### Ma ligne d'état
+
+> **N2** : **1 024 = recette de production** (2,48–2,91 ; sous 2,5 au grand corpus) ; distillé : **−0,06 à parité** (−0,19 anglais, −0,34 wt2) ; **2 048 mesuré** : à octets constants il ne bat pas 1 024 ; à pas constants **−0,10**.
+> **Porte propre** : 2,7856, capacité **saturée** (2,8662 à 34,3 M) ; il reste **0,29**.
+
+### Commits de la phase
+
+`84c28889` (erratum) · `64674e0d` (repondération −0,05) · `51ab1b36` (production −0,06) · `2b0832ca` (clôture + correction perte/PPL dans l'état) · `b67e4dcb` (2 048 en deux moitiés) · **`88861697`** (2 048 mesuré) · `b63addca` (clôture de l'objectif).
+
+### Portes et matériel
+
+Revue de documentation **verte**, état frais, T0 à **3 992**, journal vert, **636 fiches / 729 JSON**. Les deux GPU sont **libres**. Session et plan passés à **terminé**.
+
+### Ce qui reste (désigné, hors objectif)
+
+1. **La porte < 2,5 sur le corpus propre** (0,29) : ni les pas (corpus de 3,24 Mo épuisé) ni la capacité (saturée) ne la ferment — il faut un **corpus propre plus large**.
+2. **Un run de ~2 M de pas** pour 2,5 en domaine à 128 octets, avec la recette fenêtre (le compute y mène en 5 doublements).
+3. **La distillation 30 000 pas** (arrêtée deux fois) : à reprendre avec le code corrigé si le levier le justifie.
+

@@ -9,8 +9,8 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 66.2 h |
 | Tours | 9 |
-| Messages | 851 |
-| Appels d'outils | 786 |
+| Messages | 854 |
+| Appels d'outils | 788 |
 | Fichiers touchés | 27 |
 | Commandes | 579 |
 | Sous-agents | 0 |
@@ -24,6 +24,8 @@
 - **edit** — Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 
 … [442 caractères tronqués]
 - **resume** — Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 
+… [442 caractères tronqués]
+- **complete** — Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 024 (30 000 pas de plus, 60 000 au total) — mesurer si le domaine passe sous 2,9 et si la validation du grand corpus tient sous 2,5 ; (2) la capacité sur le corpus propre — trois tailles (11,47 / 21,65 / 
 … [442 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -318,7 +320,7 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 
 ### Tour 9 — où en est-on?
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Check 2048 run and repo state
 - bash — Evaluate both 2048 checkpoints
@@ -329,10 +331,51 @@ J'ai aussi corrigé une **confusion perte/PPL dans l'état** (la ligne du hub ci
 - bash — Commit the measured 2048 complement
 - bash — Write 2048 closure and terminate the plan
 - bash — Commit closure and final checks
+- get_goal
+- update_goal
 
 **Synthèse produite :**
 
-⏵ Clôture : récit, plan, vérifications finales
+⏵ Objectif clos : voici le point complet
+
+\## Où on en est
+
+**L'objectif de la session est clos (4/4 items)** et marqué terminé. Voici ce qui s'est passé depuis hier.
+
+\### 04/11 — l'erratum de la distillation
+
+Le reboot du 03/11 avait tué mes deux runs. En les reprenant, un **contrôle de parité de la perte** a révélé un biais dans mon distillateur : il donnait à la tête principale le poids **1** au lieu de **1/4** (l'entraîneur de référence fait la moyenne des quatre têtes). Mes « gains » de distillation étaient donc gonflés. Trois expériences ont décomposé :
+
+| bras | 128 | 512 | 1 000 | 2 000 |
+|---|---:|---:|---:|---:|
+| 11,47 M depuis zéro : α = 0 → α = 0,9 | 3,7072 → 3,6774 | 3,5727 → 3,5633 | 3,5251 → 3,5208 | — |
+| 11,47 M : repondération 4× seule | 3,6067 | 3,3984 | 3,3129 | — |
+| **production : α = 0 → α = 0,9** | 3,1500 → **3,1119** | 2,9069 → **2,8462** | 2,8006 → **2,7388** | 2,7618 → **2,6968** |
+| vieux code (gonflé) | 3,0550 | 2,8062 | 2,7015 | 2,6601 |
+
+**Conclusion** : la distillation **paie depuis une initialisation entraînée** (−0,06 en domaine, **−0,19 en anglais, −0,34 sur wikitext2**) mais **ne paie rien depuis zéro**. Le chiffre du 03/11 (−0,10 à −0,52) était gonflé 2× par l'échelle de perte du vieux code.
+
+\### 05/11 — le complément 2 048, mesuré
+
+Relancé en deux segments de 10 000 pas (après deux interruptions), il donne :
+
+| run (wiki_fr, RoPE) | octets | 128 | 1 000 | 4 000 |
+|---|---:|---:|---:|---:|
+| 2 048, 10 000 pas | 164 Mo | 3,0466 | 2,6501 | 2,5513 |
+| **1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,6256** | **2,5429** |
+| **2 048, 20 000 pas** | **328 Mo** | **2,9121** | **2,5375** | **2,4383** |
+
+**À octets constants, 2 048 ne bat pas 1 024** (+0,05 à 128, +0,01 à 4 000) ; **à pas constants, il gagne 0,08 à 0,10**. Synthèse de la loi : 128 → 1 024 vaut −0,4 à −0,5 à 4 000 octets ; 1 024 → 2 048 ne vaut rien à octets constants et −0,10 à pas constants — **la fenêtre paie jusqu'à ce que les pas manquent**.
+
+\### Ma ligne d'état
+
+> **N2** : **1 024 = recette de production** (2,48–2,91 ; sous 2,5 au grand corpus) ; distillé : **−0,06 à parité** (−0,19 anglais, −0,34 wt2) ; **2 048 mesuré** : à octets constants il ne bat pas 1 024 ; à pas constants **−0,10**.
+> **Porte propre** : 2,7856, capacité **saturée** (2,8662 à 34,3 M) ; il reste **0,29**.
+
+\### Commits de la phase
+
+`84c28889` (erratum) · `64674e0d` (repondération −0,05) · `51ab1b36` (production −0,06) · `2b0832ca` (clôture + correction perte/PPL dans l'état) · `b67
+… [752 caractères tronqués]
 
 ## 3. Travail accompli
 

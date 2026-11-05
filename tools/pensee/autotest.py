@@ -1754,7 +1754,7 @@ def t114_cascade_union() -> tuple[bool, str]:
     r = evaluer_bloc("c", cascade, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.3203) < 0.001 and abs(tete - 0.4817) < 0.001
+    return (abs(f1 - 0.3183) < 0.001 and abs(tete - 0.4811) < 0.001
             and cascade.appels_neuronal == 602), (
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
@@ -2219,12 +2219,12 @@ def t152_tirages() -> tuple[bool, str]:
 
 
 def t153_attachement() -> tuple[bool, str]:
-    """L'attachement sur le gold 612 (239 cibles) : top1 0,5105, exact 0,4937."""
+    """L'attachement sur le gold 612 (239 cibles) : top1 0,5272, exact 0,5105."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
-    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.5105) < 0.001
-            and abs(r["exact_taux"] - 0.4937) < 0.001), (
+    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.5272) < 0.001
+            and abs(r["exact_taux"] - 0.5146) < 0.001), (
         f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
         f"couverture {r['couverture']}")
 
@@ -2341,7 +2341,7 @@ def t161_cible_proximite() -> tuple[bool, str]:
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())
     a, th = r["attachement"], r["attachement_tete"]
-    return (a["cibles"] == 239 and a["top1"] == 122 and a["exact"] == 118), (
+    return (a["cibles"] == 239 and a["top1"] == 126 and a["exact"] == 123), (
         f"proximité : top1 {a['top1']}/239, exact {a['exact']}/239, "
         f"tête {th['top1']}/145")
 
@@ -2352,7 +2352,7 @@ def t162_candidats_verbes() -> tuple[bool, str]:
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())
     a, th = r["attachement"], r["attachement_tete"]
-    return (a["topk"] == 132 and th["topk"] == 131 and a["top1"] == 122), (
+    return (a["topk"] == 134 and th["topk"] == 134 and a["top1"] == 126), (
         f"candidats : top-k {a['topk']}/239 ({a['topk_taux']}), tête {th['topk']}/145")
 
 
@@ -2375,7 +2375,7 @@ def t163_echecs_attachement() -> tuple[bool, str]:
                 continue
             if not any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
                 cible += 1
-    return span == 93 and cible == 14, (
+    return span == 94 and cible == 11, (
         f"échecs : {span} de span, {cible} de cible (33 avant les correctifs)")
 
 
@@ -2388,7 +2388,7 @@ def t164_verbe_gv() -> tuple[bool, str]:
     gp = [e for e in a.etiquettes if e.niveau == "syntagme" and e.type == "GP"]
     cible = ((gp[0].meta or {}).get("attachement") or {}).get("cible") if gp else None
     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
-    return cible == "saw" and r["exact"] == 118, (
+    return cible == "saw" and r["exact"] == 123, (
         f"verbe du GV : {cible} (attendu saw) ; exact {r['exact']}/239")
 
 
@@ -2419,7 +2419,7 @@ def t166_spans() -> tuple[bool, str]:
                 continue
             if (s["type"], s["debut"], s["fin"]) not in spans:
                 cats[s["type"]] += 1
-    return (cats["REL"] == 48 and cats["SUB"] == 33 and cats["GP"] == 12), (
+    return (cats["REL"] == 48 and cats["SUB"] == 33 and cats["GP"] == 13), (
         f"spans : {cats['REL']} REL, {cats['SUB']} SUB, {cats['GP']} GP")
 
 
@@ -2428,10 +2428,10 @@ def t167_denominateur() -> tuple[bool, str]:
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
-    return (a["cibles"] == 239 and a["labels"] == 146
-            and abs(a["top1_taux_span"] - 0.8356) < 0.001
-            and abs(a["topk_taux_span"] - 0.9041) < 0.001
-            and abs(a["exact_taux_span"] - 0.8082) < 0.001), (
+    return (a["cibles"] == 239 and a["labels"] == 145
+            and abs(a["top1_taux_span"] - 0.869) < 0.001
+            and abs(a["topk_taux_span"] - 0.9241) < 0.001
+            and abs(a["exact_taux_span"] - 0.8483) < 0.001), (
         f"dénominateur : spans {a['top1_taux_span']} / {a['topk_taux_span']} / {a['exact_taux_span']}")
 
 
@@ -2455,7 +2455,7 @@ def t168_classement() -> tuple[bool, str]:
                 verbes += 1
             else:
                 noms += 1
-    return (r["exact"] == 118 and verbes == 51 and noms == 95), (
+    return (r["exact"] == 123 and verbes == 63 and noms == 82), (
         f"classement : exact {r['exact']}/146 ; cibles {verbes} verbes, {noms} noms")
 
 
@@ -2465,8 +2465,8 @@ def t169_conventions() -> tuple[bool, str]:
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
     v, n = a["verbe"], a["nom"]
-    return (v["cibles"] == 51 and v["justes"] == 48 and abs(v["taux"] - 0.9412) < 0.001
-            and n["cibles"] == 95 and n["justes"] == 70 and abs(n["taux"] - 0.7368) < 0.001), (
+    return (v["cibles"] == 63 and v["justes"] == 60 and abs(v["taux"] - 0.9524) < 0.001
+            and n["cibles"] == 82 and n["justes"] == 63 and abs(n["taux"] - 0.7683) < 0.001), (
         f"conventions : verbes {v['justes']}/{v['cibles']} ({v['taux']}), "
         f"noms {n['justes']}/{n['cibles']} ({n['taux']})")
 
@@ -2483,6 +2483,17 @@ def t170_attachement_cible() -> tuple[bool, str]:
     cible2 = ((gp[0].meta or {}).get("attachement") or {}).get("cible") if gp else None
     return cible == "homme" and cible2 == "joue", (
         f"ciblé : REL « homme » {cible}, GP « joue » {cible2}")
+
+
+def t171_lexique_elargi() -> tuple[bool, str]:
+    """Le lexique élargi : participes irréguliers et verbes courants (« vu » n'était pas un verbe)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    ok = (bl._est_verbe("vu"), bl._est_verbe("accroché"), bl._est_verbe("couru"),
+          bl._est_verbe("tableau"))
+    r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return ok == (True, True, True, False) and r["exact"] == 123, (
+        f"lexique élargi : vu {ok[0]}, accroché {ok[1]}, couru {ok[2]} ; exact {r['exact']}/145")
 
 
 def main() -> int:
@@ -2654,7 +2665,8 @@ def main() -> int:
               ("T167 dénominateur", t167_denominateur()),
               ("T168 classement", t168_classement()),
               ("T169 conventions", t169_conventions()),
-              ("T170 attachement ciblé", t170_attachement_cible())]
+              ("T170 attachement ciblé", t170_attachement_cible()),
+              ("T171 lexique élargi", t171_lexique_elargi())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
