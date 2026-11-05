@@ -905,3 +905,47 @@ s081 | cette secrète fenêtre trouve de Alice
 … [2049 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py 2>&1 | tail -5 && echo \"--- exact line from JSON ---\" && python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/ech/eval_base.json >/dev/null 2>&1; python3 -c \"\nimport json\n … [322 caractères tronqués]`
+
+  ```
+"exactitude_ouvert": 0.6061,
+    "tokens": 2480,
+    "confusions": {
+     
+heuristique all: {"pos": {"exactitude": 0.7455, "exactitude_ferme": 0.8984, "exactitude_ouvert": 0.6007, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 21, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 617, "ADJ": 17, "VERB": 47, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 111, "NOUN": 3}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 314, "NOUN": 447, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.3154, "rappel": 0.2619, "f1": 0.2862, "tp": 488, "fp": 1059, "fn": 1375, "tete": {"precision": 0.5862, "rappel": 0.4342, "f1": 0.4989, "tp": 809, "fp": 571, "fn": 1054}}, "pragmatique": {"acte": 0.9967, "negation": 0.9771, "modalite": 0.9886, "double_sens": 0.9444}, "fraction_semantique": 0.5551}
+--- exact line from JSON ---
+{'cibles': 239, 'labels': 145, 'exact': 137, 'top1': 140, 'topk': 142, 'topk_exact': 141, 'ex
+… [181 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/ech/controls.py <<'PY'\nimport json, sys, pathlib, re\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE/\"tools\")); sys.path.insert(0, str(RACINE/\"tools/tests/linguistique\"))\nimport bloc_linguistique as bl, evaluer_ … [3625 caractères tronqués]`
+
+  ```
+base exact: 137
+N3 split any hyphen: portee 2 gagne 1 perd 0 touches [('r230', 'appelle-moi', 'appelle'), ('r309', 'Peut-être', 'Peut')]
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/ech/controls.py", line 58, in <module>
+    n4()
+    ~~^^
+  File "/tmp/ech/controls.py", line 48, in n4
+    cands = h._syntagmes_s(texte) or []
+            ^
+NameError: name 'h' is not defined
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, re\nsys.path.insert(0,\"tools\"); sys.path.insert(0,\"tools/tests/linguistique\")\nimport bloc_linguistique as bl, evaluer_gold as eg\nh = bl.Heuristique()\nph = {p[\"id\"]:p for p in eg.charger()}\n# N4 … [1915 caractères tronqués]`
+
+  ```
+N4 :
+  s022 SUB 'que vous nage' pred='nage' inside=True gold='nage' recalcul='nage'
+  g012 GP 'à manger' pred='manger' inside=True gold='prêt' recalcul='prêt'
+  r018 GP 'à manger' pred='manger' inside=True gold='prête' recalcul='prête'
+N6 :
+  g002 GP='de la voisine' tete_GN_gauche='chat' gold='chat' OK
+  g006 GP='du voisin' tete_GN_gauche='chien' gold='chien' OK
+  s081 GP='de Alice' tete_GN_gauche='fenêtre' gold='trouve' FAUX
+  s120 GP='de une chanson' tete_GN_gauche='lettre' gold='prépare' FAUX
+  ```
+

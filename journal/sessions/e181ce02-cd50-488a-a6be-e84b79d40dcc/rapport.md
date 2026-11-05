@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 118.1 h |
 | Tours | 176 |
-| Messages | 2457 |
-| Appels d'outils | 2153 |
+| Messages | 2461 |
+| Appels d'outils | 2160 |
 | Fichiers touchés | 25 |
-| Commandes | 1771 |
-| Sous-agents | 13 |
-| Commits | 258 |
+| Commandes | 1774 |
+| Sous-agents | 16 |
+| Commits | 259 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*110 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 85 autres
+- … et 91 autres
 
 **Synthèse produite :**
 
-⏵ A4 liste des résidus dans mes corrections : je les traite un par un
+⏵ Vague 4 (3 sous-agents) : couverture des spans, multi-cibles, qualité du gold anglais
 
 ## 3. Travail accompli
 
@@ -9507,6 +9507,9 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - tour 176 — Qualifier les 8 échecs restants
 - tour 176 — Prototype de la cible vide
 - tour 176 — Cache du chunker mesuré
+- tour 176 — Couverture des spans sans S
+- tour 176 — Mesure multi-cibles du gold
+- tour 176 — Qualité du gold anglais
 
 ### Commandes exécutées (échantillon)
 
@@ -9550,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1731 autres
+- … et 1734 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9956,4 +9959,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181" -- tools/bloc_linguistique.py tools/te
 - PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181" -- docs/pilotage/en-cours.md journal/2026-11-05/README.md journal/sessions/e181ce02-cd5
 - FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR" -- reports/rapport-coherence-fiches.md reports
+- PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS" -- docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>&1 | tail -
 

@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:22 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 30 |
-| Appels d'outils | 29 |
+| Messages | 33 |
+| Appels d'outils | 32 |
 | Fichiers touchés | 0 |
-| Commandes | 23 |
+| Commandes | 26 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **qualifie … [2024 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check git state and reports listing
 - bash — Check key files exist
@@ -41,7 +41,7 @@
 - bash — Grep for r230/r309 references
 - bash — Dump 145 label records and base counts
 - bash — Inspect SUB cases with self/non-lexicon cibles
-- … et 10 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -79,6 +79,9 @@
 - **T1** Inspect other de-GP segments
 - **T1** Inspect S attachments for GP de/du cases
 - **T1** Run official evaluator to confirm base numbers
+- **T1** Run negative controls for the rules
+- **T1** Inspect N4 self-attachment types and N6 precision
+- **T1** Compare gold POS and heuristic POS on the 8 cases
 
 ## 4. Mesures et résultats marquants
 
@@ -86,7 +89,8 @@
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [  {   "regle": "R-A lexique verbal",   "portee": 2,   "gagne": 2,   "perd": 0,   "exact": 139,   "touches": [    [     "s108",     "papier",     "rêve"    ],    [     "s122",     "papier",     "saute
+- **T1** : base exact: 137 N3 split any hyphen: portee 2 gagne 1 perd 0 touches [('r230', 'appelle-moi', 'appelle'), ('r309', 'Peut-être', 'Peut')] [stderr] Traceback (most recent call last):   File "/tmp/ech/co
 

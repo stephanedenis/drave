@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:22 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 43 |
-| Appels d'outils | 53 |
+| Messages | 45 |
+| Appels d'outils | 55 |
 | Fichiers touchés | 0 |
-| Commandes | 43 |
+| Commandes | 45 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2447 caractères tronqués]
 
-*53 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - bash — Check repo state and locate attachment reports
 - read
@@ -41,11 +41,11 @@
 - bash — Show v2 commit stat and bloc diff
 - bash — Inspect lexicon variable and imports
 - bash — Show evaluer_gold and autotest v2 diff
-- … et 30 autres
+- … et 32 autres
 
 **Synthèse produite :**
 
-⏵ Resolving the 180 vs 181 discrepancy in the registry count.
+⏵ Compiling the per-type breakdown and split-matrix evidence.
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Count head-fixable top-k strict failures pre-v2
 - **T1** Measure F1 and F1+F2 on pre-v2 base
 - **T1** Count gates per commit and show post-v2 diff
-- … et 3 autres
+- … et 5 autres
 
 ## 4. Mesures et résultats marquants
 

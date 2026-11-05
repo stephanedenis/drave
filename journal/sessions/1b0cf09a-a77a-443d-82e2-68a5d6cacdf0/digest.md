@@ -1151,3 +1151,137 @@ PID     ELAPSED     TIME %CPU CMD
  14:43:50  up 1 day 19:09,  2 users,  load average: 13,06, 13,47, 13,26
   ```
 
+- **job_output** `{"job_id": "bash-1136", "timeout_ms": 90000}`
+
+  ```
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1136 (bash: cd /tmp && python3 - <<'EOF'
+from pathlib import Path
+p = Path('/tmp/bench_patch_et_off.py')
+s = p.read_text()
+s = s.replace('    return lambda seg, n=nom: b.fabrique(n, seg)',
+              '    return lambda segmenter_s, n=nom: b.fabrique(n, segmenter_s)')
+p.write_text(s)
+print('ok')
+EOF
+python3 -m py_compile /tmp/bench_patch_et_off.py && python3 /tmp/bench_patch_et_off.py > /tmp/bench_patch_et_off.out 2>&1; echo "EXIT=$?") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat /tmp/bench_patch_et_off.out", "description": "Read patch and OFF benchmark results"}`
+
+  ```
+{
+ "off_corpus_chunker": {
+  "C1": {
+   "median_ms": 197.356,
+   "min_ms": 180.309,
+   "passes_ms": [
+    204.04,
+    188.97,
+    180.31,
+    209.26,
+    208.06,
+    197.36,
+    198.44,
+    205.75,
+    193.21,
+    196.94,
+    193.72
+   ]
+  },
+  "C2": {
+   "median_ms": 194.875,
+   "min_ms": 186.325,
+   "passes_ms": [
+    192.04,
+    191.79,
+    196.93,
+    191.7,
+    186.32,
+    194.88,
+    204.25,
+    209.26,
+    203.03,
+    194.59,
+    197.98
+   ]
+  },
+  "C1OFF": {
+   "median_ms": 241.544,
+   "min_ms": 221.361,
+   "passes_ms": [
+    291.09,
+    237.88,
+    230.96,
+    231.9,
+    241.54,
+    238.49,
+    249.27,
+    249.81,
+    267.52,
+    221.36,
+    246.43
+   ]
+  },
+  "C2OFF": {
+   "median_ms": 236.539,
+   "min_ms": 224.178,
+   "passes_ms": [
+    242.35,
+    228.35,
+    236.54,
+    233.16,
+    266.5,
+    233.19,
+    236.76,
+    224.18,
+    248.12,
+    226.25,
+    253.1
+   ]
+  },
+  "original": {
+   "median_ms": 229.671,
+   "min_ms": 214.984,
+   "passes_ms": [
+    259.84,
+    231.49,
+    224.56,
+    214.98,
+    220.84,
+    239.93,
+    232.11,
+    233.39,
+    226.22,
+    223.98,
+    229.67
+   ]
+  }
+ },
+ "egalite_off": {
+  "C1OFF": "612/612",
+  "C2OFF": "612/612"
+ },
+ "patch": {
+  "co
+… [3906 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-mesure ciblée des points bruités (N=80 défaut, N=160/320 chunker)
+
+- **bash** `{"command": "cat > /tmp/bench_ciblé.py <<'PYEOF'\n#!/usr/bin/env python3\nimport json, statistics, sys, time, pathlib\nsys.path.insert(0, \"/tmp\")\nimport bench_cache_chunker as b\n\nBASE = \"Le chat de la voisine est sur le toit.\"\npoints = [(\"chunker\", 160, False), (\"chunker\", 320, False),\n … [1338 caractères tronqués]`
+
+  ```
+chunker 160 {'original': 68.311, 'C1': 13.0387, 'C2': 5.6138, 'OFF': 65.383} {'original': 1.0, 'C1': 5.239, 'C2': 12.168, 'OFF': 1.045}
+chunker 320 {'original': 251.1219, 'C1': 37.949, 'C2': 13.8494, 'OFF': 254.0555} {'original': 1.0, 'C1': 6.617, 'C2': 18.132, 'OFF': 0.988}
+defaut 80 {'original': 10.5866, 'C1': 10.3634, 'C2': 6.3923, 'OFF': 10.7935} {'original': 1.0, 'C1': 1.022, 'C2': 1.656, 'OFF': 0.981}
+defaut 160 {'original': 32.9637, 'C1': 31.8036, 'C2': 17.2724, 'OFF': 32.9} {'original': 1.0, 'C1': 1.036, 'C2': 1.908, 'OFF': 1.002}
+defaut 320 {'original': 98.6097, 'C1': 98.3739, 'C2': 34.8244, 'OFF': 101.2571} {'original': 1.0, 'C1': 1.002, 'C2': 2.832, 'OFF': 0.974}
+  ```
+

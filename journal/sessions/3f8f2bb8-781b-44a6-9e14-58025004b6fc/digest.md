@@ -1346,3 +1346,93 @@ index da05e88c..f4331ec6 100644
 de292c7d portes: 180 | derniers: ['T175 audit attachement', 'T176 segment précédent', 'T177 candidats têtes']
   ```
 
+### 🤖 Assistant
+
+⏵ Resolving the 180 vs 181 discrepancy in the registry count.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport ast\nfor label, path in [('worktree','tools/pensee/autotest.py'), ('HEAD','/tmp/audit_v2/at_de292c7d.py')]:\n    src=open(path).read()\n    t=ast.parse(src)\n    main=next(n for n in t.body if isinstance(n,as … [726 caractères tronqués]`
+
+  ```
+worktree direct assign len 181
+  last 5: ['T174 convention documentée', 'T175 audit attachement', 'T176 segment précédent', 'T177 candidats têtes', 'T178 cache chunker']
+worktree T178 count 1 portes.append 0
+HEAD direct assign len 180
+  last 5: ['T173 top-k strict', 'T174 convention documentée', 'T175 audit attachement', 'T176 segment précédent', 'T177 candidats têtes']
+HEAD T178 count 0 portes.append 0
+2:"""autotest.py — les portes du moteur de pensée : T0–T4, puis AC-3 et alpha-bêta.
+1944:    """Le gold gelé : 602 phrases, les portes ne cassent plus."""
+2620:    portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
+2798:    for nom, (ok, msg) in portes:
+2801:    print(f"  {len(portes) - échecs}/{len(portes)} portes tenues")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git show HEAD:tools/pensee/autotest.py | grep -c 'T178' ; git diff 9d5337ce..HEAD -- tools/pensee/autotest.py | grep -c 'T178' ; git status --porcelain tools/pensee/autotest.py ; git diff --stat HEAD -- tools/pe … [108 caractères tronqués]`
+
+  ```
+a2def5eeea5c54cb67397c68777f2ff5f5fc7cf1
+1
+1
+a2def5eeea5c54cb67397c68777f2ff5f5fc7cf1 PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/181
+  ```
+
+### 🤖 Assistant
+
+⏵ Running the 1000-draw permutation and random-candidate controls on v2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' > /tmp/audit_v2/controles.json\nimport sys, json, random, statistics, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\n … [2572 caractères tronqués]`
+
+  ```
+{
+ "v2": {
+  "labels": 145,
+  "exact": 137,
+  "permutation": {
+   "tirages": 1000,
+   "observe": 137,
+   "moyenne": 1.786,
+   "ecart_type": 1.3469,
+   "min": 0,
+   "max": 8,
+   "p_empirique": 0.0,
+   "ratio": 76.708
+  },
+  "candidat_aleatoire": {
+   "tirages": 1000,
+   "observe": 137,
+   "moyenne": 58.566,
+   "ecart_type": 5.517,
+   "min": 42,
+   "max": 75,
+   "p_empirique": 0.0,
+   "ratio": 2.339
+  },
+  "topk_sous_chaine": 142,
+  "topk_strict": 141
+ },
+ "sans_tetes": {
+  "labels": 145,
+  "exact": 137,
+  "permutation": {
+   "tirages": 1000,
+   "observe": 137,
+   "moyenne": 1.786,
+   "ecart_type": 1.3469,
+   "min": 0,
+   "max": 8,
+   "p_empirique": 0.0,
+   "ratio": 76.708
+  },
+  "candidat_aleatoire": {
+   "tirages": 1000,
+   "observe": 137,
+   "moyenne": 43.742,
+   "ecart_type": 4.6177,
+   "min": 30,
+   "max": 58,
+   "p_empirique": 0.0,
+   "ratio": 3.132
+  }
+ }
+}
+  ```
+

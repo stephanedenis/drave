@@ -42330,3 +42330,79 @@ a2def5ee PILOTAGE — LE CACHE DU CHUNKER AU JOURNAL ; T0 DANS LE BUDGET ; 181/1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# note v2 sur lexique-elargi (le seul sans note)\np=pathlib.Path('reports/rapport-pensee-lexique-elargi.md'); t=p.read_text()\nnote = \"\"\"\n> **Note du 2026-11-05 (attachement v2)** : cette fic … [1656 caractères tronqués]`
+
+  ```
+note v2 + trim
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1150]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1150", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 1075 insertions(+), 171 deletions(-)
+COMMIT OK 1
+a914c1e7 FICHES — LES 3 DIVERGENCES ET LEURS RÉSIDUS CORRIGÉS (SPANS, DÉNOMINATEUR, LEXIQUE ÉLARGI) ; COHÉRENCE A4 À JOUR
+jeu 05 nov 2026 14:46:22 EST
+[status: completed, exit code: 0]
+  ```
+
+- **list_agents** `{}`
+
+  ```
+df1b1098-d54e-4763-bfc2-2a8cc1498cec [inactive] — Revue visuelle des 7 schémas
+f55ccb7b-481e-4ab6-b5b4-331dc6ff2238 [inactive] — Prototype classement appris
+ff7e786c-3ece-4eae-864e-19dddfead93c [inactive] — Cohérence fiches JSON portes
+a8035275-c7b9-4713-a6ab-7b859cd72306 [inactive] — Diagnostic du top-k strict
+63d4c619-63e8-41b9-a183-5c6f1ac05a21 [inactive] — Audit reproductibilité attachement
+53bc3288-f2c1-4a7d-b1db-88d794074f70 [inactive] — Annotation indépendante d'un échantillon
+c4796573-e2dc-48c2-b832-96f8bfab22c3 [inactive] — Contrat S pour les REL/SUB
+65495a29-10c0-4571-96be-e7729f1efebf [inactive] — Coût et cache du chunker
+3f8f2bb8-781b-44a6-9e14-58025004b6fc [running] — Audit de l'attachement v2
+d300542e-6e9d-47ac-875b-b44a192eec35 [running] — Prototype de la cible vide
+7263ca42-cd56-4c36-a6dd-8ff2d1024a43 [running] — Qualifier les 8 échecs restants
+1b0cf09a-a77a-443d-82e2-68a5d6cacdf0 [running] — Cache du chunker mesuré
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -E \"audit-v2|echecs-v2|replis-cible|cache-chunker\" ; git status --porcelain | grep -E \"^\\?\\? (reports|tools/tests)\" | head -8", "description": "Voir l'état de la vague 3"}`
+
+  ```
+pensee-cache-chunker-applique.json
+rapport-cache-chunker-applique.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 4 (3 sous-agents) : couverture des spans, multi-cibles, qualité du gold anglais
+
+- **subagent** `{"description": "Couverture des spans sans S", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **mesurer ce que le chunker seul peut couvrir** des 94 spans perdus de l'attachement REL/SUB, sans toucher au code.\n\nContexte : `t … [1655 caractères tronqués]`
+- **subagent** `{"description": "Mesure multi-cibles du gold", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer l'effet des **cibles multiples** du gold sur la mesure d'attachement, sans modifier le code.\n\nContexte : `tools/tests/ling … [1389 caractères tronqués]`
+- **subagent** `{"description": "Qualité du gold anglais", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer la qualité du gold anglais** (210 phrases sur 612), parce que beaucoup d'échecs d'attachement sont anglais.\n\nContexte : `too … [1539 caractères tronqués]`
+
+  ```
+started subagent 3144cf23-6004-46ef-bc3d-f05d81c0cff6
+  ```
+
+
+  ```
+started subagent b3d82ad5-bff2-49ec-9ad6-2230e68d8071
+  ```
+
+
+  ```
+started subagent b9ea3904-889c-4497-a781-694da7d4987c
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nbloc = \"\"\"\n### Les vagues (05/11, 11 h 40 → 18 h)\n\n| vague | sous-agents | objet | état |\n|---|---|---|---|\n| **1** | A1 audi … [911 caractères tronqués]`
+
+  ```
+plan-travail : vagues documentées
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"PILOTAGE — LES QUATRE VAGUES DE SOUS-AGENTS DOCUMENTÉES (§ 9) ; VAGUES 3 ET 4 EN COURS\" -- docs/pilotag … [408 caractères tronqués]`

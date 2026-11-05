@@ -420,6 +420,15 @@ dépôt que ce qui est mesuré, avec une fiche, une porte et un commit vérifié
 même commit ; (5) consigne les résultats **négatifs** (une règle mesurée qui n'aide pas est
 dite, pas cachée).
 
+### Les vagues (05/11, 11 h 40 → 18 h)
+
+| vague | sous-agents | objet | état |
+|---|---|---|---|
+| **1** | A1 audit, A2 top-k, A3 classement, A4 cohérence, A7 annotation | reproductibilité, diagnostic, prototype, cohérence, convention | ✅ intégrée (v2) |
+| **1 bis** | A5 contrat S, A6 coût/cache | interface S, O(n²) | ✅ intégrée (cache ×139) |
+| **3** | A8 audit v2, A9 8 échecs, A10 replis cible, A11 cache | vérification de la v2, échecs restants, retouches déterministes | en cours |
+| **4** | A12 spans sans S, A13 multi-cibles, A14 gold anglais | couverture, définition de la mesure, qualité du gold | en cours |
+
 **Règles données à chaque sous-agent** : ne pas committer ; ne pas toucher `en-cours`,
 `roadmap`, `chantiers`, `plan-travail`, `AGENTS`, ni `journal/` ; **ne pas écrire** dans
 `tools/structures/` (S), `data/` (D), `tools/entrainer_native.py`/`native_model.py` (N2) ;

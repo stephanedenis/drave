@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:22 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 52 |
-| Appels d'outils | 54 |
+| Messages | 56 |
+| Appels d'outils | 58 |
 | Fichiers touchés | 1 |
-| Commandes | 42 |
+| Commandes | 46 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **valider  … [2074 caractères tronqués]
 
-*54 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - bash — Check repo status and branch
 - bash — List reports and file sizes
@@ -41,11 +41,11 @@
 - bash — Top-level structure of pensee file
 - bash — Inspect key sections of pensee JSON
 - bash — Inspect default-path long points
-- … et 32 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
-⏵ Résultats principaux obtenus : je vérifie le contrôle OFF et je prépare le patch réel
+⏵ Re-mesure ciblée des points bruités (N=80 défaut, N=160/320 chunker)
 
 ## 3. Travail accompli
 
@@ -97,7 +97,7 @@
 - **T1** Read patch benchmark error
 - **T1** Fix lambda keyword and rerun patch benchmark
 - **T1** Generate markdown tables from benchmark JSON
-- … et 2 autres
+- … et 6 autres
 
 ## 4. Mesures et résultats marquants
 

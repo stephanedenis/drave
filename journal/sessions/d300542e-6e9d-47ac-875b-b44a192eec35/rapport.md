@@ -7,12 +7,12 @@
 | Identifiant | `d300542e-6e9d-47ac-875b-b44a192eec35` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 14:22 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 25 |
-| Appels d'outils | 26 |
+| Messages | 26 |
+| Appels d'outils | 27 |
 | Fichiers touchés | 0 |
-| Commandes | 16 |
+| Commandes | 17 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : mesurer le … [2218 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Show git state and repo root
 - bash — Line counts of key files
@@ -41,11 +41,11 @@
 - bash — Replicate analyser target logic for s108
 - bash — Inspect model candidate scores for key cases
 - bash — Exhaustive 145-target analysis
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Prototype de simulation par sous-classe et post-traitement des cibles
+⏵ Mesure de la surface de changement (toutes étiquettes, pas seulement les 145 gold)
 
 ## 3. Travail accompli
 
@@ -72,6 +72,7 @@
 - **T1** Test GP-targeted rules and narrow SUB rule
 - **T1** Run evaluator against simulated variants
 - **T1** Fix simulation post-processing and rerun
+- **T1** Count changed labels outside measured set
 
 ## 4. Mesures et résultats marquants
 
@@ -88,4 +89,8 @@
 - **T1** `T1_rang0               exact=139/239 (0.5816) top1=142/239 (0.5941) span exact=0.9586 top1span=0.9793 fix=2 reg=0 time=0.9s`
 - **T1** `T2_rang0               exact=141/239 (0.5900) top1=142/239 (0.5941) span exact=0.9724 top1span=0.9793 fix=4 reg=0 time=0.9s`
 - **T1** `T2_rang0_garde         exact=141/239 (0.5900) top1=142/239 (0.5941) span exact=0.9724 top1span=0.9793 fix=4 reg=0 time=0.9s`
+- **T1** `T2_rang0_garde total labels 863`
+- **T1** `T2_rang0 total labels 863`
+- **T1** `T2_rang0_garde   total= 863 changes=  0 dont gold=0 autres=0`
+- **T1** `T2_rang0         total= 863 changes=  7 dont gold=4 autres=3`
 
