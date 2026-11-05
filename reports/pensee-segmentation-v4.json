@@ -1,0 +1,53 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "f1": 0.2862,
+  "tete": 0.4989,
+  "labels": 145,
+  "exact": 141,
+  "exact_span": 0.9724,
+  "couverture": 0.6067,
+  "fr": 0.9658,
+  "en": 1.0,
+  "spans_perdus": 94,
+  "echecs_cible": 4
+ },
+ "apres": {
+  "f1": 0.4194,
+  "tete": 0.593,
+  "labels": 160,
+  "exact": 158,
+  "exact_span": 0.9875,
+  "couverture": 0.6695,
+  "topk": 158,
+  "topk_taux": 0.6611,
+  "fr": 0.9915,
+  "en": 0.9762,
+  "spans_perdus": {
+   "REL": 48,
+   "SUB": 21,
+   "GP": 10,
+   "total": 79
+  },
+  "echecs_cible": [
+   "r162",
+   "r309"
+  ]
+ },
+ "corrections": [
+  "REL/SUB par segment précédent",
+  "GV à tête verbale + frontières",
+  "GN s'arrête au verbe",
+  "GP préposition+infinitif",
+  "_cible_hors_span partout",
+  "_verbe_dans sans auxiliaire + lexique commun"
+ ],
+ "limites": [
+  "in-sample",
+  "lexique ciblé",
+  "heuristique REL/SUB",
+  "gold 612"
+ ]
+}

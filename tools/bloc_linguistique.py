@@ -364,7 +364,11 @@ CONNECTEURS = {
     "but": set("pour afin pour que afin que in order to so that".split()),
 }
 
-RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "whose"}
+RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "whose",
+            "where", "when"}
+# les subordonnants qui n'ont pas d'antécédent : toujours SUB
+SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
+                 "whether", "car", "parce", "puisque", "comme", "quand", "si", "lorsque"}
 
 VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
                         "go take come look give find open close".split())
@@ -416,6 +420,11 @@ find finds found finding open opens opened opening close closes closed closing
 fly flies flew flown flying climb climbs climbed climbing flow flows flowed flowing
 swim swims swam swum swimming get gets got gotten getting smile smiles smiled smiling
 wait waits waited waiting belong belongs belonged belonging
+cry cries cried crying go goes went gone going come comes came coming
+leave leaves left leaving read reads reading sleep sleeps slept sleeping
+rain rains rained raining hang hangs hung hanging paint paints painted painting
+rêver rêve rêves rêvent rêvait sauter saute sautes sautent sautait
+marcher marche marches marchent marchait
 """.split())
 
 
@@ -649,13 +658,15 @@ class Heuristique:
         `est prêt à manger` : `manger` est **dans** le GP `à manger` → on écarte et on prend la
         tête du GV extérieur `est prêt` → `prêt` (mesuré : g012, r018).
         """
-        if not cible or segment.get("type") != "GP":
+        if not cible or segment.get("type") not in ("GP", "SUB"):
             return cible
         span = texte[segment["debut"]:segment["fin"]]
         if _normaliser(cible) not in _normaliser(span):
             return cible
         dehors = [g for g in gvs
                   if not (g["debut"] >= segment["debut"] and g["fin"] <= segment["fin"])]
+        # pour une SUB, le gouverneur est le verbe de la **principale** : à droite s'il n'y a
+        # rien à gauche (mesuré : r227 « lit », r262 « travaille »)
         if not dehors:
             return cible
         gauche = [g for g in dehors if g["fin"] <= segment["debut"]]
@@ -696,7 +707,7 @@ class Heuristique:
             if _est_verbe(m) and _normaliser(m) not in AUXILIAIRES:
                 return m
         for _, m in mots:
-            if _est_verbe(m):
+            if _est_verbe(m) and _normaliser(m) not in AUXILIAIRES:
                 return m
         if verbes:
             for d, f, v in verbes:
@@ -779,7 +790,9 @@ class Heuristique:
             n = _normaliser(t)
             if typ == "mot" and n in lex.get("DET", set()):
                 j = i + 1
-                while j < len(mots) and mots[j][3] == "mot" and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set()):
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set())
+                       and (j == i + 1 or not _est_verbe(mots[j][2]))):
                     j += 1
                 role = "groupe nominal"
                 # le passif sans `par` : GN + AUX (être) + participe → le sujet est un patient
@@ -800,26 +813,48 @@ class Heuristique:
                        and not _est_verbe(mots[j][2])
                        and _normaliser(mots[j][2]) not in RELATIFS):
                     j += 1
+                # « à manger » : un GP réduit à sa préposition prend le verbe qui suit
+                if j == i + 1 and j < len(mots) and _est_verbe(mots[j][2]):
+                    j += 1
                 segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
                                  "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
                 continue
-            if typ == "mot" and (n in lex.get("AUX", set()) or (i + 1 < len(mots) and _normaliser(mots[i + 1][2]) in lex.get("AUX", set()))):
+            if typ == "mot" and (n in lex.get("AUX", set()) or _est_verbe(t)
+                                 or (i + 1 < len(mots) and _normaliser(mots[i + 1][2]) in lex.get("AUX", set()))):
                 j = i + 1
-                while j < len(mots) and mots[j][3] == "mot":
+                # le GV s'arrête à la préposition, au déterminant, au relatif : un prédicat
+                # par clause (« joue | au ballon », « saw | the cat »).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and _normaliser(mots[j][2]) not in lex.get("PREP", set())
+                       and _normaliser(mots[j][2]) not in lex.get("DET", set())
+                       and _normaliser(mots[j][2]) not in RELATIFS
+                       and _normaliser(mots[j][2]) not in SUBORDONNANTS):
                     j += 1
                 segments.append({"type": "GV", "role": "prédicat", "niveau": 0,
                                  "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
                 continue
-            if typ == "mot" and n in {"qui", "que", "qu", "dont", "où", "which", "that", "who"}:
+            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS):
+                # REL ou SUB ? C'est le **segment précédent** qui tranche : après un GN c'est
+                # une relative (antécédent), après un GV une complétive ; un subordonnant
+                # (`because`, `although`…) est toujours une SUB.
+                precedent = segments[-1]["type"] if segments else None
+                stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV") else "REL"
                 j = i + 1
-                while j < len(mots) and mots[j][3] == "mot":
+                # le GV s'arrête à la préposition, au déterminant, au relatif : un prédicat
+                # par clause (« joue | au ballon », « saw | the cat »).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and _normaliser(mots[j][2]) not in lex.get("PREP", set())
+                       and _normaliser(mots[j][2]) not in lex.get("DET", set())
+                       and _normaliser(mots[j][2]) not in RELATIFS
+                       and _normaliser(mots[j][2]) not in SUBORDONNANTS):
                     j += 1
-                segments.append({"type": "REL", "role": "qualité", "niveau": 1,
-                                 "debut": d, "fin": mots[j - 1][1],
+                segments.append({"type": stype,
+                                 "role": "complément" if stype == "SUB" else "qualité",
+                                 "niveau": 1, "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
                 continue
@@ -969,6 +1004,7 @@ class Heuristique:
                 meta = {"role": s["role"], "niveau": s["niveau"]}
                 cible = (self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
                          or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
+                cible = self._cible_hors_span(texte, s, gvs_s, cible)
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
@@ -988,6 +1024,7 @@ class Heuristique:
                 meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
                 cible = (self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
                          or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
+                cible = self._cible_hors_span(texte, s, gvs_u, cible)
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],

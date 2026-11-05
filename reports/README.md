@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-segmentation-v4.md`](rapport-pensee-segmentation-v4.md) | **B13** — la segmentation d'abord : F1 **0,4194**, exact **158/160**, couverture **160/239**, 183/183 |
 | [`rapport-pensee-par-langue.md`](rapport-pensee-par-langue.md) | **B13** — l'attachement par langue : fr 0,9658, en 1,000, mais **28 labels/88 cibles en anglais**, **183/183** |
 | [`rapport-gold-anglais.md`](rapport-gold-anglais.md) | **B13** — le gold anglais est sain (0 span faux) ; l'échec anglais est la **segmentation** (60/94 spans) |
 | [`rapport-spans-chunker.md`](rapport-spans-chunker.md) | **B13** — les 94 spans : le chunker seul en couvre 0 ; deux règles en récupèrent **84** (prix : faux positifs) |
@@ -144,7 +145,6 @@
 | [`rapport-drvm-ppl.md`](rapport-drvm-ppl.md) | **N0.3b** — PPL DRVM : **28,7355** ; **close** : conversion **68,1917 / 92,1875**, natif **4,6585 / 18,6394** |
 | [`rapport-drvm-trace.md`](rapport-drvm-trace.md) | **N0.5** — trace/rejeu DRVM : 291/291, 6 144 listes, logits SHA identique, PPL 28,7355 |
 | [`rapport-gguf-drvm.md`](rapport-gguf-drvm.md) | **N0.4** — GGUF ↔ DRVM : 290 tenseurs, **SHA identique** sur 337 Mo |
-| [`rapport-native-reflexe.md`](rapport-native-reflexe.md) | **N1.7** — réflexe : **−24,05 %** de temps pour **−1,61 point** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

@@ -7,15 +7,15 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 119.9 h |
-| Tours | 176 |
-| Messages | 2554 |
-| Appels d'outils | 2238 |
+| Durée | 120.8 h |
+| Tours | 177 |
+| Messages | 2591 |
+| Appels d'outils | 2270 |
 | Fichiers touchés | 25 |
-| Commandes | 1839 |
+| Commandes | 1867 |
 | Sous-agents | 16 |
-| Commits | 274 |
-| Compactages de contexte | 6 |
+| Commits | 275 |
+| Compactages de contexte | 7 |
 
 ## Objectifs déclarés
 
@@ -45,6 +45,10 @@
 … [30 caractères tronqués]
 - **create** — Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement (classement appris, candidats, échecs restants), les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et intègre les résul
 … [152 caractères tronqués]
+- **complete** — Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement (classement appris, candidats, échecs restants), les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et intègre les résul
+… [152 caractères tronqués]
+- **create** — Autonomie B13 du 2026-11-05 16 h 40 → 2026-11-06 08 h 00 : segmenter l'anglais (le trou de 60 spans sur 94), puis les deux règles de spans avec un gold tenu à l'écart, les 4 échecs d'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantie
+… [236 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -399,6 +403,8 @@
 **Tour 175** — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les conflits
 
 **Tour 176** — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide du dossier pilotage que tu entretiens avec l'agent principal
+
+**Tour 177** — oui, continue en autonomie jusqu'à demain 8h.
 
 ## 2. Déroulé, étape par étape
 
@@ -9438,7 +9444,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*195 appels d'outils.* Actions notables :
+*198 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9460,65 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 153 autres
+- … et 156 autres
 
 **Synthèse produite :**
 
-⏵ Consolidation finale de l'état et clôture de la tranche
+⏵ Tranche close : 14 sous-agents, 4 vagues, attachement **0,9724**, 183/183 portes
+
+\## Ce qui a été fait
+
+**14 sous-agents en 4 vagues**, coordonnés par le dossier pilotage (`plan-travail` § 9, qui porte les mandats, les règles et le protocole d'intégration). Aucun n'a touché au pilotage ni commité ; j'ai rejoué et intégré leurs mesures, avec fiche, porte et commit vérifié à chaque fois.
+
+| vague | sous-agents | apports |
+|---|---|---|
+| **1** | A1 audit, A2 top-k, A3 classement, A4 cohérence, A7 annotation | audit 14/14 écart 0 ; 57 échecs qualifiés, F1 +45 ; modèle appris 142/145 **rejeté** ; 3 divergences de fiches ; **20/20** d'accord et **SUB = verbes 69/69** |
+| **1 bis** | A5 contrat S, A6 coût | contrat `s/v1` ; **O(n²) confirmé**, cache ×11,6 simulé |
+| **3** | A8 audit v2, A9 8 échecs, A10 replis, A11 cache | 43 valeurs reproduites ; 5 règles chiffrées ; replis 145/145 (**in-sample**) ; cache **×11,0, égalité 612/612** |
+| **4** | A12 spans, A13 multi-cibles, A14 gold anglais | 84 spans récupérables (**in-sample**) ; 43/96 GP multi-cibles ; **l'anglais = 60/94 spans perdus, S ne segmente pas l'anglais** |
+
+\## Ce qui est intégré
+
+- **Attachement v2** : règle du segment précédent (REL/GP), têtes des candidats S (+45 top-k strict), lexique anglais → exact **0,9448**, top-k strict **0,9724**.
+- **Attachement v3** : R2 (un GP n'est pas gouverné par un mot de son span), R3 (cible vide génitive), R4 (enclitiques) → exact **0,9724**, **noms 29/29 = 1,0**, top-k strict 0,9793.
+- **Cache du chunker** : 1+2S → **1** chunking dans les deux chemins, **×139** à 160 répétitions, sortie **identique** (0/612).
+- **Mesures nouvelles** : multi-cibles (`exact_any` **143/145**), **par langue** (fr **0,9658**, en **1,000**).
+- **Théorie** : `modele-natif.md` § 12 bis — rôle, cible, convention, et les deux lectures de la mesure.
+
+\## Ce qui est refusé (et dit)
+
+- **Le classement appris** : 142/145 mais **+5, p = 0,18**, IC [−0,7 ; +7,6], 2 régressions → rejeté.
+- **Les deux règles de spans (A12)** : 84/94 récupérables, mais **conçues sur ce gold**, non portées ; à valider sur un gold tenu à l'écart.
+- **Les replis (A10)** : 145/145, mais **dessinés sur les cas** ; consignés, non intégrés.
+
+\## L'état
+
+**183/183 portes**, `porte-bloc` verte, `revue` ✅, `taille` ✅ (T0 4 000), `en-cours` ✅, `journal` ✅, `tableaux` ✅ (3 293 liens). HEAD **`ad4ecca3`**. La file est vide de travaux sûrs : les prochains leviers sont l'**anglais** (segmentation), les **deux règles de spans** (go
+… [1419 caractères tronqués]
+
+### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
+
+*29 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Créer le goal et inspecter le lexique du chunker
+- bash — Lire le chunker en entier
+- bash — Mesurer la référence avant le changement
+- bash — Implémenter REL/SUB par segment précédent et mesurer
+- bash — GV verbe et frontières, mesurer
+- bash — Comparer les cas gagnés et perdus
+- bash — Isoler l'effet de la frontière GV
+- bash — Restaurer la frontière GV et étendre le GP infinitif
+- bash — Inspecter les quatre cas perdus
+- bash — Corriger et mesurer
+- bash — Lister les échecs anglais au span exact
+- bash — Étendre hors_span et mesurer
+- bash — Lister les échecs restants
+- … et 15 autres
+
+**Synthèse produite :**
+
+⏵ Round majeur : exact **158/160**, F1 **0,4194**, couverture **160/239**. Je fige la fiche v4 et je commite
 
 ## 3. Travail accompli
 
@@ -9553,7 +9613,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1799 autres
+- … et 1827 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9975,4 +10035,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — B13 183/183, ATTACHEMENT 0,9724 (FR 0,9658 / EN 1,000) ; 14 SOUS-AGENTS INTÉGRÉS ; L'ANGLAIS EST LE DÉCOUPAGE" -- docs/pilotage/en-cours.md docs/pilotage
 - ÉTAT — TRIM T0 (3 997) ; B13 183/183" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRIM T0"; then echo "COMMIT OK $i"; b
 - ÉTAT — T0 À 4 000 ; LE PROTOTYPE DES REPLIS (A10) ENTRE AVEC SON STATUT « NON INTÉGRÉ »" -- docs/pilotage/en-cours.md tools/tests/linguistique/replis_cible.py 2
+- B13 — LA SEGMENTATION D'ABORD : F1 0,2862 → 0,4194, EXACT 158/160 (0,9875), COUVERTURE 160/239, FR 0,9915 / EN 0,9762 ; 183/183" -- tools/bloc_linguistique.py t
 
