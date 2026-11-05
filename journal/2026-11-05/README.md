@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**83 commits** · **19 session(s)** · **8 thème(s)**
+**84 commits** · **19 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 11 | [distribue.md](distribue.md) |
 | docs | 30 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 18 | [mesures.md](mesures.md) |
+| mesures | 19 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -131,10 +131,16 @@
 | 16:07 | `028c8281` | B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182 |
 | 16:16 | `e1903e2d` | B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182 |
 | 16:24 | `841e0e71` | B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183 |
+| 16:27 | `b12616c3` | THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis) |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**La leçon de l'attachement (§ 12 bis de la théorie).** Rôle, cible et convention sont trois
+notions distinctes ; une cible se juge par langue, par type (verbe/nom) et à couverture publiée.
+La mesure par langue sépare enfin ce qui était mêlé : l'attachement est juste dans les deux
+langues (fr 0,9658, en 1,000), et l'échec anglais est un échec de **découpage** (28 labels
+seulement sur 88 cibles anglaises).
 **L'après-midi des sous-agents (11 h 40 → 16 h).** Quatre vagues, **11 sous-agents** : audit de
 reproductibilité (14/14, écart 0), diagnostic du top-k strict (57 échecs qualifiés, 3 correctifs),
 prototype de classement appris (142/145, **rejeté** : +5, p=0,18), cohérence des fiches (3

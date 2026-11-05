@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (18)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -26,6 +26,7 @@
 | 16:07 | `028c8281` | B13 — L'AUDIT DU GOLD ANGLAIS (A14) : LE GOLD EST SAIN, LA SEGMENTATION EST LA CAUSE (60/94 SPANS) ; 182/182 | `en-cours.md`, `README.md`, `attention.md` (+18) |
 | 16:16 | `e1903e2d` | B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 | 16:24 | `841e0e71` | B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
+| 16:27 | `b12616c3` | THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis) | `en-cours.md`, `modele-natif.md`, `README.md` (+6) |
 
 ## Chiffres du jour
 

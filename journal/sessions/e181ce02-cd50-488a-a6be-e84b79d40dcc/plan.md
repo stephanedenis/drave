@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-05 16:10 EST
+- **Heartbeat** : 2026-11-05 16:35 EST
 - **Prochaine action** : les **4 échecs** (lexique ou n=1, tenus à l'écart), puis les **94 spans** chez S ; le **classement appris** reste rejeté.
   200+** ; la porte stochastique/fenêtre attend une version API (serveur local interdit).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.

@@ -43782,3 +43782,28 @@ qui les trancherait :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/modele-natif.md'); t=p.read_text()\nbloc = \"\"\"\n## 12 bis. L'attachement : trois notions à ne pas confondre\n\nL'**attachement** dit à quoi un segment se rattache ; il … [2176 caractères tronqués]`
+
+  ```
+section conceptuelle ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     sources et images relatives.
+[still running after 60000ms; moved to background job bash-1611]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1611", "timeout_ms": 600000, "wait": true}`
+
+  ```
+9 files changed, 97 insertions(+), 16 deletions(-)
+COMMIT OK 1
+b12616c3 THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis)
+jeu 05 nov 2026 16:29:46 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation finale de l'état et clôture de la tranche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; attachement v3 **exact spans 0,9724**, **top-k strict 0,9793**, noms 1,0, multi-cibles 1 … [3166 caractères tronqués]`
