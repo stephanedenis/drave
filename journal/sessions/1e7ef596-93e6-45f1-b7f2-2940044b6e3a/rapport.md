@@ -7,14 +7,14 @@
 | Identifiant | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
-| Durée | 16.3 h |
-| Tours | 229 |
-| Messages | 1290 |
-| Appels d'outils | 1324 |
+| Durée | 16.4 h |
+| Tours | 230 |
+| Messages | 1295 |
+| Appels d'outils | 1328 |
 | Fichiers touchés | 15 |
-| Commandes | 1137 |
+| Commandes | 1141 |
 | Sous-agents | 0 |
-| Commits | 249 |
+| Commits | 250 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -481,6 +481,8 @@
 **Tour 228** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 229** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 230** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5693,7 +5695,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 224 : j'ajoute le lancement de la passe à l'état et commit
+⏵ Cycle 224 : passe complète lancée (83 portes), état à jour, contrôles verts
+
+**Cycle 224 — la passe complète est lancée.**
+
+- **Passe complète** : les sept contrôles verts, les GPUs libres et aucun claim — j'ai lancé les **83 portes** en arrière-plan (`work/portes/passe-2404-23h45`, log dédié). Le verdict se lira par `awk '$2 != 0'` sur le registre ; durée attendue ~1 h 45. L'état le note (`1d779118`).
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 073 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 605 mots**, **T0 3 975 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`** ; N2, S et OCR en pause, B13 et L actives.
+
+**Le goal reste actif** : suivre la passe (elle tourne), les faits B13/S, et relancer une passe si des faits arrivent après elle.
+
+### Tour 230 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Verify corpus sizes and duplicate windows
+- bash — Commit state and check pass
+
+**Synthèse produite :**
+
+⏵ Cycle 225 : corpus D vérifié (tailles et doublons nuls) ; je commit l'état
 
 ## 3. Travail accompli
 
@@ -5759,7 +5782,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1097 autres
+- … et 1101 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6156,4 +6179,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - REPORTS/README — TROIS FICHES ENTRENT (CIBLE PROXIMITÉ, DISTILLATION, OCR 64) ; HEURE 23 H 35" -m "Le README des rapports citait les fiches courantes mais avait
 - CHANTIERS — LA DATE DIT 20 H 26, PAS 13 H ; HEURE 23 H 40" -m "Le bloc État de chantiers.md portait 13 h alors que son contenu (B13 166/166, 127 échecs) a été m
 - PASSE COMPLÈTE LANCÉE À 23 H 45 (83 PORTES) ; ÉTAT À JOUR ; HEURE 23 H 45" -m "Les sept contrôles de documentation sont verts et aucune passe ne tournait : la p
+- ÉTAT — HEURE 23 H 48 ; PASSE EN COURS (2/83) ; CORPUS D RE-VÉRIFIÉ" -m "Les tailles du corpus propre sont exactes (4 440 987 / 12 536 / 10 524 octets) et les fe
 
