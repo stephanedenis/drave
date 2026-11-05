@@ -32920,3 +32920,117 @@ revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) 
 ⏵ Cycle 234 : la passe a démarré à 23 h 43, pas 23 h 45 ; je corrige et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h234.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h234.md'\nt=open(p).read()\nold=\"**la passe complète** tourne depuis 23 h 45 (83 portes\"\nnew=\"**la passe complète** tourne d … [1139 caractères tronqués]`
+
+  ```
+2026-11-05 00 h 14
+[s/v7 69a2db83] ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18
+ 7 files changed, 141 insertions(+), 15 deletions(-)
+69a2db83 ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18
+58e3e05d ÉTAT — PASSE 27/83 (GAIN 273 S), ZÉRO ROUGE ; L'AVANCEMENT EST DANS L'ÉTAT ; HEURE 00 H 15
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 234 : heure de départ de la passe corrigée (23 h 43), 27/83 sans rouge
+
+**Cycle 234 — l'heure de départ de la passe est exacte.**
+
+- **Correction** (`69a2db83`) : le dossier s'appelle `23h45`, mais le fichier `.debut` et le premier journal de porte disent **23 h 42-23 h 43** ; l'état porte maintenant l'heure réelle.
+- **Passe complète** : **27 / 83**, aucune rouge ; la 28e (longue) tourne.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 610 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict, puis les faits B13/S.
+
+
+## Tour 240
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, mandats) et committer chaque cycle ; jusqu'à ce que les sessions aient clos leurs faits et que la passe de portes complète soit passée."
+Round: 235/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Cycle 235 : audit et suivi de la passe complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; git log --oneline -3 ; echo \"---STATUS---\" ; git status --short | grep -v \"^M  journal\\|^MM journal\" | head -8 ; echo \"---SESSIONS---\" ; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause\" | head -7", "descript … [44 caractères tronqués]`
+
+  ```
+69a2db83 ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18
+58e3e05d ÉTAT — PASSE 27/83 (GAIN 273 S), ZÉRO ROUGE ; L'AVANCEMENT EST DANS L'ÉTAT ; HEURE 00 H 15
+ef59244c ÉTAT — HEURE 00 H 12 ; PASSE 26/83, ZÉRO ROUGE ; FLUX ET FUSION VERTES
+---STATUS---
+ M reports/pensee-quatre-modes.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---SESSIONS---
+    0733c5bb-f90b-4f58 · en pause · 535 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 747 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 467 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 2075 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotag
+… [261 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; python3 tools/revue_documentation.py 2>&1 | tail -2 ; python3 tools/verifie_en_cours.py 2>&1 | head -3 ; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1 ; python3 tools/verifier_liens.py 2>&1 | tail -1 ; python3  … [380 caractères tronqués]`
+
+  ```
+revue de documentation · 628 fiche(s) · 721 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1610 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3980 mots (budget 4 000)
+  ✅ 3075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ la page vivante date du dernier commit (2026-11-05)
+--- PASSE ---
+27
+0
+  porte-fusion           ✅                           9 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         273 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 235 : je vérifie que la porte longue tourne encore (pas de blocage)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; ls -lt --time-style=\"+%H:%M:%S\" work/portes/passe-2404-23h45/ | head -4 ; ps -o pid,etime,pcpu,cmd --ppid 1119604 2>/dev/null | head -6 ; pgrep -af \"porte-(greffe|generation|homeostasie|indice)\" | head -3", "description": "Check c … [27 caractères tronqués]`
+
+  ```
+total 120
+-rw-r--r--. 1 stephane stephane  841 00:16:21 porte-greffe.log
+-rw-r--r--. 1 stephane stephane  548 00:09:54 registre.txt
+-rw-r--r--. 1 stephane stephane 4660 00:09:54 porte-gain.log
+    PID     ELAPSED %CPU CMD
+1315871       07:03  0.0 timeout 1800 bash tools/porte-greffe.sh
+1315871 timeout 1800 bash tools/porte-greffe.sh
+1315872 bash tools/porte-greffe.sh
+1321654 bash tools/porte-greffe.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 235 : la porte-greffe tourne (7 min) ; je lis le registre partiel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; wc -l work/portes/passe-2404-23h45/registre.txt ; awk '$2 != 0' work/portes/passe-2404-23h45/registre.txt | head -5 ; tail -4 work/portes/passe-2404-23h45/registre.txt", "description": "Read partial pass registry"}`
+
+  ```
+26 work/portes/passe-2404-23h45/registre.txt
+porte-etat 0 0
+porte-flux 0 29
+porte-fusion 0 9
+porte-gain 0 273
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle 235 : registre à 26 entrées toutes nulles, greffe en cours ; je commit l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet ; cp docs/pilotage/en-cours.md /tmp/state.h235.md && python3 - <<'PY'\nimport subprocess, re\np='/tmp/state.h235.md'\nt=open(p).read()\nd=subprocess.run(['date','+%F'],capture_output=True,text=True).stdout.strip()\nh=subprocess.run(['da … [961 caractères tronqués]`
