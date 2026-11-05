@@ -40297,3 +40297,68 @@ consolidation finale écrite
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md journal/2026-11-05/README.md\n  timeout 240 gi … [589 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-396]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-396", "timeout_ms": 900000, "wait": true}`
+
+  ```
+[s/v7 6fe96130] ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP GÉNITIF REJETÉ (123 → 122)
+ 8 files changed, 76 insertions(+), 15 deletions(-)
+COMMIT OK 1
+6fe96130 ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP GÉNITIF REJETÉ (123 → 122)
+jeu 05 nov 2026 10:53:42 EST
+6fe96130 ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP GÉ
+a048cb83 B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175
+742cf026 PILOTAGE — B13 174/174 : ATTACHEMENT SPANS 0,8483 (REL → ANTÉCÉDENT, GP → VERBE) 
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483
+b63addca N2 — CLÔTURE DE L'OBJECTIF : LES QUATRE ITEMS SONT CLOS (RUN LONG, CAPACITÉ, 2 04
+88861697 FENÊTRE 2 048 — MESURÉ : À OCTETS CONSTANTS IL NE BAT PAS 1 024 (+0,05 À 128, +0,
+23853cb7 B13 — L'ATTACHEMENT CIBLÉ : REL → ANTÉCÉDENT, GP → VERBE ; EXACT 0,6438 → 0,8082,
+f70a1b2a B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ;
+d8edd1d9 B13 — LE CLASSEMENT : EXACT 0,2260 → 0,6438 (CIBLE RÉDUITE À SA TÊTE) ; LE GOLD M
+8f472d00 PILOTAGE — B13 170/170 DÉCRIT PAR SES DEUX LECTUR
+… [248 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 12 (jusqu'à midi) : le top-k strict — l'égalité exacte dans les candidats, pas la sous-chaîne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); tot=sub=ex=0\nfor p in charger():\n    a=h.analyse … [688 caractères tronqués]`
+
+  ```
+labels 145 | top-k sous-chaîne 134 0.9241 | top-k exact 88 0.6069
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('''    att_n = att_labels = att_top1 = att_topk = att_exact = 0''',\n'''    att_n = att_labels = att_top1 = at … [1409 caractères tronqués]`
+
+  ```
+top-k strict ajouté
+{'topk': 134, 'topk_taux': 0.5607, 'topk_exact': 88, 'topk_exact_taux': 0.3682, 'topk_exact_taux_span': 0.6069, 'labels': 145}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-topk-strict.md <<'MD'\n# B13 — le top-k strict : 0,6069, pas 0,9241\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅\n> **176/176 portes** : le top … [4708 caractères tronqués]`
+
+  ```
+T173 ajoutée
+  176/176 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T172** | où sont les 22 échecs ? | **11 hors candidats, 11 mal classés** | les verbes anglais hors lexi … [2667 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md 175→176: 5
+docs/pilotage/chantiers.md 175→176: 6
+docs/pilotage/en-cours.md 175→176: 4
+docs + pilotage + README
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **top-k strict 0,6069** (le 0,9241 était des sous-chaînes) ; fiches [échecs de cible](../../reports/rapport-pensee-echec … [1255 caractères tronqués]`

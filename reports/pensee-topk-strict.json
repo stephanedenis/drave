@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "176/176",
+ "labels": 145,
+ "sous_chaine": {
+  "topk": 134,
+  "taux_span": 0.9241,
+  "rendement": 0.5607
+ },
+ "exact": {
+  "topk": 88,
+  "taux_span": 0.6069,
+  "rendement": 0.3682
+ },
+ "notes": [
+  "le top-k lenient gonflait le rappel de 32 points",
+  "l'exact (0,8483) dépasse le top-k strict"
+ ],
+ "limites": [
+  "candidats textuels non réduits",
+  "57 échecs non qualifiés",
+  "gold 612"
+ ]
+}

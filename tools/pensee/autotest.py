@@ -2522,6 +2522,18 @@ def t172_echecs_cible() -> tuple[bool, str]:
     return (hors == 11 and dans == 11), f"échecs de cible : {hors} hors candidats, {dans} mal classés"
 
 
+def t173_topk_strict() -> tuple[bool, str]:
+    """Le top-k strict : 88/145 (0,6069), contre 0,9241 en sous-chaîne."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (a["topk"] == 134 and a["topk_exact"] == 88
+            and abs(a["topk_exact_taux_span"] - 0.6069) < 0.001
+            and abs(a["topk_taux_span"] - 0.9241) < 0.001), (
+        f"top-k : {a['topk']} sous-chaîne, {a['topk_exact']} exacts "
+        f"({a['topk_exact_taux_span']})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2693,7 +2705,8 @@ def main() -> int:
               ("T169 conventions", t169_conventions()),
               ("T170 attachement ciblé", t170_attachement_cible()),
               ("T171 lexique élargi", t171_lexique_elargi()),
-              ("T172 échecs de cible", t172_echecs_cible())]
+              ("T172 échecs de cible", t172_echecs_cible()),
+              ("T173 top-k strict", t173_topk_strict())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

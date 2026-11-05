@@ -84,6 +84,7 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
     acte_ok = neg_ok = mod_ok = ds_ok = 0
     fractions = []
     att_n = att_labels = att_top1 = att_topk = att_exact = 0
+    att_topk_exact = 0
     att_v_n = att_v_ok = att_n_n = att_n_ok = 0
     att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
     for phrase in phrases:
@@ -138,6 +139,9 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                 att_top1 += 1
             if any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
                 att_topk += 1
+            # le top-k **strict** : un candidat est exactement la cible (pas une sous-chaîne)
+            if any(nom == cibles[0] for nom in (e.candidats or [])):
+                att_topk_exact += 1
             # attachement par tête : le segment prédit qui couvre la tête du gold
             att_t_n += 1
             tete = [x for x in a.etiquettes if x.niveau == "syntagme"
@@ -179,6 +183,9 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                         # exactitude sur les segments au bon span : l'attachement seul
                         "top1_taux_span": round(att_top1 / max(1, att_labels), 4),
                         "topk_taux_span": round(att_topk / max(1, att_labels), 4),
+                        "topk_exact": att_topk_exact,
+                        "topk_exact_taux": round(att_topk_exact / max(1, att_n), 4),
+                        "topk_exact_taux_span": round(att_topk_exact / max(1, att_labels), 4),
                         "exact_taux_span": round(att_exact / max(1, att_labels), 4),
                         "verbe": {"cibles": att_v_n, "justes": att_v_ok,
                                   "taux": round(att_v_ok / max(1, att_v_n), 4)},

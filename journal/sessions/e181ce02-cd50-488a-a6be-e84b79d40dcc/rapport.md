@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 114.2 h |
+| Durée | 114.3 h |
 | Tours | 175 |
-| Messages | 2316 |
-| Appels d'outils | 2021 |
+| Messages | 2322 |
+| Appels d'outils | 2027 |
 | Fichiers touchés | 25 |
-| Commandes | 1668 |
+| Commandes | 1673 |
 | Sous-agents | 2 |
-| Commits | 243 |
+| Commits | 244 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9369,7 +9369,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 175 — oui, continue en autonomie jusqu'à midi. tient le dossier pilotage bien à jour à toutes les étapes pour éviter les confl … [3 caractères tronqués]
 
-*144 appels d'outils.* Actions notables :
+*150 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir le journal du jour et la conversion S
@@ -9385,11 +9385,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Voir les compteurs de portes dans le pilotage
 - bash — Ajuster les portes et lancer l'autotest
 - bash — Écrire la fiche et le JSON du verbe du GV
-- … et 104 autres
+- … et 109 autres
 
 **Synthèse produite :**
 
-⏵ Le GP génitif est **négatif** (123 → 122) : je reviens à l'état commité et je clôture
+⏵ Round 12 (jusqu'à midi) : le top-k strict — l'égalité exacte dans les candidats, pas la sous-chaîne
 
 ## 3. Travail accompli
 
@@ -9470,7 +9470,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1628 autres
+- … et 1633 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9861,4 +9861,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PILOTAGE — B13 174/174 : ATTACHEMENT SPANS 0,8483 (REL → ANTÉCÉDENT, GP → VERBE) ; PLAN, RAPPORT ET JOURNAL À JOUR" -- docs/pilotage/roadmap.md docs/pilotage/en
 - B13 — LES 22 ÉCHECS DE CIBLE : 11 HORS CANDIDATS, 11 MAL CLASSÉS ; 175/175" -- tools/pensee/autotest.py reports/rapport-pensee-echecs-cible.md reports/pensee-ec
 - ÉTAT — FIN DE L'AUTONOMIE 11 H : B13 175/175, ATTACHEMENT SPANS 0,8483 ; LE GP GÉNITIF REJETÉ (123 → 122)" -- docs/pilotage/en-cours.md journal/sessions/e181ce0
+- B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176" -- tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py repo
 
