@@ -2103,3 +2103,114 @@ patient 28 [('r034', 'The book', 'is exciting'), ('r035', 'The film', 'is out'),
 </content>
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "limit": 28, "offset": 889}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json</path>
+<type>file</type>
+<content>
+889:     "qualite": 6,
+890:     "fonction": 22,
+891:     "note": "qualité : r034, r035, r074, r075, r114, r115 ; fonction : r204+ (sujet 7, objet 10, lieu 4, temps 1)"
+892:    },
+893:    "copule": {
+894:     "gv_fusionne": 14,
+895:     "gv_plus_attribut": 24,
+896:     "note": "fusionné : r032, r034, r035, r036, r038, r074, r075, r078, r112, r114, r115, r118, r162, r174 ; séparé : r204+"
+897:    },
+898:    "adverbes": {
+899:     "dans_gv": 10,
+900:     "adv_segment": 8,
+901:     "hors_segment": 7,
+902:     "note": "trois traitements ; ex. play outside (GV), tomorrow (ADV r314), deeply (hors segment r069)"
+903:    },
+904:    "negation": {
+905:     "dans_gv": 2,
+906:     "adv_separe": 1,
+907:     "note": "r029/r316 dans le GV ; r422 n't en ADV"
+908:    },
+909:    "ponct": {
+910:     "avec": 3,
+911:     "sans": 201,
+912:     "note": "tokenisation PONCT seulement dans le dernier bloc"
+913:    },
+914:    "sujet_copule": {
+915:     "agent_ancien": 6,
+916:     "patient_recent": 19,
+
+(Showing lines 889-916 of 1139. Use offset=917 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "old_string": "  \"generateur_commit\": \"523d8c1\",\n  \"note\": \"HEAD dcf7bc91 = v3 ; le worktree (cache chunker) donne des chiffres identiques, vérifié. La v2 (15ee10d3) donnait 137/145 à l'attachem … [350 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "old_string": "   \"copule\": {\n    \"gv_fusionne\": 14,\n    \"gv_plus_attribut\": 24,\n    \"note\": \"fusionné : r032, r034, r035, r036, r038, r074, r075, r078, r112, r114, r115, r118, r162, r174 ;  … [273 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "old_string": "   \"sujet_copule\": {\n    \"agent_ancien\": 6,\n    \"patient_recent\": 19,\n    \"note\": \"r032/r036/r078/r112/r118/r174 agent ; r214+ patient ; r362/r370 agent : ce n'est pas une règ … [295 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-gold-anglais.json > /dev/null && echo 'JSON valide'; sha256sum tools/bloc_linguistique.py; git rev-parse HEAD; date", "description": "Validate JSON and check snapshot hashes"}`
+
+  ```
+JSON valide
+9544f173f92e55ccb6eed7b9f096f4a6bf100449d3b1d7875440a23badbda7ff  tools/bloc_linguistique.py
+8281d51e659332154597761b362441dcda164522
+jeu 05 nov 2026 15:59:19 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport sys, types, pathlib, subprocess, hashlib\nsys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'tools')\nimport evaluer_gold as eg\npath=pathlib.Path('tools/bloc_linguist … [778 caractères tronqués]`
+
+  ```
+HEAD 8281d51e659332154597761b362441dcda164522 sha 9544f173f92e55cc
+fr pos 0.7518 f1 0.3786 labels 117 cov 0.7748 top1 115 topk 114 exact 113 topk_exact 114
+en pos 0.7343 f1 0.121 labels 28 cov 0.3182 top1 28 topk 28 exact 28 topk_exact 28
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "limit": 12, "offset": 6}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json</path>
+<type>file</type>
+<content>
+6:  "snapshot": {
+7:   "head": "dcf7bc912caeebe940793888d88723f0bbb57f58",
+8:   "head_sujet": "B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181",
+9:   "bloc_head_sha256": "64b7c5204f21e4c230dcd131469187f0c9789e06469f4e19af5f8819f87ab5fa",
+10:   "bloc_worktree_sha256": "9da6dee7118cfa576d159ccdf5d1241232e974544cd3a6c5cebaddcbbaccd059",
+11:   "gold_reel_sha256": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+12:   "generateur_commit": "523d8c1",
+13:   "mesure_le": "2026-11-05 ~15:30 EST",
+14:   "note": "HEAD dcf7bc91 = v3 ; le worktree (cache chunker) donne des chiffres identiques, vérifié. La v2 (15ee10d3) donnait 137/145 à l'attachement ; la v3 en donne 141/145, anglais inchangé."
+15:  },
+16:  "gold": {
+17:   "phrases": 612,
+
+(Showing lines 6-17 of 1141. Use offset=18 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json", "new_string": " \"snapshot\": {\n  \"head\": \"dcf7bc912caeebe940793888d88723f0bbb57f58\",\n  \"head_mesure\": \"dcf7bc912caeebe940793888d88723f0bbb57f58\",\n  \"head_reverifie\": \"8281d51e659332154597 … [1637 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-gold-anglais.json > /dev/null && echo 'JSON valide' && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-gold-anglais.json'))\nprint(d['snapshot']['head_reverifie'])\nprint(d['anomalies' … [73 caractères tronqués]`
+
+  ```
+JSON valide
+8281d51e659332154597761b362441dcda164522
+{'agent': 12, 'patient': 28, 'note': 'pas de règle unique : r032/r036/r078/r112/r118/r174 agent, r034/r035/r074/r075/r114/r115 et r214+ patient ; r328 « The book » patient mais « it » agent, r362/r370 agent'}
+  ```
+

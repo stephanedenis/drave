@@ -9,10 +9,10 @@
 | Début | 2026-11-05 14:47 |
 | Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 87 |
-| Appels d'outils | 97 |
+| Messages | 89 |
+| Appels d'outils | 99 |
 | Fichiers touchés | 1 |
-| Commandes | 86 |
+| Commandes | 87 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2115 caractères tronqués]
 
-*97 appels d'outils.* Actions notables :
+*99 appels d'outils.* Actions notables :
 
 - bash — Check git status and branch
 - bash — List linguistic test and reports dirs
@@ -41,7 +41,7 @@
 - bash — Read Heuristique implementation
 - bash — Dump English sentence list and duplicates
 - bash — Check spans, overlap, coverage anomalies
-- … et 76 autres
+- … et 78 autres
 
 **Synthèse produite :**
 
@@ -53,7 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-gold-anglais.json` | 0 | 4 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +97,7 @@
 - **T1** Test evaluator state dependence
 - **T1** Check for concurrent modifications and file timestamps
 - **T1** Check git HEAD and diffs
-- … et 46 autres
+- … et 47 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-spans-chunker.md`](rapport-spans-chunker.md) | **B13** — les 94 spans : le chunker seul en couvre 0 ; deux règles en récupèrent **84** (prix : faux positifs) |
 | [`rapport-audit-v2.md`](rapport-audit-v2.md) | **B13** — l'audit A8 de la v2 : 43 valeurs reproduites, 2 arrondis, 1 prose (46→45) |
 | [`rapport-replis-cible.md`](rapport-replis-cible.md) | **B13** — les replis A10 : 145/145 par 3 règles étroites, **borne haute non intégrée** |
 | [`rapport-multicibles.md`](rapport-multicibles.md) | **B13** — les multi-cibles A13 : 43/96 GP, exact_any 143/145 |
@@ -144,7 +145,6 @@
 | [`rapport-native-reflexe.md`](rapport-native-reflexe.md) | **N1.7** — réflexe : **−24,05 %** de temps pour **−1,61 point** |
 | [`rapport-drvm-parite.md`](rapport-drvm-parite.md) | **N0.3b** — DRVM ↔ checkpoint : **114/114** tenseurs identiques |
 | [`rapport-native-pont.md`](rapport-native-pont.md) | **N1.6** — pont : PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** |
-| [`rapport-native-pensee.md`](rapport-native-pensee.md) | **N1.5** — pensée contractante **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

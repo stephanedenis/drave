@@ -2232,3 +2232,106 @@ Created file
 … [719 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Writing the fiche `reports/rapport-spans-chunker.md`
+
+- **write** `{"content": "# Chunker seul et les 94 spans REL/SUB/GP — 0 exact, deux règles en récupèrent 84 sans perdre un span déjà bon\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Territoire** : **L** (bloc\n> linguistique, chunker) · **Date** : 2026-11-05 · **Verdict** : sur les **94**  … [15258 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-chunker.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Aligning the JSON cause labels with the fiche, then installing it
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/construire_json.py'\ns=open(p).read()\ns=s.replace('''detail = []\nfor r in A[\"detail\"]:\n    detail.append({\n        \"type\": r[\"type\"], \"texte\": r[\"texte\"], \"premier\": r[\"premier\"],\n        \"cause\": r[\"cause\"], \"sou … [1694 caractères tronqués]`
+
+  ```
+ok ['date', 'ligne', 'territoire', 'objet', 'verdict', 'dispositif', 'etat', 'marqueurs', 'causes', 'regles', 'regression', 'controles_negatifs', 'attachement', 'manquants_ab', 'faux_positifs_a', 'limites', 'detail'] 94
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/spans/construire_json.py", line 78, in <module>
+    "par_type": {f"{t}|{CORRESP[c]}": n for (t, c), n in
+                                            ^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+  ```
+
+- **bash** `{"command": "cd /tmp/spans && python3 - <<'EOF'\np='/tmp/spans/construire_json.py'\ns=open(p).read()\ns=s.replace('''        \"par_type\": {f\"{t}|{CORRESP[c]}\": n for (t, c), n in\n                     (tuple(k.split(\"|\")) + (v,) for k, v in A[\"causes_par_type\"].items())},''','''        \"par_ … [809 caractères tronqués]`
+
+  ```
+{'regle_de_fin_de_clause': 7, 'type_sub_absent': 33, 'segment_avale_par_un_gv': 3, 'marqueur_hors_lexique_branche': 15, 'segment_avale_par_un_gn': 31, 'tete_avalee_par_le_gn': 1, 'gold_gp_sans_preposition': 4}
+{'GP|regle_de_fin_de_clause': 3, 'SUB|type_sub_absent': 33, 'GP|segment_avale_par_un_gv': 3, 'GP|marqueur_hors_lexique_branche': 3, 'REL|segment_avale_par_un_gn': 31, 'REL|marqueur_hors_lexique_branche': 12, 'REL|regle_de_fin_de_clause': 4, 'REL|tete_avalee_par_le_gn': 1, 'GP|gold_gp_sans_preposition': 4}
+regle_de_fin_de_clause
+ok 94 {'regle_de_fin_de_clause': 7, 'type_sub_absent': 33, 'segment_avale_par_un_gv': 3, 'marqueur_hors_lexique_branche': 15, 'segment_avale_par_un_gn': 31, 'tete_avalee_par_le_gn': 1, 'gold_gp_sans_preposition': 4}
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the "18 REL" claim and the report/JSON consistency
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger\nphrases=charger(); h=bl.Heuristique(segmenter_s=False)\nn=n_o … [590 caractères tronqués]`
+
+  ```
+REL émis 18 exact 0 recouvre un REL gold 8 aucun REL gold 10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='reports/rapport-spans-chunker.md'\ns=open(p, encoding='utf-8').read()\nold = \"\"\"Les 77 exacts du chunker seul sont **tous des GP** ; le chunker ne produit **aucun** REL ni SUB\nau bon span sur l'ensemble du g … [794 caractères tronqués]`
+
+  ```
+retry True
+52:REL ni SUB au bon span. Ses 18 REL ne tombent jamais juste : 8 recouvrent un REL du gold, 10 n'ont
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '44,62p' reports/rapport-spans-chunker.md", "description": "Read corrected paragraph"}`
+
+  ```
+|---|---:|
+| cibles du gold | 239 |
+| spans exacts, mode par défaut | 145 |
+| spans perdus (mode par défaut) | **94** (REL 48, SUB 33, GP 13) |
+| spans exacts, chunker seul | **77** (77 GP, 0 REL, 0 SUB) |
+| **spans exacts du chunker seul sur les 94** | **0** (0 REL, 0 SUB, 0 GP) |
+
+Les 77 exacts du chunker seul sont **tous des GP** ; sur les 239 cibles, il ne produit **aucun**
+REL ni SUB au bon span. Ses 18 REL ne tombent jamais juste : 8 recouvrent un REL du gold, 10 n'ont
+aucun répondant. Sur les 94, le résultat **0** n'est pas un plafond caché : le mode
+par défaut contient déjà le chunker par union, donc un span exact du chunker seul serait déjà
+compté bon. Pour gagner, le chunker doit produire des spans **neufs** — un type SUB, des bornes
+REL — pas retrouver les mêmes.
+
+### Les marqueurs en tête des 94
+
+| type | marqueurs (nombre) | reconnus par le chunker | hors lexique / hors branche |
+|---|---|---|---:|
+| **REL** (48) | qui 17, that 14, where 6, whom 3, who 2, que 2, dont 1, whose 1, when 1, she 1 | **36** (qui, that, who, que, dont) | **12** : where 6, whom 3, whose 1, when 1, relative zéro 1 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='reports/rapport-spans-chunker.md'\ns=open(p, encoding='utf-8').read()\nold = \"\"\"  segment prédit au bon span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**.\"\"\"\nnew = \"\"\"  segment prédit au bon spa … [405 caractères tronqués]`
+
+  ```
+- **Gold** : `charger()` = 612 phrases (20 `hand`, 432 `reel`, 160 `synthetique`) ; **239**
+  segments porteurs d'une cible (REL 74, SUB 69, GP 96), dont **94** sans segment prédit au bon
+  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**.
+- **Chunker seul** : `Heuristique(segmenter_s=False)`, c'est-à-dire `_syntagmes_simple` : GN, GP,
+  GV, REL, et **aucune branche SUB**.
+- **Copie locale** : `tools/bloc_linguistique.py` copié dans `/tmp/spans/`, jamais modifié dans
+  le dépôt ; les deux règles sont des sous-classes qui remplacent `_syntagmes_simple`. La
+  simulation est donc **hors du code de production** : rien n'est committé, aucun fichier
+  existant n'est touché.
+- **Mesures** : exactitude au span (`type`, `debut`, `fin`), P/R/F1 sur **tous** les segments du
+  gold, et attachement (`evaluer_bloc`) en mesure secondaire.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"13 GP\" reports/rapport-spans-chunker.md | head -5", "description": "Locate exact 13 GP line"}`
+
+  ```
+5:> sans segment prédit au bon span (**48 REL, 33 SUB, 13 GP**), le chunker seul
+31:  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**.
+  ```
+

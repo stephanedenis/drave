@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 119.3 h |
+| Durée | 119.4 h |
 | Tours | 176 |
-| Messages | 2522 |
-| Appels d'outils | 2210 |
+| Messages | 2526 |
+| Appels d'outils | 2214 |
 | Fichiers touchés | 25 |
-| Commandes | 1818 |
+| Commandes | 1822 |
 | Sous-agents | 16 |
-| Commits | 266 |
+| Commits | 267 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*167 appels d'outils.* Actions notables :
+*171 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 132 autres
+- … et 136 autres
 
 **Synthèse produite :**
 
-⏵ Consolidation finale du pilotage (journal, plan, rapport) pendant que A12/A14 finissent
+⏵ A12 ouvre le plus gros levier (84 spans récupérables) : je l'intègre comme **piste mesurée**, pas en fin de session
 
 ## 3. Travail accompli
 
@@ -9553,7 +9553,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1778 autres
+- … et 1782 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9967,4 +9967,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — MULTI-CIBLES (EXACT_ANY 143/145), AUDITS A8/A10/A13 INTÉGRÉS, DOCSTRINGS ET CODE MORT NETTOYÉS ; 182/182" -- tools/bloc_linguistique.py tools/tests/lingui
 - B13 — LA RECOMMANDATION MULTI-CIBLES D'A13 CONSIGNÉE ; T0 DANS LE BUDGET ; 182/182" -- reports/rapport-pensee-attachement-v3.md docs/pilotage/en-cours.md 2>&1 |
 - PILOTAGE — L'APRÈS-MIDI DES 11 SOUS-AGENTS AU JOURNAL, RAPPORT ET PLAN À JOUR ; 182/182" -- docs/pilotage/en-cours.md journal/2026-11-05/README.md journal/sessi
+- B13 — LA PISTE DES 84 SPANS (A12) MESURÉE ET CONSIGNÉE ; PROCHAINE ACTION LES DEUX RÈGLES ; 182/182" -- reports/rapport-spans-chunker.md reports/pensee-spans-ch
 

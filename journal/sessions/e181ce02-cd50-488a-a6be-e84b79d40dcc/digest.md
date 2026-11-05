@@ -43369,3 +43369,91 @@ journal, plan, rapport
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1289 caractères tronqués]`
+
+  ```
+compteurs 654 748
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1571]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1571", "timeout_ms": 600000, "wait": true}`
+
+  ```
+19 files changed, 280 insertions(+), 56 deletions(-)
+COMMIT OK 1
+c80744ce PILOTAGE — L'APRÈS-MIDI DES 11 SOUS-AGENTS AU JOURNAL, RAPPORT ET PLAN À JOUR ; 182/182
+jeu 05 nov 2026 16:00:33 EST
+pensee-gold-anglais.json
+pensee-spans-chunker.json
+rapport-spans-chunker.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -22 reports/rapport-spans-chunker.md", "description": "Lire le verdict de A12"}`
+
+  ```
+# Chunker seul et les 94 spans REL/SUB/GP — 0 exact, deux règles en récupèrent 84 sans perdre un span déjà bon
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Territoire** : **L** (bloc
+> linguistique, chunker) · **Date** : 2026-11-05 · **Verdict** : sur les **94** cibles du gold
+> sans segment prédit au bon span (**48 REL, 33 SUB, 13 GP**), le chunker seul
+> (`Heuristique(segmenter_s=False)`) en couvre **0 exactement** — et c'est structurel : le mode
+> par défaut est l'union du générateur S et du chunker, donc un span exact du chunker serait déjà
+> bon. Deux règles simulées sur une copie locale en récupèrent **84/94** (47 REL, 32 SUB, 5 GP),
+> soit **229/239** cibles au bon span, **sans perdre aucun** des 77 spans déjà exacts du chunker
+> seul ni des 145 du mode par défaut. Le prix est mesuré : +9 faux positifs pour (a), −201 pour
+> (b), −207 pour (a)+(b).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (lecture seule),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`),
+> [`generateur.py`](../tools/structures/generateur.py) (lecture seule) ; copie locale
+> `/tmp/spans/bloc_linguistique_copie.py`, règles da
+… [328 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 3' reports/rapport-spans-chunker.md | head -1 | cut -d: -f1),+30p\" reports/rapport-spans-chunker.md", "description": "Lire les deux règles de A12"}`
+
+  ```
+## 3. Le chunker seul : 0/94, 77/239
+
+| mesure | valeur |
+|---|---:|
+| cibles du gold | 239 |
+| spans exacts, mode par défaut | 145 |
+| spans perdus (mode par défaut) | **94** (REL 48, SUB 33, GP 13) |
+| spans exacts, chunker seul | **77** (77 GP, 0 REL, 0 SUB) |
+| **spans exacts du chunker seul sur les 94** | **0** (0 REL, 0 SUB, 0 GP) |
+
+Les 77 exacts du chunker seul sont **tous des GP** ; le chunker ne produit **aucun** REL ni SUB
+au bon span sur l'ensemble du gold, et les 18 REL qu'il émet sont tous plus larges que le gold
+(il va jusqu'à la ponctuation). Sur les 94, le résultat **0** n'est pas un plafond caché : le mode
+par défaut contient déjà le chunker par union, donc un span exact du chunker seul serait déjà
+compté bon. Pour gagner, le chunker doit produire des spans **neufs** — un type SUB, des bornes
+REL — pas retrouver les mêmes.
+
+### Les marqueurs en tête des 94
+
+| type | marqueurs (nombre) | reconnus par le chunker | hors lexique / hors branche |
+|---|---|---|---:|
+| **REL** (48) | qui 17, that 14, where 6, whom 3, who 2, que 2, dont 1, whose 1, when 1, she 1 | **36** (qui, that, who, que, dont) | **12** : where 6, whom 3, whose 1, when 1, relative zéro 1 |
+| **SUB** (
+… [709 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ A12 ouvre le plus gros levier (84 spans récupérables) : je l'intègre comme **piste mesurée**, pas en fin de session
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-spans-chunker.md`](rapp … [1911 caractères tronqués]`
+
+  ```
+A12 intégrée
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add reports/rapport-spans-chunker.md reports/pensee-spans-chunker.json reports/README.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md\n  timeout 240 git commit -m \"B13 — LA PISTE DES 84 SPANS (A12) ME … [499 caractères tronqués]`

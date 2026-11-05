@@ -1,0 +1,1993 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "territoire": "L (bloc linguistique, chunker)",
+ "objet": "ce que le chunker seul couvre des 94 spans perdus REL/SUB/GP, et deux règles mesurées",
+ "verdict": {
+  "chunker_seul_sur_94": 0,
+  "regle_a_gain": 79,
+  "regle_b_gain": 41,
+  "regles_ab_gain": 84,
+  "exacts_ab_union": 229,
+  "cibles": 239,
+  "perdus_apres_ab": 10,
+  "regression_spans_deja_bons": 0
+ },
+ "dispositif": {
+  "gold": "tools/tests/linguistique/evaluer_gold.py::charger",
+  "phrases": 612,
+  "cibles": 239,
+  "cibles_par_type": {
+   "GP": 96,
+   "SUB": 69,
+   "REL": 74
+  },
+  "chunker_seul": "Heuristique(segmenter_s=False) — tools/bloc_linguistique.py",
+  "copie_locale": "/tmp/spans/bloc_linguistique_copie.py (copie non commitée)",
+  "fichiers_du_depot_modifies": 0
+ },
+ "etat": {
+  "defaut": {
+   "labels": 145,
+   "perdus": 94,
+   "perdus_par_type": {
+    "GP": 13,
+    "SUB": 33,
+    "REL": 48
+   }
+  },
+  "chunker_seul": {
+   "exacts": 77,
+   "par_type": {
+    "GP": 77
+   },
+   "sur_les_94": 0,
+   "raison": "le mode par défaut contient déjà le chunker (union) : un span exact du chunker seul serait déjà bon"
+  },
+  "categories_meme_type": {
+   "plus_large": 24,
+   "aucun": 65,
+   "plus_etroit": 4,
+   "coupe": 1
+  }
+ },
+ "marqueurs": {
+  "GP": {
+   "du": 1,
+   "to": 2,
+   "since": 2,
+   "au-dessus": 1,
+   "en": 1,
+   "for": 1,
+   "on": 1,
+   "il": 1,
+   "les": 2,
+   "le": 1
+  },
+  "SUB": {
+   "that": 9,
+   "when": 4,
+   "although": 3,
+   "if": 2,
+   "because": 4,
+   "while": 2,
+   "as": 2,
+   "qu'il": 1,
+   "car": 1,
+   "que": 5
+  },
+  "REL": {
+   "that": 14,
+   "she": 1,
+   "where": 6,
+   "who": 2,
+   "que": 2,
+   "whom": 3,
+   "dont": 1,
+   "whose": 1,
+   "when": 1,
+   "qui": 17
+  }
+ },
+ "causes": {
+  "primaires": {
+   "regle_de_fin_de_clause": 7,
+   "type_sub_absent": 33,
+   "segment_avale_par_un_gv": 3,
+   "marqueur_hors_lexique_branche": 15,
+   "segment_avale_par_un_gn": 31,
+   "tete_avalee_par_le_gn": 1,
+   "gold_gp_sans_preposition": 4
+  },
+  "par_type": {
+   "GP|regle_de_fin_de_clause": 3,
+   "SUB|type_sub_absent": 33,
+   "GP|segment_avale_par_un_gv": 3,
+   "GP|marqueur_hors_lexique_branche": 3,
+   "REL|segment_avale_par_un_gn": 31,
+   "REL|marqueur_hors_lexique_branche": 12,
+   "REL|regle_de_fin_de_clause": 4,
+   "REL|tete_avalee_par_le_gn": 1,
+   "GP|gold_gp_sans_preposition": 4
+  },
+  "drapeaux_transversaux": {
+   "contenu_dans_un_gn": 45,
+   "contenu_dans_un_gv": 3,
+   "frontiere_sur_meme_type": 12,
+   "tete_avalee": 9,
+   "marqueur_hors_branche": 16
+  }
+ },
+ "regles": {
+  "a_marqueur_frontiere": {
+   "description": "pré-passe : tout marqueur REL/SUB ouvre une REL/SUB, type par le marqueur et le contexte gauche, frontière au second noyau prédicatif ou à la ponctuation",
+   "gain": 79,
+   "gain_par_type": {
+    "REL": 47,
+    "SUB": 32,
+    "GP": 0
+   },
+   "exacts_union": 224,
+   "perdus_sur_77": 0,
+   "perdus_sur_145": 0,
+   "fp_union": 1068,
+   "f1_union": 0.3242
+  },
+  "b_un_predicat_par_clause": {
+   "description": "GN/GP/GV/REL ferment au second noyau ; le GN s'arrête sur le verbe et le marqueur relatif ; le GV s'arrête avant un infinitif ; pas de branche SUB",
+   "gain": 41,
+   "gain_par_type": {
+    "REL": 36,
+    "SUB": 0,
+    "GP": 5
+   },
+   "exacts_union": 186,
+   "perdus_sur_77": 0,
+   "perdus_sur_145": 0,
+   "fp_union": 858,
+   "f1_union": 0.3832
+  },
+  "ab": {
+   "description": "les deux règles ; le type SUB de (a) tranche le REL homonyme de (b)",
+   "gain": 84,
+   "gain_par_type": {
+    "REL": 47,
+    "SUB": 32,
+    "GP": 5
+   },
+   "exacts_union": 229,
+   "perdus_sur_77": 0,
+   "perdus_sur_145": 0,
+   "fp_union": 852,
+   "f1_union": 0.4043
+  }
+ },
+ "regression": {
+  "base_chunker_seul": {
+   "exacts": 77,
+   "fp": 502,
+   "f1": 0.1378
+  },
+  "base_defaut": {
+   "exacts": 145,
+   "fp": 1059,
+   "f1": 0.2862
+  },
+  "f1_par_type": {
+   "default": {
+    "REL": 0.3714,
+    "SUB": 0.6852,
+    "GP": 0.7841,
+    "GN": 0.284,
+    "GV": 0.1834
+   },
+   "A": {
+    "REL": 0.7807,
+    "SUB": 0.9262,
+    "GP": 0.7841,
+    "GN": 0.284,
+    "GV": 0.1834
+   },
+   "B": {
+    "REL": 0.7006,
+    "SUB": 0.6852,
+    "GP": 0.8034,
+    "GN": 0.448,
+    "GV": 0.2075
+   },
+   "AB": {
+    "REL": 0.8439,
+    "SUB": 0.9262,
+    "GP": 0.8034,
+    "GN": 0.448,
+    "GV": 0.2075
+   }
+  },
+  "prix_mesure": "en union, aucun span de S n'est retiré (0/145) ; le coût est le FP ajouté : +9 pour (a), -201 pour (b), -207 pour (a)+(b) contre le défaut"
+ },
+ "controles_negatifs": {
+  "a_sans_frontiere": {
+   "gain": 32,
+   "gain_par_type": {
+    "SUB": 32
+   }
+  },
+  "b_sans_arret_relatif": {
+   "gain": 5,
+   "gain_par_type": {
+    "GP": 5
+   }
+  },
+  "hasard_memes_longueurs_meme_phrase": {
+   "tirages": 5000,
+   "hits_cible": 304,
+   "taux": 0.0608
+  },
+  "decalage_plus_un": {
+   "hits": 0,
+   "n": 94
+  },
+  "oracle_frontiere_tete_donnee": {
+   "REL": {
+    "n": 48,
+    "ok": 48
+   },
+   "SUB": {
+    "n": 33,
+    "ok": 32
+   }
+  },
+  "f1_a_sans_frontiere": {
+   "tp": 217,
+   "fp": 597,
+   "fn": 1646,
+   "p": 0.2666,
+   "r": 0.1165,
+   "f1": 0.1621
+  },
+  "f1_b_sans_arret_relatif": {
+   "tp": 364,
+   "fp": 346,
+   "fn": 1499,
+   "p": 0.5127,
+   "r": 0.1954,
+   "f1": 0.2829
+  }
+ },
+ "attachement": {
+  "default": {
+   "labels": 145,
+   "couverture": 0.6067,
+   "top1_taux": 0.5983,
+   "topk_taux": 0.5941,
+   "topk_taux_span": 0.9793
+  },
+  "A": {
+   "labels": 224,
+   "couverture": 0.9372,
+   "top1_taux": 0.6485,
+   "topk_taux": 0.6946,
+   "topk_taux_span": 0.7411
+  },
+  "B": {
+   "labels": 186,
+   "couverture": 0.7782,
+   "top1_taux": 0.6109,
+   "topk_taux": 0.6192,
+   "topk_taux_span": 0.7957
+  },
+  "AB": {
+   "labels": 229,
+   "couverture": 0.9582,
+   "top1_taux": 0.6485,
+   "topk_taux": 0.7071,
+   "topk_taux_span": 0.738
+  }
+ },
+ "manquants_ab": [
+  [
+   "SUB",
+   "that she would come",
+   "hand"
+  ],
+  [
+   "GP",
+   "since yesterday",
+   "reel"
+  ],
+  [
+   "REL",
+   "she talks about",
+   "reel"
+  ],
+  [
+   "GP",
+   "au-dessus du lac",
+   "reel"
+  ],
+  [
+   "GP",
+   "since this morning",
+   "reel"
+  ],
+  [
+   "GP",
+   "on the wall",
+   "reel"
+  ],
+  [
+   "GP",
+   "il",
+   "synthetique"
+  ],
+  [
+   "GP",
+   "les jardin",
+   "synthetique"
+  ],
+  [
+   "GP",
+   "les ancienne lettre",
+   "synthetique"
+  ],
+  [
+   "GP",
+   "le renard",
+   "synthetique"
+  ]
+ ],
+ "faux_positifs_a": [
+  [
+   "SUB",
+   "qu'elle viendrait hier",
+   "Elle a dit qu'elle viendrait hier."
+  ],
+  [
+   "SUB",
+   "that she would come yesterday",
+   "She said that she would come yesterday."
+  ],
+  [
+   "SUB",
+   "since yesterday",
+   "It rains since yesterday."
+  ],
+  [
+   "SUB",
+   "since this morning",
+   "The rain falls since this morning."
+  ],
+  [
+   "SUB",
+   "qu'il soit tard",
+   "Bien qu'il soit tard, il travaille."
+  ],
+  [
+   "SUB",
+   "qu'il dort",
+   "Pendant qu'il dort, elle lit."
+  ],
+  [
+   "SUB",
+   "que nous devons",
+   "Je pense que nous devons partir."
+  ],
+  [
+   "SUB",
+   "qu'il pleuve",
+   "Bien qu'il pleuve, il sort."
+  ],
+  [
+   "SUB",
+   "qu'elle dort",
+   "Pendant qu'elle dort, il travaille."
+  ]
+ ],
+ "limites": [
+  "règles conçues et mesurées sur le même gold (612 phrases) : les chiffres sont in-sample",
+  "les 4 GP synthétiques sans préposition sont une convention du gold, pas un échec du chunker",
+  "la convention d'adverbe final est instable (« hier » exclu, « demain » inclus)",
+  "l'attachement des 84 spans récupérés n'est correct qu'à 67–74 % (top-k sur span juste)",
+  "le détecteur de verbe reste lexical + morphologique : les homographes nominaux sont une limite nommée"
+ ],
+ "detail": [
+  {
+   "type": "GP",
+   "texte": "du voisin",
+   "premier": "du",
+   "cause": "regle_de_fin_de_clause",
+   "source": "hand",
+   "langue": "fr",
+   "phrase": "Le chien du voisin aboie la nuit.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that she would come",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "hand",
+   "langue": "en",
+   "phrase": "She said that she would come yesterday.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "to eat",
+   "premier": "to",
+   "cause": "segment_avale_par_un_gv",
+   "source": "hand",
+   "langue": "en",
+   "phrase": "The duck is ready to eat.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": true,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "since yesterday",
+   "premier": "since",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "It rains since yesterday.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that I read",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The book that I read is exciting.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "she talks about",
+   "premier": "she",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The film she talks about is out.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": true,
+    "relative_zero": true
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "to eat",
+   "premier": "to",
+   "cause": "segment_avale_par_un_gv",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The mouse is ready to eat.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": true,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "au-dessus du lac",
+   "premier": "au-dessus",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "Les oiseaux volent au-dessus du lac.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": true,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that you read",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The book that you read is long.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "where we live",
+   "premier": "where",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The city where we live is beautiful.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "en gare",
+   "premier": "en",
+   "cause": "regle_de_fin_de_clause",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "Le train entre en gare.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "since this morning",
+   "premier": "since",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The rain falls since this morning.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that we saw",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The film that we saw was long.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "where I was born",
+   "premier": "where",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The house where I was born is small.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "for the bus",
+   "premier": "for",
+   "cause": "regle_de_fin_de_clause",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "We wait for the bus.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "on the wall",
+   "premier": "on",
+   "cause": "segment_avale_par_un_gv",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The painting is hung on the wall.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": true,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "who speaks",
+   "premier": "who",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The man who speaks is my father.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that you are right",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "I think that you are right.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "que j'ai vu",
+   "premier": "que",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "Le chat que j'ai vu dormait.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that I read",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The book that I read is good.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "When it rains",
+   "premier": "when",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "When it rains, I stay.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that he comes",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "She says that he comes.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "whom I mention",
+   "premier": "whom",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The student whom I mention is absent.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": true
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "Although it is late",
+   "premier": "although",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "Although it is late, he works.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that you come",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "I know that you come.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that sleeps",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The cat that sleeps is black.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "dont la voiture est rouge",
+   "premier": "dont",
+   "cause": "regle_de_fin_de_clause",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "L'homme dont la voiture est rouge arrive.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "where I live",
+   "premier": "where",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The village where I live is small.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "If you come",
+   "premier": "if",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "If you come, we will leave.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "because she is happy",
+   "premier": "because",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "She sings because she is happy.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "whose car is red",
+   "premier": "whose",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The man whose car is red arrives.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that he is right",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "I believe that he is right.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "when we left",
+   "premier": "when",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The day when we left was beautiful.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "While he sleeps",
+   "premier": "while",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "While he sleeps, she reads.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that we bought",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The house that we bought is old.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "because he is sad",
+   "premier": "because",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "He cries because he is sad.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "When you arrive",
+   "premier": "when",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "When you arrive, call me.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that barks",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The dog that barks is mean.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that we must leave",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "I think that we must leave.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "whom you mention",
+   "premier": "whom",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The girl whom you mention is my sister.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": true
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "As it was raining",
+   "premier": "as",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "As it was raining, we stayed.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "where we go",
+   "premier": "where",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The place where we go is far.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "que j'ai achetée",
+   "premier": "que",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "La voiture que j'ai achetée roule.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "qu'il vient demain",
+   "premier": "qu'il",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "Je sais qu'il vient demain.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui pousse ici",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "La fleur qui pousse ici est rare.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that you eat",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The bread that you eat is fresh.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "When it snows",
+   "premier": "when",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "When it snows, we stay.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that I bought",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The car that I bought runs.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that it rains",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "He says that it rains.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "If she comes",
+   "premier": "if",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "If she comes, I leave.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "who sings",
+   "premier": "who",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The boy who sings is my friend.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "Although it rains",
+   "premier": "although",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "Although it rains, he goes out.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that we took",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The table that we took is big.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "While she sleeps",
+   "premier": "while",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "While she sleeps, he works.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that flies",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The bird that flies is blue.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that he comes tomorrow",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "I know that he comes tomorrow.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "where we live",
+   "premier": "where",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The place where we live is quiet.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "because she is alone",
+   "premier": "because",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "She cries because she is alone.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that is on the table",
+   "premier": "that",
+   "cause": "tete_avalee_par_le_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The book that is on the table is mine.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": true,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "As she sang",
+   "premier": "as",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "As she sang, he danced.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "whom I mention",
+   "premier": "whom",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The person whom I mention is here.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": true
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "When you want",
+   "premier": "when",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "When you want, we leave.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "that she leaves",
+   "premier": "that",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "She says that she leaves.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that grows here",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The flower that grows here is rare.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "Although I am tired",
+   "premier": "although",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "Although I am tired, I continue.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "that we cross",
+   "premier": "that",
+   "cause": "segment_avale_par_un_gn",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The bridge that we cross is old.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "where she lives",
+   "premier": "where",
+   "cause": "marqueur_hors_lexique_branche",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "The house where she lives is small.",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": true,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "car il est tard",
+   "premier": "car",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "fr",
+   "phrase": "Je pars car il est tard.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "because it is late",
+   "premier": "because",
+   "cause": "type_sub_absent",
+   "source": "reel",
+   "langue": "en",
+   "phrase": "I leave because it is late.",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui nage",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "un chemin qui nage prépare",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "que les fenêtre ouvre",
+   "premier": "que",
+   "cause": "type_sub_absent",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "ma fenêtre marche que les fenêtre ouvre",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "il",
+   "premier": "il",
+   "cause": "gold_gp_sans_preposition",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "mon sombre village marche avec il",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui crie",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "le village qui crie marche",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui ferme",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "un papier qui ferme observe",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui marche",
+   "premier": "qui",
+   "cause": "regle_de_fin_de_clause",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "Paul qui marche marche",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "que ils crie",
+   "premier": "que",
+   "cause": "type_sub_absent",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "une fenêtre nage que ils crie",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui ouvre",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "mon jardin qui ouvre rêve",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui saute",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "ce nuage qui saute observe",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui commence",
+   "premier": "qui",
+   "cause": "regle_de_fin_de_clause",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "elle qui commence nage",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui crie",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "ce doux canard qui crie ferme",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui ferme",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "mon canard qui ferme finit",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui dessine",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "cette douce chanson qui dessine finit",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui ferme",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "cette rivière qui ferme ouvre",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "que Lucas ferme",
+   "premier": "que",
+   "cause": "type_sub_absent",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "la brillante forêt nage que Lucas ferme",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "que les avocat compte",
+   "premier": "que",
+   "cause": "type_sub_absent",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "ce doux nuage dessine que les avocat compte",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui observe",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "la secrète fenêtre qui observe ferme",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui compte",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "mon renard qui compte crie",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui ferme",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "une rapide chanson qui ferme écoute",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "SUB",
+   "texte": "que cette brillante chanson commence",
+   "premier": "que",
+   "cause": "type_sub_absent",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "mon rapide village marche que cette brillante chanson commence",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui dessine",
+   "premier": "qui",
+   "cause": "segment_avale_par_un_gn",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "la fenêtre qui dessine écoute",
+   "drapeaux": {
+    "contenu_dans_gn": true,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": false,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "REL",
+   "texte": "qui trouve",
+   "premier": "qui",
+   "cause": "regle_de_fin_de_clause",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "Emma qui trouve compte",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "les jardin",
+   "premier": "les",
+   "cause": "gold_gp_sans_preposition",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "ma montagne observe avec les jardin",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "les ancienne lettre",
+   "premier": "les",
+   "cause": "gold_gp_sans_preposition",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "le voyage nage pour les ancienne lettre",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  },
+  {
+   "type": "GP",
+   "texte": "le renard",
+   "premier": "le",
+   "cause": "gold_gp_sans_preposition",
+   "source": "synthetique",
+   "langue": "fr",
+   "phrase": "le chemin nage avec le renard",
+   "drapeaux": {
+    "contenu_dans_gn": false,
+    "contenu_dans_gv": false,
+    "frontiere_meme_type": true,
+    "tete_avalee": false,
+    "marqueur_hors_branche": false,
+    "relative_zero": false
+   }
+  }
+ ]
+}
