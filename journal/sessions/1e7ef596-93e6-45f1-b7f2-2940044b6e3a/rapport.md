@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 18.4 h |
-| Tours | 268 |
-| Messages | 1478 |
-| Appels d'outils | 1475 |
+| Tours | 269 |
+| Messages | 1482 |
+| Appels d'outils | 1478 |
 | Fichiers touchés | 15 |
-| Commandes | 1287 |
+| Commandes | 1290 |
 | Sous-agents | 0 |
-| Commits | 289 |
+| Commits | 290 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -559,6 +559,8 @@
 **Tour 267** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 268** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 269** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6604,7 +6606,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 263 : r13-bpe (52 s) et récurrence (19 s) vertes, réflexe en cours ; je commit
+⏵ Cycle 263 : r13-bpe et récurrence vertes, réflexe en cours, 11 portes restantes
+
+**Cycle 263 — les dernières portes s'enchaînent.**
+
+- **Passe** : **72 journaux**, registre 71 — `porte-r13-bpe` (52 s : BPE natif réversible, budgets d'octets égaux, bits/octet meilleurs) et `porte-recurrence` (19 s : boucle déterministe) vertes ; `porte-reflexe` tourne.
+- **Rouges** : les **deux tolérées** + la **rouge de banc corrigée** — rien d'autre.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 616 mots**, **T0 3 986 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : finir la passe (**11 portes**), mettre à jour les références, puis décider d'une passe propre de confirmation.
+
+### Tour 269 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check pass progress
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 264 : registre, reparti-moteur et ressources vertes ; sauvegarde en cours ; je commit
 
 ## 3. Travail accompli
 
@@ -6670,7 +6693,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1247 autres
+- … et 1250 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7107,4 +7130,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 01 H 45 ; PROFONDEUR-ROUTÉE À 13 MIN, SOUS SA BORNE ; 68 JOURNAUX" -m "La porte calcule les deux profondeurs sur 8 192 jetons ; elle reste sous la 
 - ÉTAT — PASSE 69 VERDICTS : PROFONDEUR-ROUTÉE VERTE (700 S), PUSH-PARESSEUX VERTE ; HEURE 01 H 48" -m "La porte lourde est tenue : 16 couches contre 24 sur 8 192
 - ÉTAT — HEURE 01 H 51 ; PASSE 72 JOURNAUX : R13-BPE ET RÉCURRENCE VERTES, RÉFLEXE EN COURS" -m "BPE natif réversible (52 s) et boucle déterministe (19 s) sont te
+- ÉTAT — HEURE 01 H 54 ; PASSE 76 JOURNAUX : REGISTRE, REPARTI-MOTEUR ET RESSOURCES VERTES" -m "Trois portes de plus sans rouge : région absente refusée en la nom
 
