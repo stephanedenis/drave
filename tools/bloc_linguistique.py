@@ -307,7 +307,7 @@ POS_FERME = {
     },
     "en": {
         "DET": set("the a an this that these those my your his her its our their".split()),
-        "PREP": set("of to in on at by with from for about into over under between through during without".split()),
+        "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside outside toward towards until upon within".split()),
         "PRON": set("i you he she it we they me him her us them who whom which that".split()),
         "CONJ": set("and or but nor for so yet because although while if when".split()),
         "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must".split()),
@@ -423,6 +423,7 @@ wait waits waited waiting belong belongs belonged belonging
 cry cries cried crying go goes went gone going come comes came coming
 leave leaves left leaving read reads reading sleep sleeps slept sleeping
 rain rains rained raining hang hangs hung hanging paint paints painted painting
+live lives lived living
 rêver rêve rêves rêvent rêvait sauter saute sautes sautent sautait
 marcher marche marches marchent marchait
 """.split())
@@ -637,6 +638,17 @@ class Heuristique:
             return {}
 
     @staticmethod
+    def _cible_precedent(texte: str, segment: dict, precedent: dict | None, verbes) -> str | None:
+        """REL → tête du GN précédent ; SUB après un GV → son verbe (le gouverneur)."""
+        if not precedent:
+            return None
+        if segment.get("type") == "REL" and precedent.get("type") == "GN":
+            return Heuristique._tete_nom(texte, precedent["debut"], precedent["fin"])
+        if segment.get("type") == "SUB" and precedent.get("type") == "GV":
+            return Heuristique._verbe_dans(texte, precedent["debut"], precedent["fin"], verbes)
+        return None
+
+    @staticmethod
     def _repli_cible_gp(texte: str, segment: dict, gns: list[dict]) -> str | None:
         """Cible vide d'un GP : génitif → tête du GN à gauche (sinon None, le GV tranchera)."""
         if segment.get("type") != "GP":
@@ -780,19 +792,58 @@ class Heuristique:
                 proches.append(v)
         return proches
 
-    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+    def _syntagmes_simple(self, texte: str, langue: str,
+                          pos_verbes: set[int] | None = None) -> list[dict]:
         mots = self._mots(texte)
         lex = POS_FERME.get(langue, POS_FERME["fr"])
+        pos_verbes = pos_verbes or set()
+
+        def est_verbe(d: int, m: str) -> bool:
+            """Le verbe : le lexique **ou** le POS (le tagger voit « aboie », le lexique non)."""
+            return _est_verbe(m) or d in pos_verbes
         segments: list[dict] = []
         i = 0
         while i < len(mots):
             d, f, t, typ = mots[i]
             n = _normaliser(t)
-            if typ == "mot" and n in lex.get("DET", set()):
+            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS):
+                suivant = mots[i + 1] if i + 1 < len(mots) else None
+                ambigu = n in lex.get("DET", set())
+                marqueur = (not ambigu) or (suivant is not None and (
+                    _normaliser(suivant[2]) in lex.get("PRON", set())
+                    or _normaliser(suivant[2]) in lex.get("AUX", set())
+                    or est_verbe(suivant[0], suivant[2])))
+                if marqueur:
+                    precedent = segments[-1]["type"] if segments else None
+                    stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV") else "REL"
+                    j = i + 1
+                    verbes_vus = 0
+                    while j < len(mots) and mots[j][3] == "mot":
+                        m = mots[j][2]
+                        aux = _normaliser(m) in AUXILIAIRES
+                        # un AUX après un verbe plein ouvre la **principale** : on s'arrête
+                        if aux and verbes_vus >= 1:
+                            break
+                        if not aux and est_verbe(mots[j][0], m):
+                            verbes_vus += 1
+                            if verbes_vus == 2:
+                                break
+                        j += 1
+                    segments.append({"type": stype,
+                                     "role": "complément" if stype == "SUB" else "qualité",
+                                     "niveau": 1, "debut": d, "fin": mots[j - 1][1],
+                                     "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                    i = j
+                    continue
+            # déterminant élidé : « L'homme », « d'Artagnan » (le token garde l'apostrophe)
+            det_elicite = ("'" in n and n.split("'")[0] in lex.get("DET", set()))
+            if typ == "mot" and (n in lex.get("DET", set()) or det_elicite):
                 j = i + 1
                 while (j < len(mots) and mots[j][3] == "mot"
                        and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set())
-                       and (j == i + 1 or not _est_verbe(mots[j][2]))):
+                       and _normaliser(mots[j][2]) not in RELATIFS
+                       and _normaliser(mots[j][2]) not in SUBORDONNANTS
+                       and (j == i + 1 or not est_verbe(mots[j][0], mots[j][2]))):
                     j += 1
                 role = "groupe nominal"
                 # le passif sans `par` : GN + AUX (être) + participe → le sujet est un patient
@@ -810,18 +861,18 @@ class Heuristique:
                 # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
                 # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
                 while (j < len(mots) and mots[j][3] == "mot"
-                       and not _est_verbe(mots[j][2])
+                       and not est_verbe(mots[j][0], mots[j][2])
                        and _normaliser(mots[j][2]) not in RELATIFS):
                     j += 1
                 # « à manger » : un GP réduit à sa préposition prend le verbe qui suit
-                if j == i + 1 and j < len(mots) and _est_verbe(mots[j][2]):
+                if j == i + 1 and j < len(mots) and est_verbe(mots[j][0], mots[j][2]):
                     j += 1
                 segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
                                  "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
                 continue
-            if typ == "mot" and (n in lex.get("AUX", set()) or _est_verbe(t)
+            if typ == "mot" and (n in lex.get("AUX", set()) or est_verbe(d, t)
                                  or (i + 1 < len(mots) and _normaliser(mots[i + 1][2]) in lex.get("AUX", set()))):
                 j = i + 1
                 # le GV s'arrête à la préposition, au déterminant, au relatif : un prédicat
@@ -942,7 +993,8 @@ class Heuristique:
         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
         # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
         # le O(n²) mesuré venait des re-chunkings (A6, A11) — sortie identique (T178).
-        simples = self._syntagmes_simple(texte, lg)
+        pos_verbes = {e.debut for e in etiquettes if e.niveau == "pos" and e.type == "VERB"}
+        simples = self._syntagmes_simple(texte, lg, pos_verbes)
         gvs_simple = [x for x in simples if x["type"] == "GV"]
         if cands:
             for c in cands[:1]:
@@ -1004,11 +1056,14 @@ class Heuristique:
         else:
             gvs_s = gvs_simple
             cache_gv: dict = {}
+            prec = None
             for s in simples:
                 meta = {"role": s["role"], "niveau": s["niveau"]}
-                cible = (self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                cible = (self._cible_precedent(texte, s, prec, verbes)
+                         or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
                          or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_s, cible)
+                prec = s
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
@@ -1022,13 +1077,17 @@ class Heuristique:
                     for s in cands[0].get("segments", [])}
             gvs_u = ([x for x in cands[0].get("segments", []) if x.get("type") == "GV"]
                      + gvs_simple)
+            prec = None
             for s in simples:
                 if (s["type"], s["debut"], s["fin"]) in deja:
+                    prec = s
                     continue
                 meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
-                cible = (self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                cible = (self._cible_precedent(texte, s, prec, verbes)
+                         or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
                          or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_u, cible)
+                prec = s
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],

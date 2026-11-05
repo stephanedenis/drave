@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 121.2 h |
+| Durée | 121.7 h |
 | Tours | 177 |
-| Messages | 2607 |
-| Appels d'outils | 2286 |
+| Messages | 2632 |
+| Appels d'outils | 2311 |
 | Fichiers touchés | 25 |
-| Commandes | 1881 |
+| Commandes | 1905 |
 | Sous-agents | 16 |
-| Commits | 278 |
+| Commits | 279 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*45 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 29 autres
+- … et 53 autres
 
 **Synthèse produite :**
 
-⏵ Le test tenu à l'écart donne **0,9814** (dev 0,9811) : les gains généralisent. Je fige le split
+⏵ **183/183** avec exact 185/187 et couverture 0,7824 : je fige la fiche v5 et je commite
 
 ## 3. Travail accompli
 
@@ -9613,7 +9613,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1841 autres
+- … et 1865 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10039,4 +10039,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183" -- tools/bloc_linguistique.py tools/pens
 - B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS »" -- tools/tests/linguistique
 - B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS »" -- tools/tests/linguistique
+- B13 — LA COUVERTURE : 187 LABELS, EXACT 185/187 (0,9893), F1 0,5156, DEV 125/126 ET TEST 60/61 ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py
 

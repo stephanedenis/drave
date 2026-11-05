@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**89 commits** · **19 session(s)** · **8 thème(s)**
+**90 commits** · **19 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 12 | [distribue.md](distribue.md) |
 | docs | 32 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 21 | [mesures.md](mesures.md) |
+| mesures | 22 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -39,7 +39,7 @@
 | `b9ea3904-889c-4497-a781-694da7d4987c` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.5 h | [rapport](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md) · [digest](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/digest.md) |
 | `c4796573-e2dc-48c2-b832-96f8bfab22c3` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md) |
 | `d300542e-6e9d-47ac-875b-b44a192eec35` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.3 h | [rapport](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) · [digest](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 121.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 121.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.0 h | [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md) |
 | `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` | — | 2026-11-05 10:11 | 0.0 h | [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md) |
 | `ff7e786c-3ece-4eae-864e-19dddfead93c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md) |
@@ -137,6 +137,7 @@
 | 16:35 | `ad4ecca3` | ÉTAT — T0 À 4 000 ; LE PROTOTYPE DES REPLIS (A10) ENTRE AVEC SON STATUT « NON INTÉGRÉ » |
 | 17:27 | `cceacc1a` | B13 — LA SEGMENTATION D'ABORD : F1 0,2862 → 0,4194, EXACT 158/160 (0,9875), COUVERTURE 160/239, FR 0,9915 / EN 0,9762 ; 183/183 |
 | 17:50 | `392f03aa` | B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183 |
+| 17:53 | `85e4082b` | B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS » |
 
 ## Le récit de la journée (écrit à la main)
 

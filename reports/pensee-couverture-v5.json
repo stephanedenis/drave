@@ -1,0 +1,64 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 160,
+  "exact": 157,
+  "exact_span": 0.9812,
+  "topk": 156,
+  "couverture": 0.6695,
+  "f1": 0.4539,
+  "tete": 0.6432,
+  "fr": 0.9915,
+  "en": 0.9524,
+  "spans": 79,
+  "echecs_cible": 3
+ },
+ "apres": {
+  "labels": 187,
+  "exact": 185,
+  "exact_span": 0.9893,
+  "topk": 160,
+  "couverture": 0.7824,
+  "f1": 0.5156,
+  "f1_s": 0.4577,
+  "f1_chunker": 0.5341,
+  "tete": 0.6826,
+  "fr": 0.9921,
+  "en": 0.9833,
+  "spans": {
+   "REL": 24,
+   "SUB": 12,
+   "GP": 16,
+   "total": 52
+  },
+  "echecs_cible": 27
+ },
+ "dev": {
+  "exact": 125,
+  "labels": 126,
+  "f1": 0.5079,
+  "couverture": 0.773
+ },
+ "test": {
+  "exact": 60,
+  "labels": 61,
+  "f1": 0.5217,
+  "couverture": 0.8026
+ },
+ "corrections": [
+  "REL/SUB avant le GN + « that » désambiguïsé",
+  "frontière de clause (second verbe, AUX)",
+  "POS VERB dans le chunker",
+  "déterminants élidés",
+  "prépositions anglaises + live",
+  "segment précédent dans l'union et le chunker"
+ ],
+ "limites": [
+  "52 spans",
+  "27 échecs de cible",
+  "test petit",
+  "heuristiques"
+ ]
+}

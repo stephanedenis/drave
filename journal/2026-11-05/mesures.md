@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (21)
+## Commits du jour (22)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -29,10 +29,11 @@
 | 16:27 | `b12616c3` | THÉORIE — L'ATTACHEMENT : RÔLE, CIBLE, CONVENTION, ET LES DEUX LECTURES DE LA MESURE (§ 12 bis) | `en-cours.md`, `modele-natif.md`, `README.md` (+6) |
 | 17:27 | `cceacc1a` | B13 — LA SEGMENTATION D'ABORD : F1 0,2862 → 0,4194, EXACT 158/160 (0,9875), COUVERTURE 160/239, FR 0,9915 / EN 0,9762 ; 183/183 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 | 17:50 | `392f03aa` | B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
+| 17:53 | `85e4082b` | B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS » | `en-cours.md`, `README.md`, `mesures.md` (+9) |
 
 ## Chiffres du jour
 
-`0,4194` · `0,4539` · `0,6432` · `0,9915` · `0,9524` · `0,2862` · `0,9875` · `0,9762` · `0,9658` · `1,000` · `×11,0` · `0,9448`
+`0,9814` · `0,9811` · `0,4194` · `0,4539` · `0,6432` · `0,9915` · `0,9524` · `0,2862` · `0,9875` · `0,9762` · `0,9658` · `1,000`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -53,7 +54,7 @@
 - `b9ea3904-889c-4497-a781-694da7d4987c` — Tu travailles dans le dépôt (début 2026-11-05 14:47, 1.5 h) → [rapport](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md) · [digest](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/digest.md)
 - `c4796573-e2dc-48c2-b832-96f8bfab22c3` — Tu travailles dans le dépôt (début 2026-11-05 13:16, 1.0 h) → [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md)
 - `d300542e-6e9d-47ac-875b-b44a192eec35` — Tu travailles dans le dépôt (début 2026-11-05 14:22, 1.3 h) → [rapport](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) · [digest](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 121.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 121.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.0 h) → [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md)
 - `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` — — (début 2026-11-05 10:11, 0.0 h) → [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md)
 - `ff7e786c-3ece-4eae-864e-19dddfead93c` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.5 h) → [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md)
@@ -68,6 +69,7 @@
 - [reports/rapport-cout-chunker.md](../../reports/rapport-cout-chunker.md)
 - [reports/rapport-echecs-v2.md](../../reports/rapport-echecs-v2.md)
 - [reports/rapport-gold-anglais.md](../../reports/rapport-gold-anglais.md)
+- [reports/rapport-gold-split.md](../../reports/rapport-gold-split.md)
 - [reports/rapport-pensee-attachement-cible.md](../../reports/rapport-pensee-attachement-cible.md)
 - [reports/rapport-pensee-attachement-v3.md](../../reports/rapport-pensee-attachement-v3.md)
 - [reports/rapport-pensee-denominateur.md](../../reports/rapport-pensee-denominateur.md)
