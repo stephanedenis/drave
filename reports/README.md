@@ -15,17 +15,16 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) | **B13** — l'attachement v2 : exact **0,9448**, top-k strict **0,9724**, modèle appris rejeté, **180/180** |
+| [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** — l'audit A1 : 14/14 valeurs reproduites, écart 0 |
+| [`rapport-topk-diagnostic.md`](rapport-topk-diagnostic.md) | **B13** — le diagnostic A2 : 57 échecs qualifiés, 3 correctifs (F1 +45) |
+| [`rapport-classement-appris.md`](rapport-classement-appris.md) | **B13** — le classement appris A3 : 142/145, **non significatif** face à 137, rejeté |
+| [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** — l'audit A1 : 14/14 valeurs reproduites, écart 0 ; 3 JSON sur 5 sont des instantanés, **178/178** |
 | [`rapport-pensee-convention-doc.md`](rapport-pensee-convention-doc.md) | **B13** — la convention des cibles documentée dans le gold, **177/177** |
 | [`rapport-pensee-topk-strict.md`](rapport-pensee-topk-strict.md) | **B13** — le top-k strict : **0,6069**, pas 0,9241, **176/176** |
 | [`rapport-pensee-echecs-cible.md`](rapport-pensee-echecs-cible.md) | **B13** — les 22 échecs : 11 hors candidats, 11 mal classés, **175/175** |
 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | **B13** — le lexique élargi : exact 0,8082 → **0,8483**, **174/174** |
-| [`rapport-pensee-attachement-cible.md`](rapport-pensee-attachement-cible.md) | **B13** — l'attachement ciblé : exact 0,6438 → **0,8082**, **173/173** |
-| [`rapport-pensee-conventions.md`](rapport-pensee-conventions.md) | **B13** — les deux conventions du gold : verbes 0,7255, noms 0,6000, **172/172** |
-| [`rapport-pensee-classement.md`](rapport-pensee-classement.md) | **B13** — le classement : exact 0,2260 → **0,6438**, **171/171** |
-| [`rapport-pensee-denominateur.md`](rapport-pensee-denominateur.md) | **B13** — le dénominateur : rendement 0,1381 vs exactitude spans **0,2260**, **170/170** |
 | [`rapport-pensee-spans.md`](rapport-pensee-spans.md) | **B13** — les spans perdus : 48 REL, 33 SUB, 12 GP, **169/169** |
-| [`rapport-pensee-lexique-verbal.md`](rapport-pensee-lexique-verbal.md) | **B13** — le lexique verbal : exact 0,0962 → **0,1381**, tête 0,9034, **168/168** |
-| [`rapport-pensee-verbe-gv.md`](rapport-pensee-verbe-gv.md) | **B13** — le verbe du GV : exact 0,0586 → **0,0962**, tête 0,8414, **167/167** |
 | [`rapport-pensee-echecs-attachement.md`](rapport-pensee-echecs-attachement.md) | **B13** — les 127 échecs : 94 span, 33 → 32 cible, **166/166** |
 | [`rapport-pensee-candidats-verbes.md`](rapport-pensee-candidats-verbes.md) | **B13** — les candidats verbes : top-k 0,3264 → **0,4686**, tête 0,7655, **165/165** |
 | [`rapport-pensee-cible-proximite.md`](rapport-pensee-cible-proximite.md) | **B13** — la cible par proximité : exact 0,0042 → **0,0544** (×13), top1 0,3975, **164/164** |
@@ -149,7 +148,6 @@
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`INDEX.md`](INDEX.md) | **A7.5–A7.26** — 22 fiches de cache KV et de grappe réseau ; l'index exhaustif |
 | [`rapport-m6-moteur.md`](rapport-m6-moteur.md) | **B27** — M6 moteur : exact 100 %, conflit 0 ; le cue désigne le canal, pas de compétition |
-| [`rapport-m6-conflit2.md`](rapport-m6-conflit2.md) | **B26** — M6 conflit : 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition |
 
 ## Les données brutes
 

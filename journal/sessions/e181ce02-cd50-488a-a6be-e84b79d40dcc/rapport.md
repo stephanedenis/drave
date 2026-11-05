@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 116.6 h |
+| Durée | 117.6 h |
 | Tours | 176 |
-| Messages | 2358 |
-| Appels d'outils | 2068 |
+| Messages | 2418 |
+| Appels d'outils | 2117 |
 | Fichiers touchés | 25 |
-| Commandes | 1698 |
+| Commandes | 1744 |
 | Sous-agents | 9 |
-| Commits | 251 |
+| Commits | 252 |
 | Compactages de contexte | 6 |
 
 ## Objectifs déclarés
@@ -9438,7 +9438,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 176 — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide … [61 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Voir plan-travail et le budget
@@ -9454,11 +9454,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - sous-agent — Prototype classement appris
 - sous-agent — Cohérence fiches JSON portes
 - bash — Noter la vague dans le journal
-- … et 9 autres
+- … et 55 autres
 
 **Synthèse produite :**
 
-⏵ Vague 2 : trois sous-agents de plus (contrat S, coût du chunker, annotation indépendante)
+⏵ Commit de l'intégration v2 (code + 3 fiches de sous-agents + pilotage)
 
 ## 3. Travail accompli
 
@@ -9546,7 +9546,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1658 autres
+- … et 1704 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9674,7 +9674,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-31 sorties en erreur ou divergentes. Les premières :
+33 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -9945,4 +9945,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15" -- docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/p
 - PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15" -- docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/p
 - PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9" -- docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>&1 
+- B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180" -- tools/bloc_li
 

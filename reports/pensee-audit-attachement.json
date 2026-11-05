@@ -1,0 +1,960 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "objet": "audit de reproductibilité de la mesure d'attachement du bloc linguistique",
+ "verdict": {
+  "statut": "reproduit",
+  "valeurs_publiees": 14,
+  "valeurs_reproduites": 14,
+  "ecarts": 0,
+  "reserve": "3 JSON sur 5 (conventions, attachement-cible, spans) sont des instantanés antérieurs, reproduits à leur commit mais pas à l'état courant ; dans sa version committée, pensee-spans.json publie 12 GP / 93 spans dans son bloc `spans`, pas 13 / 94. L'audit n'a modifié aucun fichier existant et n'a fait aucun commit."
+ },
+ "dispositif": {
+  "date": "2026-11-05",
+  "branche": "s/v7",
+  "commit": "e1171032906de46f1a93fee0f6275f39b5d67692",
+  "commit_sujet": "PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9",
+  "heure_mesure": "2026-11-05T13:29:44-0500",
+  "bloc_linguistique_sha256": "d9c9d5592b0ba8a942860518b67b5dce04223e47c47904fbf8e185f0511b186d",
+  "evaluer_gold_sha256": "dbbcfe9007f1d7ee66f6b7a28b064b3cf43407cddc5459f0931ca4fd9c426d2d",
+  "gold": {
+   "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+   "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+   "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+  },
+  "submodule_structures": "523d8c1e8c6ca29ca415360a71bfab6c5b56102c",
+  "appel": "sys.path.insert(0,'.'); from tools.bloc_linguistique import Heuristique; from tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc"
+ },
+ "mesure": {
+  "gold": {
+   "phrases": 612,
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "duree_s": 0.546,
+  "cibles": 239,
+  "labels": 145,
+  "couverture": 0.6067,
+  "top1": 126,
+  "top1_taux_span": 0.869,
+  "top1_taux": 0.5272,
+  "topk_sous_chaine": 134,
+  "topk_sous_chaine_taux_span": 0.9241,
+  "topk_sous_chaine_taux": 0.5607,
+  "exact": 123,
+  "exact_taux_span": 0.8483,
+  "exact_taux": 0.5146,
+  "topk_strict": 88,
+  "topk_strict_taux_span": 0.6069,
+  "topk_strict_taux": 0.3682,
+  "verbe": {
+   "cibles": 63,
+   "justes": 60,
+   "taux": 0.9524
+  },
+  "nom": {
+   "cibles": 82,
+   "justes": 63,
+   "taux": 0.7683
+  },
+  "spans_perdus": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13,
+   "total": 94
+  },
+  "categories_spans": {
+   "aucun": 65,
+   "plus_large": 24,
+   "plus_etroit": 4,
+   "coupe": 1
+  },
+  "syntagme": {
+   "precision": 0.3154,
+   "rappel": 0.2619,
+   "f1": 0.2862,
+   "tp": 488,
+   "fp": 1059,
+   "fn": 1375
+  },
+  "echecs": {
+   "labels": 145,
+   "justes": 123,
+   "echecs": 22,
+   "hors_candidats": 11,
+   "presents_non_choisis": 11,
+   "cible_absente_des_candidats": 11,
+   "par_type": {
+    "GP": {
+     "nom": 14,
+     "verbe": 0,
+     "hors": 10
+    },
+    "SUB": {
+     "nom": 5,
+     "verbe": 3,
+     "hors": 1
+    },
+    "REL": {
+     "nom": 0,
+     "verbe": 0,
+     "hors": 0
+    }
+   }
+  },
+  "pos": {
+   "exactitude": 0.7455,
+   "tokens": 3179
+  },
+  "recouvrement_exact_topk_strict": {
+   "exact_et_strict": 82,
+   "exact_hors_strict": 41,
+   "strict_non_exact": 6,
+   "ni_exact_ni_strict": 16,
+   "total": 145
+  }
+ },
+ "publie": {
+  "cibles": 239,
+  "labels": 145,
+  "top1": 126,
+  "topk_sous_chaine": 134,
+  "exact": 123,
+  "topk_strict": 88,
+  "couverture": 0.6067,
+  "verbe_cibles": 63,
+  "verbe_justes": 60,
+  "nom_cibles": 82,
+  "nom_justes": 63,
+  "spans_perdus": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13,
+   "total": 94
+  }
+ },
+ "comparaison": [
+  {
+   "mesure": "cibles",
+   "mesure_valeur": 239,
+   "publie": 239,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "labels",
+   "mesure_valeur": 145,
+   "publie": 145,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "top1",
+   "mesure_valeur": 126,
+   "publie": 126,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "topk_sous_chaine",
+   "mesure_valeur": 134,
+   "publie": 134,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "exact",
+   "mesure_valeur": 123,
+   "publie": 123,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "topk_strict",
+   "mesure_valeur": 88,
+   "publie": 88,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "couverture",
+   "mesure_valeur": 0.6067,
+   "publie": 0.6067,
+   "ecart": 0.0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "verbe.cibles",
+   "mesure_valeur": 63,
+   "publie": 63,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "verbe.justes",
+   "mesure_valeur": 60,
+   "publie": 60,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "nom.cibles",
+   "mesure_valeur": 82,
+   "publie": 82,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "nom.justes",
+   "mesure_valeur": 63,
+   "publie": 63,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "spans.REL",
+   "mesure_valeur": 48,
+   "publie": 48,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "spans.SUB",
+   "mesure_valeur": 33,
+   "publie": 33,
+   "ecart": 0,
+   "statut": "reproduit"
+  },
+  {
+   "mesure": "spans.GP",
+   "mesure_valeur": 13,
+   "publie": 13,
+   "ecart": 0,
+   "statut": "reproduit"
+  }
+ ],
+ "controle_negatif": {
+  "observe": {
+   "exact": 123,
+   "labels": 145,
+   "exact_taux_span": 0.8483
+  },
+  "permutation_cibles": {
+   "tirages": 1000,
+   "graine": 20261105,
+   "moyenne": 1.617,
+   "ecart_type": 1.271,
+   "min": 0,
+   "max": 7,
+   "taux_moyen": 0.0112,
+   "observe_hors_distribution": true
+  },
+  "candidat_aleatoire": {
+   "tirages": 1000,
+   "graine": 20261105,
+   "moyenne": 39.754,
+   "ecart_type": 4.53,
+   "min": 27,
+   "max": 52,
+   "taux_moyen": 0.2742,
+   "observe_hors_distribution": true
+  },
+  "harnais_attachement_hasard": {
+   "cibles": 239,
+   "top1": 1,
+   "top1_taux": 0.0042
+  },
+  "ratio_exact_sur_permutation": 76.07,
+  "ratio_exact_sur_candidat": 3.09
+ },
+ "rejouabilite_json": {
+  "methode": "git show <commit>:tools/bloc_linguistique.py chargé depuis /tmp/audit_<commit>/ avec le gold et evaluer_gold courants ; même règle de catégories.",
+  "commits": {
+   "d400e188": {
+    "statut": "reproduit",
+    "version": "spans.json — bloc avant",
+    "labels": 145,
+    "top1": 115,
+    "topk_sous_chaine": 132,
+    "exact": 33,
+    "topk_strict": 82,
+    "couverture": 0.6067,
+    "exact_taux_span": 0.2276,
+    "top1_taux_span": 0.7931,
+    "verbe": {
+     "cibles": 51,
+     "justes": 26,
+     "taux": 0.5098
+    },
+    "nom": {
+     "cibles": 94,
+     "justes": 7,
+     "taux": 0.0745
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13,
+     "total": 94
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 25,
+     "plus_etroit": 3,
+     "coupe": 1
+    },
+    "f1": 0.2864,
+    "cible_absente": 13
+   },
+   "13e8bb2d": {
+    "statut": "reproduit",
+    "version": "spans.json — bloc après",
+    "labels": 146,
+    "top1": 115,
+    "topk_sous_chaine": 132,
+    "exact": 33,
+    "topk_strict": 82,
+    "couverture": 0.6109,
+    "exact_taux_span": 0.226,
+    "top1_taux_span": 0.7877,
+    "verbe": {
+     "cibles": 51,
+     "justes": 26,
+     "taux": 0.5098
+    },
+    "nom": {
+     "cibles": 95,
+     "justes": 7,
+     "taux": 0.0737
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 12,
+     "total": 93
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 3,
+     "coupe": 1
+    },
+    "f1": 0.2869,
+    "cible_absente": 14
+   },
+   "f70a1b2a": {
+    "statut": "reproduit",
+    "version": "pensee-conventions.json",
+    "labels": 146,
+    "top1": 114,
+    "topk_sous_chaine": 132,
+    "exact": 94,
+    "topk_strict": 83,
+    "couverture": 0.6109,
+    "exact_taux_span": 0.6438,
+    "top1_taux_span": 0.7808,
+    "verbe": {
+     "cibles": 51,
+     "justes": 37,
+     "taux": 0.7255
+    },
+    "nom": {
+     "cibles": 95,
+     "justes": 57,
+     "taux": 0.6
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 12,
+     "total": 93
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 3,
+     "coupe": 1
+    },
+    "f1": 0.2869,
+    "cible_absente": 14
+   },
+   "23853cb7": {
+    "statut": "reproduit",
+    "version": "pensee-attachement-cible.json — bloc après",
+    "labels": 146,
+    "top1": 122,
+    "topk_sous_chaine": 132,
+    "exact": 118,
+    "topk_strict": 83,
+    "couverture": 0.6109,
+    "exact_taux_span": 0.8082,
+    "top1_taux_span": 0.8356,
+    "verbe": {
+     "cibles": 51,
+     "justes": 48,
+     "taux": 0.9412
+    },
+    "nom": {
+     "cibles": 95,
+     "justes": 70,
+     "taux": 0.7368
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 12,
+     "total": 93
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 3,
+     "coupe": 1
+    },
+    "f1": 0.2869,
+    "cible_absente": 14
+   },
+   "a408a909": {
+    "statut": "reproduit",
+    "version": "lexique élargi — état courant depuis",
+    "labels": 145,
+    "top1": 126,
+    "topk_sous_chaine": 134,
+    "exact": 123,
+    "topk_strict": 88,
+    "couverture": 0.6067,
+    "exact_taux_span": 0.8483,
+    "top1_taux_span": 0.869,
+    "verbe": {
+     "cibles": 63,
+     "justes": 60,
+     "taux": 0.9524
+    },
+    "nom": {
+     "cibles": 82,
+     "justes": 63,
+     "taux": 0.7683
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13,
+     "total": 94
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 4,
+     "coupe": 1
+    },
+    "f1": 0.2862,
+    "cible_absente": 11
+   },
+   "a048cb83": {
+    "statut": "reproduit",
+    "version": "pensee-echecs-cible.json",
+    "labels": 145,
+    "top1": 126,
+    "topk_sous_chaine": 134,
+    "exact": 123,
+    "topk_strict": 88,
+    "couverture": 0.6067,
+    "exact_taux_span": 0.8483,
+    "top1_taux_span": 0.869,
+    "verbe": {
+     "cibles": 63,
+     "justes": 60,
+     "taux": 0.9524
+    },
+    "nom": {
+     "cibles": 82,
+     "justes": 63,
+     "taux": 0.7683
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13,
+     "total": 94
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 4,
+     "coupe": 1
+    },
+    "f1": 0.2862,
+    "cible_absente": 11
+   },
+   "e223a98d": {
+    "statut": "reproduit",
+    "version": "pensee-topk-strict.json",
+    "labels": 145,
+    "top1": 126,
+    "topk_sous_chaine": 134,
+    "exact": 123,
+    "topk_strict": 88,
+    "couverture": 0.6067,
+    "exact_taux_span": 0.8483,
+    "top1_taux_span": 0.869,
+    "verbe": {
+     "cibles": 63,
+     "justes": 60,
+     "taux": 0.9524
+    },
+    "nom": {
+     "cibles": 82,
+     "justes": 63,
+     "taux": 0.7683
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13,
+     "total": 94
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 4,
+     "coupe": 1
+    },
+    "f1": 0.2862,
+    "cible_absente": 11
+   }
+  }
+ },
+ "confrontation_json": {
+  "pensee-attachement-cible.json": {
+   "commit": "23853cb7",
+   "etat": "instantané antérieur — ne reproduit pas l'état courant",
+   "json": {
+    "labels": 146,
+    "top1": 122,
+    "exact": 118,
+    "exact_span": 0.8082,
+    "top1_span": 0.8356,
+    "verbe": 0.9412,
+    "nom": 0.7368
+   },
+   "mesure_courante": {
+    "labels": 145,
+    "top1": 126,
+    "exact": 123,
+    "exact_span": 0.8483,
+    "top1_span": 0.869,
+    "verbe": 0.9524,
+    "nom": 0.7683
+   },
+   "rejoue_au_commit": {
+    "statut": "reproduit",
+    "version": "pensee-attachement-cible.json — bloc après",
+    "labels": 146,
+    "top1": 122,
+    "topk_sous_chaine": 132,
+    "exact": 118,
+    "topk_strict": 83,
+    "couverture": 0.6109,
+    "exact_taux_span": 0.8082,
+    "top1_taux_span": 0.8356,
+    "verbe": {
+     "cibles": 51,
+     "justes": 48,
+     "taux": 0.9412
+    },
+    "nom": {
+     "cibles": 95,
+     "justes": 70,
+     "taux": 0.7368
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 12,
+     "total": 93
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 3,
+     "coupe": 1
+    },
+    "f1": 0.2869,
+    "cible_absente": 14
+   }
+  },
+  "pensee-conventions.json": {
+   "commit": "f70a1b2a",
+   "etat": "instantané antérieur — ne reproduit pas l'état courant",
+   "json": {
+    "labels": 146,
+    "verbe": {
+     "cibles": 51,
+     "justes": 37,
+     "taux": 0.7255
+    },
+    "nom": {
+     "cibles": 95,
+     "justes": 57,
+     "taux": 0.6
+    },
+    "tout": {
+     "justes": 94,
+     "taux": 0.6438
+    }
+   },
+   "mesure_courante": {
+    "labels": 145,
+    "verbe": {
+     "cibles": 63,
+     "justes": 60,
+     "taux": 0.9524
+    },
+    "nom": {
+     "cibles": 82,
+     "justes": 63,
+     "taux": 0.7683
+    },
+    "tout": {
+     "justes": 123,
+     "taux": 0.8483
+    }
+   },
+   "rejoue_au_commit": {
+    "statut": "reproduit",
+    "version": "pensee-conventions.json",
+    "labels": 146,
+    "top1": 114,
+    "topk_sous_chaine": 132,
+    "exact": 94,
+    "topk_strict": 83,
+    "couverture": 0.6109,
+    "exact_taux_span": 0.6438,
+    "top1_taux_span": 0.7808,
+    "verbe": {
+     "cibles": 51,
+     "justes": 37,
+     "taux": 0.7255
+    },
+    "nom": {
+     "cibles": 95,
+     "justes": 57,
+     "taux": 0.6
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 12,
+     "total": 93
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 3,
+     "coupe": 1
+    },
+    "f1": 0.2869,
+    "cible_absente": 14
+   }
+  },
+  "pensee-topk-strict.json": {
+   "commit": "e223a98d",
+   "etat": "reproduit à l'identique (état courant)",
+   "json": {
+    "labels": 145,
+    "sous_chaine": {
+     "topk": 134,
+     "taux_span": 0.9241,
+     "rendement": 0.5607
+    },
+    "exact": {
+     "topk": 88,
+     "taux_span": 0.6069,
+     "rendement": 0.3682
+    }
+   },
+   "mesure_courante": {
+    "labels": 145,
+    "sous_chaine": {
+     "topk": 134,
+     "taux_span": 0.9241,
+     "rendement": 0.5607
+    },
+    "exact": {
+     "topk": 88,
+     "taux_span": 0.6069,
+     "rendement": 0.3682
+    }
+   },
+   "rejoue_au_commit": {
+    "statut": "reproduit",
+    "version": "pensee-topk-strict.json",
+    "labels": 145,
+    "top1": 126,
+    "topk_sous_chaine": 134,
+    "exact": 123,
+    "topk_strict": 88,
+    "couverture": 0.6067,
+    "exact_taux_span": 0.8483,
+    "top1_taux_span": 0.869,
+    "verbe": {
+     "cibles": 63,
+     "justes": 60,
+     "taux": 0.9524
+    },
+    "nom": {
+     "cibles": 82,
+     "justes": 63,
+     "taux": 0.7683
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13,
+     "total": 94
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 4,
+     "coupe": 1
+    },
+    "f1": 0.2862,
+    "cible_absente": 11
+   }
+  },
+  "pensee-spans.json": {
+   "commit": "13e8bb2d (après) / d400e188 (avant)",
+   "etat": "blocs historiques (avant d400e188 / après 13e8bb2d) ; aucun des deux n'est l'état courant. Un bloc `courant` a été ajouté depuis par un autre agent et reprend les valeurs mesurées.",
+   "json": {
+    "spans": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 12,
+     "total": 93
+    },
+    "categories": {
+     "aucun": 65,
+     "plus_large": 25,
+     "plus_etroit": 3,
+     "coupe": 1
+    },
+    "avant": {
+     "labels": 145,
+     "couverture": 0.6067,
+     "f1": 0.2864,
+     "span": 94,
+     "cible": 13
+    },
+    "apres": {
+     "labels": 146,
+     "couverture": 0.6109,
+     "f1": 0.2869,
+     "span": 93,
+     "cible": 14
+    }
+   },
+   "mesure_courante": {
+    "spans": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13,
+     "total": 94
+    },
+    "categories": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 4,
+     "coupe": 1
+    },
+    "labels": 145,
+    "couverture": 0.6067,
+    "f1": 0.2862,
+    "cible_absente": 11
+   },
+   "rejoue_au_commit": {
+    "d400e188": {
+     "statut": "reproduit",
+     "version": "spans.json — bloc avant",
+     "labels": 145,
+     "top1": 115,
+     "topk_sous_chaine": 132,
+     "exact": 33,
+     "topk_strict": 82,
+     "couverture": 0.6067,
+     "exact_taux_span": 0.2276,
+     "top1_taux_span": 0.7931,
+     "verbe": {
+      "cibles": 51,
+      "justes": 26,
+      "taux": 0.5098
+     },
+     "nom": {
+      "cibles": 94,
+      "justes": 7,
+      "taux": 0.0745
+     },
+     "spans_perdus": {
+      "REL": 48,
+      "SUB": 33,
+      "GP": 13,
+      "total": 94
+     },
+     "categories_spans": {
+      "aucun": 65,
+      "plus_large": 25,
+      "plus_etroit": 3,
+      "coupe": 1
+     },
+     "f1": 0.2864,
+     "cible_absente": 13
+    },
+    "13e8bb2d": {
+     "statut": "reproduit",
+     "version": "spans.json — bloc après",
+     "labels": 146,
+     "top1": 115,
+     "topk_sous_chaine": 132,
+     "exact": 33,
+     "topk_strict": 82,
+     "couverture": 0.6109,
+     "exact_taux_span": 0.226,
+     "top1_taux_span": 0.7877,
+     "verbe": {
+      "cibles": 51,
+      "justes": 26,
+      "taux": 0.5098
+     },
+     "nom": {
+      "cibles": 95,
+      "justes": 7,
+      "taux": 0.0737
+     },
+     "spans_perdus": {
+      "REL": 48,
+      "SUB": 33,
+      "GP": 12,
+      "total": 93
+     },
+     "categories_spans": {
+      "aucun": 65,
+      "plus_large": 24,
+      "plus_etroit": 3,
+      "coupe": 1
+     },
+     "f1": 0.2869,
+     "cible_absente": 14
+    }
+   },
+   "version_comparee": "commit e1171032 (blocs spans / categories / avant / apres) ; un bloc `courant` a été ajouté dans le worktree par un autre agent pendant l'audit, il reprend les valeurs mesurées."
+  },
+  "pensee-echecs-cible.json": {
+   "commit": "a048cb83",
+   "etat": "reproduit à l'identique (état courant)",
+   "json": {
+    "labels": 145,
+    "justes": 123,
+    "echecs": 22,
+    "repartition": {
+     "hors_candidats": 11,
+     "mal_classes": 11
+    },
+    "par_type": {
+     "GP": {
+      "nom": 14,
+      "verbe": 0,
+      "hors": 10
+     },
+     "SUB": {
+      "nom": 5,
+      "verbe": 3,
+      "hors": 1
+     },
+     "REL": {
+      "nom": 0,
+      "verbe": 0,
+      "hors": 0
+     }
+    }
+   },
+   "mesure_courante": {
+    "labels": 145,
+    "justes": 123,
+    "echecs": 22,
+    "repartition": {
+     "hors_candidats": 11,
+     "mal_classes": 11
+    },
+    "par_type": {
+     "GP": {
+      "nom": 14,
+      "verbe": 0,
+      "hors": 10
+     },
+     "SUB": {
+      "nom": 5,
+      "verbe": 3,
+      "hors": 1
+     },
+     "REL": {
+      "nom": 0,
+      "verbe": 0,
+      "hors": 0
+     }
+    }
+   },
+   "rejoue_au_commit": {
+    "statut": "reproduit",
+    "version": "pensee-echecs-cible.json",
+    "labels": 145,
+    "top1": 126,
+    "topk_sous_chaine": 134,
+    "exact": 123,
+    "topk_strict": 88,
+    "couverture": 0.6067,
+    "exact_taux_span": 0.8483,
+    "top1_taux_span": 0.869,
+    "verbe": {
+     "cibles": 63,
+     "justes": 60,
+     "taux": 0.9524
+    },
+    "nom": {
+     "cibles": 82,
+     "justes": 63,
+     "taux": 0.7683
+    },
+    "spans_perdus": {
+     "REL": 48,
+     "SUB": 33,
+     "GP": 13,
+     "total": 94
+    },
+    "categories_spans": {
+     "aucun": 65,
+     "plus_large": 24,
+     "plus_etroit": 4,
+     "coupe": 1
+    },
+    "f1": 0.2862,
+    "cible_absente": 11
+   }
+  }
+ },
+ "limites": [
+  "3 des 5 JSON sont des instantanés antérieurs (commits indiqués) : ne pas les lire comme l'état courant ; aucun n'a été modifié par cet audit.",
+  "pensee-spans.json : le bloc `spans` (REL 48, SUB 33, GP 12, total 93) est l'état « après » (13e8bb2d) ; le publié 13 GP / 94 est l'état courant (et le bloc « avant » d400e188).",
+  "les catégories de spans sont une lecture : `coupe` = au moins deux segments prédits recouvrent le gold ; le courant donne 65/24/4/1, le JSON (avant) 65/25/3/1.",
+  "la mesure dépend du sous-module tools/structures au commit 523d8c1 (segmentation S) ; son fichier de données modifié (donnees/paragraphes-validations.jsonl) n'est lu que par serveur.py, pas par generateur.analyser.",
+  "le gold est vivant (612 phrases : 20 hand + 432 reel + 160 synthétiques) ; `gold_gele` (602) n'est pas utilisé ici.",
+  "les portes (169/169 … 176/176) ne sont pas rejouées : l'audit porte sur la mesure, pas sur le registre de non-régression.",
+  "HEAD a avancé pendant l'audit (commits de pilotage) ; l'état mesuré est épinglé par le commit et les sha256 du dispositif.",
+  "Concurrence : Pendant l'audit, un autre agent a ajouté à pensee-spans.json un bloc `courant` (145 / 0.6067 / 0.2862 / 94 / REL 48, SUB 33, GP 13 / 65-24-4-1) et corrigé le titre de rapport-pensee-spans.md ; cet audit n'a touché à aucun des deux. Le bloc ajouté reprend les valeurs mesurées. La comparaison ci-dessus reste celle des blobs du commit e1171032."
+ ],
+ "fichiers": [
+  "reports/rapport-audit-attachement.md",
+  "reports/pensee-audit-attachement.json"
+ ],
+ "note_concurrence": "Pendant l'audit, un autre agent a ajouté à pensee-spans.json un bloc `courant` (145 / 0.6067 / 0.2862 / 94 / REL 48, SUB 33, GP 13 / 65-24-4-1) et corrigé le titre de rapport-pensee-spans.md ; cet audit n'a touché à aucun des deux. Le bloc ajouté reprend les valeurs mesurées. La comparaison ci-dessus reste celle des blobs du commit e1171032."
+}

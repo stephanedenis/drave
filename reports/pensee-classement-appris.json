@@ -1,0 +1,7145 @@
+{
+ "titre": "Classement appris des candidats d'attachement (prototype autonome)",
+ "date": "2026-11-05",
+ "graine": 0,
+ "empreinte_bloc_linguistique": {
+  "fichier": "tools/bloc_linguistique.py",
+  "sha256_16": "6e8430180ccca615",
+  "octets": 101568,
+  "mtime": "2026-11-05T13:51:26"
+ },
+ "note_regle_actuelle": "La règle live mesurée ici est celle de l'empreinte ci-dessus. La consigne citait 123/145 (mesuré en début de session) ; le fichier a ensuite été modifié par un autre agent (129/145 puis 137/145) pendant la session. Le modèle ne lit pas la cible choisie par la règle : ses 142/145 ne dépendent pas de cette dérive, seuls le vivier, la POS et `_est_verbe` (lexique) comptent.",
+ "hyperparametres": {
+  "epochs": 6000,
+  "learning_rate": 0.6,
+  "l2": 0.01,
+  "ponderation_classes": "équilibrée"
+ },
+ "corpus": {
+  "phrases": 612,
+  "tokens": 3179,
+  "segments_gold_avec_cible": 239,
+  "span_non_predit": 94,
+  "cible_hors_vivier": 1
+ },
+ "protocole": {
+  "segments_mesures": 145,
+  "par_plis": {
+   "pairs": 79,
+   "impairs": 66
+  },
+  "vivier": "tokens pleins (POS ouverte ou _est_verbe), auxiliaires exclus",
+  "liste": "gauche → droite → dedans, puis distance (rang 0 = plus proche à gauche)",
+  "modele": "régression logistique binaire, descente de gradient, L2, classes pondérées",
+  "selection": "argmax du score sur le vivier",
+  "mesure": "égalité exacte avec cibles[0] (celle de evaluer_gold.py)",
+  "decoupage": "parité du numéro d'id de phrase ; apprentissage pair → test impair, puis inverse ; regroupé hors-pli"
+ },
+ "features": [
+  "biais",
+  "distance",
+  "rang",
+  "longueur",
+  "cote_gauche",
+  "cote_dedans",
+  "type_GP",
+  "type_REL",
+  "prep_gen",
+  "prep_dat",
+  "prep_loc",
+  "prep_but",
+  "prep_moy",
+  "prep_autre",
+  "nat_verbe",
+  "pos_verbe",
+  "pos_nom",
+  "GP_x_verbe",
+  "REL_x_verbe",
+  "SUB_x_verbe",
+  "GP_x_posV",
+  "REL_x_posV",
+  "SUB_x_posV",
+  "GEN_x_verbe",
+  "GEN_x_posV"
+ ],
+ "poids": {
+  "pairs->impairs": {
+   "biais": 0.8286,
+   "distance": -0.4013,
+   "rang": -3.112,
+   "longueur": -0.3543,
+   "cote_gauche": 0.7599,
+   "cote_dedans": -1.0544,
+   "type_GP": -0.4959,
+   "type_REL": 0.0285,
+   "prep_gen": -0.0512,
+   "prep_dat": -0.2187,
+   "prep_loc": -0.232,
+   "prep_but": 0.0117,
+   "prep_moy": -0.1148,
+   "prep_autre": 0.1092,
+   "nat_verbe": 1.1719,
+   "pos_verbe": 0.0258,
+   "pos_nom": 0.0321,
+   "GP_x_verbe": 1.0184,
+   "REL_x_verbe": -0.0927,
+   "SUB_x_verbe": 0.2463,
+   "GP_x_posV": -0.006,
+   "REL_x_posV": -0.0316,
+   "SUB_x_posV": 0.0633,
+   "GEN_x_verbe": -0.202,
+   "GEN_x_posV": -0.202
+  },
+  "impairs->pairs": {
+   "biais": 0.1688,
+   "distance": -0.7556,
+   "rang": -3.3799,
+   "longueur": 0.0619,
+   "cote_gauche": 1.5258,
+   "cote_dedans": -0.5795,
+   "type_GP": -0.6357,
+   "type_REL": 0.2385,
+   "prep_gen": -0.1544,
+   "prep_dat": 0.0158,
+   "prep_loc": -0.3553,
+   "prep_but": -0.1073,
+   "prep_moy": 0.0123,
+   "prep_autre": -0.0467,
+   "nat_verbe": 0.7345,
+   "pos_verbe": 0.6331,
+   "pos_nom": 0.0865,
+   "GP_x_verbe": 0.8727,
+   "REL_x_verbe": -0.3629,
+   "SUB_x_verbe": 0.2246,
+   "GP_x_posV": 0.5793,
+   "REL_x_posV": -0.1703,
+   "SUB_x_posV": 0.2241,
+   "GEN_x_verbe": 0.0,
+   "GEN_x_posV": 0.0824
+  },
+  "moyenne": {
+   "biais": 0.4987,
+   "distance": -0.5784,
+   "rang": -3.2459,
+   "longueur": -0.1462,
+   "cote_gauche": 1.1429,
+   "cote_dedans": -0.8169,
+   "type_GP": -0.5658,
+   "type_REL": 0.1335,
+   "prep_gen": -0.1028,
+   "prep_dat": -0.1015,
+   "prep_loc": -0.2937,
+   "prep_but": -0.0478,
+   "prep_moy": -0.0512,
+   "prep_autre": 0.0312,
+   "nat_verbe": 0.9532,
+   "pos_verbe": 0.3294,
+   "pos_nom": 0.0593,
+   "GP_x_verbe": 0.9456,
+   "REL_x_verbe": -0.2278,
+   "SUB_x_verbe": 0.2354,
+   "GP_x_posV": 0.2867,
+   "REL_x_posV": -0.1009,
+   "SUB_x_posV": 0.1437,
+   "GEN_x_verbe": -0.101,
+   "GEN_x_posV": -0.0598
+  }
+ },
+ "resultats": {
+  "sens": {
+   "pairs->impairs": {
+    "entrainement": {
+     "segments": 79,
+     "lignes": 224,
+     "positifs": 79,
+     "negatifs": 145,
+     "epochs_effectues": 1961,
+     "perte_finale": 49.83345,
+     "perte_moyenne": 0.222471,
+     "poids_positif": 1.4177,
+     "poids_negatif": 0.7724
+    },
+    "test": {
+     "segments": 66,
+     "justes": 66,
+     "n": 66,
+     "taux": 1.0
+    },
+    "modele": {
+     "n": 66,
+     "justes": 66,
+     "taux": 1.0,
+     "par_type": {
+      "GP": {
+       "n": 34,
+       "justes": 34,
+       "taux": 1.0
+      },
+      "REL": {
+       "n": 21,
+       "justes": 21,
+       "taux": 1.0
+      },
+      "SUB": {
+       "n": 11,
+       "justes": 11,
+       "taux": 1.0
+      }
+     }
+    },
+    "regle_actuelle": {
+     "n": 66,
+     "justes": 64,
+     "taux": 0.9697,
+     "par_type": {
+      "GP": {
+       "n": 34,
+       "justes": 33,
+       "taux": 0.9706
+      },
+      "REL": {
+       "n": 21,
+       "justes": 21,
+       "taux": 1.0
+      },
+      "SUB": {
+       "n": 11,
+       "justes": 10,
+       "taux": 0.9091
+      }
+     }
+    },
+    "hasard": {
+     "n": 66,
+     "justes": 23,
+     "taux": 0.3485,
+     "taux_attendu": 0.379
+    }
+   },
+   "impairs->pairs": {
+    "entrainement": {
+     "segments": 66,
+     "lignes": 191,
+     "positifs": 66,
+     "negatifs": 125,
+     "epochs_effectues": 1464,
+     "perte_finale": 31.007021,
+     "perte_moyenne": 0.16234,
+     "poids_positif": 1.447,
+     "poids_negatif": 0.764
+    },
+    "test": {
+     "segments": 79,
+     "justes": 76,
+     "n": 79,
+     "taux": 0.962
+    },
+    "modele": {
+     "n": 79,
+     "justes": 76,
+     "taux": 0.962,
+     "par_type": {
+      "GP": {
+       "n": 49,
+       "justes": 47,
+       "taux": 0.9592
+      },
+      "REL": {
+       "n": 5,
+       "justes": 5,
+       "taux": 1.0
+      },
+      "SUB": {
+       "n": 25,
+       "justes": 24,
+       "taux": 0.96
+      }
+     }
+    },
+    "regle_actuelle": {
+     "n": 79,
+     "justes": 73,
+     "taux": 0.9241,
+     "par_type": {
+      "GP": {
+       "n": 49,
+       "justes": 44,
+       "taux": 0.898
+      },
+      "REL": {
+       "n": 5,
+       "justes": 5,
+       "taux": 1.0
+      },
+      "SUB": {
+       "n": 25,
+       "justes": 24,
+       "taux": 0.96
+      }
+     }
+    },
+    "hasard": {
+     "n": 79,
+     "justes": 29,
+     "taux": 0.3671,
+     "taux_attendu": 0.3947
+    }
+   }
+  },
+  "moyenne_des_sens": {
+   "modele": 0.981,
+   "regle_actuelle": 0.9469,
+   "gain": 0.0341
+  },
+  "regroupe_hors_pli": {
+   "n": 145,
+   "modele": {
+    "justes": 142,
+    "taux": 0.9793,
+    "par_type": {
+     "GP": {
+      "n": 83,
+      "justes": 81,
+      "taux": 0.9759
+     },
+     "REL": {
+      "n": 26,
+      "justes": 26,
+      "taux": 1.0
+     },
+     "SUB": {
+      "n": 36,
+      "justes": 35,
+      "taux": 0.9722
+     }
+    }
+   },
+   "regle_actuelle": {
+    "justes": 137,
+    "taux": 0.9448,
+    "par_type": {
+     "GP": {
+      "n": 83,
+      "justes": 77,
+      "taux": 0.9277
+     },
+     "REL": {
+      "n": 26,
+      "justes": 26,
+      "taux": 1.0
+     },
+     "SUB": {
+      "n": 36,
+      "justes": 34,
+      "taux": 0.9444
+     }
+    }
+   }
+  },
+  "ablations_hors_pli": {
+   "sans_rang": {
+    "justes": 139,
+    "n": 145,
+    "taux": 0.9586,
+    "par_type": {
+     "GP": {
+      "n": 83,
+      "justes": 79,
+      "taux": 0.9518
+     },
+     "REL": {
+      "n": 26,
+      "justes": 26,
+      "taux": 1.0
+     },
+     "SUB": {
+      "n": 36,
+      "justes": 34,
+      "taux": 0.9444
+     }
+    }
+   },
+   "sans_prior_de_position": {
+    "justes": 95,
+    "n": 145,
+    "taux": 0.6552,
+    "par_type": {
+     "GP": {
+      "n": 83,
+      "justes": 63,
+      "taux": 0.759
+     },
+     "REL": {
+      "n": 26,
+      "justes": 8,
+      "taux": 0.3077
+     },
+     "SUB": {
+      "n": 36,
+      "justes": 24,
+      "taux": 0.6667
+     }
+    }
+   },
+   "sans_interactions": {
+    "justes": 141,
+    "n": 145,
+    "taux": 0.9724,
+    "par_type": {
+     "GP": {
+      "n": 83,
+      "justes": 80,
+      "taux": 0.9639
+     },
+     "REL": {
+      "n": 26,
+      "justes": 26,
+      "taux": 1.0
+     },
+     "SUB": {
+      "n": 36,
+      "justes": 35,
+      "taux": 0.9722
+     }
+    }
+   },
+   "sans_nature": {
+    "justes": 139,
+    "n": 145,
+    "taux": 0.9586,
+    "par_type": {
+     "GP": {
+      "n": 83,
+      "justes": 78,
+      "taux": 0.9398
+     },
+     "REL": {
+      "n": 26,
+      "justes": 26,
+      "taux": 1.0
+     },
+     "SUB": {
+      "n": 36,
+      "justes": 35,
+      "taux": 0.9722
+     }
+    }
+   }
+  },
+  "sensibilite_hyperparametres": {
+   "l2=0.001,epochs=6000": {
+    "justes": 141,
+    "n": 145,
+    "taux": 0.9724
+   },
+   "l2=0.1,epochs=500": {
+    "justes": 142,
+    "n": 145,
+    "taux": 0.9793
+   },
+   "l2=0.1,epochs=6000": {
+    "justes": 142,
+    "n": 145,
+    "taux": 0.9793
+   }
+  },
+  "hors_vivier_unique": {
+   "n": 140,
+   "modele": 0.9786,
+   "regle_actuelle": 0.95,
+   "segments_vivier_unique": 5
+  }
+ },
+ "controle_negatif": {
+  "regle_actuelle_regroupee": {
+   "justes": 137,
+   "taux": 0.9448,
+   "par_type": {
+    "GP": {
+     "n": 83,
+     "justes": 77,
+     "taux": 0.9277
+    },
+    "REL": {
+     "n": 26,
+     "justes": 26,
+     "taux": 1.0
+    },
+    "SUB": {
+     "n": 36,
+     "justes": 34,
+     "taux": 0.9444
+    }
+   }
+  },
+  "hasard_vivier_attendu": 0.3876,
+  "hasard_cibles_distinctes": 0.0097,
+  "mcnemar": {
+   "modele_juste_regle_fausse": 7,
+   "regle_juste_modele_fausse": 2,
+   "p_exact": 0.179688
+  },
+  "bootstrap_difference": {
+   "tirages": 2000,
+   "difference": 0.0345,
+   "ic95": [
+    -0.0069,
+    0.0759
+   ]
+  },
+  "repere": {
+   "exactitude_entrainement": 0.9931,
+   "rang0_justes": 139,
+   "rang0_taux": 0.9586,
+   "rang0_par_type": {
+    "GP": {
+     "n": 83,
+     "justes": 78,
+     "taux": 0.9398
+    },
+    "REL": {
+     "n": 26,
+     "justes": 26,
+     "taux": 1.0
+    },
+    "SUB": {
+     "n": 36,
+     "justes": 35,
+     "taux": 0.9722
+    }
+   }
+  }
+ },
+ "stabilite_decoupages_aleatoires": {
+  "decoupages": 10,
+  "modele_moyen": 0.9848,
+  "modele_ecart_type": 0.0116,
+  "regle_moyenne": 0.9476,
+  "regle_ecart_type": 0.0207,
+  "gain_moyen": 0.0372
+ },
+ "limites": [
+  "145 segments seulement (dont 26 REL) : les écarts de quelques unités ne sont pas interprétables sans le test apparié et le bootstrap joints.",
+  "Le vivier, la POS et la segmentation viennent de l'heuristique : une erreur de tokenisation ou d'étiquetage est invisible au classement (cas `appelle`/`appelle-moi`).",
+  "Les paraphrases du gold (mêmes phrases à quelques mots près) se répartissent des deux côtés du découpage : les taux absolus sont optimistes, pas forcément le gain.",
+  "La convention du gold (verbe gouverneur ou nom antécédent) n'est pas documentée ; le modèle apprend la convention observée, pas une vérité.",
+  "Aucune recherche d'hyperparamètres par pli (valeurs fixées a priori) ; le test n'est pas réutilisé pour régler le modèle."
+ ],
+ "segments": [
+  {
+   "i_seg": 0,
+   "id": "g002",
+   "source": "hand",
+   "plis": 0,
+   "texte": "Le chat de la voisine dort.",
+   "type": "GP",
+   "segment": "de la voisine",
+   "prep": "gen",
+   "cible": "chat",
+   "pred_actuelle": "",
+   "pred_modele": "chat",
+   "ok_actuelle": false,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "chat",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.8858
+    },
+    {
+     "texte": "dort",
+     "distance": 1,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": 0.485352
+    },
+    {
+     "texte": "voisine",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.45794
+    }
+   ]
+  },
+  {
+   "i_seg": 1,
+   "id": "g004",
+   "source": "hand",
+   "plis": 0,
+   "texte": "Il a couru pour attraper le bus.",
+   "type": "GP",
+   "segment": "pour attraper le bus",
+   "prep": "but",
+   "cible": "couru",
+   "pred_actuelle": "couru",
+   "pred_modele": "couru",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "couru",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.545291
+    },
+    {
+     "texte": "attraper",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.589904
+    },
+    {
+     "texte": "bus",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.824259
+    }
+   ]
+  },
+  {
+   "i_seg": 2,
+   "id": "g010",
+   "source": "hand",
+   "plis": 0,
+   "texte": "Viens ici !",
+   "type": "GP",
+   "segment": "ici",
+   "prep": "autre",
+   "cible": "Viens",
+   "pred_actuelle": "Viens",
+   "pred_modele": "Viens",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "Viens",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.731587
+    }
+   ]
+  },
+  {
+   "i_seg": 3,
+   "id": "g012",
+   "source": "hand",
+   "plis": 0,
+   "texte": "Le canard est prêt à manger.",
+   "type": "GP",
+   "segment": "à manger",
+   "prep": "dat",
+   "cible": "prêt",
+   "pred_actuelle": "manger",
+   "pred_modele": "prêt",
+   "ok_actuelle": false,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "prêt",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 1,
+     "score": 0.969431
+    },
+    {
+     "texte": "canard",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.875487
+    },
+    {
+     "texte": "manger",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.559971
+    }
+   ]
+  },
+  {
+   "i_seg": 4,
+   "id": "g014",
+   "source": "hand",
+   "plis": 0,
+   "texte": "J'ai vu l'homme avec le télescope.",
+   "type": "GP",
+   "segment": "avec le télescope",
+   "prep": "moy",
+   "cible": "vu",
+   "pred_actuelle": "vu",
+   "pred_modele": "vu",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "homme",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 1.057679
+    },
+    {
+     "texte": "vu",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 1.833365
+    },
+    {
+     "texte": "télescope",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.280899
+    }
+   ]
+  },
+  {
+   "i_seg": 5,
+   "id": "g016",
+   "source": "hand",
+   "plis": 0,
+   "texte": "The woman saw the man in the park.",
+   "type": "GP",
+   "segment": "in the park",
+   "prep": "loc",
+   "cible": "saw",
+   "pred_actuelle": "saw",
+   "pred_modele": "saw",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "man",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.679728
+    },
+    {
+     "texte": "saw",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.034211
+    },
+    {
+     "texte": "woman",
+     "distance": 4,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.94097
+    },
+    {
+     "texte": "park",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 6,
+   "id": "r008",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Il pleut depuis hier.",
+   "type": "GP",
+   "segment": "depuis hier",
+   "prep": "autre",
+   "cible": "pleut",
+   "pred_actuelle": "pleut",
+   "pred_modele": "pleut",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pleut",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.124414
+    }
+   ]
+  },
+  {
+   "i_seg": 7,
+   "id": "r014",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le livre que j'ai lu est passionnant.",
+   "type": "REL",
+   "segment": "que j'ai lu",
+   "prep": "",
+   "cible": "livre",
+   "pred_actuelle": "livre",
+   "pred_modele": "livre",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "livre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.919612
+    },
+    {
+     "texte": "passionnant",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.391103
+    },
+    {
+     "texte": "lu",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.4551
+    }
+   ]
+  },
+  {
+   "i_seg": 8,
+   "id": "r018",
+   "source": "reel",
+   "plis": 0,
+   "texte": "La souris est prête à manger.",
+   "type": "GP",
+   "segment": "à manger",
+   "prep": "dat",
+   "cible": "prête",
+   "pred_actuelle": "manger",
+   "pred_modele": "prête",
+   "ok_actuelle": false,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "prête",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 1,
+     "score": 0.974593
+    },
+    {
+     "texte": "souris",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.875487
+    },
+    {
+     "texte": "manger",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.559971
+    }
+   ]
+  },
+  {
+   "i_seg": 9,
+   "id": "r020",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Les enfants jouent dans le parc.",
+   "type": "GP",
+   "segment": "dans le parc",
+   "prep": "loc",
+   "cible": "jouent",
+   "pred_actuelle": "jouent",
+   "pred_modele": "jouent",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "jouent",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.428171
+    },
+    {
+     "texte": "enfants",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.115484
+    },
+    {
+     "texte": "parc",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 10,
+   "id": "r026",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The students listen to the teacher.",
+   "type": "GP",
+   "segment": "to the teacher",
+   "prep": "dat",
+   "cible": "listen",
+   "pred_actuelle": "listen",
+   "pred_modele": "listen",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "listen",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.799254
+    },
+    {
+     "texte": "students",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.739238
+    },
+    {
+     "texte": "teacher",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -3.161982
+    }
+   ]
+  },
+  {
+   "i_seg": 11,
+   "id": "r040",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The children play in the park.",
+   "type": "GP",
+   "segment": "in the park",
+   "prep": "loc",
+   "cible": "play",
+   "pred_actuelle": "play",
+   "pred_modele": "play",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "play",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.292063
+    },
+    {
+     "texte": "children",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.110322
+    },
+    {
+     "texte": "park",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 12,
+   "id": "r044",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le professeur parle aux étudiants.",
+   "type": "GP",
+   "segment": "aux étudiants",
+   "prep": "dat",
+   "cible": "parle",
+   "pred_actuelle": "parle",
+   "pred_modele": "parle",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "parle",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.794092
+    },
+    {
+     "texte": "professeur",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.728914
+    },
+    {
+     "texte": "étudiants",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.277442
+    }
+   ]
+  },
+  {
+   "i_seg": 13,
+   "id": "r048",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Il écrit une lettre à sa sœur.",
+   "type": "GP",
+   "segment": "à sa sœur",
+   "prep": "dat",
+   "cible": "écrit",
+   "pred_actuelle": "écrit",
+   "pred_modele": "lettre",
+   "ok_actuelle": true,
+   "ok_modele": false,
+   "candidats": [
+    {
+     "texte": "lettre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 1.066298
+    },
+    {
+     "texte": "écrit",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.726524
+    },
+    {
+     "texte": "sœur",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.303252
+    }
+   ]
+  },
+  {
+   "i_seg": 14,
+   "id": "r050",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Nous partons en vacances.",
+   "type": "GP",
+   "segment": "en vacances",
+   "prep": "autre",
+   "cible": "partons",
+   "pred_actuelle": "partons",
+   "pred_modele": "partons",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "partons",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.741911
+    },
+    {
+     "texte": "vacances",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.34511
+    }
+   ]
+  },
+  {
+   "i_seg": 15,
+   "id": "r052",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le musée ouvre à dix heures.",
+   "type": "GP",
+   "segment": "à dix heures",
+   "prep": "dat",
+   "cible": "ouvre",
+   "pred_actuelle": "ouvre",
+   "pred_modele": "ouvre",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "ouvre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.794092
+    },
+    {
+     "texte": "musée",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.754724
+    },
+    {
+     "texte": "heures",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.292928
+    }
+   ]
+  },
+  {
+   "i_seg": 16,
+   "id": "r054",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le livre que tu lis est long.",
+   "type": "REL",
+   "segment": "que tu lis",
+   "prep": "",
+   "cible": "livre",
+   "pred_actuelle": "livre",
+   "pred_modele": "livre",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "livre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.919612
+    },
+    {
+     "texte": "long",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -1.513779
+    },
+    {
+     "texte": "lis",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.07836
+    }
+   ]
+  },
+  {
+   "i_seg": 17,
+   "id": "r064",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The teacher talks to the students.",
+   "type": "GP",
+   "segment": "to the students",
+   "prep": "dat",
+   "cible": "talks",
+   "pred_actuelle": "talks",
+   "pred_modele": "talks",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "talks",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.668309
+    },
+    {
+     "texte": "teacher",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": 0.381384
+    },
+    {
+     "texte": "students",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.282604
+    }
+   ]
+  },
+  {
+   "i_seg": 18,
+   "id": "r068",
+   "source": "reel",
+   "plis": 0,
+   "texte": "He writes a letter to his sister.",
+   "type": "GP",
+   "segment": "to his sister",
+   "prep": "dat",
+   "cible": "writes",
+   "pred_actuelle": "writes",
+   "pred_modele": "letter",
+   "ok_actuelle": true,
+   "ok_modele": false,
+   "candidats": [
+    {
+     "texte": "letter",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": 2.192082
+    },
+    {
+     "texte": "writes",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.731686
+    },
+    {
+     "texte": "sister",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -3.167144
+    }
+   ]
+  },
+  {
+   "i_seg": 19,
+   "id": "r070",
+   "source": "reel",
+   "plis": 0,
+   "texte": "We leave on vacation.",
+   "type": "GP",
+   "segment": "on vacation",
+   "prep": "loc",
+   "cible": "leave",
+   "pred_actuelle": "leave",
+   "pred_modele": "leave",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "leave",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.297225
+    },
+    {
+     "texte": "vacation",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.653688
+    }
+   ]
+  },
+  {
+   "i_seg": 20,
+   "id": "r072",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The museum opens at ten.",
+   "type": "GP",
+   "segment": "at ten",
+   "prep": "loc",
+   "cible": "opens",
+   "pred_actuelle": "opens",
+   "pred_modele": "opens",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "opens",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.423009
+    },
+    {
+     "texte": "museum",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.81058
+    }
+   ]
+  },
+  {
+   "i_seg": 21,
+   "id": "r080",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The birds fly over the lake.",
+   "type": "GP",
+   "segment": "over the lake",
+   "prep": "loc",
+   "cible": "fly",
+   "pred_actuelle": "fly",
+   "pred_modele": "fly",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "fly",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.286901
+    },
+    {
+     "texte": "birds",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.125808
+    },
+    {
+     "texte": "lake",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 22,
+   "id": "r082",
+   "source": "reel",
+   "plis": 0,
+   "texte": "La pluie tombe depuis ce matin.",
+   "type": "GP",
+   "segment": "depuis ce matin",
+   "prep": "autre",
+   "cible": "tombe",
+   "pred_actuelle": "tombe",
+   "pred_modele": "tombe",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "tombe",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.605803
+    },
+    {
+     "texte": "pluie",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.817229
+    },
+    {
+     "texte": "matin",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.360595
+    }
+   ]
+  },
+  {
+   "i_seg": 23,
+   "id": "r086",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Les enfants rient aux éclats.",
+   "type": "GP",
+   "segment": "aux éclats",
+   "prep": "dat",
+   "cible": "rient",
+   "pred_actuelle": "rient",
+   "pred_modele": "rient",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "rient",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.061136
+    },
+    {
+     "texte": "enfants",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.7444
+    },
+    {
+     "texte": "éclats",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.292928
+    }
+   ]
+  },
+  {
+   "i_seg": 24,
+   "id": "r088",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le chat grimpe sur le toit.",
+   "type": "GP",
+   "segment": "sur le toit",
+   "prep": "loc",
+   "cible": "grimpe",
+   "pred_actuelle": "grimpe",
+   "pred_modele": "grimpe",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "grimpe",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.695214
+    },
+    {
+     "texte": "chat",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.13097
+    },
+    {
+     "texte": "toit",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 25,
+   "id": "r090",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Il travaille dans un bureau.",
+   "type": "GP",
+   "segment": "dans un bureau",
+   "prep": "loc",
+   "cible": "travaille",
+   "pred_actuelle": "travaille",
+   "pred_modele": "travaille",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "travaille",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.317873
+    },
+    {
+     "texte": "bureau",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.664012
+    }
+   ]
+  },
+  {
+   "i_seg": 26,
+   "id": "r094",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le film que nous avons vu était long.",
+   "type": "REL",
+   "segment": "que nous avons vu",
+   "prep": "",
+   "cible": "film",
+   "pred_actuelle": "film",
+   "pred_modele": "film",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "film",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.91445
+    },
+    {
+     "texte": "long",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -1.513779
+    },
+    {
+     "texte": "vu",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.707302
+    }
+   ]
+  },
+  {
+   "i_seg": 27,
+   "id": "r100",
+   "source": "reel",
+   "plis": 0,
+   "texte": "La rivière coule vers la mer.",
+   "type": "GP",
+   "segment": "vers la mer",
+   "prep": "loc",
+   "cible": "coule",
+   "pred_actuelle": "coule",
+   "pred_modele": "coule",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "coule",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.690052
+    },
+    {
+     "texte": "rivière",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.115484
+    },
+    {
+     "texte": "mer",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.679498
+    }
+   ]
+  },
+  {
+   "i_seg": 28,
+   "id": "r108",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The cat climbs on the roof.",
+   "type": "GP",
+   "segment": "on the roof",
+   "prep": "loc",
+   "cible": "climbs",
+   "pred_actuelle": "climbs",
+   "pred_modele": "climbs",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "climbs",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.302387
+    },
+    {
+     "texte": "cat",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.136132
+    },
+    {
+     "texte": "roof",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 29,
+   "id": "r110",
+   "source": "reel",
+   "plis": 0,
+   "texte": "He works in an office.",
+   "type": "GP",
+   "segment": "in an office",
+   "prep": "loc",
+   "cible": "works",
+   "pred_actuelle": "works",
+   "pred_modele": "works",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "works",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.297225
+    },
+    {
+     "texte": "office",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.664012
+    }
+   ]
+  },
+  {
+   "i_seg": 30,
+   "id": "r120",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The river flows to the sea.",
+   "type": "GP",
+   "segment": "to the sea",
+   "prep": "dat",
+   "cible": "flows",
+   "pred_actuelle": "flows",
+   "pred_modele": "flows",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "flows",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.668309
+    },
+    {
+     "texte": "river",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": 0.37106
+    },
+    {
+     "texte": "sea",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.308414
+    }
+   ]
+  },
+  {
+   "i_seg": 31,
+   "id": "r126",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le poisson nage dans l'eau.",
+   "type": "GP",
+   "segment": "dans l'eau",
+   "prep": "loc",
+   "cible": "nage",
+   "pred_actuelle": "nage",
+   "pred_modele": "nage",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "nage",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.68489
+    },
+    {
+     "texte": "poisson",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.115484
+    },
+    {
+     "texte": "eau",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.679498
+    }
+   ]
+  },
+  {
+   "i_seg": 32,
+   "id": "r132",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le tableau est accroché au mur.",
+   "type": "GP",
+   "segment": "au mur",
+   "prep": "dat",
+   "cible": "accroché",
+   "pred_actuelle": "accroché",
+   "pred_modele": "accroché",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "accroché",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.683795
+    },
+    {
+     "texte": "tableau",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.307014
+    },
+    {
+     "texte": "au",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "PREP",
+     "positif": 0,
+     "score": -1.666323
+    },
+    {
+     "texte": "mur",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.308414
+    }
+   ]
+  },
+  {
+   "i_seg": 33,
+   "id": "r136",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Les voyageurs montent dans le train.",
+   "type": "GP",
+   "segment": "dans le train",
+   "prep": "loc",
+   "cible": "montent",
+   "pred_actuelle": "montent",
+   "pred_modele": "montent",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "montent",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.307549
+    },
+    {
+     "texte": "voyageurs",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.10516
+    },
+    {
+     "texte": "train",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.669174
+    }
+   ]
+  },
+  {
+   "i_seg": 34,
+   "id": "r150",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le livre appartient à la bibliothèque.",
+   "type": "GP",
+   "segment": "à la bibliothèque",
+   "prep": "dat",
+   "cible": "appartient",
+   "pred_actuelle": "appartient",
+   "pred_modele": "appartient",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "appartient",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.086946
+    },
+    {
+     "texte": "livre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.754724
+    },
+    {
+     "texte": "bibliothèque",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.261956
+    }
+   ]
+  },
+  {
+   "i_seg": 35,
+   "id": "r156",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The fish swims in the water.",
+   "type": "GP",
+   "segment": "in the water",
+   "prep": "loc",
+   "cible": "swims",
+   "pred_actuelle": "swims",
+   "pred_modele": "swims",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "swims",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.297225
+    },
+    {
+     "texte": "fish",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.13097
+    },
+    {
+     "texte": "water",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -3.54339
+    }
+   ]
+  },
+  {
+   "i_seg": 36,
+   "id": "r160",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The postman passes in the morning.",
+   "type": "GP",
+   "segment": "in the morning",
+   "prep": "loc",
+   "cible": "passes",
+   "pred_actuelle": "passes",
+   "pred_modele": "passes",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "passes",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.302387
+    },
+    {
+     "texte": "postman",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.115484
+    },
+    {
+     "texte": "morning",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -3.533066
+    }
+   ]
+  },
+  {
+   "i_seg": 37,
+   "id": "r166",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The travelers get on the train.",
+   "type": "GP",
+   "segment": "on the train",
+   "prep": "loc",
+   "cible": "get",
+   "pred_actuelle": "get",
+   "pred_modele": "get",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "get",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.286901
+    },
+    {
+     "texte": "travelers",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.10516
+    },
+    {
+     "texte": "train",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.669174
+    }
+   ]
+  },
+  {
+   "i_seg": 38,
+   "id": "r168",
+   "source": "reel",
+   "plis": 0,
+   "texte": "She listens to music.",
+   "type": "GP",
+   "segment": "to music",
+   "prep": "dat",
+   "cible": "listens",
+   "pred_actuelle": "listens",
+   "pred_modele": "listens",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "listens",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.804416
+    },
+    {
+     "texte": "music",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.29809
+    }
+   ]
+  },
+  {
+   "i_seg": 39,
+   "id": "r180",
+   "source": "reel",
+   "plis": 0,
+   "texte": "The book belongs to the library.",
+   "type": "GP",
+   "segment": "to the library",
+   "prep": "dat",
+   "cible": "belongs",
+   "pred_actuelle": "belongs",
+   "pred_modele": "belongs",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "belongs",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.678633
+    },
+    {
+     "texte": "book",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.759886
+    },
+    {
+     "texte": "library",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.287766
+    }
+   ]
+  },
+  {
+   "i_seg": 40,
+   "id": "r182",
+   "source": "reel",
+   "plis": 0,
+   "texte": "La pluie tombe sur le toit.",
+   "type": "GP",
+   "segment": "sur le toit",
+   "prep": "loc",
+   "cible": "tombe",
+   "pred_actuelle": "tombe",
+   "pred_modele": "tombe",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "tombe",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.297225
+    },
+    {
+     "texte": "pluie",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.125808
+    },
+    {
+     "texte": "toit",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 41,
+   "id": "r184",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Nous mangeons à midi.",
+   "type": "GP",
+   "segment": "à midi",
+   "prep": "dat",
+   "cible": "mangeons",
+   "pred_actuelle": "mangeons",
+   "pred_modele": "mangeons",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "mangeons",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.809578
+    },
+    {
+     "texte": "midi",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.303252
+    }
+   ]
+  },
+  {
+   "i_seg": 42,
+   "id": "r194",
+   "source": "reel",
+   "plis": 0,
+   "texte": "We eat at noon.",
+   "type": "GP",
+   "segment": "at noon",
+   "prep": "loc",
+   "cible": "eat",
+   "pred_actuelle": "eat",
+   "pred_modele": "eat",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "eat",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 1.805512
+    },
+    {
+     "texte": "noon",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.674336
+    }
+   ]
+  },
+  {
+   "i_seg": 43,
+   "id": "r202",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Je pense que tu as raison.",
+   "type": "SUB",
+   "segment": "que tu as raison",
+   "prep": "",
+   "cible": "pense",
+   "pred_actuelle": "pense",
+   "pred_modele": "pense",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pense",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.681084
+    },
+    {
+     "texte": "raison",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.67298
+    }
+   ]
+  },
+  {
+   "i_seg": 44,
+   "id": "r208",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Elle dit qu'il vient.",
+   "type": "SUB",
+   "segment": "qu'il vient",
+   "prep": "",
+   "cible": "dit",
+   "pred_actuelle": "dit",
+   "pred_modele": "dit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.400465
+    },
+    {
+     "texte": "vient",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.948437
+    }
+   ]
+  },
+  {
+   "i_seg": 45,
+   "id": "r210",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Bien qu'il soit tard, il travaille.",
+   "type": "SUB",
+   "segment": "Bien qu'il soit tard",
+   "prep": "",
+   "cible": "travaille",
+   "pred_actuelle": "travaille",
+   "pred_modele": "travaille",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "travaille",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.883162
+    }
+   ]
+  },
+  {
+   "i_seg": 46,
+   "id": "r212",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Il faut que tu partes.",
+   "type": "SUB",
+   "segment": "que tu partes",
+   "prep": "",
+   "cible": "faut",
+   "pred_actuelle": "faut",
+   "pred_modele": "faut",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "faut",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.675922
+    },
+    {
+     "texte": "partes",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.713873
+    }
+   ]
+  },
+  {
+   "i_seg": 47,
+   "id": "r222",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Si tu viens, nous partirons.",
+   "type": "SUB",
+   "segment": "Si tu viens",
+   "prep": "",
+   "cible": "partirons",
+   "pred_actuelle": "partirons",
+   "pred_modele": "partirons",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "partirons",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.883162
+    },
+    {
+     "texte": "viens",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.948437
+    }
+   ]
+  },
+  {
+   "i_seg": 48,
+   "id": "r226",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Le jour où nous sommes partis était beau.",
+   "type": "REL",
+   "segment": "où nous sommes partis",
+   "prep": "",
+   "cible": "jour",
+   "pred_actuelle": "jour",
+   "pred_modele": "jour",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "jour",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.91445
+    },
+    {
+     "texte": "beau",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -1.513779
+    },
+    {
+     "texte": "partis",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.062874
+    }
+   ]
+  },
+  {
+   "i_seg": 49,
+   "id": "r228",
+   "source": "reel",
+   "plis": 0,
+   "texte": "La maison que nous avons achetée est vieille.",
+   "type": "REL",
+   "segment": "que nous avons achetée",
+   "prep": "",
+   "cible": "maison",
+   "pred_actuelle": "maison",
+   "pred_modele": "maison",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "maison",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.924774
+    },
+    {
+     "texte": "vieille",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -1.498293
+    },
+    {
+     "texte": "achetée",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.42929
+    }
+   ]
+  },
+  {
+   "i_seg": 50,
+   "id": "r230",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Quand tu arrives, appelle-moi.",
+   "type": "SUB",
+   "segment": "Quand tu arrives",
+   "prep": "",
+   "cible": "appelle",
+   "pred_actuelle": "appelle-moi",
+   "pred_modele": "appelle-moi",
+   "ok_actuelle": false,
+   "ok_modele": false,
+   "candidats": [
+    {
+     "texte": "appelle-moi",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.060304
+    },
+    {
+     "texte": "arrives",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.938113
+    }
+   ]
+  },
+  {
+   "i_seg": 51,
+   "id": "r232",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Je pense que nous devons partir.",
+   "type": "SUB",
+   "segment": "que nous devons partir",
+   "prep": "",
+   "cible": "pense",
+   "pred_actuelle": "pense",
+   "pred_modele": "pense",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pense",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.681084
+    },
+    {
+     "texte": "devons",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -0.25334
+    },
+    {
+     "texte": "partir",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.943275
+    }
+   ]
+  },
+  {
+   "i_seg": 52,
+   "id": "r234",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Comme il pleuvait, nous sommes restés.",
+   "type": "SUB",
+   "segment": "Comme il pleuvait",
+   "prep": "",
+   "cible": "restés",
+   "pred_actuelle": "restés",
+   "pred_modele": "restés",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "restés",
+     "distance": 4,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.741751
+    },
+    {
+     "texte": "pleuvait",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.662656
+    }
+   ]
+  },
+  {
+   "i_seg": 53,
+   "id": "r254",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Quand il neige, nous restons.",
+   "type": "SUB",
+   "segment": "Quand il neige",
+   "prep": "",
+   "cible": "restons",
+   "pred_actuelle": "restons",
+   "pred_modele": "restons",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "restons",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": -0.086269
+    },
+    {
+     "texte": "neige",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.678142
+    }
+   ]
+  },
+  {
+   "i_seg": 54,
+   "id": "r256",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Il dit qu'il pleut.",
+   "type": "SUB",
+   "segment": "qu'il pleut",
+   "prep": "",
+   "cible": "dit",
+   "pred_actuelle": "dit",
+   "pred_modele": "dit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.400465
+    },
+    {
+     "texte": "pleut",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.907543
+    }
+   ]
+  },
+  {
+   "i_seg": 55,
+   "id": "r258",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Si elle vient, je pars.",
+   "type": "SUB",
+   "segment": "Si elle vient",
+   "prep": "",
+   "cible": "pars",
+   "pred_actuelle": "pars",
+   "pred_modele": "pars",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pars",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 1.62795
+    },
+    {
+     "texte": "vient",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.948437
+    }
+   ]
+  },
+  {
+   "i_seg": 56,
+   "id": "r260",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Bien qu'il pleuve, il sort.",
+   "type": "SUB",
+   "segment": "Bien qu'il pleuve",
+   "prep": "",
+   "cible": "sort",
+   "pred_actuelle": "sort",
+   "pred_modele": "sort",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "sort",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.857352
+    },
+    {
+     "texte": "pleuve",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.67298
+    }
+   ]
+  },
+  {
+   "i_seg": 57,
+   "id": "r262",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Pendant qu'elle dort, il travaille.",
+   "type": "SUB",
+   "segment": "Pendant qu'elle dort",
+   "prep": "",
+   "cible": "travaille",
+   "pred_actuelle": "travaille",
+   "pred_modele": "travaille",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "travaille",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.883162
+    },
+    {
+     "texte": "dort",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.953599
+    }
+   ]
+  },
+  {
+   "i_seg": 58,
+   "id": "r266",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Elle pleure parce qu'elle est seule.",
+   "type": "SUB",
+   "segment": "parce qu'elle est seule",
+   "prep": "",
+   "cible": "pleure",
+   "pred_actuelle": "pleure",
+   "pred_modele": "pleure",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pleure",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.686246
+    },
+    {
+     "texte": "seule",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.678142
+    }
+   ]
+  },
+  {
+   "i_seg": 59,
+   "id": "r268",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Comme elle chantait, il dansait.",
+   "type": "SUB",
+   "segment": "Comme elle chantait",
+   "prep": "",
+   "cible": "dansait",
+   "pred_actuelle": "dansait",
+   "pred_modele": "dansait",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dansait",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.872838
+    },
+    {
+     "texte": "chantait",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.703549
+    }
+   ]
+  },
+  {
+   "i_seg": 60,
+   "id": "r270",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Quand tu veux, nous partons.",
+   "type": "SUB",
+   "segment": "Quand tu veux",
+   "prep": "",
+   "cible": "partons",
+   "pred_actuelle": "partons",
+   "pred_modele": "partons",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "partons",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 1.643436
+    },
+    {
+     "texte": "veux",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.953599
+    }
+   ]
+  },
+  {
+   "i_seg": 61,
+   "id": "r272",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Elle dit qu'elle part.",
+   "type": "SUB",
+   "segment": "qu'elle part",
+   "prep": "",
+   "cible": "dit",
+   "pred_actuelle": "dit",
+   "pred_modele": "dit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.400465
+    },
+    {
+     "texte": "part",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.724197
+    }
+   ]
+  },
+  {
+   "i_seg": 62,
+   "id": "r274",
+   "source": "reel",
+   "plis": 0,
+   "texte": "Bien que je sois fatigué, je continue.",
+   "type": "SUB",
+   "segment": "Bien que je sois fatigué",
+   "prep": "",
+   "cible": "continue",
+   "pred_actuelle": "continue",
+   "pred_modele": "continue",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "continue",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": -0.081107
+    },
+    {
+     "texte": "fatigué",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.667818
+    }
+   ]
+  },
+  {
+   "i_seg": 63,
+   "id": "s012",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "cette douce étoile écoute que Lucas trouve",
+   "type": "SUB",
+   "segment": "que Lucas trouve",
+   "prep": "",
+   "cible": "écoute",
+   "pred_actuelle": "écoute",
+   "pred_modele": "écoute",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "écoute",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.415951
+    },
+    {
+     "texte": "étoile",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.715354
+    },
+    {
+     "texte": "douce",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.260701
+    },
+    {
+     "texte": "Lucas",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.833175
+    },
+    {
+     "texte": "trouve",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 4,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.902381
+    }
+   ]
+  },
+  {
+   "i_seg": 64,
+   "id": "s022",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "ils nage que vous nage",
+   "type": "SUB",
+   "segment": "que vous nage",
+   "prep": "",
+   "cible": "nage",
+   "pred_actuelle": "nage",
+   "pred_modele": "nage",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "nage",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.675922
+    },
+    {
+     "texte": "nage",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": -3.683304
+    }
+   ]
+  },
+  {
+   "i_seg": 65,
+   "id": "s030",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "les rapide lettre cherche que le voyage crie",
+   "type": "SUB",
+   "segment": "que le voyage crie",
+   "prep": "",
+   "cible": "cherche",
+   "pred_actuelle": "cherche",
+   "pred_modele": "cherche",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "cherche",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.421113
+    },
+    {
+     "texte": "lettre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.715354
+    },
+    {
+     "texte": "rapide",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.255539
+    },
+    {
+     "texte": "voyage",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.828013
+    },
+    {
+     "texte": "crie",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 4,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.683304
+    }
+   ]
+  },
+  {
+   "i_seg": 66,
+   "id": "s052",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "cette ancienne cuisine ouvre que un sombre village trouve",
+   "type": "SUB",
+   "segment": "que un sombre village trouve",
+   "prep": "",
+   "cible": "ouvre",
+   "pred_actuelle": "ouvre",
+   "pred_modele": "ouvre",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "ouvre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.410789
+    },
+    {
+     "texte": "cuisine",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.889509
+    },
+    {
+     "texte": "ancienne",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.092772
+    },
+    {
+     "texte": "sombre",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.321032
+    },
+    {
+     "texte": "village",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 4,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.991844
+    },
+    {
+     "texte": "trouve",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 5,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.902381
+    }
+   ]
+  },
+  {
+   "i_seg": 67,
+   "id": "s054",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "elle trouve que une rapide rivière écoute",
+   "type": "SUB",
+   "segment": "que une rapide rivière écoute",
+   "prep": "",
+   "cible": "trouve",
+   "pred_actuelle": "trouve",
+   "pred_modele": "trouve",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "trouve",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.456845
+    },
+    {
+     "texte": "rapide",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.419734
+    },
+    {
+     "texte": "rivière",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.541195
+    },
+    {
+     "texte": "écoute",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.943275
+    }
+   ]
+  },
+  {
+   "i_seg": 68,
+   "id": "s058",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "les rapide avocat saute vers les sombre livre",
+   "type": "GP",
+   "segment": "vers les sombre livre",
+   "prep": "loc",
+   "cible": "saute",
+   "pred_actuelle": "saute",
+   "pred_modele": "saute",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "saute",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.690052
+    },
+    {
+     "texte": "avocat",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.275678
+    },
+    {
+     "texte": "rapide",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.246571
+    },
+    {
+     "texte": "sombre",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.819045
+    },
+    {
+     "texte": "livre",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 4,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.669174
+    }
+   ]
+  },
+  {
+   "i_seg": 69,
+   "id": "s064",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "la étoile compte pour Paul",
+   "type": "GP",
+   "segment": "pour Paul",
+   "prep": "but",
+   "cible": "compte",
+   "pred_actuelle": "compte",
+   "pred_modele": "compte",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "compte",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.94328
+    },
+    {
+     "texte": "étoile",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.87258
+    },
+    {
+     "texte": "Paul",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.42627
+    }
+   ]
+  },
+  {
+   "i_seg": 70,
+   "id": "s086",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "ce chemin cherche sous les cheval",
+   "type": "GP",
+   "segment": "sous les cheval",
+   "prep": "loc",
+   "cible": "cherche",
+   "pred_actuelle": "cherche",
+   "pred_modele": "cherche",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "cherche",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.433333
+    },
+    {
+     "texte": "chemin",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.120646
+    },
+    {
+     "texte": "cheval",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -4.750555
+    }
+   ]
+  },
+  {
+   "i_seg": 71,
+   "id": "s088",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "nous crie que le rapide avocat cherche",
+   "type": "SUB",
+   "segment": "que le rapide avocat cherche",
+   "prep": "",
+   "cible": "crie",
+   "pred_actuelle": "crie",
+   "pred_modele": "crie",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "crie",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.675922
+    },
+    {
+     "texte": "rapide",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.419734
+    },
+    {
+     "texte": "avocat",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.546357
+    },
+    {
+     "texte": "cherche",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.938113
+    }
+   ]
+  },
+  {
+   "i_seg": 72,
+   "id": "s108",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "ce calme papier rêve sous le nuage",
+   "type": "GP",
+   "segment": "sous le nuage",
+   "prep": "loc",
+   "cible": "rêve",
+   "pred_actuelle": "papier",
+   "pred_modele": "rêve",
+   "ok_actuelle": false,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "rêve",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.68489
+    },
+    {
+     "texte": "papier",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": 0.56845
+    },
+    {
+     "texte": "calme",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.815044
+    },
+    {
+     "texte": "nuage",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.669174
+    }
+   ]
+  },
+  {
+   "i_seg": 73,
+   "id": "s116",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "ce nuage finit vers ma rapide rivière",
+   "type": "GP",
+   "segment": "vers ma rapide rivière",
+   "prep": "loc",
+   "cible": "finit",
+   "pred_actuelle": "finit",
+   "pred_modele": "finit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "finit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 3.423009
+    },
+    {
+     "texte": "nuage",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.562496
+    },
+    {
+     "texte": "rapide",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.537389
+    },
+    {
+     "texte": "rivière",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.65885
+    }
+   ]
+  },
+  {
+   "i_seg": 74,
+   "id": "s120",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "une sombre lettre prépare de une chanson",
+   "type": "GP",
+   "segment": "de une chanson",
+   "prep": "gen",
+   "cible": "prépare",
+   "pred_actuelle": "prépare",
+   "pred_modele": "prépare",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "prépare",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.901286
+    },
+    {
+     "texte": "lettre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.356424
+    },
+    {
+     "texte": "sombre",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.608972
+    },
+    {
+     "texte": "chanson",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.45794
+    }
+   ]
+  },
+  {
+   "i_seg": 75,
+   "id": "s122",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "mon papier saute vers les montagne",
+   "type": "GP",
+   "segment": "vers les montagne",
+   "prep": "loc",
+   "cible": "saute",
+   "pred_actuelle": "papier",
+   "pred_modele": "saute",
+   "ok_actuelle": false,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "saute",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.690052
+    },
+    {
+     "texte": "papier",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": 0.005138
+    },
+    {
+     "texte": "montagne",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.653688
+    }
+   ]
+  },
+  {
+   "i_seg": 76,
+   "id": "s124",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "une fenêtre commence que elles compte",
+   "type": "SUB",
+   "segment": "que elles compte",
+   "prep": "",
+   "cible": "commence",
+   "pred_actuelle": "commence",
+   "pred_modele": "commence",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "commence",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.467169
+    },
+    {
+     "texte": "fenêtre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.124452
+    },
+    {
+     "texte": "compte",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.67298
+    }
+   ]
+  },
+  {
+   "i_seg": 77,
+   "id": "s144",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "mon rapide jardin dessine chez ce chemin",
+   "type": "GP",
+   "segment": "chez ce chemin",
+   "prep": "loc",
+   "cible": "dessine",
+   "pred_actuelle": "dessine",
+   "pred_modele": "dessine",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dessine",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.700376
+    },
+    {
+     "texte": "jardin",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.557334
+    },
+    {
+     "texte": "rapide",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.809882
+    },
+    {
+     "texte": "chemin",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.664012
+    }
+   ]
+  },
+  {
+   "i_seg": 78,
+   "id": "s150",
+   "source": "synthetique",
+   "plis": 0,
+   "texte": "les rivière compte à un rapide livre",
+   "type": "GP",
+   "segment": "à un rapide livre",
+   "prep": "dat",
+   "cible": "compte",
+   "pred_actuelle": "compte",
+   "pred_modele": "compte",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "compte",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.066298
+    },
+    {
+     "texte": "rivière",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.181089
+    },
+    {
+     "texte": "rapide",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.166305
+    },
+    {
+     "texte": "livre",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.29809
+    }
+   ]
+  },
+  {
+   "i_seg": 79,
+   "id": "g003",
+   "source": "hand",
+   "plis": 1,
+   "texte": "La femme a vu l'homme dans le parc.",
+   "type": "GP",
+   "segment": "dans le parc",
+   "prep": "loc",
+   "cible": "vu",
+   "pred_actuelle": "vu",
+   "pred_modele": "vu",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "homme",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.678168
+    },
+    {
+     "texte": "vu",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 1.77373
+    },
+    {
+     "texte": "femme",
+     "distance": 5,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.664039
+    },
+    {
+     "texte": "parc",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.151712
+    }
+   ]
+  },
+  {
+   "i_seg": 80,
+   "id": "g005",
+   "source": "hand",
+   "plis": 1,
+   "texte": "Elle a dit qu'elle viendrait hier.",
+   "type": "SUB",
+   "segment": "qu'elle viendrait",
+   "prep": "",
+   "cible": "dit",
+   "pred_actuelle": "dit",
+   "pred_modele": "dit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.940386
+    },
+    {
+     "texte": "viendrait",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -3.51436
+    }
+   ]
+  },
+  {
+   "i_seg": 81,
+   "id": "g007",
+   "source": "hand",
+   "plis": 1,
+   "texte": "Les enfants jouent dans le jardin.",
+   "type": "GP",
+   "segment": "dans le jardin",
+   "prep": "loc",
+   "cible": "jouent",
+   "pred_actuelle": "jouent",
+   "pred_modele": "jouent",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "jouent",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.826727
+    },
+    {
+     "texte": "enfants",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.003766
+    },
+    {
+     "texte": "jardin",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.210765
+    }
+   ]
+  },
+  {
+   "i_seg": 82,
+   "id": "g011",
+   "source": "hand",
+   "plis": 1,
+   "texte": "Le livre que j'ai lu est intéressant.",
+   "type": "REL",
+   "segment": "que j'ai lu",
+   "prep": "",
+   "cible": "livre",
+   "pred_actuelle": "livre",
+   "pred_modele": "livre",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "livre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "intéressant",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -1.157524
+    },
+    {
+     "texte": "lu",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.336286
+    }
+   ]
+  },
+  {
+   "i_seg": 83,
+   "id": "r005",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Elle parle à son frère.",
+   "type": "GP",
+   "segment": "à son frère",
+   "prep": "dat",
+   "cible": "parle",
+   "pred_actuelle": "parle",
+   "pred_modele": "parle",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "parle",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.869554
+    },
+    {
+     "texte": "frère",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.167938
+    }
+   ]
+  },
+  {
+   "i_seg": 84,
+   "id": "r007",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le chat dort sur la chaise.",
+   "type": "GP",
+   "segment": "sur la chaise",
+   "prep": "loc",
+   "cible": "dort",
+   "pred_actuelle": "dort",
+   "pred_modele": "dort",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dort",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.88578
+    },
+    {
+     "texte": "chat",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.915186
+    },
+    {
+     "texte": "chaise",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.210765
+    }
+   ]
+  },
+  {
+   "i_seg": 85,
+   "id": "r011",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le train part à midi.",
+   "type": "GP",
+   "segment": "à midi",
+   "prep": "dat",
+   "cible": "part",
+   "pred_actuelle": "part",
+   "pred_modele": "part",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "part",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.911313
+    },
+    {
+     "texte": "train",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.931413
+    },
+    {
+     "texte": "midi",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.138412
+    }
+   ]
+  },
+  {
+   "i_seg": 86,
+   "id": "r015",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le film dont elle parle est sorti.",
+   "type": "REL",
+   "segment": "dont elle parle",
+   "prep": "",
+   "cible": "film",
+   "pred_actuelle": "film",
+   "pred_modele": "film",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "film",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.464067
+    },
+    {
+     "texte": "sorti",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.130962
+    },
+    {
+     "texte": "parle",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.383503
+    }
+   ]
+  },
+  {
+   "i_seg": 87,
+   "id": "r025",
+   "source": "reel",
+   "plis": 1,
+   "texte": "She talks to her brother.",
+   "type": "GP",
+   "segment": "to her brother",
+   "prep": "dat",
+   "cible": "talks",
+   "pred_actuelle": "talks",
+   "pred_modele": "talks",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "talks",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.881787
+    },
+    {
+     "texte": "brother",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -4.239224
+    }
+   ]
+  },
+  {
+   "i_seg": 88,
+   "id": "r027",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The cat sleeps on the chair.",
+   "type": "GP",
+   "segment": "on the chair",
+   "prep": "loc",
+   "cible": "sleeps",
+   "pred_actuelle": "sleeps",
+   "pred_modele": "sleeps",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "sleeps",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.826727
+    },
+    {
+     "texte": "cat",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.88566
+    },
+    {
+     "texte": "chair",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -4.193472
+    }
+   ]
+  },
+  {
+   "i_seg": 89,
+   "id": "r031",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The train leaves at noon.",
+   "type": "GP",
+   "segment": "at noon",
+   "prep": "loc",
+   "cible": "leaves",
+   "pred_actuelle": "leaves",
+   "pred_modele": "leaves",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "leaves",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.83896
+    },
+    {
+     "texte": "train",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.944713
+    },
+    {
+     "texte": "noon",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.151712
+    }
+   ]
+  },
+  {
+   "i_seg": 90,
+   "id": "r041",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le garçon joue au ballon.",
+   "type": "GP",
+   "segment": "au ballon",
+   "prep": "dat",
+   "cible": "joue",
+   "pred_actuelle": "joue",
+   "pred_modele": "joue",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "joue",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.89908
+    },
+    {
+     "texte": "garçon",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.442275
+    },
+    {
+     "texte": "au",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "PREP",
+     "positif": 0,
+     "score": -0.883829
+    },
+    {
+     "texte": "ballon",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.197465
+    }
+   ]
+  },
+  {
+   "i_seg": 91,
+   "id": "r047",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Les fleurs poussent dans le jardin.",
+   "type": "GP",
+   "segment": "dans le jardin",
+   "prep": "loc",
+   "cible": "poussent",
+   "pred_actuelle": "poussent",
+   "pred_modele": "poussent",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "poussent",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.589588
+    },
+    {
+     "texte": "fleurs",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.974239
+    },
+    {
+     "texte": "jardin",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.210765
+    }
+   ]
+  },
+  {
+   "i_seg": 92,
+   "id": "r055",
+   "source": "reel",
+   "plis": 1,
+   "texte": "La ville où nous vivons est belle.",
+   "type": "REL",
+   "segment": "où nous vivons",
+   "prep": "",
+   "cible": "ville",
+   "pred_actuelle": "ville",
+   "pred_modele": "ville",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "ville",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "belle",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -0.980365
+    },
+    {
+     "texte": "vivons",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.454393
+    }
+   ]
+  },
+  {
+   "i_seg": 93,
+   "id": "r057",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le chien aboie contre le facteur.",
+   "type": "GP",
+   "segment": "contre le facteur",
+   "prep": "autre",
+   "cible": "aboie",
+   "pred_actuelle": "aboie",
+   "pred_modele": "aboie",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "aboie",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 1.00718
+    },
+    {
+     "texte": "chien",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.603468
+    },
+    {
+     "texte": "facteur",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.899047
+    }
+   ]
+  },
+  {
+   "i_seg": 94,
+   "id": "r061",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The boy plays with the ball.",
+   "type": "GP",
+   "segment": "with the ball",
+   "prep": "moy",
+   "cible": "plays",
+   "pred_actuelle": "plays",
+   "pred_modele": "plays",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "plays",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.97352
+    },
+    {
+     "texte": "boy",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.768393
+    },
+    {
+     "texte": "ball",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.034445
+    }
+   ]
+  },
+  {
+   "i_seg": 95,
+   "id": "r063",
+   "source": "reel",
+   "plis": 1,
+   "texte": "We listen to the radio.",
+   "type": "GP",
+   "segment": "to the radio",
+   "prep": "dat",
+   "cible": "listen",
+   "pred_actuelle": "listen",
+   "pred_modele": "listen",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "listen",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.840027
+    },
+    {
+     "texte": "radio",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.167938
+    }
+   ]
+  },
+  {
+   "i_seg": 96,
+   "id": "r067",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The flowers grow in the garden.",
+   "type": "GP",
+   "segment": "in the garden",
+   "prep": "loc",
+   "cible": "grow",
+   "pred_actuelle": "grow",
+   "pred_modele": "grow",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "grow",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.898013
+    },
+    {
+     "texte": "flowers",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.003766
+    },
+    {
+     "texte": "garden",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.210765
+    }
+   ]
+  },
+  {
+   "i_seg": 97,
+   "id": "r077",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The dog barks at the postman.",
+   "type": "GP",
+   "segment": "at the postman",
+   "prep": "loc",
+   "cible": "barks",
+   "pred_actuelle": "barks",
+   "pred_modele": "barks",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "barks",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.868487
+    },
+    {
+     "texte": "dog",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.88566
+    },
+    {
+     "texte": "postman",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.240292
+    }
+   ]
+  },
+  {
+   "i_seg": 98,
+   "id": "r087",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Elle écrit à son amie.",
+   "type": "GP",
+   "segment": "à son amie",
+   "prep": "dat",
+   "cible": "écrit",
+   "pred_actuelle": "écrit",
+   "pred_modele": "écrit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "écrit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.881787
+    },
+    {
+     "texte": "amie",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.138412
+    }
+   ]
+  },
+  {
+   "i_seg": 99,
+   "id": "r095",
+   "source": "reel",
+   "plis": 1,
+   "texte": "La maison où je suis né est petite.",
+   "type": "REL",
+   "segment": "où je suis né",
+   "prep": "",
+   "cible": "maison",
+   "pred_actuelle": "maison",
+   "pred_modele": "maison",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "maison",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.405014
+    },
+    {
+     "texte": "petite",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -1.009891
+    },
+    {
+     "texte": "né",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.257078
+    }
+   ]
+  },
+  {
+   "i_seg": 100,
+   "id": "r097",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Elle téléphone à sa mère.",
+   "type": "GP",
+   "segment": "à sa mère",
+   "prep": "dat",
+   "cible": "téléphone",
+   "pred_actuelle": "téléphone",
+   "pred_modele": "téléphone",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "téléphone",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.573362
+    },
+    {
+     "texte": "mère",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.138412
+    }
+   ]
+  },
+  {
+   "i_seg": 101,
+   "id": "r107",
+   "source": "reel",
+   "plis": 1,
+   "texte": "She writes to her friend.",
+   "type": "GP",
+   "segment": "to her friend",
+   "prep": "dat",
+   "cible": "writes",
+   "pred_actuelle": "writes",
+   "pred_modele": "writes",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "writes",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.85226
+    },
+    {
+     "texte": "friend",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.197465
+    }
+   ]
+  },
+  {
+   "i_seg": 102,
+   "id": "r139",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le bébé sourit à sa mère.",
+   "type": "GP",
+   "segment": "à sa mère",
+   "prep": "dat",
+   "cible": "sourit",
+   "pred_actuelle": "sourit",
+   "pred_modele": "sourit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "sourit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.661942
+    },
+    {
+     "texte": "bébé",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.901886
+    },
+    {
+     "texte": "mère",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.138412
+    }
+   ]
+  },
+  {
+   "i_seg": 103,
+   "id": "r147",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Les clients attendent devant la porte.",
+   "type": "GP",
+   "segment": "devant la porte",
+   "prep": "loc",
+   "cible": "attendent",
+   "pred_actuelle": "attendent",
+   "pred_modele": "attendent",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "attendent",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.750381
+    },
+    {
+     "texte": "clients",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.003766
+    },
+    {
+     "texte": "porte",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.99092
+    }
+   ]
+  },
+  {
+   "i_seg": 104,
+   "id": "r169",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The baby smiles at his mother.",
+   "type": "GP",
+   "segment": "at his mother",
+   "prep": "loc",
+   "cible": "smiles",
+   "pred_actuelle": "smiles",
+   "pred_modele": "smiles",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "smiles",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.83896
+    },
+    {
+     "texte": "baby",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.915186
+    },
+    {
+     "texte": "mother",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -4.222998
+    }
+   ]
+  },
+  {
+   "i_seg": 105,
+   "id": "r177",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The customers wait in front of the door.",
+   "type": "GP",
+   "segment": "in front of the door",
+   "prep": "loc",
+   "cible": "wait",
+   "pred_actuelle": "wait",
+   "pred_modele": "wait",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "wait",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.898013
+    },
+    {
+     "texte": "customers",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.544154
+    },
+    {
+     "texte": "front",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.143909
+    },
+    {
+     "texte": "door",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.151712
+    }
+   ]
+  },
+  {
+   "i_seg": 106,
+   "id": "r193",
+   "source": "reel",
+   "plis": 1,
+   "texte": "The dog runs in the garden.",
+   "type": "GP",
+   "segment": "in the garden",
+   "prep": "loc",
+   "cible": "runs",
+   "pred_actuelle": "runs",
+   "pred_modele": "runs",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "runs",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.898013
+    },
+    {
+     "texte": "dog",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.88566
+    },
+    {
+     "texte": "garden",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.210765
+    }
+   ]
+  },
+  {
+   "i_seg": 107,
+   "id": "r201",
+   "source": "reel",
+   "plis": 1,
+   "texte": "L'homme qui parle est mon père.",
+   "type": "REL",
+   "segment": "qui parle",
+   "prep": "",
+   "cible": "homme",
+   "pred_actuelle": "homme",
+   "pred_modele": "homme",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "homme",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "père",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.985607
+    },
+    {
+     "texte": "parle",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.383503
+    }
+   ]
+  },
+  {
+   "i_seg": 108,
+   "id": "r203",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le livre que j'ai lu est bon.",
+   "type": "REL",
+   "segment": "que j'ai lu",
+   "prep": "",
+   "cible": "livre",
+   "pred_actuelle": "livre",
+   "pred_modele": "livre",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "livre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "bon",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -0.921311
+    },
+    {
+     "texte": "lu",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.336286
+    }
+   ]
+  },
+  {
+   "i_seg": 109,
+   "id": "r207",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Quand il pleut, je reste.",
+   "type": "SUB",
+   "segment": "Quand il pleut",
+   "prep": "",
+   "cible": "reste",
+   "pred_actuelle": "reste",
+   "pred_modele": "reste",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "reste",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.930587
+    },
+    {
+     "texte": "pleut",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -3.396254
+    }
+   ]
+  },
+  {
+   "i_seg": 110,
+   "id": "r209",
+   "source": "reel",
+   "plis": 1,
+   "texte": "L'élève dont je parle est absent.",
+   "type": "REL",
+   "segment": "dont je parle",
+   "prep": "",
+   "cible": "élève",
+   "pred_actuelle": "élève",
+   "pred_modele": "élève",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "élève",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "absent",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.977773
+    },
+    {
+     "texte": "parle",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.383503
+    }
+   ]
+  },
+  {
+   "i_seg": 111,
+   "id": "r211",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Je sais que tu viens.",
+   "type": "SUB",
+   "segment": "que tu viens",
+   "prep": "",
+   "cible": "sais",
+   "pred_actuelle": "sais",
+   "pred_modele": "sais",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "sais",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 2.853794
+    },
+    {
+     "texte": "viens",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.978074
+    }
+   ]
+  },
+  {
+   "i_seg": 112,
+   "id": "r213",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le film dont je parle est long.",
+   "type": "REL",
+   "segment": "dont je parle",
+   "prep": "",
+   "cible": "film",
+   "pred_actuelle": "film",
+   "pred_modele": "film",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "film",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.464067
+    },
+    {
+     "texte": "long",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -0.950838
+    },
+    {
+     "texte": "parle",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.383503
+    }
+   ]
+  },
+  {
+   "i_seg": 113,
+   "id": "r221",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le village où je vis est petit.",
+   "type": "REL",
+   "segment": "où je vis",
+   "prep": "",
+   "cible": "village",
+   "pred_actuelle": "village",
+   "pred_modele": "village",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "village",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.375487
+    },
+    {
+     "texte": "petit",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -0.980365
+    },
+    {
+     "texte": "vis",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.365813
+    }
+   ]
+  },
+  {
+   "i_seg": 114,
+   "id": "r223",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Elle chante parce qu'elle est heureuse.",
+   "type": "SUB",
+   "segment": "parce qu'elle est heureuse",
+   "prep": "",
+   "cible": "chante",
+   "pred_actuelle": "chante",
+   "pred_modele": "chante",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "chante",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.851806
+    },
+    {
+     "texte": "heureuse",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -3.574018
+    }
+   ]
+  },
+  {
+   "i_seg": 115,
+   "id": "r225",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Je crois qu'il a raison.",
+   "type": "SUB",
+   "segment": "qu'il a raison",
+   "prep": "",
+   "cible": "crois",
+   "pred_actuelle": "crois",
+   "pred_modele": "crois",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "crois",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.406087
+    },
+    {
+     "texte": "raison",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.482846
+    }
+   ]
+  },
+  {
+   "i_seg": 116,
+   "id": "r227",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Pendant qu'il dort, elle lit.",
+   "type": "SUB",
+   "segment": "Pendant qu'il dort",
+   "prep": "",
+   "cible": "lit",
+   "pred_actuelle": "lit",
+   "pred_modele": "lit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "lit",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 0.628525
+    },
+    {
+     "texte": "dort",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -1.948547
+    }
+   ]
+  },
+  {
+   "i_seg": 117,
+   "id": "r229",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Il pleure parce qu'il est triste.",
+   "type": "SUB",
+   "segment": "parce qu'il est triste",
+   "prep": "",
+   "cible": "pleure",
+   "pred_actuelle": "pleure",
+   "pred_modele": "pleure",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pleure",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.37656
+    },
+    {
+     "texte": "triste",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -3.514964
+    }
+   ]
+  },
+  {
+   "i_seg": 118,
+   "id": "r231",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le chien qui aboie est méchant.",
+   "type": "REL",
+   "segment": "qui aboie",
+   "prep": "",
+   "cible": "chien",
+   "pred_actuelle": "chien",
+   "pred_modele": "chien",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "chien",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "méchant",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.007299
+    },
+    {
+     "texte": "aboie",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -3.462712
+    }
+   ]
+  },
+  {
+   "i_seg": 119,
+   "id": "r233",
+   "source": "reel",
+   "plis": 1,
+   "texte": "La fille dont tu parles est ma sœur.",
+   "type": "REL",
+   "segment": "dont tu parles",
+   "prep": "",
+   "cible": "fille",
+   "pred_actuelle": "fille",
+   "pred_modele": "fille",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "fille",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "sœur",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.985607
+    },
+    {
+     "texte": "parles",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.375184
+    }
+   ]
+  },
+  {
+   "i_seg": 120,
+   "id": "r235",
+   "source": "reel",
+   "plis": 1,
+   "texte": "L'endroit où nous allons est loin.",
+   "type": "REL",
+   "segment": "où nous allons",
+   "prep": "",
+   "cible": "endroit",
+   "pred_actuelle": "endroit",
+   "pred_modele": "endroit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "endroit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.375487
+    },
+    {
+     "texte": "allons",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.375184
+    }
+   ]
+  },
+  {
+   "i_seg": 121,
+   "id": "r253",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le pain que tu manges est frais.",
+   "type": "REL",
+   "segment": "que tu manges",
+   "prep": "",
+   "cible": "pain",
+   "pred_actuelle": "pain",
+   "pred_modele": "pain",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pain",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.464067
+    },
+    {
+     "texte": "frais",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.948246
+    },
+    {
+     "texte": "manges",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.375184
+    }
+   ]
+  },
+  {
+   "i_seg": 122,
+   "id": "r257",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le film dont tu parles est long.",
+   "type": "REL",
+   "segment": "dont tu parles",
+   "prep": "",
+   "cible": "film",
+   "pred_actuelle": "film",
+   "pred_modele": "film",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "film",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.464067
+    },
+    {
+     "texte": "long",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -0.950838
+    },
+    {
+     "texte": "parles",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.375184
+    }
+   ]
+  },
+  {
+   "i_seg": 123,
+   "id": "r259",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le garçon qui chante est mon ami.",
+   "type": "REL",
+   "segment": "qui chante",
+   "prep": "",
+   "cible": "garçon",
+   "pred_actuelle": "garçon",
+   "pred_modele": "garçon",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "garçon",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.405014
+    },
+    {
+     "texte": "ami",
+     "distance": 3,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.95608
+    },
+    {
+     "texte": "chante",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.41303
+    }
+   ]
+  },
+  {
+   "i_seg": 124,
+   "id": "r261",
+   "source": "reel",
+   "plis": 1,
+   "texte": "La table que nous avons prise est grande.",
+   "type": "REL",
+   "segment": "que nous avons prise",
+   "prep": "",
+   "cible": "table",
+   "pred_actuelle": "table",
+   "pred_modele": "table",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "table",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 1,
+     "score": 1.402422
+    },
+    {
+     "texte": "grande",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -1.009891
+    },
+    {
+     "texte": "prise",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.345658
+    }
+   ]
+  },
+  {
+   "i_seg": 125,
+   "id": "r263",
+   "source": "reel",
+   "plis": 1,
+   "texte": "L'oiseau qui vole est bleu.",
+   "type": "REL",
+   "segment": "qui vole",
+   "prep": "",
+   "cible": "oiseau",
+   "pred_actuelle": "oiseau",
+   "pred_modele": "oiseau",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "oiseau",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.405014
+    },
+    {
+     "texte": "bleu",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -0.950838
+    },
+    {
+     "texte": "vole",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.39534
+    }
+   ]
+  },
+  {
+   "i_seg": 126,
+   "id": "r265",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le lieu où nous vivons est calme.",
+   "type": "REL",
+   "segment": "où nous vivons",
+   "prep": "",
+   "cible": "lieu",
+   "pred_actuelle": "lieu",
+   "pred_modele": "lieu",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "lieu",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.464067
+    },
+    {
+     "texte": "calme",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.948246
+    },
+    {
+     "texte": "vivons",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.454393
+    }
+   ]
+  },
+  {
+   "i_seg": 127,
+   "id": "r267",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le livre qui est sur la table est à moi.",
+   "type": "REL",
+   "segment": "qui est sur la table",
+   "prep": "",
+   "cible": "livre",
+   "pred_actuelle": "livre",
+   "pred_modele": "livre",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "livre",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.43454
+    },
+    {
+     "texte": "table",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -3.456985
+    }
+   ]
+  },
+  {
+   "i_seg": 128,
+   "id": "r269",
+   "source": "reel",
+   "plis": 1,
+   "texte": "La personne dont je parle est là.",
+   "type": "REL",
+   "segment": "dont je parle",
+   "prep": "",
+   "cible": "personne",
+   "pred_actuelle": "personne",
+   "pred_modele": "personne",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "personne",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.345961
+    },
+    {
+     "texte": "là",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.859666
+    },
+    {
+     "texte": "parle",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 0,
+     "score": -2.383503
+    }
+   ]
+  },
+  {
+   "i_seg": 129,
+   "id": "r275",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Le pont que nous traversons est vieux.",
+   "type": "REL",
+   "segment": "que nous traversons",
+   "prep": "",
+   "cible": "pont",
+   "pred_actuelle": "pont",
+   "pred_modele": "pont",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "pont",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.464067
+    },
+    {
+     "texte": "vieux",
+     "distance": 2,
+     "cote": "droite",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -0.980365
+    },
+    {
+     "texte": "traversons",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.572499
+    }
+   ]
+  },
+  {
+   "i_seg": 130,
+   "id": "r309",
+   "source": "reel",
+   "plis": 1,
+   "texte": "Peut-être qu'il viendra.",
+   "type": "SUB",
+   "segment": "qu'il viendra",
+   "prep": "",
+   "cible": "viendra",
+   "pred_actuelle": "Peut-être",
+   "pred_modele": "viendra",
+   "ok_actuelle": false,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "viendra",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": -0.400385
+    }
+   ]
+  },
+  {
+   "i_seg": 131,
+   "id": "s001",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "nous compte avec il",
+   "type": "GP",
+   "segment": "avec il",
+   "prep": "moy",
+   "cible": "compte",
+   "pred_actuelle": "compte",
+   "pred_modele": "compte",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "compte",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.765908
+    }
+   ]
+  },
+  {
+   "i_seg": 132,
+   "id": "s003",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "Emma saute vers Hugo",
+   "type": "GP",
+   "segment": "vers Hugo",
+   "prep": "loc",
+   "cible": "saute",
+   "pred_actuelle": "saute",
+   "pred_modele": "saute",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "saute",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.678168
+    },
+    {
+     "texte": "Emma",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.915186
+    },
+    {
+     "texte": "Hugo",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.151712
+    }
+   ]
+  },
+  {
+   "i_seg": 133,
+   "id": "s019",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "cette secrète cuisine finit sous un cheval",
+   "type": "GP",
+   "segment": "sous un cheval",
+   "prep": "loc",
+   "cible": "finit",
+   "pred_actuelle": "finit",
+   "pred_modele": "finit",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "finit",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.856254
+    },
+    {
+     "texte": "cuisine",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.485101
+    },
+    {
+     "texte": "secrète",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.589318
+    },
+    {
+     "texte": "cheval",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "ADJ",
+     "positif": 0,
+     "score": -4.242883
+    }
+   ]
+  },
+  {
+   "i_seg": 134,
+   "id": "s041",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "les avocat marche devant elles",
+   "type": "GP",
+   "segment": "devant elles",
+   "prep": "loc",
+   "cible": "marche",
+   "pred_actuelle": "",
+   "pred_modele": "marche",
+   "ok_actuelle": false,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "marche",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.648642
+    },
+    {
+     "texte": "avocat",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.530233
+    }
+   ]
+  },
+  {
+   "i_seg": 135,
+   "id": "s045",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "un ancien canard nage avec cette cuisine",
+   "type": "GP",
+   "segment": "avec cette cuisine",
+   "prep": "moy",
+   "cible": "nage",
+   "pred_actuelle": "nage",
+   "pred_modele": "nage",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "nage",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.824961
+    },
+    {
+     "texte": "canard",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.338308
+    },
+    {
+     "texte": "ancien",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.442525
+    },
+    {
+     "texte": "cuisine",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.123025
+    }
+   ]
+  },
+  {
+   "i_seg": 136,
+   "id": "s047",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "une sombre fenêtre rêve pour un secret chemin",
+   "type": "GP",
+   "segment": "pour un secret chemin",
+   "prep": "but",
+   "cible": "rêve",
+   "pred_actuelle": "rêve",
+   "pred_modele": "rêve",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "rêve",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.951373
+    },
+    {
+     "texte": "fenêtre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.017909
+    },
+    {
+     "texte": "sombre",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.797448
+    },
+    {
+     "texte": "secret",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.18909
+    },
+    {
+     "texte": "chemin",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 4,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.967087
+    }
+   ]
+  },
+  {
+   "i_seg": 137,
+   "id": "s081",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "cette secrète fenêtre trouve de Alice",
+   "type": "GP",
+   "segment": "de Alice",
+   "prep": "gen",
+   "cible": "trouve",
+   "pred_actuelle": "trouve",
+   "pred_modele": "trouve",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "trouve",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 0.615209
+    },
+    {
+     "texte": "fenêtre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.304322
+    },
+    {
+     "texte": "secrète",
+     "distance": 3,
+     "cote": "gauche",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.408539
+    },
+    {
+     "texte": "Alice",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.000459
+    }
+   ]
+  },
+  {
+   "i_seg": 138,
+   "id": "s087",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "mon nuage trouve à le chemin",
+   "type": "GP",
+   "segment": "à le chemin",
+   "prep": "dat",
+   "cible": "trouve",
+   "pred_actuelle": "trouve",
+   "pred_modele": "trouve",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "trouve",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 0.649709
+    },
+    {
+     "texte": "nuage",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.931413
+    },
+    {
+     "texte": "chemin",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.197465
+    }
+   ]
+  },
+  {
+   "i_seg": 139,
+   "id": "s089",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "la étoile commence sur ce jardin",
+   "type": "GP",
+   "segment": "sur ce jardin",
+   "prep": "loc",
+   "cible": "commence",
+   "pred_actuelle": "commence",
+   "pred_modele": "commence",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "commence",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 0.577355
+    },
+    {
+     "texte": "étoile",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.974239
+    },
+    {
+     "texte": "jardin",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.210765
+    }
+   ]
+  },
+  {
+   "i_seg": 140,
+   "id": "s097",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "ma chanson commence que cette chanson nage",
+   "type": "SUB",
+   "segment": "que cette chanson nage",
+   "prep": "",
+   "cible": "commence",
+   "pred_actuelle": "commence",
+   "pred_modele": "commence",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "commence",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 1.374573
+    },
+    {
+     "texte": "chanson",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.242818
+    },
+    {
+     "texte": "chanson",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.475044
+    },
+    {
+     "texte": "nage",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.423793
+    }
+   ]
+  },
+  {
+   "i_seg": 141,
+   "id": "s103",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "Lucas dessine que mon sombre canard range",
+   "type": "SUB",
+   "segment": "que mon sombre canard range",
+   "prep": "",
+   "cible": "dessine",
+   "pred_actuelle": "dessine",
+   "pred_modele": "dessine",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "dessine",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.347034
+    },
+    {
+     "texte": "Lucas",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.561203
+    },
+    {
+     "texte": "sombre",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.926852
+    },
+    {
+     "texte": "canard",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.704849
+    },
+    {
+     "texte": "range",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 4,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.45332
+    }
+   ]
+  },
+  {
+   "i_seg": 142,
+   "id": "s109",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "ma lettre compte vers un voyage",
+   "type": "GP",
+   "segment": "vers un voyage",
+   "prep": "loc",
+   "cible": "compte",
+   "pred_actuelle": "compte",
+   "pred_modele": "compte",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "compte",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 0.648642
+    },
+    {
+     "texte": "lettre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.974239
+    },
+    {
+     "texte": "voyage",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.210765
+    }
+   ]
+  },
+  {
+   "i_seg": 143,
+   "id": "s139",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "la lettre crie que le calme nuage observe",
+   "type": "SUB",
+   "segment": "que le calme nuage observe",
+   "prep": "",
+   "cible": "crie",
+   "pred_actuelle": "crie",
+   "pred_modele": "crie",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "crie",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 1,
+     "score": 1.435614
+    },
+    {
+     "texte": "lettre",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": 0.531676
+    },
+    {
+     "texte": "calme",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -1.897326
+    },
+    {
+     "texte": "nuage",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 3,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -2.675323
+    },
+    {
+     "texte": "observe",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 4,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -3.512373
+    }
+   ]
+  },
+  {
+   "i_seg": 144,
+   "id": "s145",
+   "source": "synthetique",
+   "plis": 1,
+   "texte": "Emma cherche devant le nuage",
+   "type": "GP",
+   "segment": "devant le nuage",
+   "prep": "loc",
+   "cible": "cherche",
+   "pred_actuelle": "cherche",
+   "pred_modele": "cherche",
+   "ok_actuelle": true,
+   "ok_modele": true,
+   "candidats": [
+    {
+     "texte": "cherche",
+     "distance": 1,
+     "cote": "gauche",
+     "rang": 0,
+     "verbe_lex": true,
+     "pos": "VERB",
+     "positif": 1,
+     "score": 2.797201
+    },
+    {
+     "texte": "Emma",
+     "distance": 2,
+     "cote": "gauche",
+     "rang": 1,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -0.915186
+    },
+    {
+     "texte": "nuage",
+     "distance": 0,
+     "cote": "dedans",
+     "rang": 2,
+     "verbe_lex": false,
+     "pos": "NOUN",
+     "positif": 0,
+     "score": -4.181238
+    }
+   ]
+  }
+ ]
+}

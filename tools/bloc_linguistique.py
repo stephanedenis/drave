@@ -413,6 +413,9 @@ come comes came coming take takes took taken taking put puts putting say says sa
 see sees saw seen seeing know knows knew known knowing want wants wanted wanting need needs
 needed needing help helps helped helping look looks looked looking give gives gave given
 find finds found finding open opens opened opening close closes closed closing
+fly flies flew flown flying climb climbs climbed climbing flow flows flowed flowing
+swim swims swam swum swimming get gets got gotten getting smile smiles smiled smiling
+wait waits waited waiting belong belongs belonged belonging
 """.split())
 
 
@@ -614,6 +617,21 @@ class Heuristique:
             return {}
 
     @staticmethod
+    def _tete_texte(texte: str) -> str | None:
+        """La tête d'un texte de candidat : le verbe plein s'il y en a un, sinon le dernier mot.
+
+        `« … → Le livre »` → `livre` ; `« … → Les fleurs poussent »` → `poussent` ;
+        `« … → est prêt »` → `prêt` (l'auxiliaire n'est pas la tête).
+        """
+        mots = re.findall(r"\b[ldmtsnLDMTNS]['’](?=\w)|[\wÀ-ÿ]+(?:['’\-][\wÀ-ÿ]+)*", texte)
+        if not mots:
+            return None
+        for m in mots:
+            if _est_verbe(m) and _normaliser(m) not in AUXILIAIRES:
+                return m
+        return mots[-1]
+
+    @staticmethod
     def _tete_nom(texte: str, debut: int, fin: int) -> str | None:
         """La tête nominale d'un span : le dernier mot, **élision séparée** (`L'homme` → `homme`)."""
         mots = re.findall(r"\b[ldmtsnLDMTNS]['’](?=\w)|[\wÀ-ÿ]+(?:['’\-][\wÀ-ÿ]+)*",
@@ -684,6 +702,25 @@ class Heuristique:
             if v and v not in proches:
                 proches.append(v)
         return proches
+
+    @staticmethod
+    def _cible_s_par_genre(cands: list[dict], texte_seg: str, type_seg: str) -> str | None:
+        """La cible de S pour ce segment, en préférant le **genre** attendu par le type.
+
+        Le gold attache un **SUB** à un verbe (`genre: GV`) et un **REL** à un nom
+        (`genre: GN`) ; S propose les deux lectures, la première n'est pas toujours la bonne.
+        """
+        voulu = "GV" if type_seg == "SUB" else "GN" if type_seg == "REL" else None
+        meilleure = None
+        for c in cands:
+            att = c.get("attachement") or {}
+            if att.get("segment") != texte_seg:
+                continue
+            if voulu is None or att.get("genre") == voulu:
+                return att.get("cible")
+            if meilleure is None:
+                meilleure = att.get("cible")
+        return meilleure
 
     def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
         mots = self._mots(texte)
@@ -831,17 +868,21 @@ class Heuristique:
                     # la cible de S **convertie en son verbe** : « Les enfants jouent » →
                     # `jouent` (le gold attend le verbe, pas le GN) ; à défaut, le GV le plus
                     # proche. Mesuré : 82 cibles justes dans les candidats, 33 choisies avant.
-                    att = c.get("attachement") or {}
-                    brute = (att.get("cible") if att.get("segment") == s.get("texte")
-                             else cibles_s.get((s.get("debut"), s.get("fin"), s.get("type"))))
+                    brute = (self._cible_s_par_genre(cands, s.get("texte", ""), s.get("type", ""))
+                             or cibles_s.get((s.get("debut"), s.get("fin"), s.get("type"))))
                     cible = None
                     if s.get("type") in ("REL", "SUB"):
-                        # le relatif/subordonné se rattache au **nom à gauche** (son antécédent)
-                        gns = [x for x in c.get("segments", []) if x.get("type") == "GN"
-                               and x.get("fin", 0) <= s.get("debut", 0)]
-                        if gns:
-                            g = max(gns, key=lambda x: x["fin"])
-                            cible = self._tete_nom(texte, g["debut"], g["fin"])
+                        # REL/SUB : c'est le **segment précédent** qui tranche — après un GV
+                        # c'est une complétive (cible = le verbe), après un GN une relative
+                        # (cible = l'antécédent). Mesuré : 69/69 cibles SUB sont des verbes.
+                        avant = [x for x in c.get("segments", [])
+                                 if x.get("fin", 0) <= s.get("debut", 0)]
+                        if avant:
+                            g = max(avant, key=lambda x: x["fin"])
+                            if g.get("type") == "GV":
+                                cible = self._verbe_dans(texte, g["debut"], g["fin"], verbes)
+                            elif g.get("type") == "GN":
+                                cible = self._tete_nom(texte, g["debut"], g["fin"])
                     if not cible and s.get("type") == "GP":
                         cible = self._cible_proche(texte, s, gvs, verbes)
                     if not cible and brute:
@@ -856,6 +897,13 @@ class Heuristique:
                     if cible:
                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
                     candidats = list(noms) + self._verbes_proches(texte, s, gvs, verbes=verbes)
+                    # la **tête** de chaque candidat S (« « … » → Le livre » → livre ; « … → Les
+                    # fleurs poussent » → poussent) : mesuré +45 segments au top-k strict.
+                    for nom in noms:
+                        if "→" in nom:
+                            tete = self._tete_texte(nom.split("→", 1)[1])
+                            if tete and tete not in candidats:
+                                candidats.append(tete)
                     etiquettes.append(Etiquette("syntagme", s.get("type", "GN"),
                                                 s.get("texte", ""), s.get("debut", 0),
                                                 s.get("fin", 0), self.nom,

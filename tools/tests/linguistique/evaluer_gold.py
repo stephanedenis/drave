@@ -128,8 +128,12 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
             if juste:
                 att_exact += 1
             # le gold mêle deux conventions : la cible est un verbe (le gouverneur) ou un nom
-            # (l'antécédent d'un REL, la tête d'un GP). On mesure les deux séparément.
-            if bl._est_verbe(cibles[0]):
+            # (l'antécédent d'un REL, la tête d'un GP). On mesure les deux séparément — en
+            # suivant le **POS du gold** (plus fiable que le lexique : « poussent », « aboie »
+            # y sont VERB), avec `_est_verbe` en repli si la cible n'est pas un token.
+            pos_cible = next((m["pos"] for m in phrase.get("mots", [])
+                              if phrase["texte"][m["debut"]:m["fin"]] == cibles[0]), None)
+            if (pos_cible == "VERB") if pos_cible else bl._est_verbe(cibles[0]):
                 att_v_n += 1
                 att_v_ok += int(juste)
             else:

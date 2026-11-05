@@ -861,3 +861,774 @@ index f4b84845..65fb0d76 100644
 … [7785 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,55p' tools/bloc_linguistique.py; echo '--- HEAD now'; git log -1 --format='%H %ad %s' --date=iso; sha256sum tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/gold.json tools/tests/ … [130 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+
+Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+
+  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+    substitution et le parallèle sans GPU ;
+  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+    même type d'annotation ;
+  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+    POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
+  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+    étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+    que l'heuristique ne couvre pas.
+
+La sortie est une **annotation typée** — pas le corps de la RSN : chaque étiquette porte son
+`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script`
+… [1938 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Replaying the historical commits to classify the stale JSON values
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in 13e8bb2d 23853cb7 f70a1b2a a048cb83 e223a98d; do mkdir -p /tmp/audit_$c/tools; git show $c:tools/bloc_linguistique.py > /tmp/audit_$c/tools/bloc_linguistique.py; ln -sfn /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ … [140 caractères tronqués]`
+
+  ```
+total 96
+-rw-r--r--. 1 stephane stephane 96692  5 nov 13:19 bloc_linguistique.py
+lrwxrwxrwx. 1 stephane stephane    64  5 nov 13:19 structures -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in 13e8bb2d f70a1b2a 23853cb7 a048cb83 e223a98d; do echo \"===== $c\"; COMMIT=$c python3 - <<'PY'\nimport os, sys, importlib.util, json\nfrom collections import Counter\nsys.path.insert(0,'.')\nc = os.environ[\"COMMIT\"]\np = f … [1827 caractères tronqués]`
+
+  ```
+===== 13e8bb2d
+===== f70a1b2a
+===== 23853cb7
+===== a048cb83
+===== e223a98d
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/tmp/audit_13e8bb2d/tools/bloc_linguistique.py", line 58, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 1344, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib64/python3.13/dataclasses.py", line 997, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 757, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+T
+… [4473 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing module registration and retrying the replay
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in 13e8bb2d f70a1b2a 23853cb7 a048cb83 e223a98d; do echo \"===== $c\"; COMMIT=$c python3 - <<'PY'\nimport os, sys, importlib.util\nfrom collections import Counter\nsys.path.insert(0,'.')\nc = os.environ[\"COMMIT\"]\np = f\"/tmp … [1753 caractères tronqués]`
+
+  ```
+===== 13e8bb2d
+labels 146 top1 115 topk 132 exact 33 topk_exact 82 couverture 0.6109 verbe {'cibles': 51, 'justes': 26, 'taux': 0.5098} nom {'cibles': 95, 'justes': 7, 'taux': 0.0737}
+spans {'GP': 12, 'SUB': 33, 'REL': 48} total 93 cat {'plus_large': 25, 'aucun': 65, 'plus_etroit': 3}
+f1 0.2869
+===== f70a1b2a
+labels 146 top1 114 topk 132 exact 94 topk_exact 83 couverture 0.6109 verbe {'cibles': 51, 'justes': 37, 'taux': 0.7255} nom {'cibles': 95, 'justes': 57, 'taux': 0.6}
+spans {'GP': 12, 'SUB': 33, 'REL': 48} total 93 cat {'plus_large': 25, 'aucun': 65, 'plus_etroit': 3}
+f1 0.2869
+===== 23853cb7
+labels 146 top1 122 topk 132 exact 118 topk_exact 83 couverture 0.6109 verbe {'cibles': 51, 'justes': 48, 'taux': 0.9412} nom {'cibles': 95, 'justes': 70, 'taux': 0.7368}
+spans {'GP': 12, 'SUB': 33, 'REL': 48} total 93 cat {'plus_large': 25, 'aucun': 65, 'plus_etroit': 3}
+f1 0.2869
+===== a048cb83
+labels 145 top1 126 topk 134 exact 123 topk_exact 88 couverture 0.6067 verbe {'cibles': 63, 'justes': 60, 'taux': 0.9524} nom {'cibles': 82, 'justes': 63, 'taux': 0.7683}
+spans {'GP': 13, 'SUB': 33, 'REL': 48} total 94 cat {'plus_large': 25, 'aucun': 65, 'plus_etroit': 4}
+f1 0.2862
+===== e223a98d
+… [283 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Testing the pre-fix commit to recover the spans 'avant' block
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=$(git rev-parse 13e8bb2d^); echo \"parent=$P\"; mkdir -p /tmp/audit_$P/tools; git show $P:tools/bloc_linguistique.py > /tmp/audit_$P/tools/bloc_linguistique.py; ln -sfn \"$PWD/tools/structures\" /tmp/audit_$P/tools/structures; COMM … [1865 caractères tronqués]`
+
+  ```
+parent=d400e188fd3d23039f4f44ea1da8ec64ab959ba7
+attachement {'labels': 145, 'top1': 115, 'topk': 132, 'exact': 33, 'topk_exact': 82, 'couverture': 0.6067}
+f1 0.2864 p 0.3159 r 0.2619 tp/fp/fn 488 1057 1375
+spans {'GP': 13, 'SUB': 33, 'REL': 48} 94 cat {'plus_large': 26, 'aucun': 65, 'plus_etroit': 3}
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the ambiguous span categories at the pre-fix commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && COMMIT=d400e188fd3d23039f4f44ea1da8ec64ab959ba7 python3 - <<'PY'\nimport os, sys, importlib.util\nsys.path.insert(0,'.')\nc=os.environ[\"COMMIT\"]; p=f\"/tmp/audit_{c}/tools/bloc_linguistique.py\"\nspec=importlib.util.spec_from_file_ … [1267 caractères tronqués]`
+
+  ```
+GP  gold(8,21) 'de la voisine' | couvrants [(8, 26, 'de la voisine dort')] | recouvrants [(8, 26, 'de la voisine dort')]
+GP  gold(9,18) 'du voisin' | couvrants [(9, 32, 'du voisin aboie la nuit')] | recouvrants [(9, 32, 'du voisin aboie la nuit')]
+GP  gold(15,22) 'en gare' | couvrants [(9, 22, 'entre en gare')] | recouvrants [(9, 22, 'entre en gare')]
+REL gold(8,19) "que j'ai vu" | couvrants [(8, 27, "que j'ai vu dormait")] | recouvrants [(8, 27, "que j'ai vu dormait")]
+REL gold(8,33) 'dont la voiture est rouge' | couvrants [(8, 40, 'dont la voiture est rouge arrive')] | recouvrants [(8, 23, 'dont la voiture'), (8, 40, 'dont la voiture est rouge arrive')]
+REL gold(11,27) "que j'ai achetée" | couvrants [(11, 33, "que j'ai achetée roule")] | recouvrants [(11, 33, "que j'ai achetée roule")]
+REL gold(10,18) 'qui nage' | couvrants [(10, 26, 'qui nage prépare')] | recouvrants [(10, 26, 'qui nage prépare')]
+GP  gold(31,33) 'il' | couvrants [(26, 33, 'avec il')] | recouvrants [(26, 33, 'avec il')]
+REL gold(11,19) 'qui crie' | couvrants [(11, 26, 'qui crie marche')] | recouvrants [(11, 26, 'qui crie marche')]
+REL gold(10,19) 'qui ferme' | couvrants [(10, 27, 'qui ferme observe')] | recouvra
+… [1913 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the exact span-category rule across commits
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in d400e188fd3d23039f4f44ea1da8ec64ab959ba7 13e8bb2d 23853cb7 a048cb83 HEAD; do echo \"===== $c\"; COMMIT=$c python3 - <<'PY'\nimport os, sys, importlib.util\nfrom collections import Counter\nsys.path.insert(0,'.')\nc=os.enviro … [1503 caractères tronqués]`
+
+  ```
+===== d400e188fd3d23039f4f44ea1da8ec64ab959ba7
+labels 145 spans {'GP': 13, 'SUB': 33, 'REL': 48} 94 cats {'plus_large': 25, 'aucun': 65, 'plus_etroit': 3, 'coupe': 1} f1 0.2864
+===== 13e8bb2d
+labels 146 spans {'GP': 12, 'SUB': 33, 'REL': 48} 93 cats {'plus_large': 24, 'aucun': 65, 'plus_etroit': 3, 'coupe': 1} f1 0.2869
+===== 23853cb7
+labels 146 spans {'GP': 12, 'SUB': 33, 'REL': 48} 93 cats {'plus_large': 24, 'aucun': 65, 'plus_etroit': 3, 'coupe': 1} f1 0.2869
+===== a048cb83
+labels 145 spans {'GP': 13, 'SUB': 33, 'REL': 48} 94 cats {'plus_large': 24, 'aucun': 65, 'plus_etroit': 4, 'coupe': 1} f1 0.2862
+===== HEAD
+labels 145 spans {'GP': 13, 'SUB': 33, 'REL': 48} 94 cats {'plus_large': 24, 'aucun': 65, 'plus_etroit': 4, 'coupe': 1} f1 0.2862
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the failure table at its commit and the 'cible' counts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in d400e188fd3d23039f4f44ea1da8ec64ab959ba7 13e8bb2d a048cb83 HEAD; do echo \"===== $c\"; COMMIT=$c python3 - <<'PY'\nimport os, sys, importlib.util\nfrom collections import Counter\nsys.path.insert(0,'.')\nc=os.environ[\"COMMI … [1909 caractères tronqués]`
+
+  ```
+===== d400e188fd3d23039f4f44ea1da8ec64ab959ba7
+labels 145 cible absente des candidats: 13
+échecs 112 hors 13 présents 99
+  GP nom 45 verbe 16 hors 11 | total nom 47 verbe 36
+  SUB nom 16 verbe 9 hors 2 | total nom 21 verbe 15
+  REL nom 26 verbe 0 hors 0 | total nom 26 verbe 0
+===== 13e8bb2d
+labels 146 cible absente des candidats: 14
+échecs 113 hors 14 présents 99
+  GP nom 46 verbe 16 hors 12 | total nom 48 verbe 36
+  SUB nom 16 verbe 9 hors 2 | total nom 21 verbe 15
+  REL nom 26 verbe 0 hors 0 | total nom 26 verbe 0
+===== a048cb83
+labels 145 cible absente des candidats: 11
+échecs 22 hors 11 présents 11
+  GP nom 14 verbe 0 hors 10 | total nom 38 verbe 45
+  SUB nom 5 verbe 3 hors 1 | total nom 18 verbe 18
+  REL nom 0 verbe 0 hors 0 | total nom 26 verbe 0
+===== HEAD
+labels 145 cible absente des candidats: 11
+échecs 22 hors 11 présents 11
+  GP nom 14 verbe 0 hors 10 | total nom 38 verbe 45
+  SUB nom 5 verbe 3 hors 1 | total nom 18 verbe 18
+  REL nom 0 verbe 0 hors 0 | total nom 26 verbe 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the lexicon commit that moved the label count
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && C=a408a909; mkdir -p /tmp/audit_$C/tools; git show $C:tools/bloc_linguistique.py > /tmp/audit_$C/tools/bloc_linguistique.py; ln -sfn \"$PWD/tools/structures\" /tmp/audit_$C/tools/structures; COMMIT=$C python3 - <<'PY'\nimport os, sys … [1185 caractères tronqués]`
+
+  ```
+labels 145 top1 126 topk 134 exact 123 strict 88 f1 0.2862
+spans {'GP': 13, 'SUB': 33, 'REL': 48} 94
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidating all measured values and historical replays into one dataset
+
+- **bash** `{"command": "cat > /tmp/audit_mesure.py <<'PY'\n\"\"\"Audit de reproductibilité de l'attachement (B13) — mesure consolidée.\nÉcrit /tmp/audit_mesure.json ; ne touche pas au dépôt.\n\"\"\"\nimport hashlib, importlib.util, json, pathlib, random, statistics, subprocess, sys, time\nfrom collections impo … [21239 caractères tronqués]`
+
+  ```
+{
+ "verdict": {
+  "statut": "reproduit",
+  "valeurs_publiees": 14,
+  "valeurs_reproduites": 14,
+  "ecarts": 0,
+  "reserve": "3 JSON sur 5 (conventions, attachement-cible, spans) sont des instantanés antérieurs, reproduits à leur commit mais pas à l'état courant ; pensee-spans.json publie 12 GP / 93 spans, pas 13 / 94."
+ },
+ "mesure": {
+  "gold": {
+   "phrases": 612,
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "duree_s": 0.453,
+  "cibles": 239,
+  "labels": 145,
+  "couverture": 0.6067,
+  "top1": 126,
+  "top1_taux_span": 0.869,
+  "top1_taux": 0.5272,
+  "topk_sous_chaine": 134,
+  "topk_sous_chaine_taux_span": 0.9241,
+  "topk_sous_chaine_taux": 0.5607,
+  "exact": 123,
+  "exact_taux_span": 0.8483,
+  "exact_taux": 0.5146,
+  "topk_strict": 88,
+  "topk_strict_taux_span": 0.6069,
+  "topk_strict_taux": 0.3682,
+  "verbe": {
+   "cibles": 63,
+   "justes": 60,
+   "taux": 0.9524
+  },
+  "nom": {
+   "cibles": 82,
+   "justes": 63,
+   "taux": 0.7683
+  },
+  "spans_perdus": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13,
+   "total": 94
+  },
+  "categories_spans": {
+   "aucun": 65,
+   "plus_large": 24,
+   "plus_etroit": 4,
+   "coupe": 1
+  },
+  "syntagme": {
+   "precision": 0.3154,
+   "rappel": 
+… [5840 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the pinned commit/hashes and verifying determinism
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_mesure.json'))\nprint(json.dumps(d[\"dispositif\"], ensure_ascii=False, indent=1))\nPY\necho '--- HEAD now'; git log -1 --format='%H %ad %s' --date=iso; git status --short t … [116 caractères tronqués]`
+
+  ```
+{
+ "date": "2026-11-05",
+ "branche": "s/v7",
+ "commit": "e1171032906de46f1a93fee0f6275f39b5d67692",
+ "commit_sujet": "PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9",
+ "heure_mesure": "2026-11-05T13:28:51-0500",
+ "bloc_linguistique_sha256": "d9c9d5592b0ba8a942860518b67b5dce04223e47c47904fbf8e185f0511b186d",
+ "evaluer_gold_sha256": "dbbcfe9007f1d7ee66f6b7a28b064b3cf43407cddc5459f0931ca4fd9c426d2d",
+ "gold": {
+  "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+  "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+  "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+ },
+ "submodule_structures": "523d8c1e8c6ca29ca415360a71bfab6c5b56102c",
+ "appel": "sys.path.insert(0,'.'); from tools.bloc_linguistique import Heuristique; from tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc"
+}
+--- HEAD now
+e1171032906de46f1a93fee0f6275f39b5d67692 2026-11-05 13:18:23 -0500 PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/audit_mesure.json /tmp/audit_mesure_run1.json && python3 /tmp/audit_mesure.py > /tmp/audit_run2.out && python3 - <<'PY'\nimport json\na=json.load(open('/tmp/audit_mesure_run1.json')); b=json.load(open('/tmp/audit_mesure.json' … [297 caractères tronqués]`
+
+  ```
+mesure identique: False
+comparaison identique: True
+controle_negatif identique: True
+commit run1 e1171032 run2 e1171032
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\na=json.load(open('/tmp/audit_mesure_run1.json'))[\"mesure\"]; b=json.load(open('/tmp/audit_mesure.json'))[\"mesure\"]\nprint(\"duree\", a.pop(\"duree_s\"), b.pop(\"duree_s\"))\nprint(\"mesure hors duree … [161 caractères tronqués]`
+
+  ```
+duree 0.453 0.546
+mesure hors duree identique: True
+  ```
+
+### 🤖 Assistant
+
+⏵ Computing the exact/top-k overlap for accurate interpretation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nfrom collections import Counter\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); c=Counter()\nfor p in charger … [944 caractères tronqués]`
+
+  ```
+('exact', 'absent') 41
+('exact', 'lenient') 123
+('exact', 'strict') 82
+('faux', 'absent') 16
+('faux', 'absent_lenient') 11
+('faux', 'lenient') 11
+('faux', 'strict') 6
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the target paths are free before writing
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-audit-attachement.md reports/pensee-audit-attachement.json 2>&1; echo '---'; git status --short reports/ | head -20", "description": "Verify the two target files do not exist"}`
+
+  ```
+ls: cannot access 'reports/rapport-audit-attachement.md': No such file or directory
+ls: cannot access 'reports/pensee-audit-attachement.json': No such file or directory
+---
+ M reports/pensee-quatre-modes.json
+?? reports/pensee-topk-diagnostic.json
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.json; do printf '%s  ' \"$f\"; git show … [257 caractères tronqués]`
+
+  ```
+tools/bloc_linguistique.py  d9c9d5592b0ba8a942860518b67b5dce04223e47c47904fbf8e185f0511b186d
+tools/tests/linguistique/evaluer_gold.py  dbbcfe9007f1d7ee66f6b7a28b064b3cf43407cddc5459f0931ca4fd9c426d2d
+tools/tests/linguistique/gold.json  3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a
+tools/tests/linguistique/gold_reel.json  05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11
+tools/tests/linguistique/gold_synthetique.json  e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654
+--- working tree
+d9c9d5592b0ba8a942860518b67b5dce04223e47c47904fbf8e185f0511b186d  tools/bloc_linguistique.py
+dbbcfe9007f1d7ee66f6b7a28b064b3cf43407cddc5459f0931ca4fd9c426d2d  tools/tests/linguistique/evaluer_gold.py
+f2632969fbe38f67320deae3dc0052b607ffd79fcbeec29cb55d08dbb34105f1  tools/tests/linguistique/gold_gele.json
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  tools/tests/linguistique/gold.json
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  tools/tests/linguistique/gold_reel.json
+e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654  tools/tests/linguistique/gold_synthetique.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the audit sheet with measured, published, and historical values
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "content": "# Audit de reproductibilité — l'attachement du bloc linguistique (B13)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·\n> **Verdict** : ✅ **repr … [10644 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the structured audit JSON with the same figures
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, sys\nfrom collections import Counter\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\n\nd = json.load(open('/tmp/audit_mesure.jso … [2046 caractères tronqués]`
+
+  ```
+écrit reports/pensee-audit-attachement.json
+recouvrement: {'exact_et_strict': 82, 'exact_hors_strict': 41, 'strict_non_exact': 6, 'ni_exact_ni_strict': 16, 'total': 145}
+verdict: {'statut': 'reproduit', 'valeurs_publiees': 14, 'valeurs_reproduites': 14, 'ecarts': 0, 'reserve': "3 JSON sur 5 (conventions, attachement-cible, spans) sont des instantanés antérieurs, reproduits à leur commit mais pas à l'état courant ; pensee-spans.json publie 12 GP / 93 spans, pas 13 / 94. Aucun fichier existant n'a été modifié."}
+JSON valide
+19927 reports/pensee-audit-attachement.json
+10885 reports/rapport-audit-attachement.md
+30812 total
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the two deliverables and cross-checking every figure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-attachement.json'))\nprint(\"clés:\", list(d))\nprint(\"verdict:\", d[\"verdict\"])\nprint(\"publie:\", json.dumps(d[\"publie\"], ensure_ascii=False))\nprint(\"com … [1079 caractères tronqués]`
+
+  ```
+clés: ['date', 'ligne', 'objet', 'verdict', 'dispositif', 'mesure', 'publie', 'comparaison', 'controle_negatif', 'rejouabilite_json', 'confrontation_json', 'limites', 'fichiers']
+verdict: {'statut': 'reproduit', 'valeurs_publiees': 14, 'valeurs_reproduites': 14, 'ecarts': 0, 'reserve': "3 JSON sur 5 (conventions, attachement-cible, spans) sont des instantanés antérieurs, reproduits à leur commit mais pas à l'état courant ; pensee-spans.json publie 12 GP / 93 spans, pas 13 / 94. Aucun fichier existant n'a été modifié."}
+publie: {"cibles": 239, "labels": 145, "top1": 126, "topk_sous_chaine": 134, "exact": 123, "topk_strict": 88, "couverture": 0.6067, "verbe_cibles": 63, "verbe_justes": 60, "nom_cibles": 82, "nom_justes": 63, "spans_perdus": {"REL": 48, "SUB": 33, "GP": 13, "total": 94}}
+comparaison: [{"mesure": "cibles", "mesure_valeur": 239, "publie": 239, "ecart": 0, "statut": "reproduit"}, {"mesure": "labels", "mesure_valeur": 145, "publie": 145, "ecart": 0, "statut": "reproduit"}, {"mesure": "top1", "mesure_valeur": 126, "publie": 126, "ecart": 0, "statut": "reproduit"}, {"mesure": "topk_sous_chaine", "mesure_valeur": 134, "publie": 134, "ecart": 0, "statut": "reproduit"}, {"mesu
+… [4927 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md</path>
+<type>file</type>
+<content>
+1: # Audit de reproductibilité — l'attachement du bloc linguistique (B13)
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+4: > **Verdict** : ✅ **reproduit — 14/14 valeurs, écart 0** ; ⚠️ **réserve documentaire** :
+5: > **3 des 5 JSON sont des instantanés antérieurs**, reproduits à leur commit mais pas à
+6: > l'état courant. Aucun fichier existant n'a été modifié, aucun commit n'a été fait.
+7: 
+8: > **Dispositif** : depuis la racine, `sys.path.insert(0, '.')` ;
+9: > `from tools.bloc_linguistique import Heuristique` ;
+10: > `from tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc` ;
+11: > `evaluer_bloc("heuristique", Heuristique(), charger())` pour l'attachement ; pour les spans,
+12: > même boucle que `T166` : chaque `segment` du gold est comparé aux étiquettes de niveau
+13: > `syntagme` par `(type, debut, fin)`. Mesure rejouée sur `s/v7`, commit **`e1171032`**,
+14: > `bloc_linguistique.py` sha256 **`d9c9d559…`**, `evaluer_gold.py` sha256 **`dbbcfe90…`**,
+15: > gold inchangé (612 phrases : 20 `hand`
+… [10367 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing a chronology ambiguity and the no-modification wording
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "old_string": "> **3 des 5 JSON sont des instantanés antérieurs**, reproduits à leur commit mais pas à\n> l'état courant. Aucun fichier existant n'a été modifié, aucun commit n'a été fait.", "new_st … [185 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "old_string": "- Le correctif GP de `13e8bb2d` gagne bien un span (146 labels, **GP 12**, F1 0,2869) ; puis le\n  **lexique élargi** `a408a909` (10:39) repasse à **145 labels / GP 13 / F1 0,2862** t … [476 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "old_string": "| catégories (aucun / large / étroit / coupe) | 65 / 25 / 3 / 1 | 65 / 24 / 3 / 1 | **65 / 24 / 4 / 1** |", "new_string": "| catégories (aucun / plus large / plus étroit / coupe) | 65 … [57 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "old_string": "**Aucun commit, aucun fichier existant modifié** : l'audit produit deux fichiers neufs,\nconformément à la consigne.", "new_string": "**L'audit n'a modifié aucun fichier existant et n … [87 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-audit-attachement.json'\nd=json.load(open(p, encoding='utf-8'))\nd[\"verdict\"][\"reserve\"] = (\n    \"3 JSON sur 5 (conventions, attachement-cible, spans) sont des instantanés antéri … [482 caractères tronqués]`
+
+  ```
+{'statut': 'reproduit', 'valeurs_publiees': 14, 'valeurs_reproduites': 14, 'ecarts': 0, 'reserve': "3 JSON sur 5 (conventions, attachement-cible, spans) sont des instantanés antérieurs, reproduits à leur commit mais pas à l'état courant ; pensee-spans.json publie 12 GP / 93 spans, pas 13 / 94. L'audit n'a modifié aucun fichier existant et n'a fait aucun commit."}
+JSON valide
+  ```
+
+### 🤖 Assistant
+
+⏵ Running a cross-check of the sheet against the JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, re\nmd = pathlib.Path('reports/rapport-audit-attachement.md').read_text(encoding='utf-8')\nd = json.loads(pathlib.Path('reports/pensee-audit-attachement.json').read_text(encoding='utf-8'))\nerr … [3313 caractères tronqués]`
+
+  ```
+lignes du tableau principal: 22
+ERREURS: ['ligne absente: cibles', 'publié labels: 146 != 145', 'écart labels: 145']
+liens: 9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, re\nmd = pathlib.Path('reports/rapport-audit-attachement.md').read_text(encoding='utf-8')\nd = json.loads(pathlib.Path('reports/pensee-audit-attachement.json').read_text(encoding='utf-8'))\nerr … [2735 caractères tronqués]`
+
+  ```
+lignes tableau: 14
+ERREURS: aucune
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying each JSON confrontation block against the source files
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-attachement.json'))\nc=d[\"confrontation_json\"]\nfor nom in c:\n    print(\"=====\", nom)\n    print(\"commit:\", c[nom][\"commit\"], \"| etat:\", c[nom][\"etat\" … [229 caractères tronqués]`
+
+  ```
+===== pensee-attachement-cible.json
+commit: 23853cb7 | etat: instantané antérieur — ne reproduit pas l'état courant
+json: {"labels": 146, "top1": 122, "exact": 118, "exact_span": 0.8082, "top1_span": 0.8356, "verbe": 0.9412, "nom": 0.7368}
+courant: {"labels": 145, "top1": 126, "exact": 123, "exact_span": 0.8483, "top1_span": 0.869, "verbe": 0.9524, "nom": 0.7683}
+===== pensee-conventions.json
+commit: f70a1b2a | etat: instantané antérieur — ne reproduit pas l'état courant
+json: {"labels": 146, "verbe": {"cibles": 51, "justes": 37, "taux": 0.7255}, "nom": {"cibles": 95, "justes": 57, "taux": 0.6}, "tout": {"justes": 94, "taux": 0.6438}}
+courant: {"labels": 145, "verbe": {"cibles": 63, "justes": 60, "taux": 0.9524}, "nom": {"cibles": 82, "justes": 63, "taux": 0.7683}, "tout": {"justes": 123, "taux": 0.8483}}
+===== pensee-topk-strict.json
+commit: e223a98d | etat: reproduit à l'identique (état courant)
+json: {"labels": 145, "sous_chaine": {"topk": 134, "taux_span": 0.9241, "rendement": 0.5607}, "exact": {"topk": 88, "taux_span": 0.6069, "rendement": 0.3682}}
+courant: {"labels": 145, "sous_chaine": {"topk": 134, "taux_span": 0.9241, "rendement": 0.5607}, "exact": {"topk": 88, "taux_span"
+… [1301 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirming no existing file was touched and the code state is unchanged
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '--- HEAD'; git log -1 --format='%H %ad %s' --date=iso; echo '--- code hash'; sha256sum tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py; echo '--- audited JSONs diff (doit être vide)'; git diff --stat -- repo … [429 caractères tronqués]`
+
+  ```
+--- HEAD
+e1171032906de46f1a93fee0f6275f39b5d67692 2026-11-05 13:18:23 -0500 PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9
+--- code hash
+d9c9d5592b0ba8a942860518b67b5dce04223e47c47904fbf8e185f0511b186d  tools/bloc_linguistique.py
+dbbcfe9007f1d7ee66f6b7a28b064b3cf43407cddc5459f0931ca4fd9c426d2d  tools/tests/linguistique/evaluer_gold.py
+--- audited JSONs diff (doit être vide)
+ reports/pensee-spans.json | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+--- my files
+?? reports/pensee-audit-attachement.json
+?? reports/rapport-audit-attachement.md
+--- all reports status
+ M reports/README.md
+ M reports/pensee-quatre-modes.json
+ M reports/pensee-spans.json
+ M reports/rapport-pensee-spans.md
+?? reports/pensee-audit-attachement.json
+?? reports/pensee-topk-diagnostic.json
+?? reports/rapport-audit-attachement.md
+?? reports/rapport-s-paragraphes.md
+?? reports/rapport-topk-diagnostic.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Another agent modified pensee-spans.json mid-audit; inspecting the diff read-only
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -- reports/pensee-spans.json reports/rapport-pensee-spans.md | head -120", "description": "Show concurrent edits to spans report"}`
+
+  ```
+diff --git a/reports/pensee-spans.json b/reports/pensee-spans.json
+index 180902bb..d72bb3b9 100644
+--- a/reports/pensee-spans.json
++++ b/reports/pensee-spans.json
+@@ -34,5 +34,25 @@
+   "81 REL/SUB chez S",
+   "dénominateur de l'attachement à corriger",
+   "gold 612"
+- ]
++ ],
++ "courant": {
++  "date": "2026-11-05",
++  "source": "audit A1 (pensee-audit-attachement.json)",
++  "labels": 145,
++  "couverture": 0.6067,
++  "f1": 0.2862,
++  "span": 94,
++  "types": {
++   "REL": 48,
++   "SUB": 33,
++   "GP": 13
++  },
++  "categories": {
++   "aucun": 65,
++   "plus_large": 24,
++   "plus_etroit": 4,
++   "coupe": 1
++  },
++  "note": "état courant après le lexique élargi (a408a909) ; les blocs avant/apres restent l'historique"
++ }
+ }
+diff --git a/reports/rapport-pensee-spans.md b/reports/rapport-pensee-spans.md
+index 53634610..1aff6969 100644
+--- a/reports/rapport-pensee-spans.md
++++ b/reports/rapport-pensee-spans.md
+@@ -1,7 +1,7 @@
+-# B13 — les 94 spans : 48 REL, 33 SUB, 12 GP
++# B13 — les 94 spans : 48 REL, 33 SUB, 13 GP (état courant ; 93/12 après le correctif GP, avant le lexique élargi)
+ 
+ > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+-> *
+… [2314 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Documenting the concurrent edit and pinning the compared versions
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "new_string": "> gold inchangé (612 phrases : 20 `hand` + 432 `reel` + 160 synthétiques). Durée : 0,45–0,55 s.\n> Les cinq JSON sont lus dans leur version du commit **`e1171032`** ; la note de concu … [184 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "new_string": "| cible absente des candidats | 13 | 14 | **11** |\n\n**Version comparée et concurrence** : les valeurs ci-dessus sont celles des blobs du commit\n`e1171032`. Pendant l'audit, un **au … [2194 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "new_string": "- [`pensee-attachement-cible.json`](pensee-attachement-cible.json) ·\n  [`pensee-conventions.json`](pensee-conventions.json) ·\n  [`pensee-topk-strict.json`](pensee-topk-strict.json)  … [636 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "new_string": "- **Trois JSON sur cinq sont des instantanés antérieurs** (commits ci-dessus) : ils ne doivent\n  pas être relus comme l'état courant. Ils n'ont pas été modifiés par cet audit (consig … [725 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-audit-attachement.json'\nd=json.load(open(p, encoding='utf-8'))\nnote = (\"Pendant l'audit, un autre agent a ajouté à pensee-spans.json un bloc `courant` \"\n        \"(145 / 0.6067 /  … [989 caractères tronqués]`
+
+  ```
+ok
+JSON valide
+  ```
+
+### 🤖 Assistant
+
+⏵ Qualifying the spans row for the new concurrent 'courant' block
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "new_string": "courant**. Le point le plus net : dans sa version **committée**, `pensee-spans.json` publie\n**12 GP / 93 spans** dans son bloc `spans`, alors que le chiffre audité est **13 GP / 94** … [320 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "new_string": "| `pensee-spans.json` | `d400e188` / `13e8bb2d` | après : 146 ; 0,6109 ; 0,2869 ; 93 ; REL 48 / SUB 33 / **GP 12** ; avant : 145 ; 0,6067 ; 0,2864 ; 94 ; cible 13 | 145 ; 0,6067 ; 0,2 … [488 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-audit-attachement.json'\nd=json.load(open(p, encoding='utf-8'))\ns=d[\"confrontation_json\"][\"pensee-spans.json\"]\ns[\"etat\"] = (\"blocs historiques (avant d400e188 / après 13e8bb2d … [817 caractères tronqués]`
+
+  ```
+ok
+JSON valide
+  ```
+
+### 🤖 Assistant
+
+⏵ Final read-through of the edited sections
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,35p' reports/rapport-audit-attachement.md; echo '...'; sed -n '70,125p' reports/rapport-audit-attachement.md; echo '...'; sed -n '150,190p' reports/rapport-audit-attachement.md", "description": "Read edited sections of the  … [7 caractères tronqués]`
+
+  ```
+# Audit de reproductibilité — l'attachement du bloc linguistique (B13)
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+> **Verdict** : ✅ **reproduit — 14/14 valeurs, écart 0** ; ⚠️ **réserve documentaire** :
+> **3 des 5 JSON sont des instantanés antérieurs**, reproduits à leur commit mais pas à
+> l'état courant. L'audit n'a modifié aucun fichier existant et n'a fait aucun commit.
+
+> **Dispositif** : depuis la racine, `sys.path.insert(0, '.')` ;
+> `from tools.bloc_linguistique import Heuristique` ;
+> `from tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc` ;
+> `evaluer_bloc("heuristique", Heuristique(), charger())` pour l'attachement ; pour les spans,
+> même boucle que `T166` : chaque `segment` du gold est comparé aux étiquettes de niveau
+> `syntagme` par `(type, debut, fin)`. Mesure rejouée sur `s/v7`, commit **`e1171032`**,
+> `bloc_linguistique.py` sha256 **`d9c9d559…`**, `evaluer_gold.py` sha256 **`dbbcfe90…`**,
+> gold inchangé (612 phrases : 20 `hand` + 432 `reel` + 160 synthétiques). Durée : 0,45–0,55 s.
+> Les cinq JSON sont lus dans leur version du commit **`e1171032`** ; la note de concurrence
+> du § 3 dit ce qui a boug
+… [7385 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-attachement.json'))\nprint(\"note_concurrence:\", d[\"note_concurrence\"])\nprint(\"limites:\")\nfor l in d[\"limites\"]: print(\" -\", l)\nprint(\"fichiers:\", d[ … [254 caractères tronqués]`
+
+  ```
+note_concurrence: Pendant l'audit, un autre agent a ajouté à pensee-spans.json un bloc `courant` (145 / 0.6067 / 0.2862 / 94 / REL 48, SUB 33, GP 13 / 65-24-4-1) et corrigé le titre de rapport-pensee-spans.md ; cet audit n'a touché à aucun des deux. Le bloc ajouté reprend les valeurs mesurées. La comparaison ci-dessus reste celle des blobs du commit e1171032.
+limites:
+ - 3 des 5 JSON sont des instantanés antérieurs (commits indiqués) : ne pas les lire comme l'état courant ; aucun n'a été modifié.
+ - pensee-spans.json : le bloc `spans` (REL 48, SUB 33, GP 12, total 93) est l'état « après » (13e8bb2d) ; le publié 13 GP / 94 est l'état courant (et le bloc « avant » d400e188).
+ - les catégories de spans sont une lecture : `coupe` = au moins deux segments prédits recouvrent le gold ; le courant donne 65/24/4/1, le JSON (avant) 65/25/3/1.
+ - la mesure dépend du sous-module tools/structures au commit 523d8c1 (segmentation S) ; son fichier de données modifié (donnees/paragraphes-validations.jsonl) n'est lu que par serveur.py, pas par generateur.analyser.
+ - le gold est vivant (612 phrases : 20 hand + 432 reel + 160 synthétiques) ; `gold_gele` (602) n'est pas utilisé ici.
+ - les portes (169
+… [1071 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Tightening two remaining wordings about the concurrent edit
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md", "new_string": "- Les deux états de `pensee-spans.json` sont donc justes **à leurs commits**, mais sa version\n  **committée** ne contient **que** le couple avant/après : aucun des deux n'est l'état  … [205 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-attachement.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-audit-attachement.json'\nd=json.load(open(p, encoding='utf-8'))\nd[\"limites\"][0] = (\"3 des 5 JSON sont des instantanés antérieurs (commits indiqués) : ne pas les lire \"\n           … [355 caractères tronqués]`
+
+  ```
+3 des 5 JSON sont des instantanés antérieurs (commits indiqués) : ne pas les lire comme l'état courant ; aucun n'a été modifié par cet audit.
+JSON valide
+  ```
+
+### 🤖 Assistant
+
+⏵ Final validation run and workspace state check
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.')\nfrom tools.bloc_linguistique import Heuristique\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc(\"heuristique\", Heuristique(), char … [1109 caractères tronqués]`
+
+  ```
+cibles 239 labels 145 top1 126 topk 134 exact 123 strict 88 couverture 0.6067
+verbe {'cibles': 63, 'justes': 60, 'taux': 0.9524} nom {'cibles': 82, 'justes': 63, 'taux': 0.7683}
+taux spans 0.869 0.9241 0.8483 0.6069
+json verdict: reproduit 14 / 14
+json spans: {'REL': 48, 'SUB': 33, 'GP': 13, 'total': 94} cats: {'aucun': 65, 'plus_large': 24, 'plus_etroit': 4, 'coupe': 1}
+json f1: 0.2862
+--- files
+-rw-r--r--. 1 stephane stephane 21086  5 nov 13:43 reports/pensee-audit-attachement.json
+-rw-------. 1 stephane stephane 12366  5 nov 13:43 reports/rapport-audit-attachement.md
+--- status
+ M reports/pensee-spans.json
+ M reports/rapport-pensee-spans.md
+?? reports/pensee-audit-attachement.json
+?? reports/rapport-audit-attachement.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Setting final permissions and reporting the audit to the parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod 644 reports/rapport-audit-attachement.md && ls -l reports/rapport-audit-attachement.md reports/pensee-audit-attachement.json", "description": "Normalize deliverable permissions"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 21086  5 nov 13:43 reports/pensee-audit-attachement.json
+-rw-r--r--. 1 stephane stephane 12366  5 nov 13:43 reports/rapport-audit-attachement.md
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "AUDIT DE REPRODUCTIBILITÉ DE L'ATTACHEMENT — terminé. 2 fichiers neufs, aucun fichier existant modifié, aucun commit.\n\nVERDICT : ✅ les 14 valeurs publiées reproduisent exactement (écart 0), sur s/v7 au commit e1171032, bloc_linguisti … [2481 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Closing the audit and reporting figures
+
+## Audit de reproductibilité — attachement (B13)
+
+**Verdict : ✅ les 14 valeurs publiées reproduisent exactement, écart 0.** Mesure rejouée sur `s/v7` au commit `e1171032`, `bloc_linguistique.py` sha256 `d9c9d559…`, `evaluer_gold.py` sha256 `dbbcfe90…`, gold 612 phrases (20 `hand` + 432 `reel` + 160 synthétiques), `Heuristique()` aux défauts, durée ~0,5 s.
+
+| mesure | mesuré | publié | écart |
+|---|---:|---:|---:|
+| cibles | 239 | 239 | 0 |
+| labels | 145 | 145 | 0 |
+| top1 | 126 | 126 | 0 |
+| top-k (sous-chaîne) | 134 | 134 | 0 |
+| exact | 123 | 123 | 0 |
+| top-k strict | 88 | 88 | 0 |
+| couverture | 0,6067 | 0,6067 | 0 |
+| cibles verbes / justes | 63 / 60 | 63 / 60 | 0 |
+| cibles noms / justes | 82 / 63 | 82 / 63 | 0 |
+| spans perdus REL / SUB / GP | 48 / 33 / 13 | 48 / 33 / 13 | 0 |
+
+Taux dérivés : top1 0,8690 des labels ; top-k 0,9241 ; exact 0,8483 ; strict 0,6069 ; verbes 0,9524 ; noms 0,7683 ; F1 syntagmes 0,2862 (P 0,3154, R 0,2619). Catégories de spans courantes : 65 aucun / 24 plus large / 4 plus étroit / 1 coupe.
+
+**Contrôle négatif** (graine 20261105, 1 000 tirages) : permutation des cibles gold **1,12 %** (1,62/145, max 7) ; candidat aléatoire **27,42 %** (39,75/145) ; contrôle du harnais **0,42 %** (1/239). Observé **84,83 %** (123/145), soit 76× la permutation et 3,1× le candidat aléatoire. Nuance : exact et top-k strict ne mesurent pas le même objet (82 labels exacts et stricts, 41 exacts hors liste stricte, 6 cibles présentes mal choisies).
+
+### Écarts constatés — dans les JSON, pas dans les valeurs auditées
+
+- `pensee-topk-strict.json` (`e223a98d`) et `pensee-echecs-cible.json` (`a048cb83`) : **reproduisent à l'identique**.
+- `pensee-conventions.json` (`f70a1b2a`) et `pensee-attachement-cible.json` (`23853cb7`) : **instantanés antérieurs**. Ils publient 146 labels, exact 118 (0,8082), top1 122 (0,8356), 48/51 verbes, 70/95 noms ; rejoués à leur commit, ils sont exacts — mais l'état courant est 145 / 123 / 126 / 60-63 / 63-82.
+- `pensee-spans.json` : sa version committée publie **12 GP / 93 spans** (bloc `spans`, état « après » `13e8bb2d`), alors que le chiffre audité est **13 GP / 94** (état courant, = bloc « avant » `d400e188`). Les deux blocs reproduisent à leurs commits ; aucun n'est l'état courant. Le lexique élargi `a408a909` (10:39) a ramené 146→145 labels, GP 12→13, F1 0,2869→0,2862 et exact 118→123 ; stable depuis `a048cb83`.
+
+Un autre agent a ajouté pendant l'audit un bloc `courant` à `pensee-spans.json` (145 / 0,6067 / 0,2862 / 94 / 48-33-13 / 65-24-4-1) et corrigé le titre de `rapport-pensee-spans.md` ; je n'y ai pas touché — le bloc reprend exactement mes valeurs.
+
+### Fichiers
+
+- `reports/rapport-audit-attachement.md` — fiche : verdict, tableau, confrontation aux cinq JSON, contrôle négatif, limites, fichiers.
+- `reports/pensee-audit-attachement.json` — mêmes chiffres, structurés, avec les rejeux des 7 commits historiques.
+
+**Aucun commit, aucun fichier existant modifié.** Les deux livrables sont neufs et untracked.
+

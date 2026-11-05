@@ -39,6 +39,11 @@ Par type et nature (segments au bon span) :
 - **La négative est explicite** : 22/145 restent faux, et 11 d'entre eux sont hors de portée
   d'une règle de proximité.
 
+
+> **Note du 2026-11-05 (intégration v2)** : ces 22 échecs sont l'état **avant** les corrections
+> issues des sous-agents ; l'attachement v2 en laisse **8** (3 hors candidats, 5 mal classés).
+> Voir [attachement v2](rapport-pensee-attachement-v2.md).
+
 ## 2. Ce que ce banc ne dit pas
 
 - **Les 11 « présents »** : lequel des candidats est le bon n'est pas appris.

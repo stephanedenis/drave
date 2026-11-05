@@ -1,0 +1,88 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "180/180",
+ "labels": 145,
+ "cibles": 239,
+ "avant": {
+  "exact": 123,
+  "exact_span": 0.8483,
+  "top1": 126,
+  "topk": 134,
+  "topk_exact": 88,
+  "verbe_est": 0.9524,
+  "nom_est": 0.7683
+ },
+ "apres": {
+  "exact": 137,
+  "exact_span": 0.9448,
+  "top1": 140,
+  "topk": 142,
+  "topk_exact": 141,
+  "top1_span": 0.9655,
+  "topk_span": 0.9793,
+  "topk_exact_span": 0.9724,
+  "verbe_pos": 0.9569,
+  "nom_pos": 0.8966,
+  "verbe_cibles": 116,
+  "nom_cibles": 29
+ },
+ "rendement": {
+  "top1": 0.5858,
+  "topk": 0.5941,
+  "exact": 0.5732
+ },
+ "corrections": {
+  "segment_precedent": {
+   "gain_exact": 6,
+   "source": "A7",
+   "ids": [
+    "s012",
+    "s030",
+    "s052",
+    "s097",
+    "s124",
+    "s139"
+   ]
+  },
+  "lexique_anglais": {
+   "gain_exact": 8,
+   "gain_top1": 8,
+   "source": "A2",
+   "risque": "borne haute"
+  },
+  "tetes_candidats": {
+   "gain_topk_strict": 45,
+   "source": "A2"
+  }
+ },
+ "modele_appris": {
+  "exact": 0.9793,
+  "vs_regle": 137,
+  "gain": 5,
+  "mcnemar": "7/2",
+  "p": 0.18,
+  "ic95": [
+   -0.7,
+   7.6
+  ],
+  "decision": "rejete"
+ },
+ "echecs": {
+  "hors_candidats": 3,
+  "mal_classes": 5,
+  "total": 8
+ },
+ "spans": {
+  "REL": 48,
+  "SUB": 33,
+  "GP": 13,
+  "total": 94
+ },
+ "limites": [
+  "8 échecs non qualifiés",
+  "spans chez S",
+  "lexique ajusté après mesure",
+  "gold 612"
+ ]
+}

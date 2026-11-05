@@ -34,5 +34,25 @@
   "81 REL/SUB chez S",
   "dénominateur de l'attachement à corriger",
   "gold 612"
- ]
+ ],
+ "courant": {
+  "date": "2026-11-05",
+  "source": "audit A1 (pensee-audit-attachement.json)",
+  "labels": 145,
+  "couverture": 0.6067,
+  "f1": 0.2862,
+  "span": 94,
+  "types": {
+   "REL": 48,
+   "SUB": 33,
+   "GP": 13
+  },
+  "categories": {
+   "aucun": 65,
+   "plus_large": 24,
+   "plus_etroit": 4,
+   "coupe": 1
+  },
+  "note": "état courant après le lexique élargi (a408a909) ; les blocs avant/apres restent l'historique"
+ }
 }

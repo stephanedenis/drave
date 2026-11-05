@@ -1,8 +1,8 @@
-# B13 — les 94 spans : 48 REL, 33 SUB, 12 GP
+# B13 — les 94 spans : 48 REL, 33 SUB, 13 GP (état courant ; 93/12 après le correctif GP, avant le lexique élargi)
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
-> **169/169 portes** : les échecs d'attachement par **span** (93 après le correctif) sont
-> **48 REL**, **33 SUB** et **12 GP** — les subordonnées ne sont **pas produites** (65 cas) ou le
+> **169/169 portes** : les échecs d'attachement par **span** (94 à l'état courant ; **93** après le correctif GP, avant le lexique élargi de `a408a909`) sont
+> **48 REL**, **33 SUB** et **13 GP** — les subordonnées ne sont **pas produites** (65 cas) ou le
 > sont avec un span plus large (25). Le correctif testé — borner le GP au verbe et au relatif —
 > gagne **un span** (couverture 0,6067 → 0,6109, F1 0,2864 → 0,2869) mais **perd une cible** :
 > le total des échecs ne bouge pas (107).
@@ -11,33 +11,39 @@
 > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
 > [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-spans.json`](pensee-spans.json).
 
-## 1. Les 93 spans
+## 1. Les 94 spans
 
 | type | échecs de span |
 |---|---:|
 | **REL** | **48** |
 | **SUB** | **33** |
-| **GP** | **12** |
-| **tout** | **93** |
+| **GP** | **13** |
+| **tout** | **94** |
 
 | catégorie | nombre |
 |---|---:|
 | aucun segment du même type | 65 |
-| plus large | 25 |
-| plus étroit | 3 |
+| plus large | 24 |
+| plus étroit | 4 |
 | coupé en plusieurs | 1 |
 
 | mesure | avant | **après le GP borné** |
 |---|---:|---:|
-| segments au bon span (labels) | 145 | **146** |
-| couverture | 0,6067 | **0,6109** |
-| F1 syntagmes | 0,2864 | **0,2869** |
-| échecs span / cible | 94 / 13 | **93 / 14** |
+| segments au bon span (labels) | 145 (avant) | 146 (après GP) |
+| couverture | 0,6067 | 0,6109 (après GP) |
+| F1 syntagmes | 0,2864 | 0,2869 (après GP) |
+| échecs span / cible | 94 / 13 (avant le GP) | **94 / 11** (courant) |
+| **courant** | — | labels **145**, couverture **0,6067**, F1 **0,2862**, spans **94**, catégories **65/24/4/1** |
 | top1 / top-k / exact | 115 / 132 / 33 | **115 / 132 / 33** |
+
+> **Note du 2026-11-05 (audit A1)** : ce fichier publiait les valeurs du correctif GP (93 spans,
+> 12 GP) ; le **lexique élargi** (`a408a909`) a ramené l'état courant à **94 spans (48/33/13)**, et
+> c'est ce que le tableau ci-dessus donne désormais. Les valeurs historiques restent dans
+> `pensee-spans.json` (blocs `avant` / `apres`).
 
 **Ce que ça dit** :
 
-- **Les subordonnées sont le trou** (81 des 93) : REL et SUB ne sont pas produits — c'est
+- **Les subordonnées sont le trou** (81 des 94) : REL et SUB ne sont pas produits — c'est
   l'analyse des subordonnées du **générateur S** (`tools/structures/`), hors de mon territoire.
 - **Le GP avalait le verbe** (`de la voisine dort`) : borné au verbe et au relatif, il gagne un
   span — mais une cible se perd, et le total reste à 107 échecs.

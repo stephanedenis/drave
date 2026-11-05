@@ -29,6 +29,13 @@
 - **La mesure globale cachait l'écart** : 0,6438 = moyenne pondérée (51 × 0,73 + 95 × 0,60).
 - **La négative est explicite** : 14 verbes et 38 noms restent faux.
 
+
+> **Note du 2026-11-05 (intégration v2)** : la ligne « SUB » de ce tableau est **fausse** —
+> elle avait été lue avec `_est_verbe`, qui classe 53 verbes comme des noms. Le **POS du gold**
+> donne **69/69 cibles SUB = VERB** et, sur les 145 segments, **116 verbes / 29 noms** (et non
+> 63/82). La convention a été corrigée dans `gold_reel.py` (`CONVENTION_CIBLE`) et la mesure
+> suit désormais le POS du gold ; voir [attachement v2](rapport-pensee-attachement-v2.md).
+
 ## 2. Ce que ce banc ne dit pas
 
 - **La convention voulue** : elle n'est pas écrite ; tant qu'elle ne l'est pas, les deux mesures

@@ -1,0 +1,1279 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "titre": "Top-k strict de l'attachement : 57 échecs qualifiés, 45 d'emballage",
+ "verdict": "57/57 échecs classés (0 « autre ») ; 3 correctifs simulés couvrent 45 + 8 + 4 = 57, soit un plafond de 145/145 en top-k strict — borne haute, même gold, code non modifié.",
+ "non_applique": true,
+ "gold": {
+  "fichier": "tools/tests/linguistique/gold.json + gold_reel.json + gold_synthetique.json",
+  "phrases": 612,
+  "charger": "evaluer_gold.charger()"
+ },
+ "mesure": {
+  "phrases": 612,
+  "cibles_gold": 239,
+  "segments_span_predit": 145,
+  "topk_sous_chaine": 134,
+  "topk_exact": 88,
+  "echecs_stricts": 57,
+  "top1_exact": 123,
+  "taux_span": {
+   "topk_sous_chaine": 0.9241,
+   "topk_exact": 0.6069,
+   "top1_exact": 0.8483
+  },
+  "rendement_239": {
+   "topk_sous_chaine": 0.5607,
+   "topk_exact": 0.3682
+  }
+ },
+ "causes": [
+  {
+   "code": "C1",
+   "libelle": "candidat S non réduit à sa tête — cible nominale",
+   "raison": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "effectif": 26,
+   "dont_sous_chaine": 26,
+   "types": {
+    "REL": 26
+   },
+   "sources": {
+    "hand": 1,
+    "reel": 25
+   },
+   "top1_deja_juste": 26,
+   "correctif": "F1",
+   "exemples": [
+    "g011 · REL « que j'ai lu » → livre",
+    "r014 · REL « que j'ai lu » → livre",
+    "r015 · REL « dont elle parle » → film"
+   ]
+  },
+  {
+   "code": "C2",
+   "libelle": "candidat S non réduit à sa tête — cible verbale",
+   "raison": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "effectif": 17,
+   "dont_sous_chaine": 17,
+   "types": {
+    "GP": 17
+   },
+   "sources": {
+    "reel": 7,
+    "synthetique": 10
+   },
+   "top1_deja_juste": 15,
+   "correctif": "F1",
+   "exemples": [
+    "r047 · GP « dans le jardin » → poussent",
+    "r057 · GP « contre le facteur » → aboie",
+    "r088 · GP « sur le toit » → grimpe"
+   ]
+  },
+  {
+   "code": "C3",
+   "libelle": "candidat S non réduit à sa tête — cible attribut",
+   "raison": "La cible est l'adjectif attribut (`prêt`) présent seulement dans « est prêt » ; la liste ne le réduit pas.",
+   "effectif": 2,
+   "dont_sous_chaine": 2,
+   "types": {
+    "GP": 2
+   },
+   "sources": {
+    "hand": 1,
+    "reel": 1
+   },
+   "top1_deja_juste": 0,
+   "correctif": "F1",
+   "exemples": [
+    "g012 · GP « à manger » → prêt",
+    "r018 · GP « à manger » → prête"
+   ]
+  },
+  {
+   "code": "C4",
+   "libelle": "verbe anglais hors du lexique verbal",
+   "raison": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "effectif": 8,
+   "dont_sous_chaine": 0,
+   "types": {
+    "GP": 8
+   },
+   "sources": {
+    "reel": 8
+   },
+   "top1_deja_juste": 0,
+   "correctif": "F2",
+   "exemples": [
+    "r080 · GP « over the lake » → fly",
+    "r108 · GP « on the roof » → climbs",
+    "r120 · GP « to the sea » → flows"
+   ]
+  },
+  {
+   "code": "C5",
+   "libelle": "GP génitif — tête du GN à gauche jamais candidate",
+   "raison": "Pour un génitif (`de la voisine` → `chat`), la cible est le nom complété ; le GV est avalé par le GP dans le S et aucun candidat nominal de gauche n'est produit.",
+   "effectif": 1,
+   "dont_sous_chaine": 0,
+   "types": {
+    "GP": 1
+   },
+   "sources": {
+    "hand": 1
+   },
+   "top1_deja_juste": 0,
+   "correctif": "F3",
+   "exemples": [
+    "g002 · GP « de la voisine » → chat"
+   ]
+  },
+  {
+   "code": "C6",
+   "libelle": "verbe français hors lexique, aucun GV",
+   "raison": "`marche` est tagué NOUN, aucun GV n'est détecté : la liste tombe à `['GP']`.",
+   "effectif": 1,
+   "dont_sous_chaine": 0,
+   "types": {
+    "GP": 1
+   },
+   "sources": {
+    "synthetique": 1
+   },
+   "top1_deja_juste": 0,
+   "correctif": "F3",
+   "exemples": [
+    "s041 · GP « devant elles » → marche"
+   ]
+  },
+  {
+   "code": "C7",
+   "libelle": "candidat tokenisé avec enclitique",
+   "raison": "Le candidat est `appelle-moi`, la cible est la base verbale `appelle` : le trait d'union n'est pas découpé.",
+   "effectif": 1,
+   "dont_sous_chaine": 1,
+   "types": {
+    "SUB": 1
+   },
+   "sources": {
+    "reel": 1
+   },
+   "top1_deja_juste": 0,
+   "correctif": "F3",
+   "exemples": [
+    "r230 · SUB « Quand tu arrives » → appelle"
+   ]
+  },
+  {
+   "code": "C8",
+   "libelle": "GV du S mal délimité",
+   "raison": "Le S prend `Peut-être` (adverbe) pour un GV ; le verbe réel `viendra` n'est ni reconnu ni candidat.",
+   "effectif": 1,
+   "dont_sous_chaine": 0,
+   "types": {
+    "SUB": 1
+   },
+   "sources": {
+    "reel": 1
+   },
+   "top1_deja_juste": 0,
+   "correctif": "F3",
+   "exemples": [
+    "r309 · SUB « qu'il viendra » → viendra"
+   ]
+  }
+ ],
+ "correctifs": [
+  {
+   "code": "F1",
+   "ordre": 1,
+   "libelle": "réduire chaque candidat S à sa tête",
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "Heuristique.analyser (branche « 5. syntagmes », construction de `candidats`, l. 858/874/892) + helper Heuristique._tete_nom (l. 616)",
+   "detail": "Pour chaque `nom` de candidat S contenant « → », prendre la queue après « → » et ajouter sa tête (élision séparée, `L'homme` → `homme`) aux `candidats`.",
+   "gain_topk_incremental": 45,
+   "gain_topk_cumule": 133,
+   "gain_top1": 0,
+   "note": "s108/s122 (`papier` au lieu de `rêve`/`saute`) et g012/r018 (`manger` au lieu de `prêt`) restent faux en top-1 : F1 ne répare que le top-k.",
+   "statut": "simulé, non appliqué"
+  },
+  {
+   "code": "F2",
+   "ordre": 2,
+   "libelle": "compléter le lexique verbal anglais",
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "_est_verbe (l. 428) via son lexique VERBES_CONNUS (l. 374)",
+   "detail": "Ajouter fly/climb/flow/swim/get/smile/wait/belong et leurs flexions (-s, -ed, -ing, irréguliers) : le GV du S est coupé au verbe et `_verbe_dans` rend `fly` au lieu du dernier nom.",
+   "gain_topk_incremental": 8,
+   "gain_topk_cumule": 141,
+   "gain_top1": 8,
+   "note": "mesuré par greffe de VERBES_CONNUS ; 0 régression sur les 145 segments.",
+   "statut": "simulé, non appliqué"
+  },
+  {
+   "code": "F3",
+   "ordre": 3,
+   "libelle": "repli par tokens : tête du GN à gauche, verbes reconnus, enclitiques",
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "Heuristique._verbes_proches (l. 670) et Heuristique._cible_proche (l. 643) ; VERBES_CONNUS pour les formes manquantes",
+   "detail": "(a) pour un GP, ajouter la tête du GN à gauche (`_tete_nom`) ; (b) si aucun GV, balayer les verbes reconnus dans une fenêtre autour du segment ; (c) découper les enclitiques (`appelle-moi` → `appelle`) ; (d) compléter VERBES_CONNUS (`marche`, `appelle`, `viendra`).",
+   "gain_topk_incremental": 4,
+   "gain_topk_cumule": 145,
+   "gain_top1": null,
+   "gain_top1_conditionnel": 4,
+   "note": "(a) répare g002 et s041 — s041 seulement parce que le GN du chunker avale le verbe (`les avocat marche`) : fragile. Isolé, F3 vaudrait 29, mais 25 des 29 recouvrent F1/F2 (même GN trop large) : chevauchement, pas gain. Top-1 +4 seulement si `_cible_proche` suit la même règle (non simulé).",
+   "statut": "simulé, non appliqué"
+  }
+ ],
+ "controle_negatif": [
+  {
+   "nom": "F1 — premier token de la queue au lieu de la tête",
+   "resultat": "0/45",
+   "lecture": "le gain vient de la position de tête, pas du fait d'ajouter un token quelconque."
+  },
+  {
+   "nom": "F2 — 8 verbes anglais non pertinents (jump, read, write, eat, sleep, run, sing, dance)",
+   "resultat": "0/8",
+   "lecture": "des verbes anglais corrects mais hors cible ne réparent rien : le gain est lexical, pas générique."
+  },
+  {
+   "nom": "F3 — premier mot de la phrase ajouté comme candidat",
+   "resultat": "0/4",
+   "lecture": "un token arbitraire ne répare pas ; il faut la bonne relation (GN à gauche / verbe)."
+  },
+  {
+   "nom": "Oracle — ajouter la cible du gold elle-même",
+   "resultat": "57/57",
+   "lecture": "plafond trivial : la mesure compte la couverture des candidats, pas la compréhension. Les gains des correctifs sont donc des bornes hautes, mesurées sur le même gold."
+  }
+ ],
+ "limites": [
+  "correctifs déduits des échecs du même gold : les gains sont des bornes hautes, pas une estimation de généralisation ;",
+  "F3(d) ajoute au lexique des formes observées dans le gold (`marche`, `appelle`, `viendra`) : c'est le point le plus exposé au sur-apprentissage ;",
+  "F1 ne change pas le top-1 : 4 segments (s108, s122, g012, r018) gardent une cible choisie fausse (`papier`, `manger`) ;",
+  "la réduction s'appuie sur le format de présentation `nom = « … » → …` du générateur S : couplage à un détail d'affichage, à remplacer par une API `attachement` par segment ;",
+  "les 8 GP anglais sont aussi réparés par F3(a) si F2 n'est pas appliqué (le GN du chunker avale le verbe) : le gain isolé de F3 (29) surestime son apport propre ;",
+  "aucune porte ni régression : le code n'est pas modifié (mesure en lecture seule) ; les gains sont des simulations."
+ ],
+ "segments": [
+  {
+   "id": "g002",
+   "source": "hand",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "de la voisine",
+   "cible_gold": "chat",
+   "cible_choisie": "",
+   "candidats": [
+    "GP"
+   ],
+   "sous_chaine": false,
+   "cause": "C5",
+   "raison": "GP génitif — tête du GN à gauche jamais candidate",
+   "raison_detail": "Pour un génitif (`de la voisine` → `chat`), la cible est le nom complété ; le GV est avalé par le GP dans le S et aucun candidat nominal de gauche n'est produit.",
+   "correctif": "F3"
+  },
+  {
+   "id": "g011",
+   "source": "hand",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que j'ai lu",
+   "cible_gold": "livre",
+   "cible_choisie": "livre",
+   "candidats": [
+    "« que j'ai lu » → Le livre",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "g012",
+   "source": "hand",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "à manger",
+   "cible_gold": "prêt",
+   "cible_choisie": "manger",
+   "candidats": [
+    "« à manger » → Le canard",
+    "« à manger » → est prêt",
+    "manger",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C3",
+   "raison": "candidat S non réduit à sa tête — cible attribut",
+   "raison_detail": "La cible est l'adjectif attribut (`prêt`) présent seulement dans « est prêt » ; la liste ne le réduit pas.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r014",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que j'ai lu",
+   "cible_gold": "livre",
+   "cible_choisie": "livre",
+   "candidats": [
+    "« que j'ai lu » → Le livre",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r015",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "dont elle parle",
+   "cible_gold": "film",
+   "cible_choisie": "film",
+   "candidats": [
+    "« dont elle parle » → Le film",
+    "sorti"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r018",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "à manger",
+   "cible_gold": "prête",
+   "cible_choisie": "manger",
+   "candidats": [
+    "« à manger » → La souris",
+    "« à manger » → est prête",
+    "manger",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C3",
+   "raison": "candidat S non réduit à sa tête — cible attribut",
+   "raison_detail": "La cible est l'adjectif attribut (`prêt`) présent seulement dans « est prêt » ; la liste ne le réduit pas.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r047",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "dans le jardin",
+   "cible_gold": "poussent",
+   "cible_choisie": "poussent",
+   "candidats": [
+    "« dans le jardin » → Les fleurs poussent"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r054",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que tu lis",
+   "cible_gold": "livre",
+   "cible_choisie": "livre",
+   "candidats": [
+    "« que tu lis » → Le livre",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r055",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "où nous vivons",
+   "cible_gold": "ville",
+   "cible_choisie": "ville",
+   "candidats": [
+    "« où nous vivons » → La ville",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r057",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "contre le facteur",
+   "cible_gold": "aboie",
+   "cible_choisie": "aboie",
+   "candidats": [
+    "« contre le facteur » → Le chien aboie"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r080",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "over the lake",
+   "cible_gold": "fly",
+   "cible_choisie": "lake",
+   "candidats": [
+    "GP",
+    "lake"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r088",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "sur le toit",
+   "cible_gold": "grimpe",
+   "cible_choisie": "grimpe",
+   "candidats": [
+    "« sur le toit » → Le chat grimpe"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r094",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que nous avons vu",
+   "cible_gold": "film",
+   "cible_choisie": "film",
+   "candidats": [
+    "« que nous avons vu » → Le film",
+    "vu",
+    "était"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r095",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "où je suis né",
+   "cible_gold": "maison",
+   "cible_choisie": "maison",
+   "candidats": [
+    "« où je suis né » → La maison",
+    "né",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r100",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "vers la mer",
+   "cible_gold": "coule",
+   "cible_choisie": "coule",
+   "candidats": [
+    "« vers la mer » → La rivière coule"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r108",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "on the roof",
+   "cible_gold": "climbs",
+   "cible_choisie": "roof",
+   "candidats": [
+    "GP",
+    "roof"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r120",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "to the sea",
+   "cible_gold": "flows",
+   "cible_choisie": "river",
+   "candidats": [
+    "GP",
+    "river"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r126",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "dans l'eau",
+   "cible_gold": "nage",
+   "cible_choisie": "nage",
+   "candidats": [
+    "« dans l'eau » → Le poisson nage"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r139",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "à sa mère",
+   "cible_gold": "sourit",
+   "cible_choisie": "sourit",
+   "candidats": [
+    "« à sa mère » → Le bébé sourit"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r150",
+   "source": "reel",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "à la bibliothèque",
+   "cible_gold": "appartient",
+   "cible_choisie": "appartient",
+   "candidats": [
+    "« à la bibliothèque » → Le livre appartient"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r156",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "in the water",
+   "cible_gold": "swims",
+   "cible_choisie": "water",
+   "candidats": [
+    "GP",
+    "water"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r166",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "on the train",
+   "cible_gold": "get",
+   "cible_choisie": "train",
+   "candidats": [
+    "GP",
+    "train"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r169",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "at his mother",
+   "cible_gold": "smiles",
+   "cible_choisie": "mother",
+   "candidats": [
+    "GP",
+    "mother"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r177",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "in front of the door",
+   "cible_gold": "wait",
+   "cible_choisie": "door",
+   "candidats": [
+    "GP",
+    "door"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r180",
+   "source": "reel",
+   "langue": "en",
+   "type": "GP",
+   "segment": "to the library",
+   "cible_gold": "belongs",
+   "cible_choisie": "library",
+   "candidats": [
+    "GP",
+    "library"
+   ],
+   "sous_chaine": false,
+   "cause": "C4",
+   "raison": "verbe anglais hors du lexique verbal",
+   "raison_detail": "`_est_verbe` est faux pour le verbe anglais (`fly`, `climbs`…), le GV du S n'est pas coupé au verbe et les candidats retombent sur les noms du GP (`lake`, `roof`…).",
+   "correctif": "F2"
+  },
+  {
+   "id": "r201",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "qui parle",
+   "cible_gold": "homme",
+   "cible_choisie": "homme",
+   "candidats": [
+    "« qui parle » → L'homme",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r203",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que j'ai lu",
+   "cible_gold": "livre",
+   "cible_choisie": "livre",
+   "candidats": [
+    "« que j'ai lu » → Le livre",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r209",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "dont je parle",
+   "cible_gold": "élève",
+   "cible_choisie": "élève",
+   "candidats": [
+    "« dont je parle » → L'élève",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r213",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "dont je parle",
+   "cible_gold": "film",
+   "cible_choisie": "film",
+   "candidats": [
+    "« dont je parle » → Le film",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r221",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "où je vis",
+   "cible_gold": "village",
+   "cible_choisie": "village",
+   "candidats": [
+    "« où je vis » → Le village",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r226",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "où nous sommes partis",
+   "cible_gold": "jour",
+   "cible_choisie": "jour",
+   "candidats": [
+    "« où nous sommes partis » → Le jour",
+    "partis",
+    "était"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r228",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que nous avons achetée",
+   "cible_gold": "maison",
+   "cible_choisie": "maison",
+   "candidats": [
+    "« que nous avons achetée » → La maison",
+    "avons",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r230",
+   "source": "reel",
+   "langue": "fr",
+   "type": "SUB",
+   "segment": "Quand tu arrives",
+   "cible_gold": "appelle",
+   "cible_choisie": "appelle-moi",
+   "candidats": [
+    "structure la plus proche",
+    "appelle-moi"
+   ],
+   "sous_chaine": true,
+   "cause": "C7",
+   "raison": "candidat tokenisé avec enclitique",
+   "raison_detail": "Le candidat est `appelle-moi`, la cible est la base verbale `appelle` : le trait d'union n'est pas découpé.",
+   "correctif": "F3"
+  },
+  {
+   "id": "r231",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "qui aboie",
+   "cible_gold": "chien",
+   "cible_choisie": "chien",
+   "candidats": [
+    "« qui aboie » → Le chien",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r233",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "dont tu parles",
+   "cible_gold": "fille",
+   "cible_choisie": "fille",
+   "candidats": [
+    "« dont tu parles » → La fille",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r235",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "où nous allons",
+   "cible_gold": "endroit",
+   "cible_choisie": "endroit",
+   "candidats": [
+    "« où nous allons » → L'endroit",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r253",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que tu manges",
+   "cible_gold": "pain",
+   "cible_choisie": "pain",
+   "candidats": [
+    "« que tu manges » → Le pain",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r257",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "dont tu parles",
+   "cible_gold": "film",
+   "cible_choisie": "film",
+   "candidats": [
+    "« dont tu parles » → Le film",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r259",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "qui chante",
+   "cible_gold": "garçon",
+   "cible_choisie": "garçon",
+   "candidats": [
+    "« qui chante » → Le garçon",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r261",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que nous avons prise",
+   "cible_gold": "table",
+   "cible_choisie": "table",
+   "candidats": [
+    "« que nous avons prise » → La table",
+    "prise",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r263",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "qui vole",
+   "cible_gold": "oiseau",
+   "cible_choisie": "oiseau",
+   "candidats": [
+    "« qui vole » → L'oiseau",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r265",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "où nous vivons",
+   "cible_gold": "lieu",
+   "cible_choisie": "lieu",
+   "candidats": [
+    "« où nous vivons » → Le lieu",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r267",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "qui est sur la table",
+   "cible_gold": "livre",
+   "cible_choisie": "livre",
+   "candidats": [
+    "« qui est sur la table » → Le livre",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r269",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "dont je parle",
+   "cible_gold": "personne",
+   "cible_choisie": "personne",
+   "candidats": [
+    "« dont je parle » → La personne",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r275",
+   "source": "reel",
+   "langue": "fr",
+   "type": "REL",
+   "segment": "que nous traversons",
+   "cible_gold": "pont",
+   "cible_choisie": "pont",
+   "candidats": [
+    "« que nous traversons » → Le pont",
+    "est"
+   ],
+   "sous_chaine": true,
+   "cause": "C1",
+   "raison": "candidat S non réduit à sa tête — cible nominale",
+   "raison_detail": "La cible est un nom (antécédent REL) présent seulement dans la chaîne de présentation « « segment » → Le X » ; la liste des candidats garde la chaîne entière, pas `X`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "r309",
+   "source": "reel",
+   "langue": "fr",
+   "type": "SUB",
+   "segment": "qu'il viendra",
+   "cible_gold": "viendra",
+   "cible_choisie": "Peut-être",
+   "candidats": [
+    "structure la plus proche",
+    "Peut-être"
+   ],
+   "sous_chaine": false,
+   "cause": "C8",
+   "raison": "GV du S mal délimité",
+   "raison_detail": "Le S prend `Peut-être` (adverbe) pour un GV ; le verbe réel `viendra` n'est ni reconnu ni candidat.",
+   "correctif": "F3"
+  },
+  {
+   "id": "s041",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "devant elles",
+   "cible_gold": "marche",
+   "cible_choisie": "",
+   "candidats": [
+    "GP"
+   ],
+   "sous_chaine": false,
+   "cause": "C6",
+   "raison": "verbe français hors lexique, aucun GV",
+   "raison_detail": "`marche` est tagué NOUN, aucun GV n'est détecté : la liste tombe à `['GP']`.",
+   "correctif": "F3"
+  },
+  {
+   "id": "s045",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "avec cette cuisine",
+   "cible_gold": "nage",
+   "cible_choisie": "nage",
+   "candidats": [
+    "« avec cette cuisine » → un ancien canard nage"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s047",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "pour un secret chemin",
+   "cible_gold": "rêve",
+   "cible_choisie": "rêve",
+   "candidats": [
+    "« pour un secret chemin » → une sombre fenêtre rêve",
+    "« pour un secret chemin » = cause"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s058",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "vers les sombre livre",
+   "cible_gold": "saute",
+   "cible_choisie": "saute",
+   "candidats": [
+    "« vers les sombre livre » → les rapide avocat saute"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s064",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "pour Paul",
+   "cible_gold": "compte",
+   "cible_choisie": "compte",
+   "candidats": [
+    "« pour Paul » → la étoile compte",
+    "« pour Paul » = cause"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s108",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "sous le nuage",
+   "cible_gold": "rêve",
+   "cible_choisie": "papier",
+   "candidats": [
+    "« sous le nuage » → ce calme papier rêve"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s109",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "vers un voyage",
+   "cible_gold": "compte",
+   "cible_choisie": "compte",
+   "candidats": [
+    "« vers un voyage » → ma lettre compte"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s120",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "de une chanson",
+   "cible_gold": "prépare",
+   "cible_choisie": "prépare",
+   "candidats": [
+    "« de une chanson » → une sombre lettre prépare"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s122",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "vers les montagne",
+   "cible_gold": "saute",
+   "cible_choisie": "papier",
+   "candidats": [
+    "« vers les montagne » → mon papier saute"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s144",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "chez ce chemin",
+   "cible_gold": "dessine",
+   "cible_choisie": "dessine",
+   "candidats": [
+    "« chez ce chemin » → mon rapide jardin dessine"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  },
+  {
+   "id": "s150",
+   "source": "synthetique",
+   "langue": "fr",
+   "type": "GP",
+   "segment": "à un rapide livre",
+   "cible_gold": "compte",
+   "cible_choisie": "compte",
+   "candidats": [
+    "« à un rapide livre » → les rivière compte"
+   ],
+   "sous_chaine": true,
+   "cause": "C2",
+   "raison": "candidat S non réduit à sa tête — cible verbale",
+   "raison_detail": "La cible est le verbe du GV, présent seulement dans « « segment » → GN + V » ; la liste garde la phrase entière, pas `V`.",
+   "correctif": "F1"
+  }
+ ],
+ "methode": "script Python exécuté par heredoc, lecture seule : charger() + Heuristique().analyser(), classification exclusive par règles (POS du gold, têtes S, lexique verbal, GN à gauche) ; gains mesurés par greffe de VERBES_CONNUS et ajout de candidats en mémoire, sans modifier le code."
+}

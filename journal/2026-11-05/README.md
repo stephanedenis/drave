@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**65 commits** · **12 session(s)** · **8 thème(s)**
+**66 commits** · **12 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 7 | [distribue.md](distribue.md) |
+| distribue | 8 | [distribue.md](distribue.md) |
 | docs | 26 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 9 | [mesures.md](mesures.md) |
@@ -26,16 +26,16 @@
 |---|---|---|---|---|
 | `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 69.0 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
 | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 29.8 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
-| `53bc3288-f2c1-4a7d-b1db-88d794074f70` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 0.0 h | [rapport](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/rapport.md) · [digest](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/digest.md) |
-| `63d4c619-63e8-41b9-a183-5c6f1ac05a21` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.1 h | [rapport](../sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/rapport.md) · [digest](../sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/digest.md) |
-| `65495a29-10c0-4571-96be-e7729f1efebf` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 0.0 h | [rapport](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/rapport.md) · [digest](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/digest.md) |
-| `a8035275-c7b9-4713-a6ab-7b859cd72306` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.1 h | [rapport](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/rapport.md) · [digest](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/digest.md) |
+| `53bc3288-f2c1-4a7d-b1db-88d794074f70` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/rapport.md) · [digest](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/digest.md) |
+| `63d4c619-63e8-41b9-a183-5c6f1ac05a21` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.6 h | [rapport](../sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/rapport.md) · [digest](../sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/digest.md) |
+| `65495a29-10c0-4571-96be-e7729f1efebf` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/rapport.md) · [digest](../sessions/65495a29-10c0-4571-96be-e7729f1efebf/digest.md) |
+| `a8035275-c7b9-4713-a6ab-7b859cd72306` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.5 h | [rapport](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/rapport.md) · [digest](../sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/digest.md) |
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 27.7 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
-| `c4796573-e2dc-48c2-b832-96f8bfab22c3` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 0.0 h | [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 116.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.1 h | [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md) |
+| `c4796573-e2dc-48c2-b832-96f8bfab22c3` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 117.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.0 h | [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md) |
 | `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` | — | 2026-11-05 10:11 | 0.0 h | [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md) |
-| `ff7e786c-3ece-4eae-864e-19dddfead93c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.1 h | [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md) |
+| `ff7e786c-3ece-4eae-864e-19dddfead93c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.1 h | [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -106,10 +106,18 @@
 | 13:09 | `56d70431` | ÉTAT — B13 177/177, TRIM T0 ; LA TRANCHE SOUS-AGENTS CONTINUE |
 | 13:12 | `dfc860a4` | ÉTAT — LE LIEN VERS PLAN-TRAVAIL EST RÉPARÉ (../PLAN-TRAVAIL.MD → PLAN-TRAVAIL.MD) ; LA REVUE DE DOCUMENTATION REPASSE VERTE |
 | 13:14 | `4a65d44f` | PILOTAGE — VAGUE 1 DES SOUS-AGENTS NOTÉE ; HORODATAGES ALIGNÉS SUR 13 H 15 |
+| 13:18 | `e1171032` | PILOTAGE — PROTOCOLE D'INTÉGRATION DES SOUS-AGENTS (REJOUER, REJETER, COMMITTER VÉRIFIÉ) ; § 9 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Intégration de la vague 1 (14 h 25).** Trois corrections mesurées, issues des sous-agents :
+la **règle du segment précédent** (A7 : 69/69 cibles SUB sont des verbes) → +6 exact ;
+les **têtes des candidats S** (A2, F1) → top-k strict 88 → 141 ; le **lexique anglais** (A2, F2)
+→ +8 exact. Attachement v2 : **exact spans 0,9448**, **top-k strict 0,9724**, 8 échecs de cible.
+L'**audit A1** reproduit 14/14 valeurs et corrige une dérive (spans 93/12 → 94/13). Le
+**classement appris A3** (142/145) est **rejeté** : +5 non significatif face à 137 (p=0,18,
+IC [−0,7 ; +7,6]), 2 régressions, 25 poids pour +3 sur le prior de rang.
 **Tranche sous-agents (11 h 40 → 18 h).** Quatre mandats lancés en parallèle, coordonnés par
 le dossier pilotage (`plan-travail` § 9) : **A1** audit de reproductibilité de l'attachement ;
 **A2** diagnostic du top-k strict (57 échecs) ; **A3** prototype de classement appris (fichier

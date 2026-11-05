@@ -1,0 +1,1309 @@
+{
+ "date": "2026-11-05",
+ "branche": "s/v7",
+ "head": "e1171032",
+ "bloc_mesure": {
+  "version": "HEAD e1171032",
+  "sha256": "d9c9d5592b0ba8a942860518b67b5dce04223e47c47904fbf8e185f0511b186d"
+ },
+ "bloc_apres_correctif": {
+  "version": "snapshot de travail 2026-11-05 13:51:26",
+  "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65"
+ },
+ "objet": "contrôle indépendant de la convention d'attachement par annotation manuelle de 20 segments",
+ "statut": "contrôle externe ; aucun fichier existant modifié par moi ; aucun commit ; le bloc et la doc ont changé pendant la session, deux versions du bloc pinées",
+ "verdict": {
+  "moi_gold": "20/20 (100 %) ; 19/19 sans le cas r057 (cible vue avant le tirage)",
+  "moi_bloc_strict": "10/20 (50 %) contre HEAD d9c9d559 (mesure aveugle) ; 11/20 sur le snapshot post-correctif 6e843018",
+  "moi_bloc_attachement_seul": "17/20 (85 %) contre HEAD ; 18/20 (90 %) après le correctif SUB",
+  "convention": "la ligne SUB de la version mesurée était fausse : 69/69 cibles SUB sont des verbes ; le bloc et la doc ont été corrigés pendant la session ; le split _est_verbe reste faux",
+  "controle_negatif": "hasard uniforme 0,77 % (IC95 0-5 %) ; 20/20 observé",
+  "doc": "CONVENTION_CIBLE['SUB'] corrigée pendant la session : « verbe gouverneur (69/69 VERB) » (fichier de travail, non committé à l'heure de la fiche)"
+ },
+ "protocole": {
+  "versions": {
+   "mesuree_aveugle": {
+    "version": "HEAD e1171032",
+    "sha256": "d9c9d5592b0ba8a942860518b67b5dce04223e47c47904fbf8e185f0511b186d"
+   },
+   "apres_correctif": {
+    "version": "snapshot de travail 2026-11-05 13:51:26",
+    "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65"
+   },
+   "note": "le fichier de travail a changé pendant la session (bloc et doc) ; la mesure aveugle et les tableaux des § 2, 3.1 et 3.2 portent sur HEAD ; le snapshot post-correctif est une re-exécution post-hoc"
+  },
+  "population": {
+   "phrases": 612,
+   "segments": 1863,
+   "cibles": 239,
+   "types": {
+    "GP": 96,
+    "SUB": 69,
+    "REL": 74
+   },
+   "sources": {
+    "hand": 13,
+    "reel": 171,
+    "synthetique": 55
+   }
+  },
+  "graine": 20261105,
+  "tirage": "random.seed(20261105) ; random.sample(cas, 20) parmi les 239 segments avec cible",
+  "rangs_0_based": [
+   25,
+   32,
+   38,
+   43,
+   76,
+   105,
+   108,
+   116,
+   154,
+   157,
+   162,
+   169,
+   174,
+   191,
+   194,
+   201,
+   202,
+   204,
+   215,
+   222
+  ],
+  "aveugle": "extraction sans les clés cible/cibles (assertion) ; annotations écrites sur disque avant la comparaison et avant le premier appel au bloc",
+  "fuite": "r057 : cible 'aboie' vue dans un extrait de gold_reel.py lors du repérage de la convention, avant le tirage ; sensibilité 19/19",
+  "annotation": "phrase + tokens/POS gold + spans/rôles des segments gold, cibles retirées ; convention CONVENTION_CIBLE ; pour SUB sans antécédent nominal, verbe gouverneur (choix noté ambigu)",
+  "comparaison": "gold cibles[0] et appartenance ; bloc Heuristique().analyser(...).etiquettes meta.attachement.cible ; même type+span, puis même type couvrant (tête), puis tout type couvrant"
+ },
+ "population": {
+  "phrases": 612,
+  "segments": 1863,
+  "cibles": 239,
+  "types": {
+   "GP": 96,
+   "SUB": 69,
+   "REL": 74
+  },
+  "sources": {
+   "hand": 13,
+   "reel": 171,
+   "synthetique": 55
+  }
+ },
+ "echantillon": [
+  {
+   "n": 1,
+   "phrase_id": "r047",
+   "langue": "fr",
+   "source": "reel",
+   "type": "GP",
+   "segment": "dans le jardin",
+   "debut": 20,
+   "fin": 34,
+   "role": "lieu",
+   "ma_cible": "poussent",
+   "raison": "GP locatif : le verbe conjugué poussent gouverne le complément.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "poussent",
+    "fleurs"
+   ],
+   "gold_top": "poussent",
+   "bloc_exact": "poussent",
+   "bloc_tete": "poussent",
+   "bloc_any": "poussent",
+   "bloc_any_type": "GP",
+   "bloc_any_span": [
+    20,
+    34
+   ],
+   "bloc_courant_exact": "poussent",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "GP",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": true,
+   "categorie": "exact"
+  },
+  {
+   "n": 2,
+   "phrase_id": "s061",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "segment": "qui saute",
+   "debut": 9,
+   "fin": 18,
+   "role": "rel",
+   "ma_cible": "nuage",
+   "raison": "REL sujet : antécédent = tête du GN à gauche ce nuage -> nuage.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "nuage"
+   ],
+   "gold_top": "nuage",
+   "bloc_exact": "",
+   "bloc_tete": "nuage",
+   "bloc_any": "nuage",
+   "bloc_any_type": "REL",
+   "bloc_any_span": [
+    9,
+    26
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "tete",
+   "span_exact": false,
+   "span_exact_any": false,
+   "span_exact_any_type": "",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "tete"
+  },
+  {
+   "n": 3,
+   "phrase_id": "r293",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "segment": "whom I mention",
+   "debut": 11,
+   "fin": 25,
+   "role": "objet",
+   "ma_cible": "person",
+   "raison": "REL objet : antécédent = tête du GN à gauche The person -> person.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "person"
+   ],
+   "gold_top": "person",
+   "bloc_exact": "",
+   "bloc_tete": "",
+   "bloc_any": "here",
+   "bloc_any_type": "GN",
+   "bloc_any_span": [
+    0,
+    25
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "faux",
+   "span_exact": false,
+   "span_exact_any": false,
+   "span_exact_any_type": "",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": false,
+   "match_any": false,
+   "multi_cibles": false,
+   "categorie": "faux"
+  },
+  {
+   "n": 4,
+   "phrase_id": "s052",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "SUB",
+   "segment": "que un sombre village trouve",
+   "debut": 29,
+   "fin": 57,
+   "role": "sub",
+   "ma_cible": "ouvre",
+   "raison": "Complétive objet de ouvre ; aucun antécédent nominal -> lecture fonctionnelle (verbe gouverneur). Lecture littérale tête du GN à gauche = cuisine, jugée non pertinente.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "ouvre"
+   ],
+   "gold_top": "ouvre",
+   "bloc_exact": "cuisine",
+   "bloc_tete": "cuisine",
+   "bloc_any": "cuisine",
+   "bloc_any_type": "SUB",
+   "bloc_any_span": [
+    29,
+    57
+   ],
+   "bloc_courant_exact": "ouvre",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "SUB",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": false,
+   "match_any": false,
+   "multi_cibles": false,
+   "categorie": "faux"
+  },
+  {
+   "n": 5,
+   "phrase_id": "r057",
+   "langue": "fr",
+   "source": "reel",
+   "type": "GP",
+   "segment": "contre le facteur",
+   "debut": 15,
+   "fin": 32,
+   "role": "cible",
+   "ma_cible": "aboie",
+   "raison": "GP : verbe gouverneur aboie.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": false,
+   "gold_cibles": [
+    "aboie"
+   ],
+   "gold_top": "aboie",
+   "bloc_exact": "aboie",
+   "bloc_tete": "aboie",
+   "bloc_any": "aboie",
+   "bloc_any_type": "GP",
+   "bloc_any_span": [
+    15,
+    32
+   ],
+   "bloc_courant_exact": "aboie",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "GP",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "exact"
+  },
+  {
+   "n": 6,
+   "phrase_id": "s089",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "GP",
+   "segment": "sur ce jardin",
+   "debut": 19,
+   "fin": 32,
+   "role": "gp",
+   "ma_cible": "commence",
+   "raison": "GP : verbe gouverneur commence.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "commence",
+    "étoile"
+   ],
+   "gold_top": "commence",
+   "bloc_exact": "commence",
+   "bloc_tete": "commence",
+   "bloc_any": "commence",
+   "bloc_any_type": "GP",
+   "bloc_any_span": [
+    19,
+    32
+   ],
+   "bloc_courant_exact": "commence",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "GP",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": true,
+   "categorie": "exact"
+  },
+  {
+   "n": 7,
+   "phrase_id": "r270",
+   "langue": "fr",
+   "source": "reel",
+   "type": "SUB",
+   "segment": "Quand tu veux",
+   "debut": 0,
+   "fin": 13,
+   "role": "temps",
+   "ma_cible": "partons",
+   "raison": "Circonstancielle antéposée : aucun GN à gauche -> convention muette ; je choisis le verbe de la principale partons.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "partons"
+   ],
+   "gold_top": "partons",
+   "bloc_exact": "partons",
+   "bloc_tete": "partons",
+   "bloc_any": "partons",
+   "bloc_any_type": "SUB",
+   "bloc_any_span": [
+    0,
+    13
+   ],
+   "bloc_courant_exact": "partons",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "SUB",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "exact"
+  },
+  {
+   "n": 8,
+   "phrase_id": "r031",
+   "langue": "en",
+   "source": "reel",
+   "type": "GP",
+   "segment": "at noon",
+   "debut": 17,
+   "fin": 24,
+   "role": "temps",
+   "ma_cible": "leaves",
+   "raison": "GP temporel : verbe gouverneur leaves.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "leaves"
+   ],
+   "gold_top": "leaves",
+   "bloc_exact": "leaves",
+   "bloc_tete": "leaves",
+   "bloc_any": "leaves",
+   "bloc_any_type": "GP",
+   "bloc_any_span": [
+    17,
+    24
+   ],
+   "bloc_courant_exact": "leaves",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "GP",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "exact"
+  },
+  {
+   "n": 9,
+   "phrase_id": "r219",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "segment": "that you come",
+   "debut": 7,
+   "fin": 20,
+   "role": "complément",
+   "ma_cible": "know",
+   "raison": "Complétive objet de know ; la convention écrite (antécédent nominal) ne s'applique pas.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "know"
+   ],
+   "gold_top": "know",
+   "bloc_exact": "",
+   "bloc_tete": "",
+   "bloc_any": "know",
+   "bloc_any_type": "GN",
+   "bloc_any_span": [
+    7,
+    20
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "type_ignore",
+   "span_exact": false,
+   "span_exact_any": true,
+   "span_exact_any_type": "GN",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": false,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "type_ignore"
+  },
+  {
+   "n": 10,
+   "phrase_id": "r274",
+   "langue": "fr",
+   "source": "reel",
+   "type": "SUB",
+   "segment": "Bien que je sois fatigué",
+   "debut": 0,
+   "fin": 24,
+   "role": "concession",
+   "ma_cible": "continue",
+   "raison": "Concessive antéposée : pas de GN à gauche ; verbe de la principale continue.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "continue"
+   ],
+   "gold_top": "continue",
+   "bloc_exact": "continue",
+   "bloc_tete": "continue",
+   "bloc_any": "continue",
+   "bloc_any_type": "SUB",
+   "bloc_any_span": [
+    0,
+    24
+   ],
+   "bloc_courant_exact": "continue",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "SUB",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "exact"
+  },
+  {
+   "n": 11,
+   "phrase_id": "r281",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "segment": "that it rains",
+   "debut": 8,
+   "fin": 21,
+   "role": "complément",
+   "ma_cible": "says",
+   "raison": "Complétive objet de says ; pas d'antécédent nominal.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "says"
+   ],
+   "gold_top": "says",
+   "bloc_exact": "",
+   "bloc_tete": "",
+   "bloc_any": "says",
+   "bloc_any_type": "GN",
+   "bloc_any_span": [
+    8,
+    21
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "type_ignore",
+   "span_exact": false,
+   "span_exact_any": true,
+   "span_exact_any_type": "GN",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": false,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "type_ignore"
+  },
+  {
+   "n": 12,
+   "phrase_id": "r067",
+   "langue": "en",
+   "source": "reel",
+   "type": "GP",
+   "segment": "in the garden",
+   "debut": 17,
+   "fin": 30,
+   "role": "lieu",
+   "ma_cible": "grow",
+   "raison": "GP locatif : verbe gouverneur grow.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "grow",
+    "flowers"
+   ],
+   "gold_top": "grow",
+   "bloc_exact": "grow",
+   "bloc_tete": "grow",
+   "bloc_any": "grow",
+   "bloc_any_type": "GP",
+   "bloc_any_span": [
+    17,
+    30
+   ],
+   "bloc_courant_exact": "grow",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "GP",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": true,
+   "categorie": "exact"
+  },
+  {
+   "n": 13,
+   "phrase_id": "r222",
+   "langue": "fr",
+   "source": "reel",
+   "type": "SUB",
+   "segment": "Si tu viens",
+   "debut": 0,
+   "fin": 11,
+   "role": "condition",
+   "ma_cible": "partirons",
+   "raison": "Conditionnelle antéposée : pas de GN à gauche ; verbe de la principale partirons.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "partirons"
+   ],
+   "gold_top": "partirons",
+   "bloc_exact": "partirons",
+   "bloc_tete": "partirons",
+   "bloc_any": "partirons",
+   "bloc_any_type": "SUB",
+   "bloc_any_span": [
+    0,
+    11
+   ],
+   "bloc_courant_exact": "partirons",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "SUB",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "exact"
+  },
+  {
+   "n": 14,
+   "phrase_id": "s115",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "segment": "qui observe",
+   "debut": 19,
+   "fin": 30,
+   "role": "rel",
+   "ma_cible": "fenêtre",
+   "raison": "REL : antécédent = tête du GN à gauche la secrète fenêtre -> fenêtre.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "fenêtre"
+   ],
+   "gold_top": "fenêtre",
+   "bloc_exact": "",
+   "bloc_tete": "fenêtre",
+   "bloc_any": "fenêtre",
+   "bloc_any_type": "REL",
+   "bloc_any_span": [
+    19,
+    36
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "tete",
+   "span_exact": false,
+   "span_exact_any": false,
+   "span_exact_any_type": "",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "tete"
+  },
+  {
+   "n": 15,
+   "phrase_id": "r160",
+   "langue": "en",
+   "source": "reel",
+   "type": "GP",
+   "segment": "in the morning",
+   "debut": 19,
+   "fin": 33,
+   "role": "temps",
+   "ma_cible": "passes",
+   "raison": "GP temporel : verbe gouverneur passes.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "passes"
+   ],
+   "gold_top": "passes",
+   "bloc_exact": "passes",
+   "bloc_tete": "passes",
+   "bloc_any": "passes",
+   "bloc_any_type": "GP",
+   "bloc_any_span": [
+    19,
+    33
+   ],
+   "bloc_courant_exact": "passes",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "GP",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "exact"
+  },
+  {
+   "n": 16,
+   "phrase_id": "r288",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "segment": "that he comes tomorrow",
+   "debut": 7,
+   "fin": 29,
+   "role": "complément",
+   "ma_cible": "know",
+   "raison": "Complétive objet de know ; pas d'antécédent nominal.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "know"
+   ],
+   "gold_top": "know",
+   "bloc_exact": "",
+   "bloc_tete": "",
+   "bloc_any": "know",
+   "bloc_any_type": "GN",
+   "bloc_any_span": [
+    7,
+    29
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "type_ignore",
+   "span_exact": false,
+   "span_exact_any": true,
+   "span_exact_any_type": "GN",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": false,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "type_ignore"
+  },
+  {
+   "n": 17,
+   "phrase_id": "s027",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "GP",
+   "segment": "il",
+   "debut": 31,
+   "fin": 33,
+   "role": "gp",
+   "ma_cible": "marche",
+   "raison": "GP avec il (pronom, syntagme atypique) : dépend du verbe marche ; la préposition avec est dans le GV.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "marche",
+    "village"
+   ],
+   "gold_top": "marche",
+   "bloc_exact": "",
+   "bloc_tete": "",
+   "bloc_any": "marche",
+   "bloc_any_type": "GN",
+   "bloc_any_span": [
+    31,
+    33
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "type_ignore",
+   "span_exact": false,
+   "span_exact_any": true,
+   "span_exact_any_type": "GN",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": false,
+   "match_any": true,
+   "multi_cibles": true,
+   "categorie": "type_ignore"
+  },
+  {
+   "n": 18,
+   "phrase_id": "s035",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "segment": "qui ferme",
+   "debut": 10,
+   "fin": 19,
+   "role": "rel",
+   "ma_cible": "papier",
+   "raison": "REL : antécédent = tête du GN à gauche un papier -> papier.",
+   "confiance": "haute",
+   "ambigu": false,
+   "aveugle": true,
+   "gold_cibles": [
+    "papier"
+   ],
+   "gold_top": "papier",
+   "bloc_exact": "",
+   "bloc_tete": "papier",
+   "bloc_any": "papier",
+   "bloc_any_type": "REL",
+   "bloc_any_span": [
+    10,
+    27
+   ],
+   "bloc_courant_exact": "",
+   "match_courant": false,
+   "categorie_courante": "tete",
+   "span_exact": false,
+   "span_exact_any": false,
+   "span_exact_any_type": "",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "tete"
+  },
+  {
+   "n": 19,
+   "phrase_id": "r230",
+   "langue": "fr",
+   "source": "reel",
+   "type": "SUB",
+   "segment": "Quand tu arrives",
+   "debut": 0,
+   "fin": 16,
+   "role": "temps",
+   "ma_cible": "appelle",
+   "raison": "Circonstancielle antéposée : pas de GN à gauche ; verbe de la principale appelle (GV appelle-moi).",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "appelle"
+   ],
+   "gold_top": "appelle",
+   "bloc_exact": "appelle-moi",
+   "bloc_tete": "appelle-moi",
+   "bloc_any": "appelle-moi",
+   "bloc_any_type": "SUB",
+   "bloc_any_span": [
+    0,
+    16
+   ],
+   "bloc_courant_exact": "appelle-moi",
+   "match_courant": false,
+   "categorie_courante": "faux",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "SUB",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": false,
+   "match_tete": false,
+   "match_any": false,
+   "multi_cibles": false,
+   "categorie": "faux"
+  },
+  {
+   "n": 20,
+   "phrase_id": "s054",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "SUB",
+   "segment": "que une rapide rivière écoute",
+   "debut": 12,
+   "fin": 41,
+   "role": "sub",
+   "ma_cible": "trouve",
+   "raison": "Complétive objet de trouve ; pas d'antécédent nominal.",
+   "confiance": "moyenne",
+   "ambigu": true,
+   "aveugle": true,
+   "gold_cibles": [
+    "trouve"
+   ],
+   "gold_top": "trouve",
+   "bloc_exact": "trouve",
+   "bloc_tete": "trouve",
+   "bloc_any": "trouve",
+   "bloc_any_type": "SUB",
+   "bloc_any_span": [
+    12,
+    41
+   ],
+   "bloc_courant_exact": "trouve",
+   "match_courant": true,
+   "categorie_courante": "exact",
+   "span_exact": true,
+   "span_exact_any": true,
+   "span_exact_any_type": "SUB",
+   "match_gold": true,
+   "match_gold_membre": true,
+   "match_exact": true,
+   "match_tete": true,
+   "match_any": true,
+   "multi_cibles": false,
+   "categorie": "exact"
+  }
+ ],
+ "accords": {
+  "moi_gold": {
+   "n": 20,
+   "justes": 20,
+   "taux": 1.0,
+   "wilson95": [
+    0.8389,
+    1.0
+   ],
+   "justes_membre": 20,
+   "sans_r057": {
+    "n": 19,
+    "justes": 19,
+    "taux": 1.0
+   }
+  },
+  "moi_bloc": {
+   "strict": {
+    "n": 20,
+    "justes": 10,
+    "taux": 0.5,
+    "wilson95": [
+     0.2993,
+     0.7007
+    ]
+   },
+   "tete": {
+    "justes": 13,
+    "taux": 0.65
+   },
+   "attachement_seul": {
+    "justes": 17,
+    "taux": 0.85,
+    "wilson95": [
+     0.6396,
+     0.9476
+    ]
+   },
+   "categories": {
+    "exact": 10,
+    "tete": 3,
+    "faux": 3,
+    "type_ignore": 4
+   },
+   "cible_juste_au_span_exact": {
+    "justes": 10,
+    "spans": 12,
+    "taux": 0.8333
+   },
+   "sans_r057": {
+    "n": 19,
+    "strict": 9,
+    "attachement_seul": 16
+   }
+  },
+  "par_type": {
+   "GP": {
+    "n": 7,
+    "span_exact": 6,
+    "exact": 6,
+    "tete": 0,
+    "type_ignore": 1,
+    "faux": 0
+   },
+   "REL": {
+    "n": 4,
+    "span_exact": 0,
+    "exact": 0,
+    "tete": 3,
+    "type_ignore": 0,
+    "faux": 1
+   },
+   "SUB": {
+    "n": 9,
+    "span_exact": 6,
+    "exact": 4,
+    "tete": 0,
+    "type_ignore": 3,
+    "faux": 2
+   }
+  },
+  "bloc_gold_global": {
+   "labels": 145,
+   "cibles": 239,
+   "justes_au_span": 123,
+   "taux_span": 0.8483,
+   "couverture": 0.6067,
+   "par_type": {
+    "GP": {
+     "n": 96,
+     "labels": 83,
+     "justes": 69
+    },
+    "SUB": {
+     "n": 69,
+     "labels": 36,
+     "justes": 28
+    },
+    "REL": {
+     "n": 74,
+     "labels": 26,
+     "justes": 26
+    }
+   }
+  }
+ },
+ "controle_negatif": {
+  "methode": "pour chacun des 20 cas, cible prédite tirée uniformément parmi les 239 premières cibles du gold ; 10 000 répétitions ; random.Random(0)",
+  "n_cibles": 239,
+  "n_distinctes": 154,
+  "frequence_max": [
+   "nage",
+   7
+  ],
+  "accord_moyen": 0.0077,
+  "ic95_simulations": [
+   0.0,
+   0.05
+  ],
+  "max_simulations": 3,
+  "p_au_moins_10_sur_20": 0.0,
+  "p_au_moins_17_sur_20": 0.0,
+  "observe": 1.0,
+  "controle_interne_evaluer_gold": 0.0042
+ },
+ "convention_audit": {
+  "SUB": {
+   "cibles": 69,
+   "premieres_cibles_pos_verbe": 69,
+   "premieres_cibles_pos_nom": 0,
+   "echecs_bloc_span_exact": 8,
+   "echecs_regle_litterale_GN_gauche": 6,
+   "echecs_apres_correctif": 2,
+   "echecs": [
+    {
+     "id": "r230",
+     "segment": "Quand tu arrives",
+     "gold": "appelle",
+     "bloc": "appelle-moi",
+     "cause": "autre"
+    },
+    {
+     "id": "r309",
+     "segment": "qu'il viendra",
+     "gold": "viendra",
+     "bloc": "Peut-être",
+     "cause": "autre"
+    },
+    {
+     "id": "s012",
+     "segment": "que Lucas trouve",
+     "gold": "écoute",
+     "bloc": "étoile",
+     "cause": "GN à gauche (règle littérale)"
+    },
+    {
+     "id": "s030",
+     "segment": "que le voyage crie",
+     "gold": "cherche",
+     "bloc": "lettre",
+     "cause": "GN à gauche (règle littérale)"
+    },
+    {
+     "id": "s052",
+     "segment": "que un sombre village trouve",
+     "gold": "ouvre",
+     "bloc": "cuisine",
+     "cause": "GN à gauche (règle littérale)"
+    },
+    {
+     "id": "s097",
+     "segment": "que cette chanson nage",
+     "gold": "commence",
+     "bloc": "chanson",
+     "cause": "GN à gauche (règle littérale)"
+    },
+    {
+     "id": "s124",
+     "segment": "que elles compte",
+     "gold": "commence",
+     "bloc": "fenêtre",
+     "cause": "GN à gauche (règle littérale)"
+    },
+    {
+     "id": "s139",
+     "segment": "que le calme nuage observe",
+     "gold": "crie",
+     "bloc": "lettre",
+     "cause": "GN à gauche (règle littérale)"
+    }
+   ],
+   "doc_corrigee": "CONVENTION_CIBLE['SUB'] -> « verbe gouverneur (69/69 cibles VERB) », fichier de travail, pendant la session"
+  },
+  "REL": {
+   "cibles": 74,
+   "pos": {
+    "NOUN": 73,
+    "PRON": 1
+   },
+   "exemple_pronom": "s065 : elle qui commence nage -> elle"
+  },
+  "GP": {
+   "cibles": 96,
+   "pos": {
+    "VERB": 90,
+    "ADJ": 4,
+    "NOUN": 2
+   },
+   "multi_cibles": 43,
+   "exemples_adjectif": [
+    {
+     "id": "g012",
+     "segment": "à manger",
+     "cible": "prêt",
+     "pos": "ADJ"
+    },
+    {
+     "id": "g020",
+     "segment": "to eat",
+     "cible": "ready",
+     "pos": "ADJ"
+    },
+    {
+     "id": "r018",
+     "segment": "à manger",
+     "cible": "prête",
+     "pos": "ADJ"
+    },
+    {
+     "id": "r038",
+     "segment": "to eat",
+     "cible": "ready",
+     "pos": "ADJ"
+    }
+   ],
+   "exemples_nom_genitif": [
+    {
+     "id": "g002",
+     "segment": "de la voisine",
+     "cible": "chat",
+     "pos": "NOUN"
+    },
+    {
+     "id": "g006",
+     "segment": "du voisin",
+     "cible": "chien",
+     "pos": "NOUN"
+    }
+   ],
+   "exemple_multi": {
+    "id": "r047",
+    "segment": "dans le jardin",
+    "cibles": [
+     "poussent",
+     "fleurs"
+    ]
+   }
+  },
+  "multi_cibles_echantillon": [
+   1,
+   6,
+   12,
+   17
+  ],
+  "est_verbe": {
+   "tous": {
+    "pos_verbe": 159,
+    "pos_non_verbe": 80,
+    "est_verbe_vrai": 81,
+    "est_verbe_faux": 158
+   },
+   "labels": {
+    "pos_verbe": 116,
+    "pos_non_verbe": 29,
+    "est_verbe_vrai": 63,
+    "est_verbe_faux": 82
+   },
+   "echantillon": {
+    "cibles_verbe_pos": 16,
+    "reconnues_est_verbe": 9
+   }
+  }
+ },
+ "apres_correctif": {
+  "version": {
+   "version": "snapshot de travail 2026-11-05 13:51:26",
+   "sha256": "6e8430180ccca615e330c33596ff3c4020666b9feb452c7b25f771b4066d3c65"
+  },
+  "statut": "re-exécution post-hoc sur un snapshot du fichier de travail, après le correctif SUB appliqué pendant la session ; ne fait pas partie de la mesure aveugle",
+  "echantillon": {
+   "strict": 11,
+   "tete": 14,
+   "attachement_seul": 18,
+   "faux": 2,
+   "span_exact": 12,
+   "deltas": [
+    {
+     "n": 4,
+     "phrase_id": "s052",
+     "avant": "cuisine",
+     "apres": "ouvre"
+    }
+   ],
+   "restants_faux": [
+    {
+     "n": 3,
+     "phrase_id": "r293",
+     "gold": "person",
+     "bloc": "here"
+    },
+    {
+     "n": 19,
+     "phrase_id": "r230",
+     "gold": "appelle",
+     "bloc": "appelle-moi"
+    }
+   ]
+  },
+  "global": {
+   "cibles": 239,
+   "labels": 145,
+   "justes": 137,
+   "taux": 0.9448,
+   "couverture": 0.6067,
+   "GP": {
+    "n": 96,
+    "labels": 83,
+    "justes": 77
+   },
+   "SUB": {
+    "n": 69,
+    "labels": 36,
+    "justes": 34
+   },
+   "REL": {
+    "n": 74,
+    "labels": 26,
+    "justes": 26
+   }
+  },
+  "sub_echecs_span_exact": {
+   "avant": 8,
+   "apres": 2,
+   "restants": [
+    {
+     "id": "r230",
+     "gold": "appelle",
+     "bloc": "appelle-moi"
+    },
+    {
+     "id": "r309",
+     "gold": "viendra",
+     "bloc": "Peut-être"
+    }
+   ]
+  },
+  "est_verbe": {
+   "tous": {
+    "pos_verbe": 159,
+    "pos_non_verbe": 80,
+    "est_verbe_vrai": 91,
+    "est_verbe_faux": 148
+   },
+   "labels": {
+    "pos_verbe": 116,
+    "pos_non_verbe": 29,
+    "est_verbe_vrai": 71,
+    "est_verbe_faux": 74
+   }
+  },
+  "doc": {
+   "fichier": "tools/tests/linguistique/gold_reel.py",
+   "changement": "CONVENTION_CIBLE['SUB'] : « antécédent (tête du GN à gauche) » -> « verbe gouverneur (69/69 cibles VERB) » ; REL précisé par « quand le segment précédent est un GN »",
+   "statut": "fichier de travail, non committé à l'heure de la fiche ; les PHRASES et les cibles n'ont pas changé"
+  }
+ },
+ "limites": [
+  "n = 20 : les IC Wilson sont larges (20/20 -> 83,9-100 % ; 10/20 -> 29,9-70,1 %) ; aucune conclusion sur les 239.",
+  "Un seul annotateur (moi) : subjectivité, pas de kappa inter-annotateurs.",
+  "Annotation faite avec les spans et rôles de la segmentation gold (cibles retirées) : l'identification de l'antécédent est facilitée ; une annotation sur texte brut aurait pu différer.",
+  "Un cas (r057) n'était pas aveugle : sa cible avait été vue dans un extrait de gold_reel.py avant le tirage ; sensibilité 19/19.",
+  "7/20 cas synthetiques, dont certains agrammaticaux (« que un », « avec il ») : la convention y est moins naturelle.",
+  "Le bloc et la doc ont changé pendant la session : mesure aveugle sur HEAD e1171032 (sha256 d9c9d5592b0ba8a9…), re-exécution post-hoc sur le snapshot 6e843018… ; les chiffres « après correctif » ne sont pas garantis sur l'état final, et les tableaux des § 2, 3.1 et 3.2 restent la mesure aveugle.",
+  "Les constats 4.1 et 4.5 sont des lectures du gold : je n'ai modifié ni CONVENTION_CIBLE, ni _est_verbe, ni le bloc ; les correctifs SUB du bloc et de la doc sont venus d'ailleurs, pendant la session. Le split _est_verbe reste à corriger."
+ ],
+ "fichiers": [
+  "reports/rapport-annotation-independante.md",
+  "reports/pensee-annotation-independante.json"
+ ]
+}

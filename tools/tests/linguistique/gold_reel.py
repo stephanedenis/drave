@@ -12,8 +12,10 @@ import pathlib
 # La **convention des cibles** d'attachement. Le gold ne la documentait pas ; elle a été lue
 # sur les données le 2026-11-05 (T169/T172) et la voici, explicitement :
 #
-#   - **REL / SUB** : la cible est l'**antécédent** — la tête nominale du GN à gauche
-#     (« l'homme que j'ai vu » → `homme`), jamais un verbe ;
+#   - **REL** : la cible est l'**antécédent** — la tête nominale du GN à gauche
+#     (« l'homme que j'ai vu » → `homme`) ;
+#   - **SUB** : la cible est le **verbe gouverneur** (le POS gold donne 69/69 cibles VERB :
+#     « cette étoile écoute que Lucas trouve » → `écoute`), pas un antécédent ;
 #   - **GP** : la cible est le **verbe qui gouverne** le complément (« au ballon » → `joue`),
 #     ou, pour un génitif, le **nom qu'il complète** (« de la voisine » → `chat`) ;
 #   - **GN / GV** : la cible, quand elle existe, est le **nom ou le verbe** dont le segment
@@ -23,8 +25,8 @@ import pathlib
 # séparément (`evaluer_gold` → `attachement.verbe` / `attachement.nom`) et le taux global
 # n'est comparable qu'à convention constante.
 CONVENTION_CIBLE = {
-    "REL": "antécédent (tête du GN à gauche)",
-    "SUB": "antécédent (tête du GN à gauche)",
+    "REL": "antécédent (tête du GN à gauche) quand le segment précédent est un GN",
+    "SUB": "verbe gouverneur (69/69 cibles sont des VERB au POS gold)",
     "GP": "verbe gouverneur, ou nom complété pour un génitif",
     "GN": "nom ou verbe dont le segment dépend",
     "GV": "nom ou verbe dont le segment dépend",
