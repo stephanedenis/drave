@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**7 commits** · **1 session(s)** · **4 thème(s)**
+**8 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
-| memoire | 2 | [memoire.md](memoire.md) |
+| memoire | 3 | [memoire.md](memoire.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -33,6 +33,7 @@
 | 00:14 | `69a2db83` | ÉTAT — LA PASSE A DÉMARRÉ À 23 H 43 (PREMIER JOURNAL), PAS 23 H 45 ; HEURE 00 H 18 |
 | 00:17 | `43c86221` | ÉTAT — HEURE 00 H 21 ; REGISTRE 26/83 SANS NON-ZÉRO ; GREFFE EN COURS |
 | 00:20 | `06af762e` | ÉTAT — HEURE 00 H 24 ; GREFFE TOUJOURS EN COURS, AUCUNE NON-ZÉRO |
+| 00:23 | `2b5b60d0` | ÉTAT — HEURE 00 H 28 ; GREFFE PROGRESSE (SECTION 5, 13 MIN), ZÉRO NON-ZÉRO |
 
 ## Le récit de la journée (écrit à la main)
 

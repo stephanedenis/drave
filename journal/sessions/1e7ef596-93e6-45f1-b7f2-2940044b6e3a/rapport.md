@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-04 07:25 |
 | Durée | 17.0 h |
-| Tours | 242 |
-| Messages | 1351 |
-| Appels d'outils | 1374 |
+| Tours | 243 |
+| Messages | 1355 |
+| Appels d'outils | 1377 |
 | Fichiers touchés | 15 |
-| Commandes | 1187 |
+| Commandes | 1190 |
 | Sous-agents | 0 |
-| Commits | 262 |
+| Commits | 263 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -507,6 +507,8 @@
 **Tour 241** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 **Tour 242** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
+
+**Tour 243** — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer à chaque cycle (revue_documentation, verifier_liens, verifie_backlog, porte-tableaux, verifie_journal, taille_documents, verifie_en_cours), intégrer dans en-cours/roadmap/backlog les faits committés par les sessions N2/S/L, corriger les incohérences (compteurs, dates, liens, man … [679 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5999,7 +6001,28 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 
 **Synthèse produite :**
 
-⏵ Cycle 237 : greffe progresse (section 5, 13 min) ; je commit l'état
+⏵ Cycle 237 : greffe progresse (section 5, 13 min), registre toujours sans non-zéro
+
+**Cycle 237 — la porte longue n'est pas pendue.**
+
+- **`porte-greffe`** : son journal grandit (841 → **1 355 octets**) et en est à la **section 5** (« la greffe porte TOUT le contenu ») ; écoulé **13 min**, sous la borne de 30 min. Elle avance, elle n'attend pas.
+- **Registre** : **26 entrées**, toutes nulles ; `awk '$2 != 0'` ne rend rien.
+- **Audit complet** : revue ✅ **628 fiches / 721 JSON / 120 docs / 83 portes** ; **3 075 liens** ✅ ; backlog **frontière 3** ✅ ; journal ✅ ; tableaux ✅ ; `en-cours` **1 610 mots**, **T0 3 980 / 4 000** ✅.
+- **2 048 fini**, **aucune réservation GPU** ; **B13 166/166**, D **62 documents**, sur **`s/v7`**.
+
+**Le goal reste actif** : suivre la passe jusqu'au verdict, puis les faits B13/S.
+
+### Tour 243 — <goal_round> Objective: "Suivre et maintenir la cohérence de docs/ et du pilotage pendant la reprise parallèle : auditer … [959 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Snapshot commits, tree and sessions
+- bash — Run controls and check greffe verdict
+- bash — Commit state time update
+
+**Synthèse produite :**
+
+⏵ Cycle 238 : porte-greffe verte en 840 s, registre à 27 sans non-zéro ; je commit
 
 ## 3. Travail accompli
 
@@ -6065,7 +6088,7 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - **T2** Read pass precautions and existing log dirs
 - **T2** Confirm machine idle and pass directory naming
 - **T2** Run complete gate pass on idle machine
-- … et 1147 autres
+- … et 1150 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6475,4 +6498,5 @@ dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc   # L/Pensé
 - ÉTAT — HEURE 00 H 21 ; REGISTRE 26/83 SANS NON-ZÉRO ; GREFFE EN COURS" -m "Le registre partiel de la passe est lisible et awk '\$2 != 0' ne rend rien : 26 porte
 - ÉTAT — HEURE 00 H 24 ; GREFFE TOUJOURS EN COURS, AUCUNE NON-ZÉRO" -m "Le registre reste à 26 entrées, toutes nulles ; porte-greffe (connue longue, ~700 s) tourn
 - ÉTAT — HEURE 00 H 28 ; GREFFE PROGRESSE (SECTION 5, 13 MIN), ZÉRO NON-ZÉRO" -m "Le journal de porte-greffe grandit (841 → 1 355 octets) et en est à la section 5
+- ÉTAT — HEURE 00 H 31 ; PORTE-GREFFE VERTE (840 S), REGISTRE 27/83 SANS NON-ZÉRO" -m "La porte longue est franchie : l'injection d'état est branchée et l'état pr
 
