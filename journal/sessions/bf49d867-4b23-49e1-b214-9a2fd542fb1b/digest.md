@@ -2423,3 +2423,64 @@ README.md
 159:L'index **exhaustif** des JSON est [`INDEX.md`](INDEX.md) ; les fichiers sont dans ce dossier. Les
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/index_reports.py", "description": "Read index_reports docstring"}`
+
+  ```
+#!/usr/bin/env python3
+"""index_reports.py — génère reports/INDEX.md à partir des en-têtes de fiches.
+
+L'index est **exhaustif** et **déterministe** : une ligne par fiche, triée par nom,
+avec son titre (premier `# `). Les fichiers d'infrastructure (`README.md`, `INDEX.md`
+et `historique-*`) sont exclus du tableau ; les compteurs de `docs/pilotage/en-cours.md`
+comptent, eux, tous les `.md` de `reports/`.
+
+Usage :
+    python3 tools/index_reports.py              # réécrit reports/INDEX.md
+    python3 tools/index_reports.py --verifier   # ne réécrit rien, sort 1 si périmé
+    python3 tools/index_reports.py --aide       # affiche l'aide (ne touche à rien)
+"""
+from __future__ import annotations
+
+import argparse
+import pathlib
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+  ```
+
+### 🤖 Assistant
+
+⏵ Final wording refinements in the controls section
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-anglais.md'); s=p.read_text()\nsubs=[\n(\"\"\"  jetons anglais, **tous** gold NOUN (33/33) ; elle ne touche **aucun** des 176. En français elle est\n  moins préci … [1769 caractères tronqués]`
+
+  ```
+ok
+JSON valide
+lignes 439 | mots 4765
+  ```
+
+### 🤖 Assistant
+
+⏵ Final file check before reporting to the parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain -- reports/rapport-pos-anglais.md reports/pensee-pos-anglais.json && ls -l reports/rapport-pos-anglais.md reports/pensee-pos-anglais.json && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-pos- … [360 caractères tronqués]`
+
+  ```
+?? reports/pensee-pos-anglais.json
+?? reports/rapport-pos-anglais.md
+-rw-r--r--. 1 stephane stephane 28576  6 nov 12:59 reports/pensee-pos-anglais.json
+-rw-------. 1 stephane stephane 27367  6 nov 13:02 reports/rapport-pos-anglais.md
+JSON valide, clés: 16 | causes: 270
+R2+R3: 0.8375 0.84
+R1+R2+R3: 0.8641 0.8632
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod 644 reports/rapport-pos-anglais.md && ls -l reports/rapport-pos-anglais.md reports/pensee-pos-anglais.json && git status --porcelain -- reports/rapport-pos-anglais.md reports/pensee-pos-anglais.json", "description": "Align file … [30 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 28576  6 nov 12:59 reports/pensee-pos-anglais.json
+-rw-r--r--. 1 stephane stephane 27367  6 nov 13:02 reports/rapport-pos-anglais.md
+?? reports/pensee-pos-anglais.json
+?? reports/rapport-pos-anglais.md
+  ```
+

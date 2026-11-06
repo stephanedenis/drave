@@ -52362,3 +52362,32 @@ index EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; audit A24 ; **fiabilité hors gold** (0 plantage, contrat à versionner).\", \" ; audit A24.\")\np.write_text(t)\nPY\npyth … [1013 caractères tronqués]`
+
+  ```
+· reports/README.md : 2801 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/pensee-fiabilite-produit.json
+ create mode 100644 reports/rapport-fiabilite-produit.md
+COMMIT OK 1
+a8d0e578 AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0
+   56eb43af..a8d0e578  s/v7 -> s/v7
+   56eb43af..a8d0e578  master -> master
+0
+ven 06 nov 2026 13:03:23 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité hors gold : 0 plantage sur 50 phrases, contr … [903 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+a8d0e578 AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 13:04:02 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 13 h 05 HNE\", t)\np.write_text( … [695 caractères tronqués]`

@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité hors gold : 0 plantage sur 50 phrases, contrat non versionné, 2 `UnicodeEncodeError` |
+| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité hors gold : 0 plantage, contrat non versionné, 2 `UnicodeEncodeError` |
 | [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — robustesse produit : surrogate et non-str fermés, 8 tests |
 | [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) | **B13** — audit de fiabilité (A24) : temps, contrat, 18 correctifs |
 | [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — outillage : `--aide` sans écriture, index 625 → **677** |

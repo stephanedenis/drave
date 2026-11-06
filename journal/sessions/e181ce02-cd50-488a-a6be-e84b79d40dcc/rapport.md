@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 140.3 h |
+| Durée | 140.4 h |
 | Tours | 182 |
-| Messages | 3085 |
-| Appels d'outils | 2721 |
+| Messages | 3087 |
+| Appels d'outils | 2723 |
 | Fichiers touchés | 25 |
-| Commandes | 2228 |
+| Commandes | 2230 |
 | Sous-agents | 31 |
-| Commits | 348 |
+| Commits | 350 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9788,11 +9788,13 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 
 ### Tour 182 — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. I … [3010 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Vérifier les deux rapports d'audit
 - bash — Déclarer les rapports et vérifier
 - bash — Committer les rapports et pousser
+- bash — Trim T1 et pousser
+- bash — Committer le trim final et pousser
 
 **Synthèse produite :**
 
@@ -9906,7 +9908,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2188 autres
+- … et 2190 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10402,4 +10404,6 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - INDEX — RÉGÉNÉRÉ APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
 - INDEX — RÉGÉNÉRÉ (679 FICHES) APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log
 - AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0" -- reports/rapport-fiabilite-produit
+- DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1)" -- reports/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "UN MOT DE MOINS"; then
+- DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1) ; ÉTAT HORODATÉ" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --for
 

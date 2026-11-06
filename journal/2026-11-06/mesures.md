@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,6 +14,7 @@
 | 09:50 | `a9907a1b` | B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8) | `en-cours.md`, `README.md`, `distribue.md` (+20) |
 | 10:13 | `7679a2d4` | FICHE — LES TAILLES JSON DU PRODUIT CORRIGÉES (8 704 O EN ANGLAIS) ET LA MESURE D'EVALUER ; ÉTAT HORODATÉ | `en-cours.md`, `README.md`, `distribue.md` (+17) |
 | 10:42 | `266b1833` | ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES) | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
+| 13:01 | `a8d0e578` | AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0 | `en-cours.md`, `README.md`, `distribue.md` (+17) |
 
 ## Chiffres du jour
 
@@ -30,15 +31,17 @@
 - `a0d33fb7-37a9-4834-8a94-0da119e3b18f` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 1.3 h) → [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md)
 - `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 0.6 h) → [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md)
 - `bf49d867-4b23-49e1-b214-9a2fd542fb1b` — Tu travailles dans le dépôt (début 2026-11-06 11:17, 1.8 h) → [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 140.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 140.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` — Tu travailles dans le dépôt (début 2026-11-05 23:24, 1.3 h) → [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md)
 
 ## Mesures et rapports touchés
 
+- [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-audit-v10.md](../../reports/rapport-audit-v10.md)
 - [reports/rapport-autotest-parallele.md](../../reports/rapport-autotest-parallele.md)
 - [reports/rapport-dev-test-v10.md](../../reports/rapport-dev-test-v10.md)
+- [reports/rapport-fiabilite-produit.md](../../reports/rapport-fiabilite-produit.md)
 - [reports/rapport-file-taches.md](../../reports/rapport-file-taches.md)
 - [reports/rapport-pensee-v10.md](../../reports/rapport-pensee-v10.md)
 - [reports/rapport-pensee-v11.md](../../reports/rapport-pensee-v11.md)

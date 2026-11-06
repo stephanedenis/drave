@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**39 commits** · **9 session(s)** · **6 thème(s)**
+**40 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 15 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
-| mesures | 6 | [mesures.md](mesures.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 10 | [portes.md](portes.md) |
@@ -29,7 +29,7 @@
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
 | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 140.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 140.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -75,6 +75,7 @@
 | 11:45 | `3601764a` | ÉTAT — T0 DANS LE BUDGET (AUDIT A24) |
 | 11:51 | `108faf92` | DOCS — LE README DES FICHES DANS LE BUDGET T1 (LIGNES ANCIENNES RACCOURCIES) |
 | 11:55 | `56eb43af` | INDEX — RÉGÉNÉRÉ (679 FICHES) APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0 |
+| 13:01 | `a8d0e578` | AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0 |
 
 ## Le récit de la journée (écrit à la main)
 
