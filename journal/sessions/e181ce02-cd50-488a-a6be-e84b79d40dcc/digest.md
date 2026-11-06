@@ -50432,3 +50432,59 @@ README + état
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1056 caractères tronqués]`
+
+  ```
+678 771
+     · compteurs : en-cours.md dit 83 portes, le disque en a 84
+[still running after 60000ms; moved to background job bash-2840]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2840", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100755 tools/porte-produit.sh
+ create mode 100644 tools/tests/test_produit.py
+COMMIT OK 1
+62dad657 B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+[status: completed, exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn=len(list(pathlib.Path('tools').glob('porte-*.sh')))\nt=re.sub(r\"\\| portes du dépôt \\| \\*\\*\\d+\\*\\* \\|\", f\"| portes du dép … [417 caractères tronqués]`
+
+  ```
+portes 84
+     · compteurs : en-cours.md dit 83 portes, le disque en a 84
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"83\" docs/pilotage/en-cours.md | head -5 | cut -c1-200", "description": "Trouver le 83 à corriger"}`
+
+  ```
+31:> **Bilan de 15 h** : reprises à 09 h ; **runs N2 arrêtés** (`kd2`, `rope2048` à 6 400/20 000) ; **perte α=0,9 0,8385 (−0,176), PPL 3,1119 (−0,06)** ;
+71:- **Fait** : B13 **183/183** ; **attachement 212/212 (1,0000)** (fr 1,0, en 1,0), **couverture 0,887**, **F1 0,572**, **27 spans** ; bilan au journal.
+107:| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '66,76p' docs/pilotage/en-cours.md | cut -c1-230; sed -n '105,109p' docs/pilotage/en-cours.md | cut -c1-180", "description": "Lire le bloc de session L"}`
+
+  ```
+- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
+- **Plan** : B13, bloc linguistique.
+- **Stratégie** : v0 mesuré.
+- **Ambition** : un runtime cognitif tracé.
+- **Objectif final** : un moteur de pensée v0.
+- **Fait** : B13 **183/183** ; **attachement 212/212 (1,0000)** (fr 1,0, en 1,0), **couverture 0,887**, **F1 0,572**, **27 spans** ; bilan au journal.
+- **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
+- **Ce que font les autres** : **N2**, **S**, **hub**.
+- **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.
+- **Sous-agents** : 4 mandats, [plan-travail](plan-travail.md) § 9.
+- **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **678** / **771** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; **attachement 212/212 (1,0000)** (fr 1,0, en 1,0), **couverture 0,887**, **F1 0,572**, * … [1897 caractères tronqués]`

@@ -1834,3 +1834,162 @@ BACKLOG_EXIT=0
 ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
   ```
 
+### 🤖 Assistant
+
+⏵ Comptage des portes et rapprochement avec le registre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | wc -l; echo \"--- registre 06/11 entrées ---\"; grep -c '^porte-' work/portes-1106-01h28/registre.txt; echo \"--- queue du registre ---\"; tail -3 work/portes-1106-01h28/registre.txt; echo \"--- toutes-les-porte … [136 caractères tronqués]`
+
+  ```
+84
+--- registre 06/11 entrées ---
+83
+--- queue du registre ---
+porte-trace 0 30
+porte-vision 0 650
+--- 79 vertes, 4 rouges ---
+--- toutes-les-portes ---
+4:# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+13:#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+22:#   PORTES="gain topologie" tools/toutes-les-portes.sh    # un sous-ensemble (filtre)
+25:# NOTE DE MESURE : les portes de latence et de gigue (`porte-delais`, `porte-flux`) mesurent
+31:FILTRE=${PORTES:-}
+35:portes=$(ls tools/porte-*.sh | sort)
+38:    for f in $FILTRE; do
+39:        for g in $portes; do
+46:    echo "  ❌ aucune porte ne correspond à PORTES=\"$FILTRE\" : la passe ne vérifierait RIEN"
+51:echo "=== PASSE COMPLÈTE DES PORTES ($(printf '%s\n' $portes | grep -c . ) portes, borne ${DELAI} s) ==="
+53:for g in $portes; do
+81:    for nom in $liste_rouges; do
+88:echo "TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant."
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | sed 's#tools/##' | sort > /tmp/disk.txt; awk '/^porte-/{print $1}' work/portes-1106-01h28/registre.txt | sed 's/$/.sh/' | sort > /tmp/reg.txt; echo \"--- sur disque, absentes du registre ---\"; comm -23 /tmp/dis … [153 caractères tronqués]`
+
+  ```
+--- sur disque, absentes du registre ---
+porte-produit.sh
+--- registre, absentes du disque ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/porte-produit.sh; ls -l tools/porte-produit.sh; git log --oneline -3 -- tools/porte-produit.sh; echo \"--- head ---\"; head -30 tools/porte-produit.sh", "description": "Inspect new porte-produit.sh"}`
+
+  ```
+A  tools/porte-produit.sh
+-rwxr-xr-x. 1 stephane stephane 2241  6 nov 09:52 tools/porte-produit.sh
+--- head ---
+#!/usr/bin/env bash
+# porte-produit — le premier produit : la CLI répond, le JSON est valide, le rejeu est identique.
+#
+# Ce qu'elle vérifie : `drave --version`, `analyser` (fr et en) rend un JSON parsable avec des
+# étiquettes, `rejouer` rend le même sha256 deux fois, et le smoke test passe.
+set -uo pipefail
+cd "$(dirname "$0")/.." || exit 1
+ko=0
+dit() { printf '  %s %s\n' "$1" "$2"; }
+
+ver=$(python3 tools/drave.py --version 2>&1)
+case "$ver" in drave*) dit ✅ "version : $ver" ;; *) dit ❌ "version : $ver"; ko=1 ;; esac
+
+for langue in fr en; do
+  case "$langue" in
+    fr) texte="Le chat dort sur le toit." ;;
+    en) texte="The cat sleeps on the roof." ;;
+  esac
+  sortie=$(python3 tools/drave.py analyser "$texte" --langue "$langue" --json 2>&1)
+  if printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['langue'] == '$langue', d.get('langue')
+assert len(d['etiquettes']) > 5, len(d['etiquettes'])
+assert any(e['niveau'] == 'syntagme' for e in d['etiquettes'])
+assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
+" 2>/dev/null; then
+    dit
+… [126 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution de la 84ᵉ porte (stagée, non commitée)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 180 bash tools/porte-produit.sh > /tmp/pp.out 2>&1; echo \"EXIT=$?\"; cat /tmp/pp.out", "description": "Run porte-produit gate", "timeoutMs": 200000}`
+
+  ```
+EXIT=0
+  ✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 6b6def477a493444 deux fois
+  ✅ smoke test : Ran 6 tests
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+### 🤖 Assistant
+
+⏵ État des ressources (GPU/corpus) pour qualifier les blocages
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 tools/ressources.py --status >/tmp/res.out 2>&1; echo \"EXIT=$?\"; head -25 /tmp/res.out; echo \"--- check ---\"; timeout 60 python3 tools/ressources.py --check >/tmp/resc.out 2>&1; echo \"EXIT=$?\"; tail -10 /tmp/ … [68 caractères tronqués]`
+
+  ```
+EXIT=0
+ressources · Hauru — registre /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ressources.json
+  ressource      type      capacité  utilisé    libre  détail
+  gpu0           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  gpu1           gpu              1        0        1  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16        0       16  réserve 4 fils
+  cpu1           cpu             16        0       16  réserve 4 fils
+  ram            ram            109        0      109  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1929 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Aucune réservation active.
+--- check ---
+EXIT=0
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 30 nvidia-smi --query-gpu=index,name,memory.used,memory.total,utilization.gpu --format=csv,noheader 2>&1 | head; echo \"--- disque ---\"; df -h /home/stephane/Data13TB /home/stephane/IA 2>/dev/null | tail -3", "description":  … [34 caractères tronqués]`
+
+  ```
+0, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %
+1, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %
+--- disque ---
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB
+/dev/md0                 938G  895G   34G  97% /home/stephane/IA
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du lanceur de portes (options, registre, durée)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/toutes-les-portes.sh"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/toutes-les-portes.sh</path>
+<type>file</type>
+<content>
+1: #!/bin/bash
+2: # toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.
+3: #
+4: # POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+5: # (`--attn-window` en réparti) que le v7 avait **délibérément retiré** en faisant voyager les
+6: # trois réglages dans la trame (`main.rs:4432`). La porte ne pouvait donc plus passer — et
+7: # personne ne l'a vu, parce que les portes étaient lancées **une par une**, à la main, quand
+8: # on touchait la fonctionnalité du jour. Une porte qu'on croit verte et qui n'a pas tourné est
+9: # exactement le défaut que ce dépôt traque (un drapeau inerte, une mesure qui ne mesure rien) :
+10: # ici, appliqué aux instruments eux-mêmes.
+11: #
+12: # Ce que fait ce script, et ce qu'aucun autre ne faisait :
+13: #   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+14: #   2. il ne s'arrête PAS à la première rouge — il veut le tableau, pas la première tuile ;
+15: #   3. il borne chaque porte dans le temps (`DELAI`, 1800 s par défaut) : une porte qui pend
+16: #      est une porte ROU
+… [3618 caractères tronqués]
+  ```
+

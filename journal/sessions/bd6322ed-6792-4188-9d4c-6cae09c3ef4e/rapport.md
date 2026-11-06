@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 34 |
-| Appels d'outils | 52 |
+| Messages | 37 |
+| Appels d'outils | 58 |
 | Fichiers touchés | 2 |
-| Commandes | 37 |
+| Commandes | 43 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python, dépôt Drave). Mission … [2481 caractères tronqués]
 
-*52 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - bash — List tools and check branch status
 - read
@@ -41,11 +41,11 @@
 - bash — Check tests layout and pytest availability
 - bash — Read existing test style
 - bash — Read second test style
-- … et 34 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-⏵ Writing the end-to-end smoke test `tools/tests/test_produit.py`
+⏵ Investigating a concurrent commit that already includes a drave v0
 
 ## 3. Travail accompli
 
@@ -95,6 +95,10 @@
 - **T1** Measure full gold annotation dump size
 - **T1** Run smoke tests both ways
 - **T1** Measure per-sentence JSON sizes and replay stability
+- **T1** Verify only the two new files are added
+- **T1** Verify fixed-width help and exit codes
+- **T1** Check index state for new files
+- … et 3 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -124,4 +128,5 @@
 - **T1** `JSON annotation totale (indent=1): 4938465 octets = 4.938 Mo`
 - **T1** `JSON annotation totale (compact): 3574776 octets = 3.575 Mo`
 - **T1** `test direct: 1.33 s, 28532 Ko`
+- **T1** `a9907a1b B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)`
 

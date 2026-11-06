@@ -7,12 +7,12 @@
 | Identifiant | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 55 |
-| Appels d'outils | 69 |
+| Messages | 61 |
+| Appels d'outils | 77 |
 | Fichiers touchés | 0 |
-| Commandes | 59 |
+| Commandes | 66 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*69 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,11 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 46 autres
+- … et 53 autres
 
 **Synthèse produite :**
 
-⏵ Exécution de la 84ᵉ porte (stagée, non commitée)
+⏵ Lecture du commit d'objectif 09 h 30 → 12 h du parent
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
 - **T1** Run gold evaluation with key env var set
-- … et 19 autres
+- … et 26 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -117,6 +117,11 @@
 - **T1** `| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** `
 - **T1** `- **Un seul split déterministe** (`crc32 % 3`), sans validation croisée ; les valeurs`
 - **T1** `candidats laisse 1,17 % de réussite, le top-1 aléatoire 42,14 % ; les deux donnent p = 0.`
+- **T1** `0, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %`
+- **T1** `1, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %`
+- **T1** `/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB`
+- **T1** `/dev/md0                 938G  895G   34G  97% /home/stephane/IA`
+- **T1** `a9907a1b B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)`
 
 ## 5. Erreurs rencontrées
 

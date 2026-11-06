@@ -2237,3 +2237,84 @@ f1 0.5893 tete 0.7392 pos 0.7603
 fr 136 en 86
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification des quatre spans réels non attachés (g017, r255, r264, r035).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"She said that she would come yesterday.\" \"La voiture que j'ai achetée roule.\" \"Je sais qu'il vient demain.\"; do echo \"##### $t\"; python3 tools/bloc_linguistique.py --texte \"$t\" --json | jq '[.etiquettes[]|select(. … [169 caractères tronqués]`
+
+  ```
+##### She said that she would come yesterday.
+[
+  {
+    "valeur": "said",
+    "type": "GV",
+    "debut": 4,
+    "fin": 8,
+    "role": "prédicat",
+    "cible": null,
+    "candidats": [
+      "GV"
+    ]
+  },
+  {
+    "valeur": "that she would come yesterday",
+    "type": "SUB",
+    "debut": 9,
+    "fin": 38,
+    "role": "complément",
+    "cible": "said",
+    "candidats": [
+      "SUB",
+      "said",
+      "said"
+    ]
+  }
+]
+##### La voiture que j'ai achetée roule.
+[
+  {
+    "valeur": "La voiture",
+    "type": "GN",
+    "debut": 0,
+    "fin": 10,
+    "role": "agent",
+    "cible": null,
+    "candidats": [
+      "« que j'ai achetée roule » → La voiture",
+      "voiture"
+    ]
+  },
+  {
+    "valeur": "que j'ai achetée roule",
+    "type": "REL",
+    "debut": 11,
+    "fin": 33,
+    "role": "qualite",
+    "cible": "voiture",
+    "candidats": [
+      "« que j'ai achetée roule » → La voiture",
+      "voiture"
+    ]
+  }
+]
+##### Je sais qu'il vient demain.
+[
+  {
+    "valeur": "Je sais",
+    "type": "GV",
+    "debut": 0,
+    "fin": 7,
+    "role": "predicat",
+    "cible": null,
+    "candidats": [
+      "« demain » → Je sais",
+      "sais"
+    ]
+  },
+  {
+    "valeur": "sais qu'il vient demain",
+    
+… [522 caractères tronqués]
+  ```
+

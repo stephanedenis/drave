@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 57 |
-| Appels d'outils | 72 |
+| Messages | 61 |
+| Appels d'outils | 76 |
 | Fichiers touchés | 0 |
-| Commandes | 60 |
+| Commandes | 64 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*72 appels d'outils.* Actions notables :
+*76 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 50 autres
+- … et 54 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des valeurs sur le gold gelé 602 (base du F1 publié).
+⏵ Calcul de l'empreinte réelle pour l'exemple de rejeu.
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 20 autres
+- … et 24 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -121,6 +121,7 @@
 - **T1** `| **`lecteur_non_lineaire.py`** ✓ | le lecteur **MLP** (et sa leçon : mal réglé, il **sur-apprend** ✗ — 119,9 % contre 85,2 % pour le ridge ✓) | `... --modeles A,B --ids <corpus>` |`
 - **T1** `un ridge **sous-déterminé** (moins de positions que de coefficients ✓) **interpole** et rend 0,0 % ✓✗ ;`
 - **T1** `une cible qui contient **sa propre source** (même position ✓) rend aussi 0,0 % ✓✗ ; un plan de textes qui`
+- **T1** `unités sémantiques : 2 (61.5% du texte)`
 
 ## 5. Erreurs rencontrées
 

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-06, 10 h 10 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-06, 10 h 20 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,12 +68,12 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **attachement 212/212 (1,0000)** (fr 1,0, en 1,0), **couverture 0,887**, **F1 0,572**, **27 spans** ; bilan au journal.
+- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, **F1 0,5849** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0** et sa **porte produit** (6 contrôles) ; **autotest parallèle** (×2,4).
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
-- **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.
+- **Prochaine action** : les **17 spans inatteignables** (gold, lexique), la **restitution**, et la **file des tâches** (rapport A23).
 - **Sous-agents** : 4 mandats, [plan-travail](plan-travail.md) § 9.
-- **Bloquants** : 7B locales interdites (règle 11) ; reste **gold 200+**.
+- **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+** ; `cascade_pos` (rouge documentée).
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
@@ -104,7 +104,7 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **83** (82 à la passe du **03/11 11 h 30** ; **+1** le 04/11 : `porte-n3-inventaire`) | `tools/porte-*.sh` |
+| portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **678** / **771** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |

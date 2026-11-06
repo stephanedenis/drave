@@ -1454,3 +1454,52 @@ exit=0
 }
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json, sys, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique()\nfor pid in ('f01','f02','e29' … [1093 caractères tronqués]`
+
+  ```
+====================================================================================================
+f01 fr/courte | langue fr | script Latn | etiq 32 | fraction 0.5185
+TEXTE: Le chat dort sur le canapé.
+POS: Le/DET chat/NOUN dort/VERB sur/PREP le/DET canapé/NOUN
+SYNTAGMES:
+    ('GN', 0, 7, 'Le chat', 'dort', False)
+    ('GV', 8, 12, 'dort', 'chat', False)
+    ('GP', 13, 26, 'sur le canapé', 'dort', False)
+PHRASES: [(0, 27, 'type', 'déclarative')]
+PRAG: [('acte', 'assertion', ['assertion', 'question', 'ordre'])]
+DOC: [('paragraphe', 'Le chat dort sur le canapé.', 0, 27)]
+====================================================================================================
+f02 fr/longue | langue fr | script Latn | etiq 140 | fraction 0.575
+TEXTE: La voisine arrose les fleurs du jardin chaque matin avant de partir au travail, puis elle rentre vers dix-huit heures et prépare le dîner pour ses deux enfants.
+POS: La/DET voisine/NOUN arrose/NOUN les/DET fleurs/NOUN du/PREP jardin/NOUN chaque/NOUN matin/NOUN avant/PREP de/PREP partir/NOUN au/PREP travail/NOUN puis/NOUN elle/PRON rentre/NOUN vers/PREP dix-huit/NOUN heures/NOUN et/CONJ prépare/NOUN le/DET dîner/NOUN pour/PREP ses/DET deux/NUM
+… [10913 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json, statistics, collections, sys\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl\nd=json.load(open('resultats.json'))\nr=d['robustesse_50']\ndet=r['detail']\nprint('labels  … [3211 caractères tronqués]`
+
+  ```
+labels total 4320
+labels/phrase min-med-max 14 78.0 417
+fraction min-med-max 0.3529 0.5493 0.875
+mots total 819
+niveaux labels totaux Counter({'graphème': 1778, 'mot': 963, 'pos': 806, 'syntagme': 362, 'morphème': 134, 'discours': 79, 'phrase': 76, 'pragmatique': 69, 'document': 53})
+sentences avec >=1 syntagme 48
+sentences avec >=1 attachement 48
+attachements total 265
+
+overlap sentences 31 pairs 132
+max [('x50', 16, 'fr', 84), ('f02', 9, 'fr', 28), ('f23', 9, 'fr', 18), ('x45', 9, 'fr', 18), ('f03', 6, 'fr', 18), ('f09', 6, 'fr', 21), ('f06', 5, 'fr', 11), ('f08', 5, 'fr', 12), ('f10', 5, 'fr', 19), ('f13', 5, 'fr', 14)]
+median pairs among affected 3
+
+overlap kinds {('même_type', 'inclusion'): 58, ('ratio', 'inclusion'): 113, ('même_type', 'chevauchement_partiel'): 3, ('ratio', 'partiel'): 19, ('types_différents', 'inclusion'): 55, ('types_différents', 'chevauchement_partiel'): 16}
+labels syntagme impliqués 188 sur 362
+
+POS couverture tous tokens: manquants 157 / 963 par type {'ponctuation': 137, 'nombre': 20}
+tokens par type {'mot': 806, 'ponctuation': 137, 'nombre': 20}
+
+graph coverage
+x46 {'chars': 144, 'couverts': 137, 'taux': 0.9514, 'manquants': 7, 'categories': {'Cc': 7}}
+
+… [38 caractères tronqués]
+  ```
+

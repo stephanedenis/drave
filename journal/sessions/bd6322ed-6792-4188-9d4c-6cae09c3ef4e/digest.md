@@ -1117,3 +1117,146 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been
 … [17183 caractères tronqués]
   ```
 
+- **bash** `{"command": "sed -n '1,40p' tools/structures/generateur.py; echo ---; grep -n \"import torch\\|import numpy\\|urllib\\|requests\" tools/structures/generateur.py tools/bloc_linguistique.py", "description": "Check dependencies of the S generator"}`
+
+  ```
+#!/usr/bin/env python3
+"""generateur.py — une phrase brute → des structures candidates (v0 heuristique).
+
+Ce n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire valider par
+un humain. Il segmente (GN, GV, GP, REL, SUB), devine des rôles par la préposition, puis produit
+plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+GV le plus proche).
+
+    python3 generateur.py "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 generateur.py --json "..."     # la structure complète
+"""
+from __future__ import annotations
+
+import json
+import re
+import unicodedata
+
+DET = set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses "
+          "notre nos votre vos leur leurs quel quelle quels quelles".split())
+PREP = set("a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis "
+           "pendant durant contre malgre selon pres loin devant derriere apres avant".split())
+RELATIFS = set("qui que qu dont ou quoi".split())
+CONJ = set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant quoique".split())
+COORD = set("et ou mais donc or ni car".split())
+SU
+… [1872 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser \"Le chat dort.\" | head -8; echo \"code=${PIPESTATUS[0]}\"", "description": "Run CLI from outside the repo"}`
+
+  ```
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+code=0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, statistics, subprocess, sys, time\nCLI = [sys.executable, \"tools/drave.py\"]\ncas = [\n    (\"version\", [\"--version\"]),\n    (\"aide\", [\"--aide\"]),\n    (\"analyser fr court\", [\"analyser\", \"Le chat dort.\"]),\n    (\"analyser fr long\", [\"analy … [1102 caractères tronqués]`
+
+  ```
+commande                      median s    min s    max s   octets code
+version                          0.128    0.125    0.139       12    0
+aide                             0.127    0.126    0.129      770    0
+analyser fr court                0.131    0.124    0.137      585    0
+analyser fr long                 0.131    0.127    0.136     1005    0
+analyser en                      0.130    0.129    0.133      699    0
+analyser fr long --json          0.133    0.126    0.138    16100    0
+rejouer fr long                  0.133    0.129    0.135      191    0
+evaluer                          0.492    0.477    0.516      659    0
+evaluer --gold --json            0.489    0.489    0.502     2740    0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport importlib.util, json, sys, time\nsys.path.insert(0, 'tools')\nimport bloc_linguistique as bl\nspec = importlib.util.spec_from_file_location(\"eg\", \"tools/tests/linguistique/evaluer_gold.py\")\neg = importlib.util.module_from_spec(spec); spec.loader.exec_module … [869 caractères tronqués]`
+
+  ```
+gold vivant: 612 phrases
+analyses: 0.537 s (0.88 ms/phrase)
+JSON annotation totale (indent=1): 4938465 octets = 4.938 Mo
+JSON annotation totale (compact): 3574776 octets = 3.575 Mo
+moyenne par phrase (indent=1): 8069 octets
+  ```
+
+- **bash** `{"command": "/usr/bin/time -f \"test direct: %e s, %M Ko\" python3 tools/tests/test_produit.py >/tmp/test_direct.out 2>/tmp/test_direct.err; code=$?; tail -3 /tmp/test_direct.err; echo \"code=$code\"; /usr/bin/time -f \"pytest: %e s\" python3 -m pytest tools/tests/test_produit.py -q >/tmp/test_pytes … [160 caractères tronqués]`
+
+  ```
+OK
+test direct: 1.33 s, 28532 Ko
+code=0
+......                                                                   [100%]
+6 passed in 1.28s
+pytest: 1.93 s
+code=0
+  ```
+
+- **bash** `{"command": "python3 tools/drave.py analyser \"Le chat dort.\" --json > /tmp/json_court.json; python3 tools/drave.py analyser \"The cat sleeps on the roof.\" --langue en --json > /tmp/json_en.json; wc -c /tmp/json_court.json /tmp/json_en.json; python3 - <<'PY'\nimport json\nfor f in [\"/tmp/json_cou … [426 caractères tronqués]`
+
+  ```
+5561 /tmp/json_court.json
+ 8704 /tmp/json_en.json
+14265 total
+/tmp/json_court.json langue fr etiquettes 19 compact 4013
+/tmp/json_en.json langue en etiquettes 32 compact 6278
+===
+rejeu identique : oui
+  texte      : 'Le chat dort.'
+  langue     : fr
+  étiquettes : 19
+  JSON       : 4013 octets · sha256 6b6def477a493444…
+3f30031fe91a9c27d580cddafbe67112  -
+  ```
+
+- **bash** `{"command": "git status --porcelain tools/drave.py tools/tests/test_produit.py; echo ---; git status --porcelain | grep '^??' | head -20; echo ---; git diff --stat | tail -5", "description": "Verify only the two new files are added"}`
+
+  ```
+A  tools/drave.py
+A  tools/tests/test_produit.py
+---
+?? journal/2026-11-05/attention.md
+?? journal/2026-11-06/distribue.md
+?? journal/2026-11-06/docs.md
+?? journal/2026-11-06/mesures.md
+?? journal/2026-11-06/modele.md
+?? journal/2026-11-06/portes.md
+?? journal/sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/
+?? journal/sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/
+?? journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/
+?? journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/
+?? journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/
+?? journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/
+?? journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/
+?? journal/sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/
+?? journal/sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/
+?? journal/sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/
+?? journal/sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/
+?? journal/sessions/65495a29-10c0-4571-96be-e7729f1efebf/
+?? journal/sessions/7263ca42-cd56-4c36-a6dd-8ff2d1024a43/
+?? journal/sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/
+---
+ reports/rapport-coherence-fiches-v7.md             |    17 +-
+ reports/rapport-dev-test-v10.md                    |     2 +-
+ reports
+… [171 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, subprocess, sys\nCLI=[sys.executable,\"tools/drave.py\"]\n# aide déterministe : largeur fixe, même sortie en pipe et avec COLUMNS variable\na=subprocess.run(CLI+[\"--aide\"], capture_output=True, text=True).stdout\nfor col in (\"40\",\"200\"):\n    import  … [540 caractères tronqués]`
+
+  ```
+COLUMNS 40 identique: True
+COLUMNS 200 identique: True
+['--version'] -> 0 | drave 0.1.0
+['analyser', 'Le chat dort.'] -> 0 | drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+['evaluer', '--gold'] -> 0 | drave 0.1.0 — évaluation de l'heuristique sur le gold
+['rejouer', 'Le chat dort.'] -> 0 | rejeu identique : oui
+  ```
+

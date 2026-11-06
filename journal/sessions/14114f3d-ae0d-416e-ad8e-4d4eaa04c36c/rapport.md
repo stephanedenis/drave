@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 30 |
-| Appels d'outils | 41 |
+| Messages | 32 |
+| Appels d'outils | 43 |
 | Fichiers touchés | 3 |
-| Commandes | 25 |
+| Commandes | 27 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,7 +41,7 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 15 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
@@ -84,10 +84,19 @@
 - **T1** Inspecter la stabilité du contrat
 - **T1** Inspecter le format des codes langue
 - **T1** Inspecter qualitativement des sorties représentatives
+- **T1** Calculer les statistiques agrégées de robustesse
+- **T1** Quantifier attachements, titres, connecteurs, URL
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `la cascade (mock de contrat) préserve ces chiffres et couvre **67,1 %** en unités sémantiques.`
 - **T1** `(les réels passent de 40 % à 80 % en tête avec les deux lectures). Le **vrai** modèle neuronal est **refusé**`
 - **T1** `- **L'attachement par tête couvre 100 %** ; le gold annote 29 cibles ambiguës en double lecture,`
+- **T1** `MOTS '12,5 %' [(0, 2, '12', 'nombre'), (2, 3, ',', 'ponctuation'), (3, 4, '5', 'nombre'), (5, 6, '%', 'ponctuation')]`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : MOTS 'https://example.com/a.pdf' [(0, 5, 'https', 'mot'), (5, 6, ':', 'ponctuation'), (6, 7, '/', 'ponctuation'), (7, 8, '/', 'ponctuation'), (8, 15, 'example', 'mot'), (15, 16, '.', 'ponctuation'), (
 
