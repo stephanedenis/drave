@@ -3033,3 +3033,408 @@ import pathl
 … [17183 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Exécution du CLI réel : version, analyse, évaluation, rejeu, refus.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== VERSION ===\"; python3 tools/drave.py --version; echo \"exit=$?\"; echo \"=== ANALYSER ===\"; python3 tools/drave.py analyser \"Le chat dort.\"; echo \"exit=$?\"; echo \"=== ANALYSER EN ===\"; python3 tools/drave.py analys … [121 caractères tronqués]`
+
+  ```
+=== VERSION ===
+drave 0.1.0
+exit=0
+=== ANALYSER ===
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.92 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+exit=0
+=== ANALYSER EN ===
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=en script=Latn source=heuristique · 37 étiquettes · unités sémantiques=3 (45.7% du texte)
+POS  The/DET day/NOUN when/CONJ we/PRON left/NOUN was/AUX beautiful/ADJ
+SYNTAGMES
+  GN   [0:7]    The day        rôle=groupe nominal  → beautiful
+  REL  [8:20]   when we left   rôle=qualité         → day
+  GV   [21:34]  was beautiful  rôle=prédicat        → —
+PRAGMATIQUE
+  phrase [0:35] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0
+… [141 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== EVALUER ===\"; python3 tools/drave.py evaluer; echo \"exit=$?\"; echo \"=== EVALUER GOLD ===\"; python3 tools/drave.py evaluer --gold; echo \"exit=$?\"", "description": "Run CLI evaluation on both golds"}`
+
+  ```
+=== EVALUER ===
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+
+POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)
+SYNTAGMES   F1 58.49 %  (P 62.92 % / R 54.64 %)
+  tête      F1 73.36 %  (P 81.00 % / R 67.04 %)
+ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %
+  tête      couverture 100.00 % · top-k 99.55 %
+PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
+FRACTION SÉMANTIQUE 55.37 %
+CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
+exit=0
+=== EVALUER GOLD ===
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold gelé (référence figée) · 602 phrases · 3141 tokens · 239 cibles d'attachement
+
+POS         exactitude 76.03 %  (fermé 90.07 %, ouvert 62.69 %)
+SYNTAGMES   F1 58.93 %  (P 63.19 % / R 55.22 %)
+  tête      F1 73.92 %  (P 81.36 % / R 67.72 %)
+ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %
+  tête      couverture 100.00 % · top-k 99.55 %
+PRAGMATIQUE acte 99.67 % · négation 97.67 % · modalité 98.84 % · double sens 94.35 %
+
+… [110 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du refus, du rejeu, du JSON et de l'aide du CLI réel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== REFUS ===\"; python3 tools/drave.py analyser \"\"; echo \"exit=$?\"; echo \"=== REJOUER ===\"; python3 tools/drave.py rejouer \"Le chat de la voisine qui dort sur le toit se réveille.\"; echo \"exit=$?\"; echo \"=== REJOUE … [119 caractères tronqués]`
+
+  ```
+=== REFUS ===
+exit=1
+=== REJOUER ===
+rejeu identique : oui
+  texte      : 'Le chat de la voisine qui dort sur le toit se réveille.'
+  langue     : fr
+  étiquettes : 59
+  JSON       : 11700 octets · sha256 b0a1709a97abe8d4…
+exit=0
+=== REJOUER VIDE ===
+exit=1
+[stderr]
+drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== JSON HEAD ===\"; python3 tools/drave.py analyser \"Le chat dort.\" --json | head -25; echo \"=== JSON KEYS ===\"; python3 tools/drave.py analyser \"Le chat dort.\" --json | jq 'keys'; echo \"=== AIDE ===\"; python3 tools/d … [74 caractères tronqués]`
+
+  ```
+=== JSON HEAD ===
+{
+ "texte": "Le chat dort.",
+ "langue": "fr",
+ "script": "Latn",
+ "source": "heuristique",
+ "refus": "",
+ "etiquettes": [
+  {
+   "niveau": "graphème",
+   "type": "lettres",
+   "valeur": "Le",
+   "debut": 0,
+   "fin": 2,
+   "source": "heuristique",
+   "confiance": 0.99,
+   "candidats": [],
+   "langue": "fr",
+   "script": "Latn",
+   "meta": {}
+  },
+  {
+   "niveau": "mot",
+   "type": "mot",
+   "valeur": "Le",
+   "debut": 0,
+=== JSON KEYS ===
+[
+  "contexte",
+  "cout",
+  "etiquettes",
+  "fraction_semantique",
+  "langue",
+  "refus",
+  "script",
+  "source",
+  "texte",
+  "trace",
+  "unites_semantiques"
+]
+=== AIDE ===
+usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+
+Point d'entrée produit du bloc linguistique (analyse heuristique).
+
+arguments:
+  {analyser,evaluer,rejouer}
+    analyser            étiqueter un texte (POS, syntagmes, pragmatique)
+    evaluer             mesurer l'heuristique sur le gold
+    rejouer             analyser deux fois et vérifier le déterminisme
+
+options:
+  -h, --help, --aide    afficher cette aide et quitter
+  -V, --version         afficher la version et quitter
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+Limites :
+… [196 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== LONGUE ===\"; python3 tools/drave.py analyser \"Le chat de la voisine qui dort sur le toit se réveille.\"; echo \"=== ANGLAIS THAT ===\"; python3 tools/drave.py analyser \"The cat that sleeps on the roof is black.\" --lang … [147 caractères tronqués]`
+
+  ```
+=== LONGUE ===
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 59 étiquettes · unités sémantiques=5 (49.1% du texte)
+POS  Le/DET chat/NOUN de/PREP la/DET voisine/NOUN qui/PRON dort/VERB sur/PREP le/DET toit/NOUN
+     se/PRON réveille/NOUN
+SYNTAGMES
+  GN   [0:7]    Le chat                           rôle=agent       → réveille
+  GP   [8:21]   de la voisine                     rôle=possession  → réveille
+  REL  [22:42]  qui dort sur le toit              rôle=qualite     → voisine
+  REL  [22:54]  qui dort sur le toit se réveille  rôle=qualité     → réveille
+  GV   [43:54]  se réveille                       rôle=predicat    → voisine
+PRAGMATIQUE
+  phrase [0:55] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · morphème=0.32 · mot=0.98 · pos=0.92 ·
+            syntagme=0.40 · phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+=== ANGLAIS THAT ===
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=en script=Latn source=heuristique · 45 étiquettes · unités sémantiques=4 (43.9% du texte)
+POS  The/DET cat/NOUN that/DET sleeps/VERB on/PREP the/D
+… [1147 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison CLI/bloc et inspection du JSON d'évaluation produit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== hash JSON CLI vs bloc ===\"; python3 tools/drave.py analyser \"Le chat de la voisine qui dort sur le toit se réveille.\" --json | sha256sum; python3 tools/bloc_linguistique.py --texte \"Le chat de la voisine qui dort sur l … [319 caractères tronqués]`
+
+  ```
+=== hash JSON CLI vs bloc ===
+b99dd497e034cc9bd3cd5b41f77930c70a6f81ae74a355cdd2e594b69720f52e  -
+b99dd497e034cc9bd3cd5b41f77930c70a6f81ae74a355cdd2e594b69720f52e  -
+=== rejouer court ===
+rejeu identique : oui
+  texte      : 'Le chat dort.'
+  langue     : fr
+  étiquettes : 19
+  JSON       : 4013 octets · sha256 6b6def477a493444…
+=== evaluer json keys ===
+[
+  "controle_negatif",
+  "gold",
+  "heuristique",
+  "version"
+]
+{
+  "nom": "vivant (hand + reel + synthétique)",
+  "gele": false,
+  "phrases": 612,
+  "tokens": 3179,
+  "cibles_attachement": 239
+}
+[
+  "attachement",
+  "attachement_tete",
+  "bloc",
+  "fraction_semantique",
+  "phrases",
+  "pos",
+  "pragmatique",
+  "syntagme"
+]
+{
+  "nom": "cible exacte tirée au hasard dans le gold",
+  "graine": 0,
+  "cibles": 239,
+  "exact_taux": 0.0167
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== analyser help ===\"; python3 tools/drave.py analyser --help; echo \"=== evaluer help ===\"; python3 tools/drave.py evaluer --help; echo \"=== rejouer help ===\"; python3 tools/drave.py rejouer --help", "description": "Read … [19 caractères tronqués]`
+
+  ```
+=== analyser help ===
+usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE
+
+Analyse un texte avec l'heuristique et rend la lecture compacte ou le JSON.
+
+arguments:
+  TEXTE               texte à analyser (entre guillemets)
+
+options:
+  -h, --help, --aide  afficher cette aide et quitter
+  --langue {fr,en}    indice de langue (fr/en) ; sans lui, le bloc détecte
+  --json              sortie JSON complète (annotation, sans durée)
+
+Exemple : python3 tools/drave.py analyser "Le chat dort." --json
+=== evaluer help ===
+usage: drave evaluer [-h] [--gold] [--json]
+
+Mesure POS, syntagmes (F1/tête) et attachement (exact/couverture) sur le gold, avec un contrôle négatif reproductible.
+
+options:
+  -h, --help, --aide  afficher cette aide et quitter
+  --gold              mesurer le gold gelé (référence figée) au lieu du gold vivant
+  --json              sortie JSON des mesures complètes
+
+Exemple : python3 tools/drave.py evaluer --gold --json
+=== rejouer help ===
+usage: drave rejouer [-h] [--langue {fr,en}] TEXTE
+
+Analyse le texte deux fois, compare le JSON canonique et rend une empreinte sha256. Sortie 1 si les deux analyses divergent.
+
+arguments:
+  TEXTE               texte à rejouer (entre
+… [208 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du double message de refus dans `rejouer`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py rejouer \"\" 2>/tmp/doc_produit/rejouer.err; echo \"exit=$?\"; echo \"--- stderr ---\"; cat -n /tmp/doc_produit/rejouer.err", "description": "Count refusal messages from rejouer"}`
+
+  ```
+exit=1
+--- stderr ---
+     1	drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure des temps réels du CLI et recherche d'un smoke test/porte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /usr/bin/time -f \"evaluer: %e s\" python3 tools/drave.py evaluer >/dev/null; /usr/bin/time -f \"analyser: %e s\" python3 tools/drave.py analyser \"Le chat dort.\" >/dev/null; /usr/bin/time -f \"rejouer: %e s\" python3 tools/drave.py … [117 caractères tronqués]`
+
+  ```
+[stderr]
+evaluer: 0.55 s
+analyser: 0.15 s
+rejouer: 0.15 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*drave* tools/porte-*produit* tools/tests/*drave* 2>/dev/null || echo \"aucune porte/smoke test drave\"; grep -rn \"drave.py\" tools/tests/*.py tools/porte-*.sh 2>/dev/null | head -10", "description": "Find product gat … [17 caractères tronqués]`
+
+  ```
+tools/porte-produit.sh
+aucune porte/smoke test drave
+tools/tests/test_produit.py:1:"""test_produit.py — le smoke test de bout en bout du point d'entrée `tools/drave.py`.
+tools/tests/test_produit.py:17:CLI = RACINE / "tools" / "drave.py"
+tools/porte-produit.sh:11:ver=$(python3 tools/drave.py --version 2>&1)
+tools/porte-produit.sh:19:  sortie=$(python3 tools/drave.py analyser "$texte" --langue "$langue" --json 2>&1)
+tools/porte-produit.sh:34:a=$(python3 tools/drave.py rejouer "Le chat dort." 2>&1 | grep -o 'sha256 [0-9a-f]*' | head -1)
+tools/porte-produit.sh:35:b=$(python3 tools/drave.py rejouer "Le chat dort." 2>&1 | grep -o 'sha256 [0-9a-f]*' | head -1)
+tools/porte-speculatif.sh:40:$P tools/speculatif_drave.py --n "$N" --K 4 --invite "$INVITE" --json "$T/pilote.json" \
+tools/porte-speculatif.sh:76:    $P tools/speculatif_drave.py --n 12 --K 4 --invite "$INVITE" --json "$T/distille.json" \
+tools/porte-speculatif.sh:95:$P tools/speculatif_drave.py --n 4 --K 2 --invite "$INVITE" \
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture et exécution de la porte produit et du smoke test livrés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/porte-produit.sh; echo \"=== TEST ===\"; sed -n 1,80p tools/tests/test_produit.py", "description": "Read product gate and smoke test"}`
+
+  ```
+#!/usr/bin/env bash
+# porte-produit — le premier produit : la CLI répond, le JSON est valide, le rejeu est identique.
+#
+# Ce qu'elle vérifie : `drave --version`, `analyser` (fr et en) rend un JSON parsable avec des
+# étiquettes, `rejouer` rend le même sha256 deux fois, et le smoke test passe.
+set -uo pipefail
+cd "$(dirname "$0")/.." || exit 1
+ko=0
+dit() { printf '  %s %s\n' "$1" "$2"; }
+
+ver=$(python3 tools/drave.py --version 2>&1)
+case "$ver" in drave*) dit ✅ "version : $ver" ;; *) dit ❌ "version : $ver"; ko=1 ;; esac
+
+for langue in fr en; do
+  case "$langue" in
+    fr) texte="Le chat dort sur le toit." ;;
+    en) texte="The cat sleeps on the roof." ;;
+  esac
+  sortie=$(python3 tools/drave.py analyser "$texte" --langue "$langue" --json 2>&1)
+  if printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['langue'] == '$langue', d.get('langue')
+assert len(d['etiquettes']) > 5, len(d['etiquettes'])
+assert any(e['niveau'] == 'syntagme' for e in d['etiquettes'])
+assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
+" 2>/dev/null; then
+    dit ✅ "analyser $langue : JSON valide, étiquettes et syntagmes"
+  else
+    dit ❌ "analyser $langue : JSON invalide 
+… [3903 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh; echo \"exit=$?\"", "description": "Run product gate"}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 6b6def477a493444 deux fois
+  ✅ smoke test : Ran 6 tests
+[still running after 60000ms; moved to background job bash-2983]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Collecte de la porte produit (job de fond) et des sorties CLI finales.
+
+- **job_output** `{"job_id": "bash-2983", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+exit=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 80,200p tools/tests/test_produit.py", "description": "Read remainder of product smoke test"}`
+
+  ```
+and donnees["langue"] == "fr"
+            and ("pos", "NOUN") in etiquettes
+            and ("syntagme", "GN") in etiquettes
+            and bool(donnees["unites_semantiques"])
+            and "duree_s" not in donnees["cout"],
+            detail(premier),
+        )
+        self.assertEqual(premier.stdout, second.stdout,
+                         "deux appels à --json doivent rendre exactement la même sortie")
+
+    def test_rejouer_deterministe(self) -> None:
+        resultat = drave("rejouer", "Le chat de la voisine qui dort sur le toit se réveille.")
+        self.assertTrue(
+            resultat.returncode == 0
+            and "rejeu identique : oui" in resultat.stdout
+            and "sha256" in resultat.stdout,
+            detail(resultat),
+        )
+
+    def test_codes_usage(self) -> None:
+        sans_commande = drave()
+        langue_inconnue = drave("analyser", "Le chat dort.", "--langue", "de")
+        self.assertEqual(
+            (2, 2),
+            (sans_commande.returncode, langue_inconnue.returncode),
+            detail(sans_commande) + detail(langue_inconnue),
+        )
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+  ```
+

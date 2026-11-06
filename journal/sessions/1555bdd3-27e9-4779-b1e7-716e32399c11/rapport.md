@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.9 h |
+| Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 85 |
-| Appels d'outils | 102 |
+| Messages | 93 |
+| Appels d'outils | 113 |
 | Fichiers touchés | 2 |
-| Commandes | 86 |
+| Commandes | 96 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*102 appels d'outils.* Actions notables :
+*113 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 78 autres
+- … et 88 autres
 
 **Synthèse produite :**
 
-⏵ Test du refus, du rejeu, du JSON et de l'aide du CLI réel.
+⏵ Collecte de la porte produit (job de fond) et des sorties CLI finales.
 
 ## 3. Travail accompli
 
@@ -98,7 +98,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 46 autres
+- … et 56 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -139,6 +139,11 @@
 - **T1** `tête      F1 73.92 %  (P 81.36 % / R 67.72 %)`
 - **T1** `PRAGMATIQUE acte 99.67 % · négation 97.67 % · modalité 98.84 % · double sens 94.35 %`
 - **T1** `FRACTION SÉMANTIQUE 55.54 %`
+- **T1** `langue=fr script=Latn source=heuristique · 59 étiquettes · unités sémantiques=5 (49.1% du texte)`
+- **T1** `langue=en script=Latn source=heuristique · 45 étiquettes · unités sémantiques=4 (43.9% du texte)`
+- **T1** `langue=fr script=Latn source=heuristique · 30 étiquettes · unités sémantiques=3 (55.2% du texte)`
+- **T1** `[still running after 60000ms; moved to background job bash-2983]`
+- **T1** `langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)`
 
 ## 5. Erreurs rencontrées
 

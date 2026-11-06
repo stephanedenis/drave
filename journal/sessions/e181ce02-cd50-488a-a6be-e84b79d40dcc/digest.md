@@ -50866,3 +50866,35 @@ evaluer_gold EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"\"\"## Transversal et archive\"\"\",\n\"\"\"## Produit — ce qui s'utilise aujourd'hui\n\n| document | pour quoi |\n|---|---|\n| [`prod … [1305 caractères tronqués]`
+
+  ```
+carte : produit
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 120 documents, le disque en a 121
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-2963]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2963", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 docs/produit/README.md
+ create mode 100644 docs/produit/exemples.md
+COMMIT OK 1
+9952a330 PRODUIT — LA DOC D'USAGE ET LES EXEMPLES ; cascade_pos DEVIENT UN PLANCHER (0,70) ET LA PORTE BLOC REPASSE VERTE ; 84 PORTES
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nn=len([p for p in pathlib.Path('docs').rglob('*.md') if 'archive' not in str(p) and p.name!='README.md'])\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| documents  … [415 caractères tronqués]`
+
+  ```
+docs 456
+     · compteurs : en-cours.md dit 456 documents, le disque en a 121
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ven 06 nov 2026 10:26:15 EST
+ven 06 nov 2026 10:31:15 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| documents de `docs/` \\| \\*\\*\\d+\\*\\*\", \"| documents de `docs/` | **121**\", t)\np.write_text(t)\nPY\npython3 t … [592 caractères tronqués]`

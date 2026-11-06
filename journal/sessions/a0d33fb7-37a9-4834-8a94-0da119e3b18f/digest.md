@@ -2898,3 +2898,65 @@ validations.jsonl
 {'a001': 2, 'a002': 3, 'a003': 3, 'a004': 2, 'a005': 2, 'a006': 1, 'a007': 2, 'a008': 1, 'a009': 3}
   ```
 
+### 🤖 Assistant
+
+⏵ Distribution des verdicts humains S (le blocage « aucun verdict » est-il périmé ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,collections\nfor p in ['tools/structures/donnees/paragraphes-validations.jsonl','tools/structures/donnees/validations.jsonl']:\n    st=collections.Counter(); aut=collections.Counter(); n=0\n    for line … [264 caractères tronqués]`
+
+  ```
+tools/structures/donnees/paragraphes-validations.jsonl 19 {'resolu': 10, 'exclu': 8, 'compatible': 1} {'humain': 19}
+tools/structures/donnees/validations.jsonl 150 {'exclu': 64, 'resolu': 74, 'double_sens': 1, 'compatible': 11} {'humain': 150}
+  ```
+
+### 🤖 Assistant
+
+⏵ Preuve OCR installé et état de la porte OCR
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l tools/installer_ocr.sh 2>/dev/null; tesseract --version 2>&1 | head -1; python3 -c \"import pytesseract; print('pytesseract', pytesseract.__version__)\" 2>&1 | head -1; grep -n \"OCR est installé\\|tesseract\" docs/pilotage/bac … [81 caractères tronqués]`
+
+  ```
+-rwx--x--x. 1 stephane stephane 3311 31 oct 17:44 tools/installer_ocr.sh
+bash: line 1: tesseract: command not found
+Traceback (most recent call last):
+3:> **Statut** : partiel · **Priorité** : P3 · **Programme** : R · **Dépend de** : R41, R42, R43 · **Bloqué par** : — (l'OCR est installé ; restent les scans réels, le layout et les exposants)
+64:1. ~~choisir l'OCR~~ — **fait** : tesseract 5.5.3, sans root (`tools/installer_ocr.sh`).
+  ```
+
+### 🤖 Assistant
+
+⏵ Localisation de l'OCR (hors PATH ?) — dépendance cachée possible
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E \"PREFIX|prefix|export PATH|tesseract|pip\" tools/installer_ocr.sh | head -20; echo \"--- binaires ---\"; ls -d tools/ocr* work/ocr* 2>/dev/null; find /home/stephane -maxdepth 4 -name 'tesseract' -type f 2>/dev/null | head … [50 caractères tronqués]`
+
+  ```
+4:# POURQUOI CE SCRIPT. La ligne R4.4 était bloquée par « aucun OCR installé » : ni tesseract,
+5:# ni pytesseract, et un paquet système demanderait root. On télécharge donc les RPM openSUSE,
+11:# neuronal : tesseract 5.5.3 et les données fra/eng/spa/osd. Un OCR neuronal (rapidocr,
+17:set -euo pipefail
+20:PREFIXE=${TESSERACT_PREFIX:-$PWD/work/ocr/root}
+22:BIN="$PREFIXE/usr/bin/tesseract"
+23:DATA="$PREFIXE/usr/share/tessdata"
+26:    "tesseract-ocr-5.5.3-4.1.x86_64.rpm"
+27:    "libtesseract5-5.5.3-4.1.x86_64.rpm"
+31:    "tesseract-ocr-traineddata-fra-4.1.0+git.20240801.8741641-3.1.noarch.rpm"
+32:    "tesseract-ocr-traineddata-eng-4.1.0+git.20240801.8741641-3.1.noarch.rpm"
+33:    "tesseract-ocr-traineddata-spa-4.1.0+git.20240801.8741641-3.1.noarch.rpm"
+34:    "tesseract-ocr-traineddata-osd-4.1.0+git.20240801.8741641-3.1.noarch.rpm"
+38:    LD_LIBRARY_PATH="$PREFIXE/usr/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+39:    TESSDATA_PREFIX="$DATA" "$BIN" --version 2>/dev/null | head -1
+43:    LD_LIBRARY_PATH="$PREFIXE/usr/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+44:    TESSDATA_PREFIX="$DATA" "$BIN" --list-langs 2>/dev/null | sed '1d' | tr '\n' ' '
+60:mkdir -p "$PREFIXE" "$PREFIXE/../
+… [131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l work/ocr/root/usr/bin/tesseract 2>/dev/null; LD_LIBRARY_PATH=\"$PWD/work/ocr/root/usr/lib64\" TESSDATA_PREFIX=\"$PWD/work/ocr/root/usr/share/tessdata\" work/ocr/root/usr/bin/tesseract --version 2>&1 | head -2; echo \"--- porte  … [144 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 55672 16 oct 07:05 work/ocr/root/usr/bin/tesseract
+tesseract 5.5.3
+ leptonica-1.87.0
+--- porte ---
+  ```
+

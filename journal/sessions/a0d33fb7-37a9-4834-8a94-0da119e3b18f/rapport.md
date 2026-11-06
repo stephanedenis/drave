@@ -7,12 +7,12 @@
 | Identifiant | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.9 h |
+| Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 96 |
-| Appels d'outils | 115 |
+| Messages | 100 |
+| Appels d'outils | 119 |
 | Fichiers touchés | 0 |
-| Commandes | 102 |
+| Commandes | 106 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*115 appels d'outils.* Actions notables :
+*119 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,11 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 90 autres
+- … et 94 autres
 
 **Synthèse produite :**
 
-⏵ Distribution des verdicts humains S (le blocage « aucun verdict » est-il périmé ?)
+⏵ Compréhension des contrôles de la revue (navigation, compteurs) avant écriture
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
 - **T1** Run gold evaluation with key env var set
-- … et 62 autres
+- … et 66 autres
 
 ## 4. Mesures et résultats marquants
 

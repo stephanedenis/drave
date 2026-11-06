@@ -1953,3 +1953,144 @@ mots [(11, 13, '9h', 'nombre'), (26, 27, ',', 'ponctuation'), (58, 61, '
   ```
 
 - **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES, CAS_LIMITES\nh=bl.Heuristique()\ndef spans(t):\n    a=h.analyser(t); … [1294 caractères tronqués]`
+
+  ```
+Le Dr. Martin est arrivé hier. Il repart demain.
+   [(0, 30, "'Le Dr. Martin est arrivé hier.'"), (6, 30, "' Martin est arrivé hier.'"), (30, 48, "' Il repart demain.'")]
+J'ai vu M. Dupont. Il était content.
+   [(0, 18, '"J\'ai vu M. Dupont."'), (10, 18, "' Dupont.'"), (18, 36, "' Il était content.'")]
+Il a lu l'article etc. Puis il est parti.
+   [(0, 41, '"Il a lu l\'article etc. Puis il est parti."'), (22, 41, "' Puis il est parti.'")]
+La réunion est à 9 h. Elle dure une heure.
+   [(0, 21, "'La réunion est à 9 h.'"), (21, 42, "' Elle dure une heure.'")]
+Le prix est de 12.5 euros. C'est cher.
+   [(0, 18, "'Le prix est de 12.'"), (18, 26, "'5 euros.'"), (26, 38, '" C\'est cher."')]
+
+### overlaps phrase dans les 50
+f10 [((0, 104), (2, 104))] [(0, 104, '"M. Dupont, le directeur de l\'usine, a an"'), (2, 104, '" Dupont, le directeur de l\'usine, a anno"')]
+textes avec chevauchement phrase 1
+
+### cas limites phrase overlaps
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('audit.py'); s=p.read_text()\nold='''    # doublons exacts\n    vus = collections.Counter((e.niveau, e.type, e.debut, e.fin, e.valeur) for e in a.etiquettes)'''\nnew='''    # chevauchements de phrases (les type … [1124 caractères tronqués]`
+
+  ```
+patched
+exit=0
+crashes 0 refus 0 vides 0 phrases_anom 34 anom_total 149
+{"chevauchement_syntagme": {"n": 132, "exemples": [{"id": "f02", "type": "chevauchement_syntagme", "a": ["GP", 29, 51], "b": ["GP", 29, 60]}, {"id": "f02", "type": "chevauchement_syntagme", "a": ["GP", 29, 60], "b": ["GP", 58, 67]}, {"id": "f02", "type": "chevauchement_syntagme", "a": ["GP", 58, 67], "b": ["GV", 61, 67]}, {"id": "f02", "type": "chevauchement_syntagme", "a": ["GP", 68, 78], "b": ["GV", 68, 78]}, {"id": "f02", "type": "chevauchement_syntagme", "a": ["GV", 80, 96], "b": ["GV", 90, 96]}, {"id": "f02", "type": "chevauchement_syntagme", "a": ["GP", 97, 117], "b": ["GP", 97, 159]}]}, "valeur_hors_span": {"n": 8, "exemples": [{"id": "f11", "type": "valeur_hors_span", "attendu": "TION", "niveau": "morphème", "type_etiquette": "suffixe", "valeur": "tion", "debut": 5, "fin": 9}, {"id": "f11", "type": "valeur_hors_span", "attendu": "PRO", "niveau": "morphème", "type_etiquette": "préfixe", "valeur": "pro", "debut": 15, "fin": 18}, {"id": "f11", "type": "valeur_hors_span", "attendu": "CO", "niveau": "morphème", "type_etiquette": "préfixe", "valeur": "co", "debut": 23, "fin": 25}, {"id": "f11", "type": "valeu
+… [252 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, random, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique(); h0=bl.Heuristique(segmenter … [1103 caractères tronqués]`
+
+  ```
+### Mock sur entrées refusées
+'' mock refus= '' etiq= 0 []
+'... !!! ???' mock refus= '' etiq= 4 [('phrase', 'type'), ('pragmatique', 'acte'), ('phrase', 'type'), ('pragmatique', 'acte')]
+'   ' mock refus= '' etiq= 0 []
+
+### chunker seul : chevauchements syntagmes
+chunker seul paires 0
+
+### contrôle langue : caractères mélangés
+fr -> fr 0.333 | 'curlaL a eaéh nttco.r desp '
+fr -> fr 0.091 | '  tlprd tecdtea jrdr ee aiésfeneain'
+fr -> en 0.235 | 'it rhelq  êo me êntaémia t r s iutu'
+fr -> fr 0.222 | 'eotduo ln  elnunhcaeilqereemeuea-es'
+en -> de 0.5 | 'ho    shoenwamoefres cTltpta .er'
+en -> it 0.429 | 'g.ipyat a  htd una,eumy e  tiohepdl'
+en -> und 0.0 | 'dt oyd  pi rac r.dr hsyw, ncrhdeans'
+en -> en 0.25 | 'twenrsoew oshvgle inemwt tt obpuae '
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique(); pos=collections.Counter(); mot=coll … [386 caractères tronqués]`
+
+  ```
+pos {'DET': 122, 'NOUN': 365, 'VERB': 32, 'PREP': 103, 'PRON': 65, 'CONJ': 32, 'NUM': 4, 'AUX': 28, 'ADV': 40, 'ADJ': 13, 'MOT': 2} total 806
+mot types {'mot': 806, 'ponctuation': 137, 'nombre': 20}
+ratio VERB/NOUN 0.08767123287671233
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time bash tools/porte-bloc-linguistique.sh; echo \"exit=$?\"", "description": "Rejouer la porte du bloc linguistique", "timeoutMs": 600000}`
+
+  ```
+=== PORTE BLOC LINGUISTIQUE ===
+{
+ "langue": {
+  "langues_profil": 398,
+  "articles_test": 447,
+  "accuracy": 0.9687,
+  "accuracy_script": 1.0,
+  "duree_s": 4.706,
+  "langues": {
+   "hus": [
+    3,
+    3
+   ],
+   "oci": [
+    7,
+    6
+   ],
+   "roh": [
+    7,
+    7
+   ],
+   "ron": [
+    3,
+    3
+   ]
+  }
+ },
+ "controle_permute": {
+  "accuracy": 0.0022,
+  "attendu": "proche du hasard"
+ },
+ "niveaux_vus": [
+  "discours",
+  "document",
+  "graphème",
+  "morphème",
+  "mot",
+  "phrase",
+  "pos",
+  "pragmatique",
+  "syntagme"
+ ],
+ "niveaux_manquants": [],
+ "controles": {
+  "vide_refus": "vide",
+  "ponctuation_refus": "vide",
+  "langue_inconnue": "und",
+  "indice_faux": "und",
+  "rejeu_identique": true
+ },
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+exit=0
+[stderr]
+................
+----------------------------------------------------------------------
+Ran 16 tests in 0.063s
+
+OK
+
+real	0m16,022s
+user	0m15,829s
+sys	0m0,192s
+  ```
+
