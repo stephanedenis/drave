@@ -625,3 +625,273 @@ La sortie est une **annotation typée** — pas le corps de la RSN : chaque éti
 … [539 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-produit-bloc-l.json'))\nprint(type(p), list(p)[:20] if isinstance(p,dict) else len(p))\nPY", "description": "Inspect audit JSON keys"}`
+
+  ```
+<class 'dict'> ['rapport', 'ligne', 'branche', 'commit', 'date', 'objet', 'verdict', 'dispositif', 'gold', 'banc_50', 'cas_limites', 'performance', 'contrat', 'compositions', 'correctifs', 'controle_negatif', 'limites', 'fichiers']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fronti\\|f12\\|f20\\|f37\\|f38\\|f39\\|f50\" reports/pensee-produit-bloc-l.json | head -30", "description": "Find boundary data in audit JSON"}`
+
+  ```
+8: "verdict": "⚠️ utilisable en surface (graphème, mot, POS fermées, phrase, document) sur du français/anglais propre ; fragile en structure (syntagmes qui se chevauchent, frontières de phrase, compositions, langue). 0 plantage sur 50 phrases, mais 34/50 avec au moins une anomalie de contrat et 1 plantage sur 25 cas limites.",
+549:     "id": "f12",
+605:     "id": "f20",
+1149:    "id": "f12",
+1375:    "id": "f20",
+3226:   "titre": "Réparer les frontières de phrase et la tokenisation des réalités numériques",
+3575:     "id": "f20",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-produit-bloc-l.json'))\nb=p['banc_50']\nprint(b.keys())\nfor k,v in b.items():\n    if k!='detail': print(k, type(v), str(v)[:500])\nfor x in b['detail'][:5]:\n    print … [92 caractères tronqués]`
+
+  ```
+dict_keys(['phrases', 'mots', 'etiquettes', 'attachements', 'categories', 'langues_detectees', 'scripts', 'crashes', 'refus', 'sorties_vides', 'sans_anomalie', 'avec_anomalie', 'anomalies_total', 'anomalies', 'niveaux', 'fraction', 'pos', 'phrases_stats', 'document', 'graphème', 'url_emoji', 'langue', 'double_sens', 'detail'])
+phrases <class 'int'> 50
+mots <class 'int'> 819
+etiquettes <class 'int'> 4320
+attachements <class 'dict'> {'total': 265, 'cibles_fermees': 16, 'cibles_fermees_detail': {'au': 3, 'was': 3, 'lui': 2, 'pas': 2, 'have': 2, 'entre': 2, 'ne': 1, 'Tu': 1}, 'cible_absente': 0, 'cible_non_token': 0, 'segment_mismatch': 0, 'cible_ambigue': 3, 'offset_cible': False}
+categories <class 'dict'> {'fr': 29, 'en': 14, 'url+email': 1, 'sms': 1, 'sans-ponctuation-finale': 1, 'markdown': 1, 'cyrillique': 1, 'sinogrammes': 1, 'emoji': 1}
+langues_detectees <class 'dict'> {'fr': 34, 'en': 14, 'und': 2}
+scripts <class 'dict'> {'Latn': 48, 'Cyrl': 1, 'Hani': 1}
+crashes <class 'int'> 0
+refus <class 'int'> 0
+sorties_vides <class 'int'> 0
+sans_anomalie <class 'int'> 16
+avec_anomalie <class 'int'> 34
+anomalies_total <class 'int'> 149
+anomalies <class 'dict'> {'chevauchement_syntagme': {'
+… [5428 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-produit-bloc-l.json'))\nfor x in p['banc_50']['detail']:\n    if x['id'] in ('f10','f12','f20','f25','f26','f29','f37','f38','f39','f50'):\n        print(x['id'], x['cat … [76 caractères tronqués]`
+
+  ```
+f10 fr/abréviations "M. Dupont, le directeur de l'usine, a annoncé hier qu'il prendrait sa retraite à la fin de l'année, etc."
+f12 fr/incise-tirets "Le rapport — que personne n'avait lu — fut pourtant cité dans toutes les réunions de la semaine."
+f20 fr/question-pourquoi 'Pourquoi les feuilles changent-elles de couleur en automne ?'
+f25 fr/concession "Les résultats préliminaires suggèrent une amélioration, bien que la marge d'erreur reste importante."
+f26 fr/impérative-familière 'Arrête de tourner autour du pot et dis-nous la vérité, une bonne fois pour toutes !'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' tools/drave.py", "description": "Read CLI implementation head"}`
+
+  ```
+#!/usr/bin/env python3
+"""drave.py — le point d'entrée produit du bloc linguistique.
+
+Une seule commande, trois gestes, hors ligne et déterministe :
+
+    python3 tools/drave.py analyser "Le chat dort."
+    python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+    python3 tools/drave.py evaluer
+    python3 tools/drave.py evaluer --gold --json
+    python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 tools/drave.py --version
+
+Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
+Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
+(annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
+un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import pathlib
+import random
+import sys
+import textwrap
+
+# Le dépôt d'abord — 
+… [3762 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '70,180p' tools/tests/linguistique/test_bloc_linguistique.py && sed -n '1,70p' tools/tests/linguistique/test_bloc_linguistique.py", "description": "Read existing linguistic tests"}`
+
+  ```
+def test_activation_semantique(self):
+        a = self.h.analyser(TEXTE, "fr")
+        sem = bl.CoucheSemantique()
+        r = sem.activer(a)
+        self.assertLess(r["fraction"], 1.0)
+        self.assertGreater(r["unites"], 0)
+        self.assertLess(r["cout"], len(TEXTE))
+
+    def test_refus(self):
+        self.assertEqual(self.h.analyser("").refus, "vide")
+        self.assertEqual(self.h.analyser("... !!! ???").refus, "vide")
+        self.assertEqual(self.h.analyser("qqqqq zzzzz wwwww").langue, "und")
+
+    def test_rejeu(self):
+        self.assertEqual(self.h.analyser(TEXTE, "fr").json(),
+                         self.h.analyser(TEXTE, "fr").json())
+
+    def test_adaptateur_neuronal_avec_faux_modele(self):
+        d = pathlib.Path(tempfile.mkdtemp())
+        faux = d / "faux_llama.py"
+        faux.write_text(
+            "#!/usr/bin/env python3\nimport json\n"
+            "print(json.dumps({'langue':'fr','script':'Latn','etiquettes':["
+            "{'niveau':'phrase','type':'type','valeur':'déclarative','debut':0,'fin':4,'confiance':0.9},"
+            "{'niveau':'pragmatique','type':'acte','valeur':'assertion','debut':0,'fin':4,'confiance':0.8}]}))\n",
+            encoding="utf
+… [7182 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"_phrases\\|frontière\" tools/tests/ tools/porte-bloc-linguistique.sh 2>/dev/null | head -30 && cat tools/porte-bloc-linguistique.sh", "description": "Find sentence tests and gate"}`
+
+  ```
+tools/tests/documents/corpus/technique/contexte-long.md:188:la frontière entière — le détail est dans
+tools/tests/documents/corpus/tableau/dependances.md:6:> inversées, frontière) et **dessiné** dans
+tools/tests/documents/corpus/tableau/dependances.md:42:- **La frontière fait 12 items** : le « jamais en attente » n'est pas une file d'un seul élément.
+tools/tests/documents/corpus/tableau/dependances.md:134:6. **Sept dépendances manquantes.** `R11` prend en entrée les frontières de section de `R01` sans
+tools/tests/documents/corpus/tableau/dependances.md:147:## 5. La frontière : ce qui est réellement non bloqué
+tools/tests/documents/corpus/tableau/index.md:127:- [Le graphe des dépendances](dependances.md) — les arêtes dures, les plafonds, la frontière et les priorités.
+tools/tests/documents/corpus/tableau/roadmap.md:284:  3 plafonds, la frontière et les sous-items.
+tools/tests/linguistique/qualifier_frontiere_71.py:2:"""qualifier_frontiere_71.py — la frontière heuristique sur les 71 langues du dépôt.
+tools/tests/linguistique/qualifier_frontiere_71.py:5:frontière « couverture × précision par unité de calcul ». Ici, sur le lexique
+tools/tests/linguistique/classement_cible.py:538:    id
+… [950 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-produit-bloc-l.json'))\nfor x in p['banc_50']['detail']:\n    if x['cat'] in ('markdown','sans-ponctuation-finale') or 'markdown' in x['cat']:\n        print(x['id'], x[ … [97 caractères tronqués]`
+
+  ```
+x45 sans-ponctuation-finale "Ceci est une phrase sans ponctuation finale et elle continue longtemps sans marquer de pause puis elle s'arrête"
+x46 markdown "# Notes de réunion\n\nLe budget 2025 a été validé à l'unanimité.\n\n- Priorité : réduire les coûts.\n- Échéance : fin mars.\n\nProchaine réunion jeudi."
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json','gold_gele.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    n=sum('\\n' in x['texte'] for x in p['phrases'])\n    print(f … [203 caractères tronqués]`
+
+  ```
+gold.json 20 avec newline: 0
+gold_reel.json 432 avec newline: 0
+gold_synthetique.json 160 avec newline: 0
+gold_gele.json 602 avec newline: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,re\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    for x in p['phrases']:\n        if re.search(r\"\\.\\.\\.|…\", x['texte']): … [110 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,re\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    for x in p['phrases']:\n        if re.search(r\"[.!?…]\\s*[»\\\"”’)]\", x[' … [120 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,re\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    multi=[x for x in p['phrases'] if len(re.findall(r'[.!?…]', x['texte']))>1] … [190 caractères tronqués]`
+
+  ```
+gold.json 20 multi-ponctuation: 0
+gold_reel.json 432 multi-ponctuation: 2
+   r308 'Marie lit. Elle aime les livres.'
+   r318 'Marie reads. She loves books.'
+gold_synthetique.json 160 multi-ponctuation: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('tools/tests/linguistique/gold_reel.json'))\nfor x in p['phrases']:\n    if x['id'] in ('r308','r318'): print(json.dumps(x,ensure_ascii=False,indent=1))\nPY", "description": "Inspect mu … [27 caractères tronqués]`
+
+  ```
+{
+ "id": "r308",
+ "langue": "fr",
+ "texte": "Marie lit. Elle aime les livres.",
+ "mots": [
+  {
+   "texte": "Marie",
+   "pos": "NOUN",
+   "debut": 0,
+   "fin": 5
+  },
+  {
+   "texte": "lit",
+   "pos": "VERB",
+   "debut": 6,
+   "fin": 9
+  },
+  {
+   "texte": "Elle",
+   "pos": "PRON",
+   "debut": 11,
+   "fin": 15
+  },
+  {
+   "texte": "aime",
+   "pos": "VERB",
+   "debut": 16,
+   "fin": 20
+  },
+  {
+   "texte": "les",
+   "pos": "DET",
+   "debut": 21,
+   "fin": 24
+  },
+  {
+   "texte": "livres",
+   "pos": "NOUN",
+   "debut": 25,
+   "fin": 31
+  }
+ ],
+ "segments": [
+  {
+   "type": "GN",
+   "texte": "Marie",
+   "role": "agent",
+   "debut": 0,
+   "fin": 5
+  },
+  {
+   "type": "GV",
+   "texte": "lit",
+   "role": "prédicat",
+   "debut": 6,
+   "fin": 9
+  },
+  {
+   "type": "GN",
+   "texte": "Elle",
+   "role": "agent",
+   "debut": 11,
+   "fin": 15
+  },
+  {
+   "type": "GV",
+   "texte": "aime",
+   "role": "prédicat",
+   "debut": 16,
+   "fin": 20
+  },
+  {
+   "type": "GN",
+   "texte": "les livres",
+   "role": "patient",
+   "debut": 21,
+   "fin": 31
+  }
+ ],
+ "pragma": {
+  "acte": "assertion",
+  "coref": {
+   "elle": "marie"
+  }
+ },
+ "source": "reel"
+}
+{
+ "id": "r318",
+ "langue": "en",
+ "texte": "Marie read
+… [1011 caractères tronqués]
+  ```
+

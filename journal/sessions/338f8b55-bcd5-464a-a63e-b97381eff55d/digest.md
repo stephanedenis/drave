@@ -771,3 +771,132 @@ time 0.8029694557189941
 }
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nfrom tools.tests.linguistique.evaluer_gold import charger\nfrom tools.tests.linguistique.gold_split import dev, test\nph=charger … [234 caractères tronqués]`
+
+  ```
+612 3179
+{'reel', 'hand', 'synthetique'}
+dict_keys(['id', 'langue', 'texte', 'mots', 'segments', 'pragma', 'source'])
+{"id": "g001", "langue": "fr", "texte": "Le chat dort.", "mots": [{"texte": "Le", "pos": "DET", "debut": 0, "fin": 2}, {"texte": "chat", "pos": "NOUN", "debut": 3, "fin": 7}, {"texte": "dort", "pos": "VERB", "debut": 8, "fin": 12}], "segments": [{"type": "GN", "texte": "Le chat", "role": "agent", "debut": 0, "fin": 7}, {"type": "GV", "texte": "dort", "role": "prédicat", "debut": 8, "fin": 12}], "pragma": {"acte": "assertion"}, "source": "hand"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nfrom tools.tests.linguistique.evaluer_gold import charger\nfrom tools.tests.linguistique.gold_split import _e … [671 caractères tronqués]`
+
+  ```
+### where
+  r075  TEST gold=PRON  ctx=...'The city '[where]' we live is beautiful.'
+  r115  TEST gold=PRON  ctx=...'The house '[where]' I was born is small.'
+  r236  dev  gold=PRON  ctx=...'The village '[where]' I live is small.'
+  r250  dev  gold=PRON  ctx=...'The place '[where]' we go is far.'
+  r289  dev  gold=PRON  ctx=...'The place '[where]' we live is quiet.'
+  r300  dev  gold=PRON  ctx=...'The house '[where]' she lives is small.'
+
+### late
+  r199  dev  gold=ADV   ctx=...'The train arrives '[late]'.'
+  r218  dev  gold=ADV   ctx=...'Although it is '[late]', he works.'
+  r313  dev  gold=ADV   ctx=...'I leave because it is '[late]'.'
+  r365  dev  gold=ADV   ctx=...'train leaves; it arrives '[late]'.'
+
+### out
+  r035  dev  gold=ADV   ctx=...' film she talks about is '[out]'.'
+  r284  TEST gold=ADV   ctx=...'though it rains, he goes '[out]'.'
+
+### as
+
+### As
+  r249  dev  gold=CONJ  ctx=...''[As]' it was raining, we staye'
+  r292  TEST gold=CONJ  ctx=...''[As]' she sang, he danced.'
+
+### maybe
+  r036  dev  gold=ADV   ctx=...'She is '[maybe]' tired.'
+
+### Maybe
+  r319  TEST gold=ADV   ctx=...''[Maybe]' he will come.'
+
+### whose
+  r239  TEST gold=PRON  ctx=...'The man '[whose]' car i
+… [1190 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du gold et repérage des formes fermées manquantes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nfrom tools.tests.linguis … [1152 caractères tronqués]`
+
+  ```
+word gold->pred n in_lex
+The        tot=129 wrong= 0 {('DET', 'DET'): 129} lex=['DET']
+the        tot=57 wrong= 0 {('DET', 'DET'): 57} lex=['DET']
+is         tot=44 wrong= 0 {('AUX', 'AUX'): 44} lex=['AUX']
+it         tot=41 wrong= 0 {('PRON', 'PRON'): 41} lex=['PRON']
+that       tot=23 wrong= 6 {('CONJ', 'CONJ'): 9, ('CONJ', 'PRON'): 3, ('PRON', 'PRON'): 8, ('PRON', 'DET'): 3} lex=['DET', 'PRON']
+I          tot=21 wrong= 0 {('PRON', 'PRON'): 21} lex=['PRON']
+she        tot=19 wrong= 0 {('PRON', 'PRON'): 19} lex=['PRON']
+She        tot=18 wrong= 0 {('PRON', 'PRON'): 18} lex=['PRON']
+he         tot=16 wrong= 0 {('PRON', 'PRON'): 16} lex=['PRON']
+to         tot=15 wrong= 0 {('PREP', 'PREP'): 15} lex=['PREP']
+we         tot=13 wrong= 0 {('PRON', 'PRON'): 13} lex=['PRON']
+a          tot=12 wrong= 0 {('DET', 'DET'): 12} lex=['DET']
+He         tot= 9 wrong= 0 {('PRON', 'PRON'): 9} lex=['PRON']
+We         tot= 9 wrong= 0 {('PRON', 'PRON'): 9} lex=['PRON']
+you        tot= 9 wrong= 0 {('PRON', 'PRON'): 9} lex=['PRON']
+in         tot= 8 wrong= 0 {('PREP', 'PREP'): 8} lex=['PREP']
+on         tot= 8 wrong= 0 {('PREP', 'PREP'): 8} lex=['PREP']
+her        tot= 7 wrong= 0 {('DET', 'DET'): 4, ('PR
+… [4001 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nfor w in ['am','is','seems','looks','fast','where','late','out','as','As','maybe','Maybe','whose','when','mine','outside',' … [469 caractères tronqués]`
+
+  ```
+am ('NOUN', True, 0.3)
+is ('AUX', False, 0.92)
+seems ('NOUN', True, 0.3)
+looks ('VERB', True, 0.72)
+fast ('NOUN', True, 0.3)
+where ('NOUN', True, 0.3)
+late ('NOUN', True, 0.3)
+out ('NOUN', True, 0.3)
+as ('NOUN', True, 0.3)
+As ('NOUN', True, 0.55)
+maybe ('NOUN', True, 0.3)
+Maybe ('NOUN', True, 0.55)
+whose ('NOUN', True, 0.3)
+when ('CONJ', False, 0.92)
+mine ('NOUN', True, 0.3)
+outside ('PREP', False, 0.92)
+again ('NOUN', True, 0.3)
+now ('NOUN', True, 0.3)
+down ('NOUN', True, 0.3)
+n't ('NOUN', True, 0.3)
+hard ('NOUN', True, 0.3)
+far ('NOUN', True, 0.3)
+am in VERBES False
+False
+Although I am tired, I continue.
+[{'texte': 'Although', 'pos': 'CONJ', 'debut': 0, 'fin': 8}, {'texte': 'I', 'pos': 'PRON', 'debut': 9, 'fin': 10}, {'texte': 'am', 'pos': 'AUX', 'debut': 11, 'fin': 13}, {'texte': 'tired', 'pos': 'ADJ', 'debut': 14, 'fin': 19}, {'texte': 'I', 'pos': 'PRON', 'debut': 21, 'fin': 22}, {'texte': 'continue', 'pos': 'VERB', 'debut': 23, 'fin': 31}]
+[('Although', 'CONJ', 0, 8), ('I', 'PRON', 9, 10), ('am', 'VERB', 11, 13), ('tired', 'VERB', 14, 19), ('I', 'PRON', 21, 22), ('continue', 'VERB', 23, 31)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-fiabilite-produit.json'))\nfor r in p['banc_50']['resultats']:\n    print(r['id'], r['categorie'], r['attendu'], 'langue=',r.get('langue'), 'rc=',r.get('rc'), 'pos=',r.g … [99 caractères tronqués]`
+
+  ```
+f01 fr fr langue= fr rc= 0 pos= 3 mots= 4 'Le chat dort.'
+f02 fr fr langue= fr rc= 0 pos= 12 mots= 13 'Le chat de la voisine qui dort sur le toit se réveille.'
+f03 fr fr langue= fr rc= 0 pos= 4 mots= 6 "Bonjour ! Comment allez-vous aujourd'hui ?"
+f04 fr fr langue= fr rc= 0 pos= 7 mots= 9 "Ferme la porte, s'il te plaît."
+f05 fr fr langue= fr rc= 0 pos= 5 mots= 6 'Ne touche pas à ça !'
+f06 fr fr langue= fr rc= 0 pos= 11 mots= 13 "Je ne pense pas qu'il viendra demain, mais nous verrons bien."
+f07 en en langue= en rc= 0 pos= 6 mots= 7 'The cat sleeps on the roof.'
+f08 en en langue= en rc= 0 pos= 7 mots= 9 'Where is the nearest train station, please?'
+f09 en en langue= en rc= 0 pos= 6 mots= 7 "Don't forget to bring your passport."
+f10 fr fr langue= fr rc= 0 pos= 6 mots= 13 'Le prix est de 1 234,56 € pour 3 articles.'
+f11 fr fr langue= fr rc= 0 pos= 3 mots= 10 'Rendez-vous le 12/03/2026 à 14h30.'
+f12 fr fr langue= fr rc= 0 pos= 9 mots= 18 'Visitez https://example.com/docs?page=2 pour la documentation.'
+f13 fr fr langue= und rc= 0 pos= 4 mots= 6 "J'ai trouvé ça génial 😍🔥"
+f14 refus refus langue= None rc= 1 pos= None mots= None '🚀'
+f15 refus refus langue= None rc= 1 pos= None mots= None ''
+… [3340 caractères tronqués]
+  ```
+

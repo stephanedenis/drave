@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 21 |
-| Appels d'outils | 29 |
-| Fichiers touchés | 1 |
-| Commandes | 28 |
+| Messages | 34 |
+| Appels d'outils | 47 |
+| Fichiers touchés | 2 |
+| Commandes | 43 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,7 +41,7 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 15 autres
+- … et 33 autres
 
 **Synthèse produite :**
 
@@ -54,6 +54,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/partition_syntagmes/inventaire.py` | 1 | 0 |
+| `/tmp/partition_syntagmes/options.py` | 1 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -85,6 +86,19 @@
 - **T1** Compare gold sizes at audit commit and HEAD
 - **T1** Check old gold harness compatibility
 - **T1** Capture full baseline gold metrics
+- **T1** Explore corpus data for free texts
+- **T1** Find mentions of free texts in audits
+- **T1** Read drave CLI top
+- **T1** Inspect CLI output and free corpus
+- **T1** Read end of Heuristique.analyser
+- **T1** Check semantic units construction
+- **T1** Run measured options over gold, bancs, free texts
+- **T1** Compare tp/fp/fn base vs eval baseline
+- **T1** Run direct eval_bloc twice to check determinism
+- **T1** Inspect Cascade/Parallele init for shared state
+- **T1** Look for global caches or subprocesses in module
+- **T1** Read S generator entry points
+- … et 3 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -94,4 +108,5 @@
 - **T1** `diff idx 14 '' || 'Les prix ont augmenté de 12,5 % entre janvier et mars 2024, soit 3 points de plus que prévu.'`
 - **T1** `diff idx 33 "Bien que fatigué, il continue à travailler jusqu'à minuit." || 'The prices rose by 12.5% between January and March 2024, three points more than expected.'`
 - **T1** `2ba393b0 B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183`
+- **T1** `f"· unités sémantiques={len(a.unites_semantiques)} ({a.fraction_semantique:.1%} du texte)"`
 

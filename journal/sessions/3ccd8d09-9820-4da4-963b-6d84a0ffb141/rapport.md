@@ -7,12 +7,12 @@
 | Identifiant | `3ccd8d09-9820-4da4-963b-6d84a0ffb141` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 12 |
-| Appels d'outils | 16 |
+| Messages | 25 |
+| Appels d'outils | 31 |
 | Fichiers touchés | 0 |
-| Commandes | 14 |
+| Commandes | 29 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **réparer  … [2242 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Inspect repo status and branch
 - bash — Check sizes of target files
@@ -41,7 +41,7 @@
 - bash — Inspect gold structure
 - bash — Check phrase tests in gold tooling
 - bash — Check imports and Python version
-- … et 1 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
@@ -70,6 +70,21 @@
 - **T1** Check phrase tests in gold tooling
 - **T1** Check imports and Python version
 - **T1** Probe current sentence splitting
+- **T1** Inspect audit JSON keys
+- **T1** Find boundary data in audit JSON
+- **T1** Inspect 50-text bench data
+- **T1** Read audit boundary case texts
+- **T1** Read CLI implementation head
+- **T1** Read existing linguistic tests
+- **T1** Find sentence tests and gate
+- **T1** Inspect markdown and no punctuation texts
+- **T1** Check newlines in gold
+- **T1** Check ellipses in gold
+- **T1** Check closing punctuation in gold
+- **T1** Check multi-sentence gold entries
+- **T1** Inspect multi-sentence gold entries
+- **T1** Probe current tokenization
+- **T1** Check digits in gold
 
 ## 4. Mesures et résultats marquants
 
@@ -80,6 +95,7 @@
 - **T1** ``reel_new` + 160 `synthétique`), soit **100 %**. Sur `all` : **612/612**.`
 - **T1** `langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)`
 - **T1** `| **P1-7** | **Compacité et lot** : `--compact`, JSONL, `--fichier`/stdin | **2,76 Mo** pour 10 k ; **11,5 Mo** pour 50 k ; 1 texte par appel | `drave.py` 50-52, 329-341 | **0,5–1 j** | faible : optio`
+- **T1** `f"· unités sémantiques={len(a.unites_semantiques)} ({a.fraction_semantique:.1%} du texte)"`
 
 ## 5. Erreurs rencontrées
 

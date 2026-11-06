@@ -887,3 +887,356 @@ bloc_l {"textes": 50, "textes_avec_chevauchement": 32, "paires": 139, "syntagmes
 … [1037 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -8 -- tools/bloc_linguistique.py && echo '---' && git cat-file -t fa1b0c6e 2>&1 && git show fa1b0c6e:tools/bloc_linguistique.py > /tmp/partition_syntagmes/bloc_fa1b0c6e.py && wc -l /tmp/partition_syntagmes/bloc_fa1b … [79 caractères tronqués]`
+
+  ```
+037fe041 PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183
+2ba393b0 B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183
+1962eb15 PRODUIT — LA ROBUSTESSE : SURROGATE ET NON-STR FERMÉS (refus non_texte), 8 TESTS ; L'AUDIT A24 (50 PHRASES, 132 CHEVAUCHEMENTS, 18 CORRECTIFS)
+0911ae29 B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183
+653a7981 B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+710ec7f9 B13 — LE FÉMININ -ÉE ET LA GARDE DÉTERMINANT DU GP : EXACT 220/220 (1,0000), COUVERTURE 0,9205, F1 0,5880, 19 SPANS ; 183/183
+160d08ca B13 — LA GARDE PRON : EXACT 219/219 (1,0000), COUVERTURE 0,9163, F1 0,5822, DEV 152/152 ET TEST 67/67 ; AUDIT DE COHÉRENCE V8 INTÉGRÉ ; 183/183
+d497324b B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183
+---
+commit
+2192 /tmp/partition_syntagmes/bloc_fa1b0
+… [6 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in gold gold_reel gold_synthetique gold_gele; do echo -n \"$f fa1b0c6e: \"; git show fa1b0c6e:tools/tests/linguistique/$f.json 2>/dev/null | python3 -c \"import json,sys; d=json.load(sys.stdin); print(len(d.get('phrases',[])))\ … [203 caractères tronqués]`
+
+  ```
+gold fa1b0c6e: 20
+gold HEAD: 20
+gold_reel fa1b0c6e: 432
+gold_reel HEAD: 432
+gold_synthetique fa1b0c6e: 160
+gold_synthetique HEAD: 160
+gold_gele fa1b0c6e: 602
+gold_gele HEAD: 602
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show fa1b0c6e:tools/tests/linguistique/evaluer_gold.py | head -30 && echo '--- diff evaluer ---' && git diff fa1b0c6e HEAD --stat -- tools/tests/linguistique/evaluer_gold.py", "description": "Check old gold harness compatibility" … [1 caractères tronqués]`
+
+  ```
+"""evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) + synthétique (160).
+
+Trois niveaux : POS (token, exact), syntagmes (exact + **par tête**), pragmatique. Quatre
+lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+(`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import sys
+from collections import Counter, defaultdict
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE / "tools"))
+import bloc_linguistique as bl  # noqa: E402
+
+GOLD = pathlib.Path(__file__).with_name("gold.json")
+REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
+
+
+def charger() -> list[dict]:
+    hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+    reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
+    synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
+    for p in hand:
+        p["source"] = "hand"
+    for p in reel:
+--- diff evaluer ---
+ tools/tests/linguistique/evaluer_gold.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 d
+… [10 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 900 python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/partition_syntagmes/base_head.json >/dev/null 2>&1; python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/partition_syntagmes/base_head.json'))\nfo … [494 caractères tronqués]`
+
+  ```
+heuristique F1 0.6181 P 0.655 R 0.5851 tete 0.7511 POS 0.8383
+   att cibles 239   att labels 222   att exact 222   att exact_taux 0.9289   att couverture 0.9289   att top1 222   att topk 221
+cascade F1 0.6495 P 0.7557 R 0.5695 tete 0.7616 POS 0.7528
+   att cibles 239   att labels 208   att exact 208   att exact_taux 0.8703   att couverture 0.8703   att top1 208   att topk 207
+parallele F1 0.6495 P 0.7557 R 0.5695 tete 0.7616 POS 0.7528
+   att cibles 239   att labels 208   att exact 208   att exact_taux 0.8703   att couverture 0.8703   att top1 208   att topk 207
+gold {'phrases': 612, 'reel': 452, 'hand': 20, 'reel_new': 432, 'synthetique': 160, 'tokens': 3179}
+ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls data/ | head -40 && echo '---' && find data -maxdepth 2 -type f | head -40", "description": "Explore corpus data for free texts"}`
+
+  ```
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+consignes_train.jsonl
+consignes_val.jsonl
+corpus_en.txt
+corpus_en_val.txt
+corpus_fr_litterature.txt
+corpus_fr_train.txt
+corpus_fr.txt
+corpus_fr_val.txt
+corpus_litt_propre
+corpus_mixte_dev.txt
+corpus_mixte_litt2.txt
+corpus_mixte_litt.txt
+corpus_mixte_propre.txt
+corpus_mixte.txt
+corpus_multi_train.txt
+corpus_multi.txt
+corpus_multi_val.txt
+corpus_nonambigu
+corpus_ocr
+corpus_ocr_cegep
+corpus_ocr_cegep_avant_micro
+corpus_ocr_cegep_micro
+corpus_ocr_cegep_pilote-2pages
+corpus_pdf
+corpus_pdf_documents
+corpus_propre
+corpus_repo_propre
+corpus_repo.txt
+corpus_wiki_ar
+corpus_wiki_ar_texte
+corpus_wiki_de
+corpus_wiki_de_texte
+---
+data/wikitext2_test.txt
+data/wt2.json
+data/wikitext2_test.txt.ids
+data/corpus_en_val.txt
+data/corpus_en.txt
+data/corpus_fr.txt
+data/corpus_mixte.txt
+data/corpus_fr_litterature.txt
+data/corpus_mixte_litt.txt
+data/corpus_mixte_litt2.txt
+data/udhr/langues.jsonl
+data/udhr/articles.jsonl
+data/udhr/udhr_train.txt
+data/udhr/meta.json
+data/udhr/articles_propres.jsonl
+data/udhr/u
+… [707 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn -i 'texte libre\\|textes libres' reports/rapport-fiabilite-produit.md reports/rapport-produit-bloc-l.md | head -20", "description": "Find mentions of free texts in audits"}`
+
+  ```
+reports/rapport-produit-bloc-l.md:54:- **Ce que ce banc ne mesure pas** : la justesse sémantique sur texte libre (pas de gold), la
+reports/rapport-produit-bloc-l.md:372:  sur texte libre n'a pas de gold ; on cite le gold 0,7581 et des exemples, pas une exactitude
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,120p tools/drave.py", "description": "Read drave CLI top"}`
+
+  ```
+#!/usr/bin/env python3
+"""drave.py — le point d'entrée produit du bloc linguistique.
+
+Une seule commande, trois gestes, hors ligne et déterministe :
+
+    python3 tools/drave.py analyser "Le chat dort."
+    python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+    python3 tools/drave.py evaluer
+    python3 tools/drave.py evaluer --gold --json
+    python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 tools/drave.py --version
+
+Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
+Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
+(annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
+un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import pathlib
+import random
+import sys
+import textwrap
+
+# Le dépôt d'abord — 
+… [3762 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E 'analyser|--mode|print|json' tools/drave.py | head -50 && echo '--- corpus ---' && wc -c data/corpus_fr_litterature.txt data/corpus_fr.txt && head -c 600 data/corpus_fr_litterature.txt", "description": "Inspect CLI output  … [17 caractères tronqués]`
+
+  ```
+6:    python3 tools/drave.py analyser "Le chat dort."
+7:    python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+9:    python3 tools/drave.py evaluer --gold --json
+13:Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+26:import json
+57:    return _sur(json.dumps(objet, ensure_ascii=False, indent=1)) + "\n"
+62:    return _sur(json.dumps(a.json(), ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+159:def cmd_analyser(args: argparse.Namespace) -> int:
+160:    annotation = bl.Heuristique().analyser(args.texte, args.langue)
+163:        if args.json:
+164:            sys.stdout.write(_dumps(annotation.json()))
+166:            print(f"{NOM}: refus d'analyse : {annotation.refus} "
+169:    if args.json:
+170:        sys.stdout.write(_dumps(annotation.json()))
+172:        print(_sur(formater_annotation(annotation)))
+267:    if args.json:
+270:        print(_formater_evaluation(rapport))
+275:    premiere = bl.Heuristique().analyser(args.texte, args.langue)
+276:    seconde = bl.Heuristique().analyser(args.texte, args.langue)
+279:        print(f"{NOM}: refus d'analyse : {refus} "
+286:    print(f"rejeu identique : {'
+… [2191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1275,1340p tools/bloc_linguistique.py", "description": "Read end of Heuristique.analyser"}`
+
+  ```
+if m.group().strip():
+                paragraphes.append((m.start(), m.end(), m.group()))
+        for d, f, p in paragraphes:
+            etiquettes.append(Etiquette("discours", "paragraphe", "suite", d, f, self.nom, 0.5,
+                                        candidats=["suite", "contraste", "cause", "conséquence"],
+                                        langue=lg, script=script))
+            titre = (p.lstrip().startswith("#") or
+                     bool(re.match(r"^\s*(?:\d+[.)]|[IVXLC]+[.)])\s+", p)) or
+                     (len(p.strip()) < 80 and p.strip().endswith((":", ".")) is False and
+                      p.strip() == p.strip().upper()))
+            etiquettes.append(Etiquette("document", "titre" if titre else "paragraphe",
+                                        p.strip()[:60], d, f, self.nom, 0.7,
+                                        langue=lg, script=script))
+        if contexte:
+            etiquettes.append(Etiquette("pragmatique", "contexte", contexte[:200], 0, len(texte),
+                                        "humain", 1.0, langue=lg, script=script))
+
+        # 7. unités sémantiques : ouvertes + syntagmes ambiguës, dédupliquées
+        unites = _fusionner
+… [2124 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'unites.append' tools/bloc_linguistique.py | head -20 && sed -n 1060,1130p tools/bloc_linguistique.py", "description": "Check semantic units construction"}`
+
+  ```
+1055:                    unites.append(Span(d, f))
+1349:                    unites.append(Span(d, f))
+                                                langue=lg, script=script))
+
+        # 3 bis. le contexte tranche les suffixes ambigus : un mot après DET/PRÉP/ADJ est un
+        # nom (« brother », « chair » ne sont pas des verbes) — A14 : 176 VERB gold en NOUN.
+        pos_idx = [i for i, e in enumerate(etiquettes) if e.niveau == "pos"]
+        for k, i in enumerate(pos_idx):
+            e = etiquettes[i]
+            if e.type != "VERB" or e.confiance > 0.45 or k == 0:
+                continue
+            avant = etiquettes[pos_idx[k - 1]]
+            if avant.type in ("DET", "PREP", "ADJ"):
+                etiquettes[i] = Etiquette("pos", "NOUN", e.valeur, e.debut, e.fin, self.nom,
+                                          e.confiance, candidats=["noun"], langue=lg,
+                                          script=script, meta={"ouvert": True, "contexte": avant.type})
+
+        # 3 a. après un pronom sujet, un mot inconnu est un verbe (« she sings ») ; l'exception
+        # est morphologique : une désinence nominale reste un nom (« happiness »).
+        _nominales = ("tion", "sion"
+… [3327 caractères tronqués]
+  ```
+
+- **write** `{"content": "\"\"\"Mesure des options de partition des syntagmes (aucune modification du dépôt).\n\nVariantes :\n  base              : Heuristique() telle quelle (S + union).\n  alternative       : base + meta.alternative / meta.partition (les deux segments restent).\n  filtrer_chunker   : option (b … [16542 caractères tronqués]`
+
+  ```
+<path>/tmp/partition_syntagmes/options.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "/tmp/partition_syntagmes/options.py", "old_string": "    parent = list(range(len(segs)))\n\n    def trouver(i: int) -> int:\n        while parent[i] != i:\n            parent[i] = parent[parent[i]]\n            i = parent[i]\n        return i\n\n    for i, j in ((segs.index(x), segs.i … [374 caractères tronqués]`
+
+  ```
+The file /tmp/partition_syntagmes/options.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/tmp/partition_syntagmes/options.py", "old_string": "    stat = {p: {\"groupes\": 0, \"prefere_est_gold\": 0, \"un_gold_dans_groupe\": 0}\n            for p in (\"chunker\", \"s_long\", \"large\")}\n    for ph in phrases:\n        a = h.analyser(ph[\"texte\"], ph[\"langue\"])\n        … [1454 caractères tronqués]`
+
+  ```
+The file /tmp/partition_syntagmes/options.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 1800 python3 /tmp/partition_syntagmes/options.py 2>&1 | tail -30", "description": "Run measured options over gold, bancs, free texts"}`
+
+  ```
+base {"f1": 0.6176, "precision": 0.6539, "rappel": 0.5851, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.8383, "fraction": 0.5537} bancs 269 760 libres 67 267 retires 0
+alternative {"f1": 0.6176, "precision": 0.6539, "rappel": 0.5851, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.8383, "fraction": 0.5537} bancs 269 760 libres 67 267 retires 0
+alternative_chunker {"f1": 0.6176, "precision": 0.6539, "rappel": 0.5851, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.8383, "fraction": 0.5537} bancs 269 760 libres 67 267 retires 0
+alternative_large {"f1": 0.6176, "precision": 0.6539, "rappel": 0.5851, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.8383, "fraction": 0.5537} bancs 269 760 libres 67 267 retires 0
+filtrer_chunker {"f1": 0.6497, "precision": 0.7371, "rappel": 0.5808, "att_exact": 215, "att_labels": 215, "att_couverture": 0.8996, "pos": 0.8383, "fraction": 0.5537} bancs 91 657 libres 27 243 retires 199
+filtrer_contenu {"f1": 0.5373, "precision": 0.6211, "rappel": 0.4734, "att_exact": 208, "att_labels": 208, "att_couverture": 0.8703, "pos": 0.8383, "fraction": 0.5537} bancs 114 
+… [869 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\no=json.load(open('/tmp/partition_syntagmes/options.json'))\nfor k in ['base','alternative','filtrer_chunker','filtrer_contenu','dedup']:\n    g=o['gold'][k]\n    print(k,{x:g[x] for x in ('tp','fp','fn' … [293 caractères tronqués]`
+
+  ```
+base {'tp': 1090, 'fp': 577, 'fn': 773, 'f1': 0.6176, 'precision': 0.6539, 'rappel': 0.5851, 'att_exact': 222, 'att_labels': 222}
+alternative {'tp': 1090, 'fp': 577, 'fn': 773, 'f1': 0.6176, 'precision': 0.6539, 'rappel': 0.5851, 'att_exact': 222, 'att_labels': 222}
+filtrer_chunker {'tp': 1082, 'fp': 386, 'fn': 781, 'f1': 0.6497, 'precision': 0.7371, 'rappel': 0.5808, 'att_exact': 215, 'att_labels': 215}
+filtrer_contenu {'tp': 882, 'fp': 538, 'fn': 981, 'f1': 0.5373, 'precision': 0.6211, 'rappel': 0.4734, 'att_exact': 208, 'att_labels': 208}
+dedup {'tp': 1059, 'fp': 345, 'fn': 804, 'f1': 0.6483, 'precision': 0.7543, 'rappel': 0.5684, 'att_exact': 206, 'att_labels': 206}
+baseline {'tp': 1090, 'fp': 574, 'fn': 773, 'f1': 0.6181, 'precision': 0.655, 'rappel': 0.5851}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl, evaluer_gold as eg\np=eg.charger()\nprint(len(p), sum(len(x['mots']) for x in p))\n … [300 caractères tronqués]`
+
+  ```
+612 3179
+{'tp': 1090, 'fp': 577, 'fn': 773, 'f1': 0.6176, 'precision': 0.6539, 'rappel': 0.5851}
+{'tp': 1090, 'fp': 577, 'fn': 773, 'f1': 0.6176}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1985,2075p tools/bloc_linguistique.py && echo '--- parallele init ---' && sed -n 1975,2010p tools/bloc_linguistique.py | head -40", "description": "Inspect Cascade/Parallele init for shared state"}`
+
+  ```
+"""Les deux implémentations en parallèle : le contrat est le même, la fusion est explicite."""
+
+    nom = "parallele"
+
+    def __init__(self, blocs: Sequence[BlocLinguistique],
+                 priorite_syntagme: str = "heuristique",
+                 priorite_par_niveau: dict | None = None,
+                 priorite_par_type: dict | None = None):
+        if len(blocs) != 2:
+            raise ValueError("le parallèle attend exactement deux blocs")
+        self.blocs = list(blocs)
+        self.priorite_syntagme = priorite_syntagme
+        self.priorite_par_niveau = (priorite_par_niveau if priorite_par_niveau is not None
+                                     else priorite_par_defaut())
+        self.priorite_par_type = dict(priorite_par_type or {})
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        a = self.blocs[0].analyser(texte, langue, contexte)
+        b = self.blocs[1].analyser(texte, langue, contexte)
+        return _fusion(a, b, self.nom, self.priorite_syntagme, self.priorite_par_niveau,
+                       self.priorite_par_type)
+
+
+class Cascade:
+    """L'heuristique d'abord ; le neuronal seulem
+… [4688 caractères tronqués]
+  ```
+

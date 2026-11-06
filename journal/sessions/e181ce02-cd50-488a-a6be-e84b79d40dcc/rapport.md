@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 146.0 h |
+| Durée | 146.2 h |
 | Tours | 184 |
-| Messages | 3132 |
-| Appels d'outils | 2766 |
+| Messages | 3140 |
+| Appels d'outils | 2774 |
 | Fichiers touchés | 25 |
-| Commandes | 2269 |
+| Commandes | 2277 |
 | Sous-agents | 34 |
-| Commits | 355 |
+| Commits | 356 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*12 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9933,10 +9933,13 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Fiche et docs du schéma publié
 - bash — Déplacer le schéma dans tools/schemas
 - bash — Committer le schéma publié et pousser
+- bash — Valider le gold dans la porte
+- bash — Lister les 17 spans inatteignables
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Schéma publié et validé : la porte produit passe à **9 contrôles**. Je fige
+⏵ Je traite les 4 échecs réels : `acheter`, l'élision `qu'il`, et le bug du gold (GP sans préposition)
 
 ## 3. Travail accompli
 
@@ -10049,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2229 autres
+- … et 2237 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10552,4 +10555,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - DOCS — DEUX MOTS DE MOINS DANS LE README (T1 À 2 800)" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "DE
 - PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183" -- tools/bloc_linguistique.py to
 - PRODUIT — LE SCHÉMA V1 PUBLIÉ (tools/schemas/drave-annotation-v1.json, Draft 2020-12) ET VALIDÉ SUR 5 CAS ; PORTE À 9 CONTRÔLES ; 183/183" -- tools/schemas/drav
+- POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py 2>&1 | tail -1   if git log -1 
 

@@ -7,12 +7,12 @@
 | Identifiant | `338f8b55-bcd5-464a-a63e-b97381eff55d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 20 |
-| Appels d'outils | 25 |
+| Messages | 25 |
+| Appels d'outils | 30 |
 | Fichiers touchés | 0 |
-| Commandes | 17 |
+| Commandes | 22 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les deux … [2002 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Check git status and repo layout
 - bash — List reports and tools
@@ -41,11 +41,11 @@
 - bash — Find producer of fiabilite JSON
 - bash — Inspect banc_50 entries
 - bash — Locate classes and attachment logic
-- … et 5 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Exploration du dépôt et des fichiers POS concernés
+⏵ Lecture du gold et repérage des formes fermées manquantes
 
 ## 3. Travail accompli
 
@@ -73,6 +73,11 @@
 - **T1** Inspect v2 JSON keys
 - **T1** Search R4 entry in v1 JSON
 - **T1** Dump R4 entry
+- **T1** Inspect gold structure
+- **T1** List gold contexts for candidate closed words
+- **T1** List English closed-class gold words and predictions
+- **T1** Probe _pos on key words
+- **T1** List 50 free texts
 
 ## 4. Mesures et résultats marquants
 

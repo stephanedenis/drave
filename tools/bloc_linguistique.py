@@ -442,6 +442,7 @@ cry cries cried crying go goes went gone going come comes came coming
 leave leaves left leaving read reads reading sleep sleeps slept sleeping
 rain rains rained raining hang hangs hung hanging paint paints painted painting
 live lives lived living continue continues continued continuing
+acheter achète achètes achètent achetait acheté achetée achetés achetées
 fall falls fell fallen falling call calls called calling
 speak speaks spoke spoken speaking voler vole voles volent volait
 rêver rêve rêves rêvent rêvait sauter saute sautes sautent sautait
@@ -892,7 +893,8 @@ class Heuristique:
         while i < len(mots):
             d, f, t, typ = mots[i]
             n = _normaliser(t)
-            if typ == "mot" and (n in RELATIFS or est_sub(n)):
+            _n_elic = n.split("'")[0] if "'" in n else n
+            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS or est_sub(n)):
                 suivant = mots[i + 1] if i + 1 < len(mots) else None
                 # « since/before/after/until/as » : SUB devant une clause, PRÉP devant un GN
                 prep_ambigue = (n in AMBIGUES_PREP and (suivant is None
