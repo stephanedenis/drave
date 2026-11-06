@@ -7,12 +7,12 @@
 | Identifiant | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.7 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 88 |
-| Appels d'outils | 106 |
+| Messages | 96 |
+| Appels d'outils | 115 |
 | Fichiers touchés | 0 |
-| Commandes | 94 |
+| Commandes | 102 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*106 appels d'outils.* Actions notables :
+*115 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,11 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 81 autres
+- … et 90 autres
 
 **Synthèse produite :**
 
-⏵ Extraction du refus r353 dans les mesures existantes
+⏵ Distribution des verdicts humains S (le blocage « aucun verdict » est-il périmé ?)
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
 - **T1** Run gold evaluation with key env var set
-- … et 54 autres
+- … et 62 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -159,6 +159,9 @@
 - **T1** `> soit **−0,006 %**.`
 - **T1** `- **La PPL à 192 jetons** : ce n'est pas la PPL du corpus ; l'écart de lot (0,006 %) est un ordre de`
 - **T1** `+| `drave.py evaluer` | POS 75,81 %, F1 syntagmes 58,49 %, tête 73,36 % | attachement exact 92,89 %, couverture 92,89 % |`
+- **T1** `reports/rapport-classement-appris.md:3:> **Ligne de roadmap** : **B13** (moteur de pensée, attachement) · **Date** : 2026-11-05 · **Verdict** : ❌ **ne pas intégrer le classement appris en l'état** ; l`
+- **T1** `b1b1292f B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
+- **T1** `e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
 
 ## 5. Erreurs rencontrées
 

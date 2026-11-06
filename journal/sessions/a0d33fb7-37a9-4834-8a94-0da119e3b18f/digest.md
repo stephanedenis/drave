@@ -2651,3 +2651,250 @@ index 1aaddfaa..b41ddb68 100644
  | `drave.py --version` | `drave 0.1.0` | — |
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification des commandes de la fenêtre (produit, N2, S, clé API)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py --help 2>&1 | head -20; echo \"EXIT=$?\"", "description": "Check drave CLI help"}`
+
+  ```
+usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+
+Point d'entrée produit du bloc linguistique (analyse heuristique).
+
+arguments:
+  {analyser,evaluer,rejouer}
+    analyser            étiqueter un texte (POS, syntagmes, pragmatique)
+    evaluer             mesurer l'heuristique sur le gold
+    rejouer             analyser deux fois et vérifier le déterminisme
+
+options:
+  -h, --help, --aide    afficher cette aide et quitter
+  -V, --version         afficher la version et quitter
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+Limites : heuristique CPU, hors ligne, déterministe ; ni neuronal, ni restitution, ni traduction.
+Exemples :
+  python3 tools/drave.py analyser "Le chat dort."
+  python3 tools/drave.py evaluer --gold --json
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"argparse\\|add_argument\" tools/eval_n2_propre.py | head -10; echo \"--- key ---\"; ls -l ~/.config/drave/deepseek.key 2>&1; echo \"--- S server ---\"; (ss -ltn 2>/dev/null || netstat -ltn 2>/dev/null) | grep -E ':8765' ||  … [86 caractères tronqués]`
+
+  ```
+25:import argparse
+110:    ap = argparse.ArgumentParser()
+111:    ap.add_argument("point")
+112:    ap.add_argument("--chunk", type=int, default=8192)
+113:    ap.add_argument("--corpus-dir", default="data/corpus_propre",
+115:    ap.add_argument("--longueurs", action="store_true")
+116:    ap.add_argument("--decomposition", action="store_true")
+117:    ap.add_argument("--sortie", default=None)
+118:    ap.add_argument("--device", default="cuda")
+--- key ---
+-rw-------. 1 stephane stephane 36  3 nov 11:15 /home/stephane/.config/drave/deepseek.key
+--- S server ---
+LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état du sous-module S et de la page `/paragraphes`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git -C tools/structures status --short --branch 2>&1 | head -8; echo \"--- fichiers ---\"; ls tools/structures 2>/dev/null | head -12; echo \"--- paragraphes ---\"; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:8765/pa … [67 caractères tronqués]`
+
+  ```
+## master...origin/master
+ M donnees/paragraphes-validations.jsonl
+--- fichiers ---
+arbre_svg.py
+candidats_corpus.py
+construire_donnees.py
+donnees
+exporter_corpus.py
+generateur.py
+llm.py
+mesure_analyseur.py
+mesure_arbre.py
+mesure_corpus.py
+__pycache__
+README.md
+--- paragraphes ---
+404
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"argparse\\|add_argument\" tools/tests/linguistique/qualifier_quatre_modes.py | head -8; echo \"--- r353 dans quatre modes ---\"; python3 - <<'EOF'\nimport json\nfor f in ['reports/pensee-quatre-modes.json','reports/pensee-q … [256 caractères tronqués]`
+
+  ```
+21:import argparse
+40:    ap = argparse.ArgumentParser()
+41:    ap.add_argument("--limite", type=int, default=0)
+42:    ap.add_argument("--gold-reel", action="store_true", default=True)
+43:    ap.add_argument("--sortie", default=str(RACINE / "reports/pensee-quatre-modes.json"))
+44:    ap.add_argument("--seuil", type=float, default=0.6)
+45:    ap.add_argument("--temperature", type=float, default=0.0)
+--- r353 dans quatre modes ---
+reports/pensee-quatre-modes.json ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail']
+reports/pensee-quatre-modes-432.json ['date', 'ligne', 'portes', 'modes', 'cout', 'refus']
+reports/pensee-quatre-modes-niveau.json ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail']
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction du refus r353 dans les mesures existantes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-quatre-modes.json'))\nprint(json.dumps(d.get('refus'),ensure_ascii=False)[:600])\nprint(\"detail:\",json.dumps(d.get('refus_detail'),ensure_ascii=False)[:800])\nd2=json … [271 caractères tronqués]`
+
+  ```
+0
+detail: []
+niveau refus: 1
+niveau detail: ["r353"]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière passe de vérification des commandes légères
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in \"bash tools/porte-sessions.sh\" \"bash tools/porte-ressources.sh\" \"bash tools/porte-etat.sh\"; do echo \"===== $c\"; timeout 120 $c >/tmp/g.out 2>&1; echo \"EXIT=$?\"; tail -4 /tmp/g.out; done", "description": "Run sessio … [49 caractères tronqués]`
+
+  ```
+===== bash tools/porte-sessions.sh
+EXIT=1
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (1941 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ❌ mandat périmé (391 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+===== bash tools/porte-ressources.sh
+EXIT=0
+  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals
+  === GPU : aucun serveur local d'inférence (llama-server, ollama) ===
+     ✅ GPU libres ou occupés par Drave ; aucun serveur local
+✅ porte ressources verte : autotest 9 cas, registre cohérent, GPU réservés à Drave
+===== bash tools/porte-etat.sh
+EXIT=0
+  état · dernier fait 7679a2d4 · dernier état 7679a2d4
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/verifie_etat_a_jour.py; echo \"--- gold_split args ---\"; grep -n \"add_argument\\|sys.argv\\|usage\" tools/tests/linguistique/gold_split.py | head -8", "description": "Check state hook and gold_split usage"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [200 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Preuve du rejet du classement appris et du cache chunker
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"classement appris\" reports/*.md | head -5; echo \"---\"; grep -rn -i \"classement appris\" reports/rapport-*.md | head -8; echo \"--- commit cache ---\"; git log --oneline -3 -- reports/rapport-cache-chunker-applique.md  … [68 caractères tronqués]`
+
+  ```
+reports/rapport-classement-appris.md
+reports/rapport-pensee-attachement-v2.md
+reports/rapport-pensee-convention-doc.md
+reports/rapport-pensee-echecs-cible.md
+reports/rapport-pensee-topk-strict.md
+---
+reports/rapport-classement-appris.md:1:# B13 — classement appris des candidats d'attachement : 142/145, mais la règle live est déjà à 137
+reports/rapport-classement-appris.md:3:> **Ligne de roadmap** : **B13** (moteur de pensée, attachement) · **Date** : 2026-11-05 · **Verdict** : ❌ **ne pas intégrer le classement appris en l'état** ; le signal utile est le **vivier ordonné** (rang 0 : 139/145), à tester.
+reports/rapport-classement-appris.md:95:**Ne pas intégrer le classement appris en l'état.** À 137/145, le gain de +5 n'est pas significatif (p = 0,18, IC incluant 0), le modèle introduit 2 régressions, et 25 poids pour +3 sur le prior de rang ne se justifient pas — d'autant que les features ont été dessinées sur le corpus.
+reports/rapport-pensee-attachement-v2.md:18:> [annotation indépendante](rapport-annotation-independante.md) (A7), [classement appris](rapport-classement-appris.md) (A3).
+reports/rapport-pensee-attachement-v2.md:57:A3 a construit un classement appris (features de dis
+… [622 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comptage des fiches/JSON avant écriture (impact compteurs)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf \"md=%s json=%s portes=%s\\n\" \"$(ls reports/*.md | wc -l)\" \"$(ls reports/*.json | wc -l)\" \"$(ls tools/porte-*.sh | wc -l)\"; git rev-parse --short HEAD; date '+%Y-%m-%d %H:%M %Z'", "description": "Count reports and recor … [13 caractères tronqués]`
+
+  ```
+md=678 json=771 portes=84
+7679a2d4
+2026-11-06 10:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git status --short docs/pilotage/en-cours.md", "description": "Check latest commit and state status"}`
+
+  ```
+7679a2d4 FICHE — LES TAILLES JSON DU PRODUIT CORRIGÉES (8 704 O EN ANGLAIS) ET LA MESURE D'EVALUER ; ÉTAT HORODATÉ
+8012087c ÉTAT — T0 DANS LE BUDGET (DRAVE V0)
+d003bbf1 ÉTAT — TRIM T0 APRÈS LE BLOC L
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi au parent des constats qui changent sa prochaine action
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "File des tâches (A23) — constats urgents, avant le rapport final :\n\n1) `porte-sessions` est ROUGE : heartbeats périmés e181ce02 (391 min) et hub 1e7ef596 (1941 min). À rafraîchir dans `journal/sessions/<id>/plan.md` avant la clôture  … [1263 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du nombre de paragraphes S (3 faits + 8 restants ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l tools/structures/donnees/paragraphes-validations.jsonl 2>/dev/null; head -3 tools/structures/donnees/paragraphes-validations.jsonl 2>/dev/null; echo \"--- paragraphes ---\"; python3 - <<'EOF'\nimport json,pathlib\np=pathlib.Pat … [280 caractères tronqués]`
+
+  ```
+19 tools/structures/donnees/paragraphes-validations.jsonl
+{"phrase_id": "a001", "candidat_id": "a001-c1", "statut": "resolu", "referents": {"Elle": "Alice", "se": "Alice", "elle": "Alice", "lui": "Alice", "en": "Alice"}, "note": "", "contexte": "Allons, à quoi bon pleurer ainsi, se dit Alice vivement.", "niveau": 2, "auteur": "humain", "horodatage": "2026-11-03T16:49:32"}
+{"phrase_id": "a001", "candidat_id": "a001-c2", "statut": "resolu", "referents": {"Elle": "Alice", "se": "Alice", "elle": "Alice", "lui": "Alice", "en": "Alice"}, "note": "", "contexte": "Allons, à quoi bon pleurer ainsi, se dit Alice vivement.", "niveau": 2, "auteur": "humain", "horodatage": "2026-11-03T16:49:59"}
+{"phrase_id": "a002", "candidat_id": "a002-c1", "statut": "resolu", "referents": {"Elle": "Alice", "en": "Alice", "y": "Alice"}, "note": "", "contexte": "Allons, à quoi bon pleurer ainsi, se dit Alice vivement.", "niveau": 2, "auteur": "humain", "horodatage": "2026-11-03T17:02:06"}
+--- paragraphes ---
+<class 'dict'> 6
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du fichier de validation humaine de S (blocage périmé ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/structures/donnees/ | head -20; echo \"--- validations ---\"; ls -l tools/structures/donnees/*validation* 2>/dev/null; echo \"--- phrases distinctes ---\"; python3 - <<'EOF'\nimport json,collections\np='tools/structures/donn … [216 caractères tronqués]`
+
+  ```
+gold-analyseur.json
+llm.jsonl
+mesure-analyseur.json
+mesure-arbre.json
+mesure-corpus.json
+paragraphes.json
+paragraphes-validations.jsonl
+phrases-corpus-manifest.json
+phrases_generees.json
+phrases.json
+validations.jsonl
+--- validations ---
+-rw-r--r--. 1 stephane stephane  6047  4 nov 15:10 tools/structures/donnees/paragraphes-validations.jsonl
+-rw-r--r--. 1 stephane stephane 25828  3 nov 16:46 tools/structures/donnees/validations.jsonl
+--- phrases distinctes ---
+{'a001': 2, 'a002': 3, 'a003': 3, 'a004': 2, 'a005': 2, 'a006': 1, 'a007': 2, 'a008': 1, 'a009': 3}
+  ```
+

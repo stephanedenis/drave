@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.7 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 42 |
-| Appels d'outils | 55 |
+| Messages | 50 |
+| Appels d'outils | 63 |
 | Fichiers touchés | 4 |
-| Commandes | 38 |
+| Commandes | 46 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*63 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,7 +41,7 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 29 autres
+- … et 37 autres
 
 **Synthèse produite :**
 
@@ -98,6 +98,9 @@
 - **T1** Corriger et relancer les mesures finales
 - **T1** Vérifier la croissance du coût jusqu'à 4000 mots
 - **T1** Profiler une analyse de 2000 mots
+- **T1** Contrôles négatifs et simulation du correctif chevauchement
+- **T1** Tester les mutations et simuler la déduplication sur le gold
+- … et 6 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -115,10 +118,16 @@
 - **T1** `1000 median_s 0.166 ms/mot 0.166 labels 5218`
 - **T1** `2000 median_s 0.482 ms/mot 0.241 labels 10438`
 - **T1** `4000 median_s 1.574 ms/mot 0.394 labels 20826`
+- **T1** `f15 'Les prix ont augmenté de 12,5 % entre janvier et mars 2024, soit 3 poi' | nb 1`
+- **T1** `e34 'The prices rose by 12.5% between January and March 2024, three points ' | nb 1`
+- **T1** `### e34 'The prices rose by 12.5% between January and March 2024, three points more than expected.'`
+- **T1** `[(0, 22, "'The prices rose by 12.'"), (22, 89, "'5% between January and March 2024, three points more than expected.'")]`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : MOTS 'https://example.com/a.pdf' [(0, 5, 'https', 'mot'), (5, 6, ':', 'ponctuation'), (6, 7, '/', 'ponctuation'), (7, 8, '/', 'ponctuation'), (8, 15, 'example', 'mot'), (15, 16, '.', 'ponctuation'), (
+- **T1** : SIMULATION dedupe: paires 132 -> 0 | syntagmes 362 -> 292 | attachements 265 -> 215 | phrases 31 labels syntagme retirés 70 attachements retirés 50 [stderr] Traceback (most recent call last):   File "
+- **T1** : ### mutations span_hors_texte detectee True | ['chevauchement_syntagme', 'span_hors_texte'] cible_absente detectee True | ['chevauchement_syntagme', 'cible_absente'] chevauchement_syntagme detectee Tr
 

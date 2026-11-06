@@ -2644,3 +2644,392 @@ identique · c1f3c76a5a40fcbd…
 ok
   ```
 
+### 🤖 Assistant
+
+⏵ Capture finale des JSON exacts pour `exemples.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && FILTRE='{langue, script, refus, fraction_semantique, pos: [.etiquettes[] | select(.niveau==\"pos\") | {valeur, type, debut, fin, confiance, ouvert:.meta.ouvert}], syntagmes: [.etiquettes[] | select(.niveau==\"syntagme\") | {valeur, t … [1130 caractères tronqués]`
+
+  ```
+83 /tmp/doc_produit/ex1.json
+  83 /tmp/doc_produit/ex2.json
+ 120 /tmp/doc_produit/ex3.json
+  11 /tmp/doc_produit/ex4.json
+  61 /tmp/doc_produit/ex5.json
+ 358 total
+=== ex2 ===
+{
+  "langue": "fr",
+  "script": "Latn",
+  "refus": "",
+  "fraction_semantique": 0.4865,
+  "syntagmes": [
+    {
+      "valeur": "Le livre",
+      "type": "GN",
+      "debut": 0,
+      "fin": 8,
+      "confiance": 0.55,
+      "role": "agent",
+      "cible": "intéressant",
+      "union": null,
+      "candidats": [
+        "« que j'ai lu » → Le livre",
+        "intéressant",
+        "livre"
+      ]
+    },
+    {
+      "valeur": "que j'ai lu",
+      "type": "REL",
+      "debut": 9,
+      "fin": 20,
+      "confiance": 0.55,
+      "role": "qualite",
+      "cible": "livre",
+      "union": null,
+      "candidats": [
+        "« que j'ai lu » → Le livre",
+        "intéressant",
+        "livre"
+      ]
+    },
+    {
+      "valeur": "que j'ai lu est intéressant",
+      "type": "REL",
+      "debut": 9,
+      "fin": 36,
+      "confiance": 0.3,
+      "role": "qualité",
+      "cible": "livre",
+      "union": true,
+      "candidats": [
+        "REL",
+        "livre",
+        "intéressant"
+      ]
+    },
+    {
+      "valeur": "es
+… [500 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/doc_produit && echo \"=== EX1 ===\"; cat ex1.json; echo \"=== EX5 ===\"; cat ex5.json", "description": "Inspect example 1 and 5 outputs"}`
+
+  ```
+=== EX1 ===
+{
+  "langue": "fr",
+  "script": "Latn",
+  "refus": "",
+  "fraction_semantique": 0.6154,
+  "pos": [
+    {
+      "valeur": "Le",
+      "type": "DET",
+      "debut": 0,
+      "fin": 2,
+      "confiance": 0.92,
+      "ouvert": false
+    },
+    {
+      "valeur": "chat",
+      "type": "NOUN",
+      "debut": 3,
+      "fin": 7,
+      "confiance": 0.3,
+      "ouvert": true
+    },
+    {
+      "valeur": "dort",
+      "type": "VERB",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.72,
+      "ouvert": true
+    }
+  ],
+  "syntagmes": [
+    {
+      "valeur": "Le chat",
+      "type": "GN",
+      "debut": 0,
+      "fin": 7,
+      "confiance": 0.55,
+      "role": "agent",
+      "cible": "dort",
+      "union": null,
+      "candidats": [
+        "structure la plus proche",
+        "dort"
+      ]
+    },
+    {
+      "valeur": "dort",
+      "type": "GV",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.55,
+      "role": "predicat",
+      "cible": "chat",
+      "union": null,
+      "candidats": [
+        "structure la plus proche"
+      ]
+    }
+  ],
+  "phrase": [
+    {
+      "type": "type",
+      "valeur": "déclarative"
+    }
+  ],
+  "pragmatique": [
+    {
+      "type": "acte",
+  
+… [1191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/doc_produit && cat ex3.json", "description": "Inspect example 3 output"}`
+
+  ```
+{
+  "langue": "en",
+  "script": "Latn",
+  "refus": "",
+  "fraction_semantique": 0.4571,
+  "pos": [
+    {
+      "valeur": "The",
+      "type": "DET",
+      "debut": 0,
+      "fin": 3,
+      "confiance": 0.92,
+      "ouvert": false
+    },
+    {
+      "valeur": "day",
+      "type": "NOUN",
+      "debut": 4,
+      "fin": 7,
+      "confiance": 0.3,
+      "ouvert": true
+    },
+    {
+      "valeur": "when",
+      "type": "CONJ",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.92,
+      "ouvert": false
+    },
+    {
+      "valeur": "we",
+      "type": "PRON",
+      "debut": 13,
+      "fin": 15,
+      "confiance": 0.92,
+      "ouvert": false
+    },
+    {
+      "valeur": "left",
+      "type": "NOUN",
+      "debut": 16,
+      "fin": 20,
+      "confiance": 0.3,
+      "ouvert": true
+    },
+    {
+      "valeur": "was",
+      "type": "AUX",
+      "debut": 21,
+      "fin": 24,
+      "confiance": 0.92,
+      "ouvert": false
+    },
+    {
+      "valeur": "beautiful",
+      "type": "ADJ",
+      "debut": 25,
+      "fin": 34,
+      "confiance": 0.68,
+      "ouvert": true
+    }
+  ],
+  "syntagmes": [
+    {
+      "valeur": "The day",
+      "type": "GN",
+      "debut": 0,
+      "fin": 7,
+      "confi
+… [847 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat /tmp/doc_produit/ex4.json", "description": "Inspect refusal JSON"}`
+
+  ```
+{
+  "langue": "und",
+  "script": "Zyyy",
+  "refus": "vide",
+  "fraction_semantique": 0.0,
+  "pos": [],
+  "syntagmes": [],
+  "phrase": [],
+  "pragmatique": [],
+  "unites_semantiques": []
+}
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "content": "# Le premier produit — analyser un texte avec Drave\n\n> **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc\n> linguistique, utilisable **aujourd'hui**, sur un CPU … [21693 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --texte \"Le livre que j'ai lu est intéressant.\" --json | jq -r '[.etiquettes[] | select(.niveau==\"pos\") | \"\\(.valeur)/\\(.type)\"] | join(\" \")'", "description": "Get exact POS one-liner outp … [4 caractères tronqués]`
+
+  ```
+Le/DET livre/NOUN que/PRON j'ai/PRON lu/NOUN est/AUX intéressant/ADJ
+  ```
+
+- **write** `{"content": "# Cinq exemples d'analyse, commentés\n\n> **Ce que ce document est.** Cinq exécutions **réelles** du bloc linguistique, avec leur JSON\n> commenté. Il complète la notice [`README.md`](README.md) : la notice dit *quoi* faire, ce\n> document dit *comment lire* ce qui sort. Les sorties ont … [17511 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md": file has not been read — read the file, then retry
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/; test -f /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md && echo EXISTE || echo ABSENT", "description": "Check whether exemples.md exists"}`
+
+  ```
+total 28
+drwxr-xr-x. 1 stephane stephane    40  6 nov 10:21 .
+drwxr-xr-x. 1 stephane stephane   138  6 nov 10:08 ..
+-rw-r--r--. 1 stephane stephane  3765  6 nov 10:21 exemples.md
+-rw-------. 1 stephane stephane 21932  6 nov 10:19 README.md
+EXISTE
+  ```
+
+### 🤖 Assistant
+
+⏵ Un `exemples.md` vient d'apparaître : inspection avant toute écriture.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md</path>
+<type>file</type>
+<content>
+1: # Exemples — entrées et sorties réelles
+2: 
+3: > Tous les exemples ci-dessous ont été **lancés** avec `tools/drave.py` le 2026-11-06 sur `s/v7`.
+4: > Les sorties sont recopiées telles quelles (espaces compactés).
+5: 
+6: ## 1. Une phrase simple, en français
+7: 
+8: ```bash
+9: python3 tools/drave.py analyser "Le chat dort."
+10: ```
+11: 
+12: ```text
+13: POS  Le/DET chat/NOUN dort/VERB
+14: SYNTAGMES
+15:   GN   [0:7]   Le chat  rôle=agent     → dort
+16:   GV   [8:12]  dort     rôle=predicat  → chat
+17: PRAGMATIQUE
+18:   phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+19: ```
+20: 
+21: **À lire** : le GN a le rôle `agent` et sa **cible** est le verbe `dort` ; le GV a pour cible le
+22: sujet `chat`. L'attachement est la relation segment → gouverneur, pas le rôle.
+23: 
+24: ## 2. Une relative, en français
+25: 
+26: ```bash
+27: python3 tools/drave.py analyser "Le chat de la voisine qui dort sur le toit se réveille."
+28: ```
+29: 
+30: ```text
+31: GN   [0:7]    Le chat                           rôle=agent       → réveille
+32: GP   [8:21]   
+… [3014 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'arrivée de `tools/drave.py` et de son contrat réel.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l tools/drave.py 2>/dev/null && head -60 tools/drave.py 2>/dev/null || echo \"toujours absent\"; echo \"=== git status ===\"; git status --porcelain docs/produit tools/drave.py 2>/dev/null", "description": "Check if drave.py now  … [8 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 16540  6 nov 09:55 tools/drave.py
+#!/usr/bin/env python3
+"""drave.py — le point d'entrée produit du bloc linguistique.
+
+Une seule commande, trois gestes, hors ligne et déterministe :
+
+    python3 tools/drave.py analyser "Le chat dort."
+    python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+    python3 tools/drave.py evaluer
+    python3 tools/drave.py evaluer --gold --json
+    python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 tools/drave.py --version
+
+Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
+Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
+(annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
+un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import pathl
+… [1195 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le prototype CLI est livré : lecture complète pour aligner la documentation sur le réel.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """drave.py — le point d'entrée produit du bloc linguistique.
+3: 
+4: Une seule commande, trois gestes, hors ligne et déterministe :
+5: 
+6:     python3 tools/drave.py analyser "Le chat dort."
+7:     python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+8:     python3 tools/drave.py evaluer
+9:     python3 tools/drave.py evaluer --gold --json
+10:     python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+11:     python3 tools/drave.py --version
+12: 
+13: Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+14: avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
+15: Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
+16: (annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
+17: un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+18: 
+19: Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+20: """
+21: 
+… [17183 caractères tronqués]
+  ```
+

@@ -87,6 +87,13 @@
 | [`implantation/numa-segregation.md`](implantation/numa-segregation.md) | la ségrégation [NUMA](theorie/glossaire/entrees/numa.md) mesurée |
 | [`implantation/configuration-nvme-raid-amd.md`](implantation/configuration-nvme-raid-amd.md) | l'array [NVMe](theorie/glossaire/entrees/nvme-ssd-odirect-pread.md) et le pari AMD |
 
+## Produit — ce qui s'utilise aujourd'hui
+
+| document | pour quoi |
+|---|---|
+| [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte avec Drave — à qui, quoi, comment, limites |
+| [`produit/exemples.md`](produit/exemples.md) | cinq exemples réels (entrée → sortie), dont un cas d'échec connu |
+
 ## Transversal et archive
 
 | document | pour quoi |

@@ -1830,3 +1830,126 @@ exit=0
 … [2475 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys,time\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nBASE=' '.join([p['texte'] for p in PHRASES if p['cat'].startswi … [515 caractères tronqués]`
+
+  ```
+200 median_s 0.019 ms/mot 0.096 labels 1061
+500 median_s 0.07 ms/mot 0.139 labels 2613
+1000 median_s 0.166 ms/mot 0.166 labels 5218
+2000 median_s 0.482 ms/mot 0.241 labels 10438
+4000 median_s 1.574 ms/mot 0.394 labels 20826
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys,cProfile,pstats,io\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nBASE=' '.join([p['texte'] for p in PHRASES if p[' … [389 caractères tronqués]`
+
+  ```
+2923335 function calls in 8.621 seconds
+
+   Ordered by: cumulative time
+   List reduced from 155 to 18 due to restriction <18>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.442    0.442    8.624    8.624 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py:1003(analyser)
+      526    0.323    0.001    3.792    0.007 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py:800(_cible_proche)
+   199302    1.426    0.000    3.159    0.000 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py:461(_est_adverbe_seul)
+     1331    0.500    0.000    1.027    0.001 {built-in method builtins.sorted}
+   122201    0.505    0.000    0.858    0.000 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py:144(_normaliser)
+      972    0.013    0.000    0.838    0.001 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py:835(_verbes_proches)
+     6031    0.283    0.000    0.766    0.000 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py:481(_est_verbe)
+   520838    0.757    0.000    0.757    0.000 {method 'get' of 'dict' objects}
+    
+… [1254 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, json, collections, random, copy\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique()\n\n# 1) simulati … [3518 caractères tronqués]`
+
+  ```
+SIMULATION dedupe: paires 132 -> 0 | syntagmes 362 -> 292 | attachements 265 -> 215 | phrases 31
+labels syntagme retirés 70 attachements retirés 50
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 57, in <module>
+NameError: name 'check_an' is not defined
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, json, copy\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'/tmp/audit_produit_bl')\nimport bloc_linguistique as bl\nimport audit\nfrom phrases import PHRASES\nh=bl.Heuristique()\n\n … [3274 caractères tronqués]`
+
+  ```
+### mutations
+span_hors_texte detectee True | ['chevauchement_syntagme', 'span_hors_texte']
+cible_absente detectee True | ['chevauchement_syntagme', 'cible_absente']
+chevauchement_syntagme detectee True | ['attachement_segment_mismatch', 'chevauchement_syntagme', 'valeur_hors_span']
+confiance_hors_bornes detectee True | ['chevauchement_syntagme', 'confiance_hors_bornes']
+valeur_hors_span detectee True | ['chevauchement_syntagme', 'valeur_hors_span']
+fraction_incoherente detectee True | ['chevauchement_syntagme', 'fraction_incoherente']
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 41, in <module>
+ModuleNotFoundError: No module named 'tools'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys\nRACINE='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nsys.path.insert(0, RACINE)\nsys.path.insert(0, RACINE+'/tools')\nsys.path.insert(0, '/tmp/audit_produit_bl')\nimport bloc_linguistique as bl\nfrom tools.tests.linguistique … [2105 caractères tronqués]`
+
+  ```
+avant F1 0.5849 P 0.6292 R 0.5464 tp/fp/fn 1018 600 845 | tete 0.7336 | att exact 222 / 239 0.9289 | labels 17847 att 946 overlaps 363
+apres F1 0.6141 P 0.7283 R 0.5309 tp/fp/fn 989 369 874 | tete 0.7432 | att exact 208 / 239 0.8703 | labels 17587 att 812 overlaps 0
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, collections\nRACINE='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nsys.path.insert(0, RACINE); sys.path.insert(0, RACINE+'/tools')\nimport bloc_linguistique as bl\nfrom tools.tests.linguistique import evaluer_gold as eg\nh=bl … [3025 caractères tronqués]`
+
+  ```
+aucune               F1 0.5849 P 0.6292 R 0.5464 | tete 0.7336 | att 222/239=0.9289 | labels 17847 att 946 ov 363
+current              F1 0.6141 P 0.7283 R 0.5309 | tete 0.7432 | att 208/239=0.8703 | labels 17587 att 812 ov 0
+union_dabord_court   F1 0.4961 P 0.6008 R 0.4224 | tete 0.6606 | att 199/239=0.8326 | labels 17539 att 849 ov 0
+union_dabord_conf    F1 0.4961 P 0.6008 R 0.4224 | tete 0.6606 | att 199/239=0.8326 | labels 17539 att 849 ov 0
+court_dabord         F1 0.6141 P 0.7283 R 0.5309 | tete 0.7432 | att 208/239=0.8703 | labels 17587 att 812 ov 0
+long_dabord          F1 0.4920 P 0.6066 R 0.4138 | tete 0.6707 | att 196/239=0.8201 | labels 17500 att 805 ov 0
+conf_dabord          F1 0.4961 P 0.6008 R 0.4224 | tete 0.6606 | att 199/239=0.8326 | labels 17539 att 849 ov 0
+attachement_dabord   F1 0.4961 P 0.6008 R 0.4224 | tete 0.6606 | att 199/239=0.8326 | labels 17539 att 849 ov 0
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('eval_baseline.json'))\nfor mode in ('heuristique','parallele','cascade'):\n    a=d[mode]['all']['attachement']\n    print(mode, {k:a[k] for k in ('cibles','labels','exact','exact_taux_span','couverture','topk_t … [84 caractères tronqués]`
+
+  ```
+heuristique {'cibles': 239, 'labels': 222, 'exact': 222, 'exact_taux_span': 1.0, 'couverture': 0.9289, 'topk_taux_span': 0.9955}
+parallele {'cibles': 239, 'labels': 208, 'exact': 208, 'exact_taux_span': 1.0, 'couverture': 0.8703, 'topk_taux_span': 0.9952}
+cascade {'cibles': 239, 'labels': 208, 'exact': 208, 'exact_taux_span': 1.0, 'couverture': 0.8703, 'topk_taux_span': 0.9952}
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique()\nlead=trail=multi=0; nphr=0\nf … [948 caractères tronqués]`
+
+  ```
+phrases total 60 textes multi-phrases 6 commencent par espace 6 finissent par espace 0
+f03 "Le livre que tu m'as prêté hier soir était passionnant, même si la fin" | nb 1
+f05 '« Je ne sais pas », répondit-elle en haussant les épaules ; son frère,' | nb 1
+f14 'Combien de temps faudra-t-il encore attendre avant que la situation ne' | nb 1
+f15 'Les prix ont augmenté de 12,5 % entre janvier et mars 2024, soit 3 poi' | nb 1
+e34 'The prices rose by 12.5% between January and March 2024, three points ' | nb 1
+x43 'Le rapport complet est disponible sur https://example.com/rapports/202' | nb 1
+x45 'Ceci est une phrase sans ponctuation finale et elle continue longtemps' | nb 1
+x46 "# Notes de réunion\n\nLe budget 2025 a été validé à l'unanimité.\n\n- Prio" | nb 1
+x50 "Dans le petit village où je passais mes vacances quand j'étais enfant," | nb 1
+
+phrase counts per text
+f01 1 ; f02 1 ; f03 1 ; f04 1 ; f05 1 ; f06 1 ; f07 1 ; f08 1 ; f09 1 ; f10 2 ; f11 1 ; f12 1 ; f13 1 ; f14 1 ; f15 1 ; f16 1 ; f17 1 ; f18 1 ; f19 1 ; f20 1 ; f21 1 ; f22 1 ; f23 2 ; f24 1 ; f25 1 ; f26 1 ; f27 1 ; f28 1 ; e29 1 ; e30 1 ; e31 1 ; e32 1 ; e33 1 ; e34 2 ; e35 1 ; e36 1 ; e37 1 ; e38 1 ; e39 1 ; e40 1 ; e41 1 ; e
+… [70 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique()\nfor pid in ('f10','e34','x44','x46'):\n    p=nex … [379 caractères tronqués]`
+
+  ```
+### f10 "M. Dupont, le directeur de l'usine, a annoncé hier qu'il prendrait sa retraite à la fin de l'année, etc."
+[(0, 104, '"M. Dupont, le directeur de l\'usine, a annoncé hier qu\'il prendrait sa retraite à la fin de l\'année, etc."'), (2, 104, '" Dupont, le directeur de l\'usine, a annoncé hier qu\'il prendrait sa retraite à la fin de l\'année, etc."')]
+mots [(1, 2, '.', 'ponctuation'), (9, 10, ',', 'ponctuation'), (34, 35, ',', 'ponctuation'), (98, 99, ',', 'ponctuation'), (103, 104, '.', 'ponctuation')]
+### e34 'The prices rose by 12.5% between January and March 2024, three points more than expected.'
+[(0, 22, "'The prices rose by 12.'"), (22, 89, "'5% between January and March 2024, three points more than expected.'")]
+mots [(19, 21, '12', 'nombre'), (21, 22, '.', 'ponctuation'), (22, 23, '5', 'nombre'), (23, 24, '%', 'ponctuation'), (51, 55, '2024', 'nombre'), (55, 56, ',', 'ponctuation'), (88, 89, '.', 'ponctuation')]
+### x44 'rdv demain 9h pr le budget, faut valider les chiffres avt 18h!! merci :)'
+[(0, 63, "'rdv demain 9h pr le budget, faut valider les chiffres avt 18h!!'"), (63, 72, "' merci :)'")]
+mots [(11, 13, '9h', 'nombre'), (26, 27, ',', 'ponctuation'), (58, 61, '
+… [808 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES, CAS_LIMITES\nh=bl.Heuristique()\ndef spans(t):\n    a=h.analyser(t); … [1294 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.6 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 72 |
-| Appels d'outils | 87 |
-| Fichiers touchés | 0 |
-| Commandes | 75 |
+| Messages | 85 |
+| Appels d'outils | 102 |
+| Fichiers touchés | 2 |
+| Commandes | 86 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*87 appels d'outils.* Actions notables :
+*102 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 65 autres
+- … et 78 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction de `docs/produit/README.md`.
+⏵ Test du refus, du rejeu, du JSON et de l'aide du CLI réel.
 
 ## 3. Travail accompli
 
@@ -53,6 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +98,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 35 autres
+- … et 46 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -122,6 +124,21 @@
 - **T1** `un ridge **sous-déterminé** (moins de positions que de coefficients ✓) **interpole** et rend 0,0 % ✓✗ ;`
 - **T1** `une cible qui contient **sa propre source** (même position ✓) rend aussi 0,0 % ✓✗ ; un plan de textes qui`
 - **T1** `unités sémantiques : 2 (61.5% du texte)`
+- **T1** `langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)`
+- **T1** `langue=en script=Latn source=heuristique · 37 étiquettes · unités sémantiques=3 (45.7% du texte)`
+- **T1** `POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)`
+- **T1** `SYNTAGMES   F1 58.49 %  (P 62.92 % / R 54.64 %)`
+- **T1** `tête      F1 73.36 %  (P 81.00 % / R 67.04 %)`
+- **T1** `ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %`
+- **T1** `tête      couverture 100.00 % · top-k 99.55 %`
+- **T1** `PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %`
+- **T1** `FRACTION SÉMANTIQUE 55.37 %`
+- **T1** `CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)`
+- **T1** `POS         exactitude 76.03 %  (fermé 90.07 %, ouvert 62.69 %)`
+- **T1** `SYNTAGMES   F1 58.93 %  (P 63.19 % / R 55.22 %)`
+- **T1** `tête      F1 73.92 %  (P 81.36 % / R 67.72 %)`
+- **T1** `PRAGMATIQUE acte 99.67 % · négation 97.67 % · modalité 98.84 % · double sens 94.35 %`
+- **T1** `FRACTION SÉMANTIQUE 55.54 %`
 
 ## 5. Erreurs rencontrées
 
