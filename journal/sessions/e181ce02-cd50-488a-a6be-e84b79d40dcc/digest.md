@@ -46622,3 +46622,55 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; 43 spans restent ; cohérence des 7 fiches auditée.\", \" ; 43 spans restent ; les audits v7 (chiffres et cohérence)  … [893 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2021]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2021", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-audit-v7.md
+COMMIT OK 1
+4ebeb683 B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES
+jeu 05 nov 2026 20:39:32 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant A17, je nettoie les docstrings de portes périmées (26 signalées par l'audit)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\nt=pathlib.Path('tools/pensee/autotest.py').read_text()\nfor m in re.finditer(r'def (t1[5-9]\\d_\\w+)\\(\\)[^\\n]*\\n\\s+\"\"\"([^\"\\n]+)\"\"\"', t):\n    print(m.group(1), \"::\", m.group(2)[:12 … [59 caractères tronqués]`
+
+  ```
+t150_fusion_soustype :: La fusion par sous-type : double sens 0,9884 (+0,0208).
+t151_soustype_variance :: La variance du sous-type : 0,9838 à 0,3, le gain tient.
+t152_tirages :: Les trois tirages : 0,9838 exactement — le modèle est déterministe sur ces invites.
+t153_attachement :: L'attachement sur le gold 612 (239 cibles) : top1 0,5983, exact 0,5900.
+t154_cibles :: Les cibles de l'attachement : 1624 segments sans cible sur 1863.
+t155_cibles_500 :: Les 500 premiers segments : 294 GN, 206 GV.
+t156_relation :: La relation GN → GV : 221/637 (0,3469).
+t157_roles :: Les 322 GN sans rôle : 129 avant le GV, 172 après.
+t158_passifs :: Les passifs : 5/5 faux, la position ne suffit pas.
+t159_passifs_corriges :: Le correctif des passifs : _role_gp rend agent, le generateur S court-circuite.
+t160_passifs_sans_par :: Les passifs sans par : le chunker 3/3 patient.
+t161_cible_proximite :: La cible par proximité : le verbe du GV le plus proche.
+t162_candidats_verbes :: Les candidats verbes : le top-k atteint 142/145 (0,9793) après les têtes.
+t163_echecs_attachement :: Les échecs de l'attachement : 94 de span, 33 de cible.
+t164_verbe_gv :: Le verbe du GV-phrase : le POS VERB, pas le dernier mot.
+t1
+… [1581 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nD={\n \"L'attachement sur le gold 612 (239 cibles) : top1 0,5983, exact 0,5900.\": \"L'attachement sur le gold 612 (239 cibles) : top1 0,8 … [1947 caractères tronqués]`
+
+  ```
+13 / 13
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; les audits v7 (chiffres et cohérence) sont intégrés.\", \" ; audits v7 intégrés ; docstrings des portes à jour.\")\n … [751 caractères tronqués]`

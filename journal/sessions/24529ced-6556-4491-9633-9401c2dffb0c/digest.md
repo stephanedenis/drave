@@ -2313,3 +2313,209 @@ ls: cannot access 'reports/pensee-spans-v7.json': No such file or directory
 part1 written
   ```
 
+### 🤖 Assistant
+
+⏵ Rédaction de la seconde moitié : règles, mesures, rejets, non récupérables, recommandation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> /tmp/spans/rediger.py <<'PYEOF'\n\n# ---- 5. regles\nw(\"## 5. Règles proposées et mesures\")\nw()\nw(\"Chaque règle est mesurée **seule** puis **en marge** de la précédente. Les colonnes `labels`,\")\nw(\"`exacts` et `exact/l … [18223 caractères tronqués]`
+
+  ```
+part2 written
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nLEX={\"fall\",\"falls\",\"fell\",\"fallen\",\"call\",\"calls\",\"called\",\"calling\"}\nbl.VERBES[\"en\"]|=LEX … [323 caractères tronqués]`
+
+  ```
+DEV ('R1', 'R2', 'R3GP', 'R4') 154 154 0.5831
+DEV ('R1', 'R2', 'R3GP', 'R4', 'NOADV') 153 153 0.5822
+TEST ('R1', 'R2', 'R3GP', 'R4') 68 68 0.5896
+TEST ('R1', 'R2', 'R3GP', 'R4', 'NOADV') 69 69 0.5914
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger.py\"); s=p.read_text()\nold='''w(\"**Idée** : ne plus exclure un adverbe final. **Mesure** : dev **+18 / −0** au lieu de +19\")\nw(\"(g017 n'est plus récupéré ; c … [1375 caractères tronqués]`
+
+  ```
+[stderr]
+  File "/tmp/spans/rediger.py", line 245
+    w("`i = v + [t[0] for t in gv].index(prep) + 1` puis `("GP", i, i + len(g))` : le GP commence")
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger.py\"); s=p.read_text()\ns=s.replace('w(\"`i = v + [t[0] for t in gv].index(prep) + 1` puis `(\"GP\", i, i + len(g))` : le GP commence\")',\n            \"w('`i =  … [285 caractères tronqués]`
+
+  ```
+écrit 611 lignes
+611 reports/rapport-spans-v7.md
+# Rapport — les 43 spans non prédits de l'attachement v7
+
+> **Ligne de roadmap** : **B13** (attachement, règle 6) · **Date** : 2026-11-05 ·
+> **Commit de départ** : `69bd865ec1bae1958b6f617bde4bf685a15d7d67` (branche `s/v7`) ·
+> **Périmètre** : `tools/bloc_linguistique.py` (`Heuristique`, `_syntagmes_simple`,
+> `_cible_precedent`), `tools/tests/linguistique/evaluer_gold.py` (`charger`, `evaluer_bloc`),
+> `tools/tests/linguistique/gold_split.py` (`dev`, `test`).
+> **Livrables** : ce rapport + [`pensee-spans-v7.json`](pensee-spans-v7.json).
+> **Aucun fichier existant n'a été modifié** ; les mesures viennent d'une copie locale
+> (`/tmp/spans/sim3.py`, sous-classe de `Heuristique` + copie instrumentée de
+> `_syntagmes_simple`), non commitée. Le dispositif officiel (`evaluer_bloc`) redonne
+> **exactement** la ligne de base 196/195 et F1 0,5555 sur le gold vivant 612.
+
+## 1. Résumé
+
+**État de départ** : 239 cibles, **196 labels au bon span**, **195 exacts / 196** (0,9949),
+43 non prédits = **21 REL, 17 SUB, 5 GP**. **État final** de la meilleure combinaison :
+**222 labels, 222 exacts / 222** (1,0000), soit **222/239 = 0,9289** des cibles ;
+… [848 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture du rapport généré : causes, tableaux et règles
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md", "offset": 60, "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md</path>
+<type>file</type>
+<content>
+60: - **Ligne de base** : `bl.Heuristique()` (S activé, union activée), `evaluer_bloc`, gold vivant :
+61:   `cibles 239, labels 196, exact 195, exact/labels 0,9949, couverture 0,8201, F1 0,5555`.
+62: - **Harnais** : sous-classe `Sim(Heuristique)` dans `/tmp/spans/sim3.py` ; `_syntagmes_simple`
+63:   est **recopiée** et instrumentée par des drapeaux (R1, R2, R3GP, R4, NOADV). Aucun
+64:   fichier du dépôt n'est touché. Le harnais reproduit la ligne de base au chiffre près
+65:   (196/195, F1 0,5555), ce qui valide la fidélité de la simulation.
+66: - **Réglage** : les règles ont été **paramétrées sur dev seul** ; le test n'a été lu qu'après
+67:   sélection. Limite honnête : le **diagnostic** des 43 (demandé) a porté sur dev **et** test,
+68:   donc le test n'est pas aveugle au sens strict ; ses 6 gains sont une **confirmation**, pas
+69:   une prédiction. Le split est un seul découpage déterministe, sans validation croisée.
+70: 
+71: ## 3. Les 43, par cause probable
+72: 
+73: ### 3.1 Effectifs par cause
+74: 
+75: | cause | effectif | dont REL / SUB / GP | mécanisme | règle | 
+… [9076 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md", "limit": 150, "offset": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md</path>
+<type>file</type>
+<content>
+180: | `s027` | dev | fr | GP | 31:33 | « il » | `∅ (préposition hors span)` | `marche` | « mon sombre village marche avec il » | absent (gold) |
+181: | `s146` | test | fr | GP | 25:35 | « les jardin » | `∅ (préposition hors span)` | `observe` | « ma montagne observe avec les jardin » | absent (gold) |
+182: | `s148` | dev | fr | GP | 20:39 | « les ancienne lettre » | `∅ (préposition hors span)` | `nage` | « le voyage nage pour les ancienne lettre » | absent (gold) |
+183: | `s160` | test | fr | GP | 20:29 | « le renard » | `∅ (préposition hors span)` | `nage` | « le chemin nage avec le renard » | absent (gold) |
+184: 
+185: #### couverture verbale réelle (achetée/roule) — 1 cas
+186: 
+187: | id | split | lg | type | span | texte | marqueur | cible | phrase | sortie |
+188: |---|---|---|---|---|---|---|---|---|---|
+189: | `r255` | test | fr | REL | 11:27 | « que j'ai achetée » | `que` | `voiture` | « La voiture que j'ai achetée roule. » | absent (lexique réel) |
+190: 
+191: #### marqueur absent (relative zéro) — 1 cas
+192: 
+193: | id | split | lg | type | span | texte | ma
+… [8683 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md", "limit": 180, "offset": 330}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md</path>
+<type>file</type>
+<content>
+330: ```python
+331: # R1a — un pronom n'est jamais un verbe par la règle de position
+332: if _normaliser(m) in lex.get("PRON", set()):
+333:     return False
+334: 
+335: # R1b — les modaux sont des AUX
+336: AUX_MOD = AUXILIAIRES | {"would","must","can","could","should","will","shall","may","might"}
+337: aux_vus = 0
+338: while j < len(mots) and mots[j][3] == "mot":
+339:     m = mots[j][2]
+340:     aux = _normaliser(m) in AUX_MOD
+341:     if aux:
+342:         if verbes_vus >= 1 or aux_vus >= 1:   # 2e AUX = principale
+343:             break
+344:         aux_vus += 1
+345:     elif est_verbe(mots[j][0], m):
+346:         if verbes_vus >= 1:                   # 2e verbe plein = principale
+347:             break
+348:         if aux_vus >= 1 and _normaliser(mots[j-1][2]) not in AUX_MOD:
+349:             break                             # AUX saturé + verbe = principale
+350:         verbes_vus += 1
+351:     # la règle existante « adverbe final » est conservée (cf. § 4.9)
+352:     j += 1
+353: ```
+354: 
+355: **Effet** : `that I read` [9:15] → [9:20] ; `that she would come` [9:17
+… [7996 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md", "limit": 110, "offset": 510}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-spans-v7.md</path>
+<type>file</type>
+<content>
+510: déjà absent), test **69/76** au lieu de **68/76** (r288 récupéré). **Rejetée par le protocole
+511: dev** : elle échange 1 gain dev (g017) contre 1 gain test (r288). La portée de `yesterday` /
+512: `tomorrow` est une ambiguïté de gold ; on garde la règle existante et on documente r288
+513: comme non récupéré.
+514: 
+515: ### 6.4 Relative zéro (r035)
+516: 
+517: Une règle « GN s'arrête devant un pronom sujet suivi d'un verbe, puis REL jusqu'à la
+518: préposition finale » récupérerait r035, mais elle est écrite pour **un seul cas** et
+519: dépend d'une préposition finale (`about`) que le chunker traite comme un verbe. Non
+520: implémentée : coût/risque disproportionné.
+521: 
+522: ### 6.5 Correction du gold synthétique (contrefactuel)
+523: 
+524: Ce n'est pas une règle de modèle, mais le contrefactuel est net : en corrigeant la ligne 98
+525: de `gold_synthetique.py` (GP démarrant à la préposition), les 4 cas s027, s146, s148, s160
+526: deviennent exacts, **sans aucune perte** (+4 exacts). Le modèle prédit déjà le bon span avec
+527: la préposition. À faire dans un commi
+… [6041 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger.py\"); s=p.read_text()\n# 1) effectif clause 12 REL / 8 SUB\ns=s.replace('| **20** | 13 REL / 7 SUB / 0 GP |','| **20** | 12 REL / 8 SUB / 0 GP |')\n# 2) section  … [2043 caractères tronqués]`
+
+  ```
+patched
+écrit 611 lignes
+27:| couverture (labels / cibles) | 0,8201 | **0,9289** | +0,1088 |
+228:   REL s'arrête à `that I` (span [9:15] au lieu de [9:20]). **13 cas** : r034, r074, r114,
+233:   (**2 cas** : g017, r247). Le total « arrêt précoce » est donc 13 + 2 = 15.
+287:### 4.7 Marqueur absent ou élidé — 2 cas
+358:| corpus | labels / cibles | exacts | exact/labels | gains | pertes | F1 |
+381:| corpus | labels / cibles | exacts | exact/labels | gains | pertes | F1 |
+435:| corpus | labels / cibles | exacts | exact/labels | gains | pertes | F1 |
+447:| corpus | labels / cibles | exacts | exact/labels | couverture | gains | pertes | F1 |
+467:La marche `R1+R2` fait payer 2 labels faux (r102, préexistant, et r245, nouveau) : `exact/labels` baisse
+482:**52/69**, GP **90/96**. Le corpus porte surtout sur l'anglais (88 cibles sur 239) : c'est là que R1
+580:4. **Le gold synthétique** a un bug de GP (4 cas) et un lexique disjoint (9 cas) : les 13 cas
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '75,80p' reports/rapport-spans-v7.md", "description": "Check cause table row"}`
+
+  ```
+| cause | effectif | dont REL / SUB / GP | mécanisme | règle | sort |
+|---|---:|---|---|---|---|
+| **Frontière de clause (arrêt précoce + 2e prédicat)** | **20** | 13 REL / 7 SUB / 0 GP | le scanner REL/SUB s'arrête au pronom pris pour un verbe, ou avale le 2e prédicat | R1 | 20 exacts |
+| **Type attendu différent** | **4** | 0 / 4 / 0 | « when » sans antécédent classé REL ; r245 : cible `call` non reconnue | R2 (+R3c) | 4 exacts |
+| **GN qui avale** | **4** | 1 REL / 3 SUB / 0 GP | 3 verbes synthétiques hors lexique + le « car » français en anglais | R3a (+R1/R2) ; sinon lexique disjoint | 1 exact, 3 absents |
+| **Lexique disjoint synthétique (REL sur-longues)** | **6** | 6 / 0 / 0 | le 2e verbe de la relative est hors lexique → la REL inclut la principale | — (protocole) | 6 absents |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger.py\"); s=p.read_text()\ns=s.replace('(\"Frontière de clause (arrêt précoce + 2e prédicat)\", 20, \"13 REL / 7 SUB / 0 GP\"',\n            '(\"Frontière de clause  … [214 caractères tronqués]`
+
+  ```
+écrit 611 lignes
+| **Frontière de clause (arrêt précoce + 2e prédicat)** | **20** | 12 REL / 8 SUB / 0 GP | le scanner REL/SUB s'arrête au pronom pris pour un verbe, ou avale le 2e prédicat | R1 | 20 exacts |
+  ```
+

@@ -2823,3 +2823,258 @@ sans_pos label? False cible None candidats None
   POS [('The', 'DET'), ('rain', 'VERB'), ('falls', 'NOUN'), ('since', 'PREP'), ('this', 'DET'), ('morning', 'VERB')]
   ```
 
+### 🤖 Assistant
+
+⏵ Recherche de résidus d'erreurs dans la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"0,7919\\|9–29\\|+9 exacts\\|+9 exact\\|522 phrases\\|185/187\\|158/160\" reports/rapport-audit-v7.md", "description": "Search for known wrong strings"}`
+
+  ```
+251:| T107 | « 522 phrases, POS 0,7586 » | 602 phrases, POS 0,7603 |
+486:| **v4** `392f03aa` | « exact 158/160 (0,9875) » | « 157/160 (0,9812) » | 157/160, F1 0,4539, tête 0,6432, S 0,4285, chunker 0,4143, POS 0,7475, top-k 156, spans 79 | **titre faux d'un label** ; corps et JSON corrects |
+487:| **v5** `b975011b` | « exact 185/187 (0,9893) » | « 186/187 (0,9947) » | 186/187, F1 **0,5164**, tête **0,6834**, S 0,4582, chunker 0,5351, POS 0,7482, top-k 161, spans 52 | **titre faux d'un label** ; F1/tête de `7a9f0d6a` (0,5156/0,6826), exact/S/chunker de `b975011b` : **mélange de deux commits** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"9–28\\|+8 exacts\\|0,7897\\|26 docstrings\\|183/183\" reports/rapport-audit-v7.md | head -20", "description": "Confirm corrected strings present"}`
+
+  ```
+22:| les 183 portes ? | **183/183**, zéro échec |
+49:**Le dispositif des portes est juste mais daté** : 183/183, aucune porte rouge, mais **26
+65:- **Portes** : `PYTHONPATH=. python3 -m tools.pensee.autotest` → **183/183**, 0 échec.
+187:## 6. Les portes : 183/183, mais un dispositif daté
+192:183/183 portes tenues
+242:`gold_reel.construire()`. Le « 183/183 » est donc vrai, mais il certifie **deux golds différents**
+247:**26 docstrings** portent encore des chiffres d'avant v7. Les plus trompeurs :
+263:| T86-T90 | POS 0,8214/0,7897, 0,6471, 0,6829, 0,7013, 0,6984 | 0,8452/0,8221, 0,7353, 0,7236, 0,7327, 0,719 |
+292:  la fiche v7. Ce n'est pas une faute — la fiche ne prétend pas tout dire — mais le « 183/183 »
+390:- gold : `SUB « that she would come »` (span 9–28), cible `said` ;
+472:solde est **+9 labels, +8 exacts**, mais il cache des flux : les 8 labels du POS contextuel sont
+532:6. **Rafraîchir les 26 docstrings et les 6 messages `/145`** ; au minimum T107, T110, T112, T113,
+538:   explicitement le gelé, pour que le « 183/183 » ne puisse pas certifier deux golds à la fois
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -R \"0.7919\\|0,7919\" reports/rapport-audit-v7.md reports/pensee-audit-v7.json || echo 'aucun résidu 0.7919'", "description": "Confirm no residual wrong T86 value"}`
+
+  ```
+aucun résidu 0.7919
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuance sur l'attribution de la règle des candidats à la fiche v5
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "top-k 166 vient des **noms S et des verbes proches**, pas des candidats du précédent ; la règle\ndu précédent ne porte que la cible. C'est un point à noter : en v7, cette moitié de la règle ne\nporte plus rien, même si la fiche amont v5 la  … [291 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Renvoi explicite vers la liste complète des docstrings dans le JSON
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "| T111 / T114 / T115 / T119 / T138 | 0,4183 ; 0,3203/0,4817 ; 0,455/0,441 ; 0,7834/0,7472 ; 0,7424/0,3432 | 0,7265 ; 0,5864/0,7285 ; 0,6709 ; 0,7465/0,6914 ; 0,7465/0,3454 |\n\nLa liste complète des 26 identifiants est dans le JSON (`portes … [216 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de forme (lignes, encodage, JSON)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/rapport-audit-v7.md reports/pensee-audit-v7.json && python3 - <<'PY'\nfrom pathlib import Path\nfor p in ['reports/rapport-audit-v7.md','reports/pensee-audit-v7.json']:\n    b=Path(p).read_bytes()\n    print(p,'utf8 ok' … [241 caractères tronqués]`
+
+  ```
+558 reports/rapport-audit-v7.md
+ 1199 reports/pensee-audit-v7.json
+ 1757 total
+reports/rapport-audit-v7.md utf8 ok octets 33121
+  tabs 0 trailing spaces 0
+reports/pensee-audit-v7.json utf8 ok octets 24214
+  tabs 0 trailing spaces 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-audit-v7.json > /dev/null && echo 'JSON valide' && git status --short reports/rapport-audit-v7.md reports/pensee-audit-v7.json", "description": "Final JSON validation and status"}`
+
+  ```
+JSON valide
+ M reports/rapport-audit-v7.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : vérification de l'état d'index des deux fichiers d'audit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/rapport-audit-v7.md reports/pensee-audit-v7.json; echo '--- ls-files ---'; git ls-files --stage reports/rapport-audit-v7.md reports/pensee-audit-v7.json; echo '--- cached stat ---'; git diff --cached --stat … [117 caractères tronqués]`
+
+  ```
+M reports/rapport-audit-v7.md
+--- ls-files ---
+100644 b1ee51829c52a06747120bc5143859951e5b13c6 0	reports/pensee-audit-v7.json
+100644 84cd244d985082ccef84ec3399bbcbad65518235 0	reports/rapport-audit-v7.md
+--- cached stat ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git diff --cached --stat | tail -10", "description": "Check recent commits and staged changes"}`
+
+  ```
+4ebeb683 B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES
+9bf94feb FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES
+35a67bc7 FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README ET ÉTAT À JOUR
+ .../rapport.md                                     |  166 -
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 8334 --------------------
+ .../rapport.md                                     |  116 +-
+ .../f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md | 2117 -----
+ .../rapport.md                                     |  156 -
+ .../fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md |    7 -
+ .../rapport.md                                     |   33 -
+ .../ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md | 3854 ---------
+ .../rapport.md                                     |  152 -
+ 58 files changed, 62 insertions(+), 53441 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dépôt a avancé : vérification de ce que le commit parent a déjà intégré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat -- reports/rapport-audit-v7.md reports/pensee-audit-v7.json; echo '--- diff md ---'; git diff -- reports/rapport-audit-v7.md | head -120", "description": "Diff working tree vs committed audit files"}`
+
+  ```
+reports/rapport-audit-v7.md | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+--- diff md ---
+diff --git a/reports/rapport-audit-v7.md b/reports/rapport-audit-v7.md
+index 84cd244d..e0801691 100644
+--- a/reports/rapport-audit-v7.md
++++ b/reports/rapport-audit-v7.md
+@@ -263,6 +263,8 @@ sans le dire.
+ | T86-T90 | POS 0,8214/0,7897, 0,6471, 0,6829, 0,7013, 0,6984 | 0,8452/0,8221, 0,7353, 0,7236, 0,7327, 0,719 |
+ | T111 / T114 / T115 / T119 / T138 | 0,4183 ; 0,3203/0,4817 ; 0,455/0,441 ; 0,7834/0,7472 ; 0,7424/0,3432 | 0,7265 ; 0,5864/0,7285 ; 0,6709 ; 0,7465/0,6914 ; 0,7465/0,3454 |
+ 
++La liste complète des 26 identifiants est dans le JSON (`portes.docstrings_perimees`).
++
+ **6 messages de portes** affichent un dénominateur `/145` qui n'existe plus (196 labels) :
+ 
+ - T161 : `tête 195/145` (devrait être `195/196`) ;
+@@ -349,8 +351,8 @@ POS/F1/tête : c'est une règle d'attachement pur.
+ top-k 166, fr 135/135, en 60/61, dev 133/134, test 62/62). En ne retirant que la cible
+ (`_cible_precedent` + branche S), on retrouve exactement le 160/196. Autrement dit, en v7, le
+ top-k 166 vient des **noms S et des verbes proches**, pas des candidats du précédent ; la règle
+-du précédent ne 
+… [340 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 4ebeb683 | head -40; echo '---'; git show --stat --oneline 9bf94feb | head -20", "description": "Inspect parent commits"}`
+
+  ```
+4ebeb683 B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES
+ docs/pilotage/en-cours.md                          |    2 +-
+ journal/2026-11-05/README.md                       |   11 +-
+ journal/2026-11-05/attention.md                    |    6 +-
+ journal/2026-11-05/distribue.md                    |    6 +-
+ journal/2026-11-05/docs.md                         |    6 +-
+ journal/2026-11-05/memoire.md                      |    6 +-
+ journal/2026-11-05/mesures.md                      |   10 +-
+ journal/2026-11-05/modele.md                       |    6 +-
+ journal/2026-11-05/moteur.md                       |    6 +-
+ journal/2026-11-05/portes.md                       |    6 +-
+ journal/README.md                                  |    6 +-
+ .../24001907-4f19-4ea5-87f6-98334496719f/digest.md |   90 ++
+ .../rapport.md                                     |   19 +-
+ .../24529ced-6556-4491-9633-9401c2dffb0c/digest.md |   10 +
+ .../rapport.md                                     |   16 +-
+ journal/sessions/MANIFEST.md                       |    8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  122 ++
+ .../rapport.md                      
+… [1619 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection des corrections déjà appliquées à la fiche v7 par le commit parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 4ebeb683 -- reports/rapport-pensee-couverture-v7.md; echo '--- current lines ---'; sed -n '1,75p' reports/rapport-pensee-couverture-v7.md", "description": "See parent corrections to v7 sheet"}`
+
+  ```
+commit 4ebeb6830d7ff170b8b697f3feffc93ceff981fd
+Author: Stéphane <stephane@localhost>
+Date:   Thu Nov 5 20:37:24 2026 -0500
+
+    B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES
+
+diff --git a/reports/rapport-pensee-couverture-v7.md b/reports/rapport-pensee-couverture-v7.md
+index 9e11fba4..00aa4437 100644
+--- a/reports/rapport-pensee-couverture-v7.md
++++ b/reports/rapport-pensee-couverture-v7.md
+@@ -18,11 +18,11 @@
+ 
+ | # | correction | effet |
+ |---|---|---|
+-| 1 | **POS contextuel** : un verbe de suffixe après DET/PRÉP/ADJ devient un nom (« brother », « chair ») | POS 0,7475 → 0,7603, +9 labels |
++| 1 | **POS contextuel** : un verbe de suffixe après DET/PRÉP/ADJ devient un nom (« brother », « chair ») | POS **+0,0118** (gelé 602) / +0,0116 (vivant), **+8 labels** |
+ | 2 | **GV avant GP** : « entre » (verbe) n'est plus une préposition | GP « en gare » |
+ | 3 | **prépositions composées** (`au-dessus`, `au-dessous`, `vis-à-vis`) | GP « au-dessus du lac » |
+ | 4 | **prépositions ambiguës** (`since/before/after/until/as`) : SUB devant une clause, PRÉP devant un GN | GP « since yesterday » |
+-| 5 | **le verbe après un pronom sujet** (`
+… [4885 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Repérage des points restants dans la fiche v7 corrigée par le parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"0,7475\\|qui » 12\\|qui » (12)\\|dev/test n'ont pas\\|T28 les couvrent\\|SUB anglais\" reports/rapport-pensee-couverture-v7.md", "description": "Locate remaining inconsistencies in corrected sheet"}`
+
+  ```
+7:> **0,7475 à 0,7603** ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
+56:- **Les 43 spans restants** : 21 REL (« qui » 12), 17 SUB, 5 GP — la file est claire.
+60:- **Les 43 spans** : non prédits (REL « qui » en français, SUB anglais).
+62:- **L'in-sample** : les règles sont dessinées sur ce gold ; dev/test n'ont pas été re-mesurés
+71:- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+75:1. **Les 43 spans** : REL « qui » (12), SUB anglais, GP.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -8 reports/rapport-pensee-segmentation-v4.md; echo '---'; head -8 reports/rapport-pensee-couverture-v5.md", "description": "Check whether v4/v5 titles were corrected"}`
+
+  ```
+# B13 — la segmentation d'abord : F1 0,2862 → 0,4539, exact 157/160 (0,9812), couverture 160/239
+
+> **Instantané historique** : état au commit `392f03aa` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **183/183 portes** : le diagnostic de A12/A14 était juste — le trou n'était pas l'attachement mais le
+> **découpage**. Sept corrections générales font passer la **F1 syntagmes de 0,2862 à 0,4539**
+> (union ; S 0,4285, chunker 0,4143), la **tête de 0,4989 à 0,6432**, et la **couverture de 145 à
+---
+# B13 — la couverture : 187 labels, exact 186/187 (0,9947), F1 0,5156
+
+> **Instantané historique** : état au commit `b975011b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **183/183 portes** : la **couverture** passe de **160 à 187 labels** (sur 239) et l'exactitude
+> tient : **exact 186/187 = 0,9947** (fr **0,9921**, en **1
+… [132 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 4ebeb683:reports/rapport-audit-v7.md | grep -n \"0,7919\\|0,7897\\|9–29\\|9–28\\|+9 exacts\\|+8 exacts\" | head; echo '--- json committed vs worktree ---'; git diff --stat -- reports/pensee-audit-v7.json; echo '(vide = ident … [66 caractères tronqués]`
+
+  ```
+263:| T86-T90 | POS 0,8214/0,7897, 0,6471, 0,6829, 0,7013, 0,6984 | 0,8452/0,8221, 0,7353, 0,7236, 0,7327, 0,719 |
+390:- gold : `SUB « that she would come »` (span 9–28), cible `said` ;
+472:solde est **+9 labels, +8 exacts**, mais il cache des flux : les 8 labels du POS contextuel sont
+--- json committed vs worktree ---
+(vide = identique)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification qu'aucun job de fond ne reste actif avant le rapport
+
+- **job_list** `{}`
+
+  ```
+bash-1750 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 1200 python3 tools/pensee/autotest.py > /tmp/audit_v7_portes.out 2>&1; echo "exit=$?"; tail -20 /tmp/audit_v7_portes.out
+bash-1752 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 1800 python3 -m tools.pensee.autotest > /tmp/audit_v7_portes.out 2>&1; echo "exit=$?"; tail -30 /tmp/audit_v7_portes.out
+  ```
+

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 124.0 h |
+| Durée | 124.1 h |
 | Tours | 177 |
-| Messages | 2727 |
-| Appels d'outils | 2403 |
+| Messages | 2733 |
+| Appels d'outils | 2407 |
 | Fichiers touchés | 25 |
-| Commandes | 1982 |
+| Commandes | 1986 |
 | Sous-agents | 20 |
-| Commits | 291 |
+| Commits | 292 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*162 appels d'outils.* Actions notables :
+*166 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 132 autres
+- … et 136 autres
 
 **Synthèse produite :**
 
-⏵ L'audit a raison sur deux récits : je corrige la v7 (8 labels, +0,0118, exemple r204 vérifié)
+⏵ Je termine le nettoyage : les 6 points de la v7 et les docstrings/messages `/145` restants
 
 ## 3. Travail accompli
 
@@ -9617,7 +9617,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1942 autres
+- … et 1946 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10056,4 +10056,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES" -- reports/rapport-pensee-segmentation-v4.md
 - B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES" -- reports/rapport-pensee-couverture-v7.md reports/rapport
 - B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES" -- reports/rapport-pensee-couverture-v7.md reports/rapport
+- PORTES — 13 DOCSTRINGS PÉRIMÉES MISES À JOUR (ATTACHEMENT 195/196, SPANS 43, TOP-K 166) ; 183/183" -- tools/pensee/autotest.py docs/pilotage/en-cours.md 2>&1 | 
 
