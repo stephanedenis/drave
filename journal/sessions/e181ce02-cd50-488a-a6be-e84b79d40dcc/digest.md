@@ -51705,3 +51705,22 @@ COMMIT OK 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **index 677** ; `cascade_pos` vert par plancher (dégradation de 1,16 pt à corriger).\", \" ; index 677 ; `cascade_pos` v … [560 caractères tronqués]`
+
+  ```
+· T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-3148]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3148", "timeout_ms": 600000, "wait": true}`
+
+  ```
+18 files changed, 349 insertions(+), 43 deletions(-)
+COMMIT OK 1
+37e2053c ÉTAT — T0 DANS LE BUDGET
+ven 06 nov 2026 11:27:37 EST
+[status: completed, exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; index 677 ; `cascade_pos` vert par plancher.\", \" ; index 677.\")\np.write_text(t)\nPY\npython3 tools/taille_documents. … [453 caractères tronqués]`

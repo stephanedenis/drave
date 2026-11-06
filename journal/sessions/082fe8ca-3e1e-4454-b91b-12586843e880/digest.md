@@ -713,3 +713,44 @@ wall=0.63 rss=51492kB
 etiquettes 10362 syntagmes 893 unites 894
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nLC_ALL=C python3 tools/drave.py analyser \"Élodie sourit.\" >/tmp/c.out 2>/tmp/c.err; echo \"LC_ALL=C rc=$? out=$(wc -c </tmp/c.out)\"; cat /tmp/c.err\nPYTHONIOENCODING=ascii python3 tools/drave.py analyser \"Élodie sourit.\" >/tmp/c.o … [268 caractères tronqués]`
+
+  ```
+LC_ALL=C rc=0 out=473
+ascii rc=1 out=0
+drave: erreur : UnicodeEncodeError : 'ascii' codec can't encode character '\u2014' in position 12: ordinal not in range(128)
+C-noaccent rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nset -o pipefail\npython3 tools/drave.py analyser \"Le chat de la voisine qui dort sur le toit se réveille.\" --json 2>/tmp/p.err | head -c 100 >/dev/null\necho \"pipe statuses=${PIPESTATUS[*]}\"; cat /tmp/p.err\npython3 tools/drave.py  … [254 caractères tronqués]`
+
+  ```
+pipe statuses=0 0
+'déclarative' 0 8
+'déclarative' 8 15
+  ```
+
+- **bash** `{"command": "sed -n '150,340p' reports/rapport-produit-bloc-l.md", "description": "Read existing report contract and fixes sections"}`
+
+  ```
+détail de bord : un client qui construit un arbre, un index par offset ou une partition de la
+phrase casse sur près d'un texte sur deux. Et le chunker simple, seul, ne produit **aucun**
+chevauchement (`Heuristique(segmenter_s=False, union=False)` : 0) : le problème vient du
+générateur S et de l'union, pas de la tokénisation.
+
+**Autres écarts de forme** : **60 étiquettes phrase** pour 50 textes (6 textes multi-phrases),
+dont **6 spans commencent par un espace** ; **53 étiquettes document**, dont **42 valeurs
+tronquées à 60 caractères** et **2 titres** (x46, vrai titre markdown ; x48, faux titre chinois) ;
+**graphème** : 49/50 textes à 100 %, x46 à **95,14 %** (7 newlines, catégorie `Cc`, non couvertes).
+
+### 3.3 Qualité observable (sans gold libre)
+
+- **POS ouvertes** : 365 `NOUN` pour 32 `VERB` sur les 50 textes. f02 : « arrose », « rentre »,
+  « prépare » → `NOUN` ; e29 : « warm » → `NOUN`. Le gold mesure 0,6234 sur l'ouvert ; les
+  exemples libres sont cohérents avec cette faiblesse.
+- **Nombres, dates, URL** : « 12.5 » coupe la phrase en **deux fragments** ; « 12.03.2024 » en
+  **trois** ; « 12,5 » (virgule) ne coupe pas la phrase mais découpe le nombre en `12`, `,`, `5`.
+  Une 
+… [16659 caractères tronqués]
+  ```
+

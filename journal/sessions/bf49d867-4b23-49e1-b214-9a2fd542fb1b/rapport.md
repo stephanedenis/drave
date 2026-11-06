@@ -7,12 +7,12 @@
 | Identifiant | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 17 |
-| Appels d'outils | 16 |
+| Messages | 18 |
+| Appels d'outils | 17 |
 | Fichiers touchés | 0 |
-| Commandes | 8 |
+| Commandes | 9 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2138 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check repo state and branch
 - bash — List repo and tools directories
@@ -37,10 +37,11 @@
 - bash — Print baseline POS metrics
 - bash — Diagnose English POS errors
 - bash — Decompose EN errors by mechanism
+- bash — Compute dev/test split and conditional stats
 
 **Synthèse produite :**
 
-⏵ Decomposing EN errors by tagging mechanism and context
+⏵ Computing the dev/test split and conditional gold statistics
 
 ## 3. Travail accompli
 
@@ -59,6 +60,7 @@
 - **T1** Print baseline POS metrics
 - **T1** Diagnose English POS errors
 - **T1** Decompose EN errors by mechanism
+- **T1** Compute dev/test split and conditional stats
 
 ## 4. Mesures et résultats marquants
 

@@ -3117,3 +3117,65 @@ exit=0
 … [5742 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nlines=pathlib.Path('reports/rapport-produit-bloc-l.md').read_text().splitlines()\nbloc=[]; errs=[]\ndef check(b):\n    if len(b)<2: return []\n    n=[l.count('|') for l in b]\n    return [] if len(se … [648 caractères tronqués]`
+
+  ```
+tableaux déséquilibrés 0
+lignes 423
+JSON OK
+5c6b3b43
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4 --decorate && echo \"--- diff 6ef2a3f5..HEAD module/eval ---\" && git diff --stat 6ef2a3f5..HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/test_bloc_linguisti … [240 caractères tronqués]`
+
+  ```
+5c6b3b43 (HEAD -> s/v7) PORTES — LA NUANCE cascade_pos : VERTE PAR PLANCHER, LA FUSION DÉGRADE ENCORE LE POS DE 1,16 PT (CORRECTIF À FAIRE)
+e3db2cc8 OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13
+6ef2a3f5 (origin/s/v7, origin/master, origin/HEAD, master) JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)
+7f73c17f PRODUIT — LA DOC D'USAGE ET LES 5 EXEMPLES VÉRIFIÉS (5/5 REJOUÉS) ; CASCADE_POS N'EST PLUS UNE ROUGE (PLANCHER 0,70)
+--- diff 6ef2a3f5..HEAD module/eval ---
+(vide = inchangés)
+--- status nos fichiers ---
+?? reports/pensee-produit-bloc-l.json
+?? reports/rapport-produit-bloc-l.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat 6ef2a3f5..HEAD | tail -12", "description": "Voir les changements depuis le HEAD précédent"}`
+
+  ```
+.../rapport.md                                     |  21 +-
+ journal/sessions/MANIFEST.md                       |   8 +-
+ .../bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md | 574 +++++++++++++++++++
+ .../rapport.md                                     |  82 +++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 283 ++++++++++
+ .../rapport.md                                     |  91 ++-
+ reports/INDEX.md                                   |  54 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-outillage-index.json                |  19 +
+ reports/rapport-outillage-index.md                 |  52 ++
+ tools/index_reports.py                             |  43 +-
+ 26 files changed, 2219 insertions(+), 57 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md'); s=p.read_text()\ns=s.replace(\"> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD pendant la rédaction** : `6ef2a3f5`\",\n            \" … [1647 caractères tronqués]`
+
+  ```
+report ok
+builder ok
+JSON OK
+11:  "head_au_moment_de_la_redaction": "5c6b3b43",
+150:  "note_verdict": "Depuis 7f73c17f, evaluer_gold remplace la comparaison par un plancher 0,70 : cascade_pos passe à vrai et ok à vrai, sans changement du module ni des valeurs. La baisse de POS de la composition (0,7465 contre 0,7581) reste mesurée.",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"6ef2a3f5\\|5c6b3b43\\|HEAD\" reports/rapport-produit-bloc-l.md | head -20 && echo \"--- HEAD actuel ---\" && git rev-parse --short HEAD", "description": "Vérifier les références HEAD de la fiche"}`
+
+  ```
+4:> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Dernier HEAD vérifié** : `5c6b3b43`
+58:Le rejeu du 2026-11-06 redonne l'**état fourni** (vivant 612 ; module inchangé à HEAD) ; la fiche
+89:**Les quatre modes** (vivant 612 ; valeurs identiques à HEAD). Le mock est le double de contrat,
+99:- **`cascade_pos` : rouge à `fa1b0c6e`, vert à HEAD par plancher.** À `fa1b0c6e`, le verdict
+109:- **`ok`** : **faux à `fa1b0c6e`** (à cause de `cascade_pos`) ; **vrai à HEAD** (plancher 0,70),
+--- HEAD actuel ---
+37e2053c
+  ```
+
