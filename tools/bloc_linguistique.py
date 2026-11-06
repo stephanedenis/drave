@@ -88,6 +88,10 @@ class Etiquette:
         }
 
 
+SCHEMA_ANNOTATION = "drave.annotation"
+VERSION_ANNOTATION = 1
+
+
 @dataclass
 class Annotation:
     texte: str
@@ -118,6 +122,8 @@ class Annotation:
         if not avec_duree:
             cout.pop("duree_s", None)
         return {
+            # le **format** est versionné : un client peut vérifier ce qu'il reçoit
+            "schema": SCHEMA_ANNOTATION, "version": VERSION_ANNOTATION,
             "texte": self.texte, "langue": self.langue, "script": self.script,
             "source": self.source, "refus": self.refus,
             "etiquettes": [e.json() for e in self.etiquettes],

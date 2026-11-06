@@ -47,14 +47,19 @@ LARGEUR = 100
 # --------------------------------------------------------------------------- sorties JSON
 
 
+def _sur(s: str) -> str:
+    """Une chaîne toujours **écrivable** : un surrogate isolé devient U+FFFD (jamais d'exception)."""
+    return s.encode("utf-8", "replace").decode("utf-8", "replace")
+
+
 def _dumps(objet) -> str:
     """JSON stable (pas d'horodatage, pas de durée) et lisible."""
-    return json.dumps(objet, ensure_ascii=False, indent=1) + "\n"
+    return _sur(json.dumps(objet, ensure_ascii=False, indent=1)) + "\n"
 
 
 def _canonique(a: bl.Annotation) -> str:
     """La forme comparée par `rejouer` : clés triées, durée exclue, sans espaces inutiles."""
-    return json.dumps(a.json(), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return _sur(json.dumps(a.json(), ensure_ascii=False, sort_keys=True, separators=(",", ":")))
 
 
 # --------------------------------------------------------------------------- rendu lisible
@@ -154,13 +159,17 @@ def formater_annotation(a: bl.Annotation) -> str:
 def cmd_analyser(args: argparse.Namespace) -> int:
     annotation = bl.Heuristique().analyser(args.texte, args.langue)
     if annotation.refus:
-        print(f"{NOM}: refus d'analyse : {annotation.refus} "
-              "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
-        return 1
+        # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
+        if args.json:
+            sys.stdout.write(_dumps(annotation.json()))
+        else:
+            print(f"{NOM}: refus d'analyse : {annotation.refus} "
+                  "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
+        return 3
     if args.json:
         sys.stdout.write(_dumps(annotation.json()))
     else:
-        print(formater_annotation(annotation))
+        print(_sur(formater_annotation(annotation)))
     return 0
 
 
@@ -308,7 +317,7 @@ class _Parseur(argparse.ArgumentParser):
 
 def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
-        "Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).\n"
+        "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) · 1 erreur.\n"
         "Limites : heuristique CPU, hors ligne, déterministe ; ni neuronal, ni restitution, "
         "ni traduction.\n"
         "Exemples :\n"
@@ -370,6 +379,11 @@ def construire_parseur() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # un stdout non-UTF-8 ne doit pas faire planter l'en-tête (« — ») : on tolère les remplacements
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
     args = construire_parseur().parse_args(argv)
     try:
         return args.fonction(args)

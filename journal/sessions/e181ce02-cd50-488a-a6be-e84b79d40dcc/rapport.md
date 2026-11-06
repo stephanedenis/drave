@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 140.7 h |
-| Tours | 182 |
-| Messages | 3103 |
-| Appels d'outils | 2737 |
+| Durée | 145.6 h |
+| Tours | 183 |
+| Messages | 3120 |
+| Appels d'outils | 2752 |
 | Fichiers touchés | 25 |
-| Commandes | 2244 |
+| Commandes | 2259 |
 | Sous-agents | 31 |
-| Commits | 353 |
+| Commits | 354 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -421,6 +421,8 @@
 **Tour 181** — Agent 082fe8ca-3e1e-4454-b91b-12586843e880 sent a message:  Audit fiabilité produit terminé. **Deux fichiers neufs, aucun existant modifié, aucun commit** : - `reports/rapport-fiabilite-produit.md` (661 lignes, 39,6 Ko) - `reports/pensee-fiabilite-produit.json` (103,7 Ko : 50 textes + mesures par phrase + robustesse + contrat + schéma + test + correctifs)  **Snapshot.** HEAD `56eb43af`, module `bl … [3165 caractères tronqués]
 
 **Tour 182** — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. Its closing message: ⏵ Clôture : résumé de l'audit et des deux livrables  Audit terminé. **Deux fichiers neufs**, aucun existant modifié, aucun commit :  - [`reports/rapport-fiabilite-produit.md`](reports/rapport-fiabilite-produit.md) — 661 lignes - [`reports/pensee-fiabilite-prod … [2730 caractères tronqués]
+
+**Tour 183** — oui
 
 ## 2. Déroulé, étape par étape
 
@@ -9788,7 +9790,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 
 ### Tour 182 — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. I … [3010 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Vérifier les deux rapports d'audit
 - bash — Déclarer les rapports et vérifier
@@ -9804,11 +9806,73 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - bash — Autotest après R2/R3
 - bash — Recaler 18 portes et relancer
 - bash — Voir l'assertion T86
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ **183/183** avec POS 83,83 et F1 0,6181 : je fige la fiche et je commite
+⏵ Les deux audits sont intégrés : **POS 75,81 → 83,83 %**, F1 **0,6181**, attachement intact
+
+\## Ce qui vient de se passer
+
+J'ai traité les deux rapports qui sont arrivés après la clôture de la fenêtre — et l'un d'eux a livré un gain que je n'attendais plus.
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| **POS** | 75,81 % | **83,83 %** (fermé 91,33 / ouvert 76,73) |
+| **F1 syntagmes** | 58,49 % | **61,81 %** |
+| **F1 anglais** | 63,41 % | **72,73 %** |
+| tête | 73,36 % | **75,68 %** |
+| **attachement** | **222/222, couv. 0,9289** | **222/222, couv. 0,9289** |
+
+**L'attachement n'a pas bougé d'un cheveu** — c'est le point important : les règles POS ne déplacent aucune frontière au point de changer une cible.
+
+\### Les trois règles intégrées (R2a, R3, R2b)
+
+- **R2a** : après un **pronom sujet**, un mot inconnu est un verbe (« she sings »), sauf désinence nominale (`-ness`, `-tion`…) ;
+- **R3** : un **DET ambigu** (`that`, `her`) sans nom à sa droite est un PRON (ou un CONJ après un verbe) ;
+- **R2b** : un `-s`/`-es` après un **nom sujet** est un verbe (« the cat sleeps »).
+
+**R1 rejetée** : le sous-agent a montré que **101/101** de ses correctifs anglais sont des membres exacts de `VERBES_CONNUS` — un lexique écrit sur ce gold. Son gain n'est pas comptable, et je ne l'ai pas intégré.
+
+\### Les deux audits sont committés
+
+- **Fiabilité hors gold** (`rapport-fiabilite-produit.md`, 661 l.) : 0 plantage sur 50 phrases, mais **deux `UnicodeEncodeError`** (UTF-8 invalide à l'écriture JSON, stdout ASCII) et un **contrat non versionné** ;
+- **POS anglais** (`rapport-pos-anglais.md`, 439 l.) : 5 causes, 3 règles, contrôles placebo (−2,5 à −4,2 pts), 255 corrigés / 0 cassé.
+
+\## L'état vérifié
+
+`HEAD 4df6af6a`, `master` = `s/v7` **poussés**, 0 divergence. **183/183** portes ; `revue`, `taille`, `tableaux`, `en-cours`, `journal`, `sessions`, `porte-bloc`, `index --verifier` ✅ ; **porte produit verte** (8 tests, autotest 183/183).
+
+\## Ce qui reste, par ordre
+
+1. **Les deux `UnicodeEncodeError`** (P0 du rapport de fiabilité) — c'est le seul point qui fait encore planter la CLI sur une entrée hostile.
+2. **Le schéma v1** (`schema`/`version`, `refus` en JSON) : rendre le produit consommable par un client sans casser.
+3. **R4** (copule → ADJ) : +0,7 pt annoncé ; les **classes fermées anglaises** (28 erreurs : `where`, `late`, `out`, `as`).
+4. **La partition explicite des syntagmes** (23/46 textes à chevauchement) : sans dédupliquer — la déduplication ferait perdre 14 attache
+… [82 caractères tronqués]
+
+### Tour 183 — oui
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Voir la structure de la CLI
+- bash — Lire les sorties de la CLI
+- bash — Voir Annotation.json et le parseur
+- bash — Ajouter schema/version au JSON
+- bash — Voir la zone cassée
+- bash — Réparer et tester le schéma
+- bash — Refus JSON, code 3, sortie tolérante
+- bash — Écrire et lancer le test de schéma
+- bash — Voir l'erreur du test
+- bash — Corriger le test surrogate
+- bash — Étendre la porte produit
+- bash — Autotest après le schéma
+- bash — Fiche du contrat v1
+- bash — Committer le contrat v1 et pousser
+
+**Synthèse produite :**
+
+⏵ Porte produit à **8 contrôles**, verte. Je vérifie que les 183 portes tiennent toujours
 
 ## 3. Travail accompli
 
@@ -9918,7 +9982,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2204 autres
+- … et 2219 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10419,4 +10483,5 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183" -- tools/bloc_linguistique.py tools
 - DOCS — LE README DES FICHES DANS LE BUDGET T1 APRÈS LES DEUX FICHES POS" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
 - DOCS — DEUX MOTS DE MOINS DANS LE README (T1 À 2 800)" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "DE
+- PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183" -- tools/bloc_linguistique.py to
 

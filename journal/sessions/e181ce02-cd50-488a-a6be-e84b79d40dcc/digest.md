@@ -52652,3 +52652,365 @@ ven 06 nov 2026 13:20:48 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS anglais (A25) |\",\n            \"| [`rapport-pos-a … [1333 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 13 files changed, 40 insertions(+), 23 deletions(-)
+COMMIT OK 1
+4df6af6a DOCS — DEUX MOTS DE MOINS DANS LE README (T1 À 2 800)
+   795ec6d0..4df6af6a  s/v7 -> s/v7
+   795ec6d0..4df6af6a  master -> master
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale après l'intégration POS
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [397 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 13:23:30 EST
+HEAD 4df6af6a
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+POS         exactitude 83.83 %  (fermé 91.33 %, ouvert 76.73 %)
+SYNTAGMES   F1 61.81 %  (P 65.50 % / R 58.51 %)
+ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux audits sont intégrés : **POS 75,81 → 83,83 %**, F1 **0,6181**, attachement intact
+
+## Ce qui vient de se passer
+
+J'ai traité les deux rapports qui sont arrivés après la clôture de la fenêtre — et l'un d'eux a livré un gain que je n'attendais plus.
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| **POS** | 75,81 % | **83,83 %** (fermé 91,33 / ouvert 76,73) |
+| **F1 syntagmes** | 58,49 % | **61,81 %** |
+| **F1 anglais** | 63,41 % | **72,73 %** |
+| tête | 73,36 % | **75,68 %** |
+| **attachement** | **222/222, couv. 0,9289** | **222/222, couv. 0,9289** |
+
+**L'attachement n'a pas bougé d'un cheveu** — c'est le point important : les règles POS ne déplacent aucune frontière au point de changer une cible.
+
+### Les trois règles intégrées (R2a, R3, R2b)
+
+- **R2a** : après un **pronom sujet**, un mot inconnu est un verbe (« she sings »), sauf désinence nominale (`-ness`, `-tion`…) ;
+- **R3** : un **DET ambigu** (`that`, `her`) sans nom à sa droite est un PRON (ou un CONJ après un verbe) ;
+- **R2b** : un `-s`/`-es` après un **nom sujet** est un verbe (« the cat sleeps »).
+
+**R1 rejetée** : le sous-agent a montré que **101/101** de ses correctifs anglais sont des membres exacts de `VERBES_CONNUS` — un lexique écrit sur ce gold. Son gain n'est pas comptable, et je ne l'ai pas intégré.
+
+### Les deux audits sont committés
+
+- **Fiabilité hors gold** (`rapport-fiabilite-produit.md`, 661 l.) : 0 plantage sur 50 phrases, mais **deux `UnicodeEncodeError`** (UTF-8 invalide à l'écriture JSON, stdout ASCII) et un **contrat non versionné** ;
+- **POS anglais** (`rapport-pos-anglais.md`, 439 l.) : 5 causes, 3 règles, contrôles placebo (−2,5 à −4,2 pts), 255 corrigés / 0 cassé.
+
+## L'état vérifié
+
+`HEAD 4df6af6a`, `master` = `s/v7` **poussés**, 0 divergence. **183/183** portes ; `revue`, `taille`, `tableaux`, `en-cours`, `journal`, `sessions`, `porte-bloc`, `index --verifier` ✅ ; **porte produit verte** (8 tests, autotest 183/183).
+
+## Ce qui reste, par ordre
+
+1. **Les deux `UnicodeEncodeError`** (P0 du rapport de fiabilité) — c'est le seul point qui fait encore planter la CLI sur une entrée hostile.
+2. **Le schéma v1** (`schema`/`version`, `refus` en JSON) : rendre le produit consommable par un client sans casser.
+3. **R4** (copule → ADJ) : +0,7 pt annoncé ; les **classes fermées anglaises** (28 erreurs : `where`, `late`, `out`, `as`).
+4. **La partition explicite des syntagmes** (23/46 textes à chevauchement) : sans dédupliquer — la déduplication ferait perdre 14 attachements.
+
+Dites-moi si j'enchaîne sur les deux `UnicodeEncodeError` et le schéma v1.
+
+
+## Tour 183
+
+### 👤 Utilisateur
+
+oui
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def commande_analyser\\|def main\\|json.dumps\\|print(\\|reconfigure\\|def _sortie\\|refus\" tools/drave.py | head -25", "description": "Voir la structure de la CLI"}`
+
+  ```
+19:Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+52:    return json.dumps(objet, ensure_ascii=False, indent=1) + "\n"
+57:    return json.dumps(a.json(), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+156:    if annotation.refus:
+157:        print(f"{NOM}: refus d'analyse : {annotation.refus} "
+163:        print(formater_annotation(annotation))
+261:        print(_formater_evaluation(rapport))
+268:    if premiere.refus or seconde.refus:
+269:        refus = premiere.refus or seconde.refus
+270:        print(f"{NOM}: refus d'analyse : {refus} "
+277:    print(f"rejeu identique : {'oui' if identique else 'non'}")
+278:    print(f"  texte      : {args.texte!r}")
+279:    print(f"  langue     : {premiere.langue}")
+280:    print(f"  étiquettes : {len(premiere.etiquettes)}")
+281:    print(f"  JSON       : {len(canonique_1.encode('utf-8'))} octets "
+284:        print("  divergence : les deux analyses ne rendent pas le même JSON canonique",
+311:        "Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).\n"
+372:def main(argv: list[str] | None = None) -> int:
+380:        print(f"{NOM}: interrompu", file=sys.stderr)
+383:        print(f"{NOM}: er
+… [54 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,70p' tools/drave.py; echo \"=== analyser :\"; sed -n '130,170p' tools/drave.py; echo \"=== main :\"; sed -n '372,392p' tools/drave.py; echo \"=== Annotation.json :\"; grep -n \"def json\\|def dict\" tools/bloc_linguistique … [60 caractères tronqués]`
+
+  ```
+import bloc_linguistique as bl  # noqa: E402  (import après l'installation des chemins)
+
+NOM = "drave"
+VERSION = "0.1.0"
+LARGEUR = 100
+
+
+# --------------------------------------------------------------------------- sorties JSON
+
+
+def _dumps(objet) -> str:
+    """JSON stable (pas d'horodatage, pas de durée) et lisible."""
+    return json.dumps(objet, ensure_ascii=False, indent=1) + "\n"
+
+
+def _canonique(a: bl.Annotation) -> str:
+    """La forme comparée par `rejouer` : clés triées, durée exclue, sans espaces inutiles."""
+    return json.dumps(a.json(), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+# --------------------------------------------------------------------------- rendu lisible
+
+
+def _valeur_affichee(valeur: str, largeur: int) -> str:
+    """Une valeur de syntagme sur une ligne (les blancs sont normalisés pour l'affichage)."""
+    v = " ".join(str(valeur).split())
+    if len(v) <= largeur:
+        return v
+    return v[: max(1, largeur - 1)].rstrip() + "…"
+
+
+=== analyser :
+            modalite = "oui" if any(e.type == "modalité" for e in ici) else "non"
+            double_sens = "oui" if any(e.type == "double_sens" for e in ici) else "non"
+            lignes
+… [2191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '112,140p' tools/bloc_linguistique.py; echo \"=== construire_parseur :\"; sed -n \"$(grep -n 'def construire_parseur' tools/drave.py | cut -d: -f1),+12p\" tools/drave.py", "description": "Voir Annotation.json et le parseur"}`
+
+  ```
+"""La confiance maximale par niveau — la couverture *déclarée*, pas une précision."""
+        return {n: round(max((e.confiance for e in es), default=0.0), 4)
+                for n, es in self.par_niveau().items()}
+
+    def json(self, avec_duree: bool = False) -> dict:
+        cout = dict(self.cout)
+        if not avec_duree:
+            cout.pop("duree_s", None)
+        return {
+            "texte": self.texte, "langue": self.langue, "script": self.script,
+            "source": self.source, "refus": self.refus,
+            "etiquettes": [e.json() for e in self.etiquettes],
+            "unites_semantiques": [u.json() for u in self.unites_semantiques],
+            "fraction_semantique": round(float(self.fraction_semantique), 4),
+            "trace": list(self.trace), "cout": cout, "contexte": self.contexte,
+        }
+
+
+class BlocLinguistique(Protocol):
+    nom: str
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation: ...
+
+
+class RefusNeuronal(RuntimeError):
+    """Le modèle n'a pas rendu une annotation exploitable — le contrat refuse, il n'invente pas."""
+
+
+=== construire_parseur :
+def construire_parseur() -> arg
+… [550 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente : `schema`/`version` dans le JSON, refus en JSON (code 3), et sortie tolérante
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) le schéma versionné dans Annotation.json()\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        return {\n            \"texte\": self.texte, \"langue\": self.la … [789 caractères tronqués]`
+
+  ```
+schéma dans Annotation.json
+92:SCHEMA_ANNOTATION = "drave.annotation"
+93:VERSION_ANNOTATION = 1
+126:            "schema": SCHEMA_ANNOTATION, "version": VERSION_ANNOTATION,
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import ast; ast.parse(open('tools/bloc_linguistique.py').read()); print('syntaxe OK')
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/ast.py", line 50, in parse
+    return compile(source, filename, mode, flags,
+                   _feature_version=feature_version, optimize=optimize)
+  File "<unknown>", line 92
+    SCHEMA_ANNOTATION = "drave.annotation"
+    ^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '80,100p' tools/bloc_linguistique.py", "description": "Voir la zone cassée"}`
+
+  ```
+def json(self) -> dict:
+        return {
+            "niveau": self.niveau, "type": self.type, "valeur": self.valeur,
+            "debut": self.debut, "fin": self.fin, "source": self.source,
+            "confiance": round(float(self.confiance), 4),
+            "candidats": list(self.candidats), "langue": self.langue,
+            "script": self.script, "meta": dict(self.meta),
+        }
+
+
+@dataclass
+SCHEMA_ANNOTATION = "drave.annotation"
+VERSION_ANNOTATION = 1
+
+
+class Annotation:
+    texte: str
+    langue: str = "und"
+    script: str = SCRIPT_NEUTRE
+    etiquettes: list[Etiquette] = field(default_factory=list)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''@dataclass\nSCHEMA_ANNOTATION = \"drave.annotation\"\nVERSION_ANNOTATION = 1\n\n\nclass Annotation:''','''SCHEMA_ANNOTATI … [566 caractères tronqués]`
+
+  ```
+constantes replacées avant le décorateur
+syntaxe OK
+schema drave.annotation | version 1 | clés 13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\n# 1) sortie tolérante : surrogates/UTF-8 invalides ne cassent ni le JSON ni le texte\nt=t.replace('''def _dumps(objet) -> str:\n    \"\"\"JSON stabl … [3264 caractères tronqués]`
+
+  ```
+CLI : refus JSON + code 3, sortie tolérante
+syntaxe OK
+{
+ "schema": "drave.annotation",
+ "version": 1,
+ "texte": "",
+ "langue": "und",
+ "script": "Zyyy",
+ "source": "heuristique",
+ "refus": "vide",
+ "etiquettes": [],
+ "unites_semantiques": [],
+ "fraction_semantique": 0.0,
+ "trace": [
+  {
+   "etape": "refus",
+   "raison": "vide"
+  }
+ ],
+ "cout": {
+  "octets": 0
+ },
+ "contexte": ""
+}
+refus json EXIT=3
+refus texte EXIT=3
+{
+ "schema": "drave.annotation",
+ "version": 1,
+surrogate EXIT=0
+[stderr]
+drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/test_schema_produit.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"test_schema_produit.py — le **contrat** du produit : schéma v1, refus, entrées hostiles.\n\nCe que le test fige (et qu'un client peut supposer) :\n- 8 cha … [3194 caractères tronqués]`
+
+  ```
+----------------------------------------------------------------------
+Ran 6 tests in 0.944s
+
+FAILED (errors=1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_schema_produit.py 2>&1 | grep -B2 -A8 \"ERROR\" | head -20", "description": "Voir l'erreur du test"}`
+
+  ```
+test_refus_est_une_reponse_json (__main__.TestSchemaV1.test_refus_est_une_reponse_json) ... ok
+test_rejeu_identique (__main__.TestSchemaV1.test_rejeu_identique) ... ok
+test_surrogate_isole_ne_plante_pas (__main__.TestSchemaV1.test_surrogate_isole_ne_plante_pas) ... ERROR
+
+======================================================================
+ERROR: test_surrogate_isole_ne_plante_pas (__main__.TestSchemaV1.test_surrogate_isole_ne_plante_pas)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_schema_produit.py", line 55, in test_surrogate_isole_ne_plante_pas
+    sortie = _cli("analyser", "Le chat \ud800 dort.", "--json")
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_schema_produit.py", line 25, in _cli
+    return subprocess.run([sys.executable, str(RACINE / "tools/drave.py"), *args],
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                          capture_output=True, text=True, cwd=str(RACINE))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_schema_produit.py'); t=p.read_text()\nt=t.replace('''    def test_surrogate_isole_ne_plante_pas(self):\n        sortie = _cli(\"analyser\", \"Le chat \\\\ud800 dort.\ … [1054 caractères tronqués]`
+
+  ```
+test corrigé
+Ran 6 tests in 1.040s
+
+OK
+Ran 8 tests in 1.503s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# la porte produit : un contrôle de schéma + le test de schéma\np=pathlib.Path('tools/porte-produit.sh'); t=p.read_text()\nt=t.replace('''if python3 tools/tests/test_produit.py >/tmp/porte-produit-te … [1269 caractères tronqués]`
+
+  ```
+porte : contrôles schéma et refus
+  ✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f387bcab5d90d528 deux fois
+  ✅ smoke test : Ran 8 tests
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte produit à **8 contrôles**, verte. Je vérifie que les 183 portes tiennent toujours
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après le schéma", "timeoutMs": 1900000}`
+
+  ```
+183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-schema-v1.md <<'MD'\n# B13 — le contrat v1 : `schema`/`version`, refus en JSON (code 3), entrées hostiles tolérées\n\n> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Ce  … [5417 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état 686 779
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+index EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py tools/drave.py tools/tests/test_schema_produit.py tools/porte-produit.sh reports/rapport-schema-v1.md reports/pensee-schema-v1.json reports/README.md reports/INDEX.md docs/pilo … [893 caractères tronqués]`

@@ -41,6 +41,19 @@ else
   dit ❌ "smoke test en échec (voir /tmp/porte-produit-tests.log)"; ko=1
 fi
 
+if python3 tools/tests/test_schema_produit.py >/tmp/porte-produit-schema.log 2>&1; then
+  dit ✅ "schéma v1 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-schema.log | head -1)"
+else
+  dit ❌ "schéma v1 en échec (voir /tmp/porte-produit-schema.log)"; ko=1
+fi
+
+refus=$(python3 tools/drave.py analyser "" --json 2>/dev/null); code=$?
+if [ "$code" -eq 3 ] && printf '%s' "$refus" | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['refus'] and d['schema']" 2>/dev/null; then
+  dit ✅ "refus : JSON avec refus, code 3"
+else
+  dit ❌ "refus : code $code, JSON non conforme"; ko=1
+fi
+
 if AUTOTEST_JOBS=8 timeout 600 python3 -m tools.pensee.autotest >/tmp/porte-produit-autotest.log 2>&1; then
   dit ✅ "autotest parallèle : $(grep -oE '[0-9]+/[0-9]+ portes tenues' /tmp/porte-produit-autotest.log | tail -1)"
 else

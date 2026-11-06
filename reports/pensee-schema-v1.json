@@ -1,0 +1,37 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "schema": "drave.annotation",
+ "version": 1,
+ "champs_obligatoires": [
+  "schema",
+  "version",
+  "texte",
+  "langue",
+  "script",
+  "refus",
+  "etiquettes",
+  "unites_semantiques"
+ ],
+ "avant": {
+  "cles": 11,
+  "refus": "stdout vide, code 1",
+  "hostiles": "UnicodeEncodeError / AttributeError"
+ },
+ "apres": {
+  "cles": 13,
+  "refus": "JSON + code 3",
+  "hostiles": "tolérées (U+FFFD, refus non_texte)"
+ },
+ "porte_produit": {
+  "controles": 8,
+  "tests_schema": 6,
+  "tests_produit": 8,
+  "autotest": "183/183"
+ },
+ "limites": [
+  "pas de fichier JSON Schema publié",
+  "codes 0/2/3/1",
+  "surrogates remplacés"
+ ]
+}
