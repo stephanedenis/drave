@@ -2088,3 +2088,104 @@ Created file
 </content>
   ```
 
+### 🤖 Assistant
+
+⏵ Proofreading the report and checking repo state
+
+- **bash** `{"command": "git status --short reports/rapport-audit-v10.md reports/pensee-audit-v10.json; echo '---'; wc -l reports/rapport-audit-v10.md; echo '---'; grep -n \"0,5822\\|67/67\\|68/68\\|r303\\|s037\\|acheter\\|a408a909\" reports/rapport-audit-v10.md | head -40", "description": "Check new files and  … [74 caractères tronqués]`
+
+  ```
+?? reports/pensee-audit-v10.json
+?? reports/rapport-audit-v10.md
+---
+327 reports/rapport-audit-v10.md
+---
+13:la seconde, le **`-ée`**, est **antérieure à la v10** (commit `a408a909`, déjà dans v8 et v9)
+15:car `acheter` n'est pas dans le lexique. Le **seul** gain v10 est la **garde DET du GP**
+17:`r264` » : `r255`/`r264` sont déjà dans les 17 ; les deux extras réels sont **`s037`**
+18:(7e régression v8, toujours ouverte) et **`r303`** (régression v9 par `predicat_vu`, non
+19:listée). Enfin, le F1 « avant » **0,5822** est la valeur du **vivant 612** ; le **gelé 602**
+21:est **68/68**, pas 67/67.
+37:  module `v9` (`160d08ca`) : **219/219, F1 gelé 0,5866, 20 spans, dev 152/152, test 67/67**.
+72:1. **F1 « avant » (v9)** : la fiche et le JSON donnent **0,5822** en le présentant comme
+73:   « gelé 602 » (ligne F1). Or **0,5822 est la valeur du vivant 612** ; sur le gelé 602, la
+74:   v9 vaut **0,5866**. Le tableau « avant / après » compare donc **0,5822 (vivant)** à
+77:2. **dev / test** : la fiche dit « dev 152/152, test 67/67 (avant ces deux corrections) ».
+78:   C'est exact pour la **v9** ; après la garde DET du GP, le **test v10 est 68/68**
+89:| F1 union | 0,5822 (« gelé 602 ») | **0,
+… [2639 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport re, json\nmd=open('reports/rapport-audit-v10.md').read()\nj=json.load(open('reports/pensee-audit-v10.json'))\n# verify key values in text\nfor s in ['220/220','0,9205','0,5880','0,7388','134/134','86/86','top-k 219','19 spans','68/68','0,5866','r153','r303','s03 … [358 caractères tronqués]`
+
+  ```
+220/220 7
+0,9205 5
+0,5880 7
+0,7388 3
+134/134 8
+86/86 5
+top-k 219 2
+19 spans 8
+68/68 8
+0,5866 12
+r153 11
+r303 18
+s037 10
+a408a909 3
+json verdict 2 183/183
+json spans 19 {'REL': 9, 'SUB': 6, 'GP': 4}
+json devtest {'dev': {'phrases': 422, 'cibles': 163, 'labels': 152, 'exact': 152, 'couverture': 0.9325, 'f1': 0.5812, 'tete': 0.733}, 'test': {'phrases': 190, 'cibles': 76, 'labels': 68, 'exact': 68, 'couverture': 0.8947, 'f1': 0.589, 'tete': 0.7337}, 'par_langue': {'dev': {'fr': '91/91', 'en': '61/61'}, 'test': {'fr': '43/43', 'en': '25/25'}}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the -ée rule is inert down to metadata
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, importlib.util, pathlib, json\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger()\ndef load(n):\n    spec=importlib.util.spec_from_file_location('r_'+n,f'/tmp/audit_v10/mods/{n}.py')\n    m=importlib.util.module_from … [733 caractères tronqués]`
+
+  ```
+phrases avec difference JSON: 0 []
+  ```
+
+### 🤖 Assistant
+
+⏵ Clarifying the v9 dev/test row
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md", "old_string": "| top-k | 218 ; 0,9121 | **218 ; 0,9121** | **218 ; 0,9121** | 0 |\n| spans | 20 (9 REL, 6 SUB, 5 GP) | **20 (9/6/5)** | **20 (9/6/5)** | 0 (comptes) |\n| dev / test | 152/152, 67/67 | **152/ … [398 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the claimed 19 autotest assertions
+
+- **bash** `{"command": "git diff 160d08ca 710ec7f9 -- tools/pensee/autotest.py | grep -E '^[-+].*return|^[-+] *abs|^[-+] *a\\[' | wc -l; echo '--- functions changed ---'; git diff 160d08ca 710ec7f9 -- tools/pensee/autotest.py | grep -E '^@@' | wc -l; git diff 160d08ca 710ec7f9 -- tools/pensee/autotest.py | gre … [136 caractères tronqués]`
+
+  ```
+34
+--- functions changed ---
+19
+@@ -1668,7 +1668,7 @@ def t109_anaphore_103() -> tuple[bool, str]:
+@@ -1681,7 +1681,7 @@ def t110_segmenteur() -> tuple[bool, str]:
+@@ -1728,7 +1728,7 @@ def t112_union() -> tuple[bool, str]:
+@@ -1740,7 +1740,7 @@ def t113_union_defaut() -> tuple[bool, str]:
+@@ -1754,7 +1754,7 @@ def t114_cascade_union() -> tuple[bool, str]:
+@@ -2223,8 +2223,8 @@ def t153_attachement() -> tuple[bool, str]:
+@@ -2341,7 +2341,7 @@ def t161_cible_proximite() -> tuple[bool, str]:
+@@ -2352,7 +2352,7 @@ def t162_candidats_verbes() -> tuple[bool, str]:
+@@ -2375,7 +2375,7 @@ def t163_echecs_attachement() -> tuple[bool, str]:
+@@ -2388,7 +2388,7 @@ def t164_verbe_gv() -> tuple[bool, str]:
+@@ -2419,7 +2419,7 @@ def t166_spans() -> tuple[bool, str]:
+@@ -2428,9 +2428,9 @@ def t167_denominateur() -> tuple[bool, str]:
+@@ -2457,7 +2457,7 @@ def t168_classement() -> tuple[bool, str]:
+@@ -2467,7 +2467,7 @@ def t169_conventions() -> tuple[bool, str]:
+@@ -2494,7 +2494,7 @@ def t171_lexique_elargi() -> tuple[bool, str]:
+@@ -2529,10 +2529,10 @@ def t173_topk_strict() -> tuple[bool, str]:
+@@ -2593,7 +2593,7 @@ def t177_candidats_tete() -> tuple[bool, str]:
+@@ -2627,7 +2627,7 @@ def t179_mul
+… [97 caractères tronqués]
+  ```
+

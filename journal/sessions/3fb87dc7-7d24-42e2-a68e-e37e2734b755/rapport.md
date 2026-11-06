@@ -7,12 +7,12 @@
 | Identifiant | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 23:24 |
-| Durée | 0.7 h |
+| Durée | 0.8 h |
 | Tours | 1 |
-| Messages | 34 |
-| Appels d'outils | 40 |
+| Messages | 37 |
+| Appels d'outils | 43 |
 | Fichiers touchés | 1 |
-| Commandes | 34 |
+| Commandes | 37 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesur … [1686 caractères tronqués]
 
-*40 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Show branch, HEAD and status
 - bash — List linguistique tools and reports
@@ -41,11 +41,11 @@
 - bash — Trace origin of -ée handling
 - bash — Inspect autotest changes in v10
 - bash — Inspect Annotation and analyser API
-- … et 22 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
-⏵ Rejeu des commits historiques avec RACINE corrigé
+⏵ Extraction des agrégats globaux (langue, type, source, croisements)
 
 ## 3. Travail accompli
 
@@ -91,6 +91,9 @@
 - **T1** Compare old and current Heuristique classes
 - **T1** Inspect tools/structures import in old module
 - **T1** Replay historical commits with repo RACINE
+- **T1** Compute controls, Wilson CIs, GP guard side effects
+- **T1** Inspect GP guard side-effect phrases
+- **T1** Print global aggregates
 
 ## 5. Erreurs rencontrées
 

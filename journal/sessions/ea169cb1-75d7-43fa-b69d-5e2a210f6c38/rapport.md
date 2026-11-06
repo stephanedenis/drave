@@ -9,10 +9,10 @@
 | Début | 2026-11-05 23:24 |
 | Durée | 0.8 h |
 | Tours | 1 |
-| Messages | 61 |
-| Appels d'outils | 74 |
+| Messages | 66 |
+| Appels d'outils | 79 |
 | Fichiers touchés | 1 |
-| Commandes | 60 |
+| Commandes | 63 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2183 caractères tronqués]
 
-*74 appels d'outils.* Actions notables :
+*79 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, recent commits
 - bash — List relevant reports and test dirs
@@ -41,11 +41,11 @@
 - bash — Inspect audit JSON structure
 - bash — Inspect v10 commit diff
 - bash — Verify module matches audited commit
-- … et 46 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
-⏵ Proofreading the report and checking repo state
+⏵ Reading the report end-to-end
 
 ## 3. Travail accompli
 
@@ -53,7 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md` | 1 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +97,7 @@
 - **T1** Measure v9/v10 F1 modes
 - **T1** Check -ée presence in v8/v9 commits
 - **T1** Check if details saved
-- … et 20 autres
+- … et 23 autres
 
 ## 4. Mesures et résultats marquants
 

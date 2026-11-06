@@ -48358,3 +48358,38 @@ pensee-audit-v10.json
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/2026-11-06/README.md'); t=p.read_text()\nif \"index des sessions\" not in t:\n    t = t.rstrip() + \"\\n\\n[Liste des sessions](../sessions/README.md).\\n\"\np.write_text( … [1109 caractères tronqués]`
+
+  ```
+· lien vers l'index des sessions absent : journal/2026-11-06/README.md
+     · fraîcheur : en-cours.md dit 2026-11-06, le dernier commit date du 2026-11-05
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-2479]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2479", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/2026-11-06/README.md
+COMMIT OK 1
+41cae3e5 JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -6 journal/2026-11-05/README.md; echo \"===\"; tail -4 journal/2026-11-06/README.md", "description": "Comparer les en-têtes de jour"}`
+
+  ```
+# 2026-11-05
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-05/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+===
+corrigées depuis), et les audits de cohérence `rapport-coherence-fiches-v8.md`.
+
+[Liste des sessions](../sessions/README.md).
+<!-- /notes -->
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > journal/2026-11-06/README.md <<'MD'\n# 2026-11-06\n\n> **Index de la journée**, dans le dossier [`journal/2026-11-06/`](README.md). Retour :\n> [l'index du journal](../README.md) · [l'index des sessions](../README.md#sessions). … [1528 caractères tronqués]`

@@ -1291,3 +1291,57 @@ def _morphemes(mot: str) -> list[tuple[str, int, int, str]]:
 … [44 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Calcul des contrôles (χ², Wilson, test de proportion, effets de bord de la garde GP)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util, pathlib, json, math, collections, zlib\nRACINE = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RACINE/'tools')); sys.path.insert(0, str(RACINE)) … [2614 caractères tronqués]`
+
+  ```
+phrases changées v9->v10: 3 Counter({0: 2, 1: 1})
+('g004', 1, [('GP', 11, 27), ('GV', 28, 31)], [])
+('r147', 0, [('GP', 22, 31), ('GV', 32, 37)], [])
+('r153', 0, [('GP', 8, 15), ('GV', 16, 19)], [('GP', 8, 19)])
+
+chi2 tailles seaux Power_divergenceResult(statistic=np.float64(4.617647058823529), pvalue=np.float64(0.09937809822251098))
+chi2 spans perdus x seaux Chi2ContingencyResult(statistic=np.float64(2.3720582349118873), pvalue=np.float64(0.3054316926180265), dof=2, expected_freq=array([[ 6.041841  , 69.958159  ],
+       [ 7.07531381, 81.92468619],
+       [ 5.88284519, 68.11715481]]))
+wilson dev 152 163 0.9325 (0.8832, 0.9619)
+wilson test 68 76 0.8947 (0.8058, 0.9457)
+wilson tout 220 239 0.9205 (0.8792, 0.9485)
+wilson REL dev 51 57 0.8947 (0.7888, 0.9509)
+wilson REL test 14 17 0.8235 (0.5897, 0.9381)
+wilson SUB dev 42 45 0.9333 (0.8214, 0.9771)
+wilson SUB test 21 24 0.875 (0.69, 0.9566)
+wilson GP dev 59 61 0.9672 (0.8881, 0.991)
+wilson GP test 33 35 0.9429 (0.8139, 0.9842)
+wilson fr dev 91 101 0.901 (0.8273, 0.9453)
+wilson fr test 43 50 0.86 (0.7381, 0.9305)
+wilson en dev 61 62 0.9839 (0.9141, 0.9971)
+wilson en test 25 26 0.9615 (0.8111, 0.9932)
+z dev-test couverture (1.0054, np.f
+… [330 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection des deux phrases modifiées par la garde GP hors r153
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util, pathlib\nRACINE = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RACINE/'tools')); sys.path.insert(0, str(RACINE))\nfrom tools.tests.linguistique … [1008 caractères tronqués]`
+
+  ```
+======================================================================
+g004 fr hand 'Il a couru pour attraper le bus.'
+gold [('GN', 0, 2, 'Il', None), ('GV', 3, 10, 'a couru', None), ('GP', 11, 31, 'pour attraper le bus', 'couru')]
+v9 [('GV', 0, 2, 'Il', None), ('GV', 0, 10, 'Il a couru', None), ('GV', 3, 10, 'a couru', None), ('GP', 11, 27, 'pour attraper le', 'couru'), ('GP', 11, 31, 'pour attraper le bus', 'couru'), ('GV', 28, 31, 'bus', None)]
+v10 [('GV', 0, 2, 'Il', None), ('GV', 0, 10, 'Il a couru', None), ('GV', 3, 10, 'a couru', None), ('GP', 11, 31, 'pour attraper le bus', 'couru')]
+======================================================================
+r147 fr reel 'Les clients attendent devant la porte.'
+gold [('GN', 0, 11, 'Les clients', None), ('GV', 12, 21, 'attendent', None), ('GP', 22, 37, 'devant la porte', 'attendent')]
+v9 [('GN', 0, 11, 'Les clients', 'attendent'), ('GV', 12, 21, 'attendent', 'clients'), ('GP', 22, 31, 'devant la', 'attendent'), ('GP', 22, 37, 'devant la porte', 'attendent'), ('GV', 32, 37, 'porte', None)]
+v10 [('GN', 0, 11, 'Les clients', 'attendent'), ('GV', 12, 21, 'attendent', 'clients'), ('GP', 22, 37, 'devant la porte', 'attendent')]
+=======
+… [363 caractères tronqués]
+  ```
+

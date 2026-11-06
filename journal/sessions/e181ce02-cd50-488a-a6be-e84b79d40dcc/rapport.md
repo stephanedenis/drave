@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 127.5 h |
 | Tours | 177 |
-| Messages | 2842 |
-| Appels d'outils | 2502 |
+| Messages | 2845 |
+| Appels d'outils | 2505 |
 | Fichiers touchés | 25 |
-| Commandes | 2060 |
+| Commandes | 2062 |
 | Sous-agents | 25 |
-| Commits | 302 |
+| Commits | 303 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*261 appels d'outils.* Actions notables :
+*264 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,7 +9514,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 212 autres
+- … et 214 autres
 
 **Synthèse produite :**
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2020 autres
+- … et 2022 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10072,4 +10072,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - THÉORIE ET JOURNAL — LE DÉCOUPAGE D'ABORD : LA COUVERTURE EST UN PLAFOND, UN GOLD SE VÉRIFIE AVANT DE JUGER" -- docs/theorie/modele-natif.md journal/2026-11-05/
 - PILOTAGE — LES VAGUES 5 À 7 (AUDITS V7/V8, R1/R3, TOP-K, V10) DOCUMENTÉES AU PLAN-TRAVAIL" -- docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>&1 | tai
 - JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS" -- journal/2026-11-06/README.md docs/pilotage/en-cours.md 2>&1 | tai
+- JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)" -- journal/2026-11-06/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "FO
 
