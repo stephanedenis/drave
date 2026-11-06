@@ -2960,3 +2960,28 @@ tesseract 5.5.3
 --- porte ---
   ```
 
+### 🤖 Assistant
+
+⏵ Compréhension des contrôles de la revue (navigation, compteurs) avant écriture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E \"navigation|index|README|fiche.*non|orphelin|compteur\" tools/revue_documentation.py | head -25", "description": "Inspect doc review navigation/counter rules"}`
+
+  ```
+11:  5. cohérence  : la synthèse (index.md) liste les huit chapitres, le chapitre 7 et B10–B12 ;
+12:     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+14:  7. navigation : aucun document vivant n'est orphelin, et aucun chemin en code inline
+68:            if "archive" not in p.parts and p.name != "README.md" and not est_carte(p)]
+80:    """Les fichiers vivants dont les liens comptent pour la navigation (orphelins)."""
+82:            + [RACINE / "docs/README.md", RACINE / "README.md",
+89:            + [RACINE / "README.md", RACINE / "REPRISE.md", RACINE / "AGENTS.md"])
+97:               RACINE / "README.md", RACINE / "REPRISE.md", RACINE / "AGENTS.md"])
+163:            if f.name == "index.json" and f.parent.name == "glossaire":
+169:    if not (RACINE / "reports/README.md").exists():
+170:        alertes.append("classement : reports/ n'a pas d'index (reports/README.md)")
+172:    # 5. compteurs : la page d'état est la source unique, et elle dit le disque
+183:            alertes.append(f"compteurs : la ligne « {nom} » manque dans en-cours.md")
+185:            alertes.append(f"compteurs : en-cours.md dit {valeur} {nom}, le disque en a {disque}")
+
+… [935 caractères tronqués]
+  ```
+

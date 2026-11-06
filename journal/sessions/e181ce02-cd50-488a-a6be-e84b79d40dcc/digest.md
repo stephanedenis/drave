@@ -50898,3 +50898,35 @@ ven 06 nov 2026 10:31:15 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| documents de `docs/` \\| \\*\\*\\d+\\*\\*\", \"| documents de `docs/` | **121**\", t)\np.write_text(t)\nPY\npython3 t … [592 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+ 17 files changed, 717 insertions(+), 69 deletions(-)
+COMMIT OK 1
+eab04b4d ÉTAT — LE COMPTEUR DES DOCUMENTS REVIENT À 121
+  ✅ smoke test : Ran 6 tests
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation finale : la roadmap acte le produit, les références passent à 84 portes (3 rouges)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# references : 84 portes, 3 rouges (indice, melange, sessions-hub)\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"84 portes, 80 vertes, 4 rouges\",  … [2283 caractères tronqués]`
+
+  ```
+références et roadmap
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ la page vivante date du dernier commit (2026-11-06)
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+eab04b4d ÉTAT — LE COMPTEUR DES DOCUMENTS REVIENT À 121
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`drave` v0**.\", \" ; **`drave` v0**, porte produit et doc d'usage.\")\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\ … [783 caractères tronqués]`

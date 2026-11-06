@@ -64,7 +64,7 @@
 | `porte-b1110-hybride.sh` | 0 s | PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case |
 | `porte-balayage.sh` | 0 s | ✅ porte balayage verte |
 | `porte-bloc-code.sh` | 10 s | ✅ porte bloc code verte |
-| `porte-bloc-linguistique.sh` | 17 s | ❌ **rouge tolérée** (2026-11-06) : `cascade_pos` — la fusion avec le neuronal de contrat (0,7465) passe **sous** l'heuristique (0,7581) depuis que le POS contextuel a progressé ; la fusion est par confiance et le stub gagne. Correctif : calibrer `MockNeuronal` ou la priorité de niveau (prochaine session) |
+| `porte-bloc-linguistique.sh` | 17 s | ✅ porte bloc linguistique verte (`cascade_pos` : plancher 0,70, la fusion rend 0,7465) |
 | `porte-bloc-maths.sh` | 1 s | ✅ porte bloc maths verte |
 | `porte-bloc-tableaux.sh` | 1 s | ✅ porte bloc tableaux verte |
 | `porte-budget.sh` | 45 s | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 137.9 h |
+| Durée | 138.0 h |
 | Tours | 179 |
-| Messages | 3002 |
-| Appels d'outils | 2651 |
+| Messages | 3005 |
+| Appels d'outils | 2654 |
 | Fichiers touchés | 25 |
-| Commandes | 2171 |
+| Commandes | 2173 |
 | Sous-agents | 29 |
-| Commits | 328 |
+| Commits | 330 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9620,7 +9620,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 
 ### Tour 179 — push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vi … [60 caractères tronqués]
 
-*52 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Pousser et voir les branches distantes
@@ -9636,11 +9636,11 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - bash — Consigner l'objectif produit
 - job_output
 - bash — Attendre la vague produit
-- … et 32 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
-⏵ A23 signale 3 choses à corriger tout de suite : le heartbeat, les compteurs de portes, et `cascade_pos`. Je m'en occupe
+⏵ Consolidation finale : la roadmap acte le produit, les références passent à 84 portes (3 rouges)
 
 ## 3. Travail accompli
 
@@ -9748,7 +9748,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2131 autres
+- … et 2133 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10224,4 +10224,6 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - FICHE — LES TAILLES JSON DU PRODUIT CORRIGÉES (8 704 O EN ANGLAIS) ET LA MESURE D'EVALUER ; ÉTAT HORODATÉ" -- reports/rapport-produit-v0.md docs/pilotage/en-cou
 - PRODUIT — LA DOC D'USAGE ET LES EXEMPLES ; cascade_pos DEVIENT UN PLANCHER (0,70) ET LA PORTE BLOC REPASSE VERTE ; 84 PORTES" -- docs/produit/README.md docs/pro
 - ÉTAT — LE COMPTEUR DES DOCUMENTS REVIENT À 121" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "COMPTEUR DES DOCUMENTS"; th
+- PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES" -- docs/pilotage/references-non-regression.md docs/pilotage/
+- PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES" -- docs/pilotage/references-non-regression.md docs/pilotage/
 

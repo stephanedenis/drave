@@ -2094,3 +2094,51 @@ user	0m15,829s
 sys	0m0,192s
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json, collections\nd=json.load(open('resultats.json'))\ndet=d['robustesse_50']['detail']\nsans=[]; autres=[]\nfor p in det:\n    ts={a['type'] for a in p.get('anomalies',[])}\n    if not ts: sans.append(p['id'])\n    elif ts-{'chevauc … [719 caractères tronqués]`
+
+  ```
+sans anomalie 16 ['f01', 'e29', 'e30', 'e31', 'e32', 'e33', 'e34', 'e36', 'e37', 'e38', 'e39', 'e40', 'e41', 'e42', 'x47', 'x48']
+anomalies hors chevauchement syntagme [('f07', ['acte_hors_candidats']), ('f09', ['candidat_doublon']), ('f10', ['chevauchement_phrase']), ('f11', ['valeur_hors_span']), ('f14', ['valeur_hors_span']), ('f16', ['valeur_hors_span']), ('f23', ['candidat_doublon']), ('f26', ['acte_hors_candidats']), ('e35', ['candidat_doublon']), ('x44', ['acte_hors_candidats']), ('x46', ['valeur_hors_span']), ('x49', ['acte_hors_candidats'])]
+anomalies totales detail 149
+absent f01 ['morphème'] fr 6
+absent f03 ['morphème'] fr 18
+absent f07 ['morphème'] fr 13
+absent f22 ['morphème'] fr 16
+absent e29 ['morphème'] en 7
+absent e33 ['morphème'] en 12
+absent e35 ['morphème'] en 16
+absent x47 ['morphème', 'syntagme'] und 13
+absent x48 ['morphème', 'syntagme'] und 1
+categories Counter({'fr': 29, 'en': 14, 'url+email': 1, 'sms': 1, 'sans-ponctuation-finale': 1, 'markdown': 1, 'cyrillique': 1, 'sinogrammes': 1, 'emoji': 1})
+mots total 819 labels total 4320
+attachments total 265
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique()\nfor p in PHRASES:\n    a=h.analyser(p['texte'])\ … [465 caractères tronqués]`
+
+  ```
+f03 ['mots:livre']
+f05 ['guillemets']
+f14 ['mots:temps']
+f15 ['mots:point']
+e34 ['mots:point']
+x43 ['ou']
+x45 ['mots:temps']
+x46 ['mots:note']
+x50 ['mots:livre']
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique(); amb=0; tot=0; ex=[]\nfor p in PHRAS … [591 caractères tronqués]`
+
+  ```
+attachements 265 cible ambiguë (mot répété) 3 0.0113 ex [('x43', 'example', 2), ('x43', 'example', 2), ('x43', 'example', 2)]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, json\nRACINE='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nsys.path.insert(0, RACINE); sys.path.insert(0, RACINE+'/tools')\nimport bloc_linguistique as bl\nfrom tools.tests.linguistique import evaluer_gold as eg, gold_split  … [565 caractères tronqués]`
+
+  ```
+split 422 190 {'phrases': 612, 'cibles': 239, 'sources': {'hand': 20, 'reel': 432, 'synthetique': 160}, 'langues': {'fr': 402, 'en': 210}} {'phrases': 422, 'cibles': 163, 'sources': {'hand': 15, 'reel': 302, 'synthetique': 105}, 'langues': {'fr': 277, 'en': 145}} {'phrases': 190, 'cibles': 76, 'sources': {'hand': 5, 'reel': 130, 'synthetique': 55}, 'langues': {'fr': 125, 'en': 65}}
+dev phrases 422 POS 0.7547 F1 0.582 exact 153 labels 153 couverture 0.9387 spans 10
+test phrases 190 POS 0.7656 F1 0.5914 exact 69 labels 69 couverture 0.9079 spans 7
+  ```
+

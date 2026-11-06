@@ -3438,3 +3438,138 @@ if __name__ == "__main__":
     unittest.main(verbosity=2)
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py analyser \"Élodie sourit.\"; echo \"exit=$?\"; echo \"=== langue de ===\"; python3 tools/drave.py analyser \"Le chat dort.\" --langue de >/dev/null 2>/tmp/doc_produit/de.err; echo \"exit=$?\"; cat /tmp/doc_prod … [73 caractères tronqués]`
+
+  ```
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)
+POS  Élodie/NOUN sourit/NOUN
+SYNTAGMES —
+PRAGMATIQUE
+  phrase [0:14] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.55 · phrase=0.85 ·
+            discours=0.50 · pragmatique=0.45 · document=0.70
+exit=0
+=== langue de ===
+exit=2
+usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE
+drave analyser: erreur d'usage : argument --langue: invalid choice: 'de' (choose from 'fr', 'en')
+  ```
+
+### 🤖 Assistant
+
+⏵ Génération des JSON CLI définitifs pour les cinq exemples.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && \\\npython3 tools/drave.py analyser \"Le chat dort.\" --json | jq '{langue, script, refus, pos: [.etiquettes[]|select(.niveau==\"pos\")|{valeur,type,debut,fin,confiance,ouvert:.meta.ouvert}], syntagmes: [.etiquettes[]|select(.niveau= … [1749 caractères tronqués]`
+
+  ```
+72 /tmp/doc_produit/cli1.json
+  82 /tmp/doc_produit/cli2.json
+ 107 /tmp/doc_produit/cli3.json
+  60 /tmp/doc_produit/cli5.json
+ 321 total
+{
+  "langue": "fr",
+  "script": "Latn",
+  "refus": "",
+  "pos": [
+    {
+      "valeur": "Le",
+      "type": "DET",
+      "debut": 0,
+      "fin": 2,
+      "confiance": 0.92,
+      "ouvert": false
+    },
+    {
+      "valeur": "chat",
+      "type": "NOUN",
+      "debut": 3,
+      "fin": 7,
+      "confiance": 0.3,
+      "ouvert": true
+    },
+    {
+      "valeur": "dort",
+      "type": "VERB",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.72,
+      "ouvert": true
+    }
+  ],
+  "syntagmes": [
+    {
+      "valeur": "Le chat",
+      "type": "GN",
+      "debut": 0,
+      "fin": 7,
+      "confiance": 0.55,
+      "role": "agent",
+      "cible": "dort",
+      "union": null,
+      "candidats": [
+        "structure la plus proche",
+        "dort"
+      ]
+    },
+    {
+      "valeur": "dort",
+      "type": "GV",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.55,
+      "role": "predicat",
+      "cible": "chat",
+      "union": null,
+      "candidats": [
+        "structure la plus proche"
+      ]
+    }
+  ],
+  "phrase": [
+    {
+      "type": "type"
+… [129 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réécriture de la notice sur le CLI réellement livré (0.1.0, porte verte).
+
+- **write** `{"content": "# Le premier produit — analyser un texte avec Drave\n\n> **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc\n> linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui\n> il s'adresse, ce qu'il fait, comment l'ex … [21745 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ `README.md` a changé sous mes pieds : relecture de la version concurrente.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=full-iso docs/produit/; echo \"=== head ===\"; sed -n 1,40p docs/produit/README.md; echo \"=== sections ===\"; grep -n \"^#\\|^##\" docs/produit/README.md", "description": "Inspect concurrent README version"}`
+
+  ```
+total 28
+-rw-r--r--. 1 stephane stephane  3765 2026-11-06 10:21:26.143348304 -0500 exemples.md
+-rw-------. 1 stephane stephane 21932 2026-11-06 10:19:52.747486811 -0500 README.md
+=== head ===
+# Le premier produit — analyser un texte avec Drave
+
+> **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc
+> linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui
+> il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
+> qu'il garantit.
+>
+> **Vérifié le 2026-11-06** sur la branche `s/v7`. Le CLI unifié **`tools/drave.py`** est
+> **livré** : `analyser`, `evaluer`, `rejouer`, `--version` ; la **porte produit**
+> (`bash tools/porte-produit.sh`) le vérifie en **6 contrôles** et **1 min 56** ; le smoke test
+> `tools/tests/test_produit.py` passe **6 tests en 1,2 s**. Les exemples du § 3 sont réels : ils
+> ont été lancés pour ce document.
+>
+> **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
+> classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
+> candidats, de façon **déterministe**, et il sait **se mesure
+… [1997 caractères tronqués]
+  ```
+

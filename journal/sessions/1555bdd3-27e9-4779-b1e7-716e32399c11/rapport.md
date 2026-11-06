@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 1.0 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 93 |
-| Appels d'outils | 113 |
+| Messages | 99 |
+| Appels d'outils | 119 |
 | Fichiers touchés | 2 |
-| Commandes | 96 |
+| Commandes | 99 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*113 appels d'outils.* Actions notables :
+*119 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 88 autres
+- … et 93 autres
 
 **Synthèse produite :**
 
-⏵ Collecte de la porte produit (job de fond) et des sorties CLI finales.
+⏵ Relecture complète de la notice concurrente avant remplacement.
 
 ## 3. Travail accompli
 
@@ -53,7 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
@@ -98,7 +98,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 56 autres
+- … et 59 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -144,6 +144,8 @@
 - **T1** `langue=fr script=Latn source=heuristique · 30 étiquettes · unités sémantiques=3 (55.2% du texte)`
 - **T1** `[still running after 60000ms; moved to background job bash-2983]`
 - **T1** `langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)`
+- **T1** `**Lecture.** Le banc mesure **20 combinaisons** (4 lectures × 5 sources) et écrit un JSON de`
+- **T1** `unités     2 (61,5 %)`
 
 ## 5. Erreurs rencontrées
 
