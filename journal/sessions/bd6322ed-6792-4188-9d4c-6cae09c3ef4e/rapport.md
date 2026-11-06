@@ -7,12 +7,12 @@
 | Identifiant | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.0 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 9 |
-| Appels d'outils | 9 |
-| Fichiers touchés | 0 |
-| Commandes | 6 |
+| Messages | 22 |
+| Appels d'outils | 31 |
+| Fichiers touchés | 1 |
+| Commandes | 24 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python, dépôt Drave). Mission … [2481 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — List tools and check branch status
 - read
@@ -34,10 +34,18 @@
 - bash — Inspect annotation output for sample sentences
 - bash — Inspect simpler fr/en sentences
 - bash — Benchmark gold evaluation
+- bash — Search repo for entry-point mentions
+- bash — Inspect gold formats
+- bash — Check cross-process determinism of existing CLI JSON
+- bash — Look at version conventions
+- bash — Check tests layout and pytest availability
+- bash — Read existing test style
+- bash — Read second test style
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Reading the linguistic block module and existing tools
+⏵ Writing the new product CLI `tools/drave.py`
 
 ## 3. Travail accompli
 
@@ -45,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py` | 1 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -54,8 +63,45 @@
 - **T1** Inspect annotation output for sample sentences
 - **T1** Inspect simpler fr/en sentences
 - **T1** Benchmark gold evaluation
+- **T1** Search repo for entry-point mentions
+- **T1** Inspect gold formats
+- **T1** Check cross-process determinism of existing CLI JSON
+- **T1** Look at version conventions
+- **T1** Check tests layout and pytest availability
+- **T1** Read existing test style
+- **T1** Read second test style
+- **T1** Find restitution/translation modules
+- **T1** Locate restitution and translation code
+- **T1** Read headers of generation and translation tools
+- **T1** Test version and help
+- **T1** Test readable analysis in French and English
+- **T1** Measure readable gold evaluation
+- **T1** Test JSON output and replay
+- **T1** Test gold evaluations and measure runtime
+- **T1** Test help, usage errors and refusal
+- **T1** Check evaluation JSON size and validity
+- **T1** Verify cross-process determinism of outputs
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `f"({a.fraction_semantique:.1%} du texte)")`
+- **T1** `self.assertIn("80 %", invite)`
+- **T1** `langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)`
+- **T1** `langue=en script=Latn source=heuristique · 32 étiquettes · unités sémantiques=3 (48.1% du texte)`
+- **T1** `duree=0.50 s maxrss=30732 Ko`
+- **T1** `POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)`
+- **T1** `SYNTAGMES   F1 58.49 %  (P 62.92 % / R 54.64 %)`
+- **T1** `tête      F1 73.36 %  (P 81.00 % / R 67.04 %)`
+- **T1** `ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %`
+- **T1** `tête      couverture 100.00 % · top-k 99.55 %`
+- **T1** `PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %`
+- **T1** `FRACTION SÉMANTIQUE 55.37 %`
+- **T1** `CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)`
+- **T1** `POS         exactitude 76.03 %  (fermé 90.07 %, ouvert 62.69 %)`
+- **T1** `SYNTAGMES   F1 58.93 %  (P 63.19 % / R 55.22 %)`
+- **T1** `tête      F1 73.92 %  (P 81.36 % / R 67.72 %)`
+- **T1** `PRAGMATIQUE acte 99.67 % · négation 97.67 % · modalité 98.84 % · double sens 94.35 %`
+- **T1** `FRACTION SÉMANTIQUE 55.54 %`
+- **T1** `duree=0.48 s maxrss=30908 Ko`
+- **T1** `duree=0.45 s maxrss=30724 Ko`
 

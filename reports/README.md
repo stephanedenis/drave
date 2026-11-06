@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-autotest-parallele.md`](rapport-autotest-parallele.md) | **B13** — l'autotest parallèle : **183/183 en 1 min 54** (×2,4), mêmes verdicts |
 | [`rapport-pensee-v12.md`](rapport-pensee-v12.md) | **B13** — **222/222 (1,0000)**, couverture **0,9289**, 17 spans inatteignables |
 | [`rapport-dev-test-v10.md`](rapport-dev-test-v10.md) | **B13** — dev/test v10 : dev 152/152, test 68/68, l'exact est saturé |
 | [`rapport-pensee-v11.md`](rapport-pensee-v11.md) | **B13** — les 2 régressions : exact **221/221**, couverture **0,9247**, 18 spans |
@@ -147,7 +148,6 @@
 | [`rapport-native-test.md`](rapport-native-test.md) | **N0.11** — test Rust autonome de la passe avant native (fixture 36 Ko) |
 | [`rapport-native-cache-gain.md`](rapport-native-cache-gain.md) | **N0.10** — cache KV : **19,25×** plus rapide, sortie identique |
 | [`rapport-native-cache.md`](rapport-native-cache.md) | **N0.9** — cache KV natif : sortie identique à Python, **592,6 ms**, 53 octets |
-| [`rapport-native-parite.md`](rapport-native-parite.md) | **N0.8** — parité native automatisée : **5/5** prompts, top-5 identique, écart < 0,0001 |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

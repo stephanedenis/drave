@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.0 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 14 |
-| Fichiers touchés | 0 |
-| Commandes | 6 |
+| Messages | 26 |
+| Appels d'outils | 36 |
+| Fichiers touchés | 2 |
+| Commandes | 21 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -34,10 +34,18 @@
 - read
 - bash — Lister classes et fonctions du module
 - bash — Lire débuts des fiches audit et dev-test
+- bash — Rejouer l'évaluation gold de référence
+- bash — Vérifier commit et propreté des fichiers cibles
+- bash — Lire les tests existants du bloc
+- bash — Repérer les portes liées au bloc
+- bash — Lire le contrat documenté du bloc
+- bash — Lire la suite du contrat documenté
+- bash — Vérifier le corpus UDHR et ses codes langue
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Lecture du protocole d'évaluation gold et des fiches
+⏵ Construction du banc de 50 phrases libres et du harnais d'audit
 
 ## 3. Travail accompli
 
@@ -45,6 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/audit_produit_bl/phrases.py` | 1 | 0 |
+| `/tmp/audit_produit_bl/audit.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -54,4 +64,25 @@
 - **T1** Vérifier existence des fiches
 - **T1** Lister classes et fonctions du module
 - **T1** Lire débuts des fiches audit et dev-test
+- **T1** Rejouer l'évaluation gold de référence
+- **T1** Vérifier commit et propreté des fichiers cibles
+- **T1** Lire les tests existants du bloc
+- **T1** Repérer les portes liées au bloc
+- **T1** Lire le contrat documenté du bloc
+- **T1** Lire la suite du contrat documenté
+- **T1** Vérifier le corpus UDHR et ses codes langue
+- **T1** Vérifier dépendance générateur et variable d'environnement
+- **T1** Lire l'API du générateur S
+- **T1** Rejouer l'évaluation et sauver le JSON de référence
+- **T1** Extraire les chiffres de référence du JSON
+- **T1** Exécuter le harnais de robustesse et contrat
+- **T1** Corriger la collision de clé et relancer
+- **T1** Inspecter les anomalies détectées
+- **T1** Inspecter cas limites et déterminisme
+
+## 4. Mesures et résultats marquants
+
+- **T1** `la cascade (mock de contrat) préserve ces chiffres et couvre **67,1 %** en unités sémantiques.`
+- **T1** `(les réels passent de 40 % à 80 % en tête avec les deux lectures). Le **vrai** modèle neuronal est **refusé**`
+- **T1** `- **L'attachement par tête couvre 100 %** ; le gold annote 29 cibles ambiguës en double lecture,`
 

@@ -335,3 +335,701 @@ pensee
 … [12438 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 220}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+3: 
+4: Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+5: 
+6:   - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+7:     **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+8:   - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+9:     substitution et le parallèle sans GPU ;
+10:   - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+11:     même type d'annotation ;
+12:   - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+13:     POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
+14:   - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+15:     étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+16:     que l'heuristique ne couvre pas.
+… [8798 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"^class \\|^def \\|^    def \" tools/bloc_linguistique.py | head -100", "description": "Lister classes et fonctions du module"}`
+
+  ```
+59:class Span:
+63:    def json(self) -> dict:
+68:class Etiquette:
+81:    def json(self) -> dict:
+92:class Annotation:
+105:    def par_niveau(self) -> dict[str, list[Etiquette]]:
+111:    def couverture(self) -> dict[str, float]:
+116:    def json(self, avec_duree: bool = False) -> dict:
+130:class BlocLinguistique(Protocol):
+133:    def analyser(self, texte: str, langue: str | None = None,
+137:class RefusNeuronal(RuntimeError):
+144:def _normaliser(texte: str) -> str:
+148:def _trigrammes(texte: str) -> list[str]:
+153:def _profil(texte: str, top: int = 200) -> dict[str, int]:
+158:def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30),
+192:def _score_profil(tri: collections.Counter, profil: dict[str, int]) -> float:
+199:def detecter_langue(texte: str, profils: dict[str, dict] | None = None,
+230:def _script_char(ch: str) -> str:
+256:def detecter_script(texte: str) -> str:
+461:def _est_adverbe_seul(g: dict) -> bool:
+473:def _sans_enclitique(mot: str) -> str:
+481:def _est_verbe(mot: str) -> bool:
+500:def _role_gp(prep: str) -> str:
+525:class Heuristique:
+530:    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+540:    def _langue(self
+… [4335 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 500, "limit": 180}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 995, "limit": 270}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+500: def _role_gp(prep: str) -> str:
+501:     p = prep.casefold()
+502:     if p in {"dans", "sur", "sous", "chez", "vers", "entre", "devant", "derrière", "près", "loin",
+503:              "in", "on", "at", "under", "between"}:
+504:         return "lieu"
+505:     if p in {"pendant", "depuis", "durant", "avant", "après", "during", "since", "before", "after"}:
+506:         return "temps"
+507:     if p in {"pour", "afin", "for", "to"}:
+508:         return "but"
+509:     if p in {"par", "by"}:
+510:         # `par` + GN est l'**agent** d'un passif (`Le chat est mangé par le chien`) ;
+511:         # `avec`/`sans` restent le moyen.
+512:         return "agent"
+513:     if p in {"avec", "sans", "with", "without"}:
+514:         return "moyen"
+515:     if p in {"à", "a", "au", "aux", "to"}:
+516:         return "destinataire"
+517:     if p in {"de", "du", "des", "of", "from"}:
+518:         return "theme"
+519:     return "complément"
+520: 
+521: 
+522: # --------------------------------------------------------------------------- heuristique
+523: 
+524: 
+525: class Heuristique:
+526:   
+… [7985 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+995:                                  "debut": d, "fin": mots[j - 1][1],
+996:                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
+997:                 i = j
+998:                 continue
+999:             i += 1
+1000:         return segments
+1001: 
+1002:     # -- analyse ------------------------------------------------------------
+1003:     def analyser(self, texte: str, langue: str | None = None,
+1004:                  contexte: str | None = None) -> Annotation:
+1005:         t0 = time.perf_counter()
+1006:         texte = texte or ""
+1007:         trace: list[dict] = []
+1008:         if not texte.strip() or not any(ch.isalpha() or ch.isdigit() for ch in texte):
+1009:             return Annotation(texte=texte, refus="vide", source=self.nom,
+1010:                               trace=[{"etape": "refus", "raison": "vide"}],
+1011:                               cout={"octets": len(texte.encode()), "duree_s": round(time.perf_counter() - t0, 6)})
+1012: 
+1013:         lg, conf_lg, script = self._langue(texte, langue)
+1014:         trace.append(
+… [17144 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du protocole d'évaluation gold et des fiches
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py</path>
+<type>file</type>
+<content>
+1: """evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) + synthétique (160).
+2: 
+3: Trois niveaux : POS (token, exact), syntagmes (exact + **par tête**), pragmatique. Quatre
+4: lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+5: (`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+6: """
+7: from __future__ import annotations
+8: 
+9: import argparse
+10: import json
+11: import pathlib
+12: import sys
+13: from collections import Counter, defaultdict
+14: 
+15: RACINE = pathlib.Path(__file__).resolve().parents[3]
+16: sys.path.insert(0, str(RACINE / "tools"))
+17: import bloc_linguistique as bl  # noqa: E402
+18: 
+19: GOLD = pathlib.Path(__file__).with_name("gold.json")
+20: REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+21: SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
+22: 
+23: 
+24: def charger() -> list[dict]:
+25:     hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+26:     reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
+27:     synth = json.
+… [15928 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py</path>
+<type>file</type>
+<content>
+1: """gold_split.py — le gold 612 coupé en **dev** et **test**, de façon déterministe.
+2: 
+3: Le problème. Toutes les mesures de la session sont **in-sample** : les règles de segmentation et
+4: d'attachement ont été dessinées en regardant les échecs du même gold qui les mesure. Pour juger
+5: une règle, il faut un gold **tenu à l'écart** : on règle sur `dev`, on évalue sur `test`.
+6: 
+7: Protocole (fixé ici). Le split est un **hash stable de l'identifiant** (`crc32(id) % 3 == 0` →
+8: test, sinon dev), donc reproductible, insensible à l'ordre et indépendant du contenu. Il est
+9: **stratifié par source** (`hand`, `reel`, `synthetique`) et par langue : on vérifie l'équilibre
+10: dans la fiche. Aucune phrase n'est dupliquée entre les deux ; l'union redonne les 612.
+11: 
+12: Usage :
+13:     from tools.tests.linguistique.gold_split import dev, test, compter
+14:     ph = charger(); d = dev(ph); t = test(ph)
+15: """
+16: from __future__ import annotations
+17: 
+18: import zlib
+19: 
+20: PART_TEST = 3  # une phrase sur trois va au test
+21: 
+22: 
+23: def _est_test(phras
+… [1070 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-v12.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-v12.md</path>
+<type>file</type>
+<content>
+1: # B13 — 222/222 (1,0000) : le dernier marqueur ambigu, et 17 spans inatteignables
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-06 ·
+4: > **État courant** · **Verdict** : ✅ — **la cible de A17 est atteinte**.
+5: > **183/183 portes** : le dernier écart était un **marqueur ambigu** — « when » après un GN est
+6: > une **relative** (« The day when we left »), ailleurs une **subordonnée** (« When it rains »).
+7: > Résultat : **222 labels** sur 239, **exact 222/222 = 1,0000** (fr **136/136**, en **86/86**),
+8: > **couverture 0,9289**, **F1 0,5893** (union ; S 0,5014, chunker 0,6203), tête **0,7392** ;
+9: > **17 spans** restants (8 REL, 5 SUB, 4 GP) — **tous inatteignables** sans corriger le gold ou
+10: > le lexique (12 formes synthétiques, 4 GP du gold sans préposition, une tokenisation `qu'il`).
+11: > **dev 153/153, test 69/69.**
+12: >
+13: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`AMBIGUES_REL`,
+14: > branche REL/SUB), [`autotest.py`](../tools/pensee/autotest.py) (16 assertions) ;
+15: > JSO
+… [2916 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -80 reports/rapport-audit-v10.md; echo \"==========\"; head -60 reports/rapport-dev-test-v10.md", "description": "Lire débuts des fiches audit et dev-test"}`
+
+  ```
+# Audit v10 — les chiffres rejouent, l'attribution des corrections ne rejoue pas
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit audité** : `710ec7f9` (parent `160d08ca`) · **Date** : 2026-11-05 ·
+> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅ (183/183, 11 docstrings périmées).
+> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+> [`pensee-audit-v10.json`](pensee-audit-v10.json).
+
+**En une phrase.** Les valeurs de la fiche [`rapport-pensee-v10.md`](rapport-pensee-v10.md)
+rejouent presque toutes : **220/220**, couverture **0,9205**, **F1 0,5880** (gelé 602),
+**tête 0,7388**, **fr 134/134**, **en 86/86**, **19 spans** (9 REL, 6 SUB, 4 GP),
+**top-k 219**, **183/183 portes**. Mais la fiche attribue le gain à **deux** corrections :
+la seconde, le **`-ée`**, est **antérieure à la v10** (commit `a408a909`, déjà dans v8 et v9)
+et **inerte sur ce gold** (0 différence d'annotation sur 612 phrases) ; `r255` reste absent
+car `acheter` n'est pas dans le lexique. Le **seul** gain v10 est la **garde DET du GP**
+(`r153`, test), **+1 exact**. Les **19 spans** ne sont pas « 17 inatteignables + `r255` +
+`r264` » 
+… [8668 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 280, "offset": 220}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 220, "offset": 1800}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+220:         scores[indice] += 0.02
+221:     if not scores or max(scores.values()) <= 0:
+222:         return "und", 0.0, scores
+223:     langue = max(scores, key=scores.get)
+224:     return langue, round(min(1.0, scores[langue] * 2), 4), scores
+225: 
+226: 
+227: # --------------------------------------------------------------------------- script
+228: 
+229: 
+230: def _script_char(ch: str) -> str:
+231:     if not ch.isalpha():
+232:         return ""
+233:     try:
+234:         nom = unicodedata.name(ch)
+235:     except ValueError:
+236:         return ""
+237:     prefixes = (
+238:         ("LATIN", "Latn"), ("CYRILLIC", "Cyrl"), ("GREEK", "Grek"), ("ARABIC", "Arab"),
+239:         ("HEBREW", "Hebr"), ("DEVANAGARI", "Deva"), ("THAI", "Thai"), ("HIRAGANA", "Jpan"),
+240:         ("KATAKANA", "Jpan"), ("HANGUL", "Hang"), ("CJK", "Hani"), ("IDEOGRAPH", "Hani"),
+241:         ("BENGALI", "Beng"), ("TAMIL", "Taml"), ("TELUGU", "Telu"), ("KANNADA", "Knda"),
+242:         ("MALAYALAM", "Mlym"), ("GUJARATI", "Gujr"), ("GURMUKHI", "Guru"), ("SINHALA", "Sinh"),
+243:         ("MYANMAR", "
+… [18358 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1800:         except Exception as e:
+1801:             annotation = Annotation(texte=texte, langue=lg, script=script, source=self.nom,
+1802:                                     refus=f"neuronal-pragmatique: {type(e).__name__}: {str(e)[:160]}",
+1803:                                     trace=[{"etape": "neuronal-pragmatique", "erreur": str(e)[:160]}],
+1804:                                     cout={"octets": len(texte.encode()),
+1805:                                           "duree_s": round(time.perf_counter() - t0, 6)})
+1806:         if self.cache:
+1807:             self._cache[cle] = annotation
+1808:         return annotation
+1809: 
+1810: 
+1811: # --------------------------------------------------------------------------- compositions
+1812: 
+1813: 
+1814: def _supprimer_chevauchements(etiquettes: list[Etiquette],
+1815:                               priorite_syntagme: str = "heuristique") -> list[Etiquette]:
+1816:     """Les alternatives se suppriment **par type** quand les types sont complémentaires.
+1817: 
+1818:     `pos` et `syntagme` sont des alternatives de **sp
+… [11543 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des mesures de référence sur le gold actuel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 --version && PYTHONPATH=. timeout 600 python3 tools/tests/linguistique/evaluer_gold.py 2>&1 | tail -30", "description": "Rejouer l'évaluation gold de référence", "timeoutMs": 600000}`
+
+  ```
+Python 3.13.16
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 70,
+     "justes": 70,
+     "taux": 1.0
+    },
+    "couverture": 0.8703,
+    "par_langue": {
+     "fr": {
+      "cibles": 151,
+      "labels": 122,
+      "exact": 122,
+      "topk": 121,
+      "exact_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 88,
+      "labels": 86,
+      "exact": 86,
+      "topk": 86,
+      "exact_taux_span": 1.0
+     }
+    }
+   },
+   "attachement_tete": {
+    "cibles": 208,
+    "labels": 208,
+    "top1"
+heuristique all: {"pos": {"exactitude": 0.7581, "exactitude_ferme": 0.9004, "exactitude_ouvert": 0.6234, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 20, "PREP": 2, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 311, "NOUN": 450, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6292
+… [290 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%H %ad %s' --date=iso && git status --short tools/bloc_linguistique.py tools/tests/linguistique/ reports/rapport-pensee-v12.md", "description": "Vérifier commit et propreté des fichiers cibles"}`
+
+  ```
+fa1b0c6eb90b3d27ec78f946d677817ba08b419e 2026-11-06 09:16:28 -0500 ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 150, "offset": 853}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 160, "offset": 2020}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+853:         return proches
+854: 
+855:     def _syntagmes_simple(self, texte: str, langue: str,
+856:                           pos_verbes: set[int] | None = None) -> list[dict]:
+857:         mots = self._mots(texte)
+858:         lex = POS_FERME.get(langue, POS_FERME["fr"])
+859:         pos_verbes = pos_verbes or set()
+860:         par_debut = {m[0]: k for k, m in enumerate(mots)}
+861: 
+862:         def est_sub(n: str) -> bool:
+863:             """Le mot est-il un subordonnant **dans cette langue** ? (« car » est un nom anglais)"""
+864:             if n in SUB_PAR_LANGUE.get(langue, set()):
+865:                 return True
+866:             return n in SUBORDONNANTS and not (langue == "en" and n == "car")
+867: 
+868:         def est_verbe(d: int, m: str) -> bool:
+869:             """Le verbe : le lexique, le POS, ou la **position** après un pronom sujet."""
+870:             if _est_verbe(m) or d in pos_verbes:
+871:                 return True
+872:             n2 = _normaliser(m)
+873:             # A17 (R1a) : un pronom n'est jamais un verbe **par la position** (« that I 
+… [8252 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+2020:     "it": "Il gatto della vicina che dorme sul tetto si sveglia. Vedi il gatto?",
+2021: }
+2022: 
+2023: 
+2024: def _resume_annotation(a: Annotation) -> dict:
+2025:     par = a.par_niveau()
+2026:     return {"langue": a.langue, "script": a.script, "source": a.source, "refus": a.refus,
+2027:             "niveaux": {n: len(es) for n, es in sorted(par.items())},
+2028:             "couverture": a.couverture(),
+2029:             "fraction_semantique": round(a.fraction_semantique, 4),
+2030:             "etiquettes": len(a.etiquettes)}
+2031: 
+2032: 
+2033: def autotest(udhr: pathlib.Path, sortie: pathlib.Path | None = None) -> dict:
+2034:     """Mesure la langue, le script, la substitution, le parallèle, la cascade et l'activation."""
+2035:     rapport: dict = {"date": time.strftime("%Y-%m-%dT%H:%M:%S"), "niveaux": list(NIVEAUX)}
+2036:     profils, tests = charger_profils_udhr(udhr, test=(15, 15), min_test=1)
+2037:     t0 = time.perf_counter()
+2038:     justes = 0
+2039:     scripts_justes = 0
+2040:     par_langue: dict[str, list[int]] = collections.defaultdict(lambda: [0,
+… [7621 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 190, "offset": 665}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 40, "offset": 2178}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+665:                     for s in base}
+666:         except Exception:
+667:             return {}
+668: 
+669:     @staticmethod
+670:     def _cible_precedent(texte: str, segment: dict, precedent: dict | None, verbes) -> str | None:
+671:         """REL → tête du GN précédent ; SUB après un GV → son verbe (le gouverneur)."""
+672:         if not precedent:
+673:             return None
+674:         if segment.get("type") == "REL" and precedent.get("type") == "GN":
+675:             return Heuristique._tete_nom(texte, precedent["debut"], precedent["fin"])
+676:         if segment.get("type") == "SUB" and precedent.get("type") == "GV":
+677:             if _est_adverbe_seul(precedent):
+678:                 return None
+679:             return Heuristique._verbe_dans(texte, precedent["debut"], precedent["fin"], verbes)
+680:         return None
+681: 
+682:     @staticmethod
+683:     def _candidats_precedent(texte: str, segment: dict, precedent: dict | None) -> list[str]:
+684:         """Les candidats que le **précédent** impose : l'antécédent d'une REL, le verbe d'une SUB."""
+685: 
+… [9251 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+2178:     if args.json:
+2179:         print(json.dumps(a.json(avec_duree=args.duree), ensure_ascii=False, indent=1))
+2180:     else:
+2181:         print(f"langue={a.langue} script={a.script} source={a.source} refus={a.refus or '-'}")
+2182:         for n, es in sorted(a.par_niveau().items()):
+2183:             for e in es[:4]:
+2184:                 print(f"  {n:12s} {e.type:14s} {e.valeur[:40]!r} [{e.debut}:{e.fin}] "
+2185:                       f"conf={e.confiance:.2f} src={e.source}")
+2186:         print(f"unités sémantiques : {len(a.unites_semantiques)} "
+2187:               f"({a.fraction_semantique:.1%} du texte)")
+2188:     return 0
+2189: 
+2190: 
+2191: if __name__ == "__main__":
+2192:     raise SystemExit(main())
+
+(End of file - total 2192 lines)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,200p tools/tests/linguistique/test_bloc_linguistique.py", "description": "Lire les tests existants du bloc"}`
+
+  ```
+"""Tests du bloc linguistique — contrat, substitution, parallèle, cascade, activation."""
+import json
+import pathlib
+import stat
+import sys
+import tempfile
+import unittest
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE / "tools"))
+import bloc_linguistique as bl
+
+TEXTE = "Le chat de la voisine qui dort sur le toit se réveille. Va voir le chat !"
+
+
+class TestBlocLinguistique(unittest.TestCase):
+    def setUp(self):
+        self.h = bl.Heuristique(segmenter_s=False)
+        self.n = bl.MockNeuronal()
+
+    def test_niveaux_et_spans(self):
+        a = self.h.analyser(TEXTE, "fr")
+        niveaux = {e.niveau for e in a.etiquettes}
+        self.assertEqual(set(bl.NIVEAUX) - niveaux, set(), f"niveaux manquants : {set(bl.NIVEAUX)-niveaux}")
+        for e in a.etiquettes:
+            self.assertGreaterEqual(e.debut, 0)
+            self.assertLessEqual(e.fin, len(TEXTE))
+            self.assertLessEqual(e.debut, e.fin)
+
+    def test_langue_et_script(self):
+        for texte, langue in (("Le chat dort dans la maison.", "fr"),
+                              ("The cat sleeps in the house.", "en"),
+                              ("Die Katze schläft im Haus.", "d
+… [7615 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"bloc_linguistique\" tools/toutes-les-portes.sh tools/porte-bloc-linguistique.sh 2>/dev/null | head -30; ls tools/porte-bloc* 2>/dev/null; grep -n \"bloc_linguistique\" docs/implantation/bloc-linguistique.md 2>/dev/null | h … [56 caractères tronqués]`
+
+  ```
+tools/porte-bloc-linguistique.sh:7:python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' || { echo "❌ tests"; exit 1; }
+tools/porte-bloc-linguistique.sh:8:python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+tools/porte-bloc-code.sh
+tools/porte-bloc-linguistique.sh
+tools/porte-bloc-maths.sh
+tools/porte-bloc-tableaux.sh
+7:> **fraction** des unités. Le code est [`bloc_linguistique.py`](../../tools/bloc_linguistique.py) ;
+330:- Code : [`tools/bloc_linguistique.py`](../../tools/bloc_linguistique.py).
+331:- Tests : [`tools/tests/linguistique/test_bloc_linguistique.py`](../../tools/tests/linguistique/test_bloc_linguistique.py).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/implantation/bloc-linguistique.md && sed -n 1,140p docs/implantation/bloc-linguistique.md", "description": "Lire le contrat documenté du bloc"}`
+
+  ```
+338 docs/implantation/bloc-linguistique.md
+# Le bloc linguistique — un contrat, deux implémentations, neuf niveaux
+
+> **Ce que ce document est.** La **spécification** du bloc d'étiquetage linguistique : ce qu'il
+> étiquette du **graphème** à la **pragmatique**, ce que chaque étiquette porte, comment
+> l'**heuristique CPU** et la **version neuronale** se substituent, se **parallélisent** ou se
+> **cascadent**, et comment l'heuristique peut activer la **couche sémantique** sur une
+> **fraction** des unités. Le code est [`bloc_linguistique.py`](../../tools/bloc_linguistique.py) ;
+> la porte est [`porte-bloc-linguistique.sh`](../../tools/porte-bloc-linguistique.sh) ; la fiche
+> est [`rapport-bloc-linguistique.md`](../../reports/rapport-bloc-linguistique.md).
+>
+> **Ce que ce n'est pas.** Ni un analyseur syntaxique complet, ni un modèle de langue, ni la
+> couche sémantique. C'est une **couche de surface typée** : elle **déclare** ce qu'elle couvre,
+> avec quelle confiance et quels candidats ; le neuronal (ou l'humain) tranche l'ambigu, et la
+> couche sémantique ne reçoit que les unités qui en ont besoin.
+
+## 1. Le besoin
+
+Drave avait trois briques qui **touchaient** la langue sans être l
+… [7513 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 140,340p docs/implantation/bloc-linguistique.md", "description": "Lire la suite du contrat documenté"}`
+
+  ```
+GBNF** une classe POS par token, dans l'ordre. Les spans sont ceux de la tokenisation du bloc ;
+  le modèle ne les invente pas. La confiance par défaut (0,6) le destine à la **cascade** : il ne
+  remplace que les tokens que l'heuristique déclare peu sûrs, et laisse les classes fermées à
+  l'heuristique.
+- **`NeuronalLLMChunks`** : le **tagger de syntagmes**. Il demande une étiquette **BIO** par token
+  (`B-GN`/`I-GN`, `B-GV`/`I-GV`, `B-GP`/`I-GP`, `B-REL`/`I-REL`, `B-SUB`/`I-SUB`, `O`) sous
+  grammaire GBNF, puis **reconstruit** les spans sur la tokenisation du bloc. Le prompt est
+  **few-shot** (cinq exemples hors gold) : sans eux, les frontières (déterminant hors GN,
+  auxiliaire hors GV) se perdent. Il ne rend que le niveau `syntagme`.
+- **`NeuronalLLMCompose`** : le **bloc complet** — POS + syntagmes dans une seule annotation.
+  Il appelle les deux taggers (chacun avec son cache), réunit leurs étiquettes et laisse la
+  pragmatique à l'heuristique. C'est le bloc de la cascade complète ; un refus d'un des deux
+  n'efface pas l'autre.
+- **`NeuronalLLMPragmatique`** : le **tagger de pragmatique**. Un prompt d'analyse, une grammaire
+  GBNF qui impose `{acte, negation, modalite, doub
+… [10719 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 115, "offset": 1264}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1264: class MockNeuronal:
+1265:     """Le neuronal **de contrat** : même sortie, source `neuronal`, déterministe, sans GPU.
+1266: 
+1267:     Il ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+1268:     que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+1269:     """
+1270: 
+1271:     nom = "neuronal"
+1272: 
+1273:     def __init__(self, profils: dict[str, dict] | None = None):
+1274:         self.profils = profils
+1275: 
+1276:     def analyser(self, texte: str, langue: str | None = None,
+1277:                  contexte: str | None = None) -> Annotation:
+1278:         t0 = time.perf_counter()
+1279:         lg = detecter_langue(texte, self.profils, langue)[0]
+1280:         if lg == "und" and langue:
+1281:             lg = langue
+1282:         script = detecter_script(texte)
+1283:         etiquettes: list[Etiquette] = []
+1284:         unites: list[Span] = []
+1285:         h = Heuristique(segmenter_s=False)
+1286:         for d, f, t, typ in h._mots(texte):
+1287:             if typ == "mot":
+1288:   
+… [5892 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/udhr/articles.jsonl 2>/dev/null; head -c 500 data/udhr/articles.jsonl 2>/dev/null; echo; grep -c '\"iso3\"' data/udhr/articles.jsonl 2>/dev/null", "description": "Vérifier le corpus UDHR et ses codes langue"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 7661342 17 oct 23:14 data/udhr/articles.jsonl
+{"fichier": "udhr_007.xml", "iso3": "cri", "nom": "Sãotomense", "script": "Latn", "art": 0, "titre": "Préambule", "texte": "Punda dignidade di tudo nguê di mundu e dirêtu d'inem igual e andeji cu a na pô bêndê fa sá stê di liberdade, di justiça e di paz ni mundu; Punda fata di conheximentu e displêzu di dirêtu di hómé plovocá atu di malvadez cu ca revoltá cunxença di tudu hómé di mundu e punda ua mundu cu tudu nguê ca pô sa livli, pê pô flá e pê pô quêlê ni cuá cuê 
+13996
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"DEEPSEEK_KEY_FILE=${DEEPSEEK_KEY_FILE:-<unset>}\" && ls -la tools/structures/generateur.py && python3 -c \"\nimport sys; sys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nprint('priorite_par_defaut =', bl.priorite_pa … [94 caractères tronqués]`
+
+  ```
+DEEPSEEK_KEY_FILE=<unset>
+-rw-r--r--. 1 stephane stephane 30580  4 nov 11:41 tools/structures/generateur.py
+priorite_par_defaut = None
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,80p tools/structures/generateur.py", "description": "Lire l'API du générateur S"}`
+
+  ```
+#!/usr/bin/env python3
+"""generateur.py — une phrase brute → des structures candidates (v0 heuristique).
+
+Ce n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire valider par
+un humain. Il segmente (GN, GV, GP, REL, SUB), devine des rôles par la préposition, puis produit
+plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+GV le plus proche).
+
+    python3 generateur.py "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 generateur.py --json "..."     # la structure complète
+"""
+from __future__ import annotations
+
+import json
+import re
+import unicodedata
+
+DET = set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses "
+          "notre nos votre vos leur leurs quel quelle quels quelles".split())
+PREP = set("a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis "
+           "pendant durant contre malgre selon pres loin devant derriere apres avant".split())
+RELATIFS = set("qui que qu dont ou quoi".split())
+CONJ = set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant quoique".split())
+COORD = set("et ou mais donc or ni car".split())
+SU
+… [3976 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du banc de 50 phrases libres et du harnais d'audit
+
+- **bash** `{"command": "mkdir -p /tmp/audit_produit_bl && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (time PYTHONPATH=. python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/audit_produit_bl/eval_baseline.json > /tmp/audit_produit_bl/eval_baseline.out 2>&1); echo \"exit=$?\"; tail -5 /tmp/aud … [151 caractères tronqués]`
+
+  ```
+started background job bash-2751
+  ```
+
+- **write** `{"file_path": "/tmp/audit_produit_bl/phrases.py", "content": "# -*- coding: utf-8 -*-\n\"\"\"50 phrases libres écrites pour l'audit produit du bloc linguistique.\n\nAucune ne vient du gold : elles sont écrites ici, à la main, pour représenters\nl'usage « utilisateur » (longueurs, ponctuation, majusc … [10326 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_produit_bl/phrases.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2751 (bash: mkdir -p /tmp/audit_produit_bl && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (time PYTHONPATH=. python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/audit_produit_bl/eval_baseline.json > /tmp/audit_produit_bl/eval_baseline.out 2>&1); echo "exit=$?"; tail -5 /tmp/audit_produit_bl/eval_baseline.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && tail -12 eval_baseline.out && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_produit_bl/eval_baseline.json'))\nprint('keys:', list(d)[:10])\nh=d['heuristique']['all']; c=d['cascade']['all']\nprint('hand?', d['gold'])\nprint('heur POS', h['pos'][' … [506 caractères tronqués]`
+
+  ```
+"labels": 86,
+      "exact": 86,
+      "topk": 86,
+      "exact_taux_span": 1.0
+     }
+    }
+   },
+   "attachement_tete": {
+    "cibles": 208,
+    "labels": 208,
+    "top1"
+heuristique all: {"pos": {"exactitude": 0.7581, "exactitude_ferme": 0.9004, "exactitude_ouvert": 0.6234, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 20, "PREP": 2, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 311, "NOUN": 450, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6292, "rappel": 0.5464, "f1": 0.5849, "tp": 1018, "fp": 600, "fn": 845, "tete": {"precision": 0.81, "rappel": 0.6704, "f1": 0.7336, "tp": 1249, "fp": 293, "fn": 614}}, "pragmatique": {"acte": 0.9967, "negation": 0.9771, "modalite": 0.9886, "double_sens": 0.9444}, "fraction_semantique": 0.5537}
+keys: ['date', 'heuristique', 'mock_neu
+… [349 caractères tronqués]
+  ```
+
+- **write** `{"content": "# -*- coding: utf-8 -*-\n\"\"\"Harnais d'audit produit du bloc linguistique — robustesse, contrat, déterminisme.\n\nSort un JSON complet dans /tmp/audit_produit_bl/resultats.json. Ne touche pas au dépôt.\n\"\"\"\nfrom __future__ import annotations\n\nimport collections\nimport hashlib\n … [21682 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_produit_bl/audit.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+

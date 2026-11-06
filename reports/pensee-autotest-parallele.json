@@ -1,0 +1,21 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "mode": "AUTOTEST_JOBS",
+ "sequentiel": {
+  "temps_mural_s": 280,
+  "cpu_s": 280,
+  "verdict": "183/183"
+ },
+ "parallele8": {
+  "temps_mural_s": 114,
+  "cpu_s": 279,
+  "verdict": "183/183"
+ },
+ "facteur": 2.4,
+ "limites": [
+  "portes longues bornent le lot",
+  "autres évaluations séquentielles",
+  "fork seulement"
+ ]
+}

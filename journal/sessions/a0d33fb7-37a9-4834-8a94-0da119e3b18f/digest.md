@@ -349,3 +349,1040 @@ impor
 … [1749 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Repérage des 12 fiches récentes et des commandes citées
+Je liste les rapports par date de modification et je vérifie l'existence des commandes candidat.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -t reports/rapport-*.md | head -14 | while read f; do printf \"%s\\t%s\\n\" \"$(git log -1 --format=%cs -- \"$f\" 2>/dev/null || echo '-')\" \"$f\"; done; echo \"--- mtime ---\"; ls -lt reports/rapport-*.md | head -14", "descripti … [60 caractères tronqués]`
+
+  ```
+2026-11-06	reports/rapport-pensee-v12.md
+2026-11-06	reports/rapport-dev-test-v10.md
+2026-11-06	reports/rapport-pensee-v11.md
+2026-11-06	reports/rapport-audit-v10.md
+2026-11-06	reports/rapport-pensee-v10.md
+2026-11-05	reports/rapport-pensee-couverture-v5.md
+2026-11-05	reports/rapport-gold-split.md
+2026-11-05	reports/rapport-pensee-r1r3.md
+2026-11-05	reports/rapport-pensee-v9.md
+2026-11-05	reports/rapport-coherence-fiches-v8.md
+2026-11-05	reports/rapport-pensee-couverture-v7.md
+2026-11-05	reports/rapport-pensee-attachement-parfait.md
+2026-11-05	reports/rapport-pensee-segmentation-v4.md
+2026-11-05	reports/rapport-audit-r1r3.md
+--- mtime ---
+-rw-r--r--. 1 stephane stephane  3742  6 nov 01:26 reports/rapport-pensee-v12.md
+-rw-------. 1 stephane stephane 34830  6 nov 01:01 reports/rapport-dev-test-v10.md
+-rw-r--r--. 1 stephane stephane  3386  6 nov 00:59 reports/rapport-pensee-v11.md
+-rw-------. 1 stephane stephane 26533  6 nov 00:38 reports/rapport-audit-v10.md
+-rw-r--r--. 1 stephane stephane  3640  6 nov 00:28 reports/rapport-pensee-v10.md
+-rw-r--r--. 1 stephane stephane  4818  5 nov 22:56 reports/rapport-pensee-couverture-v5.md
+-rw-r--r--. 1 stephane stephane  3304  5 nov 22:56 report
+… [704 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in tools/porte-n2.sh tools/toutes-les-portes.sh tools/porte-tableaux.sh tools/revue_documentation.py tools/taille_documents.py tools/verifie_en_cours.py tools/verifie_journal.py tools/verifier_schemas.py tools/porte-ressources. … [170 caractères tronqués]`
+
+  ```
+MANQ tools/porte-n2.sh
+OK   tools/toutes-les-portes.sh
+OK   tools/porte-tableaux.sh
+OK   tools/revue_documentation.py
+OK   tools/taille_documents.py
+OK   tools/verifie_en_cours.py
+OK   tools/verifie_journal.py
+OK   tools/verifier_schemas.py
+OK   tools/porte-ressources.sh
+MANQ tools/porte-llm-guard.sh
+OK   tools/carte_chantiers.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la roadmap et de l'état courant
+`tools/porte-n2.sh` n'existe pas — point à consigner. Je lis maintenant les sources maîtresses.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+1: # La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+2: 
+3: > **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+4: > L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+5: > contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+6: >
+7: > **Détail et histoire** : l'ancien plan [A/B](../theorie/glossaire/entrees/a-b.md) est archivé dans
+8: > [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+9: > [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+10: > dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+11: > [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+12: 
+13: ## Comment lire cette roadmap
+14: 
+15: - **Les états** : ✅ m
+… [44768 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de l'état courant et des questions ouvertes
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-06, 09 h 35 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reboot du 03/11 19 h 33** : la nuit a été coupée (`kd2` **8 250/30 000**, `rope2048`
+9: > **3 350/20 000**, sans checkpoint) ; les quatre sessions ont été mises en pause. **Reprise du
+10: > 04/11** : hub `1e7ef596` (08 h 50), N2 09 h 41, S 09 h 46, L/B13 10 h 14 ; **N3** clos en
+11: > session courte (11 h 30–11 h 38). Runbook [`plan-travail.md`](plan-travail.md) § 9 et § 12.
+12: 
+13: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+14: 
+15: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+16: - **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+17: - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs (revue, liens, tableaux).
+18: - **Prochaine action** : **suivi docs**, puis la **passe** ap
+… [10710 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du plan de travail (§ 9 et § 12)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '^#\\|^##\\|^###' docs/pilotage/plan-travail.md", "description": "Show plan-travail headings"}`
+
+  ```
+1:# Le plan de travail — plusieurs sessions sur une même machine
+15:## 1. Où ce plan se situe
+30:## 2. Les quatre sessions et le rôle d'intégration
+53:## 3. Les territoires — qui écrit quoi
+78:## 4. La cadence et l'écriture de l'état
+107:## 5. Les règles de la machine partagée
+123:## 6. La surveillance
+142:## 7. La balance, et les bascules
+155:## 8. La mise en route
+163:## 9. Reprise après le reboot du 02/11 15 h 06 — ouvrir ou reprendre
+231:## 10. La coordination des ressources — le registre et le protocole
+245:### 10.1 Le modèle
+259:### 10.2 La règle NUMA
+264:# job GPU : fils et mémoire sur le node 0
+268:# job CPU seul : node 1
+274:### 10.3 Le protocole
+291:### 10.4 L'allocation type
+306:### 10.5 Le stockage
+315:### 10.6 Le registre et la vérification
+328:### 10.7 La nuit du 02/11 → 03/11 (08 h)
+352:## 11. La nuit du 03/11 → 04/11 — le plan, et les conflits qu'il évite
+394:## 12. La reprise du 04/11 — le suivi documentaire
+403:## 9. La tranche autonome du 05/11 (11 h 15 → 18 h) et ses sous-agents
+423:### Les vagues (05/11, 11 h 40 → 18 h)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/index.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/index.md</path>
+<type>file</type>
+<content>
+1: # Le backlog des fonctionnalités — index
+2: 
+3: > **Ce que ce dossier est.** Une **fiche par fonctionnalité** à documenter et à implémenter : le programme
+4: > **R (le lecteur)** et les lignes ouvertes des programmes A, B et N. Une fiche n'est **pas** un résultat :
+5: > elle porte le besoin, le contrat, la porte, les contrôles négatifs et ce qui pourrait la rendre fausse. Le
+6: > résultat, quand il existe, vit dans `reports/`.
+7: >
+8: > **La roadmap** est [`../roadmap.md`](../roadmap.md) ; l'**analyse** qui a ouvert le programme R est
+9: > [`../../theorie/lecture-rapide.md`](../../theorie/lecture-rapide.md) ; l'**état courant** est
+10: > [`../en-cours.md`](../en-cours.md). **Chargement** : une fiche à la fois, jamais le dossier entier. **37 fiches** : 20 pour R, 17 pour les lignes
+11: > ouvertes A/B/N ; le **graphe** des dépendances est dans [`dependances.md`](dependances.md).
+12: 
+13: ## Comment utiliser une fiche
+14: 
+15: 1. **Lire le besoin et le contrat** — c'est ce qui dit si la fonctionnalité est prête à être codée.
+16: 2. **Vérifier la porte et les contr
+… [8239 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des sections § 9 et § 12 du plan de travail
+Le plan contient **deux sections numérotées 9** — incohérence à signaler.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md", "offset": 15, "limit": 160}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+15: ## 1. Où ce plan se situe
+16: 
+17: ```
+18: en-cours.md          ce qui se passe maintenant (état court, une section par session active)
+19: plan-travail.md      qui fait quoi, où, à quelle cadence (ce document)
+20: roadmap.md           l'ordre des chantiers et leur état
+21: chantiers.md         les relations entre les chantiers, la vision, la capacité
+22: backlog/             les contrats par fonctionnalité
+23: ```
+24: 
+25: L'état se lit en premier ; le plan dit **comment le travail se répartit** ; la roadmap dit
+26: **dans quel ordre** ; `chantiers.md` dit **pourquoi les morceaux tiennent ensemble**. Un fait ne
+27: se commit qu'avec sa ligne d'état (hook `verifie_etat_a_jour.py`) ; une session ne s'ouvre
+28: qu'avec un plan (`journal/sessions/<id>/plan.md`) et un territoire réservé.
+29: 
+30: ## 2. Les quatre sessions et le rôle d'intégration
+31: 
+32: Quatre sessions **de mandat** et **un rôle d'intégration** (porté par la session de pilotage ou
+33: tournant à chaque checkpoint). Chaque session a un mandat long, un territoire, et 2 à 4
+34: sous-agents pour les 
+… [13592 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md", "limit": 120, "offset": 175}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+175: 
+176: | besoin | commande |
+177: |---|---|
+178: | ouvrir une **nouvelle** session | `dsh --profile dsh-tui` (ou `dsh dsh-tui`) |
+179: | **reprendre** une session | `dsh --profile dsh-tui --resume <id>` |
+180: | voir les mandats | `python3 tools/sessions.py --status` |
+181: | vérifier les mandats | `python3 tools/sessions.py --check --strict` |
+182: | voir les fichiers en mouvement | `python3 tools/surveille_sessions.py` |
+183: 
+184: **Les quatre mandats, dans l'ordre de valeur.**
+185: 
+186: 1. **N2 — le natif (GPU).** **Session `0733c5bb` ouverte.** Lire `AGENTS.md`, `en-cours`,
+187:    `backlog/N2-distillation.md`. **200 k pas terminés** : val_fr **3,16**, littérature **5,61**,
+188:    anglais **7,28**, wikitext2 **8,00** (**< 2,5 non atteinte**) ; **R1.1/R1.2 mesurées**.
+189:    Prochaine action : **fiche + état + commit**, puis **clôture**.
+190: 2. **S — les structures (CPU).** **Session `29ad180d` ouverte.** Lire `docs/theorie/jeux-symboliques.md`
+191:    et `tools/structures/`. **61/61** types, **144/144** rôles, **56 tests**, gold **60**,
+192:    corpus 
+… [7260 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md", "limit": 150, "offset": 295}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+295: | **N2** | `gpu0` excl., `cpu0` 12, `ram` 60, `nvme_raid` heavy:20 | node 0 |
+296: | **L/B13** | `cpu1` 8, `ram` 16 | node 1 |
+297: | **S** | `cpu1` 4, `ram` 8 | node 1 |
+298: | **D/R/A** | `cpu1` 2, `ram` 16, `hdd_data13tb` heavy | node 1 (OCR) |
+299: | **hub** | `cpu1` 2, `ram` 4 | node 1 |
+300: | **passe complète** | `machine` exclusive | — (rendez-vous) |
+301: 
+302: `cpu1` = 8 + 4 + 2 + 2 = **16 fils** (le maximum utile) ; `ram` = 104 Gio ; `gpu1` reste libre
+303: pour une éval. La passe complète **réserve `machine`** : elle attend que les sessions libèrent
+304: leurs claims ; le hub annonce la fenêtre, les sessions `release`, la file admet `machine`.
+305: 
+306: ### 10.5 Le stockage
+307: 
+308: - `IA` (RAID) est à **33 Gio** : un claim `nvme_raid=heavy:20` vérifie l'espace ; un claim de
+309:   40 Gio est refusé. Les nouveaux gros corpus/checkpoints vont sur `hdd_data13tb` (1,9 Tio) ou
+310:   `nvme_system` (705 Gio), pas sur `IA`.
+311: - **Une seule IO lourde par dispositif.** Une IO lourde sur `nvme_system` est déconseillée
+312:   (OS, dépôt, bureau) ; l'ou
+… [10366 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du graphe de dépendances et des rouges tolérées
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/dependances.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/dependances.md</path>
+<type>file</type>
+<content>
+1: # Le graphe des dépendances du backlog
+2: 
+3: > **Ce que ce document est.** Le **graphe** que l'index ne peut pas porter : pour chaque item des
+4: > quatre chantiers (A, B, N, R), ce qu'il attend, ce qu'il débloque, et de **quel type** est
+5: > l'arête. Il est **vérifié** par `tools/verifie_backlog.py` (arêtes mortes, cycles, priorités
+6: > inversées, frontière) et **dessiné** dans
+7: > [`backlog-dependances.svg`](../../schemas/backlog-dependances.svg).
+8: >
+9: > **Relevé du 2026-10-31.** 37 fiches, 1 ligne ouverte **sans fiche**, 43 arêtes dures,
+10: > 3 plafonds. La roadmap donne l'ordre, l'index donne le statut, ce document donne le graphe ;
+11: > les trois se contredisent s'ils sont écrits trois fois — d'où l'outil.
+12: 
+13: ## 1. Trois types d'arête, et pourquoi un seul ne suffit pas
+14: 
+15: | type | clé de la fiche | ce que ça veut dire | effet |
+16: |---|---|---|---|
+17: | **dure** | `Dépend de` | l'artefact d'entrée n'existe pas encore | la fiche est bloquée, elle ne peut pas être mesurée |
+18: | **douce** | `Plafonné par` | le travail peut avanc
+… [17392 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Références de non-régression
+2: 
+3: > **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
+4: 
+5: > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
+6: > 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
+7: > (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
+8: > (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt** : `porte-lecteur` (0 s)
+9: > échouait sur une ancre du banc pilote (« < 2,5 ») que la réécriture de la roadmap du 04/11
+10: > (« sous 2,5 ») avait rendue introuvable — **corrigée et rejouée verte** ; `porte-sessions` (0 s)
+11: > signale les heartbeats périmés du hub et de `e181ce02` au moment de la passe — le hub l'a rafraîchi
+12: > à 01 h 55, **`e181ce02` reste à rafraîchir par sa session**. Longues vertes : `greffe` **840 s**,
+13: > `homeostasie` **755 s**, `profondeur-routee` **700 s**, `vision` **670 s**, `ocr-scans` **529 s**.
+14: 
+15: 
+… [13595 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la dernière passe réelle des portes
+Je confronte les documents au registre réel de la passe pour trancher les rouges.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -dt work/portes/*/ 2>/dev/null | head -5; echo \"---\"; for d in $(ls -dt work/portes/*/ 2>/dev/null | head -3); do echo \"== $d\"; ls \"$d\" | head; done", "description": "List latest gate pass directories"}`
+
+  ```
+work/portes/passe-2404-23h45/
+work/portes/passe-1104-08h00/
+work/portes/passe-0303-11h30/
+work/portes/passe-0303-04h10/
+work/portes/passe-1102-19h32/
+---
+== work/portes/passe-2404-23h45/
+deepseek-porte
+jeux-mesures.json
+langues-mesures.json
+maitres-mesures.json
+porte-adaptateur-sortie.log
+porte-audit-drapeaux.log
+porte-b1110-hybride.log
+porte-balayage.log
+porte-bloc-code.log
+porte-bloc-linguistique.log
+== work/portes/passe-1104-08h00/
+deepseek-porte
+porte-adaptateur-sortie.log
+porte-audit-drapeaux.log
+porte-b1110-hybride.log
+porte-balayage.log
+porte-bloc-code.log
+porte-bloc-linguistique.log
+porte-bloc-maths.log
+porte-bloc-tableaux.log
+porte-budget.log
+== work/portes/passe-0303-11h30/
+deepseek-porte
+jeux-mesures.json
+langues-mesures.json
+maitres-mesures.json
+porte-adaptateur-sortie.log
+porte-audit-drapeaux.log
+porte-b1110-hybride.log
+porte-balayage.log
+porte-bloc-code.log
+porte-bloc-linguistique.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l work/portes/passe-2404-23h45/ 2>/dev/null; echo \"---\"; awk '$2 != 0' work/portes/passe-2404-23h45/registre.txt 2>/dev/null | head -20; echo \"--- total ---\"; wc -l work/portes/passe-2404-23h45/registre.txt 2>/dev/null", "des … [48 caractères tronqués]`
+
+  ```
+total 388
+drwxr-xr-x. 1 stephane stephane    64  4 nov 23:58 deepseek-porte
+-rw-r--r--. 1 stephane stephane 26244  5 nov 00:59 jeux-mesures.json
+-rw-r--r--. 1 stephane stephane  9218  5 nov 00:59 langues-mesures.json
+-rw-r--r--. 1 stephane stephane  3310  5 nov 01:01 maitres-mesures.json
+-rw-r--r--. 1 stephane stephane   580  4 nov 23:43 porte-adaptateur-sortie.log
+-rw-r--r--. 1 stephane stephane  1407  4 nov 23:46 porte-audit-drapeaux.log
+-rw-r--r--. 1 stephane stephane   398  4 nov 23:46 porte-b1110-hybride.log
+-rw-r--r--. 1 stephane stephane   413  4 nov 23:46 porte-balayage.log
+-rw-r--r--. 1 stephane stephane   865  4 nov 23:46 porte-bloc-code.log
+-rw-r--r--. 1 stephane stephane  1091  4 nov 23:47 porte-bloc-linguistique.log
+-rw-r--r--. 1 stephane stephane   877  4 nov 23:47 porte-bloc-maths.log
+-rw-r--r--. 1 stephane stephane  1035  4 nov 23:47 porte-bloc-tableaux.log
+-rw-r--r--. 1 stephane stephane  2083  4 nov 23:48 porte-budget.log
+-rw-r--r--. 1 stephane stephane   868  4 nov 23:49 porte-bus.log
+-rw-r--r--. 1 stephane stephane  1508  4 nov 23:51 porte-bus-socket.log
+-rw-r--r--. 1 stephane stephane   994  4 nov 23:52 porte-c4-retard.log
+-rw-r--r--. 1 stephane stephane   586 
+… [5292 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la passe du 06/11 et du statut exact des rouges
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/portes/passe-2404-23h45/porte-lecteur.log; echo \"--- sessions ---\"; cat work/portes/passe-2404-23h45/porte-sessions.log; echo \"--- bloc-linguistique ---\"; tail -12 work/portes/passe-2404-23h45/porte-bloc-linguistique.log … [43 caractères tronqués]`
+
+  ```
+=== PORTE R0.2 — LE CONTRÔLEUR DE LECTURE ===
+gold introuvable : docs/pilotage/roadmap.md · < 2,5
+❌ porte lecteur ROUGE (code 1)
+--- sessions ---
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (840 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ❌ mandat périmé (840 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+--- bloc-linguistique ---
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -dt work/portes* 2>/dev/null | head; echo \"---\"; git log --oneline --since=2026-11-05 -- work/portes docs/pilotage/references-non-regression.md | head -20", "description": "Find 06/11 gate pass artifacts and commits"}`
+
+  ```
+work/portes-1106-01h28
+work/portes-1106-01h03
+work/portes
+work/portes-n3-cloture
+---
+789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+f0e3f46a DOCS — LA PASSE DU 06/11 EN UNE LIGNE
+b578f95b DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1)
+ea7d3275 PORTES — LA PASSE COMPLÈTE DU 06/11 CONSIGNÉE : 79 VERTES / 4 ROUGES (2 STRUCTURELLES, SESSIONS D'AUTRUI, CASCADE_POS DOCUMENTÉE)
+2fc19487 DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE)
+b15daee7 DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1
+17078889 PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du registre de la passe du 06/11
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for d in work/portes-1106-01h28 work/portes-1106-01h03; do echo \"== $d\"; ls \"$d\" | head -3; awk '$2 != 0' \"$d/registre.txt\" 2>/dev/null; echo \"-- total: $(wc -l < \"$d/registre.txt\" 2>/dev/null)\"; done", "description": "Read … [26 caractères tronqués]`
+
+  ```
+== work/portes-1106-01h28
+porte-adaptateur-sortie.log
+porte-audit-drapeaux.log
+porte-b1110-hybride.log
+porte-bloc-linguistique 1 17
+porte-indice 1 1130
+porte-melange 1 137
+porte-sessions 1 0
+--- 79 vertes, 4 rouges ---
+-- total: 84
+== work/portes-1106-01h03
+porte-adaptateur-sortie.log
+porte-audit-drapeaux.log
+porte-b1110-hybride.log
+porte-bloc-linguistique 1 17
+-- total: 13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/portes-1106-01h28/porte-bloc-linguistique.log 2>/dev/null | tail -6; echo \"=== sessions ===\"; cat work/portes-1106-01h28/porte-sessions.log 2>/dev/null | head -12; echo \"=== lecteur ===\"; cat work/portes-1106-01h28/porte … [72 caractères tronqués]`
+
+  ```
+"inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+❌ évaluation gold
+=== sessions ===
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (1530 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ❌ mandat périmé (130 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+=== lecteur ===
+=== PORTE R0.2 — LE CONTRÔLEUR DE LECTURE ===
+=== BANC DE LECTURE PILOTE (R0.2) ===
+  20 questions · 5 types · code, juridique, prose, tableau, technique
+  type       mode              récup.     F1  valeur   octets
+  code       integrale          1.000  0.522   0.500     5969
+  code       controlee_0.10     0.750  0.522   0.500      534
+  code       controlee_0.30     1.000  0.522   0.500     1244
+  code       controlee_0.50     1.000  0.522   0.500     1358
+  code       aleatoire_0.30     0.000  0.022   0.000     1778
+  code       melangee_0.30      1.000  0.522   0.500     1244
+  code       sans_but           0.250  0.000   0.000     1024
+  code       closed_book        0.000  0.000   0.000        0
+  juridique  integrale
+… [2139 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction des « prochaines actions » dans les 12 fiches récentes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-v12.md reports/rapport-pensee-v11.md reports/rapport-pensee-v10.md reports/rapport-pensee-couverture-v5.md reports/rapport-gold-split.md reports/rapport-pensee-r1r3.md; do echo \"######## $f\"; grep -n … [145 caractères tronqués]`
+
+  ```
+######## reports/rapport-pensee-v12.md
+8:> **couverture 0,9289**, **F1 0,5893** (union ; S 0,5014, chunker 0,6203), tête **0,7392** ;
+29:| **couverture** | 0,9247 | **0,9289** |
+43:- **L'attachement ne peut plus progresser que par la couverture**, et la couverture par le gold
+62:  qui a raison dans la mesure — c'est une limite de **couverture du lexique**, pas d'attachement ;
+66:## 6. La suite
+69:   accepter comme couverture du gold.
+######## reports/rapport-pensee-v11.md
+1:# B13 — les deux dernières régressions : exact 221/221 (1,0000), couverture 0,9247, 18 spans
+5:> **183/183 portes** : les deux régressions ouvertes par l'[audit v10](rapport-audit-v10.md) sont
+9:> sur 239, **exact 221/221 = 1,0000** (fr **136/136**, en **85/85**), **couverture 0,9247**,
+20:| 1 | **R2** : un **subordonnant** ouvre une SUB ; une **relative en tête** reste une REL (`Paul qui marche`) | s037 |
+29:| **couverture** | 0,9205 | **0,9247** |
+42:- **La couverture 0,9247** est le plafond : le rendement global est 221/239.
+61:## 6. La suite
+######## reports/rapport-pensee-v10.md
+1:# B13 — 220/220 (1,0000), couverture 0,9205 : le féminin `-ée` et la garde déterminant du GP
+8:> différence d'annotation ; `r255
+… [2381 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-v9.md reports/rapport-coherence-fiches-v8.md reports/rapport-pensee-couverture-v7.md reports/rapport-pensee-attachement-parfait.md reports/rapport-dev-test-v10.md reports/rapport-audit-v10.md reports/r … [202 caractères tronqués]`
+
+  ```
+######## reports/rapport-pensee-v9.md
+1:# B13 — la garde PRON : exact 219/219 (1,0000), couverture 0,9163, F1 0,5822
+10:> en **85/85**), **couverture 0,9163**, **F1 0,5822** (union ; S 0,5006, chunker 0,6178), tête
+31:| **couverture** | 0,8870 | **0,9163** |
+45:- **Tous les compteurs montent** : labels, couverture, F1, tête, les deux langues, dev/test.
+47:  synthétique, gold sans préposition), 3 gains de A17 (`r153`, `r255`, `r264`) restent à prendre.
+67:- **`est_sub`** : « car » est un nom anglais, mais « since/before/after » restent ambigus ;
+71:## 6. La suite
+######## reports/rapport-coherence-fiches-v8.md
+18:> 7 régressions, 17+7+3, contrôle, date/commit, couverture française), la v7 est passée en
+23:> JSON v7 `avant` et les lignes README restent à vérifier sur le nouveau HEAD. Une lecture rapide
+26:> perte R1c alors qu'il manquait déjà en v7) — audit séparé, non couvert ici. De même, le
+31:> non committées de `rapport-pensee-couverture-v7.md` (en-tête POS `0,7475` → `0,7482`, « qui »
+88:| 4 | [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | [`pensee-couverture-v5.json`](pensee-couverture-v5.json) | `b975011b` | historique | 183/183 | ✅ | 2026-11-05 | ✅ | 
+… [5821 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des sections « La suite » des fiches récentes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-v12.md reports/rapport-pensee-v11.md reports/rapport-pensee-v10.md reports/rapport-pensee-v9.md; do echo \"######## $f\"; awk '/^## [0-9]+\\. La suite/{flag=1} flag{print} /^## [0-9]+\\. /{if(flag && ! … [100 caractères tronqués]`
+
+  ```
+######## reports/rapport-pensee-v12.md
+## 6. La suite
+
+1. **Les 17 spans** : corriger le gold (GP sans préposition) et étendre le lexique réel, ou les
+   accepter comme couverture du gold.
+2. **Politique DRVM/native** : quand les poids seront là.
+
+## 7. Fichiers
+######## reports/rapport-pensee-v11.md
+## 6. La suite
+
+1. **Les 18 spans** : les 17 inatteignables (gold, lexique), `g017`.
+2. **dev/test** : re-mesurer (vague 7).
+3. **Politique DRVM/native** : quand les poids seront là.
+
+## 7. Fichiers
+######## reports/rapport-pensee-v10.md
+## 6. La suite
+
+1. **Les 19 spans** : `r255`/`r264`, puis les 17 inatteignables.
+2. **dev/test** : re-mesurer après ces corrections.
+3. **Politique DRVM/native** : quand les poids seront là.
+
+## 7. Fichiers
+######## reports/rapport-pensee-v9.md
+## 6. La suite
+
+1. **Les 20 spans** : `r153` (garde déterminant GP), `r255`/`r264` (lexique/tokenisation), les
+   17 inatteignables.
+2. **dev/test** : re-mesurer après cette fiche.
+3. **Le merge `master`** si autorisé.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+## 7. Fichiers
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-couverture-v7.md reports/rapport-pensee-couverture-v5.md reports/rapport-gold-split.md reports/rapport-pensee-r1r3.md reports/rapport-pensee-attachement-parfait.md reports/rapport-s-paragraphes.md; do  … [153 caractères tronqués]`
+
+  ```
+######## reports/rapport-pensee-couverture-v7.md
+## 5. La suite
+
+1. **Les 43 spans** : REL « qui » (6, français), SUB (anglaises et 4 françaises), GP.
+2. **Le top-k** : candidats complets.
+3. **dev/test** à re-mesurer.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+## 6. Fichiers
+
+- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — les cinq corrections.
+- [`autotest.py`](../tools/pensee/autotest.py) — 183/183.
+- [`pensee-couverture-v7.json`](pensee-couverture-v7.json) — les chiffres.
+######## reports/rapport-pensee-couverture-v5.md
+## 5. La suite
+
+1. **Les 52 spans** (REL 24, SUB 12, GP 16).
+2. **Les 27 échecs de cible** : qualifier.
+3. **`_pos` anglais** : 176 VERB tagués NOUN (A14).
+4. **Politique DRVM/native** : quand les poids seront là.
+
+## 6. Fichiers
+
+- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — les sept corrections.
+- [`autotest.py`](../tools/pensee/autotest.py) — 183/183.
+- [`gold_split.py`](../tools/tests/linguistique/gold_split.py) — dev/test.
+- [`pensee-couverture-v5.json`](pensee-couverture-v5.json) — les chiffres.
+######## reports/rapport-gold-split.md
+## 5. La suite
+
+1. **Les deux règles de spans** (A12) : réglées sur dev, évaluées 
+… [1693 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture intégrale de la fiche la plus récente (B13 v12)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-v12.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-v12.md</path>
+<type>file</type>
+<content>
+1: # B13 — 222/222 (1,0000) : le dernier marqueur ambigu, et 17 spans inatteignables
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-06 ·
+4: > **État courant** · **Verdict** : ✅ — **la cible de A17 est atteinte**.
+5: > **183/183 portes** : le dernier écart était un **marqueur ambigu** — « when » après un GN est
+6: > une **relative** (« The day when we left »), ailleurs une **subordonnée** (« When it rains »).
+7: > Résultat : **222 labels** sur 239, **exact 222/222 = 1,0000** (fr **136/136**, en **86/86**),
+8: > **couverture 0,9289**, **F1 0,5893** (union ; S 0,5014, chunker 0,6203), tête **0,7392** ;
+9: > **17 spans** restants (8 REL, 5 SUB, 4 GP) — **tous inatteignables** sans corriger le gold ou
+10: > le lexique (12 formes synthétiques, 4 GP du gold sans préposition, une tokenisation `qu'il`).
+11: > **dev 153/153, test 69/69.**
+12: >
+13: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`AMBIGUES_REL`,
+14: > branche REL/SUB), [`autotest.py`](../tools/pensee/autotest.py) (16 assertions) ;
+15: > JSO
+… [2916 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification systématique des commandes candidates
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in tools/toutes-les-portes.sh tools/porte-tableaux.sh tools/revue_documentation.py tools/taille_documents.py tools/verifie_en_cours.py tools/verifie_journal.py tools/verifier_schemas.py tools/verifier_liens.py tools/sessions.py … [561 caractères tronqués]`
+
+  ```
+OK   tools/toutes-les-portes.sh
+OK   tools/porte-tableaux.sh
+OK   tools/revue_documentation.py
+OK   tools/taille_documents.py
+OK   tools/verifie_en_cours.py
+OK   tools/verifie_journal.py
+OK   tools/verifier_schemas.py
+OK   tools/verifier_liens.py
+OK   tools/sessions.py
+OK   tools/surveille_sessions.py
+OK   tools/verifie_etat_a_jour.py
+OK   tools/ressources.py
+OK   tools/verifie_backlog.py
+OK   tools/carte_decisions.py
+OK   tools/carte_chantiers.py
+OK   tools/porte-ressources.sh
+OK   tools/pensee/autotest.py
+OK   tools/tests/linguistique/gold_split.py
+OK   tools/eval_n2_propre.py
+OK   tools/entrainer_native.py
+OK   tools/distiller_budget.py
+OK   tools/corpus_propre.py
+OK   tools/native_model.py
+OK   tools/porte-ocr-scans.sh
+OK   tools/porte-bloc-linguistique.sh
+OK   tools/index_reports.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"porte-n2\" --include=*.md --include=*.sh --include=*.py . 2>/dev/null | head -10; echo \"--- n2 scripts ---\"; ls tools/ | grep -i -E 'n2|native|distill' | head -20", "description": "Search for porte-n2 and N2 tooling"}`
+
+  ```
+./journal/sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md:18:1. Extrais **toutes** les « prochaines actions » nommées dans ces documents (une par ligne), avec : chantier, action, fichier/outil concerné, dépendance, bloquant, et la **commande exacte** qui la déclenche si elle existe (par ex. `bash tools/porte-n2.sh`) ; vérifie que chaque commande existe (`ls`/`--help`).
+--- n2 scripts ---
+distiller_budget.py
+distiller_natif.py
+distiller_section.py
+entrainer_native.py
+entrainer_native_tokens.py
+eval_n2_budget.py
+eval_n2_propre.py
+eval_n2.py
+native_model.py
+verifier_parite_native.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction des prochaines actions dans les fiches du backlog
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn -i -E 'prochaine action|prochaines étapes|par quoi commencer|^## étapes' docs/pilotage/backlog/*.md | head -60", "description": "Grep next actions in backlog fiches"}`
+
+  ```
+docs/pilotage/backlog/A2.6-ordonnanceur.md:52:## Étapes
+docs/pilotage/backlog/A3.4-colab.md:24:## Prochaine action
+docs/pilotage/backlog/A5.4-fpga.md:24:## Prochaine action
+docs/pilotage/backlog/A6.2-moe-local.md:24:## Prochaine action
+docs/pilotage/backlog/B10.2bis-decodeur-attention-croisee.md:86:## Étapes
+docs/pilotage/backlog/B10.3-raisonnement-z.md:25:## Prochaine action
+docs/pilotage/backlog/B11.10-cartes-ambiguites.md:24:## Prochaine action
+docs/pilotage/backlog/B12.10-pipeline-m1-m4-m8.md:25:## Prochaine action
+docs/pilotage/backlog/B1.5-prose-scientifique.md:24:## Prochaine action
+docs/pilotage/backlog/dependances.md:160:| item | état | pourquoi c'est libre | la prochaine action |
+docs/pilotage/backlog/dependances.md:179:  sur eux-mêmes ; ils ne sont pas la prochaine action, quel que soit leur intérêt.
+docs/pilotage/backlog/dependances.md:243:- [L'état courant](../en-cours.md) — la prochaine action.
+docs/pilotage/backlog/index.md:30:| **à faire** | spécifiée, pas commencée ; la fiche dit par quoi commencer |
+docs/pilotage/backlog/index.md:39:**P0** = prochaine action non bloquée ; **P1** = après P0 ou dépend d'une ligne en cours ; **P2** = utile mais
+docs/pilotage/backlog/
+… [2194 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nfor f,ln in [(\"docs/pilotage/roadmap.md\",31),(\"docs/pilotage/roadmap.md\",178),(\"docs/pilotage/roadmap.md\",197),(\"docs/pilotage/roadmap.md\",198),(\"docs/pilotage/roadmap.md\",199)]:\n    lines=open(f,encodin … [223 caractères tronqués]`
+
+  ```
+--- docs/pilotage/roadmap.md:31 (3036 chars)
+ + **asym** + **rare** + **très rare** + **ultra-rare** + **un look** + **look tardif** + **oubli** + **oubli fort** + **oubli total** + **seuil** + **seuil fin** + **seuil graines** + **bord** + **seuil bas** + **courbe** + **vérité** + **concurrentes** + **phase dans l'état** + **phase devinée** + **vote** + **cycle** + **courbe20** + **bord fin** + **gold 200** + **sous-ensembles** + **complexes** + **20 complexes** + **50 complexes** + **100 complexes** + **discours** + **anaphore** + **pièges anaphore** + **anaphore corrigée** + **pronoms objets** + **chaînes longues** + **rôles** + **hybride** + **sémantique** + **[plafond](../theorie/glossaire/entrees/plafond.md)** + **kappa** + **méta** + **pondéré** + **CV** + **CV graines** + **bilan anaphore**, **183/183 portes** (6 S fixés ; T132/T133 2/5) | B10.3 attend un **encodeur qui porte** ; **B13** : **gold neuronal** (POS **0,9415** ; **cascade vrai modèle** : syntagmes **0,6130**, tête **0,7574**, acte **1,0** ; **gold réel 432 : 0,9065 / 0,4598 / 0,5633 / 0,9954, verdict `false`**) ; **politique DRVM/native** (cadenas **3 nœuds** avec règle, minimal **0** ; labyrinthe **2 sonde** ;
+… [4348 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des fiches backlog ouvertes (N2, N4, R11, R12, A2.6)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in N2-distillation N4-usage-sft R11-contexte-hierarchique R12-curriculum-contexte A2.6-ordonnanceur; do echo \"######## $f\"; awk '/^## Prochaine action/{flag=1} flag{print} /^## /{if(flag && !/Prochaine action/) exit}' docs/pi … [98 caractères tronqués]`
+
+  ```
+######## N2-distillation
+## Prochaine action
+
+**La fenêtre est la recette ; il reste la porte propre.** Prochaine action : la **porte propre**
+(0,29 manquant à 2,7856) — données ou capacité — puis **R1.2 à 1 024** entraînée et **N4**. Les
+200 k pas seuls ne suffisent pas (3,16) ; la longueur reste le levier de la largeur (positions
+aléatoires : 256 octets de 14,11 à 3,25).
+
+## Voir aussi
+######## N4-usage-sft
+## Prochaine action
+
+Construire un jeu de consignes courtes avec partage par document, entraîner, évaluer tenu à l'écart ; écrire la fiche. Le protocole de partage est commun avec R31.
+
+## Voir aussi
+######## R11-contexte-hierarchique
+######## R12-curriculum-contexte
+######## A2.6-ordonnanceur
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in A3.4-colab A5.4-fpga A6.2-moe-local B10.3-raisonnement-z B1.5-prose-scientifique R44-encodeur-visuel; do echo \"######## $f\"; awk '/^## Prochaine action/{flag=1} flag{print} /^## /{if(flag && !/Prochaine action/) exit}' doc … [105 caractères tronqués]`
+
+  ```
+######## A3.4-colab
+## Prochaine action
+
+Dès qu'un compte est disponible, rejouer la recette de `docs/archive/colab-reparti.md` et écrire la fiche.
+
+## Voir aussi
+######## A5.4-fpga
+## Prochaine action
+
+Dès que la carte est disponible, porter l'opérateur et écrire la fiche.
+
+## Voir aussi
+######## A6.2-moe-local
+## Prochaine action
+
+Dès qu'un MoE tient, mesurer le routage ; sinon, garder la ligne bloquée et prendre la suivante.
+
+## Voir aussi
+######## B10.3-raisonnement-z
+## Prochaine action
+
+Débloquer B10.2 : décodeur à attention croisée, 20–30 articles, 3 graines ; ensuite brancher B10.3.
+
+## Voir aussi
+######## B1.5-prose-scientifique
+## Prochaine action
+
+Chercher un corpus licite (revue, actes, manuel) traduit par des humains ; sinon, garder bloquée.
+
+## Voir aussi
+######## R44-encodeur-visuel
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in R11-contexte-hierarchique R12-curriculum-contexte A2.6-ordonnanceur R44-encodeur-visuel; do echo \"######## $f\"; sed -n '1,12p;/^## Étapes/,/^## /p' docs/pilotage/backlog/$f.md | head -40; echo; done", "description": "Read  … [38 caractères tronqués]`
+
+  ```
+######## R11-contexte-hierarchique
+# R11 — Contexte hiérarchique et état de section
+
+> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R01, N1, N2
+> **Ligne de roadmap** : R1.1 · **Fiche de résultat attendue** : rapport-r11-contexte-hierarchique.md (à créer dans `reports/`)
+> **Résumé** : Lire par sections avec un état de section, sans exiger que l'attention voie toute la page.
+> **Glossaire** : [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [test de l'aiguille](../../theorie/glossaire/entrees/test-de-l-aiguille.md) · [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md).
+
+## Le besoin
+
+Le natif surapprend 129 octets et échoue à 130–256. Avant d'allonger le contexte brut, il faut une hiérarchie : span → paragraphe → section → document, avec un état qui résume chaque section.
+
+**Ordre arrêté le 2026-10-29** : c'est **N2** qui porte la hiérarchie (l'état de section, 3 graines) ; R11 mesure la fenêtre qui en résulte et n'ouvre donc qu'après N2. La mesure reste ici : PPL à 1 000 octets, aiguille native, stabilité.
+## Étapes
+
+1. définir l'état de section et la frontière
+2. entraîner sur des sections de longueur croiss
+… [3536 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des points ouverts L/B13 (r353, T132/T133, lexique)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"r353\" --include=*.md --include=*.py --include=*.json tools/pensee tools/bloc_linguistique.py tools/tests reports 2>/dev/null | head -12; echo \"=== T132 ===\"; grep -rn \"T132\\|T133\" tools/pensee/autotest.py docs/pilota … [122 caractères tronqués]`
+
+  ```
+tools/pensee/autotest.py:2043:def t140_r353() -> tuple[bool, str]:
+tools/pensee/autotest.py:2044:    """Le refus r353 : 6 mots du bloc, le modèle en rend 7 (l'élision)."""
+tools/pensee/autotest.py:2050:        f"r353 : {len(mots)} mots du bloc, l'élision séparée")
+tools/pensee/autotest.py:2786:              ("T140 refus r353", t140_r353()),
+tools/tests/linguistique/gold_reel.py:1111:    ('r353', 'fr', "Le professeur parle ; les élèves l'écoutent.",
+tools/tests/linguistique/gold_reel.json:24985:   "id": "r353",
+tools/tests/linguistique/gold_gele.json:26329:"id": "r353",
+reports/pensee-quatre-modes-niveau.json:1113:    "r353"
+reports/rapport-pensee-fusion-reparee.md:58:  `parallele` **échoue** (0,928 < 0,9299) ; `aucun_refus` échoue (**1 refus**, `r353`).
+reports/rapport-pensee-fusion-reparee.md:68:- Le refus `r353` reste ouvert.
+reports/rapport-pensee-fusion-reparee.md:73:2. **Le refus `r353`** : le nommer, le traiter.
+reports/rapport-pensee-defaut-niveau.md:49:2. **Le refus `r353`** : non reproductible sans l'API ; il reste ouvert.
+=== T132 ===
+tools/pensee/autotest.py:2778:              ("T132 lien auto", t132_lien_auto()),
+tools/pensee/autotest.py:2779:              ("T133 lien r
+… [6294 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/tests/linguistique/ 2>/dev/null | head -20; echo \"--- gold files ---\"; grep -rln \"r241\\|s037\" tools/tests tools/pensee 2>/dev/null | head -10", "description": "Locate gold/lexicon files for B13"}`
+
+  ```
+anaphore.py
+classement_cible.py
+evaluer_gold.py
+gold_gele.json
+gold.json
+gold.py
+gold_reel.json
+gold_reel.py
+gold_split.py
+gold_synthetique.json
+gold_synthetique.py
+juge.py
+miroir.py
+__pycache__
+qualifier_cascade.py
+qualifier_frontiere_71.py
+qualifier_lien_appris.py
+qualifier_neuronal.py
+qualifier_pragmatique.py
+qualifier_quatre_modes.py
+--- gold files ---
+tools/tests/linguistique/__pycache__/gold_reel.cpython-313.pyc
+tools/tests/linguistique/gold_synthetique.json
+tools/tests/linguistique/gold_reel.py
+tools/tests/linguistique/gold_reel.json
+tools/tests/linguistique/gold_gele.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection des tests T132/T133 et de l'état de l'autotest
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1960,2060p' tools/pensee/autotest.py; echo \"=== fin ===\"; sed -n '2770,2800p' tools/pensee/autotest.py", "description": "Read T132/T133 and r353 test definitions"}`
+
+  ```
+"""Le lien automatique par le sujet : 5/5 (les assertions précèdent les questions)."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_lien_auto
+    r = fidelite_lien_auto(charger())
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien auto : {r['justes']:.0f}/{r['paires']} (sujet de surface)")
+
+
+def t133_lien_auto_fixe() -> tuple[bool, str]:
+    """Le lien réparé : 5/5 après réordonnancement (les distracteurs ne le cassent pas)."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_lien_auto
+    r = fidelite_lien_auto(charger())
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien réparé : {r['justes']:.0f}/{r['paires']}")
+
+
+def t134_lien_coref() -> tuple[bool, str]:
+    """La coréférence comme lien : 62/116."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import mesurer_lien_coref
+    ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 427]
+    r = mesurer_lien_coref(ph)
+    return r["liens"] == 116 and r["avec_phrase"] == 65, (
+        f"coréf-lien : {r['avec_phrase']}/{r['lie
+… [5371 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution de l'autotest B13 pour vérifier les échecs T132/T133
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/pensee/autotest.py 2>&1 | tail -25", "description": "Run B13 autotest and show tail", "timeoutMs": 330000}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 32, in <module>
+    from .coeur import Candidat, Etat
+ImportError: attempted relative import with no known parent package
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 -m tools.pensee.autotest 2>&1 | tail -20", "description": "Run B13 autotest as module", "timeoutMs": 650000}`
+
+  ```
+✅ T162 candidats verbes  candidats : top-k 221/239 (0.9247), tête 221/222
+  ✅ T163 échecs attachement échecs : 17 de span, 1 de cible (33 avant les correctifs)
+  ✅ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 222/239
+  ✅ T165 lexique verbal    lexique : talks True, joue True, brother False ; cible GP talks
+  ✅ T166 spans perdus      spans : 8 REL, 5 SUB, 4 GP
+  ✅ T167 dénominateur      dénominateur : spans 1.0 / 0.9955 / 1.0
+  ✅ T168 classement        classement : exact 222/222 ; cibles 150 verbes, 72 noms
+  ✅ T169 conventions       conventions : verbes 150/150 (1.0), noms 72/72 (1.0)
+  ✅ T170 attachement ciblé ciblé : REL « homme » homme, GP « joue » joue
+  ✅ T171 lexique élargi    lexique élargi : vu True, accroché True, couru True ; exact 222/222
+  ✅ T172 échecs de cible   échecs de cible : 0 hors candidats, 0 mal classés
+  ✅ T173 top-k strict      top-k : 221 sous-chaîne, 221 exacts (0.9955)
+  ✅ T174 convention documentée convention : ['GN', 'GP', 'GV', 'REL', 'SUB'] documentée
+  ✅ T175 audit attachement audit : 14/14, écarts 0
+  ✅ T176 segment précédent segment précédent : s052 ouvre, s012 écoute
+  ✅ T177 candidats têtes   candidats têtes : 221/222 (0.9955)
+ 
+… [247 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 -m tools.pensee.autotest 2>&1 | grep -E \"T132|T133|T140|183/183\"", "description": "Check T132/T133/T140 results", "timeoutMs": 650000}`
+
+  ```
+✅ T132 lien auto         lien auto : 5/5 (sujet de surface)
+  ✅ T133 lien réparé       lien réparé : 5/5
+  ✅ T140 refus r353        r353 : 7 mots du bloc, l'élision séparée
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ Reproduction de la porte rouge `bloc-linguistique`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 bash tools/porte-bloc-linguistique.sh 2>&1 | tail -30; echo \"EXIT=$?\"", "description": "Run red block-linguistique gate", "timeoutMs": 130000}`
+
+  ```
+"morphème",
+  "mot",
+  "phrase",
+  "pos",
+  "pragmatique",
+  "syntagme"
+ ],
+ "niveaux_manquants": [],
+ "controles": {
+  "vide_refus": "vide",
+  "ponctuation_refus": "vide",
+  "langue_inconnue": "und",
+  "indice_faux": "und",
+  "rejeu_identique": true
+ },
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+❌ évaluation gold
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 bash tools/porte-bloc-linguistique.sh > /tmp/bl.log 2>&1; echo \"EXIT=$?\"; grep -n -E \"cascade|gold|❌|✅\" /tmp/bl.log | tail -20; echo \"---\"; sed -n '1,60p' tools/porte-bloc-linguistique.sh", "description": "Capture g … [54 caractères tronqués]`
+
+  ```
+EXIT=1
+70:❌ évaluation gold
+---
+#!/usr/bin/env bash
+# Porte du bloc linguistique — tests de contrat + mesure UDHR (langue/script).
+set -u
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+echo "=== PORTE BLOC LINGUISTIQUE ==="
+python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' || { echo "❌ tests"; exit 1; }
+python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+python3 tools/tests/linguistique/gold.py >/dev/null || { echo "❌ gold"; exit 1; }
+python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-porte.json >/dev/null || { echo "❌ évaluation gold"; exit 1; }
+echo "✅ porte bloc linguistique verte"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 180 python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-porte.json 2>&1 | tail -25; echo \"EXIT=$?\"", "description": "Run gold evaluation to see failure", "timeoutMs": 200000}`
+
+  ```
+"taux": 1.0
+    },
+    "couverture": 0.8703,
+    "par_langue": {
+     "fr": {
+      "cibles": 151,
+      "labels": 122,
+      "exact": 122,
+      "topk": 121,
+      "exact_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 88,
+      "labels": 86,
+      "exact": 86,
+      "topk": 86,
+      "exact_taux_span": 1.0
+     }
+    }
+   },
+   "attachement_tete": {
+    "cibles": 208,
+    "labels": 208,
+    "top1"
+heuristique all: {"pos": {"exactitude": 0.7581, "exactitude_ferme": 0.9004, "exactitude_ouvert": 0.6234, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 20, "PREP": 2, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 311, "NOUN": 450, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6292, "rappel": 0.5464, "f1": 0.5849, "tp": 1018, "fp": 600, "fn": 845, "tete": {"precision": 0.81,
+… [202 caractères tronqués]
+  ```
+
