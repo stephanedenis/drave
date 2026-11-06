@@ -1211,3 +1211,1370 @@ rc=0 bytes=5561 err=
 --- code 3/4
   ```
 
+### 🤖 Assistant
+
+⏵ Relevé des lignes exactes pour la liste de correctifs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"def _mots\\|def _phrases\\|def _pos\\|def _morphemes\\|def _syntagmes_simple\\|def _supprimer_chevauchements\\|def _verbe_dans\\|def detecter_langue\\|def json\\|def couverture\\|def analyser\\|unites_semantiques\\|fraction_s … [415 caractères tronqués]`
+
+  ```
+20:La couche sémantique ne reçoit que `unites_semantiques` ; l'heuristique peut donc l'activer à
+63:    def json(self) -> dict:
+81:    def json(self) -> dict:
+100:    unites_semantiques: list[Span] = field(default_factory=list)
+101:    fraction_semantique: float = 0.0
+111:    def couverture(self) -> dict[str, float]:
+116:    def json(self, avec_duree: bool = False) -> dict:
+124:            "unites_semantiques": [u.json() for u in self.unites_semantiques],
+125:            "fraction_semantique": round(float(self.fraction_semantique), 4),
+133:    def analyser(self, texte: str, langue: str | None = None,
+199:def detecter_langue(texte: str, profils: dict[str, dict] | None = None,
+549:    def _mots(texte: str) -> list[tuple[int, int, str, str]]:
+568:    def _phrases(texte: str) -> list[tuple[int, int, str, str]]:
+601:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+627:    def _morphemes(mot: str) -> list[tuple[str, int, int, str]]:
+770:    def _verbe_dans(texte: str, debut: int, fin: int,
+855:    def _syntagmes_simple(self, texte: str, langue: str,
+1003:    def analyser(self, texte: str, langue: str | None = None,
+1145:                    meta = {"role": s.get("role
+… [3337 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nsed -n '1210,1260p' tools/bloc_linguistique.py; echo ===; sed -n '1810,1860p' tools/bloc_linguistique.py", "description": "Inspect document and overlap-removal code"}`
+
+  ```
+prec = s
+    
+        # 6. discours / document
+        for d, f, p, _ in self._phrases(texte):
+            mots_p = set(_normaliser(p).split())
+            for relation, marqueurs in CONNECTEURS.items():
+                touche = sorted(mots_p & marqueurs)
+                if touche:
+                    etiquettes.append(Etiquette("discours", "connecteur", touche[0], d, f,
+                                                self.nom, 0.55, candidats=[relation],
+                                                langue=lg, script=script))
+                    break
+        paragraphes = []
+        for m in re.finditer(r"[^\n]+(?:\n(?!\s*\n)[^\n]+)*", texte):
+            if m.group().strip():
+                paragraphes.append((m.start(), m.end(), m.group()))
+        for d, f, p in paragraphes:
+            etiquettes.append(Etiquette("discours", "paragraphe", "suite", d, f, self.nom, 0.5,
+                                        candidats=["suite", "contraste", "cause", "conséquence"],
+                                        langue=lg, script=script))
+            titre = (p.lstrip().startswith("#") or
+                     bool(re.match(r"^\s*(?:\d+[.)]|[IVXLC]+[.)])\s+", p)) or
+                
+… [4709 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire du contrat de sortie (clés, types, valeurs vides)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,subprocess,sys,collections,importlib.util\nR='.'\nspec=importlib.util.spec_from_file_location('a','/tmp/audit_cli.py'); a=importlib.util.module_from_spec(spec); spec.loader.exec_module(a)\nTOP=collections. … [1995 caractères tronqués]`
+
+  ```
+TOP Counter({('contexte', 'cout', 'etiquettes', 'fraction_semantique', 'langue', 'refus', 'script', 'source', 'texte', 'trace', 'unites_semantiques'): 46})
+LAB Counter({('candidats', 'confiance', 'debut', 'fin', 'langue', 'meta', 'niveau', 'script', 'source', 'type', 'valeur'): 4501})
+TRACE Counter({('confiance', 'etape', 'indice', 'langue', 'script'): 46, ('etape', 'etiquettes', 'fraction', 'niveaux', 'unites_semantiques'): 46})
+COUT Counter({('caracteres', 'etiquettes', 'octets'): 46})
+META {'graphème': Counter({(): 1912}), 'mot': Counter({(): 1068}), 'pos': Counter({('ouvert',): 755, ('contexte', 'ouvert'): 11}), 'syntagme': Counter({('attachement', 'niveau', 'role'): 234, ('attachement', 'niveau', 'role', 'union'): 50, ('niveau', 'role'): 41, ('niveau', 'role', 'union'): 35}), 'discours': Counter({(): 67}), 'document': Counter({(): 49}), 'phrase': Counter({(): 89}), 'pragmatique': Counter({(): 86}), 'morphème': Counter({(): 104})}
+TYPES {'graphème': ['chiffres', 'espace', 'lettres', 'ponctuation', 'symbole'], 'mot': ['mot', 'nombre', 'ponctuation'], 'pos': ['ADJ', 'ADV', 'AUX', 'CONJ', 'DET', 'NOUN', 'NUM', 'PREP', 'PRON', 'VERB'], 'syntagme': ['GN', 'GP', 'GV', 'REL', 'SUB'], 
+… [844 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesures de temps : démarrage, échelle 1k→50k, coût par phrase
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport subprocess,sys,time,statistics,json,pathlib\nCLI='tools/drave.py'\ndef wall(args,n=5):\n    ts=[]\n    for _ in range(n):\n        t=time.perf_counter(); p=subprocess.run([sys.executable,CLI,*args],capture_outp … [1215 caractères tronqués]`
+
+  ```
+version (134.3, 146.0, 192.0, 0)
+aide (128.9, 139.6, 157.0, 0)
+analyser f01 (146.5, 151.4, 164.9, 0)
+evaluer (530.0, 542.7, 578.9, 0)
+rejouer (145.6, 148.5, 162.8, 0)
+scale 1000 chars 27.48 ms labels 1042 json_bytes 228118
+scale 2000 chars 37.5 ms labels 2077 json_bytes 455423
+scale 5000 chars 125.02 ms labels 5187 json_bytes 1129928
+scale 10000 chars 331.56 ms labels 10362 json_bytes 2263467
+scale 20000 chars 1025.66 ms labels 20719 json_bytes 4593108
+scale 50000 chars 5438.9 ms labels 51792 json_bytes 11518138
+no-space 1000 21.81 ms labels 7
+no-space 10000 9.85 ms labels 7
+no-space 50000 51.94 ms labels 7
+  ```
+
+### 🤖 Assistant
+
+⏵ Sondage des rôles, cibles internes, URL et encodages NFD/BOM
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,subprocess,sys,collections,importlib.util\nspec=importlib.util.spec_from_file_location('a','/tmp/audit_cli.py'); a=importlib.util.module_from_spec(spec); spec.loader.exec_module(a)\nroles=collections.Count … [1279 caractères tronqués]`
+
+  ```
+roles Counter({'predicat': 106, 'patient': 60, 'prédicat': 39, 'theme': 18, 'agent': 17, 'qualite': 17, 'destinataire': 15, 'groupe nominal': 13, 'lieu': 12, 'qualité': 11, 'temps': 11, 'possession': 10, 'but': 8, 'complément': 6, 'moyen': 5, 'hypothese': 4, 'contenu': 3, 'cause': 3, 'concession': 1, 'maniere': 1})
+GV total 145 cible dans son span 3 hors span 72
+top cibles [('haie', 6), ('nommer', 5), ('choses', 5), ('example', 4), ('jour', 4), ('ø', 4), ('voisine', 3), ('f', 3), ('simple', 3), ('URL', 2), ('user', 2), ('cour', 2)]
+NUM f26 dix 42 45 texte 'dix'
+NUM f50 deux 441 445 texte 'deux'
+NUM f50 six 695 698 texte 'six'
+NUM f50 trois 830 835 texte 'trois'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport subprocess,sys,json\ndef run(t, *args):\n    p=subprocess.run([sys.executable,'tools/drave.py','analyser',t,'--json',*args],capture_output=True,text=True)\n    return p\nfor name,t in [('NFD','e\\u0301lodie sou … [801 caractères tronqués]`
+
+  ```
+NFD rc 0 out 5063 err 
+  langue und script Latn labels 18 mots [('e', 0, 1, 'mot'), ('́', 1, 2, 'ponctuation'), ('lodie', 2, 7, 'mot'), ('sourit', 8, 14, 'mot'), ('.', 14, 15, 'ponctuation')] synt 0 pos [('e', 'NOUN'), ('lodie', 'NOUN'), ('sourit', 'NOUN')]
+BOM rc 0 out 5779 err 
+  langue fr script Latn labels 20 mots [('\ufeff', 0, 1, 'ponctuation'), ('Le', 1, 3, 'mot'), ('chat', 4, 8, 'mot'), ('dort', 9, 13, 'mot'), ('.', 13, 14, 'ponctuation')] synt 2 pos [('Le', 'DET'), ('chat', 'NOUN'), ('dort', 'VERB')]
+tab rc 0 out 5108 err 
+  langue fr script Latn labels 17 mots [('Le', 0, 2, 'mot'), ('chat', 3, 7, 'mot'), ('dort', 8, 12, 'mot'), ('.', 12, 13, 'ponctuation')] synt 2 pos [('Le', 'DET'), ('chat', 'NOUN'), ('dort', 'VERB')]
+CRLF rc 0 out 6318 err 
+  langue fr script Latn labels 22 mots [('Le', 0, 2, 'mot'), ('chat', 3, 7, 'mot'), ('.', 7, 8, 'ponctuation'), ('Salut', 10, 15, 'mot'), ('.', 15, 16, 'ponctuation')] synt 2 pos [('Le', 'DET'), ('chat', 'NOUN'), ('Salut', 'NOUN')]
+zero-width rc 0 out 5552 err 
+  langue fr script Latn labels 19 mots [('Le', 0, 2, 'mot'), ('chat', 3, 7, 'mot'), ('\u200b', 7, 8, 'ponctuation'), ('dort', 8, 12, 'mot'), ('.', 12, 13, 'ponctuation')] synt
+… [598 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle négatif : le détecteur attrape-t-il 8 mutations ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,copy,subprocess,sys,importlib.util\nspec=importlib.util.spec_from_file_location('a','/tmp/audit_cli.py'); a=importlib.util.module_from_spec(spec); spec.loader.exec_module(a)\ntexte=\"Le chat dort.\"\np=sub … [2024 caractères tronqués]`
+
+  ```
+base overlaps {} sans_att 0 surface_ko 0
+mutations {'span_hors': 1, 'chevauchement': 1, 'cible_absente': 1, 'confiance': 1, 'cle_manquante': 1, 'fraction': 1, 'valeur': 1, 'sans_attachement': 1, 'niveau_inconnu': 1}
+detectees 9 / 9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,subprocess,sys\ndef run(t):\n    p=subprocess.run([sys.executable,'tools/drave.py','analyser',t,'--json'],capture_output=True,text=True)\n    return p, (json.loads(p.stdout) if p.returncode==0 else None)\n … [749 caractères tronqués]`
+
+  ```
+TEXTE 'Le prix est 12.5 euros.' rc 0
+  phrase 0 15 'Le prix est 12.' type déclarative
+  phrase 15 23 '5 euros.' type déclarative
+  acte assertion
+  acte assertion
+TEXTE 'Le vol part à 12.03.2024.' rc 0
+  phrase 0 17 'Le vol part à 12.' type déclarative
+  phrase 17 20 '03.' type déclarative
+  phrase 20 25 '2024.' type déclarative
+  acte assertion
+  acte assertion
+  acte assertion
+TEXTE 'Écrivez à alice@example.org.' rc 0
+  phrase 0 24 'Écrivez à alice@example.' type déclarative
+  phrase 24 28 'org.' type déclarative
+  acte assertion
+  acte assertion
+TEXTE 'Visitez https://example.com/docs?page=2.' rc 0
+  phrase 0 24 'Visitez https://example.' type déclarative
+  phrase 24 33 'com/docs?' type interrogative
+  phrase 33 40 'page=2.' type déclarative
+  acte assertion
+  acte question
+  acte assertion
+TEXTE 'M. Dupont est là. Il repart.' rc 0
+  phrase 0 17 'M. Dupont est là.' type déclarative
+  phrase 2 17 ' Dupont est là.' type déclarative
+  phrase 17 28 ' Il repart.' type déclarative
+  acte assertion
+  acte assertion
+  acte assertion
+TEXTE 'Le Dr. Martin est arrivé hier. Il repart demain.' rc 0
+  phrase 0 30 'Le Dr. Martin est arrivé hier.' type déclarative
+  phrase 6 30 ' Martin est arr
+… [236 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation des statistiques du banc et des vides du contrat
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json,statistics\nr=json.load(open('audit_cli_results.json')); b=r['banc_50']; det={x['id']:x for x in json.load(open('audit_cli_detail.json'))}\nok=[x for x in b if x['rc']==0]; ref=[x for x in b if x['rc']==1]\nprint('ok',len(ok),'refus',len(ref))\nw … [1965 caractères tronqués]`
+
+  ```
+ok 46 refus 4
+wall {'min': 136.8, 'med': 152.7, 'mean': 157.3, 'p95': 180.3, 'max': 226.6}
+api {'min': 0.2, 'med': 1.0, 'mean': 2.2, 'p95': 2.0, 'max': 45.1}
+json sizes {'min': 2126, 'med': 13510.5, 'mean': 26204.8, 'p95': 22841, 'max': 533611}
+labels 4501 mots 1068 pos 766
+synt 360 att 284 sans 76
+overlap texts 28 syn pairs 107
+phrase leading 19 doc tronq 17
+unites vides ['f18'] fraction0 ['f18']
+sans synt ['f13', 'f18', 'f27', 'f37'] sans pos ['f18']
+langues {'it', 'fr', 'und', 'en'}
+phrase labels 76 documents 49
+slowest [('f50', 226.6, 45.088), ('f02', 193.8, 1.738), ('f05', 181.6, 1.03), ('f35', 180.3, 0.509), ('f44', 179.1, 1.804)]
+api slowest [('f50', 45.088), ('f43', 7.877), ('f20', 2.414), ('f06', 2.012), ('f38', 1.893)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,subprocess,sys,collections,importlib.util\nspec=importlib.util.spec_from_file_location('a','/tmp/audit_cli.py'); a=importlib.util.module_from_spec(spec); spec.loader.exec_module(a)\ntotal=0; nonsurface=0;  … [902 caractères tronqués]`
+
+  ```
+total labels 4501 nonsurface 295 pct 6.55
+bylevel Counter({'graphème': 1912, 'mot': 1068, 'pos': 766, 'syntagme': 360, 'morphème': 104, 'phrase': 89, 'pragmatique': 86, 'discours': 67, 'document': 49})
+nonsurf Counter({'phrase': 89, 'pragmatique': 86, 'discours': 67, 'document': 49, 'morphème': 4})
+surface levels 4210
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse des cibles d'attachement (ambiguïté, hors span, classes fermées)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,subprocess,sys,collections,importlib.util\nspec=importlib.util.spec_from_file_location('a','/tmp/audit_cli.py'); a=importlib.util.module_from_spec(spec); spec.loader.exec_module(a)\namb=[]; self_=[]; hors= … [1179 caractères tronqués]`
+
+  ```
+total attachments 284
+cible apparaît >1 fois 56 [('f20', 'M', 3, 'GV'), ('f38', 'c', 3, 'GN'), ('f38', 'c', 3, 'GP'), ('f38', 'f', 2, 'GV'), ('f38', 'f', 2, 'GV'), ('f38', 'f', 2, 'GV'), ('f43', 'fin', 2, 'GN'), ('f43', 'ce', 2, 'REL'), ('f43', 'ce', 2, 'REL'), ('f43', 'fin', 2, 'REL'), ('f50', 'voisine', 2, 'REL'), ('f50', 'voisine', 2, 'GV')]
+cible dans le span 10 [('f02', 'réveille', 'REL', 22, 54), ('f08', 'station', 'REL', 0, 34), ('f24', 'fille', 'GN', 9, 34), ('f33', 'viens', 'SUB', 0, 11), ('f38', 'f', 'GV', 46, 68), ('f39', 'user', 'GN', 0, 21), ('f43', 'phrase', 'GN', 9, 19), ('f50', 'réveille', 'REL', 41, 97)]
+cible hors span 274
+cible mot fermé 18 [('f05', 'pas', 'ADV', 'GP'), ('f05', 'pas', 'ADV', 'GN'), ('f06', 'pas', 'ADV', 'SUB'), ('f06', 'pas', 'ADV', 'GP'), ('f10', 'est', 'AUX', 'GN'), ('f10', 'est', 'AUX', 'GP'), ('f10', 'est', 'AUX', 'GP'), ('f30', 'hier', 'ADV', 'GV'), ('f32', 'pas', 'ADV', 'GN'), ('f32', 'pas', 'ADV', 'GN'), ('f43', 'ce', 'DET', 'REL'), ('f43', 'ce', 'DET', 'REL')]
+cible longueur 1 9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,subprocess,sys,re,importlib.util\nspec=importlib.util.spec_from_file_location('a','/tmp/audit_cli.py'); a=importlib.util.module_from_spec(spec); spec.loader.exec_module(a)\nurlbad=[]; urlq=[]; ph_counts=[] … [1050 caractères tronqués]`
+
+  ```
+phrases par texte >1 [('f03', 2), ('f12', 3), ('f20', 2), ('f25', 2), ('f26', 2), ('f29', 2), ('f37', 2), ('f38', 4), ('f39', 2), ('f50', 19)]
+phrases coupées dans URL/email [('f12', 'https://example.com/docs?page=2', (0, 24)), ('f12', 'https://example.com/docs?page=2', (24, 33)), ('f12', 'https://example.com/docs?page=2', (33, 62)), ('f37', 'alice@example.org', (0, 21)), ('f37', 'alice@example.org', (21, 51)), ('f38', 'https://a.b/c?d=e#f', (0, 24)), ('f38', 'https://a.b/c?d=e#f', (24, 28)), ('f38', 'https://a.b/c?d=e#f', (28, 46)), ('f38', 'http://x.y', (28, 46)), ('f38', 'http://x.y', (46, 69)), ('f50', 'https://example.org/corpus/2026?page=3', (1691, 1728)), ('f50', 'https://example.org/corpus/2026?page=3', (1728, 1744)), ('f50', 'https://example.org/corpus/2026?page=3', (1744, 1805)), ('f50', 'corpus@example.org', (1744, 1805)), ('f50', 'corpus@example.org', (1805, 1869))]
+fausses interrogatives URL [('f12', 'com/docs?'), ('f38', 'b/c?'), ('f50', 'org/corpus/2026?')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor t in \"1234567890\" \"Élodie sourit.\" \"J'ai trouvé ça génial 😍🔥\" \"Email: alice@example.org, phone: +33 6 12 34 56 78.\"; do\n  echo \"===== $t\"\n  python3 tools/drave.py analyser \"$t\" 2>&1 | head -25\ndone", "description": " … [33 caractères tronqués]`
+
+  ```
+===== 1234567890
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=und script=Zyyy source=heuristique · 6 étiquettes · unités sémantiques=0 (0.0% du texte)
+POS  —
+SYNTAGMES —
+PRAGMATIQUE
+  phrase [0:10] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · phrase=0.85 · discours=0.50 ·
+            pragmatique=0.45 · document=0.70
+===== Élodie sourit.
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)
+POS  Élodie/NOUN sourit/NOUN
+SYNTAGMES —
+PRAGMATIQUE
+  phrase [0:14] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.55 · phrase=0.85 ·
+            discours=0.50 · pragmatique=0.45 · document=0.70
+===== J'ai trouvé ça génial 😍🔥
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=und script=Latn source=heuristique · 26 étiquettes · unités sémantiques=2 (50.0% du texte)
+POS  J'ai/PRON trouvé/NOUN ça/PRON génial/ADJ
+SYNTAGMES —
+PRAGMATIQUE
+  phrase [0:24] déclarative · acte=assertion · n
+… [845 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction et essai à blanc du test de non-régression du schéma
+
+- **write** `{"content": "\"\"\"test_schema_produit.py — le contrat de sortie de `drave analyser --json`.\n\nDeux contrats cohabitent :\n\n- **actuel** (drave 0.1.0) : 11 champs racine, 11 champs par étiquette, spans valides,\n  déterminisme. Ce test passe sur le produit livré ; il gèle l'enveloppe et attrape un … [7888 caractères tronqués]`
+
+  ```
+<path>/tmp/test_schema_produit.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_RACINE=$PWD python3 /tmp/test_schema_produit.py 2>&1 | tail -20", "description": "Dry-run schema non-regression test"}`
+
+  ```
+test_codes_de_sortie (__main__.TestContratActuel.test_codes_de_sortie) ... ok
+test_determinisme (__main__.TestContratActuel.test_determinisme) ... ok
+test_enveloppe_et_etiquettes (__main__.TestContratActuel.test_enveloppe_et_etiquettes) ... ok
+test_refus_actuel (__main__.TestContratActuel.test_refus_actuel)
+0.1.0 : refus = code 1, stdout vide, message sur stderr (le manque P0-2). ... ok
+setUpClass (__main__.TestSchemaV1) ... skipped "schéma v1 non livré : `schema` absent de l'annotation"
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.950s
+
+OK (skipped=1)
+  ```
+
+### 🤖 Assistant
+
+⏵ Robustesse finale : cas limites, encodages, refus et déterminisme
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Robustesse finale du CLI drave — écrit /tmp/audit_robustesse_final.json.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport os\nimport pathlib\nimport subprocess\nimport sys\nimport time\n\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/steph … [8014 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_robustesse_final.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/audit_robustesse_final.py 2>&1 | tail -45", "description": "Run final robustness suite", "timeoutMs": 600000}`
+
+  ```
+version: rc=0 out=12 attendu=0 err=''
+aide: rc=0 out=770 attendu=0 err=''
+sans_commande: rc=2 out=0 attendu=2 err="usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : th"
+commande_inconnue: rc=2 out=0 attendu=2 err="usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : ar"
+analyser_sans_texte: rc=2 out=0 attendu=2 err='usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: err'
+langue_hors_choix: rc=2 out=0 attendu=2 err='usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: err'
+langue_majuscule: rc=2 out=0 attendu=2 err='usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: err'
+option_inconnue: rc=2 out=0 attendu=2 err="usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : un"
+texte_double_tiret: rc=2 out=0 attendu=0 err='usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: err'
+texte_double_tiret_sep: rc=0 out=460 attendu=0 err=''
+texte_tiret_simple: rc=0 out=460 attendu=0 err=''
+json_avant_texte: rc=0 out=5561 attendu=0 err=''
+nouvelle_ligne: rc=0 out=754 attendu=0 err=''
+tab_et_crlf: rc=0 out=688 attendu=0
+… [1598 caractères tronqués]
+  ```
+
+- **bash** `{"command": "nl -ba /tmp/audit_robustesse_final.py | sed -n '74,92p'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/drave.py analyser $'\\ufeffLe chat dort.' --json >/tmp/bom.out 2>/tmp/bom.err; echo \"bom rc=$? out=$(wc -c </tmp/bom.out) err=$(cat /tmp/bom.err)\"", "description" … [37 caractères tronqués]`
+
+  ```
+74	    a = bl.Heuristique().analyser(valeur)
+    75	    cas.append({"nom": f"api_non_str_{type(valeur).__name__}", "api": True, "attendu": "non_texte",
+    76	                "refus": a.refus, "texte": a.texte, "etiquettes": len(a.etiquettes),
+    77	                "cles_cout": sorted(a.cout)})
+    78	
+    79	# --- encodages
+    80	p = lancer("utf8_valide", ["analyser", "Élodie sourit."], attendu=0)
+    81	p = lancer("nfd", ["analyser", "e\u0301lodie sourit."], attendu=0)
+    82	if p.returncode == 0:
+    83	    d = json.loads(p.stdout)
+    84	    cas[-1]["mots"] = [(e["valeur"], e["debut"], e["fin"]) for e in d["etiquettes"]
+    85	                       if e["niveau"] == "mot"]
+    86	    cas[-1]["syntagmes"] = sum(1 for e in d["etiquettes"] if e["niveau"] == "syntagme")
+    87	    cas[-1]["pos"] = [(e["valeur"], e["type"]) for e in d["etiquettes"] if e["niveau"] == "pos"]
+    88	p = lancer("bom", ["analyser", "\ufeffLe chat dort."], attendu=0)
+    89	p = lancer("surrogate_seul", [b"\xff"], attendu="refus_encodage")
+    90	p = lancer("surrogate_dans_mot", [b"a\xffb"], attendu="refus_encodage")
+    91	env_ascii = os.environ.copy(); env_ascii["PYTHONIOENCODING"] = "ascii"
+    92	la
+… [101 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/audit_robustesse_final.py'\ns=open(p).read()\ns=s.replace('[\"analyser\", \"Élodie sourit.\"], attendu=0)\\np = lancer(\"nfd\"', '[\"analyser\", \"Élodie sourit.\", \"--json\"], attendu=0)\\np = lancer(\"nfd\"')\ns=s.replace('[\"analyser\", \"e\\\\u0 … [535 caractères tronqués]`
+
+  ```
+80:p = lancer("utf8_valide", ["analyser", "Élodie sourit.", "--json"], attendu=0)
+81:p = lancer("nfd", ["analyser", "e\u0301lodie sourit.", "--json"], attendu=0)
+88:p = lancer("bom", ["analyser", "\ufeffLe chat dort.", "--json"], attendu=0)
+texte_tiret_simple: rc=0 out=460 attendu=0 err=''
+json_avant_texte: rc=0 out=5561 attendu=0 err=''
+nouvelle_ligne: rc=0 out=754 attendu=0 err=''
+tab_et_crlf: rc=0 out=688 attendu=0 err=''
+evaluation: rc=0 out=659 attendu=0 err=''
+evaluation_gold: rc=0 out=2740 attendu=0 err=''
+rejeu_ok: rc=0 out=147 attendu=0 err=''
+vide: rc=1 out=0 attendu=1 err="drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un "
+un_espace: rc=1 out=0 attendu=1 err="drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un "
+espaces_et_tabs: rc=1 out=0 attendu=1 err="drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un "
+ponctuation_seule: rc=1 out=0 attendu=1 err="drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un "
+emoji_seul: rc=1 out=0 attendu=1 err="drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un "
+invisible: rc=1 out=0 attendu=1 err=
+… [1142 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/audit_robustesse_final.py'\ns=open(p).read()\ns=s.replace('lancer(\"surrogate_seul\", [b\"\\\\xff\"], attendu=\"refus_encodage\")','lancer(\"surrogate_seul\", [\"analyser\", b\"\\\\xff\"], attendu=\"refus_encodage\")')\ns=s.replace('lancer(\"surrogat … [383 caractères tronqués]`
+
+  ```
+surrogate_seul: rc=1 out=0 attendu=refus_encodage err="drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un "
+surrogate_dans_mot: rc=1 out=0 attendu=refus_encodage err="drave: erreur : UnicodeEncodeError : 'utf-8' codec can't encode character '\\udcf"
+écrit /tmp/audit_robustesse_final.json 49 cas
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json\nc=json.load(open('audit_robustesse_final.json'))\nfor x in c:\n    if x.get('api'):\n        print(x['nom'], 'refus=',repr(x.get('refus')), 'etiquettes=',x.get('etiquettes'), 'cles_cout=',x.get('cles_cout'), 'json_cles=',x.get('json_cles'))\n    … [369 caractères tronqués]`
+
+  ```
+api_'' refus= 'vide' etiquettes= 0 cles_cout= ['duree_s', 'octets'] json_cles= ['contexte', 'cout', 'etiquettes', 'fraction_semantique', 'langue', 'refus', 'script', 'source', 'texte', 'trace', 'unites_semantiques']
+api_'   ' refus= 'vide' etiquettes= 0 cles_cout= ['duree_s', 'octets'] json_cles= ['contexte', 'cout', 'etiquettes', 'fraction_semantique', 'langue', 'refus', 'script', 'source', 'texte', 'trace', 'unites_semantiques']
+api_'...' refus= 'vide' etiquettes= 0 cles_cout= ['duree_s', 'octets'] json_cles= ['contexte', 'cout', 'etiquettes', 'fraction_semantique', 'langue', 'refus', 'script', 'source', 'texte', 'trace', 'unites_semantiques']
+api_'🚀' refus= 'vide' etiquettes= 0 cles_cout= ['duree_s', 'octets'] json_cles= ['contexte', 'cout', 'etiquettes', 'fraction_semantique', 'langue', 'refus', 'script', 'source', 'texte', 'trace', 'unites_semantiques']
+api_'1234567890' refus= '' etiquettes= 6 cles_cout= ['caracteres', 'duree_s', 'etiquettes', 'octets'] json_cles= ['contexte', 'cout', 'etiquettes', 'fraction_semantique', 'langue', 'refus', 'script', 'source', 'texte', 'trace', 'unites_semantiques']
+api_non_str_NoneType refus= 'non_texte' etiquettes= 0 cles_cout= ['duree_s', 'o
+… [48729 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du commit courant et des fichiers voisins avant rédaction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit log --oneline -3; git rev-parse HEAD; git status --short --untracked-files=all -- reports/ | head -10; echo ---; git ls-files reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json; echo ---; ls -l reports/rapport-fia … [174 caractères tronqués]`
+
+  ```
+56eb43af INDEX — RÉGÉNÉRÉ (679 FICHES) APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0
+108faf92 DOCS — LE README DES FICHES DANS LE BUDGET T1 (LIGNES ANCIENNES RACCOURCIES)
+3601764a ÉTAT — T0 DANS LE BUDGET (AUDIT A24)
+56eb43af207de7e231463100778934db8bebe970
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+---
+reports/pensee-produit-bloc-l.json
+reports/rapport-produit-bloc-l.md
+---
+ls: cannot access 'reports/rapport-fiabilite-produit.md': No such file or directory
+ls: cannot access 'reports/pensee-fiabilite-produit.json': No such file or directory
+59a06f3e4f7d633ae8caa30412fd4c01e14374914226f5e54629f544e47aea8c  tools/drave.py
+084517d9c10088b3adedc01658adbb33e3de69e7f5ca8c2f563f427abdd79f4f  tools/bloc_linguistique.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif chiffré final pour la rédaction
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json,statistics\nr=json.load(open('audit_cli_results.json')); b=r['banc_50']; det={x['id']:x for x in json.load(open('audit_cli_detail.json'))}\nok=[x for x in b if x['rc']==0]; ref=[x for x in b if x['rc']==1]\nwall=[x['wall_ms'] for x in b]; api=[r[ … [2102 caractères tronqués]`
+
+  ```
+WALL (136.8, 152.7, 157.3, 180.3, 226.6)
+API (0.2, 1.0, 2.2, 2.0, 45.1)
+JSON sizes (2126, 13510.5, 26204.8, 22841, 533611)
+labels 4501 mots 1068 pos 766 synt 360 att 284 sans 76
+overlap texts 28 pairs 107
+phrase leading 19 doc tronq 17 documents 49
+sans synt ['f13', 'f18', 'f27', 'f37'] sans pos ['f18'] unites vides ['f18']
+slowest [('f50', 226.6, 45.088), ('f02', 193.8, 1.738), ('f05', 181.6, 1.03), ('f35', 180.3, 0.509), ('f44', 179.1, 1.804)]
+api slowest [('f50', 45.088), ('f43', 7.877), ('f20', 2.414), ('f06', 2.012), ('f38', 1.893)]
+refus [('f14', 1, "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"), ('f15', 0, "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"), ('f16', 3, "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"), ('f17', 3, "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)")]
+langues {'f01': 'fr', 'f02': 'fr', 'f03': 'fr', 'f04': 'fr', 'f05': 'fr', 'f06': 'fr', 'f07': 'en', 'f08': 'en', 'f09': 'en', 'f10': 'fr', 'f11': 'fr', 'f12': 'fr', 'f13': 'und', 'f18': 'und', 'f19': 'fr', 'f20': 'fr', 'f21': 'fr', '
+… [1209 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nnl -ba tools/bloc_linguistique.py | sed -n '1003,1050p'; echo ===; nl -ba tools/bloc_linguistique.py | sed -n '1216,1258p'; echo ===; nl -ba tools/bloc_linguistique.py | sed -n '1818,1852p'", "description": "Get exact line numbers for  … [15 caractères tronqués]`
+
+  ```
+1003	    def analyser(self, texte: str, langue: str | None = None,
+  1004	                 contexte: str | None = None) -> Annotation:
+  1005	        t0 = time.perf_counter()
+  1006	        if not isinstance(texte, str):
+  1007	            # une entrée non textuelle est **refusée** proprement (le produit ne plante pas)
+  1008	            return Annotation(texte=str(texte)[:200], refus="non_texte", source=self.nom,
+  1009	                              trace=[{"etape": "refus", "raison": "non_texte",
+  1010	                                      "type": type(texte).__name__}],
+  1011	                              cout={"octets": 0, "duree_s": round(time.perf_counter() - t0, 6)})
+  1012	        texte = texte or ""
+  1013	        trace: list[dict] = []
+  1014	        if not texte.strip() or not any(ch.isalpha() or ch.isdigit() for ch in texte):
+  1015	            return Annotation(texte=texte, refus="vide", source=self.nom,
+  1016	                              trace=[{"etape": "refus", "raison": "vide"}],
+  1017	                              cout={"octets": len(texte.encode("utf-8", "replace")), "duree_s": round(time.perf_counter() - t0, 6)})
+  1018	
+  1019	        lg, conf_lg, script =
+… [7152 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du rapport JSON structuré (banc, contrat, schéma, correctifs)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Construit reports/pensee-fiabilite-produit.json à partir des mesures /tmp.\"\"\"\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport pathlib\nimport statistics\nimport subprocess\nimport sys\n\nRACINE = pathlib.Path(\"/home/stephane/D … [29742 caractères tronqués]`
+
+  ```
+<path>/tmp/build_json_report.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/build_json_report.py'\ns=open(p).read()\ns=s.replace('''                \"phrases\": d.get(\"documents\") and r.get(\"phrases\"),''','''                \"phrases\": r.get(\"phrases\"),''')\ns=s.replace('''                \"sans_pos\": r.get(\"pos\",  … [828 caractères tronqués]`
+
+  ```
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-fiabilite-produit.json 102879 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json\np='reports/pensee-fiabilite-produit.json'\nd=json.load(open(p))\nprint('top keys',list(d))\nprint('banc',len(d['banc_50']['resultats']),'synthese keys',list(d['banc_50']['synthese'])[:10])\ns=d['banc_50'] … [850 caractères tronqués]`
+
+  ```
+top keys ['rapport', 'ligne', 'branche', 'commit_mesure', 'commit_module', 'date', 'objet', 'verdict', 'snapshot', 'dispositif', 'banc_50', 'robustesse', 'contrat', 'schema_propose', 'test_non_regression', 'correctifs', 'controle_negatif', 'limites', 'fichiers']
+banc 50 synthese keys ['n', 'succes', 'refus', 'plantages', 'json_invalide', 'sorties_vides_sur_succes', 'spans_hors_texte', 'spans_vides', 'valeurs_vides', 'cles_racine_ko']
+n = 50
+succes = 46
+refus = 4
+labels = 4501
+mots = 1068
+pos = 766
+syntagmes = 360
+attachements = 284
+sans_attachement = 76
+chevauchements = {'textes': 28, 'paires': 107, 'union_labels': 85, 'apres_filtre_union': 0, 'tous_impliquent_union': True}
+temps_cli_ms = {'min': 136.77, 'mediane': 152.72, 'moyenne': 157.34, 'p95': 180.3, 'max': 226.64}
+temps_api_ms = {'min': 0.18, 'mediane': 1.01, 'moyenne': 2.16, 'p95': 2.01, 'max': 45.09}
+json_octets = {'min': 2126, 'mediane': 13510.5, 'moyenne': 26204.83, 'p95': 22841, 'max': 533611}
+langues = {'fr': 35, 'en': 5, 'und': 5, 'it': 1}
+sans_syntagme = ['f13', 'f18', 'f27', 'f37']
+sans_pos = ['f18']
+tokens_sans_pos = {'mot': [0, 766], 'ponctuation': [257, 257], 'nombre': [45, 45]}
+cibles_fermees = 18
+cibles_ambigues
+… [469 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nfor x in d['banc_50']['resultats']:\n    if x['id'] in ('f01','f18','f27','f50','f12','f20'):\n        print(x['id'], {k:v for k,v in x.items()  … [77 caractères tronqués]`
+
+  ```
+f01 {'id': 'f01', 'categorie': 'fr', 'attendu': 'fr', 'caracteres': 13, 'octets_utf8': 13, 'rc': 0, 'temps_cli_ms': 150.79, 'temps_api_ms': 0.796, 'deterministe': True, 'json_octets': 5561, 'json_valide': True, 'langue': 'fr', 'script': 'Latn', 'labels': 19, 'mots': 4, 'pos': 3, 'syntagmes': 2, 'attaches': 2, 'sans_attachement': 0, 'chevauchements_syntagme': 0, 'chevauchements_phrase_type': 0, 'syntagmes_union': 0, 'conflits_apres_filtre_union': 0, 'cibles_fermees': 0, 'cibles_absentes': 0, 'phrases': 1, 'phrases_espaces_initiaux': 0, 'documents': 1, 'doc_tronquees': 0, 'doc_titres': [], 'unites_semantiques': 2, 'fraction_semantique': 0.6154, 'trous_pos': {'mot': {'total': 3, 'sans_pos': 0}, 'ponctuation': {'total': 1, 'sans_pos': 1}}, 'sans_syntagme': False, 'sans_pos': False}
+f12 {'id': 'f12', 'categorie': 'fr', 'attendu': 'fr', 'caracteres': 62, 'octets_utf8': 62, 'rc': 0, 'temps_cli_ms': 153.01, 'temps_api_ms': 1.768, 'deterministe': True, 'json_octets': 17092, 'json_valide': True, 'langue': 'fr', 'script': 'Latn', 'labels': 63, 'mots': 18, 'pos': 9, 'syntagmes': 5, 'attaches': 4, 'sans_attachement': 1, 'chevauchements_syntagme': 0, 'chevauchements_phrase_type': 0, 'syntagmes_u
+… [4029 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport principal (mesures, contrat, schéma, correctifs)
+
+- **write** `{"content": "# Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 28/46 textes à chevauchement\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·\n> **Commit mesuré** : `56eb43af` (module `c1a08588`, `tools/drave.py` `59a06f3e`) ·\n>  … [29659 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Insertion du test complet dans le rapport et vérifications de cohérence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\nmd = pathlib.Path('reports/rapport-fiabilite-produit.md')\ncode = pathlib.Path('/tmp/test_schema_produit.py').read_text(encoding='utf-8')\ns = md.read_text(encoding='utf-8')\nassert '@@TEST_CODE@@' in  … [333 caractères tronqués]`
+
+  ```
+md bytes 37350 lines 626
+78:| syntagmes qui se chevauchent | **107 paires** dans **28/46** textes ; **85/360** étiquettes `meta.union` | f02 : `REL 22-42` et `REL 22-54` ; f50 : 50 paires |
+253:3. **Chevauchements** : 107 paires / 28 textes ; un arbre ou un index par offset casse. Filtrer
+351:`/tmp` : `Ran 4 tests ... OK (skipped=1)` — les 4 tests du contrat actuel passent, la classe
+535:| **P0-3** | **Partition explicite des syntagmes** : `meta.alternative` + filtre `union` documenté (ou suppression mesurée) | **107 paires / 28 textes** ; 85 `union` ; 0 conflit après filtre | `bloc_linguistique.py` 1099-1156, 1179-1204, 1820-1849 | **0,5–1 j** | moyen : change F1/attachement ; préférer l'alternative étiquetée à la suppression |
+598:- **Chevauchements** : les **107 paires** dépendent du banc ; l'audit A24 en compte **132** sur
+608:3. **P0-3 — Partition explicite des syntagmes** : 107 paires sur 28/46 textes ; le filtre
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation du rapport : fences, schéma JSON, liens et cohérence des chiffres
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re,json\np=pathlib.Path('reports/rapport-fiabilite-produit.md'); s=p.read_text(encoding='utf-8')\nprint('placeholders', s.count('@@'), s.count('{{'))\nprint('fences', s.count('```'))\n# extraire les blo … [1184 caractères tronqués]`
+
+  ```
+placeholders 0 0
+fences 6
+blocs [('', 244), ('json', 2012), ('python', 7683)]
+json blocks 1
+schema JSON valide, required= ['schema', 'version', 'texte', 'langue', 'script', 'refus', 'etiquettes', 'unites_semantiques']
+python blocks 1 [7683]
+test compile OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"242\\|fr|en\\|fr\\\\\\\\|en\\|6/2\" reports/rapport-fiabilite-produit.md | head -20; echo ---; grep -n \"non-GV\" reports/rapport-fiabilite-produit.md; echo ---; grep -n \"choix\" reports/rapport-fiabilite-produit.md | head", … [51 caractères tronqués]`
+
+  ```
+92:| cibles ambiguës par chaîne | **56/284** | cible présente >1 fois ; 9 cibles d'un caractère (`M`, `c`, `f`) |
+93:| syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/242** non-GV |
+167:| `--langue de`, `--langue FR`, option inconnue | 2 | **2** | 0 | conforme (choix `fr\|en`) |
+255:4. **Cible sans offset** : 56/284 cibles apparaissent plusieurs fois ; 18 mots fermés ; 9 cibles
+542:| **P1-1** | **Cible d'attachement offsettée** (`cible_debut`/`cible_fin`) et désambiguïsée | **56/284** cibles apparaissent >1 fois ; **18** mots fermés ; **9** cibles de 1 caractère | `bloc_linguistique.py` 1145-1156, 1168-1176, 1195-1203 | **4 h** | faible : ajout dans `meta.attachement` |
+612:5. **P1-1 — Cibles d'attachement offsettées** : 56/284 cibles ambiguës, 18 mots fermés, 0 offset ;
+---
+93:| syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/242** non-GV |
+---
+167:| `--langue de`, `--langue FR`, option inconnue | 2 | **2** | 0 | conforme (choix `fr\|en`) |
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "old_string": "| syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/242** non-GV |", "new_string": "| syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/215** non-GV |"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "offset": 86, "limit": 12}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+86: | phrases commençant par un espace | **19/76** | f03, f20, f25, f26, f29, f50 (14) |
+87: | documents tronqués à 60 caractères | **17/49** | f50 : 4 titres tronqués |
+88: | faux titres de document | **2/49** | f18 (`1234567890`), f31 (`ÇA NE MARCHE PAS !!!`) |
+89: | langue fausse | **1/41 fr** | f33 « Si tu viens… » → `it` |
+90: | langue `und` | **5** | f13, f18 (chiffres), f27, f37, f48 (latin) |
+91: | cibles en mot fermé | **18/284** | `pas` (5), `est` (3), `ce` (2), `hier`, `M`… |
+92: | cibles ambiguës par chaîne | **56/284** | cible présente >1 fois ; 9 cibles d'un caractère (`M`, `c`, `f`) |
+93: | syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/242** non-GV |
+94: | rôles non normalisés | **106** `predicat` vs **39** `prédicat` ; **17** `qualite` vs **11** `qualité` | filtre client fragile |
+95: | `valeur` non uniforme | **295/4501** | phrase = type, pragmatique = acte, document tronqué, 4 morphèmes normalisés |
+96: 
+97: **Le cas « Élodie sourit. »** — une phrase canonique, 13 étiquettes, 2 unités sémantiques, mais
+
+(Showing lines 86-97 of
+… [44 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/215** non-GV |", "old_string": "| syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/242** non-GV |"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\nlines=pathlib.Path('reports/rapport-fiabilite-produit.md').read_text(encoding='utf-8').splitlines()\nin_code=False; groups=[]; cur=[]\nfor i,l in enumerate(lines,1):\n    if l.strip().startswith('`` … [823 caractères tronqués]`
+
+  ```
+tables 14
+tables incohérentes 0
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 40, "offset": 1}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+1: # Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 28/46 textes à chevauchement
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+4: > **Commit mesuré** : `56eb43af` (module `c1a08588`, `tools/drave.py` `59a06f3e`) ·
+5: > **Date** : 2026-11-06 · **Verdict** : ⚠️ **la surface est fiable ; le contrat ne l'est pas encore.**
+6: > **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+7: > [`pensee-fiabilite-produit.json`](pensee-fiabilite-produit.json).
+8: >
+9: > **Dispositif** : [`tools/drave.py`](../tools/drave.py) (CLI : `analyser`, `evaluer`, `rejouer`,
+10: > `--version`) et [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py) ;
+11: > **50 phrases libres** écrites pour l'audit (textes dans le JSON) ; harnais local non committé
+12: > dans `/tmp` ; machine **Xeon E5-2687W v3**, Python **3.13.16**.
+13: >
+14: > **Snapshot.** HEAD a bougé pendant l'audit (`6ef2a3f5` → `56eb43af`). Le module a reçu à
+15: > **11 h 34** le correctif « non-str / surrogate » (`c1a0
+… [1638 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nsed -n '330,370p' reports/rapport-fiabilite-produit.md; echo '...'; sed -n '490,520p' reports/rapport-fiabilite-produit.md; echo '...'; tail -25 reports/rapport-fiabilite-produit.md", "description": "Inspect test insertion and closing  … [10 caractères tronqués]`
+
+  ```
+"confiance": {"type": "number", "minimum": 0, "maximum": 1},
+        "candidats": {"type": "array", "items": {"type": "string"}},
+        "langue": {"type": "string"},
+        "script": {"type": "string"},
+        "meta": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  }
+}
+```
+
+**Politique de version.** MAJOR pour toute suppression, renommage ou changement de type/sémantique
+d'un des 8 champs ; MINOR pour un champ optionnel, une valeur de `type` ou un code de `refus`.
+`schema` et `version` sont présents **sur succès et sur refus** ; le refus est un code **3** avec
+un JSON d'annotation vide (`etiquettes: []`), pas un stdout vide.
+
+### 4.5 Le test de non-régression du schéma
+
+Le test ci-dessous est **proposé** pour `tools/tests/test_schema_produit.py` (il n'est pas écrit
+dans le dépôt : la mission n'autorise que deux fichiers neufs). Il a été **essayé à blanc** depuis
+`/tmp` : `Ran 4 tests ... OK (skipped=1)` — les 4 tests du contrat actuel passent, la classe
+`TestSchemaV1` est sautée tant que `schema` n'existe pas. Elle deviendra stricte dès P0-1 livré.
+
+```python
+"""test_schema_produit.py — le contrat de sortie de `drave analyser --json`.
+
+Deux contrats cohab
+… [3760 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\n# longest strings\ndef walk(o,path=''):\n    if isinstance(o,str):\n        yield len(o),path,o[:80]\n    elif isinstance(o,dict):\n        for  … [629 caractères tronqués]`
+
+  ```
+7682 /test_non_regression/code '"""test_schema_produit.py — le contrat de sortie de `drave analyser --json`.\n\nDe'
+2144 /banc_50/resultats[49]/texte '# Notes de terrain\nLe chat de la voisine qui dort sur le toit se réveille dès qu'
+390 /banc_50/resultats[42]/texte 'Ceci est une phrase qui contient beaucoup de mots afin de tester la longueur et '
+226 /verdict '⚠️ surface fiable (0 plantage, 0 JSON invalide, 0 span hors texte, 50/50 détermi'
+211 /snapshot/note "HEAD est passé de 6ef2a3f5 à 56eb43af pendant l'audit ; le module a reçu le corr"
+187 /robustesse/cas[3]/stderr "usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : ar"
+173 /dispositif/harnais 'scripts locaux non committés dans /tmp (audit_cli.py, audit_cli_detail.py, audit'
+170 /dispositif/mesure 'CLI en subprocess (python3 tools/drave.py analyser TEXTE --json), deux passages '
+--- rob 10k
+10k_phrases ['drave', 'analyser', '<10000 caractères>', '--json'] 0 2763666 None
+10k_sans_espace ['drave', 'analyser', '<10000 caractères>', '--json'] 0 42482 None
+10k_ponctuation ['drave', 'analyser', '<10000 caractères>', '--json'] 1 None None
+10k_lisible_sans_espace ['drave', 'analyser', '<10000 caractères>']
+… [424 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nr=d['banc_50']['resultats']; ok=[x for x in r if x['rc']==0]\nfor k in ['labels','mots','pos','syntagmes','attaches','sans_attachement','chevauc … [414 caractères tronqués]`
+
+  ```
+labels 4501
+mots 1068
+pos 766
+syntagmes 360
+attaches 284
+sans_attachement 76
+chevauchements_syntagme 107
+cibles_fermees 18
+phrases 76
+documents 49
+doc_tronquees 17
+unites_semantiques 413
+refus 4 succes 46
+langues {'it': 1, 'en': 5, 'und': 5, 'fr': 35}
+temps max 226.64
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nok=[x for x in d['banc_50']['resultats'] if x['rc']==0]\nprint('union sum',sum(x.get('syntagmes_union',0) for x in ok))\nprint('conflits apres f … [277 caractères tronqués]`
+
+  ```
+union sum 85
+conflits apres filtre sum 0
+phrase chev sum 1
+leading sum 19
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final : seuls les deux fichiers neufs sont de moi, rien n'est committé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short --untracked-files=all -- reports/rapport-fiabilite-produit.md reports/pensee-fiabilite-produit.json tools/ docs/produit/README.md\necho ---\ngit status --short --untracked-files=all | grep -E 'fiabilite' \necho ---\n … [172 caractères tronqués]`
+
+  ```
+m tools/structures
+?? reports/pensee-fiabilite-produit.json
+?? reports/rapport-fiabilite-produit.md
+---
+?? reports/pensee-fiabilite-produit.json
+?? reports/rapport-fiabilite-produit.md
+---
+-rw-r--r--. 1 stephane stephane 102879  6 nov 12:29 reports/pensee-fiabilite-produit.json
+-rw-------. 1 stephane stephane  37350  6 nov 12:37 reports/rapport-fiabilite-produit.md
+---
+56eb43af INDEX — RÉGÉNÉRÉ (679 FICHES) APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 25, "offset": 158}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+158: 
+159: ## 3. Robustesse des entrées
+160: 
+161: ### 3.1 Codes et arguments
+162: 
+163: | cas | code attendu | code observé | stdout | constat |
+164: |---|---:|---:|---:|---|
+165: | `--version`, `--aide` | 0 | **0** | oui | conforme |
+166: | aucune commande, commande inconnue, texte manquant | 2 | **2** | 0 | conforme |
+167: | `--langue de`, `--langue FR`, option inconnue | 2 | **2** | 0 | conforme (choix `fr\|en`) |
+168: | texte commençant par `--` (`--bonjour`) | 0 | **2** | 0 | **anomalie** : pris pour une option |
+169: | même texte avec `--` séparateur | 0 | **0** | oui | conforme |
+170: | texte `-3 degrés` | 0 | **0** | oui | conforme (argparse accepte) |
+171: | texte vide / espace / tabs | 1 | **1** | **0** | conforme, refus |
+172: | ponctuation seule / emoji / espace invisible | 1 | **1** | **0** | refus correct, **raison `vide` fausse** |
+173: | `--json` avant le texte | 0 | **0** | oui | conforme |
+174: | nouvelle ligne, tabulation, CRLF | 0 | **0** | oui | conforme |
+175: 
+176: Les codes **0 / 1 / 2** existent ; les codes **3 (refus distinct)** et
+… [251 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| texte `-3 degrés` | 0 | **0** | oui | conforme (argparse accepte) |\n| un mot (`Bonjour`), un caractère (`a`) | 0 | **0** | oui | conforme ; 7 et 5 étiquettes |\n| caractères spécia … [390 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| caractères spéciaux (f40 : `@ # $ % & * ( ) [ ] { } < > ~ ^`, barre verticale et antislash) | 0 | **0** | oui | 76 étiquettes, 0 plantage ; la barre et l'antislash sont des tokens d … [215 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\nlines=pathlib.Path('reports/rapport-fiabilite-produit.md').read_text(encoding='utf-8').splitlines()\nin_code=False; groups=[]; cur=[]\nfor i,l in enumerate(lines,1):\n    if l.strip().startswith('```') … [654 caractères tronqués]`
+
+  ```
+tables 14 incoherentes 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re,json\ns=pathlib.Path('reports/rapport-fiabilite-produit.md').read_text(encoding='utf-8')\nbloc=re.search(r'```json\\n(.*?)```',s,re.S).group(1)\nmd=json.loads(bloc)\nd=json.load(open('reports/pensee- … [444 caractères tronqués]`
+
+  ```
+egal True
+-rw-r--r--. 1 stephane stephane 102879  6 nov 12:29 reports/pensee-fiabilite-produit.json
+-rw-r--r--. 1 stephane stephane  37646  6 nov 12:40 reports/rapport-fiabilite-produit.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\ns=pathlib.Path('reports/rapport-fiabilite-produit.md').read_text(encoding='utf-8')\nblocs=re.findall(r'```python\\n(.*?)```',s,re.S)\ncode=blocs[0]\norig=pathlib.Path('/tmp/test_schema_produit.py'). … [206 caractères tronqués]`
+
+  ```
+identique False 7683 7682
+compile OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,collections\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\n# recompute from detail file? detail has lists\ndet=json.load(open('/tmp/audit_cli_detail.json'))\nc=collections.Counter()\nfor x in … [193 caractères tronqués]`
+
+  ```
+Counter({('pas', 'ADV'): 7, ('est', 'AUX'): 4, ('ce', 'DET'): 2, ('Ce', 'DET'): 2, ('hier', 'ADV'): 1, ('Nous', 'PRON'): 1, ('ici', 'ADV'): 1})
+total 18
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 6, "offset": 89}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+89: | langue fausse | **1/41 fr** | f33 « Si tu viens… » → `it` |
+90: | langue `und` | **5** | f13, f18 (chiffres), f27, f37, f48 (latin) |
+91: | cibles en mot fermé | **18/284** | `pas` (5), `est` (3), `ce` (2), `hier`, `M`… |
+92: | cibles ambiguës par chaîne | **56/284** | cible présente >1 fois ; 9 cibles d'un caractère (`M`, `c`, `f`) |
+93: | syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/215** non-GV |
+94: | rôles non normalisés | **106** `predicat` vs **39** `prédicat` ; **17** `qualite` vs **11** `qualité` | filtre client fragile |
+
+(Showing lines 89-94 of 628. Use offset=95 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| cibles en mot fermé | **18/284** | `pas` (7), `est` (4), `ce`/`Ce` (4), `hier`, `ici`, `Nous` |", "old_string": "| cibles en mot fermé | **18/284** | `pas` (5), `est` (3), `ce` (2), … [17 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Durcissement du test : compatible avec l'ajout de `schema`/`version` et du code 3
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/test_schema_produit.py'\ns=open(p).read()\ns=s.replace('''                self.assertEqual(set(d), CHAMPS_ACTUELS)\n''','''                # Les 11 champs actuels restent obligatoires ; les 8 champs du schéma v1\n                # peuvent s'ajouter s … [1682 caractères tronqués]`
+
+  ```
+patched
+test_codes_de_sortie (__main__.TestContratActuel.test_codes_de_sortie) ... ok
+test_determinisme (__main__.TestContratActuel.test_determinisme) ... ok
+test_enveloppe_et_etiquettes (__main__.TestContratActuel.test_enveloppe_et_etiquettes) ... ok
+test_refus_actuel_ou_cible (__main__.TestContratActuel.test_refus_actuel_ou_cible)
+0.1.0 : refus = code 1, stdout vide. Cible : code 3 + JSON. Les deux passent. ... ok
+setUpClass (__main__.TestSchemaV1) ... skipped "schéma v1 non livré : `schema` absent de l'annotation"
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.817s
+
+OK (skipped=1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n# 1) régénérer le JSON (le builder lit /tmp/test_schema_produit.py)\npython3 /tmp/build_json_report.py\n# 2) remplacer le bloc python du MD par le test à jour\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('reports/rapport-fiabil … [791 caractères tronqués]`
+
+  ```
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-fiabilite-produit.json 103675 octets
+md updated 38433
+json code == md code True
+compile OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re,json\ns=pathlib.Path('reports/rapport-fiabilite-produit.md').read_text(encoding='utf-8')\nprint('fences',s.count('```'),'python blocks',len(re.findall(r'```python',s)),'json blocks',len(re.findall(r' … [940 caractères tronqués]`
+
+  ```
+fences 6 python blocks 1 json blocks 1
+placeholders 0 0
+tables 14 incoherentes 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport hashlib,json,pathlib,subprocess\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nfor name,path,key in [('drave','tools/drave.py','drave_py_sha256'),('bloc','tools/bloc_linguistique.py','bloc_linguis … [521 caractères tronqués]`
+
+  ```
+drave json 59a06f3e4f7d633a reel 59a06f3e4f7d633a ok True
+bloc json 084517d9c10088b3 reel 084517d9c10088b3 ok True
+head 56eb43af json 56eb43af
+git blob bloc c1a08588 json c1a08588
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n '^#\\|^##\\|^###' reports/rapport-fiabilite-produit.md | head -40; echo ---; wc -l reports/rapport-fiabilite-produit.md; echo ---; grep -n \"6/215\\|pas.*(7)\\|Ran 4 tests\" reports/rapport-fiabilite-produit.md", "description": … [47 caractères tronqués]`
+
+  ```
+1:# Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 28/46 textes à chevauchement
+42:## 1. Dispositif
+61:## 2. Les 50 phrases : ce qui tient, ce qui casse
+63:### 2.1 Ce qui tient
+74:### 2.2 Ce qui casse (chiffré)
+117:### 2.3 Les 4 refus du banc
+131:### 2.4 Temps
+159:## 3. Robustesse des entrées
+161:### 3.1 Codes et arguments
+181:### 3.2 Encodages
+197:### 3.3 Les 10 000 caractères
+210:### 3.4 Scripts non latins et entrées non-str
+217:## 4. Le contrat de sortie
+219:### 4.1 Ce qui est toujours présent
+231:### 4.2 Ce qui peut être vide
+249:### 4.3 Ce qui casserait un client
+274:### 4.4 Le schéma minimal versionné (8 champs)
+349:### 4.5 Le test de non-régression du schéma
+538:## 5. Correctifs produit
+544:### Bloquants
+553:### Importants
+567:### Confort
+583:## 6. Contrôle négatif
+603:## 7. Limites de l'audit
+617:## 8. Conclusion — les 5 correctifs prioritaires
+635:## Fichiers
+---
+641 reports/rapport-fiabilite-produit.md
+---
+91:| cibles en mot fermé | **18/284** | `pas` (7), `est` (4), `ce`/`Ce` (4), `hier`, `ici`, `Nous` |
+93:| syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/215** non-GV |
+353:`/tmp` : `Ran 4 tests ... OK (skipped=1)` — les 4 tes
+… [39 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,pathlib\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nprint('json bytes',pathlib.Path('reports/pensee-fiabilite-produit.json').stat().st_size)\nprint('top keys',len(d),'banc',len(d['banc_50' … [341 caractères tronqués]`
+
+  ```
+json bytes 103675
+top keys 19 banc 50 rob 49
+verdict ⚠️ surface fiable (0 plantage, 0 JSON invalide, 0 span hors texte, 50/50 déterminisme) ; contrat non versionné et struct
+statut test essayé à blanc depuis /tmp : 4 tests OK, 1 classe sautée (schéma v1 absent)
+schema version 1.0
+correctifs [4, 9, 8]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 12, "offset": 249}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+249: ### 4.3 Ce qui casserait un client
+250: 
+251: 1. **Pas de version de format** : 0/46 annotations portent `schema`/`version` ; `--version` ne
+252:    rend que `drave 0.1.0`. Impossible d'épingler un rejeu à un format.
+253: 2. **Refus sans JSON** : `--json` + texte vide/emoji/ponctuation → **stdout 0 octet**, code 1.
+254:    Un pipeline `... --json | jq` casse ; le refus est confondu avec une erreur.
+255: 3. **Chevauchements** : 107 paires / 28 textes ; un arbre ou un index par offset casse. Filtrer
+256:    `meta.union` donne **0 conflit**, mais ce n'est pas dans le schéma : le client doit le deviner.
+257: 4. **Cible sans offset** : 56/284 cibles apparaissent plusieurs fois ; 18 mots fermés ; 9 cibles
+258:    d'un caractère. `texte.find(cible)` est ambigu ; il n'y a pas `cible_debut`/`cible_fin`.
+259: 5. **POS trouées** : 302/1068 tokens sans POS (toute la ponctuation, tous les nombres) ; un
+260:    alignement token → POS a des trous ; `POS —` sur les chiffres.
+
+(Showing lines 249-260 of 641. Use offset=261 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "3. **Chevauchements** : 107 paires / 28 textes ; un arbre ou un index par offset casse. Filtrer\n   `meta.union` donne **0 conflit**, mais ce n'est pas dans le schéma : le client doit … [275 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor t in \"Bonjour\" \"a\"; do python3 tools/drave.py analyser \"$t\" --json | python3 -c \"import json,sys;d=json.load(sys.stdin);print(repr('$t'),len(d['etiquettes']),sum(e['niveau']=='syntagme' for e in d['etiquettes']),sum(e['nivea … [97 caractères tronqués]`
+
+  ```
+'Bonjour' 7 0 1
+'a' 8 1 1
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| un mot (`Bonjour`), un caractère (`a`) | 0 | **0** | oui | conforme ; 7 et 8 étiquettes (0 et 1 syntagme) |", "old_string": "| un mot (`Bonjour`), un caractère (`a`) | 0 | **0** | o … [37 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 10, "offset": 44}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+44: - **Banc libre** : 50 phrases écrites à la main pour cet audit — **41 françaises**, **5 anglaises**,
+45:   **4 refus** (vide, espaces, ponctuation, emoji), **1 très longue** (f50 : 2 144 caractères,
+46:   4 paragraphes). Les textes couvrent questions, impératives, négations, majuscules, chiffres,
+47:   dates, URL, emails, chemins, caractères spéciaux, accents, emoji, abréviations, citations,
+48:   ellipses, latin et un texte multi-paragraphes. **Aucune phrase ne vient du gold.**
+49: - **Mesure** : `python3 tools/drave.py analyser TEXTE --json` en **subprocess** (comme un
+50:   utilisateur), deux passages par texte, plus `analyser` lisible en parallèle. Validation de
+51:   **20 invariants** : clés, spans, `valeur` vs tranche, chevauchements, cibles, POS, unités,
+52:   fraction, types, sources, confiance, tri, doublons, déterminisme.
+53: - **Temps** : horloge murale du processus CLI (démarrage Python compris) et `Heuristique().analyser`
+
+(Showing lines 44-53 of 642. Use offset=54 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "- **Banc libre** : 50 phrases écrites à la main pour cet audit — **41 françaises** (dont\n  **1 très longue**, f50 : 2 144 caractères, 4 paragraphes), **5 anglaises**, **4 refus**\n   … [787 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short --untracked-files=all | grep '^??' | head -20; echo ---; git status --short --untracked-files=all | wc -l; echo ---; git diff --stat HEAD -- tools/drave.py tools/bloc_linguistique.py reports/rapport-fiabilite-produit … [111 caractères tronqués]`
+
+  ```
+?? journal/2026-11-05/attention.md
+?? journal/2026-11-06/distribue.md
+?? journal/2026-11-06/docs.md
+?? journal/2026-11-06/mesures.md
+?? journal/2026-11-06/modele.md
+?? journal/2026-11-06/outils.md
+?? journal/2026-11-06/portes.md
+?? journal/sessions/082fe8ca-3e1e-4454-b91b-12586843e880/digest.md
+?? journal/sessions/082fe8ca-3e1e-4454-b91b-12586843e880/rapport.md
+?? journal/sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md
+?? journal/sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md
+?? journal/sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/digest.md
+?? journal/sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/rapport.md
+?? journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/digest.md
+?? journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/rapport.md
+?? journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/digest.md
+?? journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/rapport.md
+?? journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/digest.md
+?? journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/rapport.md
+?? journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/digest.md
+---
+166
+---
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"test_refus_actuel_ou_cible\\|CHAMPS_ACTUELS | CHAMPS_V1\\|La classe TestSchemaV1\" reports/rapport-fiabilite-produit.md | head; python3 -c \"import json;d=json.load(open('reports/pensee-fiabilite-produit.json'));print('test c … [145 caractères tronqués]`
+
+  ```
+435:                self.assertTrue(set(d) <= (CHAMPS_ACTUELS | CHAMPS_V1),
+436:                                sorted(set(d) - (CHAMPS_ACTUELS | CHAMPS_V1)))
+470:    def test_refus_actuel_ou_cible(self) -> None:
+473:        La classe TestSchemaV1 exige le code 3 ; ce test-ci ne gèle que le fait qu'un refus
+test code updated True
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 14, "offset": 52}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+52:   **20 invariants** : clés, spans, `valeur` vs tranche, chevauchements, cibles, POS, unités,
+53:   fraction, types, sources, confiance, tri, doublons, déterminisme.
+54: - **Temps** : horloge murale du processus CLI (démarrage Python compris) et `Heuristique().analyser`
+55:   en direct (durée interne, hors démarrage). Les deux sont rapportés par phrase dans le JSON.
+56: - **Contrôle négatif** : **9 mutations** injectées dans une annotation valide (span hors texte,
+57:   chevauchement, cible absente, confiance 1,7, clé manquante, fraction fausse, valeur hors span,
+58:   attachement retiré, niveau inconnu) ; **9/9 détectées** (§ 6).
+59: - **Portée** : le **CLI** et l'heuristique par défaut. Le neuronal, `Parallele`, `Cascade` et les
+60:   profils UDHR ne sont pas mesurés ici ; un audit parallèle (A24) couvre l'API du bloc.
+61: 
+62: ## 2. Les 50 phrases : ce qui tient, ce qui casse
+63: 
+64: ### 2.1 Ce qui tient
+65: 
+
+(Showing lines 52-65 of 643. Use offset=66 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "- **Portée** : le **CLI** et l'heuristique par défaut. Le neuronal, `Parallele`, `Cascade` et les\n  profils UDHR ne sont pas mesurés ici ; un audit parallèle (A24) couvre l'API du bl … [781 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\ns=pathlib.Path('reports/rapport-fiabilite-produit.md').read_text(encoding='utf-8')\nprint('fences',s.count('```'),'lines',s.count('\\n'))\nlines=s.splitlines(); in_code=False; groups=[]; cur=[]\nfor i, … [499 caractères tronqués]`
+
+  ```
+fences 8 lines 654
+tables 14 incoherentes 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nok=[x for x in d['banc_50']['resultats'] if x['rc']==0]\nsyn=[x['id'] for x in ok if x.get('chevauchements_syntagme',0)>0]\nprint('textes avec c … [327 caractères tronqués]`
+
+  ```
+textes avec chevauchement syntagme 23 ['f02', 'f05', 'f06', 'f10', 'f11', 'f20', 'f21', 'f22', 'f23', 'f24', 'f26', 'f29', 'f31', 'f32', 'f34', 'f38', 'f39', 'f41', 'f43', 'f44', 'f45', 'f46', 'f50']
+textes avec un chevauchement quelconque (harness) 28; phrase type ['f20']
+union texts ['f02', 'f05', 'f06', 'f10', 'f11', 'f20', 'f21', 'f22', 'f23', 'f24', 'f26', 'f29', 'f31', 'f32', 'f34', 'f38', 'f39', 'f41', 'f43', 'f44', 'f45', 'f46', 'f50']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"28/46\\|28 textes\\|28/28\\|107 paires\" reports/rapport-fiabilite-produit.md; echo ---; grep -n '\"textes\": 28\\|28 textes\\|107 paires' reports/pensee-fiabilite-produit.json | head", "description": "Locate all 28-text over … [12 caractères tronqués]`
+
+  ```
+1:# Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 28/46 textes à chevauchement
+21:mais **4 refus n'ont pas de JSON** (stdout vide, code 1), **28/46 succès** portent des syntagmes
+36:| chevauchements de syntagmes | **28/46** textes, **107** paires |
+90:| syntagmes qui se chevauchent | **107 paires** dans **28/46** textes ; **85/360** étiquettes `meta.union` | f02 : `REL 22-42` et `REL 22-54` ; f50 : 50 paires |
+267:3. **Chevauchements** : 107 paires / 28 textes ; un arbre ou un index par offset casse. Filtrer
+563:| **P0-3** | **Partition explicite des syntagmes** : `meta.alternative` + filtre `union` documenté (ou suppression mesurée) | **107 paires / 28 textes** ; 85 `union` ; 0 conflit après filtre | `bloc_linguistique.py` 1099-1156, 1179-1204, 1820-1849 | **0,5–1 j** | moyen : change F1/attachement ; préférer l'alternative étiquetée à la suppression |
+626:- **Chevauchements** : les **107 paires** dépendent du banc ; l'audit A24 en compte **132** sur
+636:3. **P0-3 — Partition explicite des syntagmes** : 107 paires sur 28/46 textes ; le filtre
+---
+80:    "textes": 28,
+3467:   "Chevauchements : 107 paires sur 28/46 textes ; un arbre ou un index par o
+… [355 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/build_json_report.py'\ns=open(p).read()\ns=s.replace('''    \"chevauchements\": {\"textes\": 28, \"paires\": 107, \"union_labels\": 85,\n                       \"apres_filtre_union\": 0,\n                       \"tous_impliquent_union\": True},''','' … [583 caractères tronqués]`
+
+  ```
+patched
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-fiabilite-produit.json 103706 octets
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 40, "offset": 1}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 10, "offset": 86}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+1: # Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 28/46 textes à chevauchement
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+4: > **Commit mesuré** : `56eb43af` (module `c1a08588`, `tools/drave.py` `59a06f3e`) ·
+5: > **Date** : 2026-11-06 · **Verdict** : ⚠️ **la surface est fiable ; le contrat ne l'est pas encore.**
+6: > **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+7: > [`pensee-fiabilite-produit.json`](pensee-fiabilite-produit.json).
+8: >
+9: > **Dispositif** : [`tools/drave.py`](../tools/drave.py) (CLI : `analyser`, `evaluer`, `rejouer`,
+10: > `--version`) et [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py) ;
+11: > **50 phrases libres** écrites pour l'audit (textes dans le JSON) ; harnais local non committé
+12: > dans `/tmp` ; machine **Xeon E5-2687W v3**, Python **3.13.16**.
+13: >
+14: > **Snapshot.** HEAD a bougé pendant l'audit (`6ef2a3f5` → `56eb43af`). Le module a reçu à
+15: > **11 h 34** le correctif « non-str / surrogate » (`c1a0
+… [1638 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+86: ### 2.2 Ce qui casse (chiffré)
+87: 
+88: | anomalie | mesure | où / exemple |
+89: |---|---:|---|
+90: | syntagmes qui se chevauchent | **107 paires** dans **28/46** textes ; **85/360** étiquettes `meta.union` | f02 : `REL 22-42` et `REL 22-54` ; f50 : 50 paires |
+91: | partition après filtre `meta.union` | **0 conflit** | le filtre marche, mais n'est pas dans le schéma |
+92: | textes sans aucun syntagme | **4/46** | f13 (emoji), f18 (chiffres), f27 « Élodie sourit. », f37 (email/téléphone) |
+93: | POS manquantes | **302/1068** tokens | 257/257 ponctuations, 45/45 nombres ; 0/766 mots |
+94: | `POS —` | **1/46** | f18, `1234567890` |
+95: | frontière de phrase cassée | **6/46** textes | URL (f12, f38, f50), email (f37, f50), chemin (f39), abréviation (f20) |
+
+(Showing lines 86-95 of 654. Use offset=96 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "# Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes", "old_string": "# Fiabilité du produit hors gold — 0 planta … [68 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "mais **4 refus n'ont pas de JSON** (stdout vide, code 1), **23/46 succès** portent des syntagmes", "old_string": "mais **4 refus n'ont pas de JSON** (stdout vide, code 1), **28/46 suc … [29 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| chevauchements de syntagmes | **23/46** textes, **107** paires |", "old_string": "| chevauchements de syntagmes | **28/46** textes, **107** paires |"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| syntagmes qui se chevauchent | **107 paires** dans **23/46** textes ; **85/360** étiquettes `meta.union` | f02 : `REL 22-42` et `REL 22-54` ; f50 : 50 paires |", "old_string": "| sy … [159 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "limit": 14, "offset": 95}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md</path>
+<type>file</type>
+<content>
+95: | frontière de phrase cassée | **6/46** textes | URL (f12, f38, f50), email (f37, f50), chemin (f39), abréviation (f20) |
+96: | fausses questions | **3** | `?page=2` dans une URL → phrase `interrogative` |
+97: | phrases qui se chevauchent | **1** paire | f20 : `[0:59]` et `[2:59]` sur `M. Dupont…` |
+98: | phrases commençant par un espace | **19/76** | f03, f20, f25, f26, f29, f50 (14) |
+99: | documents tronqués à 60 caractères | **17/49** | f50 : 4 titres tronqués |
+100: | faux titres de document | **2/49** | f18 (`1234567890`), f31 (`ÇA NE MARCHE PAS !!!`) |
+101: | langue fausse | **1/41 fr** | f33 « Si tu viens… » → `it` |
+102: | langue `und` | **5** | f13, f18 (chiffres), f27, f37, f48 (latin) |
+103: | cibles en mot fermé | **18/284** | `pas` (7), `est` (4), `ce`/`Ce` (4), `hier`, `ici`, `Nous` |
+104: | cibles ambiguës par chaîne | **56/284** | cible présente >1 fois ; 9 cibles d'un caractère (`M`, `c`, `f`) |
+105: | syntagmes sans cible | **76/360** | 70 GV, 4 GN, 2 GP ; **6/215** non-GV |
+106: | rôles non normalisés | **106** `predicat` vs **39** `p
+… [274 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| `valeur` non uniforme | **295/4501** | phrase = type, pragmatique = acte, document tronqué, 4 morphèmes normalisés |\n\n**23 ou 28 ?** Les **107 paires de syntagmes** concernent **2 … [478 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"28/46\\|28 textes\\|/ 28 textes\\|sur 28\" reports/rapport-fiabilite-produit.md", "description": "Find remaining 28-text claims"}`
+
+  ```
+110:étiquettes de **même span** (`phrase` type/négation, `pragmatique` acte/double sens), **28 textes**
+272:3. **Chevauchements** : 107 paires / 28 textes ; un arbre ou un index par offset casse. Filtrer
+568:| **P0-3** | **Partition explicite des syntagmes** : `meta.alternative` + filtre `union` documenté (ou suppression mesurée) | **107 paires / 28 textes** ; 85 `union` ; 0 conflit après filtre | `bloc_linguistique.py` 1099-1156, 1179-1204, 1820-1849 | **0,5–1 j** | moyen : change F1/attachement ; préférer l'alternative étiquetée à la suppression |
+641:3. **P0-3 — Partition explicite des syntagmes** : 107 paires sur 28/46 textes ; le filtre
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "3. **Chevauchements** : 107 paires / 23 textes ; un arbre ou un index par offset casse. Filtrer", "old_string": "3. **Chevauchements** : 107 paires / 28 textes ; un arbre ou un index  … [27 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "| **P0-3** | **Partition explicite des syntagmes** : `meta.alternative` + filtre `union` documenté (ou suppression mesurée) | **107 paires / 23 textes** ; 85 `union` ; 0 conflit après … [531 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "3. **P0-3 — Partition explicite des syntagmes** : 107 paires sur 23/46 textes ; le filtre", "old_string": "3. **P0-3 — Partition explicite des syntagmes** : 107 paires sur 28/46 texte … [15 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nprint(d['banc_50']['synthese']['chevauchements'])\nprint([x for x in d['contrat']['ce_qui_casse_un_client'] if 'Chevauchements' in x])\nprint([x … [226 caractères tronqués]`
+
+  ```
+{'textes': 23, 'textes_tous_niveaux': 28, 'paires': 107, 'union_labels': 85, 'apres_filtre_union': 0, 'tous_impliquent_union': True}
+["Chevauchements : 107 paires sur 23/46 textes ; un arbre ou un index par offset casse ; filtrer `meta.union` rend 0 conflit mais n'est pas dans le schéma."]
+['107 paires / 23 textes ; 85 étiquettes `union` ; 0 conflit après filtrage ; un arbre client casse']
+110:étiquettes de **même span** (`phrase` type/négation, `pragmatique` acte/double sens), **28 textes**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"evaluer.*530\\|530–543\\|rejouer.*146\" reports/rapport-fiabilite-produit.md", "description": "Locate evaluer timing claim"}`
+
+  ```
+158:`evaluer` coûte **530–543 ms** ; `rejouer` **146–149 ms**. Les cinq textes les plus lents en CLI
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "`evaluer` coûte **530–543 ms** sur le gold vivant et **577–600 ms** avec `--gold` ; `rejouer`\n**146–149 ms**. Les cinq textes les plus lents en CLI", "old_string": "`evaluer` coûte * … [81 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"gèle l'enveloppe\" reports/rapport-fiabilite-produit.md", "description": "Find test description sentence"}`
+
+  ```
+381:  déterminisme. Ce test passe sur le produit livré ; il gèle l'enveloppe et attrape une
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"test actuel\\|11+11\\|11 + 11\" reports/rapport-fiabilite-produit.md", "description": "Find contract test sentence"}`
+
+  ```
+554:(après le smoke test) et faire échouer la porte si le code sort ≠ 0. Le test actuel gèle
+555:l'enveloppe 11+11 ; le test v1 gèle les 8 champs, `schema`, `version` et le refus code 3.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md", "new_string": "(après le smoke test) et faire échouer la porte si le code sort ≠ 0. Le test actuel gèle\nles 11 champs de l'enveloppe et n'admet, en plus, que les 8 champs du schéma v1 ; le test v1\ … [258 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation finale des deux livrables (JSON, MD, tests, liens, fences)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,pathlib,re\njsonp=pathlib.Path('reports/pensee-fiabilite-produit.json')\nmdp=pathlib.Path('reports/rapport-fiabilite-produit.md')\nd=json.loads(jsonp.read_text(encoding='utf-8'))\ns=mdp.read_text(encoding= … [1495 caractères tronqués]`
+
+  ```
+JSON valide; clés: 19 | banc: 50 | robustesse: 49
+MD lignes: 661 | fences: 8 | placeholders: 0
+test python compile OK 8454 chars
+schema JSON parse OK ['schema', 'version', 'texte', 'langue', 'script', 'refus', 'etiquettes', 'unites_semantiques']
+tables: 14 incohérentes: 0
+liens morts: []
+test JSON==MD: True
+tailles: 103706 39588
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"23/46\\|23 textes\\|textes_tous_niveaux\" reports/rapport-fiabilite-produit.md reports/pensee-fiabilite-produit.json | head -20; echo ---; grep -n \"28/46\" reports/rapport-fiabilite-produit.md reports/pensee-fiabilite-produi … [63 caractères tronqués]`
+
+  ```
+reports/rapport-fiabilite-produit.md:1:# Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes
+reports/rapport-fiabilite-produit.md:21:mais **4 refus n'ont pas de JSON** (stdout vide, code 1), **23/46 succès** portent des syntagmes
+reports/rapport-fiabilite-produit.md:36:| chevauchements de syntagmes | **23/46** textes, **107** paires |
+reports/rapport-fiabilite-produit.md:90:| syntagmes qui se chevauchent | **107 paires** dans **23/46** textes ; **85/360** étiquettes `meta.union` | f02 : `REL 22-42` et `REL 22-54` ; f50 : 50 paires |
+reports/rapport-fiabilite-produit.md:109:**23 ou 28 ?** Les **107 paires de syntagmes** concernent **23 textes**. Si l'on compte aussi les
+reports/rapport-fiabilite-produit.md:112:conflits de structure. Le chiffre à retenir pour un client qui construit un arbre est **23/46**.
+reports/rapport-fiabilite-produit.md:273:3. **Chevauchements** : 107 paires / 23 textes ; un arbre ou un index par offset casse. Filtrer
+reports/rapport-fiabilite-produit.md:570:| **P0-3** | **Partition explicite des syntagmes** : `meta.alternative` + filtre `union` documenté (ou suppression mesurée) | **107 paire
+… [778 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de l'état git et envoi du résultat au parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short --untracked-files=all -- reports/rapport-fiabilite-produit.md reports/pensee-fiabilite-produit.json\necho \"HEAD $(git rev-parse --short=8 HEAD)\"\necho \"fichiers: $(wc -c < reports/rapport-fiabilite-produit.md) o m … [479 caractères tronqués]`
+
+  ```
+?? reports/pensee-fiabilite-produit.json
+?? reports/rapport-fiabilite-produit.md
+HEAD 56eb43af
+fichiers: 39588 o md / 103706 o json
+banc 46 succès, 4 refus, 0 plantages
+chevauchements {'textes': 23, 'textes_tous_niveaux': 28, 'paires': 107, 'union_labels': 85, 'apres_filtre_union': 0, 'tous_impliquent_union': True}
+robustesse {'cas': 49, 'conformes': 33, 'anomalies': 9, 'limites': 7, 'echecs_internes': 2, 'codes_observes': [0, 1, 2], 'codes_3_4': 'non implémentés'}
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Audit fiabilité produit terminé. **Deux fichiers neufs, aucun existant modifié, aucun commit** :\n- `reports/rapport-fiabilite-produit.md` (661 lignes, 39,6 Ko)\n- `reports/pensee-fiabilite-produit.json` (103,7 Ko : 50 textes + mesures … [3296 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : résumé de l'audit et des deux livrables
+
+Audit terminé. **Deux fichiers neufs**, aucun existant modifié, aucun commit :
+
+- [`reports/rapport-fiabilite-produit.md`](reports/rapport-fiabilite-produit.md) — 661 lignes
+- [`reports/pensee-fiabilite-produit.json`](reports/pensee-fiabilite-produit.json) — 103,7 Ko (50 textes, mesures par phrase, robustesse, contrat, schéma, test, correctifs)
+
+**Snapshot mesuré** : HEAD `56eb43af`, module `bloc_linguistique.py` git `c1a08588` / sha256 `084517d9`, `drave.py` sha256 `59a06f3e`. HEAD a bougé pendant l'audit (`6ef2a3f5` → `56eb43af`) ; le module a reçu à 11 h 34 le correctif non-str/surrogate (`c1a08588`), le banc a tourné à 11 h 40 après ce correctif ; `drave.py` n'a pas changé.
+
+**50 phrases libres** (41 fr dont 1 de 2 144 car., 5 en, 4 refus) :
+- **0 plantage**, **0 JSON invalide**, **0 sortie vide sur succès**, **0 span hors texte/vide**, **0 clé manquante**, **0 cible absente du texte**, **50/50 déterminisme**, 0 `stderr` sur succès.
+- **4 refus** : code 1, stdout 0 octet, message `vide` ; **4/46 succès sans aucun syntagme** (dont « Élodie sourit. »), **1/46 sans POS** (chiffres).
+- **23/46 textes** avec chevauchement de syntagmes (**107 paires**, 85 `meta.union`, 0 conflit après filtrage union ; 28/46 avec les mêmes-span multi-label).
+- **302/1068 tokens sans POS** (257 ponctuation, 45 nombres) ; **18/284 cibles mots fermés**, **56/284 cibles ambiguës**, **0 offset de cible** ; **6/46 frontières de phrase cassées**, **3 fausses questions**.
+- **Temps CLI** : 136,8–226,6 ms, médiane **152,7 ms** (démarrage ~146 ms) ; **interne** : 0,2–45,1 ms, médiane **1,0 ms**. **10 k** : 590–765 ms CLI, 331,6 ms interne, 2,76 Mo de JSON ; **50 k** : 5,44 s, 11,5 Mo.
+- **Hors banc, 2 échecs internes** : UTF-8 invalide mêlé à des lettres (`UnicodeEncodeError` à l'écriture JSON) et stdout ASCII. NFD → tokens coupés, 0 syntagme. Codes 3/4 absents.
+
+**Contrat** : 11 clés racine + 11 par étiquette stables (46/46, 4501/4501), mais **ni `schema` ni `version`**, **refus sans JSON**, **cible sans offset**, `meta`/`candidats`/`trace`/`cout` à schéma variable, `valeur` non uniforme sur 295/4501. Le schéma v1 proposé a **8 champs obligatoires** (`schema`, `version`, `texte`, `langue`, `script`, `refus`, `etiquettes`, `unites_semantiques`) + JSON Schema 2020-12 + test complet prêt pour `tools/tests/test_schema_produit.py` (essai à blanc : 4 tests OK, classe v1 sautée). Contrôle négatif : **9 mutations, 9/9 détectées**.
+
+**5 correctifs prioritaires** :
+1. **P0-1** versionner le format — 2 h.
+2. **P0-2** refus JSON + code 3 — 2 h.
+3. **P0-3** partition explicite des syntagmes — 0,5–1 j.
+4. **P0-4** frontières de phrase/tokénisation — 0,5–1 j.
+5. **P1-1** cibles d'attachement offsettées — 4 h.
+
+Juste derrière : **P1-2** POS (302/1068) et **P1-4** syntagmes vides (4/46). Limites : pas de gold libre, banc écrit à la main, une seule machine ; l'audit A24 (API) compte 132 paires sur son propre banc, non comparables.
+

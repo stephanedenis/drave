@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **679 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **681 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -159,6 +159,7 @@
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
+| [rapport-fiabilite-produit.md](rapport-fiabilite-produit.md) | Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes |
 | [rapport-file-taches.md](rapport-file-taches.md) | La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h |
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
@@ -595,6 +596,7 @@
 | [rapport-pont-semantique.md](rapport-pont-semantique.md) | Rapport — le pont linguistique-sémantique, mesuré |
 | [rapport-pool-tampons.md](rapport-pool-tampons.md) | Le pool de tampons : neutre en temps — et l'hypothèse qui l'avait motivé est réfutée |
 | [rapport-portes-p0-p9.md](rapport-portes-p0-p9.md) | Les deux portes, phase par phase (P0 → P9) |
+| [rapport-pos-anglais.md](rapport-pos-anglais.md) | POS anglaise — les 176 VERB gold tagués NOUN viennent du défaut nominal, pas de la règle de contexte |
 | [rapport-precision.md](rapport-precision.md) | Drave — la sparsité peut-elle acheter de la précision ? |
 | [rapport-prefill-par-experts.md](rapport-prefill-par-experts.md) | Rapport — le préremplissage par experts : ce que le regroupement rapporte, mesuré |
 | [rapport-prefill-par-lots.md](rapport-prefill-par-lots.md) | Préremplissage par lots : ce que le GEMM apporte vraiment |

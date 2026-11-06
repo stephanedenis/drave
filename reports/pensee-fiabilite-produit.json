@@ -1,0 +1,3885 @@
+{
+ "rapport": "fiabilite-produit",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit_mesure": "56eb43af",
+ "commit_module": "1962eb15",
+ "date": "2026-11-06",
+ "objet": "Audit de fiabilité du produit hors gold : 50 phrases libres via la CLI, robustesse des entrées, contrat de sortie, schéma minimal versionné et test de non-régression.",
+ "verdict": "⚠️ surface fiable (0 plantage, 0 JSON invalide, 0 span hors texte, 50/50 déterminisme) ; contrat non versionné et structure fragile (107 chevauchements, 302 tokens sans POS, 6/46 frontières de phrase cassées, refus sans JSON).",
+ "snapshot": {
+  "drave_py_sha256": "59a06f3e4f7d633ae8caa30412fd4c01e14374914226f5e54629f544e47aea8c",
+  "bloc_linguistique_sha256": "084517d9c10088b3adedc01658adbb33e3de69e7f5ca8c2f563f427abdd79f4f",
+  "bloc_linguistique_git": "c1a08588",
+  "module_change_pendant_audit": true,
+  "note": "HEAD est passé de 6ef2a3f5 à 56eb43af pendant l'audit ; le module a reçu le correctif non-str/surrogate à 11 h 34 (c1a08588) ; le banc a tourné à 11 h 40, après ce correctif ; drave.py n'a pas changé (59a06f3e)."
+ },
+ "dispositif": {
+  "banc_50": "50 phrases écrites à la main (41 fr, 5 en, 4 refus, 1 très long), 4501 étiquettes, 1068 mots, 360 syntagmes, 284 attachements.",
+  "mesure": "CLI en subprocess (python3 tools/drave.py analyser TEXTE --json), deux passages par texte, sortie lisible en parallèle ; validation de 20 invariants ; timings CLI et API.",
+  "machine": "Intel Xeon E5-2687W v3 @ 3,10 GHz, 40 cœurs, Linux, Python 3.13.16.",
+  "harnais": "scripts locaux non committés dans /tmp (audit_cli.py, audit_cli_detail.py, audit_robustesse_final.py, test_schema_produit.py) ; aucun fichier existant modifié, aucun commit.",
+  "controle_negatif": "9 mutations injectées dans une annotation valide ; 9/9 détectées."
+ },
+ "banc_50": {
+  "synthese": {
+   "n": 50,
+   "succes": 46,
+   "refus": 4,
+   "plantages": 0,
+   "json_invalide": 0,
+   "sorties_vides_sur_succes": 0,
+   "spans_hors_texte": 0,
+   "spans_vides": 0,
+   "valeurs_vides": 0,
+   "cles_racine_ko": 0,
+   "cles_etiquette_ko": 0,
+   "types_inconnus": 0,
+   "cibles_absentes_du_texte": 0,
+   "stderr_succes_non_vide": 0,
+   "determinisme": "46/46",
+   "labels": 4501,
+   "mots": 1068,
+   "pos": 766,
+   "syntagmes": 360,
+   "attachements": 284,
+   "sans_attachement": 76,
+   "syntagmes_par_type": {
+    "GN": {
+     "total": 87,
+     "attaches": 83,
+     "sans": 4,
+     "union": 11
+    },
+    "GV": {
+     "total": 145,
+     "attaches": 75,
+     "sans": 70,
+     "union": 35
+    },
+    "GP": {
+     "total": 86,
+     "attaches": 84,
+     "sans": 2,
+     "union": 28
+    },
+    "REL": {
+     "total": 28,
+     "attaches": 28,
+     "sans": 0,
+     "union": 10
+    },
+    "SUB": {
+     "total": 14,
+     "attaches": 14,
+     "sans": 0,
+     "union": 1
+    }
+   },
+   "chevauchements": {
+    "textes": 23,
+    "textes_tous_niveaux": 28,
+    "paires": 107,
+    "union_labels": 85,
+    "apres_filtre_union": 0,
+    "tous_impliquent_union": true
+   },
+   "phrases_type": 76,
+   "phrases_espaces_initiaux": 19,
+   "phrase_chevauchement_type": 1,
+   "documents": 49,
+   "doc_tronquees": 17,
+   "doc_titres_faux": 2,
+   "langues": {
+    "fr": 35,
+    "en": 5,
+    "und": 5,
+    "it": 1
+   },
+   "sans_syntagme": [
+    "f13",
+    "f18",
+    "f27",
+    "f37"
+   ],
+   "sans_pos": [
+    "f18"
+   ],
+   "tokens_sans_pos": {
+    "mot": [
+     0,
+     766
+    ],
+    "ponctuation": [
+     257,
+     257
+    ],
+    "nombre": [
+     45,
+     45
+    ]
+   },
+   "cibles_fermees": 18,
+   "cibles_ambigues": 56,
+   "cibles_un_caractere": 9,
+   "roles": {
+    "predicat": 106,
+    "prédicat": 39,
+    "qualite": 17,
+    "qualité": 11
+   },
+   "non_surface": 295,
+   "non_surface_detail": {
+    "phrase": 89,
+    "pragmatique": 86,
+    "discours": 67,
+    "document": 49,
+    "morphème": 4
+   },
+   "temps_cli_ms": {
+    "min": 136.77,
+    "mediane": 152.72,
+    "moyenne": 157.34,
+    "p95": 180.3,
+    "max": 226.64
+   },
+   "temps_api_ms": {
+    "min": 0.18,
+    "mediane": 1.01,
+    "moyenne": 2.16,
+    "p95": 2.01,
+    "max": 45.09
+   },
+   "json_octets": {
+    "min": 2126,
+    "mediane": 13510.5,
+    "moyenne": 26204.83,
+    "p95": 22841,
+    "max": 533611
+   },
+   "frontieres_phrase": {
+    "f12": "URL ?page=2",
+    "f20": "abréviation M./Dr",
+    "f37": "email alice@example.org",
+    "f38": "deux URL",
+    "f39": "chemin notes.txt",
+    "f50": "URL + email"
+   },
+   "refus_detail": [
+    {
+     "id": "f14",
+     "longueur": 1,
+     "message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"
+    },
+    {
+     "id": "f15",
+     "longueur": 0,
+     "message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"
+    },
+    {
+     "id": "f16",
+     "longueur": 3,
+     "message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"
+    },
+    {
+     "id": "f17",
+     "longueur": 3,
+     "message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"
+    }
+   ]
+  },
+  "resultats": [
+   {
+    "id": "f01",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Le chat dort.",
+    "caracteres": 13,
+    "octets_utf8": 13,
+    "rc": 0,
+    "temps_cli_ms": 150.79,
+    "temps_api_ms": 0.796,
+    "deterministe": true,
+    "json_octets": 5561,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 19,
+    "mots": 4,
+    "pos": 3,
+    "syntagmes": 2,
+    "attaches": 2,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 2,
+    "fraction_semantique": 0.6154,
+    "trous_pos": {
+     "mot": {
+      "total": 3,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f02",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Le chat de la voisine qui dort sur le toit se réveille.",
+    "caracteres": 55,
+    "octets_utf8": 56,
+    "rc": 0,
+    "temps_cli_ms": 193.85,
+    "temps_api_ms": 1.738,
+    "deterministe": true,
+    "json_octets": 16098,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 59,
+    "mots": 13,
+    "pos": 12,
+    "syntagmes": 5,
+    "attaches": 5,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 2,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 5,
+    "fraction_semantique": 0.4909,
+    "trous_pos": {
+     "mot": {
+      "total": 12,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f03",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Bonjour ! Comment allez-vous aujourd'hui ?",
+    "caracteres": 42,
+    "octets_utf8": 42,
+    "rc": 0,
+    "temps_cli_ms": 149.88,
+    "temps_api_ms": 1.141,
+    "deterministe": true,
+    "json_octets": 10303,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 37,
+    "mots": 6,
+    "pos": 4,
+    "syntagmes": 3,
+    "attaches": 2,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 2,
+    "phrases_espaces_initiaux": 1,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.8333,
+    "trous_pos": {
+     "mot": {
+      "total": 4,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f04",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Ferme la porte, s'il te plaît.",
+    "caracteres": 30,
+    "octets_utf8": 31,
+    "rc": 0,
+    "temps_cli_ms": 157.17,
+    "temps_api_ms": 1.006,
+    "deterministe": true,
+    "json_octets": 10217,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 38,
+    "mots": 9,
+    "pos": 7,
+    "syntagmes": 3,
+    "attaches": 2,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.5667,
+    "trous_pos": {
+     "mot": {
+      "total": 7,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f05",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Ne touche pas à ça !",
+    "caracteres": 20,
+    "octets_utf8": 22,
+    "rc": 0,
+    "temps_cli_ms": 181.6,
+    "temps_api_ms": 1.03,
+    "deterministe": true,
+    "json_octets": 8154,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 30,
+    "mots": 6,
+    "pos": 5,
+    "syntagmes": 3,
+    "attaches": 2,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 1,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 2,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 1,
+    "fraction_semantique": 0.3,
+    "trous_pos": {
+     "mot": {
+      "total": 5,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f06",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Je ne pense pas qu'il viendra demain, mais nous verrons bien.",
+    "caracteres": 61,
+    "octets_utf8": 61,
+    "rc": 0,
+    "temps_cli_ms": 154.13,
+    "temps_api_ms": 2.012,
+    "deterministe": true,
+    "json_octets": 16232,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 62,
+    "mots": 13,
+    "pos": 11,
+    "syntagmes": 6,
+    "attaches": 2,
+    "sans_attachement": 4,
+    "chevauchements_syntagme": 4,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 2,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.3115,
+    "trous_pos": {
+     "mot": {
+      "total": 11,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f07",
+    "categorie": "en",
+    "attendu": "en",
+    "texte": "The cat sleeps on the roof.",
+    "caracteres": 27,
+    "octets_utf8": 27,
+    "rc": 0,
+    "temps_cli_ms": 149.33,
+    "temps_api_ms": 0.642,
+    "deterministe": true,
+    "json_octets": 8701,
+    "json_valide": true,
+    "langue": "en",
+    "script": "Latn",
+    "labels": 32,
+    "mots": 7,
+    "pos": 6,
+    "syntagmes": 3,
+    "attaches": 2,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.4815,
+    "trous_pos": {
+     "mot": {
+      "total": 6,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f08",
+    "categorie": "en",
+    "attendu": "en",
+    "texte": "Where is the nearest train station, please?",
+    "caracteres": 43,
+    "octets_utf8": 43,
+    "rc": 0,
+    "temps_cli_ms": 149.68,
+    "temps_api_ms": 1.012,
+    "deterministe": true,
+    "json_octets": 9897,
+    "json_valide": true,
+    "langue": "en",
+    "script": "Latn",
+    "labels": 37,
+    "mots": 9,
+    "pos": 7,
+    "syntagmes": 1,
+    "attaches": 1,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 5,
+    "fraction_semantique": 0.6977,
+    "trous_pos": {
+     "mot": {
+      "total": 7,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f09",
+    "categorie": "en",
+    "attendu": "en",
+    "texte": "Don't forget to bring your passport.",
+    "caracteres": 36,
+    "octets_utf8": 36,
+    "rc": 0,
+    "temps_cli_ms": 145.16,
+    "temps_api_ms": 0.664,
+    "deterministe": true,
+    "json_octets": 8781,
+    "json_valide": true,
+    "langue": "en",
+    "script": "Latn",
+    "labels": 33,
+    "mots": 7,
+    "pos": 6,
+    "syntagmes": 1,
+    "attaches": 0,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.6667,
+    "trous_pos": {
+     "mot": {
+      "total": 6,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f10",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Le prix est de 1 234,56 € pour 3 articles.",
+    "caracteres": 42,
+    "octets_utf8": 44,
+    "rc": 0,
+    "temps_cli_ms": 141.84,
+    "temps_api_ms": 1.516,
+    "deterministe": true,
+    "json_octets": 13753,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 51,
+    "mots": 13,
+    "pos": 6,
+    "syntagmes": 5,
+    "attaches": 5,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 1,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 3,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 2,
+    "fraction_semantique": 0.2857,
+    "trous_pos": {
+     "mot": {
+      "total": 6,
+      "sans_pos": 0
+     },
+     "nombre": {
+      "total": 4,
+      "sans_pos": 4
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f11",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Rendez-vous le 12/03/2026 à 14h30.",
+    "caracteres": 34,
+    "octets_utf8": 35,
+    "rc": 0,
+    "temps_cli_ms": 161.49,
+    "temps_api_ms": 1.126,
+    "deterministe": true,
+    "json_octets": 11113,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 41,
+    "mots": 10,
+    "pos": 3,
+    "syntagmes": 4,
+    "attaches": 3,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 1,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 1,
+    "fraction_semantique": 0.3235,
+    "trous_pos": {
+     "mot": {
+      "total": 3,
+      "sans_pos": 0
+     },
+     "nombre": {
+      "total": 4,
+      "sans_pos": 4
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f12",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Visitez https://example.com/docs?page=2 pour la documentation.",
+    "caracteres": 62,
+    "octets_utf8": 62,
+    "rc": 0,
+    "temps_cli_ms": 153.01,
+    "temps_api_ms": 1.768,
+    "deterministe": true,
+    "json_octets": 17092,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 63,
+    "mots": 18,
+    "pos": 9,
+    "syntagmes": 5,
+    "attaches": 4,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 3,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 7,
+    "fraction_semantique": 0.6935,
+    "trous_pos": {
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 8,
+      "sans_pos": 8
+     },
+     "nombre": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false,
+    "frontiere_phrase": "URL ?page=2"
+   },
+   {
+    "id": "f13",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "J'ai trouvé ça génial 😍🔥",
+    "caracteres": 24,
+    "octets_utf8": 33,
+    "rc": 0,
+    "temps_cli_ms": 148.57,
+    "temps_api_ms": 0.506,
+    "deterministe": true,
+    "json_octets": 6980,
+    "json_valide": true,
+    "langue": "und",
+    "script": "Latn",
+    "labels": 26,
+    "mots": 6,
+    "pos": 4,
+    "syntagmes": 0,
+    "attaches": 0,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 2,
+    "fraction_semantique": 0.5,
+    "trous_pos": {
+     "mot": {
+      "total": 4,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": true,
+    "sans_pos": false
+   },
+   {
+    "id": "f14",
+    "categorie": "refus",
+    "attendu": "refus",
+    "texte": "🚀",
+    "caracteres": 1,
+    "octets_utf8": 4,
+    "rc": 1,
+    "temps_cli_ms": 156.85,
+    "temps_api_ms": null,
+    "deterministe": true,
+    "json_octets": 0,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "stdout_vide": true
+   },
+   {
+    "id": "f15",
+    "categorie": "refus",
+    "attendu": "refus",
+    "texte": "",
+    "caracteres": 0,
+    "octets_utf8": 0,
+    "rc": 1,
+    "temps_cli_ms": 150.2,
+    "temps_api_ms": null,
+    "deterministe": true,
+    "json_octets": 0,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "stdout_vide": true
+   },
+   {
+    "id": "f16",
+    "categorie": "refus",
+    "attendu": "refus",
+    "texte": "   ",
+    "caracteres": 3,
+    "octets_utf8": 3,
+    "rc": 1,
+    "temps_cli_ms": 136.77,
+    "temps_api_ms": null,
+    "deterministe": true,
+    "json_octets": 0,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "stdout_vide": true
+   },
+   {
+    "id": "f17",
+    "categorie": "refus",
+    "attendu": "refus",
+    "texte": "...",
+    "caracteres": 3,
+    "octets_utf8": 3,
+    "rc": 1,
+    "temps_cli_ms": 159.55,
+    "temps_api_ms": null,
+    "deterministe": true,
+    "json_octets": 0,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "stdout_vide": true
+   },
+   {
+    "id": "f18",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "1234567890",
+    "caracteres": 10,
+    "octets_utf8": 10,
+    "rc": 0,
+    "temps_cli_ms": 143.28,
+    "temps_api_ms": 0.177,
+    "deterministe": true,
+    "json_octets": 2126,
+    "json_valide": true,
+    "langue": "und",
+    "script": "Zyyy",
+    "labels": 6,
+    "mots": 1,
+    "pos": 0,
+    "syntagmes": 0,
+    "attaches": 0,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [
+     "1234567890"
+    ],
+    "unites_semantiques": 0,
+    "fraction_semantique": 0.0,
+    "trous_pos": {
+     "nombre": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": true,
+    "sans_pos": true
+   },
+   {
+    "id": "f19",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "COVID-19 : la situation s'améliore-t-elle vraiment ?",
+    "caracteres": 52,
+    "octets_utf8": 53,
+    "rc": 0,
+    "temps_cli_ms": 147.48,
+    "temps_api_ms": 1.189,
+    "deterministe": true,
+    "json_octets": 11685,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 44,
+    "mots": 8,
+    "pos": 6,
+    "syntagmes": 2,
+    "attaches": 1,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.8077,
+    "trous_pos": {
+     "mot": {
+      "total": 6,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f20",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.",
+    "caracteres": 59,
+    "octets_utf8": 60,
+    "rc": 0,
+    "temps_cli_ms": 175.88,
+    "temps_api_ms": 2.414,
+    "deterministe": true,
+    "json_octets": 18718,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 69,
+    "mots": 16,
+    "pos": 12,
+    "syntagmes": 7,
+    "attaches": 5,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 2,
+    "chevauchements_phrase_type": 1,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 2,
+    "phrases_espaces_initiaux": 1,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 8,
+    "fraction_semantique": 0.5254,
+    "trous_pos": {
+     "mot": {
+      "total": 12,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     },
+     "nombre": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false,
+    "frontiere_phrase": "abréviation M./Dr"
+   },
+   {
+    "id": "f21",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "« Je ne sais pas », répondit-il en haussant les épaules.",
+    "caracteres": 56,
+    "octets_utf8": 60,
+    "rc": 0,
+    "temps_cli_ms": 152.44,
+    "temps_api_ms": 1.758,
+    "deterministe": true,
+    "json_octets": 15585,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 59,
+    "mots": 13,
+    "pos": 9,
+    "syntagmes": 5,
+    "attaches": 3,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 3,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.5357,
+    "trous_pos": {
+     "ponctuation": {
+      "total": 4,
+      "sans_pos": 4
+     },
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f22",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "C'est l'été ; les oiseaux chantent, les enfants jouent.",
+    "caracteres": 55,
+    "octets_utf8": 57,
+    "rc": 0,
+    "temps_cli_ms": 153.09,
+    "temps_api_ms": 1.093,
+    "deterministe": true,
+    "json_octets": 15334,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 56,
+    "mots": 12,
+    "pos": 9,
+    "syntagmes": 8,
+    "attaches": 6,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 2,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 5,
+    "fraction_semantique": 0.6,
+    "trous_pos": {
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f23",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Attention : ce produit peut contenir des traces de noisettes.",
+    "caracteres": 61,
+    "octets_utf8": 61,
+    "rc": 0,
+    "temps_cli_ms": 147.64,
+    "temps_api_ms": 1.158,
+    "deterministe": true,
+    "json_octets": 15680,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 55,
+    "mots": 11,
+    "pos": 9,
+    "syntagmes": 6,
+    "attaches": 5,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 2,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 6,
+    "fraction_semantique": 0.7049,
+    "trous_pos": {
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f24",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Il était une fois une petite fille qui vivait au bord de la forêt...",
+    "caracteres": 68,
+    "octets_utf8": 70,
+    "rc": 0,
+    "temps_cli_ms": 165.8,
+    "temps_api_ms": 1.249,
+    "deterministe": true,
+    "json_octets": 18895,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 71,
+    "mots": 17,
+    "pos": 14,
+    "syntagmes": 7,
+    "attaches": 4,
+    "sans_attachement": 3,
+    "chevauchements_syntagme": 5,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 5,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 6,
+    "fraction_semantique": 0.4412,
+    "trous_pos": {
+     "mot": {
+      "total": 14,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f25",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Pourquoi ? Parce que.",
+    "caracteres": 21,
+    "octets_utf8": 21,
+    "rc": 0,
+    "temps_cli_ms": 163.76,
+    "temps_api_ms": 0.549,
+    "deterministe": true,
+    "json_octets": 6956,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 25,
+    "mots": 5,
+    "pos": 3,
+    "syntagmes": 2,
+    "attaches": 1,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 2,
+    "phrases_espaces_initiaux": 1,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 1,
+    "fraction_semantique": 0.381,
+    "trous_pos": {
+     "mot": {
+      "total": 3,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f26",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Où sont les toilettes ? Je cherche depuis dix minutes.",
+    "caracteres": 54,
+    "octets_utf8": 55,
+    "rc": 0,
+    "temps_cli_ms": 155.36,
+    "temps_api_ms": 0.87,
+    "deterministe": true,
+    "json_octets": 13268,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 50,
+    "mots": 11,
+    "pos": 9,
+    "syntagmes": 4,
+    "attaches": 2,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 1,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 2,
+    "phrases_espaces_initiaux": 1,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.4259,
+    "trous_pos": {
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f27",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Élodie sourit.",
+    "caracteres": 14,
+    "octets_utf8": 15,
+    "rc": 0,
+    "temps_cli_ms": 168.58,
+    "temps_api_ms": 0.23,
+    "deterministe": true,
+    "json_octets": 3894,
+    "json_valide": true,
+    "langue": "und",
+    "script": "Latn",
+    "labels": 13,
+    "mots": 3,
+    "pos": 2,
+    "syntagmes": 0,
+    "attaches": 0,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 2,
+    "fraction_semantique": 0.8571,
+    "trous_pos": {
+     "mot": {
+      "total": 2,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": true,
+    "sans_pos": false
+   },
+   {
+    "id": "f28",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Le café coûte 2 €, l'eau est gratuite.",
+    "caracteres": 38,
+    "octets_utf8": 42,
+    "rc": 0,
+    "temps_cli_ms": 154.48,
+    "temps_api_ms": 0.805,
+    "deterministe": true,
+    "json_octets": 11979,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 45,
+    "mots": 11,
+    "pos": 7,
+    "syntagmes": 3,
+    "attaches": 3,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.5263,
+    "trous_pos": {
+     "mot": {
+      "total": 7,
+      "sans_pos": 0
+     },
+     "nombre": {
+      "total": 1,
+      "sans_pos": 1
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f29",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Il a dit : « Rentre avant minuit. »",
+    "caracteres": 35,
+    "octets_utf8": 37,
+    "rc": 0,
+    "temps_cli_ms": 150.48,
+    "temps_api_ms": 0.847,
+    "deterministe": true,
+    "json_octets": 12556,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 47,
+    "mots": 10,
+    "pos": 6,
+    "syntagmes": 5,
+    "attaches": 2,
+    "sans_attachement": 3,
+    "chevauchements_syntagme": 2,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 2,
+    "phrases_espaces_initiaux": 1,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.4286,
+    "trous_pos": {
+     "mot": {
+      "total": 6,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 4,
+      "sans_pos": 4
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f30",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Nous avons lu Le Petit Prince hier soir.",
+    "caracteres": 40,
+    "octets_utf8": 40,
+    "rc": 0,
+    "temps_cli_ms": 172.06,
+    "temps_api_ms": 0.847,
+    "deterministe": true,
+    "json_octets": 10724,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 40,
+    "mots": 9,
+    "pos": 8,
+    "syntagmes": 3,
+    "attaches": 2,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 1,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.425,
+    "trous_pos": {
+     "mot": {
+      "total": 8,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f31",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "ÇA NE MARCHE PAS !!!",
+    "caracteres": 20,
+    "octets_utf8": 21,
+    "rc": 0,
+    "temps_cli_ms": 149.79,
+    "temps_api_ms": 0.535,
+    "deterministe": true,
+    "json_octets": 7211,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 27,
+    "mots": 7,
+    "pos": 4,
+    "syntagmes": 2,
+    "attaches": 0,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 1,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [
+     "ÇA NE MARCHE PAS !!!"
+    ],
+    "unites_semantiques": 1,
+    "fraction_semantique": 0.3,
+    "trous_pos": {
+     "mot": {
+      "total": 4,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f32",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "J'aime les pommes, les poires et les bananes ; pas les kiwis.",
+    "caracteres": 61,
+    "octets_utf8": 61,
+    "rc": 0,
+    "temps_cli_ms": 147.9,
+    "temps_api_ms": 0.986,
+    "deterministe": true,
+    "json_octets": 16438,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 62,
+    "mots": 14,
+    "pos": 11,
+    "syntagmes": 6,
+    "attaches": 6,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 1,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 2,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.3934,
+    "trous_pos": {
+     "mot": {
+      "total": 11,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f33",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Si tu viens, apporte le dessert.",
+    "caracteres": 32,
+    "octets_utf8": 32,
+    "rc": 0,
+    "temps_cli_ms": 145.91,
+    "temps_api_ms": 0.394,
+    "deterministe": true,
+    "json_octets": 9075,
+    "json_valide": true,
+    "langue": "it",
+    "script": "Latn",
+    "labels": 34,
+    "mots": 8,
+    "pos": 6,
+    "syntagmes": 2,
+    "attaches": 1,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.5938,
+    "trous_pos": {
+     "mot": {
+      "total": 6,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f34",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Bien que fatigué, il continue à travailler jusqu'à minuit.",
+    "caracteres": 58,
+    "octets_utf8": 61,
+    "rc": 0,
+    "temps_cli_ms": 138.98,
+    "temps_api_ms": 0.941,
+    "deterministe": true,
+    "json_octets": 14784,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 54,
+    "mots": 11,
+    "pos": 9,
+    "syntagmes": 6,
+    "attaches": 4,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 3,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 3,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 5,
+    "fraction_semantique": 0.6552,
+    "trous_pos": {
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f35",
+    "categorie": "en",
+    "attendu": "en",
+    "texte": "The quick brown fox jumps over the lazy dog.",
+    "caracteres": 44,
+    "octets_utf8": 44,
+    "rc": 0,
+    "temps_cli_ms": 180.3,
+    "temps_api_ms": 0.509,
+    "deterministe": true,
+    "json_octets": 11245,
+    "json_valide": true,
+    "langue": "en",
+    "script": "Latn",
+    "labels": 43,
+    "mots": 10,
+    "pos": 9,
+    "syntagmes": 2,
+    "attaches": 0,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 6,
+    "fraction_semantique": 0.5682,
+    "trous_pos": {
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f36",
+    "categorie": "en",
+    "attendu": "en",
+    "texte": "I can't believe it's already 2026 — time flies!",
+    "caracteres": 47,
+    "octets_utf8": 49,
+    "rc": 0,
+    "temps_cli_ms": 160.12,
+    "temps_api_ms": 0.476,
+    "deterministe": true,
+    "json_octets": 11767,
+    "json_valide": true,
+    "langue": "en",
+    "script": "Latn",
+    "labels": 46,
+    "mots": 10,
+    "pos": 7,
+    "syntagmes": 2,
+    "attaches": 0,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.3404,
+    "trous_pos": {
+     "mot": {
+      "total": 7,
+      "sans_pos": 0
+     },
+     "nombre": {
+      "total": 1,
+      "sans_pos": 1
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f37",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Email: alice@example.org, phone: +33 6 12 34 56 78.",
+    "caracteres": 51,
+    "octets_utf8": 51,
+    "rc": 0,
+    "temps_cli_ms": 148.7,
+    "temps_api_ms": 0.488,
+    "deterministe": true,
+    "json_octets": 13853,
+    "json_valide": true,
+    "langue": "und",
+    "script": "Latn",
+    "labels": 55,
+    "mots": 18,
+    "pos": 5,
+    "syntagmes": 0,
+    "attaches": 0,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 2,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 5,
+    "fraction_semantique": 0.4902,
+    "trous_pos": {
+     "mot": {
+      "total": 5,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 7,
+      "sans_pos": 7
+     },
+     "nombre": {
+      "total": 6,
+      "sans_pos": 6
+     }
+    },
+    "sans_syntagme": true,
+    "sans_pos": false,
+    "frontiere_phrase": "email alice@example.org"
+   },
+   {
+    "id": "f38",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Les URL comme https://a.b/c?d=e#f et http://x.y sont parfois coupées.",
+    "caracteres": 69,
+    "octets_utf8": 70,
+    "rc": 0,
+    "temps_cli_ms": 175.04,
+    "temps_api_ms": 1.893,
+    "deterministe": true,
+    "json_octets": 27206,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 103,
+    "mots": 30,
+    "pos": 17,
+    "syntagmes": 9,
+    "attaches": 9,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 1,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 4,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 10,
+    "fraction_semantique": 0.4493,
+    "trous_pos": {
+     "mot": {
+      "total": 17,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 13,
+      "sans_pos": 13
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false,
+    "frontiere_phrase": "deux URL"
+   },
+   {
+    "id": "f39",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Un fichier /home/user/notes.txt et un chemin C:\\Windows\\System32.",
+    "caracteres": 65,
+    "octets_utf8": 65,
+    "rc": 0,
+    "temps_cli_ms": 150.19,
+    "temps_api_ms": 1.23,
+    "deterministe": true,
+    "json_octets": 19557,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 73,
+    "mots": 20,
+    "pos": 12,
+    "syntagmes": 7,
+    "attaches": 6,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 2,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 2,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 9,
+    "fraction_semantique": 0.6923,
+    "trous_pos": {
+     "mot": {
+      "total": 12,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 8,
+      "sans_pos": 8
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false,
+    "frontiere_phrase": "chemin notes.txt"
+   },
+   {
+    "id": "f40",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Les caractères spéciaux : @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^",
+    "caracteres": 63,
+    "octets_utf8": 65,
+    "rc": 0,
+    "temps_cli_ms": 149.48,
+    "temps_api_ms": 0.775,
+    "deterministe": true,
+    "json_octets": 18540,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 76,
+    "mots": 23,
+    "pos": 3,
+    "syntagmes": 1,
+    "attaches": 0,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 2,
+    "fraction_semantique": 0.2857,
+    "trous_pos": {
+     "mot": {
+      "total": 3,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 20,
+      "sans_pos": 20
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f41",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Le texte contient des accents é à ç ù ß ñ ø å et des ligatures œ æ.",
+    "caracteres": 67,
+    "octets_utf8": 77,
+    "rc": 0,
+    "temps_cli_ms": 150.64,
+    "temps_api_ms": 1.437,
+    "deterministe": true,
+    "json_octets": 22021,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 83,
+    "mots": 19,
+    "pos": 18,
+    "syntagmes": 5,
+    "attaches": 4,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 3,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 13,
+    "fraction_semantique": 0.5672,
+    "trous_pos": {
+     "mot": {
+      "total": 18,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f42",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Un mot très long : anticonstitutionnellement.",
+    "caracteres": 45,
+    "octets_utf8": 46,
+    "rc": 0,
+    "temps_cli_ms": 148.23,
+    "temps_api_ms": 0.703,
+    "deterministe": true,
+    "json_octets": 8906,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 32,
+    "mots": 7,
+    "pos": 5,
+    "syntagmes": 2,
+    "attaches": 2,
+    "sans_attachement": 0,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.7111,
+    "trous_pos": {
+     "mot": {
+      "total": 5,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f43",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Ceci est une phrase qui contient beaucoup de mots afin de tester la longueur et la ponctuation, avec des virgules, des points-virgules ; des parenthèses (comme ici), des tirets — et même des guillemets « français » — pour voir si tout reste cohérent, et si les spans restent dans le texte, sans dépasser la fin, ce qui serait un défaut grave pour un client qui découpe le texte par indices.",
+    "caracteres": 390,
+    "octets_utf8": 403,
+    "rc": 0,
+    "temps_cli_ms": 153.88,
+    "temps_api_ms": 7.877,
+    "deterministe": true,
+    "json_octets": 91521,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 342,
+    "mots": 80,
+    "pos": 66,
+    "syntagmes": 26,
+    "attaches": 23,
+    "sans_attachement": 3,
+    "chevauchements_syntagme": 10,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 8,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 2,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 32,
+    "fraction_semantique": 0.5436,
+    "trous_pos": {
+     "mot": {
+      "total": 66,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 14,
+      "sans_pos": 14
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f44",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Question rhétorique : qui peut bien croire que cela fonctionne sans test ?",
+    "caracteres": 74,
+    "octets_utf8": 75,
+    "rc": 0,
+    "temps_cli_ms": 179.05,
+    "temps_api_ms": 1.804,
+    "deterministe": true,
+    "json_octets": 16092,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 60,
+    "mots": 13,
+    "pos": 11,
+    "syntagmes": 4,
+    "attaches": 3,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 2,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 1,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 6,
+    "fraction_semantique": 0.5676,
+    "trous_pos": {
+     "mot": {
+      "total": 11,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f45",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "N'oublie jamais de sauvegarder tes données avant de fermer le programme.",
+    "caracteres": 72,
+    "octets_utf8": 73,
+    "rc": 0,
+    "temps_cli_ms": 147.44,
+    "temps_api_ms": 1.786,
+    "deterministe": true,
+    "json_octets": 17700,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 64,
+    "mots": 13,
+    "pos": 12,
+    "syntagmes": 7,
+    "attaches": 5,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 4,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 3,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 5,
+    "fraction_semantique": 0.5417,
+    "trous_pos": {
+     "mot": {
+      "total": 12,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f46",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Il n'y a ni pain ni lait dans le réfrigérateur.",
+    "caracteres": 47,
+    "octets_utf8": 49,
+    "rc": 0,
+    "temps_cli_ms": 154.13,
+    "temps_api_ms": 1.558,
+    "deterministe": true,
+    "json_octets": 14724,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 56,
+    "mots": 12,
+    "pos": 11,
+    "syntagmes": 6,
+    "attaches": 2,
+    "sans_attachement": 4,
+    "chevauchements_syntagme": 4,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 2,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 3,
+    "fraction_semantique": 0.4468,
+    "trous_pos": {
+     "mot": {
+      "total": 11,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f47",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "C'est le meilleur film que j'aie jamais vu.",
+    "caracteres": 43,
+    "octets_utf8": 43,
+    "rc": 0,
+    "temps_cli_ms": 147.1,
+    "temps_api_ms": 0.865,
+    "deterministe": true,
+    "json_octets": 12155,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 45,
+    "mots": 9,
+    "pos": 8,
+    "syntagmes": 3,
+    "attaches": 2,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 4,
+    "fraction_semantique": 0.4419,
+    "trous_pos": {
+     "mot": {
+      "total": 8,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 1,
+      "sans_pos": 1
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f48",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "caracteres": 123,
+    "octets_utf8": 123,
+    "rc": 0,
+    "temps_cli_ms": 168.8,
+    "temps_api_ms": 0.807,
+    "deterministe": true,
+    "json_octets": 22841,
+    "json_valide": true,
+    "langue": "und",
+    "script": "Latn",
+    "labels": 89,
+    "mots": 22,
+    "pos": 19,
+    "syntagmes": 1,
+    "attaches": 0,
+    "sans_attachement": 1,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 1,
+    "doc_titres": [],
+    "unites_semantiques": 18,
+    "fraction_semantique": 0.813,
+    "trous_pos": {
+     "mot": {
+      "total": 19,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f49",
+    "categorie": "fr",
+    "attendu": "fr",
+    "texte": "La réunion est reportée à demain, 10 h 30, salle B12.",
+    "caracteres": 53,
+    "octets_utf8": 56,
+    "rc": 0,
+    "temps_cli_ms": 154.32,
+    "temps_api_ms": 1.254,
+    "deterministe": true,
+    "json_octets": 15893,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 59,
+    "mots": 14,
+    "pos": 9,
+    "syntagmes": 5,
+    "attaches": 3,
+    "sans_attachement": 2,
+    "chevauchements_syntagme": 0,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 0,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 0,
+    "cibles_absentes": 0,
+    "phrases": 1,
+    "phrases_espaces_initiaux": 0,
+    "documents": 1,
+    "doc_tronquees": 0,
+    "doc_titres": [],
+    "unites_semantiques": 5,
+    "fraction_semantique": 0.4528,
+    "trous_pos": {
+     "mot": {
+      "total": 9,
+      "sans_pos": 0
+     },
+     "ponctuation": {
+      "total": 3,
+      "sans_pos": 3
+     },
+     "nombre": {
+      "total": 2,
+      "sans_pos": 2
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false
+   },
+   {
+    "id": "f50",
+    "categorie": "très long",
+    "attendu": "fr",
+    "texte": "# Notes de terrain\nLe chat de la voisine qui dort sur le toit se réveille dès que le jour se lève ; il descend alors dans la cour, contourne le vieux puits et disparaît sous la haie. Personne ne sait vraiment où il passe l'après-midi, mais tout le monde a une théorie. La voisine affirme qu'il dort dans la grange, son fils jure qu'il chasse derrière l'école, et la boulangère, qui le voit chaque matin vers 7 h 15, pense qu'il a simplement deux maisons. Cette hypothèse, aussi étrange qu'elle paraisse, n'est pas la plus invraisemblable : les chats du quartier semblent tous connaître les mêmes raccourcis, les mêmes murs chauds, les mêmes fenêtres entrouvertes, et ils se retrouvent parfois à six sur le même toit.\n\n## Le protocole\nNous avons observé pendant 30 jours, de 6 h 30 à 9 h, en notant chaque passage : le 12/03/2026, trois chats sont entrés par la porte de service ; le 14/03, aucun ; le 15, un seul, mais il portait un collier bleu que nous n'avions jamais vu. Le protocole prévoit 3 relevés par jour, 2 observateurs, 1 tableau et 0 conclusion hâtive. Les données brutes sont dans le fichier /home/observateur/notes.txt ; la synthèse est ici.\n\n## Ce que nous croyons savoir\nUne question reste ouverte : pourquoi les chats reviennent-ils toujours au même endroit ? Est-ce l'odeur, la chaleur, l'habitude, ou quelque chose de plus difficile à nommer ? Nous ne prétendons pas répondre ; nous constatons, nous comparons, nous doutons. La science commence par un doute bien tenu, et finit parfois par une phrase simple : « Le chat dort. » Cette phrase, banale, contient déjà une langue, un sujet, un verbe, un présent, une habitude, et tout un monde de choses qui ne sont pas dites.\n\n## Annexes\nVisitez https://example.org/corpus/2026?page=3 pour les données complètes ; écrivez à corpus@example.org si vous trouvez une erreur, ou appelez le +33 6 12 34 56 78. Les caractères spéciaux @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes, les accents é à ç ù ß ñ ø å et les ligatures œ æ aussi, et les emojis 🐈 🐾 restent lisibles. Ne supprimez pas les lignes vides : elles séparent les paragraphes et changent la lecture.",
+    "caracteres": 2144,
+    "octets_utf8": 2204,
+    "rc": 0,
+    "temps_cli_ms": 226.64,
+    "temps_api_ms": 45.088,
+    "deterministe": true,
+    "json_octets": 533611,
+    "json_valide": true,
+    "langue": "fr",
+    "script": "Latn",
+    "labels": 1990,
+    "mots": 480,
+    "pos": 347,
+    "syntagmes": 171,
+    "attaches": 150,
+    "sans_attachement": 21,
+    "chevauchements_syntagme": 50,
+    "chevauchements_phrase_type": 0,
+    "syntagmes_union": 40,
+    "conflits_apres_filtre_union": 0,
+    "cibles_fermees": 6,
+    "cibles_absentes": 0,
+    "phrases": 19,
+    "phrases_espaces_initiaux": 14,
+    "documents": 4,
+    "doc_tronquees": 4,
+    "doc_titres": [
+     "# Notes de terrain\nLe chat de la voisine qui dort sur le toi",
+     "## Le protocole\nNous avons observé pendant 30 jours, de 6 h ",
+     "## Ce que nous croyons savoir\nUne question reste ouverte : p",
+     "## Annexes\nVisitez https://example.org/corpus/2026?page=3 po"
+    ],
+    "unites_semantiques": 183,
+    "fraction_semantique": 0.5247,
+    "trous_pos": {
+     "ponctuation": {
+      "total": 109,
+      "sans_pos": 109
+     },
+     "mot": {
+      "total": 347,
+      "sans_pos": 0
+     },
+     "nombre": {
+      "total": 24,
+      "sans_pos": 24
+     }
+    },
+    "sans_syntagme": false,
+    "sans_pos": false,
+    "frontiere_phrase": "URL + email"
+   }
+  ]
+ },
+ "robustesse": {
+  "synthese": {
+   "cas": 49,
+   "conformes": 33,
+   "anomalies": 9,
+   "limites": 7,
+   "echecs_internes": 2,
+   "codes_observes": [
+    0,
+    1,
+    2
+   ],
+   "codes_3_4": "non implémentés"
+  },
+  "cas": [
+   {
+    "nom": "version",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 12,
+    "wall_ms": 176.46,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "--version"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "aide",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 770,
+    "wall_ms": 147.33,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "--aide"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "sans_commande",
+    "attendu": 2,
+    "rc": 2,
+    "stdout_octets": 0,
+    "wall_ms": 151.47,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave"
+    ],
+    "stderr": "usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : the following arguments are required: {analyser,evaluer,rejouer}\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "commande_inconnue",
+    "attendu": 2,
+    "rc": 2,
+    "stdout_octets": 0,
+    "wall_ms": 145.57,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "manger",
+     "x"
+    ],
+    "stderr": "usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : argument {analyser,evaluer,rejouer}: invalid choice: 'manger' (choose from 'analyser', 'evaluer', 'rejouer')\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "analyser_sans_texte",
+    "attendu": 2,
+    "rc": 2,
+    "stdout_octets": 0,
+    "wall_ms": 146.41,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser"
+    ],
+    "stderr": "usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: erreur d'usage : the following arguments are required: TEXTE\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "langue_hors_choix",
+    "attendu": 2,
+    "rc": 2,
+    "stdout_octets": 0,
+    "wall_ms": 151.69,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Le chat dort.",
+     "--langue",
+     "de"
+    ],
+    "stderr": "usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: erreur d'usage : argument --langue: invalid choice: 'de' (choose from 'fr', 'en')\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "langue_majuscule",
+    "attendu": 2,
+    "rc": 2,
+    "stdout_octets": 0,
+    "wall_ms": 154.64,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Le chat dort.",
+     "--langue",
+     "FR"
+    ],
+    "stderr": "usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: erreur d'usage : argument --langue: invalid choice: 'FR' (choose from 'fr', 'en')\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "option_inconnue",
+    "attendu": 2,
+    "rc": 2,
+    "stdout_octets": 0,
+    "wall_ms": 146.31,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Le chat dort.",
+     "--manger"
+    ],
+    "stderr": "usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : unrecognized arguments: --manger\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "texte_double_tiret",
+    "attendu": 0,
+    "rc": 2,
+    "stdout_octets": 0,
+    "wall_ms": 155.83,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "--bonjour"
+    ],
+    "stderr": "usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE\ndrave analyser: erreur d'usage : the following arguments are required: TEXTE\n",
+    "statut": "anomalie",
+    "constat": "code 2 : un texte commençant par `--` est pris pour une option"
+   },
+   {
+    "nom": "texte_double_tiret_sep",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 460,
+    "wall_ms": 149.74,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "--",
+     "--bonjour"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "texte_tiret_simple",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 460,
+    "wall_ms": 148.04,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "-3 degrés"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "json_avant_texte",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 5561,
+    "wall_ms": 153.14,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "--json",
+     "Le chat dort."
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "nouvelle_ligne",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 754,
+    "wall_ms": 180.45,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Ligne un.\nLigne deux."
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "tab_et_crlf",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 688,
+    "wall_ms": 169.9,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Le\tchat.\r\nSalut."
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "evaluation",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 659,
+    "wall_ms": 552.74,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "evaluer"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "evaluation_gold",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 2740,
+    "wall_ms": 520.43,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "evaluer",
+     "--gold",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "rejeu_ok",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 147,
+    "wall_ms": 144.41,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "rejouer",
+     "Le chat dort."
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "vide",
+    "attendu": 1,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 141.8,
+    "stdout_vide": true,
+    "traceback": false,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "commande": [
+     "drave",
+     "analyser",
+     "",
+     "--json"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "un_espace",
+    "attendu": 1,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 139.44,
+    "stdout_vide": true,
+    "traceback": false,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "commande": [
+     "drave",
+     "analyser",
+     " ",
+     "--json"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "espaces_et_tabs",
+    "attendu": 1,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 152.08,
+    "stdout_vide": true,
+    "traceback": false,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "commande": [
+     "drave",
+     "analyser",
+     " \t\n ",
+     "--json"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "conforme"
+   },
+   {
+    "nom": "ponctuation_seule",
+    "attendu": 1,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 153.65,
+    "stdout_vide": true,
+    "traceback": false,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "commande": [
+     "drave",
+     "analyser",
+     "... !!! ???",
+     "--json"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "anomalie",
+    "constat": "refus correct (code 1) mais raison `vide` fausse pour 9 caractères"
+   },
+   {
+    "nom": "emoji_seul",
+    "attendu": 1,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 141.23,
+    "stdout_vide": true,
+    "traceback": false,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "commande": [
+     "drave",
+     "analyser",
+     "🚀🔥",
+     "--json"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "anomalie",
+    "constat": "refus correct (code 1) mais raison `vide` fausse pour un texte non vide"
+   },
+   {
+    "nom": "invisible",
+    "attendu": 1,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 148.17,
+    "stdout_vide": true,
+    "traceback": false,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "commande": [
+     "drave",
+     "analyser",
+     "​​",
+     "--json"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "anomalie",
+    "constat": "refus correct (code 1) mais raison `vide` fausse (espaces invisibles)"
+   },
+   {
+    "nom": "api_''",
+    "attendu": null,
+    "refus": "vide",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "json_cles": [
+     "contexte",
+     "cout",
+     "etiquettes",
+     "fraction_semantique",
+     "langue",
+     "refus",
+     "script",
+     "source",
+     "texte",
+     "trace",
+     "unites_semantiques"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_'   '",
+    "attendu": null,
+    "refus": "vide",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "json_cles": [
+     "contexte",
+     "cout",
+     "etiquettes",
+     "fraction_semantique",
+     "langue",
+     "refus",
+     "script",
+     "source",
+     "texte",
+     "trace",
+     "unites_semantiques"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_'...'",
+    "attendu": null,
+    "refus": "vide",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "json_cles": [
+     "contexte",
+     "cout",
+     "etiquettes",
+     "fraction_semantique",
+     "langue",
+     "refus",
+     "script",
+     "source",
+     "texte",
+     "trace",
+     "unites_semantiques"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_'🚀'",
+    "attendu": null,
+    "refus": "vide",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "json_cles": [
+     "contexte",
+     "cout",
+     "etiquettes",
+     "fraction_semantique",
+     "langue",
+     "refus",
+     "script",
+     "source",
+     "texte",
+     "trace",
+     "unites_semantiques"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_'1234567890'",
+    "attendu": null,
+    "refus": "",
+    "etiquettes": 6,
+    "cles_cout": [
+     "caracteres",
+     "duree_s",
+     "etiquettes",
+     "octets"
+    ],
+    "json_cles": [
+     "contexte",
+     "cout",
+     "etiquettes",
+     "fraction_semantique",
+     "langue",
+     "refus",
+     "script",
+     "source",
+     "texte",
+     "trace",
+     "unites_semantiques"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_non_str_NoneType",
+    "attendu": "non_texte",
+    "refus": "non_texte",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_non_str_int",
+    "attendu": "non_texte",
+    "refus": "non_texte",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_non_str_list",
+    "attendu": "non_texte",
+    "refus": "non_texte",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "api_non_str_bytes",
+    "attendu": "non_texte",
+    "refus": "non_texte",
+    "etiquettes": 0,
+    "cles_cout": [
+     "duree_s",
+     "octets"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "utf8_valide",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 3894,
+    "wall_ms": 159.58,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Élodie sourit.",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "nfd",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 5076,
+    "wall_ms": 162.81,
+    "stdout_vide": false,
+    "traceback": false,
+    "mots": [
+     [
+      "e",
+      0,
+      1
+     ],
+     [
+      "́",
+      1,
+      2
+     ],
+     [
+      "lodie",
+      2,
+      7
+     ],
+     [
+      "sourit",
+      8,
+      14
+     ],
+     [
+      ".",
+      14,
+      15
+     ]
+    ],
+    "syntagmes": 0,
+    "pos": [
+     [
+      "e",
+      "NOUN"
+     ],
+     [
+      "lodie",
+      "NOUN"
+     ],
+     [
+      "sourit",
+      "NOUN"
+     ]
+    ],
+    "commande": [
+     "drave",
+     "analyser",
+     "élodie sourit.",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "anomalie",
+    "constat": "NFC non appliqué : `e` + accent combinant = 2 tokens, 0 syntagme"
+   },
+   {
+    "nom": "bom",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 5794,
+    "wall_ms": 152.95,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "﻿Le chat dort.",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "limite",
+    "constat": "le BOM devient un token de ponctuation [0:1]"
+   },
+   {
+    "nom": "surrogate_seul",
+    "attendu": "refus_encodage",
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 144.7,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "b'\\xff'"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "anomalie",
+    "constat": "octet UTF-8 invalide : refus `vide` au lieu d'un refus d'encodage"
+   },
+   {
+    "nom": "surrogate_dans_mot",
+    "attendu": "refus_encodage",
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 149.26,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "b'a\\xffb'"
+    ],
+    "stderr": "drave: erreur : UnicodeEncodeError : 'utf-8' codec can't encode character '\\udcff' in position 231: surrogates not allowed\n",
+    "statut": "anomalie",
+    "constat": "octet UTF-8 invalide mêlé à des lettres : UnicodeEncodeError interne"
+   },
+   {
+    "nom": "stdout_ascii",
+    "attendu": 0,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 150.63,
+    "stdout_vide": true,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Élodie sourit."
+    ],
+    "stderr": "drave: erreur : UnicodeEncodeError : 'ascii' codec can't encode character '\\u2014' in position 12: ordinal not in range(128)\n",
+    "statut": "anomalie",
+    "constat": "stdout ASCII : UnicodeEncodeError interne (le JSON n'est pas écrit)"
+   },
+   {
+    "nom": "locale_c",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 473,
+    "wall_ms": 155.12,
+    "stdout_vide": false,
+    "traceback": false,
+    "commande": [
+     "drave",
+     "analyser",
+     "Élodie sourit."
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "russe",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 3919,
+    "wall_ms": 148.75,
+    "stdout_vide": false,
+    "traceback": false,
+    "mots": 3,
+    "syntagmes": 0,
+    "pos": [
+     [
+      "Привет",
+      "NOUN"
+     ],
+     [
+      "мир",
+      "NOUN"
+     ]
+    ],
+    "script": "Cyrl",
+    "langue": "und",
+    "commande": [
+     "drave",
+     "analyser",
+     "Привет мир.",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "limite",
+    "constat": "surface seulement : 0 syntagme, 2 POS NOUN"
+   },
+   {
+    "nom": "arabe",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 3944,
+    "wall_ms": 150.8,
+    "stdout_vide": false,
+    "traceback": false,
+    "mots": 3,
+    "syntagmes": 0,
+    "pos": [
+     [
+      "مرحبا",
+      "MOT"
+     ],
+     [
+      "بالعالم",
+      "MOT"
+     ]
+    ],
+    "script": "Arab",
+    "langue": "und",
+    "commande": [
+     "drave",
+     "analyser",
+     "مرحبا بالعالم.",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "limite",
+    "constat": "surface seulement : 0 syntagme, POS MOT (script sans casse)"
+   },
+   {
+    "nom": "chinois",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 2904,
+    "wall_ms": 165.71,
+    "stdout_vide": false,
+    "traceback": false,
+    "mots": 2,
+    "syntagmes": 0,
+    "pos": [
+     [
+      "你好世界",
+      "MOT"
+     ]
+    ],
+    "script": "Hani",
+    "langue": "und",
+    "commande": [
+     "drave",
+     "analyser",
+     "你好世界。",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "limite",
+    "constat": "surface seulement : 0 syntagme, un seul token pour 4 sinogrammes"
+   },
+   {
+    "nom": "10k_phrases",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 2763666,
+    "wall_ms": 765.35,
+    "stdout_vide": false,
+    "traceback": false,
+    "json_valide": true,
+    "json_octets": 2763666,
+    "labels": 10362,
+    "spans_valides": true,
+    "commande": [
+     "drave",
+     "analyser",
+     "<10000 caractères>",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "limite",
+    "constat": "JSON de 2,76 Mo, 10 362 étiquettes ; 590–765 ms"
+   },
+   {
+    "nom": "10k_sans_espace",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 42482,
+    "wall_ms": 171.62,
+    "stdout_vide": false,
+    "traceback": false,
+    "json_valide": true,
+    "json_octets": 42482,
+    "labels": 7,
+    "spans_valides": true,
+    "commande": [
+     "drave",
+     "analyser",
+     "<10000 caractères>",
+     "--json"
+    ],
+    "stderr": "",
+    "statut": "limite",
+    "constat": "7 étiquettes ; ligne lisible de 10 010 caractères"
+   },
+   {
+    "nom": "10k_ponctuation",
+    "attendu": 1,
+    "rc": 1,
+    "stdout_octets": 0,
+    "wall_ms": 155.21,
+    "stdout_vide": true,
+    "traceback": false,
+    "refus_message": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)",
+    "commande": [
+     "drave",
+     "analyser",
+     "<10000 caractères>",
+     "--json"
+    ],
+    "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+    "statut": "anomalie",
+    "constat": "refus correct (code 1) mais raison `vide` fausse pour 10 000 caractères"
+   },
+   {
+    "nom": "10k_lisible_sans_espace",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 10457,
+    "wall_ms": 152.67,
+    "stdout_vide": false,
+    "traceback": false,
+    "ligne_max": 10010,
+    "commande": [
+     "drave",
+     "analyser",
+     "<10000 caractères>"
+    ],
+    "stderr": "",
+    "statut": "limite",
+    "constat": "ligne lisible de 10 010 caractères (token non coupé)"
+   },
+   {
+    "nom": "rejouer_10k",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 10318,
+    "wall_ms": 1080.68,
+    "stdout_vide": false,
+    "traceback": false,
+    "rejeu_identique": true,
+    "commande": [
+     "drave",
+     "rejouer",
+     "<10000 caractères>"
+    ],
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "cwd_tmp",
+    "attendu": 0,
+    "rc": 0,
+    "stdout_octets": 5561,
+    "wall_ms": 148.01,
+    "json_valide": true,
+    "stderr": "",
+    "statut": "conforme"
+   },
+   {
+    "nom": "evaluer_deterministe",
+    "attendu": true,
+    "identique": true,
+    "octets": 2748,
+    "stderr": "",
+    "statut": "conforme"
+   }
+  ]
+ },
+ "contrat": {
+  "enveloppe_actuelle": [
+   "texte",
+   "langue",
+   "script",
+   "source",
+   "refus",
+   "etiquettes",
+   "unites_semantiques",
+   "fraction_semantique",
+   "trace",
+   "cout",
+   "contexte"
+  ],
+  "etiquette_actuelle": [
+   "niveau",
+   "type",
+   "valeur",
+   "debut",
+   "fin",
+   "source",
+   "confiance",
+   "candidats",
+   "langue",
+   "script",
+   "meta"
+  ],
+  "invariants_tenus": {
+   "cles_racine": "46/46",
+   "cles_etiquette": "4501/4501",
+   "labels_tries": "46/46",
+   "doublons_exacts": 0,
+   "spans_dans_texte": "4501/4501",
+   "spans_vides": 0,
+   "confiance_0_1": "4501/4501",
+   "source_dans_enum": "4501/4501",
+   "niveau_dans_enum": "4501/4501",
+   "texte_roundtrip": "46/46",
+   "determinisme": "46/46",
+   "stderr_vide": "46/46"
+  },
+  "peut_etre_vide": {
+   "etiquettes": "seulement sur refus (0/46 succès)",
+   "unites_semantiques": "f18 (chiffres) : 0 ; fraction 0,0",
+   "fraction_semantique": "0,0 sur f18 ; max 0,8571 sur f03",
+   "syntagmes": "4/46 succès : f13, f18, f27 (Élodie sourit.), f37",
+   "pos": "1/46 : f18 (chiffres) ; sinon 3 à 200 POS",
+   "candidats": "3470/4501 étiquettes : graphème, mot, phrase, document, POS fermées",
+   "meta": "3375/4501 étiquettes : graphème, mot, phrase, pragmatique, discours, document, morphème",
+   "cout": "3 clés en succès (octets, caracteres, etiquettes) ; 1 clé (octets) sur refus API",
+   "trace": "2 schémas : {langue,...} puis {niveaux,...} ; 1 schéma {refus,...}",
+   "contexte": "46/46 vide : le CLI n'expose aucune option pour le fournir",
+   "refus": "46/46 vide en succès ; `vide` sur refus ; `non_texte` côté API"
+  },
+  "ce_qui_casse_un_client": [
+   "Aucun champ `schema`/`version` : 0/46 annotations ; `--version` ne rend que `drave 0.1.0`.",
+   "Refus sans JSON : `--json` + texte vide/emoji/ponctuation → stdout 0 octet et code 1 ; `json.loads` échoue.",
+   "Chevauchements : 107 paires sur 23/46 textes ; un arbre ou un index par offset casse ; filtrer `meta.union` rend 0 conflit mais n'est pas dans le schéma.",
+   "Cible sans offset : 56/284 cibles apparaissent plus d'une fois ; 18 mots fermés ; 9 cibles d'un caractère ; résolution par `texte.find` ambiguë.",
+   "POS trouées : 302/1068 tokens sans POS (257 ponctuation, 45 nombres) ; `POS —` sur les chiffres.",
+   "`valeur` non uniforme : 295/4501 étiquettes ne portent pas la surface (phrase = type, pragmatique = acte, document tronqué à 60, morphème normalisé).",
+   "Frontières de phrase : 6/46 textes coupés dans URL/email/chemin/abréviation ; 3 fausses questions ; 1 paire de phrases chevauchantes.",
+   "Structures vides : 4/46 textes valides sans syntagme (dont « Élodie sourit. ») ; le client ne distingue pas « rien trouvé » de « non supporté ».",
+   "Métadonnées hétérogènes : `meta` 0 à 4 clés, `candidats` 0 à n, `trace` 2 schémas, `cout` 2 schémas ; un parseur strict casse.",
+   "Taille : 2,76 Mo de JSON pour 10 000 caractères (10 362 étiquettes) ; pas de JSONL, pas de lot, une invocation = un texte.",
+   "Enums instables : `langue` peut être `it` (f33) ou `und` ; `Annotation.source` peut être `parallele`/`cascade` côté API ; `refus` a plusieurs sémantiques."
+  ]
+ },
+ "schema_propose": {
+  "schema": "drave.annotation",
+  "version": "1.0",
+  "champs_cles": [
+   "schema",
+   "version",
+   "texte",
+   "langue",
+   "script",
+   "refus",
+   "etiquettes",
+   "unites_semantiques"
+  ],
+  "champs_optionnels": [
+   "fraction_semantique",
+   "source",
+   "trace",
+   "cout",
+   "contexte"
+  ],
+  "json_schema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "https://drave.local/schema/annotation-1.0.json",
+   "title": "drave.annotation v1.0",
+   "type": "object",
+   "required": [
+    "schema",
+    "version",
+    "texte",
+    "langue",
+    "script",
+    "refus",
+    "etiquettes",
+    "unites_semantiques"
+   ],
+   "properties": {
+    "schema": {
+     "const": "drave.annotation"
+    },
+    "version": {
+     "type": "string",
+     "pattern": "^1\\.[0-9]+$"
+    },
+    "texte": {
+     "type": "string"
+    },
+    "langue": {
+     "type": "string",
+     "pattern": "^(und|[a-z]{2,3})$"
+    },
+    "script": {
+     "type": "string",
+     "pattern": "^(Zyyy|[A-Z][a-z]{3})$"
+    },
+    "refus": {
+     "type": "string"
+    },
+    "etiquettes": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/etiquette"
+     }
+    },
+    "unites_semantiques": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/span"
+     }
+    }
+   },
+   "additionalProperties": true,
+   "$defs": {
+    "span": {
+     "type": "object",
+     "required": [
+      "debut",
+      "fin"
+     ],
+     "properties": {
+      "debut": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "fin": {
+       "type": "integer",
+       "minimum": 0
+      }
+     },
+     "additionalProperties": false
+    },
+    "etiquette": {
+     "type": "object",
+     "required": [
+      "niveau",
+      "type",
+      "valeur",
+      "debut",
+      "fin",
+      "source",
+      "confiance",
+      "candidats",
+      "langue",
+      "script",
+      "meta"
+     ],
+     "properties": {
+      "niveau": {
+       "enum": [
+        "graphème",
+        "morphème",
+        "mot",
+        "pos",
+        "syntagme",
+        "phrase",
+        "discours",
+        "pragmatique",
+        "document"
+       ]
+      },
+      "type": {
+       "type": "string",
+       "minLength": 1
+      },
+      "valeur": {
+       "type": "string"
+      },
+      "debut": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "fin": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "source": {
+       "enum": [
+        "heuristique",
+        "neuronal",
+        "humain"
+       ]
+      },
+      "confiance": {
+       "type": "number",
+       "minimum": 0,
+       "maximum": 1
+      },
+      "candidats": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "langue": {
+       "type": "string"
+      },
+      "script": {
+       "type": "string"
+      },
+      "meta": {
+       "type": "object"
+      }
+     },
+     "additionalProperties": true
+    }
+   }
+  },
+  "politique_de_version": [
+   "MAJOR : suppression, renommage, changement de type ou de sémantique d'un des 8 champs.",
+   "MINOR : ajout d'un champ optionnel, d'une valeur de `type` ou d'un code de `refus`.",
+   "`schema` identifie la famille ; `version` est en MAJOR.MINOR ; un client refuse un MAJOR inconnu.",
+   "Les 8 champs sont présents sur succès ET sur refus (refus = code 3 + JSON).",
+   "`fraction_semantique` est dérivée (somme des unités / len(texte)) : optionnelle."
+  ]
+ },
+ "test_non_regression": {
+  "fichier_propose": "tools/tests/test_schema_produit.py",
+  "statut": "essayé à blanc depuis /tmp : 4 tests OK, 1 classe sautée (schéma v1 absent)",
+  "integration": "python3 tools/tests/test_schema_produit.py ; ajouter à tools/porte-produit.sh",
+  "code": "\"\"\"test_schema_produit.py — le contrat de sortie de `drave analyser --json`.\n\nDeux contrats cohabitent :\n\n- **actuel** (drave 0.1.0) : 11 champs racine, 11 champs par étiquette, spans valides,\n  déterminisme. Ce test passe sur le produit livré ; il gèle l'enveloppe et attrape une\n  disparition de champ, un span hors texte ou une valeur qui n'est plus la surface.\n- **cible v1** (`schema: \"drave.annotation\"`, `version: \"1.0\"`, 8 champs requis) : il est\n  **sauté** tant que le champ `schema` n'existe pas, puis il devient strict. C'est le test\n  de non-régression du schéma versionné : il échoue si `schema`/`version` disparaissent,\n  si un des 8 champs manque, ou si le refus ne rend plus de JSON avec le code 3.\n\nÀ placer dans `tools/tests/test_schema_produit.py`. Stdlib seulement, lancé par\n`python3 tools/tests/test_schema_produit.py` ou `pytest`.\n\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport os\nimport pathlib\nimport re\nimport subprocess\nimport sys\nimport unittest\n\nRACINE = pathlib.Path(os.environ.get(\"DRAVE_RACINE\")\n                      or pathlib.Path(__file__).resolve().parents[2])\nCLI = RACINE / \"tools\" / \"drave.py\"\nSCHEMA = \"drave.annotation\"\nVERSION = \"1.0\"\n\nCHAMPS_ACTUELS = {\"texte\", \"langue\", \"script\", \"source\", \"refus\", \"etiquettes\",\n                  \"unites_semantiques\", \"fraction_semantique\", \"trace\", \"cout\", \"contexte\"}\nCHAMPS_V1 = {\"schema\", \"version\", \"texte\", \"langue\", \"script\", \"refus\",\n             \"etiquettes\", \"unites_semantiques\"}\nCHAMPS_ETIQUETTE = {\"niveau\", \"type\", \"valeur\", \"debut\", \"fin\", \"source\", \"confiance\",\n                    \"candidats\", \"langue\", \"script\", \"meta\"}\nNIVEAUX = {\"graphème\", \"morphème\", \"mot\", \"pos\", \"syntagme\", \"phrase\", \"discours\",\n           \"pragmatique\", \"document\"}\nSOURCES = {\"heuristique\", \"neuronal\", \"humain\"}\nSURFACE = {\"graphème\", \"mot\", \"pos\", \"syntagme\"}  # morphème : valeur normalisée, document : tronquée\nTEXTES = [\n    \"Le chat dort.\",\n    \"The cat sleeps on the roof.\",\n    \"Le livre que j'ai lu est intéressant.\",\n    \"Bonjour. Salut.\",\n    \"1234567890\",\n    \"Élodie sourit.\",\n]\n\n\ndef drave(*arguments: str) -> subprocess.CompletedProcess[str]:\n    return subprocess.run(\n        [sys.executable, str(CLI), *arguments],\n        cwd=str(RACINE), capture_output=True, text=True, encoding=\"utf-8\", timeout=120,\n    )\n\n\ndef annoter(texte: str) -> tuple[subprocess.CompletedProcess[str], dict | None]:\n    resultat = drave(\"analyser\", texte, \"--json\")\n    donnees = json.loads(resultat.stdout) if resultat.returncode == 0 else None\n    return resultat, donnees\n\n\nclass TestContratActuel(unittest.TestCase):\n    \"\"\"Le contrat de drave 0.1.0 — doit rester vert tant que le schéma v1 n'est pas livré.\"\"\"\n\n    def test_enveloppe_et_etiquettes(self) -> None:\n        for texte in TEXTES:\n            with self.subTest(texte=texte):\n                resultat, d = annoter(texte)\n                self.assertEqual(resultat.returncode, 0, resultat.stderr)\n                assert d is not None\n                # Les 11 champs actuels restent obligatoires ; les 8 champs du schéma v1\n                # peuvent s'ajouter sans casser ce test (transition P0-1).\n                self.assertTrue(CHAMPS_ACTUELS <= set(d), sorted(CHAMPS_ACTUELS - set(d)))\n                self.assertTrue(set(d) <= (CHAMPS_ACTUELS | CHAMPS_V1),\n                                sorted(set(d) - (CHAMPS_ACTUELS | CHAMPS_V1)))\n                self.assertEqual(d[\"texte\"], texte)\n                self.assertEqual(d[\"refus\"], \"\")\n                self.assertIsInstance(d[\"etiquettes\"], list)\n                self.assertGreater(len(d[\"etiquettes\"]), 0)\n                self.assertIsInstance(d[\"unites_semantiques\"], list)\n                tri = [(e[\"debut\"], e[\"fin\"], e[\"niveau\"]) for e in d[\"etiquettes\"]]\n                self.assertEqual(tri, sorted(tri), \"les étiquettes doivent être triées\")\n                for etiquette in d[\"etiquettes\"]:\n                    self.assertEqual(set(etiquette), CHAMPS_ETIQUETTE)\n                    self.assertIn(etiquette[\"niveau\"], NIVEAUX)\n                    self.assertIn(etiquette[\"source\"], SOURCES)\n                    self.assertIsInstance(etiquette[\"type\"], str)\n                    self.assertTrue(etiquette[\"type\"])\n                    self.assertIsInstance(etiquette[\"valeur\"], str)\n                    self.assertIsInstance(etiquette[\"debut\"], int)\n                    self.assertIsInstance(etiquette[\"fin\"], int)\n                    self.assertTrue(0 <= etiquette[\"debut\"] <= etiquette[\"fin\"] <= len(texte))\n                    self.assertTrue(0.0 <= etiquette[\"confiance\"] <= 1.0)\n                    self.assertIsInstance(etiquette[\"candidats\"], list)\n                    self.assertTrue(all(isinstance(c, str) for c in etiquette[\"candidats\"]))\n                    self.assertIsInstance(etiquette[\"meta\"], dict)\n                    if etiquette[\"niveau\"] in SURFACE:\n                        self.assertEqual(etiquette[\"valeur\"],\n                                         texte[etiquette[\"debut\"]:etiquette[\"fin\"]])\n\n    def test_determinisme(self) -> None:\n        for texte in TEXTES[:3]:\n            with self.subTest(texte=texte):\n                premier, _ = annoter(texte)\n                second, _ = annoter(texte)\n                self.assertEqual(premier.returncode, 0, premier.stderr)\n                self.assertEqual(premier.stdout, second.stdout)\n\n    def test_refus_actuel_ou_cible(self) -> None:\n        \"\"\"0.1.0 : refus = code 1, stdout vide. Cible : code 3 + JSON. Les deux passent.\n\n        La classe TestSchemaV1 exige le code 3 ; ce test-ci ne gèle que le fait qu'un refus\n        ne doit jamais être confondu avec un succès.\n        \"\"\"\n        resultat = drave(\"analyser\", \"\", \"--json\")\n        if resultat.returncode == 3:\n            d = json.loads(resultat.stdout)\n            self.assertTrue(d[\"refus\"])\n            self.assertEqual(d[\"etiquettes\"], [])\n            self.assertEqual(d[\"unites_semantiques\"], [])\n        else:\n            self.assertEqual(resultat.returncode, 1)\n            self.assertEqual(resultat.stdout, \"\")\n            self.assertIn(\"refus d'analyse\", resultat.stderr)\n\n    def test_codes_de_sortie(self) -> None:\n        self.assertEqual(drave(\"--version\").returncode, 0)\n        self.assertEqual(drave().returncode, 2)\n        self.assertEqual(drave(\"analyser\", \"Le chat dort.\", \"--langue\", \"de\").returncode, 2)\n        self.assertEqual(drave(\"analyser\", \"--\", \"--bonjour\").returncode, 0)  # le `--` protège\n        self.assertEqual(drave(\"analyser\", \"--bonjour\").returncode, 2)       # sans lui, usage\n\n\nclass TestSchemaV1(unittest.TestCase):\n    \"\"\"Le schéma cible versionné — sauté tant que P0-1 n'est pas livré.\"\"\"\n\n    @classmethod\n    def setUpClass(cls) -> None:\n        resultat, d = annoter(\"Le chat dort.\")\n        if d is None or \"schema\" not in d:\n            raise unittest.SkipTest(\"schéma v1 non livré : `schema` absent de l'annotation\")\n\n    def test_les_8_champs_et_la_version(self) -> None:\n        for texte in TEXTES:\n            with self.subTest(texte=texte):\n                resultat, d = annoter(texte)\n                self.assertEqual(resultat.returncode, 0, resultat.stderr)\n                assert d is not None\n                self.assertTrue(CHAMPS_V1 <= set(d), sorted(CHAMPS_V1 - set(d)))\n                self.assertEqual(d[\"schema\"], SCHEMA)\n                self.assertRegex(d[\"version\"], rf\"^{re.escape(VERSION.split('.')[0])}\\.\\d+$\")\n                self.assertIsInstance(d[\"texte\"], str)\n                self.assertIsInstance(d[\"langue\"], str)\n                self.assertRegex(d[\"langue\"], r\"^(und|[a-z]{2,3})$\")\n                self.assertIsInstance(d[\"script\"], str)\n                self.assertIsInstance(d[\"refus\"], str)\n                self.assertIsInstance(d[\"etiquettes\"], list)\n                self.assertIsInstance(d[\"unites_semantiques\"], list)\n\n    def test_refus_code_3_et_json(self) -> None:\n        \"\"\"La cible : le refus rend un JSON d'annotation, avec un code distinct des erreurs.\"\"\"\n        resultat = drave(\"analyser\", \"\", \"--json\")\n        self.assertEqual(resultat.returncode, 3, resultat.stderr)\n        d = json.loads(resultat.stdout)  # un JSON valide, pas un stdout vide\n        self.assertTrue(CHAMPS_V1 <= set(d), sorted(CHAMPS_V1 - set(d)))\n        self.assertTrue(d[\"refus\"])\n        self.assertEqual(d[\"etiquettes\"], [])\n        self.assertEqual(d[\"unites_semantiques\"], [])\n\n\nif __name__ == \"__main__\":\n    unittest.main(verbosity=2)\n"
+ },
+ "correctifs": {
+  "bloquants": [
+   {
+    "id": "P0-1",
+    "titre": "Versionner le format : `schema` + `version` dans chaque annotation",
+    "preuve": "0/46 annotations ; `--version` = `drave 0.1.0` ; aucun client ne peut épingler le format",
+    "lignes": "tools/drave.py 50-52, 324 ; tools/bloc_linguistique.py 116-127",
+    "cout": "2 h",
+    "risque": "faible : champs additifs, tests de schéma à ajouter"
+   },
+   {
+    "id": "P0-2",
+    "titre": "Refus en JSON et code de sortie distinct (3)",
+    "preuve": "6 refus CLI : stdout 0 octet, code 1 ; refus et erreur confondus ; code 3 absent",
+    "lignes": "tools/drave.py 154-164, 265-272, 310-311 ; tools/bloc_linguistique.py 1012-1017",
+    "cout": "2 h",
+    "risque": "faible : un JSON d'annotation sur stdout, code 3, docs et tests"
+   },
+   {
+    "id": "P0-3",
+    "titre": "Rendre la partition des syntagmes explicite (union → `meta.alternative`)",
+    "preuve": "107 paires / 23 textes ; 85 étiquettes `union` ; 0 conflit après filtrage ; un arbre client casse",
+    "lignes": "tools/bloc_linguistique.py 1099-1156, 1179-1204, 1820-1849",
+    "cout": "0,5–1 j",
+    "risque": "moyen : la déduplication change le F1 et l'attachement ; préférer une alternative étiquetée à une suppression silencieuse"
+   },
+   {
+    "id": "P0-4",
+    "titre": "Réparer les frontières de phrase et la tokénisation (décimaux, URL, emails, chemins, abréviations)",
+    "preuve": "6/46 textes coupés ; 3 fausses questions ; « 12.5 » → 2 phrases ; « 12.03.2024 » → 3 ; `M.` duplique la phrase",
+    "lignes": "tools/bloc_linguistique.py 549-565, 568-587 (surtout 550, 570, 579)",
+    "cout": "0,5–1 j",
+    "risque": "moyen : change le nombre de phrases et les actes ; tests dédiés"
+   }
+  ],
+  "importants": [
+   {
+    "id": "P1-1",
+    "titre": "Cible d'attachement avec offset et désambiguïsation",
+    "preuve": "56/284 cibles apparaissent >1 fois ; 18 mots fermés ; 9 cibles de 1 caractère ; 0 offset",
+    "lignes": "tools/bloc_linguistique.py 1145-1156, 1168-1176, 1195-1203",
+    "cout": "4 h",
+    "risque": "faible : ajout de `cible_debut`/`cible_fin` dans `meta.attachement`"
+   },
+   {
+    "id": "P1-2",
+    "titre": "POS complètes pour nombres et ponctuation",
+    "preuve": "302/1068 tokens sans POS : 257 ponctuation, 45 nombres ; `POS —` sur les chiffres",
+    "lignes": "tools/bloc_linguistique.py 601-623, 1039-1049",
+    "cout": "2 h",
+    "risque": "faible-moyen : `PONCT`/`NUM` à ajouter, vérifier l'exactitude gold"
+   },
+   {
+    "id": "P1-3",
+    "titre": "Langue : éviter les faux labels (`fr` → `it`) et documenter `und`",
+    "preuve": "f33 « Si tu viens, apporte le dessert. » → `it` ; 35/41 fr, 5/5 en, 5 `und`",
+    "lignes": "tools/bloc_linguistique.py 199-224, 273-296, 540-545",
+    "cout": "2 h",
+    "risque": "faible : seuil et mots-outils ; 50 phrases de contrôle"
+   },
+   {
+    "id": "P1-4",
+    "titre": "Garantir au moins un syntagme sur une phrase simple (GN + GV)",
+    "preuve": "4/46 succès sans syntagme, dont « Élodie sourit. » (canonique) ; `SYNTAGMES —`",
+    "lignes": "tools/bloc_linguistique.py 855-1000 (départs 884-999)",
+    "cout": "0,5 j",
+    "risque": "moyen : touche le F1 gold ; mesurer avant/après"
+   },
+   {
+    "id": "P1-5",
+    "titre": "Encodage : UTF-8 invalide, NFD et stdout non UTF-8",
+    "preuve": "UTF-8 mixte → UnicodeEncodeError interne ; NFD → 2 tokens ; stdout ASCII → échec interne",
+    "lignes": "tools/bloc_linguistique.py 144, 549, 1003-1017 ; tools/drave.py 382-384",
+    "cout": "2 h",
+    "risque": "faible : refus `encodage` explicite, NFC pour la tokenisation sans changer les offsets"
+   },
+   {
+    "id": "P1-6",
+    "titre": "Réparer les alternatives mortes `url` et `emoji`",
+    "preuve": "0/1068 tokens `url` ou `emoji` ; `https` → `mot`, emoji → `ponctuation`",
+    "lignes": "tools/bloc_linguistique.py 550",
+    "cout": "30 min",
+    "risque": "faible : ordre des alternatives, tests de tokens"
+   },
+   {
+    "id": "P1-7",
+    "titre": "Compacité et lot : `--compact`, JSONL, `--fichier`/stdin",
+    "preuve": "2,76 Mo pour 10 000 caractères ; 11,5 Mo pour 50 000 ; une invocation = un texte",
+    "lignes": "tools/drave.py 50-52, 329-341",
+    "cout": "0,5–1 j",
+    "risque": "faible : option additive, pas de changement du schéma"
+   },
+   {
+    "id": "P1-8",
+    "titre": "`rejouer` sur une annotation sauvegardée, pas seulement sur un texte",
+    "preuve": "le rejeu d'hier n'est pas possible depuis le CLI ; `rejouer` prend un texte",
+    "lignes": "tools/drave.py 265-287, 357-368",
+    "cout": "4 h",
+    "risque": "faible : `--annotation` + comparaison canonique"
+   },
+   {
+    "id": "P1-9",
+    "titre": "Structurer `candidats` et normaliser `role`",
+    "preuve": "candidats = chaînes « « qui dort » → voisine » ; `predicat` 106 vs `prédicat` 39, `qualite` 17 vs `qualité` 11",
+    "lignes": "tools/bloc_linguistique.py 1147-1156, 1177-1181, 1201-1209 ; 939-942",
+    "cout": "4 h",
+    "risque": "faible : ajout d'objets `{span, cible}` et d'un rôle canonique"
+   }
+  ],
+  "confort": [
+   {
+    "id": "P2-1",
+    "titre": "Document : valeur non tronquée et titre sûr",
+    "preuve": "17/49 valeurs à 60 caractères ; 2 faux titres (chiffres, MAJUSCULES)",
+    "lignes": "tools/bloc_linguistique.py 1222-1236",
+    "cout": "2 h"
+   },
+   {
+    "id": "P2-2",
+    "titre": "Sortie lisible : ligne de phrase et tokens longs",
+    "preuve": "ligne de 10 010 caractères ; `phrase [0:15] déclarative` affiche le type, pas le texte",
+    "lignes": "tools/drave.py 71-75, 86-148 (surtout 119-137)",
+    "cout": "2 h"
+   },
+   {
+    "id": "P2-3",
+    "titre": "`contexte` : l'exposer ou le retirer",
+    "preuve": "46/46 vide ; aucune option CLI ; le champ est mort",
+    "lignes": "tools/bloc_linguistique.py 1237-1239 ; tools/drave.py 329-341",
+    "cout": "1 h"
+   },
+   {
+    "id": "P2-4",
+    "titre": "Figer `trace` et `cout` (clés toujours présentes)",
+    "preuve": "`trace` 2 schémas ; `cout` 3 clés en succès, 1 sur refus API",
+    "lignes": "tools/bloc_linguistique.py 1013-1021, 1246-1252",
+    "cout": "1 h"
+   },
+   {
+    "id": "P2-5",
+    "titre": "Graphème : couvrir les contrôles (newlines, tabs)",
+    "preuve": "f50 : newlines non étiquetés ; couverture graphème < 100 %",
+    "lignes": "tools/bloc_linguistique.py 1025-1037",
+    "cout": "15 min"
+   },
+   {
+    "id": "P2-6",
+    "titre": "Morphème : `valeur` = surface ou documentée normalisée",
+    "preuve": "4/104 morphèmes : « Co » → valeur `co` ; le contrat n'est pas explicite",
+    "lignes": "tools/bloc_linguistique.py 627-638, 1050-1053",
+    "cout": "30 min"
+   },
+   {
+    "id": "P2-7",
+    "titre": "`--version` : version du schéma et commit",
+    "preuve": "`drave 0.1.0` seulement ; pas de commit, pas de schéma",
+    "lignes": "tools/drave.py 43, 324",
+    "cout": "30 min"
+   },
+   {
+    "id": "P2-8",
+    "titre": "Nettoyage : boucle dupliquée de `_verbe_dans`",
+    "preuve": "deux boucles identiques lignes 777-782",
+    "lignes": "tools/bloc_linguistique.py 770-787",
+    "cout": "15 min"
+   }
+  ]
+ },
+ "controle_negatif": {
+  "base": "Le chat dort.",
+  "base_chevauchements": 0,
+  "mutations": [
+   {
+    "nom": "span_hors_texte",
+    "detecte": true
+   },
+   {
+    "nom": "chevauchement_syntagme",
+    "detecte": true
+   },
+   {
+    "nom": "cible_absente",
+    "detecte": true
+   },
+   {
+    "nom": "confiance_hors_bornes",
+    "detecte": true
+   },
+   {
+    "nom": "cle_manquante",
+    "detecte": true
+   },
+   {
+    "nom": "fraction_fausse",
+    "detecte": true
+   },
+   {
+    "nom": "valeur_hors_span",
+    "detecte": true
+   },
+   {
+    "nom": "sans_attachement",
+    "detecte": true
+   },
+   {
+    "nom": "niveau_inconnu",
+    "detecte": true
+   }
+  ],
+  "detectees": 9,
+  "total": 9,
+  "note": "le détecteur n'est pas complaisant ; il ne juge pas la qualité sémantique de la cible, seulement sa présence et ses bornes"
+ },
+ "limites": [
+  "Pas de gold libre : les 50 phrases n'ont pas de vérité sémantique ; on mesure la forme, pas la justesse.",
+  "Banc écrit à la main pour l'audit : 41 fr, 5 en, 4 refus ; il ne remplace pas un corpus aléatoire.",
+  "Une seule machine (Xeon partagé) : les temps varient avec la charge ; les médianes sont plus fiables que les maxima.",
+  "Le module a changé pendant l'audit (correctif non-str/surrogate, c1a08588) ; le banc est postérieur, mais un audit futur doit repartir du hash.",
+  "CLI seulement : les compositions (Parallele, Cascade), le neuronal et les profils UDHR ne sont pas mesurés ici.",
+  "Les 107 paires de chevauchement dépendent du banc ; l'audit A24 en compte 132 sur son propre banc : les deux chiffres ne sont pas comparables.",
+  "Les coûts des correctifs sont des estimations d'ingénieur, pas des mesures."
+ ],
+ "fichiers": [
+  "reports/rapport-fiabilite-produit.md",
+  "reports/pensee-fiabilite-produit.json"
+ ]
+}

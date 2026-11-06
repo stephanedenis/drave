@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 139.2 h |
-| Tours | 180 |
-| Messages | 3075 |
-| Appels d'outils | 2716 |
+| Durée | 140.3 h |
+| Tours | 182 |
+| Messages | 3085 |
+| Appels d'outils | 2721 |
 | Fichiers touchés | 25 |
-| Commandes | 2225 |
+| Commandes | 2228 |
 | Sous-agents | 31 |
-| Commits | 347 |
+| Commits | 348 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -52,6 +52,8 @@
 - **complete** — Autonomie B13 du 2026-11-05 16 h 40 → 2026-11-06 08 h 00 : segmenter l'anglais (le trou de 60 spans sur 94), puis les deux règles de spans avec un gold tenu à l'écart, les 4 échecs d'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantie
 … [236 caractères tronqués]
 - **create** — Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utilisable en autonomie comme premier produi
+… [261 caractères tronqués]
+- **complete** — Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utilisable en autonomie comme premier produi
 … [261 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -415,6 +417,10 @@
 **Tour 179** — push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vise un système utilisable en autonomie comme premier produit.
 
 **Tour 180** — <goal_round> Objective: "Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utilisable en autonomie comme premier produit (entrée CLI, smoke test de bout en bout, documentation d'usage, portes ve … [730 caractères tronqués]
+
+**Tour 181** — Agent 082fe8ca-3e1e-4454-b91b-12586843e880 sent a message:  Audit fiabilité produit terminé. **Deux fichiers neufs, aucun existant modifié, aucun commit** : - `reports/rapport-fiabilite-produit.md` (661 lignes, 39,6 Ko) - `reports/pensee-fiabilite-produit.json` (103,7 Ko : 50 textes + mesures par phrase + robustesse + contrat + schéma + test + correctifs)  **Snapshot.** HEAD `56eb43af`, module `bl … [3165 caractères tronqués]
+
+**Tour 182** — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. Its closing message: ⏵ Clôture : résumé de l'audit et des deux livrables  Audit terminé. **Deux fichiers neufs**, aucun existant modifié, aucun commit :  - [`reports/rapport-fiabilite-produit.md`](reports/rapport-fiabilite-produit.md) — 661 lignes - [`reports/pensee-fiabilite-prod … [2730 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9688,7 +9694,7 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 
 ### Tour 180 — <goal_round> Objective: "Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les t … [1010 caractères tronqués]
 
-*36 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Reconnaissance des tâches restantes
 - sous-agent — POS anglais diagnostic
@@ -9704,11 +9710,93 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - bash — Consigner la nuance cascade_pos
 - bash — Trim T0 et suivre les agents
 - bash — Trim final T0
-- … et 18 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
-⏵ Vérification finale et clôture de la fenêtre
+⏵ Fenêtre 09 h 20 → 12 h close : le produit est debout, documenté et poussé
+
+\## L'objectif
+
+Vous avez demandé : pousser l'état, **prendre le contrôle de toutes les tâches restantes**, les exécuter en sous-agents, viser un **système utilisable en autonomie comme premier produit**, jusqu'à midi. C'est fait, avec une réserve : la file complète a été **inventoriée et classée**, mais seules les tâches **autonomes** ont été exécutées (les autres demandent une décision de coordination).
+
+\## Le produit
+
+```bash
+python3 tools/drave.py analyser "Le chat dort."         # POS, syntagmes, rôles, cibles, acte
+python3 tools/drave.py analyser "…" --langue en --json  # JSON déterministe
+python3 tools/drave.py evaluer                          # POS 75,81 %, F1 58,49 %, attachement 92,89 %
+python3 tools/drave.py rejouer "…"                      # déterminisme vérifié (sha256)
+python3 tools/drave.py --version
+```
+
+- **`tools/drave.py`** v0.1.0, **hors ligne, CPU, déterministe**, codes 0/1/2.
+- **`tools/tests/test_produit.py`** : **8 tests**, 1,4 s (dont 2 de robustesse).
+- **`tools/porte-produit.sh`** : **6 contrôles**, ~2 min — version, fr, en, JSON, rejeu, smoke test, autotest **183/183**.
+- **`docs/produit/README.md`** (370 l.) et **`exemples.md`** (630 l.) : 5 sorties **rejouées 5/5**, dont un cas d'échec connu.
+
+\## Ce que la fenêtre a corrigé
+
+| correctif | preuve |
+|---|---|
+| **`cascade_pos`** : la fusion avec le contrat (0,7465) passe sous l'heuristique (0,7581) → verdict en **plancher 0,70** | `porte-bloc-linguistique` **verte** ; la dégradation de 1,16 pt est documentée, pas cachée |
+| **Autotest parallèle** (`AUTOTEST_JOBS=8`) | **183/183 en 1 min 54** (×2,4) |
+| **Robustesse produit** : surrogate isolé (`UnicodeEncodeError`) et entrées non-str (`AttributeError`) | **fermés** ; `refus="non_texte"`, 8 tests |
+| **`index_reports --help`** réécrivait l'index | `argparse` + `--verifier` ; INDEX **625 → 679** fiches |
+| **Roadmap** : « S n'a aucun verdict humain » | faux — **150 verdicts** + **19** sur les 9 paragraphes |
+| **`plan-travail`** : deux § 9 | le second devient **§ 13** |
+
+\## La file des tâches (A23)
+
+**29 tâches** : **8 autonomes** (exécutées en grande partie), **11 en coordination**, **10 bloquées** ; **18 mentions périmées** corrigées dans les documents. L'audit de fiabilité (A24) a mesuré **50 phrases libres** : **0 plantage**, mais **132 paires de syntagmes qui se chevauchent** (51,9 % des étiquettes, dues au générateur S + l'union) et **18 correctifs**
+… [1282 caractères tronqués]
+
+### Tour 181 — Agent 082fe8ca-3e1e-4454-b91b-12586843e880 sent a message:  Audit fiabilité produit terminé. **Deux fichiers neufs, aucu … [3445 caractères tronqués]
+
+**Synthèse produite :**
+
+⏵ Le second audit de fiabilité livre : deux `UnicodeEncodeError` dans la CLI et le contrat à versionner
+
+\## Ce qu'il ajoute (et qui corrige mon bilan)
+
+Le sous-agent `082fe8ca` a rendu son rapport **après** la clôture de la fenêtre : `reports/rapport-fiabilite-produit.md` (661 l.) + `reports/pensee-fiabilite-produit.json` (103 Ko). Il est **non committé** — je le signale plutôt que de le laisser croire intégré.
+
+**Ce qu'il confirme** : 50 phrases, **0 plantage sur le banc**, 50/50 déterminisme, spans valides, 11 clés racine stables. Temps : **1,0 ms** interne (médiane), **152,7 ms** via la CLI (démarrage ~146 ms), `evaluer` 530 ms.
+
+**Ce qu'il trouve de plus que l'audit A24** — deux **échecs internes hors banc** que je n'avais pas vus :
+- **UTF-8 invalide** mêlé à des lettres → `UnicodeEncodeError` **à l'écriture du JSON** ;
+- **stdout ASCII** → `UnicodeEncodeError` sur le tiret cadratin de l'en-tête.
+
+Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a couvert le surrogate et les entrées non-str, **pas ces deux cas** : le premier est un décodage d'entrée, le second une sortie console contrainte — deux choses différentes.
+
+**Le contrat** : ni `schema` ni `version` dans le JSON, `refus` sans JSON (stdout vide, code 1), cible sans offset, `valeur` non uniforme (295/4 501). Il propose un **schéma v1** à 8 champs obligatoires, un JSON Schema Draft 2020-12 et un test prêt (4 tests à blanc, 9/9 mutations détectées).
+
+**Ses 5 correctifs** : versionner le format (2 h), refus en JSON + code 3 (2 h), partition explicite des syntagmes (0,5–1 j), frontières de phrase (0,5–1 j), cibles offsettées (4 h).
+
+\## L'état réel
+
+- Le produit est **debout, documenté, poussé** (`56eb43af`, `master` = `s/v7`), la porte produit verte, 8 tests.
+- **Ces deux audits de fiabilité ne sont pas committés** : ils arrivent après la fenêtre et je ne les ai ni relus en entier, ni intégrés, ni transformés en correctifs.
+
+\## Ce que je conseille
+
+1. **Committer les deux rapports** (ils sont neufs, sans modification d'existant) et les déclarer dans `reports/README.md` — 10 min.
+2. **Fermer les deux `UnicodeEncodeError`** avant tout usage réel : décodage d'entrée tolérant et sortie console avec `errors="replace"` — c'est le seul point qui fait planter la CLI sur une entrée hostile.
+3. **Adopter le schéma v1** (`schema`/`version` + `refus` en JSON) : c'est ce qui rend le produit utilisable par un client sans casser à chaque changement.
+4. Ensuite seulement, les P0 de qual
+… [104 caractères tronqués]
+
+### Tour 182 — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. I … [3010 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Vérifier les deux rapports d'audit
+- bash — Déclarer les rapports et vérifier
+- bash — Committer les rapports et pousser
+
+**Synthèse produite :**
+
+⏵ Je commite les deux rapports d'audit (livrables non suivis) et je les déclare dans les fiches
 
 ## 3. Travail accompli
 
@@ -9818,7 +9906,7 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2185 autres
+- … et 2188 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10313,4 +10401,5 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - DOCS — LE README DES FICHES DANS LE BUDGET T1 (LIGNES ANCIENNES RACCOURCIES)" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --fo
 - INDEX — RÉGÉNÉRÉ APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
 - INDEX — RÉGÉNÉRÉ (679 FICHES) APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log
+- AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0" -- reports/rapport-fiabilite-produit
 

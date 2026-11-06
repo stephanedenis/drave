@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité hors gold : 0 plantage sur 50 phrases, contrat non versionné, 2 `UnicodeEncodeError` |
 | [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — robustesse produit : surrogate et non-str fermés, 8 tests |
 | [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) | **B13** — audit de fiabilité (A24) : temps, contrat, 18 correctifs |
 | [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — outillage : `--aide` sans écriture, index 625 → **677** |
@@ -148,7 +149,6 @@
 | [`rapport-native-21m-20k.md`](rapport-native-21m-20k.md) | **N2.9** — 21,63 M, 20 000 pas : PPL **3,381**, pire que 11,47 M (**3,123**) |
 | [`rapport-native-distillation-20k.md`](rapport-native-distillation-20k.md) | **N2.8** — 20 000 pas : PPL **3,123** contre **3,295**, précision **67,96 %**, gap **+0,768** |
 | [`rapport-native-ppl-2k.md`](rapport-native-ppl-2k.md) | **N0.14** — PPL native **1 996 octets** : **54,0379** vs **54,0343** Python |
-| [`rapport-native-ppl-corpus.md`](rapport-native-ppl-corpus.md) | **N0.13** — PPL native sur **1 076 octets** : **18,6394** vs **18,6395** Python |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

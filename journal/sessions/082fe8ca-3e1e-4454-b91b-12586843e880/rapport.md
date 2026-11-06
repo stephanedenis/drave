@@ -7,12 +7,12 @@
 | Identifiant | `082fe8ca-3e1e-4454-b91b-12586843e880` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.7 h |
+| Durée | 1.7 h |
 | Tours | 1 |
-| Messages | 39 |
-| Appels d'outils | 54 |
-| Fichiers touchés | 2 |
-| Commandes | 45 |
+| Messages | 118 |
+| Appels d'outils | 144 |
+| Fichiers touchés | 6 |
+| Commandes | 101 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [1945 caractères tronqués]
 
-*54 appels d'outils.* Actions notables :
+*144 appels d'outils.* Actions notables :
 
 - bash — Check working directory and git status
 - bash — List repo root and reports directory
@@ -41,11 +41,31 @@
 - bash — Inspect existing JSON structure
 - bash — Probe CLI edge cases and exit codes
 - bash — Probe URL tokenization and phrase spans
-- … et 34 autres
+- … et 114 autres
 
 **Synthèse produite :**
 
-⏵ Inventaire du contrat de sortie (clés, types, valeurs vides)
+⏵ Clôture : résumé de l'audit et des deux livrables
+
+Audit terminé. **Deux fichiers neufs**, aucun existant modifié, aucun commit :
+
+- [`reports/rapport-fiabilite-produit.md`](reports/rapport-fiabilite-produit.md) — 661 lignes
+- [`reports/pensee-fiabilite-produit.json`](reports/pensee-fiabilite-produit.json) — 103,7 Ko (50 textes, mesures par phrase, robustesse, contrat, schéma, test, correctifs)
+
+**Snapshot mesuré** : HEAD `56eb43af`, module `bloc_linguistique.py` git `c1a08588` / sha256 `084517d9`, `drave.py` sha256 `59a06f3e`. HEAD a bougé pendant l'audit (`6ef2a3f5` → `56eb43af`) ; le module a reçu à 11 h 34 le correctif non-str/surrogate (`c1a08588`), le banc a tourné à 11 h 40 après ce correctif ; `drave.py` n'a pas changé.
+
+**50 phrases libres** (41 fr dont 1 de 2 144 car., 5 en, 4 refus) :
+- **0 plantage**, **0 JSON invalide**, **0 sortie vide sur succès**, **0 span hors texte/vide**, **0 clé manquante**, **0 cible absente du texte**, **50/50 déterminisme**, 0 `stderr` sur succès.
+- **4 refus** : code 1, stdout 0 octet, message `vide` ; **4/46 succès sans aucun syntagme** (dont « Élodie sourit. »), **1/46 sans POS** (chiffres).
+- **23/46 textes** avec chevauchement de syntagmes (**107 paires**, 85 `meta.union`, 0 conflit après filtrage union ; 28/46 avec les mêmes-span multi-label).
+- **302/1068 tokens sans POS** (257 ponctuation, 45 nombres) ; **18/284 cibles mots fermés**, **56/284 cibles ambiguës**, **0 offset de cible** ; **6/46 frontières de phrase cassées**, **3 fausses questions**.
+- **Temps CLI** : 136,8–226,6 ms, médiane **152,7 ms** (démarrage ~146 ms) ; **interne** : 0,2–45,1 ms, médiane **1,0 ms**. **10 k** : 590–765 ms CLI, 331,6 ms interne, 2,76 Mo de JSON ; **50 k** : 5,44 s, 11,5 Mo.
+- **Hors banc, 2 échecs internes** : UTF-8 invalide mêlé à des lettres (`UnicodeEncodeError` à l'écriture JSON) et stdout ASCII. NFD → tokens coupés, 0 syntagme. Codes 3/4 absents.
+
+**Contrat** : 11 clés racine + 11 par étiquette stables (46/46, 4501/4501), mais **ni `schema` ni `version`**, **refus sans JSON**, **cible sans offset**, `meta`/`candidats`/`trace`/`cout` à schéma variable, `valeur` non uniforme sur 295/4501. Le schéma v1 proposé a **8 champs obligatoires** (`schema`, `version`, `texte`, `langue`, `script`, `refus`, `etiquettes`, `unites_semantiques`) + JSON Schema 2020-12 + test complet prêt pour `tools/tests/test_schema_produit.py` (essai à blanc : 4 tests OK, classe v1 sautée). Contrôle négatif : **9 mutations, 9/9 détectées**.
+
+**5 corr
+… [490 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -55,6 +75,10 @@
 |---|---|---|
 | `/tmp/audit_cli.py` | 1 | 0 |
 | `/tmp/audit_cli_detail.py` | 1 | 0 |
+| `/tmp/test_schema_produit.py` | 1 | 0 |
+| `/tmp/audit_robustesse_final.py` | 1 | 0 |
+| `/tmp/build_json_report.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fiabilite-produit.md` | 1 | 19 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +122,7 @@
 - **T1** Retest surrogate CLI and non-str API after fix
 - **T1** Run detailed overlap/target analysis
 - **T1** Fix refusal handling and rerun detail analysis
-- … et 5 autres
+- … et 61 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -188,6 +212,20 @@
 - **T1** `('evaluer', '--gold', '--json') rc 0 ms 600.4 bytes 2735 err`
 - **T1** `('evaluer',) rc 0 ms 545.6 bytes 636 err`
 - **T1** `('evaluer', '--gold') rc 0 ms 577.0 bytes 624 err`
+- **T1** `scale 1000 chars 27.48 ms labels 1042 json_bytes 228118`
+- **T1** `scale 2000 chars 37.5 ms labels 2077 json_bytes 455423`
+- **T1** `scale 5000 chars 125.02 ms labels 5187 json_bytes 1129928`
+- **T1** `scale 10000 chars 331.56 ms labels 10362 json_bytes 2263467`
+- **T1** `scale 20000 chars 1025.66 ms labels 20719 json_bytes 4593108`
+- **T1** `scale 50000 chars 5438.9 ms labels 51792 json_bytes 11518138`
+- **T1** `no-space 1000 21.81 ms labels 7`
+- **T1** `no-space 10000 9.85 ms labels 7`
+- **T1** `no-space 50000 51.94 ms labels 7`
+- **T1** `langue=und script=Zyyy source=heuristique · 6 étiquettes · unités sémantiques=0 (0.0% du texte)`
+- **T1** `langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)`
+- **T1** `langue=und script=Latn source=heuristique · 26 étiquettes · unités sémantiques=2 (50.0% du texte)`
+- **T1** `langue=und script=Latn source=heuristique · 55 étiquettes · unités sémantiques=5 (49.0% du texte)`
+- **T1** `158:`evaluer` coûte **530–543 ms** ; `rejouer` **146–149 ms**. Les cinq textes les plus lents en CLI`
 
 ## 5. Erreurs rencontrées
 
