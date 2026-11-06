@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **3 session(s)** · **5 thème(s)**
+**13 commits** · **3 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 4 | [distribue.md](distribue.md) |
+| distribue | 5 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -41,6 +41,7 @@
 | 02:02 | `2fc19487` | DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE) |
 | 03:39 | `2cfabd96` | SESSION — LE MANDAT E181CE02 RAFRAÎCHI : HEARTBEAT 03 h 45, PROCHAINE ACTION NETTE, 222/222 EN NOTE |
 | 03:41 | `ea7d3275` | PORTES — LA PASSE COMPLÈTE DU 06/11 CONSIGNÉE : 79 VERTES / 4 ROUGES (2 STRUCTURELLES, SESSIONS D'AUTRUI, CASCADE_POS DOCUMENTÉE) |
+| 03:44 | `b578f95b` | DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1) |
 
 ## Le récit de la journée (écrit à la main)
 

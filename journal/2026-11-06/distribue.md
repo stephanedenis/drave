@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 00:12 | `68a8717b` | JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES) | `README.md`, `distribue.md`, `README.md` (+8) |
 | 01:59 | `b15daee7` | DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1 | `references-non-regression.md`, `README.md`, `portes.md` (+5) |
 | 02:02 | `2fc19487` | DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE) | `references-non-regression.md`, `README.md`, `distribue.md` (+7) |
+| 03:44 | `b578f95b` | DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1) | `references-non-regression.md`, `README.md`, `distribue.md` (+8) |
 
 ## Chiffres du jour
 

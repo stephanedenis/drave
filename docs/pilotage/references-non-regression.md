@@ -1,8 +1,7 @@
 # Références de non-régression
 
-> **Passe — 2026-11-06 01 h 28 → 03 h 44 :** **83 portes, 79 vertes, 4 rouges**
-> (`work/portes-1106-01h28`) : `indice` et `melange` (structurelles), `bloc-linguistique`
-> (`cascade_pos`, voir la ligne), `sessions` (mandats périmés).
+> **Passe — 2026-11-06 :** **83 portes, 79 vertes, 4 rouges** — `indice`, `melange` (structurelles),
+> `bloc-linguistique` (`cascade_pos`), `sessions` (mandats).
 
 > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
 > 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**

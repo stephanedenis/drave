@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 131.1 h |
 | Tours | 177 |
-| Messages | 2931 |
-| Appels d'outils | 2584 |
+| Messages | 2933 |
+| Appels d'outils | 2586 |
 | Fichiers touchés | 25 |
-| Commandes | 2121 |
+| Commandes | 2122 |
 | Sous-agents | 25 |
-| Commits | 315 |
+| Commits | 316 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*343 appels d'outils.* Actions notables :
+*345 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,7 +9514,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 268 autres
+- … et 269 autres
 
 **Synthèse produite :**
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2081 autres
+- … et 2082 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10085,4 +10085,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - SESSION — LE MANDAT E181CE02 RAFRAÎCHI : HEARTBEAT 03 h 45, PROCHAINE ACTION NETTE, 222/222 EN NOTE" -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/pl
 - PORTES — LA PASSE COMPLÈTE DU 06/11 CONSIGNÉE : 79 VERTES / 4 ROUGES (2 STRUCTURELLES, SESSIONS D'AUTRUI, CASCADE_POS DOCUMENTÉE)" -- docs/pilotage/references-n
 - DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1)" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "EN DE
+- DOCS — LA PASSE DU 06/11 EN UNE LIGNE" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "EN UNE LIGNE"; then
 

@@ -49673,3 +49673,23 @@ ven 06 nov 2026 03:44:07 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Passe complète — 2026-11-06 01 h 28 → 03 h 44 :** **83 portes, 79 vertes, 4 rouges**\n> (journaux  … [1219 caractères tronqués]`
+
+  ```
+· docs/pilotage/references-non-regression.md : 2525 mots > budget 2500 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-2639]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2639", "timeout_ms": 600000, "wait": true}`
+
+  ```
+11 files changed, 48 insertions(+), 25 deletions(-)
+COMMIT OK 1
+b578f95b DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1)
+ven 06 nov 2026 03:46:31 EST
+36
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Passe — 2026-11-06 01 h 28 → 03 h 44 :** **83 portes, 79 vertes, 4 rouges**\n> (`work/portes-1106- … [830 caractères tronqués]`
