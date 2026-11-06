@@ -2910,3 +2910,63 @@ verdict cascade_po
 message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('eval_head.json'))\nprint('appels',d['cascade'].get('appels_neuronal'))\nprint('ok',d['ok'],'cascade_pos',d['verdict']['cascade_pos'])\nprint('compare', {k:(d['cascade']['all'][k] if k!='attachement' else d['cas … [127 caractères tronqués]`
+
+  ```
+appels 1676
+ok True cascade_pos True
+compare {'pos': {'exactitude': 0.7465, 'exactitude_ferme': 0.9004, 'exactitude_ouvert': 0.6007, 'tokens': 3179, 'confusions': {'ADJ': {'ADJ': 50, 'NOUN': 80, 'VERB': 4}, 'ADV': {'ADV': 117, 'NOUN': 20, 'PREP': 2, 'ADJ': 1, '?': 1}, 'AUX': {'PREP': 4, 'AUX': 118, '?': 3, 'NOUN': 3}, 'CONJ': {'CONJ': 44, 'PRON': 25, 'DET': 12, '?': 13, 'PREP': 2, 'NOUN': 2}, 'DET': {'DET': 586, '?': 2}, 'NOUN': {'NOUN': 617, 'ADJ': 17, 'VERB': 47, '?': 1}, 'NUM': {'NUM': 2}, 'PONCT': {'?': 25}, 'PREP': {'PREP': 114}, 'PRON': {'PRON': 411, 'NOUN': 8, '?': 30, 'DET': 25, 'CONJ': 1}, 'VERB': {'VERB': 314, 'NOUN': 447, 'ADJ': 5, 'PREP': 2, '?': 16, 'AUX': 7, 'ADV': 1}}}, 'syntagme': {'precision': 0.7283, 'rappel': 0.5309, 'f1': 0.6141, 'tp': 989, 'fp': 369, 'fn': 874, 'tete': {'precision': 0.8814, 'rappel': 0.6425, 'f1': 0.7432, 'tp': 1197, 'fp': 161, 'fn': 666}}}
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\n\n# dispositif\nold='''        \"gold\": \"evaluer_gold.charger() + evaluer_bloc ; gold_split.dev/test ; module tools/bloc_linguistique.py au commit fa1b0c6e.\",'''\nnew= … [3470 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 42, in <module>
+AssertionError
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && grep -n \"chiffres.*222/222\\|cascade_pos.*rouge\\|P0-4\\|rouge_fa1b0c6e\\|head_au\" construire_json.py | head -20", "description": "Repérer les passages à patcher"}`
+
+  ```
+173:    {"id": "P0-4", "severite": "bloquant",
+333:        "lecture": "cascade_pos est rouge parce que la fusion mélange le POS du mock (0,3454) ; par ailleurs Parallele et Cascade ont exactement les chiffres de la déduplication simulée (F1 0,6141, 208/208, couverture 0,8703).",
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && grep -n \"vivant 612\\|gelé 602\\|limites\" construire_json.py | head -20 && sed -n '395,430p' construire_json.py", "description": "Lire la section limites du constructeur"}`
+
+  ```
+58:# ------------------------------------------------------------------ cas limites
+60:for c in raw["cas_limites"]["cas"]:
+67:hors_type = raw["cas_limites"]["hors_type"]
+204:     "preuve": "42/53 valeurs document font 60 caractères (paragraphe tronqué) ; x48 (chinois) et 4 cas limites (arabe, hébreu, japonais, chiffres) sont étiquetés titre parce que upper() == lower() sur les scripts sans casse.",
+301:    "objet": "Audit de fiabilité produit du bloc linguistique : robustesse hors gold (50 phrases libres), performance, stabilité du contrat, cas limites, compositions et liste de correctifs chiffrés.",
+302:    "verdict": "⚠️ utilisable en surface (graphème, mot, POS fermées, phrase, document) sur du français/anglais propre ; fragile en structure (syntagmes qui se chevauchent, frontières de phrase, compositions, langue). 0 plantage sur 50 phrases, mais 34/50 avec au moins une anomalie de contrat et 1 plantage sur 25 cas limites.",
+394:    "cas_limites": {
+420:    "limites": [
+        "total": len(cas), "crashes": sum(1 for x in cas if x["crash"]),
+        "cas": cas, "hors_type": hors_type,
+        "lecture": "un seul plantage textuel : un surrogate isolé (UnicodeEncodeError à len(tex
+… [2543 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\n\nold='''        \"gold\": \"evaluer_gold.charger() + evaluer_bloc ; gold_split.dev/test ; module tools/bloc_linguistique.py au commit fa1b0c6e.\",'''\nnew='''        \"g … [3844 caractères tronqués]`
+
+  ```
+patched
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json 82851 octets
+JSON VALIDE
+{
+ "rouge_fa1b0c6e": "cascade_pos",
+ "verdict_cascade_pos_fa1b0c6e": false,
+ "ok_fa1b0c6e": false,
+ "verdict_cascade_pos_head": true,
+ "ok_head": true,
+ "note_verdict": "À HEAD (7f73c17f), evaluer_gold remplace la comparaison par un plancher 0,70 : cascade_pos passe à vrai et ok à vrai, sans changement du module ni des valeurs. La baisse de POS de la composition (0,7465 contre 0,7581) reste mesurée."
+}
+6ef2a3f5 7f73c17f : cascade_pos >= 0,70 au lieu de cascade >= heuristique
+Le verdict cascade_pos a changé à HEAD (7f73c17f : plancher 0,70 au lieu de la comparaison à l'heuristique) : ok passe de faux à vrai sans changement du module ni des valeurs. Le rouge de l'état fourni est éteint par le harnais, pas par un correctif ; la baisse de POS de la composition reste mesurée (0,7465 contre 0,7581).
+  ```
+

@@ -51664,3 +51664,25 @@ Agent 14114f3d-ae0d-416e-ad8e-4d4eaa04c36c sent a message:
 Point d'état important (audit produit bloc L, en cours) : HEAD a avancé pendant l'audit, de `fa1b0c6e` à `6ef2a3f5`. Le module `tools/bloc_linguistique.py` est **inchangé** (git diff vide), donc mes mesures restent valides. En revanche `tools/tests/linguistique/evaluer_gold.py` a changé dans `7f73c17f` : le verdict `cascade_pos` n'est plus `cascade >= heuristique` (0,7465 < 0,7581) mais un **plancher 0,70**. Rejoué à HEAD : `ok=True`, `cascade_pos=True`, valeurs identiques (POS cascade 0,7465 ; heur 0,7581 ; F1 0,5849 ; couverture 0,9289). Le rouge a donc été **éteint par le seuil, pas par un correctif du comportement** : la composition dégrade toujours le POS de 1,16 point. Je corrige la fiche et le JSON pour distinguer `fa1b0c6e` (rouge) et HEAD (vert par plancher), et je le signale dans les limites. À noter pour la suite : ne pas présenter `cascade_pos` comme un problème résolu côté qualité.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/index_reports.py reports/INDEX.md docs/pilotage/plan-travail.md reports/rapport-outillage-index.md reports/pensee-outillage-index.json reports/README.md docs/pilotage/en-cours.md\n  timeout 240 git … [541 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-3124]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3124", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-outillage-index.json
+ create mode 100644 reports/rapport-outillage-index.md
+COMMIT OK 1
+e3db2cc8 OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13
+ven 06 nov 2026 11:22:24 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la nuance honnête sur `cascade_pos` : la porte est verte par plancher, la fusion dégrade encore
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"| `porte-bloc-linguistique.sh` | 17 s | ✅ porte bloc linguistique verte (`cascade_pos` : plancher 0,70 … [1329 caractères tronqués]`

@@ -458,3 +458,154 @@ fba3072a ÉTAT — T0 DANS LE BUDGET APRÈS LA FILE DES TÂCHES
 … [17577 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture des tests produit et de la porte existante
+
+- **bash** `{"command": "ls tools/tests/ | head -30; echo ---; sed -n 1,120p tools/tests/test_produit.py 2>/dev/null; echo ---; sed -n 1,80p tools/porte-produit.sh", "description": "Read product test and gate"}`
+
+  ```
+code
+documents
+linguistique
+maths
+__pycache__
+qualifier_politique_drvm.py
+qualifier_porte_bouge_drvm.py
+qualifier_porte_drvm.py
+qualifier_porte_fenetre_drvm.py
+qualifier_porte_minute_drvm.py
+qualifier_porte_mobile_drvm.py
+qualifier_porte_sto_drvm.py
+qualifier_porte_sto_graines.py
+tableaux
+test_pensee_politique.py
+test_pensee_store.py
+test_produit.py
+---
+"""test_produit.py — le smoke test de bout en bout du point d'entrée `tools/drave.py`.
+
+Huit assertions, deux phrases (fr/en), le déterminisme et les codes de sortie. Le test passe
+aussi bien par `python3 tools/tests/test_produit.py` que par `pytest` : il n'importe rien du
+dépôt directement, il lance la commande comme un utilisateur.
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+import re
+import subprocess
+import sys
+import unittest
+
+RACINE = pathlib.Path(__file__).resolve().parents[2]
+CLI = RACINE / "tools" / "drave.py"
+
+
+def drave(*arguments: str) -> subprocess.CompletedProcess[str]:
+    """Lance la commande depuis la racine du dépôt, en UTF-8, sans réseau."""
+    return subprocess.run(
+        [sys.executable, str(CLI), *arguments],
+        cwd=str(RACINE),
+        capture_output=True,
+        text=True,
+    
+… [5380 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls tools/tests/linguistique/ 2>/dev/null; echo ---; python3 tools/drave.py --version; echo \"exit=$?\"", "description": "List linguistic tests and check CLI version"}`
+
+  ```
+anaphore.py
+classement_cible.py
+evaluer_gold.py
+gold_gele.json
+gold.json
+gold.py
+gold_reel.json
+gold_reel.py
+gold_split.py
+gold_synthetique.json
+gold_synthetique.py
+juge.py
+miroir.py
+__pycache__
+qualifier_cascade.py
+qualifier_frontiere_71.py
+qualifier_lien_appris.py
+qualifier_neuronal.py
+qualifier_pragmatique.py
+qualifier_quatre_modes.py
+qualifier_syntagmes.py
+replis_cible.py
+test_bloc_linguistique.py
+---
+drave 0.1.0
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de deux rapports récents pour caler le format
+
+- **bash** `{"command": "ls reports/ | grep -i -E \"produit|fia|audit\" | head -20; echo ---; head -c 2500 reports/pensee-produit-bloc-l.json 2>/dev/null", "description": "List product reports and inspect JSON format"}`
+
+  ```
+a80-audit-final.json
+b1110-audit.json
+pensee-audit-attachement.json
+pensee-audit.json
+pensee-audit-r1r3.json
+pensee-audit-v10.json
+pensee-audit-v2.json
+pensee-audit-v7.json
+pensee-produit-bloc-l.json
+pensee-produit-v0.json
+r06-cascade-confiance.json
+rapport-a80-audit-final.md
+rapport-audit-attachement.md
+rapport-audit-r1r3.md
+rapport-audit-v10.md
+rapport-audit-v2.md
+rapport-audit-v7.md
+rapport-b1110-audit.md
+rapport-hebbien-produits.md
+rapport-pensee-audit.md
+---
+{
+ "rapport": "produit-bloc-l",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+ "date": "2026-11-06",
+ "objet": "Audit de fiabilité produit du bloc linguistique : robustesse hors gold (50 phrases libres), performance, stabilité du contrat, cas limites, compositions et liste de correctifs chiffrés.",
+ "verdict": "⚠️ utilisable en surface (graphème, mot, POS fermées, phrase, document) sur du français/anglais propre ; fragile en structure (syntagmes qui se chevauchent, frontières de phrase, compositions, langue). 0 plantage sur 50 phrases, mais 34/50 avec au moins une anomalie de contrat et 1 plantage sur 25 cas limites.",
+ "dispositif": {
+  "gold": "evaluer_gold.charger() + evalue
+… [1744 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -80 reports/rapport-produit-bloc-l.md 2>/dev/null; echo ===; head -50 reports/rapport-audit-v10.md 2>/dev/null", "description": "Inspect recent report markdown styles"}`
+
+  ```
+# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Date** : 2026-11-06 ·
+> **Verdict** : ⚠️ **la surface est utilisable en autonomie ; la structure ne l'est pas encore.**
+> **Aucun fichier existant modifié par cet audit ; aucun commit.** Sorties : ce rapport et
+> [`pensee-produit-bloc-l.json`](pensee-produit-bloc-l.json).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`gold_split.py`](../tools/tests/linguistique/gold_split.py) ; **50 phrases libres** écrites pour
+> l'audit (textes dans le JSON) ; harnais local non committé dans `/tmp/audit_produit_bl`.
+> **Porte** : `bash tools/porte-bloc-linguistique.sh` → **verte** (16 tests, autotest UDHR
+> **0,9687**, profils permutés **0,0022**).
+
+**En une phrase.** Sur 50 phrases libres, le bloc **ne plante pas**, **ne refuse pas**, **ne rend
+jamais une sortie vide** et garde **tous les offsets** ; mais **34/50 textes** portent au moins une
+anomalie, do
+… [7811 caractères tronqués]
+  ```
+

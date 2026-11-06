@@ -524,3 +524,51 @@ cascade synthetique pos 0.7253 ferme 0.9449 ouvert 0.5855 tok 699
 … [1928 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Writing the English POS diagnostic script in /tmp
+
+- **bash** `{"command": "mkdir -p /tmp/qpos && cat > /tmp/qpos/diag.py <<'EOF'\nimport json, pathlib, sys, collections, zlib\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RAC/'tools'))\nsys.path.insert(0, str(RAC/'tools/tests/linguistique'))\nimport bloc_linguist … [3186 caractères tronqués]`
+
+  ```
+EN tokens: 1148 erreurs: 270 taux: 0.7648
+
+== matrice de confusion (en) ==
+or\pred ['ADJ', 'ADV', 'AUX', 'CONJ', 'DET', 'NOUN', 'NUM', 'PONCT', 'PREP', 'PRON', 'VERB']
+ADJ   n=  40 ok=  24 (60.0%)  NOUN:12  VERB:4
+ADV   n=  34 ok=  17 (50.0%)  NOUN:15  PREP:1  ?:1
+AUX   n=  61 ok=  60 (98.4%)  NOUN:1
+CONJ  n=  36 ok=  22 (61.1%)  DET:12  NOUN:2
+DET   n= 213 ok= 213 (100.0%)  
+NOUN  n= 248 ok= 238 (96.0%)  ADJ:5  VERB:5
+NUM   n=   1 ok=   1 (100.0%)  
+PONCT n=   3 ok=   0 (0.0%)  ?:3
+PREP  n=  43 ok=  43 (100.0%)  
+PRON  n= 200 ok= 177 (88.5%)  DET:14  NOUN:8  CONJ:1
+VERB  n= 269 ok=  83 (30.9%)  NOUN:176  ADJ:5  AUX:4  ?:1
+
+== classes ouvertes vs fermees (en) ==
+fermé n= 588 ok= 533 taux= 0.9065
+ouvert n= 557 ok= 345 taux= 0.6194
+hors classes: Counter({'PONCT': 3})
+
+== part des erreurs par classe gold ==
+VERB   186 (68.9%)
+PRON    23 (8.5%)
+ADV     17 (6.3%)
+ADJ     16 (5.9%)
+CONJ    14 (5.2%)
+NOUN    10 (3.7%)
+PONCT    3 (1.1%)
+AUX      1 (0.4%)
+
+== top 30 formes mal taguées (en) ==
+'that'             CONJ ->DET    12
+'that'             PRON ->DET    11
+'leave'            VERB ->NOUN    7
+'sings'            VERB ->NOUN    6
+'where'            PRON ->NOUN    6
+'writes'           VE
+… [878 caractères tronqués]
+  ```
+

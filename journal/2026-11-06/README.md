@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**31 commits** · **9 session(s)** · **5 thème(s)**
+**32 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,6 +15,7 @@
 | docs | 5 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
+| outils | 1 | [outils.md](outils.md) |
 | portes | 9 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -22,7 +23,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `082fe8ca-3e1e-4454-b91b-12586843e880` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 0.1 h | [rapport](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/rapport.md) · [digest](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/digest.md) |
-| `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.8 h | [rapport](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md) · [digest](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md) |
+| `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.9 h | [rapport](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md) · [digest](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md) |
 | `1555bdd3-27e9-4779-b1e7-716e32399c11` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.5 h | [rapport](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/rapport.md) · [digest](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/digest.md) |
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
@@ -66,6 +67,7 @@
 | 10:54 | `f6c8132b` | A23 — LES 6 CORRECTIONS FACTUELLES DE LA FILE (GOLD 200+ = 13 OCCURRENCES, PASSES 2 H 11 À 2 H 29) ; T0 DANS LE BUDGET |
 | 11:06 | `7f73c17f` | PRODUIT — LA DOC D'USAGE ET LES 5 EXEMPLES VÉRIFIÉS (5/5 REJOUÉS) ; CASCADE_POS N'EST PLUS UNE ROUGE (PLANCHER 0,70) |
 | 11:12 | `6ef2a3f5` | JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f) |
+| 11:20 | `e3db2cc8` | OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13 |
 
 ## Le récit de la journée (écrit à la main)
 
