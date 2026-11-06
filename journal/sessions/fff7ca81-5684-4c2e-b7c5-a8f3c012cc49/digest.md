@@ -401,3 +401,624 @@ f908d7b0 B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763,
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_candidats_precedent\\|_verbes_proches\\|candidats\" tools/bloc_linguistique.py | head -80", "description": "Locate candidate functions in bloc_linguistique.py"}`
+
+  ```
+7:    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+19:`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script` et ses `candidats`.
+76:    candidats: list[str] = field(default_factory=list)
+86:            "candidats": list(self.candidats), "langue": self.langue,
+680:    def _candidats_precedent(texte: str, segment: dict, precedent: dict | None) -> list[str]:
+681:        """Les candidats que le **précédent** impose : l'antécédent d'une REL, le verbe d'une SUB."""
+826:    def _verbes_proches(texte: str, segment: dict, gvs: list[dict],
+829:        """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
+923:                                     "texte": texte[d:mots[j - 1][1]], "candidats": []})
+944:                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+960:                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+976:                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+1020:                                            candidats=[] if not ouvert else [classe.lower()],
+1027:                                                self.nom
+… [1977 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Heuristique\\|def analyser\\|def _tete_nom\\|def _cible_proche\\|VERBES_CONNUS\\|def _est_verbe\" tools/bloc_linguistique.py | head -40", "description": "Locate class and helpers"}`
+
+  ```
+133:    def analyser(self, texte: str, langue: str | None = None,
+387:VERBES_CONNUS = set("""
+478:def _est_verbe(mot: str) -> bool:
+483:    if n in VERBES_CONNUS:
+488:        if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
+492:        if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
+522:class Heuristique:
+753:    def _tete_nom(texte: str, debut: int, fin: int) -> str | None:
+791:    def _cible_proche(texte: str, segment: dict, gvs: list[dict],
+983:    def analyser(self, texte: str, langue: str | None = None,
+1256:    def analyser(self, texte: str, langue: str | None = None,
+1325:    def analyser(self, texte: str, langue: str | None = None,
+1435:    def analyser(self, texte: str, langue: str | None = None,
+1569:    def analyser(self, texte: str, langue: str | None = None,
+1661:    def analyser(self, texte: str, langue: str | None = None,
+1739:    def analyser(self, texte: str, langue: str | None = None,
+1922:    def analyser(self, texte: str, langue: str | None = None,
+1950:    def analyser(self, texte: str, langue: str | None = None,
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 620, "limit": 280}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+620:         return ("NOUN" if (n and n[0].islower()) else "MOT"), True, 0.3
+621: 
+622:     # -- morphèmes ----------------------------------------------------------
+623:     @staticmethod
+624:     def _morphemes(mot: str) -> list[tuple[str, int, int, str]]:
+625:         n = _normaliser(mot)
+626:         sortie = []
+627:         for suf in SUFFIXES:
+628:             if len(n) > len(suf) + 2 and n.endswith(suf):
+629:                 sortie.append(("suffixe", len(mot) - len(suf), len(mot), suf))
+630:                 break
+631:         for pre in PREFIXES:
+632:             if len(n) > len(pre) + 2 and n.startswith(pre):
+633:                 sortie.append(("préfixe", 0, len(pre), pre))
+634:                 break
+635:         return sortie
+636: 
+637:     # -- syntagmes ----------------------------------------------------------
+638:     def _syntagmes_s(self, texte: str) -> list[dict] | None:
+639:         if not self.segmenter_s:
+640:             return None
+641:         try:
+642:             if str(RACINE / "tools/structures") not in sys.path:
+643:                 sys.path
+… [14105 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 240, "offset": 983}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+983:     def analyser(self, texte: str, langue: str | None = None,
+984:                  contexte: str | None = None) -> Annotation:
+985:         t0 = time.perf_counter()
+986:         texte = texte or ""
+987:         trace: list[dict] = []
+988:         if not texte.strip() or not any(ch.isalpha() or ch.isdigit() for ch in texte):
+989:             return Annotation(texte=texte, refus="vide", source=self.nom,
+990:                               trace=[{"etape": "refus", "raison": "vide"}],
+991:                               cout={"octets": len(texte.encode()), "duree_s": round(time.perf_counter() - t0, 6)})
+992: 
+993:         lg, conf_lg, script = self._langue(texte, langue)
+994:         trace.append({"etape": "langue", "langue": lg, "script": script, "confiance": conf_lg,
+995:                       "indice": langue or ""})
+996:         etiquettes: list[Etiquette] = []
+997:         unites: list[Span] = []
+998: 
+999:         # 1. graphème — des plages de classes, pas un caractère par étiquette
+1000:         classes = {"L": "lettres", "N": "chiffres", "P": "ponctuation", "
+… [15703 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de l'évaluation de référence pour vérifier l'état (177/239)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/tests/linguistique/evaluer_gold.py 2>&1 | tail -30", "description": "Run baseline gold evaluation", "timeoutMs": 600000}`
+
+  ```
+"taux": 1.0
+    },
+    "nom": {
+     "cibles": 63,
+     "justes": 63,
+     "taux": 1.0
+    },
+    "couverture": 0.8243,
+    "par_langue": {
+     "fr": {
+      "cibles": 151,
+      "labels": 114,
+      "exact": 114,
+      "topk": 106,
+      "exact_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 88,
+      "labels": 83,
+      "exact": 83,
+      "topk": 57,
+      "exact_taux_span": 1.0
+     }
+    }
+   },
+   "attachement_tete": {
+    "cibles": 197,
+    "labels": 197,
+    "top1": 19
+heuristique all: {"pos": {"exactitude": 0.7581, "exactitude_ferme": 0.9004, "exactitude_ouvert": 0.6234, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 20, "PREP": 2, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 311, "NOUN": 450, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6157, "rappel": 0.53
+… [324 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'tools/tests/linguistique')\nimport evaluer_gold as eg\nimport bloc_linguistique as bl\nphrases = eg.charger()\nh = bl.Heuristique()\nr = eg.evaluer_bloc('heuristique', h, phrases … [146 caractères tronqués]`
+
+  ```
+{
+ "cibles": 239,
+ "labels": 212,
+ "top1": 212,
+ "topk": 177,
+ "exact": 212,
+ "top1_taux": 0.887,
+ "topk_taux": 0.7406,
+ "exact_taux": 0.887,
+ "exact_any": 212,
+ "exact_any_taux_span": 1.0,
+ "top1_taux_span": 1.0,
+ "topk_taux_span": 0.8349,
+ "topk_exact": 177,
+ "topk_exact_taux": 0.7406,
+ "topk_exact_taux_span": 0.8349,
+ "exact_taux_span": 1.0,
+ "verbe": {
+  "cibles": 148,
+  "justes": 148,
+  "taux": 1.0
+ },
+ "nom": {
+  "cibles": 64,
+  "justes": 64,
+  "taux": 1.0
+ },
+ "couverture": 0.887,
+ "par_langue": {
+  "fr": {
+   "cibles": 151,
+   "labels": 129,
+   "exact": 129,
+   "topk": 120,
+   "exact_taux_span": 1.0
+  },
+  "en": {
+   "cibles": 88,
+   "labels": 83,
+   "exact": 83,
+   "topk": 57,
+   "exact_taux_span": 1.0
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/tests/linguistique/gold_split.py && sed -n 1,80p tools/tests/linguistique/gold.py", "description": "Read gold split and loader"}`
+
+  ```
+"""gold_split.py — le gold 612 coupé en **dev** et **test**, de façon déterministe.
+
+Le problème. Toutes les mesures de la session sont **in-sample** : les règles de segmentation et
+d'attachement ont été dessinées en regardant les échecs du même gold qui les mesure. Pour juger
+une règle, il faut un gold **tenu à l'écart** : on règle sur `dev`, on évalue sur `test`.
+
+Protocole (fixé ici). Le split est un **hash stable de l'identifiant** (`crc32(id) % 3 == 0` →
+test, sinon dev), donc reproductible, insensible à l'ordre et indépendant du contenu. Il est
+**stratifié par source** (`hand`, `reel`, `synthetique`) et par langue : on vérifie l'équilibre
+dans la fiche. Aucune phrase n'est dupliquée entre les deux ; l'union redonne les 612.
+
+Usage :
+    from tools.tests.linguistique.gold_split import dev, test, compter
+    ph = charger(); d = dev(ph); t = test(ph)
+"""
+from __future__ import annotations
+
+import zlib
+
+PART_TEST = 3  # une phrase sur trois va au test
+
+
+def _est_test(phrase: dict) -> bool:
+    return zlib.crc32(str(phrase.get("id", "")).encode()) % PART_TEST == 0
+
+
+def dev(phrases: list[dict]) -> list[dict]:
+    """Les phrases de développement (2/3)."""
+    return [p for p in phr
+… [6452 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in ['gold','gold_reel','gold_synthetique','gold_gele']:\n    d=json.load(open(f'tools/tests/linguistique/{f}.json'))\n    ph=d['phrases']\n    n=sum(1 for p in ph for s in p.get('segments',[]) if  … [161 caractères tronqués]`
+
+  ```
+gold 20 targets 13 keys ['version', 'phrases', 'note']
+gold_reel 432 targets 171 keys ['version', 'source', 'note', 'phrases']
+gold_synthetique 160 targets 55 keys ['version', 'source', 'graine', 'note', 'phrases']
+gold_gele 602 targets 239 keys ['gele', 'phrases']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'tools/tests/linguistique')\nimport evaluer_gold as eg, bloc_linguistique as bl\nfor nom, phrases in [('vivant', eg.charger()), ('gele', eg.charger_gele())]:\n    h=b … [480 caractères tronqués]`
+
+  ```
+vivant {'cibles': 239, 'labels': 212, 'exact': 212, 'topk': 177, 'topk_exact': 177, 'couverture': 0.887, 'topk_taux': 0.7406}
+  langs {'fr': {'cibles': 151, 'labels': 129, 'exact': 129, 'topk': 120, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 83, 'exact': 83, 'topk': 57, 'exact_taux_span': 1.0}}
+  sources {'hand': 20, 'reel': 432, 'synthetique': 160} langues {'fr': 402, 'en': 210}
+gele {'cibles': 239, 'labels': 212, 'exact': 212, 'topk': 177, 'topk_exact': 177, 'couverture': 0.887, 'topk_taux': 0.7406}
+  langs {'fr': {'cibles': 151, 'labels': 129, 'exact': 129, 'topk': 120, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 83, 'exact': 83, 'topk': 57, 'exact_taux_span': 1.0}}
+  sources {'hand': 20, 'reel': 422, 'synthetique': 160} langues {'fr': 394, 'en': 208}
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du diagnostic des 62 échecs (spans + couverture)
+
+- **write** `{"file_path": "/tmp/topk_v8_diag.py", "content": "\"\"\"Diagnostic top-k v8 — lecture seule, hors dépôt. Simule des règles de complétion\npar post-traitement de l'Annotation (aucune modification du code du dépôt).\"\"\"\nfrom __future__ import annotations\nimport sys, json, collections, random\nsys. … [2984 caractères tronqués]`
+
+  ```
+<path>/tmp/topk_v8_diag.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 topk_v8_diag.py 2>&1 | head -120", "description": "Run topk diagnostic, first part", "timeoutMs": 300000}`
+
+  ```
+{
+ "cibles": 239,
+ "labels": 212,
+ "spans_non_predits": 27,
+ "topk": 177,
+ "echecs": 62,
+ "echecs_couverture": 35,
+ "topk_taux": 0.7406
+}
+
+ECHECS 62
+type {'GP': 7, 'SUB': 7, 'REL': 48}
+langue {'fr': 31, 'en': 31}
+source {'hand': 3, 'reel': 36, 'synthetique': 23}
+
+croisement span/coverage: {('couverture', 'GP'): 2, ('span', 'SUB'): 6, ('couverture', 'REL'): 32, ('span', 'REL'): 16, ('span', 'GP'): 5, ('couverture', 'SUB'): 1}
+
+croisement langue x span/coverage: {('fr', 'couverture'): 9, ('en', 'span'): 5, ('en', 'couverture'): 26, ('fr', 'span'): 22}
+
+g002 [fr/hand] GP «de la voisine» -> ['chat'] COUV choisi='chat'
+  cands=['GP', 'dort']
+  texte=Le chat de la voisine dort.
+
+g006 [fr/hand] GP «du voisin» -> ['chien'] COUV choisi='chien'
+  cands=['GP', 'aboie']
+  texte=Le chien du voisin aboie la nuit.
+
+g017 [en/hand] SUB «that she would come» -> ['said'] SPAN choisi=''
+  cands=[]
+  texte=She said that she would come yesterday.
+
+r034 [en/reel] REL «that I read» -> ['book'] COUV choisi='book'
+  cands=['REL', 'exciting']
+  texte=The book that I read is exciting.
+
+r035 [en/reel] REL «she talks about» -> ['film'] SPAN choisi=''
+  cands=[]
+  texte=The film she talks about is out.
+
+r074 [en
+… [2683 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 topk_v8_diag.py 2>&1 | sed -n '120,400p'", "description": "See remaining failure details", "timeoutMs": 300000}`
+
+  ```
+r273 [fr/reel] REL «qui pousse ici» -> ['fleur'] SPAN choisi=''
+  cands=[]
+  texte=La fleur qui pousse ici est rare.
+
+r278 [en/reel] REL «that you eat» -> ['bread'] COUV choisi='bread'
+  cands=['REL', 'fresh']
+  texte=The bread that you eat is fresh.
+
+r280 [en/reel] REL «that I bought» -> ['car'] SPAN choisi=''
+  cands=[]
+  texte=The car that I bought runs.
+
+r283 [en/reel] REL «who sings» -> ['boy'] COUV choisi='boy'
+  cands=['REL', 'is']
+  texte=The boy who sings is my friend.
+
+r285 [en/reel] REL «that we took» -> ['table'] COUV choisi='table'
+  cands=['REL', 'big']
+  texte=The table that we took is big.
+
+r287 [en/reel] REL «that flies» -> ['bird'] COUV choisi='bird'
+  cands=['REL', 'blue']
+  texte=The bird that flies is blue.
+
+r288 [en/reel] SUB «that he comes tomorrow» -> ['know'] SPAN choisi=''
+  cands=[]
+  texte=I know that he comes tomorrow.
+
+r289 [en/reel] REL «where we live» -> ['place'] COUV choisi='place'
+  cands=['REL', 'quiet']
+  texte=The place where we live is quiet.
+
+r291 [en/reel] REL «that is on the table» -> ['book'] COUV choisi='book'
+  cands=['REL', 'mine']
+  texte=The book that is on the table is mine.
+
+r293 [en/reel] REL «whom I mention» -> ['person'] COUV cho
+… [3513 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json\nrows=json.load(open('/tmp/topk_v8_rows.json'))\ncov=[r for r in rows if r['label'] and not r['ok_topk']]\nprint(len(cov), 'coverage failures')\nfor r in cov:\n    print(f\"{r['id']:6} {r['langue']} {r['type']:4} cible={r['cible']!r:12} cands={r[ … [88 caractères tronqués]`
+
+  ```
+35 coverage failures
+g002   fr GP   cible='chat'       cands=['GP', 'dort'] | Le chat de la voisine dort.
+g006   fr GP   cible='chien'      cands=['GP', 'aboie'] | Le chien du voisin aboie la nuit.
+r034   en REL  cible='book'       cands=['REL', 'exciting'] | The book that I read is exciting.
+r074   en REL  cible='book'       cands=['REL', 'long'] | The book that you read is long.
+r075   en REL  cible='city'       cands=['REL', 'beautiful'] | The city where we live is beautiful.
+r114   en REL  cible='film'       cands=['REL', 'long'] | The film that we saw was long.
+r115   en REL  cible='house'      cands=['REL', 'small'] | The house where I was born is small.
+r204   en REL  cible='man'        cands=['REL', 'is'] | The man who speaks is my father.
+r206   fr REL  cible='chat'       cands=['REL', 'dormait'] | Le chat que j'ai vu dormait.
+r214   en REL  cible='book'       cands=['REL', 'good'] | The book that I read is good.
+r217   en REL  cible='student'    cands=['REL', 'absent'] | The student whom I mention is absent.
+r220   en REL  cible='cat'        cands=['REL', 'black'] | The cat that sleeps is black.
+r224   fr REL  cible='homme'      cands=['REL', 'arrive'] | L'homme dont la v
+… [2052 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json, collections\nrows=json.load(open('/tmp/topk_v8_rows.json'))\nfor dim in ('type','langue','source'):\n    c=collections.defaultdict(lambda:[0,0,0])\n    for r in rows:\n        c[r[dim]][0]+=1; c[r[dim]][1]+=int(bool(r['label'])); c[r[dim]][2]+=i … [401 caractères tronqués]`
+
+  ```
+type {'GP': {'cibles': 96, 'labels': 91, 'topk': 89}, 'REL': {'cibles': 74, 'labels': 58, 'topk': 26}, 'SUB': {'cibles': 69, 'labels': 63, 'topk': 62}}
+langue {'en': {'cibles': 88, 'labels': 83, 'topk': 57}, 'fr': {'cibles': 151, 'labels': 129, 'topk': 120}}
+source {'hand': {'cibles': 13, 'labels': 12, 'topk': 10}, 'reel': {'cibles': 171, 'labels': 164, 'topk': 135}, 'synthetique': {'cibles': 55, 'labels': 36, 'topk': 32}}
+
+GP rows:
+g002   fr ok=False lab=True  cible='chat'          cands=['GP', 'dort'] | de la voisine
+g003   fr ok=True  lab=True  cible='vu'            cands=["« dans le parc » → l'homme", '« dans le parc » → a vu', 'vu', 'homme'] | dans le parc
+g004   fr ok=True  lab=True  cible='couru'         cands=['« pour attraper le bus » → Il a couru', '« pour attraper le bus » = cause', 'bus', 'couru'] | pour attraper le bus
+g006   fr ok=False lab=True  cible='chien'         cands=['GP', 'aboie'] | du voisin
+g007   fr ok=True  lab=True  cible='jouent'        cands=['« dans le jardin » → Les enfants', '« dans le jardin » → jouent', 'jouent', 'enfants'] | dans le jardin
+g010   fr ok=True  lab=True  cible='Viens'         cands=['« ici » → Viens', 'Viens'] | ici
+g012   fr ok=Tru
+… [10305 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nfrom topk_v8_diag impor … [685 caractères tronqués]`
+
+  ```
+r034 The book that I read is exciting.
+  GN   [0,8] 'The book' cands=['GN', 'exciting']
+  REL  [9,20] 'that I read' cands=['REL', 'exciting']
+  GV   [21,32] 'is exciting' cands=['GV']
+  POS: []
+
+ r206 Le chat que j'ai vu dormait.
+  GN   [0,7] 'Le chat' cands=["« que j'ai vu dormait » → Le chat", 'dormait', 'chat']
+  REL  [8,19] "que j'ai vu" cands=['REL', 'dormait']
+  REL  [8,27] "que j'ai vu dormait" cands=["« que j'ai vu dormait » → Le chat", 'dormait', 'chat']
+  GV   [20,27] 'dormait' cands=['GV']
+  POS: [("'", 'DET')]
+
+ s050 mon jardin qui ouvre rêve
+  GN   [0,10] 'mon jardin' cands=['« qui ouvre rêve » → mon jardin', 'rêve', 'jardin']
+  REL  [11,20] 'qui ouvre' cands=['REL', 'rêve']
+  REL  [11,25] 'qui ouvre rêve' cands=['« qui ouvre rêve » → mon jardin', 'rêve', 'jardin']
+  GV   [21,25] 'rêve' cands=['GV']
+  POS: [('ê', 'DET')]
+
+ g002 Le chat de la voisine dort.
+  GN   [0,7] 'Le chat' cands=['« de la voisine dort » → Le chat', 'dort', 'chat']
+  GP   [8,21] 'de la voisine' cands=['GP', 'dort']
+  GP   [8,26] 'de la voisine dort' cands=['« de la voisine dort » → Le chat', 'dort', 'chat']
+  GV   [22,26] 'dort' cands=['GV']
+  POS: []
+
+ r309 Peut-être qu'il viendra.
+  GV   [0,9] 'P
+… [161 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation des règles de complétion (copie locale) et mesure dev/test
+
+- **write** `{"content": "\"\"\"topk_v8_rules.py — simulation par sous-classe des règles de complétion des candidats.\n\nAucune modification du dépôt : `HeuristiqueCompletee` hérite de `bl.Heuristique`, appelle\n`super().analyser` puis **ajoute** des candidats aux étiquettes syntagme (jamais ne retire,\njamais n … [7742 caractères tronqués]`
+
+  ```
+<path>/tmp/topk_v8_rules.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 topk_v8_rules.py 2>&1 | tail -160", "description": "Run completion-rule simulation", "timeoutMs": 600000}`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/topk_v8_rules.py", line 149, in <module>
+    rows = collect(h, tous)
+  File "/tmp/topk_v8_rules.py", line 118, in collect
+    rows.append({'id': p.get('id'), 'split': 'test' if p in _TEST_IDS else 'dev',
+                                                       ^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+  ```
+
+- **bash** `{"command": "cd /tmp && sed -i \"s/'split': 'test' if p in _TEST_IDS else 'dev'/'split': 'test' if id(p) in _TEST_IDS else 'dev'/\" topk_v8_rules.py && python3 topk_v8_rules.py 2>&1 | tail -170", "description": "Fix split test and rerun", "timeoutMs": 600000}`
+
+  ```
+},
+  "candidats_moyens": 2.443,
+  "candidats_max": 5
+ },
+ "R1+R2": {
+  "all": {
+   "cibles": 239,
+   "labels": 212,
+   "topk": 212,
+   "taux": 0.887,
+   "taux_span": 1.0,
+   "echecs": 27,
+   "echecs_span": 27,
+   "echecs_couverture": 0
+  },
+  "dev": {
+   "cibles": 163,
+   "labels": 148,
+   "topk": 148,
+   "taux": 0.908,
+   "taux_span": 1.0,
+   "echecs": 15,
+   "echecs_span": 15,
+   "echecs_couverture": 0
+  },
+  "test": {
+   "cibles": 76,
+   "labels": 64,
+   "topk": 64,
+   "taux": 0.8421,
+   "taux_span": 1.0,
+   "echecs": 12,
+   "echecs_span": 12,
+   "echecs_couverture": 0
+  },
+  "par_type": {
+   "GP": {
+    "cibles": 96,
+    "labels": 91,
+    "topk": 91
+   },
+   "REL": {
+    "cibles": 74,
+    "labels": 58,
+    "topk": 58
+   },
+   "SUB": {
+    "cibles": 69,
+    "labels": 63,
+    "topk": 63
+   }
+  },
+  "par_langue": {
+   "en": {
+    "cibles": 88,
+    "labels": 83,
+    "topk": 83
+   },
+   "fr": {
+    "cibles": 151,
+    "labels": 129,
+    "topk": 129
+   }
+  },
+  "par_source": {
+   "hand": {
+    "cibles": 13,
+    "labels": 12,
+    "topk": 12
+   },
+   "reel": {
+    "cibles": 171,
+    "labels": 164,
+    "topk": 164
+   },
+   "synthetique": {
+    "cibles": 55,
+    "labels": 36,
+    "topk": 
+… [1626 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && sed -i '/^PY$/d' topk_v8_rules.py && tail -5 topk_v8_rules.py && python3 topk_v8_rules.py 2>&1 | python3 -c \"\nimport sys, json, re\ntxt=sys.stdin.read()\ni=txt.find('{')\n# split the two json objects\ndec=json.JSONDecoder()\nres,_=dec.raw_decode(txt[i:])\nprint(json.dumps({ … [252 caractères tronqués]`
+
+  ```
+# contrôle : evaluer_bloc sur la sous-classe R1+R2 (all/dev/test)
+    h = HeuristiqueCompletee(('R1', 'R2'))
+    got = {nom: eg.evaluer_bloc(nom, h, ps)['attachement'] for nom, ps in
+           [('all', tous), ('dev', devp), ('test', testp)]}
+    print('evaluer_bloc R1+R2', json.dumps({k: {x: v[x] for x in ('cibles', 'labels', 'topk', 'exact')} for k, v in got.items()}, ensure_ascii=False))
+{
+ "base": {
+  "dev": {
+   "cibles": 163,
+   "labels": 148,
+   "topk": 120,
+   "taux": 0.7362,
+   "taux_span": 0.8108,
+   "echecs": 43,
+   "echecs_span": 15,
+   "echecs_couverture": 28
+  },
+  "test": {
+   "cibles": 76,
+   "labels": 64,
+   "topk": 57,
+   "taux": 0.75,
+   "taux_span": 0.8906,
+   "echecs": 19,
+   "echecs_span": 12,
+   "echecs_couverture": 7
+  },
+  "all": {
+   "cibles": 239,
+   "labels": 212,
+   "topk": 177,
+   "taux": 0.7406,
+   "taux_span": 0.8349,
+   "echecs": 62,
+   "echecs_span": 27,
+   "echecs_couverture": 35
+  },
+  "candidats_moyens": 2.434,
+  "candidats_max": 5
+ },
+ "R1": {
+  "dev": {
+   "cibles": 163,
+   "labels": 148,
+   "topk": 148,
+   "taux": 0.908,
+   "taux_span": 1.0,
+   "echecs": 15,
+   "echecs_span": 15,
+   "echecs_couverture": 0
+  },
+  "test": {
+   "cibles": 76,
+   
+… [2931 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json, collections\nrows=json.load(open('/tmp/topk_v8_rows.json'))\nech=[r for r in rows if not r['ok_topk']]\nspan=[r for r in ech if not r['label']]\ncouv=[r for r in ech if r['label']]\ndef ct(rs, dim): return dict(collections.Counter(r[dim] for r i … [598 caractères tronqués]`
+
+  ```
+SPAN 27 {'SUB': 6, 'REL': 16, 'GP': 5} {'en': 5, 'fr': 22} {'hand': 1, 'reel': 7, 'synthetique': 19}
+COUV 35 {'GP': 2, 'REL': 32, 'SUB': 1} {'fr': 9, 'en': 26} {'hand': 2, 'reel': 29, 'synthetique': 4}
+ECHECS 62 {'GP': 7, 'SUB': 7, 'REL': 48} {'fr': 31, 'en': 31} {'hand': 3, 'reel': 36, 'synthetique': 23}
+
+span fr/synth par type {('en', 'hand', 'SUB'): 1, ('en', 'reel', 'REL'): 2, ('en', 'reel', 'GP'): 1, ('fr', 'reel', 'REL'): 2, ('fr', 'reel', 'SUB'): 1, ('en', 'reel', 'SUB'): 1, ('fr', 'synthetique', 'REL'): 12, ('fr', 'synthetique', 'GP'): 4, ('fr', 'synthetique', 'SUB'): 3}
+
+span ids [('g017', 'en', 'hand', 'SUB'), ('r035', 'en', 'reel', 'REL'), ('r153', 'en', 'reel', 'GP'), ('r255', 'fr', 'reel', 'REL'), ('r264', 'fr', 'reel', 'SUB'), ('r273', 'fr', 'reel', 'REL'), ('r280', 'en', 'reel', 'REL'), ('r288', 'en', 'reel', 'SUB'), ('s010', 'fr', 'synthetique', 'REL'), ('s027', 'fr', 'synthetique', 'GP'), ('s032', 'fr', 'synthetique', 'REL'), ('s035', 'fr', 'synthetique', 'REL'), ('s037', 'fr', 'synthetique', 'REL'), ('s044', 'fr', 'synthetique', 'SUB'), ('s061', 'fr', 'synthetique', 'REL'), ('s065', 'fr', 'synthetique', 'REL'), ('s069', 'fr', 'synthetique', 'REL'), ('s072', 'fr', 
+… [1483 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Quantification du bruit des candidats ajoutés et contrôles négatifs
+
+- **write** `{"content": "\"\"\"topk_v8_controls.py — bruit des complétions + contrôles négatifs (hors dépôt).\"\"\"\nfrom __future__ import annotations\nimport sys, json, collections, random\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique')\nsys.path.insert(0, '/hom … [6959 caractères tronqués]`
+
+  ```
+<path>/tmp/topk_v8_controls.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+

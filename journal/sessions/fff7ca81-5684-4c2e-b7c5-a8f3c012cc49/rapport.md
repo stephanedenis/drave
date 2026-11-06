@@ -7,12 +7,12 @@
 | Identifiant | `fff7ca81-5684-4c2e-b7c5-a8f3c012cc49` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 21:12 |
-| Durée | 0.0 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 15 |
-| Appels d'outils | 16 |
-| Fichiers touchés | 0 |
-| Commandes | 13 |
+| Messages | 29 |
+| Appels d'outils | 30 |
+| Fichiers touchés | 3 |
+| Commandes | 24 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **améliore … [1895 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Show branch, status, and top-level files
 - bash — List linguistique tests and reports
@@ -41,10 +41,11 @@
 - bash — Read gold split and loader
 - bash — Count phrases and targets per gold file
 - bash — Compare vivant vs gele attachment metrics
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Lancement de l'évaluation de référence pour vérifier l'état (177/239)
+⏵ Quantification du bruit des candidats ajoutés et contrôles négatifs
 
 ## 3. Travail accompli
 
@@ -52,6 +53,9 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/topk_v8_diag.py` | 1 | 0 |
+| `/tmp/topk_v8_rules.py` | 1 | 0 |
+| `/tmp/topk_v8_controls.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -68,4 +72,15 @@
 - **T1** Read gold split and loader
 - **T1** Count phrases and targets per gold file
 - **T1** Compare vivant vs gele attachment metrics
+- **T1** Run topk diagnostic, first part
+- **T1** See remaining failure details
+- **T1** List coverage failures compactly
+- **T1** Cross-tabs and GP detail
+- **T1** Inspect annotations for representative failures
+- **T1** Run completion-rule simulation
+- **T1** Fix split test and rerun
+- **T1** Rerun and print compact rule results
+- **T1** Exact cross-tabs for span vs coverage failures
+- **T1** Patch and run noise/control script
+- **T1** Fix script and show noise stats
 

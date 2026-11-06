@@ -7,12 +7,12 @@
 | Identifiant | `c5910cba-e10a-4e08-8ac7-449ce150899c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 21:12 |
-| Durée | 0.0 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 14 |
-| Appels d'outils | 16 |
+| Messages | 32 |
+| Appels d'outils | 40 |
 | Fichiers touchés | 0 |
-| Commandes | 7 |
+| Commandes | 28 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2245 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*40 appels d'outils.* Actions notables :
 
 - bash — Check git status and current branch
 - bash — List relevant report files
@@ -35,10 +35,17 @@
 - bash — Count phrases and segments in gold files
 - bash — Grep autotest for audit-relevant code
 - bash — Locate fiche numbers in autotest
+- bash — Find all R1/R2/R3 rule sites
+- bash — Inspect commit history and target commit stat
+- bash — Show target commit diff for linguistic block
+- bash — Find R1/R2/R3 claims in spans v7 report
+- bash — Read start of spans v7 report
+- bash — Check submodule state and tool file cleanliness
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Exploring repo state and audit target files
+⏵ Running 183 gates while extending ablations
 
 ## 3. Travail accompli
 
@@ -56,4 +63,38 @@
 - **T1** Count phrases and segments in gold files
 - **T1** Grep autotest for audit-relevant code
 - **T1** Locate fiche numbers in autotest
+- **T1** Find all R1/R2/R3 rule sites
+- **T1** Inspect commit history and target commit stat
+- **T1** Show target commit diff for linguistic block
+- **T1** Find R1/R2/R3 claims in spans v7 report
+- **T1** Read start of spans v7 report
+- **T1** Check submodule state and tool file cleanliness
+- **T1** Run baseline evaluator on gold
+- **T1** Check module imports and RACINE
+- **T1** Inspect spans v7 JSON structure
+- **T1** Inspect A17 final state and negative control
+- **T1** Run audit harness baseline and ablations
+- **T1** Fix module registration and rerun harness
+- **T1** Summarize harness results
+- **T1** List 27 missing spans and compare with A17 17
+- **T1** Run the 183-gate autotest suite
+- **T1** Show dev/test baseline details
+- **T1** Inspect autotest gate results
+- **T1** Run autotest as module in background
+- **T1** Add bundle ablations and live F1 to harness
+- **T1** Run extended harness with bundle ablations
+- **T1** Read A17 rule implementation details
+
+## 4. Mesures et résultats marquants
+
+- **T1** `b1b1292f B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
+- **T1** `e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
+- **T1** `"lecture": "0,91 % en moyenne contre 100 % observé"`
+- **T1** `"lecture": "0.963 % en moyenne contre 100.0 % observ\u00e9"`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : Traceback (most recent call last):   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 32, in <module>     from .coeur import Candidat, Etat ImportError: attempted 
 

@@ -47200,3 +47200,41 @@ started subagent d3114d4c-1629-45f2-aba6-9592332507c5
 ⏵ Vague 6 lancée ; j'écris le récit du round R1/R3 au journal
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/2026-11-05/README.md'); t=p.read_text()\nnote = \"\"\"**Les règles de A17 (21 h 10).** La fiche des 43 spans (A17) a nommé les causes : 20 venaient de\nla **frontière de c … [1720 caractères tronqués]`
+
+  ```
+journal + plan
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+[still running after 60000ms; moved to background job bash-2090]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2090", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md
+COMMIT OK 1
+5c15ee91 JOURNAL — LES RÈGLES DE A17 : EXACT 212/212, COUVERTURE 0,887, 27 SPANS DONT 17 INATTEIGNABLES
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E \"audit-r1r3|topk-v8|coherence-fiches-v8\"", "description": "Attendre la vague 6", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2109]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2109", "timeout_ms": 300000, "wait": true}`
+
+  ```
+jeu 05 nov 2026 21:25:11 EST
+[status: completed, exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2109 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "audit-r1r3|topk-v8|coherence-fiches-v8") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-05/README.md'); t=p.read_text()\nbilan = \"\"\"\n**Le bilan de la journée (21 h 30).** Parti de **137/145 (0,9448)** sur les spans prédits et d'une\ncouverture de **0, … [1720 caractères tronqués]`

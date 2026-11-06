@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 124.6 h |
+| Durée | 124.8 h |
 | Tours | 177 |
-| Messages | 2760 |
-| Appels d'outils | 2433 |
+| Messages | 2765 |
+| Appels d'outils | 2437 |
 | Fichiers touchés | 25 |
-| Commandes | 2007 |
+| Commandes | 2009 |
 | Sous-agents | 23 |
-| Commits | 294 |
+| Commits | 295 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*192 appels d'outils.* Actions notables :
+*196 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,7 +9514,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 160 autres
+- … et 162 autres
 
 **Synthèse produite :**
 
@@ -9620,7 +9620,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1967 autres
+- … et 1969 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10062,4 +10062,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PORTES — 13 DOCSTRINGS PÉRIMÉES MISES À JOUR (ATTACHEMENT 195/196, SPANS 43, TOP-K 166) ; 183/183" -- tools/pensee/autotest.py docs/pilotage/en-cours.md 2>&1 | 
 - B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN 1,0 ; 27 SPANS DONT 17 INATTEIGNABLES ; 183/183" -- tools/bloc_linguistique.py
 - JOURNAL — LES RÈGLES DE A17 : EXACT 212/212, COUVERTURE 0,887, 27 SPANS DONT 17 INATTEIGNABLES" -- journal/2026-11-05/README.md journal/sessions/e181ce02-cd50-4
+- JOURNAL — LE BILAN DE LA JOURNÉE : 137/145 → 212/212, COUVERTURE 0,6067 → 0,8870, F1 0,2862 → 0,5763" -- journal/2026-11-05/README.md docs/pilotage/en-cours.md 
 
