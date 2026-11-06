@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**14 commits** · **3 session(s)** · **5 thème(s)**
+**15 commits** · **3 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 5 | [distribue.md](distribue.md) |
+| distribue | 6 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -22,7 +22,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 131.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 136.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -43,6 +43,7 @@
 | 03:41 | `ea7d3275` | PORTES — LA PASSE COMPLÈTE DU 06/11 CONSIGNÉE : 79 VERTES / 4 ROUGES (2 STRUCTURELLES, SESSIONS D'AUTRUI, CASCADE_POS DOCUMENTÉE) |
 | 03:44 | `b578f95b` | DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1) |
 | 03:46 | `f0e3f46a` | DOCS — LA PASSE DU 06/11 EN UNE LIGNE |
+| 03:49 | `789b1284` | DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1) |
 
 ## Le récit de la journée (écrit à la main)
 

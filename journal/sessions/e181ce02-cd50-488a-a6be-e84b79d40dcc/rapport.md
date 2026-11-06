@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 131.2 h |
-| Tours | 177 |
-| Messages | 2935 |
-| Appels d'outils | 2588 |
+| Durée | 136.6 h |
+| Tours | 178 |
+| Messages | 2946 |
+| Appels d'outils | 2597 |
 | Fichiers touchés | 25 |
-| Commandes | 2123 |
+| Commandes | 2129 |
 | Sous-agents | 25 |
-| Commits | 317 |
+| Commits | 318 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -48,6 +48,8 @@
 - **complete** — Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement (classement appris, candidats, échecs restants), les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et intègre les résul
 … [152 caractères tronqués]
 - **create** — Autonomie B13 du 2026-11-05 16 h 40 → 2026-11-06 08 h 00 : segmenter l'anglais (le trou de 60 spans sur 94), puis les deux règles de spans avec un gold tenu à l'écart, les 4 échecs d'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantie
+… [236 caractères tronqués]
+- **complete** — Autonomie B13 du 2026-11-05 16 h 40 → 2026-11-06 08 h 00 : segmenter l'anglais (le trou de 60 spans sur 94), puis les deux règles de spans avec un gold tenu à l'écart, les 4 échecs d'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantie
 … [236 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -405,6 +407,8 @@
 **Tour 176** — continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide du dossier pilotage que tu entretiens avec l'agent principal
 
 **Tour 177** — oui, continue en autonomie jusqu'à demain 8h.
+
+**Tour 178** — merge
 
 ## 2. Déroulé, étape par étape
 
@@ -9498,7 +9502,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*347 appels d'outils.* Actions notables :
+*350 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9518,65 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 270 autres
+- … et 273 autres
 
 **Synthèse produite :**
 
-⏵ Suite complète : **79 vertes / 4 rouges** (2 structurelles connues, `sessions` d'une autre session, `bloc` documentée). Je consigne la passe
+⏵ Tranche close : l'attachement est passé de 137/145 à **222/222**, la couverture de 0,6067 à **0,9289**
+
+\## Ce qui a été fait (16 h 40 → 03 h 55)
+
+**7 vagues, 22 sous-agents**, coordonnés par le dossier pilotage (`plan-travail` § 9). Chaque vague a produit une fiche, un JSON, une mesure et un commit vérifié ; aucun sous-agent n'a touché au pilotage, à S/D/N2, ni commité.
+
+| vague | sous-agents | apports |
+|---|---|---|
+| 1–1 bis | A1–A7 | audit 14/14, top-k +45, classement appris **rejeté** (p=0,18), 3 divergences de fiches, annotation 20/20, contrat S, coût O(n²) |
+| 3–4 | A8–A14 | cache ×11, 8 échecs qualifiés, replis 145/145 (in-sample), 84 spans récupérables, multi-cibles, **l'anglais = 60/94 spans** |
+| 5–7 | A15–A22 | audits v7/v8/v10/R1-R3, top-k (le site d'appel `prec = s`), dev/test, 43 puis 19 spans |
+
+\## Le tournant
+
+Le diagnostic A12/A14 a déplacé le problème : **ce n'était pas l'attachement, c'était le découpage**. Le chunker ne produisait ni REL ni SUB anglais ; les règles de frontière (REL/SUB par le segment précédent, GV à tête verbale, GN s'arrêtant au verbe, POS contextuel, garde PRON, marqueurs ambigus) ont tout débloqué.
+
+\## Les chiffres
+
+| mesure | départ (137/145) | **arrivée** |
+|---|---:|---:|
+| exact / labels | 137/145 (0,9448) | **222/222 (1,0000)** |
+| couverture | 0,6067 | **0,9289** |
+| F1 syntagmes | 0,2862 | **0,5849** |
+| POS | 0,7475 | **0,7581** |
+| français / anglais | 0,9658 / 1,0 | **1,0 (136/136) / 1,0 (86/86)** |
+| dev / test | 126/126, 61/61 | **153/153, 69/69** |
+| spans perdus | 94 | **17, tous inatteignables** |
+
+\## L'honnêteté des audits
+
+Les audits successifs ont corrigé mes propres surévaluations : la v8 annonçait +27, le code donnait **+17 net** (24 gains, 7 régressions) ; la v10 attribuait un gain à une correction **inerte** ; la « cible de A17 » n'a été atteinte qu'après avoir réparé les 7 régressions (garde PRON d'A17, `est_sub`, `predicat_vu`). Chaque fiche porte désormais son **contrôle négatif mesuré** (permutation 1,997/220, p=0).
+
+\## L'état
+
+**183/183 portes** d'autotest ; passe complète **79/83** (2 rouges structurelles connues, `sessions` d'une autre session, et **`cascade_pos`** documentée : la fusion avec le contrat passe sous l'heuristique depuis que le POS a progressé). `revue`, `taille`, `tableaux`, `journal`, `en-cours`, `sessions` ✅. **36 commits** depuis 16 h 40, tous vérifiés par `git show`.
+
+\## Ce qui reste
+
+1. **Les 17 spans** : 12 formes synthétiques (le lexique du gold n'est pas celui d
+… [513 caractères tronqués]
+
+### Tour 178 — merge
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Inspecter la divergence master/s/v7
+- bash — Fast-forward master sur s/v7
+- bash — Vérifier le remote
+- bash — Pousser master sur origin
+- bash — Consigner le merge dans l'état
+- job_output
+
+**Synthèse produite :**
+
+⏵ Merge fait : `master` fast-forwardé sur `s/v7` puis poussé (`af28eadd..789b1284`). Je consigne l'état
 
 ## 3. Travail accompli
 
@@ -9622,7 +9680,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2083 autres
+- … et 2089 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10087,4 +10145,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1)" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "EN DE
 - DOCS — LA PASSE DU 06/11 EN UNE LIGNE" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "EN UNE LIGNE"; then
 - DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --forma
+- ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)" -- docs/pilotage/en-cours.md docs/pilotage/roadmap.md 2>&1 | tail -1 
 

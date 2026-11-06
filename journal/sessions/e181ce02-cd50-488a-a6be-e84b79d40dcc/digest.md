@@ -49711,3 +49711,174 @@ f0e3f46a DOCS — LA PASSE DU 06/11 EN UNE LIGNE
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Passe — 2026-11-06 :** **83 portes, 79 vertes, 4 rouges** — `indice`, `melange` (structurelles),\n … [1453 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-2641]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2641", "timeout_ms": 600000, "wait": true}`
+
+  ```
+11 files changed, 43 insertions(+), 27 deletions(-)
+COMMIT OK 1
+789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale et clôture de la tranche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \" … [992 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 03:51:34 EST
+789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+python3 tools/verifier_schemas.py        EXIT=0
+python3 tools/sessions.py --check        EXIT=0
+FINAL : labels 222 | exact 222 = 1.0 | couv 0.9289 | F1 0.5849 | tête 0.7336 | topk 221
+langues {'fr': {'cibles': 151, 'labels': 136, 'exact': 136, 'topk': 135, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 86, 'exact': 86, 'topk': 86, 'exact_taux_span': 1.0}}
+dev 153 / 153 | couv 0.9387
+test 69 / 69 | couv 0.9079
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-4e4daebc-4590-4b62-b8c0-2b4348de9508","revision":1,"objective":"Autonomie B13 du 2026-11-05 16 h 40 → 2026-11-06 08 h 00 : segmenter l'anglais (le trou de 60 spans sur 94), puis les deux règles de spans avec un gold tenu à l'écart, les 4 échecs d'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et peut coordonner des sous-agents avec le protocole du § 9 ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"active","roundsStarted":0,"maxGoalRounds":400},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-4e4daebc-4590-4b62-b8c0-2b4348de9508", "revision": 1}`
+
+> **Objectif** (complete) : Autonomie B13 du 2026-11-05 16 h 40 → 2026-11-06 08 h 00 : segmenter l'anglais (le trou de 60 spans sur 94), puis les deux règles de spans avec un gold tenu à l'écart, les 4 échecs d'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et peut coordonner des sous-agents avec le protocole du § 9 ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.
+
+
+  ```
+{"goal":{"id":"goal-4e4daebc-4590-4b62-b8c0-2b4348de9508","revision":2,"objective":"Autonomie B13 du 2026-11-05 16 h 40 → 2026-11-06 08 h 00 : segmenter l'anglais (le trou de 60 spans sur 94), puis les deux règles de spans avec un gold tenu à l'écart, les 4 échecs d'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal) et peut coordonner des sous-agents avec le protocole du § 9 ; ne pas écrire dans les territoires S/D/N2 ; chaque round produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"complete","roundsStarted":0,"maxGoalRounds":400},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Tranche close : l'attachement est passé de 137/145 à **222/222**, la couverture de 0,6067 à **0,9289**
+
+## Ce qui a été fait (16 h 40 → 03 h 55)
+
+**7 vagues, 22 sous-agents**, coordonnés par le dossier pilotage (`plan-travail` § 9). Chaque vague a produit une fiche, un JSON, une mesure et un commit vérifié ; aucun sous-agent n'a touché au pilotage, à S/D/N2, ni commité.
+
+| vague | sous-agents | apports |
+|---|---|---|
+| 1–1 bis | A1–A7 | audit 14/14, top-k +45, classement appris **rejeté** (p=0,18), 3 divergences de fiches, annotation 20/20, contrat S, coût O(n²) |
+| 3–4 | A8–A14 | cache ×11, 8 échecs qualifiés, replis 145/145 (in-sample), 84 spans récupérables, multi-cibles, **l'anglais = 60/94 spans** |
+| 5–7 | A15–A22 | audits v7/v8/v10/R1-R3, top-k (le site d'appel `prec = s`), dev/test, 43 puis 19 spans |
+
+## Le tournant
+
+Le diagnostic A12/A14 a déplacé le problème : **ce n'était pas l'attachement, c'était le découpage**. Le chunker ne produisait ni REL ni SUB anglais ; les règles de frontière (REL/SUB par le segment précédent, GV à tête verbale, GN s'arrêtant au verbe, POS contextuel, garde PRON, marqueurs ambigus) ont tout débloqué.
+
+## Les chiffres
+
+| mesure | départ (137/145) | **arrivée** |
+|---|---:|---:|
+| exact / labels | 137/145 (0,9448) | **222/222 (1,0000)** |
+| couverture | 0,6067 | **0,9289** |
+| F1 syntagmes | 0,2862 | **0,5849** |
+| POS | 0,7475 | **0,7581** |
+| français / anglais | 0,9658 / 1,0 | **1,0 (136/136) / 1,0 (86/86)** |
+| dev / test | 126/126, 61/61 | **153/153, 69/69** |
+| spans perdus | 94 | **17, tous inatteignables** |
+
+## L'honnêteté des audits
+
+Les audits successifs ont corrigé mes propres surévaluations : la v8 annonçait +27, le code donnait **+17 net** (24 gains, 7 régressions) ; la v10 attribuait un gain à une correction **inerte** ; la « cible de A17 » n'a été atteinte qu'après avoir réparé les 7 régressions (garde PRON d'A17, `est_sub`, `predicat_vu`). Chaque fiche porte désormais son **contrôle négatif mesuré** (permutation 1,997/220, p=0).
+
+## L'état
+
+**183/183 portes** d'autotest ; passe complète **79/83** (2 rouges structurelles connues, `sessions` d'une autre session, et **`cascade_pos`** documentée : la fusion avec le contrat passe sous l'heuristique depuis que le POS a progressé). `revue`, `taille`, `tableaux`, `journal`, `en-cours`, `sessions` ✅. **36 commits** depuis 16 h 40, tous vérifiés par `git show`.
+
+## Ce qui reste
+
+1. **Les 17 spans** : 12 formes synthétiques (le lexique du gold n'est pas celui du bloc — les ajouter serait ajuster au test), 4 GP du gold sans préposition (défaut du générateur), une tokenisation `qu'il`.
+2. **`cascade_pos`** : calibrer `MockNeuronal` ou restaurer la priorité par niveau.
+3. **Le merge `master`** (300+ commits de retard), si vous l'autorisez.
+
+Je clos à 03 h 55 plutôt qu'à 8 h : la cible est atteinte, les 17 spans restants demandent des décisions sur le gold et le lexique, et la seule rouge est documentée. Dites-moi si vous voulez que j'enchaîne sur le gold ou le merge.
+
+
+## Tour 178
+
+### 👤 Utilisateur
+
+merge
+
+### 🤖 Assistant
+
+⏵ Merge : j'inspecte d'abord la divergence entre `master` et `s/v7`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -vv | head -6; echo \"=== master..s/v7 :\"; git rev-list --count master..s/v7 2>/dev/null; echo \"=== s/v7..master :\"; git rev-list --count s/v7..master 2>/dev/null; echo \"=== ancêtre ?\"; git merge-base --is-ancestor ma … [204 caractères tronqués]`
+
+  ```
+backup/pre-scrub-20261101-133055 5d5c1ee9 DONNÉES — LES DIX LANGUES SONT LÀ : 21,6 M ARTICLES, 31,4 G CARACTÈRES, 38,8 GO, 0 FUITE
+  master                           af28eadd [origin/master] B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+  s/close                          1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+* s/v7                             789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+=== master..s/v7 :
+375
+=== s/v7..master :
+0
+=== ancêtre ?
+master est un ancêtre de s/v7
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='master avant : %h %s' master; git branch -f master s/v7 && git log -1 --format='master après : %h %s' master; echo \"=== master..s/v7 :\"; git rev-list --count master..s/v7; echo \"=== s/v7..master :\"; git rev-l … [115 caractères tronqués]`
+
+  ```
+master avant : af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+master après : 789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+=== master..s/v7 :
+0
+=== s/v7..master :
+0
+  master                           789b1284 [origin/master: ahead 375] DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+* s/v7                             789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 20 git ls-remote origin refs/heads/master 2>&1 | head -2; echo \"EXIT=$?\"; git rev-parse origin/master 2>/dev/null; git log -1 --format='origin/master : %h %s' origin/master 2>/dev/null", "description": "Vérifier le remote"}`
+
+  ```
+af28eaddd29d95d923d6f70c5da17823a76ecbd5	refs/heads/master
+EXIT=0
+af28eaddd29d95d923d6f70c5da17823a76ecbd5
+origin/master : af28eadd B13 — LA CONFIRMATION (RUN 2) : REFUS 0, LE NIVEAU GAGNE ENCORE (0,9389) ; 145/145
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 git push origin master 2>&1 | tail -5; echo \"EXIT=$?\"; git log -1 --format='origin/master : %h %s' origin/master 2>/dev/null; git status -sb | head -2", "description": "Pousser master sur origin", "timeoutMs": 180000}`
+
+  ```
+To github.com:stephanedenis/drave.git
+   af28eadd..789b1284  master -> master
+EXIT=0
+origin/master : 789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+## s/v7
+MM journal/2026-11-05/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Merge fait : `master` fast-forwardé sur `s/v7` puis poussé (`af28eadd..789b1284`). Je consigne l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-list --count origin/master..s/v7; git rev-list --count s/v7..origin/master; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; passe complète **79/83** (2 stru … [1290 caractères tronqués]`
