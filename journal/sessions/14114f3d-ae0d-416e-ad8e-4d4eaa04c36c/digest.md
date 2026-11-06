@@ -2608,3 +2608,105 @@ JSON VALIDE
 … [17194 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('resultats.json'))\nfor c in d['cas_limites']['cas']:\n    if c['nom'] in ('arabe','hébreu','grec','japonais','coréen','chinois','sinogrammes'):\n        print(c['nom'], 'niveaux=',c.get('niveaux'), 'etiquettes= … [86 caractères tronqués]`
+
+  ```
+arabe niveaux= ['discours', 'document', 'graphème', 'mot', 'phrase', 'pos', 'pragmatique'] etiquettes= 27
+grec niveaux= ['discours', 'document', 'graphème', 'mot', 'phrase', 'pos', 'pragmatique'] etiquettes= 27
+hébreu niveaux= ['discours', 'document', 'graphème', 'mot', 'phrase', 'pos', 'pragmatique'] etiquettes= 27
+japonais niveaux= ['discours', 'document', 'graphème', 'mot', 'phrase', 'pos', 'pragmatique'] etiquettes= 14
+coréen niveaux= ['discours', 'document', 'graphème', 'mot', 'phrase', 'pos', 'pragmatique'] etiquettes= 29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md')\ns=p.read_text()\n\ns=s.replace(\"\"\"  `MockNeuronal`, `Parallele`, `Cascade` pour les compositions. Les 50 phrases sont passées\n  **une fois** p … [3533 caractères tronqués]`
+
+  ```
+ok
+156:- **Nombres, dates, URL** : « 12.5 » coupe la phrase en **deux fragments** ; « 12.03.2024 » en
+157:  **trois** ; « 12,5 » (virgule) ne coupe pas la phrase mais découpe le nombre en `12`, `,`, `5`.
+192:| `bytes`, `int`, `list` | **AttributeError** : `'int' object has no attribute 'isalpha'` (bytes) ; `'int' object has no attribute 'strip'` (int) ; `'list' object has no attribute 'strip'` (liste) |
+295:| **P0-2** | **Réparer les frontières de phrase et la tokénisation numérique** (décimaux, dates, URL, emails, abréviations, espace initial) | « 12.5 » coupe une phrase en 2 fragments ; « 12.03.2024 » en 3 ; URL → 3–4 ; `M./Dr./etc.` duplique la phrase (f10 : 0-104 & 2-104) ; 6/60 spans commencent par un espace ; `url`/`emoji` : 0/963 | 550, 553-563, 568-587 (surtout 570, 579) | **0,5–1 j** | faible-moyen : change le nombre de phrases et les actes par phrase ; tests dédiés obligatoires |
+344:c'est pour cela qu'elle perd ces 14 spans. Le rouge `cascade_pos` est un **autre** effet (le
+397:   initial) et les types `url`/`emoji` morts : une URL crée 3–4 phrases, `12.5` coupe une phrase
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '348,355p' reports/rapport-produit-bloc-l.md", "description": "Vérifier la phrase de déterminisme"}`
+
+  ```
+- **Contrôle de langue négatif** : 8 textes à caractères mélangés ; au niveau du bloc (seuil 0,12),
+  **6/8 reçoivent quand même une langue** (fr, en, de, it), avec une confiance jusqu'à **0,5**.
+  Le détecteur par mots-outils n'est pas un rejeteur de bruit : `und` n'est pas garanti sur du
+  charabia. C'est un point à documenter ou à corriger par un seuil/longueur minimale.
+- **Déterminisme** : même instance, instances fraîches, graines 0/1/42 → identiques ; deux textes
+  différents → digests différents. La seule nondétermination est `duree_s`, exclue par défaut.
+
+## 9. Ce que ce banc ne dit pas — et ce qui pourrait le rendre faux
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md'); s=p.read_text()\ns=s.replace(\"\"\"- **Déterminisme** : même instance, instances fraîches, graines 0/1/42 → identiques ; deux textes\n  différents … [528 caractères tronqués]`
+
+  ```
+ok
+  charabia. C'est un point à documenter ou à corriger par un seuil/longueur minimale.
+- **Déterminisme** : même instance, instances fraîches, graines 0/1/42 → identiques ; deux textes
+  différents → digests différents. Dans un environnement fixé, la seule nondétermination est
+  `duree_s`, exclue par défaut (mais `DEEPSEEK_KEY_FILE` peut changer la politique, § 6).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short -- tools/ reports/ | head -40 && echo \"--- diff tools ---\" && git diff --stat -- tools/ | tail -5 && echo \"--- fichiers ---\" && ls -l reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json", "desc … [63 caractères tronqués]`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-spans-chunker.md
+ m tools/structures
+?? reports/pensee-produit-bloc-l.json
+?? reports/rapport-produit-bloc-l.md
+?? reports/rapport-s-paragraphes.md
+--- diff tools ---
+ tools/structures | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+--- fichiers ---
+-rw-r--r--. 1 stephane stephane 81756  6 nov 11:05 reports/pensee-produit-bloc-l.json
+-rw-------. 1 stephane stephane 33074  6 nov 11:07 reports/rapport-produit-bloc-l.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md')\ns=p.read_text()\nfor link in re.findall(r'\\]\\(([^)]+)\\)', s):\n    if link.startswith(('http','#')): continue\n    q=(p.parent/link).resolv … [133 caractères tronqués]`
+
+  ```
+OK  pensee-produit-bloc-l.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  ../tools/tests/linguistique/evaluer_gold.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/tests/linguistique/gold_split.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py
+OK  rapport-audit-v10.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  ../tools/tests/linguistique/evaluer_gold.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/tests/linguistique/gold_split.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py
+OK  pensee-produit-bloc-l.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/
+… [26 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"TODO\\|FIXME\\|XXX\\|PLACEHOLDER\\|lorem\" reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json || echo \"aucun placeholder\"; echo \"---\"; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pr … [519 caractères tronqués]`
+
+  ```
+aucun placeholder
+---
+taille 65459 octets
+detail ids 50 premier f01 dernier x50
+anomalies detail total 149
+cas 25 hors type 4
+correctifs 18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nlines=pathlib.Path('reports/rapport-produit-bloc-l.md').read_text().splitlines()\n# blocs de tableaux : lignes commençant par |\nbloc=[]\ndef check(bloc):\n    if len(bloc)<2: return []\n    n=[l … [722 caractères tronqués]`
+
+  ```
+tableaux déséquilibrés: 0
+fences ``` 0
+  ```
+
