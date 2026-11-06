@@ -2221,3 +2221,187 @@ reports/rapport-produit-v0.md
 … [2505 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture de l'audit de fiabilité du produit (source de correctifs)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lt reports/rapport-produit*.md reports/rapport-*.md | head -8; echo \"=== fixture ===\"; ls -l reports/rapport-produit-bloc-l.md 2>/dev/null && tail -40 reports/rapport-produit-bloc-l.md", "description": "Read product reliability … [15 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  3352  6 nov 09:56 reports/rapport-produit-v0.md
+-rw-r--r--. 1 stephane stephane  3352  6 nov 09:56 reports/rapport-produit-v0.md
+-rw-r--r--. 1 stephane stephane  2624  6 nov 09:50 reports/rapport-autotest-parallele.md
+-rw-r--r--. 1 stephane stephane  3742  6 nov 01:26 reports/rapport-pensee-v12.md
+-rw-------. 1 stephane stephane 34830  6 nov 01:01 reports/rapport-dev-test-v10.md
+-rw-r--r--. 1 stephane stephane  3386  6 nov 00:59 reports/rapport-pensee-v11.md
+-rw-------. 1 stephane stephane 26533  6 nov 00:38 reports/rapport-audit-v10.md
+-rw-r--r--. 1 stephane stephane  3640  6 nov 00:28 reports/rapport-pensee-v10.md
+=== fixture ===
+[stderr]
+ls: write error: Broken pipe
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'audit de fiabilité référencé (fichier absent ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"produit-bloc-l\\|audit de fiabilité\\|fiabilité du produit\" . --include=*.md --include=*.json --include=*.py 2>/dev/null | head -10; echo \"--- journal today ---\"; ls journal/2026-11-06/ 2>/dev/null; grep -rn \"fiabilit … [105 caractères tronqués]`
+
+  ```
+./reports/rapport-produit-v0.md
+./journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+./journal/sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md
+--- journal today ---
+distribue.md
+docs.md
+mesures.md
+modele.md
+portes.md
+README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -B3 -A25 \"fiabilité\" journal/sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md | head -80", "description": "Read reliability audit findings in digest"}`
+
+  ```
+10-
+11-### 👤 Utilisateur
+12-
+13:Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer la fiabilité « produit » du bloc linguistique** — qu'est-ce qu'un utilisateur peut utiliser en autonomie, et qu'est-ce qui est encore fragile ?
+14-
+15-Contexte : `tools/bloc_linguistique.py` (`Heuristique`, `analyser`), `tools/tests/linguistique/evaluer_gold.py` (`charger`, `evaluer_bloc`), `tools/tests/linguistique/gold_split.py` (dev/test), les fiches `reports/rapport-pensee-v12.md`, `rapport-audit-v10.md`, `rapport-dev-test-v10.md`, `rapport-coherence-fiches-v8.md`, `rapport-cache-chunker-applique.md`. État : exact 222/222 sur 222 labels, couverture 0,9289, F1 0,5849, POS 0,7581, 17 spans inatteignables, rouge `cascade_pos`.
+16-
+17-À faire :
+18-1. Mesure la **robustesse hors gold** : prends 50 phrases libres (écris-les toi-même, variées : longues, ponctuation, majuscules, questions, impératives, anglais), analyse-les, et note les plantages, les sorties vides, les incohérences (span hors texte, cible absente, chevauchements) — c'est le test « utilisateur ».
+19-2. Mesure la **performance** : temps par phrase à 10/50/200 mots, mémoi
+… [4774 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Détection d'un éventuel jumeau parallèle sur la même mission
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-file-taches.md reports/pensee-file-taches.json 2>&1; echo \"--- sessions actives ---\"; timeout 60 python3 tools/sessions.py --status 2>/dev/null | grep -E \"actif|en pause\" | head -10; echo \"--- digests missi … [160 caractères tronqués]`
+
+  ```
+ls: cannot access 'reports/rapport-file-taches.md': No such file or directory
+ls: cannot access 'reports/pensee-file-taches.json': No such file or directory
+--- sessions actives ---
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 1928 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+    29ad180d-38a5-4481 · en pause · 2493 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · en pause · 4101 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    aeafe951-9c3d-4bb5 · en pause · 2508 min · OCR des 8 `.PDF` du fonds CEGEP, qualification au texte natif, déduplication, manifeste et fiche de résultat.
+  ⏰ e181ce02-cd50-488a · actif    · 378 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+--- digests mission ---
+journal/sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du rapport de l'instance précédente de cette mission
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' journal/sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md", "description": "Read previous mission report"}`
+
+  ```
+# Session a0d33fb7 — Tu travailles dans le dépôt
+
+> **Journaux :** [le jour](../../2026-11-06/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
+| | |
+|---|---|
+| Identifiant | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` |
+| Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
+| Début | 2026-11-06 09:31 |
+| Durée | 0.5 h |
+| Tours | 1 |
+| Messages | 69 |
+| Appels d'outils | 85 |
+| Fichiers touchés | 0 |
+| Commandes | 73 |
+| Sous-agents | 0 |
+| Commits | 0 |
+| Compactages de contexte | 0 |
+
+## 1. Ce qui a été demandé
+
+**Tour 1** — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier toutes les tâches restantes** du dépôt et en faire une file exécutable, priorisée et sans dépendance cachée.  Contexte : `docs/pilotage/roadmap.md` (les chantiers A/B/N/R, la file « jamais en attente »), `docs/pilotage/en-cours.md` (« Ce qui reste », « Les questions ouvertes »), `doc … [1929 caractères tronqués]
+
+## 2. Déroulé, étape par étape
+
+### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [
+… [5789 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de l'état courant mis à jour (10 h 20) pour éviter les tâches périmées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,100p' docs/pilotage/en-cours.md; echo \"=== CE QUI RESTE ===\"; sed -n '/^## Ce qui reste/,/^## La carte/p' docs/pilotage/en-cours.md", "description": "Re-read updated en-cours state"}`
+
+  ```
+- **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents.
+- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
+
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif ; heartbeat à rafraîchir)*
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
+- **Plan** : B13, bloc linguistique.
+- **Stratégie** : v0 mesuré.
+- **Ambition** : un runtime cognitif tracé.
+- **Objectif final** : un moteur de pensée v0.
+- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0** et sa **porte produit**.
+- **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
+- **Ce que font les autres** : **N2**, **S**, **hub**.
+- **Prochaine action** : les **17 spans inatteignables** (gold, lexique), la **restitution**, et la **file des tâches** (rapport A23).
+- **Sous-agents** : 4 mandats, [plan-travail](plan-travail.
+… [3803 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de R1.2/R1.1 : mesurées ou à refaire ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -E \"r11|r12|n2-fenetre\" | head -15; echo \"--- R12 fiche résultat ? ---\"; grep -rn \"R1.2\\|R12\" docs/pilotage/en-cours.md | head; echo \"--- rapport n2 fenetre r1 ---\"; grep -n -i \"R1.2\\|1024\\|suite\\|proc … [118 caractères tronqués]`
+
+  ```
+n2-fenetre.json
+n2-r11.json
+n2-r12-2048.json
+rapport-n2-fenetre.md
+rapport-n2-fenetre-r1.md
+rapport-n2-r11.md
+rapport-n2-r12-2048.md
+--- R12 fiche résultat ? ---
+131:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 178/178 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md) ; **la passe complète est finie** (`work/portes/passe-2404-23h45` ; **79 vertes, 4 rouges** : `indice`, `melange` tolérées ; `lecteur` corrigée ; `sessions` → heartbeat de `e181ce02` à rafraîchir).
+135:- **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
+--- rapport n2 fenetre r1 ---
+4:> fenêtre, et ce que R1.1/R1.2 devraient tester en premier. Les chiffres sont dans les fiches
+21:## Ce que R1.1 et R1.2 devraient tester
+27:- **R1.2 (la fenêtre apprise)** : entraîner sur des contextes **plus longs que la fenêtre** (512,
+30
+… [185 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-n2-r11.md reports/rapport-n2-r12-2048.md; do echo \"######## $f\"; head -12 \"$f\"; echo \"...\"; tail -18 \"$f\"; done", "description": "Read R1.1/R1.2 fiches verdicts"}`
+
+  ```
+######## reports/rapport-n2-r11.md
+# R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture
+
+> **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : à recette N2 (34,3 M, canal,
+> 20 000 pas depuis `base-wiki-45m`), remplacer la position **absolue** par un **RoPE** fait passer
+> la PPL à 1 000 octets de **8,2024** à **3,2545** : la **porte R1.1** (1 000 octets dans un
+> facteur **1,5** de la PPL à 129) est tenue à **0,97×** contre **2,33×**, et la PPL à 128
+> **s'améliore** de 0,14. Le mécanisme est contrôlé — à texte et prédécesseurs **identiques**,
+> RoPE est invariant au décalage absolu (Δ **0,0017**) quand la table absolue **×4,8** (3,8468 →
+> 18,6055) parce que les lignes 512+ n'ont jamais reçu de gradient. **Mais la porte n'est pas une
+> propriété du schéma** : depuis une initialisation **aléatoire figée**, le même RoPE **monte** de
+> 3,5428 à 6,2163 à 20 000 pas (1,76×) et **ne se redresse pas** à 40 000 (3,3215 → 6,4259) — il
+> est puni par les distances qu'il n'a jamais vues.
+...
+- **R1.2 n'est mesuré qu'à un budget** (5 000 pas × 512) : les mêmes pas que R1.1
+  (20 000 × 512) demanderaient 4× les octets et n'ont pas été fa
+… [3131 caractères tronqués]
+  ```
+

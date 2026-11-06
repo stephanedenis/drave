@@ -7,12 +7,12 @@
 | Identifiant | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.5 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 72 |
-| Appels d'outils | 88 |
+| Messages | 78 |
+| Appels d'outils | 94 |
 | Fichiers touchés | 0 |
-| Commandes | 76 |
+| Commandes | 82 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*88 appels d'outils.* Actions notables :
+*94 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,11 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 63 autres
+- … et 69 autres
 
 **Synthèse produite :**
 
-⏵ Relecture de l'état courant mis à jour (10 h 20) pour éviter les tâches périmées
+⏵ Vérification des lignes B9 et A2.6 (encore ouvertes ?)
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
 - **T1** Run gold evaluation with key env var set
-- … et 36 autres
+- … et 42 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -133,6 +133,22 @@
 - **T1** `- **T1** `- **Un seul split déterministe** (`crc32 % 3`), sans validation croisée ; les valeurs``
 - **T1** `- **T1** `candidats laisse 1,17 % de réussite, le top-1 aléatoire 42,14 % ; les deux donnent p = 0.``
 - **T1** `- **T1** `0, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %``
+- **T1** `- **N2 — en pause** : **1 024** = recette de production ; **2 048 fini** (2×10 000 pas ; drvm `c50beff6` + `91a3028…`) ; la distillation est mesurée (bilan ci-dessus) ; prochaine : la **porte propre (`
+- **T1** `**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 17`
+- **T1** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
+- **T1** `- **R1 (nuit)** : 2 048 à 20 000 pas ? → **oui** : 2×10 000 pas finis (perte 0,9409 → 0,8965 ; PPL 2,614 → 2,4953).`
+- **T1** `131:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** `
+- **T1** `> RoPE est invariant au décalage absolu (Δ **0,0017**) quand la table absolue **×4,8** (3,8468 →`
+- **T1** `- **R1.2 n'est mesuré qu'à un budget** (5 000 pas × 512) : les mêmes pas que R1.1`
+- **T1** `(20 000 × 512) demanderaient 4× les octets et n'ont pas été faits — le gain mesuré est donc un`
+- **T1** `> **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à`
+- **T1** `> **2 048 ne la bat pas** à octets constants (2,9630 ; et au complément 164 Mo, 3,0466 contre`
+- **T1** `**Synthèse de la loi de la fenêtre** (à 33 Mo pour les tailles, à 20,5 Mo pour la loi) : le saut`
+- **T1** `reports/rapport-cache-chunker.md:32:Une nuance de lecture, que la fiche dit dans son § 6 mais que son titre masque : **le ×11,6 n'est`
+- **T1** `| KV en VRAM | ✅ mesuré | ×1,93 au préremplissage 8 k, ×5,8 sur l’attention |`
+- **T1** `| tête 4 bits | ❌ refusée | +10 % de PPL ; `choisir_avec_perte` la refuse à 5 % |`
+- **T1** `- `choisir_avec_perte` refuse la tête 4 bits à un budget de 5 % : la place ne suffit pas, la perte`
+- **T1** `**testée**. La suite est **A6.2** (bloqué) ou **A8.3a** (épingler le régime 1 %), pas un nouveau`
 
 ## 5. Erreurs rencontrées
 

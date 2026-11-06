@@ -1404,3 +1404,39 @@ assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
 … [2497 caractères tronqués]
   ```
 
+- **bash** `{"command": "python3 tools/drave.py analyser \"The cat sleeps on the roof.\" --langue en --json | wc -c; python3 tools/drave.py analyser \"Le chat dort.\" --json | wc -c; python3 tools/drave.py analyser \"Le chat dort.\" --json | python3 -c \"import json,sys; d=json.load(sys.stdin); print('compact', … [281 caractères tronqués]`
+
+  ```
+8704
+5561
+compact 4013
+---
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, subprocess, sys, time\nCLI=[sys.executable,\"tools/drave.py\"]\nfor texte, langue in [(\"Le chat dort.\",\"fr\"), (\"The cat sleeps on the roof.\",\"en\"),\n                      (\"Le chat de la voisine qui dort sur le toit se réveille.\",\"fr\")]:\n    a … [381 caractères tronqués]`
+
+  ```
+fr 13 car. ->   5563 octets JSON, 19 étiquettes, 140.9 ms
+en 27 car. ->   8704 octets JSON, 32 étiquettes, 137.4 ms
+fr 55 car. ->  16100 octets JSON, 59 étiquettes, 139.1 ms
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py evaluer --gold | head -5; echo \"code=${PIPESTATUS[0]}\"", "description": "Run gold evaluation from outside the repo"}`
+
+  ```
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold gelé (référence figée) · 602 phrases · 3141 tokens · 239 cibles d'attachement
+
+POS         exactitude 76.03 %  (fermé 90.07 %, ouvert 62.69 %)
+SYNTAGMES   F1 58.93 %  (P 63.19 % / R 55.22 %)
+code=0
+  ```
+
+- **bash** `{"command": "python3 tools/drave.py analyser \"The cat sleeps on the roof.\" --langue en --json | python3 -m json.tool >/dev/null && echo \"json en valide\"; python3 tools/drave.py analyser \"Le chat dort.\" --json | python3 -m json.tool >/dev/null && echo \"json fr valide\"; python3 tools/drave.py  … [123 caractères tronqués]`
+
+  ```
+json en valide
+json fr valide
+json eval valide
+  ```
+

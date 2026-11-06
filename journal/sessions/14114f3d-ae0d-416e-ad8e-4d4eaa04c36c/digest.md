@@ -1539,3 +1539,50 @@ parallele source annotation parallele sources labels ['heuristique', 'neuronal']
 … [896 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, json, collections, time\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nRACINE='/home/stephane/Data13TB/stephane/Gi … [1005 caractères tronqués]`
+
+  ```
+attendu fr/en/und -> sans profils 50 / 50 avec profils 2 / 50
+det sans {'fr': 34, 'en': 14, 'und': 2}
+det avec {'hns': 1, 'fra': 28, 'und': 8, 'oci': 2, 'sco': 3, 'eng': 7, 'pcm': 1}
+duree 50 avec profils 0.43 s
+('f01', 'fr', 'fr', 'hns')
+('f02', 'fr', 'fr', 'fra')
+('f03', 'fr', 'fr', 'und')
+('f04', 'fr', 'fr', 'fra')
+('f05', 'fr', 'fr', 'fra')
+('f06', 'fr', 'fr', 'fra')
+('f07', 'fr', 'fr', 'oci')
+('f08', 'fr', 'fr', 'fra')
+('f09', 'fr', 'fr', 'fra')
+('f10', 'fr', 'fr', 'fra')
+('f11', 'fr', 'fr', 'fra')
+('f12', 'fr', 'fr', 'fra')
+('f13', 'fr', 'fr', 'fra')
+('f14', 'fr', 'fr', 'fra')
+('f15', 'fr', 'fr', 'fra')
+('f16', 'fr', 'fr', 'fra')
+('f17', 'fr', 'fr', 'fra')
+('f18', 'fr', 'fr', 'fra')
+('f19', 'fr', 'fr', 'fra')
+('f20', 'fr', 'fr', 'fra')
+('f21', 'fr', 'fr', 'fra')
+('f22', 'fr', 'fr', 'fra')
+('f23', 'fr', 'fr', 'und')
+('f24', 'fr', 'fr', 'fra')
+('f25', 'fr', 'fr', 'fra')
+('f26', 'fr', 'fr', 'fra')
+('f27', 'fr', 'fr', 'fra')
+('f28', 'fr', 'fr', 'fra')
+('e29', 'en', 'en', 'sco')
+('e30', 'en', 'en', 'eng')
+('e31', 'en', 'en', 'eng')
+('e32', 'en', 'en', 'und')
+('e33', 'en', 'en', 'eng')
+('e34', 'en', 'en', 'eng')
+('e35', 'en', 'en', 'sco')
+('e36', 'en', 'en', 'und')
+('e37', 'en', 'e
+… [365 caractères tronqués]
+  ```
+

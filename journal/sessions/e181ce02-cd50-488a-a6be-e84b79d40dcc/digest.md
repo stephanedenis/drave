@@ -50508,3 +50508,21 @@ be7d13b9 ÉTAT — LE BLOC L PASSE À 222/222, 17 SPANS, DRAVE V0 ET LA PORTE PR
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, **F1 0,5849* … [944 caractères tronqués]`
+
+  ```
+· T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2880]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2880", "timeout_ms": 600000, "wait": true}`
+
+  ```
+19 files changed, 552 insertions(+), 55 deletions(-)
+COMMIT OK 1
+d003bbf1 ÉTAT — TRIM T0 APRÈS LE BLOC L
+[status: completed, exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`drave` v0** et sa **porte produit**.\", \" ; **`drave` v0**.\")\np.write_text(t)\nPY\npython3 tools/taille_documents. … [422 caractères tronqués]`

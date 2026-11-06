@@ -2366,3 +2366,193 @@ langue=fr script=Latn source=heuristique refus=-
 5561 /tmp/doc_produit/chat.json
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification du gold de la phrase d'exemple (attachement) pour ne pas surinterpréter.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    d=json.load(open('tools/tests/linguistique/'+f))\n    for p in d['phrases']:\n        if p['texte'].startswith('Le chat de la voisin … [213 caractères tronqués]`
+
+  ```
+gold.json g002 Le chat de la voisine dort.
+   {'type': 'GN', 'texte': 'Le chat', 'role': 'agent', 'debut': 0, 'fin': 7}
+   {'type': 'GP', 'texte': 'de la voisine', 'role': 'possession', 'debut': 8, 'fin': 21, 'cibles': ['chat'], 'cible': 'chat'}
+   {'type': 'GV', 'texte': 'dort', 'role': 'prédicat', 'debut': 22, 'fin': 26}
+  pragma {'acte': 'assertion'}
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche d'une phrase du gold avec REL correctement attachée pour l'exemple 2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.')\nfrom tools.bloc_linguistique import Heuristique\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=Heuristique(); phr=charger()\nn=0\nfor p in phr:\n    if p.get( … [772 caractères tronqués]`
+
+  ```
+g002 'Le chat de la voisine dort.' | GP 'de la voisine' -> chat
+g003 "La femme a vu l'homme dans le parc." | GP 'dans le parc' -> vu
+g004 'Il a couru pour attraper le bus.' | GP 'pour attraper le bus' -> couru
+g005 "Elle a dit qu'elle viendrait hier." | SUB "qu'elle viendrait" -> dit
+g006 'Le chien du voisin aboie la nuit.' | GP 'du voisin' -> chien
+g007 'Les enfants jouent dans le jardin.' | GP 'dans le jardin' -> jouent
+g010 'Viens ici !' | GP 'ici' -> Viens
+g011 "Le livre que j'ai lu est intéressant." | REL "que j'ai lu" -> livre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --texte \"Le livre que j'ai lu est intéressant.\" --json | jq '[.etiquettes[]|select(.niveau==\"syntagme\")|{valeur,type,debut,fin,confiance,role:.meta.role,cible:.meta.attachement.cible,union:.meta … [300 caractères tronqués]`
+
+  ```
+[
+  {
+    "valeur": "Le livre",
+    "type": "GN",
+    "debut": 0,
+    "fin": 8,
+    "confiance": 0.55,
+    "role": "agent",
+    "cible": "intéressant",
+    "union": null,
+    "candidats": [
+      "« que j'ai lu » → Le livre",
+      "intéressant",
+      "livre"
+    ]
+  },
+  {
+    "valeur": "que j'ai lu",
+    "type": "REL",
+    "debut": 9,
+    "fin": 20,
+    "confiance": 0.55,
+    "role": "qualite",
+    "cible": "livre",
+    "union": null,
+    "candidats": [
+      "« que j'ai lu » → Le livre",
+      "intéressant",
+      "livre"
+    ]
+  },
+  {
+    "valeur": "que j'ai lu est intéressant",
+    "type": "REL",
+    "debut": 9,
+    "fin": 36,
+    "confiance": 0.3,
+    "role": "qualité",
+    "cible": "livre",
+    "union": true,
+    "candidats": [
+      "REL",
+      "livre",
+      "intéressant"
+    ]
+  },
+  {
+    "valeur": "est intéressant",
+    "type": "GV",
+    "debut": 21,
+    "fin": 36,
+    "confiance": 0.55,
+    "role": "predicat",
+    "cible": "livre",
+    "union": null,
+    "candidats": [
+      "« que j'ai lu » → Le livre",
+      "livre"
+    ]
+  }
+]
+[
+  {
+    "valeur": "Le",
+    "type": "DET",
+    "debut": 0,
+    "fin": 2
+  },
+  {
+    "valeur": "livre",
+    "type": "NOUN",
+    "debut":
+… [1015 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && jq '.phrases[0:3]|map({id,texte,segments,pragma})' tools/tests/linguistique/gold.json", "description": "Check first hand gold entries"}`
+
+  ```
+[
+  {
+    "id": "g001",
+    "texte": "Le chat dort.",
+    "segments": [
+      {
+        "type": "GN",
+        "texte": "Le chat",
+        "role": "agent",
+        "debut": 0,
+        "fin": 7
+      },
+      {
+        "type": "GV",
+        "texte": "dort",
+        "role": "prédicat",
+        "debut": 8,
+        "fin": 12
+      }
+    ],
+    "pragma": {
+      "acte": "assertion"
+    }
+  },
+  {
+    "id": "g002",
+    "texte": "Le chat de la voisine dort.",
+    "segments": [
+      {
+        "type": "GN",
+        "texte": "Le chat",
+        "role": "agent",
+        "debut": 0,
+        "fin": 7
+      },
+      {
+        "type": "GP",
+        "texte": "de la voisine",
+        "role": "possession",
+        "debut": 8,
+        "fin": 21,
+        "cibles": [
+          "chat"
+        ],
+        "cible": "chat"
+      },
+      {
+        "type": "GV",
+        "texte": "dort",
+        "role": "prédicat",
+        "debut": 22,
+        "fin": 26
+      }
+    ],
+    "pragma": {
+      "acte": "assertion"
+    }
+  },
+  {
+    "id": "g003",
+    "texte": "La femme a vu l'homme dans le parc.",
+    "segments": [
+      {
+        "type": "GN",
+        "texte": "La femme",
+        "role": "agent",
+        "debut": 
+… [576 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l data/udhr/articles.jsonl 2>/dev/null | head -2; ls tools/__init__.py 2>/dev/null || echo \"pas de tools/__init__.py (namespace package)\"; ls docs/produit 2>/dev/null || echo \"docs/produit absent\"", "description": "Check UDHR … [24 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 7661342 17 oct 23:14 data/udhr/articles.jsonl
+pas de tools/__init__.py (namespace package)
+docs/produit absent
+  ```
+

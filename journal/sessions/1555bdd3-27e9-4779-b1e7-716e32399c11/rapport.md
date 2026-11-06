@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.5 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 65 |
-| Appels d'outils | 80 |
+| Messages | 70 |
+| Appels d'outils | 85 |
 | Fichiers touchés | 0 |
-| Commandes | 68 |
+| Commandes | 73 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*80 appels d'outils.* Actions notables :
+*85 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 58 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Recherche d'une phrase du gold avec REL correctement attachée pour l'exemple 2.
+⏵ Vérification de la reproductibilité des profils UDHR hors corpus versionné.
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 28 autres
+- … et 33 autres
 
 ## 4. Mesures et résultats marquants
 
