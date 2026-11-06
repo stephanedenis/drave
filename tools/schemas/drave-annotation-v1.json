@@ -1,0 +1,138 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://drave.local/schema/annotation-v1.json",
+ "title": "drave.annotation v1",
+ "description": "L'annotation du bloc linguistique heuristique : un texte, ses étiquettes par niveau, ses unités sémantiques et son refus éventuel.",
+ "type": "object",
+ "required": [
+  "schema",
+  "version",
+  "texte",
+  "langue",
+  "script",
+  "refus",
+  "etiquettes",
+  "unites_semantiques"
+ ],
+ "properties": {
+  "schema": {
+   "const": "drave.annotation"
+  },
+  "version": {
+   "const": 1
+  },
+  "texte": {
+   "type": "string"
+  },
+  "langue": {
+   "type": "string",
+   "pattern": "^[a-z]{2,3}$|^und$"
+  },
+  "script": {
+   "type": "string"
+  },
+  "source": {
+   "type": "string"
+  },
+  "refus": {
+   "type": "string",
+   "enum": [
+    "",
+    "vide",
+    "non_texte",
+    "trop_long",
+    "neuronal"
+   ]
+  },
+  "etiquettes": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "niveau",
+     "type",
+     "valeur",
+     "debut",
+     "fin",
+     "source",
+     "confiance"
+    ],
+    "properties": {
+     "niveau": {
+      "type": "string"
+     },
+     "type": {
+      "type": "string"
+     },
+     "valeur": {
+      "type": "string"
+     },
+     "debut": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "fin": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "source": {
+      "type": "string"
+     },
+     "confiance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+     },
+     "candidats": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "langue": {
+      "type": "string"
+     },
+     "script": {
+      "type": "string"
+     },
+     "meta": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  "unites_semantiques": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "debut",
+     "fin"
+    ],
+    "properties": {
+     "debut": {
+      "type": "integer"
+     },
+     "fin": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  "fraction_semantique": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 1
+  },
+  "trace": {
+   "type": "array"
+  },
+  "cout": {
+   "type": "object"
+  },
+  "contexte": {
+   "type": "string"
+  }
+ },
+ "additionalProperties": true
+}

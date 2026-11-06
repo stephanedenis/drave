@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 145.6 h |
-| Tours | 183 |
-| Messages | 3120 |
-| Appels d'outils | 2752 |
+| Durée | 146.0 h |
+| Tours | 184 |
+| Messages | 3132 |
+| Appels d'outils | 2766 |
 | Fichiers touchés | 25 |
-| Commandes | 2259 |
-| Sous-agents | 31 |
-| Commits | 354 |
+| Commandes | 2269 |
+| Sous-agents | 34 |
+| Commits | 355 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -55,6 +55,8 @@
 … [261 caractères tronqués]
 - **complete** — Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utilisable en autonomie comme premier produi
 … [261 caractères tronqués]
+- **create** — Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des
+… [408 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -423,6 +425,8 @@
 **Tour 182** — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. Its closing message: ⏵ Clôture : résumé de l'audit et des deux livrables  Audit terminé. **Deux fichiers neufs**, aucun existant modifié, aucun commit :  - [`reports/rapport-fiabilite-produit.md`](reports/rapport-fiabilite-produit.md) — 661 lignes - [`reports/pensee-fiabilite-prod … [2730 caractères tronqués]
 
 **Tour 183** — oui
+
+**Tour 184** — oui, continue en mode autonome jusqu'à 9h demain
 
 ## 2. Déroulé, étape par étape
 
@@ -9853,7 +9857,7 @@ J'ai traité les deux rapports qui sont arrivés après la clôture de la fenêt
 
 ### Tour 183 — oui
 
-*14 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Voir la structure de la CLI
 - bash — Lire les sorties de la CLI
@@ -9869,10 +9873,70 @@ J'ai traité les deux rapports qui sont arrivés après la clôture de la fenêt
 - bash — Autotest après le schéma
 - bash — Fiche du contrat v1
 - bash — Committer le contrat v1 et pousser
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Porte produit à **8 contrôles**, verte. Je vérifie que les 183 portes tiennent toujours
+⏵ Les trois points sont fermés et poussés
+
+\## Ce que « oui » a produit
+
+\### 1. Les deux `UnicodeEncodeError` — fermés
+
+| mode de panne | avant | après |
+|---|---|---|
+| **surrogate isolé** (`"Le chat \ud800 dort."`) | `UnicodeEncodeError` | JSON valide, 23 étiquettes, exit 0 |
+| **stdout ASCII** (`PYTHONIOENCODING=ascii`) | `UnicodeEncodeError` sur le tiret cadratin | en-tête et sortie normaux |
+| **entrée non-str** (`bytes`, `int`, `list`, `None`) | `AttributeError` | `refus="non_texte"`, 0 étiquette |
+
+Le correctif : `_sur()` (encodage `errors="replace"` avant écriture), `sys.stdout.reconfigure(encoding="utf-8")` au démarrage, et la garde de type dans `analyser`.
+
+\### 2. Le contrat v1 — publié et testé
+
+- **`schema: "drave.annotation"`** et **`version: 1`** dans le JSON (13 clés, aucune retirée) ;
+- **8 champs obligatoires** figés par `tools/tests/test_schema_produit.py` (**6 tests**, dont un contrôle négatif par mutation) ;
+- **un refus est une réponse** : JSON avec `refus`, **code de sortie 3** (avant : stdout vide, code 1) ;
+- **porte produit à 8 contrôles** (version, fr, en, rejeu, smoke test, schéma v1, refus, autotest) — **verte**.
+
+```bash
+python3 tools/drave.py analyser "" --json     # {"schema":"drave.annotation","version":1,…,"refus":"vide"} + code 3
+python3 tools/drave.py analyser "Le chat dort." --json | jq .version   # 1
+```
+
+\## L'état
+
+`HEAD 037fe041`, `master` = `s/v7` **poussés**, 0 divergence. **183/183** portes d'autotest ; `revue`, `taille`, `tableaux`, `en-cours`, `journal`, `sessions`, `porte-bloc`, `index --verifier` ✅ ; **8 tests produit + 6 tests schéma OK**.
+
+Sur la fenêtre, les gains mesurés restent : **POS 75,81 → 83,83 %**, **F1 0,5849 → 0,6181**, **F1 anglais 0,6341 → 0,7273**, **attachement inchangé 222/222**.
+
+\## Ce qui reste
+
+1. **Publier le schéma** comme fichier (`docs/produit/schema-v1.json`, Draft 2020-12) et le valider dans la porte — le test couvre les 8 champs, pas encore la totalité du schéma.
+2. **Les frontières de phrase** (URL, décimaux, `M.`) et la **partition explicite des syntagmes** (23/46 textes à chevauchement, sans dédupliquer).
+3. **R4** (copule → ADJ) et les classes fermées anglaises (`where`, `late`, `out`, `as`).
+
+Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
+
+### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
+
+*12 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Ancrer l'état de départ
+- sous-agent — Frontières de phrase
+- sous-agent — Partition des syntagmes
+- sous-agent — POS R4 et classes fermées
+- bash — Publier le schéma JSON v1
+- bash — Voir si un validateur JSON Schema existe
+- bash — Écrire et lancer le validateur de schéma
+- bash — Ajouter le validateur à la porte
+- bash — Fiche et docs du schéma publié
+- bash — Déplacer le schéma dans tools/schemas
+- bash — Committer le schéma publié et pousser
+
+**Synthèse produite :**
+
+⏵ Schéma publié et validé : la porte produit passe à **9 contrôles**. Je fige
 
 ## 3. Travail accompli
 
@@ -9939,6 +10003,9 @@ J'ai traité les deux rapports qui sont arrivés après la clôture de la fenêt
 - tour 179 — File des tâches restantes
 - tour 180 — POS anglais diagnostic
 - tour 180 — Fiabilité produit hors gold
+- tour 184 — Frontières de phrase
+- tour 184 — Partition des syntagmes
+- tour 184 — POS R4 et classes fermées
 
 ### Commandes exécutées (échantillon)
 
@@ -9982,7 +10049,7 @@ J'ai traité les deux rapports qui sont arrivés après la clôture de la fenêt
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2219 autres
+- … et 2229 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10484,4 +10551,5 @@ J'ai traité les deux rapports qui sont arrivés après la clôture de la fenêt
 - DOCS — LE README DES FICHES DANS LE BUDGET T1 APRÈS LES DEUX FICHES POS" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
 - DOCS — DEUX MOTS DE MOINS DANS LE README (T1 À 2 800)" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "DE
 - PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183" -- tools/bloc_linguistique.py to
+- PRODUIT — LE SCHÉMA V1 PUBLIÉ (tools/schemas/drave-annotation-v1.json, Draft 2020-12) ET VALIDÉ SUR 5 CAS ; PORTE À 9 CONTRÔLES ; 183/183" -- tools/schemas/drav
 

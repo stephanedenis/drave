@@ -41,6 +41,12 @@ else
   dit ❌ "smoke test en échec (voir /tmp/porte-produit-tests.log)"; ko=1
 fi
 
+if python3 tools/verifier_schema_produit.py >/tmp/porte-produit-valide.log 2>&1; then
+  dit ✅ "schéma v1 validé : $(tail -1 /tmp/porte-produit-valide.log)"
+else
+  dit ❌ "schéma v1 : validation en échec (voir /tmp/porte-produit-valide.log)"; ko=1
+fi
+
 if python3 tools/tests/test_schema_produit.py >/tmp/porte-produit-schema.log 2>&1; then
   dit ✅ "schéma v1 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-schema.log | head -1)"
 else

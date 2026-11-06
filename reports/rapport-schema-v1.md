@@ -5,7 +5,10 @@
 > et **`version`** (`1`) ; un **refus** est une **réponse** (JSON avec `refus`, code de sortie
 > **3**) et non plus un stdout vide ; un **surrogate isolé** et une **entrée non textuelle** ne
 > font plus planter la CLI ; `--json` est stable (clés triées, sans durée).
-> **Porte produit** : **8 contrôles** (dont le test de schéma et le refus), **verte** ;
+> **Le schéma est publié** : [`tools/schemas/drave-annotation-v1.json`](../tools/schemas/drave-annotation-v1.json)
+> (Draft 2020-12) et **validé** par `tools/verifier_schema_produit.py` (5 cas : fr, en, vide,
+> ponctuation, long) avec `fastjsonschema`.
+> **Porte produit** : **9 contrôles** (dont le **validateur de schéma**), **verte** ;
 > **183/183** portes d'autotest.
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`SCHEMA_ANNOTATION`,
@@ -37,8 +40,8 @@ présents sur **toutes** les réponses, refus compris. Le test les fige et un **
 - **Les clients existants** : le passage de 11 à 13 clés est **additif** (aucune clé retirée), mais
   un client qui compte les clés verra la différence.
 - **Le refus** : le code 3 est **nouveau** ; un client qui testait `code != 0` continue de marcher.
-- **Le schéma JSON** (Draft 2020-12) proposé par l'audit A26 n'est **pas** encore publié comme
-  fichier : le test couvre les 8 champs, pas la totalité du schéma.
+- **Le schéma** est publié et validé sur **5 cas**, pas sur tous les textes du corpus.
+- **Le validateur** dépend de `fastjsonschema` (repli minimal si absent).
 
 ## 5. Ce qui pourrait rendre cette fiche fausse
 
@@ -48,9 +51,9 @@ présents sur **toutes** les réponses, refus compris. Le test les fige et un **
 
 ## 6. La suite
 
-1. **Publier le schéma** (`docs/produit/schema-v1.json`, Draft 2020-12) et le valider dans la porte.
+1. ~~Publier le schéma~~ — **fait** (`tools/schemas/drave-annotation-v1.json`, validé, 9e contrôle).
 2. **Les frontières de phrase** (URL, décimaux, `M.`) et la **partition des syntagmes**.
-3. **`refus` en texte** : le code 3 est déjà là ; le message stderr reste.
+3. **Valider le corpus** contre le schéma (les 612 phrases du gold) dans la porte.
 
 ## 7. Fichiers
 

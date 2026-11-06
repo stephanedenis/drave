@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — le contrat v1 : `schema`/`version`, refus JSON code 3, 8 contrôles |
+| [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — le contrat v1 : `schema`/`version`, refus JSON code 3, schéma publié, 9 contrôles |
 | [`rapport-pos-anglais-v2.md`](rapport-pos-anglais-v2.md) | **B13** — POS **83,83 %** (R2a/R3/R2b), F1 **0,6181** |
 | [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS (A25) |
 | [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité : 0 plantage, contrat à versionner |

@@ -53014,3 +53014,223 @@ index EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py tools/drave.py tools/tests/test_schema_produit.py tools/porte-produit.sh reports/rapport-schema-v1.md reports/pensee-schema-v1.json reports/README.md reports/INDEX.md docs/pilo … [893 caractères tronqués]`
+
+  ```
+create mode 100644 reports/rapport-schema-v1.md
+ create mode 100644 tools/tests/test_schema_produit.py
+COMMIT OK 1
+037fe041 PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183
+   4df6af6a..037fe041  s/v7 -> s/v7
+   4df6af6a..037fe041  master -> master
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie les deux modes de panne signalés par l'audit (surrogate, stdout ASCII)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== stdout ASCII :\"; PYTHONIOENCODING=ascii timeout 60 python3 tools/drave.py analyser \"Le chat dort.\" 2>&1 | head -3; echo \"EXIT=$?\"; echo \"=== surrogate via argv :\"; timeout 60 python3 tools/drave.py analyser $'Le cha … [434 caractères tronqués]`
+
+  ```
+=== stdout ASCII :
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+EXIT=0
+=== surrogate via argv :
+JSON OK, 23 étiquettes, refus= ''
+=== non-str (API) :
+['non_texte', 'non_texte', 'non_texte', 'non_texte']
+  ```
+
+### 🤖 Assistant
+
+⏵ Les trois modes de panne sont fermés : vérification finale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [416 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 18:17:08 EST
+HEAD 037fe041
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+OK
+OK
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ Les trois points sont fermés et poussés
+
+## Ce que « oui » a produit
+
+### 1. Les deux `UnicodeEncodeError` — fermés
+
+| mode de panne | avant | après |
+|---|---|---|
+| **surrogate isolé** (`"Le chat \ud800 dort."`) | `UnicodeEncodeError` | JSON valide, 23 étiquettes, exit 0 |
+| **stdout ASCII** (`PYTHONIOENCODING=ascii`) | `UnicodeEncodeError` sur le tiret cadratin | en-tête et sortie normaux |
+| **entrée non-str** (`bytes`, `int`, `list`, `None`) | `AttributeError` | `refus="non_texte"`, 0 étiquette |
+
+Le correctif : `_sur()` (encodage `errors="replace"` avant écriture), `sys.stdout.reconfigure(encoding="utf-8")` au démarrage, et la garde de type dans `analyser`.
+
+### 2. Le contrat v1 — publié et testé
+
+- **`schema: "drave.annotation"`** et **`version: 1`** dans le JSON (13 clés, aucune retirée) ;
+- **8 champs obligatoires** figés par `tools/tests/test_schema_produit.py` (**6 tests**, dont un contrôle négatif par mutation) ;
+- **un refus est une réponse** : JSON avec `refus`, **code de sortie 3** (avant : stdout vide, code 1) ;
+- **porte produit à 8 contrôles** (version, fr, en, rejeu, smoke test, schéma v1, refus, autotest) — **verte**.
+
+```bash
+python3 tools/drave.py analyser "" --json     # {"schema":"drave.annotation","version":1,…,"refus":"vide"} + code 3
+python3 tools/drave.py analyser "Le chat dort." --json | jq .version   # 1
+```
+
+## L'état
+
+`HEAD 037fe041`, `master` = `s/v7` **poussés**, 0 divergence. **183/183** portes d'autotest ; `revue`, `taille`, `tableaux`, `en-cours`, `journal`, `sessions`, `porte-bloc`, `index --verifier` ✅ ; **8 tests produit + 6 tests schéma OK**.
+
+Sur la fenêtre, les gains mesurés restent : **POS 75,81 → 83,83 %**, **F1 0,5849 → 0,6181**, **F1 anglais 0,6341 → 0,7273**, **attachement inchangé 222/222**.
+
+## Ce qui reste
+
+1. **Publier le schéma** comme fichier (`docs/produit/schema-v1.json`, Draft 2020-12) et le valider dans la porte — le test couvre les 8 champs, pas encore la totalité du schéma.
+2. **Les frontières de phrase** (URL, décimaux, `M.`) et la **partition explicite des syntagmes** (23/46 textes à chevauchement, sans dédupliquer).
+3. **R4** (copule → ADJ) et les classes fermées anglaises (`where`, `late`, `out`, `as`).
+
+Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
+
+
+## Tour 184
+
+### 👤 Utilisateur
+
+oui, continue en mode autonome jusqu'à 9h demain
+
+- **create_goal** `{"max_goal_rounds": 400, "objective": "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abr … [449 caractères tronqués]`
+
+> **Objectif** (create) : Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie.
+
+
+  ```
+{"goal":{"id":"goal-528eabc2-254d-4a2a-91fc-c931edc44638","revision":1,"objective":"Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie.","phase":"active","roundsStarted":0,"maxGoalRounds":400},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s' | cut -c1-80; git status --porcelain | grep -vE \"^\\?\\?\" | head -3; ls docs/produit/", "description": "Ancrer l'état de départ"}`
+
+  ```
+ven 06 nov 2026 18:32:45 EST
+037fe041 PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURRO
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+exemples.md
+README.md
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 1 de la nuit : frontières, partition des syntagmes, POS (R4/classes fermées) ; moi, le schéma publié
+
+- **subagent** `{"description": "Frontières de phrase", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **réparer les frontières de phrase** du bloc linguistique (P0-4 de l'audit produit `reports/rapport-fiabilite-produit.md`), sans modifier l … [1664 caractères tronqués]`
+- **subagent** `{"description": "Partition des syntagmes", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **expliciter la partition des syntagmes** (P0-3 des audits : 23/46 textes libres à chevauchement, 132 paires), sans dédupliquer en silen … [1574 caractères tronqués]`
+- **subagent** `{"description": "POS R4 et classes fermées", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les deux derniers leviers POS** — R4 (copule → ADJ) et les classes fermées anglaises — mesurés sur dev/test, sans modifier le code d … [1431 caractères tronqués]`
+
+  ```
+started subagent 3ccd8d09-9820-4da4-963b-6d84a0ffb141
+  ```
+
+
+  ```
+started subagent eedb7a58-2a33-4caa-8509-f46d9e328080
+  ```
+
+
+  ```
+started subagent 338f8b55-bcd5-464a-a63e-b97381eff55d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nschema = {\n  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n  \"$id\": \"https://drave.local/schema/annotation-v1.json\",\n  \"title\": \"drave.annotation v1\",\n  \"descripti … [2469 caractères tronqués]`
+
+  ```
+schéma écrit 2261 octets
+clés requises : ['schema', 'version', 'texte', 'langue', 'script', 'refus', 'etiquettes', 'unites_semantiques']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import jsonschema; print('jsonschema', jsonschema.__version__)\" 2>&1 | head -1; python3 -c \"import fastjsonschema; print('fastjsonschema ok')\" 2>&1 | head -1", "description": "Voir si un validateur JSON Schema existe" … [1 caractères tronqués]`
+
+  ```
+<string>:1: DeprecationWarning: Accessing jsonschema.__version__ is deprecated and will be removed in a future release. Use importlib.metadata directly to query for jsonschema's version.
+fastjsonschema ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/verifier_schema_produit.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"verifier_schema_produit.py — valide une annotation `drave.annotation` contre le schéma v1.\n\nLe schéma publié est `docs/produit/schema-v1.json` (Draft 2020 … [4003 caractères tronqués]`
+
+  ```
+✅ fr
+  ✅ en
+  ✅ vide
+  ✅ ponctuation
+  ✅ long
+  ✅ validateur JSON Schema
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# la porte produit : 9e contrôle (schéma publié + validateur)\np=pathlib.Path('tools/porte-produit.sh'); t=p.read_text()\nt=t.replace('''if python3 tools/tests/test_schema_produit.py >/tmp/porte-prod … [561 caractères tronqués]`
+
+  ```
+porte : validateur ajouté
+  ✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f387bcab5d90d528 deux fois
+  ✅ smoke test : Ran 8 tests
+  ✅ schéma v1 validé :   ✅ validateur JSON Schema
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Schéma publié et validé : la porte produit passe à **9 contrôles**. Je fige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-schema-v1.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Ce qui change pour un client** : le JSON porte désormais **`schema`** (`\"drave.annotation\"`)\n> et **`version` … [3192 caractères tronqués]`
+
+  ```
+fiche à jour
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · classement : donnée de résultat dans docs/ → docs/produit/schema-v1.json
+     sources et images relatives.
+index EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/schemas 2>/dev/null || echo \"pas de tools/schemas\"; mkdir -p tools/schemas && git mv docs/produit/schema-v1.json tools/schemas/drave-annotation-v1.json 2>/dev/null || mv docs/produit/schema-v1.json tools/schemas/drave-anno … [1301 caractères tronqués]`
+
+  ```
+pas de tools/schemas
+schéma déplacé vers tools/schemas
+  ✅ fr
+  ✅ en
+  ✅ vide
+  ✅ ponctuation
+  ✅ long
+  ✅ validateur JSON Schema
+EXIT=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain docs/produit/ tools/schemas/ | head -5; for i in 1 2 3; do\n  git add tools/schemas/drave-annotation-v1.json tools/verifier_schema_produit.py tools/porte-produit.sh reports/rapport-schema-v1.md reports/README.m … [834 caractères tronqués]`
