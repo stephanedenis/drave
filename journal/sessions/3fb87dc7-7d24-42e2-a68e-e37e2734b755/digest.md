@@ -2234,3 +2234,160 @@ octets 145289
 json OK
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification qu'aucune mention « arbre sale » obsolète ne subsiste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sale\\|68a8717b\" reports/rapport-dev-test-v10.md; echo '--- json ---'; python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-dev-test-v10.json'))\ns=json.dumps(d,ensure_ascii=False)\nfor mot in ('sale','68a8717b … [97 caractères tronqués]`
+
+  ```
+24:> (`68a8717b` puis `653a7981`), qui **committe** l'essai R2 + retrait de la garde d'adverbe
+466:   est à tester ; le retrait pur de la garde (arbre sale) récupère `r303`/`r288` mais perd
+--- json ---
+sale 2
+68a8717b 2
+653a7981 4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-dev-test-v10.json'))\ndef walk(x,path=''):\n    if isinstance(x,dict):\n        for k,v in x.items(): walk(v,path+'/'+k)\n    elif isinstance(x,list):\n        for i,v  … [181 caractères tronqués]`
+
+  ```
+/reserves/4 :: l'arbre a bougé après la mesure : HEAD 68a8717b, tools/bloc_linguistique.py sale ; l'arbre sale donne 221/221 et 18 spans (s037, r303, r288 récupérés ; g017, r241 perdus) — ce n'est pas l'état 710ec7f9 mesuré ici
+  ```
+
+### 🤖 Assistant
+
+⏵ Alignement du bloc `reserves` du JSON et de la dernière mention de la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\np=pathlib.Path('reports/pensee-dev-test-v10.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['reserves']=list(d['synthese']['reserves'])\np.write_text(json.dumps(d, ensure_ascii=False, i … [298 caractères tronqués]`
+
+  ```
+sale restant 0
+reserves top l'arbre a bougé après la mesure : HEAD 653a7981 (68a8717b puis 653a7981) ; l'essai R2 + retrait de la garde d'adverbe y est commité. Cet état donne, mesuré, dev
+466:   est à tester ; le retrait pur de la garde (arbre sale) récupère `r303`/`r288` mais perd
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "limit": 10, "offset": 461}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+461:    r264 » par « 17 + s037 + r303 », et remettre la F1 v9 gelée (0,5866) dans la ligne
+462:    « 602 ». Les chiffres globaux (220/220, 0,9205, 0,5880) restent.
+463: 2. **`r303` sans perdre `g017`** : la garde `predicat_vu` doit distinguer l'adverbe de phrase
+464:    (« yesterday » exclu) de l'adverbe complément du prédicat (« tard » inclus). Une condition
+465:    sur le lexique/la position (adverbe final après un verbe copule ou un verbe intransitif)
+466:    est à tester ; le retrait pur de la garde (arbre sale) récupère `r303`/`r288` mais perd
+467:    `g017`, et `est_sub` dans la ligne `stype` perd `r241`.
+468: 3. **`s037` (R2)** : implémenter `DURS`/`RELATIFS` pour un relatif initial sans précédent
+469:    (`qui`, `dont`, `where`…) au lieu de `precedent is None → SUB`. Vérifier `r241` : `when`
+470:    n'est pas un relatif dur, il doit rester SUB ou REL selon l'antécédent.
+
+(Showing lines 461-470 of 496. Use offset=471 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "new_string": "   est à tester ; le retrait pur de la garde (état `653a7981`) récupère `r303`/`r288` mais perd", "old_string": "   est à tester ; le retrait pur de la garde (arbre sale) récupère `r303`/` … [17 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles finaux après les mises à jour d'ancrage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CIBLES=\"reports/rapport-dev-test-v10.md\" bash tools/porte-tableaux.sh >/tmp/v10/porte_final.log 2>&1; echo \"porte=$?\"; tail -3 /tmp/v10/porte_final.log; python3 - <<'EOF'\nimport pathlib, json\nb=pathlib.Path('reports/rapport-dev … [823 caractères tronqués]`
+
+  ```
+porte=0
+  ✅ 1 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3475 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+ctrl report []
+json ok, reserves synced True
+meta ancrage commit 710ec7f9 ; HEAD ultérieur 653a7981 (essai R2 + retrait de la garde d'adverbe, commité) non mesuré ici
+synthese dev/test 152 68 220
+spans 19 {'REL': 9, 'SUB': 6, 'GP': 4} {'reel': 5, 'synthetique': 14}
+taille report 34830 json 145520
+--- status ---
+AM reports/pensee-dev-test-v10.json
+AM reports/rapport-dev-test-v10.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat au parent (chiffres, écarts, findings, état d'index)
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "RÉSULTAT — dev/test v10, ancré sur 710ec7f9 (module épinglé en /tmp, HEAD a depuis avancé à 653a7981). Deux fichiers neufs écrits, aucun commit, aucun fichier existant modifié : reports/rapport-dev-test-v10.md et reports/pensee-dev-tes … [4843 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif final de la mission
+
+**Mission terminée.** Deux fichiers neufs, aucun commit, aucun fichier existant modifié :
+
+- `reports/rapport-dev-test-v10.md` (490 lignes ; porte-tableaux OK, liens OK)
+- `reports/pensee-dev-test-v10.json` (145 Ko ; JSON valide, `spans.par_source` ajouté, `reserves` synchronisées)
+
+Mesure **ancrée sur `710ec7f9`** (module épinglé dans `/tmp`, `RACINE` du dépôt) ; l'arbre a depuis avancé à `653a7981`, qui committe l'essai R2 + retrait de la garde d'adverbe — la fiche le signale et ne le confond pas avec la mesure.
+
+## dev / test / tout
+
+| | phrases | cibles | labels | couverture | exact/labels | F1 | tête | POS |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| dev | 422 | 163 | 152 | **0,9325** | **152/152 = 1,0** | 0,5812 | 0,7330 | 0,7547 |
+| test | 190 | 76 | 68 | **0,8947** | **68/68 = 1,0** | 0,5890 | 0,7337 | 0,7656 |
+| tout | 612 | 239 | 220 | **0,9205** | **220/220 = 1,0** | 0,5836 | 0,7332 | 0,7581 |
+
+F1/tête **gelées 602** : 0,5880 / 0,7388. **19 spans** perdus : 9 REL, 6 SUB, 4 GP (17 fr / 2 en ; 14 synthétiques / 5 réels).
+
+**Par langue** : fr 91/101 dev, 43/50 test, 134/151 tout ; en 61/62, 25/26, 86/88. **Par type** : REL 51/57, 14/17, 65/74 ; SUB 42/45, 21/24, 63/69 ; GP 59/61, 33/35, 92/96.
+
+**Point clé** : le déficit français global est un **effet de source** (le synthétique est français seulement). Sur le réel : fr **0,9688** vs en **0,9773** (p=0,72) ; le synthétique est à 0,7455. La F1 française reste plus basse **sur le réel** (0,5379 vs 0,6341) : segmentation GN/GV, pas attachement.
+
+## Trois découpages
+
+| split | dev labels/exact | dev couv. | dev F1 | dev tête | test labels/exact | test couv. | test F1 | test tête |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `%3==0` | 152/152 | 0,9325 | 0,5812 | 0,7330 | 68/68 | 0,8947 | 0,5890 | 0,7337 |
+| `%3==1` | 135/135 | 0,9000 | 0,5793 | 0,7297 | 85/85 | 0,9551 | 0,5908 | 0,7390 |
+| `%3==2` | 153/153 | 0,9273 | 0,5900 | 0,7366 | 67/67 | 0,9054 | 0,5699 | 0,7259 |
+| **étendue** | 18 (nombres) | **0,0325** | **0,0107** | **0,0069** | 18 (nombres) | **0,0603** | **0,0209** | **0,0131** |
+
+L'exact/labels est **1,0 partout** : l'étendue du taux exact est **0**, pas 1 cas. POS : étendue 0,0055 / 0,0111. Monte-Carlo 2 000 partitions : p 0,295–0,86, toutes les étendues dans p05–p95 ; **stable**.
+
+**Écart dev/test** : exact **0** ; couverture **+0,0378** au canonique, mais **−0,0551** et **+0,0219** aux décalés (le signe s'inverse), z=1,005, p=0,315 ; standardisé sur la composition dev, le test vaut 0,8824 (−5,01 pts), IC qui se recouvrent. F1 +0,78 seulement par composition (test plus synthétique/GP-riche ; réel +0,35, synthétique +1,74 ; REL −7,3, SUB −6,8).
+
+## Comparaison
+
+| commit | dev | test | tout |
+|---|---:|---:|---:|
+| v7 `69bd865e` | 133/134 | 62/62 | 195/196 |
+| audit `f908d7b0` | 148/148 | 64/64 | 212/212 |
+| v9 `160d08ca` | 152/152 | 67/67 | 219/219 |
+| **v10 `710ec7f9`** | **152/152** | **68/68** | **220/220** |
+
+Deltas : v7→v10 **+18/+19** dev, **+6/+6** test, **+24/+25** tout ; audit→v10 **+4/+4**, **+4/+4**, **+8/+8** ; v9→v10 **0/0**, **+1/+1**, **+1/+1**.
+
+## Trois écarts de la fiche v10
+
+1. **La correction `-ée` est inerte** : `r255` reste perdu, `acheter` absent de `VERBES_CONNUS`, la règle existe depuis `a408a909` ; le diff de `710ec7f9` sur le bloc ne touche que la **garde GP** (3 lignes). Le **+1 test est `r153`**.
+2. **« 19 = 17 + r255 + r264 » est faux** (double comptage). La bonne décomposition : **17 inatteignables + `s037` (R2 non intégrée) + `r303`** (régression nouvelle de `160d08ca` : `predicat_vu` exclut « tard » ; `g017` récupéré par la même garde, échange net 0 sur les SUB).
+3. **La ligne F1 v9→v10 mélange les bases** : 0,5822 est la F1 **vivante** v9 ; la **gelée** est 0,5866 ; le delta gelé est **+0,0014** (0,5866→0,5880), pas +0,0058.
+
+Bonus : la garde GP change 3 phrases (`g004`, `r147`, `r153`) et retire **4 faux positifs** (`g004`, `r147`), d'où la F1/tête au-delà du seul `r153`.
+
+## État courant `653a7981` (à ne pas confondre avec la mesure)
+
+Mesuré : dev 152/152, test **69/69**, tout **221/221**, couverture 0,9247, F1 0,5843, tête 0,7330, POS 0,7581, **18 spans**. `s037`, `r303`, `r288` récupérés ; `g017` et `r241` perdus. `g017`/`r288` est un **ballant** sur l'adverbe final ; `r241` (« The day when we left ») devient SUB au lieu de REL (`est_sub` ajoute `when`).
+
+## État des fichiers
+
+Les deux fichiers sont dans l'index en **`AM`** (le parent les a `git add` avant mes dernières retouches d'ancrage) : **refaire `git add`** avant de committer. Aucun commit n'a été fait par moi ; aucun fichier existant n'a été modifié.
+

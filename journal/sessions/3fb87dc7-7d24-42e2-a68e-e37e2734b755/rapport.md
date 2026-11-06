@@ -7,10 +7,10 @@
 | Identifiant | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 23:24 |
-| Durée | 1.6 h |
+| Durée | 1.7 h |
 | Tours | 1 |
-| Messages | 90 |
-| Appels d'outils | 98 |
+| Messages | 92 |
+| Appels d'outils | 99 |
 | Fichiers touchés | 3 |
 | Commandes | 75 |
 | Sous-agents | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesur … [1686 caractères tronqués]
 
-*98 appels d'outils.* Actions notables :
+*99 appels d'outils.* Actions notables :
 
 - bash — Show branch, HEAD and status
 - bash — List linguistique tools and reports
@@ -41,11 +41,46 @@
 - bash — Trace origin of -ée handling
 - bash — Inspect autotest changes in v10
 - bash — Inspect Annotation and analyser API
-- … et 72 autres
+- … et 73 autres
 
 **Synthèse produite :**
 
-⏵ Contrôles finaux après les mises à jour d'ancrage
+⏵ Récapitulatif final de la mission
+
+**Mission terminée.** Deux fichiers neufs, aucun commit, aucun fichier existant modifié :
+
+- `reports/rapport-dev-test-v10.md` (490 lignes ; porte-tableaux OK, liens OK)
+- `reports/pensee-dev-test-v10.json` (145 Ko ; JSON valide, `spans.par_source` ajouté, `reserves` synchronisées)
+
+Mesure **ancrée sur `710ec7f9`** (module épinglé dans `/tmp`, `RACINE` du dépôt) ; l'arbre a depuis avancé à `653a7981`, qui committe l'essai R2 + retrait de la garde d'adverbe — la fiche le signale et ne le confond pas avec la mesure.
+
+\## dev / test / tout
+
+| | phrases | cibles | labels | couverture | exact/labels | F1 | tête | POS |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| dev | 422 | 163 | 152 | **0,9325** | **152/152 = 1,0** | 0,5812 | 0,7330 | 0,7547 |
+| test | 190 | 76 | 68 | **0,8947** | **68/68 = 1,0** | 0,5890 | 0,7337 | 0,7656 |
+| tout | 612 | 239 | 220 | **0,9205** | **220/220 = 1,0** | 0,5836 | 0,7332 | 0,7581 |
+
+F1/tête **gelées 602** : 0,5880 / 0,7388. **19 spans** perdus : 9 REL, 6 SUB, 4 GP (17 fr / 2 en ; 14 synthétiques / 5 réels).
+
+**Par langue** : fr 91/101 dev, 43/50 test, 134/151 tout ; en 61/62, 25/26, 86/88. **Par type** : REL 51/57, 14/17, 65/74 ; SUB 42/45, 21/24, 63/69 ; GP 59/61, 33/35, 92/96.
+
+**Point clé** : le déficit français global est un **effet de source** (le synthétique est français seulement). Sur le réel : fr **0,9688** vs en **0,9773** (p=0,72) ; le synthétique est à 0,7455. La F1 française reste plus basse **sur le réel** (0,5379 vs 0,6341) : segmentation GN/GV, pas attachement.
+
+\## Trois découpages
+
+| split | dev labels/exact | dev couv. | dev F1 | dev tête | test labels/exact | test couv. | test F1 | test tête |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `%3==0` | 152/152 | 0,9325 | 0,5812 | 0,7330 | 68/68 | 0,8947 | 0,5890 | 0,7337 |
+| `%3==1` | 135/135 | 0,9000 | 0,5793 | 0,7297 | 85/85 | 0,9551 | 0,5908 | 0,7390 |
+| `%3==2` | 153/153 | 0,9273 | 0,5900 | 0,7366 | 67/67 | 0,9054 | 0,5699 | 0,7259 |
+| **étendue** | 18 (nombres) | **0,0325** | **0,0107** | **0,0069** | 18 (nombres) | **0,0603** | **0,0209** | **0,0131** |
+
+L'exact/labels est **1,0 partout** : l'étendue du taux exact est **0**, pas 1 cas. POS : étendue 0,0055 / 0,0111. Monte-Carlo 2 000 partitions : p 0,295–0,86, toutes les étendues dans p05–p95 ; **stable**.
+
+**Écart dev/test** : exact **0** ; couverture **+0,0378** au canonique, mais **−0,0551** et **+0,0219** aux décalés (le signe s'inverse), z=1,005, p=0,315 ; standard
+… [2143 caractères tronqués]
 
 ## 3. Travail accompli
 

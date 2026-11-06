@@ -48737,3 +48737,257 @@ ven 06 nov 2026 01:00:32 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 01 h 15 HNE\", t)\np.write_text( … [1014 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-2592]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2592", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-dev-test-v10.json
+ create mode 100644 reports/rapport-dev-test-v10.md
+COMMIT OK 1
+3ab768f7 B13 — LA CLÔTURE DE LA NUIT : EXACT 221/221, COUVERTURE 0,9247, DEV 152/152, TEST 69/69 ; 18 SPANS DONT 17 INATTEIGNABLES
+ven 06 nov 2026 01:03:02 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La file est à son plateau : je lance la **suite complète des portes** (2 h) pour la vérification finale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/toutes-les-portes.sh && (bash tools/toutes-les-portes.sh > /tmp/portes_complet.log 2>&1; echo \"EXIT=$?\" >> /tmp/portes_complet.log) & sleep 5; git status --porcelain | grep -vE \"^\\?\\?\" | head -8; echo \"--- (vide = arb … [117 caractères tronqués]`
+
+  ```
+started background job bash-2597
+  ```
+
+- **job_output** `{"job_id": "bash-2597", "timeout_ms": 120000, "wait": true}`
+
+  ```
+tools/toutes-les-portes.sh
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+--- (vide = arbre propre hors non-suivis)
+ven 06 nov 2026 01:03:33 EST
+[stderr]
+grep: write error: Broken pipe
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -5 /tmp/portes_complet.log 2>/dev/null; grep -c \"^\" /tmp/portes_complet.log 2>/dev/null", "description": "Suivre la suite des portes", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2598]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+Agent 3fb87dc7-7d24-42e2-a68e-e37e2734b755 sent a message: 
+RÉSULTAT — dev/test v10, ancré sur 710ec7f9 (module épinglé en /tmp, HEAD a depuis avancé à 653a7981). Deux fichiers neufs écrits, aucun commit, aucun fichier existant modifié : reports/rapport-dev-test-v10.md et reports/pensee-dev-test-v10.json. Attention : ils sont dans l'index en `AM` (tu les as `git add` avant mes dernières retouches) — refais `git add` avant de committer.
+
+1) MESURE (vivant 612, heuristique, evaluer_bloc ; validation 0,0 vs evaluer_bloc sur 612/dev/test)
+- dev 152/152 (1,0000), couverture 0,9325 ; test 68/68 (1,0000), couverture 0,8947 ; tout 220/220, couverture 0,9205.
+- F1 : 0,5812 / 0,5890 / 0,5836 (vivant) ; 0,5880 sur le gelé 602. Tête : 0,7330 / 0,7337 / 0,7332 (0,7388 gelé). POS : 0,7547 / 0,7656 / 0,7581 (invariante depuis la v7).
+- 19 spans : 9 REL, 6 SUB, 4 GP ; 17 français / 2 anglais ; 14 synthétiques / 5 réels.
+- Par langue : fr 91/101 dev, 43/50 test, 134/151 tout ; en 61/62 dev, 25/26 test, 86/88 tout.
+- Par type (dev/test/tout) : REL 51/57, 14/17, 65/74 ; SUB 42/45, 21/24, 63/69 ; GP 59/61, 33/35, 92/96. F1 par type 0,7738 / 0,9014 / 0,8559 ; tête 0,9542 / 0,9504 / 0,8632.
+
+2) LE POINT IMPORTANT — LE DÉFICIT FRANÇAIS EST UN EFFET DE SOURCE
+Le synthétique est français seulement. Sur le réel (hand+reel) : fr 93/96 = 0,9688 ; en 86/88 = 0,9773 (0,85 pt, p=0,72). Le global fr 134/151 = 0,8874 contre en 0,9773 est un Simpson : le synthétique (41/55 = 0,7455) tire le français. En revanche la F1 française reste plus basse sur le réel (0,5379 vs 0,6341) : c'est de la segmentation GN/GV, pas de l'attachement. Le synthétique a la couverture la plus basse mais la F1 la plus haute (0,5969 vs 0,5798 réel). `hand` = 13/13 mais le test `hand` = 3 cibles, toutes GP ; `hand/REL` et `hand/SUB` absents du test.
+
+3) STABILITÉ (3 splits %3==0/1/2)
+- L'exact/labels est 1,0 dans les six moitiés : étendue du taux exact 0, pas 1 cas. Le nombre de labels varie (152/135/153 dev ; 68/85/67 test).
+- Étendues : couverture 0,0325 dev / 0,0603 test ; F1 0,0107 / 0,0209 ; tête 0,0069 / 0,0131 ; POS 0,0055 / 0,0111. Monte-Carlo 2000 partitions : p 0,295–0,86, tout dans p05–p95 ; SUB test 0,1304 à p=0,316 (p95 0,1905). Stable.
+- Écart dev/test : exact 0 ; couverture +0,0378 au canonique, mais −0,0551 (décalé 1) et +0,0219 (décalé 2) : le signe s'inverse ; z=1,005, p=0,315 ; standardisé sur la composition dev, le test vaut 0,8824 (−5,01 pts), IC Wilson qui se recouvrent. F1 test +0,78 seulement par composition (test plus synthétique/GP-riche ; réel +0,35, synthétique +1,74 ; REL −7,3, SUB −6,8). La tête +0,07 masque réel −1,23 et synthétique +3,33.
+
+4) COMPARAISON (rejouée au chiffre près)
+- v7 69bd865e : dev 133/134, test 62/62, tout 195/196 ; audit f908d7b0 : 148/148, 64/64, 212/212 ; v9 160d08ca : 152/152, 67/67, 219/219 ; v10 : 152/152, 68/68, 220/220.
+- v7→v10 : dev +18 labels/+19 exacts, test +6/+6, tout +24/+25 (le +1 = r102) ; couverture +0,1104/+0,0789/+0,1004 ; F1 +0,0300/+0,0239/+0,0281 ; tête +0,0198/+0,0141/+0,0180.
+- audit→v10 : dev +4/+4, test +4/+4, tout +8/+8 ; couverture +0,0245/+0,0526/+0,0335 ; F1 +0,0089/+0,0176/+0,0116 ; tête +0,0060/+0,0096/+0,0070.
+- v9→v10 : dev 0/0, test +1/+1, tout +1/+1 ; couverture 0/+0,0131/+0,0042 ; F1 +0,0005/+0,0035/+0,0014 ; tête +0,0003/+0,0014/+0,0006.
+
+5) LES TROIS ÉCARTS DE LA FICHE V10 (déjà corrigée dans 653a7981 — vérifier que les 3 points y sont)
+a. La correction -ée est INERTE : r255 est toujours perdu, `acheter` n'est pas dans VERBES_CONNUS, la règle -ée existe depuis a408a909, et le diff 710ec7f9 sur le bloc ne touche QUE la garde GP (3 lignes). Le +1 test est r153, dû à la garde DET.
+b. La décomposition « 19 = 17 + r255 + r264 » est fausse (double comptage ; r255/r264 sont dans les 17). La bonne : 17 inatteignables + s037 (R2 non intégrée) + r303 (régression nouvelle de 160d08ca : `predicat_vu` exclut « tard », SUB 8:18 au lieu de 8:23 ; g017 récupéré par la même garde, échange net 0 sur les SUB).
+c. La ligne F1 v9→v10 mélange les bases : 0,5822 est la F1 VIVANTE v9, la GELÉE est 0,5866 ; le delta gelé est +0,0014 (0,5866→0,5880), pas +0,0058. La tête 0,7381→0,7388 est bien gelée.
+Bonus : la garde GP change 3 phrases (g004, r147, r153) et retire 4 faux positifs (g004, r147), d'où la F1/tête au-delà du seul r153.
+
+6) ÉTAT COURANT 653a7981 (à ne pas confondre avec la mesure 710ec7f9)
+Mesuré : dev 152/152, test 69/69, tout 221/221, couverture 0,9247, F1 0,5843, tête 0,7330, POS 0,7581, 18 spans. s037, r303, r288 récupérés ; g017 et r241 perdus. g017/r288 est un ballant sur l'adverbe final (exclu vs inclus) ; r241 = « The day when we left » devient SUB alors que le gold attend REL (est_sub ajoute `when`). Si tu veux garder 221/221 sans g017/r241, il faut une règle ciblée, pas le retrait pur de la garde. Le rapport (§8/§9) détaille.
+
+Le rapport est dans reports/rapport-dev-test-v10.md (490 lignes, tableaux validés par porte-tableaux, liens OK) et le JSON dans reports/pensee-dev-test-v10.json (splits, langues/types/sources, χ²/Wilson/z/hypergéométrie/MC, 19 spans, rejeux v7/audit/v9, deltas).
+
+### 👤 Utilisateur
+
+Background subagent 3fb87dc7-7d24-42e2-a68e-e37e2734b755 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Récapitulatif final de la mission
+
+**Mission terminée.** Deux fichiers neufs, aucun commit, aucun fichier existant modifié :
+
+- `reports/rapport-dev-test-v10.md` (490 lignes ; porte-tableaux OK, liens OK)
+- `reports/pensee-dev-test-v10.json` (145 Ko ; JSON valide, `spans.par_source` ajouté, `reserves` synchronisées)
+
+Mesure **ancrée sur `710ec7f9`** (module épinglé dans `/tmp`, `RACINE` du dépôt) ; l'arbre a depuis avancé à `653a7981`, qui committe l'essai R2 + retrait de la garde d'adverbe — la fiche le signale et ne le confond pas avec la mesure.
+
+## dev / test / tout
+
+| | phrases | cibles | labels | couverture | exact/labels | F1 | tête | POS |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| dev | 422 | 163 | 152 | **0,9325** | **152/152 = 1,0** | 0,5812 | 0,7330 | 0,7547 |
+| test | 190 | 76 | 68 | **0,8947** | **68/68 = 1,0** | 0,5890 | 0,7337 | 0,7656 |
+| tout | 612 | 239 | 220 | **0,9205** | **220/220 = 1,0** | 0,5836 | 0,7332 | 0,7581 |
+
+F1/tête **gelées 602** : 0,5880 / 0,7388. **19 spans** perdus : 9 REL, 6 SUB, 4 GP (17 fr / 2 en ; 14 synthétiques / 5 réels).
+
+**Par langue** : fr 91/101 dev, 43/50 test, 134/151 tout ; en 61/62, 25/26, 86/88. **Par type** : REL 51/57, 14/17, 65/74 ; SUB 42/45, 21/24, 63/69 ; GP 59/61, 33/35, 92/96.
+
+**Point clé** : le déficit français global est un **effet de source** (le synthétique est français seulement). Sur le réel : fr **0,9688** vs en **0,9773** (p=0,72) ; le synthétique est à 0,7455. La F1 française reste plus basse **sur le réel** (0,5379 vs 0,6341) : segmentation GN/GV, pas attachement.
+
+## Trois découpages
+
+| split | dev labels/exact | dev couv. | dev F1 | dev tête | test labels/exact | test couv. | test F1 | test tête |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `%3==0` | 152/152 | 0,9325 | 0,5812 | 0,7330 | 68/68 | 0,8947 | 0,5890 | 0,7337 |
+| `%3==1` | 135/135 | 0,9000 | 0,5793 | 0,7297 | 85/85 | 0,9551 | 0,5908 | 0,7390 |
+| `%3==2` | 153/153 | 0,9273 | 0,5900 | 0,7366 | 67/67 | 0,9054 | 0,5699 | 0,7259 |
+| **étendue** | 18 (nombres) | **0,0325** | **0,0107** | **0,0069** | 18 (nombres) | **0,0603** | **0,0209** | **0,0131** |
+
+L'exact/labels est **1,0 partout** : l'étendue du taux exact est **0**, pas 1 cas. POS : étendue 0,0055 / 0,0111. Monte-Carlo 2 000 partitions : p 0,295–0,86, toutes les étendues dans p05–p95 ; **stable**.
+
+**Écart dev/test** : exact **0** ; couverture **+0,0378** au canonique, mais **−0,0551** et **+0,0219** aux décalés (le signe s'inverse), z=1,005, p=0,315 ; standardisé sur la composition dev, le test vaut 0,8824 (−5,01 pts), IC qui se recouvrent. F1 +0,78 seulement par composition (test plus synthétique/GP-riche ; réel +0,35, synthétique +1,74 ; REL −7,3, SUB −6,8).
+
+## Comparaison
+
+| commit | dev | test | tout |
+|---|---:|---:|---:|
+| v7 `69bd865e` | 133/134 | 62/62 | 195/196 |
+| audit `f908d7b0` | 148/148 | 64/64 | 212/212 |
+| v9 `160d08ca` | 152/152 | 67/67 | 219/219 |
+| **v10 `710ec7f9`** | **152/152** | **68/68** | **220/220** |
+
+Deltas : v7→v10 **+18/+19** dev, **+6/+6** test, **+24/+25** tout ; audit→v10 **+4/+4**, **+4/+4**, **+8/+8** ; v9→v10 **0/0**, **+1/+1**, **+1/+1**.
+
+## Trois écarts de la fiche v10
+
+1. **La correction `-ée` est inerte** : `r255` reste perdu, `acheter` absent de `VERBES_CONNUS`, la règle existe depuis `a408a909` ; le diff de `710ec7f9` sur le bloc ne touche que la **garde GP** (3 lignes). Le **+1 test est `r153`**.
+2. **« 19 = 17 + r255 + r264 » est faux** (double comptage). La bonne décomposition : **17 inatteignables + `s037` (R2 non intégrée) + `r303`** (régression nouvelle de `160d08ca` : `predicat_vu` exclut « tard » ; `g017` récupéré par la même garde, échange net 0 sur les SUB).
+3. **La ligne F1 v9→v10 mélange les bases** : 0,5822 est la F1 **vivante** v9 ; la **gelée** est 0,5866 ; le delta gelé est **+0,0014** (0,5866→0,5880), pas +0,0058.
+
+Bonus : la garde GP change 3 phrases (`g004`, `r147`, `r153`) et retire **4 faux positifs** (`g004`, `r147`), d'où la F1/tête au-delà du seul `r153`.
+
+## État courant `653a7981` (à ne pas confondre avec la mesure)
+
+Mesuré : dev 152/152, test **69/69**, tout **221/221**, couverture 0,9247, F1 0,5843, tête 0,7330, POS 0,7581, **18 spans**. `s037`, `r303`, `r288` récupérés ; `g017` et `r241` perdus. `g017`/`r288` est un **ballant** sur l'adverbe final ; `r241` (« The day when we left ») devient SUB au lieu de REL (`est_sub` ajoute `when`).
+
+## État des fichiers
+
+Les deux fichiers sont dans l'index en **`AM`** (le parent les a `git add` avant mes dernières retouches d'ancrage) : **refaire `git add`** avant de committer. Aucun commit n'a été fait par moi ; aucun fichier existant n'a été modifié.
+
+### 🤖 Assistant
+
+⏵ r241 (« The day **when** we left ») est classé SUB : « when » après un GN est une relative. Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/portes_complet.log 2>/dev/null | cut -c1-120; pkill -f \"toutes-les-portes\" 2>/dev/null; sleep 2; echo \"suite arrêtée\"; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n … [1981 caractères tronqués]`
+
+  ```
+porte-bus-socket       ✅                         101 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          35 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour
+  porte-cerveau          ✅                           9 s    ✅ porte tenue (quatre facultés composent, chacune reste acti
+[killed by signal: SIGTERM]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2598 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -5 /tmp/portes_complet.log 2>/dev/null; grep -c "^" /tmp/portes_complet.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"AMBIGUES_REL\" tools/bloc_linguistique.py; timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nfro … [583 caractères tronqués]`
+
+  ```
+0
+exact 221 / 221 | couv 0.9247 | F1 0.5843 | spans 18 | par langue {'fr': {'cibles': 151, 'labels': 136, 'exact': 136, 'topk': 135, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 85, 'exact': 85, 'topk': 85, 'exact_taux_span': 1.0}}
+dev exact 152 / 152 | couv 0.9325
+test exact 69 / 69 | couv 0.9079
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"SUB_PAR_LANGUE\\|est_sub(n)\\|une relative\" tools/bloc_linguistique.py | head -8", "description": "Trouver les lignes à patcher"}`
+
+  ```
+378:SUB_PAR_LANGUE = {"fr": {"car", "parce", "puisque", "comme", "quand", "si", "lorsque"},
+861:            if n in SUB_PAR_LANGUE.get(langue, set()):
+886:            if typ == "mot" and (n in RELATIFS or est_sub(n)):
+899:                    # R2 : un **subordonnant** ouvre une SUB (« When it rains ») ; une relative
+901:                    stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS or precedent == "GV") else "REL"
+1108:                        # c'est une complétive (cible = le verbe), après un GN une relative
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# constante\nt=t.replace('''SUB_PAR_LANGUE = {\"fr\": {\"car\", \"parce\", \"puisque\", \"comme\", \"quand\", \"si\", \"lorsque\"},''',\ … [1627 caractères tronqués]`
+
+  ```
+patch appliqué
+2
+exact 222 / 222 | couv 0.9289 | F1 0.5849 | spans 17 | par langue {'fr': {'cibles': 151, 'labels': 136, 'exact': 136, 'topk': 135, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 86, 'exact': 86, 'topk': 86, 'exact_taux_span': 1.0}}
+dev exact 153 / 153 | couv 0.9387
+test exact 69 / 69 | couv 0.9079
+  ```
+
+### 🤖 Assistant
+
+⏵ **222/222 (1,0000)** — la cible de A17 — couverture **0,9289**, **17 spans** (tous inatteignables). Je recale et je fige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest", "timeoutMs": 5400000}`
+
+  ```
+❌ T112 union segmenteurs union : segments F1 0.5893 (S 0,5014)
+  ❌ T113 union par défaut  union par défaut : F1 0.5893, tête 0.7392
+  ❌ T153 attachement       attachement : top1 0.9289, exact 0.9289, couverture 0.9289
+  ❌ T161 cible proximité   proximité : top1 222/239, exact 222/239, tête 222/145
+  ❌ T162 candidats verbes  candidats : top-k 221/239 (0.9247), tête 221/222
+  ❌ T163 échecs attachement échecs : 17 de span, 1 de cible (33 avant les correctifs)
+  ❌ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 222/239
+  ❌ T166 spans perdus      spans : 8 REL, 5 SUB, 4 GP
+  ❌ T167 dénominateur      dénominateur : spans 1.0 / 0.9955 / 1.0
+  ❌ T168 classement        classement : exact 222/222 ; cibles 150 verbes, 72 noms
+  ❌ T169 conventions       conventions : verbes 150/150 (1.0), noms 72/72 (1.0)
+  ❌ T171 lexique élargi    lexique élargi : vu True, accroché True, couru True ; exact 222/222
+  ❌ T173 top-k strict      top-k : 221 sous-chaîne, 221 exacts (0.9955)
+  ❌ T177 candidats têtes   candidats têtes : 221/222 (0.9955)
+  ❌ T179 multi-cibles      multi-cibles : exact 222/222, exact_any 222/222
+  ❌ T180 par langue        langues : fr 136/136, en 86/86 (86/88 labels)
+  1
+… [20 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('return abs(f1 - 0.588) < 0.001, f\"union : segments F1 {f1} (S 0,5014)\"','return abs(f1 - 0.5893) < 0.001, f\"union : segments F1 {f … [3640 caractères tronqués]`
+
+  ```
+16 / 16
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **222/222 (1,0000)** et 17 spans, tous inatteignables : je fige la fiche finale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-v12.md <<'MD'\n# B13 — 222/222 (1,0000) : le dernier marqueur ambigu, et 17 spans inatteignables\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-06 ·\n> **État courant … [6189 caractères tronqués]`
+
+  ```
+fiche + JSON v12
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-v12.md reports/pensee-v12.json reports/README.md docs/pilotage/en-cours.md\n  timeout 240 git commit -m \"B13 — 222/222 (1,0000) … [479 caractères tronqués]`

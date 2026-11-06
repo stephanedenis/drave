@@ -375,6 +375,9 @@ SUJETS = {"i", "you", "he", "she", "it", "we", "they", "there", "who", "that", "
 SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
                  "whether", "car", "parce", "puisque", "comme", "quand", "si", "lorsque"}
 # « car » est français : en anglais c'est un nom commun (r280)
+# marqueurs **ambigus** : relatifs après un GN (« The day when we left »), SUB ailleurs
+AMBIGUES_REL = {"when", "where", "why", "how", "quand", "où", "pourquoi", "comment"}
+
 SUB_PAR_LANGUE = {"fr": {"car", "parce", "puisque", "comme", "quand", "si", "lorsque"},
                   "en": {"because", "although", "though", "if", "while", "as", "since",
                          "unless", "whether", "when"}}
@@ -898,7 +901,11 @@ class Heuristique:
                     precedent = segments[-1]["type"] if segments else None
                     # R2 : un **subordonnant** ouvre une SUB (« When it rains ») ; une relative
                     # en tête reste une REL (« Paul qui marche »)
-                    stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS or precedent == "GV") else "REL"
+                    if precedent == "GN" and n in AMBIGUES_REL:
+                        stype = "REL"   # « The day when we left »
+                    else:
+                        stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS
+                                          or precedent == "GV") else "REL"
                     j = i + 1
                     verbes_vus = 0
                     prec_aux = False      # le mot précédent est un auxiliaire (même groupe)

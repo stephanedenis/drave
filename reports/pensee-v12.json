@@ -1,0 +1,51 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 221,
+  "exact": 221,
+  "couverture": 0.9247,
+  "spans": 18
+ },
+ "apres": {
+  "labels": 222,
+  "exact": 222,
+  "exact_span": 1.0,
+  "couverture": 0.9289,
+  "f1": 0.5893,
+  "f1_s": 0.5014,
+  "f1_chunker": 0.6203,
+  "tete": 0.7392,
+  "fr": "136/136",
+  "en": "86/86",
+  "topk": 221,
+  "topk_taux": 0.9247,
+  "spans": {
+   "REL": 8,
+   "SUB": 5,
+   "GP": 4,
+   "total": 17
+  },
+  "dev": {
+   "exact": 153,
+   "labels": 153,
+   "couverture": 0.9387
+  },
+  "test": {
+   "exact": 69,
+   "labels": 69,
+   "couverture": 0.9079
+  }
+ },
+ "correction": "AMBIGUES_REL : REL après un GN, SUB ailleurs",
+ "controle_negatif": {
+  "permutation": "1,997/220 (0,908 %) p=0",
+  "candidat_aleatoire": "42,14 % top-1"
+ },
+ "limites": [
+  "17 spans inatteignables",
+  "in-sample",
+  "gold 612"
+ ]
+}
