@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 129.3 h |
+| Durée | 129.4 h |
 | Tours | 177 |
-| Messages | 2907 |
-| Appels d'outils | 2560 |
+| Messages | 2909 |
+| Appels d'outils | 2562 |
 | Fichiers touchés | 25 |
-| Commandes | 2107 |
+| Commandes | 2108 |
 | Sous-agents | 25 |
-| Commits | 311 |
+| Commits | 312 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*319 appels d'outils.* Actions notables :
+*321 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,7 +9514,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 255 autres
+- … et 256 autres
 
 **Synthèse produite :**
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2067 autres
+- … et 2068 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10081,4 +10081,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - JOURNAL ET ROADMAP — LA CIBLE DE A17 ATTEINTE : 222/222, COUVERTURE 0,9289, 17 SPANS INATTEIGNABLES" -- journal/2026-11-06/README.md docs/pilotage/roadmap.md do
 - PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL" -- docs/pilotag
 - DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s
+- DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE)" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --for
 

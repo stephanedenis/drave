@@ -49389,3 +49389,22 @@ COMMIT OK 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Rouge nouvelle du 2026-11-06 (tolérée)** : `porte-bloc-linguistique` échoue sur son verdict\n> `ca … [1480 caractères tronqués]`
+
+  ```
+· docs/pilotage/references-non-regression.md : 2546 mots > budget 2500 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-2625]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2625", "timeout_ms": 600000, "wait": true}`
+
+  ```
+8 files changed, 52 insertions(+), 21 deletions(-)
+COMMIT OK 1
+b15daee7 DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1
+ven 06 nov 2026 02:02:09 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Rouge du 2026-11-06 (tolérée)** : `porte-bloc-linguistique` échoue sur `cascade_pos` — la\n> fusio … [879 caractères tronqués]`
