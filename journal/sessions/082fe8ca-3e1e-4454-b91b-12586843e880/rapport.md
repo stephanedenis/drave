@@ -9,10 +9,10 @@
 | Début | 2026-11-06 11:17 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 28 |
-| Appels d'outils | 38 |
+| Messages | 32 |
+| Appels d'outils | 44 |
 | Fichiers touchés | 1 |
-| Commandes | 30 |
+| Commandes | 36 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [1945 caractères tronqués]
 
-*38 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - bash — Check working directory and git status
 - bash — List repo root and reports directory
@@ -41,11 +41,11 @@
 - bash — Inspect existing JSON structure
 - bash — Probe CLI edge cases and exit codes
 - bash — Probe URL tokenization and phrase spans
-- … et 18 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ Analyse détaillée des anomalies (surface, cibles, langue, chevauchements)
+⏵ Un pair a modifié `bloc_linguistique.py` pendant l'audit : je fige l'état mesuré
 
 ## 3. Travail accompli
 
@@ -87,6 +87,12 @@
 - **T1** Debug surrogate handling in argv and API
 - **T1** Test API with lone surrogate
 - **T1** Instrument CLI argv for invalid byte
+- **T1** Test Python surrogate encoding behavior
+- **T1** Check module modification and refusal code
+- **T1** Inspect loaded analyser source
+- **T1** Inspect concurrent module changes and hashes
+- **T1** Show new commits and module diff since audit start
+- **T1** Check last commit touching module
 
 ## 4. Mesures et résultats marquants
 

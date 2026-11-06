@@ -933,3 +933,119 @@ temps med hors startup approx 153.01
 json sizes max 533611
   ```
 
+### 🤖 Assistant
+
+⏵ Analyse détaillée des anomalies (surface, cibles, langue, chevauchements)
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json\nd=json.load(open('audit_cli_results.json'))\nb={r['id']:r for r in d['banc_50']}\nfor i in ['f03','f11','f19','f29']:\n    print(i, json.dumps(b[i]['exemples']['surface_ko'], ensure_ascii=False))\n    print('  texte:', repr(b[i].get('phrase_text … [1220 caractères tronqués]`
+
+  ```
+f03 [{"niveau": "morphème", "type": "préfixe", "valeur": "co", "tranche": "Co"}]
+  texte: ['Bonjour !', " Comment allez-vous aujourd'hui ?"]
+f11 [{"niveau": "morphème", "type": "préfixe", "valeur": "re", "tranche": "Re"}]
+  texte: ['Rendez-vous le 12/03/2026 à 14h30.']
+f19 [{"niveau": "morphème", "type": "préfixe", "valeur": "co", "tranche": "CO"}]
+  texte: ["COVID-19 : la situation s'améliore-t-elle vraiment ?"]
+f29 [{"niveau": "morphème", "type": "préfixe", "valeur": "re", "tranche": "Re"}]
+  texte: ['Il a dit : « Rentre avant minuit.', ' »']
+--- langues
+f13 und ["J'ai trouvé ça génial 😍🔥"]
+f18 und ['1234567890']
+f27 und ['Élodie sourit.']
+f33 it ['Si tu viens, apporte le dessert.']
+f37 und ['Email: alice@example.', 'org, phone: +33 6 12 34 56 78.']
+f48 und ['Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.']
+--- tokens_non_pos total 302 [('f01', 1), ('f02', 1), ('f03', 2), ('f04', 2), ('f05', 1), ('f06', 2), ('f07', 1), ('f08', 2), ('f09', 1), ('f10', 7), ('f11', 7), ('f12', 9), ('f13', 2), ('f18', 1), ('f19', 2), ('f20', 4), ('f21', 4), ('f22', 3), ('f23', 2), ('f24', 3), ('f25', 2), ('f26', 2), ('f27', 
+… [4138 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport subprocess, sys, os\nR='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nfor args in ([b'\\xff'], [b'a\\xffb']):\n    cmd=[sys.executable, R+'/tools/drave.py', 'analyser', *args]\n    p=subprocess.run(cmd,cwd=R,capture_output=True)\n    print('bytes  … [530 caractères tronqués]`
+
+  ```
+bytes args [b'\xff'] rc 1 out 0 err b"drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n"
+bytes args [b'a\xffb'] rc 1 out 0 err b"drave: erreur : UnicodeEncodeError : 'utf-8' codec can't encode character '\\udcff' in position 231: surrogates not allowed\n"
+str surrogate '\udcff' rc 1 out 0 err drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+
+str surrogate 'a\udcffb' rc 1 out 0 err drave: erreur : UnicodeEncodeError : 'utf-8' codec can't encode character '\udcff' in position 231: surrogates not allowed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport subprocess,sys,os\nR=os.getcwd()\np=subprocess.run([sys.executable,'-c','import sys; print([repr(a) for a in sys.argv])','analyser',b'\\xff'],capture_output=True)\nprint('argv bytes:',p.stdout,p.stderr)\np=subp … [553 caractères tronqués]`
+
+  ```
+argv bytes: b'["\'-c\'", "\'analyser\'", "\'\\\\udcff\'"]\n' b''
+cli bytes: 1 b'' b"drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n"
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+ModuleNotFoundError: No module named 'bloc_linguistique'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport sys; sys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor s in ['\\udcff','a\\udcffb']:\n    print('repr',repr(s),'isalpha',any(c.isalpha() for c in s))\n    try:\n        a=bl.Heuristique().analyser … [212 caractères tronqués]`
+
+  ```
+repr '\udcff' isalpha False
+  refus 'vide' etiquettes 0 cout {'octets': 1, 'duree_s': 9e-06}
+repr 'a\udcffb' isalpha True
+  refus '' etiquettes 13 cout {'octets': 3, 'caracteres': 3, 'etiquettes': 13, 'duree_s': 0.00537}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport subprocess,sys,os\n# instrument drave by running a copy that prints argv repr\nsrc=open('tools/drave.py').read()\nsrc=src.replace('if __name__ == \"__main__\":', 'if __name__ == \"__main__\":\\n    print(\"ARGV … [321 caractères tronqués]`
+
+  ```
+rc 1
+ERR b'Traceback (most recent call last):\n  File "/tmp/drave_dbg.py", line 40, in <module>\n    import bloc_linguistique as bl  # noqa: E402  (import apr\xc3\xa8s l\'installation des chemins)\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named \'bloc_linguistique\'\n'
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nprint(sys.version)\ns='\\udcff'\nfor errors in (None,'strict','surrogateescape','replace'):\n    try:\n        b=s.encode() if errors is None else s.encode(errors=errors)\n        print(errors, b, len(b))\n    except Exception as e:\n        print(errors,'E … [134 caractères tronqués]`
+
+  ```
+3.13.16 (main, Oct 16 2026, 19:23:15) [GCC]
+None EXC UnicodeEncodeError 'utf-8' codec can't encode character '\udcff' in position 0: surrogates not allowed
+strict EXC UnicodeEncodeError 'utf-8' codec can't encode character '\udcff' in position 0: surrogates not allowed
+surrogateescape b'\xff' 1
+replace b'?' 1
+b'\xed\xb3\xbf'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nstat -c '%y %n' tools/bloc_linguistique.py tools/drave.py; git status --short tools/bloc_linguistique.py tools/drave.py; sed -n '1003,1013p' tools/bloc_linguistique.py; grep -n \"def analyser\" tools/bloc_linguistique.py | head", "desc … [55 caractères tronqués]`
+
+  ```
+2026-11-06 11:34:28.080011149 -0500 tools/bloc_linguistique.py
+2026-11-06 09:55:57.489575761 -0500 tools/drave.py
+M  tools/bloc_linguistique.py
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        if not isinstance(texte, str):
+            # une entrée non textuelle est **refusée** proprement (le produit ne plante pas)
+            return Annotation(texte=str(texte)[:200], refus="non_texte", source=self.nom,
+                              trace=[{"etape": "refus", "raison": "non_texte",
+                                      "type": type(texte).__name__}],
+                              cout={"octets": 0, "duree_s": round(time.perf_counter() - t0, 6)})
+        texte = texte or ""
+        trace: list[dict] = []
+133:    def analyser(self, texte: str, langue: str | None = None,
+1003:    def analyser(self, texte: str, langue: str | None = None,
+1282:    def analyser(self, texte: str, langue: str | None = None,
+1351:    def analyser(self, texte: str, langue: str | None = None,
+1461:    def analyser(self, texte: str, langue: str | None = None,
+1595:    def analyser(self, texte: str,
+… [295 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport sys; sys.path.insert(0,'tools')\nimport bloc_linguistique as bl, inspect\nsrc=inspect.getsource(bl.Heuristique.analyser)\nprint(src[:600])\nprint('module',bl.__file__)\nPY", "description": "Inspect loaded analy … [12 caractères tronqués]`
+
+  ```
+def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        if not isinstance(texte, str):
+            # une entrée non textuelle est **refusée** proprement (le produit ne plante pas)
+            return Annotation(texte=str(texte)[:200], refus="non_texte", source=self.nom,
+                              trace=[{"etape": "refus", "raison": "non_texte",
+                                      "type": type(texte).__name__}],
+                              cout={"octets": 0, "duree_s": round(time.pe
+module /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+  ```
+

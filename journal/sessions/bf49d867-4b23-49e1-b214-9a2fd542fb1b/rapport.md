@@ -7,12 +7,12 @@
 | Identifiant | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 25 |
-| Appels d'outils | 24 |
+| Messages | 26 |
+| Appels d'outils | 25 |
 | Fichiers touchés | 0 |
-| Commandes | 16 |
+| Commandes | 17 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2138 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Check repo state and branch
 - bash — List repo and tools directories
@@ -41,11 +41,11 @@
 - bash — Audit rule risks on gold
 - bash — Run POS rule variants on dev and test
 - bash — Fix patch anchor and rerun variants
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Assembling the full metrics table (POS, F1, attachement) for dev and test
+⏵ Testing the subject-rule variants and checking dev/test membership of R3 fixes
 
 ## 3. Travail accompli
 
@@ -72,6 +72,7 @@
 - **T1** Debug R3 brother/mother breaks
 - **T1** Fix R3 lookahead and rerun
 - **T1** Print full metrics table
+- **T1** Check split membership and branch counts
 
 ## 4. Mesures et résultats marquants
 

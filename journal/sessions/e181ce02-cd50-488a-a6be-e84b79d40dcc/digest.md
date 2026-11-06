@@ -52033,3 +52033,16 @@ README + état
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; index 677 ; **robustesse produit** (surrogate, non-str) ; audit A24.\", \" ; index 677 ; robustesse produit ; audit A24. … [1226 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+ create mode 100644 reports/rapport-produit-bloc-l.md
+ create mode 100644 reports/rapport-robustesse-produit.md
+COMMIT OK 1
+1962eb15 PRODUIT — LA ROBUSTESSE : SURROGATE ET NON-STR FERMÉS (refus non_texte), 8 TESTS ; L'AUDIT A24 (50 PHRASES, 132 CHEVAUCHEMENTS, 18 CORRECTIFS)
+   c6904284..1962eb15  s/v7 -> s/v7
+   c6904284..1962eb15  master -> master
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; index 677 ; robustesse produit ; audit A24.\", \" ; index 677 ; audit A24.\")\np.write_text(t)\nPY\npython3 tools/taille … [527 caractères tronqués]`

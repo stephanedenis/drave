@@ -785,3 +785,30 @@ R1+R2+
 … [1372 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Assembling the full metrics table (POS, F1, attachement) for dev and test
+
+- **bash** `{"command": "cat > /tmp/qpos/table.py <<'EOF'\nimport json, collections\nr = json.load(open('/tmp/qpos/variantes.json'))\nbase = r['V0']\nSCOPES = ['dev','test','all','dev_en','test_en','dev_fr','test_fr']\nKEYS = ['pos','pos_ferme','pos_ouvert','f1','f1_tete','att_exact_taux','att_top1_taux','att_t … [1518 caractères tronqués]`
+
+  ```
+### V0
+ dev  POS 75.47 (fermé 89.52, ouvert 62.01) tok=2185 | F1 0.5820 (tête 0.7333) | att exact 0.9387 top1 0.9387 topk 0.9387
+      ΔPOS +0.00  ΔF1 +0.0000  Δtête +0.0000  Δatt_exact +0.00  Δatt_topk +0.00
+ test POS 76.56 (fermé 91.19, ouvert 63.06) tok=994 | F1 0.5914 (tête 0.7344) | att exact 0.9079 top1 0.9079 topk 0.8947
+      ΔPOS +0.00  ΔF1 +0.0000  Δtête +0.0000  Δatt_exact +0.00  Δatt_topk +0.00
+ dev_en   POS 75.28  Δ+0.00  ouvert 60.25  | att_en 1.0000 att_fr 0.0000
+ test_en  POS 79.25  Δ+0.00  ouvert 64.85  | att_en 1.0000 att_fr 0.0000
+ dev_fr   POS 75.58  Δ+0.00  ouvert 62.97  | att_en 0.0000 att_fr 1.0000
+ test_fr  POS 75.12  Δ+0.00  ouvert 62.22  | att_en 0.0000 att_fr 1.0000
+
+### R1
+ dev  POS 81.78 (fermé 89.52, ouvert 74.37) tok=2185 | F1 0.5820 (tête 0.7333) | att exact 0.9387 top1 0.9387 topk 0.9387
+      ΔPOS +6.31  ΔF1 +0.0000  Δtête +0.0000  Δatt_exact +0.00  Δatt_topk +0.00
+ test POS 81.79 (fermé 91.19, ouvert 73.11) tok=994 | F1 0.5914 (tête 0.7344) | att exact 0.9079 top1 0.9079 topk 0.8947
+      ΔPOS +5.23  ΔF1 +0.0000  Δtête +0.0000  Δatt_exact +0.00  Δatt_topk +0.00
+ dev_en   POS 84.64  Δ+9.36  ouvert 79.24  | att_en 1.0000 att_fr 0.0000
+ test_en  POS 
+… [3340 caractères tronqués]
+  ```
+
