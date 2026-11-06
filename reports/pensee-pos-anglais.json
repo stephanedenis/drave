@@ -1,0 +1,1124 @@
+{
+ "version": 1,
+ "date": "2026-11-06",
+ "ligne": "A14",
+ "objet": "diagnostic de la POS anglaise : isolement des 270 erreurs, cinq causes, trois règles générales mesurées dev/test, contrôles",
+ "verdict": "Le défaut nominal de _pos (176 VERB->NOUN, 65,2 % des erreurs anglaises) n'est pas la règle de contexte (33 conversions, 33/33 justes) ; R2+R3 valent +7,44 pts POS au test et +9,3 pts de F1 anglais sans lexique ; R1 (lexique verbal) est mécaniquement juste mais son gain est contaminé par VERBES_CONNUS, écrit sur ce gold.",
+ "snapshot": {
+  "head": "56eb43af",
+  "head_sujet": "INDEX — RÉGÉNÉRÉ (679 FICHES) APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0",
+  "bloc_sha256": "084517d9c10088b3adedc01658adbb33e3de69e7f5ca8c2f563f427abdd79f4f",
+  "gold_sha256": {
+   "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+   "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+   "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+  },
+  "split": "gold_split.py — crc32(id) % 3 == 0 -> test ; stratifié par source et langue",
+  "mesure_le": "2026-11-06",
+  "fichiers_modifies": "aucun ; deux fichiers neufs (ce JSON et reports/rapport-pos-anglais.md) ; aucun commit"
+ },
+ "gold": {
+  "phrases": 612,
+  "fr": 402,
+  "en": 210,
+  "tokens": 3179,
+  "tokens_fr": 2031,
+  "tokens_en": 1148,
+  "dev": {
+   "phrases": 422,
+   "tokens": 2185,
+   "phrases_en": 145,
+   "tokens_en": 801
+  },
+  "test": {
+   "phrases": 190,
+   "tokens": 994,
+   "phrases_en": 65,
+   "tokens_en": 347
+  }
+ },
+ "baseline": {
+  "tout": {
+   "pos": 0.7581,
+   "justes": 2410,
+   "tokens": 3179,
+   "erreurs": 769,
+   "ferme": 0.9004,
+   "ouvert": 0.6234,
+   "f1": 0.5849,
+   "f1_tete": 0.7336,
+   "attachement_exact": 0.9289,
+   "attachement_cibles": 239,
+   "attachement_topk": 0.9247,
+   "pragmatique_acte": 0.9967,
+   "fraction_semantique": 0.5537
+  },
+  "en": {
+   "pos": 0.7648,
+   "justes": 878,
+   "tokens": 1148,
+   "erreurs": 270,
+   "part_erreurs_globales": 0.3511,
+   "ferme": 0.9065,
+   "ferme_n": 588,
+   "ouvert": 0.6161,
+   "ouvert_n": 560,
+   "ouvert_hors_ponctuation": 0.6194,
+   "f1": 0.6341,
+   "f1_tete": 0.7791,
+   "attachement_exact": 0.9773,
+   "attachement_span": 1.0,
+   "attachement_cibles": 88
+  },
+  "fr": {
+   "pos": 0.7543,
+   "justes": 1532,
+   "tokens": 2031,
+   "erreurs": 499,
+   "ferme": 0.8967,
+   "ouvert": 0.6272,
+   "f1": 0.5595,
+   "attachement_exact": 0.9007
+  },
+  "matrice_en": {
+   "VERB": {
+    "VERB": 83,
+    "NOUN": 176,
+    "ADJ": 5,
+    "AUX": 4,
+    "?": 1
+   },
+   "NOUN": {
+    "NOUN": 238,
+    "ADJ": 5,
+    "VERB": 5
+   },
+   "ADJ": {
+    "ADJ": 24,
+    "NOUN": 12,
+    "VERB": 4
+   },
+   "PRON": {
+    "PRON": 177,
+    "DET": 14,
+    "NOUN": 8,
+    "CONJ": 1
+   },
+   "CONJ": {
+    "CONJ": 22,
+    "DET": 12,
+    "NOUN": 2
+   },
+   "ADV": {
+    "ADV": 17,
+    "NOUN": 15,
+    "PREP": 1,
+    "?": 1
+   },
+   "DET": {
+    "DET": 213
+   },
+   "AUX": {
+    "AUX": 60,
+    "NOUN": 1
+   },
+   "PREP": {
+    "PREP": 43
+   },
+   "PONCT": {
+    "?": 3
+   },
+   "NUM": {
+    "NUM": 1
+   }
+  },
+  "top30_en": [
+   [
+    "that",
+    "CONJ",
+    "DET",
+    12
+   ],
+   [
+    "that",
+    "PRON",
+    "DET",
+    11
+   ],
+   [
+    "leave",
+    "VERB",
+    "NOUN",
+    7
+   ],
+   [
+    "sings",
+    "VERB",
+    "NOUN",
+    6
+   ],
+   [
+    "where",
+    "PRON",
+    "NOUN",
+    6
+   ],
+   [
+    "writes",
+    "VERB",
+    "NOUN",
+    5
+   ],
+   [
+    "speaks",
+    "VERB",
+    "NOUN",
+    5
+   ],
+   [
+    "sees",
+    "VERB",
+    "NOUN",
+    5
+   ],
+   [
+    "leaves",
+    "VERB",
+    "NOUN",
+    4
+   ],
+   [
+    "play",
+    "VERB",
+    "NOUN",
+    4
+   ],
+   [
+    "runs",
+    "VERB",
+    "NOUN",
+    4
+   ],
+   [
+    "arrives",
+    "VERB",
+    "NOUN",
+    4
+   ],
+   [
+    "late",
+    "ADV",
+    "NOUN",
+    4
+   ],
+   [
+    "table",
+    "NOUN",
+    "ADJ",
+    4
+   ],
+   [
+    "shines",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "talks",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "prepares",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "live",
+    "VERB",
+    "ADJ",
+    3
+   ],
+   [
+    "barks",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "rain",
+    "NOUN",
+    "VERB",
+    3
+   ],
+   [
+    "falls",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "works",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "stay",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "mention",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "cries",
+    "VERB",
+    "NOUN",
+    3
+   ],
+   [
+    "is",
+    "VERB",
+    "AUX",
+    3
+   ],
+   [
+    "her",
+    "PRON",
+    "DET",
+    3
+   ],
+   [
+    "love",
+    "VERB",
+    "NOUN",
+    2
+   ],
+   [
+    "out",
+    "ADV",
+    "NOUN",
+    2
+   ],
+   [
+    "tired",
+    "ADJ",
+    "VERB",
+    2
+   ]
+  ],
+  "classes_ouvertes": {
+   "tokens": 557,
+   "part_tokens": 0.4852,
+   "erreurs": 212,
+   "part_erreurs": 0.7852,
+   "par_classe": {
+    "VERB": {
+     "n": 269,
+     "justes": 83,
+     "taux": 0.309
+    },
+    "NOUN": {
+     "n": 248,
+     "justes": 238,
+     "taux": 0.96
+    },
+    "ADJ": {
+     "n": 40,
+     "justes": 24,
+     "taux": 0.6
+    }
+   }
+  },
+  "regle_contexte": {
+   "en": {
+    "conversions": 33,
+    "justes": 33,
+    "taux": 1.0,
+    "verbe": "trop timide, pas trop gourmande"
+   },
+   "fr": {
+    "conversions": 10,
+    "justes": 7,
+    "taux": 0.7,
+    "erreurs": "3 conversions après PRÉP, toutes gold VERB (infinitifs)"
+   },
+   "conversions_du_defaut": "0 des 176 VERB->NOUN anglais ne portent meta.contexte"
+  }
+ },
+ "causes": [
+  {
+   "id": "C1",
+   "nom": "défaut nominal : le POS ouvert ne consulte pas le lexique verbal",
+   "effectif": 176,
+   "part": 0.652,
+   "confiance_sortie": {
+    "0.30": 172,
+    "0.45": 4
+   },
+   "formes": {
+    "-s/-es": 126,
+    "nues": 50,
+    "-ing/-ed": 0
+   },
+   "deja_dans_verbes_connus": 100,
+   "precedees_d_un_sujet": 165,
+   "precedees_par": {
+    "PRON": 85,
+    "NOUN": 80,
+    "AUX": 6,
+    "ADV": 2,
+    "VERB": 2,
+    "ADJ": 1
+   },
+   "traitee_par": [
+    "R1",
+    "R2"
+   ]
+  },
+  {
+   "id": "C2",
+   "nom": "classes fermées ambiguës : DET prioritaire sur PRON/CONJ",
+   "effectif": 26,
+   "part": 0.096,
+   "detail": {
+    "that": 23,
+    "her": 3
+   },
+   "traitee_par": [
+    "R3"
+   ]
+  },
+  {
+   "id": "C3",
+   "nom": "lexiques fermés anglais incomplets (+ règle de majuscule)",
+   "effectif": 28,
+   "part": 0.104,
+   "detail": {
+    "ADV": 16,
+    "PRON": 9,
+    "CONJ": 2,
+    "AUX": 1
+   },
+   "exemples": [
+    "where 6",
+    "late 4",
+    "out 2",
+    "as 2",
+    "whose",
+    "when",
+    "mine",
+    "outside",
+    "am"
+   ],
+   "via_majuscule": 3,
+   "traitee_par": [
+    "données"
+   ]
+  },
+  {
+   "id": "C4",
+   "nom": "morphologie française appliquée à l'anglais",
+   "effectif": 19,
+   "part": 0.07,
+   "detail": {
+    "-able/-al->ADJ": 5,
+    "-ive->ADJ": 5,
+    "-ed/-ing->VERB": 3,
+    "-er->VERB": 2,
+    "VERBES[en] contient un nom/adjectif": 4
+   },
+   "exemples": [
+    "table 4",
+    "live 3",
+    "rain 3",
+    "tired 2",
+    "arrive 2",
+    "meal",
+    "morning",
+    "dinner",
+    "exciting",
+    "open"
+   ],
+   "traitee_par": [
+    "données"
+   ]
+  },
+  {
+   "id": "C5",
+   "nom": "adjectif attribut inconnu après copule",
+   "effectif": 12,
+   "part": 0.044,
+   "exemples": [
+    "right 2",
+    "fast",
+    "calm",
+    "dark",
+    "absent",
+    "mean",
+    "fresh",
+    "quiet",
+    "alone",
+    "rare",
+    "hungry"
+   ],
+   "traitee_par": [
+    "R4 (piste)"
+   ]
+  },
+  {
+   "id": "C7",
+   "nom": "bruit or/span + convention de copule",
+   "effectif": 9,
+   "part": 0.033,
+   "detail": {
+    "PONCT": 3,
+    "tokenisation don't": 2,
+    "copule gold VERB": 4
+   },
+   "traitee_par": [
+    "or"
+   ]
+  }
+ ],
+ "hypotheses_refutees": [
+  {
+   "hypothese": "la règle de contexte DET/PRÉP/ADJ -> nom est trop gourmande",
+   "verdict": "réfutée",
+   "mesure": "33 conversions en anglais, 33/33 gold NOUN ; 0 des 176 VERB->NOUN ; en français 7/10 (3 infinitifs après PRÉP)"
+  },
+  {
+   "hypothese": "la règle littérale « après DET/PRÉP/ADJ tout est nom sauf verbe irrégulier connu » suffit",
+   "verdict": "réfutée",
+   "mesure": "0 correctif, 4 casses (eat 2, lit 1, attrape 1) ; dev -0,14 pt, test -0,10 pt, anglais -0,17 pt"
+  }
+ ],
+ "regles": [
+  {
+   "id": "R1",
+   "nom": "le lexique verbal tranche le défaut ouvert",
+   "enonce": "un mot inconnu n'est pas un nom par défaut : si _est_verbe le connaît (formes irrégulières + base + -s/-ed/-ing), il est VERBE ; la position nominale (DET/PRÉP/ADJ) ne le convertit en nom que si la confiance verbale est <= 0,5",
+   "insertion": [
+    {
+     "ligne": "609-610",
+     "ancre": "dans _pos(), après le test ADJECTIFS",
+     "code": [
+      "# dans _pos(), après le test ADJECTIFS (l. 609-610) :",
+      "        if _est_verbe(n):",
+      "            return \"VERB\", True, 0.5"
+     ]
+    },
+    {
+     "ligne": "1055",
+     "ancre": "boucle 3 bis, seuil 0,45 -> 0,5",
+     "code": [
+      "# boucle 3 bis (l. 1055) : seuil 0,45 -> 0,5",
+      "            if e.type != \"VERB\" or e.confiance > 0.5 or k == 0:"
+     ]
+    }
+   ],
+   "dev": {
+    "pos": 0.8178,
+    "delta_pts": 6.31,
+    "ferme": 0.8952,
+    "ouvert": 0.7437,
+    "f1": 0.582,
+    "f1_tete": 0.7333,
+    "attachement_exact": 0.9387,
+    "attachement_topk": 0.9387
+   },
+   "test": {
+    "pos": 0.8179,
+    "delta_pts": 5.23,
+    "ferme": 0.9119,
+    "ouvert": 0.7311,
+    "f1": 0.5914,
+    "f1_tete": 0.7344,
+    "attachement_exact": 0.9079,
+    "attachement_topk": 0.8947
+   },
+   "en_union": 0.8528,
+   "fr_union": 0.7981,
+   "corriges": 190,
+   "casses": 0,
+   "corriges_en": 101,
+   "corriges_fr": 89,
+   "lexique": {
+    "en": {
+     "hors": 0,
+     "dans": 101
+    },
+    "fr": {
+     "hors": 7,
+     "dans": 82
+    }
+   },
+   "statut": "mécanisme juste (cohérence avec le chunker), gain mesuré contaminé par VERBES_CONNUS ; non comptable comme généralisation",
+   "sensibilite_seuil": {
+    "0.45": {
+     "dev": 0.816,
+     "test": 0.8149,
+     "en_union": 0.851,
+     "corriges": 198,
+     "casses": 15,
+     "formes_cassees": [
+      "porte 6",
+      "bus 3",
+      "flower 2",
+      "cours",
+      "painting",
+      "painter",
+      "leaves"
+     ]
+    },
+    "0.50": {
+     "dev": 0.8178,
+     "test": 0.8179,
+     "en_union": 0.8528,
+     "corriges": 190,
+     "casses": 0
+    },
+    "cout_0.50": "3 infinitifs français après PRÉP (attraper, manger ×2) restent convertis en noms"
+   }
+  },
+  {
+   "id": "R2",
+   "nom": "la position du sujet tranche le nom/verbe",
+   "enonce": "(a) après un pronom sujet, un mot inconnu est un verbe, sauf désinence nominale connue ; (b) une forme en -s/-es après un nom sujet est un verbe ; (b) s'applique après la résolution nominale (3 bis)",
+   "insertion": [
+    {
+     "ligne": "1052",
+     "ancre": "après pos_idx, avant 3 bis",
+     "code": [
+      "        # 3 a. apres un pronom sujet, un mot inconnu est un verbe (« she sings ») ; l'exception",
+      "        # est morphologique : une desinence nominale reste un nom (« happiness »).",
+      "        _nominales = (\"tion\", \"sion\", \"ness\", \"ity\", \"ité\", \"ance\", \"ence\", \"ment\", \"ship\")",
+      "        for _k, _i in enumerate(pos_idx):",
+      "            _e = etiquettes[_i]",
+      "            if _k == 0 or _e.type not in (\"NOUN\", \"ADJ\") or _e.confiance > 0.45:",
+      "                continue",
+      "            _av = etiquettes[pos_idx[_k - 1]]",
+      "            if (_av.type == \"PRON\" and _normaliser(_av.valeur) in SUJETS",
+      "                    and not _normaliser(_e.valeur).endswith(_nominales)):",
+      "                etiquettes[_i] = Etiquette(\"pos\", \"VERB\", _e.valeur, _e.debut, _e.fin, self.nom,",
+      "                                           0.5, candidats=[\"verb\"], langue=lg, script=script,",
+      "                                           meta={\"ouvert\": True, \"contexte\": \"pron_sujet\"})"
+     ]
+    },
+    {
+     "ligne": "1061",
+     "ancre": "après la boucle 3 bis",
+     "code": [
+      "        # 3 a bis. une forme en -s/-es apres un NOM sujet est un verbe (« the cat sleeps »).",
+      "        for _k, _i in enumerate(pos_idx):",
+      "            _e = etiquettes[_i]",
+      "            if _k == 0 or _e.type != \"NOUN\" or _e.confiance > 0.45:",
+      "                continue",
+      "            _av = etiquettes[pos_idx[_k - 1]]",
+      "            if _av.type == \"NOUN\" and _normaliser(_e.valeur).endswith((\"s\", \"es\")):",
+      "                etiquettes[_i] = Etiquette(\"pos\", \"VERB\", _e.valeur, _e.debut, _e.fin, self.nom,",
+      "                                           0.5, candidats=[\"verb\"], langue=lg, script=script,",
+      "                                           meta={\"ouvert\": True, \"contexte\": \"nom_sujet_3s\"})"
+     ]
+    }
+   ],
+   "dev": {
+    "pos": 0.8307,
+    "delta_pts": 7.6,
+    "ferme": 0.8952,
+    "ouvert": 0.7688,
+    "f1": 0.6153,
+    "f1_tete": 0.751,
+    "attachement_exact": 0.9387,
+    "attachement_topk": 0.9387
+   },
+   "test": {
+    "pos": 0.835,
+    "delta_pts": 6.94,
+    "ferme": 0.9119,
+    "ouvert": 0.764,
+    "f1": 0.6243,
+    "f1_tete": 0.7512,
+    "attachement_exact": 0.9079,
+    "attachement_topk": 0.8947
+   },
+   "en_union": 0.8929,
+   "fr_union": 0.7976,
+   "corriges": 235,
+   "casses": 0,
+   "corriges_en": 147,
+   "corriges_fr": 88,
+   "lexique": {
+    "en": {
+     "hors": 66,
+     "dans": 81
+    },
+    "fr": {
+     "hors": 58,
+     "dans": 30
+    }
+   },
+   "sous_regles": {
+    "R2p": {
+     "corriges": 172,
+     "casses": 0,
+     "dev_delta": 5.45,
+     "test_delta": 5.33,
+     "f1": 0.0
+    },
+    "R2s": {
+     "corriges": 63,
+     "casses": 1,
+     "dev_delta": 2.1,
+     "test_delta": 1.61,
+     "f1_dev": 0.0333,
+     "f1_test": 0.0329,
+     "note": "seule, elle casse « books » (She loves books) ; R2p d'abord -> 0 casse"
+    }
+   },
+   "statut": "recommandée — seule règle qui bouge le F1 (anglais 0,6341 -> 0,7273 ; tp 376 -> 448, fp 108 -> 82, fn 326 -> 254)"
+  },
+  {
+   "id": "R3",
+   "nom": "un DET ambigu exige un nom à sa droite",
+   "enonce": "un mot de classe fermée ambigu (DET ∩ PRON/CONJ : that, her) n'est DET que s'il introduit une tête nominale ; sinon PRON, ou CONJ après un verbe ; un DET non ambigu (the) n'est jamais touché",
+   "insertion": [
+    {
+     "ligne": "1052",
+     "ancre": "après pos_idx, après R2(a), avant 3 bis",
+     "code": [
+      "        # 3 b. un DET **ambigu** sans nom a sa droite n'est pas un DET (« the book that I",
+      "        # read », « he speaks to her ») : c'est un PRON, ou un CONJ apres un verbe.",
+      "        _lexd = POS_FERME.get(lg, POS_FERME[\"fr\"])",
+      "        for _k, _i in enumerate(pos_idx):",
+      "            _e = etiquettes[_i]",
+      "            if _e.type != \"DET\":",
+      "                continue",
+      "            if _normaliser(_e.valeur) not in (_lexd.get(\"PRON\", set()) | _lexd.get(\"CONJ\", set())):",
+      "                continue",
+      "            _suiv = etiquettes[pos_idx[_k + 1]] if _k + 1 < len(pos_idx) else None",
+      "            if _suiv is not None and (_suiv.type in (\"NOUN\", \"ADJ\", \"NUM\") or (",
+      "                    _suiv.type == \"VERB\" and _suiv.confiance <= 0.45",
+      "                    and not _est_verbe(_suiv.valeur))):",
+      "                continue",
+      "            _av = etiquettes[pos_idx[_k - 1]] if _k else None",
+      "            _cls = \"CONJ\" if (_av is not None and _av.type in (\"VERB\", \"AUX\")) else \"PRON\"",
+      "            etiquettes[_i] = Etiquette(\"pos\", _cls, _e.valeur, _e.debut, _e.fin, self.nom, 0.6,",
+      "                                       candidats=[_cls.lower()], langue=lg, script=script,",
+      "                                       meta={\"ouvert\": False, \"contexte\": \"det_sans_nom\"})"
+     ]
+    }
+   ],
+   "dev": {
+    "pos": 0.7597,
+    "delta_pts": 0.5,
+    "ferme": 0.9055,
+    "ouvert": 0.6201,
+    "f1": 0.582,
+    "f1_tete": 0.7333,
+    "attachement_exact": 0.9387,
+    "attachement_topk": 0.9387
+   },
+   "test": {
+    "pos": 0.7696,
+    "delta_pts": 0.4,
+    "ferme": 0.9203,
+    "ouvert": 0.6306,
+    "f1": 0.5914,
+    "f1_tete": 0.7344,
+    "attachement_exact": 0.9079,
+    "attachement_topk": 0.8947
+   },
+   "en_union": 0.7779,
+   "fr_union": 0.7543,
+   "corriges": 15,
+   "casses": 0,
+   "corriges_en": 15,
+   "corriges_fr": 0,
+   "lexique": {
+    "en": {
+     "hors": 15,
+     "dans": 0
+    }
+   },
+   "statut": "recommandée — dans le paquet R2+R3 : +0,68 pt dev / +0,50 pt test de plus que R2 seul"
+  },
+  {
+   "id": "R4",
+   "nom": "copule -> ADJ pour un mot inconnu (piste)",
+   "enonce": "après une copule, un mot inconnu (NOUN à confiance <= 0,45) est un ADJECTIF",
+   "dev": {
+    "pos": 0.762,
+    "delta_pts": 0.73,
+    "ferme": 0.8952,
+    "ouvert": 0.6344,
+    "f1": 0.582,
+    "f1_tete": 0.7333,
+    "attachement_exact": 0.9387,
+    "attachement_topk": 0.9387
+   },
+   "test": {
+    "pos": 0.7726,
+    "delta_pts": 0.7,
+    "ferme": 0.9119,
+    "ouvert": 0.6441,
+    "f1": 0.5914,
+    "f1_tete": 0.7344,
+    "attachement_exact": 0.9079,
+    "attachement_topk": 0.8947
+   },
+   "en_union": 0.7753,
+   "fr_union": 0.7597,
+   "corriges": 23,
+   "casses": 0,
+   "corriges_en": 12,
+   "corriges_fr": 11,
+   "statut": "piste mesurée, non retenue dans les trois règles (périmètre)"
+  },
+  {
+   "id": "R1l",
+   "nom": "règle littérale « après DET/PRÉP/ADJ, tout est nom sauf verbe connu »",
+   "enonce": "conversion de tout VERB non _est_verbe après DET/PRÉP/ADJ",
+   "dev": {
+    "pos": 0.7533,
+    "delta_pts": -0.14,
+    "ferme": 0.8952,
+    "ouvert": 0.6174,
+    "f1": null,
+    "f1_tete": null,
+    "attachement_exact": null,
+    "attachement_topk": null
+   },
+   "test": {
+    "pos": 0.7646,
+    "delta_pts": -0.1,
+    "ferme": 0.9119,
+    "ouvert": 0.6286,
+    "f1": null,
+    "f1_tete": null,
+    "attachement_exact": null,
+    "attachement_topk": null
+   },
+   "en_union": 0.7631,
+   "corriges": 0,
+   "casses": 4,
+   "formes_cassees": [
+    "eat 2",
+    "lit 1",
+    "attrape 1"
+   ],
+   "statut": "rejetée"
+  }
+ ],
+ "paquets": {
+  "R2+R3": {
+   "dev": {
+    "pos": 0.8375,
+    "delta_pts": 8.28,
+    "ferme": 0.9093,
+    "ouvert": 0.7688,
+    "f1": 0.6153,
+    "f1_tete": 0.751,
+    "attachement_exact": 0.9387,
+    "attachement_topk": 0.9387
+   },
+   "test": {
+    "pos": 0.84,
+    "delta_pts": 7.44,
+    "ferme": 0.9224,
+    "ouvert": 0.764,
+    "f1": 0.6243,
+    "f1_tete": 0.7512,
+    "attachement_exact": 0.9079,
+    "attachement_topk": 0.8947
+   },
+   "tout": {
+    "pos": 0.8383,
+    "justes": 2665,
+    "tokens": 3179,
+    "f1": 0.6181,
+    "f1_tete": 0.7511
+   },
+   "en_union": 0.9103,
+   "fr_union": 0.7976,
+   "corriges": 255,
+   "casses": 0,
+   "corriges_en": 167,
+   "corriges_fr": 88,
+   "lexique": {
+    "en": {
+     "hors": 86,
+     "dans": 81
+    },
+    "fr": {
+     "hors": 58,
+     "dans": 30
+    }
+   },
+   "statut": "paquet propre (aucun lexique nouveau), recommandé"
+  },
+  "R1+R2+R3": {
+   "dev": {
+    "pos": 0.8641,
+    "delta_pts": 10.94,
+    "ferme": 0.9111,
+    "ouvert": 0.819,
+    "f1": 0.6153,
+    "f1_tete": 0.751,
+    "attachement_exact": 0.9387,
+    "attachement_topk": 0.9387
+   },
+   "test": {
+    "pos": 0.8632,
+    "delta_pts": 9.76,
+    "ferme": 0.9224,
+    "ouvert": 0.8085,
+    "f1": 0.6243,
+    "f1_tete": 0.7512,
+    "attachement_exact": 0.9079,
+    "attachement_topk": 0.8947
+   },
+   "tout": {
+    "pos": 0.8638,
+    "justes": 2746,
+    "tokens": 3179,
+    "f1": 0.6181,
+    "f1_tete": 0.7511
+   },
+   "en_union": 0.9321,
+   "fr_union": 0.8252,
+   "corriges": 336,
+   "casses": 0,
+   "corriges_en": 192,
+   "corriges_fr": 144,
+   "lexique": {
+    "en": {
+     "hors": 88,
+     "dans": 104
+    },
+    "fr": {
+     "hors": 62,
+     "dans": 82
+    }
+   },
+   "statut": "plafond mesuré ; inclut R1 contaminé"
+  }
+ },
+ "controles": {
+  "placebo": {
+   "methode": "même nombre d'actions, même direction, jeton tiré au hasard dans la même phrase ; 200 tirages, graine 20261106",
+   "R1": {
+    "actions": 190,
+    "moyenne_pts": -2.461,
+    "p05_pts": -2.988,
+    "p95_pts": -1.824,
+    "max_pts": -1.541,
+    "observe_dev_pts": 6.31
+   },
+   "R2": {
+    "actions": 235,
+    "moyenne_pts": -2.831,
+    "p05_pts": -3.429,
+    "p95_pts": -2.233,
+    "max_pts": -1.856,
+    "observe_dev_pts": 7.6
+   },
+   "R3": {
+    "actions": 15,
+    "moyenne_pts": -0.212,
+    "p05_pts": -0.377,
+    "p95_pts": -0.063,
+    "max_pts": 0.157,
+    "observe_dev_pts": 0.5
+   },
+   "paquet": {
+    "actions": 336,
+    "moyenne_pts": -4.176,
+    "p05_pts": -4.907,
+    "p95_pts": -3.429,
+    "max_pts": -2.8,
+    "observe_dev_pts": 10.94
+   }
+  },
+  "francais": {
+   "R1": {
+    "dev_pts": 4.55,
+    "test_pts": 4.01
+   },
+   "R2": {
+    "dev_pts": 4.33,
+    "test_pts": 4.32
+   },
+   "R3": {
+    "dev_pts": 0.0,
+    "test_pts": 0.0
+   },
+   "R2+R3": {
+    "dev_pts": 4.33,
+    "test_pts": 4.32
+   },
+   "R1+R2+R3": {
+    "dev_pts": 7.08,
+    "test_pts": 7.11
+   },
+   "note": "R2 corrige 58 jetons français hors VERBES_CONNUS sur 88 : la position du sujet est une règle de langue"
+  },
+  "lexique": {
+   "note": "VERBES_CONNUS ajouté le 05/11 (commit d400e188, « mesuré le 05/11 sur les 22 GP restants ») : écrit sur ce gold ; le split ne protège pas",
+   "R1": {
+    "en_corriges": 101,
+    "en_hors_lexique": 0
+   },
+   "R2+R3": {
+    "en_corriges": 167,
+    "en_hors_lexique": 86
+   }
+  },
+  "attachement": {
+   "tout_exact": 0.9289,
+   "tout_topk": 0.9247,
+   "en_exact": 0.9773,
+   "en_span": 1.0,
+   "fr_exact": 0.9007,
+   "delta_max": 0.0,
+   "note": "inchangé pour toutes les variantes : le gain de F1 anglais est un gain de couverture de segmentation"
+  },
+  "seuils_verdict": {
+   "V0": {
+    "pos_main": 0.8857,
+    "pos_reel": 0.7661,
+    "pos_synthetique": 0.7296,
+    "f1_reel": 0.5806
+   },
+   "R2+R3": {
+    "pos_main": 0.8952,
+    "pos_reel": 0.8613,
+    "pos_synthetique": 0.7568,
+    "f1_reel": 0.623
+   },
+   "R1+R2+R3": {
+    "pos_main": 0.8952,
+    "pos_reel": 0.8831,
+    "pos_synthetique": 0.7954,
+    "f1_reel": 0.623
+   },
+   "tous_verts": true
+  }
+ },
+ "limites": [
+  "diagnostic fait sur l'union (612) et non sur dev seul : les règles ont vu le test ; une décision de R3 (garde-fou de tête nominale) a été affinée après r117 (test) et r025/r169 (dev) — le test est une borne légèrement optimiste",
+  "test anglais : 347 jetons, 1 jeton = 0,29 pt ; les +14,70 pts anglais du paquet complet reposent sur 51 correctifs nets",
+  "gold_reel templaté : les mêmes formes reviennent, la consistance dev/test est rassurante mais pas démonstrative",
+  "VERBES_CONNUS in-sample : R1 est une correction de cohérence, son +8,8 pts anglais n'est pas un gain de généralisation (101/101 dans le lexique)",
+  "seuils de confiance (0,30/0,40/0,45/0,50/0,55) liés à l'échelle de _pos : à recalibrer si l'échelle change",
+  "effets de bord hors gold : R2(b) casserait un composé nom+nom (the car mats), R2(a) « I, John, ... » ; R3 dépend de la convention that du gold (3 résidus = conventions déjà signalées par A14)",
+  "fuite inter-langue : _est_verbe est bilingue, R1 fait de As un VERB via le as français (solde nul sur ce gold)",
+  "l'attachement ne bouge pas : ce n'est pas un levier d'attachement, seulement d'observabilité/cohérence"
+ ],
+ "recommandation": [
+  {
+   "ordre": 1,
+   "action": "intégrer R2 (a) puis (b)",
+   "gain": "+6,94 pts test, +9,3 pts F1 anglais (+3,3 toutes langues), 0 cassé",
+   "condition": "aucune donnée nouvelle"
+  },
+  {
+   "ordre": 2,
+   "action": "intégrer R3 après R2(a)",
+   "gain": "+0,50 pt test dans le paquet, ~10 lignes, corrige that/her",
+   "condition": "version à deux phases si l'on veut le résidu r297 (+1 jeton)"
+  },
+  {
+   "ordre": 3,
+   "action": "R1 : intégrer le câblage, ne pas compter le gain",
+   "gain": "+8,8 pts anglais mesurés mais in-sample",
+   "condition": "lexique anglais reconstruit hors gold puis re-mesure"
+  },
+  {
+   "ordre": 4,
+   "action": "pistes mesurées : R4 copule->ADJ, puis compléter les classes fermées anglaises (C3 : 28 erreurs)",
+   "gain": "R4 +0,70 pt test, 23 correctifs, 0 cassé",
+   "condition": "hors périmètre des trois règles"
+  },
+  {
+   "ordre": 5,
+   "action": "ne pas durcir la règle 3 bis vers « plus de nom »",
+   "gain": "—",
+   "condition": "la mesure la donne à 33/33 en anglais ; le problème est le défaut qu'elle ne voyait jamais"
+  }
+ ],
+ "reproduction": {
+  "methode": "script hors dépôt (~200 lignes) : charger les trois gold, split gold_split.dev/test, copier bloc_linguistique.py en mémoire (exec(compile(source)) avec __file__ pointé sur l'original), appliquer les inserts, evaluer_gold.evaluer_bloc sur dev, test, anglais, français",
+  "patchs": {
+   "R1": [
+    "# dans _pos(), après le test ADJECTIFS (l. 609-610) :",
+    "        if _est_verbe(n):",
+    "            return \"VERB\", True, 0.5",
+    "",
+    "# boucle 3 bis (l. 1055) : seuil 0,45 -> 0,5",
+    "            if e.type != \"VERB\" or e.confiance > 0.5 or k == 0:"
+   ],
+   "R2a": [
+    "        # 3 a. apres un pronom sujet, un mot inconnu est un verbe (« she sings ») ; l'exception",
+    "        # est morphologique : une desinence nominale reste un nom (« happiness »).",
+    "        _nominales = (\"tion\", \"sion\", \"ness\", \"ity\", \"ité\", \"ance\", \"ence\", \"ment\", \"ship\")",
+    "        for _k, _i in enumerate(pos_idx):",
+    "            _e = etiquettes[_i]",
+    "            if _k == 0 or _e.type not in (\"NOUN\", \"ADJ\") or _e.confiance > 0.45:",
+    "                continue",
+    "            _av = etiquettes[pos_idx[_k - 1]]",
+    "            if (_av.type == \"PRON\" and _normaliser(_av.valeur) in SUJETS",
+    "                    and not _normaliser(_e.valeur).endswith(_nominales)):",
+    "                etiquettes[_i] = Etiquette(\"pos\", \"VERB\", _e.valeur, _e.debut, _e.fin, self.nom,",
+    "                                           0.5, candidats=[\"verb\"], langue=lg, script=script,",
+    "                                           meta={\"ouvert\": True, \"contexte\": \"pron_sujet\"})"
+   ],
+   "R3": [
+    "        # 3 b. un DET **ambigu** sans nom a sa droite n'est pas un DET (« the book that I",
+    "        # read », « he speaks to her ») : c'est un PRON, ou un CONJ apres un verbe.",
+    "        _lexd = POS_FERME.get(lg, POS_FERME[\"fr\"])",
+    "        for _k, _i in enumerate(pos_idx):",
+    "            _e = etiquettes[_i]",
+    "            if _e.type != \"DET\":",
+    "                continue",
+    "            if _normaliser(_e.valeur) not in (_lexd.get(\"PRON\", set()) | _lexd.get(\"CONJ\", set())):",
+    "                continue",
+    "            _suiv = etiquettes[pos_idx[_k + 1]] if _k + 1 < len(pos_idx) else None",
+    "            if _suiv is not None and (_suiv.type in (\"NOUN\", \"ADJ\", \"NUM\") or (",
+    "                    _suiv.type == \"VERB\" and _suiv.confiance <= 0.45",
+    "                    and not _est_verbe(_suiv.valeur))):",
+    "                continue",
+    "            _av = etiquettes[pos_idx[_k - 1]] if _k else None",
+    "            _cls = \"CONJ\" if (_av is not None and _av.type in (\"VERB\", \"AUX\")) else \"PRON\"",
+    "            etiquettes[_i] = Etiquette(\"pos\", _cls, _e.valeur, _e.debut, _e.fin, self.nom, 0.6,",
+    "                                       candidats=[_cls.lower()], langue=lg, script=script,",
+    "                                       meta={\"ouvert\": False, \"contexte\": \"det_sans_nom\"})"
+   ],
+   "R2b": [
+    "        # 3 a bis. une forme en -s/-es apres un NOM sujet est un verbe (« the cat sleeps »).",
+    "        for _k, _i in enumerate(pos_idx):",
+    "            _e = etiquettes[_i]",
+    "            if _k == 0 or _e.type != \"NOUN\" or _e.confiance > 0.45:",
+    "                continue",
+    "            _av = etiquettes[pos_idx[_k - 1]]",
+    "            if _av.type == \"NOUN\" and _normaliser(_e.valeur).endswith((\"s\", \"es\")):",
+    "                etiquettes[_i] = Etiquette(\"pos\", \"VERB\", _e.valeur, _e.debut, _e.fin, self.nom,",
+    "                                           0.5, candidats=[\"verb\"], langue=lg, script=script,",
+    "                                           meta={\"ouvert\": True, \"contexte\": \"nom_sujet_3s\"})"
+   ]
+  },
+  "ordre": "R1 dans _pos ; R2a puis R3 après pos_idx ; boucle 3 bis ; R2b après la boucle",
+  "fichiers_livres": [
+   "reports/rapport-pos-anglais.md",
+   "reports/pensee-pos-anglais.json"
+  ],
+  "commit": "aucun"
+ }
+}

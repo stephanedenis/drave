@@ -1362,7 +1362,7 @@ def t86_gold_subsets() -> tuple[bool, str]:
     r2 = evaluer_bloc("h", h, sous(181, 200))
     p2 = round(r2["pos"]["exactitude"], 4)
     p1 = round(r1["pos"]["exactitude"], 4)
-    return abs(p2 - 0.8452) < 0.001 and abs(p1 - 0.8221) < 0.001, (
+    return abs(p2 - 0.9167) < 0.001 and abs(p1 - 0.8937) < 0.001, (
         f"r181-200 POS {p2} ; r001-180 POS {p1}")
 
 
@@ -1375,7 +1375,7 @@ def t87_complexes() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 205]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.7353) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8529) < 0.001, (
         f"r201-205 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1389,7 +1389,7 @@ def t88_complexes20() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 220]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.7236) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8537) < 0.001, (
         f"r201-220 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1403,7 +1403,7 @@ def t89_complexes50() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 250]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.7327) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8396) < 0.001, (
         f"r201-250 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1417,7 +1417,7 @@ def t90_complexes100() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 300]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.719) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8365) < 0.001, (
         f"r201-300 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1637,7 +1637,7 @@ def t107_gold_complet() -> tuple[bool, str]:
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, phrases)
     return (len(phrases) == 602
-            and abs(r["pos"]["exactitude"] - 0.7603) < 0.001), (
+            and abs(r["pos"]["exactitude"] - 0.8415) < 0.001), (
         f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
         f"tête {round(r['syntagme']['tete']['f1'], 4)}")
 
@@ -1669,7 +1669,7 @@ def t109_anaphore_103() -> tuple[bool, str]:
 
 
 def t110_segmenteur() -> tuple[bool, str]:
-    """Le segmenteur : S F1 0,5014 (français seul), chunker 0,6203 ; tête 0,6677 / 0,7639 (gelé 602)."""
+    """Le segmenteur : S F1 0,5396 (français seul), chunker 0,6576 ; tête 0,6877 / 0,7839 (gelé 602)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
@@ -1682,7 +1682,7 @@ def t110_segmenteur() -> tuple[bool, str]:
     f2 = round(r2["syntagme"]["f1"], 4)
     t1 = round(r1["syntagme"]["tete"]["f1"], 4)
     t2 = round(r2["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.5014) < 0.001 and abs(f2 - 0.6203) < 0.001
+    return (abs(f1 - 0.5396) < 0.001 and abs(f2 - 0.6576) < 0.001
             and t1 < t2), (
         f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
 
@@ -1708,7 +1708,7 @@ def t111_hybride_seg() -> tuple[bool, str]:
             pred.add((t, cand[0] if cand else d))
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.7423) < 0.001, (
+    return abs(f1 - 0.7621) < 0.001, (
         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
 
 
@@ -1729,7 +1729,7 @@ def t112_union() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.5893) < 0.001, f"union : segments F1 {f1} (S 0,5014)"
+    return abs(f1 - 0.623) < 0.001, f"union : segments F1 {f1} (S 0,5396)"
 
 
 def t113_union_defaut() -> tuple[bool, str]:
@@ -1741,7 +1741,7 @@ def t113_union_defaut() -> tuple[bool, str]:
     r = evaluer_bloc("h", h, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return abs(f1 - 0.5893) < 0.001 and abs(tete - 0.7392) < 0.001, (
+    return abs(f1 - 0.623) < 0.001 and abs(tete - 0.7568) < 0.001, (
         f"union par défaut : F1 {f1}, tête {tete}")
 
 
@@ -1755,7 +1755,7 @@ def t114_cascade_union() -> tuple[bool, str]:
     r = evaluer_bloc("c", cascade, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.6176) < 0.001 and abs(tete - 0.7479) < 0.001
+    return (abs(f1 - 0.654) < 0.001 and abs(tete - 0.767) < 0.001
             and cascade.appels_neuronal == 602), (
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
@@ -1781,7 +1781,7 @@ def t115_tete_cascade() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.6895) < 0.001, (
+    return abs(f1 - 0.7095) < 0.001, (
         f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
 
 
@@ -1832,7 +1832,7 @@ def t119_miroir_resume() -> tuple[bool, str]:
     cas = bl.Cascade(h, bl.MockNeuronal())
     rap_c = sum(rappel_resume(cas.analyser(p["texte"], p["langue"]), p["texte"])
                 for p in ph) / max(1, len(ph))
-    return (abs(rap_h - 0.7465) < 0.001 and abs(rap_c - 0.6914) < 0.001), (
+    return (abs(rap_h - 0.7477) < 0.001 and abs(rap_c - 0.6918) < 0.001), (
         f"résumé : heur {round(rap_h, 4)}, cascade {round(rap_c, 4)}")
 
 
@@ -2023,7 +2023,7 @@ def t138_defaut_niveau() -> tuple[bool, str]:
     h, n = bl.Heuristique(), bl.MockNeuronal()
     r_conf = evaluer_bloc("c", bl.Parallele([h, n]), ph)["pos"]["exactitude"]
     r_niv = evaluer_bloc("n", bl.Parallele([h, n], priorite_par_niveau=bl.PRIORITE_NIVEAU), ph)["pos"]["exactitude"]
-    return abs(r_conf - 0.7465) < 0.001 and abs(r_niv - 0.3454) < 0.001 and r_conf > r_niv, (
+    return abs(r_conf - 0.7528) < 0.001 and abs(r_niv - 0.3454) < 0.001 and r_conf > r_niv, (
         f"défaut : confiance {round(r_conf, 4)}, niveau {round(r_niv, 4)}")
 
 
@@ -2058,7 +2058,7 @@ def t141_elision() -> tuple[bool, str]:
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, charger())
     pos = round(r["pos"]["exactitude"], 4)
-    return abs(pos - 0.7581) < 0.001, f"élision : POS {pos}"
+    return abs(pos - 0.8383) < 0.001, f"élision : POS {pos}"
 
 
 def t142_run2() -> tuple[bool, str]:
@@ -2272,7 +2272,7 @@ def t156_relation() -> tuple[bool, str]:
                 n += 1
                 if gv and (e.meta or {}).get("role") in ("agent", "patient", "destinataire"):
                     avec += 1
-    return n == 546 and avec == 257, f"relation : {avec}/{n} ({round(avec/n, 4)})"
+    return n == 560 and avec == 257, f"relation : {avec}/{n} ({round(avec/n, 4)})"
 
 
 def t157_roles() -> tuple[bool, str]:
@@ -2293,7 +2293,7 @@ def t157_roles() -> tuple[bool, str]:
                         avant += 1
                     else:
                         apres += 1
-    return n == 231 and avant == 156 and apres == 46, (
+    return n == 245 and avant == 178 and apres == 62, (
         f"rôles : {n} sans rôle, {avant} avant le GV, {apres} après")
 
 

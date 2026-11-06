@@ -52391,3 +52391,237 @@ ven 06 nov 2026 13:04:02 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 13 h 05 HNE\", t)\np.write_text( … [695 caractères tronqués]`
+
+  ```
+15 files changed, 160 insertions(+), 31 deletions(-)
+COMMIT OK 1
+ab3dccf8 DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1) ; ÉTAT HORODATÉ
+   a8d0e578..ab3dccf8  s/v7 -> s/v7
+   a8d0e578..ab3dccf8  master -> master
+0
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+### 👤 Utilisateur
+
+Agent bf49d867-4b23-49e1-b214-9a2fd542fb1b sent a message: 
+POS anglaise — diagnostic + règles mesurées. **Deux fichiers neufs, aucun existant modifié, aucun commit.**
+`reports/rapport-pos-anglais.md` (439 l., 4 765 mots) et `reports/pensee-pos-anglais.json` (28,6 Ko, valide, 16 clés). Snapshot : HEAD `56eb43af`, `bloc_linguistique.py` SHA `084517d9`, `gold_reel.json` `05d4f6df`.
+
+**Dispositif.** Variantes par copie **en mémoire** de `bloc_linguistique.py` (`exec(compile(source))`, `__file__` pointé sur l'original) ; `evaluer_bloc` sur dev (422 phr. / 2 185 tok., 801 tok. en) puis test (190 / 994, 347 en). Aucune écriture dans le dépôt hors les 2 fiches ; scripts en /tmp.
+
+**Diagnostic.** Anglais = 1 148 jetons (36,1 %), **270 erreurs** (35,1 %), POS **76,48 %** (fermé 90,65, ouvert 61,61) ; français 75,43 % — l'anglais n'est **pas** sur-représenté. VERB→NOUN anglais 176 = 39,1 % des 450 globaux (274 fr) ; NOUN→VERB 5 des 7.
+**5 causes** (partition exacte, somme 270) :
+1. **C1 176 (65,2 %)** — le défaut nominal de `_pos` ne consulte **jamais** `_est_verbe`/`VERBES_CONNUS` : 126 formes -s/-es, 50 nues, **100 déjà dans VERBES_CONNUS**, 165 après un sujet (85 PRON, 80 NOUN), 172 à conf 0,30.
+2. **C3 28 (10,4 %)** — lexiques fermés anglais incomplets (ADV 16, PRON 9, CONJ 2, AUX 1 : where 6, late 4, out 2, as 2…) + règle majuscule (As 2, Maybe 1).
+3. **C2 26 (9,6 %)** — DET ambigu prioritaire (that 23, her 3).
+4. **C4 19 (7,0 %)** — morphologie française sur l'anglais (-able/-al 5, -ive 5, -ed/-ing 3, -er 2) + `VERBES[en]` qui contient rain/open (4).
+5. **C5 12 (4,4 %)** — ADJ attribut inconnu après copule. + bruit or/span 9 (3,3 %).
+**Hypothèses réfutées** : la règle DET/PRÉP/ADJ→NOUN n'est **pas** gourmande — 33 conversions EN, **33/33 justes**, 0/176 ; la règle littérale « tout nom sauf verbe connu » = **0 correctif / 4 casses** (dev −0,14, test −0,10).
+
+**3 règles générales** (aucune liste de mots du gold), dev puis test :
+- **R1** « le lexique verbal tranche le défaut ouvert » (`_pos` consulte `_est_verbe` ; seuil 3 bis 0,45→0,5) : dev **81,78 (+6,31)**, test **81,79 (+5,23)**, EN 85,28 ; **190 corrigés / 0 cassé** ; F1 et attachement inchangés. ⚠️ **101/101 correctifs EN sont des membres exacts de `VERBES_CONNUS`**, écrit sur ce gold (commit `d400e188`, 05/11) → gain non comptable comme généralisation.
+- **R2** « la position du sujet tranche » (a : après pronom sujet, mot inconnu → verbe ; b : -s/-es après nom sujet → verbe, **après** la boucle 3 bis) : dev **83,07 (+7,60)**, test **83,50 (+6,94)**, EN 89,29 ; **235 / 0** ; **seule règle qui bouge le F1** : 0,5820→0,6153 dev, 0,5914→0,6243 test, **EN 0,6341→0,7273** (tp 376→448, fp 108→82, fn 326→254) ; **66 correctifs EN hors lexique**.
+- **R3** « un DET ambigu exige un nom à sa droite » (that/her → PRON, ou CONJ après verbe) : dev **75,97 (+0,50)**, test **76,96 (+0,40)**, EN 77,79 ; **15 / 0**.
+- **Paquet propre R2+R3** : dev **83,75 (+8,28)**, test **84,00 (+7,44)**, tout **83,83**, EN **91,03**, FR 79,76 ; 255/0 ; F1 +0,033.
+- **Paquet complet R1+R2+R3** : dev **86,41 (+10,94)**, test **86,32 (+9,76)**, tout **86,38**, EN **93,21**, FR **82,52** ; 336/0.
+- Annexes : **R4 copule→ADJ** (piste) +0,73 dev/+0,70 test, 23/0 ; **R1l rejetée** (0/4).
+**Contrôles** : placebo même action/position aléatoire = −2,46/−2,83/−0,21/−4,18 pts en moyenne (max −1,54/−1,86/+0,16/−2,80) ; **attachement strictement inchangé partout** (0,9289 tout, top-k 0,9247 ; EN 86/88, conditionnel 86/86) ; seuils du verdict tous verts et marges en hausse.
+
+**Recommandation** : 1) **intégrer R2** (a puis b) — +6,94 test, +9,3 pts F1 anglais, 0 cassé, sans données nouvelles ; 2) **intégrer R3** après R2(a) — +0,50 test dans le paquet ; 3) **R1 : intégrer le câblage** (cohérence chunker/POS) **mais ne pas compter le gain** tant que le lexique anglais n'est pas reconstruit hors gold ; 4) pistes : R4, puis compléter les classes fermées anglaises (28 erreurs) ; 5) **ne pas durcir 3 bis** (33/33).
+
+**Limites** : diagnostic fait sur l'union (les règles ont vu le test) ; le garde-fou R3 a été affiné après r117 (test) et r025/r169 (dev) → test = borne légèrement optimiste ; test EN = 347 jetons (1 jeton = 0,29 pt ; +14,70 pts EN = 51 correctifs nets) ; gold templaté.
+**Intégration** : régénérer `reports/INDEX.md` (`python3 tools/index_reports.py`) — non lancé pour respecter « ne modifier aucun existant ». Portes non lancées : aucun code modifié. Les 3 inserts exacts + ancres sont dans l'annexe du rapport et dans `pensee-pos-anglais.json → reproduction.patchs`.
+
+### 👤 Utilisateur
+
+Background subagent bf49d867-4b23-49e1-b214-9a2fd542fb1b finished and will do no further work unless you send it more.
+Its closing message:
+Mission terminée. Deux fichiers neufs, aucun existant modifié, aucun commit.
+
+**Fichiers**
+- `reports/rapport-pos-anglais.md` — diagnostic, causes, règles, contrôles, limites, annexe des 3 inserts exacts.
+- `reports/pensee-pos-anglais.json` — mêmes chiffres en JSON structuré (patchs inclus, validé).
+
+**Diagnostic.** Anglais = 1 148 jetons (36,1 %), **270 erreurs** (35,1 %), POS **76,48 %** — soit *mieux* que le français (75,43 %) : l'anglais n'est pas sur-représenté. Le VERB→NOUN anglais (176) est 39,1 % des 450 globaux. Les 5 causes, partition exacte des 270 :
+
+| # | cause | effectif | part |
+|---|---|---:|---:|
+| C1 | défaut nominal : `_pos` ne consulte jamais `_est_verbe`/`VERBES_CONNUS` | **176** | 65,2 % |
+| C3 | lexiques fermés anglais incomplets (+ règle majuscule) | 28 | 10,4 % |
+| C2 | DET ambigu prioritaire (`that` 23, `her` 3) | 26 | 9,6 % |
+| C4 | morphologie française appliquée à l'anglais | 19 | 7,0 % |
+| C5 | ADJ attribut inconnu après copule | 12 | 4,4 % |
+
+(+ bruit or/span 9 = 3,3 %). La règle de contexte DET/PRÉP/ADJ→NOUN est **innocente** : 33 conversions anglaises, 33/33 justes, 0 des 176 — elle est trop timide. La règle littérale « tout nom sauf verbe connu » est **rejetée** : 0 correctif, 4 casses.
+
+**Gains POS (dev / test), sur 3 179 jetons**
+
+| règle | dev | test | corrigés / cassés |
+|---|---:|---:|---:|
+| R1 — le lexique verbal tranche le défaut ouvert | 81,78 (+6,31) | 81,79 (+5,23) | 190 / 0 |
+| R2 — la position du sujet tranche (pronom, puis `-s` après nom) | 83,07 (+7,60) | 83,50 (+6,94) | 235 / 0 |
+| R3 — un DET ambigu exige un nom à sa droite | 75,97 (+0,50) | 76,96 (+0,40) | 15 / 0 |
+| **R2+R3** (paquet propre) | **83,75 (+8,28)** | **84,00 (+7,44)** | 255 / 0 |
+| **R1+R2+R3** (plafond) | 86,41 (+10,94) | 86,32 (+9,76) | 336 / 0 |
+
+L'attachement est **strictement inchangé** partout (0,9289 ; anglais 86/88). R2 seule fait bouger le F1 : **0,5914 → 0,6243 au test**, et **0,6341 → 0,7273 en anglais** (tp 376→448, fp 108→82).
+
+**Recommandation.** Intégrer **R2** d'abord (a puis b) : +6,94 pt test, +9,3 pts de F1 anglais, 0 cassé, sans donnée nouvelle. Puis **R3**. Pour **R1**, intégrer le câblage (cohérence avec le chunker) mais **ne pas compter son gain** : 101/101 de ses correctifs anglais sont des membres exacts de `VERBES_CONNUS`, lexique écrit sur ce gold (commit `d400e188`) — le split ne protège pas de cette contamination. Réserve de protocole : diagnostic sur l'union, garde-fou de R3 affiné après une phrase de test (r117) → le chiffre test est une borne légèrement optimiste ; le test anglais ne fait que 347 jetons.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-anglais.json'))\nrep=d.get('reproduction',{})\nprint('clés reproduction :', list(rep.keys()))\npatchs=rep.get('patchs') or rep.get('patch') or []\nprint('nb patchs : … [238 caractères tronqués]`
+
+  ```
+clés reproduction : ['methode', 'patchs', 'ordre', 'fichiers_livres', 'commit']
+nb patchs : 4
+---
+{"R1": ["# dans _pos(), après le test ADJECTIFS (l. 609-610) :", "        if _est_verbe(n):", "            return \"VERB\", True, 0.5", "", "# boucle 3 bis (l. 1055) : seuil 0,45 -> 0,5", "            if e.type != \"VERB\" or e.confiance > 0.5 or k == 0:"], "R2a": ["        # 3 a. apres un pronom sujet, un mot inconnu est un verbe (« she sings ») ; l'exception", "        # est morphologique : une desinence nominale reste un nom (« happiness »).", "        _nominales = (\"tion\", \"sion\", \"ness\", \"ity\", \"ité\", \"ance\", \"ence\", \"ment\", \"ship\")", "        for _k, _i in enumerate(pos_idx):", "            _e = etiquettes[_i]", "            if _k == 0 or _e.type not in (\"NOUN\", \"ADJ\") or _e.confiance > 0.45:", "                continue", "            _av = etiquettes[pos_idx[_k - 1]]", "            if (_av.type == \"PRON\" and _normaliser(_av.valeur) in SUJETS", "                    and not _normaliser(_e.valeur).endswith(_nominales)):", "                etiquettes[_i] = Etiquette(\"pos\", \"VERB\", _e.valeur, _e.debut, _e.fin, self.nom,", "                                 
+… [66 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-anglais.json'))\nfor p in d['reproduction']['patchs']:\n    for nom, lignes in p.items():\n        print(\"=\"*20, nom)\n        for l in lignes: print(l)\nPY", "des … [41 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+AttributeError: 'str' object has no attribute 'items'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-anglais.json'))\npatchs=d['reproduction']['patchs']\nprint(type(patchs), len(patchs))\nfor p in patchs:\n    print('='*30)\n    print(p if isinstance(p,str) else jso … [91 caractères tronqués]`
+
+  ```
+<class 'dict'> 4
+==============================
+R1
+==============================
+R2a
+==============================
+R3
+==============================
+R2b
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-anglais.json'))\nfor nom, lignes in d['reproduction']['patchs'].items():\n    print(\"=\"*25, nom)\n    for l in lignes: print(l)\n    print()\nPY", "description": " … [35 caractères tronqués]`
+
+  ```
+========================= R1
+# dans _pos(), après le test ADJECTIFS (l. 609-610) :
+        if _est_verbe(n):
+            return "VERB", True, 0.5
+
+# boucle 3 bis (l. 1055) : seuil 0,45 -> 0,5
+            if e.type != "VERB" or e.confiance > 0.5 or k == 0:
+
+========================= R2a
+        # 3 a. apres un pronom sujet, un mot inconnu est un verbe (« she sings ») ; l'exception
+        # est morphologique : une desinence nominale reste un nom (« happiness »).
+        _nominales = ("tion", "sion", "ness", "ity", "ité", "ance", "ence", "ment", "ship")
+        for _k, _i in enumerate(pos_idx):
+            _e = etiquettes[_i]
+            if _k == 0 or _e.type not in ("NOUN", "ADJ") or _e.confiance > 0.45:
+                continue
+            _av = etiquettes[pos_idx[_k - 1]]
+            if (_av.type == "PRON" and _normaliser(_av.valeur) in SUJETS
+                    and not _normaliser(_e.valeur).endswith(_nominales)):
+                etiquettes[_i] = Etiquette("pos", "VERB", _e.valeur, _e.debut, _e.fin, self.nom,
+                                           0.5, candidats=["verb"], langue=lg, script=script,
+                                           meta={"ouvert": True, "contexte": "
+… [1975 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"3 bis\" tools/bloc_linguistique.py; sed -n \"$(grep -n '3 bis' tools/bloc_linguistique.py | cut -d: -f1),+13p\" tools/bloc_linguistique.py", "description": "Voir le bloc 3 bis"}`
+
+  ```
+1056:        # 3 bis. le contexte tranche les suffixes ambigus : un mot après DET/PRÉP/ADJ est un
+        # 3 bis. le contexte tranche les suffixes ambigus : un mot après DET/PRÉP/ADJ est un
+        # nom (« brother », « chair » ne sont pas des verbes) — A14 : 176 VERB gold en NOUN.
+        pos_idx = [i for i, e in enumerate(etiquettes) if e.niveau == "pos"]
+        for k, i in enumerate(pos_idx):
+            e = etiquettes[i]
+            if e.type != "VERB" or e.confiance > 0.45 or k == 0:
+                continue
+            avant = etiquettes[pos_idx[k - 1]]
+            if avant.type in ("DET", "PREP", "ADJ"):
+                etiquettes[i] = Etiquette("pos", "NOUN", e.valeur, e.debut, e.fin, self.nom,
+                                          e.confiance, candidats=["noun"], langue=lg,
+                                          script=script, meta={"ouvert": True, "contexte": avant.type})
+
+        # 4. phrase + pragmatique
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/bloc_avant_pos.py && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nbloc = '''\n        # 3 a. après un pronom sujet, un mot inconnu est un verbe (« … [3760 caractères tronqués]`
+
+  ```
+R2a+R3+R2b insérés
+syntaxe OK
+dev POS 0.8375 | F1 0.6153 | exact 153 / 153 | couv 0.9387
+test POS 0.84 | F1 0.6243 | exact 69 / 69 | couv 0.9079
+tout POS 0.8383 | F1 0.6181 | exact 222 / 222 | couv 0.9289
+  ```
+
+### 🤖 Assistant
+
+⏵ **POS 75,81 → 83,83**, F1 **0,5849 → 0,6181**, attachement **inchangé (222/222)** : je recale les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après R2/R3", "timeoutMs": 1900000}`
+
+  ```
+❌ T86 sous-ensembles     r181-200 POS 0.9167 ; r001-180 POS 0.8937
+  ❌ T87 phrases complexes  r201-205 : POS 0.8529, syntagme 0.7778
+  ❌ T88 20 complexes       r201-220 : POS 0.8537, syntagme 0.6875
+  ❌ T89 50 complexes       r201-250 : POS 0.8396, syntagme 0.6771
+  ❌ T90 100 complexes      r201-300 : POS 0.8365, syntagme 0.6372
+  ❌ T107 gold complet      gold complet : 602 phrases, POS 0.8415, tête 0.7568
+  ❌ T110 segmenteur        segmenteur : S F1 0.5396 tête 0.6877 ; chunker F1 0.6576 tête 0.7839
+  ❌ T111 hybride segmenteur hybride : tête F1 0.7621 (S 0,3552, chunker 0,4707)
+  ❌ T112 union segmenteurs union : segments F1 0.623 (S 0,5014)
+  ❌ T113 union par défaut  union par défaut : F1 0.623, tête 0.7568
+  ❌ T114 cascade + union   cascade : F1 0.654, tête 0.767, 602 appels
+  ❌ T115 tête cascade      tête cascade corrigée : 0.7095 (cascade 0,441 ; union 0,466)
+  ❌ T119 restitution sémantique résumé : heur 0.7477, cascade 0.6918
+  ❌ T138 défaut fusion     défaut : confiance 0.7528, niveau 0.3454
+  ❌ T141 élision           élision : POS 0.8383
+  ❌ T156 relation GN-GV    relation : 257/560 (0.4589)
+  ❌ T157 rôles par position rôles : 245 sans rôle, 178 avant le GV, 62 après
+  166/1
+… [16 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(p2 - 0.8214) < 0.001 and abs(p1 - 0.7919) < 0.001','abs(p2 - 0.9167) < 0.001 and abs(p1 - 0.8937) < 0.001'),\n   ('abs(r[\"pos\"] … [2421 caractères tronqués]`
+
+  ```
+NON TROUVÉ abs(p2 - 0.8214) < 0.001 and abs(p1 - 0.7919) < 0.001
+17 / 18
+  ❌ T86 sous-ensembles     r181-200 POS 0.9167 ; r001-180 POS 0.8937
+  182/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"p2 - 0\" tools/pensee/autotest.py | head -2 | cut -c1-160", "description": "Voir l'assertion T86"}`
+
+  ```
+1365:    return abs(p2 - 0.8452) < 0.001 and abs(p1 - 0.8221) < 0.001, (
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('abs(p2 - 0.8452) < 0.001 and abs(p1 - 0.8221) < 0.001','abs(p2 - 0.9167) < 0.001 and abs(p1 - 0.8937) < 0.001')\np.write_text … [162 caractères tronqués]`
+
+  ```
+183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **183/183** avec POS 83,83 et F1 0,6181 : je fige la fiche et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pos-anglais-v2.md <<'MD'\n# B13 — la POS passe à 83,83 % : la position du sujet tranche (R2a + R3 + R2b)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **183/ … [6194 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état 685 778
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+index EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; audit A24 ; **POS 83,83 %** (R2a/R3/R2b).\", \" ; POS **83,83 %**.\")\np.write_text(t)\nPY\npython3 tools/taille_documen … [1113 caractères tronqués]`

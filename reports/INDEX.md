@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **681 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **682 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -596,6 +596,7 @@
 | [rapport-pont-semantique.md](rapport-pont-semantique.md) | Rapport — le pont linguistique-sémantique, mesuré |
 | [rapport-pool-tampons.md](rapport-pool-tampons.md) | Le pool de tampons : neutre en temps — et l'hypothèse qui l'avait motivé est réfutée |
 | [rapport-portes-p0-p9.md](rapport-portes-p0-p9.md) | Les deux portes, phase par phase (P0 → P9) |
+| [rapport-pos-anglais-v2.md](rapport-pos-anglais-v2.md) | B13 — la POS passe à 83,83 % : la position du sujet tranche (R2a + R3 + R2b) |
 | [rapport-pos-anglais.md](rapport-pos-anglais.md) | POS anglaise — les 176 VERB gold tagués NOUN viennent du défaut nominal, pas de la règle de contexte |
 | [rapport-precision.md](rapport-precision.md) | Drave — la sparsité peut-elle acheter de la précision ? |
 | [rapport-prefill-par-experts.md](rapport-prefill-par-experts.md) | Rapport — le préremplissage par experts : ce que le regroupement rapporte, mesuré |

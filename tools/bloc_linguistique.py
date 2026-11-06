@@ -1066,6 +1066,51 @@ class Heuristique:
                                           e.confiance, candidats=["noun"], langue=lg,
                                           script=script, meta={"ouvert": True, "contexte": avant.type})
 
+        # 3 a. après un pronom sujet, un mot inconnu est un verbe (« she sings ») ; l'exception
+        # est morphologique : une désinence nominale reste un nom (« happiness »).
+        _nominales = ("tion", "sion", "ness", "ity", "ité", "ance", "ence", "ment", "ship")
+        for _k, _i in enumerate(pos_idx):
+            _e = etiquettes[_i]
+            if _k == 0 or _e.type not in ("NOUN", "ADJ") or _e.confiance > 0.45:
+                continue
+            _av = etiquettes[pos_idx[_k - 1]]
+            if (_av.type == "PRON" and _normaliser(_av.valeur) in SUJETS
+                    and not _normaliser(_e.valeur).endswith(_nominales)):
+                etiquettes[_i] = Etiquette("pos", "VERB", _e.valeur, _e.debut, _e.fin, self.nom,
+                                           0.5, candidats=["verb"], langue=lg, script=script,
+                                           meta={"ouvert": True, "contexte": "pron_sujet"})
+
+        # 3 b. un DET **ambigu** sans nom à sa droite n'est pas un DET (« the book that I
+        # read », « he speaks to her ») : c'est un PRON, ou un CONJ après un verbe.
+        _lexd = POS_FERME.get(lg, POS_FERME["fr"])
+        for _k, _i in enumerate(pos_idx):
+            _e = etiquettes[_i]
+            if _e.type != "DET":
+                continue
+            if _normaliser(_e.valeur) not in (_lexd.get("PRON", set()) | _lexd.get("CONJ", set())):
+                continue
+            _suiv = etiquettes[pos_idx[_k + 1]] if _k + 1 < len(pos_idx) else None
+            if _suiv is not None and (_suiv.type in ("NOUN", "ADJ", "NUM") or (
+                    _suiv.type == "VERB" and _suiv.confiance <= 0.45
+                    and not _est_verbe(_suiv.valeur))):
+                continue
+            _av = etiquettes[pos_idx[_k - 1]] if _k else None
+            _cls = "CONJ" if (_av is not None and _av.type in ("VERB", "AUX")) else "PRON"
+            etiquettes[_i] = Etiquette("pos", _cls, _e.valeur, _e.debut, _e.fin, self.nom, 0.6,
+                                       candidats=[_cls.lower()], langue=lg, script=script,
+                                       meta={"ouvert": False, "contexte": "det_sans_nom"})
+
+        # 3 a bis. une forme en -s/-es après un NOM sujet est un verbe (« the cat sleeps »).
+        for _k, _i in enumerate(pos_idx):
+            _e = etiquettes[_i]
+            if _k == 0 or _e.type != "NOUN" or _e.confiance > 0.45:
+                continue
+            _av = etiquettes[pos_idx[_k - 1]]
+            if _av.type == "NOUN" and _normaliser(_e.valeur).endswith(("s", "es")):
+                etiquettes[_i] = Etiquette("pos", "VERB", _e.valeur, _e.debut, _e.fin, self.nom,
+                                           0.5, candidats=["verb"], langue=lg, script=script,
+                                           meta={"ouvert": True, "contexte": "nom_sujet_3s"})
+
         # 4. phrase + pragmatique
         for d, f, p, typ in self._phrases(texte):
             etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.85,

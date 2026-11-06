@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 140.4 h |
+| Durée | 140.6 h |
 | Tours | 182 |
-| Messages | 3087 |
-| Appels d'outils | 2723 |
+| Messages | 3101 |
+| Appels d'outils | 2735 |
 | Fichiers touchés | 25 |
-| Commandes | 2230 |
+| Commandes | 2242 |
 | Sous-agents | 31 |
-| Commits | 350 |
+| Commits | 351 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9788,17 +9788,27 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 
 ### Tour 182 — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. I … [3010 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Vérifier les deux rapports d'audit
 - bash — Déclarer les rapports et vérifier
 - bash — Committer les rapports et pousser
 - bash — Trim T1 et pousser
 - bash — Committer le trim final et pousser
+- bash — Lire les patchs proposés
+- bash — Lire les 4 patchs en entier
+- bash — Voir la structure des patchs
+- bash — Afficher les patchs R1/R2a/R3/R2b
+- bash — Voir le bloc 3 bis
+- bash — Intégrer R2+R3 et mesurer
+- bash — Autotest après R2/R3
+- bash — Recaler 18 portes et relancer
+- bash — Voir l'assertion T86
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ Je commite les deux rapports d'audit (livrables non suivis) et je les déclare dans les fiches
+⏵ **183/183** avec POS 83,83 et F1 0,6181 : je fige la fiche et je commite
 
 ## 3. Travail accompli
 
@@ -9908,7 +9918,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2190 autres
+- … et 2202 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10036,7 +10046,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 
 ## 5. Erreurs rencontrées
 
-49 sorties en erreur ou divergentes. Les premières :
+50 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10406,4 +10416,5 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0" -- reports/rapport-fiabilite-produit
 - DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1)" -- reports/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "UN MOT DE MOINS"; then
 - DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1) ; ÉTAT HORODATÉ" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --for
+- B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183" -- tools/bloc_linguistique.py tools
 
