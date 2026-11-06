@@ -1931,3 +1931,368 @@ gen add 34 hit 34 topk 211
 all add 149 hit 34 topk 211
   ```
 
+### 🤖 Assistant
+
+⏵ Mesure de la borne de cohérence `cible ∈ candidats` (contrôle du metric)
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nfrom gold_ … [1067 caractères tronqués]`
+
+  ```
+base+invariant {'labels': 212, 'ajoutes': 35, 'topk': 212, 'taux_span': 1.0, 'candidats_moyens': 2.599, 'candidats_max': 5}
+R1+invariant {'labels': 212, 'ajoutes': 1, 'topk': 212, 'taux_span': 1.0, 'candidats_moyens': 2.599, 'candidats_max': 5}
+base dev {'labels': 148, 'ajoutes': 28, 'topk': 148, 'taux_span': 1.0, 'candidats_moyens': 2.635, 'candidats_max': 5}
+base test {'labels': 64, 'ajoutes': 7, 'topk': 64, 'taux_span': 1.0, 'candidats_moyens': 2.516, 'candidats_max': 5}
+R1 dev {'labels': 148, 'ajoutes': 0, 'topk': 148, 'taux_span': 1.0, 'candidats_moyens': 2.635, 'candidats_max': 5}
+R1 test {'labels': 64, 'ajoutes': 1, 'topk': 64, 'taux_span': 1.0, 'candidats_moyens': 2.516, 'candidats_max': 5}
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation du JSON final (qualification, règles, contrôles, limites)
+
+- **write** `{"content": "\"\"\"Construit reports/pensee-topk-v8.json à partir des mesures /tmp. N'écrit que ce fichier.\"\"\"\nfrom __future__ import annotations\nimport json, pathlib, math\n\nRACINE = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nold = json.load(open('/tmp/topk_v8_resultats. … [12543 caractères tronqués]`
+
+  ```
+<path>/tmp/topk_v8_build_json.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/topk_v8_build_json.py'\ns=open(p).read()\ns=s.replace(\"\"\"    'baseline': {**enrich(base), 'par_type': par_rates(base['par_type']),\"\"\",\"\"\"    'baseline': {**enrich(base['all']), 'dev': enrich(base['dev']), 'test': enrich(base['test']),\n      … [170 caractères tronqués]`
+
+  ```
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-topk-v8.json 37525 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-topk-v8.json'))\nprint('keys', list(d))\nprint('baseline', json.dumps({k:v for k,v in d['baseline'].items() if k in ('cibles','labels','topk','taux','taux_span','dev','t … [701 caractères tronqués]`
+
+  ```
+keys ['titre', 'ligne_roadmap', 'date', 'branche', 'etat', 'mode', 'gold', 'split', 'baseline', 'qualification', 'regles', 'borne_coherence', 'controles_negatifs', 'gold_gele', 'cinq_motifs', 'limites', 'recommandation', 'fichiers']
+baseline {
+ "cibles": 239,
+ "labels": 212,
+ "topk": 177,
+ "taux": 0.7406,
+ "taux_span": 0.8349,
+ "dev": {
+  "cibles": 163,
+  "labels": 148,
+  "topk": 120,
+  "topk_strict": 120,
+  "taux": 0.7362,
+  "taux_span": 0.8108,
+  "echecs": 43,
+  "echecs_span": 15,
+  "echecs_couverture": 28
+ },
+ "test": {
+  "cibles": 76,
+  "labels": 64,
+  "topk": 57,
+  "topk_strict": 57,
+  "taux": 0.75,
+  "taux_span": 0.8906,
+  "echecs": 19,
+  "echecs_span": 12,
+  "echecs_couverture": 7
+ }
+}
+R1 dev 148 test 63 all 211 gains {'dev': 28, 'test': 6, 'all': 34} ajouts {'total': 34, 'hits_cible': 34, 'precision': 1.0} cands {'base_moyenne': 2.434, 'base_max': 5, 'moyenne': 2.594, 'max': 5}
+R2 dev 120 test 58 all 178 gains {'dev': 0, 'test': 1, 'all': 1} ajouts {'total': 19, 'hits_cible': 1, 'precision': 0.0526} cands {'base_moyenne': 2.434, 'base_max': 5, 'moyenne': 2.524, 'max': 5}
+R3 dev 120 test 57 all 177 gains {'dev': 0, 'test': 0, 'all': 0} ajouts {'total': 2, 'hits_cible': 0, 'p
+… [3223 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport `reports/rapport-topk-v8.md`
+
+- **write** `{"content": "# B13 — le top-k de l'attachement : 0,7406 → 0,8870, et le plafond de couverture\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·\n> **État** : `f908d7b0` (`s/v7`) · **Verdict** : ✅ les **62 échecs** du top-k sont qualifiés\n> (0 « autre ») ; **3 … [16269 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'intégrité des deux fichiers et de l'absence de modification du dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short -- reports/rapport-topk-v8.md reports/pensee-topk-v8.json && ls -l reports/rapport-topk-v8.md reports/pensee-topk-v8.json && python3 -c \"import json; d=json.load(open('reports/pensee-topk-v8.json')); print('json o … [75 caractères tronqués]`
+
+  ```
+?? reports/pensee-topk-v8.json
+?? reports/rapport-topk-v8.md
+-rw-r--r--. 1 stephane stephane 37525  5 nov 21:58 reports/pensee-topk-v8.json
+-rw-------. 1 stephane stephane 16586  5 nov 22:04 reports/rapport-topk-v8.md
+json ok 18 clés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat -- tools/bloc_linguistique.py tools/tests/linguistique docs/pilotage AGENTS.md journal/ data/ tools/structures/ tools/entrainer_native.py tools/native_model.py && echo '---' && git status --short | grep -v '^ M report … [131 caractères tronqués]`
+
+  ```
+journal/2026-11-05/README.md                       |   15 +-
+ journal/2026-11-05/distribue.md                    |   61 +-
+ journal/2026-11-05/docs.md                         |   65 +-
+ journal/2026-11-05/memoire.md                      |   27 +-
+ journal/2026-11-05/mesures.md                      |   91 +-
+ journal/2026-11-05/modele.md                       |   50 +-
+ journal/2026-11-05/moteur.md                       |   27 +-
+ journal/2026-11-05/portes.md                       |   30 +-
+ journal/README.md                                  |   32 +-
+ journal/THEMES.md                                  |    9 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  372 +
+ .../rapport.md                                     |  129 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md |   88 +
+ .../rapport.md                                     |   59 +-
+ journal/sessions/MANIFEST.md                       |   32 +-
+ .../aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md |   57 +
+ .../rapport.md                                     |   49 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 9067 ++++++++++++++++++++
+ .../rapport.md                                     |  124 +-
+ tools/s
+… [411 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md</path>
+<type>file</type>
+<content>
+1: # B13 — le top-k de l'attachement : 0,7406 → 0,8870, et le plafond de couverture
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+4: > **État** : `f908d7b0` (`s/v7`) · **Verdict** : ✅ les **62 échecs** du top-k sont qualifiés
+5: > (0 « autre ») ; **32 des 35 échecs de couverture** viennent d'un **site d'appel** —
+6: > `prec = s` est exécuté avant `_candidats_precedent`, qui reçoit donc le segment lui-même et
+7: > ne voit jamais le GN antécédent. La complétion **R1** (antécédent REL + GP génitif) répare
+8: > **34/35** échecs avec **34 ajouts et 34 hits (100 %)** ; **R2** (verbe propre d'une SUB sans
+9: > candidat verbal) rend le dernier. Le top-k passe à **212/239 = 0,8870**, soit **100 % des
+10: > 212 spans prédits**. Le reste est le **plafond de couverture** : **27 spans non prédits**,
+11: > dont **19 synthétiques**. Le choix, lui, était déjà bon : **exact 212/212** avant et après.
+12: >
+13: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique`,
+14: > `_candidats_precedent`, `_verbes_
+… [16324 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -40", "description": "Run documentation review (read-only)", "timeoutMs": 300000}`
+
+  ```
+revue de documentation · 669 fiche(s) · 761 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 667 fichiers, le disque en a 669
+     · compteurs : en-cours.md dit 760 JSON, le disque en a 761
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/porte-tableaux.sh", "description": "Inspect table gate script"}`
+
+  ```
+#!/bin/bash
+# porte-tableaux.sh — un tableau Markdown qui ne rend pas est un tableau qui n'existe PAS.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 13/10, le premier tableau de `docs/etat-cerveau.md` s'affichait
+# comme du TEXTE dans docwatch : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
+# **4 cellules pour 5 colonnes** — un lien qui avait glissé d'une colonne. Le rendu (mistune,
+# puis markdown_it, puis markdown) refuse alors le tableau ENTIER, sans rien dire : les 13 lignes
+# disparaissent de la page et personne ne le voit, parce que le texte est toujours là, en gris.
+#
+# CE QU'ELLE VÉRIFIE (trois conditions, toutes nécessaires au rendu) :
+#   1. l'en-tête et le séparateur d'un tableau ont le MÊME nombre de cellules ;
+#   2. chaque ligne du corps a ce nombre de cellules ;
+#   3. aucun `\|` ne subsiste : mistune ne le déséchappe NI dans un espace de code NI dans la
+#      prose (il s'affiche alors littéralement). Pour une barre de valeur absolue dans du code,
+#      on écrit `∣` (U+2223), qui rend partout et ne casse pas la lecture.
+# Les tableaux DANS une citation (`> | … |`) sont valides et vérifiés aussi.
+#
+# CE QU'ELLE NE VÉRIFIE PAS : les tableaux « écrasés » sur une se
+… [855 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-topk-v8.md')\nt=p.read_text(encoding='utf-8')\nprint('lignes', t.count('\\n'), 'mots', len(t.split()))\nprint('fences', t.count('```'))\nprint('tableaux', sum(1 fo … [144 caractères tronqués]`
+
+  ```
+lignes 257 mots 2874
+fences 0
+tableaux 46
+liens 8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CIBLES=\"reports\" bash tools/porte-tableaux.sh 2>&1 | tail -20; echo \"exit=$?\"", "description": "Run markdown table gate on reports", "timeoutMs": 300000}`
+
+  ```
+✅ 837 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 2 lien(s) relatif(s) ne résolvent pas (sur 3405 examinés) :
+     reports/rapport-audit-r1r3.md → pensee-audit-r1r3.json
+     reports/rapport-audit-r1r3.md → pensee-audit-r1r3.json
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, collections\nd=json.load(open('reports/pensee-topk-v8.json'))\ndet=d['qualification']['detail']\nprint('detail',len(det), collections.Counter(x['cause'] for x in det))\nprint('split', collections.Counte … [593 caractères tronqués]`
+
+  ```
+detail 62 Counter({'REL_antec': 32, 'span': 27, 'GP_antec': 2, 'SUB_verbe': 1})
+split Counter({'dev': 43, 'test': 19})
+ids uniques 62
+tous span/couv Counter({'couv': 35, 'span': 27})
+ok
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md", "old_string": "| **total** | **239** | **212** | **62** | **27** | **35** | **177** | **0,7406** |\n\n| langue | cibles | labels | échecs | span | couverture | top-k | taux |", "new_string": "| **total** | ** … [302 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport evaluer_gold as eg, bloc_linguistique as bl\nfrom gold_split import  … [1261 caractères tronqués]`
+
+  ```
+previous-segment REL rule: topk 209 labels 212 cibles 239 taux 0.8745 span 0.9858
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md", "new_string": "1. **Corriger le site d'appel** : passer le **segment précédent** à `_candidats_precedent`\n   (déplacer `prec = s` après la construction des candidats, ou garder `prec_candidats = prec`),\n    … [586 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-topk-v8.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['recommandation']['mesure_site_appel'] = (\n    \"correction stricte du précédent (REL seulement) : … [282 caractères tronqués]`
+
+  ```
+ok 37691
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CIBLES=\"reports\" bash tools/porte-tableaux.sh 2>&1 | tail -8", "description": "Re-run table gate on reports", "timeoutMs": 300000}`
+
+  ```
+✅ 837 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3405 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-topk-v8.md')\nt=p.read_text(encoding='utf-8')\nfor m in re.finditer(r'\\]\\(([^)]+)\\)', t):\n    cible=m.group(1)\n    if cible.startswith('http'): continue\n     … [137 caractères tronqués]`
+
+  ```
+OK  ../tools/bloc_linguistique.py
+OK  ../tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/tests/linguistique/gold_split.py
+OK  pensee-topk-v8.json
+OK  pensee-topk-v8.json
+OK  ../tools/bloc_linguistique.py
+OK  ../tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/tests/linguistique/gold_split.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep '^??' | head -20 && echo '--- notre travail ---' && git status --short -- reports/rapport-topk-v8.md reports/pensee-topk-v8.json", "description": "List untracked files and ours"}`
+
+  ```
+?? journal/2026-11-05/attention.md
+?? journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/
+?? journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/
+?? journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/
+?? journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/
+?? journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/
+?? journal/sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/
+?? journal/sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/
+?? journal/sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/
+?? journal/sessions/65495a29-10c0-4571-96be-e7729f1efebf/
+?? journal/sessions/7263ca42-cd56-4c36-a6dd-8ff2d1024a43/
+?? journal/sessions/a8035275-c7b9-4713-a6ab-7b859cd72306/
+?? journal/sessions/b3d82ad5-bff2-49ec-9ad6-2230e68d8071/
+?? journal/sessions/b9ea3904-889c-4497-a781-694da7d4987c/
+?? journal/sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/
+?? journal/sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/
+?? journal/sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/
+?? journal/sessions/d300542e-6e9d-47ac-875b-b44a192eec35/
+?? journal/sessions/d3114d4c-1629-45f2-aba6-9592332507c5/
+?? journal/sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/
+--- notre travail ---
+?? reports/pensee-topk-v8.json
+?? reports
+… [19 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -10", "description": "Check doc review anomalies after edits", "timeoutMs": 300000}`
+
+  ```
+revue de documentation · 669 fiche(s) · 762 JSON · 120 doc(s) · 83 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 667 fichiers, le disque en a 669
+     · compteurs : en-cours.md dit 760 JSON, le disque en a 762
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md", "new_string": "- La simulation est une **sous-classe locale** de `Heuristique` : `analyser` appelle\n  `super().analyser`, puis ajoute les candidats en fin de liste. Aucun fichier **existant**\n  du dépôt n'a … [342 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-topk-v8.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CIBLES=\"reports\" bash tools/porte-tableaux.sh 2>&1 | tail -4 && python3 -c \"import json; d=json.load(open('reports/pensee-topk-v8.json')); print(d['recommandation']['mesure_site_appel'])\" && grep -n \"fichier \\*\\*existant\\*\\* … [108 caractères tronqués]`
+
+  ```
+✅ 837 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3405 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+correction stricte du précédent (REL seulement) : 209/239 (+32) ; R1 (GN à gauche + GP génitif) : 211/239 (+34) ; R1+R2 : 212/239 (+35)
+262:  `super().analyser`, puis ajoute les candidats en fin de liste. Aucun fichier **existant**
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat consolidé à l'agent parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "MISSION TOP-K v8 TERMINÉE (état f908d7b0, branche s/v7).\n\nFichiers neufs, seulement deux (untracked, aucun commit, aucun fichier existant modifié) :\n- reports/rapport-topk-v8.md\n- reports/pensee-topk-v8.json\nSimulation par sous-cl … [3947 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+## Résultat — top-k v8
+
+Deux fichiers neufs, aucun existant modifié, aucun commit :
+- [`reports/rapport-topk-v8.md`](reports/rapport-topk-v8.md)
+- [`reports/pensee-topk-v8.json`](reports/pensee-topk-v8.json)
+
+Mesure de départ confirmée : **212 labels, exact 212/212, top-k 177/239 = 0,7406** (dev 120/163 ; test 57/76). Les **62 échecs** se séparent en **27 spans non prédits** et **35 échecs de couverture de candidats**.
+
+### Les 5 motifs principaux
+
+1. **Antécédent REL absent = 32/35 échecs de couverture** (26 EN + 6 FR). Cause précise : `prec = s` (l. 1148 et 1175) est exécuté **avant** `_candidats_precedent(texte, s, prec)` (l. 1154/1181) ; le helper reçoit le segment lui-même, la branche `REL → GN` est morte. La branche S ne l'appelle pas.
+2. **Le choix est déjà bon 212/212** : le top-k rate par **incohérence de liste** (cible choisie absente des candidats), pas par décision d'attachement.
+3. **R1 répare 34/35** avec les seuls GN prédits : **34 ajouts, 34 hits (100 %)**, +28 dev, +6 test.
+4. **Résidus** : 2 GP hand (g002, g006), où la convention génitive existe dans `_repli_cible_gp` pour la cible mais pas pour les candidats ; 1 SUB r309 où « viendra » est tagué NOUN. Le « verbe de la principale » est déjà couvert par `_verbes_proches` (0 ajout, 0 gain).
+5. **Plafond = couverture de span** : 27 spans (REL 16, SUB 6, GP 5 ; 19 synthétiques, 7 reel, 1 hand). Réel : 145/184 = 0,7880 → **176/184 = 0,9565**. Synthétique : 32/55 → **36/55 = 0,6545**.
+
+### Top-k dev/test par règle
+
+| règle | dev | test | all | ajouts / hits |
+|---|---:|---:|---:|---:|
+| base | 120/163 | 57/76 | 177/239 | — |
+| **R1** antécédent REL + GP génitif | **148/163 (+28)** | **63/76 (+6)** | **211/239 (+34)** | 34 / 34 |
+| R2 verbe propre de SUB (si aucun candidat verbal) | 120/163 (0) | 58/76 (+1) | 178/239 (+1) | 19 / 1 |
+| R3 voisinage POS VERB ≤ 3 | 120/163 (0) | 57/76 (0) | 177/239 (0) | 2 / 0 |
+| **R1+R2** | **148/163 (+28)** | **64/76 (+7)** | **212/239 (+35)** | 53 / 35 |
+
+Pertes **0** partout (complétion additive) ; exact inchangé **212/212**. Coût : 2,434 → 2,684 candidats/label (max 5 inchangé).
+
+### Contrôles négatifs
+
+Permutation croisée des listes **1,82/239** ; hasard global **5,49** ; hasard typé langue+type **24,36** ; permutation des seuls ajouts **177,11** ; hasard des seuls ajouts **177,30** — retour à la base. Brasser l'ordre intra-liste laisse **212** : le top-k est insensible à l'ordre, il ne mesure pas le classement.
+
+### Recommandation
+
+1. Corriger le site d'appel `prec = s` et passer le segment précédent à `_candidats_precedent` (R1 pour les REL, +32).
+2. Étendre la convention génitive de `_repli_cible_gp` aux candidats (+2 GP) → **211/239**.
+3. R2 optionnelle (+1, 19 ajouts) **ou** invariant `cible ∈ candidats` (1 ajout après R1) → **212/239**. Garder l'invariant comme **garde-fou**, pas comme résultat : seul, il ferait 212/239 en 35 ajouts, ce qui montre que le top-k est ici une mesure de cohérence de liste.
+4. Prochain chantier : les **27 spans** (chunker), pas les candidats. Ne pas lire 0,887 comme un attachement résolu : l'exact était déjà 1,0.
+
+`porte-tableaux.sh` passe sur `reports/` (tableaux + liens). `revue_documentation.py` signale 2 anomalies de **compteurs** dans `en-cours.md` (667/760 annoncés vs 669/762 sur disque) ; mes deux fichiers en expliquent une partie, d'autres fichiers non suivis ont bougé en parallèle, et je n'ai pas touché à `docs/pilotage/`.
+

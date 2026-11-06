@@ -1,12 +1,15 @@
 {
  "date": "2026-11-05",
  "ligne": "B13",
+ "commit": "f908d7b0",
  "portes": "183/183",
  "avant": {
   "labels": 196,
   "exact": 195,
   "couverture": 0.8201,
   "f1": 0.5595,
+  "tete": 0.7205,
+  "fr_couverture": 0.894,
   "spans": 43
  },
  "apres": {
@@ -15,31 +18,85 @@
   "exact_span": 1.0,
   "couverture": 0.887,
   "f1": 0.5763,
-  "f1_s": 0.4966,
-  "f1_chunker": 0.6057,
+  "f1_vivant": 0.572,
   "tete": 0.7316,
+  "tete_vivant": 0.7262,
   "fr": "129/129",
   "en": "83/83",
-  "topk": 177,
-  "topk_taux": 0.7406,
+  "fr_couverture": 0.854,
+  "topk": 211,
   "spans": {
    "REL": 16,
    "SUB": 6,
    "GP": 5,
    "total": 27
-  },
-  "inevitables": 17
+  }
  },
  "regles": [
-  "R1 frontière de clause (pronom, modaux, second prédicat)",
-  "R2 SUB sans précédent",
-  "R3a subordonnants par langue",
-  "R3c fall/call"
+  {
+   "nom": "R1a SUJETS sans relatifs",
+   "gains": 15,
+   "pertes": 6,
+   "net": 9
+  },
+  {
+   "nom": "R1b modaux",
+   "gains": 1,
+   "pertes": 0,
+   "net": 1
+  },
+  {
+   "nom": "R1c second prédicat",
+   "gains": 4,
+   "pertes": 1,
+   "net": 3
+  },
+  {
+   "nom": "R2 SUB sans précédent",
+   "gains": 4,
+   "pertes": 1,
+   "net": 3
+  },
+  {
+   "nom": "R3a subordonnants par langue",
+   "gains": 0,
+   "pertes": 0,
+   "net": 0,
+   "note": "inerte"
+  },
+  {
+   "nom": "R3c fall/call",
+   "gains": 2,
+   "pertes": 0,
+   "net": 2
+  }
  ],
+ "total": {
+  "gains": 24,
+  "pertes": 7,
+  "net": 17
+ },
+ "regressions": [
+  "r273",
+  "s069",
+  "s135",
+  "s032",
+  "s072",
+  "s115",
+  "g017",
+  "s037"
+ ],
+ "spans_restants": "17 inatteignables + 7 régressions + 3 gains A17 non intégrés",
+ "controle_negatif": {
+  "permutation": "2,04/212 (0,96 %) contre 212/212, p=0",
+  "candidat_aleatoire": "35,9 % top-1",
+  "listes_permutees": "top-k 0,85 %"
+ },
  "limites": [
-  "27 spans",
+  "7 régressions non corrigées",
+  "R3a inerte",
+  "R3b absente",
   "test non aveugle",
-  "in-sample",
-  "gold 612"
+  "in-sample"
  ]
 }

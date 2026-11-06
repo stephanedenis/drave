@@ -15,10 +15,13 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-topk-v8.md`](rapport-topk-v8.md) | **B13** — le top-k : `prec = s` expliquait 32/35 échecs ; **211/239** |
+| [`rapport-audit-r1r3.md`](rapport-audit-r1r3.md) | **B13** — audit A19 : **+17 net** (24 gains, 7 régressions), R3a inerte |
+| [`rapport-spans-v7.md`](rapport-spans-v7.md) | **B13** — les 43 spans (A17) : causes, règles |
 | [`rapport-pensee-r1r3.md`](rapport-pensee-r1r3.md) | **B13** — R1/R2/R3 : exact **212/212 (1,0000)**, couverture **0,887**, F1 **0,5763** ; 27 spans |
 | [`rapport-dev-test-v7.md`](rapport-dev-test-v7.md) | **B13** — dev/test en v7 : dev **133/134**, test **62/62**, trois découpages, écart ≤ 1 cas |
 | [`rapport-coherence-fiches-v7.md`](rapport-coherence-fiches-v7.md) | **B13** — la cohérence des 7 fiches v2→v7 : **23 écarts**, 4 critiques, corrections listées |
-| [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — la couverture **0,8201** : POS contextuel 0,7603, F1 **0,5595**, exact 195/196 |
+| [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — couverture **0,8201** : POS 0,7603, F1 0,5595 |
 | [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | **B13** — l'attachement **187/187 (1,0000)** sur les spans prédits, fr 1,0 / en 1,0, dev 126/126, test 61/61 ; le rendement reste 0,7824 |
 | [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — la couverture : **187 labels**, exact **186/187 (0,9947)**, F1 **0,5156** (602), dev/test **126/126** et 60/61 |
 | [`rapport-gold-split.md`](rapport-gold-split.md) | **B13** — le gold dev/test : **test 0,9814**, dev 0,9811, la règle « régler sur dev, accepter si test ne baisse pas » |
@@ -145,7 +148,6 @@
 | [`rapport-native-capacite-egal.md`](rapport-native-capacite-egal.md) | **N2.5b** — capacité à budget égal : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %) |
 | [`rapport-native-distillation-multi.md`](rapport-native-distillation-multi.md) | **N2.7** — distillation multi : student **9,517** vs professeur **9,571** |
 | [`rapport-native-distillation-20m.md`](rapport-native-distillation-20m.md) | **N2.5** — student 21,63 M : PPL **4,294**, pire que 11,47 M (**3,295**) ; budget de pas confondu |
-| [`rapport-native-distillation-tetes.md`](rapport-native-distillation-tetes.md) | **N2.4** — têtes dans la distillation : PPL **3,295**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

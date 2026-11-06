@@ -1,0 +1,1376 @@
+{
+ "rapport": "audit-r1r3",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit_audite": "f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b",
+ "commit_parent": "69bd865ec1bae1958b6f617bde4bf685a15d7d67",
+ "date": "2026-11-05",
+ "objet": "Audit du round R1/R2/R3 : rejeu des valeurs, ablations par règle, contrôles négatifs, dev/test, portes.",
+ "methode": {
+  "gold_vivant": {
+   "source": "evaluer_gold.charger",
+   "phrases": 612,
+   "cibles": 239,
+   "sources": {
+    "hand": 20,
+    "reel": 432,
+    "synthetique": 160
+   }
+  },
+  "gold_gele": {
+   "source": "evaluer_gold.charger_gelé",
+   "phrases": 602,
+   "cibles": 239,
+   "note": "les 10 phrases ajoutees apres le gel n'ont aucune cible"
+  },
+  "mesure": "evaluer_gold.evaluer_bloc pour les valeurs officielles ; harnais local pour les ensembles d'ids et les ablations",
+  "ablations": "copie du module dans /tmp, une seule modification reintroduite par variante, puis import et mesure",
+  "fidelite": "la variante tout-eteint ne differe du parent 69bd865e que par deux constantes inutilisees ; elle redonne 196/195, 0,5555 vivant / 0,5595 gelé, 43 spans, top-k 166",
+  "portes": "PYTHONPATH=. python3 -m tools.pensee.autotest",
+  "aucune_modification": true,
+  "aucun_commit": true,
+  "note_arbre_de_travail": {
+   "mesures_prises": "2026-11-05 entre 21:27 et 21:44",
+   "etat_mesure": "tools/bloc_linguistique.py identique a f908d7b0 (copie de base byte-identique)",
+   "effet_arbre_courant": "labels 212, exact 212, couverture 0,887 inchangés ; top-k 211 au lieu de 177 ; portes ajustées en conséquence",
+   "valeurs_fiche": "celles du commit f908d7b0, pas celles de l'arbre courant",
+   "head_observe_fin_redaction": "b551cf3b (journal/état, sans tools/) ; audit ancré sur f908d7b0",
+   "changements_observes": [
+    "tools/bloc_linguistique.py non commité a 22:14:32 (diff +9/-2 : candidat GP génitif, déplacement de prec = s)",
+    "tools/pensee/autotest.py non commité apres l'audit (assertions top-k 177 -> 211, cible 35 -> 1)"
+   ]
+  }
+ },
+ "verdict": {
+  "chiffres_rejoues": true,
+  "ecarts_chiffres": 0,
+  "regles_attribuees_justes": false,
+  "portes": "183/183",
+  "resume": "Toutes les valeurs de la fiche et du JSON rejouent. La table des regles, elle, ne rejoue pas : +27 annonces (222) contre +24 gains bruts et -7 pertes (net +17, soit 212). R1a perd 6 spans français, R1c 1, R2 1 ; R3a est inerte ; R3b n'est pas intégré. Sur les 27 spans, 10 sont récupérables (7 régressions nouvelles + 3 gains A17 non intégrés)."
+ },
+ "rejeu": {
+  "apres": {
+   "vivant_612": {
+    "labels": 212,
+    "exact": 212,
+    "exact_span": 1.0,
+    "couverture": 0.887,
+    "f1": 0.572,
+    "f1_s": 0.491,
+    "f1_chunker": 0.6018,
+    "tete": 0.7262,
+    "fr": {
+     "cibles": 151,
+     "labels": 129,
+     "exact": 129,
+     "couverture": 0.8543
+    },
+    "en": {
+     "cibles": 88,
+     "labels": 83,
+     "exact": 83,
+     "couverture": 0.9432
+    },
+    "topk": 177,
+    "topk_taux": 0.7406,
+    "topk_exact": 177,
+    "spans": {
+     "REL": 16,
+     "SUB": 6,
+     "GP": 5,
+     "total": 27
+    },
+    "inevitables": 17
+   },
+   "gele_602": {
+    "labels": 212,
+    "exact": 212,
+    "exact_span": 1.0,
+    "couverture": 0.887,
+    "f1": 0.5763,
+    "f1_s": 0.4966,
+    "f1_chunker": 0.6057,
+    "tete": 0.7316,
+    "fr": {
+     "cibles": 151,
+     "labels": 129,
+     "exact": 129,
+     "couverture": 0.8543
+    },
+    "en": {
+     "cibles": 88,
+     "labels": 83,
+     "exact": 83,
+     "couverture": 0.9432
+    },
+    "topk": 177,
+    "topk_taux": 0.7406,
+    "topk_exact": 177,
+    "spans": {
+     "REL": 16,
+     "SUB": 6,
+     "GP": 5,
+     "total": 27
+    },
+    "inevitables": 17
+   },
+   "ecarts": [],
+   "note_bases": "labels/exact/couverture/top-k identiques sur les deux golds ; F1/S/chunker/tete sont les valeurs du gelé 602 dans la fiche ; sur le vivant 612 elles valent 0,5720 / 0,4910 / 0,6018 / 0,7262.",
+   "topk_arbre_courant_non_audite": 211
+  },
+  "avant": {
+   "vivant_612": {
+    "labels": 196,
+    "exact": 195,
+    "exact_span": 0.9949,
+    "couverture": 0.8201,
+    "f1": 0.5555,
+    "f1_s": 0.4688,
+    "f1_chunker": 0.5822,
+    "tete": 0.7152,
+    "fr": {
+     "cibles": 151,
+     "labels": 135,
+     "exact": 135
+    },
+    "en": {
+     "cibles": 88,
+     "labels": 61,
+     "exact": 60
+    },
+    "topk": 166,
+    "topk_taux": 0.6946,
+    "spans": {
+     "REL": 21,
+     "SUB": 17,
+     "GP": 5,
+     "total": 43
+    }
+   },
+   "gele_602": {
+    "labels": 196,
+    "exact": 195,
+    "exact_span": 0.9949,
+    "couverture": 0.8201,
+    "f1": 0.5595,
+    "f1_s": 0.4741,
+    "f1_chunker": 0.5858,
+    "tete": 0.7205,
+    "topk": 166,
+    "topk_taux": 0.6946,
+    "spans": {
+     "REL": 21,
+     "SUB": 17,
+     "GP": 5,
+     "total": 43
+    }
+   },
+   "ecarts": []
+  },
+  "portes": {
+   "tenues": 183,
+   "total": 183,
+   "exit": 0,
+   "ecart": 0
+  }
+ },
+ "ablations": {
+  "principe": "Gain = exact dans le code livre qui cesse de l'etre sans la regle ; perte = exact retabli sans la regle. IDs phrase:type. F1 union vivant 612, base 0,5720.",
+  "regles": {
+   "R1a": {
+    "ablation": "sans_r1a",
+    "labels": 203,
+    "exact": 203,
+    "delta_labels": -9,
+    "delta_exact": -9,
+    "gains": {
+     "dev": 12,
+     "test": 3,
+     "total": 15
+    },
+    "pertes": {
+     "dev": 3,
+     "test": 3,
+     "total": 6
+    },
+    "effet_net": 9,
+    "f1_vivant": 0.5643,
+    "delta_f1": -0.0077,
+    "gains_ids": [
+     "r034:REL",
+     "r074:REL",
+     "r114:REL",
+     "r205:SUB",
+     "r219:SUB",
+     "r240:SUB",
+     "r243:REL",
+     "r247:SUB",
+     "r278:REL",
+     "r285:REL",
+     "r296:SUB",
+     "r299:REL",
+     "r214:REL",
+     "r216:SUB",
+     "r281:SUB"
+    ],
+    "pertes_ids": [
+     "r273:REL",
+     "s069:REL",
+     "s135:REL",
+     "s032:REL",
+     "s072:REL",
+     "s115:REL"
+    ],
+    "lecture": "Retirer who/that/which/qui/qu de SUJETS apporte 15 exacts mais en casse 6, tous français : net +9, pas +15."
+   },
+   "R1b": {
+    "ablation": "sans_r1b",
+    "labels": 211,
+    "exact": 211,
+    "delta_labels": -1,
+    "delta_exact": -1,
+    "gains": {
+     "dev": 1,
+     "test": 0,
+     "total": 1
+    },
+    "pertes": {
+     "dev": 0,
+     "test": 0,
+     "total": 0
+    },
+    "effet_net": 1,
+    "f1_vivant": 0.5711,
+    "delta_f1": -0.0009,
+    "gains_ids": [
+     "r247:SUB"
+    ],
+    "pertes_ids": [],
+    "lecture": "Modaux ajoutes a AUXILIAIRES : +1 (r247). La constante MODAUX n'est utilisee nulle part."
+   },
+   "R1c": {
+    "ablation": "sans_r1c",
+    "labels": 209,
+    "exact": 209,
+    "delta_labels": -3,
+    "delta_exact": -3,
+    "gains": {
+     "dev": 2,
+     "test": 2,
+     "total": 4
+    },
+    "pertes": {
+     "dev": 1,
+     "test": 0,
+     "total": 1
+    },
+    "effet_net": 3,
+    "f1_vivant": 0.5685,
+    "delta_f1": -0.0035,
+    "gains_ids": [
+     "r224:REL",
+     "r291:REL",
+     "r115:REL",
+     "r239:REL"
+    ],
+    "pertes_ids": [
+     "g017:SUB"
+    ],
+    "lecture": "Le nouveau scan redige gagne 4 mais perd g017 : verbes_vus n'est pas incremente apres un AUX, donc la garde d'adverbe final ne s'applique pas et yesterday reste dans la SUB."
+   },
+   "R1": {
+    "ablation": "sans_r1",
+    "labels": 199,
+    "exact": 199,
+    "delta_labels": -13,
+    "delta_exact": -13,
+    "gains": {
+     "dev": 14,
+     "test": 5,
+     "total": 19
+    },
+    "pertes": {
+     "dev": 3,
+     "test": 3,
+     "total": 6
+    },
+    "effet_net": 13,
+    "f1_vivant": 0.5602,
+    "delta_f1": -0.0118,
+    "gains_ids": [
+     "r034:REL",
+     "r074:REL",
+     "r114:REL",
+     "r205:SUB",
+     "r219:SUB",
+     "r224:REL",
+     "r240:SUB",
+     "r243:REL",
+     "r247:SUB",
+     "r278:REL",
+     "r285:REL",
+     "r291:REL",
+     "r296:SUB",
+     "r299:REL",
+     "r115:REL",
+     "r214:REL",
+     "r216:SUB",
+     "r239:REL",
+     "r281:SUB"
+    ],
+    "pertes_ids": [
+     "r273:REL",
+     "s069:REL",
+     "s135:REL",
+     "s032:REL",
+     "s072:REL",
+     "s115:REL"
+    ],
+    "lecture": "Faisceau R1a+R1b+R1c : 19 gains bruts, 6 pertes, net +13. La fiche annonce +15 dev, +5 test et 0 perte."
+   },
+   "R2": {
+    "ablation": "sans_r2",
+    "labels": 209,
+    "exact": 209,
+    "delta_labels": -3,
+    "delta_exact": -3,
+    "gains": {
+     "dev": 4,
+     "test": 0,
+     "total": 4
+    },
+    "pertes": {
+     "dev": 1,
+     "test": 0,
+     "total": 1
+    },
+    "effet_net": 3,
+    "f1_vivant": 0.5704,
+    "delta_f1": -0.0016,
+    "gains_ids": [
+     "r215:SUB",
+     "r245:SUB",
+     "r279:SUB",
+     "r294:SUB"
+    ],
+    "pertes_ids": [
+     "s037:REL"
+    ],
+    "lecture": "precedent is None -> SUB gagne 4 mais classe la REL initiale s037 en SUB ; net +3, avec une perte que la fiche ne mentionne pas."
+   },
+   "R3a": {
+    "ablation": "sans_r3a",
+    "labels": 212,
+    "exact": 212,
+    "delta_labels": 0,
+    "delta_exact": 0,
+    "gains": {
+     "dev": 0,
+     "test": 0,
+     "total": 0
+    },
+    "pertes": {
+     "dev": 0,
+     "test": 0,
+     "total": 0
+    },
+    "effet_net": 0,
+    "f1_vivant": 0.572,
+    "delta_f1": 0.0,
+    "gains_ids": [],
+    "pertes_ids": [],
+    "lecture": "Regle inerte : SUB_PAR_LANGUE n'ajoute que des marqueurs deja presents dans RELATIFS/SUBORDONNANTS ; car reste dans SUBORDONNANTS pour l'anglais."
+   },
+   "R3c": {
+    "ablation": "sans_r3c",
+    "labels": 212,
+    "exact": 210,
+    "delta_labels": 0,
+    "delta_exact": -2,
+    "gains": {
+     "dev": 2,
+     "test": 0,
+     "total": 2
+    },
+    "pertes": {
+     "dev": 0,
+     "test": 0,
+     "total": 0
+    },
+    "effet_net": 2,
+    "f1_vivant": 0.5688,
+    "delta_f1": -0.0032,
+    "gains_ids": [
+     "r102:GP",
+     "r245:SUB"
+    ],
+    "pertes_ids": [],
+    "lecture": "fall/call ajoutes au lexique : +2 exacts (r102, r245 avec R2), 0 perte. Seule regle dont l'effet annonce (+2) est juste."
+   }
+  },
+  "faisceaux": {
+   "tout_eteint": {
+    "ablation": "sans_r1r2r3",
+    "labels": 196,
+    "exact": 195,
+    "delta_labels": -16,
+    "delta_exact": -17,
+    "gains": {
+     "dev": 19,
+     "test": 5,
+     "total": 24
+    },
+    "pertes": {
+     "dev": 4,
+     "test": 3,
+     "total": 7
+    },
+    "effet_net": 17,
+    "f1_vivant": 0.5555,
+    "delta_f1": -0.0165,
+    "gains_ids": [
+     "r034:REL",
+     "r074:REL",
+     "r102:GP",
+     "r114:REL",
+     "r115:REL",
+     "r205:SUB",
+     "r214:REL",
+     "r215:SUB",
+     "r216:SUB",
+     "r219:SUB",
+     "r224:REL",
+     "r239:REL",
+     "r240:SUB",
+     "r243:REL",
+     "r245:SUB",
+     "r247:SUB",
+     "r278:REL",
+     "r279:SUB",
+     "r281:SUB",
+     "r285:REL",
+     "r291:REL",
+     "r294:SUB",
+     "r296:SUB",
+     "r299:REL"
+    ],
+    "pertes_ids": [
+     "r273:REL",
+     "s037:REL",
+     "s069:REL",
+     "s135:REL",
+     "s032:REL",
+     "s072:REL",
+     "s115:REL"
+    ],
+    "lecture": "Retour au parent : 196 labels, 195 exacts, 43 spans, top-k 166. Valide le harnais."
+   }
+  },
+  "contrefactuel_r3a_fidele": {
+   "ablation": "r3a_fidele (non livre)",
+   "labels": 213,
+   "exact": 213,
+   "delta_labels": 1,
+   "delta_exact": 1,
+   "gains": {
+    "dev": 1,
+    "test": 0,
+    "total": 1
+   },
+   "pertes": {
+    "dev": 0,
+    "test": 0,
+    "total": 0
+   },
+   "gains_ids": [
+    "r280:REL"
+   ],
+   "pertes_ids": [],
+   "f1_vivant": 0.5727,
+   "delta_f1": 0.0007,
+   "lecture": "SUBORDONNANTS - {car} en anglais, dans les quatre usages de _syntagmes_simple : +1 exact (r280), pas +2."
+  },
+  "table_fiche_vs_mesure": [
+   {
+    "regle": "R1",
+    "fiche": "+15 dev, +5 test, 0 perte",
+    "mesure": "+14 dev, +5 test ; 3+3 pertes ; net +13",
+    "verdict": "faux"
+   },
+   {
+    "regle": "R2",
+    "fiche": "+3",
+    "mesure": "+4 gains, -1 perte ; net +3",
+    "verdict": "net juste, perte omise"
+   },
+   {
+    "regle": "R3a",
+    "fiche": "+2",
+    "mesure": "0 (inerte) ; R3a fidele +1",
+    "verdict": "faux"
+   },
+   {
+    "regle": "R3c",
+    "fiche": "+2",
+    "mesure": "+2, 0 perte",
+    "verdict": "juste"
+   },
+   {
+    "regle": "somme",
+    "fiche": "+27 -> 195+27 = 222",
+    "mesure": "+24 gains, -7 pertes, net +17 -> 212",
+    "verdict": "contradiction arithmetique"
+   }
+  ]
+ },
+ "decomposition": {
+  "exacts": {
+   "v7": 195,
+   "regressions": 7,
+   "gains_A17": 23,
+   "correction_r102": 1,
+   "arrivee": 212,
+   "formule": "195 - 7 + 23 + 1 = 212"
+  },
+  "labels": {
+   "v7": 196,
+   "regressions": 7,
+   "gains_A17": 23,
+   "arrivee": 212,
+   "formule": "196 - 7 + 23 = 212"
+  },
+  "gains_A17_attendus": 26,
+  "gains_A17_integres": 23,
+  "gains_A17_manquants": [
+   "g017",
+   "r153",
+   "r280"
+  ],
+  "regressions": {
+   "total": 7,
+   "R1a": [
+    "r273",
+    "s032",
+    "s069",
+    "s072",
+    "s115",
+    "s135"
+   ],
+   "R2": [
+    "s037"
+   ]
+  },
+  "A17_attendu": {
+   "labels": 222,
+   "exacts": 222,
+   "couverture": 0.9289,
+   "f1_vivant": 0.5851,
+   "restants": {
+    "REL": 8,
+    "SUB": 5,
+    "GP": 4,
+    "total": 17
+   },
+   "dev": {
+    "labels": 154,
+    "exacts": 154
+   },
+   "test": {
+    "labels": 68,
+    "exacts": 68
+   }
+  },
+  "ecart_A17": {
+   "labels": -10,
+   "exacts": -10,
+   "couverture": -0.0419,
+   "f1_vivant": -0.0131,
+   "restants": 10,
+   "dev": -6,
+   "test": -4
+  },
+  "lecture": "212 = 195 - 7 + 23 + 1 (r102 corrige) ; labels 196 - 7 + 23. A17 attendait 222/222 ; il manque 7 régressions et 3 gains non intégrés."
+ },
+ "spans_27": {
+  "counts": {
+   "total": 27,
+   "REL": 16,
+   "SUB": 6,
+   "GP": 5,
+   "fr": 22,
+   "en": 5,
+   "synthetique": 19,
+   "reel": 7,
+   "hand": 1
+  },
+  "classes": [
+   {
+    "classe": "A17 non récupérable (13) + hors périmètre (4)",
+    "n": 17,
+    "types": {
+     "REL": 8,
+     "SUB": 5,
+     "GP": 4
+    },
+    "ids": [
+     "r035",
+     "r255",
+     "r264",
+     "r288",
+     "s010",
+     "s027",
+     "s035",
+     "s044",
+     "s061",
+     "s065",
+     "s112",
+     "s114",
+     "s125",
+     "s141",
+     "s146",
+     "s148",
+     "s160"
+    ]
+   },
+   {
+    "classe": "Régressions nouvelles",
+    "n": 7,
+    "types": {
+     "REL": 7,
+     "SUB": 0,
+     "GP": 0
+    },
+    "ids": [
+     "r273",
+     "s032",
+     "s037",
+     "s069",
+     "s072",
+     "s115",
+     "s135"
+    ]
+   },
+   {
+    "classe": "Gains A17 non intégrés",
+    "n": 3,
+    "types": {
+     "REL": 1,
+     "SUB": 1,
+     "GP": 1
+    },
+    "ids": [
+     "g017",
+     "r153",
+     "r280"
+    ]
+   }
+  ],
+  "cas": [
+   {
+    "id": "r035",
+    "langue": "en",
+    "source": "reel",
+    "type": "REL",
+    "debut": 9,
+    "fin": 24,
+    "texte": "she talks about",
+    "cible": "film",
+    "classe": "A17 hors périmètre (relative zéro)"
+   },
+   {
+    "id": "r255",
+    "langue": "fr",
+    "source": "reel",
+    "type": "REL",
+    "debut": 11,
+    "fin": 27,
+    "texte": "que j'ai achetée",
+    "cible": "voiture",
+    "classe": "A17 hors périmètre (lexique réel)"
+   },
+   {
+    "id": "r264",
+    "langue": "fr",
+    "source": "reel",
+    "type": "SUB",
+    "debut": 8,
+    "fin": 26,
+    "texte": "qu'il vient demain",
+    "cible": "sais",
+    "classe": "A17 hors périmètre (tokenisation)"
+   },
+   {
+    "id": "r288",
+    "langue": "en",
+    "source": "reel",
+    "type": "SUB",
+    "debut": 7,
+    "fin": 29,
+    "texte": "that he comes tomorrow",
+    "cible": "know",
+    "classe": "A17 hors périmètre (adverbe final)"
+   },
+   {
+    "id": "s010",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 10,
+    "fin": 18,
+    "texte": "qui nage",
+    "cible": "chemin",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "s035",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 10,
+    "fin": 19,
+    "texte": "qui ferme",
+    "cible": "papier",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "s061",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 9,
+    "fin": 18,
+    "texte": "qui saute",
+    "cible": "nuage",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "s065",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 5,
+    "fin": 17,
+    "texte": "qui commence",
+    "cible": "elle",
+    "classe": "A17 non récupérable (antécédent)"
+   },
+   {
+    "id": "s125",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 11,
+    "fin": 21,
+    "texte": "qui compte",
+    "cible": "renard",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "s141",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 5,
+    "fin": 15,
+    "texte": "qui trouve",
+    "cible": "Emma",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "s027",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 31,
+    "fin": 33,
+    "texte": "il",
+    "cible": "marche",
+    "classe": "A17 non récupérable (gold)"
+   },
+   {
+    "id": "s146",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 25,
+    "fin": 35,
+    "texte": "les jardin",
+    "cible": "observe",
+    "classe": "A17 non récupérable (gold)"
+   },
+   {
+    "id": "s148",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 20,
+    "fin": 39,
+    "texte": "les ancienne lettre",
+    "cible": "nage",
+    "classe": "A17 non récupérable (gold)"
+   },
+   {
+    "id": "s160",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 20,
+    "fin": 29,
+    "texte": "le renard",
+    "cible": "nage",
+    "classe": "A17 non récupérable (gold)"
+   },
+   {
+    "id": "s044",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "SUB",
+    "debut": 17,
+    "fin": 29,
+    "texte": "que ils crie",
+    "cible": "nage",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "s112",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "SUB",
+    "debut": 24,
+    "fin": 39,
+    "texte": "que Lucas ferme",
+    "cible": "nage",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "s114",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "SUB",
+    "debut": 22,
+    "fin": 43,
+    "texte": "que les avocat compte",
+    "cible": "dessine",
+    "classe": "A17 non récupérable (lexique)"
+   },
+   {
+    "id": "r273",
+    "langue": "fr",
+    "source": "reel",
+    "type": "REL",
+    "debut": 9,
+    "fin": 23,
+    "texte": "qui pousse ici",
+    "cible": "fleur",
+    "classe": "régression R1a"
+   },
+   {
+    "id": "s032",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 11,
+    "fin": 19,
+    "texte": "qui crie",
+    "cible": "village",
+    "classe": "régression R1a"
+   },
+   {
+    "id": "s069",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 15,
+    "fin": 23,
+    "texte": "qui crie",
+    "cible": "canard",
+    "classe": "régression R1a"
+   },
+   {
+    "id": "s072",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 20,
+    "fin": 31,
+    "texte": "qui dessine",
+    "cible": "chanson",
+    "classe": "régression R1a"
+   },
+   {
+    "id": "s115",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 19,
+    "fin": 30,
+    "texte": "qui observe",
+    "cible": "fenêtre",
+    "classe": "régression R1a"
+   },
+   {
+    "id": "s135",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 11,
+    "fin": 22,
+    "texte": "qui dessine",
+    "cible": "fenêtre",
+    "classe": "régression R1a"
+   },
+   {
+    "id": "s037",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 5,
+    "fin": 15,
+    "texte": "qui marche",
+    "cible": "Paul",
+    "classe": "régression R2"
+   },
+   {
+    "id": "g017",
+    "langue": "en",
+    "source": "hand",
+    "type": "SUB",
+    "debut": 9,
+    "fin": 28,
+    "texte": "that she would come",
+    "cible": "said",
+    "classe": "A17 non intégré (R1c)"
+   },
+   {
+    "id": "r153",
+    "langue": "en",
+    "source": "reel",
+    "type": "GP",
+    "debut": 8,
+    "fin": 19,
+    "texte": "for the bus",
+    "cible": "wait",
+    "classe": "A17 non intégré (R3b)"
+   },
+   {
+    "id": "r280",
+    "langue": "en",
+    "source": "reel",
+    "type": "REL",
+    "debut": 8,
+    "fin": 21,
+    "texte": "that I bought",
+    "cible": "car",
+    "classe": "A17 non intégré (R3a)"
+   }
+  ],
+  "lecture": "Les 27 contiennent les 17 ids de A17 (meme ensemble, memes types) ; les 10 autres sont 7 régressions nouvelles (6 R1a + 1 R2) et 3 gains A17 non intégrés (g017, r153, r280)."
+ },
+ "controle_negatif": {
+  "permutation_globale": {
+   "n": 212,
+   "observe": 212,
+   "tirages": 2000,
+   "graine": 0,
+   "moyenne": 2.0425,
+   "mediane": 2.0,
+   "max": 9,
+   "p95": 5,
+   "p": 0.0,
+   "lecture": "0,96 % en moyenne contre 100 % observe"
+  },
+  "candidat_aleatoire": {
+   "n": 212,
+   "avec_candidats": 212,
+   "candidats": 516,
+   "top1_moyen": 76.1,
+   "top1_taux": 0.359,
+   "observe_top1": 212,
+   "p_top1": 0.0,
+   "lecture": "35,9 % en moyenne contre 100 % observe"
+  },
+  "permutation_candidats_topk": {
+   "n": 212,
+   "moyenne": 1.81,
+   "taux": 0.0085,
+   "max": 7,
+   "observe": 177,
+   "p": 0.0,
+   "lecture": "0,85 % en moyenne contre 83,49 % observe"
+  },
+  "hasard_officiel": {
+   "n": 239,
+   "observe": 1,
+   "taux": 0.0042,
+   "top1_observe": 212,
+   "top1_taux": 0.887
+  },
+  "spans_27_verifies": true,
+  "absent_de_la_fiche": true,
+  "verdict": "L'attachement n'est pas un artefact du hasard ; mais la fiche et le JSON ne publient aucun controle negatif."
+ },
+ "dev_test": {
+  "split": {
+   "regle": "crc32(id) % 3 == 0 -> test",
+   "dev_phrases": 422,
+   "test_phrases": 190,
+   "dev_cibles": 163,
+   "test_cibles": 76,
+   "duplication": 0,
+   "union": 612
+  },
+  "v7": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 134,
+    "exact": 133,
+    "couverture": 0.8221,
+    "f1": 0.5512,
+    "tete": 0.7132
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 62,
+    "exact": 62,
+    "couverture": 0.8158,
+    "f1": 0.5651,
+    "tete": 0.7196
+   },
+   "tout": {
+    "phrases": 612,
+    "cibles": 239,
+    "labels": 196,
+    "exact": 195,
+    "couverture": 0.8201,
+    "f1": 0.5555,
+    "tete": 0.7152
+   }
+  },
+  "courant": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 148,
+    "exact": 148,
+    "couverture": 0.908,
+    "f1": 0.5723,
+    "tete": 0.727,
+    "topk": 120
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 64,
+    "exact": 64,
+    "couverture": 0.8421,
+    "f1": 0.5714,
+    "tete": 0.7241,
+    "topk": 57
+   },
+   "tout": {
+    "phrases": 612,
+    "cibles": 239,
+    "labels": 212,
+    "exact": 212,
+    "couverture": 0.887,
+    "f1": 0.572,
+    "tete": 0.7262,
+    "topk": 177
+   }
+  },
+  "A17_attendu": {
+   "dev": {
+    "labels": 154,
+    "exacts": 154
+   },
+   "test": {
+    "labels": 68,
+    "exacts": 68
+   },
+   "dev_f1": 0.575,
+   "test_f1": 0.5823
+  },
+  "delta_v7": {
+   "dev": {
+    "labels": 14,
+    "exacts": 15,
+    "couverture": 0.0859,
+    "f1": 0.0211,
+    "tete": 0.0138
+   },
+   "test": {
+    "labels": 2,
+    "exacts": 2,
+    "couverture": 0.0263,
+    "f1": 0.0063,
+    "tete": 0.0045
+   }
+  },
+  "ecart_A17": {
+   "dev": -6,
+   "test": -4,
+   "ventilation_dev": [
+    "4 régressions (r273, s037, s069, s135)",
+    "2 gains A17 non intégrés (g017, r280)"
+   ],
+   "ventilation_test": [
+    "3 régressions (s032, s072, s115)",
+    "1 gain A17 non intégré (r153)"
+   ]
+  },
+  "par_langue": {
+   "courant": {
+    "dev": {
+     "fr": {
+      "cibles": 101,
+      "labels": 89,
+      "exact": 89,
+      "couverture": 0.8812
+     },
+     "en": {
+      "cibles": 62,
+      "labels": 59,
+      "exact": 59,
+      "couverture": 0.9516
+     }
+    },
+    "test": {
+     "fr": {
+      "cibles": 50,
+      "labels": 40,
+      "exact": 40,
+      "couverture": 0.8
+     },
+     "en": {
+      "cibles": 26,
+      "labels": 24,
+      "exact": 24,
+      "couverture": 0.9231
+     }
+    }
+   },
+   "v7": {
+    "dev": {
+     "fr": {
+      "cibles": 101,
+      "labels": 92,
+      "exact": 92
+     },
+     "en": {
+      "cibles": 62,
+      "labels": 42,
+      "exact": 41
+     }
+    },
+    "test": {
+     "fr": {
+      "cibles": 50,
+      "labels": 43,
+      "exact": 43
+     },
+     "en": {
+      "cibles": 26,
+      "labels": 19,
+      "exact": 19
+     }
+    }
+   }
+  },
+  "lecture": "Le dev passe de 133/134 a 148/148, le test de 62/62 a 64/64 : +15 et +2 exacts. A17 attendait 154/154 et 68/68 : il manque 6 et 4, expliques par les 7 régressions et les 3 gains non intégrés. Le test reste non aveugle."
+ },
+ "portes_autotest": {
+  "commande": "PYTHONPATH=. python3 -m tools.pensee.autotest",
+  "tenues": 183,
+  "total": 183,
+  "exit": 0,
+  "docstrings_perimees": 15,
+  "docstrings": [
+   {
+    "porte": "T111",
+    "docstring": "tete F1 0,4183",
+    "mesure": "0,7402"
+   },
+   {
+    "porte": "T112",
+    "docstring": "F1 0,5595",
+    "mesure": "0,5763"
+   },
+   {
+    "porte": "T113",
+    "docstring": "F1 0,5595, tete 0,7205",
+    "mesure": "0,5763 / 0,7316"
+   },
+   {
+    "porte": "T114",
+    "docstring": "F1 0,5864, tete 0,7285",
+    "mesure": "0,6033 / 0,7399"
+   },
+   {
+    "porte": "T115",
+    "docstring": "0,455 contre 0,441",
+    "mesure": "0,6822"
+   },
+   {
+    "porte": "T153",
+    "docstring": "top1 0,8159, exact 0,8159, couv. 0,8201",
+    "mesure": "0,887 / 0,887 / 0,887"
+   },
+   {
+    "porte": "T161",
+    "docstring": "195/196",
+    "mesure": "212/212"
+   },
+   {
+    "porte": "T162",
+    "docstring": "166/239",
+    "mesure": "177/239"
+   },
+   {
+    "porte": "T163",
+    "docstring": "43 de span, 30 de cible",
+    "mesure": "27 de span, 35 de cible"
+   },
+   {
+    "porte": "T166",
+    "docstring": "21 REL, 17 SUB, 5 GP (43)",
+    "mesure": "16 REL, 6 SUB, 5 GP (27)"
+   },
+   {
+    "porte": "T167",
+    "docstring": "exactitude spans / 196",
+    "mesure": "/ 212"
+   },
+   {
+    "porte": "T172",
+    "docstring": "exact 195/196",
+    "mesure": "0 echec"
+   },
+   {
+    "porte": "T173",
+    "docstring": "166/196 ; 166/239",
+    "mesure": "177/177"
+   },
+   {
+    "porte": "T177",
+    "docstring": "88 -> 166",
+    "mesure": "177"
+   },
+   {
+    "porte": "T179",
+    "docstring": "exact_any 195/196",
+    "mesure": "212/212"
+   }
+  ],
+  "docstrings_qualitatives": [
+   {
+    "porte": "T180",
+    "docstring": "la couverture anglaise non",
+    "mesure": "en 0,943 > fr 0,854 ; formulation ambigue au mieux"
+   }
+  ],
+  "lecture": "183/183 portes vertes, mais 15 docstrings contredisent leur propre assertion et T180 est qualitativement perime ; les portes encodent 212/27 et n'erigent pas A17 (222/17) en reference.",
+  "etat_arbre_courant": "apres l'audit, les assertions top-k de T162/T167/T173/T177 et la cible de T163 ont ete modifiees (non auditees)"
+ },
+ "ecarts": [
+  {
+   "id": "table_regles",
+   "gravite": "majeure",
+   "constat": "La table annonce +27 exacts (222) ; la mesure donne +24 gains bruts et -7 pertes (net +17, 212).",
+   "correction": "Reecrire la table en gains bruts et pertes mesurees, supprimer la somme +27."
+  },
+  {
+   "id": "R1a_pertes",
+   "gravite": "majeure",
+   "constat": "R1a gagne 15 exacts mais en perd 6 (tous français) : net +9, pas +15.",
+   "correction": "Garder les relatifs dans SUJETS et ajouter la garde PRON d'A17 dans est_verbe."
+  },
+  {
+   "id": "R1c_g017",
+   "gravite": "majeure",
+   "constat": "R1c perd g017 : verbes_vus n'est pas incremente apres un AUX, la garde d'adverbe final ne s'applique pas.",
+   "correction": "Compter le predicat (predicat_vu) dans la garde d'adverbe final."
+  },
+  {
+   "id": "R2_s037",
+   "gravite": "majeure",
+   "constat": "R2 gagne 4 mais perd s037 en classant une REL initiale en SUB.",
+   "correction": "Implementer DURS + antécédent GN comme A17."
+  },
+  {
+   "id": "R3a_inerte",
+   "gravite": "majeure",
+   "constat": "R3a a 0 effet ; la fiche annonce +2. La regle fidele vaut +1 (r280).",
+   "correction": "Conditionner SUBORDONNANTS par la langue dans tous les usages."
+  },
+  {
+   "id": "R3b_absent",
+   "gravite": "majeure",
+   "constat": "R3b n'est pas intégré : r153 reste absent, alors que la fiche parle des quatre regles A17 intégrées.",
+   "correction": "Ajouter la garde determinant dans la boucle GP."
+  },
+  {
+   "id": "français_recule",
+   "gravite": "majeure",
+   "constat": "Le français passe de 135 a 129 exacts (couverture 0,894 -> 0,854) ; le 1,0/1,0 est exact/labels.",
+   "correction": "Documenter le recul français et la couverture par langue."
+  },
+  {
+   "id": "decomposition_27",
+   "gravite": "moyenne",
+   "constat": "La decomposition de la fiche somme a 20, pas 27 ; elle compte 12 synthetiques au lieu de 19 et appelle 17 inatteignables ce qui inclut 4 cas hors périmètre.",
+   "correction": "Classer les 27 en 17 A17 + 7 régressions + 3 non intégrés."
+  },
+  {
+   "id": "controle_negatif_absent",
+   "gravite": "moyenne",
+   "constat": "Ni la fiche ni le JSON ne publient de controle negatif.",
+   "correction": "Ajouter la permutation >= 200 tirages et le candidat aleatoire."
+  },
+  {
+   "id": "docstrings_portes",
+   "gravite": "moyenne",
+   "constat": "15 docstrings de portes contredisent leur assertion ; T180 est qualitativement perime.",
+   "correction": "Mettre a jour les docstrings et l'usage -m d'autotest.py."
+  },
+  {
+   "id": "MODAUX_mort",
+   "gravite": "mineure",
+   "constat": "MODAUX n'est utilise nulle part, mais est cite dans le dispositif.",
+   "correction": "Supprimer la constante ou l'utiliser."
+  },
+  {
+   "id": "bases_mesure",
+   "gravite": "mineure",
+   "constat": "F1 et tete ne sont pas annonces comme gelés 602 ; le vivant vaut 0,5720 / 0,7262.",
+   "correction": "Indiquer la base de chaque valeur dans le JSON."
+  },
+  {
+   "id": "inevitables_4_hors_périmètre",
+   "gravite": "mineure",
+   "constat": "Les 17 inatteignables incluent 4 cas récupérables hors périmètre (r035, r255, r264, r288).",
+   "correction": "Distinguer 13 non récupérables et 4 hors périmètre."
+  },
+  {
+   "id": "autotest_usage",
+   "gravite": "mineure",
+   "constat": "python3 tools/pensee/autotest.py echoue sur l'import relatif ; il faut -m.",
+   "correction": "Corriger l'usage affiche."
+  }
+ ],
+ "limites": [
+  "In-sample : les regles ont ete dessinees sur ce gold ; le test n'est pas aveugle (A17 a diagnostique sur dev et test).",
+  "Un seul split deterministe (crc32 % 3), sans validation croisee.",
+  "Le harnais A17 n'est pas committe ; la comparaison porte sur ses chiffres publies, pas sur son code.",
+  "Ablations par copies de module ; la variante tout-eteint ne differe du parent que par deux constantes inutilisees et reproduit ses chiffres au bit pres.",
+  "Le depot porte des modifications non commitees anterieures (journal, reports, sous-module tools/structures) ; pendant les mesures, tools/bloc_linguistique.py et tools/pensee/autotest.py etaient a l'etat de f908d7b0 (copie de base byte-identique pour bloc_linguistique.py).",
+  "Seules les 183 portes d'autotest.py ont ete rejouees, pas les 81 portes shell de tools/toutes-les-portes.sh.",
+  "Des modifications non commitées de tools/bloc_linguistique.py (22:14:32) et tools/pensee/autotest.py sont apparues apres les mesures (hors audit) ; sur l'arbre courant le top-k vaut 211, pas 177. Les valeurs de ce JSON sont celles du commit f908d7b0 ; le HEAD a avance a b551cf3b (journal/etat, sans tools)."
+ ],
+ "fichiers_ecrits": [
+  "reports/rapport-audit-r1r3.md",
+  "reports/pensee-audit-r1r3.json"
+ ],
+ "commit": false
+}

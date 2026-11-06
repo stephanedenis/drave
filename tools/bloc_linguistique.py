@@ -687,6 +687,13 @@ class Heuristique:
         if segment.get("type") == "SUB" and precedent.get("type") == "GV":
             v = Heuristique._verbe_dans(texte, precedent["debut"], precedent["fin"])
             return [v] if v else []
+        if segment.get("type") == "GP":
+            # GP génitif (« de la voisine ») : le nom qu'il complète est un candidat
+            premier = (segment.get("texte") or "").split()[:1]
+            if premier and _normaliser(premier[0]) in ("de", "du", "des", "d", "of", "from"):
+                if precedent.get("type") == "GN":
+                    tete = Heuristique._tete_nom(texte, precedent["debut"], precedent["fin"])
+                    return [tete] if tete else []
         return []
 
     @staticmethod
@@ -1145,7 +1152,6 @@ class Heuristique:
                          or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_s, cible)
                 cible = self._repli_verbe_propre(texte, s, cible)
-                prec = s
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
@@ -1155,6 +1161,7 @@ class Heuristique:
                                                        + self._verbes_proches(
                                                            texte, s, gvs_s, verbes=verbes, cache=cache_gv)),
                                             langue=lg, script=script, meta=meta))
+                prec = s
         # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
         if cands and self.union:
             deja = {(s.get("type"), s.get("debut"), s.get("fin"))
@@ -1172,7 +1179,6 @@ class Heuristique:
                          or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_u, cible)
                 cible = self._repli_verbe_propre(texte, s, cible)
-                prec = s
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
@@ -1182,6 +1188,7 @@ class Heuristique:
                                                        + self._verbes_proches(
                                                            texte, s, gvs_u, verbes=verbes, cache=cache_gv)),
                                             langue=lg, script=script, meta=meta))
+                prec = s
     
         # 6. discours / document
         for d, f, p, _ in self._phrases(texte):

@@ -1,0 +1,1919 @@
+{
+ "rapport": "spans-v7",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit": "69bd865ec1bae1958b6f617bde4bf685a15d7d67",
+ "date": "2026-11-05",
+ "objet": "Diagnostic des 43 spans non prédits de l'attachement v7 et règles chiffrées, sans modifier le code.",
+ "methode": {
+  "gold": "charger() : 612 phrases, 3179 tokens, 1863 segments, 239 cibles (GP 96, SUB 69, REL 74)",
+  "split": "crc32(id) % 3 == 0 → test ; dev 422 phrases / 163 cibles ; test 190 / 76",
+  "harnais": "sous-classe Sim(Heuristique) + copie instrumentée de _syntagmes_simple dans /tmp/spans/sim3.py ; aucun fichier du dépôt modifié",
+  "fidelite": "le harnais redonne 196 labels / 195 exacts / F1 0,5555 (gold vivant), identiques à evaluer_bloc",
+  "reglage": "dev seul pour les paramètres ; test lu après sélection ; diagnostic des 43 sur dev+test (limite)"
+ },
+ "etat_depart": {
+  "cibles": 239,
+  "labels": 196,
+  "exacts": 195,
+  "exact_taux_span": 0.9949,
+  "couverture": 0.8201,
+  "exact_taux_cibles": 0.8159,
+  "f1": 0.5555,
+  "fr_exacts": 135,
+  "en_exacts": 60,
+  "fr_cibles": 151,
+  "en_cibles": 88,
+  "fr_labels": 135,
+  "en_labels": 61,
+  "manquants": {
+   "REL": 21,
+   "SUB": 17,
+   "GP": 5,
+   "total": 43
+  }
+ },
+ "etat_final": {
+  "cibles": 239,
+  "labels": 222,
+  "exacts": 222,
+  "exact_taux_span": 1.0,
+  "couverture": 0.9289,
+  "exact_taux_cibles": 0.9289,
+  "f1": 0.5851,
+  "fr_exacts": 136,
+  "en_exacts": 86,
+  "fr_cibles": 151,
+  "en_cibles": 88,
+  "fr_labels": 136,
+  "en_labels": 86,
+  "reste_absent": {
+   "REL": 8,
+   "SUB": 5,
+   "GP": 4,
+   "total": 17
+  },
+  "faux": 0
+ },
+ "par_langue_type": {
+  "base": {
+   "fr/GP": {
+    "cibles": 62,
+    "labels": 58,
+    "exact": 58
+   },
+   "fr/*": {
+    "cibles": 151,
+    "labels": 135,
+    "exact": 135
+   },
+   "*/GP": {
+    "cibles": 96,
+    "labels": 91,
+    "exact": 90
+   },
+   "*/*": {
+    "cibles": 239,
+    "labels": 196,
+    "exact": 195
+   },
+   "fr/SUB": {
+    "cibles": 43,
+    "labels": 39,
+    "exact": 39
+   },
+   "*/SUB": {
+    "cibles": 69,
+    "labels": 52,
+    "exact": 52
+   },
+   "fr/REL": {
+    "cibles": 46,
+    "labels": 38,
+    "exact": 38
+   },
+   "*/REL": {
+    "cibles": 74,
+    "labels": 53,
+    "exact": 53
+   },
+   "en/GP": {
+    "cibles": 34,
+    "labels": 33,
+    "exact": 32
+   },
+   "en/*": {
+    "cibles": 88,
+    "labels": 61,
+    "exact": 60
+   },
+   "en/SUB": {
+    "cibles": 26,
+    "labels": 13,
+    "exact": 13
+   },
+   "en/REL": {
+    "cibles": 28,
+    "labels": 15,
+    "exact": 15
+   }
+  },
+  "final": {
+   "fr/GP": {
+    "cibles": 62,
+    "labels": 58,
+    "exact": 58
+   },
+   "fr/*": {
+    "cibles": 151,
+    "labels": 136,
+    "exact": 136
+   },
+   "*/GP": {
+    "cibles": 96,
+    "labels": 92,
+    "exact": 92
+   },
+   "*/*": {
+    "cibles": 239,
+    "labels": 222,
+    "exact": 222
+   },
+   "fr/SUB": {
+    "cibles": 43,
+    "labels": 39,
+    "exact": 39
+   },
+   "*/SUB": {
+    "cibles": 69,
+    "labels": 64,
+    "exact": 64
+   },
+   "fr/REL": {
+    "cibles": 46,
+    "labels": 39,
+    "exact": 39
+   },
+   "*/REL": {
+    "cibles": 74,
+    "labels": 66,
+    "exact": 66
+   },
+   "en/GP": {
+    "cibles": 34,
+    "labels": 34,
+    "exact": 34
+   },
+   "en/*": {
+    "cibles": 88,
+    "labels": 86,
+    "exact": 86
+   },
+   "en/SUB": {
+    "cibles": 26,
+    "labels": 25,
+    "exact": 25
+   },
+   "en/REL": {
+    "cibles": 28,
+    "labels": 27,
+    "exact": 27
+   }
+  }
+ },
+ "dev_test": {
+  "dev": {
+   "base": {
+    "cibles": 163,
+    "labels": 134,
+    "exacts": 133
+   },
+   "final": {
+    "labels": 154,
+    "exacts": 154
+   }
+  },
+  "test": {
+   "base": {
+    "cibles": 76,
+    "labels": 62,
+    "exacts": 62
+   },
+   "final": {
+    "labels": 68,
+    "exacts": 68
+   }
+  }
+ },
+ "causes": [
+  {
+   "cause": "Frontière de clause",
+   "effectif": 20,
+   "types": {
+    "REL": 12,
+    "SUB": 8,
+    "GP": 0
+   },
+   "ids": [
+    "g017",
+    "r034",
+    "r074",
+    "r114",
+    "r115",
+    "r205",
+    "r214",
+    "r216",
+    "r219",
+    "r224",
+    "r239",
+    "r240",
+    "r243",
+    "r247",
+    "r278",
+    "r281",
+    "r285",
+    "r291",
+    "r296",
+    "r299"
+   ],
+   "sous_causes": [
+    {
+     "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+     "effectif": 15,
+     "ids": [
+      "g017",
+      "r034",
+      "r074",
+      "r114",
+      "r205",
+      "r214",
+      "r216",
+      "r219",
+      "r240",
+      "r243",
+      "r247",
+      "r278",
+      "r281",
+      "r285",
+      "r296"
+     ]
+    },
+    {
+     "cause": "frontière de clause — 2e prédicat avalé",
+     "effectif": 5,
+     "ids": [
+      "r115",
+      "r224",
+      "r239",
+      "r291",
+      "r299"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "Type attendu différent",
+   "effectif": 4,
+   "types": {
+    "REL": 0,
+    "SUB": 4,
+    "GP": 0
+   },
+   "ids": [
+    "r215",
+    "r245",
+    "r279",
+    "r294"
+   ],
+   "sous_causes": [
+    {
+     "cause": "type attendu différent (REL→SUB)",
+     "effectif": 3,
+     "ids": [
+      "r215",
+      "r279",
+      "r294"
+     ]
+    },
+    {
+     "cause": "type récupéré, cible non (verbe call hors lexique)",
+     "effectif": 1,
+     "ids": [
+      "r245"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "GN qui avale",
+   "effectif": 4,
+   "types": {
+    "REL": 1,
+    "SUB": 3,
+    "GP": 0
+   },
+   "ids": [
+    "r280",
+    "s044",
+    "s112",
+    "s114"
+   ],
+   "sous_causes": [
+    {
+     "cause": "GN avalé par la collision car (SUBORDONNANTS fr en anglais)",
+     "effectif": 1,
+     "ids": [
+      "r280"
+     ]
+    },
+    {
+     "cause": "SUB synthétique : verbe principal hors lexique → GN l'avale",
+     "effectif": 3,
+     "ids": [
+      "s044",
+      "s112",
+      "s114"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "Lexique disjoint synthétique (REL sur-longues)",
+   "effectif": 6,
+   "types": {
+    "REL": 6,
+    "SUB": 0,
+    "GP": 0
+   },
+   "ids": [
+    "s010",
+    "s035",
+    "s061",
+    "s065",
+    "s125",
+    "s141"
+   ],
+   "sous_causes": [
+    {
+     "cause": "REL synthétique : 2e verbe hors lexique disjoint",
+     "effectif": 6,
+     "ids": [
+      "s010",
+      "s035",
+      "s061",
+      "s065",
+      "s125",
+      "s141"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "Gold synthétique sans préposition",
+   "effectif": 4,
+   "types": {
+    "REL": 0,
+    "SUB": 0,
+    "GP": 4
+   },
+   "ids": [
+    "s027",
+    "s146",
+    "s148",
+    "s160"
+   ],
+   "sous_causes": [
+    {
+     "cause": "gold synthétique sans préposition (bug générateur)",
+     "effectif": 4,
+     "ids": [
+      "s027",
+      "s146",
+      "s148",
+      "s160"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "Marqueur absent ou élidé",
+   "effectif": 2,
+   "types": {
+    "REL": 1,
+    "SUB": 1,
+    "GP": 0
+   },
+   "ids": [
+    "r035",
+    "r264"
+   ],
+   "sous_causes": [
+    {
+     "cause": "marqueur absent (relative zéro)",
+     "effectif": 1,
+     "ids": [
+      "r035"
+     ]
+    },
+    {
+     "cause": "marqueur élidé qu' non tokenisé",
+     "effectif": 1,
+     "ids": [
+      "r264"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "Lexique verbal réel",
+   "effectif": 1,
+   "types": {
+    "REL": 1,
+    "SUB": 0,
+    "GP": 0
+   },
+   "ids": [
+    "r255"
+   ],
+   "sous_causes": [
+    {
+     "cause": "couverture verbale réelle (achetée/roule)",
+     "effectif": 1,
+     "ids": [
+      "r255"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "GP tronqué par un faux verbe",
+   "effectif": 1,
+   "types": {
+    "REL": 0,
+    "SUB": 0,
+    "GP": 1
+   },
+   "ids": [
+    "r153"
+   ],
+   "sous_causes": [
+    {
+     "cause": "GP tronqué par un faux verbe (bus)",
+     "effectif": 1,
+     "ids": [
+      "r153"
+     ]
+    }
+   ]
+  },
+  {
+   "cause": "Adverbe final (arbitrage dev/test)",
+   "effectif": 1,
+   "types": {
+    "REL": 0,
+    "SUB": 1,
+    "GP": 0
+   },
+   "ids": [
+    "r288"
+   ],
+   "sous_causes": [
+    {
+     "cause": "adverbe final (règle trop stricte, arbitrage dev/test)",
+     "effectif": 1,
+     "ids": [
+      "r288"
+     ]
+    }
+   ]
+  }
+ ],
+ "cas": [
+  {
+   "id": "g017",
+   "langue": "en",
+   "source": "hand",
+   "type": "SUB",
+   "texte": "that she would come",
+   "debut": 9,
+   "fin": 28,
+   "cible": "said",
+   "cibles": [
+    "said"
+   ],
+   "phrase": "She said that she would come yesterday.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "said",
+   "split": "dev"
+  },
+  {
+   "id": "r034",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that I read",
+   "debut": 9,
+   "fin": 20,
+   "cible": "book",
+   "cibles": [
+    "book"
+   ],
+   "phrase": "The book that I read is exciting.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "book",
+   "split": "dev"
+  },
+  {
+   "id": "r035",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "she talks about",
+   "debut": 9,
+   "fin": 24,
+   "cible": "film",
+   "cibles": [
+    "film"
+   ],
+   "phrase": "The film she talks about is out.",
+   "marqueur": "∅ (relative zéro)",
+   "cause": "marqueur absent (relative zéro)",
+   "regle": "— (règle non écrite)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "r074",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that you read",
+   "debut": 9,
+   "fin": 22,
+   "cible": "book",
+   "cibles": [
+    "book"
+   ],
+   "phrase": "The book that you read is long.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "book",
+   "split": "dev"
+  },
+  {
+   "id": "r114",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that we saw",
+   "debut": 9,
+   "fin": 20,
+   "cible": "film",
+   "cibles": [
+    "film"
+   ],
+   "phrase": "The film that we saw was long.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "film",
+   "split": "dev"
+  },
+  {
+   "id": "r115",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "where I was born",
+   "debut": 10,
+   "fin": 26,
+   "cible": "house",
+   "cibles": [
+    "house"
+   ],
+   "phrase": "The house where I was born is small.",
+   "marqueur": "where",
+   "cause": "frontière de clause — 2e prédicat avalé",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "house",
+   "split": "test"
+  },
+  {
+   "id": "r153",
+   "langue": "en",
+   "source": "reel",
+   "type": "GP",
+   "texte": "for the bus",
+   "debut": 8,
+   "fin": 19,
+   "cible": "wait",
+   "cibles": [
+    "wait"
+   ],
+   "phrase": "We wait for the bus.",
+   "marqueur": "for",
+   "cause": "GP tronqué par un faux verbe (bus)",
+   "regle": "R3b",
+   "statut_final": "exact",
+   "cible_finale": "wait",
+   "split": "test"
+  },
+  {
+   "id": "r205",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that you are right",
+   "debut": 8,
+   "fin": 26,
+   "cible": "think",
+   "cibles": [
+    "think"
+   ],
+   "phrase": "I think that you are right.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "think",
+   "split": "dev"
+  },
+  {
+   "id": "r214",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that I read",
+   "debut": 9,
+   "fin": 20,
+   "cible": "book",
+   "cibles": [
+    "book"
+   ],
+   "phrase": "The book that I read is good.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "book",
+   "split": "test"
+  },
+  {
+   "id": "r215",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "When it rains",
+   "debut": 0,
+   "fin": 13,
+   "cible": "stay",
+   "cibles": [
+    "stay"
+   ],
+   "phrase": "When it rains, I stay.",
+   "marqueur": "When",
+   "cause": "type attendu différent (REL→SUB)",
+   "regle": "R2",
+   "statut_final": "exact",
+   "cible_finale": "stay",
+   "split": "dev"
+  },
+  {
+   "id": "r216",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that he comes",
+   "debut": 9,
+   "fin": 22,
+   "cible": "says",
+   "cibles": [
+    "says"
+   ],
+   "phrase": "She says that he comes.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "says",
+   "split": "test"
+  },
+  {
+   "id": "r219",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that you come",
+   "debut": 7,
+   "fin": 20,
+   "cible": "know",
+   "cibles": [
+    "know"
+   ],
+   "phrase": "I know that you come.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "know",
+   "split": "dev"
+  },
+  {
+   "id": "r224",
+   "langue": "fr",
+   "source": "reel",
+   "type": "REL",
+   "texte": "dont la voiture est rouge",
+   "debut": 8,
+   "fin": 33,
+   "cible": "homme",
+   "cibles": [
+    "homme"
+   ],
+   "phrase": "L'homme dont la voiture est rouge arrive.",
+   "marqueur": "dont",
+   "cause": "frontière de clause — 2e prédicat avalé",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "homme",
+   "split": "dev"
+  },
+  {
+   "id": "r239",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "whose car is red",
+   "debut": 8,
+   "fin": 24,
+   "cible": "man",
+   "cibles": [
+    "man"
+   ],
+   "phrase": "The man whose car is red arrives.",
+   "marqueur": "whose",
+   "cause": "frontière de clause — 2e prédicat avalé",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "man",
+   "split": "test"
+  },
+  {
+   "id": "r240",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that he is right",
+   "debut": 10,
+   "fin": 26,
+   "cible": "believe",
+   "cibles": [
+    "believe"
+   ],
+   "phrase": "I believe that he is right.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "believe",
+   "split": "dev"
+  },
+  {
+   "id": "r243",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that we bought",
+   "debut": 10,
+   "fin": 24,
+   "cible": "house",
+   "cibles": [
+    "house"
+   ],
+   "phrase": "The house that we bought is old.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "house",
+   "split": "dev"
+  },
+  {
+   "id": "r245",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "When you arrive",
+   "debut": 0,
+   "fin": 15,
+   "cible": "call",
+   "cibles": [
+    "call"
+   ],
+   "phrase": "When you arrive, call me.",
+   "marqueur": "When",
+   "cause": "type récupéré, cible non (verbe call hors lexique)",
+   "regle": "R2 (span) / — (cible)",
+   "statut_final": "exact",
+   "cible_finale": "call",
+   "split": "dev"
+  },
+  {
+   "id": "r247",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that we must leave",
+   "debut": 8,
+   "fin": 26,
+   "cible": "think",
+   "cibles": [
+    "think"
+   ],
+   "phrase": "I think that we must leave.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "think",
+   "split": "dev"
+  },
+  {
+   "id": "r255",
+   "langue": "fr",
+   "source": "reel",
+   "type": "REL",
+   "texte": "que j'ai achetée",
+   "debut": 11,
+   "fin": 27,
+   "cible": "voiture",
+   "cibles": [
+    "voiture"
+   ],
+   "phrase": "La voiture que j'ai achetée roule.",
+   "marqueur": "que",
+   "cause": "couverture verbale réelle (achetée/roule)",
+   "regle": "— (lexique)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  },
+  {
+   "id": "r264",
+   "langue": "fr",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "qu'il vient demain",
+   "debut": 8,
+   "fin": 26,
+   "cible": "sais",
+   "cibles": [
+    "sais"
+   ],
+   "phrase": "Je sais qu'il vient demain.",
+   "marqueur": "qu'il",
+   "cause": "marqueur élidé qu' non tokenisé",
+   "regle": "— (tokenisation)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  },
+  {
+   "id": "r278",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that you eat",
+   "debut": 10,
+   "fin": 22,
+   "cible": "bread",
+   "cibles": [
+    "bread"
+   ],
+   "phrase": "The bread that you eat is fresh.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "bread",
+   "split": "dev"
+  },
+  {
+   "id": "r279",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "When it snows",
+   "debut": 0,
+   "fin": 13,
+   "cible": "stay",
+   "cibles": [
+    "stay"
+   ],
+   "phrase": "When it snows, we stay.",
+   "marqueur": "When",
+   "cause": "type attendu différent (REL→SUB)",
+   "regle": "R2",
+   "statut_final": "exact",
+   "cible_finale": "stay",
+   "split": "dev"
+  },
+  {
+   "id": "r280",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that I bought",
+   "debut": 8,
+   "fin": 21,
+   "cible": "car",
+   "cibles": [
+    "car"
+   ],
+   "phrase": "The car that I bought runs.",
+   "marqueur": "that",
+   "cause": "GN avalé par la collision car (SUBORDONNANTS fr en anglais)",
+   "regle": "R3a",
+   "statut_final": "exact",
+   "cible_finale": "car",
+   "split": "dev"
+  },
+  {
+   "id": "r281",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that it rains",
+   "debut": 8,
+   "fin": 21,
+   "cible": "says",
+   "cibles": [
+    "says"
+   ],
+   "phrase": "He says that it rains.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "says",
+   "split": "test"
+  },
+  {
+   "id": "r285",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that we took",
+   "debut": 10,
+   "fin": 22,
+   "cible": "table",
+   "cibles": [
+    "table"
+   ],
+   "phrase": "The table that we took is big.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "table",
+   "split": "dev"
+  },
+  {
+   "id": "r288",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that he comes tomorrow",
+   "debut": 7,
+   "fin": 29,
+   "cible": "know",
+   "cibles": [
+    "know"
+   ],
+   "phrase": "I know that he comes tomorrow.",
+   "marqueur": "that",
+   "cause": "adverbe final (règle trop stricte, arbitrage dev/test)",
+   "regle": "— (arbitrage)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  },
+  {
+   "id": "r291",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that is on the table",
+   "debut": 9,
+   "fin": 29,
+   "cible": "book",
+   "cibles": [
+    "book"
+   ],
+   "phrase": "The book that is on the table is mine.",
+   "marqueur": "that",
+   "cause": "frontière de clause — 2e prédicat avalé",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "book",
+   "split": "dev"
+  },
+  {
+   "id": "r294",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "When you want",
+   "debut": 0,
+   "fin": 13,
+   "cible": "leave",
+   "cibles": [
+    "leave"
+   ],
+   "phrase": "When you want, we leave.",
+   "marqueur": "When",
+   "cause": "type attendu différent (REL→SUB)",
+   "regle": "R2",
+   "statut_final": "exact",
+   "cible_finale": "leave",
+   "split": "dev"
+  },
+  {
+   "id": "r296",
+   "langue": "en",
+   "source": "reel",
+   "type": "SUB",
+   "texte": "that she leaves",
+   "debut": 9,
+   "fin": 24,
+   "cible": "says",
+   "cibles": [
+    "says"
+   ],
+   "phrase": "She says that she leaves.",
+   "marqueur": "that",
+   "cause": "frontière de clause — arrêt précoce (pronom pris pour un verbe)",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "says",
+   "split": "dev"
+  },
+  {
+   "id": "r299",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "texte": "that we cross",
+   "debut": 11,
+   "fin": 24,
+   "cible": "bridge",
+   "cibles": [
+    "bridge"
+   ],
+   "phrase": "The bridge that we cross is old.",
+   "marqueur": "that",
+   "cause": "frontière de clause — 2e prédicat avalé",
+   "regle": "R1",
+   "statut_final": "exact",
+   "cible_finale": "bridge",
+   "split": "dev"
+  },
+  {
+   "id": "s010",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "texte": "qui nage",
+   "debut": 10,
+   "fin": 18,
+   "cible": "chemin",
+   "cibles": [
+    "chemin"
+   ],
+   "phrase": "un chemin qui nage prépare",
+   "marqueur": "qui",
+   "cause": "REL synthétique : 2e verbe hors lexique disjoint",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s027",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "GP",
+   "texte": "il",
+   "debut": 31,
+   "fin": 33,
+   "cible": "marche",
+   "cibles": [
+    "marche",
+    "village"
+   ],
+   "phrase": "mon sombre village marche avec il",
+   "marqueur": "∅ (préposition hors span)",
+   "cause": "gold synthétique sans préposition (bug générateur)",
+   "regle": "— (gold)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s035",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "texte": "qui ferme",
+   "debut": 10,
+   "fin": 19,
+   "cible": "papier",
+   "cibles": [
+    "papier"
+   ],
+   "phrase": "un papier qui ferme observe",
+   "marqueur": "qui",
+   "cause": "REL synthétique : 2e verbe hors lexique disjoint",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  },
+  {
+   "id": "s044",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "SUB",
+   "texte": "que ils crie",
+   "debut": 17,
+   "fin": 29,
+   "cible": "nage",
+   "cibles": [
+    "nage"
+   ],
+   "phrase": "une fenêtre nage que ils crie",
+   "marqueur": "que",
+   "cause": "SUB synthétique : verbe principal hors lexique → GN l'avale",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s061",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "texte": "qui saute",
+   "debut": 9,
+   "fin": 18,
+   "cible": "nuage",
+   "cibles": [
+    "nuage"
+   ],
+   "phrase": "ce nuage qui saute observe",
+   "marqueur": "qui",
+   "cause": "REL synthétique : 2e verbe hors lexique disjoint",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s065",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "texte": "qui commence",
+   "debut": 5,
+   "fin": 17,
+   "cible": "elle",
+   "cibles": [
+    "elle"
+   ],
+   "phrase": "elle qui commence nage",
+   "marqueur": "qui",
+   "cause": "REL synthétique : 2e verbe hors lexique disjoint",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s112",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "SUB",
+   "texte": "que Lucas ferme",
+   "debut": 24,
+   "fin": 39,
+   "cible": "nage",
+   "cibles": [
+    "nage"
+   ],
+   "phrase": "la brillante forêt nage que Lucas ferme",
+   "marqueur": "que",
+   "cause": "SUB synthétique : verbe principal hors lexique → GN l'avale",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  },
+  {
+   "id": "s114",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "SUB",
+   "texte": "que les avocat compte",
+   "debut": 22,
+   "fin": 43,
+   "cible": "dessine",
+   "cibles": [
+    "dessine"
+   ],
+   "phrase": "ce doux nuage dessine que les avocat compte",
+   "marqueur": "que",
+   "cause": "SUB synthétique : verbe principal hors lexique → GN l'avale",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s125",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "texte": "qui compte",
+   "debut": 11,
+   "fin": 21,
+   "cible": "renard",
+   "cibles": [
+    "renard"
+   ],
+   "phrase": "mon renard qui compte crie",
+   "marqueur": "qui",
+   "cause": "REL synthétique : 2e verbe hors lexique disjoint",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s141",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "texte": "qui trouve",
+   "debut": 5,
+   "fin": 15,
+   "cible": "Emma",
+   "cibles": [
+    "Emma"
+   ],
+   "phrase": "Emma qui trouve compte",
+   "marqueur": "qui",
+   "cause": "REL synthétique : 2e verbe hors lexique disjoint",
+   "regle": "— (lexique disjoint)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  },
+  {
+   "id": "s146",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "GP",
+   "texte": "les jardin",
+   "debut": 25,
+   "fin": 35,
+   "cible": "observe",
+   "cibles": [
+    "observe",
+    "montagne"
+   ],
+   "phrase": "ma montagne observe avec les jardin",
+   "marqueur": "∅ (préposition hors span)",
+   "cause": "gold synthétique sans préposition (bug générateur)",
+   "regle": "— (gold)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  },
+  {
+   "id": "s148",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "GP",
+   "texte": "les ancienne lettre",
+   "debut": 20,
+   "fin": 39,
+   "cible": "nage",
+   "cibles": [
+    "nage",
+    "voyage"
+   ],
+   "phrase": "le voyage nage pour les ancienne lettre",
+   "marqueur": "∅ (préposition hors span)",
+   "cause": "gold synthétique sans préposition (bug générateur)",
+   "regle": "— (gold)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "dev"
+  },
+  {
+   "id": "s160",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "GP",
+   "texte": "le renard",
+   "debut": 20,
+   "fin": 29,
+   "cible": "nage",
+   "cibles": [
+    "nage",
+    "chemin"
+   ],
+   "phrase": "le chemin nage avec le renard",
+   "marqueur": "∅ (préposition hors span)",
+   "cause": "gold synthétique sans préposition (bug générateur)",
+   "regle": "— (gold)",
+   "statut_final": "absent",
+   "cible_finale": null,
+   "split": "test"
+  }
+ ],
+ "regles": [
+  {
+   "id": "R1",
+   "nom": "Frontière de clause REL/SUB",
+   "statut": "retenue",
+   "ou": "tools/bloc_linguistique.py, _syntagmes_simple, branche REL/SUB (l. 858-897) + est_verbe local (l. 843-855), état 69bd865e",
+   "definition": [
+    "R1a — un pronom n'est jamais un verbe par la règle de position (`n in PRON` → False).",
+    "R1b — les modaux anglais sont des AUX : would, must, can, could, should, will, shall, may, might.",
+    "R1c — un 2e AUX, un 2e verbe plein, ou un verbe plein après un AUX saturé ouvre la principale : on s'arrête avant.",
+    "La règle existante « adverbe final » est conservée (cf. r288 / g017)."
+   ],
+   "mesure": {
+    "dev": {
+     "cibles": 163,
+     "labels": 149,
+     "exact": 148,
+     "f1": 0.5717,
+     "n_gains": 15,
+     "n_pertes": 0
+    },
+    "test": {
+     "cibles": 76,
+     "labels": 67,
+     "exact": 67,
+     "f1": 0.5823,
+     "n_gains": 5,
+     "n_pertes": 0
+    },
+    "all": {
+     "cibles": 239,
+     "labels": 216,
+     "exact": 215,
+     "f1": 0.575,
+     "n_gains": 20,
+     "n_pertes": 0
+    }
+   },
+   "gains": {
+    "dev": [
+     "g017",
+     "r034",
+     "r074",
+     "r114",
+     "r205",
+     "r219",
+     "r224",
+     "r240",
+     "r243",
+     "r247",
+     "r278",
+     "r285",
+     "r291",
+     "r296",
+     "r299"
+    ],
+    "test": [
+     "r115",
+     "r214",
+     "r216",
+     "r239",
+     "r281"
+    ],
+    "all": [
+     "g017",
+     "r034",
+     "r074",
+     "r114",
+     "r115",
+     "r205",
+     "r214",
+     "r216",
+     "r219",
+     "r224",
+     "r239",
+     "r240",
+     "r243",
+     "r247",
+     "r278",
+     "r281",
+     "r285",
+     "r291",
+     "r296",
+     "r299"
+    ]
+   },
+   "pertes": {
+    "dev": [],
+    "test": [],
+    "all": []
+   },
+   "nouveaux_labels_faux": [],
+   "note": "Le plus gros gain, aucune perte, aucun nouveau label faux."
+  },
+  {
+   "id": "R2",
+   "nom": "Type REL/SUB par antécédent",
+   "statut": "retenue",
+   "ou": "tools/bloc_linguistique.py, _syntagmes_simple, l. 874",
+   "definition": [
+    "DURS = {qui, dont, où, which, who, whom, whose, where}.",
+    "stype = REL si (marqueur ∈ DURS) ou (marqueur ∈ RELATIFS et précédent = GN), sinon SUB."
+   ],
+   "mesure": {
+    "dev": {
+     "cibles": 163,
+     "labels": 138,
+     "exact": 136,
+     "f1": 0.5547,
+     "n_gains": 3,
+     "n_pertes": 0
+    },
+    "test": {
+     "cibles": 76,
+     "labels": 62,
+     "exact": 62,
+     "f1": 0.5651,
+     "n_gains": 0,
+     "n_pertes": 0
+    },
+    "all": {
+     "cibles": 239,
+     "labels": 200,
+     "exact": 198,
+     "f1": 0.5579,
+     "n_gains": 3,
+     "n_pertes": 0
+    }
+   },
+   "gains": {
+    "dev": [
+     "r215",
+     "r279",
+     "r294"
+    ],
+    "test": [],
+    "all": [
+     "r215",
+     "r279",
+     "r294"
+    ]
+   },
+   "pertes": {
+    "dev": [],
+    "test": [],
+    "all": []
+   },
+   "nouveaux_labels_faux": [
+    {
+     "id": "r245",
+     "type": "SUB",
+     "span": [
+      0,
+      15
+     ],
+     "cible_obtenue": "arrive",
+     "cible_gold": "call",
+     "corrige_par": "R3c"
+    }
+   ],
+   "note": "0 perte d'exact ; 1 nouveau label faux (r245) tant que R3c n'est pas appliquée."
+  },
+  {
+   "id": "R3",
+   "nom": "Trois gardes de lexique et de contexte",
+   "statut": "retenue",
+   "definition": [
+    "R3a — `SUBORDONNANTS - {car}` quand langue == 'en' (le « car » français ne doit pas couper un GN anglais).",
+    "R3b — dans la boucle GP, un mot précédé d'un déterminant n'est pas un verbe (est_verbe_gp).",
+    "R3c — compléter le lexique anglais : fall/falls/fell/fallen et call/calls/called/calling (VERBES['en'] et VERBES_CONNUS)."
+   ],
+   "mesure": {
+    "dev": {
+     "cibles": 163,
+     "labels": 134,
+     "exact": 134,
+     "f1": 0.5582,
+     "n_gains": 1,
+     "n_pertes": 0
+    },
+    "test": {
+     "cibles": 76,
+     "labels": 63,
+     "exact": 63,
+     "f1": 0.5722,
+     "n_gains": 1,
+     "n_pertes": 0
+    },
+    "all": {
+     "cibles": 239,
+     "labels": 197,
+     "exact": 197,
+     "f1": 0.5625,
+     "n_gains": 2,
+     "n_pertes": 0
+    }
+   },
+   "gains": {
+    "dev": [
+     "r102"
+    ],
+    "test": [
+     "r153"
+    ],
+    "all": [
+     "r102",
+     "r153"
+    ]
+   },
+   "pertes": {
+    "dev": [],
+    "test": [],
+    "all": []
+   },
+   "nouveaux_labels_faux": [],
+   "marginal_sur_R1_R2": {
+    "dev": {
+     "gains": [
+      "r280",
+      "r102",
+      "r245"
+     ],
+     "exacts_avant": 151,
+     "exacts_apres": 154
+    },
+    "test": {
+     "gains": [
+      "r153"
+     ],
+     "exacts_avant": 67,
+     "exacts_apres": 68
+    },
+    "all": {
+     "gains": [
+      "r280",
+      "r102",
+      "r245",
+      "r153"
+     ],
+     "exacts_avant": 218,
+     "exacts_apres": 222
+    }
+   },
+   "sous_regles": [
+    {
+     "id": "R3a",
+     "effet": "r280 (avec R1/R2)",
+     "seule": "0 gain",
+     "note": "synergie"
+    },
+    {
+     "id": "R3b",
+     "effet": "r153",
+     "seule": "+1 test",
+     "note": "portée GP uniquement"
+    },
+    {
+     "id": "R3c",
+     "effet": "r245 et r102",
+     "seule": "+1 dev (r102)",
+     "note": "fall + call ; r245 exige R2"
+    }
+   ]
+  }
+ ],
+ "variantes": [
+  {
+   "variante": "ligne de base",
+   "labels": 196,
+   "exacts": 195,
+   "exact_taux_span": 0.9949,
+   "f1": 0.5555
+  },
+  {
+   "variante": "R1+R2",
+   "labels": 220,
+   "exacts": 218,
+   "exact_taux_span": 0.9909,
+   "f1": 0.5774
+  },
+  {
+   "variante": "+ R3a/R3b",
+   "labels": 222,
+   "exacts": 220,
+   "exact_taux_span": 0.991,
+   "f1": 0.5819
+  },
+  {
+   "variante": "+ R3c fall",
+   "labels": 222,
+   "exacts": 221,
+   "exact_taux_span": 0.9955,
+   "f1": 0.5848
+  },
+  {
+   "variante": "+ R3c call (retenue)",
+   "labels": 222,
+   "exacts": 222,
+   "exact_taux_span": 1.0,
+   "f1": 0.5851
+  }
+ ],
+ "regles_rejetees": [
+  {
+   "id": "R3-globale",
+   "nom": "Contexte DET dans tous les chunkers",
+   "statut": "rejetée",
+   "dev": {
+    "labels": 141,
+    "exacts": 140,
+    "gains": 11,
+    "pertes": 4,
+    "ids_pertes": [
+     "r083",
+     "r246",
+     "r287",
+     "r297"
+    ],
+    "f1": 0.5607
+   },
+   "test": {
+    "labels": 65,
+    "exacts": 65,
+    "gains": 4,
+    "pertes": 1,
+    "ids_pertes": [
+     "r220"
+    ],
+    "f1": 0.5725
+   },
+   "raison": "« that » est DET mais le mot suivant peut être un verbe (« that sleeps ») ; « entre » est PREP et verbe (« Le train entre en gare »)."
+  },
+  {
+   "id": "R4-lexique-synthetique",
+   "nom": "Ajouter les 7 lemmes synthétiques",
+   "statut": "rejetée comme mesure de généralisation",
+   "dev": {
+    "gains": 5,
+    "ids": [
+     "s010",
+     "s044",
+     "s061",
+     "s114",
+     "s125"
+    ]
+   },
+   "test": {
+    "gains": 3,
+    "ids": [
+     "s035",
+     "s112",
+     "s141"
+    ]
+   },
+   "raison": "Le générateur déclare ce lexique disjoint pour mesurer la généralisation : l'ajouter, c'est apprendre le vocabulaire du test. s065 reste absent."
+  },
+  {
+   "id": "NOADV",
+   "nom": "Supprimer la règle « adverbe final »",
+   "statut": "rejetée par le protocole dev",
+   "dev": {
+    "exacts_avant": 154,
+    "exacts_apres": 153,
+    "perte": "g017"
+   },
+   "test": {
+    "exacts_avant": 68,
+    "exacts_apres": 69,
+    "gain": "r288"
+   },
+   "raison": "Échange 1 gain dev (g017) contre 1 gain test (r288) : la portée de l'adverbe final est une ambiguïté de gold."
+  },
+  {
+   "id": "relative-zero",
+   "nom": "Règle relative zéro (r035)",
+   "statut": "non implémentée",
+   "raison": "Un seul cas ; dépend d'une préposition finale (about) traitée comme un verbe ; coût/risque disproportionné."
+  }
+ ],
+ "non_recuperables": {
+  "non_recuperables_par_regle_justifiee": {
+   "effectif": 13,
+   "gold_synthetique_sans_preposition": {
+    "n": 4,
+    "ids": [
+     "s027",
+     "s146",
+     "s148",
+     "s160"
+    ],
+    "pourquoi": "gold_synthetique.py ligne 98 : i = v + index(prep) + 1, le GP gold démarre après la préposition",
+    "que_faire": "corriger le gold (démarrer à la préposition) : contrefactuel +4 exacts, 0 perte"
+   },
+   "lexique_disjoint_synthetique": {
+    "n": 9,
+    "REL": [
+     "s010",
+     "s035",
+     "s061",
+     "s065",
+     "s125",
+     "s141"
+    ],
+    "SUB": [
+     "s044",
+     "s112",
+     "s114"
+    ],
+    "pourquoi": "le lexique verbal du générateur est disjoint ; 7 lemmes manquent",
+    "que_faire": "ajouter les 7 lemmes = +8 exacts mais mesure invalide ; s065 reste absent (antécédent elle non GN)"
+   }
+  },
+  "recuperables_hors_perimetre": {
+   "effectif": 4,
+   "r035": {
+    "raison": "relative zéro",
+    "que_faire": "règle dédiée"
+   },
+   "r255": {
+    "raison": "couverture verbale réelle (achetée/roule)",
+    "que_faire": "chantier couverture verbale"
+   },
+   "r264": {
+    "raison": "qu' élidé non tokenisé + adverbe final",
+    "que_faire": "tokeniser qu'"
+   },
+   "r288": {
+    "raison": "adverbe final",
+    "que_faire": "arbitrage de gold (perd g017)"
+   }
+  },
+  "total_absent": 17,
+  "total_faux": 0
+ },
+ "controle_negatif": {
+  "permutation": {
+   "n": 222,
+   "observe": 222,
+   "moyenne": 2.011,
+   "max": 9,
+   "p95": 5,
+   "tirages": 2000,
+   "graine": 0,
+   "lecture": "0,91 % en moyenne contre 100 % observé"
+  },
+  "hasard_officiel": {
+   "n": 239,
+   "observe": 1,
+   "taux": 0.0042
+  },
+  "bootstrap_apparie": {
+   "n": 239,
+   "gain": 27,
+   "diff": 0.113,
+   "ic95": [
+    0.0753,
+    0.1548
+   ],
+   "tirages": 5000
+  }
+ },
+ "limites": [
+  "Le test n'est pas aveugle : le diagnostic des 43 a porté sur dev et test avant le réglage.",
+  "Un seul split déterministe (crc32), sans validation croisée ; test = 76 cibles (14 absentes au départ).",
+  "fall/call sont deux verbes anglais courants, mais choisis en connaissance de deux échecs ; étude de couverture verbale à faire.",
+  "Le gold synthétique a un bug de GP (4 cas) et un lexique disjoint (9 cas) : les 13 « non récupérables » sont des propriétés du générateur.",
+  "La F1 0,5555 → 0,5851 est sur le gold vivant 612 ; le 0,5595 du commit est le gelé 602.",
+  "L'implémentation réelle peut différer de la copie locale ; re-mesurer avec evaluer_gold.py et les portes."
+ ],
+ "recommandation": {
+  "ordre": [
+   "R1 seule (dev/test, commit)",
+   "R2 + R3c ensemble",
+   "R3a + R3b",
+   "correction gold ligne 98 (commit gold)",
+   "ne pas ajouter le lexique synthétique"
+  ],
+  "cible": {
+   "labels": 222,
+   "exacts": 222,
+   "cibles": 239,
+   "couverture": 0.9289,
+   "exact_cibles": 0.9289,
+   "f1_vivant": 0.5851,
+   "dev": "154/154",
+   "test": "68/68"
+  },
+  "prochains_leviers": [
+   "r035 (relative zéro)",
+   "r255 (couverture verbale française)",
+   "r264 (tokenisation qu')",
+   "r288 (adverbe final)",
+   "les 9 synthétiques si le protocole change"
+  ]
+ },
+ "journal_de_pensee": [
+  {
+   "hypothese": "Les 43 sont des erreurs d'attachement",
+   "test": "196 labels au bon span, 195 exacts ; 239 - 196 = 43",
+   "verdict": "faux : ce sont des spans non prédits (segmentation), pas des cibles fausses"
+  },
+  {
+   "hypothese": "Le problème est anglais",
+   "test": "27 anglais / 16 français",
+   "verdict": "partiellement : l'anglais porte 20 des 27 gains de R1, mais 13 cas français sont synthétiques"
+  },
+  {
+   "hypothese": "« that » est toujours SUB",
+   "test": "R2 : REL après GN, SUB après GV",
+   "verdict": "confirmé par 3 gains dev (When) ; r245 exige aussi call"
+  },
+  {
+   "hypothese": "Les modaux sont des AUX",
+   "test": "R1b : would, must…",
+   "verdict": "confirmé (g017, r247, r216, r281)"
+  },
+  {
+   "hypothese": "Le 2e prédicat doit être coupé",
+   "test": "R1c : 2e AUX / AUX saturé",
+   "verdict": "confirmé (r115, r224, r239, r291, r299)"
+  },
+  {
+   "hypothese": "Ajouter les verbes synthétiques",
+   "test": "+8 exacts",
+   "verdict": "rejeté : mesure invalide (lexique disjoint)"
+  },
+  {
+   "hypothese": "Le gold synthétique est faux",
+   "test": "ligne 98 : GP après la préposition",
+   "verdict": "confirmé : 4 cas, +4 en contrefactuel"
+  },
+  {
+   "hypothese": "Supprimer l'adverbe final",
+   "test": "NOADV",
+   "verdict": "rejeté : échange g017 (dev) contre r288 (test)"
+  },
+  {
+   "hypothese": "Étendre le garde DET partout",
+   "test": "R3 globale",
+   "verdict": "rejeté : 4 pertes dev, 1 test (that sleeps, entre)"
+  },
+  {
+   "hypothese": "Le problème est le lexique `bus`",
+   "test": "_est_verbe(bus) = bu + s",
+   "verdict": "confirmé : R3b, portée GP"
+  },
+  {
+   "hypothese": "`car` est un subordonnant",
+   "test": "collision français/anglais",
+   "verdict": "confirmé : R3a, r280"
+  },
+  {
+   "hypothese": "Le lexique fall/call",
+   "test": "r102, r245",
+   "verdict": "confirmé : exact/labels 222/222"
+  }
+ ],
+ "fichiers_ecrits": [
+  "reports/rapport-spans-v7.md",
+  "reports/pensee-spans-v7.json"
+ ],
+ "note": "Aucun fichier existant modifié par cette session ; aucun commit effectué."
+}

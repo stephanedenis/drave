@@ -4,9 +4,9 @@
 > **183/183 portes** : la **couverture** passe de **187 à 196 labels** (sur 239) et l'exactitude
 > tient : **exact 195/196 = 0,9949** (fr **135/135 = 1,0**, en **60/61**) ; la **F1 syntagmes**
 > monte à **0,5595** (union ; S 0,4741, chunker 0,5858), la tête à **0,7205** ; la **POS** passe de
-> **0,7475 à 0,7603** ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
+> **0,7482 à 0,7603** (gelé 602) ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
 >
-> **État courant** : commit `69bd865e` · **Base** : F1/tête/POS sur le gold **gelé 602** (portes
+> **Instantané historique** : état au commit `69bd865e` · **Base** : F1/tête/POS sur le gold **gelé 602** (portes
 > T110-T115) ; sur le **612** : F1 **0,5555**, tête **0,7152**, POS **0,7581**. Couverture et
 > exactitude sur le **612**.
 >
@@ -53,14 +53,14 @@ cibles ; sur trois découpages (`%3==0/1/2`), l'exact varie d'un cas et la couve
   (gelé) et **huit** labels de couverture.
 - **Le chunker est maintenant meilleur que S** (F1 0,5858 contre 0,4741) : le découpage est
   devenu la force, plus la faiblesse.
-- **Les 43 spans restants** : 21 REL (« qui » 12), 17 SUB, 5 GP — la file est claire.
+- **Les 43 spans restants** : 21 REL (dont 6 « qui » français), 17 SUB (dont 4 françaises), 5 GP — la file est claire.
 
 ## 3. Ce que ce banc ne dit pas
 
 - **Les 43 spans** : non prédits (REL « qui » en français, SUB anglais).
 - **Le top-k** (166/239) : les candidats restent incomplets.
-- **L'in-sample** : les règles sont dessinées sur ce gold ; dev/test n'ont pas été re-mesurés
-  depuis la v6 (à refaire).
+- **L'in-sample** : les règles sont dessinées sur ce gold ; dev/test sont re-mesurés ci-dessus
+  (dev 133/134, test 62/62) mais restent petits.
 - **Le gold 612** : 432 réels + 160 synthétiques + 20 de `gold.py`.
 
 ## 4. Ce qui pourrait rendre cette fiche fausse
@@ -68,11 +68,11 @@ cibles ; sur trois découpages (`%3==0/1/2`), l'exact varie d'un cas et la couve
 - **la règle de contexte** (DET/PRÉP/ADJ → nom) peut transformer un vrai verbe en nom ;
 - **le sujet-verbe** peut faire d'un nom un verbe après « qui/that » ;
 - **les prépositions composées** sont une liste ;
-- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+- un **audit** qui ne vérifie pas ces mesures (voir [audit v7](rapport-audit-v7.md)).
 
 ## 5. La suite
 
-1. **Les 43 spans** : REL « qui » (12), SUB anglais, GP.
+1. **Les 43 spans** : REL « qui » (6, français), SUB (anglaises et 4 françaises), GP.
 2. **Le top-k** : candidats complets.
 3. **dev/test** à re-mesurer.
 4. **Politique DRVM/native** : quand les poids seront là.

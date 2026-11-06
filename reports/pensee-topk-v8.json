@@ -1,0 +1,1955 @@
+{
+ "titre": "Top-k de l'attachement — qualification des 62 échecs et complétion des candidats (v8)",
+ "ligne_roadmap": "B13",
+ "date": "2026-11-05",
+ "branche": "s/v7",
+ "etat": "f908d7b0",
+ "mode": "lecture seule : aucun fichier existant modifié, aucun commit ; simulation par sous-classe locale (HeuristiqueV8), hors dépôt",
+ "gold": {
+  "phrases": 612,
+  "cibles": 239,
+  "labels": 212,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "langues": {
+   "fr": 402,
+   "en": 210
+  }
+ },
+ "split": {
+  "all": {
+   "phrases": 612,
+   "cibles": 239,
+   "sources": {
+    "hand": 20,
+    "reel": 432,
+    "synthetique": 160
+   },
+   "langues": {
+    "fr": 402,
+    "en": 210
+   }
+  },
+  "dev": {
+   "phrases": 422,
+   "cibles": 163,
+   "sources": {
+    "hand": 15,
+    "reel": 302,
+    "synthetique": 105
+   },
+   "langues": {
+    "fr": 277,
+    "en": 145
+   }
+  },
+  "test": {
+   "phrases": 190,
+   "cibles": 76,
+   "sources": {
+    "hand": 5,
+    "reel": 130,
+    "synthetique": 55
+   },
+   "langues": {
+    "fr": 125,
+    "en": 65
+   }
+  }
+ },
+ "baseline": {
+  "cibles": 239,
+  "labels": 212,
+  "topk": 177,
+  "topk_strict": 177,
+  "taux": 0.7406,
+  "taux_span": 0.8349,
+  "echecs": 62,
+  "echecs_span": 27,
+  "echecs_couverture": 35,
+  "dev": {
+   "cibles": 163,
+   "labels": 148,
+   "topk": 120,
+   "topk_strict": 120,
+   "taux": 0.7362,
+   "taux_span": 0.8108,
+   "echecs": 43,
+   "echecs_span": 15,
+   "echecs_couverture": 28
+  },
+  "test": {
+   "cibles": 76,
+   "labels": 64,
+   "topk": 57,
+   "topk_strict": 57,
+   "taux": 0.75,
+   "taux_span": 0.8906,
+   "echecs": 19,
+   "echecs_span": 12,
+   "echecs_couverture": 7
+  },
+  "par_type": {
+   "GP": {
+    "cibles": 96,
+    "labels": 91,
+    "topk": 89,
+    "taux": 0.9271,
+    "taux_span": 0.978
+   },
+   "REL": {
+    "cibles": 74,
+    "labels": 58,
+    "topk": 26,
+    "taux": 0.3514,
+    "taux_span": 0.4483
+   },
+   "SUB": {
+    "cibles": 69,
+    "labels": 63,
+    "topk": 62,
+    "taux": 0.8986,
+    "taux_span": 0.9841
+   }
+  },
+  "par_langue": {
+   "en": {
+    "cibles": 88,
+    "labels": 83,
+    "topk": 57,
+    "taux": 0.6477,
+    "taux_span": 0.6867
+   },
+   "fr": {
+    "cibles": 151,
+    "labels": 129,
+    "topk": 120,
+    "taux": 0.7947,
+    "taux_span": 0.9302
+   }
+  },
+  "par_source": {
+   "hand": {
+    "cibles": 13,
+    "labels": 12,
+    "topk": 10,
+    "taux": 0.7692,
+    "taux_span": 0.8333
+   },
+   "reel": {
+    "cibles": 171,
+    "labels": 164,
+    "topk": 135,
+    "taux": 0.7895,
+    "taux_span": 0.8232
+   },
+   "synthetique": {
+    "cibles": 55,
+    "labels": 36,
+    "topk": 32,
+    "taux": 0.5818,
+    "taux_span": 0.8889
+   }
+  },
+  "candidats_moyens": 2.434,
+  "candidats_max": 5,
+  "exact": 212,
+  "exact_taux_span": 1.0
+ },
+ "qualification": {
+  "echecs_total": 62,
+  "spans_non_predits": {
+   "total": 27,
+   "par_type": {
+    "GP": 5,
+    "REL": 16,
+    "SUB": 6
+   },
+   "par_langue": {
+    "en": 5,
+    "fr": 22
+   },
+   "par_source": {
+    "hand": 1,
+    "reel": 7,
+    "synthetique": 19
+   },
+   "ids": [
+    "g017",
+    "r035",
+    "r153",
+    "r255",
+    "r264",
+    "r273",
+    "r280",
+    "r288",
+    "s010",
+    "s027",
+    "s032",
+    "s035",
+    "s037",
+    "s044",
+    "s061",
+    "s065",
+    "s069",
+    "s072",
+    "s112",
+    "s114",
+    "s115",
+    "s125",
+    "s135",
+    "s141",
+    "s146",
+    "s148",
+    "s160"
+   ]
+  },
+  "echecs_couverture": {
+   "total": 35,
+   "par_type": {
+    "GP": 2,
+    "REL": 32,
+    "SUB": 1
+   },
+   "par_langue": {
+    "en": 26,
+    "fr": 9
+   },
+   "par_source": {
+    "hand": 2,
+    "reel": 29,
+    "synthetique": 4
+   },
+   "ids": [
+    "g002",
+    "g006",
+    "r034",
+    "r074",
+    "r075",
+    "r114",
+    "r115",
+    "r204",
+    "r206",
+    "r214",
+    "r217",
+    "r220",
+    "r224",
+    "r236",
+    "r239",
+    "r241",
+    "r243",
+    "r246",
+    "r248",
+    "r250",
+    "r278",
+    "r283",
+    "r285",
+    "r287",
+    "r289",
+    "r291",
+    "r293",
+    "r297",
+    "r299",
+    "r300",
+    "r309",
+    "s050",
+    "s070",
+    "s075",
+    "s131"
+   ]
+  },
+  "echecs_par_type": {
+   "GP": 7,
+   "REL": 48,
+   "SUB": 7
+  },
+  "echecs_par_langue": {
+   "en": 31,
+   "fr": 31
+  },
+  "echecs_par_source": {
+   "hand": 3,
+   "reel": 36,
+   "synthetique": 23
+  },
+  "causes": {
+   "GP_antec": 2,
+   "REL_antec": 32,
+   "SUB_verbe": 1,
+   "span": 27
+  },
+  "croisement_type_span_couverture": {
+   "GP|couverture": 2,
+   "SUB|span": 6,
+   "REL|couverture": 32,
+   "REL|span": 16,
+   "GP|span": 5,
+   "SUB|couverture": 1
+  },
+  "croisement_langue_span_couverture": {
+   "fr|couverture": 9,
+   "en|span": 5,
+   "en|couverture": 26,
+   "fr|span": 22
+  },
+  "croisement_source_span_couverture": {
+   "hand|couverture": 2,
+   "hand|span": 1,
+   "reel|couverture": 29,
+   "reel|span": 7,
+   "synthetique|span": 19,
+   "synthetique|couverture": 4
+  },
+  "detail": [
+   {
+    "id": "g002",
+    "split": "test",
+    "source": "hand",
+    "langue": "fr",
+    "type": "GP",
+    "span": "de la voisine",
+    "cibles": [
+     "chat"
+    ],
+    "candidats": [
+     "GP",
+     "dort"
+    ],
+    "choisi": "chat",
+    "cause": "GP_antec"
+   },
+   {
+    "id": "g006",
+    "split": "dev",
+    "source": "hand",
+    "langue": "fr",
+    "type": "GP",
+    "span": "du voisin",
+    "cibles": [
+     "chien"
+    ],
+    "candidats": [
+     "GP",
+     "aboie"
+    ],
+    "choisi": "chien",
+    "cause": "GP_antec"
+   },
+   {
+    "id": "g017",
+    "split": "dev",
+    "source": "hand",
+    "langue": "en",
+    "type": "SUB",
+    "span": "that she would come",
+    "cibles": [
+     "said"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r034",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that I read",
+    "cibles": [
+     "book"
+    ],
+    "candidats": [
+     "REL",
+     "exciting"
+    ],
+    "choisi": "book",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r035",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "she talks about",
+    "cibles": [
+     "film"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r074",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that you read",
+    "cibles": [
+     "book"
+    ],
+    "candidats": [
+     "REL",
+     "long"
+    ],
+    "choisi": "book",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r075",
+    "split": "test",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "where we live",
+    "cibles": [
+     "city"
+    ],
+    "candidats": [
+     "REL",
+     "beautiful"
+    ],
+    "choisi": "city",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r114",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that we saw",
+    "cibles": [
+     "film"
+    ],
+    "candidats": [
+     "REL",
+     "long"
+    ],
+    "choisi": "film",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r115",
+    "split": "test",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "where I was born",
+    "cibles": [
+     "house"
+    ],
+    "candidats": [
+     "REL",
+     "small"
+    ],
+    "choisi": "house",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r153",
+    "split": "test",
+    "source": "reel",
+    "langue": "en",
+    "type": "GP",
+    "span": "for the bus",
+    "cibles": [
+     "wait"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r204",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "who speaks",
+    "cibles": [
+     "man"
+    ],
+    "candidats": [
+     "REL",
+     "is"
+    ],
+    "choisi": "man",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r206",
+    "split": "dev",
+    "source": "reel",
+    "langue": "fr",
+    "type": "REL",
+    "span": "que j'ai vu",
+    "cibles": [
+     "chat"
+    ],
+    "candidats": [
+     "REL",
+     "dormait"
+    ],
+    "choisi": "chat",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r214",
+    "split": "test",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that I read",
+    "cibles": [
+     "book"
+    ],
+    "candidats": [
+     "REL",
+     "good"
+    ],
+    "choisi": "book",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r217",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "whom I mention",
+    "cibles": [
+     "student"
+    ],
+    "candidats": [
+     "REL",
+     "absent"
+    ],
+    "choisi": "student",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r220",
+    "split": "test",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that sleeps",
+    "cibles": [
+     "cat"
+    ],
+    "candidats": [
+     "REL",
+     "black"
+    ],
+    "choisi": "cat",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r224",
+    "split": "dev",
+    "source": "reel",
+    "langue": "fr",
+    "type": "REL",
+    "span": "dont la voiture est rouge",
+    "cibles": [
+     "homme"
+    ],
+    "candidats": [
+     "REL",
+     "arrive"
+    ],
+    "choisi": "homme",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r236",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "where I live",
+    "cibles": [
+     "village"
+    ],
+    "candidats": [
+     "REL",
+     "small"
+    ],
+    "choisi": "village",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r239",
+    "split": "test",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "whose car is red",
+    "cibles": [
+     "man"
+    ],
+    "candidats": [
+     "REL",
+     "arrives"
+    ],
+    "choisi": "man",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r241",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "when we left",
+    "cibles": [
+     "day"
+    ],
+    "candidats": [
+     "REL",
+     "beautiful"
+    ],
+    "choisi": "day",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r243",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that we bought",
+    "cibles": [
+     "house"
+    ],
+    "candidats": [
+     "REL",
+     "old"
+    ],
+    "choisi": "house",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r246",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that barks",
+    "cibles": [
+     "dog"
+    ],
+    "candidats": [
+     "REL",
+     "mean"
+    ],
+    "choisi": "dog",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r248",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "whom you mention",
+    "cibles": [
+     "girl"
+    ],
+    "candidats": [
+     "REL",
+     "is"
+    ],
+    "choisi": "girl",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r250",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "where we go",
+    "cibles": [
+     "place"
+    ],
+    "candidats": [
+     "REL",
+     "far"
+    ],
+    "choisi": "place",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r255",
+    "split": "test",
+    "source": "reel",
+    "langue": "fr",
+    "type": "REL",
+    "span": "que j'ai achetée",
+    "cibles": [
+     "voiture"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r264",
+    "split": "test",
+    "source": "reel",
+    "langue": "fr",
+    "type": "SUB",
+    "span": "qu'il vient demain",
+    "cibles": [
+     "sais"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r273",
+    "split": "dev",
+    "source": "reel",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui pousse ici",
+    "cibles": [
+     "fleur"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r278",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that you eat",
+    "cibles": [
+     "bread"
+    ],
+    "candidats": [
+     "REL",
+     "fresh"
+    ],
+    "choisi": "bread",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r280",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that I bought",
+    "cibles": [
+     "car"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r283",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "who sings",
+    "cibles": [
+     "boy"
+    ],
+    "candidats": [
+     "REL",
+     "is"
+    ],
+    "choisi": "boy",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r285",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that we took",
+    "cibles": [
+     "table"
+    ],
+    "candidats": [
+     "REL",
+     "big"
+    ],
+    "choisi": "table",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r287",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that flies",
+    "cibles": [
+     "bird"
+    ],
+    "candidats": [
+     "REL",
+     "blue"
+    ],
+    "choisi": "bird",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r288",
+    "split": "test",
+    "source": "reel",
+    "langue": "en",
+    "type": "SUB",
+    "span": "that he comes tomorrow",
+    "cibles": [
+     "know"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "r289",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "where we live",
+    "cibles": [
+     "place"
+    ],
+    "candidats": [
+     "REL",
+     "quiet"
+    ],
+    "choisi": "place",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r291",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that is on the table",
+    "cibles": [
+     "book"
+    ],
+    "candidats": [
+     "REL",
+     "mine"
+    ],
+    "choisi": "book",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r293",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "whom I mention",
+    "cibles": [
+     "person"
+    ],
+    "candidats": [
+     "REL",
+     "here"
+    ],
+    "choisi": "person",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r297",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that grows here",
+    "cibles": [
+     "flower"
+    ],
+    "candidats": [
+     "REL",
+     "rare"
+    ],
+    "choisi": "flower",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r299",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "that we cross",
+    "cibles": [
+     "bridge"
+    ],
+    "candidats": [
+     "REL",
+     "old"
+    ],
+    "choisi": "bridge",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r300",
+    "split": "dev",
+    "source": "reel",
+    "langue": "en",
+    "type": "REL",
+    "span": "where she lives",
+    "cibles": [
+     "house"
+    ],
+    "candidats": [
+     "REL",
+     "small"
+    ],
+    "choisi": "house",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "r309",
+    "split": "test",
+    "source": "reel",
+    "langue": "fr",
+    "type": "SUB",
+    "span": "qu'il viendra",
+    "cibles": [
+     "viendra"
+    ],
+    "candidats": [
+     "structure la plus proche",
+     "Peut-être"
+    ],
+    "choisi": "viendra",
+    "cause": "SUB_verbe"
+   },
+   {
+    "id": "s010",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui nage",
+    "cibles": [
+     "chemin"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s027",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "GP",
+    "span": "il",
+    "cibles": [
+     "marche",
+     "village"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s032",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui crie",
+    "cibles": [
+     "village"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s035",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui ferme",
+    "cibles": [
+     "papier"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s037",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui marche",
+    "cibles": [
+     "Paul"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s044",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "SUB",
+    "span": "que ils crie",
+    "cibles": [
+     "nage"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s050",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui ouvre",
+    "cibles": [
+     "jardin"
+    ],
+    "candidats": [
+     "REL",
+     "rêve"
+    ],
+    "choisi": "jardin",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "s061",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui saute",
+    "cibles": [
+     "nuage"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s065",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui commence",
+    "cibles": [
+     "elle"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s069",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui crie",
+    "cibles": [
+     "canard"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s070",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui ferme",
+    "cibles": [
+     "canard"
+    ],
+    "candidats": [
+     "REL",
+     "finit"
+    ],
+    "choisi": "canard",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "s072",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui dessine",
+    "cibles": [
+     "chanson"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s075",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui ferme",
+    "cibles": [
+     "rivière"
+    ],
+    "candidats": [
+     "REL",
+     "ouvre"
+    ],
+    "choisi": "rivière",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "s112",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "SUB",
+    "span": "que Lucas ferme",
+    "cibles": [
+     "nage"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s114",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "SUB",
+    "span": "que les avocat compte",
+    "cibles": [
+     "dessine"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s115",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui observe",
+    "cibles": [
+     "fenêtre"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s125",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui compte",
+    "cibles": [
+     "renard"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s131",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui ferme",
+    "cibles": [
+     "chanson"
+    ],
+    "candidats": [
+     "REL",
+     "écoute"
+    ],
+    "choisi": "chanson",
+    "cause": "REL_antec"
+   },
+   {
+    "id": "s135",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui dessine",
+    "cibles": [
+     "fenêtre"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s141",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "REL",
+    "span": "qui trouve",
+    "cibles": [
+     "Emma"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s146",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "GP",
+    "span": "les jardin",
+    "cibles": [
+     "observe",
+     "montagne"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s148",
+    "split": "dev",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "GP",
+    "span": "les ancienne lettre",
+    "cibles": [
+     "nage",
+     "voyage"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   },
+   {
+    "id": "s160",
+    "split": "test",
+    "source": "synthetique",
+    "langue": "fr",
+    "type": "GP",
+    "span": "le renard",
+    "cibles": [
+     "nage",
+     "chemin"
+    ],
+    "candidats": [],
+    "choisi": "",
+    "cause": "span"
+   }
+  ]
+ },
+ "regles": {
+  "R1": {
+   "definition": "Antécédent à gauche. REL : tête du GN prédit le plus proche dont la fin <= début du REL. GP : même tête si la préposition initiale est génitive (de, du, des, d', of, from). Aucune tête interne de GP. Ajout dédupliqué, en fin de liste.",
+   "mode": "sous-classe locale HeuristiqueV8, ajout en fin de liste",
+   "dev": {
+    "cibles": 163,
+    "labels": 148,
+    "topk": 148,
+    "topk_strict": 148,
+    "taux": 0.908,
+    "taux_span": 1.0,
+    "echecs": 15,
+    "echecs_span": 15,
+    "echecs_couverture": 0
+   },
+   "test": {
+    "cibles": 76,
+    "labels": 64,
+    "topk": 63,
+    "topk_strict": 63,
+    "taux": 0.8289,
+    "taux_span": 0.9844,
+    "echecs": 13,
+    "echecs_span": 12,
+    "echecs_couverture": 1
+   },
+   "all": {
+    "cibles": 239,
+    "labels": 212,
+    "topk": 211,
+    "topk_strict": 211,
+    "taux": 0.8828,
+    "taux_span": 0.9953,
+    "echecs": 28,
+    "echecs_span": 27,
+    "echecs_couverture": 1
+   },
+   "par_type": {
+    "GP": {
+     "cibles": 96,
+     "labels": 91,
+     "topk": 91,
+     "taux": 0.9479,
+     "taux_span": 1.0
+    },
+    "REL": {
+     "cibles": 74,
+     "labels": 58,
+     "topk": 58,
+     "taux": 0.7838,
+     "taux_span": 1.0
+    },
+    "SUB": {
+     "cibles": 69,
+     "labels": 63,
+     "topk": 62,
+     "taux": 0.8986,
+     "taux_span": 0.9841
+    }
+   },
+   "par_langue": {
+    "en": {
+     "cibles": 88,
+     "labels": 83,
+     "topk": 83,
+     "taux": 0.9432,
+     "taux_span": 1.0
+    },
+    "fr": {
+     "cibles": 151,
+     "labels": 129,
+     "topk": 128,
+     "taux": 0.8477,
+     "taux_span": 0.9922
+    }
+   },
+   "par_source": {
+    "hand": {
+     "cibles": 13,
+     "labels": 12,
+     "topk": 12,
+     "taux": 0.9231,
+     "taux_span": 1.0
+    },
+    "reel": {
+     "cibles": 171,
+     "labels": 164,
+     "topk": 163,
+     "taux": 0.9532,
+     "taux_span": 0.9939
+    },
+    "synthetique": {
+     "cibles": 55,
+     "labels": 36,
+     "topk": 36,
+     "taux": 0.6545,
+     "taux_span": 1.0
+    }
+   },
+   "gains": {
+    "dev": 28,
+    "test": 6,
+    "all": 34
+   },
+   "pertes": {
+    "dev": 0,
+    "test": 0,
+    "all": 0
+   },
+   "ajouts": {
+    "total": 34,
+    "hits_cible": 34,
+    "precision": 1.0
+   },
+   "candidats": {
+    "base_moyenne": 2.434,
+    "base_max": 5,
+    "moyenne": 2.594,
+    "max": 5
+   },
+   "verdict": "retenue : 34 ajouts, 34 hits (100 %), +34 cibles, 0 perte."
+  },
+  "R2": {
+   "definition": "Repli verbal de la SUB : si aucun candidat de la liste n'est un verbe (`_est_verbe`), ajouter le verbe propre du span (`_verbe_dans`, repli dernier mot).",
+   "mode": "sous-classe locale HeuristiqueV8, ajout en fin de liste",
+   "dev": {
+    "cibles": 163,
+    "labels": 148,
+    "topk": 120,
+    "topk_strict": 120,
+    "taux": 0.7362,
+    "taux_span": 0.8108,
+    "echecs": 43,
+    "echecs_span": 15,
+    "echecs_couverture": 28
+   },
+   "test": {
+    "cibles": 76,
+    "labels": 64,
+    "topk": 58,
+    "topk_strict": 58,
+    "taux": 0.7632,
+    "taux_span": 0.9062,
+    "echecs": 18,
+    "echecs_span": 12,
+    "echecs_couverture": 6
+   },
+   "all": {
+    "cibles": 239,
+    "labels": 212,
+    "topk": 178,
+    "topk_strict": 178,
+    "taux": 0.7448,
+    "taux_span": 0.8396,
+    "echecs": 61,
+    "echecs_span": 27,
+    "echecs_couverture": 34
+   },
+   "par_type": {
+    "GP": {
+     "cibles": 96,
+     "labels": 91,
+     "topk": 89,
+     "taux": 0.9271,
+     "taux_span": 0.978
+    },
+    "REL": {
+     "cibles": 74,
+     "labels": 58,
+     "topk": 26,
+     "taux": 0.3514,
+     "taux_span": 0.4483
+    },
+    "SUB": {
+     "cibles": 69,
+     "labels": 63,
+     "topk": 63,
+     "taux": 0.913,
+     "taux_span": 1.0
+    }
+   },
+   "par_langue": {
+    "en": {
+     "cibles": 88,
+     "labels": 83,
+     "topk": 57,
+     "taux": 0.6477,
+     "taux_span": 0.6867
+    },
+    "fr": {
+     "cibles": 151,
+     "labels": 129,
+     "topk": 121,
+     "taux": 0.8013,
+     "taux_span": 0.938
+    }
+   },
+   "par_source": {
+    "hand": {
+     "cibles": 13,
+     "labels": 12,
+     "topk": 10,
+     "taux": 0.7692,
+     "taux_span": 0.8333
+    },
+    "reel": {
+     "cibles": 171,
+     "labels": 164,
+     "topk": 136,
+     "taux": 0.7953,
+     "taux_span": 0.8293
+    },
+    "synthetique": {
+     "cibles": 55,
+     "labels": 36,
+     "topk": 32,
+     "taux": 0.5818,
+     "taux_span": 0.8889
+    }
+   },
+   "gains": {
+    "dev": 0,
+    "test": 1,
+    "all": 1
+   },
+   "pertes": {
+    "dev": 0,
+    "test": 0,
+    "all": 0
+   },
+   "ajouts": {
+    "total": 19,
+    "hits_cible": 1,
+    "precision": 0.0526
+   },
+   "candidats": {
+    "base_moyenne": 2.434,
+    "base_max": 5,
+    "moyenne": 2.524,
+    "max": 5
+   },
+   "verdict": "optionnelle : 19 ajouts, 1 hit (r309), neutre sur dev, +1 sur test."
+  },
+  "R3": {
+   "definition": "Voisinage verbal : ajouter les tokens POS VERB à distance <= 3 tokens du segment (REL/SUB/GP).",
+   "dev": {
+    "cibles": 163,
+    "labels": 148,
+    "topk": 120,
+    "topk_strict": 120,
+    "taux": 0.7362,
+    "taux_span": 0.8108,
+    "echecs": 43,
+    "echecs_span": 15,
+    "echecs_couverture": 28
+   },
+   "test": {
+    "cibles": 76,
+    "labels": 64,
+    "topk": 57,
+    "topk_strict": 57,
+    "taux": 0.75,
+    "taux_span": 0.8906,
+    "echecs": 19,
+    "echecs_span": 12,
+    "echecs_couverture": 7
+   },
+   "all": {
+    "cibles": 239,
+    "labels": 212,
+    "topk": 177,
+    "topk_strict": 177,
+    "taux": 0.7406,
+    "taux_span": 0.8349,
+    "echecs": 62,
+    "echecs_span": 27,
+    "echecs_couverture": 35
+   },
+   "gains": {
+    "dev": 0,
+    "test": 0,
+    "all": 0
+   },
+   "pertes": {
+    "dev": 0,
+    "test": 0,
+    "all": 0
+   },
+   "ajouts": {
+    "total": 2,
+    "hits_cible": 0,
+    "precision": 0.0
+   },
+   "candidats": {
+    "base_moyenne": 2.434,
+    "base_max": 5,
+    "moyenne": 2.443,
+    "max": 5
+   },
+   "verdict": "dominée : 2 ajouts, 0 gain ; le POS tague « viendra » NOUN (r309), la règle ne le voit pas."
+  },
+  "R1+R2": {
+   "definition": "R1 puis R2, même ordre, ajouts en fin de liste.",
+   "mode": "sous-classe locale HeuristiqueV8, ajout en fin de liste",
+   "dev": {
+    "cibles": 163,
+    "labels": 148,
+    "topk": 148,
+    "topk_strict": 148,
+    "taux": 0.908,
+    "taux_span": 1.0,
+    "echecs": 15,
+    "echecs_span": 15,
+    "echecs_couverture": 0
+   },
+   "test": {
+    "cibles": 76,
+    "labels": 64,
+    "topk": 64,
+    "topk_strict": 64,
+    "taux": 0.8421,
+    "taux_span": 1.0,
+    "echecs": 12,
+    "echecs_span": 12,
+    "echecs_couverture": 0
+   },
+   "all": {
+    "cibles": 239,
+    "labels": 212,
+    "topk": 212,
+    "topk_strict": 212,
+    "taux": 0.887,
+    "taux_span": 1.0,
+    "echecs": 27,
+    "echecs_span": 27,
+    "echecs_couverture": 0
+   },
+   "par_type": {
+    "GP": {
+     "cibles": 96,
+     "labels": 91,
+     "topk": 91,
+     "taux": 0.9479,
+     "taux_span": 1.0
+    },
+    "REL": {
+     "cibles": 74,
+     "labels": 58,
+     "topk": 58,
+     "taux": 0.7838,
+     "taux_span": 1.0
+    },
+    "SUB": {
+     "cibles": 69,
+     "labels": 63,
+     "topk": 63,
+     "taux": 0.913,
+     "taux_span": 1.0
+    }
+   },
+   "par_langue": {
+    "en": {
+     "cibles": 88,
+     "labels": 83,
+     "topk": 83,
+     "taux": 0.9432,
+     "taux_span": 1.0
+    },
+    "fr": {
+     "cibles": 151,
+     "labels": 129,
+     "topk": 129,
+     "taux": 0.8543,
+     "taux_span": 1.0
+    }
+   },
+   "par_source": {
+    "hand": {
+     "cibles": 13,
+     "labels": 12,
+     "topk": 12,
+     "taux": 0.9231,
+     "taux_span": 1.0
+    },
+    "reel": {
+     "cibles": 171,
+     "labels": 164,
+     "topk": 164,
+     "taux": 0.9591,
+     "taux_span": 1.0
+    },
+    "synthetique": {
+     "cibles": 55,
+     "labels": 36,
+     "topk": 36,
+     "taux": 0.6545,
+     "taux_span": 1.0
+    }
+   },
+   "gains": {
+    "dev": 28,
+    "test": 7,
+    "all": 35
+   },
+   "pertes": {
+    "dev": 0,
+    "test": 0,
+    "all": 0
+   },
+   "ajouts": {
+    "total": 53,
+    "hits_cible": 35,
+    "precision": 0.6604
+   },
+   "candidats": {
+    "base_moyenne": 2.434,
+    "base_max": 5,
+    "moyenne": 2.684,
+    "max": 5
+   },
+   "verdict": "recommandée si l'on refuse l'invariant de cohérence : +35 cibles, 212/239, 53 ajouts."
+  }
+ },
+ "borne_coherence": {
+  "definition": "Invariant de cohérence : si la cible choisie n'est pas dans les candidats, l'ajouter en fin de liste. Ce n'est pas une règle linguistique : elle utilise la réponse déjà choisie.",
+  "base_plus_invariant": {
+   "all": {
+    "cibles": 239,
+    "labels": 212,
+    "topk": 212,
+    "taux": 0.887,
+    "taux_span": 1.0
+   },
+   "dev": {
+    "cibles": 163,
+    "labels": 148,
+    "topk": 148,
+    "taux": 0.908,
+    "taux_span": 1.0
+   },
+   "test": {
+    "cibles": 76,
+    "labels": 64,
+    "topk": 64,
+    "taux": 0.8421,
+    "taux_span": 1.0
+   },
+   "ajouts": 35,
+   "candidats_moyens": 2.599,
+   "candidats_max": 5
+  },
+  "R1_plus_invariant": {
+   "all": {
+    "cibles": 239,
+    "labels": 212,
+    "topk": 212,
+    "taux": 0.887,
+    "taux_span": 1.0
+   },
+   "dev": {
+    "cibles": 163,
+    "labels": 148,
+    "topk": 148,
+    "taux": 0.908,
+    "taux_span": 1.0
+   },
+   "test": {
+    "cibles": 76,
+    "labels": 64,
+    "topk": 64,
+    "taux": 0.8421,
+    "taux_span": 1.0
+   },
+   "ajouts": 1,
+   "candidats_moyens": 2.599,
+   "candidats_max": 5
+  },
+  "lecture": "35 ajouts suffisent à faire 212/239 : le top-k est borné par la cohérence de la liste, pas par la décision (exact 212/212). R1 en fournit 34 sans regarder la cible ; l'invariant couvre le 1 restant (r309). L'invariant seul est tautologique : il ne doit pas être présenté comme un résultat."
+ },
+ "controles_negatifs": {
+  "dispositif": "R1+R2 ; 212 labels. Permutation croisée = la liste d'un label vient du label suivant (1000 tirages) ; hasard global = k tirages dans les 239 cibles ; hasard typé = k tirages dans les cibles de même langue et même type ; permutation/hasard des ajouts = la base est conservée, seuls les ajouts sont permutés/tirés (1000/2000 tirages).",
+  "ref_R1_R2": {
+   "dev": {
+    "labels": 148,
+    "topk": 148,
+    "taux_span": 1.0
+   },
+   "test": {
+    "labels": 64,
+    "topk": 64,
+    "taux_span": 1.0
+   },
+   "all": {
+    "labels": 212,
+    "topk": 212,
+    "taux_span": 1.0
+   }
+  },
+  "ordre_intra_liste": {
+   "dev": {
+    "labels": 148,
+    "topk": 148,
+    "taux_span": 1.0
+   },
+   "test": {
+    "labels": 64,
+    "topk": 64,
+    "taux_span": 1.0
+   },
+   "all": {
+    "labels": 212,
+    "topk": 212,
+    "taux_span": 1.0
+   }
+  },
+  "permutation_croisee": {
+   "dev": {
+    "moyenne": 1.22,
+    "p2_5": 0,
+    "p97_5": 4
+   },
+   "test": {
+    "moyenne": 0.6,
+    "p2_5": 0,
+    "p97_5": 3
+   },
+   "all": {
+    "moyenne": 1.82,
+    "p2_5": 0,
+    "p97_5": 5
+   }
+  },
+  "hasard_global": {
+   "dev": {
+    "moyenne": 3.66,
+    "p2_5": 1,
+    "p97_5": 7
+   },
+   "test": {
+    "moyenne": 1.83,
+    "p2_5": 0,
+    "p97_5": 5
+   },
+   "all": {
+    "moyenne": 5.49,
+    "p2_5": 2,
+    "p97_5": 10
+   }
+  },
+  "hasard_type_langue": {
+   "dev": {
+    "moyenne": 16.84,
+    "p2_5": 10,
+    "p97_5": 24
+   },
+   "test": {
+    "moyenne": 7.52,
+    "p2_5": 3,
+    "p97_5": 13
+   },
+   "all": {
+    "moyenne": 24.36,
+    "p2_5": 16,
+    "p97_5": 33
+   }
+  },
+  "permutation_ajouts": {
+   "dev": {
+    "moyenne": 120.08,
+    "p2_5": 120,
+    "p97_5": 121
+   },
+   "test": {
+    "moyenne": 57.03,
+    "p2_5": 57,
+    "p97_5": 58
+   },
+   "all": {
+    "moyenne": 177.11,
+    "p2_5": 177,
+    "p97_5": 178
+   }
+  },
+  "hasard_ajouts": {
+   "dev": {
+    "moyenne": 120.24,
+    "p2_5": 120,
+    "p97_5": 122
+   },
+   "test": {
+    "moyenne": 57.06,
+    "p2_5": 57,
+    "p97_5": 58
+   },
+   "all": {
+    "moyenne": 177.3,
+    "p2_5": 177,
+    "p97_5": 179
+   }
+  },
+  "lecture": "Le top-k ignore l'ordre : brasser chaque liste laisse 212/212. Une liste prise à un autre label tombe à 1,82/239 ; le hasard global à 5,49 ; le hasard typé à 24,36. Surtout, permuter ou tirer les seuls ajouts ramène à 177,1–177,3 : les +35 viennent des ajouts précis, pas du seul fait d'allonger les listes."
+ },
+ "gold_gele": {
+  "base": {
+   "cibles": 239,
+   "labels": 212,
+   "topk": 177,
+   "topk_strict": 177,
+   "taux": 0.7406,
+   "taux_span": 0.8349,
+   "echecs": 62,
+   "echecs_span": 27,
+   "echecs_couverture": 35
+  },
+  "R1+R2": {
+   "cibles": 239,
+   "labels": 212,
+   "topk": 212,
+   "topk_strict": 212,
+   "taux": 0.887,
+   "taux_span": 1.0,
+   "echecs": 27,
+   "echecs_span": 27,
+   "echecs_couverture": 0
+  }
+ },
+ "cinq_motifs": [
+  "1. L'antécédent des REL n'est jamais ajouté : 32 des 35 échecs de couverture. `prec = s` (l. 1148 et 1175) est exécuté avant `_candidats_precedent(texte, s, prec)` (l. 1154/1181) : le helper reçoit le segment lui-même, jamais le GN précédent. La branche S (l. 1122) ne l'appelle pas du tout. Ce n'est pas un manque de règle, c'est un site d'appel.",
+  "2. Le choix est déjà correct 212 fois sur 212 : exact 212/212. Le top-k rate parce que la liste ne contient pas le choix, pas parce que l'attachement choisit mal. Les 62 échecs sont un problème de représentation, pas de décision.",
+  "3. Les 34 gains de R1 sont exactement les 34 antécédents manquants, avec 34 ajouts et 34 hits (100 %) : la règle est récupérable sans consulter la cible, à partir des seuls GN prédits. 28 gains sur dev (28/28 échecs de couverture), 6 sur test.",
+  "4. Le GP génitif et la SUB sont des cas résiduels : 2 GP hand (g002, g006) où `_repli_cible_gp` connaît déjà la convention mais pas les candidats ; 1 SUB (r309) où le verbe propre « viendra » n'est candidat nulle part et où le POS le tague NOUN. Le verbe de la principale, lui, est déjà couvert par `_verbes_proches` (0 ajout, 0 gain).",
+  "5. Le plafond est la couverture de span, pas les candidats : 27 échecs (43,5 %) sont des spans non prédits, dont 19 synthétiques. Après R1+R2, 212/212 labels ont la cible dans les candidats, mais 212/239 seulement des cibles ont un label : réel (hand+reel) 176/184 = 0,9565, synthétique 36/55 = 0,6545."
+ ],
+ "limites": [
+  "Le split dev/test n'est pas parfaitement aveugle : R1 a été dessinée après avoir regardé les 62 échecs, test compris. Elle reste une réparation du helper existant, et le test confirme +6/76 (signe exact bilatéral p ≈ 0,031 pour R1 ; p ≈ 0,016 pour R1+R2).",
+  "R2 est neutre sur dev et ne gagne que sur un cas de test (r309) : c'est une hypothèse, pas un résultat validé. Son coût est de 19 ajouts pour 1 hit.",
+  "Le top-k est insensible à l'ordre : brasser les listes ne change rien. Il mesure la présence, pas le classement. 100 % sur les spans ne veut pas dire que la bonne cible est en tête.",
+  "L'invariant `cible ∈ candidats` ferait 212/239 à lui seul (35 ajouts) : le top-k est alors circulaire. C'est pourquoi la mesure utile est R1 (34 hits sans la cible), pas l'invariant.",
+  "R1 dépend des GN prédits : si l'antécédent n'est pas un GN labellisé, la règle ne l'ajoute pas. Les 32 REL réparées avaient toutes un GN prédit à gauche ; ce n'est pas garanti sur un nouveau corpus.",
+  "Le gold fait 612 phrases / 239 cibles ; le test 76 cibles. Les 6–7 gains de test sont un petit échantillon.",
+  "19 des 27 spans manqués sont synthétiques : le plafond 0,887 est en partie un artefact du gold synthétique ; sur réel (hand+reel), le plafond est 176/184 = 0,9565."
+ ],
+ "recommandation": {
+  "regle": "R1 + R2 (ou R1 + invariant de cohérence si l’on veut 35 ajouts au lieu de 53)",
+  "topk_all": "212/239 = 0,8870 (plafond de couverture)",
+  "topk_sur_spans": "212/212 = 1,0",
+  "topk_dev": "148/163 = 0,9080",
+  "topk_test": "64/76 = 0,8421",
+  "exact": "212/212 = 1,0 (inchangé)",
+  "cout": "+53 candidats sur 212 labels (R1+R2), +0,25 par label, max 5 inchangé ; R1 seul : +34, +0,16 par label.",
+  "prochaine_marche": "couverture de span : 27 cibles sans label (19 synthétiques, 8 réelles/hand). R1/R2 n'y peuvent rien ; c'est le chantier du chunker, pas des candidats.",
+  "ordre": [
+   "1. corriger le site d’appel `prec = s` et appeler `_candidats_precedent` avec le segment précédent (R1)",
+   "2. étendre la convention génitive de `_repli_cible_gp` aux candidats (R1, 2 GP)",
+   "3. R2 en repli si l’on refuse l’invariant de cohérence",
+   "4. invariant `cible ∈ candidats` comme garde-fou, pas comme résultat",
+   "5. attaquer les 27 spans (chunker)"
+  ],
+  "mesure_site_appel": "correction stricte du précédent (REL seulement) : 209/239 (+32) ; R1 (GN à gauche + GP génitif) : 211/239 (+34) ; R1+R2 : 212/239 (+35)"
+ },
+ "fichiers": {
+  "rapport": "reports/rapport-topk-v8.md",
+  "json": "reports/pensee-topk-v8.json",
+  "code_lu": [
+   "tools/bloc_linguistique.py",
+   "tools/tests/linguistique/evaluer_gold.py",
+   "tools/tests/linguistique/gold_split.py"
+  ]
+ }
+}

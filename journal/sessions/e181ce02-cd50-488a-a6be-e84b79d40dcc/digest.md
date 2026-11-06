@@ -47355,3 +47355,459 @@ jeu 05 nov 2026 21:54:41 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"^- \\*\\*Fait\\*\\* : B13 \\*\\*183/183\\*\\*.*$\",\n\"- **Fait** : B13 **183/183** ; **attachement 212/212 (1,0000)** (f … [741 caractères tronqués]`
+
+  ```
+Fait à jour
+71:- **Fait** : B13 **183/183** ; **attachement 212/212 (1,0000)** (fr 1,0, en 1,0), **couverture 0,887**, **F1 0,572**, **27 spans** ; bilan au journal.
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2257]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2257", "timeout_ms": 600000, "wait": true}`
+
+  ```
+21 files changed, 2717 insertions(+), 82 deletions(-)
+COMMIT OK 1
+b551cf3b ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E \"audit-r1r3|topk-v8|coherence-fiches-v8\"", "description": "Attendre la vague 6 (4)", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2261]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2261", "timeout_ms": 300000, "wait": true}`
+
+  ```
+jeu 05 nov 2026 22:07:26 EST
+pensee-topk-v8.json
+rapport-audit-r1r3.md
+rapport-topk-v8.md
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2261 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "audit-r1r3|topk-v8|coherence-fiches-v8") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Deux livraisons (audit R1/R3, top-k) : je lis les verdicts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -16 reports/rapport-audit-r1r3.md; echo \"=== TOP-K :\"; head -14 reports/rapport-topk-v8.md", "description": "Lire les deux verdicts"}`
+
+  ```
+# Audit R1/R2/R3 — les chiffres rejouent, l'attribution des règles ne rejoue pas
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit audité** : `f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b` (parent `69bd865ec1bae1958b6f617bde4bf685a15d7d67`) ·
+> **Date** : 2026-11-05 · **Verdict** : chiffres ✅, règles ❌.
+> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+> [`pensee-audit-r1r3.json`](pensee-audit-r1r3.json).
+
+**En une phrase.** Les **valeurs** de la fiche [`rapport-pensee-r1r3.md`](rapport-pensee-r1r3.md)
+et de [`pensee-r1r3.json`](pensee-r1r3.json) rejouent **toutes** au chiffre près (212/212,
+0,8870, 0,5763, 27 spans, 177 top-k, 183/183 portes). Mais la **table des règles** ne rejoue
+pas : elle annonce **+27 exacts** (donc 222), alors que le code livré en produit **+24 gains
+bruts pour 7 pertes**, soit **+17** (212). R1a perd **6 spans français**, R1c en perd **1**,
+R2 en perd **1**, R3a est **inerte**, R3b n'est **pas intégré**. Sur les 27 spans restants,
+**10 ne sont pas inatteignables** : 7 régressions nouvelles et 3 gains A17 non intégrés.
+
+=== TOP-K :
+# B13 — le top-k de l'attachement : 0,7406 → 0,8870, et l
+… [1010 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le subagent top-k trouve un bug : les candidats ne voient jamais le segment précédent. Je vérifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'prec = None' tools/bloc_linguistique.py | head -1 | cut -d: -f1),+30p\" tools/bloc_linguistique.py", "description": "Voir la boucle union"}`
+
+  ```
+prec = None
+            for s in simples:
+                meta = {"role": s["role"], "niveau": s["niveau"]}
+                cible = (self._cible_precedent(texte, s, prec, verbes)
+                         or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                         or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
+                cible = self._cible_hors_span(texte, s, gvs_s, cible)
+                cible = self._repli_verbe_propre(texte, s, cible)
+                prec = s
+                if cible:
+                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+                etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
+                                            s["fin"], self.nom, 0.35,
+                                            candidats=([s["type"]]
+                                                       + self._candidats_precedent(texte, s, prec)
+                                                       + self._verbes_proches(
+                                                           texte, s, gvs_s, verbes=verbes, cache=cache_gv)),
+                                            langue=l
+… [720 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# le motif : repli_verbe_propre, prec = s, if cible, etiquettes.append(...)\nmotif = '''                cible = self._repli_verbe_pr … [1118 caractères tronqués]`
+
+  ```
+motifs 2 | fermetures 2
+syntaxe OK
+exact 212 / 212 | topk 209 / 212 | couv 0.887 | F1 0.572
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug corrigé : top-k **177 → 209/212**. Je recale les portes et je fige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après le correctif top-k", "timeoutMs": 5400000}`
+
+  ```
+❌ T162 candidats verbes  candidats : top-k 209/239 (0.8745), tête 209/212
+  ❌ T163 échecs attachement échecs : 27 de span, 3 de cible (33 avant les correctifs)
+  ❌ T167 dénominateur      dénominateur : spans 1.0 / 0.9858 / 1.0
+  ❌ T173 top-k strict      top-k : 209 sous-chaîne, 209 exacts (0.9858)
+  ❌ T177 candidats têtes   candidats têtes : 209/212 (0.9858)
+  178/183 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent fff7ca81-5684-4c2e-b7c5-a8f3c012cc49 sent a message: 
+MISSION TOP-K v8 TERMINÉE (état f908d7b0, branche s/v7).
+
+Fichiers neufs, seulement deux (untracked, aucun commit, aucun fichier existant modifié) :
+- reports/rapport-topk-v8.md
+- reports/pensee-topk-v8.json
+Simulation par sous-classe locale (HeuristiqueV8) hors dépôt ; aucun code du dépôt touché.
+
+ÉTAT MESURÉ : 212 labels, exact 212/212, top-k 177/239 = 0,7406 (dev 120/163 = 0,7362 ; test 57/76 = 0,75). 62 échecs = 27 spans non prédits + 35 échecs de couverture. Top-k strict = top-k sous-chaîne = 177 (pas d'artefact).
+
+LES 5 MOTIFS :
+1. Antécédent REL absent = 32/35 échecs de couverture (26 EN + 6 FR), listes type ["REL","dormait"]. Cause précise : site d'appel — `prec = s` (l.1148 et 1175) est exécuté AVANT `_candidats_precedent(texte, s, prec)` (l.1154/1181), donc le helper reçoit le segment lui-même ; la branche REL→GN est morte. La branche S (l.1122) ne l'appelle pas. Ce n'est pas un manque de règle.
+2. Le choix est déjà bon 212/212 : le top-k rate par incohérence de liste (cible choisie absente des candidats), pas par décision d'attachement.
+3. R1 (antécédent GN à gauche pour REL ; GP génitif de/du/des/d'/of/from) : 34 ajouts, 34 hits = 100 %, +28 dev, +6 test, top-k 211/239. Corrige 34/35 échecs de couverture. La correction stricte du site d'appel (segment précédent, REL seul) donne 209/239 (+32).
+4. Résidus : 2 GP hand (g002, g006) — la convention génitive existe dans `_repli_cible_gp` pour la cible mais pas pour les candidats ; 1 SUB r309 (« Peut-être qu'il viendra ») — verbe propre « viendra » absent, POS le tague NOUN, `_verbe_dans` le retrouve par son repli dernier mot. Le « verbe de la principale » suggéré est déjà couvert par `_verbes_proches` : 0 ajout, 0 gain.
+5. Plafond = couverture de span : 27 spans (REL 16, SUB 6, GP 5 ; 19 synthétiques, 7 reel, 1 hand). Après R1+R2, 212/212 labels couverts mais 212/239 cibles. Réel hand+reel : 145/184 = 0,7880 → 176/184 = 0,9565. Synthétique : 32/55 = 0,5818 → 36/55 = 0,6545. La suite est le chunker, pas les candidats.
+
+TOP-K DEV/TEST PAR RÈGLE (pertes = 0 partout, complétion additive ; exact inchangé 212/212) :
+- R1 : dev 148/163 (+28), test 63/76 (+6), all 211/239 (+34) ; 34 ajouts/34 hits ; candidats 2,594 (max 5, base 2,434/5).
+- R2 (verbe propre de SUB si aucun candidat verbal) : dev 120/163 (+0), test 58/76 (+1), all 178/239 ; 19 ajouts/1 hit (5,3 %) ; 2,524.
+- R3 (voisinage POS VERB ≤3 tokens) : dev 120, test 57, all 177 ; 2 ajouts/0 hit ; dominée.
+- R1+R2 : dev 148/163 (+28), test 64/76 (+7), all 212/239 (+35) ; 53 ajouts/35 hits ; 2,684 (max 5).
+- Gold gelé 602 : mêmes chiffres (177 → 212).
+
+CONTRÔLES NÉGATIFS (sur R1+R2, 212 labels) : permutation croisée des listes 1,82/239 ; hasard global 5,49 ; hasard typé langue+type 24,36 ; permutation des seuls ajouts 177,11 ; hasard des seuls ajouts 177,30 (retour à la base) ; brassage intra-liste 212 (top-k insensible à l'ordre). Les +35 viennent donc des ajouts précis, pas de l'allongement des listes.
+
+LIMITE IMPORTANTE : l'invariant `cible ∈ candidats` ferait 212/239 à lui seul en 35 ajouts — le top-k est ici une mesure de cohérence de liste, pas de qualité de décision. R1 + invariant = 35 ajouts/35 hits (212) ; R1+R2 = 53. R2 n'est pas validée sur dev (+0) ; son seul gain est r309 (test), à traiter comme hypothèse.
+
+RECOMMANDATION : 1) corriger le site d'appel `prec = s` + appeler `_candidats_precedent` avec le segment précédent (et dans la branche S) — c'est R1 pour les REL (+32) ; 2) étendre la convention génitive de `_repli_cible_gp` aux candidats (+2 GP) ; 3) R2 optionnelle si l'on refuse l'invariant ; 4) garder `cible ∈ candidats` comme garde-fou, pas comme résultat ; 5) prochain chantier = les 27 spans (chunker). Ne pas lire 0,887 comme un attachement résolu : l'exact était déjà 1,0.
+
+ATTENTION : `python3 tools/revue_documentation.py` signale 2 anomalies de compteurs (en-cours.md dit 667 fichiers/760 JSON, disque 669/762). Mes deux fichiers en expliquent une partie, d'autres fichiers non suivis ont bougé en parallèle ; je n'ai pas touché à docs/pilotage/en-cours.md conformément aux consignes. `porte-tableaux.sh` sur reports/ passe (tableaux + 3405 liens OK).
+
+### 🤖 Assistant
+
+⏵ J'ajoute la convention génitive aux candidats (+2 GP) et je recale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        if segment.get(\"type\") == \"SUB\" and precedent.get(\"type\") == \"GV\":\n            v = Heuristique._verbe_da … [1334 caractères tronqués]`
+
+  ```
+candidats génitifs
+exact 212 / 212 | topk 211 | couv 0.887 | F1 0.572
+  ```
+
+### 👤 Utilisateur
+
+Background subagent fff7ca81-5684-4c2e-b7c5-a8f3c012cc49 finished and will do no further work unless you send it more.
+Its closing message:
+## Résultat — top-k v8
+
+Deux fichiers neufs, aucun existant modifié, aucun commit :
+- [`reports/rapport-topk-v8.md`](reports/rapport-topk-v8.md)
+- [`reports/pensee-topk-v8.json`](reports/pensee-topk-v8.json)
+
+Mesure de départ confirmée : **212 labels, exact 212/212, top-k 177/239 = 0,7406** (dev 120/163 ; test 57/76). Les **62 échecs** se séparent en **27 spans non prédits** et **35 échecs de couverture de candidats**.
+
+### Les 5 motifs principaux
+
+1. **Antécédent REL absent = 32/35 échecs de couverture** (26 EN + 6 FR). Cause précise : `prec = s` (l. 1148 et 1175) est exécuté **avant** `_candidats_precedent(texte, s, prec)` (l. 1154/1181) ; le helper reçoit le segment lui-même, la branche `REL → GN` est morte. La branche S ne l'appelle pas.
+2. **Le choix est déjà bon 212/212** : le top-k rate par **incohérence de liste** (cible choisie absente des candidats), pas par décision d'attachement.
+3. **R1 répare 34/35** avec les seuls GN prédits : **34 ajouts, 34 hits (100 %)**, +28 dev, +6 test.
+4. **Résidus** : 2 GP hand (g002, g006), où la convention génitive existe dans `_repli_cible_gp` pour la cible mais pas pour les candidats ; 1 SUB r309 où « viendra » est tagué NOUN. Le « verbe de la principale » est déjà couvert par `_verbes_proches` (0 ajout, 0 gain).
+5. **Plafond = couverture de span** : 27 spans (REL 16, SUB 6, GP 5 ; 19 synthétiques, 7 reel, 1 hand). Réel : 145/184 = 0,7880 → **176/184 = 0,9565**. Synthétique : 32/55 → **36/55 = 0,6545**.
+
+### Top-k dev/test par règle
+
+| règle | dev | test | all | ajouts / hits |
+|---|---:|---:|---:|---:|
+| base | 120/163 | 57/76 | 177/239 | — |
+| **R1** antécédent REL + GP génitif | **148/163 (+28)** | **63/76 (+6)** | **211/239 (+34)** | 34 / 34 |
+| R2 verbe propre de SUB (si aucun candidat verbal) | 120/163 (0) | 58/76 (+1) | 178/239 (+1) | 19 / 1 |
+| R3 voisinage POS VERB ≤ 3 | 120/163 (0) | 57/76 (0) | 177/239 (0) | 2 / 0 |
+| **R1+R2** | **148/163 (+28)** | **64/76 (+7)** | **212/239 (+35)** | 53 / 35 |
+
+Pertes **0** partout (complétion additive) ; exact inchangé **212/212**. Coût : 2,434 → 2,684 candidats/label (max 5 inchangé).
+
+### Contrôles négatifs
+
+Permutation croisée des listes **1,82/239** ; hasard global **5,49** ; hasard typé langue+type **24,36** ; permutation des seuls ajouts **177,11** ; hasard des seuls ajouts **177,30** — retour à la base. Brasser l'ordre intra-liste laisse **212** : le top-k est insensible à l'ordre, il ne mesure pas le classement.
+
+### Recommandation
+
+1. Corriger le site d'appel `prec = s` et passer le segment précédent à `_candidats_precedent` (R1 pour les REL, +32).
+2. Étendre la convention génitive de `_repli_cible_gp` aux candidats (+2 GP) → **211/239**.
+3. R2 optionnelle (+1, 19 ajouts) **ou** invariant `cible ∈ candidats` (1 ajout après R1) → **212/239**. Garder l'invariant comme **garde-fou**, pas comme résultat : seul, il ferait 212/239 en 35 ajouts, ce qui montre que le top-k est ici une mesure de cohérence de liste.
+4. Prochain chantier : les **27 spans** (chunker), pas les candidats. Ne pas lire 0,887 comme un attachement résolu : l'exact était déjà 1,0.
+
+`porte-tableaux.sh` passe sur `reports/` (tableaux + liens). `revue_documentation.py` signale 2 anomalies de **compteurs** dans `en-cours.md` (667/760 annoncés vs 669/762 sur disque) ; mes deux fichiers en expliquent une partie, d'autres fichiers non suivis ont bougé en parallèle, et je n'ai pas touché à `docs/pilotage/`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après les candidats génitifs", "timeoutMs": 5400000}`
+
+  ```
+❌ T162 candidats verbes  candidats : top-k 211/239 (0.8828), tête 211/212
+  ❌ T163 échecs attachement échecs : 27 de span, 1 de cible (33 avant les correctifs)
+  ❌ T167 dénominateur      dénominateur : spans 1.0 / 0.9953 / 1.0
+  ❌ T173 top-k strict      top-k : 211 sous-chaîne, 211 exacts (0.9953)
+  ❌ T177 candidats têtes   candidats têtes : 211/212 (0.9953)
+  178/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('return (a[\"topk\"] == 177 and th[\"topk\"] == 178 and a[\"top1\"] == 212), (','return (a[\"topk\"] == 211 and th[\"topk\"] == 211 an … [1207 caractères tronqués]`
+
+  ```
+5 / 5
+  ❌ T173 top-k strict      top-k : 211 sous-chaîne, 211 exacts (0.9953)
+  182/183 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent c5910cba-e10a-4e08-8ac7-449ce150899c sent a message: 
+Audit R1/R2/R3 terminé au commit f908d7b0. Deux fichiers neufs écrits, aucun commit, aucun fichier existant modifié par moi :
+- reports/rapport-audit-r1r3.md
+- reports/pensee-audit-r1r3.json
+
+REJEU : toutes les valeurs de la fiche/du JSON rejouent au chiffre près — 212 labels, 212/212 exact (1,0000), couverture 0,8870, F1 union 0,5763 (gelé 602 ; 0,5720 vivant), S 0,4966, chunker 0,6057, tête 0,7316 (gelé ; 0,7262 vivant), fr 129/129, en 83/83, spans 27 (16 REL/6 SUB/5 GP), top-k 177 (0,7406), 183/183 portes. L'état « avant » est également reproduit exactement (196/195, 0,8201, 0,5595 gelé, 43 spans 21/17/5, top-k 166).
+
+ÉCARTS (le vrai problème) : la table des règles de la fiche annonce +27 exacts (donc 222), mais le code livré donne +24 gains bruts et −7 pertes = +17 (212). Ablations mesurées :
+- R1a (SUJETS) : +15 gains, mais 6 pertes françaises (r273, s069, s135, s032, s072, s115) => net +9.
+- R1b (modaux) : +1 (r247), 0 perte ; la constante MODAUX est morte.
+- R1c (2e prédicat) : +4 gains (r224, r291, r115, r239), 1 perte g017 (verbes_vus non incrémenté après AUX, « yesterday » avalé) => net +3.
+- R1 faisceau : 19 gains, 6 pertes, net +13.
+- R2 (SUB sans précédent) : 4 gains (r215, r245, r279, r294), 1 perte s037 (« Paul qui marche marche » classé SUB) => net +3.
+- R3a (subordonnants par langue) : 0 effet (inerte : tous ses membres sont déjà dans RELATIFS/SUBORDONNANTS, car reste subordonnant anglais) ; la fiche annonce +2. Variante fidèle A17 : +1 (r280).
+- R3c (fall/call) : +2 (r102, r245), 0 perte — seule règle juste.
+- R3b (garde déterminant dans GP) n'est pas intégré : r153 reste absent.
+
+DÉCOMPOSITION : 212 = 195 (v7) − 7 régressions nouvelles + 23 des 26 gains A17 + 1 (r102 corrigé). Les 27 restants = 17 non récupérables A17 + 7 régressions (6 R1a + 1 R2) + 3 gains A17 non intégrés (g017, r153, r280). 19 synthétiques/7 réels/1 hand ; 22 fr/5 en. Le français recule : 135 → 129 exacts, couverture 0,894 → 0,854 (le « 1,0/1,0 » est exact/labels) ; l'anglais gagne +23.
+
+CONTRÔLES NÉGATIFS : permutation globale des cibles 2000 tirages, moyenne nulle 2,04/212 (0,96 %), observé 212, p=0 ; candidat aléatoire top-1 35,9 % (observé 100 %) ; permutation des listes de candidats top-k 0,85 % (observé 83,49 %). La fiche/le JSON n'en publient aucun.
+
+DEV/TEST : dev 148/148 (couverture 0,9080, F1 0,5723, tête 0,7270), test 64/64 (0,8421, 0,5714, 0,7241). v7 : 133/134 et 62/62. A17 attendait 154/154 et 68/68 : il manque 6 dev et 4 test, exactement 4 régressions+2 gains non intégrés en dev et 3 régressions+1 gain non intégré en test.
+
+PORTES : 183/183 avec `PYTHONPATH=. python3 -m tools.pensee.autotest` ; `python3 tools/pensee/autotest.py` échoue sur l'import relatif. 15 docstrings de portes (T111–T179) contredisent leur propre assertion, ex. T163 « 43 span/30 cible » alors que 27/35, T166 « 21/17/5 (43) » alors que 16/6/5 (27), T153 « 0,8159 » alors que 0,887.
+
+ATTENTION ARBRE DE TRAVAIL : mes mesures datent de 21:27–21:44, quand tools/bloc_linguistique.py était byte-identique à f908d7b0. Une modification non commitée de ce fichier est apparue à 22:14:32 (+9/−2 : candidat GP génitif, déplacement `prec = s`), hors audit. Sur l'arbre courant : toujours 212/212 et 0,887, mais top-k = 211 au lieu de 177. Les chiffres de l'audit sont ceux du commit. À vérifier par le propriétaire de ce changement.
+
+### 👤 Utilisateur
+
+Agent d3114d4c-1629-45f2-aba6-9592332507c5 sent a message: 
+Alerte audit cohérence (état f908d7b0) — la fiche v8 (`rapport-pensee-r1r3.md`) est fausse sur son cœur :
+
+1. Le tableau des règles annonce R1 « +15 dev, +5 test, 0 perte », R2 +3, R3a +2, R3c +2 (somme +27). La mesure réelle v7→v8 est : +23 labels gagnés (22 en + 1 fr) et **7 labels perdus** (6 REL synthétiques fr : s032, s037, s069, s072, s115, s135 ; + r273), soit +16 labels / +17 exacts. En exact : 24 gains, 7 pertes. Le test gagne 5 exacts mais perd 3 (net +2, pas +5) ; le dev gagne 19 et perd 4 (net +15). « 0 perte » est faux.
+2. Les 27 spans : 17 inatteignables (A17) + 7 régressions v7→v8 + 3 gains A17 non intégrés (g017, r280, r153). La composition du texte (12 synthétiques + 4 GP + 1 tokenisation + … = 20) est fausse : 6 des 12 « synthétiques » sont des régressions, 3 SUB synthétiques sont omises. `inevitables: 17` est un compte juste par coïncidence, pas la bonne liste.
+3. v8 n'a **pas de date** dans la fiche (le JSON l'a), ne nomme pas `f908d7b0` (« après 4ebeb683 »), et n'a **aucun contrôle négatif**. Son lien `rapport-spans-v7.md` (A17) est **absent à f908d7b0** (fichier non suivi dans l'arbre de travail).
+4. v4/v5/v6 ont copié le contrôle de la v7 (« 1,67/196 vs 195/196 ») alors que leurs bases sont 160/187/187 : contrôles invalides. v7 dit encore « État courant 69bd865e » alors qu'elle est historique, et son JSON `avant` mélange trois bases (f1 0,5130 = v6 612 ; tête 0,6826 = v5 ; POS 0,7475 = v4) contre le tableau 0,5164/0,6834/0,7482.
+
+Je finalise `reports/rapport-coherence-fiches-v8.md` et `reports/pensee-coherence-fiches-v8.json` (42 écarts, 7 critiques). Aucun fichier existant modifié, aucun commit. Note : l'arbre de travail est en train de corriger la v7 (0,7475→0,7482, « qui » 12→6, §3) ; mon audit décrit f908d7b0 et signalera ces corrections en cours.
+
+### 🤖 Assistant
+
+⏵ Les deux audits ont raison : la fiche v8 surévalue ses règles (+27 annoncés, +17 réels, 7 régressions). Je la réécris honnêtement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-r1r3.md <<'MD'\n# B13 — R1/R2/R3 : exact 212/212 (1,0000), mais **+17 net** (24 gains, 7 régressions)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·\n> **Commit* … [6655 caractères tronqués]`
+
+  ```
+fiche + JSON réécrits
+  ✅ la page vivante date du dernier commit (2026-11-05)
+  ```
+
+### 👤 Utilisateur
+
+Background subagent c5910cba-e10a-4e08-8ac7-449ce150899c finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Finalisation du résumé d'audit
+
+Audit terminé au commit `f908d7b0`. Deux fichiers neufs, aucun commit, aucun fichier existant modifié par moi :
+
+- `reports/rapport-audit-r1r3.md`
+- `reports/pensee-audit-r1r3.json`
+
+## Verdict
+
+**Les chiffres rejouent tous. Les règles, non.** La fiche annonce **+27 exacts (222)** ; le code livré produit **+24 gains bruts pour 7 pertes = +17 (212)**. R1a perd 6 spans français, R1c en perd 1, R2 en perd 1, R3a est inerte, R3b n'est pas intégré.
+
+## 1. Rejeu — 0 écart
+
+| grandeur | fiche / JSON | vivant 612 | gelé 602 |
+|---|---:|---:|---:|
+| labels | 212 | **212** | **212** |
+| exact / labels | 212/212 = 1,0000 | **212/212** | **212/212** |
+| couverture | 0,887 | **0,8870** | **0,8870** |
+| F1 union | 0,5763 | 0,5720 | **0,5763** |
+| S / chunker | 0,4966 / 0,6057 | 0,4910 / 0,6018 | **0,4966 / 0,6057** |
+| tête | 0,7316 | 0,7262 | **0,7316** |
+| fr / en | 129/129, 83/83 | **idem** | **idem** |
+| spans | 27 (16 REL, 6 SUB, 5 GP) | **idem** | **idem** |
+| top-k | 177 ; 0,7406 | **idem** | **idem** |
+| « inatteignables » | 17 | **17** (même ensemble que A17) | **17** |
+
+L'état **avant** est également reproduit exactement : 196 labels, 195 exacts, couverture 0,8201, F1 0,5595 gelé / 0,5555 vivant, 43 spans (21/17/5), top-k 166. **183/183 portes** passent avec `PYTHONPATH=. python3 -m tools.pensee.autotest` (le lancement direct `python3 tools/pensee/autotest.py` échoue sur l'import relatif).
+
+## 2. Ablations — gain/perte par règle
+
+« Gain » = exact livré qui disparaît sans la règle ; « perte » = exact rétabli sans la règle. Net = gains − pertes.
+
+| règle retirée | exact restant | gains dev/test | pertes dev/test | net | pertes (ids) |
+|---|---:|---:|---:|---:|---|
+| **R1a** SUJETS/pronom | 203 | 12 / 3 | **3 / 3** | **+9** | `r273 s069 s135` / `s032 s072 s115` |
+| **R1b** modaux | 211 | 1 / 0 | 0 / 0 | +1 | — |
+| **R1c** 2e prédicat | 209 | 2 / 2 | **1 / 0** | **+3** | `g017` |
+| **R1** (faisceau) | 199 | 14 / 5 | **3 / 3** | **+13** | les 6 de R1a |
+| **R2** SUB sans précédent | 209 | 4 / 0 | **1 / 0** | **+3** | `s037` |
+| **R3a** subordonnants/langue | 212 | 0 / 0 | 0 / 0 | **0** | — |
+| **R3c** `fall`/`call` | 210 | 2 / 0 | 0 / 0 | **+2** | — |
+| *tout éteint* | 195 | **24** | **7** | **+17** | 7 pertes ci-dessus |
+
+- **R1a** : gains `r034 r074 r114 r205 r219 r240 r243 r247 r278 r285 r296 r299` (dev), `r214 r216 r281` (test) ; pertes `r273 s069 s135` (dev), `s032 s072 s115` (test). Le code retire les relatifs de `SUJETS` ; il ne fait pas la garde `PRON` d'A17. Six REL françaises dont le verbe n'est reconnu que par position sont perdues.
+- **R1c** : gains `r224 r291` (dev), `r115 r239` (test) ; perd `g017` : `verbes_vus` n'est pas incrémenté pour `come` après `would`, donc `yesterday` reste dans la SUB (`[9:38]` au lieu de `[9:28]`).
+- **R2** : gains `r215 r245 r279 r294` (dev) ; perd `s037` : `precedent is None → SUB` classe une REL initiale en SUB. La règle DURS/RELATIFS d'A17 n'est pas intégrée.
+- **R3a** : **inerte** (0 effet). Tous ses membres sont déjà dans `RELATIFS`/`SUBORDONNANTS`, et `car` reste un subordonnant anglais. La règle fidèle (retirer `car` en anglais partout) vaut **+1** (`r280`), pas +2.
+- **R3c** : **+2** (`r102` cible `falls`, `r245` avec R2), 0 perte. Seule règle dont l'effet annoncé est juste.
+- **R3b** (garde déterminant dans le GP) n'est pas intégrée : `r153` reste absent.
+
+**Arithmétique de la fiche** : R1 +20, R2 +3, R3a +2, R3c +2 = **+27**, donc 195+27 = **222** ; or la fiche affiche 212. Les lignes R1/R2/R3a coïncident avec le harnais A17, pas avec les mesures du code livré.
+
+## 3. Décomposition et 27 spans
+
+```
+exacts : 195 (v7) − 7 régressions + 23 des 26 gains A17 + 1 (r102 corrigé) = 212
+labels : 196 (v7) − 7 régressions + 23 des 26 gains A17                      = 212
+```
+
+Les **27 restants** = **17 non récupérables A17** + **7 régressions nouvelles** (6 R1a + 1 R2) + **3 gains A17 non intégrés** (`g017`, `r153`, `r280`). Les 27 contiennent exactement les 17 ids de A17 (mêmes types) ; les 10 autres sont récupérables. 19 synthétiques / 7 réels / 1 hand ; 22 fr / 5 en.
+
+Le **français recule** : 135 → 129 exacts, couverture 0,894 → 0,854 ; l'anglais gagne +23. Le « 1,0 / 1,0 » est un taux `exact/labels`, pas une couverture.
+
+La décomposition de la fiche somme à **20, pas 27** (12 REL synthétiques + 4 GP + 4 cas réels) : il manque 3 SUB synthétiques (`s044`, `s112`, `s114`) et 4 cas (`r273`, `g017`, `r153`, `r280`).
+
+## 4. Contrôles négatifs
+
+| contrôle | tirage | observé | référence nulle |
+|---|---:|---:|---:|
+| permutation globale des cibles | 2 000 | **212/212** | moyenne **2,04/212 = 0,96 %** ; p = 0/2 000 |
+| candidat aléatoire (top-1) | 2 000 | **212/212** | moyenne **76,1/212 = 35,9 %** |
+| permutation des candidats (top-k) | 2 000 | **177/212 = 83,49 %** | moyenne **1,81/212 = 0,85 %** |
+| hasard officiel | 1 | top-1 212/239 = 88,70 % | **1/239 = 0,42 %** |
+
+La fiche et le JSON ne publient **aucun** contrôle négatif ; ceux-ci le corroborent.
+
+## 5. dev/test
+
+| moitié | phrases | cibles | labels | exact | couverture | F1 | tête |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| dev v7 | 422 | 163 | 134 | 133/134 | 0,8221 | 0,5512 | 0,7132 |
+| **dev courant** | 422 | 163 | **148** | **148/148 = 1,0** | **0,9080** | **0,5723** | **0,7270** |
+| test v7 | 190 | 76 | 62 | 62/62 | 0,8158 | 0,5651 | 0,7196 |
+| **test courant** | 190 | 76 | **64** | **64/64 = 1,0** | **0,8421** | **0,5714** | **0,7241** |
+
+v7 → courant : dev **+14 labels / +15 exacts**, test **+2 / +2**. A17 attendait **dev 154/154** et **test 68/68** : il manque **6 dev et 4 test**, exactement 4 régressions + 2 gains non intégrés en dev, 3 régressions + 1 gain non intégré en test.
+
+## 6. Portes
+
+**183/183** portes vertes, mais **15 docstrings** du périmètre attachement/segmentation contredisent leur assertion : T111 (0,4183 vs 0,7402), T112/T113/T114/T115, T153 (0,8159 vs 0,887), T161 (195/196 vs 212/212), T162 (166 vs 177), T163 (43/30 vs 27/35), T166 (21/17/5-43 vs 16/6/5-27), T167 (÷196 vs ÷212), T172, T173, T177, T179. T180 est qualitativement ambigu. Les portes encodent 212/27 et n'erigent pas A17 (222/17) en référence.
+
+## ⚠ Note d'arbre de travail
+
+Les mesures datent de 21:27–21:44, quand `tools/bloc_linguistique.py` était **byte-identique à `f908d7b0`** (la copie de base du harnais a été diffée contre le commit). Depuis, l'arbre a bougé **hors audit** :
+
+- `tools/bloc_linguistique.py` a une modification non commitée (22:14:32, `+9/−2` : candidat GP génitif, déplacement de `prec = s`) ; sur l'arbre courant, **top-k = 211** au lieu de 177 (labels/exact restent 212/212, couverture 0,887).
+- `tools/pensee/autotest.py` a ensuite été ajusté (assertions top-k 177 → 211).
+- HEAD a avancé à `b551cf3b` (journal/état, sans `tools/`).
+
+Les chiffres de l'audit sont ceux du **commit `f908d7b0`**, pas de l'arbre courant. Le propriétaire de ces modifications doit les vérifier/committer.
+
+### 🤖 Assistant
+
+⏵ Je corrige les contrôles copiés (v4/v5/v6), le statut de la v7 et les 15 docstrings
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# v4/v5/v6 : le contrôle copié (1,67/196) est invalide sur leurs bases\ncopie = \"\"\"**Contrôle négatif** : le dispositif est celui de la fiche courante — **permutation globale des\ncibles** (100 ti … [1180 caractères tronqués]`
+
+  ```
+corrigé reports/rapport-pensee-segmentation-v4.md
+corrigé reports/rapport-pensee-couverture-v5.md
+corrigé reports/rapport-pensee-attachement-parfait.md
+v7 historique
+reports/rapport-pensee-segmentation-v4.md:0
+reports/rapport-pensee-couverture-v5.md:0
+reports/rapport-pensee-attachement-parfait.md:0
+     · compteurs : en-cours.md dit 760 JSON, le disque en a 762
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\n# docstrings : aligner sur les assertions courantes\nD={\n '\"\"\"L\\'hybride frontières/têtes : tête F1 0,4183 (S 0,3552, chunker 0,4 … [2098 caractères tronqués]`
+
+  ```
+11 / 11
+  ❌ T173 top-k strict      top-k : 211 sous-chaîne, 211 exacts (0.9953)
+  182/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def t173_' tools/pensee/autotest.py | cut -d: -f1),+14p\" tools/pensee/autotest.py", "description": "Lire T173"}`
+
+  ```
+def t173_topk_strict() -> tuple[bool, str]:
+    """Le top-k strict : 211/212 (0,9953) ; le sous-chaîne 211/239 (0,8828)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (a["topk"] == 211 and a["topk_exact"] == 211
+            and abs(a["topk_exact_taux_span"] - 0.9953) < 0.001
+            and abs(a["topk_taux_span"] - 0.8828) < 0.001), (
+        f"top-k : {a['topk']} sous-chaîne, {a['topk_exact']} exacts "
+        f"({a['topk_exact_taux_span']})")
+
+
+def t174_convention_documentee() -> tuple[bool, str]:
+    """La convention des cibles est documentée dans le gold et couvre les cinq types."""
+    from ..tests.linguistique.gold_reel import CONVENTION_CIBLE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''            and abs(a[\"topk_exact_taux_span\"] - 0.9953) < 0.001\n            and abs(a[\"topk_taux_span\"] - 0.8828) < 0. … [401 caractères tronqués]`
+
+  ```
+T173 corrigée
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-topk-v8.md`](rapport-to … [1412 caractères tronqués]`
+
+  ```
+README + état 670 762
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+     reports/rapport-coherence-fiches-v8.md → pensee-coherence-fiches-v8.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-topk-v8.md`](rapport-topk-v8.md) | **B13** — le top-k : le site d'appel `prec = s` expliquait 32/35 échecs ; correctif  … [926 caractères tronqués]`
+
+  ```
+· reports/README.md : 2802 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+rapport-coherence-fiches-v8.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# raccourcir deux descriptions anciennes\nt=t.replace(\"| [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) | **B13** — l'at … [2127 caractères tronqués]`

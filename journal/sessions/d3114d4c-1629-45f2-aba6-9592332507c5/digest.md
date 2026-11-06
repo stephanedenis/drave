@@ -1910,3 +1910,340 @@ all239 10k mean 1.696 max 8
 v8 labels 212 observed 212 perm196 mean 2.1 max 7
   ```
 
+### 🤖 Assistant
+
+⏵ Calcul exact des gains/pertes de cibles v7 → v8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess, types, pathlib, sys, collections\nR=pathlib.Path('.').resolve(); sys.path.insert(0,str(R/'tools')); sys.path.insert(0,str(R/'tools/tests/linguistique'))\nimport bloc_linguistique as bl_head, eval … [1492 caractères tronqués]`
+
+  ```
+Counter({('exact_gain', 'dev', 'en'): 18, ('exact_gain', 'test', 'en'): 5, ('exact_loss', 'dev', 'fr'): 4, ('exact_loss', 'test', 'fr'): 3, ('exact_gain', 'dev', 'fr'): 1})
+total exact gains 24 losses 7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '70,110p' reports/rapport-spans-v7.md && echo '---' && sed -n '160,200p' reports/rapport-spans-v7.md", "description": "Read A17 remaining spans table"}`
+
+  ```
+## 3. Les 43, par cause probable
+
+### 3.1 Effectifs par cause
+
+| cause | effectif | dont REL / SUB / GP | mécanisme | règle | sort |
+|---|---:|---|---|---|---|
+| **Frontière de clause (arrêt précoce + 2e prédicat)** | **20** | 12 REL / 8 SUB / 0 GP | le scanner REL/SUB s'arrête au pronom pris pour un verbe, ou avale le 2e prédicat | R1 | 20 exacts |
+| **Type attendu différent** | **4** | 0 / 4 / 0 | « when » sans antécédent classé REL ; r245 : cible `call` non reconnue | R2 (+R3c) | 4 exacts |
+| **GN qui avale** | **4** | 1 REL / 3 SUB / 0 GP | 3 verbes synthétiques hors lexique + le « car » français en anglais | R3a (+R1/R2) ; sinon lexique disjoint | 1 exact, 3 absents |
+| **Lexique disjoint synthétique (REL sur-longues)** | **6** | 6 / 0 / 0 | le 2e verbe de la relative est hors lexique → la REL inclut la principale | — (protocole) | 6 absents |
+| **Gold synthétique sans préposition** | **4** | 0 / 0 / 4 | le GP du gold commence après la préposition (bug du générateur) | — (gold) | 4 absents |
+| **Marqueur absent ou élidé** | **2** | 1 / 1 / 0 | relative zéro (r035) ; « qu'il » non tokenisé (r264) | — | 2 absents |
+| **Lexique verbal réel** | **1** | 1 / 0 / 0 | `achetée` / `rou
+… [4891 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '200,235p' reports/rapport-spans-v7.md", "description": "Read A17 zero relative and tokenization cases"}`
+
+  ```
+|---|---|---|---|---|---|---|---|---|---|
+| `r035` | dev | en | REL | 9:24 | « she talks about » | `∅ (relative zéro)` | `film` | « The film she talks about is out. » | absent (pas de règle) |
+
+#### marqueur élidé qu' non tokenisé — 1 cas
+
+| id | split | lg | type | span | texte | marqueur | cible | phrase | sortie |
+|---|---|---|---|---|---|---|---|---|---|
+| `r264` | test | fr | SUB | 8:26 | « qu'il vient demain » | `qu'il` | `sais` | « Je sais qu'il vient demain. » | absent (tokenisation) |
+
+#### GP tronqué par un faux verbe (bus) — 1 cas
+
+| id | split | lg | type | span | texte | marqueur | cible | phrase | sortie |
+|---|---|---|---|---|---|---|---|---|---|
+| `r153` | test | en | GP | 8:19 | « for the bus » | `for` | `wait` | « We wait for the bus. » | exact (R3b) |
+
+#### adverbe final (règle trop stricte, arbitrage dev/test) — 1 cas
+
+| id | split | lg | type | span | texte | marqueur | cible | phrase | sortie |
+|---|---|---|---|---|---|---|---|---|---|
+| `r288` | test | en | SUB | 7:29 | « that he comes tomorrow » | `that` | `know` | « I know that he comes tomorrow. » | absent (arbitrage) |
+
+**Lecture** : 26 des 43 sont récupérés exactement ; les 17 autres sont absents, aucun 
+… [731 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des liens et des références croisées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re, pathlib\nfiles=['reports/rapport-pensee-attachement-v2.md','reports/rapport-pensee-attachement-v3.md','reports/rapport-pensee-segmentation-v4.md','reports/rapport-pensee-couverture-v5.md','reports/rappor … [554 caractères tronqués]`
+
+  ```
+reports/rapport-pensee-attachement-v2.md links 16 bad []
+reports/rapport-pensee-attachement-v3.md links 9 bad []
+reports/rapport-pensee-segmentation-v4.md links 9 bad []
+reports/rapport-pensee-couverture-v5.md links 9 bad []
+reports/rapport-pensee-attachement-parfait.md links 8 bad []
+reports/rapport-pensee-couverture-v7.md links 8 bad []
+reports/rapport-pensee-r1r3.md links 8 bad []
+reports/rapport-gold-split.md links 6 bad []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess, types, pathlib, sys\nR=pathlib.Path('.').resolve(); sys.path.insert(0,str(R/'tools')); sys.path.insert(0,str(R/'tools/tests/linguistique'))\nimport evaluer_gold as eg\ndef load(commit):\n    name … [962 caractères tronqués]`
+
+  ```
+r102 GP since this morning pred=  gold= ['falls']
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json", "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json</path>
+<type>file</type>
+<content>
+1: {
+2:  "date_verification": "2026-11-05T20:10:36-05:00",
+3:  "branche": "s/v7",
+4:  "ligne": "B13",
+5:  "objet": "Cohérence des fiches B13 de la journée v2 → v7 avec leurs JSON et l'état 69bd865e",
+6:  "commit_audite": "69bd865e",
+7:  "head_au_moment_de_l_ecriture": "e4cd4408",
+8:  "note_head": "HEAD a avancé de 69bd865e à e4cd4408 pendant l'audit (commits DOCS/JOURNAL seulement) ; les sept fiches, leurs JSON et reports/README.md sont identiques dans les deux commits.",
+9:  "perimetre": {
+10:   "fiches": [
+11:    "reports/rapport-pensee-attachement-v2.md",
+12:    "reports/rapport-pensee-attachement-v3.md",
+13:    "reports/rapport-pensee-segmentation-v4.md",
+14:    "reports/rapport-pensee-couverture-v5.md",
+15:    "reports/rapport-pensee-attachement-parfait.md",
+16:    "reports/rapport-gold-split.md",
+17:    "reports/rapport-pensee-couverture-v7.md"
+18:   ],
+19:   "json": [
+20:    "reports/pensee-attachement-v2.json",
+21:    "reports/pensee-attachement-v3.json",
+22:    "reports/pensee-segmentation-v4.json",
+23:    "reports/pensee-couverture-v5.json",
+24:
+… [3614 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-coherence-fiches-v7.json'))\nprint(list(d.keys()))\nfor k,v in d.items():\n    if k=='fiches':\n        print('fiches entries', len(v), 'keys', list(v[0].keys()))\n     … [230 caractères tronqués]`
+
+  ```
+['date_verification', 'branche', 'ligne', 'objet', 'commit_audite', 'head_au_moment_de_l_ecriture', 'note_head', 'perimetre', 'methode', 'etat_verifie', 'synthese', 'fiches', 'divergences', 'tableaux_sommes', 'controles_negatifs', 'mentions_historiques', 'readme', 'corrections', 'ambiguites_non_comptees', 'concurrence', 'limites', 'fichiers']
+fiches entries 7 keys ['id', 'fichier', 'json', 'commit', 'statut', 'date', 'ligne', 'portes', 'verdict_fiche', 'verdict_audit', 'divergences', 'mesures_reproduites', 'json_texte', 'controle_negatif', 'mention_historique', 'readme_reference']
+controles_negatifs <class 'list'> 7
+readme <class 'dict'> 2
+limites <class 'list'> 6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-attachement-v2.md reports/rapport-pensee-attachement-v3.md reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-couverture-v5.md reports/rapport-pensee-attachement-parfait.md reports/rappor … [408 caractères tronqués]`
+
+  ```
+### reports/rapport-pensee-attachement-v2.md
+     3	> **Instantané historique** : état au commit `9d5337ce` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+     5	> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+    14	> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+    15	> [`gold_reel.py`](../tools/tests/linguistique/gold_reel.py) (`CONVENTION_CIBLE`),
+    16	> [`autotest.py`](../tools/pensee/autotest.py) ; fiches des sous-agents :
+    27	| **exact** | **123 (0,8483)** | **137 (0,9448)** | **+14** |
+    28	| **top-k strict** | **88 (0,6069)** | **141 (0,9724)** | **+53** |
+    29	| cibles verbes (POS gold) | 63 (0,9524) | **111/116 (0,9569)** | +53 cibles |
+    30	| cibles noms (POS gold) | 82 (0,7683) | **26/29 (0,8966)** | +… |
+    46	  le POS gold donne **69/69 cibles SUB = VERB**. La règle littérale ciblait le sujet (« cuisine »)
+    48	- **A2 a trouvé que le top-k strict mesurait l'emballage des candidats**, pas la règle : 46 des
+    51	- **Le split verbe/nom était faux** : `_est_verbe` donnait 63/82, le POS gold donne **116
+… [11534 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Détection de modifications concurrentes dans l'arbre de travail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short -- reports/ | head -40; echo '---diff v7 header---'; git diff f908d7b0 -- reports/rapport-pensee-couverture-v7.md | head -60; echo '---show committed---'; git show f908d7b0:reports/rapport-pensee-couverture-v7.md | … [73 caractères tronqués]`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-pensee-couverture-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/pensee-audit-r1r3.json
+?? reports/pensee-spans-v7.json
+?? reports/pensee-topk-v8.json
+?? reports/rapport-audit-r1r3.md
+?? reports/rapport-s-paragraphes.md
+?? reports/rapport-spans-v7.md
+?? reports/rapport-topk-v8.md
+---diff v7 header---
+diff --git a/reports/rapport-pensee-couverture-v7.md b/reports/rapport-pensee-couverture-v7.md
+index 00aa4437..608c4778 100644
+--- a/reports/rapport-pensee-couverture-v7.md
++++ b/reports/rapport-pensee-couverture-v7.md
+@@ -4,7 +4,7 @@
+ > **183/183 portes** : la **couverture** passe de **187 à 196 labels** (sur 239) et l'exactitude
+ > tient : **exact 195/196 = 0,9949** (fr **135/135 = 1,0**, en **60/61**) ; la **F1 syntagmes**
+ > monte à **0,5595** (union ; S 0,4741, chunker 0,5858), la tête à **0,7205** ; la **POS** passe de
+-> **0,7475 à 0,7603** ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
++> **0,7482 à 0,7603** (gelé 602) ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5
+… [2825 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ancrage sur le commit f908d7b0 et relevé des modifications concurrentes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-attachement-v2.md reports/rapport-pensee-attachement-v3.md reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-couverture-v5.md reports/rapport-pensee-attachement-parfait.md reports/rappor … [527 caractères tronqués]`
+
+  ```
+MODIFIED: reports/rapport-pensee-couverture-v7.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show f908d7b0:reports/rapport-pensee-couverture-v7.md", "description": "Read committed v7 fiche"}`
+
+  ```
+# B13 — la couverture à 0,8201 : POS contextuel, GV avant GP, prépositions ambiguës
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **183/183 portes** : la **couverture** passe de **187 à 196 labels** (sur 239) et l'exactitude
+> tient : **exact 195/196 = 0,9949** (fr **135/135 = 1,0**, en **60/61**) ; la **F1 syntagmes**
+> monte à **0,5595** (union ; S 0,4741, chunker 0,5858), la tête à **0,7205** ; la **POS** passe de
+> **0,7475 à 0,7603** ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
+>
+> **État courant** : commit `69bd865e` · **Base** : F1/tête/POS sur le gold **gelé 602** (portes
+> T110-T115) ; sur le **612** : F1 **0,5555**, tête **0,7152**, POS **0,7581**. Couverture et
+> exactitude sur le **612**.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (POS contextuel,
+> ordre GV/GP, prépositions composées, sujets), [`autotest.py`](../tools/pensee/autotest.py)
+> (32 assertions recalées) ; JSON [`pensee-couverture-v7.json`](pensee-couverture-v7.json).
+
+## 1. Les cinq corrections
+
+| # | correction | effet |
+|---|---|---|
+| 1 | **POS contextuel** : un verbe de suffixe après DET
+… [3119 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-spans-v7.md reports/rapport-audit-v7.md reports/rapport-dev-test-v7.md reports/rapport-pensee-r1r3.md reports/pensee-r1r3.json tools/pensee/autotest.py tools/bloc_linguistique.py; do echo -n \"$f: \"; git cat … [128 caractères tronqués]`
+
+  ```
+reports/rapport-spans-v7.md: ABSENT
+reports/rapport-audit-v7.md: TRACKED
+reports/rapport-dev-test-v7.md: TRACKED
+reports/rapport-pensee-r1r3.md: TRACKED
+reports/pensee-r1r3.json: TRACKED
+tools/pensee/autotest.py: TRACKED
+tools/bloc_linguistique.py: TRACKED
+  ```
+
+- **bash** `{"command": "date -Iseconds; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%ci %H' f908d7b0", "description": "Get current time and commit time"}`
+
+  ```
+2026-11-05T22:15:31-05:00
+2026-11-05 21:08:09 -0500 f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des liens au commit f908d7b0
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess, re, pathlib, posixpath\nfiles=['reports/rapport-pensee-attachement-v2.md','reports/rapport-pensee-attachement-v3.md','reports/rapport-pensee-segmentation-v4.md','reports/rapport-pensee-couverture … [688 caractères tronqués]`
+
+  ```
+reports/rapport-pensee-attachement-v2.md bad []
+reports/rapport-pensee-attachement-v3.md bad []
+reports/rapport-pensee-segmentation-v4.md bad []
+reports/rapport-pensee-couverture-v5.md bad []
+reports/rapport-pensee-attachement-parfait.md bad []
+reports/rapport-pensee-couverture-v7.md bad []
+reports/rapport-pensee-r1r3.md bad ['rapport-spans-v7.md']
+reports/rapport-gold-split.md bad []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat 9d5337ce..f908d7b0 -- tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/gold_gele.json; echo '---'; git diff --stat 85e4 … [240 caractères tronqués]`
+
+  ```
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess, re\nsrc=subprocess.check_output(['git','show','f908d7b0:tools/pensee/autotest.py'],text=True)\n# count entries in the portes list: lines with (\"T\nn=len(re.findall(r'^\\s*\\(\"T\\d+',src,re.M))\ … [146 caractères tronqués]`
+
+  ```
+entries T 178
+183/183 present False False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"T28\\|def t28\\|T28' tools/pensee/autotest.py | head -10; grep -rn \"T28\" reports/rapport-pensee-attachement-v2.md reports/rapport-pensee-attachement-v3.md reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee- … [182 caractères tronqués]`
+
+  ```
+496:def t28_audit() -> tuple[bool, str]:
+2673:              ("T28 audit des mesures", t28_audit()),
+reports/rapport-pensee-attachement-v2.md:78:- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+reports/rapport-pensee-attachement-v3.md:72:- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+reports/rapport-pensee-segmentation-v4.md:71:- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+reports/rapport-pensee-couverture-v5.md:70:- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+reports/rapport-pensee-attachement-parfait.md:63:- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+reports/rapport-gold-split.md:54:- un **audit** qui ne vérifie pas ces mesures (T28 les couvrent).
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte au parent : la v8 « 0 perte » est fausse
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Alerte audit cohérence (état f908d7b0) — la fiche v8 (`rapport-pensee-r1r3.md`) est fausse sur son cœur :\n\n1. Le tableau des règles annonce R1 « +15 dev, +5 test, 0 perte », R2 +3, R3a +2, R3c +2 (somme +27). La mesure réelle v7→v8 e … [1578 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport de cohérence v8
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "content": "# Cohérence des fiches B13 du 2026-11-05 — v2 → v8 (état `f908d7b0`)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ❌\n> **8 fi … [43406 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle du registre (42 écarts, 7 critiques) et cohérence des compteurs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re, pathlib\np=pathlib.Path('reports/rapport-coherence-fiches-v8.md'); t=p.read_text(encoding='utf-8')\nids=re.findall(r'\\| (V\\d+-\\d+|GS-\\d+|S-\\d+) \\|',t)\nprint('ids',len(ids), ids)\nprint('unique',le … [503 caractères tronqués]`
+
+  ```
+ids 42 ['V2-1', 'V2-2', 'V2-3', 'V2-4', 'V3-1', 'V3-2', 'V3-3', 'V4-1', 'V4-2', 'V4-3', 'V4-4', 'V5-1', 'V5-2', 'V5-3', 'V5-4', 'V5-5', 'V6-1', 'V6-2', 'V6-3', 'GS-1', 'GS-2', 'GS-3', 'GS-4', 'V7-1', 'V7-2', 'V7-3', 'V7-4', 'V7-5', 'V7-6', 'V7-7', 'V8-1', 'V8-2', 'V8-3', 'V8-4', 'V8-5', 'V8-6', 'V8-7', 'V8-8', 'S-1', 'S-2', 'S-3', 'S-4']
+unique 42
+dups []
+Counter({'M': 23, 'm': 12, '**C**': 7})
+V2 4
+V3 3
+V4 4
+V5 5
+V6 3
+GS 4
+V7 7
+V8 8
+S 4
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du registre JSON structuré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json, pathlib\n\nD = []\ndef add(id, fiche, gravite, ou, constat, mesure, correction):\n    D.append({\"id\": id, \"fiche\": fiche, \"gravite\": gravite, \"ou\": ou,\n              \"constat\": constat, \" … [41526 caractères tronqués]`
+
+  ```
+rows 42 {'majeure': 23, 'mineure': 12, 'critique': 7}
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 261, in <module>
+AssertionError
+[exit code: 1]
+  ```
+

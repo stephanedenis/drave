@@ -7,12 +7,12 @@
 | Identifiant | `d3114d4c-1629-45f2-aba6-9592332507c5` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 21:12 |
-| Durée | 0.7 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 57 |
-| Appels d'outils | 80 |
-| Fichiers touchés | 0 |
-| Commandes | 70 |
+| Messages | 79 |
+| Appels d'outils | 102 |
+| Fichiers touchés | 1 |
+| Commandes | 89 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : vérifier l … [1846 caractères tronqués]
 
-*80 appels d'outils.* Actions notables :
+*102 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, and commits
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Find functions and constants in evaluer_gold
 - bash — Read evaluer_bloc tail and main
 - bash — Evaluate current code on 612 and 602 gold
-- … et 57 autres
+- … et 78 autres
 
 **Synthèse produite :**
 
-⏵ Reproduction du contrôle de permutation de la v7
+⏵ Correction de l'assertion (38 écarts de fiche + 4 systémiques) et génération du JSON
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +97,7 @@
 - **T1** Find A17 references
 - **T1** Search all reports for v8 fr/en counts
 - **T1** Check spans-v7 report and v8 commit files
-- … et 30 autres
+- … et 49 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -111,8 +112,9 @@
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 26, in <module>   File "<stdin>", line 10, in load_hist   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistiq
 - **T1** : [stderr]   File "<stdin>", line 24     print('lexical split v2: verb',v_ok,'/',v_n, v_ok/v_n; 'nom',n_ok,'/',n_n,n_ok/n_n)                                                          ^ SyntaxError: inval
+- **T1** : rows 42 {'majeure': 23, 'mineure': 12, 'critique': 7} [stderr] Traceback (most recent call last):   File "<stdin>", line 261, in <module> AssertionError [exit code: 1]
 

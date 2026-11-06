@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 125.3 h |
+| Durée | 126.0 h |
 | Tours | 177 |
-| Messages | 2778 |
-| Appels d'outils | 2448 |
+| Messages | 2802 |
+| Appels d'outils | 2466 |
 | Fichiers touchés | 25 |
-| Commandes | 2017 |
+| Commandes | 2033 |
 | Sous-agents | 23 |
-| Commits | 296 |
+| Commits | 297 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*207 appels d'outils.* Actions notables :
+*225 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 170 autres
+- … et 186 autres
 
 **Synthèse produite :**
 
-⏵ Vague 6 lancée ; j'écris le récit du round R1/R3 au journal
+⏵ Je corrige les contrôles copiés (v4/v5/v6), le statut de la v7 et les 15 docstrings
 
 ## 3. Travail accompli
 
@@ -9620,7 +9620,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1977 autres
+- … et 1993 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10064,4 +10064,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - JOURNAL — LES RÈGLES DE A17 : EXACT 212/212, COUVERTURE 0,887, 27 SPANS DONT 17 INATTEIGNABLES" -- journal/2026-11-05/README.md journal/sessions/e181ce02-cd50-4
 - JOURNAL — LE BILAN DE LA JOURNÉE : 137/145 → 212/212, COUVERTURE 0,6067 → 0,8870, F1 0,2862 → 0,5763" -- journal/2026-11-05/README.md docs/pilotage/en-cours.md 
 - ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep
+- B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183" -- tools/bloc_linguistiq
 

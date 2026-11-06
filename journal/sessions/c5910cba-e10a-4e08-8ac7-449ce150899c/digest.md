@@ -1989,3 +1989,729 @@ avant {'union': {'f1': 0.5555, 'tete': 0.7152}, 's': {'f1': 0.4688, 'tete': 0.64
 … [950 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"__pycache__|\\.pyc\" | head; echo \"---untracked tools?---\"; git status --short tools/ | head -20; echo \"---reports status---\"; git status --short reports/ | head -20", "description": "Check for pyca … [18 caractères tronqués]`
+
+  ```
+---untracked tools?---
+ m tools/structures
+---reports status---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-pensee-couverture-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/pensee-spans-v7.json
+?? reports/rapport-s-paragraphes.md
+?? reports/rapport-spans-v7.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"paragraphes-validations\" tools/structures --include=*.py | head; echo \"---generateur refs---\"; grep -n \"paragraphes-validations\\|donnees/\" tools/structures/generateur.py | head", "description": "Check if S generator  … [28 caractères tronqués]`
+
+  ```
+tools/structures/tests/test_serveur.py:112:            self.assertTrue((b.dossier / "paragraphes-validations.jsonl").exists())
+tools/structures/serveur.py:58:        validations = self._journal("paragraphes-validations.jsonl")
+tools/structures/serveur.py:92:            with (self.dossier / "paragraphes-validations.jsonl").open("a", encoding="utf-8") as f:
+tools/structures/serveur.py:101:        p = self.dossier / "paragraphes-validations.jsonl"
+---generateur refs---
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the audit report and its JSON
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md", "content": "# Audit R1/R2/R3 — les chiffres rejouent, l'attribution des règles ne rejoue pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·\n> **Commit audité** :  … [27795 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && python3 - <<'PY'\nimport json\nd=json.load(open('compile.json'))\nfor x in d['spans']:\n    if x['id']=='r102': print(x)\nPY\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools'); sys … [616 caractères tronqués]`
+
+  ```
+The rain falls since this morning. en
+{'type': 'GP', 'texte': 'since this morning', 'role': 'temps', 'debut': 15, 'fin': 33, 'cibles': ['falls'], 'cible': 'falls'}
+baseline [('GP', 'since this morning', 'falls')]
+sans_r3c [('GP', 'since this morning', None)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-audit-r1r3.md'\ns=open(p,encoding='utf-8').read()\nrepl={\n 'la ligne R3c, elle, correspond au code livré.Additionner':'la ligne R3c, elle, correspond au code livré. Additionner',\n '**+2 exacts** … [1224 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+AssertionError: | `s065` | fr | REL | synthetique | 5:17 | « qui commence » 
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"s065\\|cible .fall\\|Additionner\\|le attendu\\|repérimé\\|Le F1 vivant\" reports/rapport-audit-r1r3.md", "description": "Locate lines to fix"}`
+
+  ```
+77:Le F1 vivant 0,5555 est exactement celui que la fiche [dev/test v7](rapport-dev-test-v7.md)
+167:**+2 exacts** (`r102` : cible `fall` corrigée ; `r245` : `call` avec R2), **0 perte**. La
+181:intégrées), pas ceux du code livré ; la ligne R3c, elle, correspond au code livré.Additionner
+210:| **A17 non récupérables** (13) + hors périmètre (4) | **17** | 8 REL / 5 SUB / 4 GP | `r035 r255 r264 r288 s010 s027 s035 s044 s061 s065 s112 s114 s125 s141 s146 s148 s160` |
+229:| `s065` | fr | REL | synthetique | 5:17 | « qui commence » | `elle` | A17 non récupérable (antécédent) |
+356:`638ac8e8` annonçait 13 docstrings corrigées ; le passage à `f908d7b0` en a repérimé 15.
+359:et passent par construction ; elles ne testent ni la fidélité aux règles A17, ni le attendu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-audit-r1r3.md'\ns=open(p,encoding='utf-8').read()\nrepl={\n 'la ligne R3c, elle, correspond au code livré.Additionner':'la ligne R3c, elle, correspond au code livré. Additionner',\n '(`r102` : cib … [732 caractères tronqués]`
+
+  ```
+ok
+62:F1 vivantes. **Écart de forme, pas de valeur.**
+77:La F1 vivante 0,5555 est exactement celui que la fiche [dev/test v7](rapport-dev-test-v7.md)
+167:**+2 exacts** (`r102` : cible `falls` corrigée ; `r245` : `call` avec R2), **0 perte**. La
+181:intégrées), pas ceux du code livré ; la ligne R3c, elle, correspond au code livré. Additionner
+356:`638ac8e8` annonçait 13 docstrings corrigées ; **15 sont périmées au commit audité**.
+359:et passent par construction ; elles ne testent ni la fidélité aux règles A17, ni l'attendu
+428:   dans **tous** les usages ; +1 attendu (`r280`), pas +2.
+430:   +1 attendu (`r153`).
+  ```
+
+- **bash** `{"command": "cat > /tmp/audit_r1r3/build_json.py <<'PY'\nimport json, pathlib\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-audit-r1r3.json')\n\ndef regle(nom, ablation, labels, exact, dl, de, gd, gt, pd, pt, f1, gains_ids, pertes_ids, lecture):\n    return {\"abl … [27651 caractères tronqués]`
+
+  ```
+written /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-audit-r1r3.json bytes 29874
+valid json, keys: ['rapport', 'ligne', 'branche', 'commit_audite', 'commit_parent', 'date', 'objet', 'methode'] ... 24432
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ne applique\\|celui que la fiche\\|de A17\\|d'A17\\|Le F1\\|la F1\\|les 17 identifiants\" reports/rapport-audit-r1r3.md | head -30", "description": "Find grammar issues in report"}`
+
+  ```
+77:La F1 vivante 0,5555 est exactement celui que la fiche [dev/test v7](rapport-dev-test-v7.md)
+99:> **R3a fidèle** n'est pas le code livré : c'est la règle d'A17 appliquée pour de vrai
+136:Le code livré diffère du pseudocode A17 : il autorise les auxiliaires consécutifs
+215:19 synthétiques, 7 réels, 1 `hand` (`g017`). Les 27 contiennent bien les 17 identifiants de
+252:  les 17 de A17. Mais **4 de ces 17 ne sont pas inatteignables** : ce sont les 4
+253:  « récupérables hors périmètre » de A17 (`r035`, `r255`, `r264`, `r288`) ; seuls 13 sont
+369:   relatifs) n'est pas la garde `PRON` d'A17 ; il transforme des REL synthétiques exactes en
+374:   initiale en SUB ; la règle DURS/RELATIFS d'A17 n'est pas intégrée.
+421:2. **R1a** : garder les relatifs dans `SUJETS` et ajouter la garde `PRON` d'A17 dans
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '118,130p' reports/rapport-audit-r1r3.md", "description": "Read R1a paragraph"}`
+
+  ```
+### 3.2 R1a — le pronom : +15 gains, mais 6 pertes françaises
+
+Le code livré **retire `who, that, which, qui, qu` de `SUJETS`** (diff de `f908d7b0`). Il ne
+applique pas la règle R1a décrite par A17 (« un pronom n'est jamais un verbe par la règle de
+position », garde `n in PRON` dans `est_verbe`). Conséquence : le mot qui suit un relatif
+n'est plus reconnu comme verbe **par position**. Les six pertes sont exactement des REL
+françaises dont le verbe n'est pas au lexique (`crie`, `dessine`, `observe`, `pousse`…) :
+elles étaient exactes en v7 et ne le sont plus. **Net R1a : +9**, pas +15 ; et **6 pertes**,
+pas 0.
+
+### 3.3 R1b — les modaux : +1, et une constante morte
+
+Les modaux sont ajoutés à `AUXILIAIRES` (ligne 449) ; c'est ce qui produit l'effet. La
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-audit-r1r3.md'\ns=open(p,encoding='utf-8').read()\ns=s.replace('La F1 vivante 0,5555 est exactement celui que la fiche','La F1 vivante 0,5555 est exactement celle que la fiche')\ns=s.replace('les  … [436 caractères tronqués]`
+
+  ```
+ok
+24:  les ensembles d'identifiants et les ablations.
+77:La F1 vivante 0,5555 est exactement celle que la fiche [dev/test v7](rapport-dev-test-v7.md)
+84:exacte **rétablie** quand on retire la règle (ce que la règle casse). Les identifiants sont
+208:| classe | n | types | identifiants |
+215:19 synthétiques, 7 réels, 1 `hand` (`g017`). Les 27 contiennent bien les 17 identifiants
+252:  les 17 d'A17. Mais **4 de ces 17 ne sont pas inatteignables** : ce sont les 4
+253:  « récupérables hors périmètre » d'A17 (`r035`, `r255`, `r264`, `r288`) ; seuls 13 sont
+290:sont bien ceux listés ci-dessus (identifiants, langues, types vérifiés). Le contrôle de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '212,220p' reports/rapport-audit-r1r3.md", "description": "Check line wrap after grammar fix"}`
+
+  ```
+| **Gains A17 non intégrés** | **3** | 1 REL / 1 SUB / 1 GP | `g017 r153 r280` |
+
+**Langues / sources** : 22 français, 5 anglais (`r035`, `g017`, `r153`, `r280`, `r288`) ;
+19 synthétiques, 7 réels, 1 `hand` (`g017`). Les 27 contiennent bien les 17 identifiants
+d'A17 (même ensemble, mêmes types) ; les 10 autres sont les 7 régressions et les 3 gains A17
+non intégrés.
+
+| id | lg | type | source | span | texte | cible | classe |
+|---|---|---|---|---:|---|---|---|
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-r1r3.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nfor c in d['spans_27']['cas']:\n    if c['id'] in ('s115','s135'):\n        c['cible']='fenêtre'\n … [1202 caractères tronqués]`
+
+  ```
+keys sample: ['ablation', 'labels', 'exact', 'delta_labels', 'delta_exact', 'gains', 'pertes', 'effet_net', 'f1_vivant', 'delta_f1', 'gains_ids', 'pertes_ids', 'lecture']
+[{'id': 'r255', 'langue': 'fr', 'source': 'reel', 'type': 'REL', 'debut': 11, 'fin': 27, 'texte': "que j'ai achetée", 'cible': 'voiture', 'classe': 'A17 hors périmètre (lexique reel)'}, {'id': 's115', 'langue': 'fr', 'source': 'synthetique', 'type': 'REL', 'debut': 19, 'fin': 30, 'texte': 'qui observe', 'cible': 'fenêtre', 'classe': 'régression R1a'}, {'id': 's135', 'langue': 'fr', 'source': 'synthetique', 'type': 'REL', 'debut': 11, 'fin': 22, 'texte': 'qui dessine', 'cible': 'fenêtre', 'classe': 'régression R1a'}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-r1r3.json')\nd=json.loads(p.read_text(encoding='utf-8'))\ndef keys(o, pref=''):\n    if isinstance(o, dict):\n        for k,v in o.items():\n            if  … [264 caractères tronqués]`
+
+  ```
+---top keys--- ['rapport', 'ligne', 'branche', 'commit_audite', 'commit_parent', 'date', 'objet', 'methode', 'verdict', 'rejeu', 'ablations', 'decomposition', 'spans_27', 'controle_negatif', 'dev_test', 'portes_autotest', 'ecarts', 'limites', 'fichiers_ecrits', 'commit']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, collections\nd=json.load(open('reports/pensee-audit-r1r3.json'))\nprint('apres vivant', {k:d['rejeu']['apres']['vivant_612'][k] for k in ('labels','exact','couverture','f1','topk','spans')})\nprint('apr … [1065 caractères tronqués]`
+
+  ```
+apres vivant {'labels': 212, 'exact': 212, 'couverture': 0.887, 'f1': 0.572, 'topk': 177, 'spans': {'REL': 16, 'SUB': 6, 'GP': 5, 'total': 27}}
+apres gele {'f1': 0.5763, 'f1_s': 0.4966, 'f1_chunker': 0.6057, 'tete': 0.7316}
+avant vivant {'labels': 196, 'exact': 195, 'couverture': 0.8201, 'f1': 0.5555, 'topk': 166, 'spans': {'REL': 21, 'SUB': 17, 'GP': 5, 'total': 43}}
+ablations {'R1a': (203, 203, 15, 6), 'R1b': (211, 211, 1, 0), 'R1c': (209, 209, 4, 1), 'R1': (199, 199, 19, 6), 'R2': (209, 209, 4, 1), 'R3a': (212, 212, 0, 0), 'R3c': (212, 210, 2, 0)}
+tout eteint (196, 195)
+spans cas 27 Counter({'REL': 16, 'SUB': 6, 'GP': 5})
+classes [('A17 non récupérable (13) + hors périmètre (4)', 17, 17), ('Regressions nouvelles', 7, 7), ('Gains A17 non intégrés', 3, 3)]
+dev/test 148 64 {'dev': -6, 'test': -4, 'ventilation_dev': ['4 régressions (r273, s037, s069, s135)', '2 gains A17 non intégrés (g017, r280)'], 'ventilation_test': ['3 régressions (s032, s072, s115)', '1 gain A17 non intégré (r153)']}
+docstrings 15
+ecarts 14
+json ok
+  443 reports/rapport-audit-r1r3.md
+ 1362 reports/pensee-audit-r1r3.json
+ 1805 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-r1r3.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nfor c in d['spans_27']['classes']:\n    if c['classe']=='Regressions nouvelles': c['classe']='Régr … [222 caractères tronqués]`
+
+  ```
+r035 A17 hors périmètre (relative zero)
+r255 A17 hors périmètre (lexique reel)
+r264 A17 hors périmètre (tokenisation)
+r288 A17 hors périmètre (adverbe final)
+s010 A17 non récupérable (lexique)
+s035 A17 non récupérable (lexique)
+s061 A17 non récupérable (lexique)
+s065 A17 non récupérable (antécédent)
+s125 A17 non récupérable (lexique)
+s141 A17 non récupérable (lexique)
+s027 A17 non récupérable (gold)
+s146 A17 non récupérable (gold)
+s148 A17 non récupérable (gold)
+s160 A17 non récupérable (gold)
+s044 A17 non récupérable (lexique)
+s112 A17 non récupérable (lexique)
+s114 A17 non récupérable (lexique)
+r273 régression R1a
+s032 régression R1a
+s069 régression R1a
+s072 régression R1a
+s115 régression R1a
+s135 régression R1a
+s037 régression R2
+g017 A17 non intégré (R1c)
+r153 A17 non intégré (R3b)
+r280 A17 non intégré (R3a)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-r1r3.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nfor c in d['spans_27']['cas']:\n    c['classe']=c['classe'].replace('relative zero','relative zéro … [286 caractères tronqués]`
+
+  ```
+ok
+JSON VALIDE
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md", "limit": 160}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md</path>
+<type>file</type>
+<content>
+1: # Audit R1/R2/R3 — les chiffres rejouent, l'attribution des règles ne rejoue pas
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+4: > **Commit audité** : `f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b` (parent `69bd865ec1bae1958b6f617bde4bf685a15d7d67`) ·
+5: > **Date** : 2026-11-05 · **Verdict** : chiffres ✅, règles ❌.
+6: > **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+7: > [`pensee-audit-r1r3.json`](pensee-audit-r1r3.json).
+8: 
+9: **En une phrase.** Les **valeurs** de la fiche [`rapport-pensee-r1r3.md`](rapport-pensee-r1r3.md)
+10: et de [`pensee-r1r3.json`](pensee-r1r3.json) rejouent **toutes** au chiffre près (212/212,
+11: 0,8870, 0,5763, 27 spans, 177 top-k, 183/183 portes). Mais la **table des règles** ne rejoue
+12: pas : elle annonce **+27 exacts** (donc 222), alors que le code livré en produit **+24 gains
+13: bruts pour 7 pertes**, soit **+17** (212). R1a perd **6 spans français**, R1c en perd **1**,
+14: R2 en perd **1**, R3a est **inerte**, R3b n'est **pas intégré**. Sur les 27 spans res
+… [9607 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md", "limit": 180, "offset": 160}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md</path>
+<type>file</type>
+<content>
+160: produit toujours la SUB `[4:21]` qui coupe le GN. La règle A17 (retirer `car` des
+161: subordonnants **anglais**) n'est pas implémentée. Mesure : **0 gain, 0 perte** ; la règle
+162: fidèle récupère `r280` (+1 exact), pas +2.
+163: 
+164: ### 3.7 R3c — `fall`/`call` : la seule règle dont l'effet annoncé est juste
+165: 
+166: Ajout de `fall/falls/fell/fallen/falling` et `call/calls/called/calling` à `VERBES_CONNUS` :
+167: **+2 exacts** (`r102` : cible `falls` corrigée ; `r245` : `call` avec R2), **0 perte**. La
+168: fiche annonce +2 : conforme.
+169: 
+170: ### 3.8 La table de la fiche ne somme pas
+171: 
+172: | règle | fiche | mesuré sur le code livré | verdict |
+173: |---|---|---:|---|
+174: | **R1** | +15 dev, +5 test, **0 perte** | +14 dev, +5 test ; **3+3 pertes** ; net **+13** | faux |
+175: | **R2** | +3 | +4 gains, **−1 perte** ; net **+3** | net juste, perte omise |
+176: | **R3a** | +2 | **0** (R3a fidèle : +1) | faux |
+177: | **R3c** | +2 | **+2**, 0 perte | juste |
+178: | **somme** | **+27** → 195+27 = **222** | +24 gains, −7 pertes, net **+17** → **212** | *
+… [11148 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md", "offset": 340}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md</path>
+<type>file</type>
+<content>
+340: | T114 | F1 0,5864, tête 0,7285 | **0,6033 / 0,7399** |
+341: | T115 | 0,455 contre 0,441 | **0,6822** |
+342: | T153 | top1 0,8159, exact 0,8159, couv. 0,8201 | **0,887 / 0,887 / 0,887** |
+343: | T161 | 195/196 | **212/212** |
+344: | T162 | 166/239 | **177/239** |
+345: | T163 | 43 de span, 30 de cible | **27 de span, 35 de cible** |
+346: | T166 | 21 REL, 17 SUB, 5 GP (43) | **16 REL, 6 SUB, 5 GP (27)** |
+347: | T167 | exactitude spans ÷ 196 | **÷ 212** |
+348: | T172 | exact 195/196 | **0 échec** |
+349: | T173 | 166/196 ; 166/239 | **177/177** |
+350: | T177 | 88 → 166 | **177** |
+351: | T179 | exact_any 195/196 | **212/212** |
+352: 
+353: T180 est qualitativement périmé : « la couverture anglaise non » — la couverture anglaise est
+354: maintenant **0,943**, au-dessus de la française (0,854). Ces docstrings ne changent pas le
+355: verdict des portes, mais ils font dire au banc le contraire de ce qu'il mesure. Le commit
+356: `638ac8e8` annonçait 13 docstrings corrigées ; **15 sont périmées au commit audité**.
+357: 
+358: **Ce que les portes ne prouvent pas** : elles
+… [5918 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-audit-r1r3.md'\ns=open(p,encoding='utf-8').read()\nrepl={\n'| top-k strict | (177) | **177** | **177** | 0 |':'| top-k strict (hors fiche) | — | **177** | **177** | — |',\n\"La fiche indique « gel … [2563 caractères tronqués]`
+
+  ```
+done
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dont 5\\|de A17\\|top-k strict\\|coïncident\\|ligne F1\\|222/17\\|R1/R2/R3 dit\" reports/rapport-audit-r1r3.md", "description": "Check refined text"}`
+
+  ```
+54:| top-k strict (hors fiche) | — | **177** | **177** | — |
+60:0,5720 / 0,4910 / 0,6018 / 0,7262. La fiche indique « gelé 602 » sur la ligne F1 ; elle ne
+136:Le code livré diffère du pseudocode A17 : il autorise les auxiliaires consécutifs
+180:Les nombres des lignes R1, R2 et R3a **coïncident avec ceux du harnais A17** (R1 : +15/+5/0 ;
+320:mise à jour par `f908d7b0`. La fiche R1/R2/R3 dit « dev/test à re-mesurer » (§ 5) : c'est fait
+361:222/17. T163 et T166 en particulier **entérinent** les 27 au lieu de signaler les 10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"rapport-audit-r1r3|pensee-audit-r1r3|bloc_linguistique|autotest|gold\" ; echo \"---diff existing tools---\"; git diff --stat HEAD -- tools/ | head; echo \"---report files---\"; ls -l reports/rapport-aud … [182 caractères tronqués]`
+
+  ```
+M tools/bloc_linguistique.py
+?? reports/pensee-audit-r1r3.json
+?? reports/rapport-audit-r1r3.md
+---diff existing tools---
+ tools/bloc_linguistique.py | 11 +++++++++--
+ tools/structures           |  0
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+---report files---
+-rw-r--r--. 1 stephane stephane 29988  5 nov 22:12 reports/pensee-audit-r1r3.json
+-rw-------. 1 stephane stephane 28510  5 nov 22:14 reports/rapport-audit-r1r3.md
+---git diff reports existing---
+ reports/pensee-coherence-fiches-v7.json |  19 +
+ reports/pensee-quatre-modes.json        | 734 ++++++++++++++++++--------------
+ reports/rapport-audit-v7.md             |   6 +-
+ reports/rapport-coherence-fiches-v7.md  |  17 +-
+ reports/rapport-pensee-couverture-v7.md |  12 +-
+ reports/rapport-spans-chunker.md        |  13 +-
+ 6 files changed, 461 insertions(+), 340 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD -- tools/bloc_linguistique.py", "description": "Inspect unexpected modification"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 80eccd3c..8daa099c 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -687,6 +687,13 @@ class Heuristique:
+         if segment.get("type") == "SUB" and precedent.get("type") == "GV":
+             v = Heuristique._verbe_dans(texte, precedent["debut"], precedent["fin"])
+             return [v] if v else []
++        if segment.get("type") == "GP":
++            # GP génitif (« de la voisine ») : le nom qu'il complète est un candidat
++            premier = (segment.get("texte") or "").split()[:1]
++            if premier and _normaliser(premier[0]) in ("de", "du", "des", "d", "of", "from"):
++                if precedent.get("type") == "GN":
++                    tete = Heuristique._tete_nom(texte, precedent["debut"], precedent["fin"])
++                    return [tete] if tete else []
+         return []
+ 
+     @staticmethod
+@@ -1145,7 +1152,6 @@ class Heuristique:
+                          or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
+                 cible = self._cible_hors_span(texte, s, gvs_s, cible)
+                 cible = self._repli_verbe_propre(texte, s, cible)
+-       
+… [1665 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && stat -c '%y %n' tools/bloc_linguistique.py /tmp/audit_r1r3/mods/base.py /tmp/audit_r1r3/resultats.json /tmp/audit_r1r3/compile.json /tmp/audit_r1r3/verifs.json 2>/dev/null; echo \"---now---\"; date", "description": "Check modificatio … [30 caractères tronqués]`
+
+  ```
+2026-11-05 22:14:32.929989436 -0500 tools/bloc_linguistique.py
+2026-11-05 22:02:39.672403244 -0500 /tmp/audit_r1r3/mods/base.py
+2026-11-05 21:27:46.933095399 -0500 /tmp/audit_r1r3/resultats.json
+2026-11-05 21:43:32.758690202 -0500 /tmp/audit_r1r3/compile.json
+2026-11-05 21:35:30.431045503 -0500 /tmp/audit_r1r3/verifs.json
+---now---
+jeu 05 nov 2026 22:16:13 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuri … [257 caractères tronqués]`
+
+  ```
+{'cibles': 239, 'labels': 212, 'exact': 212, 'topk': 211, 'couverture': 0.887}
+f1 0.572 tete 0.7262
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show f908d7b0:tools/bloc_linguistique.py > /tmp/audit_r1r3/bl_f908.py && diff -q /tmp/audit_r1r3/bl_f908.py /tmp/audit_r1r3/mods/base.py; echo \"DIFF_BASE_EXIT:$?\"; diff -u /tmp/audit_r1r3/bl_f908.py /tmp/audit_r1r3/mods/base.py … [166 caractères tronqués]`
+
+  ```
+DIFF_BASE_EXIT:0
+---current vs commit---
+ tools/bloc_linguistique.py | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-audit-r1r3.md'\ns=open(p,encoding='utf-8').read()\nanchor='''- **Portes** : `PYTHONPATH=. python3 -m tools.pensee.autotest` → **183/183**, exit 0.\n  (`python3 tools/pensee/autotest.py` échoue sur … [2259 caractères tronqués]`
+
+  ```
+ok
+37:**Note d'arbre de travail (importante).** Les mesures ont été prises entre 21:27 et 21:44,
+43:`evaluer_bloc` donne toujours 212/212 et 0,887, mais **top-k 211** au lieu de **177**. Les
+423:  de base byte-identique) ; il a été **modifié après** (22:14:32, hors audit), ce qui porte le
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-r1r3.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['methode']['note_arbre_de_travail'] = {\n \"mesures_prises\": \"2026-11-05 entre 21:27 et 21:44\ … [1020 caractères tronqués]`
+
+  ```
+ok
+JSON_VALIDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport importlib.util, sys, pathlib\nRACINE=pathlib.Path('.')\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nimport tools.tests.linguistique.evaluer_gold as eg\nspec=importlib.util.spec_from_file_l … [465 caractères tronqués]`
+
+  ```
+{'cibles': 239, 'labels': 212, 'exact': 212, 'topk': 177, 'couverture': 0.887}
+f1 0.572 tete 0.7262
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\nmd=pathlib.Path('reports/rapport-audit-r1r3.md').read_text(encoding='utf-8')\nliens=re.findall(r'\\]\\(([^)]+)\\)', md)\nfor l in sorted(set(liens)):\n    if l.startswith('http'): continue\n    p … [508 caractères tronqués]`
+
+  ```
+OK  ../tools/bloc_linguistique.py
+OK  pensee-audit-r1r3.json
+OK  pensee-r1r3.json
+OK  rapport-audit-r1r3.md
+OK  rapport-dev-test-v7.md
+OK  rapport-pensee-r1r3.md
+---JSON keys/values spot---
+verdict Toutes les valeurs de la fiche et du JSON rejouent. La table des regles, elle, ne rejoue pas : +27 annonces (222) contre ...
+note arbre labels 212, exact 212, couverture 0,887 inchangés ; top-k 211 au lieu de 177
+topk courant non audite 211
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Audit R1/R2/R3 terminé au commit f908d7b0. Deux fichiers neufs écrits, aucun commit, aucun fichier existant modifié par moi :\n- reports/rapport-audit-r1r3.md\n- reports/pensee-audit-r1r3.json\n\nREJEU : toutes les valeurs de la fiche/ … [3138 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\na=json.load(open('/tmp/audit_r1r3/compile.json'))\nb=json.load(open('reports/pensee-audit-r1r3.json'))\nca={x['id']:x for x in a['spans']}\ncb={x['id']:x for x in b['spans_27']['cas']}\nprint('ids equal … [792 caractères tronqués]`
+
+  ```
+ids equal True 27 27
+differences []
+types {'REL': 16, 'SUB': 6, 'GP': 5}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-audit-r1r3.md'\ns=open(p,encoding='utf-8').read()\ns=s.replace(\"T180 est qualitativement périmé : « la couverture anglaise non » — la couverture anglaise est\\nmaintenant **0,943**, au-dessus de  … [327 caractères tronqués]`
+
+  ```
+ok
+342:compte est exact (T0–T180 + les deux T1 supplémentaires). En revanche, **15 docstrings du
+364:T180 est qualitativement ambigu : « la couverture anglaise non » — l'anglaise est
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-r1r3.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['portes_autotest']['docstrings_qualitatives']=[{\"porte\":\"T180\",\"docstring\":\"la couverture … [220 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && stat -c '%y %n' complements.json details.json resultats.json compile.json verifs.json 2>/dev/null; echo \"---\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 && git status --short reports/rapport-audit-r1r3.md reports/pensee-audit-r1r3 … [62 caractères tronqués]`
+
+  ```
+2026-11-05 21:33:39.758527972 -0500 complements.json
+2026-11-05 21:40:41.677688901 -0500 details.json
+2026-11-05 21:27:46.933095399 -0500 resultats.json
+2026-11-05 21:43:32.758690202 -0500 compile.json
+2026-11-05 21:35:30.431045503 -0500 verifs.json
+---
+b551cf3b ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS
+?? reports/pensee-audit-r1r3.json
+?? reports/rapport-audit-r1r3.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5 && echo \"---stat---\" && git show --stat --oneline b551cf3b | head -40 && echo \"---diff tools---\" && git show b551cf3b -- tools/bloc_linguistique.py | head -80", "description": "Inspect new HEAD commit"}`
+
+  ```
+b551cf3b ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS
+7c43c75e JOURNAL — LE BILAN DE LA JOURNÉE : 137/145 → 212/212, COUVERTURE 0,6067 → 0,8870, F1 0,2862 → 0,5763
+5c15ee91 JOURNAL — LES RÈGLES DE A17 : EXACT 212/212, COUVERTURE 0,887, 27 SPANS DONT 17 INATTEIGNABLES
+f908d7b0 B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN 1,0 ; 27 SPANS DONT 17 INATTEIGNABLES ; 183/183
+638ac8e8 PORTES — 13 DOCSTRINGS PÉRIMÉES MISES À JOUR (ATTACHEMENT 195/196, SPANS 43, TOP-K 166) ; 183/183
+---stat---
+b551cf3b ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-05/README.md                       |  13 +-
+ journal/2026-11-05/attention.md                    |   8 +-
+ journal/2026-11-05/distribue.md                    |   8 +-
+ journal/2026-11-05/docs.md                         |  13 +-
+ journal/2026-11-05/memoire.md                      |   8 +-
+ journal/2026-11-05/mesures.md                      |   8 +-
+ journal/2026-11-05/modele.md                       |   8 +-
+ journal/2026-11-05/moteur.md                       |   8 +-
+ jou
+… [850 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -30; echo \"---HEAD---\"; git log --oneline -3; echo \"---tools diff---\"; git diff --stat HEAD -- tools/", "description": "Check current status after new commits"}`
+
+  ```
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/digest.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/rapport.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+D  journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/digest.md
+D  journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/rapport.md
+D  journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/digest.md
+D  journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/rapport.md
+D  journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/digest.md
+D  journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/rapport.md
+D  journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cf
+… [924 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD -- tools/pensee/autotest.py", "description": "Inspect concurrent autotest modifications"}`
+
+  ```
+diff --git a/tools/pensee/autotest.py b/tools/pensee/autotest.py
+index 9322303c..77b90973 100644
+--- a/tools/pensee/autotest.py
++++ b/tools/pensee/autotest.py
+@@ -2352,7 +2352,7 @@ def t162_candidats_verbes() -> tuple[bool, str]:
+     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+     r = evaluer_bloc("h", bl.Heuristique(), charger())
+     a, th = r["attachement"], r["attachement_tete"]
+-    return (a["topk"] == 177 and th["topk"] == 178 and a["top1"] == 212), (
++    return (a["topk"] == 211 and th["topk"] == 211 and a["top1"] == 212), (
+         f"candidats : top-k {a['topk']}/239 ({a['topk_taux']}), tête {th['topk']}/{a['labels']}")
+ 
+ 
+@@ -2375,7 +2375,7 @@ def t163_echecs_attachement() -> tuple[bool, str]:
+                 continue
+             if not any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
+                 cible += 1
+-    return span == 27 and cible == 35, (
++    return span == 27 and cible == 1, (
+         f"échecs : {span} de span, {cible} de cible (33 avant les correctifs)")
+ 
+ 
+@@ -2430,7 +2430,7 @@ def t167_denominateur() -> tuple[bool, str]:
+     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+     return
+… [1655 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\np='reports/rapport-audit-r1r3.md'\ns=open(p,encoding='utf-8').read()\nold='''> **Commit audité** : `f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b` (parent `69bd865ec1bae1958b6f617bde4bf685a15d7d67`) ·\n> **Date** : 2026- … [4944 caractères tronqués]`
+
+  ```
+md ok
+json ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-r1r3.json'))\nprint('note:', json.dumps(d['methode']['note_arbre_de_travail'],ensure_ascii=False,indent=1))\nprint('limites:')\nfor x in d['limites']: print('-',x) … [123 caractères tronqués]`
+
+  ```
+note: {
+ "mesures_prises": "2026-11-05 entre 21:27 et 21:44",
+ "etat_mesure": "tools/bloc_linguistique.py identique a f908d7b0 (copie de base byte-identique)",
+ "changement_observe": "modification non commitée de tools/bloc_linguistique.py apparue a 22:14:32 (diff +9/-2 : candidat GP génitif, déplacement de prec = s), hors audit",
+ "effet_arbre_courant": "labels 212, exact 212, couverture 0,887 inchangés ; top-k 211 au lieu de 177 ; portes ajustées en conséquence",
+ "valeurs_fiche": "celles du commit f908d7b0, pas celles de l'arbre courant",
+ "head_observe_fin_redaction": "b551cf3b (journal/état, sans tools/) ; audit ancré sur f908d7b0",
+ "changements_observes": [
+  "tools/bloc_linguistique.py non commité a 22:14:32 (diff +9/-2 : candidat GP génitif, déplacement de prec = s)",
+  "tools/pensee/autotest.py non commité apres l'audit (assertions top-k 177 -> 211, cible 35 -> 1)"
+ ]
+}
+limites:
+- In-sample : les regles ont ete dessinees sur ce gold ; le test n'est pas aveugle (A17 a diagnostique sur dev et test).
+- Un seul split deterministe (crc32 % 3), sans validation croisee.
+- Le harnais A17 n'est pas committe ; la comparaison porte sur ses chiffres publies, pas sur son code.
+- Ablat
+… [920 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-audit-r1r3.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['limites']=[x for x in d['limites'] if not x.startswith('Le depot porte des modifications')]\nd[ … [602 caractères tronqués]`
+
+  ```
+ok
+JSON_VALIDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '412,432p' reports/rapport-audit-r1r3.md", "description": "Read limits paragraph"}`
+
+  ```
+- **In-sample** : les règles ont été dessinées sur ce gold ; le test n'est pas aveugle (A17 a
+  diagnostiqué sur dev **et** test). L'audit ne corrige pas ce biais, il mesure l'intégration.
+- **Un seul split déterministe** (`crc32 % 3`), sans validation croisée ; les chiffres
+  dev/test sont ceux de ce split.
+- **Le harnais A17 n'est pas committé** (`/tmp/spans/sim3.py` selon sa fiche) : la comparaison
+  porte sur ses chiffres publiés, pas sur son code. Si ses chiffres étaient faux, l'écart
+  A17→livré changerait — mais la ligne de base et la ligne livrée, elles, sont reproduites
+  exactement.
+- **Ablations par copies** : le module copié « tout éteint » ne diffère du parent que par deux
+  constantes inutilisées ; la fidélité est vérifiée au chiffre. Les variantes intermédiaires
+  ne touchent qu'une chaîne à la fois.
+- **Dépôt déjà modifié** : `journal/`, plusieurs `reports/` et le sous-module
+  `tools/structures` portaient des modifications non commitées antérieures à cet audit. Le
+  fichier `tools/bloc_linguistique.py` **était à l'état du commit pendant les mesures** (copie
+  de base byte-identique) ; il a été **modifié après** (22:14:32, hors audit), ce qui porte le
+  top-k de l'a
+… [417 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Finalisation du résumé d'audit
+
+Audit terminé au commit `f908d7b0`. Deux fichiers neufs, aucun commit, aucun fichier existant modifié par moi :
+
+- `reports/rapport-audit-r1r3.md`
+- `reports/pensee-audit-r1r3.json`
+
+## Verdict
+
+**Les chiffres rejouent tous. Les règles, non.** La fiche annonce **+27 exacts (222)** ; le code livré produit **+24 gains bruts pour 7 pertes = +17 (212)**. R1a perd 6 spans français, R1c en perd 1, R2 en perd 1, R3a est inerte, R3b n'est pas intégré.
+
+## 1. Rejeu — 0 écart
+
+| grandeur | fiche / JSON | vivant 612 | gelé 602 |
+|---|---:|---:|---:|
+| labels | 212 | **212** | **212** |
+| exact / labels | 212/212 = 1,0000 | **212/212** | **212/212** |
+| couverture | 0,887 | **0,8870** | **0,8870** |
+| F1 union | 0,5763 | 0,5720 | **0,5763** |
+| S / chunker | 0,4966 / 0,6057 | 0,4910 / 0,6018 | **0,4966 / 0,6057** |
+| tête | 0,7316 | 0,7262 | **0,7316** |
+| fr / en | 129/129, 83/83 | **idem** | **idem** |
+| spans | 27 (16 REL, 6 SUB, 5 GP) | **idem** | **idem** |
+| top-k | 177 ; 0,7406 | **idem** | **idem** |
+| « inatteignables » | 17 | **17** (même ensemble que A17) | **17** |
+
+L'état **avant** est également reproduit exactement : 196 labels, 195 exacts, couverture 0,8201, F1 0,5595 gelé / 0,5555 vivant, 43 spans (21/17/5), top-k 166. **183/183 portes** passent avec `PYTHONPATH=. python3 -m tools.pensee.autotest` (le lancement direct `python3 tools/pensee/autotest.py` échoue sur l'import relatif).
+
+## 2. Ablations — gain/perte par règle
+
+« Gain » = exact livré qui disparaît sans la règle ; « perte » = exact rétabli sans la règle. Net = gains − pertes.
+
+| règle retirée | exact restant | gains dev/test | pertes dev/test | net | pertes (ids) |
+|---|---:|---:|---:|---:|---|
+| **R1a** SUJETS/pronom | 203 | 12 / 3 | **3 / 3** | **+9** | `r273 s069 s135` / `s032 s072 s115` |
+| **R1b** modaux | 211 | 1 / 0 | 0 / 0 | +1 | — |
+| **R1c** 2e prédicat | 209 | 2 / 2 | **1 / 0** | **+3** | `g017` |
+| **R1** (faisceau) | 199 | 14 / 5 | **3 / 3** | **+13** | les 6 de R1a |
+| **R2** SUB sans précédent | 209 | 4 / 0 | **1 / 0** | **+3** | `s037` |
+| **R3a** subordonnants/langue | 212 | 0 / 0 | 0 / 0 | **0** | — |
+| **R3c** `fall`/`call` | 210 | 2 / 0 | 0 / 0 | **+2** | — |
+| *tout éteint* | 195 | **24** | **7** | **+17** | 7 pertes ci-dessus |
+
+- **R1a** : gains `r034 r074 r114 r205 r219 r240 r243 r247 r278 r285 r296 r299` (dev), `r214 r216 r281` (test) ; pertes `r273 s069 s135` (dev), `s032 s072 s115` (test). Le code retire les relatifs de `SUJETS` ; il ne fait pas la garde `PRON` d'A17. Six REL françaises dont le verbe n'est reconnu que par position sont perdues.
+- **R1c** : gains `r224 r291` (dev), `r115 r239` (test) ; perd `g017` : `verbes_vus` n'est pas incrémenté pour `come` après `would`, donc `yesterday` reste dans la SUB (`[9:38]` au lieu de `[9:28]`).
+- **R2** : gains `r215 r245 r279 r294` (dev) ; perd `s037` : `precedent is None → SUB` classe une REL initiale en SUB. La règle DURS/RELATIFS d'A17 n'est pas intégrée.
+- **R3a** : **inerte** (0 effet). Tous ses membres sont déjà dans `RELATIFS`/`SUBORDONNANTS`, et `car` reste un subordonnant anglais. La règle fidèle (retirer `car` en anglais partout) vaut **+1** (`r280`), pas +2.
+- **R3c** : **+2** (`r102` cible `falls`, `r245` avec R2), 0 perte. Seule règle dont l'effet annoncé est juste.
+- **R3b** (garde déterminant dans le GP) n'est pas intégrée : `r153` reste absent.
+
+**Arithmétique de la fiche** : R1 +20, R2 +3, R3a +2, R3c +2 = **+27**, donc 195+27 = **222** ; or la fiche affiche 212. Les lignes R1/R2/R3a coïncident avec le harnais A17, pas avec les mesures du code livré.
+
+## 3. Décomposition et 27 spans
+
+```
+exacts : 195 (v7) − 7 régressions + 23 des 26 gains A17 + 1 (r102 corrigé) = 212
+labels : 196 (v7) − 7 régressions + 23 des 26 gains A17                      = 212
+```
+
+Les **27 restants** = **17 non récupérables A17** + **7 régressions nouvelles** (6 R1a + 1 R2) + **3 gains A17 non intégrés** (`g017`, `r153`, `r280`). Les 27 contiennent exactement les 17 ids de A17 (mêmes types) ; les 10 autres sont récupérables. 19 synthétiques / 7 réels / 1 hand ; 22 fr / 5 en.
+
+Le **français recule** : 135 → 129 exacts, couverture 0,894 → 0,854 ; l'anglais gagne +23. Le « 1,0 / 1,0 » est un taux `exact/labels`, pas une couverture.
+
+La décomposition de la fiche somme à **20, pas 27** (12 REL synthétiques + 4 GP + 4 cas réels) : il manque 3 SUB synthétiques (`s044`, `s112`, `s114`) et 4 cas (`r273`, `g017`, `r153`, `r280`).
+
+## 4. Contrôles négatifs
+
+| contrôle | tirage | observé | référence nulle |
+|---|---:|---:|---:|
+| permutation globale des cibles | 2 000 | **212/212** | moyenne **2,04/212 = 0,96 %** ; p = 0/2 000 |
+| candidat aléatoire (top-1) | 2 000 | **212/212** | moyenne **76,1/212 = 35,9 %** |
+| permutation des candidats (top-k) | 2 000 | **177/212 = 83,49 %** | moyenne **1,81/212 = 0,85 %** |
+| hasard officiel | 1 | top-1 212/239 = 88,70 % | **1/239 = 0,42 %** |
+
+La fiche et le JSON ne publient **aucun** contrôle négatif ; ceux-ci le corroborent.
+
+## 5. dev/test
+
+| moitié | phrases | cibles | labels | exact | couverture | F1 | tête |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| dev v7 | 422 | 163 | 134 | 133/134 | 0,8221 | 0,5512 | 0,7132 |
+| **dev courant** | 422 | 163 | **148** | **148/148 = 1,0** | **0,9080** | **0,5723** | **0,7270** |
+| test v7 | 190 | 76 | 62 | 62/62 | 0,8158 | 0,5651 | 0,7196 |
+| **test courant** | 190 | 76 | **64** | **64/64 = 1,0** | **0,8421** | **0,5714** | **0,7241** |
+
+v7 → courant : dev **+14 labels / +15 exacts**, test **+2 / +2**. A17 attendait **dev 154/154** et **test 68/68** : il manque **6 dev et 4 test**, exactement 4 régressions + 2 gains non intégrés en dev, 3 régressions + 1 gain non intégré en test.
+
+## 6. Portes
+
+**183/183** portes vertes, mais **15 docstrings** du périmètre attachement/segmentation contredisent leur assertion : T111 (0,4183 vs 0,7402), T112/T113/T114/T115, T153 (0,8159 vs 0,887), T161 (195/196 vs 212/212), T162 (166 vs 177), T163 (43/30 vs 27/35), T166 (21/17/5-43 vs 16/6/5-27), T167 (÷196 vs ÷212), T172, T173, T177, T179. T180 est qualitativement ambigu. Les portes encodent 212/27 et n'erigent pas A17 (222/17) en référence.
+
+## ⚠ Note d'arbre de travail
+
+Les mesures datent de 21:27–21:44, quand `tools/bloc_linguistique.py` était **byte-identique à `f908d7b0`** (la copie de base du harnais a été diffée contre le commit). Depuis, l'arbre a bougé **hors audit** :
+
+- `tools/bloc_linguistique.py` a une modification non commitée (22:14:32, `+9/−2` : candidat GP génitif, déplacement de `prec = s`) ; sur l'arbre courant, **top-k = 211** au lieu de 177 (labels/exact restent 212/212, couverture 0,887).
+- `tools/pensee/autotest.py` a ensuite été ajusté (assertions top-k 177 → 211).
+- HEAD a avancé à `b551cf3b` (journal/état, sans `tools/`).
+
+Les chiffres de l'audit sont ceux du **commit `f908d7b0`**, pas de l'arbre courant. Le propriétaire de ces modifications doit les vérifier/committer.
+

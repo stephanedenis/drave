@@ -41,8 +41,9 @@
 | spans perdus | 94 (48 REL, 33 SUB, 13 GP) | **79 (48 REL, 21 SUB, 10 GP)** |
 | échecs de cible | 4 | **3 hors candidats** (r162, r309, r194) |
 
-**Contrôle négatif** : le dispositif est celui de la fiche courante — **permutation globale des
-cibles** (100 tirages) : **1,67/196** en moyenne contre **195/196** observé, p < 0,001.
+**Contrôle négatif** : voir le dispositif de la [fiche v7](rapport-pensee-couverture-v7.md)
+(permutation globale des cibles, candidat aléatoire) — les valeurs publiées là-bas sont celles de
+sa base, pas de celle-ci.
 
 **Ce que ça dit** :
 

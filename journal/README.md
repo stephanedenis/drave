@@ -173,14 +173,14 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c27ff712` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.9 h | 1 | 67 | 3 | 0 | [rapport](sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/rapport.md) |
 | `c3d0f0bd` | Chantier inactif à examiner | 2026-10-29 14:37 | 18.7 h | 5 | 551 | 26 | 32 | [rapport](sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/rapport.md) |
 | `c4796573` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | 1 | 129 | 6 | 0 | [rapport](sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) |
-| `c5910cba` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 0.7 h | 1 | 64 | 0 | 0 | [rapport](sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/rapport.md) |
+| `c5910cba` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.2 h | 1 | 105 | 1 | 0 | [rapport](sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
 | `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 26.5 h | 34 | 624 | 6 | 36 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
 | `cf0456ab` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | 8 | 343 | 27 | 11 | [rapport](sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
 | `d093c795` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 40 | 0 | 0 | [rapport](sessions/d093c795-b4c9-4270-bea8-e2673f86057b/rapport.md) |
 | `d300542e` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.3 h | 1 | 80 | 2 | 0 | [rapport](sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) |
-| `d3114d4c` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 0.7 h | 1 | 80 | 0 | 0 | [rapport](sessions/d3114d4c-1629-45f2-aba6-9592332507c5/rapport.md) |
+| `d3114d4c` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.5 h | 1 | 102 | 1 | 0 | [rapport](sessions/d3114d4c-1629-45f2-aba6-9592332507c5/rapport.md) |
 | `d31b3d9b` | Où en est-on | 2026-10-08 09:11 | 71.0 h | 104 | 3157 | 127 | 306 | [rapport](sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) |
 | `d58fb6be` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.5 h | 1 | 54 | 0 | 0 | [rapport](sessions/d58fb6be-cedc-4236-a298-aa953dfb21b7/rapport.md) |
 | `d622230d` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.3 h | 1 | 34 | 0 | 0 | [rapport](sessions/d622230d-649c-43cf-9202-da1eeb230259/rapport.md) |
@@ -190,7 +190,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 125.3 h | 177 | 2448 | 25 | 296 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 126.0 h | 177 | 2466 | 25 | 297 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
 | `ee19a880` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/ee19a880-cc76-4c5c-9fe0-5972bd73b533/rapport.md) |
@@ -206,4 +206,4 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `fe3c05f0` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 44.8 h | 390 | 1633 | 29 | 99 | [rapport](sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) |
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |
 | `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | 1 | 194 | 2 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
-| `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 0.7 h | 1 | 58 | 6 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
+| `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
