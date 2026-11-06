@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 126.3 h |
+| Durée | 126.6 h |
 | Tours | 177 |
-| Messages | 2816 |
-| Appels d'outils | 2478 |
+| Messages | 2823 |
+| Appels d'outils | 2485 |
 | Fichiers touchés | 25 |
-| Commandes | 2044 |
+| Commandes | 2050 |
 | Sous-agents | 23 |
-| Commits | 298 |
+| Commits | 299 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*237 appels d'outils.* Actions notables :
+*244 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 195 autres
+- … et 200 autres
 
 **Synthèse produite :**
 
-⏵ J'intègre l'audit de cohérence v8 (arithmétique, bases) et je commite le round v9
+⏵ **183/183** avec 220/220 : je fige la fiche v10 et je commite
 
 ## 3. Travail accompli
 
@@ -9620,7 +9620,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2004 autres
+- … et 2010 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10066,4 +10066,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep
 - B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183" -- tools/bloc_linguistiq
 - B13 — LA GARDE PRON : EXACT 219/219 (1,0000), COUVERTURE 0,9163, F1 0,5822, DEV 152/152 ET TEST 67/67 ; AUDIT DE COHÉRENCE V8 INTÉGRÉ ; 183/183" -- tools/bloc_l
+- B13 — LE FÉMININ -ÉE ET LA GARDE DÉTERMINANT DU GP : EXACT 220/220 (1,0000), COUVERTURE 0,9205, F1 0,5880, 19 SPANS ; 183/183" -- tools/bloc_linguistique.py too
 

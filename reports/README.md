@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-v10.md`](rapport-pensee-v10.md) | **B13** — le `-ée` et la garde DET : **220/220**, couverture **0,9205** |
 | [`rapport-pensee-v9.md`](rapport-pensee-v9.md) | **B13** — la garde PRON : exact **219/219 (1,0000)**, couverture **0,9163**, F1 **0,5822**, dev 152/152, test 67/67 |
 | [`rapport-topk-v8.md`](rapport-topk-v8.md) | **B13** — le top-k : `prec = s` expliquait 32/35 échecs ; **211/239** |
 | [`rapport-audit-r1r3.md`](rapport-audit-r1r3.md) | **B13** — audit A19 : **+17 net** (24 gains, 7 régressions), R3a inerte |
@@ -147,7 +148,6 @@
 | [`rapport-native-forward.md`](rapport-native-forward.md) | **N0.7** — exécution native DRVM : top-1 identique, logits **9,94 vs 10,82** |
 | [`rapport-native-generation.md`](rapport-native-generation.md) | **N4.1** — génération : cohérente 12 octets, puis dérive ; pas un assistant |
 | [`rapport-native-capacite-egal.md`](rapport-native-capacite-egal.md) | **N2.5b** — capacité à budget égal : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %) |
-| [`rapport-native-distillation-multi.md`](rapport-native-distillation-multi.md) | **N2.7** — distillation multi : student **9,517** vs professeur **9,571** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

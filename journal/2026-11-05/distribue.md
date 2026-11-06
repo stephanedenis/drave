@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (18)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -26,10 +26,11 @@
 | 20:20 | `35a67bc7` | FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README ET ÉTAT À JOUR | `en-cours.md`, `README.md`, `attention.md` (+21) |
 | 20:37 | `4ebeb683` | B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES | `en-cours.md`, `README.md`, `attention.md` (+18) |
 | 22:39 | `d497324b` | B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183 | `en-cours.md`, `README.md`, `attention.md` (+33) |
+| 22:56 | `160d08ca` | B13 — LA GARDE PRON : EXACT 219/219 (1,0000), COUVERTURE 0,9163, F1 0,5822, DEV 152/152 ET TEST 67/67 ; AUDIT DE COHÉRENCE V8 INTÉGRÉ ; 183/183 | `en-cours.md`, `README.md`, `attention.md` (+24) |
 
 ## Chiffres du jour
 
-`0,0118` · `0,9836` · `0,2862` · `0,5595` · `0,9724` · `0,9658` · `1,000`
+`1,0000` · `0,9163` · `0,5822` · `0,0118` · `0,9836` · `0,2862` · `0,5595` · `0,9724` · `0,9658` · `1,000`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -56,7 +57,7 @@
 - `c5910cba-e10a-4e08-8ac7-449ce150899c` — Tu travailles dans le dépôt (début 2026-11-05 21:12, 1.2 h) → [rapport](../sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/rapport.md) · [digest](../sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/digest.md)
 - `d300542e-6e9d-47ac-875b-b44a192eec35` — Tu travailles dans le dépôt (début 2026-11-05 14:22, 1.3 h) → [rapport](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) · [digest](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/digest.md)
 - `d3114d4c-1629-45f2-aba6-9592332507c5` — Tu travailles dans le dépôt (début 2026-11-05 21:12, 1.7 h) → [rapport](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/rapport.md) · [digest](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 126.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 126.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.0 h) → [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md)
 - `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` — — (début 2026-11-05 10:11, 0.0 h) → [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md)
 - `ff7e786c-3ece-4eae-864e-19dddfead93c` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.5 h) → [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md)
@@ -68,6 +69,7 @@
 - [reports/rapport-audit-r1r3.md](../../reports/rapport-audit-r1r3.md)
 - [reports/rapport-audit-v7.md](../../reports/rapport-audit-v7.md)
 - [reports/rapport-coherence-fiches-v7.md](../../reports/rapport-coherence-fiches-v7.md)
+- [reports/rapport-coherence-fiches-v8.md](../../reports/rapport-coherence-fiches-v8.md)
 - [reports/rapport-dev-test-v7.md](../../reports/rapport-dev-test-v7.md)
 - [reports/rapport-gold-split.md](../../reports/rapport-gold-split.md)
 - [reports/rapport-pensee-attachement-parfait.md](../../reports/rapport-pensee-attachement-parfait.md)
@@ -77,6 +79,7 @@
 - [reports/rapport-pensee-couverture-v7.md](../../reports/rapport-pensee-couverture-v7.md)
 - [reports/rapport-pensee-r1r3.md](../../reports/rapport-pensee-r1r3.md)
 - [reports/rapport-pensee-segmentation-v4.md](../../reports/rapport-pensee-segmentation-v4.md)
+- [reports/rapport-pensee-v9.md](../../reports/rapport-pensee-v9.md)
 - [reports/rapport-spans-v7.md](../../reports/rapport-spans-v7.md)
 - [reports/rapport-topk-v8.md](../../reports/rapport-topk-v8.md)
 
