@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-v11.md`](rapport-pensee-v11.md) | **B13** — les 2 régressions : exact **221/221**, couverture **0,9247**, 18 spans |
 | [`rapport-pensee-v10.md`](rapport-pensee-v10.md) | **B13** — le `-ée` et la garde DET : **220/220**, couverture **0,9205** |
 | [`rapport-pensee-v9.md`](rapport-pensee-v9.md) | **B13** — la garde PRON : exact **219/219 (1,0000)**, couverture **0,9163**, F1 **0,5822**, dev 152/152, test 67/67 |
 | [`rapport-topk-v8.md`](rapport-topk-v8.md) | **B13** — le top-k : `prec = s` expliquait 32/35 échecs ; **211/239** |
@@ -147,7 +148,6 @@
 | [`rapport-native-parite.md`](rapport-native-parite.md) | **N0.8** — parité native automatisée : **5/5** prompts, top-5 identique, écart < 0,0001 |
 | [`rapport-native-forward.md`](rapport-native-forward.md) | **N0.7** — exécution native DRVM : top-1 identique, logits **9,94 vs 10,82** |
 | [`rapport-native-generation.md`](rapport-native-generation.md) | **N4.1** — génération : cohérente 12 octets, puis dérive ; pas un assistant |
-| [`rapport-native-capacite-egal.md`](rapport-native-capacite-egal.md) | **N2.5b** — capacité à budget égal : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %) |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

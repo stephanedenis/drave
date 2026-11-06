@@ -1,0 +1,37 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 220,
+  "exact": 220,
+  "couverture": 0.9205,
+  "spans": 19
+ },
+ "apres": {
+  "labels": 221,
+  "exact": 221,
+  "exact_span": 1.0,
+  "couverture": 0.9247,
+  "f1": 0.5843,
+  "fr": "136/136",
+  "en": "85/85",
+  "topk": 220,
+  "topk_taux": 0.9205,
+  "spans": {
+   "REL": 9,
+   "SUB": 5,
+   "GP": 4,
+   "total": 18
+  }
+ },
+ "corrections": [
+  "R2 : relative en tête = REL",
+  "adverbe final retiré (g017 perdu, r303/r264 gagnés)"
+ ],
+ "limites": [
+  "18 spans",
+  "arbitrage g017",
+  "in-sample"
+ ]
+}

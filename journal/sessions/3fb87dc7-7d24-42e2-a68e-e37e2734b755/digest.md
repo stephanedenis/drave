@@ -1345,3 +1345,300 @@ v10 [('GN', 0, 11, 'Les clients', 'attendent'), ('GV', 12, 21, 'attendent', 'cli
 … [363 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Extraction des agrégats globaux (langue, type, source, croisements)
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\nimport json\nd = json.load(open('mesures.json'))\ng = d['global']\nprint('GLOBAL', g['phrases'], g['tokens'], g['attachement']['cibles'], g['attachement']['labels'], g['attachement']['exact'])\nprint('F1', g['syntagme'], 'TETE', g['tete'], 'POS', g['pos … [1062 caractères tronqués]`
+
+  ```
+GLOBAL 612 3179 239 220 220
+F1 {'precision': 0.6275, 'rappel': 0.5454, 'f1': 0.5836, 'tp': 1016, 'fp': 603, 'fn': 847} TETE {'precision': 0.8089, 'rappel': 0.6704, 'f1': 0.7332, 'tp': 1249, 'fp': 295, 'fn': 614} POS {'exactitude': 0.7581, 'exactitude_ferme': 0.9004, 'exactitude_ouvert': 0.6234, 'justes': 2410, 'tokens': 3179} PRAGMA {'acte': 0.9967, 'negation': 0.9771, 'modalite': 0.9886, 'double_sens': 0.9444}
+LANG fr 151 134 134 0.8874 F1 0.5575 tete 0.7087 POS 0.7543
+LANG en 88 86 86 0.9773 F1 0.6341 tete 0.7791 POS 0.7648
+TYPE REL 74 65 65 0.8784 F1 0.7738 tete 0.9542 tp/fp/fn 65 29 9
+TYPE SUB 69 63 63 0.913 F1 0.9014 tete 0.9504 tp/fp/fn 64 8 6
+TYPE GP 96 92 92 0.9583 F1 0.8559 tete 0.8632 tp/fp/fn 101 30 4
+TL REL/fr 46 38 38 0.8261
+TL REL/en 28 27 27 0.9643
+TL SUB/fr 43 38 38 0.8837
+TL SUB/en 26 25 25 0.9615
+TL GP/fr 62 58 58 0.9355
+TL GP/en 34 34 34 1.0
+SRC hand 13 13 13 1.0
+SRC reel 171 166 166 0.9708
+SRC synthetique 55 41 41 0.7455
+ATT_TETE {'cibles': 220, 'labels': 220, 'top1': 220, 'topk': 219, 'top1_taux': 1.0, 'topk_taux': 0.9955, 'couverture': 1.0}
+PERDUS {'total': 19, 'par_type': {'REL': 9, 'SUB': 6, 'GP': 4}, 'par_langue': {'en': 2, 'fr': 17}, 'par_source': {'reel':
+… [238 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Calcul des F1 GN/GV et des valeurs par type/langue pour les trois splits
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spec_from_file_l … [1314 caractères tronqués]`
+
+  ```
+dev F1 par type:
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "/tmp/v10/harnais.py", line 227, in seg_agrege
+    tp = sum(sum(r["seg_type"][t]["tp"] for t in types) for r in rs)
+  File "/tmp/v10/harnais.py", line 227, in <genexpr>
+    tp = sum(sum(r["seg_type"][t]["tp"] for t in types) for r in rs)
+             ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/v10/harnais.py", line 227, in <genexpr>
+    tp = sum(sum(r["seg_type"][t]["tp"] for t in types) for r in rs)
+                 ~~~~~~~~~~~~~^^^
+KeyError: 'GN'
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recalcul direct des F1 par type (y compris GN/GV) et table des splits
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util, json\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spec_from_ … [1392 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+  File "<stdin>", line 11, in f1_type
+KeyError: 'gold_segs'
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recalcul des F1 par type avec le gold directement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util, json\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spec_from_ … [1485 caractères tronqués]`
+
+  ```
+dev {'GN': {'f1': 0.4932, 'precision': 0.63, 'rappel': 0.4052, 'tp': 235, 'fp': 138, 'fn': 345}, 'GV': {'f1': 0.5959, 'precision': 0.5709, 'rappel': 0.6232, 'tp': 306, 'fp': 230, 'fn': 185}, 'ADJ': {'f1': 0.0, 'precision': 0.0, 'rappel': 0.0, 'tp': 0, 'fp': 0, 'fn': 30}, 'ADV': {'f1': 0.0, 'precision': 0.0, 'rappel': 0.0, 'tp': 0, 'fp': 0, 'fn': 18}, 'PONCT': {'f1': 0.0, 'precision': 0.0, 'rappel': 0.0, 'tp': 0, 'fp': 0, 'fn': 7}, 'REL': {'f1': 0.7907, 'precision': 0.7083, 'rappel': 0.8947, 'tp': 51, 'fp': 21, 'fn': 6}, 'SUB': {'f1': 0.9247, 'precision': 0.9149, 'rappel': 0.9348, 'tp': 43, 'fp': 4, 'fn': 3}, 'GP': {'f1': 0.8553, 'precision': 0.7647, 'rappel': 0.9701, 'tp': 65, 'fp': 20, 'fn': 2}}
+test {'GN': {'f1': 0.4798, 'precision': 0.5838, 'rappel': 0.4073, 'tp': 101, 'fp': 72, 'fn': 147}, 'GV': {'f1': 0.6247, 'precision': 0.6, 'rappel': 0.6516, 'tp': 144, 'fp': 96, 'fn': 77}, 'ADJ': {'f1': 0.0, 'precision': 0.0, 'rappel': 0.0, 'tp': 0, 'fp': 0, 'fn': 5}, 'ADV': {'f1': 0.0, 'precision': 0.0, 'rappel': 0.0, 'tp': 0, 'fp': 0, 'fn': 12}, 'PONCT': {'f1': 0.0, 'precision': 0.0, 'rappel': 0.0, 'tp': 0, 'fp': 0, 'fn': 2}, 'REL': {'f1': 0.7179, 'precision': 0.6364, 'rappel': 0.8235, 't
+… [2285 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Décomposition réel/synthétique par langue (le confond source-langue)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spec_from_file_l … [1127 caractères tronqués]`
+
+  ```
+==================== reel (hand+reel) phr 452
+  tout 184 179 179 0.9728 F1 0.5798 tete 0.7232 POS 0.7661
+   fr 242 96 94 94 0.9792 F1 0.5392 tete 0.6804 POS 0.7673
+   en 210 88 85 85 0.9659 F1 0.6324 tete 0.7774 POS 0.7648
+==================== synthetique phr 160
+  tout 55 42 42 0.7636 F1 0.6003 tete 0.7703 POS 0.7296
+   fr 160 55 42 42 0.7636 F1 0.6003 tete 0.7703 POS 0.7296
+   en 0 0 0 0 None F1 0.0 tete 0.0 POS 0.0
+==================== source hand phr 20
+  tout 13 12 12 0.9231 F1 0.7288 tete 0.8288 POS 0.8857
+   fr 14 10 10 10 1.0 F1 0.7416 tete 0.8537 POS 0.8514
+   en 6 3 2 2 0.6667 F1 0.6897 tete 0.7586 POS 0.9677
+==================== source reel phr 432
+  tout 171 167 167 0.9766 F1 0.5731 tete 0.7186 POS 0.7608
+   fr 228 86 84 84 0.9767 F1 0.5267 tete 0.6704 POS 0.7623
+   en 204 85 83 83 0.9765 F1 0.6309 tete 0.7779 POS 0.7592
+==================== source synthetique phr 160
+  tout 55 42 42 0.7636 F1 0.6003 tete 0.7703 POS 0.7296
+   fr 160 55 42 42 0.7636 F1 0.6003 tete 0.7703 POS 0.7296
+   en 0 0 0 0 None F1 0.0 tete 0.0 POS 0.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Debug de l'écart source×langue dans le harnais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util, collections\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spe … [1146 caractères tronqués]`
+
+  ```
+langues phrases Counter({'fr': 402, 'en': 210})
+langues records Counter({'fr': 402, 'en': 210})
+sources records Counter({'reel': 432, 'synthetique': 160, 'hand': 20})
+hand recs 20 tg 13 trouve 12 lang Counter({('fr', True): 10, ('en', True): 2, ('en', False): 1}) srclang Counter({('fr', 'hand'): 14, ('en', 'hand'): 6})
+   fr recs 14 tg 10 trouve 10
+   en recs 6 tg 3 trouve 2
+reel recs 432 tg 171 trouve 167 lang Counter({('fr', True): 84, ('en', True): 83, ('en', False): 2, ('fr', False): 2}) srclang Counter({('fr', 'reel'): 228, ('en', 'reel'): 204})
+   fr recs 228 tg 86 trouve 84
+   en recs 204 tg 85 trouve 83
+synthetique recs 160 tg 55 trouve 42 lang Counter({('fr', True): 42, ('fr', False): 13}) srclang Counter({('fr', 'synthetique'): 160})
+   fr recs 160 tg 55 trouve 42
+   en recs 0 tg 0 trouve 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Investigation de l'incohérence hand 12/13 vs 13/13
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util, collections, json\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.ut … [1204 caractères tronqués]`
+
+  ```
+g002 fr GP 8 21 trouve True exact 1 cible chat pred chat
+g003 fr GP 22 34 trouve True exact 1 cible vu pred vu
+g004 fr GP 11 31 trouve True exact 1 cible couru pred couru
+g005 fr SUB 11 28 trouve True exact 1 cible dit pred dit
+g006 fr GP 9 18 trouve True exact 1 cible chien pred chien
+g007 fr GP 19 33 trouve True exact 1 cible jouent pred jouent
+g010 fr GP 6 9 trouve True exact 1 cible Viens pred Viens
+g011 fr REL 9 20 trouve True exact 1 cible livre pred livre
+g012 fr GP 19 27 trouve True exact 1 cible prêt pred prêt
+g014 fr GP 16 33 trouve True exact 1 cible vu pred vu
+g016 en GP 22 33 trouve True exact 1 cible saw pred saw
+g017 en SUB 9 28 trouve False exact 0 cible said pred 
+g020 en GP 18 24 trouve True exact 1 cible ready pred ready
+perdus hand [('g017', [('SUB', 9, 28, 'said')])]
+agg hand par_source {'hand': {'cibles': 13, 'labels': 12, 'exact': 12, 'exact_any': 12, 'top1': 12, 'topk': 12, 'topk_exact': 12, 'couverture': 0.9231, 'exact_taux_span': 1.0, 'exact_taux_cibles': 0.9231, 'exact_any_taux_span': 1.0, 'top1_taux': 0.9231, 'topk_taux': 0.9231, 'topk_taux_span': 1.0, 'topk_exact_taux': 0.9231, 'verbe': {'cibles': 7, 'justes': 7, 'taux': 1.0}, 'nom': {'cibles': 5, 'just
+… [1223 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : g017 diffère entre deux exécutions — vérification de l'état de l'arbre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git status --porcelain tools/bloc_linguistique.py tools/tests/linguistique/ | head -20; echo '--- dirty code? ---'; git diff --stat -- tools/bloc_linguistique.py tools/tests/linguistique/; echo '--- mtime ---';  … [189 caractères tronqués]`
+
+  ```
+68a8717b057f21d389194679bf34f1cabc5c312d
+ M tools/bloc_linguistique.py
+--- dirty code? ---
+ tools/bloc_linguistique.py | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+--- mtime ---
+2026-11-06 00:15:37.544747590 -0500 tools/bloc_linguistique.py
+2026-11-05 16:37:50.944795187 -0500 tools/tests/linguistique/gold.json
+2026-11-02 14:39:32.079131990 -0500 tools/tests/linguistique/gold_reel.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spec_from_file_l … [609 caractères tronqués]`
+
+  ```
+bl file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+gold [('GN', 0, 3, None), ('GV', 4, 8, None), ('SUB', 9, 28, 'said')]
+pred [('GV', 4, 8), ('SUB', 9, 38)]
+collect target [{'type': 'SUB', 'langue': 'en', 'source': 'hand', 'debut': 9, 'fin': 28, 'cibles': ['said'], 'trouve': False, 'cible_pred': '', 'exact': 0, 'exact_any': 0, 'top1': 0, 'topk': 0, 'topk_exact': 0, 'verbe': True}]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'arbre a bougé pendant la mesure — inspection du nouveau HEAD et du diff sale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo '=== 68a8717b stat ==='; git show --stat --oneline 68a8717b | head -30; echo '=== diff sale ==='; git diff -- tools/bloc_linguistique.py", "description": "Inspect new HEAD and dirty module diff"}`
+
+  ```
+68a8717b JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)
+41cae3e5 JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS
+4d34c37a PILOTAGE — LES VAGUES 5 À 7 (AUDITS V7/V8, R1/R3, TOP-K, V10) DOCUMENTÉES AU PLAN-TRAVAIL
+77ed0856 THÉORIE ET JOURNAL — LE DÉCOUPAGE D'ABORD : LA COUVERTURE EST UN PLAFOND, UN GOLD SE VÉRIFIE AVANT DE JUGER
+710ec7f9 B13 — LE FÉMININ -ÉE ET LA GARDE DÉTERMINANT DU GP : EXACT 220/220 (1,0000), COUVERTURE 0,9205, F1 0,5880, 19 SPANS ; 183/183
+=== 68a8717b stat ===
+68a8717b JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)
+ journal/2026-11-06/README.md                       |  13 ++-
+ journal/2026-11-06/distribue.md                    |  27 ++++++
+ journal/README.md                                  |   6 +-
+ journal/THEMES.md                                  |   1 +
+ .../3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md |  54 +++++++++++
+ .../rapport.md                                     |  17 ++--
+ journal/sessions/MANIFEST.md                       |   8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  35 +++++++
+ .../rapport.md                                     |  15 +--
+ 
+… [1979 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de l'arbre sale (après 710ec7f9) pour documenter le ballant g017/r303
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0, 'tools'); sys.path.insert(0, '.')\nfrom tools.tests.linguistique import evaluer_gold as eg, gold_split as gs\nimport bloc_linguistique as bl\nph = eg.charger(); d = gs.de … [1133 caractères tronqués]`
+
+  ```
+dev 163 152 152 0.9325 F1 0.5812 tete 0.7324 POS 0.7547
+test 76 69 69 0.9079 F1 0.5914 tete 0.7344 POS 0.7656
+tout 239 221 221 0.9247 F1 0.5843 tete 0.733 POS 0.7581
+perdus 18 Counter({'REL': 9, 'SUB': 5, 'GP': 4})
+ids ['g017', 'r035', 'r241', 'r255', 'r264', 's010', 's027', 's035', 's044', 's061', 's065', 's112', 's114', 's125', 's141', 's146', 's148', 's160']
+g017 [('GV', 4, 8), ('SUB', 9, 38)]
+s037 [('GV', 0, 4), ('REL', 5, 15), ('REL', 5, 22), ('GV', 16, 22)]
+r303 [('GV', 0, 7), ('GV', 3, 7), ('SUB', 8, 23), ('GV', 12, 18), ('GP', 19, 23)]
+r255 [('GN', 0, 10), ('REL', 11, 33)]
+r153 [('GV', 3, 7), ('GP', 8, 19)]
+r280 [('GN', 0, 7), ('REL', 8, 21), ('GV', 22, 26)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Épinglage du module 710ec7f9 et re-exécution de contrôle du harnais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/v10/mesures.json /tmp/v10/mesures_avant_pin.json && git show 710ec7f9:tools/bloc_linguistique.py > /tmp/v10/bloc_710ec7f9.py && python3 - <<'EOF'\np = '/tmp/v10/harnais.py'\ns = open(p, encoding='utf-8').read()\nold = '''from … [1078 caractères tronqués]`
+
+  ```
+ok
+== validation ==
+tout écart max 0.0 phrases 612
+dev écart max 0.0 phrases 422
+test écart max 0.0 phrases 190
+gelé 602: {'phrases': 602, 'pos': 0.7603, 'f1': 0.588, 'tete': 0.7388, 'labels': 220, 'exact': 220, 'couverture': 0.9205, 'topk': 219}
+
+== canonique ==
+dev phrases 422 cibles 163 labels 152 exact 152 couv 0.9325 F1 0.5812 tête 0.733 POS 0.7547
+   langue {'fr': (101, 91, 91, 0.901), 'en': (62, 61, 61, 0.9839)}
+   type {'REL': (57, 51, 51, 0.8947, 0.7907, 0.9573), 'SUB': (45, 42, 42, 0.9333, 0.9247, 0.9462), 'GP': (61, 59, 59, 0.9672, 0.8553, 0.8609)}
+test phrases 190 cibles 76 labels 68 exact 68 couv 0.8947 F1 0.589 tête 0.7337 POS 0.7656
+   langue {'fr': (50, 43, 43, 0.86), 'en': (26, 25, 25, 0.9615)}
+   type {'REL': (17, 14, 14, 0.8235, 0.7179, 0.9444), 'SUB': (24, 21, 21, 0.875, 0.8571, 0.9583), 'GP': (35, 33, 33, 0.9429, 0.8571, 0.8675)}
+all phrases 612 cibles 239 labels 220 exact 220 couv 0.9205 F1 0.5836 tête 0.7332 POS 0.7581
+   langue {'fr': (151, 134, 134, 0.8874), 'en': (88, 86, 86, 0.9773)}
+   type {'REL': (74, 65, 65, 0.8784, 0.7738, 0.9542), 'SUB': (69, 63, 63, 0.913, 0.9014, 0.9504), 'GP': (96, 92, 92, 0.9583, 0.8559, 0.8632)}
+
+== stabilité ==
+exact_taux_span
+… [2608 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison JSON épinglé vs JSON initial (doit être identique)
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\nimport json\na=json.load(open('mesures_avant_pin.json')); b=json.load(open('mesures_pin.json'))\ndef diff(x,y,path=''):\n    if type(x)!=type(y): print('TYPE', path, type(x), type(y)); return\n    if isinstance(x,dict):\n        for k in set(x)|set(y):\ … [476 caractères tronqués]`
+
+  ```
+done
+  ```
+
+### 🤖 Assistant
+
+⏵ Décomposition réel/synthétique sur le module épinglé 710ec7f9
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spec_from_file_l … [1499 caractères tronqués]`
+
+  ```
+==================== reel (hand+reel) phr 452
+  tout 184 179 179 0.9728 F1 0.5798 tete 0.7239 POS 0.7661
+   fr 242 96 93 93 0.9688 F1 0.5379 tete 0.6804 POS 0.7673
+   en 210 88 86 86 0.9773 F1 0.6341 tete 0.7791 POS 0.7648
+==================== synthetique phr 160
+  tout 55 41 41 0.7455 F1 0.5969 tete 0.7682 POS 0.7296
+   fr 160 55 41 41 0.7455 F1 0.5969 tete 0.7682 POS 0.7296
+==================== source hand phr 20
+  tout 13 13 13 1.0 F1 0.7458 tete 0.8288 POS 0.8857
+   fr 14 10 10 10 1.0 F1 0.7416 tete 0.8537 POS 0.8514
+   en 6 3 3 3 1.0 F1 0.7586 tete 0.7586 POS 0.9677
+==================== source reel phr 432
+  tout 171 166 166 0.9708 F1 0.5723 tete 0.7194 POS 0.7608
+   fr 228 86 83 83 0.9651 F1 0.5253 tete 0.6704 POS 0.7623
+   en 204 85 83 83 0.9765 F1 0.6309 tete 0.7796 POS 0.7592
+==================== source synthetique phr 160
+  tout 55 41 41 0.7455 F1 0.5969 tete 0.7682 POS 0.7296
+   fr 160 55 41 41 0.7455 F1 0.5969 tete 0.7682 POS 0.7296
+GLOBAL 239 220 220
+par source {'hand': (13, 13), 'reel': (171, 166), 'synthetique': (55, 41)}
+par langue {'fr': (151, 134), 'en': (88, 86)}
+  ```
+

@@ -2189,3 +2189,746 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v
 … [97 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Refining the dev/test wording to avoid overclaiming
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\ns=s.replace(\"\"\"est **68/68**, pas 67/67.\n\n## 1. Dispositif\"\"\",\"\"\"n'est pas actualisé : **68/68**, pas 67/67 (le 67/67 est explicitement la v9).\n\n## 1. Dispositif\"\"\")\ns=s.replace(\"\"\"2. **dev / test* … [2001 caractères tronqués]`
+
+  ```
+ok
+json ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading the report end-to-end
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md", "limit": 140}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md</path>
+<type>file</type>
+<content>
+1: # Audit v10 — les chiffres rejouent, l'attribution des corrections ne rejoue pas
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+4: > **Commit audité** : `710ec7f9` (parent `160d08ca`) · **Date** : 2026-11-05 ·
+5: > **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅.
+6: > **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+7: > [`pensee-audit-v10.json`](pensee-audit-v10.json).
+8: 
+9: **En une phrase.** Les valeurs de la fiche [`rapport-pensee-v10.md`](rapport-pensee-v10.md)
+10: rejouent presque toutes : **220/220**, couverture **0,9205**, **F1 0,5880** (gelé 602),
+11: **tête 0,7388**, **fr 134/134**, **en 86/86**, **19 spans** (9 REL, 6 SUB, 4 GP),
+12: **top-k 219**, **183/183 portes**. Mais la fiche attribue le gain à **deux** corrections :
+13: la seconde, le **`-ée`**, est **antérieure à la v10** (commit `a408a909`, déjà dans v8 et v9)
+14: et **inerte sur ce gold** (0 différence d'annotation sur 612 phrases) ; `r255` reste absent
+15: car `acheter` n'est pas dans le lexique. Le **seul** 
+… [8670 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger(); ge=eg.charger_gele()\nprint('tokens vivant', sum(len(p['mots']) for p in ph), 'gele', sum(len(p['mots']) for p in ge))\nprint('sources', {s:sum(1 for p in ph if p.g … [210 caractères tronqués]`
+
+  ```
+tokens vivant 3179 gele 3141
+sources {'hand': 20, 'reel': 432, 'synthetique': 160}
+phrases 612 602
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading the rest of the report
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md", "offset": 141, "limit": 200}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md</path>
+<type>file</type>
+<content>
+141: - **Garde PRON** — gains : `g017 r034 r074 r114 r205 r219 r240 r243 r247 r278 r280 r285
+142:   r296 r299` (dev), `r214 r216 r281` (test) ; aucune perte.
+143: - **Expansion SUJETS** — gains : `r273 s069 s135` (dev), `s032 s072 s115` (test) ; aucune
+144:   perte. **PRON + SUJETS** : mêmes six gains, mêmes pertes nulles.
+145: - **`est_sub`** — gain : `r280` (dev) ; aucune perte.
+146: - **`predicat_vu`** — gain : `g017` (dev) ; **perte : `r303`** (dev).
+147: - **`-ée`** — aucun gain, aucune perte.
+148: - **Garde DET du GP** — gain : `r153` (test) ; aucune perte.
+149: - **v8 → v10** — 9 gains (`g017 r273 r280 s069 s135` dev ; `r153 s032 s072 s115` test),
+150:   1 perte (`r303` dev) : net **+8** (212 → 220).
+151: 
+152: ### 4.2 Ce que les ablations disent
+153: 
+154: - **Le `-ée` est totalement inerte sur ce gold.** Retirer la boucle ne change **aucune**
+155:   étiquette (niveau, type, span) sur les **612** phrases : labels, exact, F1, top-k et spans
+156:   sont identiques. `_est_verbe("achetée")` reste **False** car `acheter` n'est **pas** dans
+157:   `VERBES_CONNUS` 
+… [13162 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Tightening the arithmetic and test wording
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\ns=s.replace(\"\"\"- **L'arithmétique ne somme pas** : 212 + (6 REL + `r280` + `g017`) = 220, mais la v9 donne\n  **219** ; la différence est **`r303`**, perdue. Mesure : **8 gains bruts, 1 perte, net +7**\n  (212 → 21 … [729 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking JSON consistency with the report
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nprint(json.dumps(d['verdict'],ensure_ascii=False,indent=1))\nprint('--- ecarts ---')\nfor e in d['ecarts']:\n    print(e['gravite'],'|',e['grandeur'],'|',e['fiche'],'->',e['mesure'])\nprint('--- rejeu v9  … [275 caractères tronqués]`
+
+  ```
+{
+ "chiffres_rejoues": true,
+ "ecarts_chiffres": 2,
+ "regles_justes": false,
+ "portes": "183/183",
+ "resume": "Les valeurs v10 rejouent (220/220, 0,9205, 0,5880, 0,7388, 134/134, 86/86, 19 spans, top-k 219). Deux écarts de valeur : le F1 « avant » (0,5822 vivant, 0,5866 gelé) et le test non actualisé (68/68, pas 67/67, valeur v9 explicite). Les règles ne rejouent pas : la seule correction v10 est la garde DET du GP (+1, r153) ; le -ée est antérieur et inerte (0 différence sur 612 phrases), r255 reste absent. Les 19 spans sont 17 résiduels + s037 + r303, pas 17 + r255 + r264 ; r303 est une perte cachée du predicat_vu v9 (net 0 avec g017)."
+}
+--- ecarts ---
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+KeyError: 'mesure'
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting discrepancy entries safely
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nfor e in d['ecarts']:\n    print('\\n',e['gravite'],'|',e['grandeur'])\n    for k,v in e.items():\n        if k not in ('gravite','grandeur'): print('  ',k,':',v)\nprint('\\n--- rejeu v9 f1 ---', d['rejeu … [249 caractères tronqués]`
+
+  ```
+majeure | F1 union (état v9, colonne « avant » de la v10)
+   fiche : 0.5822
+   mesure_gele_602 : 0.5866
+   mesure_vivant_612 : 0.5822
+   note : 0,5822 est la valeur du vivant 612 ; le gelé 602 vaut 0,5866. La v9 étiquette 0,5822 « gelé 602 » ; la v10 la reprend en « avant ». Le gain v9→v10 est +0,0014, pas +0,0058.
+
+ moyenne | dev / test
+   fiche : 152/152, 67/67 (daté « avant corrections »)
+   mesure : 152/152, 68/68
+   note : Le 67/67 est explicitement la v9 ; la valeur courante v10 est test 68/68 (+1 par r153), dev 152/152. Le JSON v10 ne publie pas dev/test.
+
+ majeure | décomposition des 19 spans
+   fiche : 17 inatteignables + r255 + r264
+   mesure : 17 résiduels + s037 + r303
+   note : r255 et r264 sont déjà dans les 17 ; les deux extras réels sont s037 et r303.
+
+ majeure | attribution des corrections
+   fiche : -ée + garde DET du GP
+   mesure : garde DET du GP seule
+   note : -ée est présent dès a408a909 (avant v8), sans effet mesurable sur ce gold ; le commit 710ec7f9 ne modifie que la boucle GP.
+
+ majeure | 7 régressions v8 réparées
+   fiche : 7
+   mesure : 6
+   note : s037 (la 7e) reste absente ; les 6 réparées sont r273 s032 s069 s072 s115 s135.
+
+ majeure | table v9 (212 
+… [532 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nprint(json.dumps(d['rejeu']['v10'],ensure_ascii=False,indent=1)[:3500])\nPY", "description": "Inspect v10 replay JSON", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+{
+ "vivant_612": {
+  "labels": 220,
+  "exact": 220,
+  "exact_span": 1.0,
+  "exact_any": 220,
+  "couverture": 0.9205,
+  "topk": 219,
+  "topk_taux": 0.9163,
+  "topk_exact": 219,
+  "topk_taux_span": 0.9955,
+  "fr": {
+   "cibles": 151,
+   "labels": 134,
+   "exact": 134,
+   "couverture": 0.8874,
+   "topk": 133
+  },
+  "en": {
+   "cibles": 88,
+   "labels": 86,
+   "exact": 86,
+   "couverture": 0.9773,
+   "topk": 86
+  },
+  "f1": 0.5836,
+  "f1_s": 0.4957,
+  "f1_chunker": 0.6163,
+  "tete": 0.7332,
+  "spans": {
+   "REL": 9,
+   "SUB": 6,
+   "GP": 4,
+   "total": 19
+  },
+  "verbe": {
+   "cibles": 149,
+   "justes": 149,
+   "taux": 1.0
+  },
+  "nom": {
+   "cibles": 71,
+   "justes": 71,
+   "taux": 1.0
+  }
+ },
+ "gele_602": {
+  "labels": 220,
+  "exact": 220,
+  "exact_span": 1.0,
+  "exact_any": 220,
+  "couverture": 0.9205,
+  "topk": 219,
+  "topk_taux": 0.9163,
+  "topk_exact": 219,
+  "topk_taux_span": 0.9955,
+  "fr": {
+   "cibles": 151,
+   "labels": 134,
+   "exact": 134,
+   "couverture": 0.8874,
+   "topk": 133
+  },
+  "en": {
+   "cibles": 88,
+   "labels": 86,
+   "exact": 86,
+   "couverture": 0.9773,
+   "topk": 86
+  },
+  "f1": 0.588,
+  "f1_s": 0.5014,
+  "f1_chunker": 0.6203,
+  "tete": 0.7388,
+  "spans": {
+
+… [2299 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing two JSON notes for accuracy
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\np='reports/pensee-audit-v10.json'\nd=json.load(open(p))\nd['rejeu']['v10']['note']=\"labels/exact/couverture/top-k identiques sur les deux golds ; F1/S/chunker/tête sont les valeurs du gelé 602 dans la fiche ; les valeurs vivant 612 sont mesurées ici, la f … [485 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Validating final outputs and links
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-audit-v10.json >/dev/null && echo 'JSON OK'; python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-audit-v10.md')\ns=p.read_text()\nlinks=re.findall(r'\\]\\(([^)]+)\\)',s)\nfor l in sorted(set(links)):\n    if l.startswith('http'): con … [213 caractères tronqués]`
+
+  ```
+JSON OK
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  pensee-audit-v10.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-audit-v10.json
+OK  rapport-audit-r1r3.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-r1r3.md
+OK  rapport-audit-v10.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md
+OK  rapport-pensee-v10.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-v10.md
+  ```
+
+- **bash** `{"command": "git status --short | grep -E 'rapport-audit-v10|pensee-audit-v10'; echo '--- diff stat (new files only)'; git status --short | wc -l; echo '--- forbidden tools ---'; git status --short tools/bloc_linguistique.py tools/pensee/autotest.py tools/tests/linguistique/evaluer_gold.py tools/tes … [252 caractères tronqués]`
+
+  ```
+?? reports/pensee-audit-v10.json
+?? reports/rapport-audit-v10.md
+--- diff stat (new files only)
+106
+--- forbidden tools ---
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/2026-11-06/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Cross-checking gate messages cited
+
+- **bash** `{"command": "grep -E 'T153|T161|T162|T163|T166|T167|T173|T180' /tmp/audit_v10/autotest.log", "description": "Read cited gate messages", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ T153 attachement       attachement : top1 0.9205, exact 0.9205, couverture 0.9205
+  ✅ T161 cible proximité   proximité : top1 220/239, exact 220/239, tête 220/145
+  ✅ T162 candidats verbes  candidats : top-k 219/239 (0.9163), tête 219/220
+  ✅ T163 échecs attachement échecs : 19 de span, 1 de cible (33 avant les correctifs)
+  ✅ T166 spans perdus      spans : 9 REL, 6 SUB, 4 GP
+  ✅ T167 dénominateur      dénominateur : spans 1.0 / 0.9955 / 1.0
+  ✅ T173 top-k strict      top-k : 219 sous-chaîne, 219 exacts (0.9955)
+  ✅ T180 par langue        langues : fr 134/134, en 86/86 (86/88 labels)
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the odd T161 denominator
+
+- **bash** `{"command": "sed -n '2325,2360p' tools/pensee/autotest.py", "description": "Read T161 implementation", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+"""Les passifs sans par : le chunker 3/3 patient."""
+    import tools.bloc_linguistique as bl
+    h = bl.Heuristique(segmenter_s=False)
+    ok = 0
+    for txt in ("Le livre est lu.", "La porte est ouverte.", "Les enfants sont partis."):
+        a = h.analyser(txt, "fr")
+        roles = [(e.meta or {}).get("role") for e in a.etiquettes
+                 if e.niveau == "syntagme" and e.type == "GN"]
+        if roles and roles[0] == "patient":
+            ok += 1
+    return ok == 3, f"passif sans par (chunker) : {ok}/3 patient"
+
+
+def t161_cible_proximite() -> tuple[bool, str]:
+    """La cible par proximité : 212/212 avec la règle du précédent."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    r = evaluer_bloc("h", bl.Heuristique(), charger())
+    a, th = r["attachement"], r["attachement_tete"]
+    return (a["cibles"] == 239 and a["top1"] == 220 and a["exact"] == 220), (
+        f"proximité : top1 {a['top1']}/239, exact {a['exact']}/239, "
+        f"tête {th['top1']}/145")
+
+
+def t162_candidats_verbes() -> tuple[bool, str]:
+    """Les candidats verbes : le top-k atteint 211/239 (0,8828) après le correctif du précédent.
+… [514 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Scanning gate docstrings for stale numbers
+
+- **bash** `{"command": "python3 - <<'PY'\nimport ast\nsrc=open('tools/pensee/autotest.py').read()\nt=ast.parse(src)\nfor node in t.body:\n    if isinstance(node,ast.FunctionDef) and node.name.startswith('t1') and int(node.name[1:])>=153:\n        doc=ast.get_docstring(node) or ''\n        if doc: print(node.na … [126 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: invalid literal for int() with base 10: '1_rejeu'
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Listing T153+ docstrings safely
+
+- **bash** `{"command": "python3 - <<'PY'\nimport ast,re\nsrc=open('tools/pensee/autotest.py').read()\nt=ast.parse(src)\nfor node in t.body:\n    if isinstance(node,ast.FunctionDef):\n        m=re.match(r't(\\d+)_',node.name)\n        if m and 153<=int(m.group(1))<=180:\n            doc=(ast.get_docstring(node) … [189 caractères tronqués]`
+
+  ```
+t153_attachement             L'attachement sur le gold 612 (239 cibles) : top1 0,887, exact 0,887, couverture 0,887.
+t154_cibles                  Les cibles de l'attachement : 1624 segments sans cible sur 1863.
+t155_cibles_500              Les 500 premiers segments : 294 GN, 206 GV.
+t156_relation                La relation GN → GV : 257/546 (0,4707).
+t157_roles                   Les GN sans rôle : 231, dont 151 avant le GV et 46 après.
+t158_passifs                 Les passifs : 5/5 faux par la position seule.
+t159_passifs_corriges        Le correctif des passifs : _role_gp rend agent, le generateur S court-circuite.
+t160_passifs_sans_par        Les passifs sans par : le chunker 3/3 patient.
+t161_cible_proximite         La cible par proximité : 212/212 avec la règle du précédent.
+t162_candidats_verbes        Les candidats verbes : le top-k atteint 211/239 (0,8828) après le correctif du précédent.
+t163_echecs_attachement      Les échecs de l'attachement : 27 de span, 1 de cible.
+t164_verbe_gv                Le verbe du GV-phrase : le POS VERB, pas le dernier mot.
+t165_lexique_verbal          Le lexique verbal arbitre le POS : « talks » est un verbe, « brother » n'en est pas un.
+t166_
+… [1551 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Auditing gate docstrings for stale values
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))['variantes']['v10']\nprint('v10 exact',d['exact'],'labels',d['labels'],'topk',d['topk'],'topk_exact',d['topk_exact'],'spans',d['spans'])\nprint('fr',d['fr'],'en',d['en'])\nprint('att tete',d.get('tete_gele … [125 caractères tronqués]`
+
+  ```
+v10 exact 220 labels 220 topk 219 topk_exact 219 spans {'GP': 4, 'REL': 9, 'SUB': 6}
+fr {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133} en {'cibles': 88, 'labels': 86, 'exact': 86, 'topk': 86}
+att tete 0.7388
+  ```
+
+### 🤖 Assistant
+
+⏵ Adding the stale gate docstrings finding
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\nold=\"\"\"mesurées : `T153` top-1/exact 0,9205, `T161` 220/239, `T162` top-k 219/239 et tête 219/220,\n`T163` 19 spans et 1 cible, `T166` 9 REL / 6 SUB / 4 GP, `T167` labels 220 et top-k span\n0,9955, `T173` 219 sous- … [3033 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Adding stale docstrings to the JSON
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\np='reports/pensee-audit-v10.json'\nd=json.load(open(p))\ndocstrings=[\n {'porte':'T153','docstring':'top1/exact/couverture 0,887','mesure':'0,9205 / 0,9205 / 0,9205'},\n {'porte':'T161','docstring':'212/212','mesure':'220/220'},\n {'porte':'T162','docstrin … [1674 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading the updated gates section
+
+- **bash** `{"command": "sed -n '250,310p' reports/rapport-audit-v10.md", "description": "Read updated gates section", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+en dev. La fiche v10 publie encore le **test 67/67** en le datant d'avant les corrections ;
+la valeur courante est **68/68**.
+
+## 7. Portes
+
+`PYTHONPATH=. python3 -m tools.pensee.autotest` → **183/183 portes tenues**, exit 0,
+**0 échec**. Les assertions du périmètre attachement/segmentation portent bien les valeurs
+mesurées : `T153` top-1/exact 0,9205, `T161` 220/239, `T162` top-k 219/239 et tête 219/220,
+`T163` 19 spans et 1 cible, `T166` 9 REL / 6 SUB / 4 GP, `T167` labels 220 et top-k span
+0,9955, `T173` 219 sous-chaîne et 219 exacts (0,9955), `T180` fr 134/134 et en 86/86. Les
+portes **entérinent** les valeurs courantes ; elles ne testent pas l'attribution des règles
+(le `-ée` inerte et `r303` passent sans être vus).
+
+**Onze docstrings du périmètre attachement/segmentation sont périmées** : elles contredisent
+leur propre assertion (qui, elle, passe). Le commit `710ec7f9` a mis à jour 19 assertions,
+pas ces textes.
+
+| porte | docstring | mesure affichée |
+|---|---|---|
+| T153 | top1/exact/couverture 0,887 | **0,9205 / 0,9205 / 0,9205** |
+| T161 | 212/212 | **220/220** |
+| T162 | 211/239 (0,8828) | **219/239 (0,9163)** |
+| T163 | 27 de span | **19 de span** |
+| T166 | 16 REL, 6 S
+… [2500 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying JSON gate fields
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nprint(json.dumps(d['portes_autotest'],ensure_ascii=False,indent=1)[:2500])\nprint('\\nlast ecarts:')\nfor e in d['ecarts'][-2:]: print(e)\nPY", "description": "Inspect JSON gates and last discrepancies",  … [61 caractères tronqués]`
+
+  ```
+{
+ "commande": "PYTHONPATH=. python3 -m tools.pensee.autotest",
+ "resultat": "183/183, exit 0",
+ "echecs": 0,
+ "note": "183/183, exit 0. L'invocation directe python3 tools/pensee/autotest.py échoue sur l'import relatif (ImportError) ; utiliser -m. Onze docstrings du périmètre attachement/segmentation contredisent leur assertion (elles annoncent encore 212/0,887/27/211).",
+ "docstrings_perimees": [
+  {
+   "porte": "T153",
+   "docstring": "top1/exact/couverture 0,887",
+   "mesure": "0,9205 / 0,9205 / 0,9205"
+  },
+  {
+   "porte": "T161",
+   "docstring": "212/212",
+   "mesure": "220/220"
+  },
+  {
+   "porte": "T162",
+   "docstring": "211/239 (0,8828)",
+   "mesure": "219/239 (0,9163)"
+  },
+  {
+   "porte": "T163",
+   "docstring": "27 de span",
+   "mesure": "19 de span"
+  },
+  {
+   "porte": "T166",
+   "docstring": "16 REL, 6 SUB, 5 GP (27)",
+   "mesure": "9 REL, 6 SUB, 4 GP (19)"
+  },
+  {
+   "porte": "T167",
+   "docstring": "exactitude spans ÷ 212",
+   "mesure": "÷ 220"
+  },
+  {
+   "porte": "T172",
+   "docstring": "exact 212/212",
+   "mesure": "220/220"
+  },
+  {
+   "porte": "T173",
+   "docstring": "211/212 (0,9953) ; 211/239 (0,8828)",
+   "mesure": "219/220 (0,9955) ; 219/239 (0,9163)"
+  }
+… [746 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking T161's tête denominator
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json; sys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nimport tools.bloc_linguistique as bl\nr=eg.evaluer_bloc('h',bl.Heuristique(),eg.charger())\nprint(json.dumps(r['attachement_tete'],indent=1))\nPY", "description": "Check attach … [82 caractères tronqués]`
+
+  ```
+{
+ "cibles": 221,
+ "labels": 221,
+ "top1": 221,
+ "topk": 220,
+ "top1_taux": 1.0,
+ "topk_taux": 0.9955,
+ "couverture": 1.0
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Reproducing T161's tête count
+
+- **bash** `{"command": "PYTHONPATH=. python3 - <<'PY'\nfrom tools.pensee.autotest import t161_cible_proximite\nprint(t161_cible_proximite())\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h',bl.Heuristique(),charger())\nprint(r['a … [122 caractères tronqués]`
+
+  ```
+(False, 'proximité : top1 221/239, exact 221/239, tête 221/145')
+{'cibles': 221, 'labels': 221, 'top1': 221, 'topk': 220, 'top1_taux': 1.0, 'topk_taux': 0.9955, 'couverture': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Investigating a reproducibility discrepancy (220 vs 221)
+
+- **bash** `{"command": "python3 - <<'PY'\nimport hashlib,subprocess,pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); cur=p.read_bytes()\ncom=subprocess.run(['git','show','710ec7f9:tools/bloc_linguistique.py'],capture_output=True).stdout\nprint('bloc current==commit:',cur==com, hashlib.sha256(cur).hexdige … [516 caractères tronqués]`
+
+  ```
+bloc current==commit: False 04545a07d41e
+--- structures status ---
+ M donnees/paragraphes-validations.jsonl
+--- structures head ---
+523d8c1e8c6ca29ca415360a71bfab6c5b56102c
+--- mtimes ---
+2026-11-04 11:41:49.129836555 -0500 tools/structures/generateur.py
+2026-11-06 00:15:37.544747590 -0500 tools/bloc_linguistique.py
+--- generateur imports ---
+12:from __future__ import annotations
+14:import json
+15:import re
+16:import unicodedata
+44:facile faciles difficile difficiles important importante importants importantes
+638:    import sys
+  ```
+
+### 🤖 Assistant
+
+⏵ The working tree changed under us; diffing the live module
+
+- **bash** `{"command": "git diff -- tools/bloc_linguistique.py | head -80; echo '--- status ---'; git status --short tools/bloc_linguistique.py tools/pensee/autotest.py", "description": "Diff dirty working-tree module", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 329298c4..2b77673b 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -896,9 +896,9 @@ class Heuristique:
+                     or est_verbe(suivant[0], suivant[2]))))
+                 if marqueur:
+                     precedent = segments[-1]["type"] if segments else None
+-                    # R2 : sans segment précédent, un marqueur ouvre une **SUB** (« When it rains »)
+-                    stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV"
+-                                      or precedent is None) else "REL"
++                    # R2 : un **subordonnant** ouvre une SUB (« When it rains ») ; une relative
++                    # en tête reste une REL (« Paul qui marche »)
++                    stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS or precedent == "GV") else "REL"
+                     j = i + 1
+                     verbes_vus = 0
+                     prec_aux = False      # le mot précédent est un auxiliaire (même groupe)
+@@ -927,10 +927,7 @@ class Heuristique:
+                             if prec_aux:
+                                 predicat_vu = True   # « is r
+… [610 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pinning the harness to commit 710ec7f9
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/audit_v10/harness.py'\ns=open(p).read()\ns=s.replace(\"SOURCE = (RACINE/'tools/bloc_linguistique.py').read_text(encoding='utf-8')\",\n\"\"\"_COMMIT = '710ec7f9'\nSOURCE = subprocess.run(['git','show',f'{_COMMIT}:tools/bloc_linguistique.py'],\n                   … [404 caractères tronqués]`
+
+  ```
+pinned
+exit=0
+v10 labels 220 exact 220 f1g 0.588 spans 19 0.8s
+v9 labels 219 exact 219 f1g 0.5866 spans 20 0.8s
+v8 labels 212 exact 212 f1g 0.5763 spans 27 0.9s
+sans_pron labels 203 exact 203 f1g 0.5718 spans 36 0.7s
+sans_est_sub labels 219 exact 219 f1g 0.5849 spans 20 0.9s
+sans_predicat_vu labels 220 exact 220 f1g 0.588 spans 19 0.8s
+sans_ee labels 220 exact 220 f1g 0.588 spans 19 0.8s
+sans_gp_det labels 219 exact 219 f1g 0.5866 spans 20 0.7s
+v9_attendu labels 219 exact 219 f1g 0.5866 spans 20 0.8s
+sans_sujets labels 214 exact 214 f1g 0.5833 spans 25 0.8s
+sans_pron_sujets labels 214 exact 214 f1g 0.5808 spans 25 0.9s
+{
+ "controles": {
+  "permutation": {
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,importlib.util,pathlib\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\n# dirty tree measure\nimport tools.bloc_linguistique as bl\nr=eg.evaluer_bloc('h',bl.Heuristique(),eg.charger())\na=r['attachement']\nprint('dirty top1', … [248 caractères tronqués]`
+
+  ```
+dirty top1 221 exact 221 labels 221 topk 220 f1 0.5843 tete 0.733
+  ```
+
+### 🤖 Assistant
+
+⏵ Characterizing the uncommitted working-tree change
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,collections\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.gold_split import dev,test\nph=eg.charger(); ge=eg.charger_gele()\nh=bl.Heuristique()\ndef att(p … [884 caractères tronqués]`
+
+  ```
+dirty vivant {'labels': 221, 'exact': 221, 'topk': 220, 'topk_taux': 0.9205}
+dirty dev {'labels': 152, 'exact': 152} test {'labels': 69, 'exact': 69}
+dirty spans 18 Counter({'REL': 9, 'SUB': 5, 'GP': 4})
+('g017', 'SUB', 'that she would come')
+('r035', 'REL', 'she talks about')
+('r241', 'REL', 'when we left')
+('r255', 'REL', "que j'ai achetée")
+('r264', 'SUB', "qu'il vient demain")
+('s010', 'REL', 'qui nage')
+('s027', 'GP', 'il')
+('s035', 'REL', 'qui ferme')
+('s044', 'SUB', 'que ils crie')
+('s061', 'REL', 'qui saute')
+('s065', 'REL', 'qui commence')
+('s112', 'SUB', 'que Lucas ferme')
+('s114', 'SUB', 'que les avocat compte')
+('s125', 'REL', 'qui compte')
+('s141', 'REL', 'qui trouve')
+('s146', 'GP', 'les jardin')
+('s148', 'GP', 'les ancienne lettre')
+('s160', 'GP', 'le renard')
+  ```
+
+- **bash** `{"command": "PYTHONPATH=. python3 -m tools.pensee.autotest > /tmp/audit_v10/autotest_dirty.log 2>&1; echo \"exit=$?\"", "description": "Run gates on dirty working tree", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-2525
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-validating official counters with the pinned module
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, importlib.util, pathlib, json\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nfrom tools.tests.linguistique.gold_split import dev, test\nspec=importlib.util.spec_from_file_location('pinned_v10','/tmp/audit_v10/mods/v10.py')\nm=i … [785 caractères tronqués]`
+
+  ```
+vivant labels 220 exact 220 topk 219 f1 0.5836 tete 0.7332
+gele labels 220 exact 220 topk 219 f1 0.588 tete 0.7388
+dev labels 152 exact 152 couverture 0.9325
+test labels 68 exact 68 couverture 0.8947
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking gates on the dirty tree
+
+- **job_output** `{"job_id": "bash-2525", "wait": true, "timeout_ms": 120000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Documenting the uncommitted working-tree change
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\nanchor=\"\"\"## 2. Rejeu des valeurs v10 — 2 écarts\"\"\"\nnew=\"\"\"### 1 bis. Note d'arbre de travail (importante)\n\nAu début de l'audit, `tools/bloc_linguistique.py` était **byte-identique** à `710ec7f9`\n(sha256  … [2249 caractères tronqués]`
+
+  ```
+report updated
+  ```
+
+### 🤖 Assistant
+
+⏵ Adding the working-tree note to JSON
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\np='reports/pensee-audit-v10.json'\nd=json.load(open(p))\nd['methode']['note_arbre_de_travail']={\n 'etat_initial':'tools/bloc_linguistique.py byte-identique à 710ec7f9 (sha256 308f6eeda95f69ea...) au début de l\\'audit',\n 'changement_observe':'modificatio … [1306 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the dirty-tree gate run
+
+- **job_output** `{"job_id": "bash-2525", "timeout_ms": 60000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking whether the working tree changed again
+
+- **bash** `{"command": "git status --short tools/bloc_linguistique.py tools/pensee/autotest.py; stat -c '%y %n' tools/bloc_linguistique.py; python3 - <<'PY'\nimport hashlib,subprocess,pathlib\ncur=pathlib.Path('tools/bloc_linguistique.py').read_bytes()\ncom=subprocess.run(['git','show','710ec7f9:tools/bloc_lin … [201 caractères tronqués]`
+
+  ```
+M tools/bloc_linguistique.py
+ M tools/pensee/autotest.py
+2026-11-06 00:15:37.544747590 -0500 tools/bloc_linguistique.py
+byte-identique commit: False
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2525 (bash: PYTHONPATH=. python3 -m tools.pensee.autotest > /tmp/audit_v10/autotest_dirty.log 2>&1; echo "exit=$?") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Reading the dirty-tree gate results
+
+- **bash** `{"command": "tail -8 /tmp/audit_v10/autotest_dirty.log; echo '--- failures ---'; grep -c '❌' /tmp/audit_v10/autotest_dirty.log; grep -c '✅' /tmp/audit_v10/autotest_dirty.log; echo '--- T161/T162/T163/T166 ---'; grep -E 'T161|T162|T163|T166|T173|T180' /tmp/audit_v10/autotest_dirty.log", "description" … [93 caractères tronqués]`
+
+  ```
+✅ T174 convention documentée convention : ['GN', 'GP', 'GV', 'REL', 'SUB'] documentée
+  ✅ T175 audit attachement audit : 14/14, écarts 0
+  ✅ T176 segment précédent segment précédent : s052 ouvre, s012 écoute
+  ✅ T177 candidats têtes   candidats têtes : 220/221 (0.9955)
+  ✅ T178 cache chunker     cache : 1 chunking chunker, 1 défaut (1+2S avant)
+  ✅ T179 multi-cibles      multi-cibles : exact 221/221, exact_any 221/221
+  ✅ T180 par langue        langues : fr 136/136, en 85/85 (85/88 labels)
+  183/183 portes tenues
+--- failures ---
+0
+183
+--- T161/T162/T163/T166 ---
+  ✅ T161 cible proximité   proximité : top1 221/239, exact 221/239, tête 221/145
+  ✅ T162 candidats verbes  candidats : top-k 220/239 (0.9205), tête 220/221
+  ✅ T163 échecs attachement échecs : 18 de span, 1 de cible (33 avant les correctifs)
+  ✅ T166 spans perdus      spans : 9 REL, 5 SUB, 4 GP
+  ✅ T173 top-k strict      top-k : 220 sous-chaîne, 220 exacts (0.9955)
+  ✅ T180 par langue        langues : fr 136/136, en 85/85 (85/88 labels)
+  ```
+
+- **bash** `{"command": "git diff --stat tools/pensee/autotest.py; git diff tools/pensee/autotest.py | head -60", "description": "Inspect dirty autotest changes", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+(no output)
+  ```
+

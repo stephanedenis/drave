@@ -7,12 +7,12 @@
 | Identifiant | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 23:24 |
-| Durée | 0.8 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 66 |
-| Appels d'outils | 79 |
+| Messages | 102 |
+| Appels d'outils | 118 |
 | Fichiers touchés | 1 |
-| Commandes | 63 |
+| Commandes | 99 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2183 caractères tronqués]
 
-*79 appels d'outils.* Actions notables :
+*118 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, recent commits
 - bash — List relevant reports and test dirs
@@ -41,11 +41,11 @@
 - bash — Inspect audit JSON structure
 - bash — Inspect v10 commit diff
 - bash — Verify module matches audited commit
-- … et 50 autres
+- … et 87 autres
 
 **Synthèse produite :**
 
-⏵ Reading the report end-to-end
+⏵ Verifying gate docstrings at the audited commit
 
 ## 3. Travail accompli
 
@@ -97,7 +97,7 @@
 - **T1** Measure v9/v10 F1 modes
 - **T1** Check -ée presence in v8/v9 commits
 - **T1** Check if details saved
-- … et 23 autres
+- … et 59 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -109,8 +109,10 @@
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : Error: spawn bash ENOENT
 - **T1** : Error: spawn bash ENOENT
+- **T1** : {  "chiffres_rejoues": true,  "ecarts_chiffres": 2,  "regles_justes": false,  "portes": "183/183",  "resume": "Les valeurs v10 rejouent (220/220, 0,9205, 0,5880, 0,7388, 134/134, 86/86, 19 spans, top-
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module> ValueError: invalid literal for int() with base 10: '1_rejeu' [exit code: 1]
 

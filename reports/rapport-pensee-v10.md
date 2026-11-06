@@ -1,13 +1,14 @@
 # B13 — 220/220 (1,0000), couverture 0,9205 : le féminin `-ée` et la garde déterminant du GP
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
-> **État courant** · **Verdict** : ✅
-> **183/183 portes** : deux corrections générales — le **féminin `-ée`** des participes
-> (`achetée` → `acheter`) et la **garde déterminant** du GP (A17 R3b : un « verbe » précédé d'un
-> déterminant est un nom, `for the bus`) — portent l'attachement à **220/220 (1,0000)** sur les
-> **220 labels** prédits (sur 239), **couverture 0,9205**, **F1 0,5880** (union ; S 0,5014,
-> chunker 0,6203), tête **0,7388** ; **fr 134/134**, **en 86/86** ; **19 spans** restants
-> (9 REL, 6 SUB, 4 GP). **dev 152/152, test 67/67** (avant ces deux corrections).
+> **Instantané historique** : état au commit `710ec7f9` · **Verdict** : ✅ chiffres, ⚠️ attribution corrigée
+> **183/183 portes** : **une seule** des deux corrections annoncées est **effective** — la
+> **garde déterminant** du GP (A17 R3b : un « verbe » précédé d'un déterminant est un nom,
+> `for the bus`), **+1 exact** (`r153`). Le **féminin `-ée`** est **inerte sur ce gold** (0
+> différence d'annotation ; `r255` reste absent car `acheter` n'est pas au lexique). L'attachement
+> est à **220/220 (1,0000)** sur **220 labels** (sur 239), **couverture 0,9205**, **F1 0,5880**
+> (gelé 602 ; 0,5843 vivant), tête **0,7388** ; **fr 134/134**, **en 86/86** ; **19 spans** dont
+> **17 déjà inatteignables** + `s037` et `r303` (deux régressions, corrigées en v11).
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_est_verbe`, boucle GP),
 > [`autotest.py`](../tools/pensee/autotest.py) (19 assertions) ;

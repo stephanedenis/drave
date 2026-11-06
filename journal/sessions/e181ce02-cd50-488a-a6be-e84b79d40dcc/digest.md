@@ -48393,3 +48393,115 @@ corrigées depuis), et les audits de cohérence `rapport-coherence-fiches-v8.md`
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > journal/2026-11-06/README.md <<'MD'\n# 2026-11-06\n\n> **Index de la journée**, dans le dossier [`journal/2026-11-06/`](README.md). Retour :\n> [l'index du journal](../README.md) · [l'index des sessions](../README.md#sessions). … [1528 caractères tronqués]`
+
+  ```
+· section « Sessions DSH » absente : journal/2026-11-06/README.md
+     · compteurs : en-cours.md dit 672 fichiers, le disque en a 673
+[still running after 60000ms; moved to background job bash-2486]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2486", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/2026-11-06/distribue.md
+COMMIT OK 1
+68a8717b JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)
+pensee-audit-v10.json
+rapport-audit-v10.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 reports/rapport-audit-v10.md", "description": "Lire l'audit v10"}`
+
+  ```
+# Audit v10 — les chiffres rejouent, l'attribution des corrections ne rejoue pas
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit audité** : `710ec7f9` (parent `160d08ca`) · **Date** : 2026-11-05 ·
+> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅.
+> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+> [`pensee-audit-v10.json`](pensee-audit-v10.json).
+
+**En une phrase.** Les valeurs de la fiche [`rapport-pensee-v10.md`](rapport-pensee-v10.md)
+rejouent presque toutes : **220/220**, couverture **0,9205**, **F1 0,5880** (gelé 602),
+**tête 0,7388**, **fr 134/134**, **en 86/86**, **19 spans** (9 REL, 6 SUB, 4 GP),
+**top-k 219**, **183/183 portes**. Mais la fiche attribue le gain à **deux** corrections :
+la seconde, le **`-ée`**, est **antérieure à la v10** (commit `a408a909`, déjà dans v8 et v9)
+et **inerte sur ce gold** (0 différence d'annotation sur 612 phrases) ; `r255` reste absent
+car `acheter` n'est pas dans le lexique. Le **seul** gain v10 est la **garde DET du GP**
+(`r153`, test), **+1 exact**. Les **19 spans** ne sont pas « 17 inatteignables + `r255` +
+`r264` » : `r255`/`r264` sont déjà dans les
+… [315 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'audit v10 trouve deux régressions ouvertes (s037, r303) : je les examine
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\nfor p in charger():\n    if p[\"id\"] not in (\"s0 … [339 caractères tronqués]`
+
+  ```
+r303 Je pars car il est tard. | gold [('SUB', 'car il est tard')]
+   préd [('GV', 'Je pars'), ('GV', 'pars'), ('SUB', 'car il est'), ('GV', 'il est'), ('GP', 'tard')]
+s037 Paul qui marche marche | gold [('REL', 'qui marche')]
+   préd [('GV', 'Paul'), ('SUB', 'qui marche'), ('REL', 'qui marche marche'), ('GV', 'marche')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige les deux régressions : R2 ne classe plus une relative en tête comme SUB, et je retire la règle d'adverbe final (arbitrage perdant)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# R2 : une relative en tête reste une REL\nt=t.replace('''                    # R2 : sans segment précédent, un marqueur ouvre une **SUB … [1723 caractères tronqués]`
+
+  ```
+deux corrections
+exact 221 / 221 | couv 0.9247 | F1 0.5843 | spans 18 | par langue {'fr': {'cibles': 151, 'labels': 136, 'exact': 136, 'topk': 135, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 85, 'exact': 85, 'topk': 85, 'exact_taux_span': 1.0}}
+g017 [('GV', 'said'), ('SUB', 'that she would come yesterday')] | gold [('SUB', 'that she would come')]
+r303 [('GV', 'Je pars'), ('GV', 'pars'), ('SUB', 'car il est tard'), ('GV', 'il est'), ('GP', 'tard')] | gold [('SUB', 'car il est tard')]
+s037 [('GV', 'Paul'), ('REL', 'qui marche'), ('REL', 'qui marche marche'), ('GV', 'marche')] | gold [('REL', 'qui marche')]
+  ```
+
+### 🤖 Assistant
+
+⏵ **221/221 (1,0000)**, couverture **0,9247**, 18 spans. Je recale les portes et je corrige la v10
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest", "timeoutMs": 5400000}`
+
+  ```
+❌ T153 attachement       attachement : top1 0.9247, exact 0.9247, couverture 0.9247
+  ❌ T161 cible proximité   proximité : top1 221/239, exact 221/239, tête 221/145
+  ❌ T162 candidats verbes  candidats : top-k 220/239 (0.9205), tête 220/221
+  ❌ T163 échecs attachement échecs : 18 de span, 1 de cible (33 avant les correctifs)
+  ❌ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 221/239
+  ❌ T166 spans perdus      spans : 9 REL, 5 SUB, 4 GP
+  ❌ T167 dénominateur      dénominateur : spans 1.0 / 0.9955 / 1.0
+  ❌ T168 classement        classement : exact 221/221 ; cibles 150 verbes, 71 noms
+  ❌ T169 conventions       conventions : verbes 150/150 (1.0), noms 71/71 (1.0)
+  ❌ T171 lexique élargi    lexique élargi : vu True, accroché True, couru True ; exact 221/221
+  ❌ T173 top-k strict      top-k : 220 sous-chaîne, 220 exacts (0.9955)
+  ❌ T177 candidats têtes   candidats têtes : 220/221 (0.9955)
+  ❌ T179 multi-cibles      multi-cibles : exact 221/221, exact_any 221/221
+  ❌ T180 par langue        langues : fr 136/136, en 85/85 (85/88 labels)
+  169/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(r[\"top1_taux\"] - 0.9205) < 0.001\\n            and abs(r[\"exact_taux\"] - 0.9205) < 0.001','abs(r[\"top1_taux\"] - 0.9247) < 0 … [3344 caractères tronqués]`
+
+  ```
+14 / 14
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige la v10 (audit) et je fige la v11 (s037, r303)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# v10 : corriger l'attribution (audit A21)\np=pathlib.Path('reports/rapport-pensee-v10.md'); t=p.read_text()\nt=t.replace(\"> **État courant** · **Verdict** : ✅\",\"> **Instantané historique** : état … [5586 caractères tronqués]`
+
+  ```
+v10 corrigée
+fiche + JSON v11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-pensee-v11.md`](rapport … [2355 caractères tronqués]`

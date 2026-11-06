@@ -896,9 +896,9 @@ class Heuristique:
                     or est_verbe(suivant[0], suivant[2]))))
                 if marqueur:
                     precedent = segments[-1]["type"] if segments else None
-                    # R2 : sans segment précédent, un marqueur ouvre une **SUB** (« When it rains »)
-                    stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV"
-                                      or precedent is None) else "REL"
+                    # R2 : un **subordonnant** ouvre une SUB (« When it rains ») ; une relative
+                    # en tête reste une REL (« Paul qui marche »)
+                    stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS or precedent == "GV") else "REL"
                     j = i + 1
                     verbes_vus = 0
                     prec_aux = False      # le mot précédent est un auxiliaire (même groupe)
@@ -927,10 +927,7 @@ class Heuristique:
                             if prec_aux:
                                 predicat_vu = True   # « is red » : copule + attribut
                             prec_aux = False
-                        # un adverbe **final** n'appartient pas à la clause (« … would come | yesterday »)
-                        if (predicat_vu and _normaliser(m) in lex.get("ADV", set())
-                                and (j + 1 >= len(mots) or mots[j + 1][3] != "mot")):
-                            break
+
                         j += 1
                     segments.append({"type": stype,
                                      "role": "complément" if stype == "SUB" else "qualité",

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 127.5 h |
+| Durée | 127.8 h |
 | Tours | 177 |
-| Messages | 2845 |
-| Appels d'outils | 2505 |
+| Messages | 2853 |
+| Appels d'outils | 2513 |
 | Fichiers touchés | 25 |
-| Commandes | 2062 |
+| Commandes | 2069 |
 | Sous-agents | 25 |
-| Commits | 303 |
+| Commits | 304 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*264 appels d'outils.* Actions notables :
+*272 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 214 autres
+- … et 219 autres
 
 **Synthèse produite :**
 
-⏵ Passage au 06/11 : j'ouvre le dossier du jour au journal
+⏵ Je corrige la v10 (audit) et je fige la v11 (s037, r303)
 
 ## 3. Travail accompli
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2022 autres
+- … et 2029 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10073,4 +10073,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PILOTAGE — LES VAGUES 5 À 7 (AUDITS V7/V8, R1/R3, TOP-K, V10) DOCUMENTÉES AU PLAN-TRAVAIL" -- docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>&1 | tai
 - JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS" -- journal/2026-11-06/README.md docs/pilotage/en-cours.md 2>&1 | tai
 - JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)" -- journal/2026-11-06/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "FO
+- B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183" -- tools/bl
 

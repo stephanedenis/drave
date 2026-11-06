@@ -1,0 +1,1238 @@
+{
+ "rapport": "audit-v10",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit_audite": "710ec7f9",
+ "commit_parent": "160d08ca",
+ "date": "2026-11-05",
+ "objet": "Audit de l'état v10 : rejeu des valeurs sur le vivant 612 et le gelé 602, ablations par règle, contrôles négatifs, dev/test, portes.",
+ "methode": {
+  "gold_vivant": {
+   "source": "evaluer_gold.charger",
+   "phrases": 612,
+   "cibles": 239,
+   "sources": {
+    "hand": 20,
+    "reel": 432,
+    "synthetique": 160
+   }
+  },
+  "gold_gele": {
+   "source": "evaluer_gold.charger_gele",
+   "phrases": 602,
+   "cibles": 239,
+   "note": "les 10 phrases ajoutées après le gel n'ont aucune cible"
+  },
+  "dev_test": {
+   "split": "crc32(id) % 3 == 0 -> test",
+   "dev": {
+    "phrases": 422,
+    "cibles": 163
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76
+   }
+  },
+  "mesure": "evaluer_gold.evaluer_bloc pour les valeurs officielles ; harnais local pour les ensembles d'identifiants, les ablations et les contrôles.",
+  "ablations": "copies du module dans /tmp/audit_v10/mods, une seule modification réintroduite par variante ; aucun patch du dépôt.",
+  "fidelite": "v10 sans garde GP sans -ée = module v9 (219, 0,5866, 20 spans, 152/152, 67/67) ; module v8 = 212, 0,5763, 27 spans, 177 top-k, 148/148, 64/64.",
+  "portes": "PYTHONPATH=. python3 -m tools.pensee.autotest -> 183/183, exit 0",
+  "aucune_modification": true,
+  "aucun_commit": true,
+  "note_arbre_de_travail": {
+   "etat_initial": "tools/bloc_linguistique.py byte-identique à 710ec7f9 (sha256 308f6eeda95f69ea...) au début de l'audit",
+   "changement_observe": "modification non commitée pendant la rédaction (mtime 2026-11-06 00:15:37) : condition R2 (est_sub(n) or n in SUBORDONNANTS or precedent == \"GV\") et suppression de la garde d'adverbe final",
+   "ancrage": "toutes les mesures utilisent git show 710ec7f9:tools/bloc_linguistique.py, copié dans /tmp/audit_v10/mods ; le fichier de travail n'est pas utilisé",
+   "arbre_courant": {
+    "labels": 221,
+    "exact": 221,
+    "f1": 0.5843,
+    "topk": 220,
+    "spans": {
+     "REL": 9,
+     "SUB": 5,
+     "GP": 4,
+     "total": 18
+    },
+    "dev": "152/152",
+    "test": "69/69",
+    "effet": "répare s037 et r303, perd g017, ajoute r241"
+   },
+   "portes": "183/183 obtenu quand l'arbre était encore au commit ; le changement courant n'est pas audité"
+  }
+ },
+ "verdict": {
+  "chiffres_rejoues": true,
+  "ecarts_chiffres": 2,
+  "regles_justes": false,
+  "portes": "183/183",
+  "resume": "Les valeurs v10 rejouent (220/220, 0,9205, 0,5880, 0,7388, 134/134, 86/86, 19 spans, top-k 219). Deux écarts de valeur : le F1 « avant » (0,5822 vivant, 0,5866 gelé) et le test non actualisé (68/68, pas 67/67, valeur v9 explicite). Les règles ne rejouent pas : la seule correction v10 est la garde DET du GP (+1, r153) ; le -ée est antérieur et inerte (0 différence sur 612 phrases), r255 reste absent. Les 19 spans sont 17 résiduels + s037 + r303, pas 17 + r255 + r264 ; r303 est une perte cachée du predicat_vu v9 (net 0 avec g017)."
+ },
+ "rejeu": {
+  "v10": {
+   "vivant_612": {
+    "labels": 220,
+    "exact": 220,
+    "exact_span": 1.0,
+    "exact_any": 220,
+    "couverture": 0.9205,
+    "topk": 219,
+    "topk_taux": 0.9163,
+    "topk_exact": 219,
+    "topk_taux_span": 0.9955,
+    "fr": {
+     "cibles": 151,
+     "labels": 134,
+     "exact": 134,
+     "couverture": 0.8874,
+     "topk": 133
+    },
+    "en": {
+     "cibles": 88,
+     "labels": 86,
+     "exact": 86,
+     "couverture": 0.9773,
+     "topk": 86
+    },
+    "f1": 0.5836,
+    "f1_s": 0.4957,
+    "f1_chunker": 0.6163,
+    "tete": 0.7332,
+    "spans": {
+     "REL": 9,
+     "SUB": 6,
+     "GP": 4,
+     "total": 19
+    },
+    "verbe": {
+     "cibles": 149,
+     "justes": 149,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 71,
+     "justes": 71,
+     "taux": 1.0
+    }
+   },
+   "gele_602": {
+    "labels": 220,
+    "exact": 220,
+    "exact_span": 1.0,
+    "exact_any": 220,
+    "couverture": 0.9205,
+    "topk": 219,
+    "topk_taux": 0.9163,
+    "topk_exact": 219,
+    "topk_taux_span": 0.9955,
+    "fr": {
+     "cibles": 151,
+     "labels": 134,
+     "exact": 134,
+     "couverture": 0.8874,
+     "topk": 133
+    },
+    "en": {
+     "cibles": 88,
+     "labels": 86,
+     "exact": 86,
+     "couverture": 0.9773,
+     "topk": 86
+    },
+    "f1": 0.588,
+    "f1_s": 0.5014,
+    "f1_chunker": 0.6203,
+    "tete": 0.7388,
+    "spans": {
+     "REL": 9,
+     "SUB": 6,
+     "GP": 4,
+     "total": 19
+    },
+    "verbe": {
+     "cibles": 149,
+     "justes": 149,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 71,
+     "justes": 71,
+     "taux": 1.0
+    }
+   },
+   "note": "labels/exact/couverture/top-k identiques sur les deux golds ; F1/S/chunker/tête sont les valeurs du gelé 602 dans la fiche ; les valeurs vivant 612 sont mesurées ici, la fiche ne les publie pas.",
+   "ecarts": [
+    {
+     "grandeur": "F1 union (état v9, colonne « avant » de la v10)",
+     "fiche": 0.5822,
+     "mesure_gele_602": 0.5866,
+     "mesure_vivant_612": 0.5822,
+     "gravite": "majeure",
+     "note": "0,5822 est la valeur du vivant 612 ; le gelé 602 vaut 0,5866. La v9 étiquette 0,5822 « gelé 602 » ; la v10 la reprend en « avant ». Le gain v9→v10 est +0,0014, pas +0,0058."
+    },
+    {
+     "grandeur": "dev / test",
+     "fiche": "152/152, 67/67 (avant corrections)",
+     "mesure": "152/152, 68/68",
+     "gravite": "moyenne",
+     "note": "Le 67/67 est explicitement daté d'avant les corrections (valeur v9) ; la valeur courante v10 est test 68/68 (+1 par r153), dev 152/152. Le JSON v10 ne publie pas dev/test."
+    },
+    {
+     "grandeur": "décomposition des 19 spans",
+     "fiche": "17 inatteignables + r255 + r264",
+     "mesure": "17 résiduels + s037 + r303",
+     "gravite": "majeure",
+     "note": "r255 et r264 sont déjà dans les 17 ; les deux extras réels sont s037 et r303."
+    },
+    {
+     "grandeur": "attribution des corrections",
+     "fiche": "-ée + garde DET du GP",
+     "mesure": "garde DET du GP seule",
+     "gravite": "majeure",
+     "note": "-ée est présent dès a408a909 (avant v8), sans effet mesurable sur ce gold ; le commit 710ec7f9 ne modifie que la boucle GP."
+    },
+    {
+     "grandeur": "7 régressions v8 réparées",
+     "fiche": 7,
+     "mesure": 6,
+     "gravite": "majeure",
+     "note": "s037 (la 7e) reste absente ; les 6 réparées sont r273 s032 s069 s072 s115 s135."
+    },
+    {
+     "grandeur": "table v9 (212 + corrections)",
+     "fiche": "7 régressions + 3 spans",
+     "mesure": "8 gains bruts, 1 perte (r303), net +7",
+     "gravite": "majeure",
+     "note": "La somme de la fiche ne rejoint pas 219."
+    },
+    {
+     "grandeur": "predicat_vu",
+     "fiche": "g017 rouvert",
+     "mesure": "g017 gagné, r303 perdu, net 0",
+     "gravite": "majeure",
+     "note": "r303 (SUB « car il est tard ») est absent des deux fiches."
+    },
+    {
+     "grandeur": "portes",
+     "fiche": "183/183",
+     "mesure": "183/183, exit 0",
+     "gravite": "aucune",
+     "note": "Conforme."
+    }
+   ]
+  },
+  "v9": {
+   "labels": 219,
+   "exact": 219,
+   "exact_span": 1.0,
+   "exact_any": 219,
+   "couverture": 0.9163,
+   "topk": 218,
+   "topk_taux": 0.9121,
+   "topk_exact": 218,
+   "topk_taux_span": 0.9954,
+   "fr": {
+    "cibles": 151,
+    "labels": 134,
+    "exact": 134,
+    "couverture": 0.8874,
+    "topk": 133
+   },
+   "en": {
+    "cibles": 88,
+    "labels": 85,
+    "exact": 85,
+    "couverture": 0.9659,
+    "topk": 85
+   },
+   "f1_fiche": 0.5822,
+   "f1_vivant": 0.5822,
+   "f1_gele": 0.5866,
+   "f1_s_vivant": 0.495,
+   "f1_s_gele": 0.5006,
+   "f1_chunker_vivant": 0.6138,
+   "f1_chunker_gele": 0.6178,
+   "tete_vivant": 0.7326,
+   "tete_gele": 0.7381,
+   "spans": {
+    "REL": 9,
+    "SUB": 6,
+    "GP": 5,
+    "total": 20
+   },
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 152,
+    "exact": 152,
+    "couverture": 0.9325,
+    "f1": 0.5807,
+    "tete": 0.7327
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 67,
+    "exact": 67,
+    "couverture": 0.8816,
+    "f1": 0.5855,
+    "tete": 0.7323
+   }
+  },
+  "v8": {
+   "labels": 212,
+   "exact": 212,
+   "couverture": 0.887,
+   "topk": 177,
+   "topk_taux": 0.7406,
+   "f1_vivant": 0.572,
+   "f1_gele": 0.5763,
+   "tete_vivant": 0.7262,
+   "tete_gele": 0.7316,
+   "spans": {
+    "REL": 16,
+    "SUB": 6,
+    "GP": 5,
+    "total": 27
+   },
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 148,
+    "exact": 148,
+    "couverture": 0.908,
+    "f1": 0.5723,
+    "tete": 0.727
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 64,
+    "exact": 64,
+    "couverture": 0.8421,
+    "f1": 0.5714,
+    "tete": 0.7241
+   }
+  }
+ },
+ "ablations": {
+  "garde_pron": {
+   "nom": "garde PRON (retirée, SUJETS relatifs conservés)",
+   "labels": 203,
+   "exact": 203,
+   "delta_labels": -17,
+   "delta_exact": -17,
+   "couverture": 0.8494,
+   "f1_gele": 0.5718,
+   "delta_f1_gele": -0.0162,
+   "tete_gele": 0.7288,
+   "topk": 202,
+   "spans": {
+    "REL": 18,
+    "SUB": 14,
+    "GP": 4,
+    "total": 36
+   },
+   "gains_ids": [
+    "g017:SUB",
+    "r034:REL",
+    "r074:REL",
+    "r114:REL",
+    "r205:SUB",
+    "r219:SUB",
+    "r240:SUB",
+    "r243:REL",
+    "r247:SUB",
+    "r278:REL",
+    "r280:REL",
+    "r285:REL",
+    "r296:SUB",
+    "r299:REL",
+    "r214:REL",
+    "r216:SUB",
+    "r281:SUB"
+   ],
+   "pertes_ids": [],
+   "n_gains": 17,
+   "n_pertes": 0,
+   "dev": {
+    "labels": 138,
+    "exact": 138,
+    "couverture": 0.8466,
+    "f1": 0.5621,
+    "tete": 0.7215
+   },
+   "test": {
+    "labels": 65,
+    "exact": 65,
+    "couverture": 0.8553,
+    "f1": 0.5799,
+    "tete": 0.7278
+   },
+   "note": "Le +17 est conditionnel à l'expansion de SUJETS : sans elle, la garde est inerte (voir garde_pron_et_sujets)."
+  },
+  "expansion_sujets": {
+   "nom": "expansion SUJETS (retirée, garde PRON conservée)",
+   "labels": 214,
+   "exact": 214,
+   "delta_labels": -6,
+   "delta_exact": -6,
+   "couverture": 0.8954,
+   "f1_gele": 0.5833,
+   "delta_f1_gele": -0.0047,
+   "tete_gele": 0.7369,
+   "topk": 213,
+   "spans": {
+    "REL": 15,
+    "SUB": 6,
+    "GP": 4,
+    "total": 25
+   },
+   "gains_ids": [
+    "r273:REL",
+    "s069:REL",
+    "s135:REL",
+    "s032:REL",
+    "s072:REL",
+    "s115:REL"
+   ],
+   "pertes_ids": [],
+   "n_gains": 6,
+   "n_pertes": 0,
+   "dev": {
+    "labels": 149,
+    "exact": 149,
+    "couverture": 0.9141,
+    "f1": 0.578,
+    "tete": 0.7319
+   },
+   "test": {
+    "labels": 65,
+    "exact": 65,
+    "couverture": 0.8553,
+    "f1": 0.5811,
+    "tete": 0.7301
+   },
+   "note": "Ce sont les 6 REL françaises réparées par la v9 ; s037 (7e régression) reste absente."
+  },
+  "garde_pron_et_sujets": {
+   "nom": "garde PRON + expansion SUJETS (les deux retirées)",
+   "labels": 214,
+   "exact": 214,
+   "delta_labels": -6,
+   "delta_exact": -6,
+   "couverture": 0.8954,
+   "f1_gele": 0.5808,
+   "delta_f1_gele": -0.0072,
+   "tete_gele": 0.7343,
+   "topk": 213,
+   "spans": {
+    "REL": 15,
+    "SUB": 6,
+    "GP": 4,
+    "total": 25
+   },
+   "gains_ids": [
+    "r273:REL",
+    "s069:REL",
+    "s135:REL",
+    "s032:REL",
+    "s072:REL",
+    "s115:REL"
+   ],
+   "pertes_ids": [],
+   "n_gains": 6,
+   "n_pertes": 0,
+   "dev": {
+    "labels": 149,
+    "exact": 149,
+    "couverture": 0.9141,
+    "f1": 0.5752,
+    "tete": 0.729
+   },
+   "test": {
+    "labels": 65,
+    "exact": 65,
+    "couverture": 0.8553,
+    "f1": 0.5792,
+    "tete": 0.7281
+   },
+   "note": "Même résultat que expansion_sujets seule : la garde PRON ne contribue pas sans l'expansion ; le faisceau vaut +6 net."
+  },
+  "est_sub": {
+   "nom": "est_sub (retiré)",
+   "labels": 219,
+   "exact": 219,
+   "delta_labels": -1,
+   "delta_exact": -1,
+   "couverture": 0.9163,
+   "f1_gele": 0.5849,
+   "delta_f1_gele": -0.0031,
+   "tete_gele": 0.7367,
+   "topk": 218,
+   "spans": {
+    "REL": 10,
+    "SUB": 6,
+    "GP": 4,
+    "total": 20
+   },
+   "gains_ids": [
+    "r280:REL"
+   ],
+   "pertes_ids": [],
+   "n_gains": 1,
+   "n_pertes": 0,
+   "dev": {
+    "labels": 151,
+    "exact": 151,
+    "couverture": 0.9264,
+    "f1": 0.5787,
+    "tete": 0.7313
+   },
+   "test": {
+    "labels": 68,
+    "exact": 68,
+    "couverture": 0.8947,
+    "f1": 0.5847,
+    "tete": 0.7311
+   },
+   "note": "Gain unique : r280 (dev), conforme à la v9."
+  },
+  "predicat_vu": {
+   "nom": "predicat_vu (retiré)",
+   "labels": 220,
+   "exact": 220,
+   "delta_labels": 0,
+   "delta_exact": 0,
+   "couverture": 0.9205,
+   "f1_gele": 0.588,
+   "delta_f1_gele": 0.0,
+   "tete_gele": 0.7388,
+   "topk": 219,
+   "spans": {
+    "REL": 9,
+    "SUB": 6,
+    "GP": 4,
+    "total": 19
+   },
+   "gains_ids": [
+    "g017:SUB"
+   ],
+   "pertes_ids": [
+    "r303:SUB"
+   ],
+   "n_gains": 1,
+   "n_pertes": 1,
+   "dev": {
+    "labels": 152,
+    "exact": 152,
+    "couverture": 0.9325,
+    "f1": 0.5812,
+    "tete": 0.733
+   },
+   "test": {
+    "labels": 68,
+    "exact": 68,
+    "couverture": 0.8947,
+    "f1": 0.589,
+    "tete": 0.7337
+   },
+   "note": "Échange g017 (gagné) contre r303 (perdu) : net 0 exact, 0 F1. La perte n'est pas dans la fiche v9."
+  },
+  "ee": {
+   "nom": "-ée (retiré)",
+   "labels": 220,
+   "exact": 220,
+   "delta_labels": 0,
+   "delta_exact": 0,
+   "couverture": 0.9205,
+   "f1_gele": 0.588,
+   "delta_f1_gele": 0.0,
+   "tete_gele": 0.7388,
+   "topk": 219,
+   "spans": {
+    "REL": 9,
+    "SUB": 6,
+    "GP": 4,
+    "total": 19
+   },
+   "gains_ids": [],
+   "pertes_ids": [],
+   "n_gains": 0,
+   "n_pertes": 0,
+   "dev": {
+    "labels": 152,
+    "exact": 152,
+    "couverture": 0.9325,
+    "f1": 0.5812,
+    "tete": 0.733
+   },
+   "test": {
+    "labels": 68,
+    "exact": 68,
+    "couverture": 0.8947,
+    "f1": 0.589,
+    "tete": 0.7337
+   },
+   "note": "Aucun effet : 0 différence d'annotation sur les 612 phrases. r255 reste absent car 'acheter' n'est pas dans VERBES_CONNUS."
+  },
+  "garde_det_gp": {
+   "nom": "garde DET du GP (retirée)",
+   "labels": 219,
+   "exact": 219,
+   "delta_labels": -1,
+   "delta_exact": -1,
+   "couverture": 0.9163,
+   "f1_gele": 0.5866,
+   "delta_f1_gele": -0.0014,
+   "tete_gele": 0.7381,
+   "topk": 218,
+   "spans": {
+    "REL": 9,
+    "SUB": 6,
+    "GP": 5,
+    "total": 20
+   },
+   "gains_ids": [
+    "r153:GP"
+   ],
+   "pertes_ids": [],
+   "n_gains": 1,
+   "n_pertes": 0,
+   "dev": {
+    "labels": 152,
+    "exact": 152,
+    "couverture": 0.9325,
+    "f1": 0.5807,
+    "tete": 0.7327
+   },
+   "test": {
+    "labels": 67,
+    "exact": 67,
+    "couverture": 0.8816,
+    "f1": 0.5855,
+    "tete": 0.7323
+   },
+   "note": "Seule correction v10 : +1 exact (r153, test), 0 perte. Change aussi g004 et r147 (doublons GP/GV retirés, sans cible)."
+  },
+  "v9": {
+   "nom": "module v9 (160d08ca)",
+   "labels": 219,
+   "exact": 219,
+   "delta_labels": -1,
+   "delta_exact": -1,
+   "couverture": 0.9163,
+   "f1_gele": 0.5866,
+   "delta_f1_gele": -0.0014,
+   "tete_gele": 0.7381,
+   "topk": 218,
+   "spans": {
+    "REL": 9,
+    "SUB": 6,
+    "GP": 5,
+    "total": 20
+   },
+   "gains_ids": [
+    "r153:GP"
+   ],
+   "pertes_ids": [],
+   "n_gains": 1,
+   "n_pertes": 0,
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 152,
+    "exact": 152,
+    "couverture": 0.9325,
+    "f1": 0.5807,
+    "tete": 0.7327
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 67,
+    "exact": 67,
+    "couverture": 0.8816,
+    "f1": 0.5855,
+    "tete": 0.7323
+   },
+   "note": "Le module v9 rejoue exactement : 219/219, 0,5866 gelé, 20 spans, 152/152, 67/67."
+  },
+  "v8": {
+   "nom": "module v8 (f908d7b0)",
+   "labels": 212,
+   "exact": 212,
+   "delta_labels": -8,
+   "delta_exact": -8,
+   "couverture": 0.887,
+   "f1_gele": 0.5763,
+   "delta_f1_gele": -0.0117,
+   "tete_gele": 0.7316,
+   "topk": 177,
+   "spans": {
+    "REL": 16,
+    "SUB": 6,
+    "GP": 5,
+    "total": 27
+   },
+   "gains_ids": [
+    "g017:SUB",
+    "r273:REL",
+    "r280:REL",
+    "s069:REL",
+    "s135:REL",
+    "r153:GP",
+    "s032:REL",
+    "s072:REL",
+    "s115:REL"
+   ],
+   "pertes_ids": [
+    "r303:SUB"
+   ],
+   "n_gains": 9,
+   "n_pertes": 1,
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 148,
+    "exact": 148,
+    "couverture": 0.908,
+    "f1": 0.5723,
+    "tete": 0.727
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 64,
+    "exact": 64,
+    "couverture": 0.8421,
+    "f1": 0.5714,
+    "tete": 0.7241
+   },
+   "note": "Contrôle de fidélité : 212/212, 0,5763, 27 spans, 177 top-k, 148/148, 64/64 — conforme à l'audit A19."
+  }
+ },
+ "controle_negatif": {
+  "permutation_globale": {
+   "n": 220,
+   "observe": 220,
+   "tirages": 2000,
+   "graine": 0,
+   "moyenne": 1.997,
+   "mediane": 2.0,
+   "max": 10,
+   "p95": 5,
+   "p": 0.0,
+   "taux_moyen": 0.00908,
+   "lecture": "0,908 % en moyenne contre 100 % observé"
+  },
+  "candidat_aleatoire": {
+   "n": 220,
+   "avec_candidats": 220,
+   "candidats_total": 585,
+   "tirages": 2000,
+   "graine": 0,
+   "top1_moyen": 92.7,
+   "top1_taux": 0.4214,
+   "observe_top1": 220,
+   "p_top1": 0.0,
+   "lecture": "42,14 % en moyenne contre 100 % observé"
+  },
+  "permutation_candidats_topk_exact": {
+   "n": 220,
+   "observe": 219,
+   "tirages": 2000,
+   "graine": 0,
+   "moyenne": 2.18,
+   "taux": 0.0099,
+   "max": 8,
+   "p": 0.0,
+   "lecture": "0,99 % en moyenne contre 99,55 % observé (critère = égalité)"
+  },
+  "permutation_candidats_topk_souschaine": {
+   "n": 220,
+   "observe": 219,
+   "tirages": 2000,
+   "graine": 0,
+   "moyenne": 2.58,
+   "taux": 0.0117,
+   "max": 9,
+   "p": 0.0,
+   "lecture": "1,17 % en moyenne contre 99,55 % observé (critère officiel = sous-chaîne)"
+  },
+  "spans_19_verifies": true
+ },
+ "spans_19": {
+  "total": 19,
+  "types": {
+   "REL": 9,
+   "SUB": 6,
+   "GP": 4
+  },
+  "langues": {
+   "fr": 17,
+   "en": 2
+  },
+  "sources": {
+   "synthetique": 14,
+   "reel": 5
+  },
+  "residuels_A17": [
+   "r035",
+   "r255",
+   "r264",
+   "r288",
+   "s010",
+   "s027",
+   "s035",
+   "s044",
+   "s061",
+   "s065",
+   "s112",
+   "s114",
+   "s125",
+   "s141",
+   "s146",
+   "s148",
+   "s160"
+  ],
+  "extras": [
+   "s037",
+   "r303"
+  ],
+  "cas": [
+   {
+    "id": "s027",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 31,
+    "fin": 33,
+    "texte": "il",
+    "cible_gold": "marche",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s146",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 25,
+    "fin": 35,
+    "texte": "les jardin",
+    "cible_gold": "observe",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s148",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 20,
+    "fin": 39,
+    "texte": "les ancienne lettre",
+    "cible_gold": "nage",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s160",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "GP",
+    "debut": 20,
+    "fin": 29,
+    "texte": "le renard",
+    "cible_gold": "nage",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "r035",
+    "langue": "en",
+    "source": "reel",
+    "type": "REL",
+    "debut": 9,
+    "fin": 24,
+    "texte": "she talks about",
+    "cible_gold": "film",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "r255",
+    "langue": "fr",
+    "source": "reel",
+    "type": "REL",
+    "debut": 11,
+    "fin": 27,
+    "texte": "que j'ai achetée",
+    "cible_gold": "voiture",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s010",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 10,
+    "fin": 18,
+    "texte": "qui nage",
+    "cible_gold": "chemin",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s035",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 10,
+    "fin": 19,
+    "texte": "qui ferme",
+    "cible_gold": "papier",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s037",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 5,
+    "fin": 15,
+    "texte": "qui marche",
+    "cible_gold": "Paul",
+    "classe": "régression v8 (R2), non réparée"
+   },
+   {
+    "id": "s061",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 9,
+    "fin": 18,
+    "texte": "qui saute",
+    "cible_gold": "nuage",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s065",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 5,
+    "fin": 17,
+    "texte": "qui commence",
+    "cible_gold": "elle",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s125",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 11,
+    "fin": 21,
+    "texte": "qui compte",
+    "cible_gold": "renard",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s141",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "REL",
+    "debut": 5,
+    "fin": 15,
+    "texte": "qui trouve",
+    "cible_gold": "Emma",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "r264",
+    "langue": "fr",
+    "source": "reel",
+    "type": "SUB",
+    "debut": 8,
+    "fin": 26,
+    "texte": "qu'il vient demain",
+    "cible_gold": "sais",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "r288",
+    "langue": "en",
+    "source": "reel",
+    "type": "SUB",
+    "debut": 7,
+    "fin": 29,
+    "texte": "that he comes tomorrow",
+    "cible_gold": "know",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "r303",
+    "langue": "fr",
+    "source": "reel",
+    "type": "SUB",
+    "debut": 8,
+    "fin": 23,
+    "texte": "car il est tard",
+    "cible_gold": "pars",
+    "classe": "régression v9 (predicat_vu), non listée"
+   },
+   {
+    "id": "s044",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "SUB",
+    "debut": 17,
+    "fin": 29,
+    "texte": "que ils crie",
+    "cible_gold": "nage",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s112",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "SUB",
+    "debut": 24,
+    "fin": 39,
+    "texte": "que Lucas ferme",
+    "cible_gold": "nage",
+    "classe": "A17 résiduel"
+   },
+   {
+    "id": "s114",
+    "langue": "fr",
+    "source": "synthetique",
+    "type": "SUB",
+    "debut": 22,
+    "fin": 43,
+    "texte": "que les avocat compte",
+    "cible_gold": "dessine",
+    "classe": "A17 résiduel"
+   }
+  ],
+  "decomposition_fiche": {
+   "annonce": "17 inatteignables + r255 + r264",
+   "probleme": "r255 et r264 appartiennent aux 17 résiduels ; les deux extras réels sont s037 (7e régression v8) et r303 (régression v9 par predicat_vu)."
+  },
+  "verifies": true
+ },
+ "dev_test": {
+  "v10": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 152,
+    "exact": 152,
+    "couverture": 0.9325,
+    "f1": 0.5812,
+    "tete": 0.733
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 68,
+    "exact": 68,
+    "couverture": 0.8947,
+    "f1": 0.589,
+    "tete": 0.7337
+   },
+   "par_langue": {
+    "dev": {
+     "fr": "91/91",
+     "en": "61/61"
+    },
+    "test": {
+     "fr": "43/43",
+     "en": "25/25"
+    }
+   }
+  },
+  "v9": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 152,
+    "exact": 152,
+    "couverture": 0.9325,
+    "f1": 0.5807,
+    "tete": 0.7327
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 67,
+    "exact": 67,
+    "couverture": 0.8816,
+    "f1": 0.5855,
+    "tete": 0.7323
+   }
+  },
+  "v8": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 148,
+    "exact": 148,
+    "couverture": 0.908,
+    "f1": 0.5723,
+    "tete": 0.727
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 64,
+    "exact": 64,
+    "couverture": 0.8421,
+    "f1": 0.5714,
+    "tete": 0.7241
+   }
+  },
+  "ecart_cle": "v10 : +1 test (68/68) par r153 ; le -ée n'ajoute rien ; dev inchangé (152/152)."
+ },
+ "portes_autotest": {
+  "commande": "PYTHONPATH=. python3 -m tools.pensee.autotest",
+  "resultat": "183/183, exit 0",
+  "echecs": 0,
+  "note": "183/183, exit 0. L'invocation directe python3 tools/pensee/autotest.py échoue sur l'import relatif (ImportError) ; utiliser -m. Onze docstrings du périmètre attachement/segmentation contredisent leur assertion (elles annoncent encore 212/0,887/27/211).",
+  "docstrings_perimees": [
+   {
+    "porte": "T153",
+    "docstring": "top1/exact/couverture 0,887",
+    "mesure": "0,9205 / 0,9205 / 0,9205"
+   },
+   {
+    "porte": "T161",
+    "docstring": "212/212",
+    "mesure": "220/220"
+   },
+   {
+    "porte": "T162",
+    "docstring": "211/239 (0,8828)",
+    "mesure": "219/239 (0,9163)"
+   },
+   {
+    "porte": "T163",
+    "docstring": "27 de span",
+    "mesure": "19 de span"
+   },
+   {
+    "porte": "T166",
+    "docstring": "16 REL, 6 SUB, 5 GP (27)",
+    "mesure": "9 REL, 6 SUB, 4 GP (19)"
+   },
+   {
+    "porte": "T167",
+    "docstring": "exactitude spans ÷ 212",
+    "mesure": "÷ 220"
+   },
+   {
+    "porte": "T172",
+    "docstring": "exact 212/212",
+    "mesure": "220/220"
+   },
+   {
+    "porte": "T173",
+    "docstring": "211/212 (0,9953) ; 211/239 (0,8828)",
+    "mesure": "219/220 (0,9955) ; 219/239 (0,9163)"
+   },
+   {
+    "porte": "T177",
+    "docstring": "88 → 211",
+    "mesure": "219"
+   },
+   {
+    "porte": "T179",
+    "docstring": "exact_any 212/212",
+    "mesure": "220/220"
+   },
+   {
+    "porte": "T180",
+    "docstring": "« la couverture anglaise non »",
+    "mesure": "en 86/88 = 0,9773 ; fr 134/151 = 0,8874 (l'anglaise est la plus haute)"
+   }
+  ]
+ },
+ "ecarts": [
+  {
+   "grandeur": "F1 union (état v9, colonne « avant » de la v10)",
+   "fiche": 0.5822,
+   "mesure_gele_602": 0.5866,
+   "mesure_vivant_612": 0.5822,
+   "gravite": "majeure",
+   "note": "0,5822 est la valeur du vivant 612 ; le gelé 602 vaut 0,5866. La v9 étiquette 0,5822 « gelé 602 » ; la v10 la reprend en « avant ». Le gain v9→v10 est +0,0014, pas +0,0058."
+  },
+  {
+   "grandeur": "dev / test",
+   "fiche": "152/152, 67/67 (daté « avant corrections »)",
+   "mesure": "152/152, 68/68",
+   "gravite": "moyenne",
+   "note": "Le 67/67 est explicitement la v9 ; la valeur courante v10 est test 68/68 (+1 par r153), dev 152/152. Le JSON v10 ne publie pas dev/test."
+  },
+  {
+   "grandeur": "décomposition des 19 spans",
+   "fiche": "17 inatteignables + r255 + r264",
+   "mesure": "17 résiduels + s037 + r303",
+   "gravite": "majeure",
+   "note": "r255 et r264 sont déjà dans les 17 ; les deux extras réels sont s037 et r303."
+  },
+  {
+   "grandeur": "attribution des corrections",
+   "fiche": "-ée + garde DET du GP",
+   "mesure": "garde DET du GP seule",
+   "gravite": "majeure",
+   "note": "-ée est présent dès a408a909 (avant v8), sans effet mesurable sur ce gold ; le commit 710ec7f9 ne modifie que la boucle GP."
+  },
+  {
+   "grandeur": "7 régressions v8 réparées",
+   "fiche": 7,
+   "mesure": 6,
+   "gravite": "majeure",
+   "note": "s037 (la 7e) reste absente ; les 6 réparées sont r273 s032 s069 s072 s115 s135."
+  },
+  {
+   "grandeur": "table v9 (212 + corrections)",
+   "fiche": "7 régressions + 3 spans",
+   "mesure": "8 gains bruts, 1 perte (r303), net +7",
+   "gravite": "majeure",
+   "note": "La somme de la fiche ne rejoint pas 219."
+  },
+  {
+   "grandeur": "predicat_vu",
+   "fiche": "g017 rouvert",
+   "mesure": "g017 gagné, r303 perdu, net 0",
+   "gravite": "majeure",
+   "note": "r303 (SUB « car il est tard ») est absent des deux fiches."
+  },
+  {
+   "grandeur": "docstrings de portes",
+   "fiche": "11 docstrings annoncent 212/0,887/27/211",
+   "mesure": "220/0,9205/19/219",
+   "gravite": "moyenne",
+   "note": "T153, T161, T162, T163, T166, T167, T172, T173, T177, T179, T180 ; les portes passent, mais leur texte contredit leur assertion."
+  },
+  {
+   "grandeur": "portes",
+   "fiche": "183/183",
+   "mesure": "183/183, exit 0",
+   "gravite": "aucune",
+   "note": "Conforme."
+  }
+ ],
+ "limites": [
+  "In-sample : les règles sont dessinées sur ce gold ; le test n'est pas aveugle (A17 a diagnostiqué sur dev et test).",
+  "Un seul split déterministe (crc32 % 3), sans validation croisée.",
+  "Ablations par copies : la fidélité est vérifiée par v9_attendu = v9 et par le module v8 (212, 0,5763, 27 spans, 177 top-k).",
+  "Le -ée est inerte sur ce gold (0 différence d'annotation sur 612 phrases) ; un autre corpus pourrait révéler des faux positifs (entrée, portée, aimée) ou des effets hors gold.",
+  "La garde DET du GP inclut un vrai verbe après déterminant (« de la voir » -> GP « de la voir ») : risque réel, non mesuré sur ce gold.",
+  "Le top-k officiel (sous-chaîne) est peu discriminant : la permutation des listes de candidats laisse 1,17 % de réussite ; le top-1 aléatoire vaut 42,14 %. Les deux contrôles donnent p = 0.",
+  "Le fichier tools/bloc_linguistique.py a été modifié sans commit pendant l'audit (mtime 2026-11-06 00:15:37) : les mesures sont ancrées sur git show 710ec7f9, pas sur l'arbre courant ; la reproductibilité sur l'arbre courant n'est pas garantie tant que le changement n'est pas committé ou reverté.",
+  "Les valeurs de la fiche sont mesurées à 710ec7f9, module byte-identique au commit ; les modifications non commitées du journal, de reports/ et du sous-module tools/structures n'entrent pas dans les mesures."
+ ],
+ "fichiers_ecrits": [
+  "reports/rapport-audit-v10.md",
+  "reports/pensee-audit-v10.json"
+ ],
+ "commit": null
+}

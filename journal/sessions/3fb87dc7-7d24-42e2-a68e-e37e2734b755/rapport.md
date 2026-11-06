@@ -7,12 +7,12 @@
 | Identifiant | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 23:24 |
-| Durée | 0.8 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 37 |
-| Appels d'outils | 43 |
+| Messages | 50 |
+| Appels d'outils | 57 |
 | Fichiers touchés | 1 |
-| Commandes | 37 |
+| Commandes | 51 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesur … [1686 caractères tronqués]
 
-*43 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — Show branch, HEAD and status
 - bash — List linguistique tools and reports
@@ -41,11 +41,11 @@
 - bash — Trace origin of -ée handling
 - bash — Inspect autotest changes in v10
 - bash — Inspect Annotation and analyser API
-- … et 25 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
-⏵ Extraction des agrégats globaux (langue, type, source, croisements)
+⏵ Décomposition par source et par moitié (contrôle du confond synthétique/français)
 
 ## 3. Travail accompli
 
@@ -94,10 +94,16 @@
 - **T1** Compute controls, Wilson CIs, GP guard side effects
 - **T1** Inspect GP guard side-effect phrases
 - **T1** Print global aggregates
+- **T1** Compute GN/GV F1 and three-split per-type values
+- **T1** Compute per-type F1 including GN/GV
+- **T1** Compute GN/GV F1 and print splits
+- … et 11 autres
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 13, in <module>   File "<stdin>", line 9, in charger   File "<frozen importlib._bootstrap_external>", line 1027, in exec_module   Fil
+- **T1** : dev F1 par type: [stderr] Traceback (most recent call last):   File "<stdin>", line 12, in <module>   File "/tmp/v10/harnais.py", line 227, in seg_agrege     tp = sum(sum(r["seg_type"][t]["tp"] for t 
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 16, in <module>   File "<stdin>", line 11, in f1_type KeyError: 'gold_segs' [exit code: 1]
 
