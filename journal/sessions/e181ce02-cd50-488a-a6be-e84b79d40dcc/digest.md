@@ -46500,3 +46500,125 @@ v2 et contrôles
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1055 caractères tronqués]`
+
+  ```
+665 758
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-2007]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2007", "timeout_ms": 600000, "wait": true}`
+
+  ```
+25 files changed, 1555 insertions(+), 100 deletions(-)
+COMMIT OK 1
+9bf94feb FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'audit v7 est livré : je lis le verdict
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -18 reports/rapport-audit-v7.md", "description": "Lire l'audit v7"}`
+
+  ```
+# Audit v7 — 195/196 sur les deux golds, mais cinq valeurs de qualité sont gelées
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+> **Commit audité** : `69bd865e` (branche `s/v7`) · **Verdict** : ✅ chiffres reproduits ;
+> ⚠️ cinq valeurs sont mesurées sur le **gold gelé 602**, la colonne « avant » n'est pas la v6,
+> et deux récits de la fiche sont faux.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique`,
+> `_syntagmes_simple`, `_cible_precedent`, `_cible_hors_span`),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+> [`gold_split.py`](../tools/tests/linguistique/gold_split.py) (`dev`, `test`),
+> [`autotest.py`](../tools/pensee/autotest.py) (183 portes) · **JSON** :
+> [`pensee-audit-v7.json`](pensee-audit-v7.json).
+
+## 1. Le verdict en une page
+
+| question | réponse |
+|---|---|
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"récit\\|faux\" reports/rapport-audit-v7.md | head -8 | cut -c1-200", "description": "Trouver les récits faux"}`
+
+  ```
+6:> et deux récits de la fiche sont faux.
+43:**Deux récits faux** :
+234:chose : **T163** compte les **30 labels** (justes ou faux) dont la cible n'est pas dans
+372:  de 1,0 à 0,9949 : les 8 labels achetés sont anglais, et l'un d'eux (r102) est faux ;
+396:sur `would come yesterday`. La règle `who speaks` fonctionne, mais `that + pronom` est un faux
+486:| **v4** `392f03aa` | « exact 158/160 (0,9875) » | « 157/160 (0,9812) » | 157/160, F1 0,4539, tête 0,6432, S 0,4285, chunker 0,4143, POS 0,7475, top-k 156, spans 79 | **titre faux d'un label** ; c
+487:| **v5** `b975011b` | « exact 185/187 (0,9893) » | « 186/187 (0,9947) » | 186/187, F1 **0,5164**, tête **0,6834**, S 0,4582, chunker 0,5351, POS 0,7482, top-k 161, spans 52 | **titre faux d'un lab
+498:## 11. Ce qui pourrait rendre cet audit faux
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,50p' reports/rapport-audit-v7.md", "description": "Lire les deux récits faux"}`
+
+  ```
+| F1 chunker | **0,5858** | **0,5822** | −0,0036 |
+| F1 tête | **0,7205** | **0,7152** | −0,0053 |
+
+**Deux récits faux** :
+1. le POS contextuel ne rend pas **neuf** labels mais **huit** (196 − 188), et **+0,0118** de POS
+   sur le gelé (**+0,0116** sur le vivant), pas +0,0132 ;
+2. l'exemple `SUB « that she would come »` n'est **pas** produit : la prédiction est
+   `SUB « that she »` (span 9–17) et le span gold reste parmi les 43 perdus.
+
+**Le dispositif des portes est juste mais daté** : 183/183, aucune porte rouge, mais **26
+docstrings** portent encore les chiffres d'avant v7 et **6 messages** affichent un dénominateur
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\nfor p in charger():\n    if p[\"id\"] not in (\"g0 … [361 caractères tronqués]`
+
+  ```
+g017 She said that she would come yesterday. [('GV', 4, 8, 'said'), ('SUB', 9, 17, 'that she'), ('GV', 18, 38, 'would come yesterday')]
+   gold [('SUB', 9, 28, 'that she would come')]
+r034 The book that I read is exciting. [('GN', 0, 8, 'The book'), ('REL', 9, 15, 'that I'), ('GV', 16, 32, 'read is exciting')]
+   gold [('REL', 9, 20, 'that I read')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\nfor p in charger():\n    if p[\"id\"] not in (\"r2 … [362 caractères tronqués]`
+
+  ```
+r028 It rains since yesterday. [('GV', 'rains'), ('GP', 'since yesterday')]
+   gold [('GP', 'since yesterday')]
+r060 Les oiseaux volent au-dessus du lac. [('GN', 'Les oiseaux'), ('GN', 'Les oiseaux volent au-dessus'), ('GV', 'volent'), ('GP', 'au-dessus du lac'), ('GP', 'du lac')]
+   gold [('GP', 'au-dessus du lac')]
+r083 Le train entre en gare. [('GN', 'Le train'), ('GV', 'entre'), ('GV', 'en gare'), ('GP', 'en gare')]
+   gold [('GP', 'en gare')]
+r204 The man who speaks is my father. [('GN', 'The man'), ('REL', 'who speaks'), ('GV', 'is'), ('GN', 'my father')]
+   gold [('REL', 'who speaks')]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'audit a raison sur deux récits : je corrige la v7 (8 labels, +0,0118, exemple r204 vérifié)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pensee-couverture-v7.md'); t=p.read_text()\nt=t.replace(\"| 1 | **POS contextuel** : un verbe de suffixe après DET/PRÉP/ADJ devient un nom (« brother », « chair ») | P … [1275 caractères tronqués]`
+
+  ```
+récits corrigés
+52:- **La POS est le verrou** : le contexte (DET/PRÉP/ADJ avant un suffixe) rend 0,0128 de POS et
+53:  neuf labels de couverture.
+--- (vide = ok)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pensee-couverture-v7.md'); t=p.read_text()\nt=t.replace(\"- **La POS est le verrou** : le contexte (DET/PRÉP/ADJ avant un suffixe) rend 0,0128 de POS et\\n  neuf label … [916 caractères tronqués]`
+
+  ```
+ok
+0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+9bf94feb FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; 43 spans restent ; cohérence des 7 fiches auditée.\", \" ; 43 spans restent ; les audits v7 (chiffres et cohérence)  … [893 caractères tronqués]`

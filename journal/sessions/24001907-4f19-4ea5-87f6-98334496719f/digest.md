@@ -2733,3 +2733,93 @@ OK  rapport-pensee-couverture-v7.md -> /home/stephane/Data13TB/stephane/GitHub/Q
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
   ```
 
+### 🤖 Assistant
+
+⏵ Contrôle de la liste des docstrings périmées et des messages faux dans le JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v7.json',encoding='utf-8'))\nprint('docstrings',len(d['portes']['docstrings_perimees']),d['portes']['docstrings_perimees'])\nprint('messages',len(d['portes']['mess … [150 caractères tronqués]`
+
+  ```
+docstrings 26 ['T86', 'T87', 'T88', 'T89', 'T90', 'T107', 'T110', 'T111', 'T112', 'T113', 'T114', 'T115', 'T119', 'T138', 'T141', 'T153', 'T156', 'T157', 'T162', 'T163', 'T166', 'T167', 'T172', 'T173', 'T177', 'T179']
+messages 6 ['T161 (tete 195/145)', 'T162 (tete 167/145)', 'T168 (exact 195/145)', 'T171 (exact 195/145)', 'T177 (166/145)', 'T179 (195/145, exact_any 195/145)']
+citees 32
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout d'une note sur les portes d'instantané (T154/T155/T175)
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "- **T114/T115/T119/T138/T156/T157** : valeurs recalées par le commit, mais aucune n'apparaît dans\n  la fiche v7. Ce n'est pas une faute — la fiche ne prétend pas tout dire — mais le « 183/183 »\n  couvre plus que les 14 lignes du tableau.\ … [534 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-attachement.json',encoding='utf-8'))\nm=d['mesure']\nprint({k:m[k] for k in ('cibles','labels','top1','topk_sous_chaine','exact','topk_strict')})\nprint('verdict', … [65 caractères tronqués]`
+
+  ```
+{'cibles': 239, 'labels': 145, 'top1': 126, 'topk_sous_chaine': 134, 'exact': 123, 'topk_strict': 88}
+verdict {'statut': 'reproduit', 'valeurs_publiees': 14, 'valeurs_reproduites': 14, 'ecarts': 0, 'reserve': "3 JSON sur 5 (conventions, attachement-cible, spans) sont des instantanés antérieurs, reproduits à leur commit mais pas à l'état courant ; dans sa version committée, pensee-spans.json publie 12 GP / 93 spans dans son bloc `spans`, pas 13 / 94. L'audit n'a modifié aucun fichier existant et n'a fait aucun commit."}
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final de cohérence JSON ↔ mesures
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v7.json',encoding='utf-8'))\nfor k,v in d['revendications'].items():\n    print(k, v.get('fiche'), v.get('vivant'), v.get('gele'), v.get('ecart_vivant'), v.get('st … [578 caractères tronqués]`
+
+  ```
+labels 196 196 196 0 ok
+exact 195 195 195 0 ok
+exact_taux_span 0.9949 0.9949 0.9949 0.0 ok
+couverture 0.8201 0.8201 0.8201 0.0 ok
+topk 166 166 166 0 ok
+topk_taux 0.6946 0.6946 0.6946 0.0 ok
+pos 0.7603 0.7581 0.7603 -0.0022 gele seulement
+f1 0.5595 0.5555 0.5595 -0.004 gele seulement
+f1_s 0.4741 0.4688 0.4741 -0.0053 gele seulement
+f1_chunker 0.5858 0.5822 0.5858 -0.0036 gele seulement
+tete 0.7205 0.7152 0.7205 -0.0053 gele seulement
+fr 135/135 135/135 135/135 0 ok
+en 60/61 60/61 60/61 0 ok
+spans {'REL': 21, 'SUB': 17, 'GP': 5, 'total': 43} {'REL': 21, 'SUB': 17, 'GP': 5, 'total': 43} {'REL': 21, 'SUB': 17, 'GP': 5, 'total': 43} 0 ok
+--- avant
+{'pos': 0.7475, 'f1': 0.513, 'tete': 0.6826, 'labels': 187, 'exact': 187, 'couverture': 0.7824, 'spans': 52}
+{'vivant': {'phrases': 612, 'pos': 0.7461, 'f1': 0.513, 'tete': 0.6785, 'labels': 187, 'exact': 187, 'couverture': 0.7824, 'spans': 52, 'topk': 161}, 'gele': {'phrases': 602, 'pos': 0.7482, 'f1': 0.5164, 'tete': 0.6834, 'labels': 187, 'exact': 187, 'couverture': 0.7824, 'spans': 52, 'topk': 161}}
+--- portes
+183 183 0
+--- negatifs
+permutation_cibles 1.807 0.0092 7
+permutation_cibles_par_type 5.163 0.0263 13
+permutation_cibles_par_langue 
+… [454 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Enrichissement du JSON pour les deux ablations fines
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,copy\np='reports/pensee-audit-v7.json'\nd=json.load(open(p,encoding='utf-8'))\na=d['ablations']\n# sans_cible_precedent = sans_segment_precedent (mêmes chiffres), on garde la note\ncible=copy.deepcopy(a[ … [1032 caractères tronqués]`
+
+  ```
+ok
+JSON valide
+sans_cible_precedent {'pos': 0.7603, 'f1': 0.5595, 'tete': 0.7205, 'labels': 196, 'exact': 160, 'exact_span': 0.8163, 'couverture': 0.8201, 'topk': 166, 'fr': [115, 135], 'en': [45, 61]} {'labels': 134, 'exact': 105, 'f1': 0.5512, 'couverture': 0.8221, 'topk': 111} {'labels': 62, 'exact': 55, 'f1': 0.5651, 'couverture': 0.8158, 'topk': 55}
+sans_candidats_precedent {'pos': 0.7603, 'f1': 0.5595, 'tete': 0.7205, 'labels': 196, 'exact': 195, 'exact_span': 0.9949, 'couverture': 0.8201, 'topk': 166, 'fr': [135, 135], 'en': [60, 61]} {'labels': 134, 'exact': 133, 'f1': 0.5512, 'couverture': 0.8221, 'topk': 111} {'labels': 62, 'exact': 62, 'f1': 0.5651, 'couverture': 0.8158, 'topk': 55}
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification : r102 est-il un label nouveau ou un label cassé par le POS contextuel ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport importlib.util,sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nspec=importlib.util.spec_from_file_location(' … [863 caractères tronqués]`
+
+  ```
+v7 label? True cible None candidats ['GP']
+  segments [('GN', 'The rain falls'), ('GP', 'since this morning')]
+  POS [('The', 'DET'), ('rain', 'VERB'), ('falls', 'NOUN'), ('since', 'PREP'), ('this', 'DET'), ('morning', 'NOUN')]
+sans_pos label? False cible None candidats None
+  segments [('GN', 'The rain falls'), ('GP', 'since this'), ('GV', 'morning')]
+  POS [('The', 'DET'), ('rain', 'VERB'), ('falls', 'NOUN'), ('since', 'PREP'), ('this', 'DET'), ('morning', 'VERB')]
+  ```
+

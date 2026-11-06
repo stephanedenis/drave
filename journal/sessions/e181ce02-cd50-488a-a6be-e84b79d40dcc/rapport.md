@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 123.9 h |
+| Durée | 124.0 h |
 | Tours | 177 |
-| Messages | 2718 |
-| Appels d'outils | 2394 |
+| Messages | 2727 |
+| Appels d'outils | 2403 |
 | Fichiers touchés | 25 |
-| Commandes | 1974 |
+| Commandes | 1982 |
 | Sous-agents | 20 |
-| Commits | 289 |
+| Commits | 291 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*153 appels d'outils.* Actions notables :
+*162 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 124 autres
+- … et 132 autres
 
 **Synthèse produite :**
 
-⏵ J'applique la liste de corrections de l'audit (proses v4/v5, v2, v6, README, contrôles)
+⏵ L'audit a raison sur deux récits : je corrige la v7 (8 labels, +0,0118, exemple r204 vérifié)
 
 ## 3. Travail accompli
 
@@ -9617,7 +9617,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1934 autres
+- … et 1942 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10054,4 +10054,6 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README ET ÉTAT À JOUR" -- reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-co
 - FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES" -- reports/rapport-pensee-segmentation-v4.md
 - FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES" -- reports/rapport-pensee-segmentation-v4.md
+- B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES" -- reports/rapport-pensee-couverture-v7.md reports/rapport
+- B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES" -- reports/rapport-pensee-couverture-v7.md reports/rapport
 

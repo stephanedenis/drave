@@ -1,0 +1,1199 @@
+{
+ "audit": "v7",
+ "commit": "69bd865ec1bae1958b6f617bde4bf685a15d7d67",
+ "branche": "s/v7",
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "verdict": "Les chiffres de la fiche sont reproductibles, mais cinq valeurs de qualite (POS, F1 union, S, chunker, tete) sont mesurees sur le gold gele 602, pas sur le gold vivant 612. L'attachement (196 labels, 195 exacts, couverture, top-k, fr/en, spans) est identique sur les deux. La colonne avant n'est pas la v6 : elle melange v4, v5a et v6. Deux recits sont faux : le POS contextuel vaut +8 labels (pas +9) et +0,0118 de POS (pas +0,0132) ; l'exemple SUB « that she would come » n'est pas produit. 183/183 portes, zero echec, mais 26 docstrings et 6 messages de portes sont perimes et aucune porte ne couvre dev/test.",
+ "gold": {
+  "vivant": {
+   "phrases": 612,
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160,
+   "tokens": 3179,
+   "segments": 1863,
+   "cibles": 239
+  },
+  "gele": {
+   "phrases": 602,
+   "hand": 20,
+   "reel": 422,
+   "synthetique": 160,
+   "tokens": 3141,
+   "segments": 1831,
+   "cibles": 239
+  },
+  "difference": {
+   "phrases": 10,
+   "ids": [
+    "r423",
+    "r424",
+    "r425",
+    "r426",
+    "r427",
+    "r428",
+    "r429",
+    "r430",
+    "r431",
+    "r432"
+   ],
+   "cibles": 0,
+   "tokens": 38,
+   "segments": 32
+  }
+ },
+ "revendications": {
+  "labels": {
+   "fiche": 196,
+   "vivant": 196,
+   "gele": 196,
+   "ecart_vivant": 0,
+   "statut": "ok"
+  },
+  "exact": {
+   "fiche": 195,
+   "vivant": 195,
+   "gele": 195,
+   "ecart_vivant": 0,
+   "statut": "ok"
+  },
+  "exact_taux_span": {
+   "fiche": 0.9949,
+   "vivant": 0.9949,
+   "gele": 0.9949,
+   "ecart_vivant": 0.0,
+   "statut": "ok"
+  },
+  "couverture": {
+   "fiche": 0.8201,
+   "vivant": 0.8201,
+   "gele": 0.8201,
+   "ecart_vivant": 0.0,
+   "statut": "ok"
+  },
+  "topk": {
+   "fiche": 166,
+   "vivant": 166,
+   "gele": 166,
+   "ecart_vivant": 0,
+   "statut": "ok"
+  },
+  "topk_taux": {
+   "fiche": 0.6946,
+   "vivant": 0.6946,
+   "gele": 0.6946,
+   "ecart_vivant": 0.0,
+   "statut": "ok"
+  },
+  "pos": {
+   "fiche": 0.7603,
+   "vivant": 0.7581,
+   "gele": 0.7603,
+   "ecart_vivant": -0.0022,
+   "statut": "gele seulement"
+  },
+  "f1": {
+   "fiche": 0.5595,
+   "vivant": 0.5555,
+   "gele": 0.5595,
+   "ecart_vivant": -0.004,
+   "statut": "gele seulement"
+  },
+  "f1_s": {
+   "fiche": 0.4741,
+   "vivant": 0.4688,
+   "gele": 0.4741,
+   "ecart_vivant": -0.0053,
+   "statut": "gele seulement"
+  },
+  "f1_chunker": {
+   "fiche": 0.5858,
+   "vivant": 0.5822,
+   "gele": 0.5858,
+   "ecart_vivant": -0.0036,
+   "statut": "gele seulement"
+  },
+  "tete": {
+   "fiche": 0.7205,
+   "vivant": 0.7152,
+   "gele": 0.7205,
+   "ecart_vivant": -0.0053,
+   "statut": "gele seulement"
+  },
+  "fr": {
+   "fiche": "135/135",
+   "vivant": "135/135",
+   "gele": "135/135",
+   "ecart_vivant": 0,
+   "statut": "ok"
+  },
+  "en": {
+   "fiche": "60/61",
+   "vivant": "60/61",
+   "gele": "60/61",
+   "ecart_vivant": 0,
+   "statut": "ok"
+  },
+  "spans": {
+   "fiche": {
+    "REL": 21,
+    "SUB": 17,
+    "GP": 5,
+    "total": 43
+   },
+   "vivant": {
+    "REL": 21,
+    "SUB": 17,
+    "GP": 5,
+    "total": 43
+   },
+   "gele": {
+    "REL": 21,
+    "SUB": 17,
+    "GP": 5,
+    "total": 43
+   },
+   "ecart_vivant": 0,
+   "statut": "ok"
+  }
+ },
+ "avant": {
+  "fiche": {
+   "pos": 0.7475,
+   "f1": 0.513,
+   "tete": 0.6826,
+   "labels": 187,
+   "exact": 187,
+   "couverture": 0.7824,
+   "spans": 52
+  },
+  "v6_mesure": {
+   "vivant": {
+    "phrases": 612,
+    "pos": 0.7461,
+    "f1": 0.513,
+    "tete": 0.6785,
+    "labels": 187,
+    "exact": 187,
+    "couverture": 0.7824,
+    "spans": 52,
+    "topk": 161
+   },
+   "gele": {
+    "phrases": 602,
+    "pos": 0.7482,
+    "f1": 0.5164,
+    "tete": 0.6834,
+    "labels": 187,
+    "exact": 187,
+    "couverture": 0.7824,
+    "spans": 52,
+    "topk": 161
+   }
+  },
+  "provenance": {
+   "pos": "v4 gele (0,7475), pas la v6",
+   "tete": "v5a gele (0,6826), pas la v6",
+   "f1": "v6 vivant (0,5130)",
+   "labels_exact_couverture_spans": "v6 (identique sur les deux golds)"
+  },
+  "v4_gele": {
+   "commit": "392f03aa",
+   "pos": 0.7475,
+   "f1": 0.4539,
+   "tete": 0.6432,
+   "s": 0.4285,
+   "chunker": 0.4143,
+   "labels": 160,
+   "exact": 157,
+   "topk": 156
+  },
+  "v5a_gele": {
+   "commit": "7a9f0d6a",
+   "pos": 0.7482,
+   "f1": 0.5156,
+   "tete": 0.6826,
+   "s": 0.4577,
+   "chunker": 0.5341,
+   "labels": 187,
+   "exact": 185
+  },
+  "v5b_gele": {
+   "commit": "b975011b",
+   "pos": 0.7482,
+   "f1": 0.5164,
+   "tete": 0.6834,
+   "s": 0.4582,
+   "chunker": 0.5351,
+   "labels": 187,
+   "exact": 186
+  },
+  "v6_gele": {
+   "commit": "0ec6c27d",
+   "pos": 0.7482,
+   "f1": 0.5164,
+   "tete": 0.6834,
+   "s": 0.4582,
+   "chunker": 0.5351,
+   "labels": 187,
+   "exact": 187
+  },
+  "v6_vivant": {
+   "commit": "0ec6c27d",
+   "pos": 0.7461,
+   "f1": 0.513,
+   "tete": 0.6785,
+   "s": 0.453,
+   "chunker": 0.5321,
+   "labels": 187,
+   "exact": 187
+  }
+ },
+ "portes": {
+  "total": 183,
+  "tenues": 183,
+  "echecs": 0,
+  "citees": [
+   {
+    "id": "T86",
+    "gold": "reel",
+    "attendu": "POS 0.8452 / 0.8221",
+    "mesure": "0.8452 / 0.8221",
+    "statut": "ok",
+    "docstring": "perimee (0.8214 / 0.7897)"
+   },
+   {
+    "id": "T87",
+    "gold": "reel",
+    "attendu": "POS 0.7353",
+    "mesure": "0.7353 ; syntagme 0.7027",
+    "statut": "ok",
+    "docstring": "perimee (0.6471 / 0.4828)"
+   },
+   {
+    "id": "T88",
+    "gold": "reel",
+    "attendu": "POS 0.7236",
+    "mesure": "0.7236 ; syntagme 0.5954",
+    "statut": "ok",
+    "docstring": "perimee (0.6829 / 0.2963)"
+   },
+   {
+    "id": "T89",
+    "gold": "reel",
+    "attendu": "POS 0.7327",
+    "mesure": "0.7327 ; syntagme 0.5839",
+    "statut": "ok",
+    "docstring": "perimee (0.7013 / 0.3060)"
+   },
+   {
+    "id": "T90",
+    "gold": "reel",
+    "attendu": "POS 0.719",
+    "mesure": "0.719 ; syntagme 0.5477",
+    "statut": "ok",
+    "docstring": "perimee (0.6984 / 0.2677)"
+   },
+   {
+    "id": "T107",
+    "gold": "gele",
+    "attendu": "602 phrases, POS 0.7603",
+    "mesure": "602, POS 0.7603, tete 0.7205",
+    "statut": "ok",
+    "docstring": "perimee (522 phrases, 0.7586)"
+   },
+   {
+    "id": "T110",
+    "gold": "gele",
+    "attendu": "S 0.4741, chunker 0.5858",
+    "mesure": "S 0.4741, chunker 0.5858",
+    "statut": "ok",
+    "docstring": "perimee (0.4582 / 0.5351)"
+   },
+   {
+    "id": "T111",
+    "gold": "gele",
+    "attendu": "tete hybride 0.7265",
+    "mesure": "0.7265",
+    "statut": "ok",
+    "docstring": "perimee (0.4183 ; S 0.3552, chunker 0.4707)"
+   },
+   {
+    "id": "T112",
+    "gold": "gele",
+    "attendu": "union F1 0.5595",
+    "mesure": "0.5595",
+    "statut": "ok",
+    "docstring": "perimee (0.2833 ; S 0.1722, tete 0.5027)"
+   },
+   {
+    "id": "T113",
+    "gold": "gele",
+    "attendu": "F1 0.5595, tete 0.7205",
+    "mesure": "0.5595 / 0.7205",
+    "statut": "ok",
+    "docstring": "perimee (0.2833 / 0.5027)"
+   },
+   {
+    "id": "T114",
+    "gold": "gele",
+    "attendu": "cascade F1 0.5864, tete 0.7285, 602 appels",
+    "mesure": "0.5864 / 0.7285 / 602",
+    "statut": "ok",
+    "docstring": "perimee (0.3203 / 0.4817)"
+   },
+   {
+    "id": "T115",
+    "gold": "gele",
+    "attendu": "tete cascade 0.6709",
+    "mesure": "0.6709",
+    "statut": "ok",
+    "docstring": "perimee (0.455 contre 0.441)"
+   },
+   {
+    "id": "T119",
+    "gold": "gele",
+    "attendu": "resume 0.7465 / 0.6914",
+    "mesure": "0.7465 / 0.6914",
+    "statut": "ok",
+    "docstring": "perimee (0.7834 / 0.7472)"
+   },
+   {
+    "id": "T138",
+    "gold": "vivant",
+    "attendu": "confiance 0.7465, niveau 0.3454",
+    "mesure": "0.7465 / 0.3454",
+    "statut": "ok",
+    "docstring": "perimee (0.7424 / 0.3432)"
+   },
+   {
+    "id": "T141",
+    "gold": "vivant",
+    "attendu": "POS 0.7581",
+    "mesure": "0.7581",
+    "statut": "ok",
+    "docstring": "perimee (0.7455, 432 phrases)"
+   },
+   {
+    "id": "T153",
+    "gold": "vivant",
+    "attendu": "top1 0.8159, exact 0.8159, cibles 239",
+    "mesure": "0.8159 / 0.8159, couverture 0.8201 (imprimee, non asservie)",
+    "statut": "ok",
+    "docstring": "perimee (0.5983 / 0.5900)"
+   },
+   {
+    "id": "T156",
+    "gold": "vivant",
+    "attendu": "257/546",
+    "mesure": "257/546 (0.4707)",
+    "statut": "ok",
+    "docstring": "perimee (221/637, 0.3469)"
+   },
+   {
+    "id": "T157",
+    "gold": "vivant",
+    "attendu": "231 sans role, 151 avant, 46 apres",
+    "mesure": "231 / 151 / 46",
+    "statut": "ok",
+    "docstring": "perimee (322 sans role, 129 avant, 172 apres)"
+   },
+   {
+    "id": "T161",
+    "gold": "vivant",
+    "attendu": "top1 195, exact 195, cibles 239",
+    "mesure": "195/239 ; tete 195/145 (message faux)",
+    "statut": "ok",
+    "docstring": "message faux (/145)"
+   },
+   {
+    "id": "T162",
+    "gold": "vivant",
+    "attendu": "topk 166, tete topk 167, top1 195",
+    "mesure": "166/239 (0.6946) ; tete 167/145 (message faux)",
+    "statut": "ok",
+    "docstring": "perimee (142/145, 0.9793)"
+   },
+   {
+    "id": "T163",
+    "gold": "vivant",
+    "attendu": "span 43, cible 30",
+    "mesure": "43 de span, 30 de cible",
+    "statut": "ok",
+    "docstring": "perimee (94 de span, 33 de cible)"
+   },
+   {
+    "id": "T164",
+    "gold": "vivant",
+    "attendu": "cible saw, exact 195",
+    "mesure": "saw, 195/239",
+    "statut": "ok",
+    "docstring": "ok"
+   },
+   {
+    "id": "T166",
+    "gold": "vivant",
+    "attendu": "21 REL, 17 SUB, 5 GP",
+    "mesure": "21 / 17 / 5",
+    "statut": "ok",
+    "docstring": "perimee (48 / 33 / 13 = 94)"
+   },
+   {
+    "id": "T167",
+    "gold": "vivant",
+    "attendu": "196 labels, 0.9949 / 0.8469 / 0.9949",
+    "mesure": "196, 0.9949 / 0.8469 / 0.9949",
+    "statut": "ok",
+    "docstring": "perimee (diviseur 146)"
+   },
+   {
+    "id": "T168",
+    "gold": "vivant",
+    "attendu": "exact 195, 137 verbes, 59 noms",
+    "mesure": "195 ; 137 / 59",
+    "statut": "ok",
+    "docstring": "message faux (195/145)"
+   },
+   {
+    "id": "T169",
+    "gold": "vivant",
+    "attendu": "verbes 136/137, noms 59/59",
+    "mesure": "136/137 (0.9927), 59/59",
+    "statut": "ok",
+    "docstring": "ok"
+   },
+   {
+    "id": "T171",
+    "gold": "vivant",
+    "attendu": "exact 195",
+    "mesure": "195 ; message 195/145",
+    "statut": "ok",
+    "docstring": "message faux (/145)"
+   },
+   {
+    "id": "T172",
+    "gold": "vivant",
+    "attendu": "1 hors candidats, 0 mal classes",
+    "mesure": "1 / 0",
+    "statut": "ok",
+    "docstring": "perimee (2 / 2, 141/145)"
+   },
+   {
+    "id": "T173",
+    "gold": "vivant",
+    "attendu": "topk 166, topk_exact 166, 0.8469",
+    "mesure": "166 / 166 / 0.8469",
+    "statut": "ok",
+    "docstring": "perimee (142/145, 0.9793)"
+   },
+   {
+    "id": "T177",
+    "gold": "vivant",
+    "attendu": "topk_exact 166, 0.8469",
+    "mesure": "166/145 (message faux), 0.8469",
+    "statut": "ok",
+    "docstring": "perimee (88 -> 141)"
+   },
+   {
+    "id": "T179",
+    "gold": "vivant",
+    "attendu": "exact 195, exact_any 195, 0.9949",
+    "mesure": "195 / 195 / 0.9949 ; messages 195/145",
+    "statut": "ok",
+    "docstring": "perimee (43 GP, 143/145)"
+   },
+   {
+    "id": "T180",
+    "gold": "vivant",
+    "attendu": "fr 135/135, en 60/61",
+    "mesure": "fr 135/135, en 60/61 (61/88 labels)",
+    "statut": "ok",
+    "docstring": "ok"
+   }
+  ],
+  "gold_des_portes": {
+   "gele": [
+    "T107",
+    "T110",
+    "T111",
+    "T112",
+    "T113",
+    "T114",
+    "T115",
+    "T119"
+   ],
+   "vivant": [
+    "T138",
+    "T141",
+    "T153",
+    "T156",
+    "T157",
+    "T161",
+    "T162",
+    "T163",
+    "T164",
+    "T166",
+    "T167",
+    "T168",
+    "T169",
+    "T171",
+    "T172",
+    "T173",
+    "T177",
+    "T179",
+    "T180"
+   ],
+   "reel": [
+    "T86",
+    "T87",
+    "T88",
+    "T89",
+    "T90"
+   ]
+  },
+  "docstrings_perimees": [
+   "T86",
+   "T87",
+   "T88",
+   "T89",
+   "T90",
+   "T107",
+   "T110",
+   "T111",
+   "T112",
+   "T113",
+   "T114",
+   "T115",
+   "T119",
+   "T138",
+   "T141",
+   "T153",
+   "T156",
+   "T157",
+   "T162",
+   "T163",
+   "T166",
+   "T167",
+   "T172",
+   "T173",
+   "T177",
+   "T179"
+  ],
+  "messages_faux": [
+   "T161 (tete 195/145)",
+   "T162 (tete 167/145)",
+   "T168 (exact 195/145)",
+   "T171 (exact 195/145)",
+   "T177 (166/145)",
+   "T179 (195/145, exact_any 195/145)"
+  ],
+  "non_couvertes": [
+   "dev/test (exact/labels/F1/couverture) : aucune porte",
+   "POS vivant 0.7581 et F1 vivant 0.5555 : aucun gate ne les associe (T141 ne couvre que la POS vivante ; T112/T113 couvrent la F1 gelee)",
+   "couverture 0.8201 : imprimee par T153, non assertee ; impliquee par T167 (labels 196 / cibles 239)",
+   "exact global 195/239 = 0.8159 : asserte par T153, absent de la fiche et du JSON",
+   "top-k span 166/196 = 0.8469 : asserte par T167/T173/T177, absent de la fiche"
+  ]
+ },
+ "controles_negatifs": {
+  "n": 196,
+  "exact_observe": 195,
+  "exact_observe_taux": 0.9949,
+  "topk_observe": 166,
+  "topk_observe_taux": 0.8469,
+  "permutation_cibles": {
+   "tirages": 1000,
+   "moyenne": 1.807,
+   "taux": 0.0092,
+   "min": 0,
+   "max": 7,
+   "ecart_type": 1.327,
+   "p_value": 0.0
+  },
+  "permutation_cibles_par_type": {
+   "tirages": 1000,
+   "moyenne": 5.163,
+   "taux": 0.0263,
+   "min": 0,
+   "max": 13,
+   "p_value": 0.0
+  },
+  "permutation_cibles_par_langue": {
+   "tirages": 1000,
+   "moyenne": 3.468,
+   "taux": 0.0177,
+   "min": 0,
+   "max": 13,
+   "p_value": 0.0
+  },
+  "permutation_cibles_type_et_langue": {
+   "tirages": 1000,
+   "moyenne": 9.397,
+   "taux": 0.0479,
+   "min": 2,
+   "max": 20,
+   "p_value": 0.0
+  },
+  "permutation_listes_cibles": {
+   "tirages": 1000,
+   "moyenne": 1.901,
+   "taux": 0.0097,
+   "min": 0,
+   "max": 7,
+   "p_value": 0.0
+  },
+  "candidat_aleatoire_liste_du_label": {
+   "tirages": 1000,
+   "moyenne": 70.24,
+   "taux": 0.3584,
+   "max": 92
+  },
+  "candidat_aleatoire_pool_global": {
+   "tirages": 1000,
+   "moyenne": 0.757,
+   "taux": 0.0039,
+   "max": 4
+  },
+  "cible_uniforme": {
+   "tirages": 1000,
+   "moyenne": 1.925,
+   "taux": 0.0098,
+   "max": 8
+  },
+  "topk_candidats_permutes": {
+   "tirages": 1000,
+   "moyenne": 2.463,
+   "taux": 0.0126,
+   "min": 0,
+   "max": 8
+  },
+  "note": "Les permutations stratifiees sont les controles les plus conservateurs ; meme par type et langue, le maximum (20/196) reste tres loin de 195/196. Le candidat aleatoire dans la liste du label (35,8 %) est le seul controle haut : les listes de candidats sont informatives, mais le choix du bon candidat reste l'essentiel (63,7 points d'ecart)."
+ },
+ "ablations": {
+  "temoin": {
+   "vivant": {
+    "pos": 0.7581,
+    "f1": 0.5555,
+    "tete": 0.7152,
+    "labels": 196,
+    "exact": 195,
+    "exact_span": 0.9949,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     135,
+     135
+    ],
+    "en": [
+     60,
+     61
+    ]
+   },
+   "gele": {
+    "pos": 0.7603,
+    "f1": 0.5595,
+    "tete": 0.7205,
+    "labels": 196,
+    "exact": 195,
+    "exact_span": 0.9949,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     135,
+     135
+    ],
+    "en": [
+     60,
+     61
+    ]
+   },
+   "dev": {
+    "labels": 134,
+    "exact": 133,
+    "f1": 0.5512,
+    "couverture": 0.8221,
+    "topk": 111
+   },
+   "test": {
+    "labels": 62,
+    "exact": 62,
+    "f1": 0.5651,
+    "couverture": 0.8158,
+    "topk": 55
+   }
+  },
+  "sans_pos_contextuel": {
+   "vivant": {
+    "pos": 0.7465,
+    "f1": 0.5495,
+    "tete": 0.7133,
+    "labels": 188,
+    "exact": 188,
+    "exact_span": 1.0,
+    "couverture": 0.7866,
+    "topk": 159,
+    "fr": [
+     135,
+     135
+    ],
+    "en": [
+     53,
+     53
+    ]
+   },
+   "gele": {
+    "pos": 0.7485,
+    "f1": 0.5534,
+    "tete": 0.7185,
+    "labels": 188,
+    "exact": 188,
+    "exact_span": 1.0,
+    "couverture": 0.7866,
+    "topk": 159,
+    "fr": [
+     135,
+     135
+    ],
+    "en": [
+     53,
+     53
+    ]
+   },
+   "dev": {
+    "labels": 126,
+    "exact": 126,
+    "f1": 0.5425,
+    "couverture": 0.773,
+    "topk": 104
+   },
+   "test": {
+    "labels": 62,
+    "exact": 62,
+    "f1": 0.5651,
+    "couverture": 0.8158,
+    "topk": 55
+   },
+   "pos_par_langue_gele": {
+    "avec": {
+     "fr": [
+      1515,
+      2000,
+      0.7575
+     ],
+     "en": [
+      873,
+      1141,
+      0.7651
+     ]
+    },
+    "sans": {
+     "fr": [
+      1511,
+      2000,
+      0.7555
+     ],
+     "en": [
+      840,
+      1141,
+      0.7362
+     ]
+    }
+   },
+   "delta": {
+    "pos_vivant": -0.0116,
+    "pos_gele": -0.0118,
+    "labels": -8,
+    "exact": -7,
+    "couverture": -0.0335,
+    "topk": -7,
+    "f1_vivant": -0.006,
+    "f1_gele": -0.0061,
+    "tete": -0.002
+   }
+  },
+  "sans_segment_precedent": {
+   "vivant": {
+    "pos": 0.7581,
+    "f1": 0.5555,
+    "tete": 0.7152,
+    "labels": 196,
+    "exact": 160,
+    "exact_span": 0.8163,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     115,
+     135
+    ],
+    "en": [
+     45,
+     61
+    ]
+   },
+   "gele": {
+    "pos": 0.7603,
+    "f1": 0.5595,
+    "tete": 0.7205,
+    "labels": 196,
+    "exact": 160,
+    "exact_span": 0.8163,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     115,
+     135
+    ],
+    "en": [
+     45,
+     61
+    ]
+   },
+   "dev": {
+    "labels": 134,
+    "exact": 105,
+    "f1": 0.5512,
+    "couverture": 0.8221,
+    "topk": 111
+   },
+   "test": {
+    "labels": 62,
+    "exact": 55,
+    "f1": 0.5651,
+    "couverture": 0.8158,
+    "topk": 55
+   },
+   "delta": {
+    "exact": -35,
+    "exact_span": -0.1786,
+    "fr": -20,
+    "en": -15,
+    "dev": -28,
+    "test": -7
+   }
+  },
+  "sans_cible_precedent": {
+   "vivant": {
+    "pos": 0.7581,
+    "f1": 0.5555,
+    "tete": 0.7152,
+    "labels": 196,
+    "exact": 160,
+    "exact_span": 0.8163,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     115,
+     135
+    ],
+    "en": [
+     45,
+     61
+    ]
+   },
+   "gele": {
+    "pos": 0.7603,
+    "f1": 0.5595,
+    "tete": 0.7205,
+    "labels": 196,
+    "exact": 160,
+    "exact_span": 0.8163,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     115,
+     135
+    ],
+    "en": [
+     45,
+     61
+    ]
+   },
+   "dev": {
+    "labels": 134,
+    "exact": 105,
+    "f1": 0.5512,
+    "couverture": 0.8221,
+    "topk": 111
+   },
+   "test": {
+    "labels": 62,
+    "exact": 55,
+    "f1": 0.5651,
+    "couverture": 0.8158,
+    "topk": 55
+   },
+   "delta": {
+    "exact": -35,
+    "exact_span": -0.1786,
+    "fr": -20,
+    "en": -15,
+    "dev": -28,
+    "test": -7
+   },
+   "note": "identique a sans_segment_precedent : la cible porte tout l'effet (les candidats du precedent ne changent rien)"
+  },
+  "sans_candidats_precedent": {
+   "vivant": {
+    "pos": 0.7581,
+    "f1": 0.5555,
+    "tete": 0.7152,
+    "labels": 196,
+    "exact": 195,
+    "exact_span": 0.9949,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     135,
+     135
+    ],
+    "en": [
+     60,
+     61
+    ]
+   },
+   "gele": {
+    "pos": 0.7603,
+    "f1": 0.5595,
+    "tete": 0.7205,
+    "labels": 196,
+    "exact": 195,
+    "exact_span": 0.9949,
+    "couverture": 0.8201,
+    "topk": 166,
+    "fr": [
+     135,
+     135
+    ],
+    "en": [
+     60,
+     61
+    ]
+   },
+   "dev": {
+    "labels": 134,
+    "exact": 133,
+    "f1": 0.5512,
+    "couverture": 0.8221,
+    "topk": 111
+   },
+   "test": {
+    "labels": 62,
+    "exact": 62,
+    "f1": 0.5651,
+    "couverture": 0.8158,
+    "topk": 55
+   },
+   "note": "aucun effet : les candidats du precedent sont redondants en v7, le top-k vient des noms S et des verbes proches"
+  }
+ },
+ "dev_test": {
+  "split": {
+   "algo": "crc32(str(id)) % 3 == 0 -> test",
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 134,
+    "sources": {
+     "hand": 15,
+     "reel": 302,
+     "synthetique": 105
+    },
+    "langues": {
+     "fr": 277,
+     "en": 145
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 62,
+    "sources": {
+     "hand": 5,
+     "reel": 130,
+     "synthetique": 55
+    },
+    "langues": {
+     "fr": 125,
+     "en": 65
+    }
+   },
+   "union": 612,
+   "intersection": 0
+  },
+  "dev": {
+   "pos": 0.7547,
+   "f1": 0.5512,
+   "tete": 0.7132,
+   "labels": 134,
+   "exact": 133,
+   "exact_span": 0.9925,
+   "couverture": 0.8221,
+   "topk": 111,
+   "topk_taux": 0.681,
+   "fr": [
+    92,
+    92
+   ],
+   "en": [
+    41,
+    42
+   ]
+  },
+  "test": {
+   "pos": 0.7656,
+   "f1": 0.5651,
+   "tete": 0.7196,
+   "labels": 62,
+   "exact": 62,
+   "exact_span": 1.0,
+   "couverture": 0.8158,
+   "topk": 55,
+   "topk_taux": 0.7237,
+   "fr": [
+    43,
+    43
+   ],
+   "en": [
+    19,
+    19
+   ]
+  },
+  "gele": {
+   "dev": {
+    "pos": 0.7572,
+    "f1": 0.5556,
+    "tete": 0.7189,
+    "labels": 134,
+    "exact": 133,
+    "exact_span": 0.9925,
+    "couverture": 0.8221,
+    "topk": 111
+   },
+   "test": {
+    "pos": 0.767,
+    "f1": 0.5679,
+    "tete": 0.7239,
+    "labels": 62,
+    "exact": 62,
+    "exact_span": 1.0,
+    "couverture": 0.8158,
+    "topk": 55
+   }
+  },
+  "v6": {
+   "dev": {
+    "exact": 126,
+    "labels": 126,
+    "f1": 0.5091,
+    "couverture": 0.773
+   },
+   "test": {
+    "exact": 61,
+    "labels": 61,
+    "f1": 0.5217,
+    "couverture": 0.8026
+   }
+  },
+  "v5b": {
+   "dev": {
+    "exact": 126,
+    "labels": 126,
+    "f1": 0.5091,
+    "couverture": 0.773
+   },
+   "test": {
+    "exact": 60,
+    "labels": 61,
+    "f1": 0.5217,
+    "couverture": 0.8026
+   }
+  },
+  "note": "Le test est parfait (62/62) ; le seul echec est r102 (GP/en « since this morning », cible gold falls, attachement vide), dans dev. Le gain POS de 8 labels et cette erreur sont tous deux dans dev ; test ne change pas de nombre de labels (62 avant et apres le POS contextuel)."
+ },
+ "amont": {
+  "v4": {
+   "commit": "392f03aa",
+   "titre": "158/160 (0,9875)",
+   "corps": "157/160 (0,9812)",
+   "mesure_gele": {
+    "labels": 160,
+    "exact": 157,
+    "f1": 0.4539,
+    "tete": 0.6432,
+    "s": 0.4285,
+    "chunker": 0.4143,
+    "pos": 0.7475,
+    "topk": 156,
+    "spans": 79
+   },
+   "statut": "titre perime d'un label ; corps et JSON corrects"
+  },
+  "v5": {
+   "commit": "b975011b",
+   "titre": "185/187 (0,9893)",
+   "corps": "186/187 (0,9947)",
+   "mesure_gele_b975011b": {
+    "labels": 187,
+    "exact": 186,
+    "f1": 0.5164,
+    "tete": 0.6834,
+    "s": 0.4582,
+    "chunker": 0.5351,
+    "pos": 0.7482,
+    "topk": 161,
+    "spans": 52
+   },
+   "valeurs_7a9f0d6a": {
+    "labels": 187,
+    "exact": 185,
+    "f1": 0.5156,
+    "tete": 0.6826,
+    "s": 0.4577,
+    "chunker": 0.5341
+   },
+   "statut": "titre perime d'un label ; F1/tete de 7a9f0d6a, exact/S/chunker de b975011b : melange de deux commits"
+  },
+  "v6": {
+   "commit": "0ec6c27d",
+   "mesure_vivant": {
+    "pos": 0.7461,
+    "f1": 0.513,
+    "tete": 0.6785,
+    "labels": 187,
+    "exact": 187,
+    "couverture": 0.7824,
+    "spans": 52,
+    "topk": 161,
+    "dev": [
+     126,
+     126
+    ],
+    "test": [
+     61,
+     61
+    ]
+   },
+   "mesure_gele": {
+    "pos": 0.7482,
+    "f1": 0.5164,
+    "tete": 0.6834,
+    "labels": 187,
+    "exact": 187,
+    "couverture": 0.7824,
+    "spans": 52,
+    "topk": 161
+   },
+   "statut": "les valeurs v6 sont correctes ; c'est la colonne avant de la v7 qui ne les reprend pas"
+  }
+ },
+ "limites": [
+  "Le split dev/test est un hash non stratifie : test 76 cibles, 62 labels, 1 cas = 1,6 point ; REL/en = 5 cibles et hand = 3 cibles au test.",
+  "Le split ne mesure pas le surajustement global : les regles v7 ont ete dessinees en regardant tout le gold, test compris ; il mesure la stabilite au decoupage.",
+  "Les cinq valeurs gelees sont sensibles aux 10 phrases ajoutees (38 tokens, 32 segments) ; les 10 phrases n'ont aucune cible, donc l'attachement est invariant, mais POS/F1/tete/S/chunker ne le sont pas.",
+  "Les controles negatifs mesurent une association sur le meme gold, pas une causalite ; le candidat aleatoire dans la liste du label utilise les listes du modele lui-meme (35,8 %), ce n'est pas une baseline independante.",
+  "La regle du sujet-verbe (`SUJETS`) sur-promeut les mots apres « that/qui » : l'exemple g017 « that she would come » est coupe en « that she » ; d'autres phrases avec « that + pronom » peuvent etre touchees.",
+  "Les docstrings et messages de portes perimes peuvent faire croire a des valeurs qui ne sont plus mesurees ; ils ne cassent pas les portes mais trompent le lecteur.",
+  "Le gold 612 est vivant et peut encore grandir ; toute nouvelle phrase avec cible changera l'exact/labels, pas seulement la POS/F1."
+ ]
+}

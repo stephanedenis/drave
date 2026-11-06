@@ -18,11 +18,11 @@
 
 | # | correction | effet |
 |---|---|---|
-| 1 | **POS contextuel** : un verbe de suffixe après DET/PRÉP/ADJ devient un nom (« brother », « chair ») | POS 0,7475 → 0,7603, +9 labels |
+| 1 | **POS contextuel** : un verbe de suffixe après DET/PRÉP/ADJ devient un nom (« brother », « chair ») | POS **+0,0118** (gelé 602) / +0,0116 (vivant), **+8 labels** |
 | 2 | **GV avant GP** : « entre » (verbe) n'est plus une préposition | GP « en gare » |
 | 3 | **prépositions composées** (`au-dessus`, `au-dessous`, `vis-à-vis`) | GP « au-dessus du lac » |
 | 4 | **prépositions ambiguës** (`since/before/after/until/as`) : SUB devant une clause, PRÉP devant un GN | GP « since yesterday » |
-| 5 | **le verbe après un pronom sujet** (`who speaks`, `qui parle`) + adverbe **final** hors clause | REL « who speaks », SUB « that she would come » |
+| 5 | **le verbe après un pronom sujet** (`who speaks`, `qui parle`) ; l'adverbe final n'est que **partiel** (g017 non réparé) | REL « who speaks » (r204) |
 
 ## 2. Avant / après
 
@@ -49,8 +49,8 @@ cibles ; sur trois découpages (`%3==0/1/2`), l'exact varie d'un cas et la couve
 
 **Ce que ça dit** :
 
-- **La POS est le verrou** : le contexte (DET/PRÉP/ADJ avant un suffixe) rend 0,0128 de POS et
-  neuf labels de couverture.
+- **La POS est le verrou** : le contexte (DET/PRÉP/ADJ avant un suffixe) rend **0,0118** de POS
+  (gelé) et **huit** labels de couverture.
 - **Le chunker est maintenant meilleur que S** (F1 0,5858 contre 0,4741) : le découpage est
   devenu la force, plus la faiblesse.
 - **Les 43 spans restants** : 21 REL (« qui » 12), 17 SUB, 5 GP — la file est claire.
