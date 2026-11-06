@@ -1455,3 +1455,636 @@ sys	0m0,148s
 
 background job bash-2416 (bash: PYTHONPATH=. python3 -m tools.pensee.autotest > /tmp/audit_v10/autotest.log 2>&1; echo "exit=$?") finished [status: completed, exit code: 0]. Read its output with job_output.
 
+### 🤖 Assistant
+
+⏵ Checking gate results and prior top-k control code
+
+- **bash** `{"command": "grep -n \"permutation\\|topk\\|candidat\" /tmp/audit_r1r3/*.py | head -40; echo '---'; tail -12 /tmp/audit_v10/autotest.log; echo '--- gate count ---'; grep -c '✅' /tmp/audit_v10/autotest.log; grep -c '❌' /tmp/audit_v10/autotest.log; grep 'portes tenues' /tmp/audit_v10/autotest.log", "d … [112 caractères tronqués]`
+
+  ```
+/tmp/audit_r1r3/bl_f908.py:7:    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+/tmp/audit_r1r3/bl_f908.py:19:`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script` et ses `candidats`.
+/tmp/audit_r1r3/bl_f908.py:76:    candidats: list[str] = field(default_factory=list)
+/tmp/audit_r1r3/bl_f908.py:86:            "candidats": list(self.candidats), "langue": self.langue,
+/tmp/audit_r1r3/bl_f908.py:654:        (GP, puis GN, puis GV), comme le premier candidat de `analyser`.
+/tmp/audit_r1r3/bl_f908.py:680:    def _candidats_precedent(texte: str, segment: dict, precedent: dict | None) -> list[str]:
+/tmp/audit_r1r3/bl_f908.py:681:        """Les candidats que le **précédent** impose : l'antécédent d'une REL, le verbe d'une SUB."""
+/tmp/audit_r1r3/bl_f908.py:739:        """La tête d'un texte de candidat : le verbe plein s'il y en a un, sinon le dernier mot.
+/tmp/audit_r1r3/bl_f908.py:829:        """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
+/tmp/audit_r1r3/bl_f908.py:923:                                     "texte": texte[d:mots[j - 1][1]], "candidats": []})
+/tmp/audit_r1r3/bl_f908.py:944:                    
+… [4313 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nfor nom in ('v8','v9','v10'):\n    v=d['variantes'][nom]\n    print('\\n===',nom,'spans',v['spans_total'],v['spans'])\n    print(' ids:',[x['id']+':'+x['type'] for x in v['spans_liste']])\nPY", "descripti … [97 caractères tronqués]`
+
+  ```
+=== v8 spans 27 {'GP': 5, 'REL': 16, 'SUB': 6}
+ ids: ['r153:GP', 's160:GP', 's027:GP', 's146:GP', 's148:GP', 's037:REL', 's141:REL', 's065:REL', 's010:REL', 's061:REL', 's032:REL', 's035:REL', 'r280:REL', 's125:REL', 's135:REL', 'r273:REL', 's069:REL', 'r035:REL', 'r255:REL', 's115:REL', 's072:REL', 'r264:SUB', 'g017:SUB', 'r288:SUB', 's044:SUB', 's112:SUB', 's114:SUB']
+
+=== v9 spans 20 {'GP': 5, 'REL': 9, 'SUB': 6}
+ ids: ['r153:GP', 's160:GP', 's027:GP', 's146:GP', 's148:GP', 's037:REL', 's141:REL', 's065:REL', 's010:REL', 's061:REL', 's035:REL', 's125:REL', 'r035:REL', 'r255:REL', 'r303:SUB', 'r264:SUB', 'r288:SUB', 's044:SUB', 's112:SUB', 's114:SUB']
+
+=== v10 spans 19 {'GP': 4, 'REL': 9, 'SUB': 6}
+ ids: ['s160:GP', 's027:GP', 's146:GP', 's148:GP', 's037:REL', 's141:REL', 's065:REL', 's010:REL', 's061:REL', 's035:REL', 's125:REL', 'r035:REL', 'r255:REL', 'r303:SUB', 'r264:SUB', 'r288:SUB', 's044:SUB', 's112:SUB', 's114:SUB']
+  ```
+
+- **bash** `{"command": "grep -n \"permutation_candidats\\|permut\\|candidats_topk\\|topk\" /tmp/audit_r1r3/build_json.py /tmp/audit_r1r3/compile.py /tmp/audit_r1r3/verifs.py /tmp/audit_r1r3/details.py /tmp/audit_r1r3/complements.py 2>/dev/null | head -30", "description": "Find prior top-k permutation code"}`
+
+  ```
+/tmp/audit_r1r3/build_json.py:46:                  "topk": 177, "topk_taux": 0.7406, "topk_exact": 177,
+/tmp/audit_r1r3/build_json.py:52:                "topk": 177, "topk_taux": 0.7406, "topk_exact": 177,
+/tmp/audit_r1r3/build_json.py:61:                  "topk": 166, "topk_taux": 0.6946,
+/tmp/audit_r1r3/build_json.py:65:                "topk": 166, "topk_taux": 0.6946,
+/tmp/audit_r1r3/build_json.py:177:  "permutation_globale": {"n": 212, "observe": 212, "tirages": 2000, "graine": 0,
+/tmp/audit_r1r3/build_json.py:183:  "permutation_candidats_topk": {"n": 212, "moyenne": 1.81, "taux": 0.0085, "max": 7,
+/tmp/audit_r1r3/build_json.py:201:   "dev": {"phrases": 422, "cibles": 163, "labels": 148, "exact": 148, "couverture": 0.908, "f1": 0.5723, "tete": 0.727, "topk": 120},
+/tmp/audit_r1r3/build_json.py:202:   "test": {"phrases": 190, "cibles": 76, "labels": 64, "exact": 64, "couverture": 0.8421, "f1": 0.5714, "tete": 0.7241, "topk": 57},
+/tmp/audit_r1r3/build_json.py:203:   "tout": {"phrases": 612, "cibles": 239, "labels": 212, "exact": 212, "couverture": 0.887, "f1": 0.572, "tete": 0.7262, "topk": 177}
+/tmp/audit_r1r3/build_json.py:255:  {"id": "controle_negatif_absent", "gravite": "mo
+… [878 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/tmp/audit_r1r3/complements.py", "offset": 50, "limit": 35}`
+
+  ```
+<path>/tmp/audit_r1r3/complements.py</path>
+<type>file</type>
+<content>
+50: b = att(base, phrases)
+51: par_id = {p["id"]: {"split": "test" if p in H.split_test(phrases) else "dev"} for p in phrases}
+52: res["r3a_fidele"] = {"labels": a["labels"], "exact": a["exact"], "couverture": a["couverture"],
+53:                      "gains_ids": H.ids_courts(b["exact_set"] - a["exact_set"]),
+54:                      "pertes_ids": H.ids_courts(a["exact_set"] - b["exact_set"]),
+55:                      "labels_gagnes": H.ids_courts(b["label_set"] - a["label_set"]),
+56:                      "labels_perdus": H.ids_courts(a["label_set"] - b["label_set"])}
+57: # détail r280 avant/après
+58: for nom, mod in (("baseline", base), ("r3a_fidele", m)):
+59:     aa = att(mod, phrases)
+60:     res[f"r280_{nom}"] = aa["details"].get(("r280","REL",8,21), {})
+61: # contrôle top-k par permutation des listes de candidats
+62: a0 = att(base, phrases)
+63: cles = sorted(a0["label_set"], key=lambda x: (x[0],x[1],x[2],x[3]))
+64: cands = [a0["details"][k]["candidats"] for k in cles]
+65: cibles = [a0["details"][k]["cible_gold"] for k in cles]
+66: rng = random.Random(0); vals = []
+67: for _ in range(2000):
+68:     perm = 
+… [580 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cross-checking official F1 bases for v9
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger(); ge=eg.charger_gele()\nspec=importlib.util.spec_from_file_location('bl_v9','/tmp/audit_v10/mods/v9.py')\nm=importlib.util.module_from_spec(s … [666 caractères tronqués]`
+
+  ```
+vivant f1 0.5822 tete 0.7326 labels 219 exact 219
+gele f1 0.5866 tete 0.7381 labels 219 exact 219
+v10 vivant f1 0.5836 tete 0.7332
+v10 gele f1 0.588 tete 0.7388
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking all -é(e) forms in the gold
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfor f in ['tools/tests/linguistique/gold.json','tools/tests/linguistique/gold_reel.json','tools/tests/linguistique/gold_synthetique.json']:\n    ph=json.load(open(f))['phrases']\n    for p i … [383 caractères tronqués]`
+
+  ```
+r016 'fatiguée' False
+r052 'musée' False
+r099 'musée' False
+r228 'achetée' False
+r234 'restés' True
+r255 'achetée' False
+r431 'arrivés' True
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnosing the r303 regression
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph={p['id']:p for p in eg.charger()}\np=ph['r303']; print(repr(p['texte']))\nfor nom in ('v8','v9','v10'):\n    spec=importlib.util.spec_from_file_location( … [527 caractères tronqués]`
+
+  ```
+'Je pars car il est tard.'
+
+ v8
+  GV 0 7 'Je pars' None
+  GV 3 7 'pars' None
+  SUB 8 23 'car il est tard' {'segment': 'car il est tard', 'cible': 'pars'}
+  GV 12 18 'il est' {'segment': 'il est', 'cible': 'pars'}
+  GP 19 23 'tard' {'segment': 'tard', 'cible': 'pars'}
+
+ v9
+  GV 0 7 'Je pars' None
+  GV 3 7 'pars' None
+  SUB 8 18 'car il est' {'segment': 'car il est', 'cible': 'pars'}
+  GV 12 18 'il est' {'segment': 'il est', 'cible': 'pars'}
+  GP 19 23 'tard' {'segment': 'tard', 'cible': 'pars'}
+
+ v10
+  GV 0 7 'Je pars' None
+  GV 3 7 'pars' None
+  SUB 8 18 'car il est' {'segment': 'car il est', 'cible': 'pars'}
+  GV 12 18 'il est' {'segment': 'il est', 'cible': 'pars'}
+  GP 19 23 'tard' {'segment': 'tard', 'cible': 'pars'}
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying v9's S/chunker and testing the R1a bundle
+
+- **bash** `{"command": "cat >> /tmp/audit_v10/check_v9_modes.py <<'PY'\nimport sys, importlib.util, pathlib, json\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger(); ge=eg.charger_gele()\ndef seg(mod, phrases, mode):\n    h=mod.Heuristique()\n    if mode=='s': h.union= … [1312 caractères tronqués]`
+
+  ```
+v9 vivant {'union': (0.5822, 0.7326), 's': (0.495, 0.6602), 'chunker': (0.6138, 0.7585)}
+v9 gele {'union': (0.5866, 0.7381), 's': (0.5006, 0.6675), 'chunker': (0.6178, 0.7632)}
+v10 vivant {'union': (0.5836, 0.7332), 's': (0.4957, 0.6604), 'chunker': (0.6163, 0.7592)}
+v10 gele {'union': (0.588, 0.7388), 's': (0.5014, 0.6677), 'chunker': (0.6203, 0.7639)}
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirming -ée's introduction point precisely
+
+- **bash** `{"command": "for c in f908d7b0 69bd865e 160d08ca a408a909; do echo -n \"$c: \"; git show $c:tools/bloc_linguistique.py 2>/dev/null | grep -c 'participes en -é'; done; echo '--- dates ---'; git log -1 --format='%h %ad %s' --date=iso a408a909; git log -1 --format='%h %ad %s' --date=iso f908d7b0; git l … [296 caractères tronqués]`
+
+  ```
+f908d7b0: 1
+69bd865e: 1
+160d08ca: 1
+a408a909: 1
+--- dates ---
+a408a909 2026-11-05 10:39:22 -0500 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+f908d7b0 2026-11-05 21:08:09 -0500 B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN 1,0 ; 27 SPANS DONT 17 INATTEIGNABLES ; 183/183
+160d08ca 2026-11-05 22:56:46 -0500 B13 — LA GARDE PRON : EXACT 219/219 (1,0000), COUVERTURE 0,9163, F1 0,5822, DEV 152/152 ET TEST 67/67 ; AUDIT DE COHÉRENCE V8 INTÉGRÉ ; 183/183
+--- ancestry ---
+a408 before v8
+  ```
+
+### 🤖 Assistant
+
+⏵ Adding exact-equality top-k control
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, random, statistics\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nv=d['variantes']['v10']; # details removed? check\nprint('keys', list(v.keys())[:20])\nPY", "description": "Check if details saved"}`
+
+  ```
+keys ['labels', 'exact', 'exact_any', 'couverture', 'topk', 'topk_taux', 'topk_exact', 'topk_taux_span', 'fr', 'en', 'f1_vivant', 'tete_vivant', 'f1_gele', 'tete_gele', 'spans', 'spans_total', 'spans_liste', 'dev', 'test', 'duree_s']
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring the R1a bundle and exact top-k null
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/audit_v10/harness.py'\ns=open(p).read()\n# add SUJETS snippets\ns=s.replace(\"MODS = pathlib.Path('/tmp/audit_v10/mods'); MODS.mkdir(parents=True, exist_ok=True)\",\n\"\"\"MODS = pathlib.Path('/tmp/audit_v10/mods'); MODS.mkdir(parents=True, exist_ok=True)\n\nSU … [3389 caractères tronqués]`
+
+  ```
+patched
+exit=0
+v10 labels 220 exact 220 f1g 0.588 spans 19 0.8s
+v9 labels 219 exact 219 f1g 0.5866 spans 20 0.7s
+v8 labels 212 exact 212 f1g 0.5763 spans 27 0.9s
+sans_pron labels 203 exact 203 f1g 0.5718 spans 36 0.8s
+sans_est_sub labels 219 exact 219 f1g 0.5849 spans 20 0.8s
+sans_predicat_vu labels 220 exact 220 f1g 0.588 spans 19 0.7s
+sans_ee labels 220 exact 220 f1g 0.588 spans 19 0.9s
+sans_gp_det labels 219 exact 219 f1g 0.5866 spans 20 0.8s
+v9_attendu labels 219 exact 219 f1g 0.5866 spans 20 0.9s
+sans_sujets labels 214 exact 214 f1g 0.5833 spans 25 0.8s
+sans_pron_sujets labels 214 exact 214 f1g 0.5808 spans 25 0.8s
+{
+ "controles": {
+  "permutation": {
+   "n": 220,
+   "observe": 220,
+[stderr]
+
+real	0m13,943s
+user	0m13,568s
+sys	0m0,375s
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the R1a bundle effects
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nfor nom in ('sans_sujets','sans_pron_sujets','sans_pron','sans_est_sub','sans_predicat_vu','sans_ee','sans_gp_det'):\n    a=d['ablations'][nom]\n    print('\\n===',nom)\n    for k in ('labels','exact','de … [459 caractères tronqués]`
+
+  ```
+=== sans_sujets
+  labels 214
+  exact 214
+  delta_labels -6
+  delta_exact -6
+  n_gains 6
+  n_pertes 0
+  n_labels_gagnes 6
+  n_labels_perdus 0
+  f1_gele 0.5833
+  delta_f1_gele -0.0047
+  topk 213
+  spans_total 25
+  spans {'GP': 4, 'REL': 15, 'SUB': 6}
+  gains {'dev': ['r273:REL', 's069:REL', 's135:REL'], 'test': ['s032:REL', 's072:REL', 's115:REL']}
+  pertes {}
+
+=== sans_pron_sujets
+  labels 214
+  exact 214
+  delta_labels -6
+  delta_exact -6
+  n_gains 6
+  n_pertes 0
+  n_labels_gagnes 6
+  n_labels_perdus 0
+  f1_gele 0.5808
+  delta_f1_gele -0.0072
+  topk 213
+  spans_total 25
+  spans {'GP': 4, 'REL': 15, 'SUB': 6}
+  gains {'dev': ['r273:REL', 's069:REL', 's135:REL'], 'test': ['s032:REL', 's072:REL', 's115:REL']}
+  pertes {}
+
+=== sans_pron
+  labels 203
+  exact 203
+  delta_labels -17
+  delta_exact -17
+  n_gains 17
+  n_pertes 0
+  n_labels_gagnes 17
+  n_labels_perdus 0
+  f1_gele 0.5718
+  delta_f1_gele -0.0162
+  topk 202
+  spans_total 36
+  spans {'GP': 4, 'REL': 18, 'SUB': 14}
+  gains {'dev': ['g017:SUB', 'r034:REL', 'r074:REL', 'r114:REL', 'r205:SUB', 'r219:SUB', 'r240:SUB', 'r243:REL', 'r247:SUB', 'r278:REL', 'r280:REL', 'r285:REL', 'r296:SUB', 'r299:REL'], 'test': ['r214:REL', 'r216:SUB', 
+… [2073 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing the top-k control bug and re-running
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/audit_v10/harness.py'\ns=open(p).read()\ns=s.replace(\"\"\"        topk_perm.append(sum(1 for j,i in enumerate(idx)\n                             if any(any(c in nom for c in cibles[i]) for nom in cands[perm[j]])))\"\"\",\n\"\"\"        topk_perm.append(sum(1 f … [530 caractères tronqués]`
+
+  ```
+patched
+exit=0
+{
+ "permutation": {
+  "n": 220,
+  "observe": 220,
+  "tirages": 2000,
+  "graine": 0,
+  "moyenne": 1.997,
+  "mediane": 2.0,
+  "max": 10,
+  "p95": 5,
+  "p": 0.0,
+  "lecture": "0.908 % moyen contre 100.0 % observé"
+ },
+ "candidat": {
+  "labels": 220,
+  "labels_avec_candidats": 220,
+  "candidats_total": 585,
+  "tirage": 2000,
+  "graine": 0,
+  "hasard_top1_moyen": 92.7,
+  "hasard_top1_taux": 0.4214,
+  "hasard_topk_perm_moyen": 2.53,
+  "hasard_topk_perm_taux": 0.0115,
+  "observe_top1": 220,
+  "observe_topk": 219,
+  "p_top1": 0.0,
+  "p_topk": 0.0
+ },
+ "permutation_candidats_exact": {
+  "n": 220,
+  "tirages": 2000,
+  "graine": 0,
+  "observe": 219,
+  "moyenne": 2.18,
+  "taux": 0.0099,
+  "max": 8,
+  "p": 0.0
+ },
+ "permutation_candidats_souschaine": {
+  "n": 220,
+  "tirages": 2000,
+  "graine": 0,
+  "observe": 219,
+  "moyenne": 2.58,
+  "taux": 0.0117,
+  "max": 9,
+  "p": 0.0
+ }
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Classifying all 19 remaining spans
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, collections\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nsp=d['spans_v10']\nprint('counts type', collections.Counter(x['type'] for x in sp))\nprint('langue', collections.Counter(x['langue'] for x in sp))\nprint('source', collections.Counter(x['sour … [799 caractères tronqués]`
+
+  ```
+counts type Counter({'REL': 9, 'SUB': 6, 'GP': 4})
+langue Counter({'fr': 17, 'en': 2})
+source Counter({'synthetique': 14, 'reel': 5})
+cross Counter({('fr', 'synthetique', 'REL'): 7, ('fr', 'synthetique', 'GP'): 4, ('fr', 'synthetique', 'SUB'): 3, ('fr', 'reel', 'SUB'): 2, ('en', 'reel', 'REL'): 1, ('fr', 'reel', 'REL'): 1, ('en', 'reel', 'SUB'): 1})
+A17 subset True extra ['r303', 's037'] missing A17 []
+| `s027` | fr | synthetique | GP | 31:33 | il | `marche` | A17 résiduel |
+| `s146` | fr | synthetique | GP | 25:35 | les jardin | `observe` | A17 résiduel |
+| `s148` | fr | synthetique | GP | 20:39 | les ancienne lettre | `nage` | A17 résiduel |
+| `s160` | fr | synthetique | GP | 20:29 | le renard | `nage` | A17 résiduel |
+| `r035` | en | reel | REL | 9:24 | she talks about | `film` | A17 résiduel |
+| `r255` | fr | reel | REL | 11:27 | que j'ai achetée | `voiture` | A17 résiduel |
+| `s010` | fr | synthetique | REL | 10:18 | qui nage | `chemin` | A17 résiduel |
+| `s035` | fr | synthetique | REL | 10:19 | qui ferme | `papier` | A17 résiduel |
+| `s037` | fr | synthetique | REL | 5:15 | qui marche | `Paul` | s037 (R2 v8) |
+| `s061` | fr | synthetique | REL | 9:18 | qui saute | `nuage` | 
+… [776 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Assembling ablation and dev/test tables
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nnoms=('v10','sans_pron','sans_sujets','sans_pron_sujets','sans_est_sub','sans_predicat_vu','sans_ee','sans_gp_det','v9','v8')\nprint(f\"{'variante':20s} {'lab':>4} {'exa':>4} {'dE':>4} {'F1g':>7} {'dF1':> … [728 caractères tronqués]`
+
+  ```
+variante              lab  exa   dE     F1g     dF1 topk  sp      dev      test
+v10                   220  220    0  0.5880  0.0000  219  19  152/152     68/68
+sans_pron             203  203  -17  0.5718 -0.0162  202  36  138/138     65/65
+sans_sujets           214  214   -6  0.5833 -0.0047  213  25  149/149     65/65
+sans_pron_sujets      214  214   -6  0.5808 -0.0072  213  25  149/149     65/65
+sans_est_sub          219  219   -1  0.5849 -0.0031  218  20  151/151     68/68
+sans_predicat_vu      220  220    0  0.5880  0.0000  219  19  152/152     68/68
+sans_ee               220  220    0  0.5880  0.0000  219  19  152/152     68/68
+sans_gp_det           219  219   -1  0.5866 -0.0014  218  20  152/152     67/67
+v9                    219  219   -1  0.5866 -0.0014  218  20  152/152     67/67
+v8                    212  212   -8  0.5763 -0.0117  177  27  148/148     64/64
+
+v10 dev {'cibles': 163, 'labels': 152, 'exact': 152, 'couverture': 0.9325, 'f1': 0.5812, 'tete': 0.733} test {'cibles': 76, 'labels': 68, 'exact': 68, 'couverture': 0.8947, 'f1': 0.589, 'tete': 0.7337}
+sans_pron dev {'cibles': 163, 'labels': 138, 'exact': 138, 'couverture': 0.8466, 'f1': 0.5621, 'tete': 0.7215} test {
+… [1769 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirming target files are new and checking repo cleanliness
+
+- **bash** `{"command": "ls -la reports/rapport-audit-v10.md reports/pensee-audit-v10.json 2>&1; echo '---'; git status --short reports/ | head -20; echo '--- forbidden paths untouched'; git status --short docs/pilotage AGENTS.md journal tools/structures data tools/entrainer_native.py tools/native_model.py 2>/d … [138 caractères tronqués]`
+
+  ```
+ls: cannot access 'reports/rapport-audit-v10.md': No such file or directory
+ls: cannot access 'reports/pensee-audit-v10.json': No such file or directory
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+--- forbidden paths untouched
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the documented autotest invocation
+
+- **bash** `{"command": "python3 tools/pensee/autotest.py > /tmp/audit_v10/autotest_direct.log 2>&1; echo \"exit=$?\"; tail -3 /tmp/audit_v10/autotest_direct.log", "description": "Test direct autotest invocation", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+exit=1
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 32, in <module>
+    from .coeur import Candidat, Etat
+ImportError: attempted relative import with no known parent package
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\n# verify exact topk strict and any\nv=d['variantes']['v10']\nprint('v10 topk',v['topk'],'topk_exact',v['topk_exact'],'topk_taux_span',v['topk_taux_span'])\n# check v9 fiche values\nv9=d['variantes']['v9'] … [433 caractères tronqués]`
+
+  ```
+v10 topk 219 topk_exact 219 topk_taux_span 0.9955
+v9 {'labels': 219, 'exact': 219, 'couverture': 0.9163, 'topk': 218, 'topk_taux': 0.9121, 'fr': {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133}, 'en': {'cibles': 88, 'labels': 85, 'exact': 85, 'topk': 85}, 'f1_vivant': 0.5822, 'f1_gele': 0.5866, 'tete_vivant': 0.7326, 'tete_gele': 0.7381, 'spans_total': 20, 'spans': {'GP': 5, 'REL': 9, 'SUB': 6}}
+v10 {'labels': 220, 'exact': 220, 'couverture': 0.9205, 'topk': 219, 'topk_taux': 0.9163, 'fr': {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133}, 'en': {'cibles': 88, 'labels': 86, 'exact': 86, 'topk': 86}, 'f1_vivant': 0.5836, 'f1_gele': 0.588, 'tete_vivant': 0.7332, 'tete_gele': 0.7388, 'spans_total': 19, 'spans': {'GP': 4, 'REL': 9, 'SUB': 6}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Probing the two stated risks of the new rules
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor t in ['Il parle de la voir.', 'Elle finit de la regarder.', 'Une idée arrive.', 'La entrée est libre.', 'La portée est grande.']:\n    a=h.analyser(t,'fr')\n    print(repr … [390 caractères tronqués]`
+
+  ```
+'Il parle de la voir.'
+    GV 0 8 'Il parle'
+    GV 3 8 'parle'
+    GP 9 19 'de la voir'
+'Elle finit de la regarder.'
+    GV 0 10 'Elle finit'
+    GV 5 10 'finit'
+    GP 11 25 'de la regarder'
+'Une idée arrive.'
+    GN 0 8 'Une idée'
+    GV 9 15 'arrive'
+'La entrée est libre.'
+    GN 0 9 'La entrée'
+    GV 10 19 'est libre'
+'La portée est grande.'
+    GN 0 9 'La portée'
+    GV 10 20 'est grande'
+_est_verbe idée False entrée True portée True aimée True
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking whether -ée changes any annotation on the gold
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger()\ndef load(n):\n    spec=importlib.util.spec_from_file_location('z_'+n,f'/tmp/audit_v10/mods/{n}.py')\n    m=importlib.util.module_from_spec( … [664 caractères tronqués]`
+
+  ```
+phrases avec difference: 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring the full reach of the GP guard
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, importlib.util, pathlib, collections\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger()\ndef load(n):\n    spec=importlib.util.spec_from_file_location('q_'+n,f'/tmp/audit_v10/mods/{n}.py')\n    m=importlib.util.modu … [679 caractères tronqués]`
+
+  ```
+Error: spawn bash ENOENT
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-running the GP guard annotation diff
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, importlib.util, pathlib\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger()\ndef load(n):\n    spec=importlib.util.spec_from_file_location('q_'+n,f'/tmp/audit_v10/mods/{n}.py')\n    m=importlib.util.module_from_spec( … [660 caractères tronqués]`
+
+  ```
+phrases avec difference: 3
+('g004', [], [('syntagme', 'GP', 11, 27), ('syntagme', 'GV', 28, 31)])
+('r147', [], [('syntagme', 'GP', 22, 31), ('syntagme', 'GV', 32, 37)])
+('r153', [('syntagme', 'GP', 8, 19)], [('syntagme', 'GP', 8, 15), ('syntagme', 'GV', 16, 19)])
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the other two GP-guard changes
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph={p['id']:p for p in eg.charger()}\nfor i in ('g004','r147','r153'):\n    p=ph[i]; print('\\n',i,repr(p['texte']))\n    print(' gold:',[(s['type'],s['debut'],s['fin'],p['texte'][s … [953 caractères tronqués]`
+
+  ```
+g004 'Il a couru pour attraper le bus.'
+ gold: [('GN', 0, 2, 'Il', None), ('GV', 3, 10, 'a couru', None), ('GP', 11, 31, 'pour attraper le bus', 'couru')]
+
+ r147 'Les clients attendent devant la porte.'
+ gold: [('GN', 0, 11, 'Les clients', None), ('GV', 12, 21, 'attendent', None), ('GP', 22, 37, 'devant la porte', 'attendent')]
+
+ r153 'We wait for the bus.'
+ gold: [('GN', 0, 2, 'We', None), ('GV', 3, 7, 'wait', None), ('GP', 8, 19, 'for the bus', 'wait')]
+
+### v10
+g004 [('GV', 0, 2, 'Il', None), ('GV', 0, 10, 'Il a couru', None), ('GV', 3, 10, 'a couru', None), ('GP', 11, 31, 'pour attraper le bus', {'segment': 'pour attraper le bus', 'cible': 'couru'})]
+r147 [('GN', 0, 11, 'Les clients', {'segment': 'Les clients', 'cible': 'attendent'}), ('GV', 12, 21, 'attendent', {'segment': 'attendent', 'cible': 'clients'}), ('GP', 22, 37, 'devant la porte', {'segment': 'devant la porte', 'cible': 'attendent'})]
+r153 [('GV', 3, 7, 'wait', None), ('GP', 8, 19, 'for the bus', {'segment': 'for the bus', 'cible': 'wait'})]
+
+### sans_gp_det
+g004 [('GV', 0, 2, 'Il', None), ('GV', 0, 10, 'Il a couru', None), ('GV', 3, 10, 'a couru', None), ('GP', 11, 27, 'pour attraper le', {'segment': 'pour attraper 
+… [636 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Collecting final official counters
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nimport tools.bloc_linguistique as bl\na=eg.evaluer_bloc('h',bl.Heuristique(),eg.charger())['attachement']\nprint(json.dumps({k:a[k] for k in ('cibles','labels','top1','topk',' … [439 caractères tronqués]`
+
+  ```
+{
+ "cibles": 239,
+ "labels": 220,
+ "top1": 220,
+ "topk": 219,
+ "exact": 220,
+ "exact_any": 220,
+ "top1_taux": 0.9205,
+ "topk_taux": 0.9163,
+ "exact_taux": 0.9205,
+ "exact_any_taux_span": 1.0,
+ "top1_taux_span": 1.0,
+ "topk_taux_span": 0.9955,
+ "topk_exact": 219,
+ "topk_exact_taux": 0.9163,
+ "topk_exact_taux_span": 0.9955,
+ "exact_taux_span": 1.0,
+ "verbe": {
+  "cibles": 149,
+  "justes": 149,
+  "taux": 1.0
+ },
+ "nom": {
+  "cibles": 71,
+  "justes": 71,
+  "taux": 1.0
+ },
+ "couverture": 0.9205
+}
+par langue {
+ "fr": {
+  "cibles": 151,
+  "labels": 134,
+  "exact": 134,
+  "topk": 133,
+  "exact_taux_span": 1.0
+ },
+ "en": {
+  "cibles": 88,
+  "labels": 86,
+  "exact": 86,
+  "topk": 86,
+  "exact_taux_span": 1.0
+ }
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Pulling remaining ablation metrics
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nfor n in ('v10','sans_pron','sans_sujets','sans_pron_sujets','sans_est_sub','sans_predicat_vu','sans_ee','sans_gp_det','v9','v8'):\n    v=d['variantes'][n]\n    print(n, 'tete_gele',v['tete_gele'],'f1_viv … [274 caractères tronqués]`
+
+  ```
+Error: spawn bash ENOENT
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-pulling remaining ablation metrics
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nfor n in ('v10','sans_pron','sans_sujets','sans_pron_sujets','sans_est_sub','sans_predicat_vu','sans_ee','sans_gp_det','v9','v8'):\n    v=d['variantes'][n]\n    print(n, 'tete_gele',v['tete_gele'],'f1_viv … [280 caractères tronqués]`
+
+  ```
+v10 tete_gele 0.7388 f1_vivant 0.5836 tete_vivant 0.7332 topk 219 topk_taux 0.9163 spans_total 19 spans {'GP': 4, 'REL': 9, 'SUB': 6}
+sans_pron tete_gele 0.7288 f1_vivant 0.5676 tete_vivant 0.7234 topk 202 topk_taux 0.8452 spans_total 36 spans {'GP': 4, 'REL': 18, 'SUB': 14}
+sans_sujets tete_gele 0.7369 f1_vivant 0.5789 tete_vivant 0.7313 topk 213 topk_taux 0.8912 spans_total 25 spans {'GP': 4, 'REL': 15, 'SUB': 6}
+sans_pron_sujets tete_gele 0.7343 f1_vivant 0.5764 tete_vivant 0.7288 topk 213 topk_taux 0.8912 spans_total 25 spans {'GP': 4, 'REL': 15, 'SUB': 6}
+sans_est_sub tete_gele 0.7367 f1_vivant 0.5805 tete_vivant 0.7312 topk 218 topk_taux 0.9121 spans_total 20 spans {'GP': 4, 'REL': 10, 'SUB': 6}
+sans_predicat_vu tete_gele 0.7388 f1_vivant 0.5836 tete_vivant 0.7332 topk 219 topk_taux 0.9163 spans_total 19 spans {'GP': 4, 'REL': 9, 'SUB': 6}
+sans_ee tete_gele 0.7388 f1_vivant 0.5836 tete_vivant 0.7332 topk 219 topk_taux 0.9163 spans_total 19 spans {'GP': 4, 'REL': 9, 'SUB': 6}
+sans_gp_det tete_gele 0.7381 f1_vivant 0.5822 tete_vivant 0.7326 topk 218 topk_taux 0.9121 spans_total 20 spans {'GP': 5, 'REL': 9, 'SUB': 6}
+v9 tete_gele 0.7381 f1_vivant 0.5822 tete_vivant 0.7326 topk 2
+… [203 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the audit JSON
+
+- **bash** `{"command": "cat > /tmp/audit_v10/build_json.py <<'PY'\nimport json, pathlib\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\n\ndef lang(cibles, labels, exact, topk):\n    return {'cibles': cibles, 'labels': labels, 'exact': exact,\n            'couverture': round(labels/cibles, … [16328 caractères tronqués]`
+
+  ```
+written /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-audit-v10.json 25984
+  ```
+
+### 🤖 Assistant
+
+⏵ Validating the audit JSON
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-audit-v10.json > /dev/null && echo 'JSON valide'; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nprint('top keys:', list(d.keys()))\nprint('verdict:', d['verdict']['resume'][:200])\nprint('ablations:', list(d['ablat … [280 caractères tronqués]`
+
+  ```
+JSON valide
+top keys: ['rapport', 'ligne', 'branche', 'commit_audite', 'commit_parent', 'date', 'objet', 'methode', 'verdict', 'rejeu', 'ablations', 'controle_negatif', 'spans_19', 'dev_test', 'portes_autotest', 'ecarts', 'limites', 'fichiers_ecrits', 'commit']
+verdict: Les valeurs v10 rejouent (220/220, 0,9205, 0,5880, 0,7388, 134/134, 86/86, 19 spans, top-k 219). Deux valeurs sont fausses : le F1 « avant » (0,5822 vivant, 0,5866 gelé) et le test (68/68, pas 67/67).
+ablations: ['garde_pron', 'expansion_sujets', 'garde_pron_et_sujets', 'est_sub', 'predicat_vu', 'ee', 'garde_det_gp', 'v9', 'v8']
+spans: 19 {'REL': 9, 'SUB': 6, 'GP': 4} 19
+controles: ['permutation_globale', 'candidat_aleatoire', 'permutation_candidats_topk_exact', 'permutation_candidats_topk_souschaine', 'spans_19_verifies']
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the audit report
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md", "content": "# Audit v10 — les chiffres rejouent, l'attribution des corrections ne rejoue pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·\n> **Commit audité** : ` … [22240 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+

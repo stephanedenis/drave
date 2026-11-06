@@ -856,3 +856,438 @@ gele phrases 602 F1 0.588 tete 0.7388 POS 0.7603 labels 220 exact 220 topk 219 c
   precision/rappel 0.6302 0.5511
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification des dépendances du module avant copie des versions antérieures
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/bloc_linguistique.py; echo '--- ressources ---'; grep -n \"__file__\\|open(\\|Path(\" tools/bloc_linguistique.py | head -20", "description": "Inspect module imports and resource loading"}`
+
+  ```
+#!/usr/bin/env python3
+"""bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+
+Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+
+  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+    substitution et le parallèle sans GPU ;
+  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+    même type d'annotation ;
+  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+    POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
+  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+    étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+    que l'heuristique ne couvre pas.
+
+La sortie est une **annotation typée** — pas le corps de la RSN : chaque étiquette porte son
+`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script`
+… [1962 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat f908d7b0..HEAD -- tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/gold_gele.json; echo '---'; git diff --stat f908d7b0 … [172 caractères tronqués]`
+
+  ```
+---
+ tools/bloc_linguistique.py | 34 +++++++++++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
+---
+ tools/bloc_linguistique.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Calibrage des tests χ² sur le split canonique (méthode v7)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'.')\nfrom tools.tests.linguistique import evaluer_gold as eg, gold_split as gs\nfrom scipy.stats import chi2_contingency\nph = eg.charger(); d … [1324 caractères tronqués]`
+
+  ```
+source vs dev chi2=1.353 p=0.5083 dof=2 min_exp=6.21
+source vs tout chi2=0.711 p=0.7009 dof=2 min_exp=5.92
+langue vs dev chi2=0.001 p=0.9712 dof=1 min_exp=65.20
+langue vs tout chi2=0.001 p=0.9791 dof=1 min_exp=65.15
+type vs dev chi2=3.902 p=0.1421 dof=2 min_exp=21.94
+type vs tout chi2=2.098 p=0.3503 dof=2 min_exp=21.96
+type_langue vs dev chi2=5.115 p=0.4020 dof=5 min_exp=8.27
+type_langue vs tout chi2=2.768 p=0.7357 dof=5 min_exp=7.96
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du harnais complet de re-mesure (split, langues, types, contrôles)
+
+- **write** `{"file_path": "/tmp/v10/harnais.py", "content": "#!/usr/bin/env python3\n\"\"\"Harnais de re-mesure dev/test v10 — hors dépôt (/tmp).\n\nMesure le bloc heuristique sur le gold vivant 612, le gold gelé 602, les trois\ndécoupages crc32(id) % 3 == 0/1/2, par langue et par type, avec :\n  - validation c … [44962 caractères tronqués]`
+
+  ```
+<path>/tmp/v10/harnais.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution du harnais (première passe, correction des erreurs)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 /tmp/v10/harnais.py 2>&1 | tail -80", "description": "Run measurement harness", "timeoutMs": 620000}`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/v10/harnais.py", line 881, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/v10/harnais.py", line 652, in main
+    {k: sorted(v["pred_segs"]) for k, v in recs.items()}, sort_keys=True,
+               ~^^^^^^^^^^^^^
+KeyError: 'pred_segs'
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du digest de déterminisme et relance
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\nimport re\np = '/tmp/v10/harnais.py'\ns = open(p, encoding='utf-8').read()\nold = '            \"n_pred\": len(pred_segs), \"n_gold\": len(gold_segs),'\nnew = '            \"pred_segs\": pred_segs,\\n            \"n_pred\": len(pred_segs), \"n_gold\": l … [301 caractères tronqués]`
+
+  ```
+ok
+== validation ==
+tout écart max 10.0 phrases 612
+dev écart max 6.0 phrases 422
+test écart max 5.0 phrases 190
+gelé 602: {'phrases': 602, 'pos': 0.7603, 'f1': 0.588, 'tete': 0.7388, 'labels': 220, 'exact': 220, 'couverture': 0.9205, 'topk': 219}
+
+== canonique ==
+dev phrases 422 cibles 163 labels 152 exact 152 couv 0.9325 F1 0.5812 tête 0.733 POS 0.7547
+   langue {'fr': (101, 91, 91, 0.901), 'en': (62, 61, 61, 0.9839)}
+   type {'REL': (57, 51, 51, 0.8947, 0.7907, 0.9573), 'SUB': (45, 42, 42, 0.9333, 0.9247, 0.9462), 'GP': (61, 59, 59, 0.9672, 0.8553, 0.8609)}
+test phrases 190 cibles 76 labels 68 exact 68 couv 0.8947 F1 0.589 tête 0.7337 POS 0.7656
+   langue {'fr': (50, 43, 43, 0.86), 'en': (26, 25, 25, 0.9615)}
+   type {'REL': (17, 14, 14, 0.8235, 0.7179, 0.9444), 'SUB': (24, 21, 21, 0.875, 0.8571, 0.9583), 'GP': (35, 33, 33, 0.9429, 0.8571, 0.8675)}
+all phrases 612 cibles 239 labels 220 exact 220 couv 0.9205 F1 0.5836 tête 0.7332 POS 0.7581
+   langue {'fr': (151, 134, 134, 0.8874), 'en': (88, 86, 86, 0.9773)}
+   type {'REL': (74, 65, 65, 0.8784, 0.7738, 0.9542), 'SUB': (69, 63, 63, 0.913, 0.9014, 0.9504), 'GP': (96, 92, 92, 0.9583, 0.8559, 0.8632)}
+
+== stabilité ==
+exact_taux_spa
+… [2677 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Localisation de l'écart harnais/evaluer_bloc avant de publier
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\nimport json\nd = json.load(open('mesures.json'))\nfor nom in ('tout','dev','test'):\n    v = d['validation'][nom]\n    print('='*20, nom, 'ecart', v['ecart_max'])\n    def walk(a, b, path=''):\n        if isinstance(a, dict) and isinstance(b, dict):\n   … [388 caractères tronqués]`
+
+  ```
+==================== tout ecart 10.0
+  /attachement/verbe/cibles: ref=149 moi=159 ecart=+10.000000
+  /attachement/verbe/taux: ref=1.0 moi=0.9371 ecart=-0.062900
+  /attachement/nom/cibles: ref=71 moi=80 ecart=+9.000000
+  /attachement/nom/taux: ref=1.0 moi=0.8875 ecart=-0.112500
+  /attachement_tete/cibles: ref=220 moi=239 ecart=+19.000000
+  /attachement_tete/labels: ref=220 moi=235 ecart=+15.000000
+  /attachement_tete/top1: ref=220 moi=235 ecart=+15.000000
+  /attachement_tete/topk: ref=219 moi=234 ecart=+15.000000
+  /attachement_tete/top1_taux: ref=1.0 moi=0.9833 ecart=-0.016700
+  /attachement_tete/topk_taux: ref=0.9955 moi=0.9791 ecart=-0.016400
+  /attachement_tete/couverture: ref=1.0 moi=0.9833 ecart=-0.016700
+==================== dev ecart 6.0
+  /attachement/verbe/cibles: ref=97 moi=102 ecart=+5.000000
+  /attachement/verbe/taux: ref=1.0 moi=0.951 ecart=-0.049000
+  /attachement/nom/cibles: ref=55 moi=61 ecart=+6.000000
+  /attachement/nom/taux: ref=1.0 moi=0.9016 ecart=-0.098400
+  /attachement_tete/cibles: ref=152 moi=163 ecart=+11.000000
+  /attachement_tete/labels: ref=152 moi=160 ecart=+8.000000
+  /attachement_tete/top1: ref=152 moi=160 ecart=+8.000000
+  /attachement_tete/topk: re
+… [932 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction des dénominateurs (verbe/nom, tête) et des valeurs brutes
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\np = '/tmp/v10/harnais.py'\ns = open(p, encoding='utf-8').read()\n\n# 1) verbe/nom : dénominateur = labels (le code officiel saute les spans non trouvés)\nold = '''    verbe_n = sum(1 for x in tg if x[\"verbe\"])\n    verbe_ok = sum(x[\"exact\"] for x in … [10580 caractères tronqués]`
+
+  ```
+patched
+== validation ==
+tout écart max 0.0 phrases 612
+dev écart max 0.0 phrases 422
+test écart max 0.0 phrases 190
+gelé 602: {'phrases': 602, 'pos': 0.7603, 'f1': 0.588, 'tete': 0.7388, 'labels': 220, 'exact': 220, 'couverture': 0.9205, 'topk': 219}
+
+== canonique ==
+dev phrases 422 cibles 163 labels 152 exact 152 couv 0.9325 F1 0.5812 tête 0.733 POS 0.7547
+   langue {'fr': (101, 91, 91, 0.901), 'en': (62, 61, 61, 0.9839)}
+   type {'REL': (57, 51, 51, 0.8947, 0.7907, 0.9573), 'SUB': (45, 42, 42, 0.9333, 0.9247, 0.9462), 'GP': (61, 59, 59, 0.9672, 0.8553, 0.8609)}
+test phrases 190 cibles 76 labels 68 exact 68 couv 0.8947 F1 0.589 tête 0.7337 POS 0.7656
+   langue {'fr': (50, 43, 43, 0.86), 'en': (26, 25, 25, 0.9615)}
+   type {'REL': (17, 14, 14, 0.8235, 0.7179, 0.9444), 'SUB': (24, 21, 21, 0.875, 0.8571, 0.9583), 'GP': (35, 33, 33, 0.9429, 0.8571, 0.8675)}
+all phrases 612 cibles 239 labels 220 exact 220 couv 0.9205 F1 0.5836 tête 0.7332 POS 0.7581
+   langue {'fr': (151, 134, 134, 0.8874), 'en': (88, 86, 86, 0.9773)}
+   type {'REL': (74, 65, 65, 0.8784, 0.7738, 0.9542), 'SUB': (69, 63, 63, 0.913, 0.9014, 0.9504), 'GP': (96, 92, 92, 0.9583, 0.8559, 0.8632)}
+
+== stabilité ==
+exact_taux
+… [2609 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des versions f908d7b0 et 160d08ca sur r303/r153/r280/g017
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show f908d7b0:tools/bloc_linguistique.py > /tmp/v10/bloc_f908d7b0.py && git show 160d08ca:tools/bloc_linguistique.py > /tmp/v10/bloc_160d08ca.py && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane … [1370 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+  File "<stdin>", line 9, in charger
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/tmp/v10/bloc_f908d7b0.py", line 58, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 1344, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib64/python3.13/dataclasses.py", line 997, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 757, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de l'import des modules historiques et nouvelle vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nfrom tools.tests.linguistique import e … [1236 caractères tronqués]`
+
+  ```
+============================== f908d7b0
+  acheter dans VERBES_CONNUS ? False | _est_verbe(achetée) False
+   r303 exact []
+   r255 perdus [('REL', 11, 27, 'voiture')]
+   r153 perdus [('GP', 8, 19, 'wait')]
+   r280 perdus [('REL', 8, 21, 'car')]
+   g017 perdus [('SUB', 9, 28, 'said')]
+   s037 perdus [('REL', 5, 15, 'Paul')]
+============================== 160d08ca
+  acheter dans VERBES_CONNUS ? False | _est_verbe(achetée) False
+   r303 perdus [('SUB', 8, 23, 'pars')]
+   r255 perdus [('REL', 11, 27, 'voiture')]
+   r153 perdus [('GP', 8, 19, 'wait')]
+   r280 exact []
+   g017 exact []
+   s037 perdus [('REL', 5, 15, 'Paul')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction et contrôle des tableaux canoniques (langue, type, croisement)
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\nimport json\nd = json.load(open('mesures.json'))\ncan = d['splits']['canonique']\nfor h in ('dev','test'):\n    a = can[h]\n    print('='*25, h.upper())\n    at = a['attachement']\n    print('phrases', a['phrases'], 'tokens', a['tokens'], 'cibles', at[' … [1738 caractères tronqués]`
+
+  ```
+========================= DEV
+phrases 422 tokens 2185 cibles 163 labels 152 exact 152 exact_any 152 topk 152 topk_exact 152
+couverture 0.9325 exact_taux_span 1.0 top1_taux 0.9325 topk_taux 0.9325 exact_any_taux_span 1.0 verbe {'cibles': 97, 'justes': 97, 'taux': 1.0} nom {'cibles': 55, 'justes': 55, 'taux': 1.0}
+F1 {'precision': 0.6289, 'rappel': 0.5401, 'f1': 0.5812, 'tp': 700, 'fp': 413, 'fn': 596} 
+TETE {'precision': 0.8116, 'rappel': 0.6682, 'f1': 0.733, 'tp': 866, 'fp': 201, 'fn': 430}
+POS {'exactitude': 0.7547, 'exactitude_ferme': 0.8952, 'exactitude_ouvert': 0.6201, 'justes': 1649, 'tokens': 2185}
+PRAGMA {'acte': 1.0, 'negation': 0.9787, 'modalite': 0.9929, 'double_sens': 0.9336} fraction 0.5509
+ATT_TETE {'cibles': 152, 'labels': 152, 'top1': 152, 'topk': 152, 'top1_taux': 1.0, 'topk_taux': 1.0, 'couverture': 1.0}
+PERDUS {'total': 11, 'par_type': {'REL': 6, 'SUB': 3, 'GP': 2}, 'par_langue': {'en': 1, 'fr': 10}, 'par_source': {'reel': 2, 'synthetique': 9}}
+LANGUE:
+  fr {'phrases': 277, 'cibles': 101, 'labels': 91, 'exact': 91, 'couverture': 0.901, 'exact_taux_span': 1.0} F1 0.5517 tete 0.7041 POS 0.7558
+  en {'phrases': 145, 'cibles': 62, 'labels': 61, 'exact': 61, 'couvertur
+… [2743 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction des trois splits (langues, types) et des contrôles d'équilibre
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\nimport json\nd = json.load(open('mesures.json'))\nprint('GLOBAL compte:', {k:d['equilibre_global'][k] for k in ('phrases','tokens','sources','langues','types_tout','types_cibles','cibles','cibles_par_langue','cibles_par_source')})\nprint('buckets', d['t … [2394 caractères tronqués]`
+
+  ```
+GLOBAL compte: {'phrases': 612, 'tokens': 3179, 'sources': {'hand': 20, 'reel': 432, 'synthetique': 160}, 'langues': {'fr': 402, 'en': 210}, 'types_tout': {'GN': 828, 'GV': 712, 'GP': 105, 'SUB': 70, 'REL': 74, 'ADJ': 35, 'ADV': 30, 'PONCT': 9}, 'types_cibles': {'GP': 96, 'SUB': 69, 'REL': 74}, 'cibles': 239, 'cibles_par_langue': {'fr': 151, 'en': 88}, 'cibles_par_source': {'hand': 13, 'reel': 171, 'synthetique': 55}}
+buckets {'0': 190, '1': 229, '2': 193}
+
+==================== canonique crc32(id)%3==0 -> test
+dev phr 422 cib 163 lab 152 ex 152 couv 0.9325 F1 0.5812 tete 0.733 POS 0.7547 perdus 11
+   lang {'fr': (101, 91, 91, 0.901, 0.5517, 0.7041, 0.7558), 'en': (62, 61, 61, 0.9839, 0.637, 0.7861, 0.7528)}
+   type {'REL': (57, 51, 51, 0.8947, 0.7907, 0.9573), 'SUB': (45, 42, 42, 0.9333, 0.9247, 0.9462), 'GP': (61, 59, 59, 0.9672, 0.8553, 0.8609)}
+test phr 190 cib 76 lab 68 ex 68 couv 0.8947 F1 0.589 tete 0.7337 POS 0.7656 perdus 8
+   lang {'fr': (50, 43, 43, 0.86, 0.5702, 0.7188, 0.7512), 'en': (26, 25, 25, 0.9615, 0.6271, 0.7627, 0.7925)}
+   type {'REL': (17, 14, 14, 0.8235, 0.7179, 0.9444), 'SUB': (24, 21, 21, 0.875, 0.8571, 0.9583), 'GP': (35, 33, 33, 0.9429, 0.8571, 0.8675)}
+ 
+… [9540 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-mesure des commits v7, audit et v9 avec le même évaluateur (comparaison homogène)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for sha in 69bd865e f908d7b0 160d08ca; do git show $sha:tools/bloc_linguistique.py > /tmp/v10/bloc_$sha.py; done && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/to … [1235 caractères tronqués]`
+
+  ```
+============================== v7_69bd865e
+  dev   phr 422 cib 163 lab 116 ex 106 couv 0.7117 F1 0.5776 tete 0.7359 POS 0.7547 topk 67
+  test  phr 190 cib  76 lab  56 ex  50 couv 0.7368 F1 0.5927 tete 0.7482 POS 0.7656 topk 40
+  tout  phr 612 cib 239 lab 172 ex 156 couv 0.7197 F1 0.5822 tete 0.7397 POS 0.7581 topk 107
+  gele  phr 602 cib 239 lab 172 ex 156 couv 0.7197 F1 0.5858 tete 0.7441 POS 0.7603 topk 107
+============================== audit_f908d7b0
+  dev   phr 422 cib 163 lab 132 ex 123 couv 0.8098 F1 0.6019 tete 0.7503 POS 0.7547 topk 77
+  test  phr 190 cib  76 lab  59 ex  53 couv 0.7763 F1 0.6017 tete 0.7531 POS 0.7656 topk 42
+  tout  phr 612 cib 239 lab 191 ex 176 couv 0.7992 F1 0.6018 tete 0.7512 POS 0.7581 topk 119
+  gele  phr 602 cib 239 lab 191 ex 176 couv 0.7992 F1 0.6057 tete 0.7558 POS 0.7603 topk 119
+============================== v9_160d08ca
+  dev   phr 422 cib 163 lab 136 ex 127 couv 0.8344 F1 0.6114 tete 0.7570 POS 0.7547 topk 127
+  test  phr 190 cib  76 lab  62 ex  56 couv 0.8158 F1 0.6190 tete 0.7619 POS 0.7656 topk 57
+  tout  phr 612 cib 239 lab 198 ex 183 couv 0.8285 F1 0.6138 tete 0.7585 POS 0.7581 topk 184
+  gele  phr 602 cib 239 lab 198 ex 183 couv 0.8285
+… [42 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic de l'écart des rejeux historiques (RACINE/lexique)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"RACINE\" /tmp/v10/bloc_69bd865e.py | head -20; echo '---'; grep -n \"json.load\\|read_text\\|LEXIQUE\\|lexique\" /tmp/v10/bloc_69bd865e.py | head -30; echo '--- diff evaluer_gold ---'; git diff --stat 69bd865e..HEAD -- tool … [179 caractères tronqués]`
+
+  ```
+49:RACINE = pathlib.Path(__file__).resolve().parent.parent
+633:            if str(RACINE / "tools/structures") not in sys.path:
+634:                sys.path.insert(0, str(RACINE / "tools/structures"))
+2115:    ap.add_argument("--modele", default=str(RACINE / "models/Qwen2.5-0.5B-Q4_0.gguf"))
+2120:    ap.add_argument("--udhr", default=str(RACINE / "data/udhr/articles.jsonl"))
+---
+167:    for ligne in chemin.read_text(encoding="utf-8").splitlines():
+170:        d = json.loads(ligne)
+218:    scores = {l: len(mots & set(LEXIQUES[l])) / max(1, len(mots)) for l in LEXIQUES}
+270:# --------------------------------------------------------------------------- lexiques
+273:LEXIQUES = {
+381:# Un lexique verbal minimal, bilingue, pour arbitrer les classes ouvertes : le POS de surface
+754:        """Le **verbe** du span : le lexique d'abord, puis le POS `VERB`, sinon le dernier mot."""
+844:            """Le verbe : le lexique, le POS, ou la **position** après un pronom sujet."""
+1315:            d = json.loads(texte_sortie[debut:fin + 1])
+1404:            sortie = json.loads(reponse.read().decode("utf-8"))
+1430:            pos = json.loads(sortie[debut:fin + 1]).get("pos")
+1538:            sortie
+… [345 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des changements de gold entre v7, audit, v9 et HEAD
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -10 -- tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/gold_gele.json; echo '--- stat 69bd865e..HEAD ---'; git diff  … [293 caractères tronqués]`
+
+  ```
+702b368c B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140
+651c1fc0 B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136
+297c4f17 B13 — LA RÉPONSE CONTEXTUELLE : 5/5, LA PHRASE PRÉCÉDENTE TRANCHE ; 134/134
+20194fb1 B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133
+26e4df27 B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132
+866fcaa7 B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130
+56b22212 B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127
+41c7d1f1 B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112
+4d8c9905 B13 — LA CORÉFÉRENCE À 68 LIENS : LE RÔLE PASSE DEVANT (52/51), GOLD 372 ; 111/111
+8e9d0c1d B13 — LES CHAÎNES LONGUES : 7/10, LE RÔLE MANQUE, GOLD 342 ; 99/99
+--- stat 69bd865e..HEAD ---
+--- stat f908d7b0..HEAD ---
+--- stat 160d08ca..HEAD ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Test direct des classes historiques (identité et annotation)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nimport bloc_linguistique as cur\n\ndef … [955 caractères tronqués]`
+
+  ```
+cur Heuristique module bloc_linguistique 94461644208240
+old Heuristique module bloc_69bd865e 94461644621136
+same? False
+old sources: ['Heuristique']
+cur [('GN', 0, 7, 'dort'), ('GV', 8, 12, 'chat')]
+cur meta [('GN', 0, 7, {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'Le chat', 'cible': 'dort'}}), ('GV', 8, 12, {'role': 'predicat', 'niveau': 0, 'attachement': {'segment': 'dort', 'cible': 'chat'}})]
+old [('GN', 0, 7, 'dort'), ('GV', 8, 12, 'chat')]
+old meta [('GN', 0, 7, {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'Le chat', 'cible': 'dort'}}), ('GV', 8, 12, {'role': 'predicat', 'niveau': 0, 'attachement': {'segment': 'dort', 'cible': 'chat'}})]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection de l'import `tools/structures` et correction de RACINE
+
+- **bash** `{"command": "sed -n '615,650p' /tmp/v10/bloc_69bd865e.py; echo '--- current ---'; sed -n '620,650p' /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "description": "Inspect tools/structures import in old module"}`
+
+  ```
+def _morphemes(mot: str) -> list[tuple[str, int, int, str]]:
+        n = _normaliser(mot)
+        sortie = []
+        for suf in SUFFIXES:
+            if len(n) > len(suf) + 2 and n.endswith(suf):
+                sortie.append(("suffixe", len(mot) - len(suf), len(mot), suf))
+                break
+        for pre in PREFIXES:
+            if len(n) > len(pre) + 2 and n.startswith(pre):
+                sortie.append(("préfixe", 0, len(pre), pre))
+                break
+        return sortie
+
+    # -- syntagmes ----------------------------------------------------------
+    def _syntagmes_s(self, texte: str) -> list[dict] | None:
+        if not self.segmenter_s:
+            return None
+        try:
+            if str(RACINE / "tools/structures") not in sys.path:
+                sys.path.insert(0, str(RACINE / "tools/structures"))
+            import generateur  # le générateur S, importé en lecture seule
+            return generateur.analyser(texte)
+        except Exception:
+            return None
+
+    def _cibles_s(self, texte: str) -> dict:
+        """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+
+        Lecture seule de l'API interne du S : `_tokens`/`_
+… [1640 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rejeu des commits historiques avec RACINE corrigé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util, pathlib\nRACINE = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RACINE / 'tools'))\nsys.path.insert(0, str(RACINE))\nfrom tools.tests.linguistiq … [1098 caractères tronqués]`
+
+  ```
+============================== v7_69bd865e
+  dev   phr 422 cib 163 lab 134 ex 133 couv 0.8221 F1 0.5512 tete 0.7132 POS 0.7547 topk 111
+  test  phr 190 cib  76 lab  62 ex  62 couv 0.8158 F1 0.5651 tete 0.7196 POS 0.7656 topk 55
+  tout  phr 612 cib 239 lab 196 ex 195 couv 0.8201 F1 0.5555 tete 0.7152 POS 0.7581 topk 166
+  gele  phr 602 cib 239 lab 196 ex 195 couv 0.8201 F1 0.5595 tete 0.7205 POS 0.7603 topk 166
+============================== audit_f908d7b0
+  dev   phr 422 cib 163 lab 148 ex 148 couv 0.9080 F1 0.5723 tete 0.7270 POS 0.7547 topk 120
+  test  phr 190 cib  76 lab  64 ex  64 couv 0.8421 F1 0.5714 tete 0.7241 POS 0.7656 topk 57
+  tout  phr 612 cib 239 lab 212 ex 212 couv 0.8870 F1 0.5720 tete 0.7262 POS 0.7581 topk 177
+  gele  phr 602 cib 239 lab 212 ex 212 couv 0.8870 F1 0.5763 tete 0.7316 POS 0.7603 topk 177
+============================== v9_160d08ca
+  dev   phr 422 cib 163 lab 152 ex 152 couv 0.9325 F1 0.5807 tete 0.7327 POS 0.7547 topk 152
+  test  phr 190 cib  76 lab  67 ex  67 couv 0.8816 F1 0.5855 tete 0.7323 POS 0.7656 topk 66
+  tout  phr 612 cib 239 lab 219 ex 219 couv 0.9163 F1 0.5822 tete 0.7326 POS 0.7581 topk 218
+  gele  phr 602 cib 239 lab 219 ex 219 couv 0.91
+… [44 caractères tronqués]
+  ```
+

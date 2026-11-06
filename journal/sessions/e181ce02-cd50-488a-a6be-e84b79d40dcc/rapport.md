@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 127.0 h |
+| Durée | 127.5 h |
 | Tours | 177 |
-| Messages | 2832 |
-| Appels d'outils | 2494 |
+| Messages | 2842 |
+| Appels d'outils | 2502 |
 | Fichiers touchés | 25 |
-| Commandes | 2055 |
+| Commandes | 2060 |
 | Sous-agents | 25 |
-| Commits | 301 |
+| Commits | 302 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*253 appels d'outils.* Actions notables :
+*261 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 207 autres
+- … et 212 autres
 
 **Synthèse produite :**
 
-⏵ J'ajoute la leçon « le découpage d'abord » à la théorie (concept, sans chiffres)
+⏵ Passage au 06/11 : j'ouvre le dossier du jour au journal
 
 ## 3. Travail accompli
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2015 autres
+- … et 2020 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9750,7 +9750,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-45 sorties en erreur ou divergentes. Les premières :
+46 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10071,4 +10071,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LE FÉMININ -ÉE ET LA GARDE DÉTERMINANT DU GP : EXACT 220/220 (1,0000), COUVERTURE 0,9205, F1 0,5880, 19 SPANS ; 183/183" -- tools/bloc_linguistique.py too
 - THÉORIE ET JOURNAL — LE DÉCOUPAGE D'ABORD : LA COUVERTURE EST UN PLAFOND, UN GOLD SE VÉRIFIE AVANT DE JUGER" -- docs/theorie/modele-natif.md journal/2026-11-05/
 - PILOTAGE — LES VAGUES 5 À 7 (AUDITS V7/V8, R1/R3, TOP-K, V10) DOCUMENTÉES AU PLAN-TRAVAIL" -- docs/pilotage/plan-travail.md docs/pilotage/en-cours.md 2>&1 | tai
+- JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS" -- journal/2026-11-06/README.md docs/pilotage/en-cours.md 2>&1 | tai
 

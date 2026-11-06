@@ -7,12 +7,12 @@
 | Identifiant | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 23:24 |
-| Durée | 0.2 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 17 |
-| Appels d'outils | 22 |
-| Fichiers touchés | 0 |
-| Commandes | 17 |
+| Messages | 34 |
+| Appels d'outils | 40 |
+| Fichiers touchés | 1 |
+| Commandes | 34 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesur … [1686 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*40 appels d'outils.* Actions notables :
 
 - bash — Show branch, HEAD and status
 - bash — List linguistique tools and reports
@@ -41,11 +41,11 @@
 - bash — Trace origin of -ée handling
 - bash — Inspect autotest changes in v10
 - bash — Inspect Annotation and analyser API
-- … et 4 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des bases vivant/gelé et des valeurs publiées v10
+⏵ Rejeu des commits historiques avec RACINE corrigé
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/v10/harnais.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -73,4 +74,27 @@
 - **T1** List current lost spans with bucket
 - **T1** Inspect predictions for key lost/recovered spans
 - **T1** Compare living and frozen gold global metrics
+- **T1** Inspect module imports and resource loading
+- **T1** Check gold and module changes since audit
+- **T1** Compute chi-square both ways for canonical split
+- **T1** Run measurement harness
+- **T1** Fix digest and rerun harness
+- **T1** Find harness vs evaluer_bloc discrepancies
+- **T1** Patch denominators and rerun harness
+- **T1** Compare old module versions on key spans
+- **T1** Compare old modules on key spans
+- **T1** Print canonical detailed metrics
+- **T1** Print split details, stability, MC, spans, comparison
+- **T1** Measure old commits with same evaluator
+- **T1** Find lexicon loading and evaluator changes
+- **T1** Check gold history and diffs
+- **T1** Compare old and current Heuristique classes
+- **T1** Inspect tools/structures import in old module
+- **T1** Replay historical commits with repo RACINE
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 13, in <module>   File "<stdin>", line 9, in charger   File "<frozen importlib._bootstrap_external>", line 1027, in exec_module   Fil
 

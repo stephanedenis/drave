@@ -13,6 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
+| **2026-11-06** | [2026-11-06/README.md](2026-11-06/README.md) | — |
 | **2026-11-05** | [2026-11-05/README.md](2026-11-05/README.md) | [attention](2026-11-05/attention.md) · [distribue](2026-11-05/distribue.md) · [docs](2026-11-05/docs.md) · [memoire](2026-11-05/memoire.md) · [mesures](2026-11-05/mesures.md) · [modele](2026-11-05/modele.md) · [moteur](2026-11-05/moteur.md) · [portes](2026-11-05/portes.md) |
 | **2026-11-04** | [2026-11-04/README.md](2026-11-04/README.md) | [apprentissage](2026-11-04/apprentissage.md) · [distribue](2026-11-04/distribue.md) · [docs](2026-11-04/docs.md) · [mesures](2026-11-04/mesures.md) · [modele](2026-11-04/modele.md) · [moteur](2026-11-04/moteur.md) · [outils](2026-11-04/outils.md) · [portes](2026-11-04/portes.md) |
 | **2026-11-03** | [2026-11-03/README.md](2026-11-03/README.md) | [apprentissage](2026-11-03/apprentissage.md) · [attention](2026-11-03/attention.md) · [distribue](2026-11-03/distribue.md) · [docs](2026-11-03/docs.md) · [memoire](2026-11-03/memoire.md) · [mesures](2026-11-03/mesures.md) · [modele](2026-11-03/modele.md) · [moteur](2026-11-03/moteur.md) · [outils](2026-11-03/outils.md) · [portes](2026-11-03/portes.md) |
@@ -104,7 +105,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `3d5618a0` | Tu écris un **document de | 2026-10-02 15:02 | 0.3 h | 1 | 85 | 1 | 0 | [rapport](sessions/3d5618a0-4e3a-45bb-943d-a72c753fb7da/rapport.md) |
 | `3de141c0` | Tu travailles dans le dépôt | 2026-10-29 11:32 | 0.3 h | 1 | 75 | 4 | 0 | [rapport](sessions/3de141c0-089b-4ceb-8a2e-bd6d83044a5f/rapport.md) |
 | `3f8f2bb8` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.3 h | 1 | 108 | 1 | 0 | [rapport](sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/rapport.md) |
-| `3fb87dc7` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 0.2 h | 1 | 22 | 0 | 0 | [rapport](sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) |
+| `3fb87dc7` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 0.7 h | 1 | 40 | 1 | 0 | [rapport](sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) |
 | `42059fde` | Tu es vérificateur de documentation | 2026-09-30 12:20 | 0.2 h | 1 | 157 | 1 | 0 | [rapport](sessions/42059fde-f06f-4e2c-9a23-8292d887fb6e/rapport.md) |
 | `482522d1` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 58 | 0 | 0 | [rapport](sessions/482522d1-31f1-43eb-ae9c-a681336404f7/rapport.md) |
 | `48ec07ab` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 62 | 0 | 0 | [rapport](sessions/48ec07ab-ec9d-4297-a7bf-d84974667e61/rapport.md) |
@@ -191,9 +192,9 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 127.0 h | 177 | 2494 | 25 | 301 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 127.5 h | 177 | 2502 | 25 | 302 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
-| `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 0.3 h | 1 | 47 | 0 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
+| `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 0.8 h | 1 | 74 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
 | `ee19a880` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/ee19a880-cc76-4c5c-9fe0-5972bd73b533/rapport.md) |
 | `f0969e87` | Optimiser couches linguistiques jeux symboliques | 2026-10-25 21:28 | 89.0 h | 172 | 3209 | 53 | 211 | [rapport](sessions/f0969e87-af0c-43b1-93cf-f278d9c90846/rapport.md) |

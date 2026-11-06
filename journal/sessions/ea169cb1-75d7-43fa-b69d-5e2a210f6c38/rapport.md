@@ -7,12 +7,12 @@
 | Identifiant | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 23:24 |
-| Durée | 0.3 h |
+| Durée | 0.8 h |
 | Tours | 1 |
-| Messages | 36 |
-| Appels d'outils | 47 |
-| Fichiers touchés | 0 |
-| Commandes | 34 |
+| Messages | 61 |
+| Appels d'outils | 74 |
+| Fichiers touchés | 1 |
+| Commandes | 60 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2183 caractères tronqués]
 
-*47 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, recent commits
 - bash — List relevant reports and test dirs
@@ -41,11 +41,11 @@
 - bash — Inspect audit JSON structure
 - bash — Inspect v10 commit diff
 - bash — Verify module matches audited commit
-- … et 21 autres
+- … et 46 autres
 
 **Synthèse produite :**
 
-⏵ Checking gate results and prior top-k control code
+⏵ Proofreading the report and checking repo state
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v10.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -90,6 +91,13 @@
 - **T1** Check prior control code and gates
 - **T1** Compare span sets v8 v9 v10
 - **T1** Find prior top-k permutation code
+- **T1** Official F1 on both golds
+- **T1** List -ée words and their verb status
+- **T1** Show r303 segmentation across versions
+- **T1** Measure v9/v10 F1 modes
+- **T1** Check -ée presence in v8/v9 commits
+- **T1** Check if details saved
+- … et 20 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -98,4 +106,11 @@
 - **T1** `"lecture": "0,96 % en moyenne contre 100 % observe"`
 - **T1** `"lecture": "35,9 % en moyenne contre 100 % observe"`
 - **T1** `"lecture": "0,85 % en moyenne contre 83,49 % observe"`
+
+## 5. Erreurs rencontrées
+
+2 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : Error: spawn bash ENOENT
+- **T1** : Error: spawn bash ENOENT
 
