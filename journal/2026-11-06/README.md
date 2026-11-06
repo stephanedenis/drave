@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**30 commits** · **7 session(s)** · **5 thème(s)**
+**31 commits** · **9 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,18 +15,20 @@
 | docs | 5 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 8 | [portes.md](portes.md) |
+| portes | 9 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.7 h | [rapport](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md) · [digest](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md) |
+| `082fe8ca-3e1e-4454-b91b-12586843e880` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 0.1 h | [rapport](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/rapport.md) · [digest](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/digest.md) |
+| `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.8 h | [rapport](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md) · [digest](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md) |
 | `1555bdd3-27e9-4779-b1e7-716e32399c11` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.5 h | [rapport](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/rapport.md) · [digest](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/digest.md) |
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 138.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 0.1 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 138.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -63,6 +65,7 @@
 | 10:44 | `fba3072a` | ÉTAT — T0 DANS LE BUDGET APRÈS LA FILE DES TÂCHES |
 | 10:54 | `f6c8132b` | A23 — LES 6 CORRECTIONS FACTUELLES DE LA FILE (GOLD 200+ = 13 OCCURRENCES, PASSES 2 H 11 À 2 H 29) ; T0 DANS LE BUDGET |
 | 11:06 | `7f73c17f` | PRODUIT — LA DOC D'USAGE ET LES 5 EXEMPLES VÉRIFIÉS (5/5 REJOUÉS) ; CASCADE_POS N'EST PLUS UNE ROUGE (PLANCHER 0,70) |
+| 11:12 | `6ef2a3f5` | JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f) |
 
 ## Le récit de la journée (écrit à la main)
 

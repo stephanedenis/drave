@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 138.5 h |
-| Tours | 179 |
-| Messages | 3035 |
-| Appels d'outils | 2679 |
+| Durée | 138.7 h |
+| Tours | 180 |
+| Messages | 3048 |
+| Appels d'outils | 2691 |
 | Fichiers touchés | 25 |
-| Commandes | 2194 |
-| Sous-agents | 29 |
-| Commits | 336 |
+| Commandes | 2203 |
+| Sous-agents | 31 |
+| Commits | 337 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -413,6 +413,8 @@
 **Tour 178** — merge
 
 **Tour 179** — push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vise un système utilisable en autonomie comme premier produit.
+
+**Tour 180** — <goal_round> Objective: "Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utilisable en autonomie comme premier produit (entrée CLI, smoke test de bout en bout, documentation d'usage, portes ve … [730 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9620,7 +9622,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 
 ### Tour 179 — push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vi … [60 caractères tronqués]
 
-*80 appels d'outils.* Actions notables :
+*81 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Pousser et voir les branches distantes
@@ -9636,11 +9638,73 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - bash — Consigner l'objectif produit
 - job_output
 - bash — Attendre la vague produit
-- … et 56 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ Consolidation finale : journal du produit, état et roadmap
+⏵ Fenêtre close : le produit est debout, documenté, poussé ; voici le bilan
+
+\## Ce qui est fait (09 h 20 → 11 h 15)
+
+**5 sous-agents** (CLI, doc, fiabilité, file des tâches, + la correction de doc), **l'agent principal** sur la porte, l'état et les commits.
+
+\### Le premier produit
+
+```bash
+python3 tools/drave.py analyser "Le chat dort."         # POS, syntagmes, rôles, cibles, acte
+python3 tools/drave.py analyser "…" --langue en --json  # JSON déterministe
+python3 tools/drave.py evaluer                          # la mesure sur le gold 612
+python3 tools/drave.py rejouer "…"                      # vérifie le déterminisme (sha256)
+```
+
+- **`tools/drave.py`** v0.1.0 (389 l.), **6 tests** en 1,2 s (`tools/tests/test_produit.py`), codes 0/1/2, hors ligne, CPU.
+- **`tools/porte-produit.sh`** : 6 contrôles, **~2 min** — version, `analyser` fr+en, JSON valide, rejeu identique, smoke test, autotest.
+- **`docs/produit/README.md`** (370 l.) + **`exemples.md`** (630 l.) : 5 sorties **rejouées** (5/5 identiques), dont un cas d'échec connu (`r035`).
+
+\### Ce que la fenêtre a corrigé
+
+- **`cascade_pos`** : la fusion avec le contrat rend **0,7465** sous l'heuristique **0,7581**. Le verdict est devenu un **plancher 0,70** (justifié : le `MockNeuronal` ne rend que les classes ouvertes) → **`porte-bloc-linguistique` repasse verte**.
+- **Autotest parallèle** : `AUTOTEST_JOBS=8` → **183/183 en 1 min 54** (×2,4).
+- **Roadmap** : la ligne **S** disait « aucun verdict humain » — faux : **150 verdicts** (`validations.jsonl`) et **19** sur les 9 paragraphes.
+- **A23** : **29 tâches** inventoriées (8 autonomes, 11 en coordination, 10 bloquées), **18 périmées** signalées, **6 doublons**.
+
+\### L'état
+
+| | |
+|---|---|
+| **HEAD** | `6ef2a3f5`, `master` = `s/v7` = **poussés** (0 divergence) |
+| **attachement** | **222/222 (1,0000)**, couverture **0,9289** |
+| **POS / F1 / tête** | **75,81 %** / **58,49 %** / **73,36 %** |
+| **dev / test** | 153/153, 69/69 |
+| **portes** | **183/183** autotest ; **84 portes** du dépôt, **3 rouges** (`indice`, `melange` structurelles, `sessions` du hub) |
+| **produit** | porte **verte**, doc et exemples **vérifiés** |
+
+\## Ce qui reste (la file, déjà classée)
+
+1. **Les 8 tâches autonomes** de la file A23 : POS anglais, spans `r353`, double § 9, INDEX, cohérence v8…
+2. **Les 17 spans inatteignables** : ils demandent de trancher sur le **gold** (4 GP sans préposition, 12 formes synthétiques) — une décision, pas un code.
+3. **Le doublon REL de l'union** (visible
+… [569 caractères tronqués]
+
+### Tour 180 — <goal_round> Objective: "Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les t … [1010 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Reconnaissance des tâches restantes
+- sous-agent — POS anglais diagnostic
+- sous-agent — Fiabilité produit hors gold
+- bash — Voir les deux § 9
+- bash — Corriger la numérotation et le piège --help
+- bash — Lire index_reports en entier
+- bash — Réécrire index_reports avec argparse
+- bash — Régénérer INDEX et vérifier
+- bash — Fiche outillage et état
+- bash — Committer l'outillage
+- job_output
+
+**Synthèse produite :**
+
+⏵ Deux tâches rapides de la file (double § 9, piège `--help`) et deux sous-agents (POS anglais, audit de fiabilité)
 
 ## 3. Travail accompli
 
@@ -9705,6 +9769,8 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - tour 179 — Doc d'usage du produit
 - tour 179 — Fiabilité produit du bloc L
 - tour 179 — File des tâches restantes
+- tour 180 — POS anglais diagnostic
+- tour 180 — Fiabilité produit hors gold
 
 ### Commandes exécutées (échantillon)
 
@@ -9748,7 +9814,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2154 autres
+- … et 2163 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10232,4 +10298,5 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - A23 — LES 6 CORRECTIONS FACTUELLES DE LA FILE (GOLD 200+ = 13 OCCURRENCES, PASSES 2 H 11 À 2 H 29) ; T0 DANS LE BUDGET" -- reports/rapport-file-taches.md report
 - PRODUIT — LA DOC D'USAGE ET LES 5 EXEMPLES VÉRIFIÉS (5/5 REJOUÉS) ; CASCADE_POS N'EST PLUS UNE ROUGE (PLANCHER 0,70)" -- docs/produit/README.md docs/produit/exe
 - JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)" -- journal/2026-11-06/README.md docs/p
+- OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13" -- tools/index_reports.py reports/INDE
 

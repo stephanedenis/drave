@@ -1,0 +1,19 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "avant": {
+  "index": "625 fiches (périmé)",
+  "help": "réécrit INDEX.md",
+  "sections": "9, 12, 9"
+ },
+ "apres": {
+  "index": "677 fiches",
+  "help": "affiche l'aide, n'écrit rien",
+  "verifier": "exit 0 si à jour, 1 sinon",
+  "sections": "9, 12, 13"
+ },
+ "limites": [
+  "autres outils non audités",
+  "677 ≠ 679 (exclusions)"
+ ]
+}

@@ -2710,3 +2710,203 @@ tableaux déséquilibrés: 0
 fences ``` 0
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\ns=s.replace('\"parse_sur\": [','\"a_parser_sans_casser\": [')\np.write_text(s); print('ok')\nPY\nDEST=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produ … [274 caractères tronqués]`
+
+  ```
+ok
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json 81767 octets
+JSON VALIDE
+3119:  "a_parser_sans_casser": [
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md'); s=p.read_text()\ns=s.replace(\"\"\"- **Débit** : 923 phrases/s à 10 mots, 218/s à 50, 51,5/s à 200. Le mode par défaut est\n  **largement assez ra … [1196 caractères tronqués]`
+
+  ```
+ok
+67:| F1 / tête gelé 602 | **0,5893** (P 0,6319 ; R 0,5522) / **0,7392** ; POS 0,7603 |
+75:publie les valeurs **gelées** (le POS 0,7603 est notre mesure du gelé, pas une valeur de la
+211:  composante superlinéaire commence à se voir.
+377:  commit `fa1b0c6e` ; la fiche v12 publie le F1/tête du **gelé 602** (0,5893/0,7392, POS 0,7603).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '168,176p' reports/rapport-produit-bloc-l.md", "description": "Vérifier la phrase des profils de langue"}`
+
+  ```
+`meta.attachement` ne porte **pas l'offset de la cible**, seulement sa chaîne.
+- **Double sens** : **9/50** phrases déclenchent `double_sens` (candidat à 0,25) : `livre` 2,
+  `temps` 2, `point` 2, `note` 1, ` ou ` 1, guillemets 1. C'est du rappel, pas de la précision.
+- **Langue** : défaut **50/50** (34 fr, 14 en, 2 `und`). Avec les **profils UDHR** : **39/50**
+  après conversion ISO3→ISO2 (30/34 fr, 7/14 en, 2/2 `und` ; `oci` compté comme fr,
+  `hns`/`sco`/`pcm` non), et **2/50** en égalité stricte de chaîne (les deux `und`). Exemples : f01 fr→`hns`, e29/e35/e42 en→`sco`, e37 en→`pcm`, f03/f23/
+  x44 fr→`und`, e32/e36/e40 en→`und`. L'indice de langue `"fr"` est **ignoré** quand les profils
+  sont chargés (les clés sont en ISO3).
+- **Scripts non latins** : russe et chinois rendent graphème/mot/phrase/document, **0 syntagme**,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"parse_sur\\|sur_parcours\\|cible_close\" reports/pensee-produit-bloc-l.json || echo \"aucune clé obsolète\"; python3 -m json.tool reports/pensee-produit-bloc-l.json > /dev/null && echo \"JSON OK\"", "description": "Vérifier … [24 caractères tronqués]`
+
+  ```
+aucune clé obsolète
+JSON OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, collections\nd=json.load(open('reports/pensee-produit-bloc-l.json'))\nb=d['banc_50']\nprint('gold', d['gold']['exact'], d['gold']['labels'], d['gold']['couverture'], d['gold']['f1'], d['gold']['pos'], d … [1436 caractères tronqués]`
+
+  ```
+gold 222 222 0.9289 0.5849 0.7581 17 0.5893 0.7392
+banc {'labels': 60, 'textes_multi': 6, 'commencent_par_espace': 6, 'chevauchements': 1, 'exemples': [{'id': 'f10', 'a': [0, 104], 'b': [2, 104]}]} 819 4320 {'total': 265, 'cibles_fermees': 16, 'cibles_fermees_detail': {'au': 3, 'was': 3, 'lui': 2, 'pas': 2, 'have': 2, 'entre': 2, 'ne': 1, 'Tu': 1}, 'cible_absente': 0, 'cible_non_token': 0, 'segment_mismatch': 0, 'cible_ambigue': 3, 'offset_cible': False} 0 0 0 34 149
+langues {'fr': 34, 'en': 14, 'und': 2} scripts {'Latn': 48, 'Cyrl': 1, 'Hani': 1}
+fraction {'min': 0.3529, 'mediane': 0.5493, 'max': 0.875, 'doc': '0,51–0,76 sur 5 échantillons : la plage ne tient pas sur 50 phrases libres'}
+pos 806 963 157 {'NOUN': 365, 'VERB': 32, 'DET': 122, 'PREP': 103, 'PRON': 65, 'CONJ': 32, 'ADV': 40, 'AUX': 28, 'ADJ': 13, 'NUM': 4, 'MOT': 2}
+att {'total': 265, 'cibles_fermees': 16, 'cibles_fermees_detail': {'au': 3, 'was': 3, 'lui': 2, 'pas': 2, 'have': 2, 'entre': 2, 'ne': 1, 'Tu': 1}, 'cible_absente': 0, 'cible_non_token': 0, 'segment_mismatch': 0, 'cible_ambigue': 3, 'offset_cible': False}
+doc {'labels': 53, 'tronques': 42, 'titres': 2, 'titres_faux_50': [{'id': 'x48', 'valeur': '今天天气很好，我们去公
+… [859 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, collections\nd=json.load(open('reports/pensee-produit-bloc-l.json'))\nprint('dedupe', json.dumps(d['controle_negatif']['dedupe_simulation'],ensure_ascii=False))\nprint('correctifs', collections.Counter( … [275 caractères tronqués]`
+
+  ```
+dedupe {"banc_50": {"paires_avant": 132, "paires_apres": 0, "textes": 31, "syntagmes_avant": 362, "syntagmes_apres": 292, "attachements_avant": 265, "attachements_apres": 215}, "gold": {"avant": {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "tp": 1018, "fp": 600, "fn": 845, "tete": 0.7336, "att_exact": 222, "att_cibles": 239, "att_labels": 222, "couverture": 0.9289, "labels": 17847, "attachements": 946}, "apres": {"f1": 0.6141, "precision": 0.7283, "rappel": 0.5309, "tp": 989, "fp": 369, "fn": 874, "tete": 0.7432, "att_exact": 208, "att_cibles": 239, "att_labels": 208, "couverture": 0.8703, "labels": 17587, "attachements": 812}}}
+correctifs Counter({'important': 10, 'bloquant': 5, 'confort': 3})
+cas 25 1
+detail first {'id': 'f01', 'cat': 'fr/courte', 'texte': 'Le chat dort sur le canapé.', 'attendu': 'fr', 'langue': 'fr', 'script': 'Latn', 'mots': 6, 'etiquettes': 32, 'niveaux': {'graphème': 12, 'mot': 7, 'pos': 6, 'syntagme': 3, 'discours': 1, 'document': 1, 'phrase': 1, 'pragmatique': 1}, 'niveaux_absents': ['morphème'], 'fraction': 0.5185, 'attachements': 3, 'anomalies': [], 'anomalies_n': 0}
+detail last {'id': 'x50', 'cat': 'fr/très-longue', 'texte': "Dans le petit vill
+… [817 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\ns=s.replace('        \"phrases\": extra[\"phrases\"],','        \"phrases_stats\": extra[\"phrases\"],')\np.write_text(s); print('ok')\nPY\nDEST=/home/stephane/Data13TB/s … [314 caractères tronqués]`
+
+  ```
+ok
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json 81790 octets
+JSON VALIDE
+307:  "phrases_stats": {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"HEAD: $(git rev-parse --short HEAD)\" && git status --short -- reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json && wc -l -c reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json && python3 -  … [557 caractères tronqués]`
+
+  ```
+HEAD: 6ef2a3f5
+?? reports/pensee-produit-bloc-l.json
+?? reports/rapport-produit-bloc-l.md
+   410  33260 reports/rapport-produit-bloc-l.md
+  3636  81790 reports/pensee-produit-bloc-l.json
+  4046 115050 total
+reports/rapport-produit-bloc-l.md utf8 OK sans BOM
+reports/pensee-produit-bloc-l.json utf8 OK sans BOM
+JSON chargé OK
+d657837c40f818dcd544a1cb7358bbd9230e36ce604eb439f06963a49b0971ab  reports/rapport-produit-bloc-l.md
+abd5774159593f74568693eec1cf8d37b829b0940c88eadb7541b5d94848af84  reports/pensee-produit-bloc-l.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -6 --decorate && echo \"--- diff module fa1b0c6e..HEAD ---\" && git diff --stat fa1b0c6e..HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/gold_split.py && echo \" … [166 caractères tronqués]`
+
+  ```
+6ef2a3f5 (HEAD -> s/v7, origin/s/v7, origin/master, origin/HEAD, master) JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)
+7f73c17f PRODUIT — LA DOC D'USAGE ET LES 5 EXEMPLES VÉRIFIÉS (5/5 REJOUÉS) ; CASCADE_POS N'EST PLUS UNE ROUGE (PLANCHER 0,70)
+f6c8132b A23 — LES 6 CORRECTIONS FACTUELLES DE LA FILE (GOLD 200+ = 13 OCCURRENCES, PASSES 2 H 11 À 2 H 29) ; T0 DANS LE BUDGET
+fba3072a ÉTAT — T0 DANS LE BUDGET APRÈS LA FILE DES TÂCHES
+266b1833 ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES)
+b2196cc7 PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES
+--- diff module fa1b0c6e..HEAD ---
+ tools/tests/linguistique/evaluer_gold.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+--- status module ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat fa1b0c6e..HEAD | tail -20", "description": "Voir les fichiers modifiés depuis le commit mesuré"}`
+
+  ```
+.../a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md | 3369 +++++++++++++++
+ .../rapport.md                                     |  205 +
+ .../bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md | 1529 +++++++
+ .../rapport.md                                     |  193 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 1521 +++++++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |    2 +-
+ .../rapport.md                                     |  108 +-
+ reports/README.md                                  |    6 +-
+ reports/pensee-autotest-parallele.json             |   21 +
+ reports/pensee-file-taches.json                    |  854 ++++
+ reports/pensee-produit-v0.json                     |   26 +
+ reports/rapport-autotest-parallele.md              |   52 +
+ reports/rapport-file-taches.md                     |  215 +
+ reports/rapport-produit-v0.md                      |   66 +
+ tools/drave.py                                     |  388 ++
+ tools/pensee/autotest.py                           |  385 +-
+ tools/porte-produit.sh                             |   50 +
+ tools/tests/linguistique/evaluer_gold.py           |    5 +-
+ tools/tests/test_produit.py                        |  110 +
+ 38 fil
+… [49 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a avancé pendant l'audit : vérification de l'impact sur les chiffres
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff fa1b0c6e..HEAD -- tools/tests/linguistique/evaluer_gold.py && echo \"=== log 7f73 ===\" && git show --stat --oneline 7f73c17f | head -20", "description": "Inspecter le changement du harnais et le commit cascade_pos"}`
+
+  ```
+diff --git a/tools/tests/linguistique/evaluer_gold.py b/tools/tests/linguistique/evaluer_gold.py
+index b25e8677..83350674 100644
+--- a/tools/tests/linguistique/evaluer_gold.py
++++ b/tools/tests/linguistique/evaluer_gold.py
+@@ -277,7 +277,10 @@ def main() -> int:
+         "syntagme_synthetique": h_syn["syntagme"]["f1"] >= 0.15,
+         "tete": h_all["syntagme"]["tete"]["f1"] >= 0.35,
+         "acte": h_all["pragmatique"]["acte"] >= 0.70,
+-        "cascade_pos": c_all["pos"]["exactitude"] >= h_all["pos"]["exactitude"],
++        # la cascade n'est **pas** l'heuristique : le neuronal de contrat (MockNeuronal) ne rend
++        # que les classes ouvertes, donc son POS est structurellement plus bas — le verdict est un
++        # **plancher** (0,70), pas une comparaison à l'heuristique (mesuré : 0,7465 contre 0,7581).
++        "cascade_pos": c_all["pos"]["exactitude"] >= 0.70,
+         "cascade_syntagme": c_all["syntagme"]["f1"] >= h_all["syntagme"]["f1"],
+         "attachement_topk": h_all["attachement"]["topk_taux"] >= 0.30,
+         "attachement_hasard": (h_all["attachement"]["top1_taux"]
+=== log 7f73 ===
+7f73c17f PRODUIT — LA DOC D'USAGE ET LES 5 EXEMPLES VÉRIFIÉS (5/5 REJOUÉS) ; CASC
+… [1240 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline --all -- tools/bloc_linguistique.py | head -8 && echo \"--- diff module fa1b0c6e..HEAD ---\" && git diff --stat fa1b0c6e..HEAD -- tools/bloc_linguistique.py && echo \"(vide = inchangé)\"", "description": "Confirmer  … [30 caractères tronqués]`
+
+  ```
+0911ae29 B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183
+653a7981 B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+710ec7f9 B13 — LE FÉMININ -ÉE ET LA GARDE DÉTERMINANT DU GP : EXACT 220/220 (1,0000), COUVERTURE 0,9205, F1 0,5880, 19 SPANS ; 183/183
+160d08ca B13 — LA GARDE PRON : EXACT 219/219 (1,0000), COUVERTURE 0,9163, F1 0,5822, DEV 152/152 ET TEST 67/67 ; AUDIT DE COHÉRENCE V8 INTÉGRÉ ; 183/183
+d497324b B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183
+f908d7b0 B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN 1,0 ; 27 SPANS DONT 17 INATTEIGNABLES ; 183/183
+69bd865e B13 — LA COUVERTURE À 0,8201 : POS CONTEXTUEL 0,7603, F1 0,5595, EXACT 195/196 (0,9949), 43 SPANS ; 183/183
+0ec6c27d B13 — L'ATTACHEMENT PARFAIT SUR LES SPANS PRÉDITS : 187/187 (1,0000), FR 1,0, EN 1,0, DEV 126/126, TEST 61/61 ; RENDEMENT 0,7824 ; 183/183
+--- diff module fa1b0c6e..HEAD ---
+(vide = inchangé)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/audit_produit_bl/eval_head.json > /tmp/audit_produit_bl/eval_head.out 2>&1; echo \"exit=$?\"; tail -12 /tmp/audit_produit_bl/eval_head.out; python3 - <<'PY'\ni … [470 caractères tronqués]`
+
+  ```
+exit=0
+      "labels": 86,
+      "exact": 86,
+      "topk": 86,
+      "exact_taux_span": 1.0
+     }
+    }
+   },
+   "attachement_tete": {
+    "cibles": 208,
+    "labels": 208,
+    "top1"
+heuristique all: {"pos": {"exactitude": 0.7581, "exactitude_ferme": 0.9004, "exactitude_ouvert": 0.6234, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 20, "PREP": 2, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 311, "NOUN": 450, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6292, "rappel": 0.5464, "f1": 0.5849, "tp": 1018, "fp": 600, "fn": 845, "tete": {"precision": 0.81, "rappel": 0.6704, "f1": 0.7336, "tp": 1249, "fp": 293, "fn": 614}}, "pragmatique": {"acte": 0.9967, "negation": 0.9771, "modalite": 0.9886, "double_sens": 0.9444}, "fraction_semantique": 0.5537}
+ok True
+verdict cascade_po
+… [69 caractères tronqués]
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Point d'état important (audit produit bloc L, en cours) : HEAD a avancé pendant l'audit, de `fa1b0c6e` à `6ef2a3f5`. Le module `tools/bloc_linguistique.py` est **inchangé** (git diff vide), donc mes mesures restent valides. En revanche … [674 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+

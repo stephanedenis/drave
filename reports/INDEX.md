@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **625 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **677 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -54,9 +54,16 @@
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
 | [rapport-analyse-flux.md](rapport-analyse-flux.md) | Analyse du flux, couche par couche |
+| [rapport-annotation-independante.md](rapport-annotation-independante.md) | Contrôle indépendant de la convention d'attachement — 20 segments annotés à la main |
 | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
+| [rapport-audit-attachement.md](rapport-audit-attachement.md) | Audit de reproductibilité — l'attachement du bloc linguistique (B13) |
+| [rapport-audit-r1r3.md](rapport-audit-r1r3.md) | Audit R1/R2/R3 — les chiffres rejouent, l'attribution des règles ne rejoue pas |
+| [rapport-audit-v10.md](rapport-audit-v10.md) | Audit v10 — les chiffres rejouent, l'attribution des corrections ne rejoue pas |
+| [rapport-audit-v2.md](rapport-audit-v2.md) | Audit B13 — l'attachement v2 : 43 valeurs rejouées, 2 arrondis, 1 erreur de prose (46 → 45), 8 docstrings de portes périmées |
+| [rapport-audit-v7.md](rapport-audit-v7.md) | Audit v7 — 195/196 sur les deux golds, mais cinq valeurs de qualité sont gelées |
+| [rapport-autotest-parallele.md](rapport-autotest-parallele.md) | B13 — la vérification parallèle : 183/183 en 1 min 54 (×2,4) |
 | [rapport-b10-contraste.md](rapport-b10-contraste.md) | B10 — le terme contrastif ne fait pas lire `z` : 32,6 de chrF (inchangé), écart `z` 1,5 (contre 2,6) |
 | [rapport-b10-decodeur-mots.md](rapport-b10-decodeur-mots.md) | B10 — le décodeur au niveau du mot : 32,5 de chrF (plancher 33,7), mais le `z` ne porte que 2,6 points |
 | [rapport-b10-mots-jw.md](rapport-b10-mots-jw.md) | B10 — le décodeur mot sur JW : 26,7 contre un plancher de 17,1 (+9,5), mais le `z` ne porte que 1,9 point |
@@ -85,6 +92,8 @@
 | [rapport-c8-transfert-corpus.md](rapport-c8-transfert-corpus.md) | C8 — transfert d'un corpus à un AUTRE : la tête lit quand même l'état (÷1 730) |
 | [rapport-c9-echange-experts.md](rapport-c9-echange-experts.md) | C9 sur un modèle routé : échanger les choix d'experts ne transfère RIEN d'utilisable |
 | [rapport-c9-lateralite.md](rapport-c9-lateralite.md) | C9 — latéralité : l'échange est exact, il ne crée pas de gain, et il récupère un jumeau dégradé à hauteur de sa moyenne |
+| [rapport-cache-chunker-applique.md](rapport-cache-chunker-applique.md) | B13 — le cache du chunker appliqué : ×139 en chunker, ×1 en défaut (S domine) |
+| [rapport-cache-chunker.md](rapport-cache-chunker.md) | Cache du chunker — validation indépendante : ×11,0 à 160 tokens, égalité 612/612 |
 | [rapport-cache-experts-vram.md](rapport-cache-experts-vram.md) | Rapport — un cache d'experts en VRAM pour Kimi-K3 : mesuré, et pourquoi c'est non |
 | [rapport-campagne-parcimonie.md](rapport-campagne-parcimonie.md) | Campagne « parcimonie imposée » — synthèse |
 | [rapport-capteur-hebbien.md](rapport-capteur-hebbien.md) | Capteur hebbien — apprendre des logs d'activation |
@@ -92,14 +101,19 @@
 | [rapport-cerveau-corrections.md](rapport-cerveau-corrections.md) | Corrections B12 — ce que le stress des sous-agents a changé |
 | [rapport-cerveau-modules.md](rapport-cerveau-modules.md) | Rapport — modules cerveau-langage M1–M9 |
 | [rapport-chargement-paresseux.md](rapport-chargement-paresseux.md) | Le chargement construisait 2,7 Go de « listes » que personne ne lisait |
+| [rapport-classement-appris.md](rapport-classement-appris.md) | B13 — classement appris des candidats d'attachement : 142/145, mais la règle live est déjà à 137 |
 | [rapport-coherence-docs-2.md](rapport-coherence-docs-2.md) | Cohérence des documents avec le code — second passage |
 | [rapport-coherence-docs-3.md](rapport-coherence-docs-3.md) | Rapport — cohérence de la documentation, troisième passage |
 | [rapport-coherence-docs.md](rapport-coherence-docs.md) | Cohérence des documents avec le code — audit |
+| [rapport-coherence-fiches-v7.md](rapport-coherence-fiches-v7.md) | Cohérence des fiches B13 du 2026-11-05 — v2 → v7 |
+| [rapport-coherence-fiches-v8.md](rapport-coherence-fiches-v8.md) | Cohérence des fiches B13 du 2026-11-05 — v2 → v8 (état `f908d7b0`) |
+| [rapport-coherence-fiches.md](rapport-coherence-fiches.md) | Cohérence des fiches B13 du 2026-11-05 — vérification |
 | [rapport-coherence-vision.md](rapport-coherence-vision.md) | Cohérence des `docs/` avec la vision Drave — révision du 02/10 |
 | [rapport-compacite-trace.md](rapport-compacite-trace.md) | Compacité de la trace — le disque paie trois fois le câble |
 | [rapport-consolidation-balayage.md](rapport-consolidation-balayage.md) | Le balayage de la consolidation — un optimum INTÉRIEUR de capacité (rang 4) et de pas (3e-4), qui ne composent PAS |
 | [rapport-consolidation-c7.md](rapport-consolidation-c7.md) | C7 — la consolidation : le rejeu met bien l'expérience dans les poids (−16,4 % en domaine, **+1,3 % hors domaine**) |
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |
+| [rapport-contrat-s.md](rapport-contrat-s.md) | B13 — Contrat d'interface L ↔ S : les subordonnées REL/SUB |
 | [rapport-corpus-documents.md](rapport-corpus-documents.md) | Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères |
 | [rapport-corpus-gele.md](rapport-corpus-gele.md) | Le corpus gelé — la dérive des bancs est close |
 | [rapport-corpus-pdf.md](rapport-corpus-pdf.md) | Le corpus PDF local — les livres et les cours |
@@ -108,6 +122,7 @@
 | [rapport-couche-distante.md](rapport-couche-distante.md) | A7.6 — une couche exécutée à distance : logits identiques au bit près |
 | [rapport-couche-int8-canal.md](rapport-couche-int8-canal.md) | A7.8 — int8 par canal : l'argmax tient, le bit non |
 | [rapport-couche-int8.md](rapport-couche-int8.md) | A7.7 — int8 sur le hidden : le volume baisse, la fidélité casse |
+| [rapport-cout-chunker.md](rapport-cout-chunker.md) | Coût des règles d'attachement du chunker — O(n²) réel, cache ×12 à 160 tokens |
 | [rapport-cpu-aer.md](rapport-cpu-aer.md) | Drave — l'architecture « push » (AER) sur CPU |
 | [rapport-croisement-push-pull.md](rapport-croisement-push-pull.md) | Croisement push / pull — quand l'architecture événementielle est-elle justifiée ? |
 | [rapport-cycle-c2.md](rapport-cycle-c2.md) | C2 — le cycle à deux régions : exact au premier pas, **divergent** ensuite (14,65 → 2 988 en 4 pas) |
@@ -121,6 +136,8 @@
 | [rapport-design-H-profondeur-routee.md](rapport-design-H-profondeur-routee.md) | Dessin H — profondeur routée : la borne de l'oracle vaut ≈ 31 % des jetons, et le chemin court reste derrière le chemin long même là où il est le plus sûr |
 | [rapport-design-H-sorties-precoces.md](rapport-design-H-sorties-precoces.md) | Dessin H — les sorties précoces (8 et 4) : la question ouverte est tranchée, et le verdict ne change pas |
 | [rapport-dessin-B-poids-creux.md](rapport-dessin-B-poids-creux.md) | Dessin B (poids creux) — le levier reste à trouver : élaguer coûte toujours cher |
+| [rapport-dev-test-v10.md](rapport-dev-test-v10.md) | B13 — dev/test en v10 : dev 152/152, test 68/68, l'exact est saturé et le split ne bouge plus que par la couverture |
+| [rapport-dev-test-v7.md](rapport-dev-test-v7.md) | B13 — dev/test en v7 : dev 133/134, test 62/62, le split tient sur trois découpages |
 | [rapport-dialogue-diabla.md](rapport-dialogue-diabla.md) | Le dialogue réel (DiaBLa) : +40,3 / +44,2 au 1,5 B — mais la référence est une **post-édition**, pas une traduction |
 | [rapport-drapeaux-ignores.md](rapport-drapeaux-ignores.md) | Drapeaux et variables « analysés mais jamais appliqués » — audit systématique |
 | [rapport-drvm-n01.md](rapport-drvm-n01.md) | N0.1 — DRVM se lit-il ? Oui, et le payload est enfin vérifié |
@@ -133,6 +150,7 @@
 | [rapport-e5-distillation.md](rapport-e5-distillation.md) | E5 — distiller le cerveau dans le réflexe : l'accord double (28 % → 51 %), et le texte ne suit toujours pas |
 | [rapport-e6-poids-lognormaux.md](rapport-e6-poids-lognormaux.md) | E6 — poids log-normaux : les chiffres corrigés, et les trois chiffres RÉTRACTÉS |
 | [rapport-e9-homeostasie.md](rapport-e9-homeostasie.md) | E9 — L'HOMÉOSTASIE SYNAPTIQUE : amortir le changement plastique rend la consolidation MEILLEURE des deux côtés |
+| [rapport-echecs-v2.md](rapport-echecs-v2.md) | B13 — les 8 échecs restants de l'attachement v2 : qualifiés, chiffrés, 5 règles pour 145/145 |
 | [rapport-elagage-logs.md](rapport-elagage-logs.md) | A6.3 — l'élagage guidé par les logs : aucun neurone ne s'allume jamais, mais 63 % s'allument à peine |
 | [rapport-empreinte-memoire.md](rapport-empreinte-memoire.md) | Rapport — l'empreinte mémoire : ce qui réduit vraiment ce qu'il faut charger |
 | [rapport-encodage.md](rapport-encodage.md) | Drave — encodage de structure : éliminer la valeur |
@@ -141,8 +159,11 @@
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
+| [rapport-file-taches.md](rapport-file-taches.md) | La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h |
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
+| [rapport-gold-anglais.md](rapport-gold-anglais.md) | B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause |
+| [rapport-gold-split.md](rapport-gold-split.md) | B13 — le gold coupé en dev/test : les gains généralisent (test 0,9815, dev 0,9811) |
 | [rapport-gpt-oss-perplexite.md](rapport-gpt-oss-perplexite.md) | Perplexité de gpt-oss : deux bugs réels, une prémisse fausse |
 | [rapport-gpu-scores.md](rapport-gpu-scores.md) | Noyau GPU de scores d'attention — le premier des trois du top-k |
 | [rapport-gpu-tandem-nvlink.md](rapport-gpu-tandem-nvlink.md) | Le tandem GPU (2 × Quadro RTX 5000, NVLink) : ce qu'il fait, ce qu'il pourrait faire |
@@ -207,6 +228,7 @@
 | [rapport-modele-reel.md](rapport-modele-reel.md) | Drave — le modèle réel expose-t-il ses grappes ? |
 | [rapport-modules-famille.md](rapport-modules-famille.md) | C3.2b — un module de restitution par famille : l'indo-européen recopie à 100 % |
 | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
+| [rapport-multicibles.md](rapport-multicibles.md) | Multi-cibles du gold et mesure d'attachement — 43 GP, +2 exact en V2 et V3 |
 | [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
 | [rapport-n2-200k.md](rapport-n2-200k.md) | N2.ae — 200 000 pas sur le mélange 1 Go : −0,33 en domaine, −1,06 en largeur, et la porte 2,5 à un million de pas |
@@ -367,6 +389,10 @@
 | [rapport-pensee-anaphore-semantique.md](rapport-pensee-anaphore-semantique.md) | B13 — la sémantique des verbes : 23/30, la table ne bat pas le dernier nom |
 | [rapport-pensee-anaphore.md](rapport-pensee-anaphore.md) | B13 — l'anaphore : 4/4 liens justes |
 | [rapport-pensee-asym.md](rapport-pensee-asym.md) | B13 — la fiabilité asymétrique : 0,9 / 0,5, 20/20 |
+| [rapport-pensee-attachement-cible.md](rapport-pensee-attachement-cible.md) | B13 — l'attachement ciblé : l'exact passe de 0,6438 à 0,8082 |
+| [rapport-pensee-attachement-parfait.md](rapport-pensee-attachement-parfait.md) | B13 — l'attachement parfait sur les spans prédits : 187/187 (1,0000) |
+| [rapport-pensee-attachement-v2.md](rapport-pensee-attachement-v2.md) | B13 — l'attachement v2 : exact 0,8483 → 0,9448, top-k strict 0,6069 → 0,9724 |
+| [rapport-pensee-attachement-v3.md](rapport-pensee-attachement-v3.md) | B13 — l'attachement v3 : exact 0,9448 → 0,9724, les noms à 1,0 |
 | [rapport-pensee-attachement.md](rapport-pensee-attachement.md) | B13 — l'attachement sur le gold 432 : top1 0,3431, exact 0,0042 |
 | [rapport-pensee-audit.md](rapport-pensee-audit.md) | B13 — l'audit des mesures « seule » : 15/15 cohérentes, et un transfert qui manque |
 | [rapport-pensee-banc.md](rapport-pensee-banc.md) | B13 — le banc anytime : l'A* atteint le but en 32 nœuds, l'aléatoire n'y arrive pas |
@@ -388,20 +414,27 @@
 | [rapport-pensee-cible-proximite.md](rapport-pensee-cible-proximite.md) | B13 — la cible par proximité : l'exact passe de 0,0042 à 0,0544 (×13) |
 | [rapport-pensee-cibles-500.md](rapport-pensee-cibles-500.md) | B13 — les 500 premiers segments : 294 GN et 206 GV sans cible |
 | [rapport-pensee-cibles.md](rapport-pensee-cibles.md) | B13 — les cibles de l'attachement : 1624 segments sans cible sur 1863 |
+| [rapport-pensee-classement.md](rapport-pensee-classement.md) | B13 — le classement : l'exact passe de 0,2260 à 0,6438 — et le gold mélange deux conventions |
 | [rapport-pensee-concurrentes.md](rapport-pensee-concurrentes.md) | B13 — les routes concurrentes : 0/20 au but 0, 20/20 au but 1 |
 | [rapport-pensee-contexte.md](rapport-pensee-contexte.md) | B13 — la réponse contextuelle : 5/5, la phrase précédente tranche |
+| [rapport-pensee-convention-doc.md](rapport-pensee-convention-doc.md) | B13 — la convention des cibles est documentée dans le gold |
+| [rapport-pensee-conventions.md](rapport-pensee-conventions.md) | B13 — les deux conventions du gold : verbes 0,7255, noms 0,6000 |
 | [rapport-pensee-correction.md](rapport-pensee-correction.md) | B13 — la mesure corrigée : `seule_minute` rendait de faux échecs |
 | [rapport-pensee-courbe-seuil.md](rapport-pensee-courbe-seuil.md) | B13 — la courbe complète du seuil : 0 → 80 % → 100 % (un creux à 0,45) |
 | [rapport-pensee-courbe.md](rapport-pensee-courbe.md) | B13 — la courbe d'apprentissage : la porte est apprise dès 50 épisodes |
 | [rapport-pensee-courbe20.md](rapport-pensee-courbe20.md) | B13 — la courbe sur 20 graines : le seuil est ~0,41 |
+| [rapport-pensee-couverture-v5.md](rapport-pensee-couverture-v5.md) | B13 — la couverture : 187 labels, exact 186/187 (0,9947), F1 0,5164 |
+| [rapport-pensee-couverture-v7.md](rapport-pensee-couverture-v7.md) | B13 — la couverture à 0,8201 : POS contextuel, GV avant GP, prépositions ambiguës |
 | [rapport-pensee-croyance.md](rapport-pensee-croyance.md) | B13 — la croyance : 0/20, la distribution seule ne suffit pas |
 | [rapport-pensee-curieuse.md](rapport-pensee-curieuse.md) | B13 — la curiosité : 0/20, le bonus de certitude ne suffit pas |
 | [rapport-pensee-cycle.md](rapport-pensee-cycle.md) | B13 — la pénalité -1 ne casse pas le cycle : 0/20 |
 | [rapport-pensee-defaut-conditionnel.md](rapport-pensee-defaut-conditionnel.md) | B13 — le défaut conditionnel : le niveau si le réel est là |
 | [rapport-pensee-defaut-niveau.md](rapport-pensee-defaut-niveau.md) | B13 — le défaut de la fusion : la confiance, pas le niveau |
+| [rapport-pensee-denominateur.md](rapport-pensee-denominateur.md) | B13 — le dénominateur de l'attachement : 239 cibles, 146 segments |
 | [rapport-pensee-derive.md](rapport-pensee-derive.md) | B13 — la fiabilité qui dérive : v = 0,56, 20/20 |
 | [rapport-pensee-drvf.md](rapport-pensee-drvf.md) | B13 — DRVF `thought` : la trace se relit, la corruption se voit |
 | [rapport-pensee-echecs-attachement.md](rapport-pensee-echecs-attachement.md) | B13 — les 127 échecs qualifiés : 94 de span, 33 de cible |
+| [rapport-pensee-echecs-cible.md](rapport-pensee-echecs-cible.md) | B13 — les 22 échecs de l'attachement ciblé : 11 hors candidats, 11 mal classés |
 | [rapport-pensee-elision.md](rapport-pensee-elision.md) | B13 — l'élision : le bloc coupe `l'écoutent`, le refus tombe |
 | [rapport-pensee-ferme.md](rapport-pensee-ferme.md) | B13 — la porte qui se referme : le moteur repasse |
 | [rapport-pensee-frequent.md](rapport-pensee-frequent.md) | B13 — la bascule fréquente : 1/50, 20/20 |
@@ -430,6 +463,8 @@
 | [rapport-pensee-juge-bloc.md](rapport-pensee-juge-bloc.md) | B13 — le juge contre le bloc : 0/19, la première mesure de correction |
 | [rapport-pensee-juge.md](rapport-pensee-juge.md) | B13 — le juge des réponses : sa couverture est 0/19 |
 | [rapport-pensee-labyrinthe.md](rapport-pensee-labyrinthe.md) | B13 — le labyrinthe non linéaire : la bonne politique utilise la sonde, l'aveugle l'ignore |
+| [rapport-pensee-lexique-elargi.md](rapport-pensee-lexique-elargi.md) | B13 — le lexique élargi : l'exact passe de 0,8082 à 0,8483 |
+| [rapport-pensee-lexique-verbal.md](rapport-pensee-lexique-verbal.md) | B13 — le lexique verbal : l'exact passe de 0,0962 à 0,1381 |
 | [rapport-pensee-lien-10-paires.md](rapport-pensee-lien-10-paires.md) | B13 — les 10 paires : 5/10, la forme inversée est la limite (r408–r412) |
 | [rapport-pensee-lien-acte.md](rapport-pensee-lien-acte.md) | B13 — le critère acte : les 10 paires restent 5/10, la normalisation du sujet inversé manque |
 | [rapport-pensee-lien-appris.md](rapport-pensee-lien-appris.md) | B13 — le lien appris : perceptron de rang, LOO 9/9, le hasard 0,1 et la surface seule 2/9 |
@@ -467,6 +502,7 @@
 | [rapport-pensee-oubli-total.md](rapport-pensee-oubli-total.md) | B13 — l'oubli total : 0/20, la mémoire est nécessaire |
 | [rapport-pensee-oubli.md](rapport-pensee-oubli.md) | B13 — la mémoire courte : 20/20, 10,0 pas |
 | [rapport-pensee-ouverte.md](rapport-pensee-ouverte.md) | B13 — le curriculum des états `open` : le trou de transfert est comblé |
+| [rapport-pensee-par-langue.md](rapport-pensee-par-langue.md) | B13 — la mesure par langue : l'exact tient, la couverture anglaise non |
 | [rapport-pensee-parite-drvm-native-rejoue.md](rapport-pensee-parite-drvm-native-rejoue.md) | B13 — la parité DRVM/native **rejouée** : checkpoint régénéré en CPU, 5/5 prompts, écart 0,00005 |
 | [rapport-pensee-parite-drvm-native.md](rapport-pensee-parite-drvm-native.md) | B13 — la parité DRVM/native : 114/114 poids, 5/5 prompts, rejouable mais checkpoint volatil |
 | [rapport-pensee-partielle.md](rapport-pensee-partielle.md) | B13 — l'observation partielle : 0/20, la mémoire ne suffit pas |
@@ -495,6 +531,7 @@
 | [rapport-pensee-quatre-modes-432.md](rapport-pensee-quatre-modes-432.md) | B13 — les quatre modes sur le gold 432 : le niveau gagne avec le réel |
 | [rapport-pensee-quatre-modes-run2.md](rapport-pensee-quatre-modes-run2.md) | B13 — la confirmation (run 2) : refus 0, le niveau gagne encore |
 | [rapport-pensee-quatre-modes.md](rapport-pensee-quatre-modes.md) | L — la porte des quatre modes sur le gold 432 : le neuronal API domine (0,9309 / 0,8226 / 0,8784), la fusion dégrade (0,928 / 0,802 / 0,857) |
+| [rapport-pensee-r1r3.md](rapport-pensee-r1r3.md) | B13 — R1/R2/R3 : exact 212/212 (1,0000), mais **+17 net** (24 gains, 7 régressions) |
 | [rapport-pensee-rapide.md](rapport-pensee-rapide.md) | B13 — la bascule très fréquente : 1/10, 20/20 |
 | [rapport-pensee-rare.md](rapport-pensee-rare.md) | B13 — l'information rare : utile 10 % du temps, 20/20 |
 | [rapport-pensee-relation.md](rapport-pensee-relation.md) | B13 — la relation GN → GV : 221 sur 637 (0,3469) |
@@ -507,6 +544,7 @@
 | [rapport-pensee-rupture.md](rapport-pensee-rupture.md) | B13 — la rupture : 90 % d'erreur, v = 0,12, 20/20 |
 | [rapport-pensee-sans-none.md](rapport-pensee-sans-none.md) | B13 — la politique sans None : elle tourne, sans but |
 | [rapport-pensee-sans-verbaliser.md](rapport-pensee-sans-verbaliser.md) | Rapport — la pensée sans verbaliser : le journal des mesures 77–168 |
+| [rapport-pensee-segmentation-v4.md](rapport-pensee-segmentation-v4.md) | B13 — la segmentation d'abord : F1 0,2862 → 0,4539, exact 157/160 (0,9812), couverture 160/239 |
 | [rapport-pensee-segmenteur-defaut.md](rapport-pensee-segmenteur-defaut.md) | B13 — l'union par défaut : F1 0,2005, tête 0,4662 |
 | [rapport-pensee-segmenteur-hybride.md](rapport-pensee-segmenteur-hybride.md) | B13 — l'hybride frontières/têtes : 0,3732, le chunker garde les têtes |
 | [rapport-pensee-segmenteur-union.md](rapport-pensee-segmenteur-union.md) | B13 — l'union des segmenteurs : F1 0,2005, le rappel paie |
@@ -523,15 +561,22 @@
 | [rapport-pensee-si.md](rapport-pensee-si.md) | B13 — la règle du `si` : 29/29, la dernière règle de surface |
 | [rapport-pensee-silencieuse.md](rapport-pensee-silencieuse.md) | PENSER SANS VERBALISER — la boucle d'état naïve détruit la prédiction, et verbaliser n'est PAS du gaspillage |
 | [rapport-pensee-soustype-variance.md](rapport-pensee-soustype-variance.md) | B13 — la variance du sous-type : 0,9838 à 0,3, le gain tient |
+| [rapport-pensee-spans.md](rapport-pensee-spans.md) | B13 — les 94 spans : 48 REL, 33 SUB, 13 GP (état courant ; 93/12 après le correctif GP, avant le lexique élargi) |
 | [rapport-pensee-sto-seule.md](rapport-pensee-sto-seule.md) | B13 — la politique seule sur le bruit : elle réessaie et atteint le but |
 | [rapport-pensee-stochastique.md](rapport-pensee-stochastique.md) | B13 — la porte stochastique : 80 % d'ouverture, la politique réessaie |
 | [rapport-pensee-tirages.md](rapport-pensee-tirages.md) | B13 — les trois tirages à 0,3 : 0,9838 exactement, le cache était inactif — le modèle est déterministe |
+| [rapport-pensee-topk-strict.md](rapport-pensee-topk-strict.md) | B13 — le top-k strict : 0,6069, pas 0,9241 |
 | [rapport-pensee-tres-rare.md](rapport-pensee-tres-rare.md) | B13 — l'information très rare : utile 1 %, 20/20 |
 | [rapport-pensee-troisieme-passe.md](rapport-pensee-troisieme-passe.md) | B13 — la troisième passe : variance nulle, tous les seuils verts |
 | [rapport-pensee-ultra-rare.md](rapport-pensee-ultra-rare.md) | B13 — l'information ultra-rare : utile 0,1 %, 20/20 |
 | [rapport-pensee-un-look.md](rapport-pensee-un-look.md) | B13 — un seul look : 20/20 |
 | [rapport-pensee-v0.md](rapport-pensee-v0.md) | Pensée v0 — le state store, l'arbre hashé et six portes |
+| [rapport-pensee-v10.md](rapport-pensee-v10.md) | B13 — 220/220 (1,0000), couverture 0,9205 : le féminin `-ée` et la garde déterminant du GP |
+| [rapport-pensee-v11.md](rapport-pensee-v11.md) | B13 — les deux dernières régressions : exact 221/221 (1,0000), couverture 0,9247, 18 spans |
+| [rapport-pensee-v12.md](rapport-pensee-v12.md) | B13 — 222/222 (1,0000) : le dernier marqueur ambigu, et 17 spans inatteignables |
+| [rapport-pensee-v9.md](rapport-pensee-v9.md) | B13 — la garde PRON : exact 219/219 (1,0000), couverture 0,9163, F1 0,5822 |
 | [rapport-pensee-variance.md](rapport-pensee-variance.md) | B13 — la variance à température 0,3 : ±0,007 au pire |
+| [rapport-pensee-verbe-gv.md](rapport-pensee-verbe-gv.md) | B13 — le verbe du GV-phrase : l'exact passe de 0,0586 à 0,0962 |
 | [rapport-pensee-verite.md](rapport-pensee-verite.md) | B13 — la vérité qui change : porte cachée, 20/20 aux deux phases |
 | [rapport-pensee-votante.md](rapport-pensee-votante.md) | B13 — l'observation votante : deux looks, 20/20, 1 % d'erreur |
 | [rapport-pensee-votante3.md](rapport-pensee-votante3.md) | B13 — l'observation à trois looks : 20/20, mais 4000 épisodes |
@@ -554,6 +599,8 @@
 | [rapport-prefill-par-lots.md](rapport-prefill-par-lots.md) | Préremplissage par lots : ce que le GEMM apporte vraiment |
 | [rapport-prefill-reparti.md](rapport-prefill-reparti.md) | Phase 3.4 — le préremplissage par LOTS sur le fil |
 | [rapport-prelire-grappe.md](rapport-prelire-grappe.md) | S4 — le préchargement par grappe : la lecture à la demande rend 29 Mo/s là où la grappe rend 1 230 |
+| [rapport-produit-bloc-l.md](rapport-produit-bloc-l.md) | Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat |
+| [rapport-produit-v0.md](rapport-produit-v0.md) | B13 — le premier produit : `drave` v0, une CLI qui analyse, mesure et rejoue |
 | [rapport-programme-evolutif.md](rapport-programme-evolutif.md) | Programme « journaliser, faire évoluer » — ce que la mesure autorise |
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
 | [rapport-r01-graphe-document.md](rapport-r01-graphe-document.md) | R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000 |
@@ -587,6 +634,7 @@
 | [rapport-r44-scans.md](rapport-r44-scans.md) | R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 % |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
+| [rapport-replis-cible.md](rapport-replis-cible.md) | B13 — les trois retouches A3 sur le live : +1, +2, +1, et 145/145 exact/top1 |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
 | [rapport-reutilisation-experts.md](rapport-reutilisation-experts.md) | La réutilisation des experts, mesurée |
 | [rapport-routage-experts.md](rapport-routage-experts.md) | Rapport — le routage des experts était faux pour quatre gros modèles sur cinq |
@@ -610,11 +658,15 @@
 | [rapport-sommeil-deux-nuits.md](rapport-sommeil-deux-nuits.md) | Deux nuits, deux expériences — la première garde son gain, la seconde n'ajoute presque rien |
 | [rapport-sommeil-selection.md](rapport-sommeil-selection.md) | La sélection du rejeu — à volume égal, *ce qu'on rejoue* compte moins que *rejouer* |
 | [rapport-sous-familles-autres.md](rapport-sous-familles-autres.md) | C3.2e — les sous-familles des autres familles |
+| [rapport-spans-chunker.md](rapport-spans-chunker.md) | Chunker seul et les 94 spans REL/SUB/GP — 0 exact, deux règles en récupèrent 84 sans perdre un span déjà bon |
+| [rapport-spans-v7.md](rapport-spans-v7.md) | Rapport — les 43 spans non prédits de l'attachement v7 |
 | [rapport-speculatif-reflexe.md](rapport-speculatif-reflexe.md) | Le réflexe propose, le cerveau vérifie — acceptation 2 à 30 % (le cerveau non entraîné : 0 %) |
 | [rapport-sprint-24h.md](rapport-sprint-24h.md) | Sprint 24 h — bilan B12 → B18 |
 | [rapport-tableaux-casses.md](rapport-tableaux-casses.md) | Un tableau qui ne rend pas est un tableau qui n'existe pas — 17 lignes, 9 fichiers, et une porte |
 | [rapport-tete-garantie.md](rapport-tete-garantie.md) | Rapport — restriction de tête GARANTIE : exacte, et sans gain |
 | [rapport-tete-restreinte.md](rapport-tete-restreinte.md) | Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas |
+| [rapport-topk-diagnostic.md](rapport-topk-diagnostic.md) | B13 — le top-k strict de l'attachement : 57 échecs, dont 45 d'emballage |
+| [rapport-topk-v8.md](rapport-topk-v8.md) | B13 — le top-k de l'attachement : 0,7406 → 0,8870, et le plafond de couverture |
 | [rapport-transport-liste.md](rapport-transport-liste.md) | Phase 3.2 — transporter la LISTE au lieu du vecteur |
 | [rapport-travail-reel.md](rapport-travail-reel.md) | Le moteur est-il prêt pour du vrai travail ? |
 | [rapport-typoglycemie.md](rapport-typoglycemie.md) | La typoglycémie du modèle : il lit les lettres, pas les formes |

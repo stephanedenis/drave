@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — l'outillage repris : `--aide` sans écriture, index 625 → **677**, § 13 |
 | [`rapport-file-taches.md`](rapport-file-taches.md) | **B13** — la file des 29 tâches : 8 autonomes, 11 en coordination, 10 bloquées ; 18 périmées |
 | [`rapport-produit-v0.md`](rapport-produit-v0.md) | **B13** — le premier produit : **`drave` v0** (analyser/evaluer/rejouer), porte produit, 6 tests |
 | [`rapport-autotest-parallele.md`](rapport-autotest-parallele.md) | **B13** — l'autotest parallèle : **183/183 en 1 min 54** (×2,4), mêmes verdicts |
@@ -147,7 +148,6 @@
 | [`rapport-native-ppl-2k.md`](rapport-native-ppl-2k.md) | **N0.14** — PPL native **1 996 octets** : **54,0379** vs **54,0343** Python |
 | [`rapport-native-ppl-corpus.md`](rapport-native-ppl-corpus.md) | **N0.13** — PPL native sur **1 076 octets** : **18,6394** vs **18,6395** Python |
 | [`rapport-native-ppl.md`](rapport-native-ppl.md) | **N0.12** — PPL native **4,6585**, identique à Python sur 59 octets |
-| [`rapport-native-test.md`](rapport-native-test.md) | **N0.11** — test Rust autonome de la passe avant native (fixture 36 Ko) |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

@@ -400,7 +400,7 @@ ont repris (N2 09 h 41, S 09 h 46, L/B13 10 h 14) ; **N3** a clos sa ligne en se
 `verifie_en_cours.py`, `taille_documents.py`, `verifie_journal.py`, `verifier_liens.py`,
 `porte-tableaux.sh` ; la **passe complète** attend la fin des runs (règle § 11).
 
-## 9. La tranche autonome du 05/11 (11 h 15 → 18 h) et ses sous-agents
+## 13. La tranche autonome du 05/11 (11 h 15 → 18 h) et ses sous-agents
 
 **L'agent principal (Pensée, `e181ce02`) tient seul ce dossier** : `en-cours`, `roadmap`,
 `chantiers`, ce plan et le `journal`. Les **sous-agents** ne les écrivent **jamais**.

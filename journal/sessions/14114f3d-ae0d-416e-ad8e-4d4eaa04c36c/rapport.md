@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 1.7 h |
+| Durée | 1.8 h |
 | Tours | 1 |
-| Messages | 85 |
-| Appels d'outils | 99 |
+| Messages | 99 |
+| Appels d'outils | 115 |
 | Fichiers touchés | 7 |
-| Commandes | 77 |
+| Commandes | 92 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*99 appels d'outils.* Actions notables :
+*115 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,11 +41,11 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 71 autres
+- … et 87 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction de la fiche d'audit produit
+⏵ HEAD a avancé pendant l'audit : vérification de l'impact sur les chiffres
 
 ## 3. Travail accompli
 
@@ -103,7 +103,7 @@
 - **T1** Profiler une analyse de 2000 mots
 - **T1** Contrôles négatifs et simulation du correctif chevauchement
 - **T1** Tester les mutations et simuler la déduplication sur le gold
-- … et 37 autres
+- … et 52 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -126,13 +126,16 @@
 - **T1** `### e34 'The prices rose by 12.5% between January and March 2024, three points more than expected.'`
 - **T1** `[(0, 22, "'The prices rose by 12.'"), (22, 89, "'5% between January and March 2024, three points more than expected.'")]`
 - **T1** `"valeur = texte[debut:fin] pour graphème/mot/pos/syntagme (100 %)"`
+- **T1** `6ef2a3f5 (HEAD -> s/v7, origin/s/v7, origin/master, origin/HEAD, master) JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)`
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : MOTS 'https://example.com/a.pdf' [(0, 5, 'https', 'mot'), (5, 6, ':', 'ponctuation'), (6, 7, '/', 'ponctuation'), (7, 8, '/', 'ponctuation'), (8, 15, 'example', 'mot'), (15, 16, '.', 'ponctuation'), (
 - **T1** : SIMULATION dedupe: paires 132 -> 0 | syntagmes 362 -> 292 | attachements 265 -> 215 | phrases 31 labels syntagme retirés 70 attachements retirés 50 [stderr] Traceback (most recent call last):   File "
 - **T1** : ### mutations span_hors_texte detectee True | ['chevauchement_syntagme', 'span_hors_texte'] cible_absente detectee True | ['chevauchement_syntagme', 'cible_absente'] chevauchement_syntagme detectee Tr
 - **T1** : clean [stderr] Traceback (most recent call last):   File "/tmp/audit_produit_bl/construire_json.py", line 41, in <module>     modes = {nom: mode(nom) for nom in ("heuristique", "mock_neuronal", "paral
+- **T1** : gold 222 222 0.9289 0.5849 0.7581 17 0.5893 0.7392 banc {'labels': 60, 'textes_multi': 6, 'commencent_par_espace': 6, 'chevauchements': 1, 'exemples': [{'id': 'f10', 'a': [0, 104], 'b': [2, 104]}]} 81
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 42, in <module> AssertionError [exit code: 1]
 
