@@ -52046,3 +52046,33 @@ COMMIT OK 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; index 677 ; robustesse produit ; audit A24.\", \" ; index 677 ; audit A24.\")\np.write_text(t)\nPY\npython3 tools/taille … [527 caractères tronqués]`
+
+  ```
+· reports/README.md : 2827 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+ 16 files changed, 215 insertions(+), 45 deletions(-)
+COMMIT OK 1
+3601764a ÉTAT — T0 DANS LE BUDGET (AUDIT A24)
+  ✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 6b6def477a493444 deux fois
+  ✅ smoke test : Ran 8 tests
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+ven 06 nov 2026 11:50:15 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — la robustesse produit : surrogate et non-str fermés, … [1406 caractères tronqués]`
+
+  ```
+· reports/README.md : 2812 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+3601764a ÉTAT — T0 DANS LE BUDGET (AUDIT A24)
+ven 06 nov 2026 11:50:58 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# raccourcir deux lignes anciennes de 15+ mots\nt=t.replace(\"| [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) | **B1 … [1804 caractères tronqués]`

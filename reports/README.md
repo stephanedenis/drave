@@ -15,9 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — la robustesse produit : surrogate et non-str fermés, 8 tests ; l'audit A24 (50 phrases, 132 chevauchements) |
-| [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) | **B13** — l'audit de fiabilité du bloc L (A24) : invariants, temps, contrat, 18 correctifs |
-| [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — l'outillage repris : `--aide` sans écriture, index 625 → **677**, § 13 |
+| [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — robustesse produit : surrogate et non-str fermés, 8 tests |
+| [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) | **B13** — audit de fiabilité (A24) : temps, contrat, 18 correctifs |
+| [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — outillage : `--aide` sans écriture, index 625 → **677** |
 | [`rapport-file-taches.md`](rapport-file-taches.md) | **B13** — la file des 29 tâches : 8 autonomes, 11 en coordination, 10 bloquées ; 18 périmées |
 | [`rapport-produit-v0.md`](rapport-produit-v0.md) | **B13** — le premier produit : **`drave` v0** (analyser/evaluer/rejouer), porte produit, 6 tests |
 | [`rapport-autotest-parallele.md`](rapport-autotest-parallele.md) | **B13** — l'autotest parallèle : **183/183 en 1 min 54** (×2,4), mêmes verdicts |
@@ -32,9 +32,9 @@
 | [`rapport-pensee-r1r3.md`](rapport-pensee-r1r3.md) | **B13** — R1/R2/R3 : exact **212/212 (1,0000)**, couverture **0,887**, F1 **0,5763** ; 27 spans |
 | [`rapport-dev-test-v7.md`](rapport-dev-test-v7.md) | **B13** — dev/test en v7 : dev **133/134**, test **62/62**, trois découpages, écart ≤ 1 cas |
 | [`rapport-coherence-fiches-v7.md`](rapport-coherence-fiches-v7.md) | **B13** — la cohérence des 7 fiches v2→v7 : **23 écarts**, 4 critiques, corrections listées |
-| [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — couverture **0,8201** : POS 0,7603, F1 0,5595 |
+| [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — couverture 0,8201 |
 | [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | **B13** — l'attachement **187/187 (1,0000)** sur les spans prédits, fr 1,0 / en 1,0, dev 126/126, test 61/61 ; le rendement reste 0,7824 |
-| [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — la couverture : **187 labels**, exact **186/187 (0,9947)**, F1 **0,5164** (602), dev/test **126/126** et 60/61 |
+| [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — couverture : 187 labels, exact 186/187 |
 | [`rapport-gold-split.md`](rapport-gold-split.md) | **B13** — le gold dev/test : **test 0,9814**, dev 0,9811, la règle « régler sur dev, accepter si test ne baisse pas » |
 | [`rapport-pensee-segmentation-v4.md`](rapport-pensee-segmentation-v4.md) | **B13** — la segmentation d'abord : F1 **0,4539** (602), exact **157/160**, couverture **160/239**, 183/183 |
 | [`rapport-pensee-par-langue.md`](rapport-pensee-par-langue.md) | **B13** — l'attachement par langue : fr 0,9658, en 1,000, mais **28 labels/88 cibles en anglais**, **183/183** |

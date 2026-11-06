@@ -7,12 +7,12 @@
 | Identifiant | `082fe8ca-3e1e-4454-b91b-12586843e880` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.5 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 32 |
-| Appels d'outils | 44 |
-| Fichiers touchés | 1 |
-| Commandes | 36 |
+| Messages | 36 |
+| Appels d'outils | 49 |
+| Fichiers touchés | 2 |
+| Commandes | 40 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [1945 caractères tronqués]
 
-*44 appels d'outils.* Actions notables :
+*49 appels d'outils.* Actions notables :
 
 - bash — Check working directory and git status
 - bash — List repo root and reports directory
@@ -41,11 +41,11 @@
 - bash — Inspect existing JSON structure
 - bash — Probe CLI edge cases and exit codes
 - bash — Probe URL tokenization and phrase spans
-- … et 24 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
-⏵ Un pair a modifié `bloc_linguistique.py` pendant l'audit : je fige l'état mesuré
+⏵ Classification fine des chevauchements, cibles et POS manquantes
 
 ## 3. Travail accompli
 
@@ -54,6 +54,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/audit_cli.py` | 1 | 0 |
+| `/tmp/audit_cli_detail.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -93,6 +94,10 @@
 - **T1** Inspect concurrent module changes and hashes
 - **T1** Show new commits and module diff since audit start
 - **T1** Check last commit touching module
+- **T1** Compare harness and module timestamps
+- **T1** Retest surrogate CLI and non-str API after fix
+- **T1** Run detailed overlap/target analysis
+- **T1** Fix refusal handling and rerun detail analysis
 
 ## 4. Mesures et résultats marquants
 

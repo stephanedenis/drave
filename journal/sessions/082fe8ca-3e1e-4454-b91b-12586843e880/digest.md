@@ -1049,3 +1049,112 @@ def analyser(self, texte: str, langue: str | None = None,
 module /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
   ```
 
+### 🤖 Assistant
+
+⏵ Un pair a modifié `bloc_linguistique.py` pendant l'audit : je fige l'état mesuré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit diff HEAD --stat -- tools/bloc_linguistique.py tools/drave.py; echo ---; git diff HEAD -- tools/bloc_linguistique.py | head -120; echo ---; sha256sum tools/bloc_linguistique.py tools/drave.py; git hash-object tools/bloc_linguistiqu … [84 caractères tronqués]`
+
+  ```
+---
+---
+084517d9c10088b3adedc01658adbb33e3de69e7f5ca8c2f563f427abdd79f4f  tools/bloc_linguistique.py
+59a06f3e4f7d633ae8caa30412fd4c01e14374914226f5e54629f544e47aea8c  tools/drave.py
+c1a0858841b9128e1f9743d164b903e243454e5e
+7c715a34926827fe4810997e869de972793de827
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit log --oneline -6; echo ---; git diff --stat 6ef2a3f5..HEAD -- tools/bloc_linguistique.py tools/drave.py; echo ---; git diff 6ef2a3f5..HEAD -- tools/bloc_linguistique.py | head -160", "description": "Show new commits and module diff … [20 caractères tronqués]`
+
+  ```
+1962eb15 PRODUIT — LA ROBUSTESSE : SURROGATE ET NON-STR FERMÉS (refus non_texte), 8 TESTS ; L'AUDIT A24 (50 PHRASES, 132 CHEVAUCHEMENTS, 18 CORRECTIFS)
+c6904284 ÉTAT — T0 À 4 000
+37e2053c ÉTAT — T0 DANS LE BUDGET
+5c6b3b43 PORTES — LA NUANCE cascade_pos : VERTE PAR PLANCHER, LA FUSION DÉGRADE ENCORE LE POS DE 1,16 PT (CORRECTIF À FAIRE)
+e3db2cc8 OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13
+6ef2a3f5 JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)
+---
+ tools/bloc_linguistique.py | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
+---
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 8f1b658f..c1a08588 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -1003,12 +1003,18 @@ class Heuristique:
+     def analyser(self, texte: str, langue: str | None = None,
+                  contexte: str | None = None) -> Annotation:
+         t0 = time.perf_counter()
++        if not isinstance(texte, str):
++            # une entrée non textuelle est **refusée** proprement (le p
+… [7242 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit log -1 --format='%H %ci %s' -- tools/bloc_linguistique.py; stat -c '%y' tools/bloc_linguistique.py; git status --short tools/bloc_linguistique.py tools/drave.py; echo ---; sha256sum tools/bloc_linguistique.py tools/drave.py", "desc … [46 caractères tronqués]`
+
+  ```
+1962eb15a2dc709649ec3baa62c8bfb58827f78c 2026-11-06 11:43:06 -0500 PRODUIT — LA ROBUSTESSE : SURROGATE ET NON-STR FERMÉS (refus non_texte), 8 TESTS ; L'AUDIT A24 (50 PHRASES, 132 CHEVAUCHEMENTS, 18 CORRECTIFS)
+2026-11-06 11:34:28.080011149 -0500
+---
+084517d9c10088b3adedc01658adbb33e3de69e7f5ca8c2f563f427abdd79f4f  tools/bloc_linguistique.py
+59a06f3e4f7d633ae8caa30412fd4c01e14374914226f5e54629f544e47aea8c  tools/drave.py
+  ```
+
+- **bash** `{"command": "stat -c '%y %n' /tmp/audit_cli_results.json /tmp/audit_cli.log /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py; date '+%Y-%m-%d %H:%M:%S'", "description": "Compare harness and module timestamps"}`
+
+  ```
+2026-11-06 11:40:32.317732641 -0500 /tmp/audit_cli_results.json
+2026-11-06 11:40:32.317732641 -0500 /tmp/audit_cli.log
+2026-11-06 11:34:28.080011149 -0500 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+2026-11-06 11:48:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor s in $'\\xff' $'a\\xffb'; do\n  python3 tools/drave.py analyser \"$s\" >/tmp/x.out 2>/tmp/x.err; echo \"rc=$? out=$(wc -c </tmp/x.out) err=$(cat /tmp/x.err)\"\ndone\npython3 - <<'PY'\nimport sys; sys.path.insert(0,'tools')\nimport  … [292 caractères tronqués]`
+
+  ```
+rc=1 out=0 err=drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+rc=1 out=0 err=drave: erreur : UnicodeEncodeError : 'utf-8' codec can't encode character '\udcff' in position 231: surrogates not allowed
+NoneType refus= 'non_texte' texte= 'None' etiquettes= 0 cout= {'octets': 0, 'duree_s': 6e-06}
+int refus= 'non_texte' texte= '3' etiquettes= 0 cout= {'octets': 0, 'duree_s': 5e-06}
+list refus= 'non_texte' texte= '[1, 2]' etiquettes= 0 cout= {'octets': 0, 'duree_s': 4e-06}
+bytes refus= 'non_texte' texte= "b'abc'" etiquettes= 0 cout= {'octets': 0, 'duree_s': 4e-06}
+  ```
+
+### 🤖 Assistant
+
+⏵ Classification fine des chevauchements, cibles et POS manquantes
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Détail des anomalies du banc CLI (relit /tmp/audit_cli_results.json pour la liste des textes).\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport subprocess\nimport sys\n\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephan … [10588 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_cli_detail.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/audit_cli_detail.py 2>&1 | tail -40", "description": "Run detailed overlap/target analysis", "timeoutMs": 300000}`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/audit_cli_detail.py", line 212, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/audit_cli_detail.py", line 43, in main
+    p, d = run(texte)
+           ~~~^^^^^^^
+  File "/tmp/audit_cli_detail.py", line 36, in run
+    d = json.loads(p.stdout.decode("utf-8"))
+  File "/usr/lib64/python3.13/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/usr/lib64/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/audit_cli_detail.py'\ns=open(p).read()\ns=s.replace('''    d = json.loads(p.stdout.decode(\"utf-8\"))\n    return p, d\n''','''    d = json.loads(p.stdout.decode(\"utf-8\")) if p.returncode == 0 else None\n    return p, d\n''')\nopen(p,'w').write(s)\ … [195 caractères tronqués]`

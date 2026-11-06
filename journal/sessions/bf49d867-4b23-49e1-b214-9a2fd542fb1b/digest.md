@@ -812,3 +812,85 @@ R1+R2+
 … [3340 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Testing the subject-rule variants and checking dev/test membership of R3 fixes
+
+- **bash** `{"command": "cat > /tmp/qpos/check.py <<'EOF'\nimport sys, pathlib, zlib, json, collections\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RAC/'tools')); sys.path.insert(0, str(RAC/'tools/tests/linguistique')); sys.path.insert(0, '/tmp/qpos')\nimport e … [2093 caractères tronqués]`
+
+  ```
+r025 dev en She talks to her brother.
+r117 test en She calls her mother.
+r169 dev en The baby smiles at his mother.
+r062 dev en The mother prepares the meal.
+r280 dev en The car that I bought runs.
+g017 dev en She said that she would come yesterday.
+
+== branches _pos, en ==
+  classe fermée (0,92)             n= 563
+      défaut NOUN (0,30)               -> NOUN   391
+  défaut NOUN (0,30)               n= 391
+      classe fermée (0,92)             -> DET    239
+      classe fermée (0,92)             -> PRON   177
+      VERBES (0,72)                    -> VERB    84
+  VERBES (0,72)                    n=  84
+      classe fermée (0,92)             -> AUX     64
+      classe fermée (0,92)             -> PREP    44
+  suffixe -er/-ir/-ing/-ed (0,40)  n=  41
+      suffixe -er/-ir/-ing/-ed (0,40)  -> NOUN    33
+      ADJECTIFS (0,68)                 -> ADJ     23
+  ADJECTIFS (0,68)                 n=  23
+      classe fermée (0,92)             -> CONJ    23
+      majuscule (0,55)                 -> NOUN    19
+  majuscule (0,55)                 n=  19
+      classe fermée (0,92)             -> ADV     15
+      suffixe ADJ fr (0,38)            -> ADJ     11
+  suffixe ADJ fr (0,38)            n=
+… [1741 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Building the final measurement script (all variants, controls, residuals)
+
+- **bash** `{"command": "cat > /tmp/qpos/mesures_finales.py <<'PYEOF'\n\"\"\"Mesures finales — POS anglais : diagnostic, variantes, contrôles. Aucun fichier du dépôt touché.\"\"\"\nimport json, pathlib, sys, types, collections, random\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nORIG  … [14077 caractères tronqués]`
+
+  ```
+mesuré V0
+mesuré R1
+mesuré R2p
+mesuré R2s
+mesuré R2
+mesuré R3
+mesuré R1+R2
+mesuré R1+R2+R3
+
+--- DIAG EN ---
+tokens 1148 erreurs 270 exact 0.7648
+fermé {'n': 588, 'ok': 533} ouvert {'n': 557, 'ok': 345} part tokens ouverts 0.4852 part erreurs ouvertes 0.7852
+matrice {"ADJ": {"ADJ": 24, "NOUN": 12, "VERB": 4}, "ADV": {"ADV": 17, "NOUN": 15, "PREP": 1, "?": 1}, "AUX": {"AUX": 60, "NOUN": 1}, "CONJ": {"DET": 12, "CONJ": 22, "NOUN": 2}, "DET": {"DET": 213}, "NOUN": {"NOUN": 238, "ADJ": 5, "VERB": 5}, "NUM": {"NUM": 1}, "PONCT": {"?": 3}, "PREP": {"PREP": 43}, "PRON": {"PRON": 177, "NOUN": 8, "DET": 14, "CONJ": 1}, "VERB": {"VERB": 83, "NOUN": 176, "ADJ": 5, "AUX": 4, "?": 1}}
+top30 [(('that', 'CONJ', 'DET'), 12), (('that', 'PRON', 'DET'), 11), (('leave', 'VERB', 'NOUN'), 7), (('sings', 'VERB', 'NOUN'), 6), (('where', 'PRON', 'NOUN'), 6), (('writes', 'VERB', 'NOUN'), 5), (('speaks', 'VERB', 'NOUN'), 5), (('sees', 'VERB', 'NOUN'), 5), (('leaves', 'VERB', 'NOUN'), 4), (('play', 'VERB', 'NOUN'), 4), (('runs', 'VERB', 'NOUN'), 4), (('arrives', 'VERB', 'NOUN'), 4), (('late', 'ADV', 'NOUN'), 4), (('table', 'NOUN', 'ADJ'), 4), (('shines', 'VERB', 'NOUN'), 3), (('talks', 'VERB', 'NOUN'), 3), (('
+… [3510 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting the remaining breaks in R2/R2s
+
+- **bash** `{"command": "cd /tmp/qpos && python3 - <<'EOF'\nimport json\nr=json.load(open('mesures.json'))\nfor k in ('R2s','R2','R1+R2','R1+R2+R3'):\n    d=r['diffs'][k]\n    print(k, 'cassés:', d['casses'], d['formes_cassees_en'], d['cassees'])\n    print('   corrigées en (top15):', d['formes_corrigees_en'][: … [184 caractères tronqués]`
+
+  ```
+R2s cassés: 2 [['flowers', 1], ['books', 1]] [['flowers', 1], ['books', 1]]
+   corrigées en (top15): [['sees', 4], ['shines', 3], ['leaves', 2], ['blows', 2], ['passes', 2], ['runs', 2], ['sings', 2], ['drinks', 1], ['drives', 1], ['barks', 1], ['prepares', 1], ['brings', 1], ['enters', 1], ['climbs', 1], ['softens', 1]]
+R2 cassés: 1 [['flowers', 1]] [['flowers', 1]]
+   corrigées en (top15): [['writes', 5], ['sings', 5], ['sees', 5], ['leaves', 4], ['leave', 4], ['speaks', 4], ['shines', 3], ['live', 3], ['works', 3], ['runs', 3], ['stay', 3], ['cries', 3], ['talks', 2], ['blows', 2], ['watches', 2]]
+R1+R2 cassés: 1 [['flowers', 1]] [['flowers', 1]]
+   corrigées en (top15): [['leave', 7], ['sings', 6], ['writes', 5], ['speaks', 5], ['sees', 5], ['leaves', 4], ['play', 4], ['runs', 4], ['shines', 3], ['talks', 3], ['live', 3], ['falls', 3], ['works', 3], ['arrives', 3], ['stay', 3]]
+R1+R2+R3 cassés: 1 [['flowers', 1]] [['flowers', 1]]
+   corrigées en (top15): [['that', 16], ['leave', 7], ['sings', 6], ['writes', 5], ['speaks', 5], ['sees', 5], ['leaves', 4], ['play', 4], ['runs', 4], ['shines', 3], ['talks', 3], ['live', 3], ['barks', 3], ['falls', 3], ['works', 3]]
+
+R2p {'VERB->NOU
+… [65 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,pathlib,sys\nRAC=pathlib.Path('.')\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'/tmp/qpos')\nimport evaluer_gold as eg, mesures_finales as mf\nfor p in  … [555 caractères tronqués]`

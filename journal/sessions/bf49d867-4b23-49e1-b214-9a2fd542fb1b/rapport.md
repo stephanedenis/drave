@@ -7,12 +7,12 @@
 | Identifiant | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.5 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 26 |
-| Appels d'outils | 25 |
+| Messages | 30 |
+| Appels d'outils | 29 |
 | Fichiers touchés | 0 |
-| Commandes | 17 |
+| Commandes | 21 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2138 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Check repo state and branch
 - bash — List repo and tools directories
@@ -41,11 +41,11 @@
 - bash — Audit rule risks on gold
 - bash — Run POS rule variants on dev and test
 - bash — Fix patch anchor and rerun variants
-- … et 5 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Testing the subject-rule variants and checking dev/test membership of R3 fixes
+⏵ Debugging why R2s skips "plants" but fires on "flowers"
 
 ## 3. Travail accompli
 
@@ -73,6 +73,10 @@
 - **T1** Fix R3 lookahead and rerun
 - **T1** Print full metrics table
 - **T1** Check split membership and branch counts
+- **T1** Run final measurement script
+- **T1** Inspect breaks and transitions
+- **T1** Inspect flowers/books breaks
+- **T1** Inspect R2S patch text
 
 ## 4. Mesures et résultats marquants
 
