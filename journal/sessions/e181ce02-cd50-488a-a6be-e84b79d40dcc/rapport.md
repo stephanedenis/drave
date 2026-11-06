@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 129.4 h |
+| Durée | 131.0 h |
 | Tours | 177 |
-| Messages | 2909 |
-| Appels d'outils | 2562 |
+| Messages | 2925 |
+| Appels d'outils | 2578 |
 | Fichiers touchés | 25 |
-| Commandes | 2108 |
+| Commandes | 2117 |
 | Sous-agents | 25 |
-| Commits | 312 |
+| Commits | 313 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*321 appels d'outils.* Actions notables :
+*337 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 256 autres
+- … et 264 autres
 
 **Synthèse produite :**
 
-⏵ La porte complète a une rouge : `cascade_pos` (la fusion avec le neuronal de contrat passe sous l'heuristique). Je la documente comme rouge tolérée, avec sa cause
+⏵ `porte-sessions` rouge : **mon** mandat est périmé (130 min). Je rafraîchis le plan de session
 
 ## 3. Travail accompli
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2068 autres
+- … et 2077 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10082,4 +10082,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL" -- docs/pilotag
 - DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s
 - DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE)" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --for
+- SESSION — LE MANDAT E181CE02 RAFRAÎCHI : HEARTBEAT 03 h 45, PROCHAINE ACTION NETTE, 222/222 EN NOTE" -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/pl
 

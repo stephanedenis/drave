@@ -49408,3 +49408,194 @@ ven 06 nov 2026 02:02:09 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Rouge du 2026-11-06 (tolérée)** : `porte-bloc-linguistique` échoue sur `cascade_pos` — la\n> fusio … [879 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-2626]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2626", "timeout_ms": 600000, "wait": true}`
+
+  ```
+10 files changed, 41 insertions(+), 22 deletions(-)
+COMMIT OK 1
+2fc19487 DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE)
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2
+  porte-gain             ✅                         241 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -f \"toutes-les-portes\" | head -2; grep -c \"✅\\|❌\" /tmp/portes_final.log; tail -12 /tmp/portes_final.log | cut -c1-120; date", "description": "État de la suite"}`
+
+  ```
+2569774
+2569776
+26
+  porte-coupe            ✅                         149 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (co
+  porte-cycle-c2         ✅                         139 s    ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût di
+  porte-deepseek         ✅                           0 s    ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, 
+  porte-delais           ✅                          23 s    ✅ le temps, lui, augmente : 7.73 s → 11.02 s (+3.3 s ≈ 50 ms
+  porte-diff-couche      ✅                          20 s    ✅ le contrat est tenu : la divergence commence à la couche 1
+  porte-document         ✅                           7 s  ✅ porte document verte
+  porte-echange-experts  ✅                          60 s    PORTE TENUE
+  porte-episodique       ✅                         199 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 30
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / 
+  porte-fusion           ✅                           8 s    ✅
+… [200 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 780; date; pgrep -f \"toutes-les-portes\" | head -1; tail -6 /tmp/portes_final.log | cut -c1-120", "description": "Attendre la fin de la suite", "timeoutMs": 850000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2628]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2628", "timeout_ms": 300000, "wait": true}`
+
+  ```
+ven 06 nov 2026 02:17:53 EST
+2569774
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / 
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         241 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297
+  porte-greffe           ✅                         791 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'
+  porte-harnais-invariants ✅                         122 s  ✅ porte harnais : installer une reparamétrisation laisse le 
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; pgrep -f \"toutes-les-portes\" | head -1; tail -3 /tmp/portes_final.log | cut -c1-120", "description": "Attendre la suite", "timeoutMs": 960000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2629]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2629", "timeout_ms": 400000, "wait": true}`
+
+  ```
+ven 06 nov 2026 02:33:16 EST
+2569774
+  porte-harnais-invariants ✅                         122 s  ✅ porte harnais : installer une reparamétrisation laisse le 
+  porte-homeostasie      ✅                         612 s    ✅ porte tenue (×0 exact · activité monotone · dominance repr
+  porte-horloge          ✅                          28 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perple
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; pgrep -f \"toutes-les-portes\" | head -1; tail -4 /tmp/portes_final.log | cut -c1-120", "description": "Attendre indice et la suite", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2630]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2630", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-2630", "timeout_ms": 600000, "wait": true}`
+
+  ```
+ven 06 nov 2026 02:58:24 EST
+2569774
+  porte-ocr-scans        ✅                         499 s  ✅ porte OCR-scans verte : familles, colonnes et tableaux tienn
+  porte-ocr              ✅                          53 s  ✅ porte OCR verte : 10 pages lues, WER sous le seuil, parité t
+  porte-pannes           ✅                          50 s    ✅ pair absent : échec annoncé en 2 s (code 7), aucune perple
+  porte-peripherie       ✅                          15 s  PORTE TENUE : l'entrée est injectée, la sortie est écrite, le 
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; pgrep -f \"toutes-les-portes\" | head -1; tail -8 /tmp/portes_final.log | cut -c1-125", "description": "Attendre la fin", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2631]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2631", "timeout_ms": 900000, "wait": true}`
+
+  ```
+ven 06 nov 2026 03:18:33 EST
+2569774
+  porte-occupation-moteur ✅                          56 s  ✅ porte occupation du moteur : la ligne « occupation des poids » e
+  porte-ocr-scans        ✅                         499 s  ✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent l
+  porte-ocr              ✅                          53 s  ✅ porte OCR verte : 10 pages lues, WER sous le seuil, parité tenue 
+  porte-pannes           ✅                          50 s    ✅ pair absent : échec annoncé en 2 s (code 7), aucune perplexité
+  porte-peripherie       ✅                          15 s  PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai
+  porte-poids-creux      ✅                         353 s  ✅ porte poids creux : le noyau creux est EXACT et il paie la sparsi
+  porte-pont             ✅                          91 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est en
+  porte-prechargement    ✅                         211 s    PORTE TENUE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; pgrep -f \"toutes-les-portes\" | head -1; tail -10 /tmp/portes_final.log | cut -c1-125", "description": "Attendre la fin (2)", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2632]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2632", "timeout_ms": 900000, "wait": true}`
+
+  ```
+ven 06 nov 2026 03:38:39 EST
+2569774
+  porte-registre         ✅                          17 s    ✅ région absente : refusée en la nommant (code 2), rien n'est cal
+  porte-reparti-moteur   ✅                           3 s  PORTE TENUE : le découpage ne change pas la perplexité (écart relat
+  porte-ressources       ✅                           1 s  ✅ porte ressources verte : autotest 9 cas, registre cohérent, GPU r
+  porte-sauvegarde-modele ✅                          56 s  ✅ porte sauvegarde du modèle : la perte de validation est la MÊME 
+  porte-sessions         ❌ code 1                    0 s    ❌ mandat périmé (130 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc 
+  porte-speculatif       ✅                          75 s    ✅ porte tenue (invariant exact · taux rendu · témoin à zéro · bro
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-06)
+  porte-tokenizer-kimi   ✅                           6 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK
+  porte-topologie        ✅                         109 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topolo
+  porte-trace            ✅               
+… [93 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-sessions` rouge : **mon** mandat est périmé (130 min). Je rafraîchis le plan de session
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check 2>&1 | tail -6; grep -n \"Mandat\\|Heartbeat\\|Expire\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -6", "description": "Voir le mandat périmé"}`
+
+  ```
+⚠ mandat périmé (1544 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ⚠ mandat périmé (144 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+3:> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+18:- **Heartbeat** : 2026-11-06 01:15 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,24p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "description": "Lire l'en-tête du plan"}`
+
+  ```
+# Plan de session — Pensée, la RSN plurielle et le moteur N3
+
+> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3 ; analyse de la couche heuristique ; bloc linguistique
+- **Périmètre** : Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`,
+  `docs/schemas/heuristique-*.svg`, `tools/bloc_linguistique.py`,
+  `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
+  `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
+  `reports/bloc-*`, `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-11-06 01:1
+… [504 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=t.replace(\"\"\"- **Heartbeat** : 2026-11-06 01:15 EST\n- **Prochaine action** : les 17 spans i … [1195 caractères tronqués]`

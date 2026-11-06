@@ -15,9 +15,10 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-06 01:15 EST
-- **Prochaine action** : les 17 spans inatteignables (gold, lexique), `g017` (adverbe), puis `_pos` anglais et le merge `master`.
-  200+** ; la porte stochastique/fenêtre attend une version API (serveur local interdit).
+- **Heartbeat** : 2026-11-06 03:45 EST
+- **Prochaine action** : les 17 spans inatteignables (gold, lexique) ; `_pos` anglais ; le merge `master` si autorisé.
+- **Note** : l'attachement est à **222/222 (1,0000)**, la couverture 0,9289 ; la seule rouge est
+  `cascade_pos` (documentée, tolérée).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
 - **État** : actif
 - **Reprise** : le 04/11 10 h 14 ; quatre modes, élision 144/144.
