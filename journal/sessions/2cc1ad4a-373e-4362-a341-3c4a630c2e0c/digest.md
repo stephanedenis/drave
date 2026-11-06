@@ -1965,3 +1965,196 @@ index 76e9ba91..d16c5655 100644
 … [2568 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Alerte au parent sur un résidu dans la correction v7 en cours
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n -E \"F1 syntagmes|F1 tête|POS \\(gelé|Base|0,5130|0,5164\" reports/rapport-pensee-couverture-v7.md | head -20; echo \"=== v4/v5 titles still? ===\"; head -1 reports/rapport-pensee-segmentation-v4.md; head -1 reports/rapport-pen … [259 caractères tronqués]`
+
+  ```
+5:> tient : **exact 195/196 = 0,9949** (fr **135/135 = 1,0**, en **60/61**) ; la **F1 syntagmes**
+9:> **État courant** : commit `69bd865e` · **Base** : F1/tête/POS sur le gold **gelé 602** (portes
+34:| F1 syntagmes (union, gelé 602) | 0,5130 | **0,5595** |
+35:| F1 tête (gelé 602) | 0,6834 | **0,7205** |
+36:| POS (gelé 602) | 0,7482 | **0,7603** |
+=== v4/v5 titles still? ===
+# B13 — la segmentation d'abord : F1 0,2862 → 0,4194, exact 158/160 (0,9875), couverture 160/239
+# B13 — la couverture : 187 labels, exact 185/187 (0,9893), F1 0,5156
+=== v6 line ===
+33:| F1 syntagmes | 0,5156 | 0,5130 |
+=== README lines ===
+| [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — la couverture **0,8201** : POS contextuel 0,7603, F1 **0,5595**, exact 195/196 |
+| [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — la couverture : **187 labels**, exact **185/187 (0,9893)**, F1 **0,5156**, dev/test 125/126 et 60/61 |
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Alerte cohérence v7 (audit ancré sur 69bd865e terminé ; rapport + JSON écrits). Un résidu dans la correction v7 en cours : le tableau dit désormais « F1 syntagmes (union, gelé 602) » mais garde la valeur v6 0,5130, qui est celle du gol … [594 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout d'une note de concurrence au rapport et au JSON
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md", "old_string": "- **Une correction des fiches après `69bd865e`** : à `e4cd4408`, aucune des sept fiches n'a bougé ;\n  si un commit ultérieur les corrige, les écarts V2…V7 disparaissent (c'est le b … [735 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -l --time-style=full-iso reports/rapport-coherence-fiches-v7.md reports/pensee-coherence-fiches-v7.json; git status --porcelain -- reports/rapport-coherence-fiches-v7.md reports/pensee-coherence-fiches-v7.json; echo \"=== tail ===\" … [112 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 29658 2026-11-05 20:14:42.899713936 -0500 reports/pensee-coherence-fiches-v7.json
+-rw-------. 1 stephane stephane 27214 2026-11-05 20:15:42.343816244 -0500 reports/rapport-coherence-fiches-v7.md
+=== tail ===
+
+19. Ajouter la mention d'historique aux six fiches historiques ; ajouter « état courant » à la v7.
+20. Ajouter un contrôle négatif à v4, v5, v6, v7 et gold-split (permutation des cibles, candidat
+    aléatoire, mélange des identifiants du split).
+21. Corriger les lignes 20 et 22 de `reports/README.md` ; préciser la base sur la ligne 18.
+22. Ajouter le compte de portes (183/183) à l'en-tête de gold-split.
+
+## 11. Ce qui pourrait rendre ce rapport faux
+
+- **Une correction des fiches après `69bd865e`** : à `e4cd4408`, aucune des sept fiches n'a bougé ;
+  si un commit ultérieur les corrige, les écarts V2…V7 disparaissent (c'est le but).
+- **Le choix de la base** : les valeurs 612 et 602 sont toutes deux défendables ; le reproche n'est
+  pas qu'elles soient fausses, mais que la fiche nomme **612** et publie du **602** sans le dire.
+  Si la convention du dépôt est « F1/POS sur le gelé, couverture sur le vivant », il suffit de
+  l'écrire : les chiffres
+… [1861 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md", "offset": 327, "limit": 40}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md</path>
+<type>file</type>
+<content>
+327: ## 11. Ce qui pourrait rendre ce rapport faux
+328: 
+329: - **Une correction des fiches après `69bd865e`** : à `e4cd4408`, aucune des sept fiches n'a bougé ;
+330:   si un commit ultérieur les corrige, les écarts V2…V7 disparaissent (c'est le but).
+331: - **Le choix de la base** : les valeurs 612 et 602 sont toutes deux défendables ; le reproche n'est
+332:   pas qu'elles soient fausses, mais que la fiche nomme **612** et publie du **602** sans le dire.
+333:   Si la convention du dépôt est « F1/POS sur le gelé, couverture sur le vivant », il suffit de
+334:   l'écrire : les chiffres sont alors exacts.
+335: - **Les constantes de porte** : pour la v5, 0,5156 / 0,6826 sont dans la tolérance 0,001 de la
+336:   porte T112/T113 (0,5164 / 0,6834). Si la porte est la référence, la fiche est « dans la
+337:   tolérance » ; elle n'est pas exacte au quatrième chiffre.
+338: - **Le statut de « contrôle négatif »** : si le split dev/test est accepté comme contrôle négatif,
+339:   il en manque trois (v4, v6, v7) au lieu de cinq. Nous avons distingué les deux.
+340: - **La
+… [1548 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md", "new_string": "- **Une correction des fiches après `69bd865e`** : à `e4cd4408`, aucune des sept fiches n'a bougé ;\n  si un commit ultérieur les corrige, les écarts V2…V7 disparaissent (c'est le b … [735 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json", "offset": 760, "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json</path>
+<type>file</type>
+<content>
+760:   {
+761:    "priorite": 1,
+762:    "fiche": "v5",
+763:    "action": "titre : 185/187 (0,9893) -> 186/187 (0,9947)"
+764:   },
+765:   {
+766:    "priorite": 1,
+767:    "fiche": "v5",
+768:    "action": "§ 2/§ 3/§ 5 : dev 125/126 -> 126/126 ; +28 -> +29 ; 40 -> 59 devient 40 -> 60 ; '27 echecs de cible' -> 1 echec de cible + 26 candidats manquants ; 0,8556 -> 0,8610 (161/187) ou 0,6736 (161/239) ; six -> sept"
+769:   },
+770:   {
+771:    "priorite": 1,
+772:    "fiche": "v7",
+773:    "action": "0,0132 -> 0,0128 ; nommer la base 602 de F1/tete/POS ou publier 0,5555 / 0,7152 / 0,7581 ; corriger la colonne v6 (tete et POS)"
+774:   },
+775:   {
+776:    "priorite": 2,
+777:    "fiche": "v2",
+778:    "action": "§ 1 : etiqueter le split lexical (60/63, 63/82), retirer '(POS gold)' et '+48 cibles' ; § 2 : 46 -> 45 ; crediter +8 top-k, +8 strict, +6 top1"
+779:   },
+780:   {
+781:    "priorite": 2,
+782:    "fiche": "v4",
+783:    "action": "nommer le gold 602 pour F1/tete, ou republier sur 612 (0,4509 / 0,6385)"
+784:   },
+785:   {
+786:    "priorite": 2,
+787:    "fiche": 
+… [1934 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json", "limit": 70, "offset": 840}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json</path>
+<type>file</type>
+<content>
+840:   {
+841:    "priorite": 4,
+842:    "fiche": "v4/v5/v6/v7/gold_split",
+843:    "action": "ajouter un controle negatif (permutation des cibles, candidat aleatoire, melange des identifiants du split)"
+844:   },
+845:   {
+846:    "priorite": 4,
+847:    "fiche": "README",
+848:    "action": "corriger les lignes 20 et 22 ; preciser la base sur la ligne 18"
+849:   },
+850:   {
+851:    "priorite": 4,
+852:    "fiche": "gold_split",
+853:    "action": "ajouter le compte de portes (183/183) a l'en-tete"
+854:   }
+855:  ],
+856:  "ambiguites_non_comptees": [
+857:   {
+858:    "fiche": "v3",
+859:    "sujet": "R1 portee 2-3",
+860:    "detail": "la ligne liste trois identifiants (s108, s122, s041) mais donne une portee 2-3 ; peut-etre parce que s041 ('marche') n'est pas 'marcher' du lexique, mais la fiche ne le dit pas"
+861:   },
+862:   {
+863:    "fiche": "v5",
+864:    "sujet": "27 = 26 + 1",
+865:    "detail": "le JSON contient echecs_cible = 1 et candidats_manquants = 26 ; la fiche appelle '27 echecs de cible' ce qui est 26 candidats manquants + 1 echec"
+866:   },
+867:  
+… [2014 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json", "new_string": "  ],\n  \"concurrence\": {\n   \"constat\": \"des corrections non committées étaient en cours dans l'arbre de travail pendant l'écriture (20:10) ; ce rapport décrit le commit 69bd8 … [994 caractères tronqués]`
+
+  ```
+Error: old_string was not found in "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '868,878p' reports/pensee-coherence-fiches-v7.json | cat -A", "description": "Show exact indentation around insertion point"}`
+
+  ```
+"fiche": "toutes",$
+   "sujet": "F1/POS sur le gele",$
+   "detail": "si la convention du depot est F1/POS sur le gold gele 602, il suffit de l'ecrire ; les chiffres 0,4539 / 0,5156 / 0,5595 / 0,7603 sont alors exacts, mais la fiche nomme le 612"$
+  }$
+ ],$
+ "limites": [$
+  "les mesures historiques sont obtenues avec le blob du commit et RACINE force a la racine ; un worktree detache ne suffit pas (S y perd ses donnees et la v6 tombe a 156 labels)",$
+  "les hashes des quatre fichiers d'or sont identiques de 9d5337ce a 69bd865e, ce qui securise la comparaison",$
+  "HEAD a avance de 69bd865e a e4cd4408 pendant l'audit (DOCS/JOURNAL seulement) ; les sept fiches sont identiques dans les deux commits",$
+  "le statut de 'controle negatif' du split dev/test est discute : si on l'accepte, il manque trois controles (v4, v6, v7) au lieu de cinq",$
+  "la mention d'historique est interpretee strictement : le numero de version et la date ne suffisent pas",$
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json", "new_string": " ],\n \"concurrence\": {\n  \"constat\": \"des corrections non committées étaient en cours dans l'arbre de travail pendant l'écriture (20:10) ; ce rapport décrit le commit 69bd865e … [972 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json has been updated successfully.
+  ```
+

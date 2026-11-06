@@ -1700,3 +1700,50 @@ reports/rapport-dev-test-v7.md
 ⏵ Vérification que le code mesuré n'a pas bougé depuis `69bd865e`
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat 69bd865e -- tools/bloc_linguistique.py tools/tests/linguistique/gold_split.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistiqu … [178 caractères tronqués]`
+
+  ```
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat complet à l'agent parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Terminé. Deux fichiers neufs (non committés) : `reports/rapport-dev-test-v7.md` et `reports/pensee-dev-test-v7.json`. Mesure au commit `69bd865e` (les fichiers mesurés n'ont pas bougé ; HEAD a seulement avancé sur docs/journal depuis). … [2985 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Résumé final de la re-mesure dev/test v7
+
+Deux fichiers neufs créés, aucun fichier existant modifié, aucun commit :
+`reports/rapport-dev-test-v7.md` et `reports/pensee-dev-test-v7.json`.
+
+**Split canonique (`crc32(id)%3==0` → test), commit `69bd865e`**
+
+| | phrases | cibles | labels | couverture | exact/labels | F1 | tête |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| dev | 422 | 163 | 134 | 0,8221 | **133/134 = 0,9925** | 0,5512 | 0,7132 |
+| test | 190 | 76 | 62 | 0,8158 | **62/62 = 1,0** | 0,5651 | 0,7196 |
+| tout | 612 | 239 | 196 | 0,8201 | **195/196 = 0,9949** | 0,5555 | 0,7152 |
+
+Par langue : fr 92/92 dev, 43/43 test ; en 41/42 dev, 19/19 test.
+Par type : REL 42/42 dev, 11/11 test ; SUB 33/33, 19/19 ; GP 58/59, 32/32 (l'unique échec est r102, GP/en).
+
+**Les trois splits**
+
+| split | dev exact | test exact |
+|---|---:|---:|
+| `%3==0` (canonique) | 133/134 | 62/62 |
+| `%3==1` | 119/120 | 76/76 |
+| `%3==2` | 138/138 | 57/58 |
+
+**Écart** : **1 cas** sur l'exact (étendue 0,0172 au test, 0,0083 en dev), **3 spans** sur la couverture (14/13/16 perdus sur 43, attendus 13,67/16,01/13,31), **2,4 pts** de F1, **1,2 pt** de tête. Un Monte-Carlo de 2 000 partitions aléatoires place toutes ces étendues dans la bande 95 % : le split est stable.
+
+**Équilibre** : aucune catégorie demandée absente, mais `hand` est mince (5 phrases, 3 cibles au test, toutes GP ; `hand/REL` et `hand/SUB` uniquement en dev) et REL/en ne compte que 5 cibles au test. Le test canonique est REL-pauvre (22,4 % contre 35,0 % en dev) et GP-riche (46,1 % contre 37,4 % ; χ² p=0,26).
+
+**Dev vs test** : 1 échec contre 0 → **< 2 cas**, pas d'alerte. En v5, l'échec unique était r309 (seau 0/test) ; en v7 il est corrigé et r102 (seau 2/dev) apparaît : l'écart s'inverse parce que l'échec change de phrase et de seau, pas parce que le test progresse. La F1 agrégée +1,39 pt est portée par GN/GV, pas par l'attachement ; sur REL/SUB/GP le test est plus bas de 6,8/1,3/4,0 pts.
+

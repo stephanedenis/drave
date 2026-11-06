@@ -1492,3 +1492,221 @@ marginal R3 DEV 152 -> 153 gain ['r280'] perte []
 marginal R3 TEST 67 -> 68 gain ['r153'] perte []
   ```
 
+### 🤖 Assistant
+
+⏵ Construction du jeu de données final par cas et contrôle négatif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/final_data.py <<'EOF'\nimport json,sys,collections,random\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); ids={p[\"id\"]:p for p in ph}\nb=evaluer(ph,lambda: Sim(()))\nbl.VERBES[\"en\"] |= {\"fa … [4652 caractères tronqués]`
+
+  ```
+total 43 causes Counter({'frontière de clause — arrêt précoce (pronom pris pour un verbe)': 15, 'REL synthétique : 2e verbe hors lexique disjoint': 6, 'frontière de clause — 2e prédicat avalé': 5, 'gold synthétique sans préposition (bug générateur)': 4, 'type attendu différent (REL→SUB)': 3, "SUB synthétique : verbe principal hors lexique → GN l'avale": 3, 'marqueur absent (relative zéro)': 1, 'GP tronqué par un faux verbe (bus)': 1, 'type récupéré, cible non (verbe call hors lexique)': 1, 'couverture verbale réelle (achetée/roule)': 1, "marqueur élidé qu' non tokenisé": 1, 'GN avalé par la collision car (SUBDORDONNANTS fr en anglais)': 1, 'adverbe final (règle trop stricte, arbitrage dev/test)': 1})
+statuts Counter({'exact': 25, 'absent': 17, 'faux': 1})
+par type final absent/faux Counter({('REL', 'absent'): 8, ('SUB', 'absent'): 5, ('GP', 'absent'): 4, ('SUB', 'faux'): 1})
+permutation control: n= 222 mean 2.002 max 9 baseline exact 222
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle négatif correct et métriques finales par langue et par type
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/final_metrics.py <<'EOF'\nimport json,sys,collections,random\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger()\nb=evaluer(ph,lambda: Sim(()))\nbl.VERBES[\"en\"] |= {\"fall\",\"falls\",\"fell\",\"fa … [2517 caractères tronqués]`
+
+  ```
+{
+ "base": {
+  "cibles": 239,
+  "labels": 196,
+  "exact": 195,
+  "f1": 0.5555
+ },
+ "final": {
+  "cibles": 239,
+  "labels": 222,
+  "exact": 221,
+  "f1": 0.5848
+ },
+ "par_langue_type_base": {
+  "fr/GP": {
+   "cibles": 62,
+   "labels": 58,
+   "exact": 58
+  },
+  "fr/*": {
+   "cibles": 151,
+   "labels": 135,
+   "exact": 135
+  },
+  "*/GP": {
+   "cibles": 96,
+   "labels": 91,
+   "exact": 91
+  },
+  "*/*": {
+   "cibles": 239,
+   "labels": 196,
+   "exact": 196
+  },
+  "fr/SUB": {
+   "cibles": 43,
+   "labels": 39,
+   "exact": 39
+  },
+  "*/SUB": {
+   "cibles": 69,
+   "labels": 52,
+   "exact": 52
+  },
+  "fr/REL": {
+   "cibles": 46,
+   "labels": 38,
+   "exact": 38
+  },
+  "*/REL": {
+   "cibles": 74,
+   "labels": 53,
+   "exact": 53
+  },
+  "en/GP": {
+   "cibles": 34,
+   "labels": 33,
+   "exact": 33
+  },
+  "en/*": {
+   "cibles": 88,
+   "labels": 61,
+   "exact": 61
+  },
+  "en/SUB": {
+   "cibles": 26,
+   "labels": 13,
+   "exact": 13
+  },
+  "en/REL": {
+   "cibles": 28,
+   "labels": 15,
+   "exact": 15
+  }
+ },
+ "par_langue_type_final": {
+  "fr/GP": {
+   "cibles": 62,
+   "labels": 58,
+   "exact": 58
+  },
+  "fr/*": {
+   "cibles": 151,
+   "labels": 136,
+   "exact": 136
+  },
+  "*/GP": {
+   "cibles": 96,
+   "l
+… [796 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/final_metrics.py\"); s=p.read_text()\ns=s.replace('b=evaluer(ph,lambda: Sim(()))\\nbl.VERBES[\"en\"] |= {\"fall\",\"falls\",\"fell\",\"fallen\"}; bl.VERBES_CONNUS |= {\"f … [468 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/spans/final_metrics.py", line 6, in <module>
+    base,basepairs=plat(())
+                   ^^^^
+NameError: name 'plat' is not defined. Did you mean: 'float'?
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/final_metrics.py <<'EOF'\nimport json,sys,collections,random\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger()\ndef plat(reg):\n    h=Sim(reg); acc=collections.defaultdict(lambda:{\"cibles\":0,\"la … [2389 caractères tronqués]`
+
+  ```
+{
+ "base": {
+  "cibles": 239,
+  "labels": 196,
+  "exact": 195,
+  "f1": 0.5555
+ },
+ "final": {
+  "cibles": 239,
+  "labels": 222,
+  "exact": 221,
+  "f1": 0.5848
+ },
+ "par_langue_type_base": {
+  "fr/GP": {
+   "cibles": 62,
+   "labels": 58,
+   "exact": 58
+  },
+  "fr/*": {
+   "cibles": 151,
+   "labels": 135,
+   "exact": 135
+  },
+  "*/GP": {
+   "cibles": 96,
+   "labels": 91,
+   "exact": 90
+  },
+  "*/*": {
+   "cibles": 239,
+   "labels": 196,
+   "exact": 195
+  },
+  "fr/SUB": {
+   "cibles": 43,
+   "labels": 39,
+   "exact": 39
+  },
+  "*/SUB": {
+   "cibles": 69,
+   "labels": 52,
+   "exact": 52
+  },
+  "fr/REL": {
+   "cibles": 46,
+   "labels": 38,
+   "exact": 38
+  },
+  "*/REL": {
+   "cibles": 74,
+   "labels": 53,
+   "exact": 53
+  },
+  "en/GP": {
+   "cibles": 34,
+   "labels": 33,
+   "exact": 32
+  },
+  "en/*": {
+   "cibles": 88,
+   "labels": 61,
+   "exact": 60
+  },
+  "en/SUB": {
+   "cibles": 26,
+   "labels": 13,
+   "exact": 13
+  },
+  "en/REL": {
+   "cibles": 28,
+   "labels": 15,
+   "exact": 15
+  }
+ },
+ "par_langue_type_final": {
+  "fr/GP": {
+   "cibles": 62,
+   "labels": 58,
+   "exact": 58
+  },
+  "fr/*": {
+   "cibles": 151,
+   "labels": 136,
+   "exact": 136
+  },
+  "*/GP": {
+   "cibles": 96,
+   "l
+… [796 caractères tronqués]
+  ```
+

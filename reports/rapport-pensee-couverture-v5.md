@@ -1,4 +1,4 @@
-# B13 — la couverture : 187 labels, exact 185/187 (0,9893), F1 0,5156
+# B13 — la couverture : 187 labels, exact 186/187 (0,9947), F1 0,5156
 
 > **Instantané historique** : état au commit `b975011b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
 

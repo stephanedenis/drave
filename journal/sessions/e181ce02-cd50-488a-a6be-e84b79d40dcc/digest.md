@@ -46255,3 +46255,143 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1960", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-coherence-fiches-v7.md
+ create mode 100644 reports/rapport-dev-test-v7.md
+COMMIT OK 1
+8d6c318d B13 — AUDIT DES 7 FICHES (23 ÉCARTS), DEV/TEST V7 (133/134, 62/62), LA V7 CORRIGÉE AVEC SON CONTRÔLE (195/196 VS 1,67)
+jeu 05 nov 2026 20:18:16 EST
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+Agent 2cc1ad4a-373e-4362-a341-3c4a630c2e0c sent a message: 
+Alerte cohérence v7 (audit ancré sur 69bd865e terminé ; rapport + JSON écrits). Un résidu dans la correction v7 en cours : le tableau dit désormais « F1 syntagmes (union, gelé 602) » mais garde la valeur v6 0,5130, qui est celle du gold 612 ; sur le 602 la v6 vaut 0,5164. Les lignes tête/POS ont bien été corrigées (0,6834 et 0,7482, cohérentes avec 602). Il reste donc à mettre 0,5164 (ou à revenir à une colonne 612). Toujours non corrigés dans l'arbre : titre v4 (0,4194 / 158/160), titre v5 (185/187) et ses puces (+28, 40→59, 27 échecs, dev 125/126, 0,8556, « six »), tableau des corrections v2 (+8 top-k/+8 strict/+6 top1, « 46 »→45), ligne F1 v6 (0,5156→0,5130 compare 602 et 612), lignes 20 et 22 de reports/README.md. Détail complet : reports/rapport-coherence-fiches-v7.md et reports/pensee-coherence-fiches-v7.json.
+
+### 🤖 Assistant
+
+⏵ Je termine les corrections des titres historiques (v4, v5, v2) et des lignes README
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -8 reports/rapport-pensee-segmentation-v4.md; echo \"=== V5 :\"; head -10 reports/rapport-pensee-couverture-v5.md", "description": "Lire les titres v4 et v5"}`
+
+  ```
+# B13 — la segmentation d'abord : F1 0,2862 → 0,4194, exact 158/160 (0,9875), couverture 160/239
+
+> **Instantané historique** : état au commit `392f03aa` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **183/183 portes** : le diagnostic de A12/A14 était juste — le trou n'était pas l'attachement mais le
+> **découpage**. Sept corrections générales font passer la **F1 syntagmes de 0,2862 à 0,4539**
+> (union ; S 0,4285, chunker 0,4143), la **tête de 0,4989 à 0,6432**, et la **couverture de 145 à
+=== V5 :
+# B13 — la couverture : 187 labels, exact 185/187 (0,9893), F1 0,5156
+
+> **Instantané historique** : état au commit `b975011b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+> **183/183 portes** : la **couverture** passe de **160 à 187 labels** (sur 239) et l'exactitude
+> tient : **exact 186/187 = 0,9947** (fr **0,9921**, e
+… [320 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Agent c27ff712-ac49-4750-90d4-76f59bedb5ca sent a message: 
+Terminé. Deux fichiers neufs (non committés) : `reports/rapport-dev-test-v7.md` et `reports/pensee-dev-test-v7.json`. Mesure au commit `69bd865e` (les fichiers mesurés n'ont pas bougé ; HEAD a seulement avancé sur docs/journal depuis). Aucun fichier existant modifié.
+
+**Split canonique (`crc32(id)%3==0` → test), gold vivant 612**
+- **dev** : 422 phrases, 163 cibles, **134 labels au bon span** (couverture 0,8221), **exact 133/134 = 0,9925**, F1 0,5512, tête 0,7132. fr 92/92 (couv. 0,9109), en 41/42 (0,9762) ; REL 42/42 (couv. 0,7368), SUB 33/33 (0,7333), GP 58/59 (0,9672).
+- **test** : 190 phrases, 76 cibles, **62 labels** (couverture 0,8158), **exact 62/62 = 1,0**, F1 0,5651, tête 0,7196. fr 43/43 (0,86), en 19/19 (0,7308) ; REL 11/11 (0,6471), SUB 19/19 (0,7917), GP 32/32 (0,9143).
+- Ensemble : **195/196**, couverture **196/239**, F1 0,5555, tête 0,7152, POS 0,7581. La fiche v7 cite 0,5595/0,7205/0,7603 sur le **gelé 602** : mêmes 195/196 et 196/239, seules F1/tête/POS diffèrent (10 phrases réelles sans cible ajoutées au vivant).
+
+**Les trois splits**
+| split | dev exact | test exact |
+|---|---:|---:|
+| canonique `%3==0` | 133/134 | 62/62 |
+| décalé 1 `%3==1` | 119/120 | 76/76 |
+| décalé 2 `%3==2` | 138/138 | 57/58 |
+
+Écart maximal : **1 cas** sur l'exact (test 1,0/1,0/0,9828 ; dev 0,9925/0,9917/1,0). Couverture test 0,8158/0,8539/0,7838 = 14/13/16 spans perdus sur 43 (hypergéométrie attendue 13,67/16,01/13,31 ; z ≤ 1,05). F1 test 0,5651/0,5598/0,5410 (étendue 2,4 pts) ; tête 0,7196/0,7180/0,7076. Monte-Carlo 2000 partitions aléatoires de mêmes tailles : toutes les étendues observées sont dans la bande 95 % — le split est stable, la variation est du bruit de partition/composition.
+
+**Équilibre** : aucune catégorie demandée absente (3 sources, 2 langues, 3 types de cibles). Mais `hand` est mince : 5 phrases / 3 cibles au test, toutes GP ; `hand/REL` (1) et `hand/SUB` (2) sont uniquement en dev. REL/en test = 5 cibles (2 labels). Le test canonique est REL-pauvre (17, 22,4 %, contre 35,0 % dev) et GP-riche (35, 46,1 %, contre 37,4 %) ; χ² p=0,26. Le hash n'est pas stratifié.
+
+**Écart dev/test** : exact **1 échec contre 0 = 1 cas** (< 2 cas, pas d'alerte). L'unique échec est **r102** (GP/en, « since this morning », cible gold `falls`, attachement prédit vide), seau 2 → dans dev au canonique, dans test au décalé 2. En v5, l'échec unique était **r309** (seau 0 → test) : r309 est corrigé et r102 apparaît, donc l'écart dev/test s'inverse parce que l'échec change de phrase et de seau, pas parce que le test progresse. Couverture brute 0,8221 vs 0,8158 (0,63 pt) ; standardisée sur le mélange dev, le test tombe à 0,7870 (~2,7 cas sur 76) mais les IC Wilson se recouvrent — le test paraît aussi couvrant surtout parce qu'il a plus de GP faciles et moins de REL difficiles. La F1 agrégée +1,39 pt est portée par GN/GV (82,7 % des segments), pas par l'attachement : sur REL/SUB/GP le test est plus bas de 6,8/1,3/4,0 pts.
+
+Le JSON contient les trois splits complets, l'équilibre, les χ², l'hypergéométrie, les IC Wilson, le Monte-Carlo et la comparaison v5→v7. Dites-moi si vous voulez que je retire les fichiers de l'index ou ajuste la fiche (je ne committe pas).
+
+### 🤖 Assistant
+
+⏵ Dernières corrections : titres v4/v5 et tableau des corrections v2
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# v4 : titre = état final du commit 392f03aa\np=pathlib.Path('reports/rapport-pensee-segmentation-v4.md'); t=p.read_text()\nt=t.replace(\"# B13 — la segmentation d'abord : F1 0,2862 → 0,4194, exact 1 … [2326 caractères tronqués]`
+
+  ```
+reports/rapport-pensee-segmentation-v4.md:23:| 3 | **GN s'arrête au verbe** (la tête après le déterminant est toujours prise) | passif 3/3, F1 0,4194 |
+reports/rapport-pensee-segmentation-v4.md:27:| 7 | **S ne segmente que le français** (langue déclarée) : ses segments anglais polluaient l'union | F1 0,4194 → **0,4539**, tête 0,5930 → **0,6432** |
+--- (vide = ok)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 28, in <module>
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 555, in write_text
+    return PathBase.write_text(self, data, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_abc.py", line 649, in write_text
+    raise TypeError('data must be str, not %s' %
+                    data.__class__.__name__)
+TypeError: data must be str, not NoneType
+  ```
+
+### 👤 Utilisateur
+
+Background subagent c27ff712-ac49-4750-90d4-76f59bedb5ca finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Résumé final de la re-mesure dev/test v7
+
+Deux fichiers neufs créés, aucun fichier existant modifié, aucun commit :
+`reports/rapport-dev-test-v7.md` et `reports/pensee-dev-test-v7.json`.
+
+**Split canonique (`crc32(id)%3==0` → test), commit `69bd865e`**
+
+| | phrases | cibles | labels | couverture | exact/labels | F1 | tête |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| dev | 422 | 163 | 134 | 0,8221 | **133/134 = 0,9925** | 0,5512 | 0,7132 |
+| test | 190 | 76 | 62 | 0,8158 | **62/62 = 1,0** | 0,5651 | 0,7196 |
+| tout | 612 | 239 | 196 | 0,8201 | **195/196 = 0,9949** | 0,5555 | 0,7152 |
+
+Par langue : fr 92/92 dev, 43/43 test ; en 41/42 dev, 19/19 test.
+Par type : REL 42/42 dev, 11/11 test ; SUB 33/33, 19/19 ; GP 58/59, 32/32 (l'unique échec est r102, GP/en).
+
+**Les trois splits**
+
+| split | dev exact | test exact |
+|---|---:|---:|
+| `%3==0` (canonique) | 133/134 | 62/62 |
+| `%3==1` | 119/120 | 76/76 |
+| `%3==2` | 138/138 | 57/58 |
+
+**Écart** : **1 cas** sur l'exact (étendue 0,0172 au test, 0,0083 en dev), **3 spans** sur la couverture (14/13/16 perdus sur 43, attendus 13,67/16,01/13,31), **2,4 pts** de F1, **1,2 pt** de tête. Un Monte-Carlo de 2 000 partitions aléatoires place toutes ces étendues dans la bande 95 % : le split est stable.
+
+**Équilibre** : aucune catégorie demandée absente, mais `hand` est mince (5 phrases, 3 cibles au test, toutes GP ; `hand/REL` et `hand/SUB` uniquement en dev) et REL/en ne compte que 5 cibles au test. Le test canonique est REL-pauvre (22,4 % contre 35,0 % en dev) et GP-riche (46,1 % contre 37,4 % ; χ² p=0,26).
+
+**Dev vs test** : 1 échec contre 0 → **< 2 cas**, pas d'alerte. En v5, l'échec unique était r309 (seau 0/test) ; en v7 il est corrigé et r102 (seau 2/dev) apparaît : l'écart s'inverse parce que l'échec change de phrase et de seau, pas parce que le test progresse. La F1 agrégée +1,39 pt est portée par GN/GV, pas par l'attachement ; sur REL/SUB/GP le test est plus bas de 6,8/1,3/4,0 pts.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -1 reports/rapport-pensee-segmentation-v4.md; head -1 reports/rapport-pensee-couverture-v5.md; grep -n \"186/187\\|185/187\" reports/README.md | head -3; grep -n \"0,5164\" reports/rapport-pensee-couverture-v7.md\npython3 tools/ … [782 caractères tronqués]`
+
+  ```
+# B13 — la segmentation d'abord : F1 0,2862 → 0,4539, exact 157/160 (0,9812), couverture 160/239
+# B13 — la couverture : 187 labels, exact 186/187 (0,9947), F1 0,5156
+22:| [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — la couverture : **187 labels**, exact **186/187 (0,9947)**, F1 **0,5156**, dev/test 125/126 et 60/61 |
+34:| F1 syntagmes (union, gelé 602) | 0,5164 | **0,5595** |
+     · compteurs : en-cours.md dit 757 JSON, le disque en a 758
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ la page vivante date du dernier commit (2026-11-05)
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+8d6c318d B13 — AUDIT DES 7 FICHES (23 ÉCARTS), DEV/TEST V7 (133/134, 62/62), LA V7 CORRIGÉE AVEC SON CONTRÔLE (195/196 VS 1,67)
+jeu 05 nov 2026 20:19:48 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1255 caractères tronqués]`

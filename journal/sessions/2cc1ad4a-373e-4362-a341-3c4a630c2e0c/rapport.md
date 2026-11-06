@@ -9,10 +9,10 @@
 | Début | 2026-11-05 19:25 |
 | Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 52 |
-| Appels d'outils | 69 |
+| Messages | 65 |
+| Appels d'outils | 83 |
 | Fichiers touchés | 2 |
-| Commandes | 53 |
+| Commandes | 59 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : vérifier l … [2312 caractères tronqués]
 
-*69 appels d'outils.* Actions notables :
+*83 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, log, target commit
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Inspect evaluer_gold for measurement API and writes
 - bash — Inspect POS and F1 assertions
 - bash — Inspect union test gold source and attachment computation
-- … et 42 autres
+- … et 53 autres
 
 **Synthèse produite :**
 
-⏵ Alerte au parent sur un résidu dans la correction v7 en cours
+⏵ État des corrections du parent après le commit 8d6c318d
 
 ## 3. Travail accompli
 
@@ -53,8 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json` | 1 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +98,7 @@
 - **T1** Check all relative links in fiches resolve
 - **T1** Search negative-control markers in JSONs
 - **T1** Inspect previous coherence JSON structure
-- … et 13 autres
+- … et 19 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -7,12 +7,12 @@
 | Identifiant | `24529ced-6556-4491-9633-9401c2dffb0c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 19:25 |
-| Durée | 0.8 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 56 |
-| Appels d'outils | 55 |
+| Messages | 62 |
+| Appels d'outils | 61 |
 | Fichiers touchés | 0 |
-| Commandes | 49 |
+| Commandes | 55 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2041 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*61 appels d'outils.* Actions notables :
 
 - bash — Inspect git state and recent commits
 - bash — List linguistics tests and reports directories
@@ -41,11 +41,11 @@
 - bash — Check verb recognition and _est_verbe definition
 - bash — Gold stats, ADV sets, split membership, wrong attachment
 - bash — Distribution of REL/SUB head markers by type and language
-- … et 36 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
-⏵ Mesure finale de la combinaison retenue (R1+R2+R3 avec complément `fall`)
+⏵ Relecture des données par cas avant rédaction des deux livrables
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Patch R3 ordering and R4, measure dev and test
 - **T1** Restore exact baseline order and verify counts
 - **T1** Inspect R3 losses and the GP case
-- … et 9 autres
+- … et 15 autres
 
 ## 5. Erreurs rencontrées
 
