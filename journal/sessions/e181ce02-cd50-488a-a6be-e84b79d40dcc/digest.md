@@ -49651,3 +49651,25 @@ Journaux complets : work/portes-1106-01h28
 ⏵ Suite complète : **79 vertes / 4 rouges** (2 structurelles connues, `sessions` d'une autre session, `bloc` documentée). Je consigne la passe
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nnouvelle = \"\"\"> **Passe complète — 2026-11-06 01 h 28 → 03 h 44 :** **83 portes, 79 vertes, 4 rouges**\n> (journaux ` … [1748 caractères tronqués]`
+
+  ```
+passe consignée
+     · docs/pilotage/references-non-regression.md : 2559 mots > budget 2500 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · docs/pilotage/references-non-regression.md : 2559 mots > budget 2500 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2638]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2638", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/2026-11-06/modele.md
+COMMIT OK 1
+ea7d3275 PORTES — LA PASSE COMPLÈTE DU 06/11 CONSIGNÉE : 79 VERTES / 4 ROUGES (2 STRUCTURELLES, SESSIONS D'AUTRUI, CASCADE_POS DOCUMENTÉE)
+ven 06 nov 2026 03:44:07 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Passe complète — 2026-11-06 01 h 28 → 03 h 44 :** **83 portes, 79 vertes, 4 rouges**\n> (journaux  … [1219 caractères tronqués]`
