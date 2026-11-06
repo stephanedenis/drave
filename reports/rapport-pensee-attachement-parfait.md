@@ -1,5 +1,7 @@
 # B13 — l'attachement parfait sur les spans prédits : 187/187 (1,0000)
 
+> **Instantané historique** : état au commit `0ec6c27d` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **183/183 portes** : sur les **187 segments dont le span est prédit** (sur 239 cibles), la cible
 > est **juste 187 fois** — **français 127/127 (1,0)**, **anglais 60/60 (1,0)**, **verbes 131/131**,

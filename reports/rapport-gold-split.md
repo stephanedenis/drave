@@ -1,5 +1,7 @@
 # B13 — le gold coupé en dev/test : les gains généralisent (test 0,9814, dev 0,9811)
 
+> **Instantané historique** : état au commit `85e4082b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > Le gold 612 est coupé en **dev** (422 phrases, 163 cibles, 106 labels) et **test** (190, 76, 54)
 > par un **hash stable de l'identifiant** (`crc32(id) % 3 == 0` → test), stratifié par source et
@@ -39,7 +41,7 @@
 
 ## 3. Ce que ce banc ne dit pas
 
-- **Les 79 spans perdus** : la couverture reste 160/239, identique sur les deux moitiés.
+- **Les 79 spans perdus** : la couverture est **106/163 = 0,6503 en dev** et **54/76 = 0,7105 en test** (total 160/239 = 0,6695) — pas identique.
 - **Le surajustement fin** : un split ne détecte pas un ajustement qui profite aux deux moitiés
   (les règles ont été dessinées sur l'ensemble, donc sur test aussi) — c'est une limite de méthode.
 - **Le gold 612** : 432 réels + 160 synthétiques + 20 de `gold.py`.

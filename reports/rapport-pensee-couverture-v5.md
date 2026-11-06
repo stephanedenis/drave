@@ -1,5 +1,7 @@
 # B13 — la couverture : 187 labels, exact 185/187 (0,9893), F1 0,5156
 
+> **Instantané historique** : état au commit `b975011b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **183/183 portes** : la **couverture** passe de **160 à 187 labels** (sur 239) et l'exactitude
 > tient : **exact 186/187 = 0,9947** (fr **0,9921**, en **1,0000** — 60/60) ; la **F1 syntagmes**

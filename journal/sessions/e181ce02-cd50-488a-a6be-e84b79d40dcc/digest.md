@@ -45985,3 +45985,273 @@ NON TROUVÉ | **T167** | quel dénominateur pour l'attachement ? | **rend
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T167** | quel dénominateur pour l'attachement ? | **rendement** (÷239) et **exactitude spans** (÷146) : 0,7 … [891 caractères tronqués]`
+
+  ```
+T167
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 23 files changed, 4239 insertions(+), 106 deletions(-)
+COMMIT OK 1
+e4cd4408 DOCS — LE TABLEAU DES PORTES T163-T180 PASSE AUX VALEURS V7 (43 SPANS, EXACT 195/196, FR 1,0 / EN 0,9836)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; sleep 540; ls reports/ | grep -E \"audit-v7|coherence-fiches-v7|spans-v7|dev-test-v7\"", "description": "Attendre les sous-agents", "timeoutMs": 600000}`
+
+  ```
+jeu 05 nov 2026 19:51:31 EST
+[exit code: 1]
+  ```
+
+- **list_agents** `{}`
+
+  ```
+df1b1098-d54e-4763-bfc2-2a8cc1498cec [inactive] — Revue visuelle des 7 schémas
+f55ccb7b-481e-4ab6-b5b4-331dc6ff2238 [inactive] — Prototype classement appris
+ff7e786c-3ece-4eae-864e-19dddfead93c [inactive] — Cohérence fiches JSON portes
+a8035275-c7b9-4713-a6ab-7b859cd72306 [inactive] — Diagnostic du top-k strict
+63d4c619-63e8-41b9-a183-5c6f1ac05a21 [inactive] — Audit reproductibilité attachement
+53bc3288-f2c1-4a7d-b1db-88d794074f70 [inactive] — Annotation indépendante d'un échantillon
+c4796573-e2dc-48c2-b832-96f8bfab22c3 [inactive] — Contrat S pour les REL/SUB
+65495a29-10c0-4571-96be-e7729f1efebf [inactive] — Coût et cache du chunker
+3f8f2bb8-781b-44a6-9e14-58025004b6fc [inactive] — Audit de l'attachement v2
+d300542e-6e9d-47ac-875b-b44a192eec35 [inactive] — Prototype de la cible vide
+7263ca42-cd56-4c36-a6dd-8ff2d1024a43 [inactive] — Qualifier les 8 échecs restants
+1b0cf09a-a77a-443d-82e2-68a5d6cacdf0 [inactive] — Cache du chunker mesuré
+3144cf23-6004-46ef-bc3d-f05d81c0cff6 [inactive] — Couverture des spans sans S
+b3d82ad5-bff2-49ec-9ad6-2230e68d8071 [inactive] — Mesure multi-cibles du gold
+b9ea3904-889c-4497-a781-694da7d4987c [inactive] — Qualité du gold anglais
+24001907-4f19-4ea5-8
+… [258 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E \"audit-v7|coherence-fiches-v7|spans-v7|dev-test-v7\"", "description": "Attendre encore", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-1907]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1907", "timeout_ms": 300000, "wait": true}`
+
+  ```
+jeu 05 nov 2026 20:10:49 EST
+pensee-dev-test-v7.json
+rapport-coherence-fiches-v7.md
+rapport-dev-test-v7.md
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1907 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "audit-v7|coherence-fiches-v7|spans-v7|dev-test-v7") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Deux livraisons (dev/test, cohérence) : je lis les verdicts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -16 reports/rapport-dev-test-v7.md; echo \"=== COHÉRENCE :\"; head -14 reports/rapport-coherence-fiches-v7.md", "description": "Lire les verdicts dev/test et cohérence"}`
+
+  ```
+# B13 — dev/test en v7 : dev 133/134, test 62/62, le split tient sur trois découpages
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Commit mesuré** : `69bd865e` · **Verdict** : ✅
+> Le gold 612 est re-coupé par `crc32(id) % 3 == 0` (test) : **dev 133/134 (0,9925)**, **test 62/62 (1,0)**
+> — mais le test ne couvre que **62 des 76 cibles** (0,8158). En décalant le split (`%3==1`, `%3==2`),
+> l'exact reste à **1 cas près** (étendue 0,0172), la couverture à **3 spans près** (14/13/16 des 43),
+> la F1 à **2,4 points**. **Aucune catégorie demandée n'est absente** ; les écarts dev/test tiennent à
+> **un échec unique (r102)** et à la **composition par type**, pas au split.
+>
+> **Dispositif** : [`gold_split.py`](../tools/tests/linguistique/gold_split.py) (`dev`, `test`, `compter`),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+> [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (heuristique) ; JSON
+> [`pensee-dev-test-v7.json`](pensee-dev-test-v7.json).
+
+## 1. Ce qui est mesuré
+
+=== COHÉRENCE :
+# Cohérence des fiches B13 du 2026-11-05 — v2 → v7
+
+> **Ligne de roadmap** : **B13** (moteur de pens
+… [842 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 2' reports/rapport-coherence-fiches-v7.md | head -1 | cut -d: -f1),+26p\" reports/rapport-coherence-fiches-v7.md", "description": "Lire les écarts critiques"}`
+
+  ```
+## 2. Les sept fiches
+
+| # | fiche | commit | statut | portes | verdict de la fiche | verdict de l'audit | écarts |
+|---:|---|---|---|---:|---|---|---:|
+| 1 | [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) | `9d5337ce` | historique | 180/180 | ✅ | ⚠️ chiffres reproduits, 3 écarts de table/prose (A8) | 3 |
+| 2 | [`rapport-pensee-attachement-v3.md`](rapport-pensee-attachement-v3.md) | `dcf7bc91` / `e1903e2d` | historique | 181/181 | ✅ | ✅ chiffres ; ⚠️ JSON non mis à jour | 0 |
+| 3 | [`rapport-pensee-segmentation-v4.md`](rapport-pensee-segmentation-v4.md) | `392f03aa` | historique | 183/183 | ✅ | ❌ titre/prose périmés + base F1 | 7 |
+| 4 | [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | `b975011b` | historique | 183/183 | ✅ | ❌ titre/puces périmés + base F1 | 8 |
+| 5 | [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | `0ec6c27d` | historique | 183/183 | ✅ | ⚠️ chiffres justes ; ligne F1 sur deux bases | 1 |
+| 6 | [`rapport-gold-split.md`](rapport-gold-split.md) | `85e4082b` | historique | 183/183 (commit) | ✅ | ⚠️ chiffres justes ; une phrase fausse | 1 |
+| 7 | [`rapport-pensee-couverture-v7.md`](rapport-
+… [1327 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 7' reports/rapport-coherence-fiches-v7.md | head -1 | cut -d: -f1),+30p\" reports/rapport-coherence-fiches-v7.md", "description": "Lire les corrections à faire"}`
+
+  ```
+## 7. Contrôles négatifs
+
+| fiche | contrôle négatif | où | verdict |
+|---|---|---|---|
+| v2 | modèle appris rejeté : 142/145 contre 137, +5, McNemar 7/2, p = 0,18, IC [−0,7 ; +7,6] ; l'audit A8 ajoute permutations et candidat aléatoire | § 3, JSON `modele_appris` | ✅ |
+| v3 | complétion naïve des GV 132 (−5) ; R5 sans condition ADV 131 (−6) ; R3(a) 2/4 | § 2, JSON `controles_negatifs` | ✅ |
+| v4 | aucun ; les deux règles de A12 « non intégrées » ne sont pas un négatif mesuré | — | ❌ |
+| v5 | aucun ; dev/test est un contrôle de généralisation, pas un négatif | — | ❌ |
+| v6 | aucun ; dev/test est un contrôle de généralisation, pas un négatif | — | ❌ |
+| v7 | aucun ; dev/test n'ont même pas été re-mesurés depuis la v6 | — | ❌ |
+| gold-split | aucun ; le split est l'objet de la fiche, sans test de fuite, de permutation ou de mélange | — | ❌ |
+
+## 8. Mentions d'historique
+
+**Aucune des six fiches historiques ne porte de mention d'historique explicite.** Le numéro de
+version (v2…v6) et la date 2026-11-05 sont des indices, pas une phrase disant « instantané au
+commit X, ne décrit pas l'état courant ». La v2 est appelée « instantané historique » dans
+`rapport-audit-v2.md`, mais cette ment
+… [735 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '## 4' reports/rapport-coherence-fiches-v7.md | head -1 | cut -d: -f1),+22p\" reports/rapport-coherence-fiches-v7.md", "description": "Lire les écarts de la v7"}`
+
+  ```
+## 4. Registre des écarts
+
+### 4.1 v2 — `9d5337ce` (3 écarts)
+
+| id | gravité | où | constat | mesure / correction |
+|---|---|---|---|---|
+| V2-1 | majeure | § 1, lignes 27–29 | la colonne « avant » est étiquetée « (POS gold) » alors que 63/82 est l'**ancien split lexical** (`_est_verbe`) ; la ligne écrit « 63 (0,9524) » et « 82 (0,7683) », des **comptes de labels** avec des taux calculés sur 60/63 et 63/82 ; « +48 cibles » est `111 − 63` (justes après − cibles avant), ni un gain de cibles ni un gain de justes | écrire 60/63 (0,9524) et 63/82 (0,7683) comme split lexical ; le POS gold sur le même bloc donne 97/116 et 26/29, le v2 111/116 et 26/29 ; les cibles passent 63 → 116 (+53) et les justes 60 → 111 (+51), ou +14 à split POS constant |
+| V2-2 | majeure | § 2, lignes 46–47 | « **46** des 57 échecs étaient des candidats non réduits à leur tête » ; le même paragraphe dit « +45 » | lire **45** ; le 46 est `134 − 88` (sous-chaîne vs strict), le nombre de têtes candidates égales à la cible est 45 (A2, comptage indépendant de A8) |
+| V2-3 | majeure | § 2, tableau des corrections, lignes 35–39 | la colonne « gain » ne s'additionne pas aux totaux : strict 88 + 45 = 133, alors que le to
+… [1153 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '### 4.7' reports/rapport-coherence-fiches-v7.md | head -1 | cut -d: -f1),+22p\" reports/rapport-coherence-fiches-v7.md", "description": "Lire les écarts de la v7"}`
+
+  ```
+### 4.7 gold-split — `85e4082b` (1 écart)
+
+| id | gravité | où | constat | mesure / correction |
+|---|---|---|---|---|
+| GS-1 | majeure | § 3, ligne 42 | « la couverture reste 160/239, **identique sur les deux moitiés** » | la couverture est **106/163 = 0,6503 en dev** et **54/76 = 0,7105 en test** ; seul le total est 160/239 = 0,6695. Le split n'est pas « identique » |
+
+Tout le reste se reproduit exactement : 422/163/106 en dev, 190/76/54 en test, 612/239/160 au
+total ; sources 15/302/105, 5/130/55, 20/432/160 ; langues 277/145, 125/65, 402/210 ; exact
+104/106 et 53/54 ; F1 0,4414 / 0,4719 ; tête 0,6347 / 0,6470 ; fr 79/79 et 38/39 ; en 25/27 et
+15/15. Les tableaux d'équilibre s'additionnent parfaitement. La fiche ne donne pas le compte de
+portes (le commit est à 183/183), n'a pas de contrôle négatif ni de mention d'historique.
+
+## 5. Tableaux : sommes et dénombrements
+
+**Le seul tableau dont la somme visible ne tombe pas** est celui des corrections de la v2 :
+`88 + 45 = 133` pour le top-k strict, alors que le total est 141 ; `134` pour le top-k, alors que
+le total est 142 ; le +6 top1 du segment n'est pas crédité. Les totaux de la fiche sont justes,
+c'est la colonne « gain » qui 
+… [410 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '### 4.6' reports/rapport-coherence-fiches-v7.md | head -1 | cut -d: -f1),+18p\" reports/rapport-coherence-fiches-v7.md", "description": "Lire 4.6 (v7)"}`
+
+  ```
+### 4.6 v7 — `69bd865e` (3 écarts, fiche courante)
+
+| id | gravité | où | constat | mesure / correction |
+|---|---|---|---|---|
+| V7-1 | majeure | § 3, ligne 40 | « le contexte … rend **0,0132** de POS » | 0,7603 − 0,7475 = **0,0128** |
+| V7-2 | **critique** | en-tête, § 2 | F1 **0,5595**, tête **0,7205**, POS **0,7603** présentées avec le gold **612** (§ 3) | ces trois valeurs sont celles du gold **gelé 602** ; sur 612, le code donne F1 **0,5555**, tête **0,7152**, POS **0,7581**. La couverture (196/239) et l'exactitude (195/196) sont, elles, sur le 612 |
+| V7-3 | majeure | § 2, colonne « v6 » | la colonne v6 n'est pas homogène : F1 0,5130 est la v6 sur 612, mais tête **0,6826** est la **v5** (v6 : 0,6785 sur 612, 0,6834 sur 602) et POS **0,7475** est la **constante de porte de la v6** (v6 : 0,7461 sur 612, 0,7482 sur 602) | choisir une base et y ramener les trois valeurs de la v6 ; a minima, corriger la tête et la POS |
+
+Les autres mesures se reproduisent : 196 labels, 195/196, 195 top1, 166 top-k, fr 135/135,
+en 60/61, 43 spans (21 + 17 + 5), couverture 0,8201, POS 0,7603 (sur 602), F1 0,5595 (sur 602).
+La fiche **ne re-mesure pas dev/test** depuis la v6 (§ 3) et n'a pas de cont
+… [482 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige la v7 (base 602/612, POS 0,0128) et je lui donne un **contrôle négatif mesuré** (permutation)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, random, statistics; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique() … [1123 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1939]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1939", "timeout_ms": 900000, "wait": true}`
+
+  ```
+réel exact 195 / 196 | F1 612 : 0.5555
+permutation : moyenne 195 | max 195 | observé 195 | sur 196
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, random, statistics; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\n# on collecte les labels prédi … [921 caractères tronqués]`
+
+  ```
+n 196 | observé 195 | permutation moyenne 1.67 | max 4
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle valide : **195/196** contre **1,67** en permutation. Je corrige les fiches (v7, historique, gold-split, README)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) v7 : corrections + base + dev/test + contrôle négatif\np=pathlib.Path('reports/rapport-pensee-couverture-v7.md'); t=p.read_text()\nt=t.replace(\"> **Dispositif** : [`bloc_linguistique.py`](../to … [3387 caractères tronqués]`
+
+  ```
+fiches corrigées
+     · compteurs : en-cours.md dit 755 JSON, le disque en a 757
+SyntaxError: invalid syntax
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -5; python3 -c \"\nimport pathlib\nfor f in ('reports/rapport-pensee-couverture-v7.md','reports/rapport-pensee-attachement-v2.md'):\n    t=pathlib.Path(f).read_text().splitlines()\n    print(f … [57 caractères tronqués]`
+
+  ```
+❌ 1 tableau(x) ne rendront pas (mistune refuse le tableau ENTIER) :
+     reports/rapport-coherence-fiches-v7.md:178 — 7 cellules ≠ 5 attendues
+  1700 fichier(s) examiné(s)
+reports/rapport-pensee-couverture-v7.md ['# B13 — la couverture à 0,8201 : POS contextuel, GV avant GP, prépositions ambiguës', '', '> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅', "> **183/183 portes** : la **couverture** passe de **187 à 196 labels** (sur 239) et l'exactitude"]
+reports/rapport-pensee-attachement-v2.md ["# B13 — l'attachement v2 : exact 0,8483 → 0,9448, top-k strict 0,6069 → 0,9724", '', "> **Instantané historique** : état au commit `9d5337ce` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).", '']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '174,180p' reports/rapport-coherence-fiches-v7.md | cut -c1-260", "description": "Voir la ligne du tableau fautif"}`
+
+  ```
+### 4.5 v6 — `0ec6c27d` (1 écart)
+
+| id | gravité | où | constat | mesure / correction |
+|---|---|---|---|---|
+| V6-1 | majeure | § 2, ligne 31 | « F1 syntagmes | **0,5156** | **0,5130** » | sur un gold constant, la F1 ne bouge pas : sur 612, v5 = v6 = **0,5130** ; sur 602, v5 = v6 = **0,5164**. La baisse 0,5156 → 0,5130 compare la constante de porte de la v5 (602) à l
+
+Les autres chiffres se reproduisent : 187/187, fr 127/127, en 60/60, verbes 131/131, noms 56/56,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-coherence-fiches-v7.md'); t=p.read_text()\nt=t.replace('| V6-1 | majeure | § 2, ligne 31 | « F1 syntagmes | **0,5156** | **0,5130** » | sur un gold constant',\n        … [303 caractères tronqués]`
+
+  ```
+tableau de l’audit réparé
+  ✅ 1700 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3362 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-05)
+     · compteurs : en-cours.md dit 662 fichiers, le disque en a 664
+     · compteurs : en-cours.md dit 755 JSON, le disque en a 757
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [2379 caractères tronqués]`
+
+  ```
+664 757
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+README
+[still running after 60000ms; moved to background job bash-1960]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1960", "timeout_ms": 900000, "wait": true}`

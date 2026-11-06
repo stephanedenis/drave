@@ -1,0 +1,3128 @@
+{
+ "commit": "69bd865e",
+ "valide_contre_evaluer_gold": true,
+ "validation": {
+  "exact": [
+   195,
+   195
+  ],
+  "labels": [
+   196,
+   196
+  ],
+  "cibles": [
+   239,
+   239
+  ],
+  "f1": [
+   0.5555,
+   0.5555
+  ],
+  "tete_f1": [
+   0.7152,
+   0.7152
+  ],
+  "pos": [
+   0.7581,
+   0.7581
+  ],
+  "couverture": [
+   0.8201,
+   0.8201
+  ]
+ },
+ "analyses_secondes": 0.384,
+ "equilibre_global": {
+  "phrases": 612,
+  "ids_uniques": 612,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "langues": {
+   "fr": 402,
+   "en": 210
+  },
+  "types_tout": {
+   "GN": 828,
+   "GV": 712,
+   "GP": 105,
+   "SUB": 70,
+   "REL": 74,
+   "ADJ": 35,
+   "ADV": 30,
+   "PONCT": 9
+  },
+  "types_cibles": {
+   "GP": 96,
+   "SUB": 69,
+   "REL": 74
+  },
+  "cibles_par_langue": {
+   "fr": 151,
+   "en": 88
+  }
+ },
+ "splits": {
+  "canonique": {
+   "regle": "crc32(id)%3==0 -> test",
+   "dev": {
+    "phrases": 422,
+    "tokens": 2185,
+    "pos": {
+     "exactitude": 0.7547,
+     "ferme": 0.8952,
+     "ouvert": 0.6201,
+     "tokens": 2185
+    },
+    "syntagme": {
+     "precision": 0.5953,
+     "rappel": 0.5131,
+     "f1": 0.5512,
+     "tp": 665,
+     "fp": 452,
+     "fn": 631
+    },
+    "tete": {
+     "precision": 0.7893,
+     "rappel": 0.6505,
+     "f1": 0.7132,
+     "tp": 843,
+     "fp": 225,
+     "fn": 453
+    },
+    "acte": 1.0,
+    "attachement": {
+     "cibles": 163,
+     "labels": 134,
+     "exact": 133,
+     "exact_any": 133,
+     "couverture": 0.8221,
+     "exact_taux_span": 0.9925,
+     "exact_taux_cibles": 0.816,
+     "exact_any_taux_span": 0.9925
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 101,
+      "labels": 92,
+      "exact": 92,
+      "exact_any": 92,
+      "couverture": 0.9109,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9109,
+      "exact_any_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 62,
+      "labels": 42,
+      "exact": 41,
+      "exact_any": 41,
+      "couverture": 0.6774,
+      "exact_taux_span": 0.9762,
+      "exact_taux_cibles": 0.6613,
+      "exact_any_taux_span": 0.9762
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 57,
+      "labels": 42,
+      "exact": 42,
+      "exact_any": 42,
+      "tp": 42,
+      "fp": 37,
+      "fn": 15,
+      "ttp": 55,
+      "tfp": 10,
+      "tfn": 2,
+      "couverture": 0.7368,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7368,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.5316,
+       "rappel": 0.7368,
+       "f1": 0.6176,
+       "tp": 42,
+       "fp": 37,
+       "fn": 15
+      },
+      "tete": {
+       "precision": 0.8462,
+       "rappel": 0.9649,
+       "f1": 0.9016,
+       "tp": 55,
+       "fp": 10,
+       "fn": 2
+      }
+     },
+     "SUB": {
+      "cibles": 45,
+      "labels": 33,
+      "exact": 33,
+      "exact_any": 33,
+      "tp": 34,
+      "fp": 8,
+      "fn": 12,
+      "ttp": 40,
+      "tfp": 2,
+      "tfn": 6,
+      "couverture": 0.7333,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7333,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.8095,
+       "rappel": 0.7391,
+       "f1": 0.7727,
+       "tp": 34,
+       "fp": 8,
+       "fn": 12
+      },
+      "tete": {
+       "precision": 0.9524,
+       "rappel": 0.8696,
+       "f1": 0.9091,
+       "tp": 40,
+       "fp": 2,
+       "fn": 6
+      }
+     },
+     "GP": {
+      "cibles": 61,
+      "labels": 59,
+      "exact": 58,
+      "exact_any": 58,
+      "tp": 65,
+      "fp": 21,
+      "fn": 2,
+      "ttp": 65,
+      "tfp": 19,
+      "tfn": 2,
+      "couverture": 0.9672,
+      "exact_taux_span": 0.9831,
+      "exact_taux_cibles": 0.9508,
+      "exact_any_taux_span": 0.9831,
+      "syntagme": {
+       "precision": 0.7558,
+       "rappel": 0.9701,
+       "f1": 0.8497,
+       "tp": 65,
+       "fp": 21,
+       "fn": 2
+      },
+      "tete": {
+       "precision": 0.7738,
+       "rappel": 0.9701,
+       "f1": 0.8609,
+       "tp": 65,
+       "fp": 19,
+       "fn": 2
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 34,
+      "labels": 29,
+      "exact": 29,
+      "exact_any": 29,
+      "couverture": 0.8529,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8529,
+      "exact_any_taux_span": 1.0
+     },
+     "REL/en": {
+      "cibles": 23,
+      "labels": 13,
+      "exact": 13,
+      "exact_any": 13,
+      "couverture": 0.5652,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.5652,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/fr": {
+      "cibles": 29,
+      "labels": 27,
+      "exact": 27,
+      "exact_any": 27,
+      "couverture": 0.931,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.931,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/en": {
+      "cibles": 16,
+      "labels": 6,
+      "exact": 6,
+      "exact_any": 6,
+      "couverture": 0.375,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.375,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/fr": {
+      "cibles": 38,
+      "labels": 36,
+      "exact": 36,
+      "exact_any": 36,
+      "couverture": 0.9474,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9474,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/en": {
+      "cibles": 23,
+      "labels": 23,
+      "exact": 22,
+      "exact_any": 22,
+      "couverture": 1.0,
+      "exact_taux_span": 0.9565,
+      "exact_taux_cibles": 0.9565,
+      "exact_any_taux_span": 0.9565
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 10,
+      "labels": 9,
+      "exact": 9,
+      "exact_any": 9,
+      "couverture": 0.9,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9,
+      "exact_any_taux_span": 1.0
+     },
+     "reel": {
+      "cibles": 121,
+      "labels": 101,
+      "exact": 100,
+      "exact_any": 100,
+      "couverture": 0.8347,
+      "exact_taux_span": 0.9901,
+      "exact_taux_cibles": 0.8264,
+      "exact_any_taux_span": 0.9901
+     },
+     "synthetique": {
+      "cibles": 32,
+      "labels": 24,
+      "exact": 24,
+      "exact_any": 24,
+      "couverture": 0.75,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.75,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "spans_perdus": {
+     "SUB": 12,
+     "REL": 15,
+     "GP": 2
+    },
+    "par_langue_f1": {
+     "fr": {
+      "syntagme": {
+       "precision": 0.5581,
+       "rappel": 0.536,
+       "f1": 0.5468,
+       "tp": 432,
+       "fp": 342,
+       "fn": 374
+      },
+      "tete": {
+       "precision": 0.7379,
+       "rappel": 0.6638,
+       "f1": 0.6989,
+       "tp": 535,
+       "fp": 190,
+       "fn": 271
+      },
+      "pos": 0.7558,
+      "tokens": 1384
+     },
+     "en": {
+      "syntagme": {
+       "precision": 0.6793,
+       "rappel": 0.4755,
+       "f1": 0.5594,
+       "tp": 233,
+       "fp": 110,
+       "fn": 257
+      },
+      "tete": {
+       "precision": 0.898,
+       "rappel": 0.6286,
+       "f1": 0.7395,
+       "tp": 308,
+       "fp": 35,
+       "fn": 182
+      },
+      "pos": 0.7528,
+      "tokens": 801
+     }
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "tokens": 994,
+    "pos": {
+     "exactitude": 0.7656,
+     "ferme": 0.9119,
+     "ouvert": 0.6306,
+     "tokens": 994
+    },
+    "syntagme": {
+     "precision": 0.5972,
+     "rappel": 0.5362,
+     "f1": 0.5651,
+     "tp": 304,
+     "fp": 205,
+     "fn": 263
+    },
+    "tete": {
+     "precision": 0.7866,
+     "rappel": 0.6631,
+     "f1": 0.7196,
+     "tp": 376,
+     "fp": 102,
+     "fn": 191
+    },
+    "acte": 0.9895,
+    "attachement": {
+     "cibles": 76,
+     "labels": 62,
+     "exact": 62,
+     "exact_any": 62,
+     "couverture": 0.8158,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8158,
+     "exact_any_taux_span": 1.0
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 50,
+      "labels": 43,
+      "exact": 43,
+      "exact_any": 43,
+      "couverture": 0.86,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.86,
+      "exact_any_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 26,
+      "labels": 19,
+      "exact": 19,
+      "exact_any": 19,
+      "couverture": 0.7308,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7308,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 17,
+      "labels": 11,
+      "exact": 11,
+      "exact_any": 11,
+      "tp": 11,
+      "fp": 12,
+      "fn": 6,
+      "ttp": 17,
+      "tfp": 2,
+      "tfn": 0,
+      "couverture": 0.6471,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.6471,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.4783,
+       "rappel": 0.6471,
+       "f1": 0.55,
+       "tp": 11,
+       "fp": 12,
+       "fn": 6
+      },
+      "tete": {
+       "precision": 0.8947,
+       "rappel": 1.0,
+       "f1": 0.9444,
+       "tp": 17,
+       "fp": 2,
+       "fn": 0
+      }
+     },
+     "SUB": {
+      "cibles": 24,
+      "labels": 19,
+      "exact": 19,
+      "exact_any": 19,
+      "tp": 19,
+      "fp": 7,
+      "fn": 5,
+      "ttp": 23,
+      "tfp": 2,
+      "tfn": 1,
+      "couverture": 0.7917,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7917,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.7308,
+       "rappel": 0.7917,
+       "f1": 0.76,
+       "tp": 19,
+       "fp": 7,
+       "fn": 5
+      },
+      "tete": {
+       "precision": 0.92,
+       "rappel": 0.9583,
+       "f1": 0.9388,
+       "tp": 23,
+       "fp": 2,
+       "fn": 1
+      }
+     },
+     "GP": {
+      "cibles": 35,
+      "labels": 32,
+      "exact": 32,
+      "exact_any": 32,
+      "tp": 34,
+      "fp": 12,
+      "fn": 4,
+      "ttp": 35,
+      "tfp": 9,
+      "tfn": 3,
+      "couverture": 0.9143,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9143,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.7391,
+       "rappel": 0.8947,
+       "f1": 0.8095,
+       "tp": 34,
+       "fp": 12,
+       "fn": 4
+      },
+      "tete": {
+       "precision": 0.7955,
+       "rappel": 0.9211,
+       "f1": 0.8537,
+       "tp": 35,
+       "fp": 9,
+       "fn": 3
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 12,
+      "labels": 9,
+      "exact": 9,
+      "exact_any": 9,
+      "couverture": 0.75,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.75,
+      "exact_any_taux_span": 1.0
+     },
+     "REL/en": {
+      "cibles": 5,
+      "labels": 2,
+      "exact": 2,
+      "exact_any": 2,
+      "couverture": 0.4,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.4,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/fr": {
+      "cibles": 14,
+      "labels": 12,
+      "exact": 12,
+      "exact_any": 12,
+      "couverture": 0.8571,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8571,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/en": {
+      "cibles": 10,
+      "labels": 7,
+      "exact": 7,
+      "exact_any": 7,
+      "couverture": 0.7,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/fr": {
+      "cibles": 24,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "couverture": 0.9167,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9167,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/en": {
+      "cibles": 11,
+      "labels": 10,
+      "exact": 10,
+      "exact_any": 10,
+      "couverture": 0.9091,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9091,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 3,
+      "labels": 3,
+      "exact": 3,
+      "exact_any": 3,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0
+     },
+     "reel": {
+      "cibles": 50,
+      "labels": 41,
+      "exact": 41,
+      "exact_any": 41,
+      "couverture": 0.82,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.82,
+      "exact_any_taux_span": 1.0
+     },
+     "synthetique": {
+      "cibles": 23,
+      "labels": 18,
+      "exact": 18,
+      "exact_any": 18,
+      "couverture": 0.7826,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7826,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "spans_perdus": {
+     "REL": 6,
+     "GP": 3,
+     "SUB": 5
+    },
+    "par_langue_f1": {
+     "fr": {
+      "syntagme": {
+       "precision": 0.5562,
+       "rappel": 0.5718,
+       "f1": 0.5639,
+       "tp": 203,
+       "fp": 162,
+       "fn": 152
+      },
+      "tete": {
+       "precision": 0.7365,
+       "rappel": 0.693,
+       "f1": 0.7141,
+       "tp": 246,
+       "fp": 88,
+       "fn": 109
+      },
+      "pos": 0.7512,
+      "tokens": 647
+     },
+     "en": {
+      "syntagme": {
+       "precision": 0.7014,
+       "rappel": 0.4764,
+       "f1": 0.5674,
+       "tp": 101,
+       "fp": 43,
+       "fn": 111
+      },
+      "tete": {
+       "precision": 0.9028,
+       "rappel": 0.6132,
+       "f1": 0.7303,
+       "tp": 130,
+       "fp": 14,
+       "fn": 82
+      },
+      "pos": 0.7925,
+      "tokens": 347
+     }
+    }
+   },
+   "equilibre": {
+    "dev": {
+     "phrases": 422,
+     "sources": {
+      "hand": 15,
+      "reel": 302,
+      "synthetique": 105
+     },
+     "langues": {
+      "fr": 277,
+      "en": 145
+     },
+     "cibles_par_type": {
+      "GP": 61,
+      "SUB": 45,
+      "REL": 57
+     },
+     "cibles_par_langue": {
+      "fr": 101,
+      "en": 62
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 38,
+      "SUB/fr": 29,
+      "REL/fr": 34,
+      "GP/en": 23,
+      "SUB/en": 16,
+      "REL/en": 23
+     },
+     "sources_langues": {
+      "hand/fr": 11,
+      "hand/en": 4,
+      "reel/fr": 161,
+      "reel/en": 141,
+      "synthetique/fr": 105
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "sources": {
+      "hand": 5,
+      "reel": 130,
+      "synthetique": 55
+     },
+     "langues": {
+      "fr": 125,
+      "en": 65
+     },
+     "cibles_par_type": {
+      "GP": 35,
+      "REL": 17,
+      "SUB": 24
+     },
+     "cibles_par_langue": {
+      "fr": 50,
+      "en": 26
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 24,
+      "GP/en": 11,
+      "REL/fr": 12,
+      "REL/en": 5,
+      "SUB/fr": 14,
+      "SUB/en": 10
+     },
+     "sources_langues": {
+      "hand/fr": 3,
+      "hand/en": 2,
+      "reel/fr": 67,
+      "reel/en": 63,
+      "synthetique/fr": 55
+     }
+    },
+    "chi2_test": {
+     "sources": {
+      "chi2": 0.9331,
+      "ddl": 2,
+      "p": 0.6272,
+      "observe": {
+       "hand": 5,
+       "reel": 130,
+       "synthetique": 55
+      },
+      "attendu": {
+       "hand": 6.21,
+       "reel": 134.12,
+       "synthetique": 49.67
+      }
+     },
+     "langues": {
+      "chi2": 0.0009,
+      "ddl": 1,
+      "p": 0.9761,
+      "observe": {
+       "fr": 125,
+       "en": 65
+      },
+      "attendu": {
+       "fr": 124.8,
+       "en": 65.2
+      }
+     },
+     "types_cibles": {
+      "chi2": 2.6613,
+      "ddl": 2,
+      "p": 0.2643,
+      "observe": {
+       "GP": 35,
+       "REL": 17,
+       "SUB": 24
+      },
+      "attendu": {
+       "GP": 30.53,
+       "SUB": 21.94,
+       "REL": 23.53
+      }
+     },
+     "types_langues": {
+      "chi2": 3.4887,
+      "ddl": 5,
+      "p": 0.6251,
+      "observe": {
+       "GP/fr": 24,
+       "GP/en": 11,
+       "REL/fr": 12,
+       "REL/en": 5,
+       "SUB/fr": 14,
+       "SUB/en": 10
+      },
+      "attendu": {
+       "GP/fr": 19.72,
+       "SUB/fr": 13.67,
+       "REL/fr": 14.63,
+       "GP/en": 10.81,
+       "SUB/en": 8.27,
+       "REL/en": 8.9
+      }
+     }
+    },
+    "mix_types_test_pct": {
+     "GP": 46.05,
+     "REL": 22.37,
+     "SUB": 31.58
+    }
+   },
+   "categories_absentes": {
+    "sources": [],
+    "langues": [],
+    "types": [],
+    "types_langues": []
+   }
+  },
+  "decale1": {
+   "regle": "crc32(id)%3==1 -> test",
+   "dev": {
+    "phrases": 383,
+    "tokens": 2018,
+    "pos": {
+     "exactitude": 0.7602,
+     "ferme": 0.9017,
+     "ouvert": 0.6273,
+     "tokens": 2018
+    },
+    "syntagme": {
+     "precision": 0.5916,
+     "rappel": 0.5189,
+     "f1": 0.5529,
+     "tp": 604,
+     "fp": 417,
+     "fn": 560
+    },
+    "tete": {
+     "precision": 0.784,
+     "rappel": 0.6546,
+     "f1": 0.7135,
+     "tp": 762,
+     "fp": 210,
+     "fn": 402
+    },
+    "acte": 0.9948,
+    "attachement": {
+     "cibles": 150,
+     "labels": 120,
+     "exact": 119,
+     "exact_any": 119,
+     "couverture": 0.8,
+     "exact_taux_span": 0.9917,
+     "exact_taux_cibles": 0.7933,
+     "exact_any_taux_span": 0.9917
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 95,
+      "labels": 83,
+      "exact": 83,
+      "exact_any": 83,
+      "couverture": 0.8737,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8737,
+      "exact_any_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 55,
+      "labels": 37,
+      "exact": 36,
+      "exact_any": 36,
+      "couverture": 0.6727,
+      "exact_taux_span": 0.973,
+      "exact_taux_cibles": 0.6545,
+      "exact_any_taux_span": 0.973
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 43,
+      "labels": 29,
+      "exact": 29,
+      "exact_any": 29,
+      "tp": 29,
+      "fp": 27,
+      "fn": 14,
+      "ttp": 42,
+      "tfp": 8,
+      "tfn": 1,
+      "couverture": 0.6744,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.6744,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.5179,
+       "rappel": 0.6744,
+       "f1": 0.5859,
+       "tp": 29,
+       "fp": 27,
+       "fn": 14
+      },
+      "tete": {
+       "precision": 0.84,
+       "rappel": 0.9767,
+       "f1": 0.9032,
+       "tp": 42,
+       "fp": 8,
+       "fn": 1
+      }
+     },
+     "SUB": {
+      "cibles": 47,
+      "labels": 35,
+      "exact": 35,
+      "exact_any": 35,
+      "tp": 36,
+      "fp": 10,
+      "fn": 12,
+      "ttp": 43,
+      "tfp": 2,
+      "tfn": 5,
+      "couverture": 0.7447,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7447,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.7826,
+       "rappel": 0.75,
+       "f1": 0.766,
+       "tp": 36,
+       "fp": 10,
+       "fn": 12
+      },
+      "tete": {
+       "precision": 0.9556,
+       "rappel": 0.8958,
+       "f1": 0.9247,
+       "tp": 43,
+       "fp": 2,
+       "fn": 5
+      }
+     },
+     "GP": {
+      "cibles": 60,
+      "labels": 56,
+      "exact": 55,
+      "exact_any": 55,
+      "tp": 60,
+      "fp": 21,
+      "fn": 5,
+      "ttp": 61,
+      "tfp": 18,
+      "tfn": 4,
+      "couverture": 0.9333,
+      "exact_taux_span": 0.9821,
+      "exact_taux_cibles": 0.9167,
+      "exact_any_taux_span": 0.9821,
+      "syntagme": {
+       "precision": 0.7407,
+       "rappel": 0.9231,
+       "f1": 0.8219,
+       "tp": 60,
+       "fp": 21,
+       "fn": 5
+      },
+      "tete": {
+       "precision": 0.7722,
+       "rappel": 0.9385,
+       "f1": 0.8472,
+       "tp": 61,
+       "fp": 18,
+       "fn": 4
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 27,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "couverture": 0.8148,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8148,
+      "exact_any_taux_span": 1.0
+     },
+     "REL/en": {
+      "cibles": 16,
+      "labels": 7,
+      "exact": 7,
+      "exact_any": 7,
+      "couverture": 0.4375,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.4375,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/fr": {
+      "cibles": 29,
+      "labels": 25,
+      "exact": 25,
+      "exact_any": 25,
+      "couverture": 0.8621,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8621,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/en": {
+      "cibles": 18,
+      "labels": 10,
+      "exact": 10,
+      "exact_any": 10,
+      "couverture": 0.5556,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.5556,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/fr": {
+      "cibles": 39,
+      "labels": 36,
+      "exact": 36,
+      "exact_any": 36,
+      "couverture": 0.9231,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9231,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/en": {
+      "cibles": 21,
+      "labels": 20,
+      "exact": 19,
+      "exact_any": 19,
+      "couverture": 0.9524,
+      "exact_taux_span": 0.95,
+      "exact_taux_cibles": 0.9048,
+      "exact_any_taux_span": 0.95
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 5,
+      "labels": 4,
+      "exact": 4,
+      "exact_any": 4,
+      "couverture": 0.8,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8,
+      "exact_any_taux_span": 1.0
+     },
+     "reel": {
+      "cibles": 105,
+      "labels": 86,
+      "exact": 85,
+      "exact_any": 85,
+      "couverture": 0.819,
+      "exact_taux_span": 0.9884,
+      "exact_taux_cibles": 0.8095,
+      "exact_any_taux_span": 0.9884
+     },
+     "synthetique": {
+      "cibles": 40,
+      "labels": 30,
+      "exact": 30,
+      "exact_any": 30,
+      "couverture": 0.75,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.75,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "spans_perdus": {
+     "SUB": 12,
+     "REL": 14,
+     "GP": 4
+    },
+    "par_langue_f1": {
+     "fr": {
+      "syntagme": {
+       "precision": 0.5519,
+       "rappel": 0.5436,
+       "f1": 0.5477,
+       "tp": 399,
+       "fp": 324,
+       "fn": 335
+      },
+      "tete": {
+       "precision": 0.73,
+       "rappel": 0.6703,
+       "f1": 0.6989,
+       "tp": 492,
+       "fp": 182,
+       "fn": 242
+      },
+      "pos": 0.7554,
+      "tokens": 1300
+     },
+     "en": {
+      "syntagme": {
+       "precision": 0.6879,
+       "rappel": 0.4767,
+       "f1": 0.5632,
+       "tp": 205,
+       "fp": 93,
+       "fn": 225
+      },
+      "tete": {
+       "precision": 0.906,
+       "rappel": 0.6279,
+       "f1": 0.7418,
+       "tp": 270,
+       "fp": 28,
+       "fn": 160
+      },
+      "pos": 0.7688,
+      "tokens": 718
+     }
+    }
+   },
+   "test": {
+    "phrases": 229,
+    "tokens": 1161,
+    "pos": {
+     "exactitude": 0.7545,
+     "ferme": 0.8981,
+     "ouvert": 0.6166,
+     "tokens": 1161
+    },
+    "syntagme": {
+     "precision": 0.6033,
+     "rappel": 0.5222,
+     "f1": 0.5598,
+     "tp": 365,
+     "fp": 240,
+     "fn": 334
+    },
+    "tete": {
+     "precision": 0.7962,
+     "rappel": 0.6538,
+     "f1": 0.718,
+     "tp": 457,
+     "fp": 117,
+     "fn": 242
+    },
+    "acte": 1.0,
+    "attachement": {
+     "cibles": 89,
+     "labels": 76,
+     "exact": 76,
+     "exact_any": 76,
+     "couverture": 0.8539,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8539,
+     "exact_any_taux_span": 1.0
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 56,
+      "labels": 52,
+      "exact": 52,
+      "exact_any": 52,
+      "couverture": 0.9286,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9286,
+      "exact_any_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 33,
+      "labels": 24,
+      "exact": 24,
+      "exact_any": 24,
+      "couverture": 0.7273,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7273,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 31,
+      "labels": 24,
+      "exact": 24,
+      "exact_any": 24,
+      "tp": 24,
+      "fp": 22,
+      "fn": 7,
+      "ttp": 30,
+      "tfp": 4,
+      "tfn": 1,
+      "couverture": 0.7742,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7742,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.5217,
+       "rappel": 0.7742,
+       "f1": 0.6234,
+       "tp": 24,
+       "fp": 22,
+       "fn": 7
+      },
+      "tete": {
+       "precision": 0.8824,
+       "rappel": 0.9677,
+       "f1": 0.9231,
+       "tp": 30,
+       "fp": 4,
+       "fn": 1
+      }
+     },
+     "SUB": {
+      "cibles": 22,
+      "labels": 17,
+      "exact": 17,
+      "exact_any": 17,
+      "tp": 17,
+      "fp": 5,
+      "fn": 5,
+      "ttp": 20,
+      "tfp": 2,
+      "tfn": 2,
+      "couverture": 0.7727,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7727,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.7727,
+       "rappel": 0.7727,
+       "f1": 0.7727,
+       "tp": 17,
+       "fp": 5,
+       "fn": 5
+      },
+      "tete": {
+       "precision": 0.9091,
+       "rappel": 0.9091,
+       "f1": 0.9091,
+       "tp": 20,
+       "fp": 2,
+       "fn": 2
+      }
+     },
+     "GP": {
+      "cibles": 36,
+      "labels": 35,
+      "exact": 35,
+      "exact_any": 35,
+      "tp": 39,
+      "fp": 12,
+      "fn": 1,
+      "ttp": 39,
+      "tfp": 10,
+      "tfn": 1,
+      "couverture": 0.9722,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9722,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.7647,
+       "rappel": 0.975,
+       "f1": 0.8571,
+       "tp": 39,
+       "fp": 12,
+       "fn": 1
+      },
+      "tete": {
+       "precision": 0.7959,
+       "rappel": 0.975,
+       "f1": 0.8764,
+       "tp": 39,
+       "fp": 10,
+       "fn": 1
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 19,
+      "labels": 16,
+      "exact": 16,
+      "exact_any": 16,
+      "couverture": 0.8421,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8421,
+      "exact_any_taux_span": 1.0
+     },
+     "REL/en": {
+      "cibles": 12,
+      "labels": 8,
+      "exact": 8,
+      "exact_any": 8,
+      "couverture": 0.6667,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.6667,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/fr": {
+      "cibles": 14,
+      "labels": 14,
+      "exact": 14,
+      "exact_any": 14,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/en": {
+      "cibles": 8,
+      "labels": 3,
+      "exact": 3,
+      "exact_any": 3,
+      "couverture": 0.375,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.375,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/fr": {
+      "cibles": 23,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "couverture": 0.9565,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9565,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/en": {
+      "cibles": 13,
+      "labels": 13,
+      "exact": 13,
+      "exact_any": 13,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 8,
+      "labels": 8,
+      "exact": 8,
+      "exact_any": 8,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0
+     },
+     "reel": {
+      "cibles": 66,
+      "labels": 56,
+      "exact": 56,
+      "exact_any": 56,
+      "couverture": 0.8485,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8485,
+      "exact_any_taux_span": 1.0
+     },
+     "synthetique": {
+      "cibles": 15,
+      "labels": 12,
+      "exact": 12,
+      "exact_any": 12,
+      "couverture": 0.8,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "spans_perdus": {
+     "REL": 7,
+     "SUB": 5,
+     "GP": 1
+    },
+    "par_langue_f1": {
+     "fr": {
+      "syntagme": {
+       "precision": 0.5673,
+       "rappel": 0.5527,
+       "f1": 0.5599,
+       "tp": 236,
+       "fp": 180,
+       "fn": 191
+      },
+      "tete": {
+       "precision": 0.7506,
+       "rappel": 0.6768,
+       "f1": 0.7118,
+       "tp": 289,
+       "fp": 96,
+       "fn": 138
+      },
+      "pos": 0.7524,
+      "tokens": 731
+     },
+     "en": {
+      "syntagme": {
+       "precision": 0.6825,
+       "rappel": 0.4743,
+       "f1": 0.5597,
+       "tp": 129,
+       "fp": 60,
+       "fn": 143
+      },
+      "tete": {
+       "precision": 0.8889,
+       "rappel": 0.6176,
+       "f1": 0.7289,
+       "tp": 168,
+       "fp": 21,
+       "fn": 104
+      },
+      "pos": 0.7581,
+      "tokens": 430
+     }
+    }
+   },
+   "equilibre": {
+    "dev": {
+     "phrases": 383,
+     "sources": {
+      "hand": 9,
+      "reel": 272,
+      "synthetique": 102
+     },
+     "langues": {
+      "fr": 252,
+      "en": 131
+     },
+     "cibles_par_type": {
+      "GP": 60,
+      "SUB": 47,
+      "REL": 43
+     },
+     "cibles_par_langue": {
+      "fr": 95,
+      "en": 55
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 39,
+      "GP/en": 21,
+      "SUB/en": 18,
+      "REL/fr": 27,
+      "REL/en": 16,
+      "SUB/fr": 29
+     },
+     "sources_langues": {
+      "hand/fr": 4,
+      "hand/en": 5,
+      "reel/fr": 146,
+      "reel/en": 126,
+      "synthetique/fr": 102
+     }
+    },
+    "test": {
+     "phrases": 229,
+     "sources": {
+      "hand": 11,
+      "reel": 160,
+      "synthetique": 58
+     },
+     "langues": {
+      "fr": 150,
+      "en": 79
+     },
+     "cibles_par_type": {
+      "GP": 36,
+      "SUB": 22,
+      "REL": 31
+     },
+     "cibles_par_langue": {
+      "fr": 56,
+      "en": 33
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 23,
+      "SUB/fr": 14,
+      "REL/fr": 19,
+      "GP/en": 13,
+      "REL/en": 12,
+      "SUB/en": 8
+     },
+     "sources_langues": {
+      "hand/fr": 10,
+      "hand/en": 1,
+      "reel/fr": 82,
+      "reel/en": 78,
+      "synthetique/fr": 58
+     }
+    },
+    "chi2_test": {
+     "sources": {
+      "chi2": 1.7274,
+      "ddl": 2,
+      "p": 0.4216,
+      "observe": {
+       "hand": 11,
+       "reel": 160,
+       "synthetique": 58
+      },
+      "attendu": {
+       "hand": 7.48,
+       "reel": 161.65,
+       "synthetique": 59.87
+      }
+     },
+     "langues": {
+      "chi2": 0.0034,
+      "ddl": 1,
+      "p": 0.9532,
+      "observe": {
+       "fr": 150,
+       "en": 79
+      },
+      "attendu": {
+       "fr": 150.42,
+       "en": 78.58
+      }
+     },
+     "types_cibles": {
+      "chi2": 0.9633,
+      "ddl": 2,
+      "p": 0.6178,
+      "observe": {
+       "GP": 36,
+       "SUB": 22,
+       "REL": 31
+      },
+      "attendu": {
+       "GP": 35.75,
+       "SUB": 25.69,
+       "REL": 27.56
+      }
+     },
+     "types_langues": {
+      "chi2": 0.9961,
+      "ddl": 5,
+      "p": 0.9629,
+      "observe": {
+       "GP/fr": 23,
+       "SUB/fr": 14,
+       "REL/fr": 19,
+       "GP/en": 13,
+       "REL/en": 12,
+       "SUB/en": 8
+      },
+      "attendu": {
+       "GP/fr": 23.09,
+       "SUB/fr": 16.01,
+       "REL/fr": 17.13,
+       "GP/en": 12.66,
+       "SUB/en": 9.68,
+       "REL/en": 10.43
+      }
+     }
+    },
+    "mix_types_test_pct": {
+     "GP": 40.45,
+     "SUB": 24.72,
+     "REL": 34.83
+    }
+   },
+   "categories_absentes": {
+    "sources": [],
+    "langues": [],
+    "types": [],
+    "types_langues": []
+   }
+  },
+  "decale2": {
+   "regle": "crc32(id)%3==2 -> test",
+   "dev": {
+    "phrases": 419,
+    "tokens": 2155,
+    "pos": {
+     "exactitude": 0.7596,
+     "ferme": 0.9044,
+     "ouvert": 0.6231,
+     "tokens": 2155
+    },
+    "syntagme": {
+     "precision": 0.6005,
+     "rappel": 0.5284,
+     "f1": 0.5622,
+     "tp": 669,
+     "fp": 445,
+     "fn": 597
+    },
+    "tete": {
+     "precision": 0.7918,
+     "rappel": 0.658,
+     "f1": 0.7187,
+     "tp": 833,
+     "fp": 219,
+     "fn": 433
+    },
+    "acte": 0.9952,
+    "attachement": {
+     "cibles": 165,
+     "labels": 138,
+     "exact": 138,
+     "exact_any": 138,
+     "couverture": 0.8364,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8364,
+     "exact_any_taux_span": 1.0
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 106,
+      "labels": 95,
+      "exact": 95,
+      "exact_any": 95,
+      "couverture": 0.8962,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8962,
+      "exact_any_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 59,
+      "labels": 43,
+      "exact": 43,
+      "exact_any": 43,
+      "couverture": 0.7288,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7288,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 48,
+      "labels": 35,
+      "exact": 35,
+      "exact_any": 35,
+      "tp": 35,
+      "fp": 34,
+      "fn": 13,
+      "ttp": 47,
+      "tfp": 6,
+      "tfn": 1,
+      "couverture": 0.7292,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7292,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.5072,
+       "rappel": 0.7292,
+       "f1": 0.5983,
+       "tp": 35,
+       "fp": 34,
+       "fn": 13
+      },
+      "tete": {
+       "precision": 0.8868,
+       "rappel": 0.9792,
+       "f1": 0.9307,
+       "tp": 47,
+       "fp": 6,
+       "fn": 1
+      }
+     },
+     "SUB": {
+      "cibles": 46,
+      "labels": 36,
+      "exact": 36,
+      "exact_any": 36,
+      "tp": 36,
+      "fp": 12,
+      "fn": 10,
+      "ttp": 43,
+      "tfp": 4,
+      "tfn": 3,
+      "couverture": 0.7826,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7826,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.75,
+       "rappel": 0.7826,
+       "f1": 0.766,
+       "tp": 36,
+       "fp": 12,
+       "fn": 10
+      },
+      "tete": {
+       "precision": 0.9149,
+       "rappel": 0.9348,
+       "f1": 0.9247,
+       "tp": 43,
+       "fp": 4,
+       "fn": 3
+      }
+     },
+     "GP": {
+      "cibles": 71,
+      "labels": 67,
+      "exact": 67,
+      "exact_any": 67,
+      "tp": 73,
+      "fp": 24,
+      "fn": 5,
+      "ttp": 74,
+      "tfp": 19,
+      "tfn": 4,
+      "couverture": 0.9437,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9437,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.7526,
+       "rappel": 0.9359,
+       "f1": 0.8343,
+       "tp": 73,
+       "fp": 24,
+       "fn": 5
+      },
+      "tete": {
+       "precision": 0.7957,
+       "rappel": 0.9487,
+       "f1": 0.8655,
+       "tp": 74,
+       "fp": 19,
+       "fn": 4
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 31,
+      "labels": 25,
+      "exact": 25,
+      "exact_any": 25,
+      "couverture": 0.8065,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8065,
+      "exact_any_taux_span": 1.0
+     },
+     "REL/en": {
+      "cibles": 17,
+      "labels": 10,
+      "exact": 10,
+      "exact_any": 10,
+      "couverture": 0.5882,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.5882,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/fr": {
+      "cibles": 28,
+      "labels": 26,
+      "exact": 26,
+      "exact_any": 26,
+      "couverture": 0.9286,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9286,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/en": {
+      "cibles": 18,
+      "labels": 10,
+      "exact": 10,
+      "exact_any": 10,
+      "couverture": 0.5556,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.5556,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/fr": {
+      "cibles": 47,
+      "labels": 44,
+      "exact": 44,
+      "exact_any": 44,
+      "couverture": 0.9362,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9362,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/en": {
+      "cibles": 24,
+      "labels": 23,
+      "exact": 23,
+      "exact_any": 23,
+      "couverture": 0.9583,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9583,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 11,
+      "labels": 11,
+      "exact": 11,
+      "exact_any": 11,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0
+     },
+     "reel": {
+      "cibles": 116,
+      "labels": 97,
+      "exact": 97,
+      "exact_any": 97,
+      "couverture": 0.8362,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8362,
+      "exact_any_taux_span": 1.0
+     },
+     "synthetique": {
+      "cibles": 38,
+      "labels": 30,
+      "exact": 30,
+      "exact_any": 30,
+      "couverture": 0.7895,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7895,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "spans_perdus": {
+     "REL": 13,
+     "GP": 4,
+     "SUB": 10
+    },
+    "par_langue_f1": {
+     "fr": {
+      "syntagme": {
+       "precision": 0.5621,
+       "rappel": 0.5614,
+       "f1": 0.5617,
+       "tp": 439,
+       "fp": 342,
+       "fn": 343
+      },
+      "tete": {
+       "precision": 0.7441,
+       "rappel": 0.6841,
+       "f1": 0.7129,
+       "tp": 535,
+       "fp": 184,
+       "fn": 247
+      },
+      "pos": 0.7518,
+      "tokens": 1378
+     },
+     "en": {
+      "syntagme": {
+       "precision": 0.6907,
+       "rappel": 0.4752,
+       "f1": 0.563,
+       "tp": 230,
+       "fp": 103,
+       "fn": 254
+      },
+      "tete": {
+       "precision": 0.8949,
+       "rappel": 0.6157,
+       "f1": 0.7295,
+       "tp": 298,
+       "fp": 35,
+       "fn": 186
+      },
+      "pos": 0.7735,
+      "tokens": 777
+     }
+    }
+   },
+   "test": {
+    "phrases": 193,
+    "tokens": 1024,
+    "pos": {
+     "exactitude": 0.7549,
+     "ferme": 0.892,
+     "ouvert": 0.624,
+     "tokens": 1024
+    },
+    "syntagme": {
+     "precision": 0.5859,
+     "rappel": 0.5025,
+     "f1": 0.541,
+     "tp": 300,
+     "fp": 212,
+     "fn": 297
+    },
+    "tete": {
+     "precision": 0.7814,
+     "rappel": 0.6466,
+     "f1": 0.7076,
+     "tp": 386,
+     "fp": 108,
+     "fn": 211
+    },
+    "acte": 1.0,
+    "attachement": {
+     "cibles": 74,
+     "labels": 58,
+     "exact": 57,
+     "exact_any": 57,
+     "couverture": 0.7838,
+     "exact_taux_span": 0.9828,
+     "exact_taux_cibles": 0.7703,
+     "exact_any_taux_span": 0.9828
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 45,
+      "labels": 40,
+      "exact": 40,
+      "exact_any": 40,
+      "couverture": 0.8889,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8889,
+      "exact_any_taux_span": 1.0
+     },
+     "en": {
+      "cibles": 29,
+      "labels": 18,
+      "exact": 17,
+      "exact_any": 17,
+      "couverture": 0.6207,
+      "exact_taux_span": 0.9444,
+      "exact_taux_cibles": 0.5862,
+      "exact_any_taux_span": 0.9444
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 26,
+      "labels": 18,
+      "exact": 18,
+      "exact_any": 18,
+      "tp": 18,
+      "fp": 15,
+      "fn": 8,
+      "ttp": 25,
+      "tfp": 6,
+      "tfn": 1,
+      "couverture": 0.6923,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.6923,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.5455,
+       "rappel": 0.6923,
+       "f1": 0.6102,
+       "tp": 18,
+       "fp": 15,
+       "fn": 8
+      },
+      "tete": {
+       "precision": 0.8065,
+       "rappel": 0.9615,
+       "f1": 0.8772,
+       "tp": 25,
+       "fp": 6,
+       "fn": 1
+      }
+     },
+     "SUB": {
+      "cibles": 23,
+      "labels": 16,
+      "exact": 16,
+      "exact_any": 16,
+      "tp": 17,
+      "fp": 3,
+      "fn": 7,
+      "ttp": 20,
+      "tfp": 0,
+      "tfn": 4,
+      "couverture": 0.6957,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.6957,
+      "exact_any_taux_span": 1.0,
+      "syntagme": {
+       "precision": 0.85,
+       "rappel": 0.7083,
+       "f1": 0.7727,
+       "tp": 17,
+       "fp": 3,
+       "fn": 7
+      },
+      "tete": {
+       "precision": 1.0,
+       "rappel": 0.8333,
+       "f1": 0.9091,
+       "tp": 20,
+       "fp": 0,
+       "fn": 4
+      }
+     },
+     "GP": {
+      "cibles": 25,
+      "labels": 24,
+      "exact": 23,
+      "exact_any": 23,
+      "tp": 26,
+      "fp": 9,
+      "fn": 1,
+      "ttp": 26,
+      "tfp": 9,
+      "tfn": 1,
+      "couverture": 0.96,
+      "exact_taux_span": 0.9583,
+      "exact_taux_cibles": 0.92,
+      "exact_any_taux_span": 0.9583,
+      "syntagme": {
+       "precision": 0.7429,
+       "rappel": 0.963,
+       "f1": 0.8387,
+       "tp": 26,
+       "fp": 9,
+       "fn": 1
+      },
+      "tete": {
+       "precision": 0.7429,
+       "rappel": 0.963,
+       "f1": 0.8387,
+       "tp": 26,
+       "fp": 9,
+       "fn": 1
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 15,
+      "labels": 13,
+      "exact": 13,
+      "exact_any": 13,
+      "couverture": 0.8667,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8667,
+      "exact_any_taux_span": 1.0
+     },
+     "REL/en": {
+      "cibles": 11,
+      "labels": 5,
+      "exact": 5,
+      "exact_any": 5,
+      "couverture": 0.4545,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.4545,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/fr": {
+      "cibles": 15,
+      "labels": 13,
+      "exact": 13,
+      "exact_any": 13,
+      "couverture": 0.8667,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8667,
+      "exact_any_taux_span": 1.0
+     },
+     "SUB/en": {
+      "cibles": 8,
+      "labels": 3,
+      "exact": 3,
+      "exact_any": 3,
+      "couverture": 0.375,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.375,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/fr": {
+      "cibles": 15,
+      "labels": 14,
+      "exact": 14,
+      "exact_any": 14,
+      "couverture": 0.9333,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9333,
+      "exact_any_taux_span": 1.0
+     },
+     "GP/en": {
+      "cibles": 10,
+      "labels": 10,
+      "exact": 9,
+      "exact_any": 9,
+      "couverture": 1.0,
+      "exact_taux_span": 0.9,
+      "exact_taux_cibles": 0.9,
+      "exact_any_taux_span": 0.9
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 2,
+      "labels": 1,
+      "exact": 1,
+      "exact_any": 1,
+      "couverture": 0.5,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.5,
+      "exact_any_taux_span": 1.0
+     },
+     "reel": {
+      "cibles": 55,
+      "labels": 45,
+      "exact": 44,
+      "exact_any": 44,
+      "couverture": 0.8182,
+      "exact_taux_span": 0.9778,
+      "exact_taux_cibles": 0.8,
+      "exact_any_taux_span": 0.9778
+     },
+     "synthetique": {
+      "cibles": 17,
+      "labels": 12,
+      "exact": 12,
+      "exact_any": 12,
+      "couverture": 0.7059,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7059,
+      "exact_any_taux_span": 1.0
+     }
+    },
+    "spans_perdus": {
+     "SUB": 7,
+     "REL": 8,
+     "GP": 1
+    },
+    "par_langue_f1": {
+     "fr": {
+      "syntagme": {
+       "precision": 0.5475,
+       "rappel": 0.5172,
+       "f1": 0.5319,
+       "tp": 196,
+       "fp": 162,
+       "fn": 183
+      },
+      "tete": {
+       "precision": 0.7235,
+       "rappel": 0.6491,
+       "f1": 0.6843,
+       "tp": 246,
+       "fp": 94,
+       "fn": 133
+      },
+      "pos": 0.7596,
+      "tokens": 653
+     },
+     "en": {
+      "syntagme": {
+       "precision": 0.6753,
+       "rappel": 0.4771,
+       "f1": 0.5591,
+       "tp": 104,
+       "fp": 50,
+       "fn": 114
+      },
+      "tete": {
+       "precision": 0.9091,
+       "rappel": 0.6422,
+       "f1": 0.7527,
+       "tp": 140,
+       "fp": 14,
+       "fn": 78
+      },
+      "pos": 0.7466,
+      "tokens": 371
+     }
+    }
+   },
+   "equilibre": {
+    "dev": {
+     "phrases": 419,
+     "sources": {
+      "hand": 16,
+      "reel": 290,
+      "synthetique": 113
+     },
+     "langues": {
+      "fr": 275,
+      "en": 144
+     },
+     "cibles_par_type": {
+      "GP": 71,
+      "SUB": 46,
+      "REL": 48
+     },
+     "cibles_par_langue": {
+      "fr": 106,
+      "en": 59
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 47,
+      "SUB/fr": 28,
+      "REL/fr": 31,
+      "GP/en": 24,
+      "REL/en": 17,
+      "SUB/en": 18
+     },
+     "sources_langues": {
+      "hand/fr": 13,
+      "hand/en": 3,
+      "reel/fr": 149,
+      "reel/en": 141,
+      "synthetique/fr": 113
+     }
+    },
+    "test": {
+     "phrases": 193,
+     "sources": {
+      "hand": 4,
+      "reel": 142,
+      "synthetique": 47
+     },
+     "langues": {
+      "fr": 127,
+      "en": 66
+     },
+     "cibles_par_type": {
+      "GP": 25,
+      "SUB": 23,
+      "REL": 26
+     },
+     "cibles_par_langue": {
+      "en": 29,
+      "fr": 45
+     },
+     "cibles_par_type_langue": {
+      "GP/en": 10,
+      "SUB/en": 8,
+      "GP/fr": 15,
+      "REL/en": 11,
+      "REL/fr": 15,
+      "SUB/fr": 15
+     },
+     "sources_langues": {
+      "hand/fr": 1,
+      "hand/en": 3,
+      "reel/fr": 79,
+      "reel/en": 63,
+      "synthetique/fr": 47
+     }
+    },
+    "chi2_test": {
+     "sources": {
+      "chi2": 1.3248,
+      "ddl": 2,
+      "p": 0.5156,
+      "observe": {
+       "hand": 4,
+       "reel": 142,
+       "synthetique": 47
+      },
+      "attendu": {
+       "hand": 6.31,
+       "reel": 136.24,
+       "synthetique": 50.46
+      }
+     },
+     "langues": {
+      "chi2": 0.0012,
+      "ddl": 1,
+      "p": 0.9727,
+      "observe": {
+       "fr": 127,
+       "en": 66
+      },
+      "attendu": {
+       "fr": 126.77,
+       "en": 66.23
+      }
+     },
+     "types_cibles": {
+      "chi2": 1.2922,
+      "ddl": 2,
+      "p": 0.5241,
+      "observe": {
+       "GP": 25,
+       "SUB": 23,
+       "REL": 26
+      },
+      "attendu": {
+       "GP": 29.72,
+       "SUB": 21.36,
+       "REL": 22.91
+      }
+     },
+     "types_langues": {
+      "chi2": 1.8245,
+      "ddl": 5,
+      "p": 0.8729,
+      "observe": {
+       "GP/en": 10,
+       "SUB/en": 8,
+       "GP/fr": 15,
+       "REL/en": 11,
+       "REL/fr": 15,
+       "SUB/fr": 15
+      },
+      "attendu": {
+       "GP/fr": 19.2,
+       "SUB/fr": 13.31,
+       "REL/fr": 14.24,
+       "GP/en": 10.53,
+       "SUB/en": 8.05,
+       "REL/en": 8.67
+      }
+     }
+    },
+    "mix_types_test_pct": {
+     "GP": 33.78,
+     "SUB": 31.08,
+     "REL": 35.14
+    }
+   },
+   "categories_absentes": {
+    "sources": [],
+    "langues": [],
+    "types": [],
+    "types_langues": []
+   }
+  }
+ },
+ "ecart_dev_test": {
+  "exact_cas_dev": 133,
+  "labels_dev": 134,
+  "echecs_dev": 1,
+  "exact_cas_test": 62,
+  "labels_test": 62,
+  "echecs_test": 0,
+  "ecart_taux_span": -0.0075,
+  "ecart_f1": -0.0139,
+  "ecart_tete": -0.0064,
+  "ecart_couverture": 0.0063
+ },
+ "stabilite": {
+  "dev_exact_taux_span": {
+   "valeurs": {
+    "canonique": 0.9925,
+    "decale1": 0.9917,
+    "decale2": 1.0
+   },
+   "min": 0.9917,
+   "max": 1.0,
+   "dispersion": 0.0083
+  },
+  "dev_couverture": {
+   "valeurs": {
+    "canonique": 0.8221,
+    "decale1": 0.8,
+    "decale2": 0.8364
+   },
+   "min": 0.8,
+   "max": 0.8364,
+   "dispersion": 0.0364
+  },
+  "dev_f1": {
+   "valeurs": {
+    "canonique": 0.5512,
+    "decale1": 0.5529,
+    "decale2": 0.5622
+   },
+   "min": 0.5512,
+   "max": 0.5622,
+   "dispersion": 0.011
+  },
+  "dev_tete_f1": {
+   "valeurs": {
+    "canonique": 0.7132,
+    "decale1": 0.7135,
+    "decale2": 0.7187
+   },
+   "min": 0.7132,
+   "max": 0.7187,
+   "dispersion": 0.0055
+  },
+  "dev_pos": {
+   "valeurs": {
+    "canonique": 0.7547,
+    "decale1": 0.7602,
+    "decale2": 0.7596
+   },
+   "min": 0.7547,
+   "max": 0.7602,
+   "dispersion": 0.0055
+  },
+  "test_exact_taux_span": {
+   "valeurs": {
+    "canonique": 1.0,
+    "decale1": 1.0,
+    "decale2": 0.9828
+   },
+   "min": 0.9828,
+   "max": 1.0,
+   "dispersion": 0.0172
+  },
+  "test_couverture": {
+   "valeurs": {
+    "canonique": 0.8158,
+    "decale1": 0.8539,
+    "decale2": 0.7838
+   },
+   "min": 0.7838,
+   "max": 0.8539,
+   "dispersion": 0.0701
+  },
+  "test_f1": {
+   "valeurs": {
+    "canonique": 0.5651,
+    "decale1": 0.5598,
+    "decale2": 0.541
+   },
+   "min": 0.541,
+   "max": 0.5651,
+   "dispersion": 0.0241
+  },
+  "test_tete_f1": {
+   "valeurs": {
+    "canonique": 0.7196,
+    "decale1": 0.718,
+    "decale2": 0.7076
+   },
+   "min": 0.7076,
+   "max": 0.7196,
+   "dispersion": 0.012
+  },
+  "test_pos": {
+   "valeurs": {
+    "canonique": 0.7656,
+    "decale1": 0.7545,
+    "decale2": 0.7549
+   },
+   "min": 0.7545,
+   "max": 0.7656,
+   "dispersion": 0.0111
+  }
+ },
+ "resume": {
+  "canonique": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "labels": 134,
+    "exact": 133,
+    "exact_taux": 0.9925
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "labels": 62,
+    "exact": 62,
+    "exact_taux": 1.0
+   }
+  },
+  "decale1": {
+   "dev": {
+    "phrases": 383,
+    "cibles": 150,
+    "labels": 120,
+    "exact": 119,
+    "exact_taux": 0.9917
+   },
+   "test": {
+    "phrases": 229,
+    "cibles": 89,
+    "labels": 76,
+    "exact": 76,
+    "exact_taux": 1.0
+   }
+  },
+  "decale2": {
+   "dev": {
+    "phrases": 419,
+    "cibles": 165,
+    "labels": 138,
+    "exact": 138,
+    "exact_taux": 1.0
+   },
+   "test": {
+    "phrases": 193,
+    "cibles": 74,
+    "labels": 58,
+    "exact": 57,
+    "exact_taux": 0.9828
+   }
+  }
+ },
+ "controles": {
+  "hypergeometrie_spans_perdus": {
+   "canonique": {
+    "cibles_test": 76,
+    "perdus_observes": 14,
+    "perdus_attendus": 13.67,
+    "ecart_type": 2.77,
+    "z": 0.12
+   },
+   "decale1": {
+    "cibles_test": 89,
+    "perdus_observes": 13,
+    "perdus_attendus": 16.01,
+    "ecart_type": 2.88,
+    "z": -1.05
+   },
+   "decale2": {
+    "cibles_test": 74,
+    "perdus_observes": 16,
+    "perdus_attendus": 13.31,
+    "ecart_type": 2.75,
+    "z": 0.98
+   },
+   "total": {
+    "cibles": 239,
+    "perdus": 43,
+    "par_type": {
+     "REL": 21,
+     "SUB": 17,
+     "GP": 5
+    }
+   }
+  },
+  "bucket_sizes": {
+   "phrases": {
+    "0": 190,
+    "1": 229,
+    "2": 193
+   },
+   "cibles": {
+    "0": 76,
+    "1": 89,
+    "2": 74
+   },
+   "chi2_phrases": 4.6176,
+   "p_phrases": 0.0994
+  },
+  "echec_unique": {
+   "id": "r102",
+   "langue": "en",
+   "type": "GP",
+   "span": "since this morning",
+   "cible_gold": "falls",
+   "cible_predite": "",
+   "bucket": 2,
+   "present_dans_test": {
+    "canonique": false,
+    "decale1": false,
+    "decale2": true
+   }
+  },
+  "monte_carlo": {
+   "exact_taux_span": {
+    "observe_3_splits": [
+     1.0,
+     1.0,
+     0.9828
+    ],
+    "observe_etendue": 0.0172,
+    "monte_carlo_etendue": {
+     "p05": 0.0125,
+     "p50": 0.0152,
+     "p95": 0.0185
+    },
+    "monte_carlo_valeur": {
+     "p05": 0.9828,
+     "p50": 1.0,
+     "p95": 1.0
+    },
+    "dans_intervalle_95": true
+   },
+   "couverture": {
+    "observe_3_splits": [
+     0.8158,
+     0.8539,
+     0.7838
+    ],
+    "observe_etendue": 0.0701,
+    "monte_carlo_etendue": {
+     "p05": 0.0195,
+     "p50": 0.0678,
+     "p95": 0.1445
+    },
+    "monte_carlo_valeur": {
+     "p05": 0.7614,
+     "p50": 0.8202,
+     "p95": 0.878
+    },
+    "dans_intervalle_95": true
+   },
+   "f1": {
+    "observe_3_splits": [
+     0.5651,
+     0.5598,
+     0.541
+    ],
+    "observe_etendue": 0.0241,
+    "monte_carlo_etendue": {
+     "p05": 0.01,
+     "p50": 0.0361,
+     "p95": 0.0772
+    },
+    "monte_carlo_valeur": {
+     "p05": 0.5243,
+     "p50": 0.5557,
+     "p95": 0.5866
+    },
+    "dans_intervalle_95": true
+   },
+   "tete_f1": {
+    "observe_3_splits": [
+     0.7196,
+     0.718,
+     0.7076
+    ],
+    "observe_etendue": 0.012,
+    "monte_carlo_etendue": {
+     "p05": 0.0072,
+     "p50": 0.026,
+     "p95": 0.0555
+    },
+    "monte_carlo_valeur": {
+     "p05": 0.6926,
+     "p50": 0.7151,
+     "p95": 0.7382
+    },
+    "dans_intervalle_95": true
+   },
+   "pos": {
+    "observe_3_splits": [
+     0.7656,
+     0.7545,
+     0.7549
+    ],
+    "observe_etendue": 0.0111,
+    "monte_carlo_etendue": {
+     "p05": 0.0052,
+     "p50": 0.0182,
+     "p95": 0.0386
+    },
+    "monte_carlo_valeur": {
+     "p05": 0.7423,
+     "p50": 0.7581,
+     "p95": 0.7735
+    },
+    "dans_intervalle_95": true
+   }
+  },
+  "croisements": {
+   "global": {
+    "source_langue_phrases": {
+     "hand/fr": 14,
+     "hand/en": 6,
+     "reel/fr": 228,
+     "reel/en": 204,
+     "synthetique/fr": 160
+    },
+    "source_type_cibles": {
+     "hand/GP": 10,
+     "hand/SUB": 2,
+     "hand/REL": 1,
+     "reel/GP": 62,
+     "reel/REL": 57,
+     "reel/SUB": 52,
+     "synthetique/GP": 24,
+     "synthetique/REL": 16,
+     "synthetique/SUB": 15
+    },
+    "type_langue_cibles": {
+     "GP/fr": 62,
+     "SUB/fr": 43,
+     "REL/fr": 46,
+     "GP/en": 34,
+     "SUB/en": 26,
+     "REL/en": 28
+    }
+   },
+   "canonique": {
+    "dev": {
+     "source_langue_phrases": {
+      "hand/fr": 11,
+      "hand/en": 4,
+      "reel/fr": 161,
+      "reel/en": 141,
+      "synthetique/fr": 105
+     },
+     "source_type_cibles": {
+      "hand/GP": 7,
+      "hand/SUB": 2,
+      "hand/REL": 1,
+      "reel/GP": 43,
+      "reel/REL": 45,
+      "reel/SUB": 33,
+      "synthetique/GP": 11,
+      "synthetique/REL": 11,
+      "synthetique/SUB": 10
+     },
+     "type_langue_cibles": {
+      "GP/fr": 38,
+      "SUB/fr": 29,
+      "REL/fr": 34,
+      "GP/en": 23,
+      "SUB/en": 16,
+      "REL/en": 23
+     }
+    },
+    "test": {
+     "source_langue_phrases": {
+      "hand/fr": 3,
+      "hand/en": 2,
+      "reel/fr": 67,
+      "reel/en": 63,
+      "synthetique/fr": 55
+     },
+     "source_type_cibles": {
+      "hand/GP": 3,
+      "reel/REL": 12,
+      "reel/GP": 19,
+      "reel/SUB": 19,
+      "synthetique/GP": 13,
+      "synthetique/REL": 5,
+      "synthetique/SUB": 5
+     },
+     "type_langue_cibles": {
+      "GP/fr": 24,
+      "GP/en": 11,
+      "REL/fr": 12,
+      "REL/en": 5,
+      "SUB/fr": 14,
+      "SUB/en": 10
+     }
+    }
+   },
+   "decale1": {
+    "dev": {
+     "source_langue_phrases": {
+      "hand/fr": 4,
+      "hand/en": 5,
+      "reel/fr": 146,
+      "reel/en": 126,
+      "synthetique/fr": 102
+     },
+     "source_type_cibles": {
+      "hand/GP": 4,
+      "hand/SUB": 1,
+      "reel/GP": 37,
+      "reel/REL": 34,
+      "reel/SUB": 34,
+      "synthetique/GP": 19,
+      "synthetique/SUB": 12,
+      "synthetique/REL": 9
+     },
+     "type_langue_cibles": {
+      "GP/fr": 39,
+      "GP/en": 21,
+      "SUB/en": 18,
+      "REL/fr": 27,
+      "REL/en": 16,
+      "SUB/fr": 29
+     }
+    },
+    "test": {
+     "source_langue_phrases": {
+      "hand/fr": 10,
+      "hand/en": 1,
+      "reel/fr": 82,
+      "reel/en": 78,
+      "synthetique/fr": 58
+     },
+     "source_type_cibles": {
+      "hand/GP": 6,
+      "hand/SUB": 1,
+      "hand/REL": 1,
+      "reel/GP": 25,
+      "reel/REL": 23,
+      "reel/SUB": 18,
+      "synthetique/GP": 5,
+      "synthetique/REL": 7,
+      "synthetique/SUB": 3
+     },
+     "type_langue_cibles": {
+      "GP/fr": 23,
+      "SUB/fr": 14,
+      "REL/fr": 19,
+      "GP/en": 13,
+      "REL/en": 12,
+      "SUB/en": 8
+     }
+    }
+   },
+   "decale2": {
+    "dev": {
+     "source_langue_phrases": {
+      "hand/fr": 13,
+      "hand/en": 3,
+      "reel/fr": 149,
+      "reel/en": 141,
+      "synthetique/fr": 113
+     },
+     "source_type_cibles": {
+      "hand/GP": 9,
+      "hand/SUB": 1,
+      "hand/REL": 1,
+      "reel/GP": 44,
+      "reel/REL": 35,
+      "reel/SUB": 37,
+      "synthetique/GP": 18,
+      "synthetique/REL": 12,
+      "synthetique/SUB": 8
+     },
+     "type_langue_cibles": {
+      "GP/fr": 47,
+      "SUB/fr": 28,
+      "REL/fr": 31,
+      "GP/en": 24,
+      "REL/en": 17,
+      "SUB/en": 18
+     }
+    },
+    "test": {
+     "source_langue_phrases": {
+      "hand/fr": 1,
+      "hand/en": 3,
+      "reel/fr": 79,
+      "reel/en": 63,
+      "synthetique/fr": 47
+     },
+     "source_type_cibles": {
+      "hand/GP": 1,
+      "hand/SUB": 1,
+      "reel/GP": 18,
+      "reel/REL": 22,
+      "reel/SUB": 15,
+      "synthetique/SUB": 7,
+      "synthetique/REL": 4,
+      "synthetique/GP": 6
+     },
+     "type_langue_cibles": {
+      "GP/en": 10,
+      "SUB/en": 8,
+      "GP/fr": 15,
+      "REL/en": 11,
+      "REL/fr": 15,
+      "SUB/fr": 15
+     }
+    }
+   }
+  },
+  "f1_gn_gv": {
+   "dev": {
+    "GN": {
+     "f1": 0.4827,
+     "gold": 580,
+     "pred": 373
+    },
+    "GV": {
+     "f1": 0.572,
+     "gold": 491,
+     "pred": 537
+    },
+    "part_gold_gn_gv": 0.8264
+   },
+   "test": {
+    "GN": {
+     "f1": 0.4751,
+     "gold": 248,
+     "pred": 173
+    },
+    "GV": {
+     "f1": 0.6061,
+     "gold": 221,
+     "pred": 241
+    },
+    "part_gold_gn_gv": 0.8272
+   },
+   "note": "F1 micro sur GN/GV, les deux types qui dominent l'agrégat ; REL/SUB/GP ne font que ~17 % des segments gold"
+  },
+  "couverture_standardisee": {
+   "test_sur_mix_dev": 0.787,
+   "dev": 0.8221,
+   "test_brut": 0.8158,
+   "poids_dev": {
+    "REL": 0.3497,
+    "SUB": 0.2761,
+    "GP": 0.3742
+   },
+   "taux_test_par_type": {
+    "REL": 0.6471,
+    "SUB": 0.7917,
+    "GP": 0.9143
+   },
+   "note": "le test, ramené au mélange de cibles du dev, couvrirait 0,7870 ; son brut 0,8158 est tiré par les GP"
+  },
+  "f1_ecart_par_type": {
+   "REL": -0.0676,
+   "SUB": -0.0127,
+   "GP": -0.0402
+  }
+ },
+ "wilson": {
+  "dev_exact": {
+   "k": 133,
+   "n": 134,
+   "taux": 0.9925,
+   "wilson95": [
+    0.9589,
+    0.9987
+   ]
+  },
+  "test_exact": {
+   "k": 62,
+   "n": 62,
+   "taux": 1.0,
+   "wilson95": [
+    0.9417,
+    1.0
+   ]
+  },
+  "dev_exact_fr": {
+   "k": 92,
+   "n": 92,
+   "taux": 1.0,
+   "wilson95": [
+    0.9599,
+    1.0
+   ]
+  },
+  "test_exact_fr": {
+   "k": 43,
+   "n": 43,
+   "taux": 1.0,
+   "wilson95": [
+    0.918,
+    1.0
+   ]
+  },
+  "dev_exact_en": {
+   "k": 41,
+   "n": 42,
+   "taux": 0.9762,
+   "wilson95": [
+    0.8768,
+    0.9958
+   ]
+  },
+  "test_exact_en": {
+   "k": 19,
+   "n": 19,
+   "taux": 1.0,
+   "wilson95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "dev_exact_REL": {
+   "k": 42,
+   "n": 42,
+   "taux": 1.0,
+   "wilson95": [
+    0.9162,
+    1.0
+   ]
+  },
+  "test_exact_REL": {
+   "k": 11,
+   "n": 11,
+   "taux": 1.0,
+   "wilson95": [
+    0.7412,
+    1.0
+   ]
+  },
+  "dev_exact_SUB": {
+   "k": 33,
+   "n": 33,
+   "taux": 1.0,
+   "wilson95": [
+    0.8957,
+    1.0
+   ]
+  },
+  "test_exact_SUB": {
+   "k": 19,
+   "n": 19,
+   "taux": 1.0,
+   "wilson95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "dev_exact_GP": {
+   "k": 58,
+   "n": 59,
+   "taux": 0.9831,
+   "wilson95": [
+    0.91,
+    0.997
+   ]
+  },
+  "test_exact_GP": {
+   "k": 32,
+   "n": 32,
+   "taux": 1.0,
+   "wilson95": [
+    0.8928,
+    1.0
+   ]
+  }
+ },
+ "wilson_couverture": {
+  "dev": {
+   "labels": 134,
+   "cibles": 163,
+   "taux": 0.8221,
+   "wilson95": [
+    0.7562,
+    0.8732
+   ]
+  },
+  "test": {
+   "labels": 62,
+   "cibles": 76,
+   "taux": 0.8158,
+   "wilson95": [
+    0.7142,
+    0.887
+   ]
+  },
+  "dev_REL": {
+   "labels": 42,
+   "cibles": 57,
+   "taux": 0.7368,
+   "wilson95": [
+    0.6102,
+    0.8335
+   ]
+  },
+  "test_REL": {
+   "labels": 11,
+   "cibles": 17,
+   "taux": 0.6471,
+   "wilson95": [
+    0.413,
+    0.8269
+   ]
+  },
+  "dev_GP": {
+   "labels": 59,
+   "cibles": 61,
+   "taux": 0.9672,
+   "wilson95": [
+    0.8881,
+    0.991
+   ]
+  },
+  "test_GP": {
+   "labels": 32,
+   "cibles": 35,
+   "taux": 0.9143,
+   "wilson95": [
+    0.7762,
+    0.9704
+   ]
+  }
+ },
+ "corpus_vs_gele": {
+  "vivant": {
+   "phrases": 612,
+   "cibles": 239,
+   "labels": 196,
+   "exact": 195,
+   "couverture": 0.8201,
+   "f1": 0.5555,
+   "tete": 0.7152,
+   "pos": 0.7581
+  },
+  "gele": {
+   "phrases": 602,
+   "cibles": 239,
+   "labels": 196,
+   "exact": 195,
+   "couverture": 0.8201,
+   "f1": 0.5595,
+   "tete": 0.7205,
+   "pos": 0.7603
+  },
+  "note": "les 10 phrases réelles ajoutées au vivant après le gel n'ont pas de cibles : mêmes 239 cibles, 196 labels, 195 exact ; seules F1/tête/POS bougent"
+ },
+ "comparaison_v5": {
+  "v5": {
+   "labels": 187,
+   "exact": 186,
+   "dev": "126/126",
+   "test": "60/61",
+   "echec": "r309 (bucket 0 -> test)"
+  },
+  "v7": {
+   "labels": 196,
+   "exact": 195,
+   "dev": "133/134",
+   "test": "62/62",
+   "echec": "r102 (bucket 2 -> dev)"
+  },
+  "mouvement": {
+   "gagnes": 21,
+   "gagnes_exacts": 20,
+   "perdus": 12,
+   "perdus_exacts": 12,
+   "corrige": "r309",
+   "nouvel_echec": "r102"
+  },
+  "note": "solde +9 labels et +9 exacts, mais 21 labels gagnés (20 exacts, r102 faux) et 12 perdus (tous exacts) ; r309 corrigé, r102 nouveau : l'écart dev/test s'inverse parce que l'échec unique change de seau, pas parce que le test progresse",
+  "source": "code v5 = commit b975011b, mesuré sur le gold vivant 612 actuel"
+ },
+ "limites": [
+  "in-sample : les règles v7 ont été dessinées sur ce gold, dev/test ne mesure pas le surajustement global",
+  "160 phrases synthétiques sur 612 ; 20 seulement de gold.py",
+  "cellules petites : REL/en test = 5 cibles, hand test = 5 phrases",
+  "le hash n'est pas stratifié par construction ; l'équilibre est vérifié a posteriori",
+  "les 43 spans perdus restent hors de la mesure exact/labels (196/239)",
+  "cibles hand au test canonique : 3, toutes GP ; hand/REL (1) et hand/SUB (2) sont dans dev",
+  "synthétique = français seulement : source et langue sont confondues pour ces 160 phrases"
+ ],
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "objet": "re-mesure dev/test du gold 612 et robustesse du split sur trois découpages (commit 69bd865e)",
+ "methode": {
+  "corpus": "gold vivant 612 = 20 hand + 432 reel + 160 synthetique ; 239 cibles (74 REL, 69 SUB, 96 GP)",
+  "split": "crc32(str(id)) % 3 ; canonique test=0, decale1 test=1, decale2 test=2 ; dev=complement",
+  "mesure": "evaluer_bloc('heuristique', Heuristique(), sous-ensemble) + agrégation par type/langue",
+  "bareme": "exact = cible correcte parmi les labels au bon span ; couverture = labels/cibles ; F1 et tete sur les syntagmes ; POS au token",
+  "validation": "l'agrégation indépendante redonne exactement evaluer_bloc : 195/196, 196/239, F1 0.5555, tete 0.7152, POS 0.7581",
+  "monte_carlo": "2000 partitions aléatoires de tailles 190/229/193, mêmes phrases, mêmes annotations",
+  "wilson": "intervalle de Wilson 95 %"
+ }
+}

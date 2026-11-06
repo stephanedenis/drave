@@ -1,5 +1,7 @@
 # B13 — l'attachement v3 : exact 0,9448 → 0,9724, les noms à 1,0
 
+> **Instantané historique** : état au commit `dcf7bc91` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **181/181 portes** : trois règles **générales** issues du diagnostic des 8 échecs (A9) sont
 > intégrées — **R2** (un GP n'est pas gouverné par un mot de son span), **R3** (cible vide :

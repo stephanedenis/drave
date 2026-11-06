@@ -1,5 +1,7 @@
 # B13 — la segmentation d'abord : F1 0,2862 → 0,4194, exact 158/160 (0,9875), couverture 160/239
 
+> **Instantané historique** : état au commit `392f03aa` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **183/183 portes** : le diagnostic de A12/A14 était juste — le trou n'était pas l'attachement mais le
 > **découpage**. Sept corrections générales font passer la **F1 syntagmes de 0,2862 à 0,4539**

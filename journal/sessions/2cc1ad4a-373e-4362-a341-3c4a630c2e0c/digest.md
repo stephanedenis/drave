@@ -1588,3 +1588,380 @@ index c8e05b00..b25e8677 100644
 … [1856 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '1,160p' tools/tests/linguistique/gold_split.py", "description": "Read gold_split API"}`
+
+  ```
+"""gold_split.py — le gold 612 coupé en **dev** et **test**, de façon déterministe.
+
+Le problème. Toutes les mesures de la session sont **in-sample** : les règles de segmentation et
+d'attachement ont été dessinées en regardant les échecs du même gold qui les mesure. Pour juger
+une règle, il faut un gold **tenu à l'écart** : on règle sur `dev`, on évalue sur `test`.
+
+Protocole (fixé ici). Le split est un **hash stable de l'identifiant** (`crc32(id) % 3 == 0` →
+test, sinon dev), donc reproductible, insensible à l'ordre et indépendant du contenu. Il est
+**stratifié par source** (`hand`, `reel`, `synthetique`) et par langue : on vérifie l'équilibre
+dans la fiche. Aucune phrase n'est dupliquée entre les deux ; l'union redonne les 612.
+
+Usage :
+    from tools.tests.linguistique.gold_split import dev, test, compter
+    ph = charger(); d = dev(ph); t = test(ph)
+"""
+from __future__ import annotations
+
+import zlib
+
+PART_TEST = 3  # une phrase sur trois va au test
+
+
+def _est_test(phrase: dict) -> bool:
+    return zlib.crc32(str(phrase.get("id", "")).encode()) % PART_TEST == 0
+
+
+def dev(phrases: list[dict]) -> list[dict]:
+    """Les phrases de développement (2/3)."""
+    return [p for p in phr
+… [708 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reproduction des splits dev/test et des mesures de la fiche gold-split
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > /tmp/mesure_split.py <<'PY'\nimport importlib.util, pathlib, sys, json\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.insert(0, str(RACINE))\nfrom tools.tests.linguistique.evaluer_gold impor … [1562 caractères tronqués]`
+
+  ```
+{"commit": "392f03aa", "dev": {"phrases": 422, "cibles": 163, "sources": {"hand": 15, "reel": 302, "synthetique": 105}, "langues": {"fr": 277, "en": 145}, "labels": 106, "exact": 104, "f1": 0.4414, "tete": 0.6347, "fr": [79, 79], "en": [25, 27], "couverture": 0.6503}, "test": {"phrases": 190, "cibles": 76, "sources": {"hand": 5, "reel": 130, "synthetique": 55}, "langues": {"fr": 125, "en": 65}, "labels": 54, "exact": 53, "f1": 0.4719, "tete": 0.647, "fr": [38, 39], "en": [15, 15], "couverture": 0.7105}}
+{"commit": "b975011b", "dev": {"phrases": 422, "cibles": 163, "sources": {"hand": 15, "reel": 302, "synthetique": 105}, "langues": {"fr": 277, "en": 145}, "labels": 126, "exact": 126, "f1": 0.5091, "tete": 0.6782, "fr": [88, 88], "en": [38, 38], "couverture": 0.773}, "test": {"phrases": 190, "cibles": 76, "sources": {"hand": 5, "reel": 130, "synthetique": 55}, "langues": {"fr": 125, "en": 65}, "labels": 61, "exact": 60, "f1": 0.5217, "tete": 0.6792, "fr": [38, 39], "en": [22, 22], "couverture": 0.8026}}
+{"commit": "0ec6c27d", "dev": {"phrases": 422, "cibles": 163, "sources": {"hand": 15, "reel": 302, "synthetique": 105}, "langues": {"fr": 277, "en": 145}, "labels": 126, "exact": 126
+… [326 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche des renvois de section et des liens internes fautifs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for f in reports/rapport-pensee-attachement-v2.md reports/rapport-pensee-attachement-v3.md reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-couverture-v5.md reports/rapport-pensee-attachement-parfait.md reports/rapport- … [214 caractères tronqués]`
+
+  ```
+=== reports/rapport-pensee-attachement-v2.md
+(aucun renvoi §)
+=== reports/rapport-pensee-attachement-v3.md
+(aucun renvoi §)
+=== reports/rapport-pensee-segmentation-v4.md
+(aucun renvoi §)
+=== reports/rapport-pensee-couverture-v5.md
+(aucun renvoi §)
+=== reports/rapport-pensee-attachement-parfait.md
+(aucun renvoi §)
+=== reports/rapport-pensee-couverture-v7.md
+(aucun renvoi §)
+=== reports/rapport-gold-split.md
+(aucun renvoi §)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for f in reports/rapport-pensee-attachement-v2.md reports/rapport-pensee-attachement-v3.md reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-couverture-v5.md reports/rapport-pensee-attachement-parfait.md reports/rapport- … [359 caractères tronqués]`
+
+  ```
+=== reports/rapport-pensee-attachement-v2.md
+=== reports/rapport-pensee-attachement-v3.md
+=== reports/rapport-pensee-segmentation-v4.md
+=== reports/rapport-pensee-couverture-v5.md
+=== reports/rapport-pensee-attachement-parfait.md
+=== reports/rapport-pensee-couverture-v7.md
+=== reports/rapport-gold-split.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for f in reports/pensee-attachement-v2.json reports/pensee-attachement-v3.json reports/pensee-segmentation-v4.json reports/pensee-couverture-v5.json reports/pensee-attachement-parfait.json reports/pensee-couverture-v7.json reports/pens … [237 caractères tronqués]`
+
+  ```
+=== reports/pensee-attachement-v2.json
+69:  "decision": "rejete"
+71: "echecs": {
+82: "limites": [
+=== reports/pensee-attachement-v3.json
+38: "regles_rejetees": {
+42: "controles_negatifs": {
+47: "echecs_restants": [
+59: "limites": [
+=== reports/pensee-segmentation-v4.json
+15:  "echecs_cible": 4
+34:  "echecs_cible": [
+51: "limites": [
+=== reports/pensee-couverture-v5.json
+16:  "echecs_cible": 3
+36:  "echecs_cible": 1,
+61: "limites": [
+=== reports/pensee-attachement-parfait.json
+42: "limites": [
+=== reports/pensee-couverture-v7.json
+42: "limites": [
+=== reports/pensee-gold-split.json
+28: "limites": [
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du format du JSON de cohérence antérieur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json\np='reports/pensee-coherence-fiches.json'\nd=json.load(open(p))\nprint(type(d), list(d)[:20] if isinstance(d,dict) else len(d))\nif isinstance(d,dict):\n    for k,v in d.items():\n        print(k, type(v). … [166 caractères tronqués]`
+
+  ```
+<class 'dict'> ['date_verification', 'branche', 'ligne', 'objet', 'note_portes', 'perimetre', 'methode', 'etat_verifie_pre_v2', 'v2_concurrente', 'synthese', 'fiches', 'controles', 'divergences', 'chiffres_historiques', 'note_chiffres_historiques', 'dettes_portes', 'concurrence', 'ambiguites_non_comptees', 'limites', 'fichiers']
+date_verification str 2026-11-05T13:54:11-05:00
+branche str s/v7
+ligne str B13
+objet str Cohérence des fiches B13 datées du 2026-11-05 avec leurs JSON et les portes
+note_portes str Les champs porte_actuelle/portes_actuelles sont ceux du 2026-11-05T13:54 (pré-v2). La v2 committée `9d5337ce` a changé T
+perimetre dict ['fiches', 'json', 'date_fiches', 'commits', 'portes_ciblees', 'portes_fiches', 'hors_perimetre']
+methode dict ['lecture', 'valeur_porte', 'historique', 'execution', 'aucune_modification']
+etat_verifie_pre_v2 dict ['date', 'note', 'portes', 'cibles', 'labels', 'top1', 'topk', 'exact']
+v2_concurrente dict ['date', 'statut', 'portes', 'fichiers_modifies', 'fichiers_ajoutes', 'mesure', 'gates_changes', 'gates_ajoutees']
+synthese dict ['fiches_verifiees', 'fiches_coherentes', 'fiches_avec_divergence', 'fiches_historiques', 'fiches_actuelles', 'palier
+… [621 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de quelques chiffres textuels isolés (v3, v5, v7)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/linguistique/gold.json'))\nr=json.load(open('tools/tests/linguistique/gold_reel.json'))\ns=json.load(open('tools/tests/linguistique/gol … [710 caractères tronqués]`
+
+  ```
+GP 105 multi 43 ratio 0.4095
+segments avec cible 239 {'GP': 96, 'SUB': 69, 'REL': 74}
+Counter({'fr': 402, 'en': 210})
+phrases 612
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json, collections\ng=json.load(open('tools/tests/linguistique/gold_gele.json'))['phrases']\nprint(len(g), collections.Counter(p.get('source') for p in g), collections.Counter(p.get('langue') for p in g))\nprint … [147 caractères tronqués]`
+
+  ```
+602 Counter({'reel': 422, 'synthetique': 160, 'hand': 20}) Counter({'fr': 394, 'en': 208})
+segments 239
+  ```
+
+### 🤖 Assistant
+
+⏵ Collecte des métadonnées de commits et vérification de l'état du dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for c in 9d5337ce dcf7bc91 e1903e2d 392f03aa b975011b 0ec6c27d 85e4082b 69bd865e; do git show -s --format=\"$c %ci %s\" $c; done", "description": "Get commit dates and subjects"}`
+
+  ```
+9d5337ce 2026-11-05 14:14:38 -0500 B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+dcf7bc91 2026-11-05 15:18:56 -0500 B13 — L'ATTACHEMENT V3 : EXACT 0,9448 → 0,9724, NOMS 29/29 = 1,0 ; R2/R3/R4 DE A9 ; 181/181
+e1903e2d 2026-11-05 16:16:07 -0500 B13 — L'ANGLAIS EST LE TROU (60/94 SPANS, S NE SEGMENTE PAS L'ANGLAIS) ; TABLEAU V3 RÉPARÉ ; 182/182
+392f03aa 2026-11-05 17:50:01 -0500 B13 — S NE SEGMENTE QUE LE FRANÇAIS : F1 0,4194 → 0,4539, TÊTE 0,6432 ; EXACT 157/160, FR 0,9915 / EN 0,9524 ; 183/183
+b975011b 2026-11-05 18:43:42 -0500 B13 — LES CANDIDATS DU PRÉCÉDENT : EXACT 186/187 (0,9947), ANGLAIS 60/60, DEV 126/126 ; 183/183
+0ec6c27d 2026-11-05 19:03:53 -0500 B13 — L'ATTACHEMENT PARFAIT SUR LES SPANS PRÉDITS : 187/187 (1,0000), FR 1,0, EN 1,0, DEV 126/126, TEST 61/61 ; RENDEMENT 0,7824 ; 183/183
+85e4082b 2026-11-05 17:53:37 -0500 B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS »
+69bd865e 2026-11-05 19:22:37 -0500 B13 — LA COUVERTURE À 0,8201 : POS CONTEXTUEL 0,7603, F1 0,5595, EXACT 195/196 (0,9949), 43 SPANS 
+… [9 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== status before write ===\"; git status --porcelain | grep -v '^ M journal' | head -30; echo \"=== worktrees ===\"; git worktree list", "description": "Check repo status and worktrees before writing"}`
+
+  ```
+=== status before write ===
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/digest.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/rapport.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+D  journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/digest.md
+D  journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/rapport.md
+D  journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/digest.md
+D  journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/rapport.md
+D  journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/digest.md
+D  journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/rapport.md
+D  journal/sessions/3144cf
+… [968 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a bougé ; vérification que les sept fiches sont inchangées depuis 69bd865e
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== HEAD ===\"; git rev-parse --short HEAD; echo \"=== commits after 69bd865e ===\"; git log --oneline 69bd865e..HEAD | head -20; echo \"=== diff for 7 fiches/json ===\"; git diff --stat 69bd865e..HEAD -- reports/rapport-pensee- … [577 caractères tronqués]`
+
+  ```
+=== HEAD ===
+e4cd4408
+=== commits after 69bd865e ===
+e4cd4408 DOCS — LE TABLEAU DES PORTES T163-T180 PASSE AUX VALEURS V7 (43 SPANS, EXACT 195/196, FR 1,0 / EN 0,9836)
+4ccf06e1 JOURNAL — LA SOIRÉE DU DÉCOUPAGE : F1 0,2862 → 0,5595, COUVERTURE 196/239, ATTACHEMENT 195/196
+=== diff for 7 fiches/json ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --porcelain -- reports/rapport-pensee-attachement-v2.md reports/pensee-attachement-v2.json reports/rapport-pensee-attachement-v3.md reports/pensee-attachement-v3.json reports/rapport-pensee-segmentation-v4.md reports/pensee- … [411 caractères tronqués]`
+
+  ```
+(fin)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n -E \"22 \\(11/11\\)|11/11|avant.*22|échecs.*22\" reports/rapport-audit-v2.md | head -20; echo \"=== audit v2 §? ===\"; grep -n -E \"46|45|63/60|82/63|\\+48|split\" reports/rapport-audit-v2.md | head -30", "description": "Check  … [48 caractères tronqués]`
+
+  ```
+50:  d'échecs ; l'audit A1 en compte 22).
+73:| verbe (POS gold) | 111/116 (0,9569) | **111/116 (0,9569)** | 0 |
+217:| T163 | « 94 de span, 33 de cible » | 94 / **3** ; « 33 avant les correctifs » est faux (33 = exacts à `d400e188` ; A1 compte 22 échecs) |
+270:  `RACINE` corrigé, les 126/134/123/88 et 11/11 reproduisent exactement.
+=== audit v2 §? ===
+1:# Audit B13 — l'attachement v2 : 43 valeurs rejouées, 2 arrondis, 1 erreur de prose (46 → 45), 8 docstrings de portes périmées
+17:> une intégration v3 (`dcf7bc91`, 15:18) a atterri** : elle change les valeurs (exact 141/145,
+25:- **Toutes les mesures revendiquées reproduisent** : 145 labels, top1 140, top-k 142, exact
+27:  / 0,5732 ; split 116/111 (0,9569) et 29/26 (0,8966) ; 8 échecs (3 hors candidats, 5 mal
+32:  **142/145**, règle **137/145**, gain **+5**, McNemar **7/2**, `p = 0,1797`, bootstrap
+34:- **Une erreur de prose** : « **46** des 57 échecs étaient des candidats non réduits à leur
+35:  tête » doit se lire « **45** ». Le 46 est l'écart `134 − 88` (sous-chaîne vs strict) ; le
+36:  nombre de têtes candidates égales à la cible est **45** (A2 le dit, le comptage
+37:  indépendant le confirme). Le gain « +45 » est, lui, correct.
+
+… [1922 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du rapport de cohérence et de son JSON
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md", "content": "# Cohérence des fiches B13 du 2026-11-05 — v2 → v7\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ❌\n> **7 fiches auditées** (1 … [26635 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du registre JSON structuré
+
+- **bash** `{"command": "date -Is; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git rev-parse --short HEAD", "description": "Get timestamp and HEAD"}`
+
+  ```
+2026-11-05T20:10:36-05:00
+e4cd4408
+  ```
+
+- **write** `{"content": "{\n \"date_verification\": \"2026-11-05T20:10:36-05:00\",\n \"branche\": \"s/v7\",\n \"ligne\": \"B13\",\n \"objet\": \"Cohérence des fiches B13 de la journée v2 → v7 avec leurs JSON et l'état 69bd865e\",\n \"commit_audite\": \"69bd865e\",\n \"head_au_moment_de_l_ecriture\": \"e4cd4408\ … [32578 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation du JSON, des compteurs et de l'intégrité du dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json\np='reports/pensee-coherence-fiches-v7.json'\nd=json.load(open(p, encoding='utf-8'))\nprint('JSON OK')\nprint('fiches', len(d['fiches']))\nprint('divergences', len(d['divergences']))\nfrom collections impo … [492 caractères tronqués]`
+
+  ```
+JSON OK
+fiches 7
+divergences 23
+gravites Counter({'majeure': 17, 'critique': 4, 'mineure': 2})
+synthese {'fiches_verifiees': 7, 'fiches_courantes': 1, 'fiches_historiques': 6, 'fiches_sans_divergence_numerique': 1, 'fiches_avec_divergence_numerique': 6, 'divergences_numeriques': 23, 'divergences_critiques': 4, 'divergences_majeures': 17, 'divergences_mineures': 2, 'fiches_avec_lacune_json_texte': 7, 'fiches_sans_controle_negatif': 5, 'fiches_historiques_sans_mention': 6, 'lignes_readme_a_corriger': 2, 'renvois_section_faux': 0, 'liens_casses': 0, 'tableaux_somme_fausse': 1, 'verdict_global': "❌ 0 fiche entièrement conforme (chiffres + JSON + mention d'historique + contrôle négatif) ; 1 fiche sans écart numérique (v3) ; 4 écarts critiques (v4, v5, v7)."}
+ids ['V2-1', 'V2-2', 'V2-3', 'V4-1', 'V4-2', 'V4-3', 'V4-4', 'V4-5', 'V4-6', 'V4-7', 'V5-1', 'V5-2', 'V5-3', 'V5-4', 'V5-5', 'V5-6', 'V5-7', 'V5-8', 'V6-1', 'V7-1', 'V7-2', 'V7-3', 'GS-1']
+=== markdown headings ===
+1:# Cohérence des fiches B13 du 2026-11-05 — v2 → v7
+22:## 1. Synthèse
+51:## 2. Les sept fiches
+66:## 3. Mesures reproduites
+68:### 3.1 Attachement, couverture, spans
+85:### 3.2 F1, tête, POS : la base de mesure n'est pas
+… [1044 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== git status for our files ===\"; git status --porcelain -- reports/rapport-coherence-fiches-v7.md reports/pensee-coherence-fiches-v7.json; echo \"=== existing files unchanged? ===\"; git status --porcelain -- reports/rapport- … [877 caractères tronqués]`
+
+  ```
+=== git status for our files ===
+?? reports/pensee-coherence-fiches-v7.json
+?? reports/rapport-coherence-fiches-v7.md
+=== existing files unchanged? ===
+ M reports/rapport-gold-split.md
+ M reports/rapport-pensee-attachement-parfait.md
+ M reports/rapport-pensee-attachement-v2.md
+ M reports/rapport-pensee-attachement-v3.md
+ M reports/rapport-pensee-couverture-v5.md
+ M reports/rapport-pensee-couverture-v7.md
+ M reports/rapport-pensee-segmentation-v4.md
+(fin)
+=== untracked pycache? ===
+=== worktree cleanup ===
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet e4cd4408 [s/v7]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les fiches ont changé dans l'arbre de travail ; inspection des diffs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff --stat -- reports/rapport-pensee-attachement-v2.md reports/rapport-pensee-attachement-v3.md reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-couverture-v5.md reports/rapport-pensee-attachement-parfait.md report … [216 caractères tronqués]`
+
+  ```
+reports/rapport-gold-split.md                 |  4 +++-
+ reports/rapport-pensee-attachement-parfait.md |  2 ++
+ reports/rapport-pensee-attachement-v2.md      |  2 ++
+ reports/rapport-pensee-attachement-v3.md      |  2 ++
+ reports/rapport-pensee-couverture-v5.md       |  2 ++
+ reports/rapport-pensee-couverture-v7.md       | 20 ++++++++++++++++----
+ reports/rapport-pensee-segmentation-v4.md     |  2 ++
+ 7 files changed, 29 insertions(+), 5 deletions(-)
+=== v4 diff ===
+diff --git a/reports/rapport-pensee-segmentation-v4.md b/reports/rapport-pensee-segmentation-v4.md
+index e5f306b8..d6899a0a 100644
+--- a/reports/rapport-pensee-segmentation-v4.md
++++ b/reports/rapport-pensee-segmentation-v4.md
+@@ -1,5 +1,7 @@
+ # B13 — la segmentation d'abord : F1 0,2862 → 0,4194, exact 158/160 (0,9875), couverture 160/239
+ 
++> **Instantané historique** : état au commit `392f03aa` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
++
+ > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+ > **183/183 portes** : le diagnostic de A12/A14 était juste — le trou n'était pas l'attachement
+… [104 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff -- reports/rapport-pensee-couverture-v7.md reports/rapport-gold-split.md | head -120", "description": "Inspect v7 and gold-split concurrent edits"}`
+
+  ```
+diff --git a/reports/rapport-gold-split.md b/reports/rapport-gold-split.md
+index 76e9ba91..d16c5655 100644
+--- a/reports/rapport-gold-split.md
++++ b/reports/rapport-gold-split.md
+@@ -1,5 +1,7 @@
+ # B13 — le gold coupé en dev/test : les gains généralisent (test 0,9814, dev 0,9811)
+ 
++> **Instantané historique** : état au commit `85e4082b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
++
+ > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+ > Le gold 612 est coupé en **dev** (422 phrases, 163 cibles, 106 labels) et **test** (190, 76, 54)
+ > par un **hash stable de l'identifiant** (`crc32(id) % 3 == 0` → test), stratifié par source et
+@@ -39,7 +41,7 @@
+ 
+ ## 3. Ce que ce banc ne dit pas
+ 
+-- **Les 79 spans perdus** : la couverture reste 160/239, identique sur les deux moitiés.
++- **Les 79 spans perdus** : la couverture est **106/163 = 0,6503 en dev** et **54/76 = 0,7105 en test** (total 160/239 = 0,6695) — pas identique.
+ - **Le surajustement fin** : un split ne détecte pas un ajustement qui profite aux deux moitiés
+   (les règles ont été dessinées sur l'e
+… [2568 caractères tronqués]
+  ```
+

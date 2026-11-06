@@ -7,12 +7,12 @@
 | Identifiant | `24001907-4f19-4ea5-87f6-98334496719f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 19:25 |
-| Durée | 0.3 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 40 |
-| Appels d'outils | 61 |
+| Messages | 71 |
+| Appels d'outils | 93 |
 | Fichiers touchés | 0 |
-| Commandes | 40 |
+| Commandes | 71 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2473 caractères tronqués]
 
-*61 appels d'outils.* Actions notables :
+*93 appels d'outils.* Actions notables :
 
 - bash — Inspect git HEAD and status
 - bash — List reports and relevant tool dirs
@@ -41,11 +41,11 @@
 - bash — Run autotest gates
 - bash — Read bloc_linguistique header and classes
 - job_output
-- … et 28 autres
+- … et 59 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des composantes S/chunker des fiches amont
+⏵ Correction du compte de docstrings et d'une coquille dans le JSON
 
 ## 3. Travail accompli
 
@@ -96,6 +96,17 @@
 - **T1** Inspect gold split commit changes
 - **T1** Replay v4/v5/v6/v7 code on golds
 - **T1** Measure v4/v5 component F1 values
+- … et 31 autres
+
+## 4. Mesures et résultats marquants
+
+- **T1** `- **Le mélange des types varie** : le test canonique est **REL-pauvre** (17 cibles, 22,4 %, contre`
+- **T1** `35,0 % en dev) et **GP-riche** (35, 46,1 %, contre 37,4 %) ; l'attendu serait 23,5 REL et 30,5 GP.`
+- **T1** `Ce n'est pas significatif (p=0,26), mais les décalés ne donnent pas le même mélange : test REL 34,8 %`
+- **T1** `(décalé 1) et 35,1 % (décalé 2). C'est le principal levier des variations agrégées ci-dessous.`
+- **T1** `Toutes les étendues observées sont dans la bande 95 % du tirage aléatoire. **Conclusion : le split est`
+- **T1** `sous dev, ~2,7 cas pour 76), mais cette estimation n'est pas significative : les IC Wilson 95 % se`
+- **T1** `- **F1** : test **+1,39 point**, mais l'agrégat est dominé par GN/GV (81 % des segments) : GV test`
 
 ## 5. Erreurs rencontrées
 

@@ -1,0 +1,901 @@
+{
+ "date_verification": "2026-11-05T20:10:36-05:00",
+ "branche": "s/v7",
+ "ligne": "B13",
+ "objet": "Cohérence des fiches B13 de la journée v2 → v7 avec leurs JSON et l'état 69bd865e",
+ "commit_audite": "69bd865e",
+ "head_au_moment_de_l_ecriture": "e4cd4408",
+ "note_head": "HEAD a avancé de 69bd865e à e4cd4408 pendant l'audit (commits DOCS/JOURNAL seulement) ; les sept fiches, leurs JSON et reports/README.md sont identiques dans les deux commits.",
+ "perimetre": {
+  "fiches": [
+   "reports/rapport-pensee-attachement-v2.md",
+   "reports/rapport-pensee-attachement-v3.md",
+   "reports/rapport-pensee-segmentation-v4.md",
+   "reports/rapport-pensee-couverture-v5.md",
+   "reports/rapport-pensee-attachement-parfait.md",
+   "reports/rapport-gold-split.md",
+   "reports/rapport-pensee-couverture-v7.md"
+  ],
+  "json": [
+   "reports/pensee-attachement-v2.json",
+   "reports/pensee-attachement-v3.json",
+   "reports/pensee-segmentation-v4.json",
+   "reports/pensee-couverture-v5.json",
+   "reports/pensee-attachement-parfait.json",
+   "reports/pensee-gold-split.json",
+   "reports/pensee-couverture-v7.json"
+  ],
+  "commits": {
+   "v2": "9d5337ce",
+   "v3_markdown": "e1903e2d",
+   "v3_json": "dcf7bc91",
+   "v4": "392f03aa",
+   "v5": "b975011b",
+   "v6": "0ec6c27d",
+   "gold_split": "85e4082b",
+   "v7": "69bd865e"
+  },
+  "hors_perimetre": [
+   "les autres fiches B13 du 2026-11-05 non listées",
+   "docs/pilotage/en-cours.md et docs/pilotage/roadmap.md",
+   "journal/",
+   "tools/structures/",
+   "data/",
+   "tools/entrainer_native.py",
+   "tools/native_model.py"
+  ]
+ },
+ "methode": {
+  "lecture": "lecture intégrale des 7 fiches et des 7 JSON, puis git show <commit>:tools/pensee/autotest.py pour lire les portes de l'époque",
+  "reproduction": "bloc_linguistique.py historique chargé comme module depuis git show, RACINE forcé à la racine du dépôt, evaluer_bloc sur le gold vivant 612 et le gold gelé 602",
+  "worktree": "un worktree détaché à 0ec6c27d a été essayé puis écarté : S y perd ses données et la v6 tombe à 156 labels ; le chargement du blob avec RACINE à la racine redonne 187 labels",
+  "golds": {
+   "vivant": "612 phrases = 20 hand + 432 reel + 160 synthetique ; 239 cibles",
+   "gele": "602 phrases = 20 hand + 422 reel + 160 synthetique ; 239 cibles ; utilisé par les portes T107/T112/T113 et par les F1/POS de v4, v5, v7"
+  },
+  "aucune_modification": true
+ },
+ "etat_verifie": {
+  "commit": "69bd865e",
+  "portes": "183/183",
+  "v7_sur_gold_vivant_612": {
+   "phrases": 612,
+   "labels": 196,
+   "exact": 195,
+   "top1": 195,
+   "topk": 166,
+   "topk_taux": 0.6946,
+   "exact_taux_span": 0.9949,
+   "couverture": 0.8201,
+   "fr": "135/135",
+   "en": "60/61",
+   "spans": {
+    "REL": 21,
+    "SUB": 17,
+    "GP": 5,
+    "total": 43
+   },
+   "f1": 0.5555,
+   "tete": 0.7152,
+   "pos": 0.7581
+  },
+  "v7_sur_gold_gele_602": {
+   "phrases": 602,
+   "labels": 196,
+   "exact": 195,
+   "f1": 0.5595,
+   "tete": 0.7205,
+   "pos": 0.7603
+  },
+  "portes_v7_verifiees": {
+   "T161": "top1 195, exact 195",
+   "T167": "labels 196, top1_taux_span 0.9949, topk_taux_span 0.8469, exact_taux_span 0.9949",
+   "T168": "exact 195, verbes 137, noms 59",
+   "T169": "verbes 136/137 (0.9927), noms 59/59 (1.0)",
+   "T172": "1 hors candidats, 0 mal classé",
+   "T173": "topk 166, topk_exact 166",
+   "T179": "exact_any 195, exact_any_taux_span 0.9949",
+   "T180": "fr 135/135, en 60/61"
+  }
+ },
+ "synthese": {
+  "fiches_verifiees": 7,
+  "fiches_courantes": 1,
+  "fiches_historiques": 6,
+  "fiches_sans_divergence_numerique": 1,
+  "fiches_avec_divergence_numerique": 6,
+  "divergences_numeriques": 23,
+  "divergences_critiques": 4,
+  "divergences_majeures": 17,
+  "divergences_mineures": 2,
+  "fiches_avec_lacune_json_texte": 7,
+  "fiches_sans_controle_negatif": 5,
+  "fiches_historiques_sans_mention": 6,
+  "lignes_readme_a_corriger": 2,
+  "renvois_section_faux": 0,
+  "liens_casses": 0,
+  "tableaux_somme_fausse": 1,
+  "verdict_global": "❌ 0 fiche entièrement conforme (chiffres + JSON + mention d'historique + contrôle négatif) ; 1 fiche sans écart numérique (v3) ; 4 écarts critiques (v4, v5, v7)."
+ },
+ "fiches": [
+  {
+   "id": "v2",
+   "fichier": "reports/rapport-pensee-attachement-v2.md",
+   "json": "reports/pensee-attachement-v2.json",
+   "commit": "9d5337ce",
+   "statut": "historique",
+   "date": "2026-11-05",
+   "ligne": "B13",
+   "portes": "180/180",
+   "verdict_fiche": "✅",
+   "verdict_audit": "⚠️ chiffres reproduits, 3 écarts de table/prose déjà documentés par l'audit A8",
+   "divergences": ["V2-1", "V2-2", "V2-3"],
+   "mesures_reproduites": {
+    "labels": 145,
+    "exact": "137/145 (0.9448)",
+    "top1": 140,
+    "topk": 142,
+    "topk_exact": 141,
+    "verbe": "111/116 (0.9569)",
+    "nom": "26/29 (0.8966)",
+    "echecs": "8 = 3 hors candidats + 5 mal classes",
+    "spans": "94 = 48 REL + 33 SUB + 13 GP",
+    "rendement": "0.5858 / 0.5941 / 0.5732",
+    "modele_appris": "142/145, +5, McNemar 7/2, p=0.18, IC [-0.7 ; +7.6] (arrondis A8)"
+   },
+   "json_texte": {
+    "json_sans_texte": [],
+    "texte_sans_json": [
+     "60/63 et 63/82 (split lexical avant)",
+     "111 et 26 (justes verbes/noms)",
+     "22 = 11 + 11 (echecs avant)",
+     "46/57",
+     "139/145 (prior de liste)",
+     "r048, r068 (regressions du modele appris)",
+     "liste des 8 verbes anglais"
+    ]
+   },
+   "controle_negatif": true,
+   "mention_historique": false,
+   "readme_reference": true
+  },
+  {
+   "id": "v3",
+   "fichier": "reports/rapport-pensee-attachement-v3.md",
+   "json": "reports/pensee-attachement-v3.json",
+   "commit": "dcf7bc91 / e1903e2d",
+   "statut": "historique",
+   "date": "2026-11-05",
+   "ligne": "B13",
+   "portes": "181/181",
+   "verdict_fiche": "✅",
+   "verdict_audit": "✅ chiffres reproduits ; ⚠️ JSON non mis à jour après la réparation du tableau (A13 absent)",
+   "divergences": [],
+   "mesures_reproduites": {
+    "labels": 145,
+    "exact": "141/145 (0.9724)",
+    "top1": 143,
+    "topk": 142,
+    "topk_exact": 142,
+    "verbe": "112/116 (0.9655)",
+    "nom": "29/29 (1.0)",
+    "exact_any": "143/145 (0.9862) et 143/239 (0.5983)",
+    "spans": "94 = 48 REL + 33 SUB + 13 GP",
+    "controles_negatifs": "completion naive 132 (-5), R5 sans ADV 131 (-6), R3a 2/4",
+    "rendement": "0.5983 / 0.5941 / 0.5900",
+    "plafond": "145/239 = 0.6067"
+   },
+   "json_texte": {
+    "json_sans_texte": [],
+    "texte_sans_json": [
+     "A13 : 43/96 GP, 143/145, 143/239, p=0.5, s108 et s122",
+     "111/116 et 112/116",
+     "26/29 et 29/29",
+     "portee 2-3 de R1"
+    ]
+   },
+   "controle_negatif": true,
+   "mention_historique": false,
+   "readme_reference": true,
+   "note": "le JSON est resté à dcf7bc91 ; git diff dcf7bc91..HEAD -- reports/pensee-attachement-v3.json est vide"
+  },
+  {
+   "id": "v4",
+   "fichier": "reports/rapport-pensee-segmentation-v4.md",
+   "json": "reports/pensee-segmentation-v4.json",
+   "commit": "392f03aa",
+   "statut": "historique",
+   "date": "2026-11-05",
+   "ligne": "B13",
+   "portes": "183/183",
+   "verdict_fiche": "✅",
+   "verdict_audit": "❌ titre et prose restés à l'état intermédiaire ; F1/tête mesurées sur le 602 alors que la fiche nomme le 612",
+   "divergences": ["V4-1", "V4-2", "V4-3", "V4-4", "V4-5", "V4-6", "V4-7"],
+   "mesures_reproduites": {
+    "labels": 160,
+    "exact": "157/160 (0.9812)",
+    "top1": 157,
+    "topk": "156/239 (0.6527)",
+    "fr": "117/118 (0.9915)",
+    "en": "40/42 (0.9524)",
+    "spans": "79 = 48 REL + 21 SUB + 10 GP",
+    "echecs": "3 (r162, r309, r194)",
+    "f1_612": 0.4509,
+    "f1_602": 0.4539,
+    "tete_612": 0.6385,
+    "tete_602": 0.6432
+   },
+   "json_texte": {
+    "json_sans_texte": [],
+    "texte_sans_json": [
+     "145 -> 159 labels et 141 -> 145 exact (correction 1)",
+     "F1 0.2937 -> 0.4033 (correction 2)",
+     "exact 144 -> 152 et anglais 30 -> 38 (correction 5)",
+     "exact 152 -> 158 (correction 6)",
+     "F1 0.4194 et tete 0.5930 (correction 7)",
+     "84 spans de A12",
+     "38 assertions",
+     "passif 3/3",
+     "41/42"
+    ]
+   },
+   "controle_negatif": false,
+   "mention_historique": false,
+   "readme_reference": true
+  },
+  {
+   "id": "v5",
+   "fichier": "reports/rapport-pensee-couverture-v5.md",
+   "json": "reports/pensee-couverture-v5.json",
+   "commit": "b975011b",
+   "statut": "historique",
+   "date": "2026-11-05",
+   "ligne": "B13",
+   "portes": "183/183",
+   "verdict_fiche": "✅",
+   "verdict_audit": "❌ titre et puces restés à l'état intermédiaire ; F1/tête publiées sont les constantes de porte, pas la mesure exacte",
+   "divergences": ["V5-1", "V5-2", "V5-3", "V5-4", "V5-5", "V5-6", "V5-7", "V5-8"],
+   "mesures_reproduites": {
+    "labels": 187,
+    "exact": "186/187 (0.9947)",
+    "top1": 186,
+    "topk": "161/239 (0.6736)",
+    "fr": "126/127 (0.9921)",
+    "en": "60/60 (1.0)",
+    "spans": "52 = 24 REL + 12 SUB + 16 GP",
+    "dev": "126/126 (1.0)",
+    "test": "60/61 (0.9836)",
+    "dev_f1": 0.5091,
+    "test_f1": 0.5217,
+    "dev_couverture": 0.773,
+    "test_couverture": 0.8026,
+    "f1_612": 0.513,
+    "f1_602": 0.5164,
+    "tete_612": 0.6785,
+    "tete_602": 0.6834,
+    "f1_publie": 0.5156,
+    "tete_publiee": 0.6826
+   },
+   "json_texte": {
+    "json_sans_texte": [
+     "dev.f1 0.5091",
+     "dev.couverture 0.773",
+     "test.f1 0.5217",
+     "test.couverture 0.8026",
+     "candidats_manquants 26 (seulement implicite dans le texte)"
+    ],
+    "texte_sans_json": [
+     "117/118, 126/127, 60/60 (denominateurs)",
+     "27 echecs (en fait 26 candidats manquants + 1 echec de cible)",
+     "0.8556",
+     "125/126",
+     "59"
+    ]
+   },
+   "controle_negatif": false,
+   "mention_historique": false,
+   "readme_reference": true
+  },
+  {
+   "id": "v6",
+   "fichier": "reports/rapport-pensee-attachement-parfait.md",
+   "json": "reports/pensee-attachement-parfait.json",
+   "commit": "0ec6c27d",
+   "statut": "historique",
+   "date": "2026-11-05",
+   "ligne": "B13",
+   "portes": "183/183",
+   "verdict_fiche": "✅",
+   "verdict_audit": "⚠️ chiffres justes ; la ligne F1 compare la constante de porte de la v5 (602) à la valeur vivante de la v6 (612)",
+   "divergences": ["V6-1"],
+   "mesures_reproduites": {
+    "labels": 187,
+    "exact": "187/187 (1.0)",
+    "top1": 187,
+    "topk": "161/239 (0.6736)",
+    "fr": "127/127 (1.0)",
+    "en": "60/60 (1.0)",
+    "verbe": "131/131",
+    "nom": "56/56",
+    "dev": "126/126",
+    "test": "61/61",
+    "spans": "52 = 24 REL + 12 SUB + 16 GP",
+    "f1_612": 0.513,
+    "f1_602": 0.5164,
+    "tete_612": 0.6785,
+    "tete_602": 0.6834
+   },
+   "json_texte": {
+    "json_sans_texte": [],
+    "texte_sans_json": [
+     "26 candidats incomplets",
+     "130/131 (v5)",
+     "0.5156 (v5)",
+     "la tete (non publiee)"
+    ]
+   },
+   "controle_negatif": false,
+   "mention_historique": false,
+   "readme_reference": true
+  },
+  {
+   "id": "gold_split",
+   "fichier": "reports/rapport-gold-split.md",
+   "json": "reports/pensee-gold-split.json",
+   "commit": "85e4082b",
+   "statut": "historique",
+   "date": "2026-11-05",
+   "ligne": "B13",
+   "portes": "183/183 (commit ; non ecrit dans la fiche)",
+   "verdict_fiche": "✅",
+   "verdict_audit": "⚠️ chiffres et tableaux exacts ; une phrase fausse sur la couverture des deux moities",
+   "divergences": ["GS-1"],
+   "mesures_reproduites": {
+    "dev": "422 phrases, 163 cibles, 106 labels, 104/106 exact (0.9811)",
+    "test": "190 phrases, 76 cibles, 54 labels, 53/54 exact (0.9814)",
+    "tout": "612 phrases, 239 cibles, 160 labels",
+    "sources": "dev 15 hand / 302 reel / 105 synth ; test 5 / 130 / 55 ; tout 20 / 432 / 160",
+    "langues": "dev 277 fr / 145 en ; test 125 / 65 ; tout 402 / 210",
+    "f1": "0.4414 / 0.4719",
+    "tete": "0.6347 / 0.6470",
+    "fr": "79/79 et 38/39",
+    "en": "25/27 et 15/15",
+    "couverture_dev": 0.6503,
+    "couverture_test": 0.7105,
+    "couverture_totale": 0.6695
+   },
+   "json_texte": {
+    "json_sans_texte": [],
+    "texte_sans_json": [
+     "tableau des sources et des langues (15/302/105, 5/130/55, 20/432/160 ; 277/145, 125/65, 402/210)",
+     "79 spans",
+     "160/239",
+     "79/79, 38/39, 25/27, 15/15",
+     "1.9 point par cas au test"
+    ]
+   },
+   "controle_negatif": false,
+   "mention_historique": false,
+   "readme_reference": true
+  },
+  {
+   "id": "v7",
+   "fichier": "reports/rapport-pensee-couverture-v7.md",
+   "json": "reports/pensee-couverture-v7.json",
+   "commit": "69bd865e",
+   "statut": "courante",
+   "date": "2026-11-05",
+   "ligne": "B13",
+   "portes": "183/183",
+   "verdict_fiche": "✅",
+   "verdict_audit": "❌ base F1/tee/POS non nommee (602) alors que la fiche dit 612 ; 0.0132 faux ; colonne v6 heterogene",
+   "divergences": ["V7-1", "V7-2", "V7-3"],
+   "mesures_reproduites": {
+    "labels": 196,
+    "exact": "195/196 (0.9949)",
+    "top1": 195,
+    "topk": "166/239 (0.6946)",
+    "fr": "135/135 (1.0)",
+    "en": "60/61 (0.9836)",
+    "spans": "43 = 21 REL + 17 SUB + 5 GP",
+    "couverture": 0.8201,
+    "f1_612": 0.5555,
+    "f1_602": 0.5595,
+    "tete_612": 0.7152,
+    "tete_602": 0.7205,
+    "pos_612": 0.7581,
+    "pos_602": 0.7603
+   },
+   "json_texte": {
+    "json_sans_texte": [],
+    "texte_sans_json": [
+     "0.0132 (faux)",
+     "repartition REL qui 12",
+     "32 assertions",
+     "composition 20 + 432 + 160"
+    ]
+   },
+   "controle_negatif": false,
+   "mention_historique": false,
+   "readme_reference": true,
+   "note": "fiche courante : devrait porter une mention 'etat courant au commit 69bd865e'"
+  }
+ ],
+ "divergences": [
+  {
+   "id": "V2-1",
+   "fiche": "v2",
+   "gravite": "majeure",
+   "type": "table",
+   "ou": "§ 1, lignes 27-29",
+   "constat": "la colonne 'avant' est etiquetee '(POS gold)' alors que 63/82 est l'ancien split lexical (_est_verbe) ; '63 (0,9524)' et '82 (0,7683)' melangent comptes de labels et taux ; '+48 cibles' est 111 - 63, un melange de justes et de cibles",
+   "mesure": "split lexical 60/63 (0.9524) et 63/82 (0.7683) ; POS gold sur le meme bloc 97/116 et 26/29 ; v2 111/116 et 26/29 ; cibles 63 -> 116 (+53), justes 60 -> 111 (+51), ou +14 a split POS constant",
+   "correction": "etiqueter le split lexical, retirer '(POS gold)' et '+48 cibles', ou publier le split POS gold sur le meme bloc"
+  },
+  {
+   "id": "V2-2",
+   "fiche": "v2",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 2, lignes 46-47",
+   "constat": "'46 des 57 echecs' ; le meme paragraphe dit '+45'",
+   "mesure": "45 tetes candidates egales a la cible (A2, comptage independant A8) ; 46 = 134 - 88 (sous-chaine vs strict)",
+   "correction": "ecrire 45"
+  },
+  {
+   "id": "V2-3",
+   "fiche": "v2",
+   "gravite": "majeure",
+   "type": "table_somme",
+   "ou": "§ 2, tableau des corrections, lignes 35-39",
+   "constat": "la colonne 'gain' ne s'additionne pas aux totaux : strict 88 + 45 = 133 pour un total de 141 ; top-k 134 sans gain credite pour un total de 142 ; top1 126 + 6 + 8 = 140 mais le +6 du segment n'est pas credite",
+   "mesure": "88 + 45 + 8 = 141 (strict) ; 134 + 8 = 142 (top-k) ; 126 + 6 + 8 = 140 (top1) ; 123 + 6 + 8 = 137 (exact)",
+   "correction": "crediter le lexique de +8 top-k et +8 strict, le segment de +6 top1, ou ajouter une ligne total"
+  },
+  {
+   "id": "V4-1",
+   "fiche": "v4",
+   "gravite": "critique",
+   "type": "titre",
+   "ou": "titre, ligne 1",
+   "constat": "F1 0.4194",
+   "mesure": "F1 finale 0.4539 (en-tete, § 1, § 2, porte T112)",
+   "correction": "0.4539 (ou 0.4509 sur 612)"
+  },
+  {
+   "id": "V4-2",
+   "fiche": "v4",
+   "gravite": "critique",
+   "type": "titre",
+   "ou": "titre, ligne 1",
+   "constat": "exact 158/160 (0.9875)",
+   "mesure": "157/160 (0.9812) (en-tete, § 2, JSON, porte T167)",
+   "correction": "157/160 (0.9812)"
+  },
+  {
+   "id": "V4-3",
+   "fiche": "v4",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 2, ligne 46",
+   "constat": "'sans perdre l'exactitude (0,9724 -> 0,9875)'",
+   "mesure": "0.9724 -> 0.9812",
+   "correction": "0.9812"
+  },
+  {
+   "id": "V4-4",
+   "fiche": "v4",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 2, ligne 45",
+   "constat": "'l'exact tient (41/42)'",
+   "mesure": "40/42 (0.9524) (tableau, JSON, porte T180)",
+   "correction": "40/42"
+  },
+  {
+   "id": "V4-5",
+   "fiche": "v4",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 5, ligne 70",
+   "constat": "'Les 2 echecs (r162, r309)'",
+   "mesure": "3 echecs : r162, r309, r194 (§ 2, JSON)",
+   "correction": "3"
+  },
+  {
+   "id": "V4-6",
+   "fiche": "v4",
+   "gravite": "mineure",
+   "type": "compte",
+   "ou": "§ 6, ligne 77",
+   "constat": "'les six corrections'",
+   "mesure": "sept corrections (§ 1, JSON 7)",
+   "correction": "sept"
+  },
+  {
+   "id": "V4-7",
+   "fiche": "v4",
+   "gravite": "majeure",
+   "type": "base_mesure",
+   "ou": "§ 3, ligne 57",
+   "constat": "la fiche nomme le gold 612 mais la F1 et la tete publiees sont mesurees sur le gold gele 602",
+   "mesure": "sur 612 : F1 0.4509, tete 0.6385 ; sur 602 : 0.4539, 0.6432",
+   "correction": "nommer le 602 ou publier les valeurs du 612"
+  },
+  {
+   "id": "V5-1",
+   "fiche": "v5",
+   "gravite": "critique",
+   "type": "titre",
+   "ou": "titre, ligne 1",
+   "constat": "exact 185/187 (0.9893)",
+   "mesure": "186/187 (0.9947) (en-tete, § 2, JSON, porte T161/T167)",
+   "correction": "186/187 (0.9947)"
+  },
+  {
+   "id": "V5-2",
+   "fiche": "v5",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 2, ligne 46",
+   "constat": "dev 125/126 (0.9921)",
+   "mesure": "126/126 (1.0) (en-tete, JSON, split reproduit) ; 0.9921 est le taux fr 126/127",
+   "correction": "126/126"
+  },
+  {
+   "id": "V5-3",
+   "fiche": "v5",
+   "gravite": "majeure",
+   "type": "arithmetique",
+   "ou": "§ 2, ligne 44",
+   "constat": "'+27 labels et +28 exact'",
+   "mesure": "157 -> 186 = +29 exact",
+   "correction": "+29"
+  },
+  {
+   "id": "V5-4",
+   "fiche": "v5",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 2, ligne 45",
+   "constat": "'L'anglais rattrape (40 -> 59)'",
+   "mesure": "40 -> 60 (tableau, JSON, porte T180)",
+   "correction": "60"
+  },
+  {
+   "id": "V5-5",
+   "fiche": "v5",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 2, § 3, § 5",
+   "constat": "'Les 27 echecs de cible'",
+   "mesure": "1 echec de cible (echecs_cible = 1, r309) ; 27 = 26 candidats manquants + 1 echec de cible",
+   "correction": "distinguer 1 echec de cible et 26 candidats manquants"
+  },
+  {
+   "id": "V5-6",
+   "fiche": "v5",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 2, ligne 48",
+   "constat": "'le top-k tombe a 0,8556 sur les labels'",
+   "mesure": "161/187 = 0.8610 (ou 161/239 = 0.6736) ; 0.8556 = 160/187, valeur d'avant le correctif",
+   "correction": "0.8610 (161/187) ou 0.6736 (161/239)"
+  },
+  {
+   "id": "V5-7",
+   "fiche": "v5",
+   "gravite": "mineure",
+   "type": "compte",
+   "ou": "§ 1, ligne 15 ; § 6, ligne 76",
+   "constat": "'Les six corrections'",
+   "mesure": "sept corrections (tableau a 7 lignes, JSON a 7 entrees)",
+   "correction": "sept"
+  },
+  {
+   "id": "V5-8",
+   "fiche": "v5",
+   "gravite": "majeure",
+   "type": "base_mesure",
+   "ou": "en-tete, § 2",
+   "constat": "F1 0.5156, tete 0.6826",
+   "mesure": "sur 612 : 0.5130 / 0.6785 ; sur 602 : 0.5164 / 0.6834 ; 0.5156/0.6826 sont les constantes de la porte T112/T113",
+   "correction": "publier une base et la mesure exacte"
+  },
+  {
+   "id": "V6-1",
+   "fiche": "v6",
+   "gravite": "majeure",
+   "type": "base_mesure",
+   "ou": "§ 2, ligne 31",
+   "constat": "F1 syntagmes 0.5156 -> 0.5130",
+   "mesure": "sur un gold constant la F1 ne bouge pas : sur 612, v5 = v6 = 0.5130 ; sur 602, v5 = v6 = 0.5164 ; la baisse compare la constante de porte v5 (602) a la valeur vivante v6 (612)",
+   "correction": "comparer sur un gold constant : 0.5130 -> 0.5130 (612) ou 0.5164 -> 0.5164 (602)"
+  },
+  {
+   "id": "V7-1",
+   "fiche": "v7",
+   "gravite": "majeure",
+   "type": "arithmetique",
+   "ou": "§ 3, ligne 40",
+   "constat": "'le contexte ... rend 0,0132 de POS'",
+   "mesure": "0.7603 - 0.7475 = 0.0128",
+   "correction": "0.0128"
+  },
+  {
+   "id": "V7-2",
+   "fiche": "v7",
+   "gravite": "critique",
+   "type": "base_mesure",
+   "ou": "en-tete, § 2",
+   "constat": "F1 0.5595, tete 0.7205, POS 0.7603 presentees avec le gold 612",
+   "mesure": "ces trois valeurs sont celles du gold gele 602 ; sur 612 : F1 0.5555, tete 0.7152, POS 0.7581 ; couverture 196/239 et exact 195/196 sont sur 612",
+   "correction": "nommer le 602 pour F1/tete/POS ou publier les valeurs du 612"
+  },
+  {
+   "id": "V7-3",
+   "fiche": "v7",
+   "gravite": "majeure",
+   "type": "base_mesure",
+   "ou": "§ 2, colonne v6",
+   "constat": "la colonne v6 n'est pas homogene : F1 0.5130 est la v6 sur 612, mais tete 0.6826 est la v5 et POS 0.7475 est la constante de porte de la v6",
+   "mesure": "v6 : tete 0.6785 (612) / 0.6834 (602) ; POS 0.7461 (612) / 0.7482 (602)",
+   "correction": "choisir une base et y ramener les trois valeurs de la v6"
+  },
+  {
+   "id": "GS-1",
+   "fiche": "gold_split",
+   "gravite": "majeure",
+   "type": "prose",
+   "ou": "§ 3, ligne 42",
+   "constat": "'la couverture reste 160/239, identique sur les deux moities'",
+   "mesure": "dev 106/163 = 0.6503 ; test 54/76 = 0.7105 ; total 160/239 = 0.6695",
+   "correction": "ecrire 106/163 en dev, 54/76 en test, 160/239 au total"
+  }
+ ],
+ "tableaux_sommes": {
+  "tableaux_faux": [
+   {
+    "fiche": "v2",
+    "ou": "§ 2, corrections",
+    "detail": "strict 88 + 45 = 133 vs 141 ; top-k 134 vs 142 ; +6 top1 non credite",
+    "correction": "crediter +8 top-k, +8 strict, +6 top1"
+   }
+  ],
+  "tableaux_justes": [
+   "v2/v3 spans 48 + 33 + 13 = 94",
+   "v4 spans 48 + 21 + 10 = 79",
+   "v5/v6 spans 24 + 12 + 16 = 52",
+   "v7 spans 21 + 17 + 5 = 43 ; 135 + 61 = 196 ; 135 + 60 = 195",
+   "v6 131 + 56 = 187",
+   "gold-split 422 + 190 = 612 ; 163 + 76 = 239 ; 106 + 54 = 160 ; sources 15 + 5 = 20, 302 + 130 = 432, 105 + 55 = 160 ; langues 277 + 125 = 402, 145 + 65 = 210",
+   "v3 R2 + R3 + R4 = +4 exact, +3 top1, +1 strict"
+  ]
+ },
+ "controles_negatifs": [
+  {
+   "fiche": "v2",
+   "present": true,
+   "description": "modele appris rejete (142/145 vs 137, +5, McNemar 7/2, p=0.18, IC [-0.7 ; +7.6]) ; audit A8 : permutations et candidat aleatoire"
+  },
+  {
+   "fiche": "v3",
+   "present": true,
+   "description": "completion naive 132 (-5), R5 sans ADV 131 (-6), R3a 2/4"
+  },
+  {
+   "fiche": "v4",
+   "present": false,
+   "description": "aucun ; les regles A12 non integrees ne sont pas un negatif mesure"
+  },
+  {
+   "fiche": "v5",
+   "present": false,
+   "description": "aucun ; dev/test est un controle de generalisation"
+  },
+  {
+   "fiche": "v6",
+   "present": false,
+   "description": "aucun ; dev/test est un controle de generalisation"
+  },
+  {
+   "fiche": "v7",
+   "present": false,
+   "description": "aucun ; dev/test non re-mesures depuis la v6"
+  },
+  {
+   "fiche": "gold_split",
+   "present": false,
+   "description": "aucun ; pas de test de fuite, de permutation ou de melange des identifiants"
+  }
+ ],
+ "mentions_historiques": {
+  "historiques_sans_mention": ["v2", "v3", "v4", "v5", "v6", "gold_split"],
+  "courante": "v7",
+  "note": "le numero de version et la date ne sont pas une mention explicite ; v2 est appelee 'instantane historique' dans rapport-audit-v2.md, mais pas dans sa propre fiche",
+  "formulation_recommandee": "> **Instantane historique** : etat au commit <sha> (2026-11-05) ; ne decrit pas l'etat courant 69bd865e."
+ },
+ "readme": {
+  "referencees": {
+   "v7": 18,
+   "v6": 19,
+   "v5": 20,
+   "gold_split": 21,
+   "v4": 22,
+   "v3": 30,
+   "v2": 36
+  },
+  "a_corriger": [
+   {
+    "ligne": 20,
+    "fiche": "v5",
+    "actuel": "exact 185/187 (0,9893), ... dev/test 125/126 et 60/61",
+    "corrige": "exact 186/187 (0,9947), ... dev/test 126/126 et 60/61"
+   },
+   {
+    "ligne": 22,
+    "fiche": "v4",
+    "actuel": "F1 0,4194, exact 158/160",
+    "corrige": "F1 0,4539 (ou 0,4509 sur 612), exact 157/160 (0,9812)"
+   },
+   {
+    "ligne": 18,
+    "fiche": "v7",
+    "actuel": "couverture 0,8201 : POS 0,7603, F1 0,5595, exact 195/196",
+    "corrige": "preciser que POS/F1 sont sur le gold gele 602 et la couverture sur le 612"
+   }
+  ]
+ },
+ "corrections": [
+  {
+   "priorite": 1,
+   "fiche": "v4",
+   "action": "titre : 0,4194 -> 0,4539 ; 158/160 (0,9875) -> 157/160 (0,9812)"
+  },
+  {
+   "priorite": 1,
+   "fiche": "v4",
+   "action": "§ 2 : 0,9875 -> 0,9812 ; 41/42 -> 40/42 ; § 5 : 2 -> 3 echecs ; § 6 : six -> sept"
+  },
+  {
+   "priorite": 1,
+   "fiche": "v5",
+   "action": "titre : 185/187 (0,9893) -> 186/187 (0,9947)"
+  },
+  {
+   "priorite": 1,
+   "fiche": "v5",
+   "action": "§ 2/§ 3/§ 5 : dev 125/126 -> 126/126 ; +28 -> +29 ; 40 -> 59 devient 40 -> 60 ; '27 echecs de cible' -> 1 echec de cible + 26 candidats manquants ; 0,8556 -> 0,8610 (161/187) ou 0,6736 (161/239) ; six -> sept"
+  },
+  {
+   "priorite": 1,
+   "fiche": "v7",
+   "action": "0,0132 -> 0,0128 ; nommer la base 602 de F1/tete/POS ou publier 0,5555 / 0,7152 / 0,7581 ; corriger la colonne v6 (tete et POS)"
+  },
+  {
+   "priorite": 2,
+   "fiche": "v2",
+   "action": "§ 1 : etiqueter le split lexical (60/63, 63/82), retirer '(POS gold)' et '+48 cibles' ; § 2 : 46 -> 45 ; crediter +8 top-k, +8 strict, +6 top1"
+  },
+  {
+   "priorite": 2,
+   "fiche": "v4",
+   "action": "nommer le gold 602 pour F1/tete, ou republier sur 612 (0,4509 / 0,6385)"
+  },
+  {
+   "priorite": 2,
+   "fiche": "v5",
+   "action": "nommer la base de F1/tete (612 ou 602) et publier la mesure exacte (0,5130/0,6785 ou 0,5164/0,6834)"
+  },
+  {
+   "priorite": 2,
+   "fiche": "v6",
+   "action": "comparer la F1 sur un gold constant : 0,5130 -> 0,5130 (612) ou 0,5164 -> 0,5164 (602)"
+  },
+  {
+   "priorite": 2,
+   "fiche": "gold_split",
+   "action": "§ 3 : 'identique sur les deux moities' -> 106/163 (0,6503) en dev, 54/76 (0,7105) en test, 160/239 (0,6695) au total"
+  },
+  {
+   "priorite": 3,
+   "fiche": "v3",
+   "action": "ajouter au JSON le bloc A13 (43/96, 143/145, 143/239, p=0,5, s108/s122) et les comptes 111/116, 112/116, 26/29, 29/29"
+  },
+  {
+   "priorite": 3,
+   "fiche": "v2",
+   "action": "ajouter au JSON 60/63, 63/82, 111/116, 26/29, 22 = 11 + 11, 46/57, 139/145, r048/r068"
+  },
+  {
+   "priorite": 3,
+   "fiche": "v4",
+   "action": "ajouter au JSON les effets intermediaires des sept corrections, ou les retirer du texte"
+  },
+  {
+   "priorite": 3,
+   "fiche": "v5",
+   "action": "ajouter au JSON les denominateurs et 27 = 26 + 1"
+  },
+  {
+   "priorite": 3,
+   "fiche": "v7",
+   "action": "retirer 0,0132 du JSON ou le corriger en 0,0128"
+  },
+  {
+   "priorite": 3,
+   "fiche": "gold_split",
+   "action": "ajouter au JSON le tableau des sources et des langues, 79 spans / 160/239 et les denominateurs"
+  },
+  {
+   "priorite": 3,
+   "fiche": "tous",
+   "action": "ajouter un champ gold (612 vivant / 602 gele) par mesure et le commit de la fiche"
+  },
+  {
+   "priorite": 4,
+   "fiche": "historiques",
+   "action": "ajouter la mention d'historique aux six fiches ; ajouter 'etat courant' a la v7"
+  },
+  {
+   "priorite": 4,
+   "fiche": "v4/v5/v6/v7/gold_split",
+   "action": "ajouter un controle negatif (permutation des cibles, candidat aleatoire, melange des identifiants du split)"
+  },
+  {
+   "priorite": 4,
+   "fiche": "README",
+   "action": "corriger les lignes 20 et 22 ; preciser la base sur la ligne 18"
+  },
+  {
+   "priorite": 4,
+   "fiche": "gold_split",
+   "action": "ajouter le compte de portes (183/183) a l'en-tete"
+  }
+ ],
+ "ambiguites_non_comptees": [
+  {
+   "fiche": "v3",
+   "sujet": "R1 portee 2-3",
+   "detail": "la ligne liste trois identifiants (s108, s122, s041) mais donne une portee 2-3 ; peut-etre parce que s041 ('marche') n'est pas 'marcher' du lexique, mais la fiche ne le dit pas"
+  },
+  {
+   "fiche": "v5",
+   "sujet": "27 = 26 + 1",
+   "detail": "le JSON contient echecs_cible = 1 et candidats_manquants = 26 ; la fiche appelle '27 echecs de cible' ce qui est 26 candidats manquants + 1 echec"
+  },
+  {
+   "fiche": "toutes",
+   "sujet": "F1/POS sur le gele",
+   "detail": "si la convention du depot est F1/POS sur le gold gele 602, il suffit de l'ecrire ; les chiffres 0,4539 / 0,5156 / 0,5595 / 0,7603 sont alors exacts, mais la fiche nomme le 612"
+  }
+ ],
+ "limites": [
+  "les mesures historiques sont obtenues avec le blob du commit et RACINE force a la racine ; un worktree detache ne suffit pas (S y perd ses donnees et la v6 tombe a 156 labels)",
+  "les hashes des quatre fichiers d'or sont identiques de 9d5337ce a 69bd865e, ce qui securise la comparaison",
+  "HEAD a avance de 69bd865e a e4cd4408 pendant l'audit (DOCS/JOURNAL seulement) ; les sept fiches sont identiques dans les deux commits",
+  "le statut de 'controle negatif' du split dev/test est discute : si on l'accepte, il manque trois controles (v4, v6, v7) au lieu de cinq",
+  "la mention d'historique est interpretee strictement : le numero de version et la date ne suffisent pas",
+  "les valeurs 612 et 602 sont toutes deux defendables ; le reproche est de ne pas nommer la base, pas de fausser le calcul"
+ ],
+ "fichiers": {
+  "sorties": [
+   "reports/rapport-coherence-fiches-v7.md",
+   "reports/pensee-coherence-fiches-v7.json"
+  ],
+  "sources": [
+   "les sept fiches et leurs JSON",
+   "tools/pensee/autotest.py aux commits 9d5337ce, e1903e2d, 392f03aa, b975011b, 0ec6c27d, 85e4082b, 69bd865e",
+   "tools/bloc_linguistique.py aux memes commits",
+   "tools/tests/linguistique/evaluer_gold.py",
+   "tools/tests/linguistique/gold_split.py",
+   "tools/tests/linguistique/gold.json",
+   "tools/tests/linguistique/gold_reel.json",
+   "tools/tests/linguistique/gold_synthetique.json",
+   "tools/tests/linguistique/gold_gele.json",
+   "reports/rapport-audit-v2.md (A8)"
+  ],
+  "aucune_modification": true,
+  "aucun_commit": true
+ }
+}

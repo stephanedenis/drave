@@ -7,12 +7,12 @@
 | Identifiant | `2cc1ad4a-373e-4362-a341-3c4a630c2e0c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 19:25 |
-| Durée | 0.3 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 37 |
-| Appels d'outils | 50 |
-| Fichiers touchés | 0 |
-| Commandes | 36 |
+| Messages | 52 |
+| Appels d'outils | 69 |
+| Fichiers touchés | 2 |
+| Commandes | 53 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : vérifier l … [2312 caractères tronqués]
 
-*50 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, log, target commit
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Inspect evaluer_gold for measurement API and writes
 - bash — Inspect POS and F1 assertions
 - bash — Inspect union test gold source and attachment computation
-- … et 23 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
-⏵ Reproduction des splits dev/test et des mesures de la fiche gold-split
+⏵ Alerte au parent sur un résidu dans la correction v7 en cours
 
 ## 3. Travail accompli
 
@@ -53,6 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -92,6 +94,11 @@
 - **T1** Measure historical blobs on living and frozen gold
 - **T1** Read gold_split API
 - **T1** Measure dev/test split for v4, v5, v6
+- **T1** Find section cross-references in fiches
+- **T1** Check all relative links in fiches resolve
+- **T1** Search negative-control markers in JSONs
+- **T1** Inspect previous coherence JSON structure
+- … et 13 autres
 
 ## 4. Mesures et résultats marquants
 

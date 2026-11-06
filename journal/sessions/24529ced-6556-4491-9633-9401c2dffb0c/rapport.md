@@ -7,12 +7,12 @@
 | Identifiant | `24529ced-6556-4491-9633-9401c2dffb0c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 19:25 |
-| Durée | 0.3 h |
+| Durée | 0.8 h |
 | Tours | 1 |
-| Messages | 27 |
-| Appels d'outils | 26 |
+| Messages | 56 |
+| Appels d'outils | 55 |
 | Fichiers touchés | 0 |
-| Commandes | 20 |
+| Commandes | 49 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2041 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - bash — Inspect git state and recent commits
 - bash — List linguistics tests and reports directories
@@ -41,11 +41,11 @@
 - bash — Check verb recognition and _est_verbe definition
 - bash — Gold stats, ADV sets, split membership, wrong attachment
 - bash — Distribution of REL/SUB head markers by type and language
-- … et 7 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
-⏵ Vérification de la convention GP du gold synthétique et du cas r102
+⏵ Mesure finale de la combinaison retenue (R1+R2+R3 avec complément `fall`)
 
 ## 3. Travail accompli
 
@@ -76,4 +76,31 @@
 - **T1** Inspect synthetic gold generator GP convention
 - **T1** Read synthetic generator vocabulary
 - **T1** Read generator verb list
+- **T1** Simulate clause-boundary and type rules on dev
+- **T1** Refined simulation with sentence-level clause scan
+- **T1** Debug over-extension regressions
+- **T1** Measure rule variants on dev with copied chunker
+- **T1** Re-measure with S generator enabled (real baseline)
+- **T1** Debug remaining dev misses and r228 gain
+- **T1** Inspect r228 baseline status precisely
+- **T1** Re-list dev gains cleanly
+- **T1** Add modals to the R1 auxiliary test and re-measure dev
+- **T1** Verify modal patch applied
+- **T1** Use modal set for previous-token check and re-measure
+- **T1** Evaluate rules on held-out test set
+- **T1** Identify new wrong-cible label and remaining absences
+- **T1** Retry detailed diff
+- **T1** Debug r255 and r280 segmentation
+- **T1** Trace simple chunker output on r255
+- **T1** Verify override is called inside analyser
+- **T1** Patch R3 ordering and R4, measure dev and test
+- **T1** Restore exact baseline order and verify counts
+- **T1** Inspect R3 losses and the GP case
+- … et 9 autres
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : base 196 195 | best 220 218 [stderr] Traceback (most recent call last):   File "<stdin>", line 8, in <module> ValueError: too many values to unpack (expected 2) [exit code: 1]
 

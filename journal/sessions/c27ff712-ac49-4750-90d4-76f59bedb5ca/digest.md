@@ -984,3 +984,719 @@ Monte-Carlo : {
 … [772 caractères tronqués]
   ```
 
+- **bash** `{"command": "python3 -c \"import scipy; print(scipy.__version__)\" 2>&1 | head -2", "description": "Check scipy availability"}`
+
+  ```
+1.18.1
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/enrichir.py'\ns=open(p).read()\nold='''    df = len(attendu) - 1\n    if df == 1:\n        p = math.erfc(math.sqrt(x2 / 2))\n    elif df == 2:\n        p = math.exp(-x2 / 2)\n    else:\n        raise ValueError(df)\n'''\nnew='''    df = len(attendu)  … [254 caractères tronqués]`
+
+  ```
+ok
+  "attendu": {
+   "hand": 6.21,
+   "reel": 134.12,
+   "synthetique": 49.67
+  }
+ },
+ "langues": {
+  "chi2": 0.0009,
+  "ddl": 1,
+  "p": 0.9761,
+  "observe": {
+   "fr": 125,
+   "en": 65
+  },
+  "attendu": {
+   "fr": 124.8,
+   "en": 65.2
+  }
+ },
+ "types_cibles": {
+  "chi2": 2.6613,
+  "ddl": 2,
+  "p": 0.2643,
+  "observe": {
+   "GP": 35,
+   "REL": 17,
+   "SUB": 24
+  },
+  "attendu": {
+   "GP": 30.53,
+   "SUB": 21.94,
+   "REL": 23.53
+  }
+ },
+ "types_langues": {
+  "chi2": 3.4887,
+  "ddl": 5,
+  "p": 0.6251,
+  "observe": {
+   "GP/fr": 24,
+   "GP/en": 11,
+   "REL/fr": 12,
+   "REL/en": 5,
+   "SUB/fr": 14,
+   "SUB/en": 10
+  },
+  "attendu": {
+   "GP/fr": 19.72,
+   "SUB/fr": 13.67,
+   "REL/fr": 14.63,
+   "GP/en": 10.81,
+   "SUB/en": 8.27,
+   "REL/en": 8.9
+  }
+ }
+}
+hyper: {"canonique": {"cibles_test": 76, "perdus_observes": 14, "perdus_attendus": 13.67, "ecart_type": 2.77, "z": 0.12}, "decale1": {"cibles_test": 89, "perdus_observes": 13, "perdus_attendus": 16.01, "ecart_type": 2.88, "z": -1.05}, "decale2": {"cibles_test": 74, "perdus_observes": 16, "perdus_attendus": 13.31, "ecart_type": 2.75, "z": 0.98}, "total": {"cibles": 239, "perdus": 43, "par_type": {"REL": 21, "SUB": 17, "GP": 5}}}
+wilson 
+… [1909 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif des contrôles pour la fiche
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-dev-test-v7.json'))\nprint(\"taille JSON\", len(json.dumps(d)), \"octets\")\nfor n in (\"canonique\",\"decale1\",\"decale2\"):\n    s=d[\"splits\"][n]\n    print(\"\\n\",n, s[\"regle\"], \"test phrases\", s[\"test\"][\"phrases … [812 caractères tronqués]`
+
+  ```
+taille JSON 40586 octets
+
+ canonique crc32(id)%3==0 -> test test phrases 190 cibles 76
+  chi2 p: {'sources': 0.6272, 'langues': 0.9761, 'types_cibles': 0.2643, 'types_langues': 0.6251}
+  mix types test %: {'GP': 46.05, 'REL': 22.37, 'SUB': 31.58}
+
+ decale1 crc32(id)%3==1 -> test test phrases 229 cibles 89
+  chi2 p: {'sources': 0.4216, 'langues': 0.9532, 'types_cibles': 0.6178, 'types_langues': 0.9629}
+  mix types test %: {'GP': 40.45, 'SUB': 24.72, 'REL': 34.83}
+
+ decale2 crc32(id)%3==2 -> test test phrases 193 cibles 74
+  chi2 p: {'sources': 0.5156, 'langues': 0.9727, 'types_cibles': 0.5241, 'types_langues': 0.8729}
+  mix types test %: {'GP': 33.78, 'SUB': 31.08, 'REL': 35.14}
+
+STABILITE
+  dev_exact_taux_span      [0.9925, 0.9917, 1.0] etendue 0.0083
+  dev_couverture           [0.8221, 0.8, 0.8364] etendue 0.0364
+  dev_f1                   [0.5512, 0.5529, 0.5622] etendue 0.011
+  dev_tete_f1              [0.7132, 0.7135, 0.7187] etendue 0.0055
+  dev_pos                  [0.7547, 0.7602, 0.7596] etendue 0.0055
+  test_exact_taux_span     [1.0, 1.0, 0.9828] etendue 0.0172
+  test_couverture          [0.8158, 0.8539, 0.7838] etendue 0.0701
+  test_f1                  [0.5651, 0.5598, 0.
+… [1087 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle des croisements source×langue et F1 par langue
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, zlib, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\ndef tab(sous):\n    return dict(collections.Counter(f'{p.get(\"source\")}/{p.get(\"langue\")}' for p in sous))\nprint(\"global:\", tab(ph))\n … [807 caractères tronqués]`
+
+  ```
+global: {'hand/fr': 14, 'hand/en': 6, 'reel/fr': 228, 'reel/en': 204, 'synthetique/fr': 160}
+split 0 dev {'hand/fr': 11, 'hand/en': 4, 'reel/fr': 161, 'reel/en': 141, 'synthetique/fr': 105} test {'hand/fr': 3, 'hand/en': 2, 'reel/fr': 67, 'reel/en': 63, 'synthetique/fr': 55}
+split 1 dev {'hand/fr': 4, 'hand/en': 5, 'reel/fr': 146, 'reel/en': 126, 'synthetique/fr': 102} test {'hand/fr': 10, 'hand/en': 1, 'reel/fr': 82, 'reel/en': 78, 'synthetique/fr': 58}
+split 2 dev {'hand/fr': 13, 'hand/en': 3, 'reel/fr': 149, 'reel/en': 141, 'synthetique/fr': 113} test {'hand/fr': 1, 'hand/en': 3, 'reel/fr': 79, 'reel/en': 63, 'synthetique/fr': 47}
+dev cibles source/type {'hand/GP': 7, 'hand/REL': 1, 'hand/SUB': 2, 'reel/GP': 43, 'reel/REL': 45, 'reel/SUB': 33, 'synthetique/GP': 11, 'synthetique/REL': 11, 'synthetique/SUB': 10}
+test cibles source/type {'hand/GP': 3, 'reel/GP': 19, 'reel/REL': 12, 'reel/SUB': 19, 'synthetique/GP': 13, 'synthetique/REL': 5, 'synthetique/SUB': 5}
+  ```
+
+- **bash** `{"command": "cat > /tmp/complement.py <<'PY'\nimport sys, json, zlib, collections, pathlib\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimp … [3475 caractères tronqués]`
+
+  ```
+ok
+{"fr": {"syntagme": {"precision": 0.5581, "rappel": 0.536, "f1": 0.5468, "tp": 432, "fp": 342, "fn": 374}, "tete": {"precision": 0.7379, "rappel": 0.6638, "f1": 0.6989, "tp": 535, "fp": 190, "fn": 271}, "pos": 0.7558, "tokens": 1384}, "en": {"syntagme": {"precision": 0.6793, "rappel": 0.4755, "f1": 0.5594, "tp": 233, "fp": 110, "fn": 257}, "tete": {"precision": 0.898, "rappel": 0.6286, "f1": 0.7395, "tp": 308, "fp": 35, "fn": 182}, "pos": 0.7528, "tokens": 801}}
+{"fr": {"syntagme": {"precision": 0.5562, "rappel": 0.5718, "f1": 0.5639, "tp": 203, "fp": 162, "fn": 152}, "tete": {"precision": 0.7365, "rappel": 0.693, "f1": 0.7141, "tp": 246, "fp": 88, "fn": 109}, "pos": 0.7512, "tokens": 647}, "en": {"syntagme": {"precision": 0.7014, "rappel": 0.4764, "f1": 0.5674, "tp": 101, "fp": 43, "fn": 111}, "tete": {"precision": 0.9028, "rappel": 0.6132, "f1": 0.7303, "tp": 130, "fp": 14, "fn": 82}, "pos": 0.7925, "tokens": 347}}
+croisements canonical: {"dev": {"source_langue_phrases": {"hand/fr": 11, "hand/en": 4, "reel/fr": 161, "reel/en": 141, "synthetique/fr": 105}, "source_type_cibles": {"hand/GP": 7, "hand/SUB": 2, "hand/REL": 1, "reel/GP": 43, "reel/REL": 45, "reel/SUB": 33, "syntheti
+… [539 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nettoyage des champs ambigus et régénération du JSON final
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/mesure_dev_test_v7.py'\ns=open(p).read()\ns=s.replace('''    return {\"cibles\": 0, \"labels\": 0, \"exact\": 0, \"exact_any\": 0, \"phrases\": 0,\n            \"tp\": 0, \"fp\": 0, \"fn\": 0, \"ttp\": 0, \"tfp\": 0, \"tfn\": 0}''',\n'''    return {\ … [1860 caractères tronqués]`
+
+  ```
+patché
+  test: {"hand": 11, "reel": 160, "synthetique": 58} {"fr": 150, "en": 79} {"GP": 36, "SUB": 22, "REL": 31}
+decale2 absentes: {'sources': [], 'langues': [], 'types': [], 'types_langues': []}
+  dev: {"hand": 16, "reel": 290, "synthetique": 113} {"fr": 275, "en": 144} {"GP": 71, "SUB": 46, "REL": 48}
+  test: {"hand": 4, "reel": 142, "synthetique": 47} {"fr": 127, "en": 66} {"GP": 25, "SUB": 23, "REL": 26}
+wilson exact: {"dev_exact": {"k": 133, "n": 134, "taux": 0.9925, "wilson95": [0.9589, 0.9987]}, "test_exact": {"k": 62, "n": 62, "taux": 1.0, "wilson95": [0.9417, 1.0]}, "dev_exact_fr": {"k": 92, "n": 92, "taux": 1.0, "wilson95": [0.9599, 1.0]}, "test_exact_fr": {"k": 43, "n": 43, "taux": 1.0, "wilson95": [0.918, 1.0]}, "dev_exact_en": {"k": 41, "n": 42, "taux": 0.9762, "wilson95": [0.8768, 0.9958]}, "test_exact_en": {"k": 19, "n": 19, "taux": 1.0, "wilson95": [0.8318, 1.0]}, "dev_exact_REL": {"k": 42, "n": 42, "taux": 1.0, "wilson95": [0.9162, 1.0]}, "test_exact_REL": {"k": 11, "n": 11, "taux": 1.0, "wilson95": [0.7412, 1.0]}, "dev_exact_SUB": {"k": 33, "n": 33, "taux": 1.0, "wilson95": [0.8957, 1.0]}, "test_exact_SUB": {"k": 19, "n": 19, "taux": 1.0, "wilson95": [0.8318, 1.
+… [2240 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-dev-test-v7.json'))\ns=d[\"splits\"][\"canonique\"][\"dev\"]\nprint(list(s))\nprint(json.dumps({k:s[k] for k in (\"phrases\",\"tokens\",\"pos\",\"syntagme\",\"tete\",\"acte\",\"attachement\",\"par_langue\",\"par_type\",\"par_l … [202 caractères tronqués]`
+
+  ```
+['phrases', 'tokens', 'pos', 'syntagme', 'tete', 'acte', 'attachement', 'par_langue', 'par_type', 'par_type_langue', 'par_source', 'spans_perdus', 'par_langue_f1']
+{
+ "phrases": 422,
+ "tokens": 2185,
+ "pos": {
+  "exactitude": 0.7547,
+  "ferme": 0.8952,
+  "ouvert": 0.6201,
+  "tokens": 2185
+ },
+ "syntagme": {
+  "precision": 0.5953,
+  "rappel": 0.5131,
+  "f1": 0.5512,
+  "tp": 665,
+  "fp": 452,
+  "fn": 631
+ },
+ "tete": {
+  "precision": 0.7893,
+  "rappel": 0.6505,
+  "f1": 0.7132,
+  "tp": 843,
+  "fp": 225,
+  "fn": 453
+ },
+ "acte": 1.0,
+ "attachement": {
+  "cibles": 163,
+  "labels": 134,
+  "exact": 133,
+  "exact_any": 133,
+  "tp": 0,
+  "fp": 0,
+  "fn": 0,
+  "ttp": 0,
+  "tfp": 0,
+  "tfn": 0,
+  "couverture": 0.8221,
+  "exact_taux_span": 0.9925,
+  "exact_taux_cibles": 0.816,
+  "exact_any_taux_span": 0.9925
+ },
+ "par_langue": {
+  "fr": {
+   "cibles": 101,
+   "labels": 92,
+   "exact": 92,
+   "exact_any": 92,
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "ttp": 0,
+   "tfp": 0,
+   "tfn": 0,
+   "couverture": 0.9109,
+   "exact_taux_span": 1.0,
+   "exact_taux_cibles": 0.9109,
+   "exact_any_taux_span": 1.0
+  },
+  "en": {
+   "cibles": 62,
+   "labels": 42,
+   "exact": 41,
+   "exact_any": 41,
+   "tp": 0,
+   "
+… [3225 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/mesure_dev_test_v7.py'\ns=open(p).read()\n# ajouter finir_att\nold='''    def finir(b: dict) -> dict:\n        d = dict(b)\n        d[\"couverture\"] = round(b[\"labels\"] / max(1, b[\"cibles\"]), 4)\n        d[\"exact_taux_span\"] = round(b[\"exact\ … [4227 caractères tronqués]`
+
+  ```
+mesure patché
+enrichir patché
+  dev: {"hand": 16, "reel": 290, "synthetique": 113} {"fr": 275, "en": 144} {"GP": 71, "SUB": 46, "REL": 48}
+  test: {"hand": 4, "reel": 142, "synthetique": 47} {"fr": 127, "en": 66} {"GP": 25, "SUB": 23, "REL": 26}
+corpus: {"vivant": {"phrases": 612, "cibles": 239, "labels": 196, "exact": 195, "couverture": 0.8201, "f1": 0.5555, "tete": 0.7152, "pos": 0.7581}, "gele": {"phrases": 602, "cibles": 239, "labels": 196, "exact": 195, "couverture": 0.8201, "f1": 0.5595, "tete": 0.7205, "pos": 0.7603}, "note": "les 10 phrases réelles ajoutées au vivant après le gel n'ont pas de cibles : mêmes 239 cibles, 196 labels, 195 exact ; seules F1/tête/POS bougent"}
+croisements canonical: {"dev": {"source_langue_phrases": {"hand/fr": 11, "hand/en": 4, "reel/fr": 161, "reel/en": 141, "synthetique/fr": 105}, "source_type_cibles": {"hand/GP": 7, "hand/SUB": 2, "hand/REL": 1, "reel/GP": 43, "reel/REL": 45, "reel/SUB": 33, "synthetique/GP": 11, "synthetique/REL": 11, "synthetique/SUB": 10}, "type_langue_cibles": {"GP/fr": 38, "SUB/fr": 29, "REL/fr": 34, "GP/en": 23, "SUB/en": 16, "REL/en": 23}}, "test": {"source_langue_phrases": {"hand/fr": 3, "hand/en": 2, "reel/fr": 67, "
+… [730 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction des chiffres définitifs pour la fiche
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-dev-test-v7.json'))\nfor n in (\"canonique\",\"decale1\",\"decale2\"):\n    print(\"#\",n)\n    for moitie in (\"dev\",\"test\"):\n        m=d[\"splits\"][n][moitie]; a=m[\"attachement\"]\n        print(f\" {moitie}: {m['phras … [1999 caractères tronqués]`
+
+  ```
+# canonique
+ dev: 422 phr 2185 tok | cibles 163 labels 134 exact 133 | couv 0.8221 exact/span 0.9925 exact/cibles 0.816 | F1 0.5512 P 0.5953 R 0.5131 | tete 0.7132 | POS 0.7547 | acte 1.0
+  par langue: {'fr': (101, 92, 92, 0.9109, 1.0), 'en': (62, 42, 41, 0.6774, 0.9762)}
+  F1 langue: {'fr': (0.5468, 0.6989, 0.7558), 'en': (0.5594, 0.7395, 0.7528)}
+  par type: {'REL': (57, 42, 42, 0.7368, 1.0, 0.6176, 0.9016), 'SUB': (45, 33, 33, 0.7333, 1.0, 0.7727, 0.9091), 'GP': (61, 59, 58, 0.9672, 0.9831, 0.8497, 0.8609)}
+  type/langue: {'REL/fr': (34, 29, 29, 0.8529, 1.0), 'REL/en': (23, 13, 13, 0.5652, 1.0), 'SUB/fr': (29, 27, 27, 0.931, 1.0), 'SUB/en': (16, 6, 6, 0.375, 1.0), 'GP/fr': (38, 36, 36, 0.9474, 1.0), 'GP/en': (23, 23, 22, 1.0, 0.9565)}
+  spans perdus: {'SUB': 12, 'REL': 15, 'GP': 2}
+ test: 190 phr 994 tok | cibles 76 labels 62 exact 62 | couv 0.8158 exact/span 1.0 exact/cibles 0.8158 | F1 0.5651 P 0.5972 R 0.5362 | tete 0.7196 | POS 0.7656 | acte 0.9895
+  par langue: {'fr': (50, 43, 43, 0.86, 1.0), 'en': (26, 19, 19, 0.7308, 1.0)}
+  F1 langue: {'fr': (0.5639, 0.7141, 0.7512), 'en': (0.5674, 0.7303, 0.7925)}
+  par type: {'REL': (17, 11, 11, 0.6471, 1.0, 0.55, 0.9444), 'SUB': (24, 
+… [8363 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'échec unique dans la fiche v5 avant de l'affirmer
+
+- **bash** `{"command": "grep -n \"r102\\|échec\\|echec\" reports/rapport-pensee-couverture-v5.md | head -30; echo ===; git log --oneline -3 -- reports/pensee-couverture-v5.json", "description": "Check v5 report for the failing phrase", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+40:| échecs de cible | 3 | **1** (r309) |
+47:- **Les 27 échecs de cible** sont le prix de la couverture : les REL/SUB nouvelles sont plus
+53:- **Les 27 échecs** : à qualifier (REL sans antécédent, GP, SUB en tête).
+63:- **les règles ont été réglées en regardant les échecs** : le test limite le surajustement, il
+70:2. **Les 27 échecs de cible** : qualifier.
+===
+b975011b B13 — LES CANDIDATS DU PRÉCÉDENT : EXACT 186/187 (0,9947), ANGLAIS 60/60, DEV 126/126 ; 183/183
+7a9f0d6a B13 — LA COUVERTURE : 187 LABELS, EXACT 185/187 (0,9893), F1 0,5156, DEV 125/126 ET TEST 60/61 ; 183/183
+  ```
+
+- **bash** `{"command": "cd /tmp && git -C /home/stephane/Data13TB/stephane/GitHub/Qtrinet show b975011b:tools/bloc_linguistique.py > /tmp/bloc_v5.py && python3 - <<'PY'\nimport sys, importlib.util, zlib, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,'/home … [2424 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/tmp/bloc_v5.py", line 58, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 1344, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib64/python3.13/dataclasses.py", line 997, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 757, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport sys, importlib.util\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport tools.bloc_linguis … [2240 caractères tronqués]`
+
+  ```
+v5 chargé True
+v5 labels 187 exact 186 | v7 labels 196 exact 195
+r309 v5 {('SUB', 10, 23): ('Peut-être', False, 'viendra', 'r309')} v7 {('SUB', 10, 23): ('viendra', True, 'viendra', 'r309')}
+r102 v5 {('GP', 15, 33): None} v7 {('GP', 15, 33): ('', False, 'falls', 'r102')}
+gagnés 21 dont exacts 20
+perdus 12 dont exacts 12
+changés 1
+ + ('r025', ('GP', 10, 24), ('talks', True, 'talks', 'r025'))
+ + ('r026', ('GP', 20, 34), ('listen', True, 'listen', 'r026'))
+ + ('r027', ('GP', 15, 27), ('sleeps', True, 'sleeps', 'r027'))
+ + ('r028', ('GP', 9, 24), ('rains', True, 'rains', 'r028'))
+ + ('r060', ('GP', 19, 35), ('volent', True, 'volent', 'r060'))
+ + ('r068', ('GP', 19, 32), ('writes', True, 'writes', 'r068'))
+ + ('r083', ('GP', 15, 22), ('entre', True, 'entre', 'r083'))
+ + ('r102', ('GP', 15, 33), ('', False, 'falls', 'r102'))
+ + ('r156', ('GP', 15, 27), ('swims', True, 'swims', 'r156'))
+ + ('r160', ('GP', 19, 33), ('passes', True, 'passes', 'r160'))
+ + ('r169', ('GP', 16, 29), ('smiles', True, 'smiles', 'r169'))
+ + ('r204', ('REL', 8, 18), ('man', True, 'man', 'r204'))
+ + ('r217', ('REL', 12, 26), ('student', True, 'student', 'r217'))
+ + ('r248', ('REL', 9, 25), ('girl', True, 'girl', 'r2
+… [1302 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport zlib\nfor i in (\"r309\",\"r102\"):\n    print(i, zlib.crc32(i.encode())%3)\nPY", "description": "Check buckets of v5 and v7 errors"}`
+
+  ```
+r309 0
+r102 2
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de la comparaison v5→v7 (r309 corrigé, r102 nouveau)
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/enrichir.py'\ns=open(p).read()\nold='''    v5 = json.load(open(RACINE / \"reports/pensee-couverture-v5.json\"))[\"dev\"]\n    d[\"comparaison_v5\"] = {\n        \"v5\": {\"labels\": 187, \"exact\": 186, \"dev\": \"126/126\", \"test\": \"60/61\"},\n   … [1962 caractères tronqués]`
+
+  ```
+patché
+corpus: {"vivant": {"phrases": 612, "cibles": 239, "labels": 196, "exact": 195, "couverture": 0.8201, "f1": 0.5555, "tete": 0.7152, "pos": 0.7581}, "gele": {"phrases": 602, "cibles": 239, "labels": 196, "exact": 195, "couverture": 0.8201, "f1": 0.5595, "tete": 0.7205, "pos": 0.7603}, "note": "les 10 phrases réelles ajoutées au vivant après le gel n'ont pas de cibles : mêmes 239 cibles, 196 labels, 195 exact ; seules F1/tête/POS bougent"}
+croisements canonical: {"dev": {"source_langue_phrases": {"hand/fr": 11, "hand/en": 4, "reel/fr": 161, "reel/en": 141, "synthetique/fr": 105}, "source_type_cibles": {"hand/GP": 7, "hand/SUB": 2, "hand/REL": 1, "reel/GP": 43, "reel/REL": 45, "reel/SUB": 33, "synthetique/GP": 11, "synthetique/REL": 11, "synthetique/SUB": 10}, "type_langue_cibles": {"GP/fr": 38, "SUB/fr": 29, "REL/fr": 34, "GP/en": 23, "SUB/en": 16, "REL/en": 23}}, "test": {"source_langue_phrases": {"hand/fr": 3, "hand/en": 2, "reel/fr": 67, "reel/en": 63, "synthetique/fr": 55}, "source_type_cibles": {"hand/GP": 3, "reel/REL": 12, "reel/GP": 19, "reel/SUB": 19, "synthetique/GP": 13, "synthetique/REL": 5, "synthetique/SUB": 5}, "type_langue_cibles": {"GP/fr": 24, "GP/en": 11, "R
+… [780 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\nfor src in (\"hand\",\"reel\",\"synthetique\"):\n    c=collections.Counter(f'{p.get(\"langue\")}/{s[\"type\"]}' for p in ph if p.get(\"source\")==s … [247 caractères tronqués]`
+
+  ```
+hand {'fr/GP': 8, 'fr/SUB': 1, 'fr/REL': 1, 'en/GP': 2, 'en/SUB': 1} total 13
+reel {'fr/GP': 30, 'fr/REL': 29, 'en/GP': 32, 'en/REL': 28, 'fr/SUB': 27, 'en/SUB': 25} total 171
+synthetique {'fr/GP': 24, 'fr/REL': 16, 'fr/SUB': 15} total 55
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des métadonnées de méthode au JSON final
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/complement.py'\ns=open(p).read()\nold='''d[\"controles\"][\"croisements\"]=c\n'''\nnew='''d[\"controles\"][\"croisements\"]=c\nd[\"date\"]=\"2026-11-05\"\nd[\"ligne\"]=\"B13\"\nd[\"objet\"]=\"re-mesure dev/test du gold 612 et robustesse du split sur  … [1324 caractères tronqués]`
+
+  ```
+ok
+croisements canonical: {"dev": {"source_langue_phrases": {"hand/fr": 11, "hand/en": 4, "reel/fr": 161, "reel/en": 141, "synthetique/fr": 105}, "source_type_cibles": {"hand/GP": 7, "hand/SUB": 2, "hand/REL": 1, "reel/GP": 43, "reel/REL": 45, "reel/SUB": 33, "synthetique/GP": 11, "synthetique/REL": 11, "synthetique/SUB": 10}, "type_langue_cibles": {"GP/fr": 38, "SUB/fr": 29, "REL/fr": 34, "GP/en": 23, "SUB/en": 16, "REL/en": 23}}, "test": {"source_langue_phrases": {"hand/fr": 3, "hand/en": 2, "reel/fr": 67, "reel/en": 63, "synthetique/fr": 55}, "source_type_cibles": {"hand/GP": 3, "reel/REL": 12, "reel/GP": 19, "reel/SUB": 19, "synthetique/GP": 13, "synthetique/REL": 5, "synthetique/SUB": 5}, "type_langue_cibles": {"GP/fr": 24, "GP/en": 11, "REL/fr": 12, "REL/en": 5, "SUB/fr": 14, "SUB/en": 10}}}
+['commit', 'valide_contre_evaluer_gold', 'validation', 'analyses_secondes', 'equilibre_global', 'splits', 'ecart_dev_test', 'stabilite']
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "objet": "re-mesure dev/test du gold 612 et robustesse du split sur trois découpages (commit 69bd865e)",
+ "commit": "69bd865e",
+ "methode": {
+  "corpus": "gold vivant 612 = 20 hand + 432 reel + 160 synthetique ;
+… [676 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-dev-test-v7.json'))\nfor n in (\"canonique\",\"decale1\",\"decale2\"):\n    print(n)\n    for k,v in d[\"splits\"][n][\"equilibre\"][\"chi2_test\"].items():\n        print(\" \",k,\"chi2\",v[\"chi2\"],\"ddl\",v[\"ddl\"],\"p\", … [113 caractères tronqués]`
+
+  ```
+canonique
+  sources chi2 0.9331 ddl 2 p 0.6272 obs {'hand': 5, 'reel': 130, 'synthetique': 55} att {'hand': 6.21, 'reel': 134.12, 'synthetique': 49.67}
+  langues chi2 0.0009 ddl 1 p 0.9761 obs {'fr': 125, 'en': 65} att {'fr': 124.8, 'en': 65.2}
+  types_cibles chi2 2.6613 ddl 2 p 0.2643 obs {'GP': 35, 'REL': 17, 'SUB': 24} att {'GP': 30.53, 'SUB': 21.94, 'REL': 23.53}
+  types_langues chi2 3.4887 ddl 5 p 0.6251 obs {'GP/fr': 24, 'GP/en': 11, 'REL/fr': 12, 'REL/en': 5, 'SUB/fr': 14, 'SUB/en': 10} att {'GP/fr': 19.72, 'SUB/fr': 13.67, 'REL/fr': 14.63, 'GP/en': 10.81, 'SUB/en': 8.27, 'REL/en': 8.9}
+decale1
+  sources chi2 1.7274 ddl 2 p 0.4216 obs {'hand': 11, 'reel': 160, 'synthetique': 58} att {'hand': 7.48, 'reel': 161.65, 'synthetique': 59.87}
+  langues chi2 0.0034 ddl 1 p 0.9532 obs {'fr': 150, 'en': 79} att {'fr': 150.42, 'en': 78.58}
+  types_cibles chi2 0.9633 ddl 2 p 0.6178 obs {'GP': 36, 'SUB': 22, 'REL': 31} att {'GP': 35.75, 'SUB': 25.69, 'REL': 27.56}
+  types_langues chi2 0.9961 ddl 5 p 0.9629 obs {'GP/fr': 23, 'SUB/fr': 14, 'REL/fr': 19, 'GP/en': 13, 'REL/en': 12, 'SUB/en': 8} att {'GP/fr': 23.09, 'SUB/fr': 16.01, 'REL/fr': 17.13, 'GP/en': 12.66, 'SUB/en': 9.68, 'REL/en': 10
+… [605 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche `reports/rapport-dev-test-v7.md`
+
+- **bash** `{"command": "ls -l reports/rapport-dev-test-v7.md reports/pensee-dev-test-v7.json 2>&1 | head", "description": "Confirm target files do not exist", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+ls: cannot access 'reports/rapport-dev-test-v7.md': No such file or directory
+ls: cannot access 'reports/pensee-dev-test-v7.json': No such file or directory
+  ```
+
+- **write** `{"content": "# B13 — dev/test en v7 : dev 133/134, test 62/62, le split tient sur trois découpages\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Commit mesuré** : `69bd865e` · **Verdict** : ✅\n> Le gold 612 est re-coupé par `crc32(id) % 3 == 0` (test) :  … [14502 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de la fiche et vérification des chiffres
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md</path>
+<type>file</type>
+<content>
+1: # B13 — dev/test en v7 : dev 133/134, test 62/62, le split tient sur trois découpages
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Commit mesuré** : `69bd865e` · **Verdict** : ✅
+4: > Le gold 612 est re-coupé par `crc32(id) % 3 == 0` (test) : **dev 133/134 (0,9925)**, **test 62/62 (1,0)**
+5: > — mais le test ne couvre que **62 des 76 cibles** (0,8158). En décalant le split (`%3==1`, `%3==2`),
+6: > l'exact reste à **1 cas près** (étendue 0,0172), la couverture à **3 spans près** (14/13/16 des 43),
+7: > la F1 à **2,4 points**. **Aucune catégorie demandée n'est absente** ; les écarts dev/test tiennent à
+8: > **un échec unique (r102)** et à la **composition par type**, pas au split.
+9: >
+10: > **Dispositif** : [`gold_split.py`](../tools/tests/linguistique/gold_split.py) (`dev`, `test`, `compter`),
+11: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+12: > [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (heuristique) ; JSON
+13: > [`pensee-dev-test-v7.json`](pense
+… [14437 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de la fiche (quatre réserves, part GN/GV) et ajout des contrôles F1 au JSON
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/complement.py'\ns=open(p).read()\nold='''d[\"controles\"][\"croisements\"]=c\n'''\nnew='''d[\"controles\"][\"croisements\"]=c\nd[\"controles\"][\"f1_gn_gv\"]={\n \"dev\":{\"GN\":{\"f1\":0.4827,\"gold\":580,\"pred\":373},\"GV\":{\"f1\":0.5720,\"gold\" … [1877 caractères tronqués]`
+
+  ```
+patché
+croisements canonical: {"dev": {"source_langue_phrases": {"hand/fr": 11, "hand/en": 4, "reel/fr": 161, "reel/en": 141, "synthetique/fr": 105}, "source_type_cibles": {"hand/GP": 7, "hand/SUB": 2, "hand/REL": 1, "reel/GP": 43, "reel/REL": 45, "reel/SUB": 33, "synthetique/GP": 11, "synthetique/REL": 11, "synthetique/SUB": 10}, "type_langue_cibles": {"GP/fr": 38, "SUB/fr": 29, "REL/fr": 34, "GP/en": 23, "SUB/en": 16, "REL/en": 23}}, "test": {"source_langue_phrases": {"hand/fr": 3, "hand/en": 2, "reel/fr": 67, "reel/en": 63, "synthetique/fr": 55}, "source_type_cibles": {"hand/GP": 3, "reel/REL": 12, "reel/GP": 19, "reel/SUB": 19, "synthetique/GP": 13, "synthetique/REL": 5, "synthetique/SUB": 5}, "type_langue_cibles": {"GP/fr": 24, "GP/en": 11, "REL/fr": 12, "REL/en": 5, "SUB/fr": 14, "SUB/en": 10}}}
+f1_gn_gv {"dev": {"GN": {"f1": 0.4827, "gold": 580, "pred": 373}, "GV": {"f1": 0.572, "gold": 491, "pred": 537}, "part_gold_gn_gv": 0.8264}, "test": {"GN": {"f1": 0.4751, "gold": 248, "pred": 173}, "GV": {"f1": 0.6061, "gold": 221, "pred": 241}, "part_gold_gn_gv": 0.8272}, "note": "F1 micro sur GN/GV, les deux types qui dominent l'agrégat ; REL/SUB/GP ne font que ~17 % des segments go
+… [410 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/complement.py'\ns=open(p).read()\ns=s.replace('\"note\":\"le test, ramené au mélange de cibles du dev, couvrirait 0,7869 ; son brut 0,8158 est tiré par les GP\"',\n            '\"note\":\"le test, ramené au mélange de cibles du dev, couvrirait 0,7870 … [246 caractères tronqués]`
+
+  ```
+ok
+croisements canonical: {"dev": {"source_langue_phrases": {"hand/fr": 11, "hand/en": 4, "reel/fr": 161, "reel/en": 141, "synthetique/fr": 105}, "source_type_cibles": {"hand/GP": 7, "hand/SUB": 2, "hand/REL": 1, "reel/GP": 43, "reel/REL": 45, "reel/SUB": 33, "synthetique/GP": 11, "synthetique/REL": 11, "synthetique/SUB": 10}, "type_langue_cibles": {"GP/fr": 38, "SUB/fr": 29, "REL/fr": 34, "GP/en": 23, "SUB/en": 16, "REL/en": 23}}, "test": {"source_langue_phrases": {"hand/fr": 3, "hand/en": 2, "reel/fr": 67, "reel/en": 63, "synthetique/fr": 55}, "source_type_cibles": {"hand/GP": 3, "reel/REL": 12, "reel/GP": 19, "reel/SUB": 19, "synthetique/GP": 13, "synthetique/REL": 5, "synthetique/SUB": 5}, "type_langue_cibles": {"GP/fr": 24, "GP/en": 11, "REL/fr": 12, "REL/en": 5, "SUB/fr": 14, "SUB/en": 10}}}
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md", "old_string": "| GP | 0,8497 | 0,8609 | 0,8095 | 0,8537 |\n\nLe croisement fin montre les cellules réellement minces :", "new_string": "| GP | 0,8497 | 0,8609 | 0,8095 | 0,8537 |\n\nLa F1 et la tête sont  … [231 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md", "old_string": "Trois réserves de lecture, même sans catégorie absente :", "new_string": "Quatre réserves de lecture, même sans catégorie absente :"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md", "old_string": "  76 cibles. Après standardisation sur la composition du dev, le test serait à **0,7869** (3,5 points\n  sous dev, ~2,7 cas pour 76), mais cette estimation n'est pas significative : les IC  … [445 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md", "old_string": "- **F1** : test **+1,39 point**, mais l'agrégat est dominé par GN/GV (81 % des segments) : GV test", "new_string": "- **F1** : test **+1,39 point**, mais l'agrégat est dominé par GN/GV (83  … [32 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v7.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Publication du JSON et contrôle de l'état git
+
+- **bash** `{"command": "cp /tmp/pensee-dev-test-v7.json reports/pensee-dev-test-v7.json && python3 -m json.tool reports/pensee-dev-test-v7.json >/dev/null && echo \"JSON valide\" && ls -l reports/rapport-dev-test-v7.md reports/pensee-dev-test-v7.json && git status --short reports/ && echo \"--- tracked diff na … [163 caractères tronqués]`
+
+  ```
+JSON valide
+-rw-r--r--. 1 stephane stephane 61349  5 nov 20:10 reports/pensee-dev-test-v7.json
+-rw-------. 1 stephane stephane 14980  5 nov 20:10 reports/rapport-dev-test-v7.md
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-spans-chunker.md
+?? reports/pensee-dev-test-v7.json
+?? reports/rapport-coherence-fiches-v7.md
+?? reports/rapport-dev-test-v7.md
+?? reports/rapport-s-paragraphes.md
+--- tracked diff names ---
+journal/2026-11-05/README.md
+journal/2026-11-05/distribue.md
+journal/2026-11-05/docs.md
+journal/2026-11-05/memoire.md
+journal/2026-11-05/mesures.md
+journal/2026-11-05/modele.md
+journal/2026-11-05/moteur.md
+journal/2026-11-05/portes.md
+journal/README.md
+journal/THEMES.md
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+journal/sessions/MANIFEST.md
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md
+journal/sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+journal/sessions/e181ce02-
+… [71 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dédoublonnage des limites et régénération propre du JSON
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/complement.py'\ns=open(p).read()\nold='''pathlib.Path('/tmp/pensee-dev-test-v7.json').write_text(json.dumps(d,ensure_ascii=False,indent=1)+\"\\\\n\",encoding='utf-8')\n'''\nnew='''vus=set()\nd[\"limites\"]=[x for x in d[\"limites\"] if not (x in vus  … [777 caractères tronqués]`
+
+  ```
+patché
+mesure-ok
+enrichir-ok
+complement-ok
+limites: 7
+ - in-sample : les règles v7 ont été dessinées sur ce gold, dev/test ne mesure pas le surajus
+ - 160 phrases synthétiques sur 612 ; 20 seulement de gold.py
+ - cellules petites : REL/en test = 5 cibles, hand test = 5 phrases
+ - le hash n'est pas stratifié par construction ; l'équilibre est vérifié a posteriori
+ - les 43 spans perdus restent hors de la mesure exact/labels (196/239)
+ - cibles hand au test canonique : 3, toutes GP ; hand/REL (1) et hand/SUB (2) sont dans dev
+ - synthétique = français seulement : source et langue sont confondues pour ces 160 phrases
+taille chars 43704
+  ```
+
+- **bash** `{"command": "cp /tmp/pensee-dev-test-v7.json reports/pensee-dev-test-v7.json && chmod 644 reports/rapport-dev-test-v7.md reports/pensee-dev-test-v7.json && python3 -m json.tool reports/pensee-dev-test-v7.json >/dev/null && echo \"JSON valide\" && ls -l reports/rapport-dev-test-v7.md reports/pensee-d … [498 caractères tronqués]`
+
+  ```
+JSON valide
+-rw-r--r--. 1 stephane stephane 60776  5 nov 20:11 reports/pensee-dev-test-v7.json
+-rw-r--r--. 1 stephane stephane 14980  5 nov 20:10 reports/rapport-dev-test-v7.md
+clés: ['commit', 'valide_contre_evaluer_gold', 'validation', 'analyses_secondes', 'equilibre_global', 'splits', 'ecart_dev_test', 'stabilite', 'resume', 'controles', 'wilson', 'wilson_couverture', 'corpus_vs_gele', 'comparaison_v5', 'limites', 'date', 'ligne', 'objet', 'methode']
+splits: ['canonique', 'decale1', 'decale2']
+controles: ['hypergeometrie_spans_perdus', 'bucket_sizes', 'echec_unique', 'monte_carlo', 'croisements', 'f1_gn_gv', 'couverture_standardisee', 'f1_ecart_par_type']
+canonique dev: {'cibles': 163, 'labels': 134, 'exact': 133, 'exact_any': 133, 'couverture': 0.8221, 'exact_taux_span': 0.9925, 'exact_taux_cibles': 0.816, 'exact_any_taux_span': 0.9925}
+canonique test: {'cibles': 76, 'labels': 62, 'exact': 62, 'exact_any': 62, 'couverture': 0.8158, 'exact_taux_span': 1.0, 'exact_taux_cibles': 0.8158, 'exact_any_taux_span': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale : tableaux, liens et cohérence des chiffres
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path(\"reports/rapport-dev-test-v7.md\")\ns=p.read_text(encoding=\"utf-8\")\n# 1) tableaux : nombre de colonnes constant par tableau\nlignes=s.splitlines()\ni=0; problemes=[]\nwhile i < l … [691 caractères tronqués]`
+
+  ```
+tableaux incohérents: aucun
+OK ../tools/tests/linguistique/gold_split.py
+OK ../tools/tests/linguistique/evaluer_gold.py
+OK ../tools/bloc_linguistique.py
+OK pensee-dev-test-v7.json
+OK rapport-pensee-couverture-v7.md
+OK ../tools/tests/linguistique/gold_split.py
+OK ../tools/tests/linguistique/evaluer_gold.py
+OK ../tools/bloc_linguistique.py
+OK pensee-dev-test-v7.json
+OK rapport-gold-split.md
+OK rapport-pensee-couverture-v7.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path(\"reports/rapport-dev-test-v7.md\")\ns=p.read_text(encoding=\"utf-8\")\ns=s.replace(\"(83 % des segments gold)\", \"(82,7 % des segments gold)\")\np.write_text(s, encoding=\"utf-8\") … [174 caractères tronqués]`
+
+  ```
+corrigé 82,7 %
+166:- **F1** : test **+1,39 point**, mais l'agrégat est dominé par GN/GV (82,7 % des segments gold) : GV test
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-dev-test-v7.json'))\nprint(\"commit\", d[\"commit\"], \"| ligne\", d[\"ligne\"], \"| date\", d[\"date\"])\nprint(\"validation\", d[\"validation\"])\nprint(\"resume\", js … [617 caractères tronqués]`
+
+  ```
+commit 69bd865e | ligne B13 | date 2026-11-05
+validation {'exact': [195, 195], 'labels': [196, 196], 'cibles': [239, 239], 'f1': [0.5555, 0.5555], 'tete_f1': [0.7152, 0.7152], 'pos': [0.7581, 0.7581], 'couverture': [0.8201, 0.8201]}
+resume {"canonique": {"dev": {"phrases": 422, "cibles": 163, "labels": 134, "exact": 133, "exact_taux": 0.9925}, "test": {"phrases": 190, "cibles": 76, "labels": 62, "exact": 62, "exact_taux": 1.0}}, "decale1": {"dev": {"phrases": 383, "cibles": 150, "labels": 120, "exact": 119, "exact_taux": 0.9917}, "test": {"phrases": 229, "cibles": 89, "labels": 76, "exact": 76, "exact_taux": 1.0}}, "decale2": {"dev": {"phrases": 419, "cibles": 165, "labels": 138, "exact": 138, "exact_taux": 1.0}, "test": {"phrases": 193, "cibles": 74, "labels": 58, "exact": 57, "exact_taux": 0.9828}}}
+stabilite exact {'valeurs': {'canonique': 1.0, 'decale1': 1.0, 'decale2': 0.9828}, 'min': 0.9828, 'max': 1.0, 'dispersion': 0.0172}
+stabilite couv {'valeurs': {'canonique': 0.8158, 'decale1': 0.8539, 'decale2': 0.7838}, 'min': 0.7838, 'max': 0.8539, 'dispersion': 0.0701}
+hyper {'canonique': {'cibles_test': 76, 'perdus_observes': 14, 'perdus_attendus': 13.67, 'ecart_type': 2.77, 'z': 0
+… [1265 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final de l'état git (aucune modification existante de notre fait)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== modifiés suivis ===\" && git status --short | grep -v '^??' && echo \"=== nouveaux non suivis ===\" && git status --short | grep '^??'", "description": "List tracked modifications and untracked files"}`
+
+  ```
+=== modifiés suivis ===
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/digest.md
+D  journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/rapport.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md
+MM journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md
+D  journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/digest.md
+D  journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/rapport.md
+D  journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/digest.md
+D  journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/rapport.md
+D  journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/digest.md
+D  journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/rapport.md
+D  journal/sessions/3144cf23-6
+… [3700 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== occurrences historiques ===\" && grep -n \"125/126\\|126/126\\|60/61\\|133/134\\|62/62\" reports/rapport-dev-test-v7.md && echo \"=== corrections ===\" && grep -n \"0,7869\\|Trois réserves\\|81 %\" reports/rapport-dev-test … [153 caractères tronqués]`
+
+  ```
+=== occurrences historiques ===
+1:# B13 — dev/test en v7 : dev 133/134, test 62/62, le split tient sur trois découpages
+4:> Le gold 612 est re-coupé par `crc32(id) % 3 == 0` (test) : **dev 133/134 (0,9925)**, **test 62/62 (1,0)**
+37:| **dev** | 422 | 163 | 134 | 134/163 = **0,8221** | 133/134 = **0,9925** | 0,5512 | 0,7132 |
+38:| **test** | 190 | 76 | 62 | 62/76 = **0,8158** | 62/62 = **1,0** | 0,5651 | 0,7196 |
+136:  splits 0 et 1, et dans test pour le split 2 — d'où 62/62, 62/62, 57/58.
+156:- **Exact** : dev **133/134**, test **62/62** → **1 échec contre 0**, soit **0,75 point** et **1 cas**.
+175:est passée à 187 labels (dev 125/126 puis 126/126 selon le commit, test 60/61) ; la v7 est à 196 labels
+176:(dev 133/134, test 62/62). Au dernier état v5 (`b975011b`), l'unique échec était **r309**, dans le
+177:**seau 0** (donc test), d'où 60/61 au test et 126/126 en dev. En v7, **r309 est corrigé** et **r102**
+=== corrections ===
+=== 82,7 ===
+166:- **F1** : test **+1,39 point**, mais l'agrégat est dominé par GN/GV (82,7 % des segments gold) : GV test
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-dev-test-v7.json'))\ns=open('reports/rapport-dev-test-v7.md',encoding='utf-8').read()\ndef check(txt, label):\n    assert txt in s, (label, txt)\n    print(\"OK\", label … [1260 caractères tronqués]`
+
+  ```
+OK dev exact 133/134
+OK dev couv 134/163
+OK test exact 62/62
+OK test couv 62/76
+OK detail fr 92/92
+OK detail en 41/42
+OK detail REL 42/42
+OK detail GP 32/32
+OK dispersion test_exact_taux_span 0,0172
+OK dispersion test_couverture 0,0701
+OK dispersion test_f1 0,0241
+OK dispersion test_tete_f1 0,012
+OK dispersion test_pos 0,0111
+OK source dev hand 15
+OK source dev reel 302
+OK source dev synthetique 105
+OK hyper attendu 13,67
+OK v5 r309 r309
+OK v7 r102 r102
+Toutes les chaînes clés sont présentes.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, charger_gele\nv={p[\"id\"] for p in charger_gele()}; l=charger()\nextra=[p for p in l if p[\"id\"] not in v]\nprint([(p[ … [218 caractères tronqués]`
+
+  ```
+[('r423', 'reel', 'fr', 0), ('r424', 'reel', 'fr', 0), ('r425', 'reel', 'fr', 0), ('r426', 'reel', 'fr', 0), ('r427', 'reel', 'en', 0), ('r428', 'reel', 'fr', 0), ('r429', 'reel', 'fr', 0), ('r430', 'reel', 'fr', 0), ('r431', 'reel', 'fr', 0), ('r432', 'reel', 'en', 0)]
+2026-11-05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"104/106\\|53/54\\|160 labels\\|TODO\\|FIXME\\|XXX\" reports/rapport-dev-test-v7.md; echo \"---\"; tail -12 reports/rapport-dev-test-v7.md; echo \"---\"; git status --short reports/rapport-dev-test-v7.md reports/pensee-dev-t … [72 caractères tronqués]`
+
+  ```
+174:**Continuité v5 → v7.** La fiche d'origine mesurait dev 104/106 et test 53/54 avec 160 labels ; la v5
+225:- [`rapport-gold-split.md`](rapport-gold-split.md) — la fiche d'origine (160 labels).
+---
+   systématiquement le par-type) ; changer le split maintenant casserait la comparaison avec la v5.
+4. **Re-mesurer après la prochaine règle** : c'est le seul moyen de savoir si le gain est un gain.
+
+## 9. Fichiers
+
+- [`gold_split.py`](../tools/tests/linguistique/gold_split.py) — le split (`dev`, `test`, `compter`).
+- [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) — `charger`, `evaluer_bloc`.
+- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — l'heuristique mesurée.
+- [`pensee-dev-test-v7.json`](pensee-dev-test-v7.json) — les trois splits, l'équilibre, les contrôles
+  (χ², hypergéométrie, Wilson, Monte-Carlo), la comparaison v5 → v7.
+- [`rapport-gold-split.md`](rapport-gold-split.md) — la fiche d'origine (160 labels).
+- [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) — la fiche v7 (gelé 602).
+---
+A  reports/pensee-dev-test-v7.json
+A  reports/rapport-dev-test-v7.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 && echo \"--- fichiers dans HEAD ? ---\" && git ls-tree -r --name-only HEAD reports/ | grep -E \"dev-test-v7\" || echo \"non présents dans HEAD\" && echo \"--- index ---\" && git diff --cached --name-only | grep  … [96 caractères tronqués]`
+
+  ```
+e4cd4408 DOCS — LE TABLEAU DES PORTES T163-T180 PASSE AUX VALEURS V7 (43 SPANS, EXACT 195/196, FR 1,0 / EN 0,9836)
+4ccf06e1 JOURNAL — LA SOIRÉE DU DÉCOUPAGE : F1 0,2862 → 0,5595, COUVERTURE 196/239, ATTACHEMENT 195/196
+--- fichiers dans HEAD ? ---
+non présents dans HEAD
+--- index ---
+reports/pensee-dev-test-v7.json
+reports/rapport-dev-test-v7.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification que le code mesuré n'a pas bougé depuis `69bd865e`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat 69bd865e -- tools/bloc_linguistique.py tools/tests/linguistique/gold_split.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistiqu … [178 caractères tronqués]`

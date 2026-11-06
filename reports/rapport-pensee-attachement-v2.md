@@ -1,5 +1,7 @@
 # B13 — l'attachement v2 : exact 0,8483 → 0,9448, top-k strict 0,6069 → 0,9724
 
+> **Instantané historique** : état au commit `9d5337ce` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **180/180 portes** : trois corrections **mesurées**, issues de trois sous-agents indépendants :
 > (1) la règle du **segment précédent** (un SUB après un GV est une complétive → cible = le verbe ;

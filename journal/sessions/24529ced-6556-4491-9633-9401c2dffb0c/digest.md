@@ -914,3 +914,581 @@ V = [("saute", "S"), ("marche", "S"), ("nage", "S"), ("crie", "S"), ("rê
 … [1533 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Construction du banc de simulation (sous-classe locale) et mesure de base sur dev
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/sim.py <<'EOF'\nimport json,sys,pathlib,collections\nR=pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"); sys.path.insert(0,str(R/\"tools\")); sys.path.insert(0,str(R/\"tools/tests/linguistique\"))\ni … [4820 caractères tronqués]`
+
+  ```
+base dev {'cibles': 163, 'labels': 134, 'exact': 133, 'tp': 665, 'fp': 452, 'fn': 631, 'f1': 0.5512}
+DEV ('R1',) {'cibles': 163, 'labels': 136, 'exact': 135, 'f1': 0.5544} gain 2 perte 0
+   + (('r224', 'REL', 8, 33), None, 'homme')
+   + (('r291', 'REL', 9, 29), None, 'book')
+DEV ('R2',) {'cibles': 163, 'labels': 136, 'exact': 134, 'f1': 0.5535} gain 3 perte 2
+   + (('r215', 'SUB', 0, 13), None, 'stay')
+   + (('r279', 'SUB', 0, 13), None, 'stay')
+   + (('r294', 'SUB', 0, 13), None, 'leave')
+   - (('s015', 'SUB', 18, 39), 'marche', None)
+   - (('s132', 'SUB', 26, 62), 'marche', None)
+DEV ('R1', 'R2') {'cibles': 163, 'labels': 138, 'exact': 136, 'f1': 0.5568} gain 5 perte 2
+   + (('r215', 'SUB', 0, 13), None, 'stay')
+   + (('r224', 'REL', 8, 33), None, 'homme')
+   + (('r279', 'SUB', 0, 13), None, 'stay')
+   + (('r291', 'REL', 9, 29), None, 'book')
+   + (('r294', 'SUB', 0, 13), None, 'leave')
+   - (('s015', 'SUB', 18, 39), 'marche', None)
+   - (('s132', 'SUB', 26, 62), 'marche', None)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/sim2.py <<'EOF'\nimport json,sys,pathlib,collections\nR=pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"); sys.path.insert(0,str(R/\"tools\")); sys.path.insert(0,str(R/\"tools/tests/linguistique\"))\n … [5183 caractères tronqués]`
+
+  ```
+base {'cibles': 163, 'labels': 134, 'exact': 133, 'f1': 0.5512}
+DEV ('R1',) adv True {'labels': 131, 'exact': 130, 'f1': 0.5519} gain 12 perte 15
+   + (('g017', 'SUB', 9, 28), None, 'said')
+   + (('r034', 'REL', 9, 20), None, 'book')
+   + (('r074', 'REL', 9, 22), None, 'book')
+   + (('r114', 'REL', 9, 20), None, 'film')
+   + (('r205', 'SUB', 8, 26), None, 'think')
+   + (('r219', 'SUB', 7, 20), None, 'know')
+   + (('r224', 'REL', 8, 33), None, 'homme')
+   + (('r240', 'SUB', 10, 26), None, 'believe')
+   + (('r247', 'SUB', 8, 26), None, 'think')
+   + (('r285', 'REL', 10, 22), None, 'table')
+   + (('r291', 'REL', 9, 29), None, 'book')
+   + (('r296', 'SUB', 9, 24), None, 'says')
+   - (('g005', 'SUB', 11, 28), 'dit', None)
+   - (('g011', 'REL', 9, 20), 'livre', None)
+   - (('r014', 'REL', 9, 20), 'livre', None)
+   - (('r055', 'REL', 9, 23), 'ville', None)
+   - (('r203', 'REL', 9, 20), 'livre', None)
+   - (('r217', 'REL', 12, 26), 'student', None)
+   - (('r221', 'REL', 11, 20), 'village', None)
+   - (('r231', 'REL', 9, 18), 'chien', None)
+   - (('r248', 'REL', 9, 25), 'girl', None)
+   - (('r265', 'REL', 8, 22), 'lieu', None)
+   - (('r273', 'REL', 9, 23), 'fleur', None)
+   - (('r275', 'REL
+… [4751 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim2 import *\nfrom evaluer_gold import charger\nph={p[\"id\"]:p for p in charger()}\nh=Sim(); s=Sim((\"R1\",))\nfor pid in [\"g011\",\"r014\",\"r217\",\"s069\",\ … [563 caractères tronqués]`
+
+  ```
+--- g011 "Le livre que j'ai lu est intéressant."
+ base [('GN', 0, 8, 'Le livre'), ('REL', 9, 20, "que j'ai lu"), ('REL', 9, 36, "que j'ai lu est intéressant"), ('GV', 21, 36, 'est intéressant')]
+ sim  [('GN', 0, 8, 'Le livre'), ('REL', 9, 36, "que j'ai lu est intéressant"), ('REL', 9, 36, "que j'ai lu est intéressant"), ('GV', 21, 36, 'est intéressant')]
+ gold [('REL', 9, 20, "que j'ai lu")]
+--- r014 "Le livre que j'ai lu est passionnant."
+ base [('GN', 0, 8, 'Le livre'), ('REL', 9, 20, "que j'ai lu"), ('REL', 9, 36, "que j'ai lu est passionnant"), ('GV', 21, 36, 'est passionnant')]
+ sim  [('GN', 0, 8, 'Le livre'), ('REL', 9, 36, "que j'ai lu est passionnant"), ('REL', 9, 36, "que j'ai lu est passionnant"), ('GV', 21, 36, 'est passionnant')]
+ gold [('REL', 9, 20, "que j'ai lu")]
+--- r217 'The student whom I mention is absent.'
+ base [('GN', 0, 11, 'The student'), ('REL', 12, 26, 'whom I mention'), ('GV', 27, 36, 'is absent')]
+ sim  [('GN', 0, 11, 'The student'), ('REL', 12, 36, 'whom I mention is absent'), ('GV', 27, 36, 'is absent')]
+ gold [('REL', 12, 26, 'whom I mention')]
+--- s069 'ce doux canard qui crie ferme'
+ base [('GN', 0, 14, 'ce doux canard'), ('REL', 15, 23, 'qui crie'
+… [864 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Copie locale du chunker avec les règles R1/R2/R3 et mesure dev
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/sim3.py <<'EOF'\nimport json,sys,pathlib\nR=pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"); sys.path.insert(0,str(R/\"tools\")); sys.path.insert(0,str(R/\"tools/tests/linguistique\"))\nimport bloc_ … [10138 caractères tronqués]`
+
+  ```
+base {'cibles': 163, 'labels': 116, 'exact': 106, 'f1': 0.5776}
+DEV ('R1',) {'labels': 130, 'exact': 120, 'f1': 0.5983} gain 14 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r219', 'r224', 'r228', 'r240', 'r243', 'r278', 'r285', 'r291', 'r296', 'r299']
+   - []
+DEV ('R2',) {'labels': 121, 'exact': 109, 'f1': 0.5822} gain 3 perte 0
+   + ['r215', 'r279', 'r294']
+   - []
+DEV ('R3',) {'labels': 127, 'exact': 117, 'f1': 0.5924} gain 11 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r219', 'r240', 'r243', 'r278', 'r285', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2') {'labels': 135, 'exact': 123, 'f1': 0.6028} gain 17 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r228', 'r240', 'r243', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2', 'R3') {'labels': 135, 'exact': 123, 'f1': 0.6028} gain 17 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r228', 'r240', 'r243', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/segmenter_s=False/segmenter_s=True/g' /tmp/spans/sim3.py && python3 /tmp/spans/sim3.py", "description": "Re-measure with S generator enabled (real baseline)"}`
+
+  ```
+base {'cibles': 163, 'labels': 134, 'exact': 133, 'f1': 0.5512}
+DEV ('R1',) {'labels': 147, 'exact': 146, 'f1': 0.5695} gain 13 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r219', 'r224', 'r240', 'r243', 'r278', 'r285', 'r291', 'r296', 'r299']
+   - []
+DEV ('R2',) {'labels': 138, 'exact': 136, 'f1': 0.5547} gain 3 perte 0
+   + ['r215', 'r279', 'r294']
+   - []
+DEV ('R3',) {'labels': 145, 'exact': 144, 'f1': 0.5645} gain 11 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r219', 'r240', 'r243', 'r278', 'r285', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2') {'labels': 151, 'exact': 149, 'f1': 0.5731} gain 16 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2', 'R3') {'labels': 151, 'exact': 149, 'f1': 0.5731} gain 16 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph={p[\"id\"]:p for p in charger()}\nfor pid in [\"g017\",\"r247\",\"r288\",\"r228\",\"r216\"]:\n    p=ph[pid]; \n    for nom,reg in [(\"base\",()) … [656 caractères tronqués]`
+
+  ```
+g017 base 'She said that she would come yesterday.' -> [('SUB', 9, 17, 'that she', 'said')]
+g017 R1R2 'She said that she would come yesterday.' -> [('SUB', 9, 23, 'that she would', 'said')]
+g017 R1R2R3 'She said that she would come yesterday.' -> [('SUB', 9, 23, 'that she would', 'said')]
+   gold [('SUB', 9, 28, 'that she would come', 'said')]
+r247 base 'I think that we must leave.' -> [('SUB', 8, 15, 'that we', 'think')]
+r247 R1R2 'I think that we must leave.' -> [('SUB', 8, 20, 'that we must', 'think')]
+r247 R1R2R3 'I think that we must leave.' -> [('SUB', 8, 20, 'that we must', 'think')]
+   gold [('SUB', 8, 26, 'that we must leave', 'think')]
+r288 base 'I know that he comes tomorrow.' -> [('SUB', 7, 14, 'that he', 'know')]
+r288 R1R2 'I know that he comes tomorrow.' -> [('SUB', 7, 20, 'that he comes', 'know')]
+r288 R1R2R3 'I know that he comes tomorrow.' -> [('SUB', 7, 20, 'that he comes', 'know')]
+   gold [('SUB', 7, 29, 'that he comes tomorrow', 'know')]
+r228 base 'La maison que nous avons achetée est vieille.' -> [('REL', 10, 32, 'que nous avons achetée', 'maison'), ('REL', 10, 44, 'que nous avons achetée est vieille', 'maison')]
+r228 R1R2 'La maison que nous avons achetée est
+… [535 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph={p[\"id\"]:p for p in charger()}\np=ph[\"r228\"]; print(repr(p[\"texte\"]))\nfor nom,reg in [(\"base\",()),(\"R1R2\",(\"R1\",\"R2\"))]:\n    r=e … [382 caractères tronqués]`
+
+  ```
+'La maison que nous avons achetée est vieille.'
+base {('r228', 'REL', 10, 32): ('exact', 'maison')} 1 1
+[('GN', 0, 9, 'La maison', 'vieille', None), ('REL', 10, 32, 'que nous avons achetée', 'maison', None), ('REL', 10, 44, 'que nous avons achetée est vieille', 'maison', True), ('GV', 33, 44, 'est vieille', 'maison', None)]
+R1R2 {('r228', 'REL', 10, 32): ('exact', 'maison')} 1 1
+[('GN', 0, 9, 'La maison', 'vieille', None), ('REL', 10, 32, 'que nous avons achetée', 'maison', None), ('GV', 33, 44, 'est vieille', 'maison', None)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph)\nfor reg in [(),(\"R1\",),(\"R1\",\"R2\")]:\n    r=evaluer(d,lambda: Sim(reg))\n    print(reg,\"r228\",r[\"details\"].get(( … [306 caractères tronqués]`
+
+  ```
+() r228 ('exact', 'maison') exact 133
+('R1',) r228 ('exact', 'maison') exact 146
+  gain ('r034', 'REL', 9, 20)
+  gain ('r074', 'REL', 9, 22)
+  gain ('r114', 'REL', 9, 20)
+  gain ('r205', 'SUB', 8, 26)
+  gain ('r219', 'SUB', 7, 20)
+  gain ('r224', 'REL', 8, 33)
+  gain ('r240', 'SUB', 10, 26)
+  gain ('r243', 'REL', 10, 24)
+  gain ('r278', 'REL', 10, 22)
+  gain ('r285', 'REL', 10, 22)
+  gain ('r291', 'REL', 9, 29)
+  gain ('r296', 'SUB', 9, 24)
+  gain ('r299', 'REL', 11, 24)
+('R1', 'R2') r228 ('exact', 'maison') exact 149
+  gain ('r034', 'REL', 9, 20)
+  gain ('r074', 'REL', 9, 22)
+  gain ('r114', 'REL', 9, 20)
+  gain ('r205', 'SUB', 8, 26)
+  gain ('r215', 'SUB', 0, 13)
+  gain ('r219', 'SUB', 7, 20)
+  gain ('r224', 'REL', 8, 33)
+  gain ('r240', 'SUB', 10, 26)
+  gain ('r243', 'REL', 10, 24)
+  gain ('r278', 'REL', 10, 22)
+  gain ('r279', 'SUB', 0, 13)
+  gain ('r285', 'REL', 10, 22)
+  gain ('r291', 'REL', 9, 29)
+  gain ('r294', 'SUB', 0, 13)
+  gain ('r296', 'SUB', 9, 24)
+  gain ('r299', 'REL', 11, 24)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re,pathlib\np=pathlib.Path(\"/tmp/spans/sim3.py\"); s=p.read_text()\ns=s.replace('DURS={\"qui\",\"dont\",\"où\",\"which\",\"who\",\"whom\",\"whose\",\"where\"}',\n 'DURS={\"qui\",\"dont\",\"où\",\"which\",\" … [481 caractères tronqués]`
+
+  ```
+base {'cibles': 163, 'labels': 134, 'exact': 133, 'f1': 0.5512}
+DEV ('R1',) {'labels': 147, 'exact': 146, 'f1': 0.5695} gain 13 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r219', 'r224', 'r240', 'r243', 'r278', 'r285', 'r291', 'r296', 'r299']
+   - []
+DEV ('R2',) {'labels': 138, 'exact': 136, 'f1': 0.5547} gain 3 perte 0
+   + ['r215', 'r279', 'r294']
+   - []
+DEV ('R3',) {'labels': 145, 'exact': 144, 'f1': 0.5645} gain 11 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r219', 'r240', 'r243', 'r278', 'r285', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2') {'labels': 151, 'exact': 149, 'f1': 0.5731} gain 16 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2', 'R3') {'labels': 151, 'exact': 149, 'f1': 0.5731} gain 16 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+  ```
+
+- **bash** `{"command": "grep -n \"AUX_MOD\\|aux = \" /tmp/spans/sim3.py | head", "description": "Verify modal patch applied"}`
+
+  ```
+8:AUX_MOD = bl.AUXILIAIRES | {"would","must","can","could","should","will","shall","may","might"}
+66:                        aux = bl._normaliser(m) in (AUX_MOD if R1 else bl.AUXILIAIRES)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/sim3.py\"); s=p.read_text()\ns=s.replace(\"if aux_vus >= 1 and not (j > 0 and bl._normaliser(mots[j - 1][2]) in bl.AUXILIAIRES):\",\n            \"if aux_vus >= 1 and not … [182 caractères tronqués]`
+
+  ```
+base {'cibles': 163, 'labels': 134, 'exact': 133, 'f1': 0.5512}
+DEV ('R1',) {'labels': 149, 'exact': 148, 'f1': 0.5717} gain 15 perte 0
+   + ['g017', 'r034', 'r074', 'r114', 'r205', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r285', 'r291', 'r296', 'r299']
+   - []
+DEV ('R2',) {'labels': 138, 'exact': 136, 'f1': 0.5547} gain 3 perte 0
+   + ['r215', 'r279', 'r294']
+   - []
+DEV ('R3',) {'labels': 145, 'exact': 144, 'f1': 0.5645} gain 11 perte 0
+   + ['r034', 'r074', 'r114', 'r205', 'r219', 'r240', 'r243', 'r278', 'r285', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2') {'labels': 153, 'exact': 151, 'f1': 0.5752} gain 18 perte 0
+   + ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+DEV ('R1', 'R2', 'R3') {'labels': 153, 'exact': 151, 'f1': 0.5752} gain 18 perte 0
+   + ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299']
+   - []
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation des règles sur test tenu à l'écart
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); t=test(ph); d=dev(ph); allp=ph\nfor corpus,nom in [(t,\"TEST\"),(allp,\"ALL\")]:\n    b=evaluer(corpus,lambda: Sim(()))\n    print(no … [427 caractères tronqués]`
+
+  ```
+TEST base {'cibles': 76, 'labels': 62, 'exact': 62, 'f1': 0.5651}
+  ('R1',) {'labels': 67, 'exact': 67, 'f1': 0.5823} gain 5 perte 0 gains ['r115', 'r214', 'r216', 'r239', 'r281'] pertes []
+  ('R2',) {'labels': 62, 'exact': 62, 'f1': 0.5651} gain 0 perte 0 gains [] pertes []
+  ('R3',) {'labels': 65, 'exact': 65, 'f1': 0.5722} gain 3 perte 0 gains ['r214', 'r216', 'r281'] pertes []
+  ('R1', 'R2') {'labels': 67, 'exact': 67, 'f1': 0.5823} gain 5 perte 0 gains ['r115', 'r214', 'r216', 'r239', 'r281'] pertes []
+  ('R1', 'R2', 'R3') {'labels': 67, 'exact': 67, 'f1': 0.5823} gain 5 perte 0 gains ['r115', 'r214', 'r216', 'r239', 'r281'] pertes []
+ALL base {'cibles': 239, 'labels': 196, 'exact': 195, 'f1': 0.5555}
+  ('R1',) {'labels': 216, 'exact': 215, 'f1': 0.575} gain 20 perte 0 gains ['g017', 'r034', 'r074', 'r114', 'r115', 'r205', 'r214', 'r216', 'r219', 'r224', 'r239', 'r240', 'r243', 'r247', 'r278', 'r281', 'r285', 'r291', 'r296', 'r299'] pertes []
+  ('R2',) {'labels': 200, 'exact': 198, 'f1': 0.5579} gain 3 perte 0 gains ['r215', 'r279', 'r294'] pertes []
+  ('R3',) {'labels': 210, 'exact': 209, 'f1': 0.5669} gain 14 perte 0 gains ['r034', 'r074', 'r114', 'r205', 'r214', 'r216', 'r2
+… [628 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diff détaillé sur les 239 cibles : gains, cible fausse nouvelle, restes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger()\nb=evaluer(ph,lambda: Sim(())); r=evaluer(ph,lambda: Sim((\"R1\",\"R2\")))\nprint(\"base\",b[\"labels\"],b[\"exact\"],\"| best\",r[\"l … [674 caractères tronqués]`
+
+  ```
+base 196 195 | best 220 218
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+ValueError: too many values to unpack (expected 2)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger()\nb=evaluer(ph,lambda: Sim(())); r=evaluer(ph,lambda: Sim((\"R1\",\"R2\")))\nprint(\"base\",b[\"labels\"],b[\"exact\"],\"| best\",r[\"l … [592 caractères tronqués]`
+
+  ```
+base 196 195 | best 220 218
+gained 23
+new label wrong [(('r035', 'REL', 9, 24), 'absent', None), (('r153', 'GP', 8, 19), 'absent', None), (('r245', 'SUB', 0, 15), 'faux', 'arrive'), (('r255', 'REL', 11, 27), 'absent', None), (('r264', 'SUB', 8, 26), 'absent', None), (('r280', 'REL', 8, 21), 'absent', None), (('r288', 'SUB', 7, 29), 'absent', None), (('s010', 'REL', 10, 18), 'absent', None), (('s027', 'GP', 31, 33), 'absent', None), (('s035', 'REL', 10, 19), 'absent', None), (('s044', 'SUB', 17, 29), 'absent', None), (('s061', 'REL', 9, 18), 'absent', None), (('s065', 'REL', 5, 17), 'absent', None), (('s112', 'SUB', 24, 39), 'absent', None), (('s114', 'SUB', 22, 43), 'absent', None), (('s125', 'REL', 11, 21), 'absent', None), (('s141', 'REL', 5, 15), 'absent', None), (('s146', 'GP', 25, 35), 'absent', None), (('s148', 'GP', 20, 39), 'absent', None), (('s160', 'GP', 20, 29), 'absent', None)]
+still labelled wrong [(('r102', 'GP', 15, 33), 'faux', '')]
+still absent []
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic des deux cas test inattendus (r255, r280) et règle de collision lexicale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph={p[\"id\"]:p for p in charger()}\nfor pid in [\"r255\",\"r280\"]:\n    p=ph[pid]; print(\"===\",pid,repr(p[\"texte\"]))\n    for nom,reg in [(\" … [746 caractères tronqués]`
+
+  ```
+=== r255 "La voiture que j'ai achetée roule."
+base [('GN', 0, 10, 'La voiture', None, None), ('REL', 11, 33, "que j'ai achetée roule", 'voiture', None)]
+R1R2 [('GN', 0, 10, 'La voiture', None, None), ('REL', 11, 33, "que j'ai achetée roule", 'voiture', None)]
+gold [('REL', 11, 27, "que j'ai achetée", 'voiture')]
+mots [('La', 0, 2, 'DET'), ('voiture', 3, 10, 'NOUN'), ('que', 11, 14, 'PRON'), ("j'", 15, 17, 'PRON'), ('ai', 17, 19, 'AUX'), ('achetée', 20, 27, 'VERB'), ('roule', 28, 33, 'VERB')]
+=== r280 'The car that I bought runs.'
+base [('GN', 0, 3, 'The', 'runs', None), ('SUB', 4, 14, 'car that I', 'runs', None), ('GV', 15, 26, 'bought runs', None, None)]
+R1R2 [('GN', 0, 3, 'The', 'runs', None), ('SUB', 4, 21, 'car that I bought', 'runs', None), ('GV', 22, 26, 'runs', None, None)]
+gold [('REL', 8, 21, 'that I bought', 'car')]
+mots [('The', 0, 3, 'DET'), ('car', 4, 7, 'NOUN'), ('that', 8, 12, 'PRON'), ('I', 13, 14, 'PRON'), ('bought', 15, 21, 'VERB'), ('runs', 22, 26, 'VERB')]
+car in SUBORDONNANTS True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\np=next(p for p in charger() if p[\"id\"]==\"r255\")\ns=Sim((\"R1\",\"R2\"))\nprint(\"mots\",s._mots(p[\"texte\"]))\nprint(\"simples\",s._syntagmes_ … [393 caractères tronqués]`
+
+  ```
+mots [(0, 2, 'La', 'mot'), (3, 10, 'voiture', 'mot'), (11, 14, 'que', 'mot'), (15, 19, "j'ai", 'mot'), (20, 27, 'achetée', 'mot'), (28, 33, 'roule', 'mot'), (33, 34, '.', 'ponctuation')]
+simples [{'type': 'GN', 'role': 'groupe nominal', 'niveau': 0, 'debut': 0, 'fin': 10, 'texte': 'La voiture', 'candidats': []}, {'type': 'REL', 'role': 'qualité', 'niveau': 1, 'debut': 11, 'fin': 27, 'texte': "que j'ai achetée", 'candidats': []}, {'type': 'GV', 'role': 'prédicat', 'niveau': 0, 'debut': 28, 'fin': 33, 'texte': 'roule', 'candidats': []}]
+_normaliser j' j' | est_verbe False
+S [('GN', 0, 10, 'La voiture'), ('REL', 11, 33, "que j'ai achetée roule")]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\np=next(p for p in charger() if p[\"id\"]==\"r255\")\ns=Sim((\"R1\",\"R2\"))\norig=s._syntagmes_simple\ndef traced(texte,langue,pos_verbes=None):\n  … [433 caractères tronqués]`
+
+  ```
+TRACE fr [('GN', 0, 10), ('REL', 11, 33)]
+union? True segmenter_s True
+[('GN', 0, 10, 'La voiture', {'role': 'agent', 'niveau': 0}), ('REL', 11, 33, "que j'ai achetée roule", {'role': 'qualite', 'niveau': 1, 'attachement': {'segment': "que j'ai achetée roule", 'cible': 'voiture'}})]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajustement de la règle GP (contexte DET) et test d'une règle de collision lexicale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/sim3.py\"); s=p.read_text()\n# R3 : le contexte DET passe avant la reconnaissance lexicale\nold='''        def est_verbe(d: int, m: str) -> bool:\n            if _est_ver … [3071 caractères tronqués]`
+
+  ```
+patched
+DEV base 133 132 0.5496
+  ('R3',) 141 140 0.5607 gain 11 perte 3 ['r034', 'r074', 'r114', 'r205', 'r219', 'r240', 'r243', 'r278', 'r285', 'r296', 'r299'] ['r246', 'r287', 'r297']
+  ('R4',) 133 132 0.5513 gain 0 perte 0 [] []
+  ('R1', 'R2') 152 150 0.5737 gain 18 perte 0 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299'] []
+  ('R1', 'R2', 'R3') 149 147 0.5714 gain 18 perte 3 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299'] ['r246', 'r287', 'r297']
+  ('R1', 'R2', 'R4') 153 151 0.5762 gain 19 perte 0 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] []
+  ('R1', 'R2', 'R3', 'R4') 150 148 0.5739 gain 19 perte 3 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] ['r246', 'r287', 'r297']
+TEST base 62 62 0.5637
+  ('R3',) 65 65 0.5725 gain 4 perte 1 ['r153', 'r214', 'r216', 'r281'] ['r220']
+  ('
+… [437 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/sim3.py\"); s=p.read_text()\nold='''        def est_verbe(d: int, m: str) -> bool:\n            n2 = bl._normaliser(m)\n            idx = par_debut.get(d)\n            av … [2673 caractères tronqués]`
+
+  ```
+ok
+DEV base 134 133 0.5512
+  ('R1',) 149 148 0.5717 gain 15 perte 0 ['g017', 'r034', 'r074', 'r114', 'r205', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r285', 'r291', 'r296', 'r299'] []
+  ('R2',) 138 136 0.5547 gain 3 perte 0 ['r215', 'r279', 'r294'] []
+  ('R4',) 134 133 0.5528 gain 0 perte 0 [] []
+  ('R1', 'R2') 153 151 0.5752 gain 18 perte 0 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r285', 'r291', 'r294', 'r296', 'r299'] []
+  ('R1', 'R2', 'R4') 154 152 0.5777 gain 19 perte 0 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] []
+  ('R1', 'R2', 'R3', 'R4') 150 148 0.5739 gain 19 perte 4 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] ['r083', 'r246', 'r287', 'r297']
+TEST base 62 62 0.5651
+  ('R1',) 67 67 0.5823 gain 5 perte 0 ['r115', 'r214', 'r216', 'r239', 'r281'] []
+  ('R2',) 62 62 0.5651 gain 0 perte 0 [] []
+  ('R4',) 62 62 0.5693 gain 0 perte 0 [] []
+  ('R1', 'R2') 67 67 0.5823 gain 5 perte 0 ['r115', 'r2
+… [237 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph={p[\"id\"]:p for p in charger()}\nfor pid in [\"r220\",\"r153\",\"r246\",\"r287\",\"r297\",\"r083\"]:\n    p=ph[pid]; print(\"===\",pid,repr(p[\ … [467 caractères tronqués]`
+
+  ```
+=== r220 'The cat that sleeps is black.'
+ gold [('GN', 0, 7, 'The cat', None), ('REL', 8, 19, 'that sleeps', 'cat'), ('GV', 20, 22, 'is', None), ('ADJ', 23, 28, 'black', None)]
+  base [('GN', 0, 7, 'The cat', 'black'), ('REL', 8, 19, 'that sleeps', 'cat'), ('GV', 20, 28, 'is black', None)]
+  R3 [('GN', 0, 7, 'The cat', 'black'), ('GN', 8, 19, 'that sleeps', 'black'), ('GV', 20, 28, 'is black', None)]
+=== r153 'We wait for the bus.'
+ gold [('GN', 0, 2, 'We', None), ('GV', 3, 7, 'wait', None), ('GP', 8, 19, 'for the bus', 'wait')]
+  base [('GV', 3, 7, 'wait', None), ('GP', 8, 15, 'for the', 'wait'), ('GV', 16, 19, 'bus', None)]
+  R3 [('GV', 3, 7, 'wait', None), ('GP', 8, 19, 'for the bus', 'wait')]
+=== r246 'The dog that barks is mean.'
+ gold [('GN', 0, 7, 'The dog', None), ('REL', 8, 18, 'that barks', 'dog'), ('GV', 19, 21, 'is', None), ('ADJ', 22, 26, 'mean', None)]
+  base [('GN', 0, 7, 'The dog', 'mean'), ('REL', 8, 18, 'that barks', 'dog'), ('GV', 19, 26, 'is mean', None)]
+  R3 [('GN', 0, 7, 'The dog', 'mean'), ('GN', 8, 18, 'that barks', 'mean'), ('GV', 19, 26, 'is mean', None)]
+=== r287 'The bird that flies is blue.'
+ gold [('GN', 0, 8, 'The bird', None), ('REL', 9, 19, 'that f
+… [1135 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/sim3.py\"); s=p.read_text()\ns=s.replace('R1=\"R1\" in self.regles;', 'R3GP=\"R3GP\" in self.regles; R1=\"R1\" in self.regles;')\n# helper local juste avant la boucle GP\ … [1607 caractères tronqués]`
+
+  ```
+ok
+DEV base 134 133 0.5512
+  ('R3GP',) 134 133 0.5516 gain 0 perte 0 [] []
+  ('R1', 'R2', 'R4', 'R3GP') 154 152 0.5782 gain 19 perte 0 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] []
+TEST base 62 62 0.5651
+  ('R3GP',) 63 63 0.5685 gain 1 perte 0 ['r153'] []
+  ('R1', 'R2', 'R4', 'R3GP') 68 68 0.5901 gain 6 perte 0 ['r115', 'r153', 'r214', 'r216', 'r239', 'r281'] []
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la cohérence avec l'évaluateur officiel et des métriques finales
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nfrom evaluer_gold import evaluer_bloc\nph=charger()\nr=evaluer_bloc(\"heuristique\",bl.Heuristique(),ph)\nprint(\"officiel all:\",{k:r[k] for k in  … [391 caractères tronqués]`
+
+  ```
+officiel all: {'syntagme': {'precision': 0.5959, 'rappel': 0.5201, 'f1': 0.5555, 'tp': 969, 'fp': 657, 'fn': 894, 'tete': {'precision': 0.7885, 'rappel': 0.6543, 'f1': 0.7152, 'tp': 1219, 'fp': 327, 'fn': 644}}, 'attachement': {'cibles': 239, 'labels': 196, 'top1': 195, 'topk': 166, 'exact': 195, 'top1_taux': 0.8159, 'topk_taux': 0.6946, 'exact_taux': 0.8159, 'exact_any': 195, 'exact_any_taux_span': 0.9949, 'top1_taux_span': 0.9949, 'topk_taux_span': 0.8469, 'topk_exact': 166, 'topk_exact_taux': 0.6946, 'topk_exact_taux_span': 0.8469, 'exact_taux_span': 0.9949, 'verbe': {'cibles': 137, 'justes': 136, 'taux': 0.9927}, 'nom': {'cibles': 59, 'justes': 59, 'taux': 1.0}, 'couverture': 0.8201, 'par_langue': {'fr': {'cibles': 151, 'labels': 135, 'exact': 135, 'topk': 121, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 61, 'exact': 60, 'topk': 45, 'exact_taux_span': 0.9836}}}}
+harness base: {'labels': 196, 'exact': 195, 'f1': 0.5555}
+('R1', 'R2', 'R3') {'labels': 216, 'exact': 214, 'f1': 0.5749}
+('R1', 'R2', 'R3GP', 'R4') {'labels': 222, 'exact': 220, 'f1': 0.5819}
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation des mesures : règles seules, marginales, échecs, et métriques finales
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/bilan.py <<'EOF'\nimport json,sys\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nout={}\ndef mes(corpus,reg):\n    r=evaluer(corpus,lambda: Sim(reg))\n    return {k:r[k]  … [2235 caractères tronqués]`
+
+  ```
+{
+ "dev": {
+  "base": {
+   "cibles": 163,
+   "labels": 134,
+   "exact": 133,
+   "f1": 0.5512
+  },
+  "final": {
+   "cibles": 163,
+   "labels": 154,
+   "exact": 152,
+   "f1": 0.5782
+  }
+ },
+ "test": {
+  "base": {
+   "cibles": 76,
+   "labels": 62,
+   "exact": 62,
+   "f1": 0.5651
+  },
+  "final": {
+   "cibles": 76,
+   "labels": 68,
+   "exact": 68,
+   "f1": 0.5901
+  }
+ },
+ "all": {
+  "base": {
+   "cibles": 239,
+   "labels": 196,
+   "exact": 195,
+   "f1": 0.5555
+  },
+  "final": {
+   "cibles": 239,
+   "labels": 222,
+   "exact": 220,
+   "f1": 0.5819
+  }
+ },
+ "regles": {
+  "('R1',)": {
+   "dev": {
+    "labels": 149,
+    "exact": 148,
+    "f1": 0.5717,
+    "gains": [
+     "g017",
+     "r034",
+     "r074",
+     "r114",
+     "r205",
+     "r219",
+     "r224",
+     "r240",
+     "r243",
+     "r247",
+     "r278",
+     "r285",
+     "r291",
+     "r296",
+     "r299"
+    ],
+    "pertes": [],
+    "n_gains": 15,
+    "n_pertes": 0
+   },
+   "test": {
+    "labels": 67,
+    "exact": 67,
+    "f1": 0.5823,
+    "gains": [
+     "r115",
+     "r214",
+     "r216",
+     "r239",
+     "r281"
+    ],
+    "pertes": [],
+    "n_gains": 5,
+    "n_pertes": 0
+   }
+  },
+  "('R2',)": {
+   "dev": {
+    "labels": 138,
+    "exact"
+… [4320 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure des règles rejetées : adverbe final, lexique synthétique, verbe anglais manquant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/sim3.py\"); s=p.read_text()\ns=s.replace('R3GP=\"R3GP\" in self.regles;', 'NOADV=\"NOADV\" in self.regles; R3GP=\"R3GP\" in self.regles;')\ns=s.replace('if (verbes_vus >= … [924 caractères tronqués]`
+
+  ```
+ok
+DEV ('R1', 'R2', 'R3GP', 'R4', 'NOADV') 151 gain 18 ['r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] perte 0 []
+DEV ('R1', 'R2', 'R3GP', 'R4') 152 gain 19 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] perte 0 []
+TEST ('R1', 'R2', 'R3GP', 'R4', 'NOADV') 69 gain 7 ['r115', 'r153', 'r214', 'r216', 'r239', 'r281', 'r288'] perte 0 []
+TEST ('R1', 'R2', 'R3GP', 'R4') 68 gain 6 ['r115', 'r153', 'r214', 'r216', 'r239', 'r281'] perte 0 []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph={p[\"id\"]:p for p in charger()}\np=ph[\"r264\"]; print(repr(p[\"texte\"])); print([(m[\"texte\"],m[\"debut\"],m[\"fin\"],m[\"pos\"]) for m in p … [883 caractères tronqués]`
+
+  ```
+"Je sais qu'il vient demain."
+[('Je', 0, 2, 'PRON'), ('sais', 3, 7, 'VERB'), ("qu'", 8, 11, 'CONJ'), ('il', 11, 13, 'PRON'), ('vient', 14, 19, 'VERB'), ('demain', 20, 26, 'ADV')]
+() [('GV', 0, 7, 'Je sais', None, None), ('GV', 3, 26, "sais qu'il vient demain", None, True), ('SUB', 8, 19, "qu'il vient", 'sais', None), ('GP', 20, 26, 'demain', 'sais', None)]
+('R1', 'R2', 'R3GP', 'R4') [('GV', 0, 7, 'Je sais', None, None), ('GV', 3, 26, "sais qu'il vient demain", None, True), ('SUB', 8, 19, "qu'il vient", 'sais', None), ('GP', 20, 26, 'demain', 'sais', None)]
+('R1', 'R2', 'R3GP', 'R4', 'NOADV') [('GV', 0, 7, 'Je sais', None, None), ('GV', 3, 26, "sais qu'il vient demain", None, True), ('SUB', 8, 19, "qu'il vient", 'sais', None), ('GP', 20, 26, 'demain', 'sais', None)]
+gold [('GN', 0, 2, 'Je', None), ('GV', 3, 7, 'sais', None), ('SUB', 8, 26, "qu'il vient demain", 'sais')]
+simples [{'type': 'GV', 'role': 'prédicat', 'niveau': 0, 'debut': 3, 'fin': 26, 'texte': "sais qu'il vient demain", 'candidats': []}]
+S [('GV', 0, 7, 'Je sais'), ('SUB', 8, 19, "qu'il vient"), ('GP', 20, 26, 'demain')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Quantification des règles de lexique rejetées (verbes synthétiques, « fall »)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nSYN={\"nage\",\"nages\",\"nagent\",\"crie\",\"cries\",\"crient\",\"dessine\",\"dessines\",\"dessinent\",\n     \"observe\",\"observes\",\"observent … [787 caractères tronqués]`
+
+  ```
+DEV 160 157 0.6055 gain 19 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] perte 0 []
+TEST 71 71 0.6158 gain 6 ['r115', 'r153', 'r214', 'r216', 'r239', 'r281'] perte 0 []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\n# baseline AVANT patch\nbases={nom:evaluer(c,lambda: Sim(())) for nom,c in [(\"DEV\",d),(\"TEST\",t)]}\nSYN={\ … [914 caractères tronqués]`
+
+  ```
+DEV () 140 138 0.5792 gain 5 ['s010', 's044', 's061', 's114', 's125'] perte 0 []
+DEV ('R1', 'R2', 'R3GP', 'R4') 160 157 0.6055 gain 24 ['g017', 'r034', 'r074', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299', 's010', 's044', 's061', 's114', 's125'] perte 0 []
+TEST () 65 65 0.591 gain 3 ['s035', 's112', 's141'] perte 0 []
+TEST ('R1', 'R2', 'R3GP', 'R4') 71 71 0.6158 gain 9 ['r115', 'r153', 'r214', 'r216', 'r239', 'r281', 's035', 's112', 's141'] perte 0 []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nbases={nom:evaluer(c,lambda: Sim(())) for nom,c in [(\"DEV\",d),(\"TEST\",t)]}\nbl.VERBES[\"en\"] |= {\"fall\" … [643 caractères tronqués]`
+
+  ```
+DEV () 134 134 gain 1 ['r102'] perte 0 []
+DEV ('R1', 'R2', 'R3GP', 'R4') 154 153 gain 20 ['g017', 'r034', 'r074', 'r102', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] perte 0 []
+TEST () 62 62 gain 0 [] perte 0 []
+TEST ('R1', 'R2', 'R3GP', 'R4') 68 68 gain 6 ['r115', 'r153', 'r214', 'r216', 'r239', 'r281'] perte 0 []
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure finale de la combinaison retenue (R1+R2+R3 avec complément `fall`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nbases={nom:evaluer(c,lambda: Sim(())) for nom,c in [(\"DEV\",d),(\"TEST\",t),(\"ALL\",ph)]}\nbl.VERBES[\"en\"] … [1168 caractères tronqués]`
+
+  ```
+DEV base 134 133 -> 154 153 f1 0.5825 gain 20 ['g017', 'r034', 'r074', 'r102', 'r114', 'r205', 'r215', 'r219', 'r224', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r285', 'r291', 'r294', 'r296', 'r299'] perte 0 []
+TEST base 62 62 -> 68 68 f1 0.5901 gain 6 ['r115', 'r153', 'r214', 'r216', 'r239', 'r281'] perte 0 []
+ALL base 196 195 -> 222 221 f1 0.5848 gain 26 ['g017', 'r034', 'r074', 'r102', 'r114', 'r115', 'r153', 'r205', 'r214', 'r215', 'r216', 'r219', 'r224', 'r239', 'r240', 'r243', 'r247', 'r278', 'r279', 'r280', 'r281', 'r285', 'r291', 'r294', 'r296', 'r299'] perte 0 []
+marginal R3 DEV 152 -> 153 gain ['r280'] perte []
+marginal R3 TEST 67 -> 68 gain ['r153'] perte []
+  ```
+

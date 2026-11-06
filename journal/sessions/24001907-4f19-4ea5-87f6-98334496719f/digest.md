@@ -1803,3 +1803,619 @@ candidat aléatoire (pool global)    : mean 0.76/196 (0.0039) max 4
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 85e4082b | head -40; echo '---'; git show --stat --oneline 85e4082b | grep -E \"gold\"", "description": "Inspect gold split commit changes"}`
+
+  ```
+85e4082b B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS »
+ docs/pilotage/en-cours.md                          |  6 +--
+ journal/2026-11-05/README.md                       |  5 +-
+ journal/2026-11-05/mesures.md                      |  5 +-
+ journal/README.md                                  |  2 +-
+ journal/THEMES.md                                  |  2 +-
+ journal/sessions/MANIFEST.md                       |  2 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 54 +++++++++++++++++++
+ .../rapport.md                                     | 18 ++++---
+ reports/README.md                                  |  2 +-
+ reports/pensee-gold-split.json                     | 33 ++++++++++++
+ reports/rapport-gold-split.md                      | 63 ++++++++++++++++++++++
+ tools/tests/linguistique/gold_split.py             | 50 +++++++++++++++++
+ 12 files changed, 223 insertions(+), 19 deletions(-)
+---
+ reports/pensee-gold-split.json                     | 33 ++++++++++++
+ reports/rapport-gold-split.md                      | 63 ++++++++++++++++++++++
+ tools/tests/linguistique/gold_split.py             | 50 ++++++
+… [11 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport importlib.util,sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger, charger_gele, evaluer_bloc\nfor tag,path in [('v4','/tmp/audit_v7/bloc_392f03 … [903 caractères tronqués]`
+
+  ```
+=== v4
+vivant pos 0.7455 f1 0.4509 tete 0.6385 labels 160 exact 157 exact_span 0.9812 couv 0.6695 topk 156 fr 117 118 en 40 42
+gele pos 0.7475 f1 0.4539 tete 0.6432 labels 160 exact 157 exact_span 0.9812 couv 0.6695 topk 156 fr 117 118 en 40 42
+=== v5
+vivant pos 0.7461 f1 0.513 tete 0.6785 labels 187 exact 186 exact_span 0.9947 couv 0.7824 topk 161 fr 126 127 en 60 60
+gele pos 0.7482 f1 0.5164 tete 0.6834 labels 187 exact 186 exact_span 0.9947 couv 0.7824 topk 161 fr 126 127 en 60 60
+=== v6
+vivant pos 0.7461 f1 0.513 tete 0.6785 labels 187 exact 187 exact_span 1.0 couv 0.7824 topk 161 fr 127 127 en 60 60
+gele pos 0.7482 f1 0.5164 tete 0.6834 labels 187 exact 187 exact_span 1.0 couv 0.7824 topk 161 fr 127 127 en 60 60
+=== v7
+vivant pos 0.7581 f1 0.5555 tete 0.7152 labels 196 exact 195 exact_span 0.9949 couv 0.8201 topk 166 fr 135 135 en 60 61
+gele pos 0.7603 f1 0.5595 tete 0.7205 labels 196 exact 195 exact_span 0.9949 couv 0.8201 topk 166 fr 135 135 en 60 61
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des composantes S/chunker des fiches amont
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 7a9f0d6a:tools/bloc_linguistique.py > /tmp/audit_v7/bloc_7a9f0d6a.py && sed -i 's#RACINE = pathlib.Path(__file__).resolve().parent.parent#RACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")#' /tmp/audi … [1210 caractères tronqués]`
+
+  ```
+v4 vivant union 0.4509 tete 0.6385 | S 0.4237 0.605 | chunker 0.4125 0.6211 | pos 0.7455 exact 157 labels 160
+v4 gele union 0.4539 tete 0.6432 | S 0.4285 0.6117 | chunker 0.4143 0.6245 | pos 0.7475 exact 157 labels 160
+v5a vivant union 0.5121 tete 0.6777 | S 0.4525 0.6283 | chunker 0.5311 0.6957 | pos 0.7461 exact 185 labels 187
+v5a gele union 0.5156 tete 0.6826 | S 0.4577 0.6353 | chunker 0.5341 0.6997 | pos 0.7482 exact 185 labels 187
+v5b vivant union 0.513 tete 0.6785 | S 0.453 0.6288 | chunker 0.5321 0.6966 | pos 0.7461 exact 186 labels 187
+v5b gele union 0.5164 tete 0.6834 | S 0.4582 0.6358 | chunker 0.5351 0.7006 | pos 0.7482 exact 186 labels 187
+v6 vivant union 0.513 tete 0.6785 | S 0.453 0.6288 | chunker 0.5321 0.6966 | pos 0.7461 exact 187 labels 187
+v6 gele union 0.5164 tete 0.6834 | S 0.4582 0.6358 | chunker 0.5351 0.7006 | pos 0.7482 exact 187 labels 187
+  ```
+
+### 🤖 Assistant
+
+⏵ Identification des 10 phrases du gold vivant absentes du gelé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,json\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger,charger_gele\nv=charger(); g=charger_gele(); ids_g={p['id'] for p in g}\nextra=[p for p  … [431 caractères tronqués]`
+
+  ```
+extra 10
+r423 reel fr segments 4 cibles 0 | Tu viens demain.
+r424 reel fr segments 3 cibles 0 | Il mange.
+r425 reel fr segments 3 cibles 0 | Elle dort.
+r426 reel fr segments 3 cibles 0 | Ils partent.
+r427 reel en segments 4 cibles 0 | You come tomorrow.
+r428 reel fr segments 3 cibles 0 | Il pleut.
+r429 reel fr segments 3 cibles 0 | On dit que c'est vrai.
+r430 reel fr segments 3 cibles 0 | Elle est partie.
+r431 reel fr segments 3 cibles 0 | Ils sont arrivés.
+r432 reel en segments 3 cibles 0 | It rains.
+ids living 612 gele 602
+doublons 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Rejeu dev/test aux commits v5 et v6 pour situer les chiffres amont
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport importlib.util,sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger,charger_gele,evaluer_bloc\nfrom tools.tests.linguistique.gold_split import dev … [746 caractères tronqués]`
+
+  ```
+v5 dev phr 422 exact 126 / 126 taux 1.0 f1 0.5091 couv 0.773 topk 105 / 163 verbe {'cibles': 81, 'justes': 81, 'taux': 1.0} nom {'cibles': 45, 'justes': 45, 'taux': 1.0}
+v5 test phr 190 exact 60 / 61 taux 0.9836 f1 0.5217 couv 0.8026 topk 56 / 76 verbe {'cibles': 50, 'justes': 49, 'taux': 0.98} nom {'cibles': 11, 'justes': 11, 'taux': 1.0}
+v6 dev phr 422 exact 126 / 126 taux 1.0 f1 0.5091 couv 0.773 topk 105 / 163 verbe {'cibles': 81, 'justes': 81, 'taux': 1.0} nom {'cibles': 45, 'justes': 45, 'taux': 1.0}
+v6 test phr 190 exact 61 / 61 taux 1.0 f1 0.5217 couv 0.8026 topk 56 / 76 verbe {'cibles': 50, 'justes': 50, 'taux': 1.0} nom {'cibles': 11, 'justes': 11, 'taux': 1.0}
+v7 dev phr 422 exact 133 / 134 taux 0.9925 f1 0.5512 couv 0.8221 topk 111 / 163 verbe {'cibles': 88, 'justes': 87, 'taux': 0.9886} nom {'cibles': 46, 'justes': 46, 'taux': 1.0}
+v7 test phr 190 exact 62 / 62 taux 1.0 f1 0.5651 couv 0.8158 topk 55 / 76 verbe {'cibles': 49, 'justes': 49, 'taux': 1.0} nom {'cibles': 13, 'justes': 13, 'taux': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nfrom tools.tests.linguistique.gold_split import dev,test,compter\nph=charger(); d=dev(ph); t … [448 caractères tronqués]`
+
+  ```
+dev 422 test 190 union 612 inter 0
+dev {'phrases': 422, 'cibles': 163, 'sources': {'hand': 15, 'reel': 302, 'synthetique': 105}, 'langues': {'fr': 277, 'en': 145}}
+test {'phrases': 190, 'cibles': 76, 'sources': {'hand': 5, 'reel': 130, 'synthetique': 55}, 'langues': {'fr': 125, 'en': 65}}
+cibles dev 163
+cibles test 76
+  ```
+
+### 🤖 Assistant
+
+⏵ Identification de l'unique échec d'attachement v7
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nfor p in charger():\n    a=h.analyser(p[ … [652 caractères tronqués]`
+
+  ```
+r102 en GP 'since this morning' gold ['falls'] pred None candidats ['GP'] | The rain falls since this morning.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du détail des 43 spans perdus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, collections, re\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique(); cats=collections.Counte … [892 caractères tronqués]`
+
+  ```
+Counter({'REL': 21, 'SUB': 17, 'GP': 5}) total 43 REL qui 6
+('REL', 'that') 10
+('SUB', 'that') 9
+('REL', 'qui') 6
+('SUB', 'When') 4
+('SUB', 'que') 3
+('GP', 'les') 2
+('REL', 'she') 1
+('REL', 'where') 1
+('GP', 'for') 1
+('REL', 'dont') 1
+('REL', 'whose') 1
+('REL', 'que') 1
+('SUB', "qu'il") 1
+('GP', 'il') 1
+('GP', 'le') 1
+--- exemples ---
+('g017', 'en', 'SUB', 'that she would come', ['said'])
+('r034', 'en', 'REL', 'that I read', ['book'])
+('r035', 'en', 'REL', 'she talks about', ['film'])
+('r074', 'en', 'REL', 'that you read', ['book'])
+('r114', 'en', 'REL', 'that we saw', ['film'])
+('r115', 'en', 'REL', 'where I was born', ['house'])
+('r153', 'en', 'GP', 'for the bus', ['wait'])
+('r205', 'en', 'SUB', 'that you are right', ['think'])
+('r214', 'en', 'REL', 'that I read', ['book'])
+('r215', 'en', 'SUB', 'When it rains', ['stay'])
+('r216', 'en', 'SUB', 'that he comes', ['says'])
+('r219', 'en', 'SUB', 'that you come', ['know'])
+('r224', 'fr', 'REL', 'dont la voiture est rouge', ['homme'])
+('r239', 'en', 'REL', 'whose car is red', ['man'])
+('r240', 'en', 'SUB', 'that he is right', ['believe'])
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique(); stats=collections.Counter() … [802 caractères tronqués]`
+
+  ```
+Counter({('en', 'SUB'): 13, ('en', 'REL'): 13, ('fr', 'REL'): 8, ('fr', 'SUB'): 4, ('fr', 'GP'): 4, ('en', 'GP'): 1})
+REL premiers mots Counter({('en', 'that'): 10, ('fr', 'qui'): 6, ('en', 'she'): 1, ('en', 'where'): 1, ('fr', 'dont'): 1, ('en', 'whose'): 1, ('fr', 'que'): 1})
+REL avec qui Counter({'fr': 6})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport importlib.util,sys,collections\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nspec=importlib.util.spec_from_file_location('v6c','/tmp/audit_v7/ … [591 caractères tronqués]`
+
+  ```
+v6 spans {'SUB': 12, 'GP': 16, 'REL': 24} 52
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du nombre d'assertions recalées annoncé dans la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff 69bd865e^ 69bd865e -- tools/pensee/autotest.py | grep -E '^[-+].*(abs\\(|==|return)' | wc -l; echo '---'; git diff 69bd865e^ 69bd865e -- tools/pensee/autotest.py | head -120", "description": "Inspect v7 autotest diff"}`
+
+  ```
+82
+---
+diff --git a/tools/pensee/autotest.py b/tools/pensee/autotest.py
+index a3dd7b88..a5aa06e3 100644
+--- a/tools/pensee/autotest.py
++++ b/tools/pensee/autotest.py
+@@ -1361,7 +1361,7 @@ def t86_gold_subsets() -> tuple[bool, str]:
+     r2 = evaluer_bloc("h", h, sous(181, 200))
+     p2 = round(r2["pos"]["exactitude"], 4)
+     p1 = round(r1["pos"]["exactitude"], 4)
+-    return abs(p2 - 0.8214) < 0.001 and abs(p1 - 0.7919) < 0.001, (
++    return abs(p2 - 0.8452) < 0.001 and abs(p1 - 0.8221) < 0.001, (
+         f"r181-200 POS {p2} ; r001-180 POS {p1}")
+ 
+ 
+@@ -1374,7 +1374,7 @@ def t87_complexes() -> tuple[bool, str]:
+     h = bl.Heuristique()
+     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 205]
+     r = evaluer_bloc("h", h, ps)
+-    return abs(r["pos"]["exactitude"] - 0.7059) < 0.001, (
++    return abs(r["pos"]["exactitude"] - 0.7353) < 0.001, (
+         f"r201-205 : POS {round(r['pos']['exactitude'], 4)}, "
+         f"syntagme {round(r['syntagme']['f1'], 4)}")
+ 
+@@ -1388,7 +1388,7 @@ def t88_complexes20() -> tuple[bool, str]:
+     h = bl.Heuristique()
+     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 220]
+     r = evaluer_bloc("h", h, ps)
+-    return 
+… [4616 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff 69bd865e^ 69bd865e -- tools/pensee/autotest.py | grep -E '^[-+].*(abs\\(|== )' | sed 's/^[+-]//' | sort | uniq -c | sort -rn | head -20; echo '--- changed assertion lines count ---'; git diff 69bd865e^ 69bd865e -- tools/pens … [107 caractères tronqués]`
+
+  ```
+1     return (v["cibles"] == 137 and v["justes"] == 136 and abs(v["taux"] - 0.9927) < 0.001
+      1     return (v["cibles"] == 131 and v["justes"] == 131 and abs(v["taux"] - 1.0) < 0.001
+      1     return span == 52 and cible == 26, (
+      1     return span == 43 and cible == 30, (
+      1     return (r["exact"] == 195 and verbes == 137 and noms == 59), (
+      1     return (r["exact"] == 187 and verbes == 131 and noms == 56), (
+      1     return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.8159) < 0.001
+      1     return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.7824) < 0.001
+      1     return ok == (True, True, True, False) and r["exact"] == 195, (
+      1     return ok == (True, True, True, False) and r["exact"] == 187, (
+      1     return n == 546 and avec == 257, f"relation : {avec}/{n} ({round(avec/n, 4)})"
+      1     return n == 544 and avec == 251, f"relation : {avec}/{n} ({round(avec/n, 4)})"
+      1     return n == 231 and avant == 151 and apres == 46, (
+      1     return n == 229 and avant == 137 and apres == 38, (
+      1     return (hors == 1 and dans == 0), f"échecs de cible : {hors} hors candidats, {dans} mal classés"
+      1     return (hors == 0 and 
+… [407 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport subprocess,re\nd=subprocess.run(['git','diff','-U0','69bd865e^','69bd865e','--','tools/pensee/autotest.py'],capture_output=True,text=True).stdout\ncur=None; funcs=set(); changed=0\nfor line in d.splitlines(): … [878 caractères tronqués]`
+
+  ```
+fonctions touchées 32 ['t107_gold_complet', 't110_segmenteur', 't111_hybride_seg', 't112_union', 't113_union_defaut', 't114_cascade_union', 't115_tete_cascade', 't119_miroir_resume', 't138_defaut_niveau', 't141_elision', 't153_attachement', 't156_relation', 't157_roles', 't161_cible_proximite', 't162_candidats_verbes', 't163_echecs_attachement', 't164_verbe_gv', 't166_spans', 't167_denominateur', 't168_classement', 't169_conventions', 't171_lexique_elargi', 't172_echecs_cible', 't173_topk_strict', 't177_candidats_tete', 't179_multi_cibles', 't180_par_langue', 't86_gold_subsets', 't87_complexes', 't88_complexes20', 't89_complexes50', 't90_complexes100']
+fonctions avec assertion changée 32 ['t107_gold_complet', 't110_segmenteur', 't111_hybride_seg', 't112_union', 't113_union_defaut', 't114_cascade_union', 't115_tete_cascade', 't119_miroir_resume', 't138_defaut_niveau', 't141_elision', 't153_attachement', 't156_relation', 't157_roles', 't161_cible_proximite', 't162_candidats_verbes', 't163_echecs_attachement', 't164_verbe_gv', 't166_spans', 't167_denominateur', 't168_classement', 't169_conventions', 't171_lexique_elargi', 't172_echecs_cible', 't173_topk_strict', 't177_candidats_tete',
+… [135 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport ast\nsrc=open('tools/pensee/autotest.py').read()\ntree=ast.parse(src)\nfor node in ast.walk(tree):\n    if isinstance(node,ast.FunctionDef) and node.name=='main':\n        # count tuples in the portes list\n  … [245 caractères tronqués]`
+
+  ```
+portes list len 183
+  ```
+
+### 🤖 Assistant
+
+⏵ Relevé des comptes tp/fp/fn et des têtes pour la fiche d'audit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,json\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger,charger_gele,evaluer_bloc\nimport bloc_linguistique as bl\nfor nom,ph in [('vivant',char … [591 caractères tronqués]`
+
+  ```
+vivant syntagme {'precision': 0.5959, 'rappel': 0.5201, 'f1': 0.5555, 'tp': 969, 'fp': 657, 'fn': 894, 'tete': {'precision': 0.7885, 'rappel': 0.6543, 'f1': 0.7152, 'tp': 1219, 'fp': 327, 'fn': 644}} tete {'precision': 0.7885, 'rappel': 0.6543, 'f1': 0.7152, 'tp': 1219, 'fp': 327, 'fn': 644}
+  att {'cibles': 239, 'labels': 196, 'top1': 195, 'topk': 166, 'exact': 195, 'exact_any': 195, 'topk_exact': 166, 'couverture': 0.8201, 'top1_taux': 0.8159, 'topk_taux': 0.6946, 'exact_taux': 0.8159, 'top1_taux_span': 0.9949, 'topk_taux_span': 0.8469, 'exact_taux_span': 0.9949, 'topk_exact_taux_span': 0.8469}
+  tete {'cibles': 196, 'labels': 196, 'top1': 195, 'topk': 167, 'top1_taux': 0.9949, 'topk_taux': 0.852, 'couverture': 1.0}
+gele syntagme {'precision': 0.5983, 'rappel': 0.5254, 'f1': 0.5595, 'tp': 962, 'fp': 646, 'fn': 869, 'tete': {'precision': 0.7919, 'rappel': 0.6608, 'f1': 0.7205, 'tp': 1210, 'fp': 318, 'fn': 621}} tete {'precision': 0.7919, 'rappel': 0.6608, 'f1': 0.7205, 'tp': 1210, 'fp': 318, 'fn': 621}
+  att {'cibles': 239, 'labels': 196, 'top1': 195, 'topk': 166, 'exact': 195, 'exact_any': 195, 'topk_exact': 166, 'couverture': 0.8201, 'top1_taux': 0.8159, 'topk_taux': 0.6946, 'ex
+… [253 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de la cible tirée uniformément (référence du hasard)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,random,statistics,collections\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nph=charger(); h=bl.Heuristique … [838 caractères tronqués]`
+
+  ```
+cible uniforme : mean 1.925 (0.0098), max 8, min 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Ablations fines : cible du précédent vs candidats du précédent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\nbase=Path('/tmp/audit_v7/bloc_ablation.py').read_text()\n# candidats seulement\nold='''    def _candidats_precedent(texte: str, segment: dict, precedent: dict | None) -> list[str]:\n        … [2550 caractères tronqués]`
+
+  ```
+ok
+temoin vivant exact 195 / 196 topk 166 couv 0.8201 fr 135 / 135 en 60 / 61
+temoin gele exact 195 / 196 topk 166 couv 0.8201 fr 135 / 135 en 60 / 61
+temoin dev exact 133 / 134 topk 111 couv 0.8221 fr 92 / 92 en 41 / 42
+temoin test exact 62 / 62 topk 55 couv 0.8158 fr 43 / 43 en 19 / 19
+sans_cand_prec vivant exact 195 / 196 topk 166 couv 0.8201 fr 135 / 135 en 60 / 61
+sans_cand_prec gele exact 195 / 196 topk 166 couv 0.8201 fr 135 / 135 en 60 / 61
+sans_cand_prec dev exact 133 / 134 topk 111 couv 0.8221 fr 92 / 92 en 41 / 42
+sans_cand_prec test exact 62 / 62 topk 55 couv 0.8158 fr 43 / 43 en 19 / 19
+sans_cible_prec vivant exact 160 / 196 topk 166 couv 0.8201 fr 115 / 135 en 45 / 61
+sans_cible_prec gele exact 160 / 196 topk 166 couv 0.8201 fr 115 / 135 en 45 / 61
+sans_cible_prec dev exact 105 / 134 topk 111 couv 0.8221 fr 77 / 92 en 28 / 42
+sans_cible_prec test exact 55 / 62 topk 55 couv 0.8158 fr 38 / 43 en 17 / 19
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification qualitative des cinq corrections v7 sur des exemples
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\ncas=[(\"Il entre en gare.\",\"fr\"),(\"L'oiseau vole au-dessus du lac.\",\"fr\"),\n     (\"He has b … [542 caractères tronqués]`
+
+  ```
+--- Il entre en gare. fr
+POS [('Il', 'PRON'), ('entre', 'PREP'), ('en', 'PREP'), ('gare', 'NOUN')]
+  GN 'Il' span 0 2 cible entre
+  GV 'entre' span 3 8 cible None
+  GV 'en gare' span 9 16 cible Il
+  GP 'en gare' span 9 16 cible entre
+--- L'oiseau vole au-dessus du lac. fr
+POS [("L'", 'DET'), ('oiseau', 'NOUN'), ('vole', 'NOUN'), ('au-dessus', 'PREP'), ('du', 'PREP'), ('lac', 'NOUN')]
+  GN "L'oiseau" span 0 8 cible vole
+  GN "L'oiseau vole au-dessus" span 0 23 cible vole
+  GV 'vole' span 9 13 cible None
+  GP 'au-dessus du lac' span 14 30 cible vole
+  GP 'du lac' span 24 30 cible vole
+--- He has been here since yesterday. en
+POS [('He', 'PRON'), ('has', 'AUX'), ('been', 'AUX'), ('here', 'ADV'), ('since', 'PREP'), ('yesterday', 'ADV')]
+  GV 'He has been here' span 0 16 cible None
+  GP 'since yesterday' span 17 32 cible here
+--- The man who speaks English is here. en
+POS [('The', 'DET'), ('man', 'NOUN'), ('who', 'PRON'), ('speaks', 'NOUN'), ('English', 'NOUN'), ('is', 'AUX'), ('here', 'ADV')]
+  GN 'The man' span 0 7 cible here
+  REL 'who speaks English' span 8 26 cible man
+  GV 'is here' span 27 34 cible None
+--- She said that she would come yesterday. en
+POS [('She', 'PRON'), ('said',
+… [221 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle du lexique verbal ajouté en v7 (français vs anglais)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"VERBES = \\|speak speaks\\|voler vole\\|VERBES\\[\" tools/bloc_linguistique.py | head -20; echo '---'; python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor m  … [326 caractères tronqués]`
+
+  ```
+319:VERBES = {
+432:speak speaks spoke spoken speaking voler vole voles volent volait
+595:        if n in VERBES.get(langue, VERBES["fr"]):
+---
+vole ('NOUN', True, 0.3) ('NOUN', True, 0.3) True
+voler ('VERB', True, 0.4) ('VERB', True, 0.4) True
+parle ('VERB', True, 0.72) ('NOUN', True, 0.3) True
+speaks ('NOUN', True, 0.3) ('NOUN', True, 0.3) True
+brother ('VERB', True, 0.4) ('VERB', True, 0.4) False
+entre ('PREP', False, 0.92) ('NOUN', True, 0.3) True
+fr verbs contains vole False
+en verbs contains speaks False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '319,440p' tools/bloc_linguistique.py", "description": "Inspect verb lexicons"}`
+
+  ```
+VERBES = {
+    "fr": set("dort dorment dormait mange mangeons mangent mangeait court courent courait vu voir vois "
+              "voit voyons voyez voient dit disons dites disent viendrait viens vient venons venez "
+              "viennent aboie aboient joue jouons jouent jouait lit lisons lisez lisent pars partons "
+              "partez partent fini finis finit finissons finissez finissent arrive arrives arrivez "
+              "arrivent pleut pleuvoir habite habites habitent parle parlons parlez parlent explique "
+              "expliquons expliquez expliquent souffle soufflent chante chantent chantes peut peux "
+              "pouvons pouvez peuvent doit devons devez doivent pourrait pourrais pourrions pourriez "
+              "pourraient devrait devrais voudrais voudrait veux veut voulons voulez veulent prend "
+              "prends prenons prenez prennent donne donnes donnons donnez donnent trouve trouves "
+              "trouvons trouvez trouvent cherche cherches cherchons cherchez cherchent regarde "
+              "regardes regardons regardez regardent écoute écoutes écoutons écoutez écoutent ouvre "
+              "ouvres ouvrons ouvrez ouvrent ferme fermes fermons fermez 
+… [8086 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"would come\\|who speaks\\|au-dessus du lac\\|en gare\\|since yesterday\" tools/tests/linguistique/gold*.json | head -20", "description": "Find fiche example sentences in gold"}`
+
+  ```
+tools/tests/linguistique/gold_gele.json:1098:"texte": "She said that she would come yesterday.",
+tools/tests/linguistique/gold_gele.json:1160:"texte": "that she would come",
+tools/tests/linguistique/gold_gele.json:3034:"texte": "It rains since yesterday.",
+tools/tests/linguistique/gold_gele.json:3078:"texte": "since yesterday",
+tools/tests/linguistique/gold_gele.json:5075:"texte": "Les oiseaux volent au-dessus du lac.",
+tools/tests/linguistique/gold_gele.json:5131:"texte": "au-dessus du lac",
+tools/tests/linguistique/gold_gele.json:6609:"texte": "Le train entre en gare.",
+tools/tests/linguistique/gold_gele.json:6659:"texte": "en gare",
+tools/tests/linguistique/gold_gele.json:14350:"texte": "The man who speaks is my father.",
+tools/tests/linguistique/gold_gele.json:14405:"texte": "who speaks",
+tools/tests/linguistique/gold.json:1082:   "texte": "She said that she would come yesterday.",
+tools/tests/linguistique/gold.json:1144:     "texte": "that she would come",
+tools/tests/linguistique/gold_reel.json:1690:   "texte": "It rains since yesterday.",
+tools/tests/linguistique/gold_reel.json:1734:     "texte": "since yesterday",
+tools/tests/linguistique/gold_reel.json:3731:   "texte": "Le
+… [437 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse des phrases du gold citées par la fiche v7
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,json\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique(); ph=charger()\nfor p in ph:\n    if  … [731 caractères tronqués]`
+
+  ```
+=== g017 She said that she would come yesterday. en
+gold: [('GN', 'She', None), ('GV', 'said', None), ('SUB', 'that she would come', 'said')]
+pred: [('GV', 'said', None), ('SUB', 'that she', 'said'), ('GV', 'would come yesterday', None)]
+POS: [('She', 'PRON'), ('said', 'VERB'), ('that', 'DET'), ('she', 'PRON'), ('would', 'AUX'), ('come', 'VERB'), ('yesterday', 'ADV')]
+=== r025 She talks to her brother. en
+gold: [('GN', 'She', None), ('GV', 'talks', None), ('GP', 'to her brother', 'talks')]
+pred: [('GV', 'talks', None), ('GP', 'to her brother', 'talks')]
+POS: [('She', 'PRON'), ('talks', 'NOUN'), ('to', 'PREP'), ('her', 'DET'), ('brother', 'NOUN')]
+=== r028 It rains since yesterday. en
+gold: [('GN', 'It', None), ('GV', 'rains', None), ('GP', 'since yesterday', 'rains')]
+pred: [('GV', 'rains', None), ('GP', 'since yesterday', 'rains')]
+POS: [('It', 'PRON'), ('rains', 'VERB'), ('since', 'PREP'), ('yesterday', 'ADV')]
+=== r060 Les oiseaux volent au-dessus du lac. fr
+gold: [('GN', 'Les oiseaux', None), ('GV', 'volent', None), ('GP', 'au-dessus du lac', 'volent')]
+pred: [('GN', 'Les oiseaux', 'volent'), ('GN', 'Les oiseaux volent au-dessus', 'volent'), ('GV', 'volent', None), ('GP', 'au-d
+… [889 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "tools/bloc_linguistique.py", "limit": 80, "offset": 862}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+862:                 suivant = mots[i + 1] if i + 1 < len(mots) else None
+863:                 # « since/before/after/until/as » : SUB devant une clause, PRÉP devant un GN
+864:                 prep_ambigue = (n in AMBIGUES_PREP and (suivant is None
+865:                                 or not (_normaliser(suivant[2]) in lex.get("PRON", set())
+866:                                         or est_verbe(suivant[0], suivant[2]))))
+867:                 ambigu = n in lex.get("DET", set())
+868:                 marqueur = (not prep_ambigue) and ((not ambigu) or (suivant is not None and (
+869:                     _normaliser(suivant[2]) in lex.get("PRON", set())
+870:                     or _normaliser(suivant[2]) in lex.get("AUX", set())
+871:                     or est_verbe(suivant[0], suivant[2]))))
+872:                 if marqueur:
+873:                     precedent = segments[-1]["type"] if segments else None
+874:                     stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV") else "REL"
+875:                     j = i + 1
+876:                     verbes_vus = 
+… [4562 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des exemples POS « brother » et « chair »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt,lg in [(\"She talks to her brother.\",\"en\"),(\"He sat on the chair.\",\"en\"),(\"The chai … [218 caractères tronqués]`
+
+  ```
+She talks to her brother. [('She', 'PRON', 0.92, None), ('talks', 'NOUN', 0.3, None), ('to', 'PREP', 0.92, None), ('her', 'DET', 0.92, None), ('brother', 'NOUN', 0.4, 'DET')]
+He sat on the chair. [('He', 'PRON', 0.92, None), ('sat', 'NOUN', 0.3, None), ('on', 'PREP', 0.92, None), ('the', 'DET', 0.92, None), ('chair', 'NOUN', 0.4, 'DET')]
+The chair is red. [('The', 'DET', 0.92, None), ('chair', 'NOUN', 0.4, 'DET'), ('is', 'AUX', 0.92, None), ('red', 'ADJ', 0.68, None)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Statistiques des listes de candidats pour interpréter le contrôle aléatoire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,statistics,collections\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique(); lens=[]; has=0; n … [759 caractères tronqués]`
+
+  ```
+n 196 longueur moyenne 2.47 médiane 2.0 max 5
+distribution [(2, 134), (3, 32), (4, 26), (5, 3), (1, 1)]
+cible dans candidats 166 0.8469387755102041
+  ```
+
+### 🤖 Assistant
+
+⏵ Permutation stratifiée par type et par langue (contrôle plus strict)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,random,statistics\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique(); recs=[]\nfor p in char … [1170 caractères tronqués]`
+
+  ```
+type mean 5.163 (0.0263) min 0 max 13
+langue mean 3.468 (0.0177) min 0 max 13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,random,statistics\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport bloc_linguistique as bl\nh=bl.Heuristique(); recs=[]\nfor p in char … [1050 caractères tronqués]`
+
+  ```
+type+langue mean 9.397 (0.0479) min 2 max 20
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation des sorties de portes citées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re,json\ncitees=['T86','T87','T88','T89','T90','T107','T110','T111','T112','T113','T114','T115','T119','T138','T141','T153','T156','T157','T161','T162','T163','T164','T166','T167','T168','T169','T171','T172', … [521 caractères tronqués]`
+
+  ```
+T86 {'ok': True, 'nom': 'sous-ensembles', 'message': 'r181-200 POS 0.8452 ; r001-180 POS 0.8221'}
+T87 {'ok': True, 'nom': 'phrases complexes', 'message': 'r201-205 : POS 0.7353, syntagme 0.7027'}
+T88 {'ok': True, 'nom': '20 complexes', 'message': 'r201-220 : POS 0.7236, syntagme 0.5954'}
+T89 {'ok': True, 'nom': '50 complexes', 'message': 'r201-250 : POS 0.7327, syntagme 0.5839'}
+T90 {'ok': True, 'nom': '100 complexes', 'message': 'r201-300 : POS 0.719, syntagme 0.5477'}
+T107 {'ok': True, 'nom': 'gold complet', 'message': 'gold complet : 602 phrases, POS 0.7603, tête 0.7205'}
+T110 {'ok': True, 'nom': 'segmenteur', 'message': 'segmenteur : S F1 0.4741 tête 0.6518 ; chunker F1 0.5858 tête 0.7441'}
+T111 None
+T112 None
+T113 {'ok': True, 'nom': 'union par défaut', 'message': 'union par défaut : F1 0.5595, tête 0.7205'}
+T114 {'ok': True, 'nom': 'cascade + union', 'message': 'cascade : F1 0.5864, tête 0.7285, 602 appels'}
+T115 {'ok': True, 'nom': 'tête cascade', 'message': 'tête cascade corrigée : 0.6709 (cascade 0,441 ; union 0,466)'}
+T119 None
+T138 {'ok': True, 'nom': 'défaut fusion', 'message': 'défaut : confiance 0.7465, niveau 0.3454'}
+T141 {'ok': True, 'nom': 'élision', 'message': 'é
+… [1645 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Décomposition par langue de l'effet POS contextuel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport importlib.util,sys,collections\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger,charger_gele\nimport bloc_linguistique as bl\ndef load(path,name): … [828 caractères tronqués]`
+
+  ```
+v7 gele {'fr': (1515, 2000, 0.7575), 'en': (873, 1141, 0.7651)}
+sans_pos gele {'fr': (1511, 2000, 0.7555), 'en': (840, 1141, 0.7362)}
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification que les deux fichiers d'audit sont neufs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-audit-v7.md reports/pensee-audit-v7.json 2>&1; git status --short reports/ | head", "description": "Check audit files do not exist"}`
+
+  ```
+ls: cannot access 'reports/rapport-audit-v7.md': No such file or directory
+ls: cannot access 'reports/pensee-audit-v7.json': No such file or directory
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-dev-test-v7.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' reports/rapport-dev-test-v7.md 2>/dev/null; echo '---'; sed -n '1,40p' reports/rapport-s-paragraphes.md 2>/dev/null", "description": "Peek at sibling untracked reports"}`
+
+  ```
+# B13 — dev/test en v7 : dev 133/134, test 62/62, le split tient sur trois découpages
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Commit mesuré** : `69bd865e` · **Verdict** : ✅
+> Le gold 612 est re-coupé par `crc32(id) % 3 == 0` (test) : **dev 133/134 (0,9925)**, **test 62/62 (1,0)**
+> — mais le test ne couvre que **62 des 76 cibles** (0,8158). En décalant le split (`%3==1`, `%3==2`),
+> l'exact reste à **1 cas près** (étendue 0,0172), la couverture à **3 spans près** (14/13/16 des 43),
+> la F1 à **2,4 points**. **Aucune catégorie demandée n'est absente** ; les écarts dev/test tiennent à
+> **un échec unique (r102)** et à la **composition par type**, pas au split.
+>
+> **Dispositif** : [`gold_split.py`](../tools/tests/linguistique/gold_split.py) (`dev`, `test`, `compter`),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+> [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (heuristique) ; JSON
+> [`pensee-dev-test-v7.json`](pensee-dev-test-v7.json).
+
+## 1. Ce qui est mesuré
+
+- **Corpus** : `charger()` = **612 phrases** (20 `hand`, 432 `reel`, 160 `synthetique`), 402 fr / 210 en,
+  **239 ci
+… [6130 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '80,200p' reports/rapport-dev-test-v7.md 2>/dev/null", "description": "Read rest of sibling dev/test report"}`
+
+  ```
+| `synthetique` (phrases) | 105 | 55 | 160 |
+| fr (phrases) | 277 | 125 | 402 |
+| en (phrases) | 145 | 65 | 210 |
+| REL (cibles) | 57 | **17** | 74 |
+| SUB (cibles) | 45 | 24 | 69 |
+| GP (cibles) | 61 | 35 | 96 |
+
+**Aucune catégorie demandée n'est absente d'une moitié** : les trois sources, les deux langues et les
+trois types de cibles sont présents des deux côtés. Le χ² d'homogénéité du test canonique contre
+l'ensemble ne rejette rien : sources χ²=0,93 (p=0,63), langues χ²=0,0009 (p=0,98), types de cibles
+χ²=2,66 (p=0,26), types×langues χ²=3,49 (p=0,63) ; les splits décalés donnent des p entre 0,42 et 0,97.
+L'équilibre tient donc **en espérance**, pas par construction : le hash n'est **pas stratifié**, il est
+vérifié a posteriori.
+
+Trois réserves de lecture, même sans catégorie absente :
+
+- **`hand` est mince** : 5 phrases au test (4 au décalé 2, 11 au décalé 1), et **3 cibles seulement**,
+  **toutes GP**. `hand/REL` (1 cible) et `hand/SUB` (2 cibles) sont entièrement dans dev. Les taux
+  `hand` du test ne disent donc rien des REL/SUB.
+- **REL/en est la cellule la plus mince** : 5 cibles au test (2 labels), contre 23 en dev. Toute
+  conclusion sur l'anglais REL au test est fragile
+… [7172 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Relevé des dénominateurs (tokens, segments) pour le rapport
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger,charger_gele,evaluer_bloc\nimport bloc_linguistique as bl\nfor nom,ph in [('vivant',charger() … [458 caractères tronqués]`
+
+  ```
+vivant phrases 612 tokens pos 3179 tokens gold 3179 segments gold 1863 pos ferme 0.9004 pos ouvert 0.6234
+  pos ferme/ouvert counts? {'exactitude': 0.7581, 'exactitude_ferme': 0.9004, 'exactitude_ouvert': 0.6234, 'tokens': 3179, 'confusions': {'ADJ': {'ADJ': 50, 'NOUN': 80, 'VERB': 4}, 'ADV': {'ADV': 117, 'NOUN': 20, 'PREP': 2, 'ADJ': 1, '?': 1}, 'AUX': {'PREP': 4, 'AUX': 118, '?': 3, 'NOUN': 3}, 'CONJ': {'CONJ': 44, 'PRON': 25, 'DET': 12, '?': 13, 'PREP': 2, 'NOUN': 2}, 'DET': {'DET': 586, '?': 2}, 'NOUN': {'NOUN': 657, 'ADJ': 17, 'VERB': 7, '?': 1}, 'NUM': {'NUM': 2}, 'PONCT': {'?': 25}, 'PREP': {'PREP': 114}, 'PRON': {'PRON': 411, 'NOUN': 8, '?': 30, 'DET': 25, 'CONJ': 1}, 'VERB': {'VERB': 311, 'NOUN': 450, 'ADJ': 5, 'PREP': 2, '?': 16, 'AUX': 7, 'ADV': 1}}}
+gele phrases 602 tokens pos 3141 tokens gold 3141 segments gold 1831 pos ferme 0.9007 pos ouvert 0.6269
+  pos ferme/ouvert counts? {'exactitude': 0.7603, 'exactitude_ferme': 0.9007, 'exactitude_ouvert': 0.6269, 'tokens': 3141, 'confusions': {'ADJ': {'ADJ': 50, 'NOUN': 79, 'VERB': 4}, 'ADV': {'ADV': 115, 'NOUN': 20, 'PREP': 2, 'ADJ': 1, '?': 1}, 'AUX': {'PREP': 4, 'AUX': 116, '?': 3, 'NOUN': 3}, 'CONJ': {'CONJ': 44, 'PRON': 2
+… [341 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du JSON d'audit structuré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nD={\n \"audit\":\"v7\",\n \"commit\":\"69bd865ec1bae1958b6f617bde4bf685a15d7d67\",\n \"branche\":\"s/v7\",\n \"date\":\"2026-11-05\",\n \"ligne\":\"B13\",\n \"verdict\":\"Les chiffres de la fiche sont r … [20367 caractères tronqués]`
+
+  ```
+written reports/pensee-audit-v7.json 18934
+JSON valide
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du compte de docstrings et d'une coquille dans le JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-audit-v7.json'\nd=json.load(open(p,encoding='utf-8'))\nd['verdict']=d['verdict'].replace('20 docstrings','26 docstrings')\nd['limites']=[x.replace('La rege du sujet-verbe (`SUJETS`) su … [457 caractères tronqués]`
+
+  ```
+Les chiffres de la fiche sont reproductibles, mais cinq valeurs de qualite (POS, F1 union, S, chunker, tete) sont mesure
+La regle du sujet-verbe (`SUJETS`) sur-promeut les mots apres « that/qui » : l'exemple g017 « that she would come » est coupe en « that she » ; d'autres phrases avec « that + pronom » peuvent etre touchees.
+docstrings 26 messages 6
+JSON valide
+  ```
+

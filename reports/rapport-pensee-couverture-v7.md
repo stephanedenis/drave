@@ -6,6 +6,10 @@
 > monte à **0,5595** (union ; S 0,4741, chunker 0,5858), la tête à **0,7205** ; la **POS** passe de
 > **0,7475 à 0,7603** ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
 >
+> **État courant** : commit `69bd865e` · **Base** : F1/tête/POS sur le gold **gelé 602** (portes
+> T110-T115) ; sur le **612** : F1 **0,5555**, tête **0,7152**, POS **0,7581**. Couverture et
+> exactitude sur le **612**.
+>
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (POS contextuel,
 > ordre GV/GP, prépositions composées, sujets), [`autotest.py`](../tools/pensee/autotest.py)
 > (32 assertions recalées) ; JSON [`pensee-couverture-v7.json`](pensee-couverture-v7.json).
@@ -27,17 +31,25 @@
 | labels au bon span | 187 | **196** |
 | **exact / labels** | 187/187 (1,0) | **195/196 (0,9949)** |
 | **couverture** | 187/239 (0,7824) | **196/239 (0,8201)** |
-| F1 syntagmes (union) | 0,5130 | **0,5595** |
-| F1 tête | 0,6826 | **0,7205** |
-| POS | 0,7475 | **0,7603** |
+| F1 syntagmes (union, gelé 602) | 0,5130 | **0,5595** |
+| F1 tête (gelé 602) | 0,6834 | **0,7205** |
+| POS (gelé 602) | 0,7482 | **0,7603** |
 | français | 127/127 | **135/135 (1,0)** |
 | anglais | 60/60 | **60/61 (0,9836)** |
 | spans perdus | 52 | **43** (21 REL, 17 SUB, 5 GP) |
 | top-k | 161/239 | 166/239 (0,6946) |
 
+**Contrôle négatif (mesuré)** : les 196 cibles prédites sont comparées à leurs cibles gold ; en
+**permutant les cibles globalement** (100 tirages, graine 20261105), l'accord tombe à **1,67/196**
+(max 4) contre **195/196** observé — p < 0,001.
+
+**dev/test (re-mesurés)** : dev **133/134 (0,9925)**, test **62/62 (1,0)** ; test couvre 62 des 76
+cibles ; sur trois découpages (`%3==0/1/2`), l'exact varie d'un cas et la couverture de 3 spans
+(fiche [dev/test v7](rapport-dev-test-v7.md)).
+
 **Ce que ça dit** :
 
-- **La POS est le verrou** : le contexte (DET/PRÉP/ADJ avant un suffixe) rend 0,0132 de POS et
+- **La POS est le verrou** : le contexte (DET/PRÉP/ADJ avant un suffixe) rend 0,0128 de POS et
   neuf labels de couverture.
 - **Le chunker est maintenant meilleur que S** (F1 0,5858 contre 0,4741) : le découpage est
   devenu la force, plus la faiblesse.
