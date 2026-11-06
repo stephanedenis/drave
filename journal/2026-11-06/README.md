@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**7 commits** · **3 session(s)** · **4 thème(s)**
+**8 commits** · **3 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
-| portes | 1 | [portes.md](portes.md) |
+| portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -35,6 +35,7 @@
 | 01:00 | `3ab768f7` | B13 — LA CLÔTURE DE LA NUIT : EXACT 221/221, COUVERTURE 0,9247, DEV 152/152, TEST 69/69 ; 18 SPANS DONT 17 INATTEIGNABLES |
 | 01:26 | `0911ae29` | B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183 |
 | 01:29 | `5523de51` | JOURNAL ET ROADMAP — LA CIBLE DE A17 ATTEINTE : 222/222, COUVERTURE 0,9289, 17 SPANS INATTEIGNABLES |
+| 01:57 | `17078889` | PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL |
 
 ## Le récit de la journée (écrit à la main)
 

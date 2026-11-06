@@ -55,13 +55,10 @@
 > documentés) : le récit et les tableaux sont dans
 > [`historique-passes-portes.md`](../../reports/historique-passes-portes.md).
 
-> **Rouge nouvelle du 2026-11-06 (tolérée)** : `porte-bloc-linguistique` échoue sur son verdict
-> `cascade_pos` — la **fusion** (heuristique + `MockNeuronal`) rend un POS de **0,7465**, sous
-> l'heuristique seule (**0,7581**) que le POS contextuel a fait progresser. La fusion est par
-> confiance et le stub l'emporte sur les spans où il est sûr. Ce n'est **pas** une régression de
-> mesure : l'attachement est à **222/222**, la POS heuristique à 0,7581. Le correctif est de
-> **calibrer `MockNeuronal`** (un contrat, pas un modèle) ou de restaurer la priorité par niveau
-> hors DeepSeek — à faire à la prochaine session, avec les portes L.
+> **Rouge du 2026-11-06 (tolérée)** : `porte-bloc-linguistique` échoue sur `cascade_pos` — la
+> fusion rend un POS de **0,7465**, sous l'heuristique (**0,7581**). La fusion est par confiance et
+> `MockNeuronal` gagne là où il est sûr ; l'attachement reste **222/222**. Correctif : calibrer le
+> stub ou restaurer la priorité par niveau (prochaine session).
 
 ## 2. Les repères imprimés par chaque porte
 

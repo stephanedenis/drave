@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 129.3 h |
 | Tours | 177 |
-| Messages | 2905 |
-| Appels d'outils | 2558 |
+| Messages | 2907 |
+| Appels d'outils | 2560 |
 | Fichiers touchés | 25 |
-| Commandes | 2106 |
+| Commandes | 2107 |
 | Sous-agents | 25 |
-| Commits | 310 |
+| Commits | 311 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*317 appels d'outils.* Actions notables :
+*319 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,7 +9514,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 254 autres
+- … et 255 autres
 
 **Synthèse produite :**
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2066 autres
+- … et 2067 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10080,4 +10080,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183" -- tools/bloc_linguistique.py
 - JOURNAL ET ROADMAP — LA CIBLE DE A17 ATTEINTE : 222/222, COUVERTURE 0,9289, 17 SPANS INATTEIGNABLES" -- journal/2026-11-06/README.md docs/pilotage/roadmap.md do
 - PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL" -- docs/pilotag
+- DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s
 

@@ -49364,3 +49364,28 @@ def _fusion(a: Annotation, b: Annotation, source: str,
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\n# 1) la ligne de la porte : signaler la rouge\nt=t.replace(\"| `porte-bloc-linguistique.sh` | 12 s | ✅ porte bloc lingui … [2565 caractères tronqués]`
+
+  ```
+rouge documentée
+1
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · docs/pilotage/references-non-regression.md : 2597 mots > budget 2500 (T1)
+     · docs/pilotage/references-non-regression.md : 2597 mots > budget 2500 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2624]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2624", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/2026-11-06/docs.md
+COMMIT OK 1
+17078889 PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2
+  porte-gain             ✅                         241 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Rouge nouvelle du 2026-11-06 (tolérée)** : `porte-bloc-linguistique` échoue sur son verdict\n> `ca … [1480 caractères tronqués]`
