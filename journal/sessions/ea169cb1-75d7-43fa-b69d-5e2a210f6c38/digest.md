@@ -550,3 +550,908 @@ reports/rapport-audit-r1r3.md:98:`phrase:type`. F1 = union, vivant 612 (base 0,5
 … [16693 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Hunting the F1 union / S / chunker harness
+
+- **bash** `{"command": "grep -rln \"0\\.4966\\|0,4966\\|0\\.5763\\|0,5763\" --include=*.py . 2>/dev/null | grep -v site-packages | head; echo '--- json files with f1_s ---'; grep -rln \"f1_s\" --include=*.json . 2>/dev/null | grep -v site-packages | head; echo '--- audits json ---'; python3 -c \"\nimport json\ … [230 caractères tronqués]`
+
+  ```
+--- json files with f1_s ---
+./reports/pensee-coherence-fiches.json
+./reports/pensee-segmentation-v4.json
+./reports/pensee-couverture-v5.json
+./reports/pensee-couverture-v7.json
+./reports/pensee-audit-v7.json
+./reports/pensee-audit-r1r3.json
+./reports/pensee-coherence-fiches-v8.json
+./reports/pensee-v9.json
+./reports/pensee-v10.json
+--- audits json ---
+{
+ "rapport": "audit-r1r3",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit_audite": "f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b",
+ "commit_parent": "69bd865ec1bae1958b6f617bde4bf685a15d7d67",
+ "date": "2026-11-05",
+ "objet": "Audit du round R1/R2/R3 : rejeu des valeurs, ablations par règle, contrôles négatifs, dev/test, portes.",
+ "methode": {
+  "gold_vivant": {
+   "source": "evaluer_gold.charger",
+   "phrases": 612,
+   "cibles": 239,
+   "sources": {
+    "hand": 20,
+    "reel": 432,
+    "synthetique": 160
+   }
+  },
+  "gold_gele": {
+   "source": "evaluer_gold.charger_gelé",
+   "phrases": 602,
+   "cibles": 239,
+   "note": "les 10 phrases ajoutees apres le gel n'ont aucune cible"
+  },
+  "mesure": "evaluer_gold.evaluer_bloc pour les valeurs officielles ; harnais local pour les ensembles d'ids et les ablations",
+  "ablations": "copie du modu
+… [3155 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"union\\|chunker\\|def f1\\|F1\" --include=*.py tools/tests/linguistique/ tools/bloc_linguistique.py | head -50", "description": "Search chunker and union in test tools", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+tools/tests/linguistique/qualifier_quatre_modes.py:12:Mêmes mesures que la cascade : POS, syntagmes F1, tête F1, acte, fraction, refus.
+tools/tests/linguistique/gold_split.py:10:dans la fiche. Aucune phrase n'est dupliquée entre les deux ; l'union redonne les 612.
+tools/bloc_linguistique.py:529:                 union: bool = True):
+tools/bloc_linguistique.py:534:        self.union = union
+tools/bloc_linguistique.py:1082:        # 5. syntagmes : le générateur S (candidats) ou un chunker simple
+tools/bloc_linguistique.py:1086:        # l'interroge que pour le français, sinon ses segments polluent l'union.
+tools/bloc_linguistique.py:1090:        # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
+tools/bloc_linguistique.py:1174:        # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
+tools/bloc_linguistique.py:1175:        if cands and self.union:
+tools/bloc_linguistique.py:1185:                meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mapping the bloc's classes and key functions
+
+- **bash** `{"command": "grep -n \"^class \\|^    def \\|^def \\|PRON\\b\\|SUJETS\\|SUBORDONNANTS\\|RELATIFS\\|MODAUX\\|VERBES_CONNUS\\|_est_verbe\\|def est_verbe\\|def _syntagmes_simple\" tools/bloc_linguistique.py | head -120", "description": "Outline bloc_linguistique", "workdir": "/home/stephane/Data13TB/st … [23 caractères tronqués]`
+
+  ```
+59:class Span:
+63:    def json(self) -> dict:
+68:class Etiquette:
+81:    def json(self) -> dict:
+92:class Annotation:
+105:    def par_niveau(self) -> dict[str, list[Etiquette]]:
+111:    def couverture(self) -> dict[str, float]:
+116:    def json(self, avec_duree: bool = False) -> dict:
+130:class BlocLinguistique(Protocol):
+133:    def analyser(self, texte: str, langue: str | None = None,
+137:class RefusNeuronal(RuntimeError):
+144:def _normaliser(texte: str) -> str:
+148:def _trigrammes(texte: str) -> list[str]:
+153:def _profil(texte: str, top: int = 200) -> dict[str, int]:
+158:def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30),
+192:def _score_profil(tri: collections.Counter, profil: dict[str, int]) -> float:
+199:def detecter_langue(texte: str, profils: dict[str, dict] | None = None,
+230:def _script_char(ch: str) -> str:
+256:def detecter_script(texte: str) -> str:
+302:        "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split()),
+311:        "PRON": set("i you he she it we they me him her us them who whom which that".split()),
+367:RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "
+… [6264 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 280, "limit": 220}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+280:               "i you he she it we they me him her us them my your his its our their".split()),
+281:     "de": set("der die das den dem des ein eine einer eines und oder aber denn sondern nicht "
+282:               "kein keine ist sind war waren sein haben hat hatte ich du er sie es wir ihr "
+283:               "mit von zu aus bei nach über unter für durch".split()),
+284:     "es": set("el la los las un una unos unas de del a al y o pero sino que quien como donde "
+285:               "yo tú él ella nosotros vosotros ellos me te se le les mi tu su nuestro vuestro "
+286:               "es son era eran ser haber he has ha han no nunca muy en con por para".split()),
+287:     "it": set("il lo la i gli le un uno una di del della a al alla e o ma però che chi cui "
+288:               "dove io tu lui lei noi voi loro mi ti si ci vi mio tuo suo nostro vostro è sono "
+289:               "era erano essere avere ho hai ha hanno non mai molto in con per su tra fra".split()),
+290:     "pt": set("o a os as um uma uns umas de do da dos das a ao aos à às e ou mas porém que quem "
+
+… [15375 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reading segmentation rules and union logic
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 250, "offset": 840}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+840:             if g["fin"] <= segment["debut"]:
+841:                 return segment["debut"] - g["fin"]
+842:             if g["debut"] >= segment["fin"]:
+843:                 return g["debut"] - segment["fin"]
+844:             return 0
+845:         proches: list[str] = []
+846:         for g in sorted(gvs, key=ecart)[:k]:
+847:             v = Heuristique._verbe_gv(texte, g, verbes, cache)
+848:             if v and v not in proches:
+849:                 proches.append(v)
+850:         return proches
+851: 
+852:     def _syntagmes_simple(self, texte: str, langue: str,
+853:                           pos_verbes: set[int] | None = None) -> list[dict]:
+854:         mots = self._mots(texte)
+855:         lex = POS_FERME.get(langue, POS_FERME["fr"])
+856:         pos_verbes = pos_verbes or set()
+857:         par_debut = {m[0]: k for k, m in enumerate(mots)}
+858: 
+859:         def est_sub(n: str) -> bool:
+860:             """Le mot est-il un subordonnant **dans cette langue** ? (« car » est un nom anglais)"""
+861:             if n in SUB_PAR_LANGUE.get(langue, set()):
+862:       
+… [14810 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 160, "offset": 1089}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1089:         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+1090:         # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
+1091:         # le O(n²) mesuré venait des re-chunkings (A6, A11) — sortie identique (T178).
+1092:         pos_verbes = {e.debut for e in etiquettes if e.niveau == "pos" and e.type == "VERB"}
+1093:         simples = self._syntagmes_simple(texte, lg, pos_verbes)
+1094:         gvs_simple = [x for x in simples if x["type"] == "GV"]
+1095:         if cands:
+1096:             for c in cands[:1]:
+1097:                 noms = [x.get("nom", "") for x in cands]
+1098:                 gvs_s = [x for x in c.get("segments", []) if x.get("type") == "GV"]
+1099:                 deja = {(x["debut"], x["fin"]) for x in gvs_s}
+1100:                 gvs = gvs_s + [x for x in gvs_simple if (x["debut"], x["fin"]) not in deja]
+1101:                 for s in c.get("segments", []):
+1102:                     # la cible de S **convertie en son verbe** : « Les enfants jouent » →
+1103:                     # `jouent` (
+… [10470 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 120, "offset": 522}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+522: class Heuristique:
+523:     """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+524: 
+525:     nom = "heuristique"
+526: 
+527:     def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+528:                  seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+529:                  union: bool = True):
+530:         self.profils = profils
+531:         self.segmenter_s = segmenter_s
+532:         self.seuil_ouvert = seuil_ouvert
+533:         self.seuil_langue = seuil_langue
+534:         self.union = union
+535: 
+536:     # -- langues / script ---------------------------------------------------
+537:     def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
+538:         langue, conf, _ = detecter_langue(texte, self.profils, indice)
+539:         script = detecter_script(texte)
+540:         if conf < self.seuil_langue:
+541:             return "und", conf, script
+542:         return langue, conf, script
+543: 
+544:     # -- tokens ---------------------------------------------
+… [5039 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 70, "offset": 638}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+638:     def _syntagmes_s(self, texte: str) -> list[dict] | None:
+639:         if not self.segmenter_s:
+640:             return None
+641:         try:
+642:             if str(RACINE / "tools/structures") not in sys.path:
+643:                 sys.path.insert(0, str(RACINE / "tools/structures"))
+644:             import generateur  # le générateur S, importé en lecture seule
+645:             return generateur.analyser(texte)
+646:         except Exception:
+647:             return None
+648: 
+649:     def _cibles_s(self, texte: str) -> dict:
+650:         """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+651: 
+652:         Lecture seule de l'API interne du S : `_tokens`/`_segmente` rendent les `Segment` avec
+653:         `cible_nom`/`cible_gp`/`cible_verbe`. Le défaut retenu est la cible la plus proche
+654:         (GP, puis GN, puis GV), comme le premier candidat de `analyser`.
+655:         """
+656:         if not self.segmenter_s:
+657:             return {}
+658:         try:
+659:             import generateur
+660:             base = generateur
+… [2829 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/audit_r1r3/ 2>/dev/null && echo EXISTS || echo 'no /tmp/audit_r1r3'; ls /tmp | head -30", "description": "Check for previous audit harness"}`
+
+  ```
+total 376
+drwxr-xr-x.   4 stephane stephane    380  5 nov 22:17 .
+drwxrwxrwt. 192 root     root      18240  5 nov 23:27 ..
+-rw-r--r--.   1 stephane stephane  14442  5 nov 21:32 autotest.log
+-rw-r--r--.   1 stephane stephane 115791  5 nov 22:17 bl_f908.py
+-rw-r--r--.   1 stephane stephane 114128  5 nov 21:28 bl_parent.py
+-rw-r--r--.   1 stephane stephane  24641  5 nov 22:08 build_json.py
+-rw-r--r--.   1 stephane stephane   7177  5 nov 21:43 compile.json
+-rw-r--r--.   1 stephane stephane   3217  5 nov 21:43 compile.py
+-rw-r--r--.   1 stephane stephane   2884  5 nov 21:33 complements.json
+-rw-r--r--.   1 stephane stephane   3791  5 nov 21:33 complements.py
+-rw-r--r--.   1 stephane stephane   3761  5 nov 21:40 details.json
+-rw-r--r--.   1 stephane stephane   1186  5 nov 21:40 details.py
+-rw-r--r--.   1 stephane stephane   8598  5 nov 21:27 harness.log
+-rw-r--r--.   1 stephane stephane  19742  5 nov 21:27 harness.py
+drwxr-xr-x.   3 stephane stephane    280  5 nov 21:33 mods
+drwxr-xr-x.   2 stephane stephane     60  5 nov 21:31 __pycache__
+-rw-r--r--.   1 stephane stephane  33271  5 nov 21:27 resultats.json
+-rw-r--r--.   1 stephane stephane   2444  5 nov 21:35 verifs.json
+-rw-r--r--.   1
+… [571 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-audit-r1r3.json'))\nprint(list(d.keys()))\nprint(json.dumps({k:d[k] for k in d if k not in ('rejeu','ablations')}, ensure_ascii=False, indent=1)[:5000])\nEOF", "description": "Inspect audit JSON structure", "workdir": "/ho … [46 caractères tronqués]`
+
+  ```
+['rapport', 'ligne', 'branche', 'commit_audite', 'commit_parent', 'date', 'objet', 'methode', 'verdict', 'rejeu', 'ablations', 'decomposition', 'spans_27', 'controle_negatif', 'dev_test', 'portes_autotest', 'ecarts', 'limites', 'fichiers_ecrits', 'commit']
+{
+ "rapport": "audit-r1r3",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit_audite": "f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b",
+ "commit_parent": "69bd865ec1bae1958b6f617bde4bf685a15d7d67",
+ "date": "2026-11-05",
+ "objet": "Audit du round R1/R2/R3 : rejeu des valeurs, ablations par règle, contrôles négatifs, dev/test, portes.",
+ "methode": {
+  "gold_vivant": {
+   "source": "evaluer_gold.charger",
+   "phrases": 612,
+   "cibles": 239,
+   "sources": {
+    "hand": 20,
+    "reel": 432,
+    "synthetique": 160
+   }
+  },
+  "gold_gele": {
+   "source": "evaluer_gold.charger_gelé",
+   "phrases": 602,
+   "cibles": 239,
+   "note": "les 10 phrases ajoutees apres le gel n'ont aucune cible"
+  },
+  "mesure": "evaluer_gold.evaluer_bloc pour les valeurs officielles ; harnais local pour les ensembles d'ids et les ablations",
+  "ablations": "copie du module dans /tmp, une seule modification reintroduite par variante, puis import et mesure",
+  "fidelit
+… [4056 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reusing the prior harness code as a basis
+
+- **read** `{"file_path": "/tmp/audit_r1r3/harness.py"}`
+
+  ```
+<path>/tmp/audit_r1r3/harness.py</path>
+<type>file</type>
+<content>
+1: """Harnais d'audit R1/R2/R3 — mesures sur le gold vivant 612 et gelé 602.
+2: 
+3: Aucun fichier du dépôt n'est modifié : les variantes du bloc sont copiées dans /tmp et
+4: importées comme modules distincts ; le module officiel n'est jamais patché sur disque.
+5: """
+6: from __future__ import annotations
+7: 
+8: import collections
+9: import importlib.util
+10: import json
+11: import pathlib
+12: import random
+13: import statistics
+14: import sys
+15: 
+16: RACINE = pathlib.Path("/home/stephane/Data13TB/stephane/GitHub/Qtrinet")
+17: sys.path.insert(0, str(RACINE))
+18: sys.path.insert(0, str(RACINE / "tools"))
+19: 
+20: import tools.tests.linguistique.evaluer_gold as eg  # noqa: E402
+21: from tools.tests.linguistique.gold_split import dev as split_dev, test as split_test  # noqa: E402
+22: 
+23: SOURCE = (RACINE / "tools/bloc_linguistique.py").read_text(encoding="utf-8")
+24: 
+25: # ---- remplacements exacts des règles de f908d7b0 -------------------------
+26: R1A_OLD = '''SUJETS = {"i", "you", "he", "she", "it", "we", "they", "who", "that", "which", "there",
+27:           "je", "tu", "il", "elle", "on", "nous", "vous", "ils"
+… [20565 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the v10 diff and module identity
+
+- **bash** `{"command": "git diff 160d08ca 710ec7f9 -- tools/bloc_linguistique.py tools/pensee/autotest.py tools/tests/linguistique/ | head -250; echo '---'; git status --short tools/bloc_linguistique.py tools/pensee/autotest.py tools/tests/linguistique/", "description": "Inspect v10 commit diff", "workdir": "/ … [48 caractères tronqués]`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 074aa790..329298c4 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -980,7 +980,8 @@ class Heuristique:
+                 # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
+                 # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
+                 while (j < len(mots) and mots[j][3] == "mot"
+-                       and not est_verbe(mots[j][0], mots[j][2])
++                       and not (est_verbe(mots[j][0], mots[j][2])
++                                and not (j > i + 1 and _normaliser(mots[j - 1][2]) in lex.get("DET", set())))
+                        and _normaliser(mots[j][2]) not in RELATIFS):
+                     j += 1
+                 # « à manger » : un GP réduit à sa préposition prend le verbe qui suit
+diff --git a/tools/pensee/autotest.py b/tools/pensee/autotest.py
+index 94cc7d6c..94b9f354 100644
+--- a/tools/pensee/autotest.py
++++ b/tools/pensee/autotest.py
+@@ -1668,7 +1668,7 @@ def t109_anaphore_103() -> tuple[bool, str]:
+ 
+ 
+ def t110_segmenteur() -> tuple[bool, str]:
+-    """Le segmenteur : S F1 0,5006 (français s
+… [9753 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport hashlib, subprocess, pathlib\np = pathlib.Path('tools/bloc_linguistique.py')\ncur = p.read_bytes()\ncom = subprocess.run(['git','show','710ec7f9:tools/bloc_linguistique.py'],capture_output=True).stdout\nprint('current == commit710ec7f9:', cur==com)\nprint('sha  … [251 caractères tronqués]`
+
+  ```
+current == commit710ec7f9: True
+sha current 308f6eeda95f69ea 116798
+sha commit  308f6eeda95f69ea 116798
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying which correction belongs to which commit
+
+- **bash** `{"command": "git show --stat --oneline 710ec7f9; echo '--- parent -ée? ---'; git show 160d08ca:tools/bloc_linguistique.py | grep -n 'ées\\|ée\\|participes' | head; echo '--- 710ec7f9 -ée ---'; grep -n 'ées\\|ée\\|participes' tools/bloc_linguistique.py | head; echo '--- diff journal for v10 ---'; git … [150 caractères tronqués]`
+
+  ```
+710ec7f9 B13 — LE FÉMININ -ÉE ET LA GARDE DÉTERMINANT DU GP : EXACT 220/220 (1,0000), COUVERTURE 0,9205, F1 0,5880, 19 SPANS ; 183/183
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-05/README.md                       |   7 +-
+ journal/2026-11-05/attention.md                    |   2 +-
+ journal/2026-11-05/distribue.md                    |   9 +-
+ journal/2026-11-05/docs.md                         |   2 +-
+ journal/2026-11-05/memoire.md                      |   2 +-
+ journal/2026-11-05/mesures.md                      |   2 +-
+ journal/2026-11-05/modele.md                       |   2 +-
+ journal/2026-11-05/moteur.md                       |   2 +-
+ journal/2026-11-05/portes.md                       |   2 +-
+ journal/README.md                                  |   2 +-
+ journal/THEMES.md                                  |   2 +-
+ journal/sessions/MANIFEST.md                       |   2 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 113 +++++++++++++++++++++
+ .../rapport.md                                     |  19 ++--
+ reports/README.md                                  |   2 +-
+ reports/pensee-v10.json                            |  41 ++++++++
+ 
+… [3325 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git log --oneline -S'n[:-len(suf)] + \"er\"' -- tools/bloc_linguistique.py; echo '---'; git log --oneline -S'Une garde' -- tools/bloc_linguistique.py | head -3", "description": "Trace introduction of -ée rule", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+---
+  ```
+
+### 🤖 Assistant
+
+⏵ Isolating each rule's exact source delta
+
+- **bash** `{"command": "git diff d497324b 160d08ca -- tools/bloc_linguistique.py", "description": "Diff v8 to v9 module", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index 8daa099c..074aa790 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -369,8 +369,8 @@ RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "
+ # les subordonnants qui n'ont pas d'antécédent : toujours SUB
+ AMBIGUES_PREP = {"since", "before", "after", "until", "as", "depuis", "avant", "après", "pendant", "durant"}
+ 
+-SUJETS = {"i", "you", "he", "she", "it", "we", "they", "there",
+-          "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles"}
++SUJETS = {"i", "you", "he", "she", "it", "we", "they", "there", "who", "that", "which",
++          "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "qui", "qu"}
+ 
+ SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
+                  "whether", "car", "parce", "puisque", "comme", "quand", "si", "lorsque"}
+@@ -856,11 +856,20 @@ class Heuristique:
+         pos_verbes = pos_verbes or set()
+         par_debut = {m[0]: k for k, m in enumerate(mots)}
+ 
++        def est_sub(n: str) -> bool:
++            """Le mot est-il un subordonnant **dans cette langue** ? (« ca
+… [2577 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show a408a909 --stat --oneline | head -20; echo '--- -ée diff ---'; git show a408a909 -- tools/bloc_linguistique.py | head -80; echo '--- acheter in lexicon? ---'; grep -c 'acheter' tools/bloc_linguistique.py; grep -n 'achet' tools/bloc_linguistique.py data/* 2>/dev/null | head", "d … [110 caractères tronqués]`
+
+  ```
+a408a909 B13 — LE LEXIQUE ÉLARGI (PARTICIPES IRRÉGULIERS ET EN -É) : EXACT 0,8082 → 0,8483 ; 174/174
+ docs/implantation/moteur-de-pensee.md              |  7 +-
+ docs/pilotage/chantiers.md                         |  8 +-
+ docs/pilotage/en-cours.md                          | 14 ++--
+ docs/pilotage/roadmap.md                           |  6 +-
+ journal/2026-11-05/README.md                       |  7 +-
+ journal/2026-11-05/attention.md                    |  2 +-
+ journal/2026-11-05/distribue.md                    |  2 +-
+ journal/2026-11-05/docs.md                         |  5 +-
+ journal/2026-11-05/memoire.md                      |  2 +-
+ journal/2026-11-05/mesures.md                      |  2 +-
+ journal/2026-11-05/modele.md                       |  2 +-
+ journal/2026-11-05/moteur.md                       |  2 +-
+ journal/2026-11-05/portes.md                       |  2 +-
+ journal/README.md                                  |  6 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md | 89 ++++++++++++++++++++++
+ .../rapport.md                                     | 51 ++++++++++++-
+ journal/sessions/MANIFEST.md                       |  4 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/dige
+… [10862 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Building the v10 audit harness in /tmp
+
+- **bash** `{"command": "mkdir -p /tmp/audit_v10/mods && cat > /tmp/audit_v10/mesure.py <<'PY'\nfrom __future__ import annotations\nimport collections, json, pathlib, sys, statistics, random, importlib.util\nRACINE = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RACINE) … [2272 caractères tronqués]`
+
+  ```
+vivant 612 gele 602
+dev 422 test 190
+--- vivant 612
+labels 220 exact 220 exact_span 1.0 couverture 0.9205
+topk 219 0.9163 topk_span 0.9955
+fr {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133, 'exact_taux_span': 1.0} en {'cibles': 88, 'labels': 86, 'exact': 86, 'topk': 86, 'exact_taux_span': 1.0}
+syntagme f1 0.5836 tete 0.7332
+spans perdus 239
+--- gele 602
+labels 220 exact 220 exact_span 1.0 couverture 0.9205
+topk 219 0.9163 topk_span 0.9955
+fr {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133, 'exact_taux_span': 1.0} en {'cibles': 88, 'labels': 86, 'exact': 86, 'topk': 86, 'exact_taux_span': 1.0}
+syntagme f1 0.588 tete 0.7388
+spans perdus 239
+--- dev
+labels 152 exact 152 exact_span 1.0 couverture 0.9325
+topk 152 0.9325 topk_span 1.0
+fr {'cibles': 101, 'labels': 91, 'exact': 91, 'topk': 91, 'exact_taux_span': 1.0} en {'cibles': 62, 'labels': 61, 'exact': 61, 'topk': 61, 'exact_taux_span': 1.0}
+syntagme f1 0.5812 tete 0.733
+spans perdus 239
+--- test
+labels 68 exact 68 exact_span 1.0 couverture 0.8947
+topk 67 0.8816 topk_span 0.9853
+fr {'cibles': 50, 'labels': 43, 'exact': 43, 'topk': 42, 'exact_taux_span': 1.0} en {'cibles': 26, 'labels': 25, 'exact': 25, 'topk': 25, '
+… [2705 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Testing the -ée rule's actual reach
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfor w in ['achetée','acheté','aimée','entrée','portée','idée','année','journée','pensée','soirée','matinée','montée','visitée']:\n    print(w, bl._est_verbe(w), '| sans -ée hypothesis:', (w[:-2]+ … [404 caractères tronqués]`
+
+  ```
+achetée False | sans -ée hypothesis: False
+acheté False | sans -ée hypothesis: -
+aimée True | sans -ée hypothesis: True
+entrée True | sans -ée hypothesis: True
+portée True | sans -ée hypothesis: True
+idée False | sans -ée hypothesis: False
+année False | sans -ée hypothesis: False
+journée False | sans -ée hypothesis: False
+pensée False | sans -ée hypothesis: False
+soirée False | sans -ée hypothesis: False
+matinée False | sans -ée hypothesis: False
+montée True | sans -ée hypothesis: True
+visitée False | sans -ée hypothesis: False
+acheter in VERBES_CONNUS: False
+aimer: True entrer: True porter: True monter: True
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph = eg.charger()\nfor p in ph:\n    if p['id'] in ('r303','s037','r153','r255','r264'):\n        print(p['id'], p['langue'], p.get('source'), repr(p['texte']))\n        for s … [257 caractères tronqués]`
+
+  ```
+r153 en reel 'We wait for the bus.'
+    GN 0 2 'We' None
+    GV 3 7 'wait' None
+    GP 8 19 'for the bus' wait
+r255 fr reel "La voiture que j'ai achetée roule."
+    GN 0 10 'La voiture' None
+    REL 11 27 "que j'ai achetée" voiture
+    GV 28 33 'roule' None
+r264 fr reel "Je sais qu'il vient demain."
+    GN 0 2 'Je' None
+    GV 3 7 'sais' None
+    SUB 8 26 "qu'il vient demain" sais
+r303 fr reel 'Je pars car il est tard.'
+    GN 0 2 'Je' None
+    GV 3 7 'pars' None
+    SUB 8 23 'car il est tard' pars
+s037 fr synthetique 'Paul qui marche marche'
+    GN 0 4 'Paul' None
+    REL 5 15 'qui marche' Paul
+    GV 16 22 'marche' None
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking autotest entrypoint and measuring cost
+
+- **bash** `{"command": "tail -80 tools/pensee/autotest.py; echo '---'; head -40 tools/pensee/autotest.py; echo '--- head of test list'; grep -n \"def t0\\|def t1\\|PORTES\\|__main__\" tools/pensee/autotest.py | tail -20", "description": "Inspect autotest runner", "workdir": "/home/stephane/Data13TB/stephane/Gi … [14 caractères tronqués]`
+
+  ```
+("T111 hybride segmenteur", t111_hybride_seg()),
+              ("T112 union segmenteurs", t112_union()),
+              ("T113 union par défaut", t113_union_defaut()),
+              ("T114 cascade + union", t114_cascade_union()),
+              ("T115 tête cascade", t115_tete_cascade()),
+              ("T116 miroir", t116_miroir()),
+              ("T117 sortie POS", t117_miroir_pos()),
+              ("T118 restitution spans", t118_miroir_espaces()),
+              ("T119 restitution sémantique", t119_miroir_resume()),
+              ("T120 réponse", t120_miroir_reponse()),
+              ("T121 réponse contenu", t121_reponse_contenu()),
+              ("T122 extraction", t122_extraction()),
+              ("T123 juge", t123_juge()),
+              ("T124 réponses", t124_reponses()),
+              ("T125 juge contre le bloc", t125_juge_bloc()),
+              ("T126 réponse dirigée", t126_dirigee()),
+              ("T127 négatives", t127_negatives()),
+              ("T128 règle du si", t128_si()),
+              ("T129 pièges", t129_pieges()),
+              ("T130 gold gelé", t130_gold_gele()),
+              ("T131 contexte", t131_contextuel()),
+              ("T132 lien auto", t132_lien_auto
+… [6741 caractères tronqués]
+  ```
+
+- **bash** `{"command": "time python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nimport tools.bloc_linguistique as bl\nph = eg.charger(); h=bl.Heuristique()\nfor p in ph[:50]:\n    h.analyser(p['texte'],p['langue'])\nprint('50 ok')\nPY", "description": "Ben … [82 caractères tronqués]`
+
+  ```
+50 ok
+[stderr]
+
+real	0m0,187s
+user	0m0,168s
+sys	0m0,019s
+  ```
+
+### 🤖 Assistant
+
+⏵ Running the 183 gates in the background
+
+- **bash** `{"command": "PYTHONPATH=. python3 -m tools.pensee.autotest > /tmp/audit_v10/autotest.log 2>&1; echo \"exit=$?\"", "description": "Run autotest gates", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet", "run_in_background": true}`
+
+  ```
+started background job bash-2416
+  ```
+
+- **bash** `{"command": "sed -n '260,380p' /tmp/audit_r1r3/harness.py >/dev/null; python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.tests.linguistique.evaluer_gold as eg\nph=eg.charger(); ge=eg.charger_gele()\n# check ids overlap and split semantics\nfrom tools.tests.linguistique.gold_split imp … [840 caractères tronqués]`
+
+  ```
+ids vivant uniques 612 gele uniques 602
+gele subset ids True
+test ids ['g002', 'g007', 'g013', 'g018', 'g020']
+r303 split dev
+s037 split dev
+r153 split test
+r255 split test
+r264 split test
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py</path>
+<type>file</type>
+<content>
+1: """gold_split.py — le gold 612 coupé en **dev** et **test**, de façon déterministe.
+2: 
+3: Le problème. Toutes les mesures de la session sont **in-sample** : les règles de segmentation et
+4: d'attachement ont été dessinées en regardant les échecs du même gold qui les mesure. Pour juger
+5: une règle, il faut un gold **tenu à l'écart** : on règle sur `dev`, on évalue sur `test`.
+6: 
+7: Protocole (fixé ici). Le split est un **hash stable de l'identifiant** (`crc32(id) % 3 == 0` →
+8: test, sinon dev), donc reproductible, insensible à l'ordre et indépendant du contenu. Il est
+9: **stratifié par source** (`hand`, `reel`, `synthetique`) et par langue : on vérifie l'équilibre
+10: dans la fiche. Aucune phrase n'est dupliquée entre les deux ; l'union redonne les 612.
+11: 
+12: Usage :
+13:     from tools.tests.linguistique.gold_split import dev, test, compter
+14:     ph = charger(); d = dev(ph); t = test(ph)
+15: """
+16: from __future__ import annotations
+17: 
+18: import zlib
+19: 
+20: PART_TEST = 3  # une phrase sur trois va au test
+21: 
+22: 
+23: def _est_test(phras
+… [1070 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,60p' tools/tests/linguistique/gold_gele.json | head -5; python3 - <<'PY'\nimport json\nfor f in ['tools/tests/linguistique/gold.json','tools/tests/linguistique/gold_reel.json','tools/tests/linguistique/gold_synthetique.json','tools/tests/linguistique/gold_gele.json']:\n    d=j … [171 caractères tronqués]`
+
+  ```
+{
+"gele": "2026-11-02",
+"phrases": [
+{
+"id": "g001",
+tools/tests/linguistique/gold.json 20
+tools/tests/linguistique/gold_reel.json 432
+tools/tests/linguistique/gold_synthetique.json 160
+tools/tests/linguistique/gold_gele.json 602
+  ```
+
+- **bash** `{"command": "sed -n '1,60p' tools/bloc_linguistique.py", "description": "Check module RACINE definition", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/usr/bin/env python3
+"""bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+
+Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+
+  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+    substitution et le parallèle sans GPU ;
+  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+    même type d'annotation ;
+  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+    POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
+  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+    étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+    que l'heuristique ne couvre pas.
+
+La sortie est une **annotation typée** — pas le corps de la RSN : chaque étiquette porte son
+`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script`
+… [1316 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the full measurement harness
+
+- **bash** `{"command": "cat > /tmp/audit_v10/harness.py <<'PY'\n\"\"\"Harnais d'audit v10 — rejeu, ablations, contrôles négatifs, dev/test.\n\nAucun fichier du dépôt n'est modifié : chaque variante est une copie du module dans /tmp,\nimportée comme module distinct. Le module officiel n'est jamais patché.\n\"\" … [15964 caractères tronqués]`
+
+  ```
+exit=1
+v10 labels 220 exact 220 f1g 0.7007 spans 19 0.7s
+v9 labels 219 exact 219 f1g 0.6985 spans 20 0.7s
+v8 labels 212 exact 212 f1g 0.6884 spans 27 0.8s
+sans_pron labels 203 exact 203 f1g 0.6846 spans 36 0.8s
+sans_est_sub labels 219 exact 219 f1g 0.6995 spans 20 0.9s
+sans_predicat_vu labels 220 exact 220 f1g 0.7007 spans 19 0.8s
+sans_ee labels 220 exact 220 f1g 0.7007 spans 19 0.9s
+sans_gp_det labels 219 exact 219 f1g 0.6985 spans 20 0.7s
+v9_attendu labels 219 exact 219 f1g 0.6985 spans 20 0.9s
+Traceback (most recent call last):
+  File "/tmp/audit_v10/harness.py", line 286, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/audit_v10/harness.py", line 260, in main
+    dd=diff_sets(base,m,par_id)
+  File "/tmp/audit_v10/harness.py", line 156, in diff_sets
+    g=base['exact_set']-autre['exact_set']; p=autre['exact_set']-base['exact_set']
+      ~~~~^^^^^^^^^^^^^
+KeyError: 'exact_set'
+[stderr]
+
+real	0m10,637s
+user	0m10,495s
+sys	0m0,142s
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing per-phrase F1 and set keys
+
+- **bash** `{"command": "python3 - <<'PY'\np='/tmp/audit_v10/harness.py'\ns=open(p).read()\ns=s.replace('''def mesure_segmentation(ann, phrases):\n    pred=set(); pred_t=set(); gold=set(); gold_t=set()\n    for p in phrases:\n        a=ann[p['id']]\n        pred |= {(e.type,e.debut,e.fin) for e in a.etiquettes  … [1803 caractères tronqués]`
+
+  ```
+patched
+exit=0
+      "labels": 40,
+      "exact": 40,
+      "topk": 38
+     },
+     "en": {
+      "cibles": 26,
+      "labels": 24,
+      "exact": 24,
+      "topk": 19
+     }
+    }
+   }
+  }
+ }
+}
+[stderr]
+
+real	0m10,647s
+user	0m10,498s
+sys	0m0,148s
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspecting harness results
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nprint(json.dumps(d['gold'],indent=1))\nfor nom in ('v10','v9','v8'):\n    v=d['variantes'][nom]\n    print('\\n===',nom)\n    for k in ('labels','exact','exact_any','couverture','topk','topk_taux','topk_e … [661 caractères tronqués]`
+
+  ```
+{
+ "vivant": 612,
+ "gele": 602,
+ "dev": 422,
+ "test": 190
+}
+
+=== v10
+  labels 220
+  exact 220
+  exact_any 220
+  couverture 0.9205
+  topk 219
+  topk_taux 0.9163
+  topk_exact 219
+  topk_taux_span 0.9955
+  f1_vivant 0.5836
+  tete_vivant 0.7332
+  f1_gele 0.588
+  tete_gele 0.7388
+  spans {'GP': 4, 'REL': 9, 'SUB': 6}
+  spans_total 19
+  f1_s_vivant 0.4957
+  f1_chunker_vivant 0.6163
+  f1_s_gele 0.5014
+  f1_chunker_gele 0.6203
+  tete_s_gele 0.6677
+  tete_chunker_gele 0.7639
+  fr {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133}
+  en {'cibles': 88, 'labels': 86, 'exact': 86, 'topk': 86}
+  dev {'cibles': 163, 'labels': 152, 'exact': 152, 'couverture': 0.9325, 'f1': 0.5812, 'tete': 0.733, 'par_langue': {'fr': {'cibles': 101, 'labels': 91, 'exact': 91, 'topk': 91}, 'en': {'cibles': 62, 'labels': 61, 'exact': 61, 'topk': 61}}}
+  test {'cibles': 76, 'labels': 68, 'exact': 68, 'couverture': 0.8947, 'f1': 0.589, 'tete': 0.7337, 'par_langue': {'fr': {'cibles': 50, 'labels': 43, 'exact': 43, 'topk': 42}, 'en': {'cibles': 26, 'labels': 25, 'exact': 25, 'topk': 25}}}
+
+=== v9
+  labels 219
+  exact 219
+  exact_any 219
+  couverture 0.9163
+  topk 218
+  topk_taux 0.9121
+  topk_exact 218
+  topk_taux_
+… [5283 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparing negative-control protocols with the prior audit
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-r1r3.json'))\nprint(json.dumps(d['controle_negatif'],ensure_ascii=False,indent=1)[:6000])\nPY", "description": "Read prior negative control JSON", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+{
+ "permutation_globale": {
+  "n": 212,
+  "observe": 212,
+  "tirages": 2000,
+  "graine": 0,
+  "moyenne": 2.0425,
+  "mediane": 2.0,
+  "max": 9,
+  "p95": 5,
+  "p": 0.0,
+  "lecture": "0,96 % en moyenne contre 100 % observe"
+ },
+ "candidat_aleatoire": {
+  "n": 212,
+  "avec_candidats": 212,
+  "candidats": 516,
+  "top1_moyen": 76.1,
+  "top1_taux": 0.359,
+  "observe_top1": 212,
+  "p_top1": 0.0,
+  "lecture": "35,9 % en moyenne contre 100 % observe"
+ },
+ "permutation_candidats_topk": {
+  "n": 212,
+  "moyenne": 1.81,
+  "taux": 0.0085,
+  "max": 7,
+  "observe": 177,
+  "p": 0.0,
+  "lecture": "0,85 % en moyenne contre 83,49 % observe"
+ },
+ "hasard_officiel": {
+  "n": 239,
+  "observe": 1,
+  "taux": 0.0042,
+  "top1_observe": 212,
+  "top1_taux": 0.887
+ },
+ "spans_27_verifies": true,
+ "absent_de_la_fiche": true,
+ "verdict": "L'attachement n'est pas un artefact du hasard ; mais la fiche et le JSON ne publient aucun controle negatif."
+}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nfor nom in ('sans_pron','sans_est_sub','sans_predicat_vu','sans_ee','sans_gp_det','v9','v8','v9_attendu'):\n    a=d['ablations'][nom]\n    print('\\n===',nom)\n    for k in ('labels','exact','delta_labels … [459 caractères tronqués]`
+
+  ```
+=== sans_pron
+  labels 203
+  exact 203
+  delta_labels -17
+  delta_exact -17
+  couverture 0.8494
+  n_gains 17
+  n_pertes 0
+  n_labels_gagnes 17
+  n_labels_perdus 0
+  f1_gele 0.5718
+  delta_f1_gele -0.0162
+  f1_vivant 0.5676
+  delta_f1_vivant -0.016
+  tete_gele 0.7288
+  topk 202
+  spans_total 36
+  spans {'GP': 4, 'REL': 18, 'SUB': 14}
+  gains {'dev': ['g017:SUB', 'r034:REL', 'r074:REL', 'r114:REL', 'r205:SUB', 'r219:SUB', 'r240:SUB', 'r243:REL', 'r247:SUB', 'r278:REL', 'r280:REL', 'r285:REL', 'r296:SUB', 'r299:REL'], 'test': ['r214:REL', 'r216:SUB', 'r281:SUB']}
+  pertes {}
+  dev {'cibles': 163, 'labels': 138, 'exact': 138, 'couverture': 0.8466, 'f1': 0.5621, 'tete': 0.7215, 'par_langue': {'fr': {'cibles': 101, 'labels': 91, 'exact': 91, 'topk': 91}, 'en': {'cibles': 62, 'labels': 47, 'exact': 47, 'topk': 47}}}
+  test {'cibles': 76, 'labels': 65, 'exact': 65, 'couverture': 0.8553, 'f1': 0.5799, 'tete': 0.7278, 'par_langue': {'fr': {'cibles': 50, 'labels': 43, 'exact': 43, 'topk': 42}, 'en': {'cibles': 26, 'labels': 22, 'exact': 22, 'topk': 22}}}
+
+=== sans_est_sub
+  labels 219
+  exact 219
+  delta_labels -1
+  delta_exact -1
+  couverture 0.9163
+  n_gains 1
+  n_pertes 0
+  n_labels_gagnes
+… [5930 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2416 (bash: PYTHONPATH=. python3 -m tools.pensee.autotest > /tmp/audit_v10/autotest.log 2>&1; echo "exit=$?") finished [status: completed, exit code: 0]. Read its output with job_output.
+

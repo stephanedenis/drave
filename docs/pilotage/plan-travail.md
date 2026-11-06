@@ -427,7 +427,10 @@ dite, pas cachée).
 | **1** | A1 audit, A2 top-k, A3 classement, A4 cohérence, A7 annotation | reproductibilité, diagnostic, prototype, cohérence, convention | ✅ intégrée (v2) |
 | **1 bis** | A5 contrat S, A6 coût/cache | interface S, O(n²) | ✅ intégrée (cache ×139) |
 | **3** | A8 audit v2, A9 8 échecs, A10 replis cible, A11 cache | vérification de la v2, échecs restants, retouches déterministes | en cours |
-| **4** | A12 spans sans S, A13 multi-cibles, A14 gold anglais | couverture, définition de la mesure, qualité du gold | en cours |
+| **4** | A12 spans sans S, A13 multi-cibles, A14 gold anglais | couverture, définition de la mesure, qualité du gold | ✅ intégrée |
+| **5** | A15 audit v7, A16 dev/test, A17 43 spans, A18 cohérence v8 | vérification, robustesse, diagnostic, cohérence | ✅ intégrée |
+| **6** | A19 audit R1/R3, A20 top-k | ablations, site d'appel `prec = s` | ✅ intégrée |
+| **7** | A21 audit v10, A22 dev/test v10 | vérification finale, robustesse | en cours |
 
 **Règles données à chaque sous-agent** : ne pas committer ; ne pas toucher `en-cours`,
 `roadmap`, `chantiers`, `plan-travail`, `AGENTS`, ni `journal/` ; **ne pas écrire** dans

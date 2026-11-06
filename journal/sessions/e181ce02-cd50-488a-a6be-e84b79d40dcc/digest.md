@@ -48249,3 +48249,40 @@ journal + plan
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **19 spans**.\", \" ; 19 spans ; leçon « le découpage d'abord » en théorie.\")\nn_md=len(list(pathlib.Path('reports' … [1169 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2389]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2389", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md
+COMMIT OK 1
+77ed0856 THÉORIE ET JOURNAL — LE DÉCOUPAGE D'ABORD : LA COUVERTURE EST UN PLAFOND, UN GOLD SE VÉRIFIE AVANT DE JUGER
+jeu 05 nov 2026 23:27:24 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E \"audit-v10|dev-test-v10\"", "description": "Attendre la vague 7", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2403]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2403", "timeout_ms": 300000, "wait": true}`
+
+  ```
+jeu 05 nov 2026 23:37:52 EST
+[status: completed, exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2403 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "audit-v10|dev-test-v10") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nt=t.replace(\"| **4** | A12 spans sans S, A13 multi-cibles, A14 gold anglais | couverture, définition de la mesure, qualité du gold | … [1510 caractères tronqués]`

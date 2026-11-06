@@ -7,12 +7,12 @@
 | Identifiant | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 23:24 |
-| Durée | 0.0 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 13 |
+| Messages | 17 |
+| Appels d'outils | 22 |
 | Fichiers touchés | 0 |
-| Commandes | 9 |
+| Commandes | 17 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesur … [1686 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Show branch, HEAD and status
 - bash — List linguistique tools and reports
@@ -37,10 +37,15 @@
 - bash — Locate the -ée correction in HEAD
 - bash — Search -ée handling and v10 JSON
 - bash — Measure canonical dev/test globally
+- bash — Check corpus counts and scipy availability
+- bash — Trace origin of -ée handling
+- bash — Inspect autotest changes in v10
+- bash — Inspect Annotation and analyser API
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Première mesure canonique dev/test au commit courant
+⏵ Vérification des bases vivant/gelé et des valeurs publiées v10
 
 ## 3. Travail accompli
 
@@ -60,4 +65,12 @@
 - **T1** Locate the -ée correction in HEAD
 - **T1** Search -ée handling and v10 JSON
 - **T1** Measure canonical dev/test globally
+- **T1** Check corpus counts and scipy availability
+- **T1** Trace origin of -ée handling
+- **T1** Inspect autotest changes in v10
+- **T1** Inspect Annotation and analyser API
+- **T1** Inspect annotation objects and attachment metadata
+- **T1** List current lost spans with bucket
+- **T1** Inspect predictions for key lost/recovered spans
+- **T1** Compare living and frozen gold global metrics
 
