@@ -2219,7 +2219,7 @@ def t152_tirages() -> tuple[bool, str]:
 
 
 def t153_attachement() -> tuple[bool, str]:
-    """L'attachement sur le gold 612 (239 cibles) : top1 0,887, exact 0,887, couverture 0,887."""
+    """L'attachement sur le gold 612 (239 cibles) : top1 0,9247, exact 0,9247, couverture 0,9247."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
@@ -2336,7 +2336,7 @@ def t160_passifs_sans_par() -> tuple[bool, str]:
 
 
 def t161_cible_proximite() -> tuple[bool, str]:
-    """La cible par proximité : 212/212 avec la règle du précédent."""
+    """La cible par proximité : 221/221 avec la règle du précédent."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())
@@ -2347,7 +2347,7 @@ def t161_cible_proximite() -> tuple[bool, str]:
 
 
 def t162_candidats_verbes() -> tuple[bool, str]:
-    """Les candidats verbes : le top-k atteint 211/239 (0,8828) après le correctif du précédent."""
+    """Les candidats verbes : le top-k atteint 220/239 (0,9205) après le correctif du précédent."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     r = evaluer_bloc("h", bl.Heuristique(), charger())
@@ -2357,7 +2357,7 @@ def t162_candidats_verbes() -> tuple[bool, str]:
 
 
 def t163_echecs_attachement() -> tuple[bool, str]:
-    """Les échecs de l'attachement : 27 de span, 1 de cible."""
+    """Les échecs de l'attachement : 18 de span, 1 de cible."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger
     h = bl.Heuristique()
@@ -2404,7 +2404,7 @@ def t165_lexique_verbal() -> tuple[bool, str]:
 
 
 def t166_spans() -> tuple[bool, str]:
-    """Les spans perdus : 16 REL, 6 SUB, 5 GP (27)."""
+    """Les spans perdus : 9 REL, 5 SUB, 4 GP (18)."""
     import collections
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger
@@ -2424,7 +2424,7 @@ def t166_spans() -> tuple[bool, str]:
 
 
 def t167_denominateur() -> tuple[bool, str]:
-    """Le dénominateur : rendement global (÷ 239) et exactitude spans (÷ 212)."""
+    """Le dénominateur : rendement global (÷ 239) et exactitude spans (÷ 221)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
@@ -2499,7 +2499,7 @@ def t171_lexique_elargi() -> tuple[bool, str]:
 
 
 def t172_echecs_cible() -> tuple[bool, str]:
-    """Les échecs de cible : 0 hors candidats, 0 mal classé (exact 212/212)."""
+    """Les échecs de cible : 0 hors candidats, 0 mal classé (exact 221/221)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger
     h = bl.Heuristique()
@@ -2525,7 +2525,7 @@ def t172_echecs_cible() -> tuple[bool, str]:
 
 
 def t173_topk_strict() -> tuple[bool, str]:
-    """Le top-k strict : 211/212 (0,9953) ; le sous-chaîne 211/239 (0,8828)."""
+    """Le top-k strict : 220/221 (0,9955) ; le sous-chaîne 220/239 (0,9205)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
@@ -2589,7 +2589,7 @@ def t176_segment_precedent() -> tuple[bool, str]:
 
 
 def t177_candidats_tete() -> tuple[bool, str]:
-    """Les têtes des candidats S : le top-k strict passe de 88 à 211."""
+    """Les têtes des candidats S : le top-k strict passe de 88 à 220."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
@@ -2623,7 +2623,7 @@ def t178_cache_chunker() -> tuple[bool, str]:
 
 
 def t179_multi_cibles() -> tuple[bool, str]:
-    """La mesure multi-cibles : 43 GP du gold ont deux cibles ; exact_any = 212/212."""
+    """La mesure multi-cibles : 43 GP du gold ont deux cibles ; exact_any = 221/221."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
@@ -2633,7 +2633,7 @@ def t179_multi_cibles() -> tuple[bool, str]:
 
 
 def t180_par_langue() -> tuple[bool, str]:
-    """La mesure par langue : l'exact tient dans les deux langues, la couverture anglaise non."""
+    """La mesure par langue : l'exact tient dans les deux langues (fr 136/136, en 85/85)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     lg = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]["par_langue"]

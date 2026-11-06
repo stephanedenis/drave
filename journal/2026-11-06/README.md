@@ -5,21 +5,22 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**2 commits** · **3 session(s)** · **1 thème(s)**
+**3 commits** · **3 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
+| mesures | 1 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.1 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 127.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.1 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
+| `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.6 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 128.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -27,6 +28,7 @@
 |---|---|---|
 | 00:09 | `41cae3e5` | JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS |
 | 00:12 | `68a8717b` | JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES) |
+| 00:28 | `653a7981` | B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 

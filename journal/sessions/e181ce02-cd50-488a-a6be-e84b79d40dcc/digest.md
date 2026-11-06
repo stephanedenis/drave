@@ -48505,3 +48505,151 @@ fiche + JSON v11
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-pensee-v11.md`](rapport … [2355 caractères tronqués]`
+
+  ```
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2538]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2538", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-audit-v10.md
+ create mode 100644 reports/rapport-pensee-v11.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+653a7981 B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+ven 06 nov 2026 00:31:12 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; ls reports/ | grep dev-test-v10", "description": "Attendre dev/test v10", "timeoutMs": 600000}`
+
+  ```
+ven 06 nov 2026 00:40:44 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep dev-test-v10", "description": "Attendre dev/test v10 (2)", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2568]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+Agent ea169cb1-75d7-43fa-b69d-5e2a210f6c38 sent a message: 
+Audit v10 terminé — ancré sur le commit 710ec7f9. Fichiers livrés : reports/rapport-audit-v10.md et reports/pensee-audit-v10.json (versions finales dans le worktree ; je n'ai rien commité ni modifié d'existant).
+
+VALEURS (rejouées sur vivant 612 et gelé 602) : 220/220 = 1,0000 ; couverture 0,9205 ; F1 gelé 0,5880 (S 0,5014, chunker 0,6203 ; vivant 0,5836) ; tête 0,7388 (vivant 0,7332) ; fr 134/134 ; en 86/86 ; 19 spans (9 REL, 6 SUB, 4 GP) ; top-k 219 (0,9163 ; top-k strict 0,9955) ; 183/183 portes.
+
+ÉCARTS : (1) le F1 « avant » 0,5822 est la valeur du vivant 612, pas du gelé 602 ; le gelé v9 vaut 0,5866, donc le gain v9→v10 est +0,0014, pas +0,0058. (2) le test courant v10 est 68/68 (0,8947), pas 67/67 (le 67/67 est la v9).
+
+RÈGLES : dans le bloc, le commit 710ec7f9 ne modifie que la garde DET du GP (+2/−1 lignes). Le -ée est antérieur (a408a909, déjà présent en v8/v9) et totalement inerte sur ce gold : 0 différence d'annotation JSON sur 612 phrases, r255 reste absent car « acheter » n'est pas dans VERBES_CONNUS. Le seul gain v10 est r153 (test), +1 exact, 0 perte.
+
+ABLATIONS (base 220 ; F1 gelé entre parenthèses) : garde PRON retirée → 203 (−17 ; 0,5718), mais conditionnelle à l'expansion SUJETS : sans expansion elle est inerte (214, −6 ; le faisceau SUJETS+garde vaut +6 net) ; expansion SUJETS retirée → 214 (−6 ; 0,5833), gains r273 s032 s069 s072 s115 s135 ; est_sub retiré → 219 (−1 ; r280 ; 0,5849) ; predicat_vu retiré → 220 (net 0 : gagne g017, perd r303 ; 0,5880) ; -ée retiré → 220 (0/0 ; 0,5880) ; garde DET GP retirée → 219 (−1 ; r153 ; 0,5866). Ids détaillés dans le rapport/JSON.
+
+SPANS 19 : 17 résiduels A17 + s037 (7e régression v8, toujours absente) + r303 (régression v9 par predicat_vu, non documentée). La fiche « 17 inatteignables + r255 + r264 » double compte r255/r264 et omet s037/r303.
+
+DEV/TEST : v10 dev 152/152 (0,9325), test 68/68 (0,8947) ; v9 152/152, 67/67 ; v8 148/148, 64/64. Le +1 test est r153 ; le -ée n'ajoute rien.
+
+CONTRÔLES (2000 tirages, graine 0) : permutation globale des cibles 1,997/220 = 0,908 % (p=0) ; candidat aléatoire top-1 42,14 % (p=0) ; permutation des listes de candidats top-k 0,99 % (égalité) / 1,17 % (sous-chaîne), p=0. Les 19 spans ont été vérifiés un par un.
+
+PORTES : 183/183, exit 0 au commit ; mais 11 docstrings périmées contredisent leur assertion (T153, T161, T162, T163, T166, T167, T172, T173, T177, T179, T180). L'invocation directe `python3 tools/pensee/autotest.py` échoue (import relatif) ; utiliser `-m`.
+
+CONCURRENCE : un commit 653a7981 (v11 « les deux dernières régressions ») est apparu pendant l'audit. Il intègre une version antérieure de mon rapport et corrige la fiche v10 ; il donne 221/221, 18 spans (9 REL, 5 SUB, 4 GP), test 69/69. Mes mesures restent ancrées sur 710ec7f9 via `git show` (copie dans /tmp), pas sur l'arbre courant. Le commit contient une version antérieure de mes deux fichiers ; le worktree contient les versions finales (avec la note d'arbre de travail, les docstrings périmées et les dernières corrections de formulation).
+
+### 👤 Utilisateur
+
+Background subagent ea169cb1-75d7-43fa-b69d-5e2a210f6c38 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Clôture de l'audit et résumé final
+
+Audit terminé. Deux fichiers neufs écrits :
+
+- [`reports/rapport-audit-v10.md`](reports/rapport-audit-v10.md)
+- [`reports/pensee-audit-v10.json`](reports/pensee-audit-v10.json)
+
+Aucun fichier existant modifié par moi, aucun commit de ma part.
+
+## Valeurs rejouées (commit `710ec7f9`)
+
+| grandeur | fiche | vivant 612 | gelé 602 |
+|---|---:|---:|---:|
+| labels / exact | 220 / 220 (1,0000) | **220 / 220** | **220 / 220** |
+| couverture | 0,9205 | **0,9205** | **0,9205** |
+| F1 union | 0,5880 | 0,5836 | **0,5880** |
+| S / chunker | 0,5014 / 0,6203 | 0,4957 / 0,6163 | **0,5014 / 0,6203** |
+| tête | 0,7388 | 0,7332 | **0,7388** |
+| fr / en | 134/134, 86/86 | **idem** | **idem** |
+| spans | 19 (9 REL, 6 SUB, 4 GP) | **19** | **19** |
+| top-k | 219 (0,9163) | **219** | **219** |
+
+**Écarts**
+1. Le F1 « avant » **0,5822** est la valeur du **vivant 612**, pas du gelé ; le **gelé v9 vaut 0,5866**. Le gain v9→v10 est **+0,0014**, pas +0,0058.
+2. Le **test courant v10 est 68/68** (0,8947), pas 67/67 (le 67/67 est la v9).
+
+## Règles
+
+Le commit `710ec7f9` ne modifie, dans le bloc, que la **garde DET du GP** : **+1 exact (`r153`, test)**, 0 perte. Le **`-ée` est antérieur** (`a408a909`, déjà dans v8/v9) et **totalement inerte** : 0 différence d'annotation sur 612 phrases ; `r255` reste absent car `acheter` n'est pas dans `VERBES_CONNUS`.
+
+## Ablations (base 220 ; F1 gelé)
+
+| ablation | exact | Δ | gains / pertes | F1 |
+|---|---:|---:|---|---:|
+| garde PRON retirée | 203 | **−17** | 17 gains, 0 perte | 0,5718 (−0,0162) |
+| expansion SUJETS retirée | 214 | **−6** | 6 gains (r273 s032 s069 s072 s115 s135) | 0,5833 |
+| PRON + SUJETS retirées | 214 | **−6** | mêmes 6 gains ; garde inerte sans expansion | 0,5808 |
+| `est_sub` retiré | 219 | **−1** | r280 | 0,5849 |
+| `predicat_vu` retiré | 220 | **0** | gagne g017, perd r303 | 0,5880 |
+| `-ée` retiré | 220 | **0** | 0 / 0 | 0,5880 |
+| garde DET GP retirée | 219 | **−1** | r153 | 0,5866 |
+
+**Les 19 spans** = **17 résiduels A17 + `s037` + `r303`**. La fiche « 17 inatteignables + r255 + r264 » double compte r255/r264 et omet s037/r303. `r303` est la perte cachée de `predicat_vu` (net 0 avec g017) ; `s037` est la 7e régression v8, toujours ouverte.
+
+## dev/test
+
+| moitié | v8 | v9 | **v10** |
+|---|---:|---:|---:|
+| dev | 148/148 | 152/152 | **152/152** (0,9325) |
+| test | 64/64 | 67/67 | **68/68** (0,8947) |
+
+Le +1 test est `r153` ; le `-ée` n'ajoute rien.
+
+## Contrôles et portes
+
+- Permutation globale des cibles : **1,997/220 = 0,908 %** (2000 tirages, p=0).
+- Candidat aléatoire top-1 : **42,14 %** (p=0).
+- Permutation des listes de candidats top-k : **0,99 %** (égalité) / **1,17 %** (sous-chaîne), p=0.
+- Les 19 spans ont été vérifiés un par un.
+- **183/183 portes**, exit 0 — mais **11 docstrings périmées** (T153, T161, T162, T163, T166, T167, T172, T173, T177, T179, T180) contredisent leur assertion.
+
+## Note de concurrence
+
+Un commit **`653a7981` (v11)** est apparu pendant l'audit : il intègre une version antérieure de mon rapport, corrige la fiche v10 et passe à **221/221, 18 spans, test 69/69**. Mes mesures restent **ancrées sur `710ec7f9`** via `git show` ; le worktree contient mes versions finales, le commit une version antérieure. Je n'ai rien commité.
+
+### 🤖 Assistant
+
+⏵ Je commite les versions finales de l'audit v10 et j'aligne les 11 docstrings
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-audit-v10.md reports/pensee-audit-v10.json | head -3; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nD={\n '\"\"\"L\\'attachement sur le gold 612  … [2175 caractères tronqués]`
+
+  ```
+MM reports/pensee-audit-v10.json
+MM reports/rapport-audit-v10.md
+11 / 11
+  183/183 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2568 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep dev-test-v10) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep dev-test-v10; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; 18 spans ; vagues 5-7 au plan-travail.\", \" ; 18 spans ; audits A19/A21 intégrés.\ … [1089 caractères tronqués]`

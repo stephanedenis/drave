@@ -1642,3 +1642,399 @@ par source {'hand': (13, 13), 'reel': (171, 166), 'synthetique': (55, 41)}
 par langue {'fr': (151, 134), 'en': (88, 86)}
   ```
 
+### 🤖 Assistant
+
+⏵ Décomposition par source et par moitié (contrôle du confond synthétique/français)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, importlib.util\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nspec = importlib.util.spec_from_file_l … [1280 caractères tronqués]`
+
+  ```
+dev reel           phr 317 cib 131 lab 129 couv 0.9847 F1 0.5788 tete 0.7275 POS 0.7609
+dev synth          phr 105 cib  32 lab  23 couv 0.7188 F1 0.5904 tete 0.7560 POS 0.7300
+dev synth-fr       phr 105 cib  32 lab  23 couv 0.7188 F1 0.5904 tete 0.7560 POS 0.7300
+test reel          phr 135 cib  53 lab  50 couv 0.9434 F1 0.5823 tete 0.7152 POS 0.7787
+test synth         phr  55 cib  23 lab  18 couv 0.7826 F1 0.6078 tete 0.7893 POS 0.7290
+test synth-fr      phr  55 cib  23 lab  18 couv 0.7826 F1 0.6078 tete 0.7893 POS 0.7290
+
+dev {'hand': 10, 'reel': 121, 'synthetique': 32} total 163
+test {'hand': 3, 'reel': 50, 'synthetique': 23} total 76
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection de r241 (effet de bord de l'essai R2 dans l'arbre sale)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0, 'tools'); sys.path.insert(0, '.')\nfrom tools.tests.linguistique import evaluer_gold as eg\nimport bloc_linguistique as bl\np = {x['id']:x for x in eg.charger()}['r241']\nprint(p['lan … [410 caractères tronqués]`
+
+  ```
+en reel 'The day when we left was beautiful.'
+gold [('GN', 0, 7, 'The day', None), ('REL', 8, 20, 'when we left', 'day'), ('GV', 21, 24, 'was', None), ('ADJ', 25, 34, 'beautiful', None)]
+pred [('GN', 0, 7, 'The day'), ('SUB', 8, 20, 'when we left'), ('GV', 21, 34, 'was beautiful')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Assemblage du JSON final (comparaisons rejouées, contrôles, notes d'arbre)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Assemble reports/pensee-dev-test-v10.json à partir de la mesure épinglée 710ec7f9.\n\nNe touche à aucun fichier existant hors les deux sorties demandées.\n\"\"\"\nfrom __future__ import annotations\n\nimport importlib.util\nimport json\nimport math\nimport  … [21315 caractères tronqués]`
+
+  ```
+<path>/tmp/v10/construire_json.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des cibles neuves puis génération du JSON final
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-dev-test-v10.md reports/pensee-dev-test-v10.json 2>&1; echo '---'; timeout 300 python3 /tmp/v10/construire_json.py 2>&1 | tail -20", "description": "Check targets and build final JSON", "timeoutMs": 320000}`
+
+  ```
+ls: cannot access 'reports/rapport-dev-test-v10.md': No such file or directory
+ls: cannot access 'reports/pensee-dev-test-v10.json': No such file or directory
+---
+Traceback (most recent call last):
+  File "/tmp/v10/construire_json.py", line 416, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/v10/construire_json.py", line 89, in main
+    bloc[label] = resume(eg.evaluer_bloc("h", h, ps))
+                  ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/v10/construire_json.py", line 56, in resume
+    "exact_taux_cibles": a["exact_taux_cibles"],
+                         ~^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'exact_taux_cibles'
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du champ exact_taux (nommage variable selon la source) et relance
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\np='/tmp/v10/construire_json.py'\ns=open(p,encoding='utf-8').read()\nold='\"exact_taux_cibles\": a[\"exact_taux_cibles\"],'\nnew='\"exact_taux_cibles\": a.get(\"exact_taux_cibles\", a.get(\"exact_taux\")),'\nassert old in s\ns=s.replace(old,new,1)\nopen( … [244 caractères tronqués]`
+
+  ```
+ok
+Traceback (most recent call last):
+  File "/tmp/v10/construire_json.py", line 416, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/v10/construire_json.py", line 95, in main
+    "dev": resume(can["dev"]), "test": resume(can["test"]),
+           ~~~~~~^^^^^^^^^^^^
+  File "/tmp/v10/construire_json.py", line 59, in resume
+    "tete": r["syntagme"]["tete"]["f1"],
+            ~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'tete'
+  ```
+
+### 🤖 Assistant
+
+⏵ Gestion des deux formes de sortie (tête au niveau syntagme ou racine)
+
+- **bash** `{"command": "cd /tmp/v10 && python3 - <<'EOF'\np='/tmp/v10/construire_json.py'\ns=open(p,encoding='utf-8').read()\nold='''def resume(r: dict) -> dict:\n    a = r[\"attachement\"]\n    return {\n        \"phrases\": r[\"phrases\"],\n        \"cibles\": a[\"cibles\"], \"labels\": a[\"labels\"], \"exac … [1787 caractères tronqués]`
+
+  ```
+ok
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-dev-test-v10.json 144763 octets
+deltas v7 {"dev": {"labels": 18, "exact": 19, "couverture": 0.1104, "f1": 0.03, "tete": 0.0198, "pos": 0.0}, "test": {"labels": 6, "exact": 6, "couverture": 0.0789, "f1": 0.0239, "tete": 0.0141, "pos": 0.0}, "tout": {"labels": 24, "exact": 25, "couverture": 0.1004, "f1": 0.0281, "tete": 0.018, "pos": 0.0}, "gele": {"labels": 24, "exact": 25, "couverture": 0.1004, "f1": 0.0285, "tete": 0.0183, "pos": 0.0}}
+deltas audit {"dev": {"labels": 4, "exact": 4, "couverture": 0.0245, "f1": 0.0089, "tete": 0.006, "pos": 0.0}, "test": {"labels": 4, "exact": 4, "couverture": 0.0526, "f1": 0.0176, "tete": 0.0096, "pos": 0.0}, "tout": {"labels": 8, "exact": 8, "couverture": 0.0335, "f1": 0.0116, "tete": 0.007, "pos": 0.0}, "gele": {"labels": 8, "exact": 8, "couverture": 0.0335, "f1": 0.0117, "tete": 0.0072, "pos": 0.0}}
+deltas v9 {"dev": {"labels": 0, "exact": 0, "couverture": 0.0, "f1": 0.0005, "tete": 0.0003, "pos": 0.0}, "test": {"labels": 1, "exact": 1, "couverture": 0.0131, "f1": 0.0035, "tete": 0.0014, "pos": 0.0}, "tout": {"labels": 1, "exact": 1, "couverture": 0.0042, "f1": 0.0014, "tete
+… [122 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du JSON final (comparaisons, synthèse, contrôles)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-dev-test-v10.json'))\nprint('meta', d['meta'])\nprint('synthese dev/test/tout', {k:d['synthese'][k] for k in ('dev','test','tout')})\nprint('gele', d['synthese']['gele_ … [1098 caractères tronqués]`
+
+  ```
+meta {'ligne': 'B13', 'commit': '710ec7f9', 'sha': '710ec7f982ea3a85a3ca2cb8afc8e3390a129c9c', 'branche': 's/v7', 'date': '2026-11-05', 'verdict': 'dev/test re-mesurés ; stabilité vérifiée ; 3 écarts de fiche', 'ancrage': 'commit 710ec7f9 ; HEAD ultérieur 68a8717b et module sale non mesurés', 'aucun_commit': True, 'aucun_fichier_existant_modifie': True, 'fichiers': ['reports/rapport-dev-test-v10.md', 'reports/pensee-dev-test-v10.json']}
+synthese dev/test/tout {'dev': {'phrases': 422, 'cibles': 163, 'labels': 152, 'exact': 152, 'couverture': 0.9325, 'f1': 0.5812, 'tete': 0.733, 'pos': 0.7547}, 'test': {'phrases': 190, 'cibles': 76, 'labels': 68, 'exact': 68, 'couverture': 0.8947, 'f1': 0.589, 'tete': 0.7337, 'pos': 0.7656}, 'tout': {'phrases': 612, 'cibles': 239, 'labels': 220, 'exact': 220, 'couverture': 0.9205, 'f1': 0.5836, 'tete': 0.7332, 'pos': 0.7581}}
+gele {'phrases': 602, 'pos': 0.7603, 'f1': 0.588, 'tete': 0.7388, 'labels': 220, 'exact': 220, 'couverture': 0.9205, 'topk': 219}
+ecart {'exact_taux': 0.0, 'couverture': 0.0378, 'f1': -0.0078, 'tete': -0.0007, 'pos': -0.0109}
+stabilite {'exact_taux_span': {'dev': 0.0, 'test': 0.0}, 'exact': {'dev': 18, 'test': 18}, 'labels': {'d
+… [3103 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche `reports/rapport-dev-test-v10.md`
+
+- **write** `{"content": "# B13 — dev/test en v10 : dev 152/152, test 68/68, l'exact est saturé et le split ne bouge plus que par la couverture\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·\n> **Commit mesuré** : `710ec7f9` (branche `s/v7`) · **Verdict** : ✅ chiffres j … [33950 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture ciblée de la fiche (typos, chiffres, liens)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"+?\\|??\\|TODO\\|None\\|XXX\" reports/rapport-dev-test-v10.md; echo '--- lignes ---'; wc -l reports/rapport-dev-test-v10.md reports/pensee-dev-test-v10.json; echo '--- liens ---'; python3 - <<'EOF'\nimport re, pathlib\np=pa … [383 caractères tronqués]`
+
+  ```
+170:- **1 R2 non intégrée** : `s037` (« Paul qui marche marche » ; la règle `precedent is None
+314:  synthétique **+3,33** : la composition annule les deux. Par type, REL +? au test (0,9444
+463:   (`qui`, `dont`, `where`…) au lieu de `precedent is None → SUB`. Vérifier `r241` : `when`
+--- lignes ---
+   490 reports/rapport-dev-test-v10.md
+  7389 reports/pensee-dev-test-v10.json
+  7879 total
+--- liens ---
+OK  ../tools/tests/linguistique/gold_split.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py
+OK  ../tools/tests/linguistique/evaluer_gold.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  pensee-dev-test-v10.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-dev-test-v10.json
+OK  rapport-dev-test-v10.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md
+OK  pensee-dev-test-v10.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-dev-test-v10.json
+OK  ../tools/tests/linguistique/gold_split.py -> /home/stephane/Data
+… [642 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du typographe « REL +? » dans la fiche
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "offset": 306, "limit": 16}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+306: - **F1** : test **+0,78 point** (0,5836 contre 0,5890), mais c'est un **effet de
+307:   composition**, pas une meilleure segmentation des cibles : le test est plus synthétique
+308:   (30,3 % des cibles contre 19,6 %) et le synthétique a une F1 plus haute (0,6078 au test
+309:   contre 0,5823 au réel) ; à source fixée, le réel gagne +0,35 point et le synthétique
+310:   +1,74. Sur les types cibles, le test est **plus bas** : REL 0,7179 contre 0,7907 (−7,3),
+311:   SUB 0,8571 contre 0,9247 (−6,8), GP 0,8571 contre 0,8553 (+0,2). La F1 globale ne mesure
+312:   donc pas la généralisation de l'attachement ; elle mesure surtout GN/GV et la source.
+313: - **Tête** : test **+0,07 point** (0,7337 contre 0,7330), masque un réel **−1,23** et un
+314:   synthétique **+3,33** : la composition annule les deux. Par type, REL +? au test (0,9444
+315:   contre 0,9573, −1,29), SUB +1,21, GP +0,66. Rien de significatif.
+316: - **POS** : test **+1,09 point** (0,7656 contre 0,7547), exactement le motif de la v7 :
+317:   l'anglais gagne (+3,97), le français recule (−0,46). La POS est
+… [381 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "old_string": "  synthétique **+3,33** : la composition annule les deux. Par type, REL +? au test (0,9444\n  contre 0,9573, −1,29), SUB +1,21, GP +0,66. Rien de significatif.", "new_string": "  synthétiq … [150 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation locale des tableaux et de la structure de la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib, re\np = pathlib.Path('reports/rapport-dev-test-v10.md')\nlines = p.read_text(encoding='utf-8').splitlines()\nblocs=[]; cur=[]\nfor i,l in enumerate(lines,1):\n    if l.strip().startswith('|'):\n     … [594 caractères tronqués]`
+
+  ```
+tableaux 14
+OK  ligne 57 lignes 5 pipes [11]
+OK  ligne 69 lignes 4 pipes [16]
+OK  ligne 80 lignes 5 pipes [14]
+OK  ligne 95 lignes 8 pipes [8]
+OK  ligne 110 lignes 5 pipes [8]
+OK  ligne 116 lignes 7 pipes [9]
+OK  ligne 141 lignes 21 pipes [9]
+OK  ligne 180 lignes 14 pipes [5]
+OK  ligne 232 lignes 6 pipes [19]
+OK  ligne 244 lignes 5 pipes [7]
+OK  ligne 269 lignes 11 pipes [12]
+OK  ligne 332 lignes 6 pipes [17]
+OK  ligne 339 lignes 6 pipes [5]
+OK  ligne 386 lignes 5 pipes [6]
+1 # B13 — dev/test en v10 : dev 152/152, test 68/68, l'exact est saturé et le split ne bouge plus que 
+29 ## 1. Ce qui est mesuré
+55 ## 2. Le split canonique
+67 ### 2.1 Par langue
+78 ### 2.2 Par type
+93 ### 2.3 Le croisement fin
+108 ### 2.4 Par source — et le confond synthétique/français
+139 ### 2.5 Les 19 spans perdus
+178 ## 3. L'équilibre du split
+230 ## 4. La stabilité : trois découpages
+295 ## 5. L'écart dev/test
+326 ## 6. Comparaison v7 (`69bd865e`), audit v8 (`f908d7b0`), v9 (`160d08ca`)
+355 ### 6.1 Trois énoncés de la fiche v10 à corriger
+381 ### 6.2 La garde GP : un effet plus large que `r153`
+396 ## 7. Contrôles négatifs
+417 ## 8. Ce que ce banc ne dit pas — et ce qui pourrait le rendre faux
+452 ## 9. L
+… [27 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois corrections de forme (renvoi, libellé d'étendue, nom de l'audit)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='reports/rapport-dev-test-v10.md'\ns=open(p,encoding='utf-8').read()\n# 1) renvoi source au bon paragraphe\nold=\"mais c'est un **effet de source**,\\npas un effet de langue (voir § 2.5).\"\nnew=\"mais c'est un * … [648 caractères tronqués]`
+
+  ```
+ok
+MM reports/pensee-audit-v10.json
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+MM reports/rapport-audit-v10.md
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/pensee-dev-test-v10.json
+?? reports/rapport-dev-test-v10.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale : porte tableaux (lecture seule ?) et cohérence JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/porte-tableaux.sh", "description": "Inspect table door script"}`
+
+  ```
+#!/bin/bash
+# porte-tableaux.sh — un tableau Markdown qui ne rend pas est un tableau qui n'existe PAS.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 13/10, le premier tableau de `docs/etat-cerveau.md` s'affichait
+# comme du TEXTE dans docwatch : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
+# **4 cellules pour 5 colonnes** — un lien qui avait glissé d'une colonne. Le rendu (mistune,
+# puis markdown_it, puis markdown) refuse alors le tableau ENTIER, sans rien dire : les 13 lignes
+# disparaissent de la page et personne ne le voit, parce que le texte est toujours là, en gris.
+#
+# CE QU'ELLE VÉRIFIE (trois conditions, toutes nécessaires au rendu) :
+#   1. l'en-tête et le séparateur d'un tableau ont le MÊME nombre de cellules ;
+#   2. chaque ligne du corps a ce nombre de cellules ;
+#   3. aucun `\|` ne subsiste : mistune ne le déséchappe NI dans un espace de code NI dans la
+#      prose (il s'affiche alors littéralement). Pour une barre de valeur absolue dans du code,
+#      on écrit `∣` (U+2223), qui rend partout et ne casse pas la lecture.
+# Les tableaux DANS une citation (`> | … |`) sont valides et vérifiés aussi.
+#
+# CE QU'ELLE NE VÉRIFIE PAS : les tableaux « écrasés » sur une se
+… [855 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passage de la porte tableaux sur la seule fiche neuve
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CIBLES=\"reports/rapport-dev-test-v10.md\" bash tools/porte-tableaux.sh; echo \"exit=$?\"", "description": "Run table door on new report"}`
+
+  ```
+✅ 1 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3475 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Assertions finales sur le JSON (splits, 19 spans, comparaisons, validation)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-dev-test-v10.json'))\nassert d['meta']['commit']=='710ec7f9'\nassert d['meta']['sha'].startswith('710ec7f9')\nfor h in ('dev','test','tout'):\n    s=d['synthese'][h]\n  … [1624 caractères tronqués]`
+
+  ```
+dev {'phrases': 422, 'cibles': 163, 'labels': 152, 'exact': 152, 'couverture': 0.9325, 'f1': 0.5812, 'tete': 0.733, 'pos': 0.7547}
+test {'phrases': 190, 'cibles': 76, 'labels': 68, 'exact': 68, 'couverture': 0.8947, 'f1': 0.589, 'tete': 0.7337, 'pos': 0.7656}
+tout {'phrases': 612, 'cibles': 239, 'labels': 220, 'exact': 220, 'couverture': 0.9205, 'f1': 0.5836, 'tete': 0.7332, 'pos': 0.7581}
+json.tool OK
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+KeyError: 'par_source'
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de `spans.par_source` au JSON et reprise des assertions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, collections, pathlib\np=pathlib.Path('reports/pensee-dev-test-v10.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['spans']['par_source']=dict(collections.Counter(s['source'] for s in d['spans'][ … [1778 caractères tronqués]`
+
+  ```
+par_source {'reel': 5, 'synthetique': 14}
+validation ecarts {'tout': 0.0, 'dev': 0.0, 'test': 0.0}
+stabilite {'exact_taux_span': {'dev': 0.0, 'test': 0.0}, 'exact': {'dev': 18, 'test': 18}, 'labels': {'dev': 18, 'test': 18}, 'couverture': {'dev': 0.0325, 'test': 0.0603}, 'f1': {'dev': 0.0107, 'test': 0.0209}, 'tete': {'dev': 0.0069, 'test': 0.0131}, 'pos': {'dev': 0.0055, 'test': 0.0111}}
+deltas v9 test {'labels': 1, 'exact': 1, 'couverture': 0.0131, 'f1': 0.0035, 'tete': 0.0014, 'pos': 0.0}
+mc test couverture {'p05': 0.0143, 'mediane': 0.0494, 'p95': 0.1008} obs 0.0603 p 0.345
+JSON OK 104535 octets
+json.tool OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier ajustement de prudence sur la formulation du rejeu (`generateur`)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "new_string": "- **Rejeu des anciens commits** : les modules sont copiés dans `/tmp` avec `RACINE` du dépôt ;\n  le `generateur` S est celui du dépôt (**le même pour tous les rejeux**), et le gold n'a pa … [541 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de la section concernée avant la dernière correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Rejeu des anciens commits\" reports/rapport-dev-test-v10.md", "description": "Locate replay sentence"}`
+
+  ```
+444:- **Rejeu des anciens commits** : les modules sont copiés dans `/tmp` avec `RACINE` du dépôt ;
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "limit": 8, "offset": 444}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+444: - **Rejeu des anciens commits** : les modules sont copiés dans `/tmp` avec `RACINE` du dépôt ;
+445:   le `generateur` S est celui du dépôt (identique entre les commits), et le gold n'a pas
+446:   changé entre `69bd865e` et `710ec7f9` (vérifié : aucun diff de `tools/tests/linguistique/`).
+447:   Les valeurs publiées sont reproduites, ce qui valide la comparaison.
+448: - **Les 17 inatteignables** sont la classification de l'audit R1/R3, pas un jugement nouveau :
+449:   4 d'entre eux sont « hors périmètre » (récupérables en changeant le gold/le lexique), 13 sont
+450:   non récupérables sans changer le gold. `s037` et `r303` ne sont pas dans ces 17.
+451: 
+
+(Showing lines 444-451 of 490. Use offset=452 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "new_string": "  le `generateur` S est celui du dépôt (**le même pour tous les rejeux**), et le gold n'a pas\n  changé entre `69bd865e` et `710ec7f9` (vérifié : aucun diff de `tools/tests/linguistique/`) … [205 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle des caractères de contrôle et repassage de la porte tableaux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nfor f in ('reports/rapport-dev-test-v10.md','reports/pensee-dev-test-v10.json'):\n    b=pathlib.Path(f).read_bytes()\n    ctrl=[(i,hex(x)) for i,x in enumerate(b) if x<32 and x not in (9,10,13)]\n   … [214 caractères tronqués]`
+
+  ```
+reports/rapport-dev-test-v10.md control chars [(31613, '0x8')] count 1
+reports/pensee-dev-test-v10.json control chars [] count 0
+  ✅ 1 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3475 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Suppression du caractère de contrôle `\x08` dans la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('reports/rapport-dev-test-v10.md')\nb=p.read_bytes()\ni=b.find(b'\\x08')\nprint('context:', repr(b[i-80:i+80].decode('utf-8', errors='replace')))\nb=b.replace(b'\\x08', b'')\np.write_ … [342 caractères tronqués]`
+
+  ```
+context: "ignables** sont la classification de l'audit R1/R3, pas un jugement nouveau :\n  \x084 d'entre eux sont « hors périmètre » (récupérables en changeant le gold/"
+remaining control chars: []
+line: "  4 d'entre eux sont « hors périmètre » (récupérables en changeant le gold/le lexique), 13 sont"
+  ```
+

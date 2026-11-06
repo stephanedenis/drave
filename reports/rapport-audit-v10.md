@@ -2,7 +2,7 @@
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
 > **Commit audité** : `710ec7f9` (parent `160d08ca`) · **Date** : 2026-11-05 ·
-> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅.
+> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅ (183/183, 11 docstrings périmées).
 > **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
 > [`pensee-audit-v10.json`](pensee-audit-v10.json).
 
@@ -49,14 +49,22 @@ Au début de l'audit, `tools/bloc_linguistique.py` était **byte-identique** à 
 `2026-11-06 00:15:37`) : deux changements dans `_syntagmes_simple` — la condition R2
 (`stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS or precedent == "GV")`, qui répare
 `s037`) et la **suppression de la garde d'adverbe final** (qui répare `r303` mais perd
-`g017`). **Toutes les mesures de ce rapport sont ancrées sur le commit** : le module est lu
-par `git show 710ec7f9:tools/bloc_linguistique.py`, copié dans `/tmp/audit_v10/mods` et
-importé ; le fichier de travail n'est jamais utilisé. Les chiffres du commit sont **220/220,
-0,5880, 19 spans, test 68/68** ; l'arbre courant, lui, donne **221/221, F1 0,5843, top-k 220,
-18 spans (9 REL, 5 SUB, 4 GP), dev 152/152, test 69/69** (il répare `s037` et `r303`, perd
-`g017`, ajoute `r241`). Ce changement n'est **pas** de cet audit et n'est **pas** évalué ici ;
-son auteur doit le vérifier et le committer. Les **183/183 portes** ont été obtenues quand
-l'arbre était encore au commit.
+`g017`). Ce changement a ensuite été **committé** dans `653a7981` (2026-11-06 00:28:42,
+« … AUDIT V10 INTÉGRÉ, V10 CORRIGÉE »), avec `reports/pensee-v11.json` et
+`rapport-pensee-v11.md` ; c'est la **v11**, pas la v10. **Toutes les mesures de ce rapport
+sont ancrées sur `710ec7f9`** : le module est lu par
+`git show 710ec7f9:tools/bloc_linguistique.py`, copié dans `/tmp/audit_v10/mods` et importé ;
+le fichier de travail n'est jamais utilisé. Les chiffres du commit sont **220/220, 0,5880,
+19 spans, test 68/68** ; l'arbre courant (v11) donne **221/221, F1 0,5843, top-k 220, 18 spans
+(9 REL, 5 SUB, 4 GP), dev 152/152, test 69/69** (il répare `s037` et `r303`, perd `g017`,
+ajoute `r241`). Ce changement n'est **pas** de cet audit et n'est **pas** évalué ici. Les
+**183/183 portes** de ce rapport ont été obtenues quand l'arbre était encore au commit ; la
+v11 passe aussi **183/183** avec ses assertions ajustées. La fiche
+[`rapport-pensee-v10.md`](rapport-pensee-v10.md) a également été **corrigée** dans `653a7981`
+(elle se présente désormais comme un « instantané historique ») ; les citations de ce rapport
+sont celles du **commit `710ec7f9`**, pas celles de la fiche corrigée. Les versions de ce
+rapport et du JSON présentes dans `653a7981` sont une **version antérieure** ; les versions
+courantes du worktree sont les versions finales.
 
 ## 2. Rejeu des valeurs v10 — 2 écarts
 
@@ -363,14 +371,15 @@ de ce qu'il mesure.
 - **Dépôt déjà modifié** : `journal/`, plusieurs `reports/` et le sous-module
   `tools/structures` portaient des modifications non commitées antérieures à cet audit. Le
   fichier `tools/bloc_linguistique.py` a été **modifié en cours d'audit** (mtime
-  `2026-11-06 00:15:37`, deux changements R2/adverbe) : les mesures sont faites sur la copie
-  du **commit** `710ec7f9`, pas sur l'arbre courant. La reproductibilité sur l'arbre courant
-  n'est donc pas garantie tant que ce changement n'est pas committé ou reverté.
+  `2026-11-06 00:15:37`, deux changements R2/adverbe) puis **committé** dans `653a7981`
+  (v11) : les mesures sont faites sur la copie du **commit** `710ec7f9`, pas sur l'arbre
+  courant. Rejouer sur l'arbre courant donne **221/221** (v11), pas 220 ; c'est une autre
+  version, pas un écart de cet audit.
 
 ## 10. Fichiers
 
 - [`rapport-audit-v10.md`](rapport-audit-v10.md) — ce rapport.
 - [`pensee-audit-v10.json`](pensee-audit-v10.json) — les chiffres, les ids et les contrôles.
 
-**Aucun fichier existant n'a été modifié ; aucun commit n'a été fait.** Les scripts de mesure
-vivaient dans `/tmp/audit_v10/` et ne sont pas livrés.
+**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait par cet
+audit.** Les scripts de mesure vivaient dans `/tmp/audit_v10/` et ne sont pas livrés.

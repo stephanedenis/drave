@@ -38,12 +38,10 @@
   "ablations": "copies du module dans /tmp/audit_v10/mods, une seule modification réintroduite par variante ; aucun patch du dépôt.",
   "fidelite": "v10 sans garde GP sans -ée = module v9 (219, 0,5866, 20 spans, 152/152, 67/67) ; module v8 = 212, 0,5763, 27 spans, 177 top-k, 148/148, 64/64.",
   "portes": "PYTHONPATH=. python3 -m tools.pensee.autotest -> 183/183, exit 0",
-  "aucune_modification": true,
-  "aucun_commit": true,
   "note_arbre_de_travail": {
    "etat_initial": "tools/bloc_linguistique.py byte-identique à 710ec7f9 (sha256 308f6eeda95f69ea...) au début de l'audit",
    "changement_observe": "modification non commitée pendant la rédaction (mtime 2026-11-06 00:15:37) : condition R2 (est_sub(n) or n in SUBORDONNANTS or precedent == \"GV\") et suppression de la garde d'adverbe final",
-   "ancrage": "toutes les mesures utilisent git show 710ec7f9:tools/bloc_linguistique.py, copié dans /tmp/audit_v10/mods ; le fichier de travail n'est pas utilisé",
+   "ancrage": "toutes les mesures utilisent git show 710ec7f9:tools/bloc_linguistique.py, copié dans /tmp/audit_v10/mods ; l'arbre courant (v11) n'est pas utilisé",
    "arbre_courant": {
     "labels": 221,
     "exact": 221,
@@ -57,16 +55,24 @@
     },
     "dev": "152/152",
     "test": "69/69",
-    "effet": "répare s037 et r303, perd g017, ajoute r241"
+    "effet": "répare s037 et r303, perd g017, ajoute r241",
+    "portes": "183/183 avec les assertions autotest ajustées (v11)"
    },
-   "portes": "183/183 obtenu quand l'arbre était encore au commit ; le changement courant n'est pas audité"
-  }
+   "portes": "183/183 obtenu quand l'arbre était encore au commit ; le changement courant n'est pas audité",
+   "etat": "changement committé dans 653a7981 (v11) pendant l'audit, après les mesures",
+   "commit_concurrent": "653a7981 — 2026-11-06 00:28:42 — « ... AUDIT V10 INTÉGRÉ, V10 CORRIGÉE »",
+   "versions": "les versions de ce rapport et du JSON dans 653a7981 sont une version antérieure ; le worktree contient les versions finales",
+   "fiche_v10": "rapport-pensee-v10.md a été corrigée dans 653a7981 (instantané historique) ; les citations et écarts de ce rapport portent sur la version du commit 710ec7f9."
+  },
+  "aucune_modification_existante_par_cet_audit": true,
+  "aucun_commit_par_cet_audit": true,
+  "commit_concurrent_note": "653a7981 (v11) a été créé par un autre agent pendant l'audit ; il intègre une version antérieure de ce rapport et du JSON."
  },
  "verdict": {
   "chiffres_rejoues": true,
   "ecarts_chiffres": 2,
   "regles_justes": false,
-  "portes": "183/183",
+  "portes": "183/183 (11 docstrings périmées)",
   "resume": "Les valeurs v10 rejouent (220/220, 0,9205, 0,5880, 0,7388, 134/134, 86/86, 19 spans, top-k 219). Deux écarts de valeur : le F1 « avant » (0,5822 vivant, 0,5866 gelé) et le test non actualisé (68/68, pas 67/67, valeur v9 explicite). Les règles ne rejouent pas : la seule correction v10 est la garde DET du GP (+1, r153) ; le -ée est antérieur et inerte (0 différence sur 612 phrases), r255 reste absent. Les 19 spans sont 17 résiduels + s037 + r303, pas 17 + r255 + r264 ; r303 est une perte cachée du predicat_vu v9 (net 0 avec g017)."
  },
  "rejeu": {
@@ -1227,7 +1233,7 @@
   "Le -ée est inerte sur ce gold (0 différence d'annotation sur 612 phrases) ; un autre corpus pourrait révéler des faux positifs (entrée, portée, aimée) ou des effets hors gold.",
   "La garde DET du GP inclut un vrai verbe après déterminant (« de la voir » -> GP « de la voir ») : risque réel, non mesuré sur ce gold.",
   "Le top-k officiel (sous-chaîne) est peu discriminant : la permutation des listes de candidats laisse 1,17 % de réussite ; le top-1 aléatoire vaut 42,14 %. Les deux contrôles donnent p = 0.",
-  "Le fichier tools/bloc_linguistique.py a été modifié sans commit pendant l'audit (mtime 2026-11-06 00:15:37) : les mesures sont ancrées sur git show 710ec7f9, pas sur l'arbre courant ; la reproductibilité sur l'arbre courant n'est pas garantie tant que le changement n'est pas committé ou reverté.",
+  "Le fichier tools/bloc_linguistique.py a été modifié puis committé dans 653a7981 (v11) pendant l'audit : les mesures sont ancrées sur git show 710ec7f9 ; rejouer sur l'arbre courant donne 221/221 (v11), pas 220.",
   "Les valeurs de la fiche sont mesurées à 710ec7f9, module byte-identique au commit ; les modifications non commitées du journal, de reports/ et du sous-module tools/structures n'entrent pas dans les mesures."
  ],
  "fichiers_ecrits": [

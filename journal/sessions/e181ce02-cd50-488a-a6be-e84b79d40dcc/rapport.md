@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 127.8 h |
+| Durée | 128.3 h |
 | Tours | 177 |
-| Messages | 2853 |
-| Appels d'outils | 2513 |
+| Messages | 2861 |
+| Appels d'outils | 2518 |
 | Fichiers touchés | 25 |
-| Commandes | 2069 |
+| Commandes | 2073 |
 | Sous-agents | 25 |
-| Commits | 304 |
+| Commits | 305 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*272 appels d'outils.* Actions notables :
+*277 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 219 autres
+- … et 223 autres
 
 **Synthèse produite :**
 
-⏵ Je corrige la v10 (audit) et je fige la v11 (s037, r303)
+⏵ Je commite les versions finales de l'audit v10 et j'aligne les 11 docstrings
 
 ## 3. Travail accompli
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2029 autres
+- … et 2033 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9750,7 +9750,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-46 sorties en erreur ou divergentes. Les premières :
+47 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10074,4 +10074,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS" -- journal/2026-11-06/README.md docs/pilotage/en-cours.md 2>&1 | tai
 - JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)" -- journal/2026-11-06/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "FO
 - B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183" -- tools/bl
+- PORTES — 11 DOCSTRINGS ALIGNÉES SUR LA V11 (221/221, 18 SPANS, TOP-K 220) ; AUDIT V10 FINAL COMMITTÉ ; 183/183" -- tools/pensee/autotest.py reports/rapport-audi
 

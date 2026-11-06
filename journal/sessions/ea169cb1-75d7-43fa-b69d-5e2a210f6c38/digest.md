@@ -2932,3 +2932,509 @@ background job bash-2525 (bash: PYTHONPATH=. python3 -m tools.pensee.autotest > 
 (no output)
   ```
 
+### 🤖 Assistant
+
+⏵ Checking staged vs unstaged state of the in-flight change
+
+- **bash** `{"command": "git status --short tools/bloc_linguistique.py tools/pensee/autotest.py; echo '--- cached stat ---'; git diff --cached --stat tools/pensee/autotest.py tools/bloc_linguistique.py; echo '--- unstaged stat ---'; git diff --stat tools/pensee/autotest.py tools/bloc_linguistique.py", "descript … [115 caractères tronqués]`
+
+  ```
+M  tools/bloc_linguistique.py
+M  tools/pensee/autotest.py
+--- cached stat ---
+ tools/bloc_linguistique.py | 11 ++++-------
+ tools/pensee/autotest.py   | 34 +++++++++++++++++-----------------
+ 2 files changed, 21 insertions(+), 24 deletions(-)
+--- unstaged stat ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Documenting that the in-flight variant is staged and self-consistent
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\nold=\"\"\"`g017`, ajoute `r241`). Ce changement n'est **pas** de cet audit et n'est **pas** évalué ici ;\nson auteur doit le vérifier et le committer. Les **183/183 portes** ont été obtenues quand\nl'arbre était encor … [1191 caractères tronqués]`
+
+  ```
+md ok
+json ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Clarifying that only the audit wrote nothing else
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\ns=s.replace(\"**Aucun fichier existant n'a été modifié ; aucun commit n'a été fait.**\",\"**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait.**\")\nopen(p,'w').write(s)\nprint('ok')\nPY … [155 caractères tronqués]`
+
+  ```
+ok
+
+- [`rapport-audit-v10.md`](rapport-audit-v10.md) — ce rapport.
+- [`pensee-audit-v10.json`](pensee-audit-v10.json) — les chiffres, les ids et les contrôles.
+
+**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait.** Les scripts de mesure
+vivaient dans `/tmp/audit_v10/` et ne sont pas livrés.
+  ```
+
+### 🤖 Assistant
+
+⏵ Confirming the final measurement file is commit-anchored
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_v10/resultats.json'))\nv=d['variantes']['v10']\nprint('v10',v['labels'],v['exact'],v['f1_gele'],v['topk'],v['spans_total'],v['spans'],v['test'])\nprint('v9',d['variantes']['v9']['labels'],d['variantes']['v9']['f1_gele'],d['vari … [246 caractères tronqués]`
+
+  ```
+v10 220 220 0.588 219 19 {'GP': 4, 'REL': 9, 'SUB': 6} {'cibles': 76, 'labels': 68, 'exact': 68, 'couverture': 0.8947, 'f1': 0.589, 'tete': 0.7337, 'par_langue': {'fr': {'cibles': 50, 'labels': 43, 'exact': 43, 'topk': 42}, 'en': {'cibles': 26, 'labels': 25, 'exact': 25, 'topk': 25}}}
+v9 219 0.5866 20
+controles 220 1.997
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying gate docstrings at the audited commit
+
+- **bash** `{"command": "git show 710ec7f9:tools/pensee/autotest.py > /tmp/audit_v10/autotest_710.py; python3 - <<'PY'\nimport ast,re\nsrc=open('/tmp/audit_v10/autotest_710.py').read()\nt=ast.parse(src)\nfor node in t.body:\n    if isinstance(node,ast.FunctionDef):\n        m=re.match(r't(\\d+)_',node.name)\n   … [277 caractères tronqués]`
+
+  ```
+t153_attachement             L'attachement sur le gold 612 (239 cibles) : top1 0,887, exact 0,887, couverture 0,887.
+t154_cibles                  Les cibles de l'attachement : 1624 segments sans cible sur 1863.
+t155_cibles_500              Les 500 premiers segments : 294 GN, 206 GV.
+t156_relation                La relation GN → GV : 257/546 (0,4707).
+t157_roles                   Les GN sans rôle : 231, dont 151 avant le GV et 46 après.
+t158_passifs                 Les passifs : 5/5 faux par la position seule.
+t159_passifs_corriges        Le correctif des passifs : _role_gp rend agent, le generateur S court-circuite.
+t160_passifs_sans_par        Les passifs sans par : le chunker 3/3 patient.
+t161_cible_proximite         La cible par proximité : 212/212 avec la règle du précédent.
+t162_candidats_verbes        Les candidats verbes : le top-k atteint 211/239 (0,8828) après le correctif du précédent.
+t163_echecs_attachement      Les échecs de l'attachement : 27 de span, 1 de cible.
+t164_verbe_gv                Le verbe du GV-phrase : le POS VERB, pas le dernier mot.
+t165_lexique_verbal          Le lexique verbal arbitre le POS : « talks » est un verbe, « brother » n'en est pas un.
+t166_
+… [1551 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Final consistency scan of the outputs
+
+- **bash** `{"command": "grep -n \"221\\|dirty\\|arbre courant\\|00:15\" reports/rapport-audit-v10.md; echo '--- json ---'; grep -n \"221\\|arbre_courant\\|00:15\" reports/pensee-audit-v10.json | head -20", "description": "Locate working-tree mentions", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrine … [3 caractères tronqués]`
+
+  ```
+49:`2026-11-06 00:15:37`) : deux changements dans `_syntagmes_simple` — la condition R2
+55:0,5880, 19 spans, test 68/68** ; l'arbre courant, lui, donne **221/221, F1 0,5843, top-k 220,
+368:  `2026-11-06 00:15:37`, deux changements R2/adverbe) : les mesures sont faites sur la copie
+369:  du **commit** `710ec7f9`, pas sur l'arbre courant. La reproductibilité sur l'arbre courant
+--- json ---
+45:   "changement_observe": "modification non commitée pendant la rédaction (mtime 2026-11-06 00:15:37) : condition R2 (est_sub(n) or n in SUBORDONNANTS or precedent == \"GV\") et suppression de la garde d'adverbe final",
+46:   "ancrage": "toutes les mesures utilisent git show 710ec7f9:tools/bloc_linguistique.py, copié dans /tmp/audit_v10/mods ; le fichier de travail (staged, 221/221) n'est pas utilisé",
+47:   "arbre_courant": {
+48:    "labels": 221,
+49:    "exact": 221,
+61:    "portes": "183/183 avec les assertions autotest ajustées pour 221/221 et 18 spans"
+1232:  "Le fichier tools/bloc_linguistique.py a été modifié sans commit pendant l'audit (mtime 2026-11-06 00:15:37) : les mesures sont ancrées sur git show 710ec7f9, pas sur l'arbre courant ; la reproductibilité sur l'arbre courant n'est pas 
+… [64 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-audit-v10.json >/dev/null && echo 'JSON OK'; python3 - <<'PY'\nimport re,pathlib\np=pathlib.Path('reports/rapport-audit-v10.md'); s=p.read_text()\nfor l in sorted(set(re.findall(r'\\]\\(([^)]+)\\)',s))):\n    if l.startswith('http'): continue\n    pri … [166 caractères tronqués]`
+
+  ```
+JSON OK
+OK ../tools/bloc_linguistique.py
+OK pensee-audit-v10.json
+OK rapport-audit-r1r3.md
+OK rapport-audit-v10.md
+OK rapport-pensee-v10.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking gate log timing against the in-flight edit
+
+- **bash** `{"command": "stat -c '%y %n' /tmp/audit_v10/autotest.log /tmp/audit_v10/autotest_dirty.log /tmp/audit_v10/harness_pinned.log; head -3 /tmp/audit_v10/autotest.log; tail -1 /tmp/audit_v10/autotest.log", "description": "Check gate log timing", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet … [2 caractères tronqués]`
+
+  ```
+2026-11-05 23:38:21.095722471 -0500 /tmp/audit_v10/autotest.log
+2026-11-06 00:28:34.264845723 -0500 /tmp/audit_v10/autotest_dirty.log
+2026-11-06 00:22:42.573938810 -0500 /tmp/audit_v10/harness_pinned.log
+  ✅ T0 store canonique     aller-retour exact, empreinte stable sous permutation
+  ✅ T1 rejeu               rejeu identique sur 94 événements ; deux exécutions égales
+  ✅ T1 graine              deux graines divergent au premier pas différent
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ Qualifying the gate verdict with stale docstrings
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\ns=s.replace(\"> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅.\",\"> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅ (183/183, 11 docstrings périmées).\")\nopen(p,'w').write(s)\nprint('md ok')\ … [359 caractères tronqués]`
+
+  ```
+md ok
+json ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Final repo status check
+
+- **bash** `{"command": "git status --short reports/ | grep -E 'audit-v10|rapport-audit-v10|pensee-audit-v10'; echo '--- all new reports files ---'; git status --short reports/ | grep '^??'; echo '--- our files ---'; ls -l reports/rapport-audit-v10.md reports/pensee-audit-v10.json", "description": "Confirm only … [85 caractères tronqués]`
+
+  ```
+MM reports/pensee-audit-v10.json
+MM reports/rapport-audit-v10.md
+--- all new reports files ---
+?? reports/rapport-s-paragraphes.md
+--- our files ---
+-rw-r--r--. 1 stephane stephane 29330  6 nov 00:33 reports/pensee-audit-v10.json
+-rw-------. 1 stephane stephane 25957  6 nov 00:33 reports/rapport-audit-v10.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Investigating why the new files are now staged
+
+- **bash** `{"command": "git log --oneline -3; echo '--- status ours ---'; git status --short reports/rapport-audit-v10.md reports/pensee-audit-v10.json; echo '--- cached diff stat ours ---'; git diff --cached --stat reports/rapport-audit-v10.md reports/pensee-audit-v10.json; echo '--- index hash ---'; git ls-f … [298 caractères tronqués]`
+
+  ```
+653a7981 B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+68a8717b JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)
+41cae3e5 JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS
+--- status ours ---
+MM reports/pensee-audit-v10.json
+MM reports/rapport-audit-v10.md
+--- cached diff stat ours ---
+ reports/pensee-audit-v10.json | 8 +++++---
+ reports/rapport-audit-v10.md  | 8 +++++---
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+--- index hash ---
+100644 5b802258acd586d692519689ceee2b5548849499 0	reports/pensee-audit-v10.json
+100644 dd6b1e81df627d5c4f483620fa47ca703b1515e3 0	reports/rapport-audit-v10.md
+--- worktree hash ---
+68a575d43d961c5dc37e63fc5be39ea621ec065c
+da316c7409bb4197c8b144a12bf994b4964b7af0
+  ```
+
+### 🤖 Assistant
+
+⏵ A concurrent commit appeared; comparing committed vs latest audit files
+
+- **bash** `{"command": "git log -1 --format='%h %an <%ae> %ad%n%s' --date=iso 653a7981; echo '--- files in commit ---'; git show --stat --oneline 653a7981 | head -30; echo '--- HEAD version vs worktree (stat) ---'; git diff --stat HEAD -- reports/rapport-audit-v10.md reports/pensee-audit-v10.json; echo '--- wo … [229 caractères tronqués]`
+
+  ```
+653a7981 Stéphane <stephane@localhost> 2026-11-06 00:28:42 -0500
+B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+--- files in commit ---
+653a7981 B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+ docs/pilotage/en-cours.md                          |    4 +-
+ journal/2026-11-06/README.md                       |   11 +-
+ journal/2026-11-06/distribue.md                    |    9 +-
+ journal/README.md                                  |    8 +-
+ .../3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md |  297 +++++
+ .../rapport.md                                     |   22 +-
+ journal/sessions/MANIFEST.md                       |    8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  112 ++
+ .../rapport.md                                     |   19 +-
+ .../ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md |  743 ++++++++++++
+ .../rapport.md                                     |   20 +-
+ reports/README.md                                  |    2 +-
+ reports/pensee-audit-v10.json                   
+… [797 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparing committed audit version with current worktree
+
+- **bash** `{"command": "wc -l reports/rapport-audit-v10.md; echo 'HEAD:'; git show HEAD:reports/rapport-audit-v10.md | wc -l; echo '--- diff HEAD vs worktree (report) ---'; git diff HEAD -- reports/rapport-audit-v10.md | head -120", "description": "Diff committed vs worktree report", "workdir": "/home/stephane … [35 caractères tronqués]`
+
+  ```
+378 reports/rapport-audit-v10.md
+HEAD:
+376
+--- diff HEAD vs worktree (report) ---
+diff --git a/reports/rapport-audit-v10.md b/reports/rapport-audit-v10.md
+index fe47566d..68a575d4 100644
+--- a/reports/rapport-audit-v10.md
++++ b/reports/rapport-audit-v10.md
+@@ -2,7 +2,7 @@
+ 
+ > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+ > **Commit audité** : `710ec7f9` (parent `160d08ca`) · **Date** : 2026-11-05 ·
+-> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅.
++> **Verdict** : chiffres ✅ (deux écarts), règles ❌, portes ✅ (183/183, 11 docstrings périmées).
+ > **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+ > [`pensee-audit-v10.json`](pensee-audit-v10.json).
+ 
+@@ -55,8 +55,10 @@ importé ; le fichier de travail n'est jamais utilisé. Les chiffres du commit s
+ 0,5880, 19 spans, test 68/68** ; l'arbre courant, lui, donne **221/221, F1 0,5843, top-k 220,
+ 18 spans (9 REL, 5 SUB, 4 GP), dev 152/152, test 69/69** (il répare `s037` et `r303`, perd
+ `g017`, ajoute `r241`). Ce changement n'est **pas** de cet audit et n'est **pas** évalué ici ;
+-son auteur doit le vérifier et le committer. Les **183/183 portes** ont été obtenue
+… [833 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Updating the note: the concurrent change is now committed as v11
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\nold=\"\"\"Au début de l'audit, `tools/bloc_linguistique.py` était **byte-identique** à `710ec7f9`\n(sha256 `308f6eed…`). Pendant la rédaction, le fichier a été **modifié sans commit** (mtime\n`2026-11-06 00:15:37`) :  … [3643 caractères tronqués]`
+
+  ```
+md ok
+json ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Updating the limitation bullet for committed v11
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\nold=\"\"\"- **Dépôt déjà modifié** : `journal/`, plusieurs `reports/` et le sous-module\n  `tools/structures` portaient des modifications non commitées antérieures à cet audit. Le\n  fichier `tools/bloc_linguistique.p … [1587 caractères tronqués]`
+
+  ```
+md ok
+json ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Reviewing final note and limitation text
+
+- **bash** `{"command": "sed -n '42,72p' reports/rapport-audit-v10.md; echo '...'; sed -n '360,385p' reports/rapport-audit-v10.md; echo '--- json note ---'; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nprint(json.dumps(d['methode']['note_arbre_de_travail'],ensure_ascii=Fals … [156 caractères tronqués]`
+
+  ```
+L'invocation directe `python3 tools/pensee/autotest.py` échoue sur l'import relatif
+  (`ImportError`) ; il faut `-m`.
+
+### 1 bis. Note d'arbre de travail (importante)
+
+Au début de l'audit, `tools/bloc_linguistique.py` était **byte-identique** à `710ec7f9`
+(sha256 `308f6eed…`). Pendant la rédaction, le fichier a été **modifié sans commit** (mtime
+`2026-11-06 00:15:37`) : deux changements dans `_syntagmes_simple` — la condition R2
+(`stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS or precedent == "GV")`, qui répare
+`s037`) et la **suppression de la garde d'adverbe final** (qui répare `r303` mais perd
+`g017`). Ce changement a ensuite été **committé** dans `653a7981` (2026-11-06 00:28:42,
+« … AUDIT V10 INTÉGRÉ, V10 CORRIGÉE »), avec `reports/pensee-v11.json` et
+`rapport-pensee-v11.md` ; c'est la **v11**, pas la v10. **Toutes les mesures de ce rapport
+sont ancrées sur `710ec7f9`** : le module est lu par
+`git show 710ec7f9:tools/bloc_linguistique.py`, copié dans `/tmp/audit_v10/mods` et importé ;
+le fichier de travail n'est jamais utilisé. Les chiffres du commit sont **220/220, 0,5880,
+19 spans, test 68/68** ; l'arbre courant (v11) donne **221/221, F1 0,5843, top-k 220, 18 spans
+(9 REL
+… [3903 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Scoping the no-commit statement to this audit
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\ns=s.replace(\"**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait.**\",\"**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait par cet audit.**\")\nopen(p,'w … [709 caractères tronqués]`
+
+  ```
+ok
+json ok
+JSON OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Final check of method and closing line
+
+- **bash** `{"command": "tail -5 reports/rapport-audit-v10.md; echo '---'; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nprint(json.dumps(d['methode'],ensure_ascii=False,indent=1)[:2000])\nPY", "description": "Review final method block", "workdir": "/home/stephane/Data13TB/s … [24 caractères tronqués]`
+
+  ```
+- [`rapport-audit-v10.md`](rapport-audit-v10.md) — ce rapport.
+- [`pensee-audit-v10.json`](pensee-audit-v10.json) — les chiffres, les ids et les contrôles.
+
+**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait par cet audit.** Les scripts de mesure
+vivaient dans `/tmp/audit_v10/` et ne sont pas livrés.
+---
+{
+ "gold_vivant": {
+  "source": "evaluer_gold.charger",
+  "phrases": 612,
+  "cibles": 239,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  }
+ },
+ "gold_gele": {
+  "source": "evaluer_gold.charger_gele",
+  "phrases": 602,
+  "cibles": 239,
+  "note": "les 10 phrases ajoutées après le gel n'ont aucune cible"
+ },
+ "dev_test": {
+  "split": "crc32(id) % 3 == 0 -> test",
+  "dev": {
+   "phrases": 422,
+   "cibles": 163
+  },
+  "test": {
+   "phrases": 190,
+   "cibles": 76
+  }
+ },
+ "mesure": "evaluer_gold.evaluer_bloc pour les valeurs officielles ; harnais local pour les ensembles d'identifiants, les ablations et les contrôles.",
+ "ablations": "copies du module dans /tmp/audit_v10/mods, une seule modification réintroduite par variante ; aucun patch du dépôt.",
+ "fidelite": "v10 sans garde GP sans -ée = module v9 (219, 0,5866, 20 spans, 152/15
+… [1138 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Wrapping the closing line
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\ns=s.replace(\"**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait par cet audit.** Les scripts de mesure\\nvivaient dans `/tmp/audit_v10/` et ne sont pas livrés.\",\"**Aucun fichier exis … [338 caractères tronqués]`
+
+  ```
+ok
+- [`pensee-audit-v10.json`](pensee-audit-v10.json) — les chiffres, les ids et les contrôles.
+
+**Aucun fichier existant n'a été modifié par cet audit ; aucun commit n'a été fait par cet
+audit.** Les scripts de mesure vivaient dans `/tmp/audit_v10/` et ne sont pas livrés.
+  ```
+
+### 🤖 Assistant
+
+⏵ Checking the concurrent correction to the v10 fiche
+
+- **bash** `{"command": "git show 653a7981 -- reports/rapport-pensee-v10.md; echo '--- current fiche head ---'; head -20 reports/rapport-pensee-v10.md", "description": "Inspect v10 fiche correction in concurrent commit", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+commit 653a79817f4bccb9bb354e3687e8bba06b454995
+Author: Stéphane <stephane@localhost>
+Date:   Fri Nov 6 00:28:42 2026 -0500
+
+    B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+
+diff --git a/reports/rapport-pensee-v10.md b/reports/rapport-pensee-v10.md
+index 1e7e4f4b..1b1f036a 100644
+--- a/reports/rapport-pensee-v10.md
++++ b/reports/rapport-pensee-v10.md
+@@ -1,13 +1,14 @@
+ # B13 — 220/220 (1,0000), couverture 0,9205 : le féminin `-ée` et la garde déterminant du GP
+ 
+ > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+-> **État courant** · **Verdict** : ✅
+-> **183/183 portes** : deux corrections générales — le **féminin `-ée`** des participes
+-> (`achetée` → `acheter`) et la **garde déterminant** du GP (A17 R3b : un « verbe » précédé d'un
+-> déterminant est un nom, `for the bus`) — portent l'attachement à **220/220 (1,0000)** sur les
+-> **220 labels** prédits (sur 239), **couverture 0,9205**, **F1 0,5880** (union ; S 0,5014,
+-> chunker 0,6203), tête **0,7388** ; **fr 134/134**, **en 86/86** ; **19 spans** restants
+-> (9 REL, 6 SUB, 4 GP). **dev 152/
+… [2239 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Noting the v10 fiche was also corrected in the concurrent commit
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-audit-v10.md'\ns=open(p).read()\nold=\"\"\"v11 passe aussi **183/183** avec ses assertions ajustées. Les versions de ce rapport et du\nJSON présentes dans `653a7981` sont une **version antérieure** ; les versions courantes du\nworktree sont les versi … [1120 caractères tronqués]`
+
+  ```
+md ok
+json ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Verifying the final note paragraphs
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-audit-v10.json >/dev/null && echo 'JSON OK'; sed -n '48,75p' reports/rapport-audit-v10.md; echo '---'; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v10.json'))\nprint(d['methode']['note_arbre_de_travail']['fiche_v10'])\nPY", " … [115 caractères tronqués]`
+
+  ```
+JSON OK
+(sha256 `308f6eed…`). Pendant la rédaction, le fichier a été **modifié sans commit** (mtime
+`2026-11-06 00:15:37`) : deux changements dans `_syntagmes_simple` — la condition R2
+(`stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS or precedent == "GV")`, qui répare
+`s037`) et la **suppression de la garde d'adverbe final** (qui répare `r303` mais perd
+`g017`). Ce changement a ensuite été **committé** dans `653a7981` (2026-11-06 00:28:42,
+« … AUDIT V10 INTÉGRÉ, V10 CORRIGÉE »), avec `reports/pensee-v11.json` et
+`rapport-pensee-v11.md` ; c'est la **v11**, pas la v10. **Toutes les mesures de ce rapport
+sont ancrées sur `710ec7f9`** : le module est lu par
+`git show 710ec7f9:tools/bloc_linguistique.py`, copié dans `/tmp/audit_v10/mods` et importé ;
+le fichier de travail n'est jamais utilisé. Les chiffres du commit sont **220/220, 0,5880,
+19 spans, test 68/68** ; l'arbre courant (v11) donne **221/221, F1 0,5843, top-k 220, 18 spans
+(9 REL, 5 SUB, 4 GP), dev 152/152, test 69/69** (il répare `s037` et `r303`, perd `g017`,
+ajoute `r241`). Ce changement n'est **pas** de cet audit et n'est **pas** évalué ici. Les
+**183/183 portes** de ce rapport ont été obtenues quand l'arbre était enco
+… [872 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Sending the audit summary to the parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Audit v10 terminé — ancré sur le commit 710ec7f9. Fichiers livrés : reports/rapport-audit-v10.md et reports/pensee-audit-v10.json (versions finales dans le worktree ; je n'ai rien commité ni modifié d'existant).\n\nVALEURS (rejouées su … [2836 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture de l'audit et résumé final
+
+Audit terminé. Deux fichiers neufs écrits :
+
+- [`reports/rapport-audit-v10.md`](reports/rapport-audit-v10.md)
+- [`reports/pensee-audit-v10.json`](reports/pensee-audit-v10.json)
+
+Aucun fichier existant modifié par moi, aucun commit de ma part.
+
+## Valeurs rejouées (commit `710ec7f9`)
+
+| grandeur | fiche | vivant 612 | gelé 602 |
+|---|---:|---:|---:|
+| labels / exact | 220 / 220 (1,0000) | **220 / 220** | **220 / 220** |
+| couverture | 0,9205 | **0,9205** | **0,9205** |
+| F1 union | 0,5880 | 0,5836 | **0,5880** |
+| S / chunker | 0,5014 / 0,6203 | 0,4957 / 0,6163 | **0,5014 / 0,6203** |
+| tête | 0,7388 | 0,7332 | **0,7388** |
+| fr / en | 134/134, 86/86 | **idem** | **idem** |
+| spans | 19 (9 REL, 6 SUB, 4 GP) | **19** | **19** |
+| top-k | 219 (0,9163) | **219** | **219** |
+
+**Écarts**
+1. Le F1 « avant » **0,5822** est la valeur du **vivant 612**, pas du gelé ; le **gelé v9 vaut 0,5866**. Le gain v9→v10 est **+0,0014**, pas +0,0058.
+2. Le **test courant v10 est 68/68** (0,8947), pas 67/67 (le 67/67 est la v9).
+
+## Règles
+
+Le commit `710ec7f9` ne modifie, dans le bloc, que la **garde DET du GP** : **+1 exact (`r153`, test)**, 0 perte. Le **`-ée` est antérieur** (`a408a909`, déjà dans v8/v9) et **totalement inerte** : 0 différence d'annotation sur 612 phrases ; `r255` reste absent car `acheter` n'est pas dans `VERBES_CONNUS`.
+
+## Ablations (base 220 ; F1 gelé)
+
+| ablation | exact | Δ | gains / pertes | F1 |
+|---|---:|---:|---|---:|
+| garde PRON retirée | 203 | **−17** | 17 gains, 0 perte | 0,5718 (−0,0162) |
+| expansion SUJETS retirée | 214 | **−6** | 6 gains (r273 s032 s069 s072 s115 s135) | 0,5833 |
+| PRON + SUJETS retirées | 214 | **−6** | mêmes 6 gains ; garde inerte sans expansion | 0,5808 |
+| `est_sub` retiré | 219 | **−1** | r280 | 0,5849 |
+| `predicat_vu` retiré | 220 | **0** | gagne g017, perd r303 | 0,5880 |
+| `-ée` retiré | 220 | **0** | 0 / 0 | 0,5880 |
+| garde DET GP retirée | 219 | **−1** | r153 | 0,5866 |
+
+**Les 19 spans** = **17 résiduels A17 + `s037` + `r303`**. La fiche « 17 inatteignables + r255 + r264 » double compte r255/r264 et omet s037/r303. `r303` est la perte cachée de `predicat_vu` (net 0 avec g017) ; `s037` est la 7e régression v8, toujours ouverte.
+
+## dev/test
+
+| moitié | v8 | v9 | **v10** |
+|---|---:|---:|---:|
+| dev | 148/148 | 152/152 | **152/152** (0,9325) |
+| test | 64/64 | 67/67 | **68/68** (0,8947) |
+
+Le +1 test est `r153` ; le `-ée` n'ajoute rien.
+
+## Contrôles et portes
+
+- Permutation globale des cibles : **1,997/220 = 0,908 %** (2000 tirages, p=0).
+- Candidat aléatoire top-1 : **42,14 %** (p=0).
+- Permutation des listes de candidats top-k : **0,99 %** (égalité) / **1,17 %** (sous-chaîne), p=0.
+- Les 19 spans ont été vérifiés un par un.
+- **183/183 portes**, exit 0 — mais **11 docstrings périmées** (T153, T161, T162, T163, T166, T167, T172, T173, T177, T179, T180) contredisent leur assertion.
+
+## Note de concurrence
+
+Un commit **`653a7981` (v11)** est apparu pendant l'audit : il intègre une version antérieure de mon rapport, corrige la fiche v10 et passe à **221/221, 18 spans, test 69/69**. Mes mesures restent **ancrées sur `710ec7f9`** via `git show` ; le worktree contient mes versions finales, le commit une version antérieure. Je n'ai rien commité.
+
