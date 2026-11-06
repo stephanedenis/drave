@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 140.6 h |
 | Tours | 182 |
-| Messages | 3101 |
-| Appels d'outils | 2735 |
+| Messages | 3102 |
+| Appels d'outils | 2736 |
 | Fichiers touchés | 25 |
-| Commandes | 2242 |
+| Commandes | 2243 |
 | Sous-agents | 31 |
-| Commits | 351 |
+| Commits | 352 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9788,7 +9788,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 
 ### Tour 182 — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. I … [3010 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Vérifier les deux rapports d'audit
 - bash — Déclarer les rapports et vérifier
@@ -9804,7 +9804,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - bash — Autotest après R2/R3
 - bash — Recaler 18 portes et relancer
 - bash — Voir l'assertion T86
-- … et 3 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -9918,7 +9918,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2202 autres
+- … et 2203 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10417,4 +10417,5 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1)" -- reports/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "UN MOT DE MOINS"; then
 - DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1) ; ÉTAT HORODATÉ" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --for
 - B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183" -- tools/bloc_linguistique.py tools
+- DOCS — LE README DES FICHES DANS LE BUDGET T1 APRÈS LES DEUX FICHES POS" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
 

@@ -52625,3 +52625,16 @@ index EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; audit A24 ; **POS 83,83 %** (R2a/R3/R2b).\", \" ; POS **83,83 %**.\")\np.write_text(t)\nPY\npython3 tools/taille_documen … [1113 caractères tronqués]`
+
+  ```
+· reports/README.md : 2815 mots > budget 2800 (T1)
+ create mode 100644 reports/rapport-pos-anglais-v2.md
+ create mode 100644 reports/rapport-pos-anglais.md
+COMMIT OK 1
+2ba393b0 B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183
+   ab3dccf8..2ba393b0  s/v7 -> s/v7
+   ab3dccf8..2ba393b0  master -> master
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-anglais-v2.md`](rapport-pos-anglais-v2.md) | **B13** — la POS à **83,83 %** (R2a/R3/R2b), F1 **0,6181**, attachemen … [1754 caractères tronqués]`

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,10 +15,11 @@
 | 10:13 | `7679a2d4` | FICHE — LES TAILLES JSON DU PRODUIT CORRIGÉES (8 704 O EN ANGLAIS) ET LA MESURE D'EVALUER ; ÉTAT HORODATÉ | `en-cours.md`, `README.md`, `distribue.md` (+17) |
 | 10:42 | `266b1833` | ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES) | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
 | 13:01 | `a8d0e578` | AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0 | `en-cours.md`, `README.md`, `distribue.md` (+17) |
+| 13:15 | `2ba393b0` | B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+18) |
 
 ## Chiffres du jour
 
-`×2,4` · `1,0000` · `0,9289` · `0,9247`
+`83,83 %` · `0,5849` · `0,6181` · `0,6341` · `0,7273` · `×2,4` · `1,0000` · `0,9289` · `0,9247`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -46,6 +47,8 @@
 - [reports/rapport-pensee-v10.md](../../reports/rapport-pensee-v10.md)
 - [reports/rapport-pensee-v11.md](../../reports/rapport-pensee-v11.md)
 - [reports/rapport-pensee-v12.md](../../reports/rapport-pensee-v12.md)
+- [reports/rapport-pos-anglais-v2.md](../../reports/rapport-pos-anglais-v2.md)
+- [reports/rapport-pos-anglais.md](../../reports/rapport-pos-anglais.md)
 - [reports/rapport-produit-v0.md](../../reports/rapport-produit-v0.md)
 
 <!-- notes -->

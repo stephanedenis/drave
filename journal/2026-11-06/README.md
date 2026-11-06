@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**41 commits** · **9 session(s)** · **6 thème(s)**
+**42 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 16 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
-| mesures | 7 | [mesures.md](mesures.md) |
+| mesures | 8 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 10 | [portes.md](portes.md) |
@@ -77,6 +77,7 @@
 | 11:55 | `56eb43af` | INDEX — RÉGÉNÉRÉ (679 FICHES) APRÈS LES DEUX FICHES DE ROBUSTESSE ; --verifier SORT 0 |
 | 13:01 | `a8d0e578` | AUDIT — LA FIABILITÉ HORS GOLD COMMITTÉE : 0 PLANTAGE SUR 50 PHRASES, CONTRAT NON VERSIONNÉ, DEUX UnicodeEncodeError, 5 P0 |
 | 13:04 | `ab3dccf8` | DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1) ; ÉTAT HORODATÉ |
+| 13:15 | `2ba393b0` | B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
