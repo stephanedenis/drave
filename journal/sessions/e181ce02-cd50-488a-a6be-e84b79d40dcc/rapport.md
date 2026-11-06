@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 122.8 h |
+| Durée | 123.1 h |
 | Tours | 177 |
-| Messages | 2675 |
-| Appels d'outils | 2357 |
+| Messages | 2683 |
+| Appels d'outils | 2365 |
 | Fichiers touchés | 25 |
-| Commandes | 1943 |
+| Commandes | 1951 |
 | Sous-agents | 20 |
-| Commits | 283 |
+| Commits | 284 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*116 appels d'outils.* Actions notables :
+*124 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,7 +9514,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 94 autres
+- … et 102 autres
 
 **Synthèse produite :**
 
@@ -9617,7 +9617,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1903 autres
+- … et 1911 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9745,7 +9745,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-37 sorties en erreur ou divergentes. Les premières :
+39 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10048,4 +10048,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — L'ATTACHEMENT PARFAIT SUR LES SPANS PRÉDITS : 187/187 (1,0000), FR 1,0, EN 1,0, DEV 126/126, TEST 61/61 ; RENDEMENT 0,7824 ; 183/183" -- tools/bloc_lingui
 - B13 — LA COUVERTURE À 0,8201 : POS CONTEXTUEL 0,7603, F1 0,5595, EXACT 195/196 (0,9949), 43 SPANS ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest
 - JOURNAL — LA SOIRÉE DU DÉCOUPAGE : F1 0,2862 → 0,5595, COUVERTURE 196/239, ATTACHEMENT 195/196" -- journal/2026-11-05/README.md journal/sessions/e181ce02-cd50-4
+- DOCS — LE TABLEAU DES PORTES T163-T180 PASSE AUX VALEURS V7 (43 SPANS, EXACT 195/196, FR 1,0 / EN 0,9836)" -- docs/implantation/moteur-de-pensee.md 2>&1 | tail 
 

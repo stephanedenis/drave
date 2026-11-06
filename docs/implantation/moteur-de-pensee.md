@@ -332,24 +332,24 @@ ré-exécution.
 | **T160** | les passifs sans `par` ? | chunker **3/3** patient, le S ignore | deux chemins |
 | **T161** | la cible par proximité paie-t-elle ? | exact **0,0042 → 0,0544** (×13), top1 0,3975 | 226/239 restent faux |
 | **T162** | les candidats verbes paient-ils ? | top-k **0,3264 → 0,4728**, tête **0,7793** | le classement n'est pas appris |
-| **T163** | où échoue l'attachement ? | **94 span, 23 cible** (32 avant les correctifs) | le POS tague le verbe en nom |
+| **T163** | où échoue l'attachement ? | **43 span, 30 cible** (33 avant les correctifs) | le POS tague encore des verbes en noms |
 | **T164** | le verbe du GV-phrase ? | **le POS VERB** : exact **0,0586 → 0,0962**, top1 0,4393 | 22 GP restants par le POS |
 | **T165** | le lexique verbal arbitre-t-il ? | exact **0,0962 → 0,1381**, tête 0,9034 | 13 verbes hors lexique |
-| **T166** | où sont les spans perdus ? | **48 REL, 33 SUB, 12 GP** | 81 subordonnées chez S |
-| **T167** | quel dénominateur pour l'attachement ? | **rendement** (÷239) et **exactitude spans** (÷146) : 0,7808 / 0,9041 / **0,6438** | deux lectures, nommées |
-| **T168** | le classement de la cible ? | la cible **réduite à sa tête** : exact 0,2260 → **0,6438** | 52 échecs non qualifiés |
-| **T169** | une seule convention de cible ? | **non** : verbes 48/51 (0,9412), noms 70/95 (0,7368) | le gold mêle deux conventions |
+| **T166** | où sont les spans perdus ? | **21 REL, 17 SUB, 5 GP** (v7) | le découpage, plus la couverture |
+| **T167** | quel dénominateur pour l'attachement ? | **rendement** (÷239) et **exactitude spans** (÷196) : **0,9949 / 0,8469 / 0,9949** | deux lectures, nommées |
+| **T168** | le classement de la cible ? | la cible **réduite à sa tête** : exact 0,2260 → **0,9949** | 43 spans non prédits |
+| **T169** | une seule convention de cible ? | **non** : verbes **136/137 (0,9927)**, noms **59/59 (1,0)** | le gold mêle deux conventions |
 | **T170** | la cible dépend-elle du type ? | **oui** : REL → antécédent, GP → verbe ; exact 0,6438 → 0,8082 | 28 échecs non qualifiés |
-| **T171** | les participes irréguliers ? | **oui** : « vu », « accroché » ; exact **0,8082 → 0,8483** | 22 échecs |
-| **T172** | où sont les 22 échecs ? | **11 hors candidats, 11 mal classés** | les verbes anglais hors lexique |
-| **T173** | le top-k était-il honnête ? | **non** : 0,9241 en sous-chaîne, **0,6069** en égalité exacte | les candidats sont des textes entiers |
+| **T171** | les participes irréguliers ? | **oui** : « vu », « accroché », « couru » ; exact **195/196** | 43 spans |
+| **T172** | où sont les échecs de cible ? | **1 hors candidats, 0 mal classé** (v7) | les candidats du précédent |
+| **T173** | le top-k était-il honnête ? | **non** : **0,6946** en sous-chaîne, **0,8469** en égalité exacte | les candidats sont des textes entiers |
 | **T174** | la convention est-elle documentée ? | **oui** : REL/SUB → antécédent, GP → verbe | reconstruite depuis les données |
 | **T175** | les mesures reproduisent-elles ? | **14/14**, écart 0 (audit A1) ; 3 JSON sur 5 sont des instantanés | dérive documentaire corrigée |
 | **T176** | comment trancher REL/SUB ? | **le segment précédent** : après un GV → verbe, après un GN → antécédent ; +6 exact | dépend de la segmentation S |
-| **T177** | les candidats S sont-ils exploitables ? | **têtes** : top-k strict **0,6069 → 0,9724** (+45) | couplé au format d'affichage de S |
+| **T177** | les candidats S sont-ils exploitables ? | **têtes** : top-k strict **0,6069 → 0,8469** | couplé au format d'affichage de S |
 | **T178** | le chunker était-il en O(n²) ? | **oui** : 1+2S → 1 chunking, **×139** à 160 répétitions, sortie identique | en défaut, S domine (×1,0) |
-| **T179** | le gold admet-il plusieurs cibles ? | **oui** : 43/96 GP ; exact 141 → **exact_any 143/145 (0,9862)** | mesure secondaire, pas le chiffre principal |
-| **T180** | l'attachement tient-il par langue ? | **oui** : fr **113/117 (0,9658)**, en **28/28 (1,000)** | l'anglais n'a que **28 labels sur 88 cibles** |
+| **T179** | le gold admet-il plusieurs cibles ? | **oui** : 43/96 GP ; exact **195/196 (0,9949)** = exact_any | mesure secondaire, pas le chiffre principal |
+| **T180** | l'attachement tient-il par langue ? | **oui** : fr **135/135 (1,0)**, en **60/61 (0,9836)** | l'anglais n'a que **61 labels sur 88 cibles** |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le

@@ -405,3 +405,582 @@ drwxr-xr-x. 1 stephane stephane    720  5 nov 17:52 __pycache__
 … [3943 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture de la fiche v7 et du gold pour comprendre les mesures récentes
+
+- **bash** `{"command": "ls -la reports/*v7* reports/pensee-couverture* 2>/dev/null; echo ---; python3 - <<'PY'\nimport json\nfor f in [\"tools/tests/linguistique/gold.json\",\"tools/tests/linguistique/gold_reel.json\",\"tools/tests/linguistique/gold_synthetique.json\"]:\n    d=json.load(open(f))\n    ph=d[\"ph … [359 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 1228  5 nov 18:43 reports/pensee-couverture-v5.json
+-rw-r--r--. 1 stephane stephane  841  5 nov 19:22 reports/pensee-couverture-v7.json
+-rw-r--r--. 1 stephane stephane  841  5 nov 19:22 reports/pensee-couverture-v7.json
+-rw-r--r--. 1 stephane stephane 3620  5 nov 19:22 reports/rapport-pensee-couverture-v7.md
+---
+tools/tests/linguistique/gold.json 20 phrases 56 segments
+ keys: ['id', 'langue', 'texte', 'mots', 'segments', 'pragma']
+ seg0: {"type": "GN", "texte": "Le chat", "role": "agent", "debut": 0, "fin": 7}
+tools/tests/linguistique/gold_reel.json 432 phrases 1445 segments
+ keys: ['id', 'langue', 'texte', 'mots', 'segments', 'pragma', 'source']
+ seg0: {"type": "GN", "texte": "Le chien", "role": "agent", "debut": 0, "fin": 8}
+tools/tests/linguistique/gold_synthetique.json 160 phrases 362 segments
+ keys: ['id', 'langue', 'texte', 'pragma', 'source', 'mots', 'segments']
+ seg0: {"type": "GN", "texte": "nous", "role": "gn", "debut": 0, "fin": 4}
+  ```
+
+- **bash** `{"command": "grep -rn \"REL\\|SUB\\|GP\" tools/bloc_linguistique.py | head -30; echo ===; grep -rn \"par_type\\|type_cible\\|types\" reports/pensee-couverture-v7.json 2>/dev/null | head", "description": "Search REL/SUB/GP handling", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+9:    substitution et le parallèle sans GPU ;
+367:RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "whose",
+369:# les subordonnants qui n'ont pas d'antécédent : toujours SUB
+375:SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
+382:# tague « talks » NOUN et « brother » VERB (mesuré le 05/11 sur les 22 GP restants).
+645:        (GP, puis GN, puis GV), comme le premier candidat de `analyser`.
+659:        """REL → tête du GN précédent ; SUB après un GV → son verbe (le gouverneur)."""
+662:        if segment.get("type") == "REL" and precedent.get("type") == "GN":
+664:        if segment.get("type") == "SUB" and precedent.get("type") == "GV":
+672:        """Les candidats que le **précédent** impose : l'antécédent d'une REL, le verbe d'une SUB."""
+675:        if segment.get("type") == "REL" and precedent.get("type") == "GN":
+678:        if segment.get("type") == "SUB" and precedent.get("type") == "GV":
+685:        """Cible vide d'un GP : génitif → tête du GN à gauche (sinon None, le GV tranchera)."""
+686:        if segment.get("type") != "GP":
+700:        """Sans gouverneur extérieur, une SUB/REL prend son propre verbe («
+… [1258 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-couverture-v7.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-couverture-v7.md</path>
+<type>file</type>
+<content>
+1: # B13 — la couverture à 0,8201 : POS contextuel, GV avant GP, prépositions ambiguës
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
+4: > **183/183 portes** : la **couverture** passe de **187 à 196 labels** (sur 239) et l'exactitude
+5: > tient : **exact 195/196 = 0,9949** (fr **135/135 = 1,0**, en **60/61**) ; la **F1 syntagmes**
+6: > monte à **0,5595** (union ; S 0,4741, chunker 0,5858), la tête à **0,7205** ; la **POS** passe de
+7: > **0,7475 à 0,7603** ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
+8: >
+9: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (POS contextuel,
+10: > ordre GV/GP, prépositions composées, sujets), [`autotest.py`](../tools/pensee/autotest.py)
+11: > (32 assertions recalées) ; JSON [`pensee-couverture-v7.json`](pensee-couverture-v7.json).
+12: 
+13: ## 1. Les cinq corrections
+14: 
+15: | # | correction | effet |
+16: |---|---|---|
+17: | 1 | **POS contextuel** : un verbe de suffixe après DET/PRÉP/ADJ devient un nom (« brothe
+… [2780 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat reports/pensee-couverture-v7.json; echo ===V5===; cat reports/pensee-couverture-v5.json", "description": "Read v7 and v5 coverage JSON", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 187,
+  "exact": 187,
+  "couverture": 0.7824,
+  "f1": 0.513,
+  "tete": 0.6826,
+  "pos": 0.7475,
+  "spans": 52
+ },
+ "apres": {
+  "labels": 196,
+  "exact": 195,
+  "exact_span": 0.9949,
+  "couverture": 0.8201,
+  "f1": 0.5595,
+  "f1_s": 0.4741,
+  "f1_chunker": 0.5858,
+  "tete": 0.7205,
+  "pos": 0.7603,
+  "fr": "135/135",
+  "en": "60/61",
+  "topk": 166,
+  "topk_taux": 0.6946,
+  "spans": {
+   "REL": 21,
+   "SUB": 17,
+   "GP": 5,
+   "total": 43
+  }
+ },
+ "corrections": [
+  "POS contextuel (DET/PRÉP/ADJ → nom)",
+  "GV avant GP",
+  "prépositions composées",
+  "prépositions ambiguës (since/before/after/until/as)",
+  "verbe après pronom sujet + adverbe final"
+ ],
+ "limites": [
+  "43 spans",
+  "top-k incomplet",
+  "in-sample",
+  "heuristiques"
+ ]
+}
+===V5===
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 160,
+  "exact": 157,
+  "exact_span": 0.9812,
+  "topk": 156,
+  "couverture": 0.6695,
+  "f1": 0.4539,
+  "tete": 0.6432,
+  "fr": 0.9915,
+  "en": 0.9524,
+  "spans": 79,
+  "echecs_cible": 3
+ },
+ "apres": {
+  "labels": 187,
+  "exact": 186,
+  "exact_span": 0.9947,
+  "topk": 16
+… [852 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport time, sys\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nimport tools.bloc_linguistique as bl\nph=charger()\nprint(len(ph), \"phrases\")\nfrom collections import Counter\nprint(\"sources\", Counter(p.get(\"sourc … [708 caractères tronqués]`
+
+  ```
+612 phrases
+sources Counter({'reel': 432, 'synthetique': 160, 'hand': 20})
+langues Counter({'fr': 402, 'en': 210})
+types avec cible Counter({'GP': 96, 'REL': 74, 'SUB': 69})
+types tout Counter({'GN': 828, 'GV': 712, 'GP': 105, 'REL': 74, 'SUB': 70, 'ADJ': 35, 'ADV': 30, 'PONCT': 9})
+ids uniques 612
+init 0.0 s
+30 phrases 0.028 s -> 612 ~ 0.6 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du script de mesure (dev/test + deux splits décalés)
+
+- **write** `{"file_path": "/tmp/mesure_dev_test_v7.py", "content": "\"\"\"Mesure dev/test du gold 612 au commit v7, avec deux splits décalés.\n\nUsage : python3 /tmp/mesure_dev_test_v7.py /tmp/dev-test-v7.json\nN'écrit rien dans le dépôt.\n\"\"\"\nfrom __future__ import annotations\n\nimport collections\nimport … [15919 caractères tronqués]`
+
+  ```
+<path>/tmp/mesure_dev_test_v7.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport re\np='/tmp/mesure_dev_test_v7.py'\ns=open(p).read()\ns=s.replace('            vals = [splits[n][moitie][chemin] if False else chemin(splits[n][moitie])\\n                    for n in (\"canonique\", \"decale1\", \"decale2\")]',\n            '         … [281 caractères tronqués]`
+
+  ```
+ok
+analyses: 612 en 0.38 s
+validation contre evaluer_bloc : {'exact': (195, 195), 'labels': (196, 196), 'cibles': (239, 239), 'f1': (0.5555, 0.5555), 'tete_f1': (0.7152, 0.7152), 'pos': (0.7581, 0.7581), 'couverture': (0.8201, 0.8201)}
+écrit /tmp/dev-test-v7.json
+{
+ "canonique": {
+  "dev": {
+   "phrases": 422,
+   "cibles": 163,
+   "labels": 134,
+   "exact": 133,
+   "exact_taux": 0.9925
+  },
+  "test": {
+   "phrases": 190,
+   "cibles": 76,
+   "labels": 62,
+   "exact": 62,
+   "exact_taux": 1.0
+  }
+ },
+ "decale1": {
+  "dev": {
+   "phrases": 383,
+   "cibles": 150,
+   "labels": 120,
+   "exact": 119,
+   "exact_taux": 0.9917
+  },
+  "test": {
+   "phrases": 229,
+   "cibles": 89,
+   "labels": 76,
+   "exact": 76,
+   "exact_taux": 1.0
+  }
+ },
+ "decale2": {
+  "dev": {
+   "phrases": 419,
+   "cibles": 165,
+   "labels": 138,
+   "exact": 138,
+   "exact_taux": 1.0
+  },
+  "test": {
+   "phrases": 193,
+   "cibles": 74,
+   "labels": 58,
+   "exact": 57,
+   "exact_taux": 0.9828
+  }
+ }
+}
+écart: {"exact_cas_dev": 133, "labels_dev": 134, "echecs_dev": 1, "exact_cas_test": 62, "labels_test": 62, "echecs_test": 0, "ecart_taux_span": -0.0075, "ecart_f1": -0.0139, "ecart_tete": -0.0064, "ecart_couverture": 0.0063
+… [2237 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des écarts avec la fiche v7 et correction du contrôle d'équilibre
+
+- **bash** `{"command": "grep -rn \"0.5595\\|0.5555\\|0.7603\\|0.7581\\|union\" tools/pensee/autotest.py tools/bloc_linguistique.py tools/tests/linguistique/*.py 2>/dev/null | head -40", "description": "Find v7 metric definitions", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+tools/pensee/autotest.py:1639:            and abs(r["pos"]["exactitude"] - 0.7603) < 0.001), (
+tools/pensee/autotest.py:1675:    h1 = bl.Heuristique(union=False)
+tools/pensee/autotest.py:1676:    h2 = bl.Heuristique(union=False)
+tools/pensee/autotest.py:1694:    h1 = bl.Heuristique(union=False)
+tools/pensee/autotest.py:1695:    h2 = bl.Heuristique(union=False)
+tools/pensee/autotest.py:1714:def t112_union() -> tuple[bool, str]:
+tools/pensee/autotest.py:1715:    """L'union des segmenteurs : segments F1 0,2833 (S 0,1722), tête 0,5027."""
+tools/pensee/autotest.py:1719:    h1 = bl.Heuristique(union=False)
+tools/pensee/autotest.py:1720:    h2 = bl.Heuristique(union=False)
+tools/pensee/autotest.py:1731:    return abs(f1 - 0.5595) < 0.001, f"union : segments F1 {f1} (S 0,4741)"
+tools/pensee/autotest.py:1734:def t113_union_defaut() -> tuple[bool, str]:
+tools/pensee/autotest.py:1735:    """L'union par défaut : F1 0,2833, tête 0,5027 dans l'analyseur."""
+tools/pensee/autotest.py:1743:    return abs(f1 - 0.5595) < 0.001 and abs(tete - 0.7205) < 0.001, (
+tools/pensee/autotest.py:1744:        f"union par défaut : F1 {f1}, tête {tete}")
+tools/pensee/autotest.py:1747:def t114_cascade_union() -> tu
+… [1500 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show --stat 69bd865e | head -30; echo ===; git show 69bd865e:tools/bloc_linguistique.py | sha256sum; sha256sum tools/bloc_linguistique.py", "description": "Confirm working tree matches commit for bloc_linguistique", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+commit 69bd865ec1bae1958b6f617bde4bf685a15d7d67
+Author: Stéphane <stephane@localhost>
+Date:   Thu Nov 5 19:22:37 2026 -0500
+
+    B13 — LA COUVERTURE À 0,8201 : POS CONTEXTUEL 0,7603, F1 0,5595, EXACT 195/196 (0,9949), 43 SPANS ; 183/183
+
+ docs/pilotage/en-cours.md                          |   4 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ journal/2026-11-05/README.md                       |   7 +-
+ journal/2026-11-05/attention.md                    |   2 +-
+ journal/2026-11-05/distribue.md                    |   2 +-
+ journal/2026-11-05/docs.md                         |   2 +-
+ journal/2026-11-05/memoire.md                      |   2 +-
+ journal/2026-11-05/mesures.md                      |   8 +-
+ journal/2026-11-05/modele.md                       |   2 +-
+ journal/2026-11-05/moteur.md                       |   2 +-
+ journal/2026-11-05/portes.md                       |   2 +-
+ journal/README.md                                  |   2 +-
+ journal/THEMES.md                                  |   2 +-
+ journal/sessions/MANIFEST.md                       |   4 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 360 +++++++++++++++++++++
+ .../rapport.md             
+… [567 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "offset": 1625, "limit": 135}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+1625:           and abs(statistics.mean([mesurer_cv(tout, graine=k)["taux"]
+1626:                                    for k in range(5)]) - 0.86) < 0.06
+1627:           and abs(accords(tout)["paires"]["role/semantique"] - 1.0) < 1e-9)
+1628:     return ok, "bilan : 4/4, 10/12, 12/12, 8/8, 27/30, méta 25/30, CV ~0,85"
+1629: 
+1630: 
+1631: def t107_gold_complet() -> tuple[bool, str]:
+1632:     """Le gold complet : 522 phrases, POS 0,7586."""
+1633:     import tools.bloc_linguistique as bl
+1634:     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
+1635:     phrases = charger()
+1636:     h = bl.Heuristique()
+1637:     r = evaluer_bloc("h", h, phrases)
+1638:     return (len(phrases) == 602
+1639:             and abs(r["pos"]["exactitude"] - 0.7603) < 0.001), (
+1640:         f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
+1641:         f"tête {round(r['syntagme']['tete']['f1'], 4)}")
+1642: 
+1643: 
+1644: def t108_anaphore_68() -> tuple[bool, str]:
+1645:     """La coréférence à 68 liens : 52/68 par le rôle, 51/68 
+… [6030 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger, charger_gele, evaluer_bloc\nimport tools.bloc_linguistique as bl\nge=charger_gele(); vi=charger()\nprint(\"gele\", len(ge), \"cibles\", sum(1 for p in ge f … [1055 caractères tronqués]`
+
+  ```
+gele 602 cibles 239
+vivant 612 cibles 239
+sources gele Counter({'reel': 422, 'synthetique': 160, 'hand': 20})
+langues gele Counter({'fr': 394, 'en': 208})
+types gele Counter({'GP': 96, 'REL': 74, 'SUB': 69})
+ids gele absents du vivant 0 vivant absents du gele 10
+gele: exact 195 / 196 cibles 239 f1 0.5595 tete 0.7205 pos 0.7603
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/mesure_dev_test_v7.py'\ns=open(p).read()\nold='''        # catégories absentes (par rapport à l'ensemble)\n        absentes = {}\n        for cat, cle in ((\"sources\", \"sources\"), (\"langues\", \"langues\"),\n                         (\"types\", \ … [1564 caractères tronqués]`
+
+  ```
+ok
+ "test_pos": {
+  "valeurs": [
+   0.7656,
+   0.7545,
+   0.7549
+  ],
+  "min": 0.7545,
+  "max": 0.7656,
+  "dispersion": 0.0111
+ }
+}
+canonique absentes: {'sources': [], 'langues': [], 'types': [], 'types_langues': []}
+  dev: {"hand": 15, "reel": 302, "synthetique": 105} {"fr": 277, "en": 145} {"GP": 61, "SUB": 45, "REL": 57}
+  test: {"hand": 5, "reel": 130, "synthetique": 55} {"fr": 125, "en": 65} {"GP": 35, "REL": 17, "SUB": 24}
+decale1 absentes: {'sources': [], 'langues': [], 'types': [], 'types_langues': []}
+  dev: {"hand": 9, "reel": 272, "synthetique": 102} {"fr": 252, "en": 131} {"GP": 60, "SUB": 47, "REL": 43}
+  test: {"hand": 11, "reel": 160, "synthetique": 58} {"fr": 150, "en": 79} {"GP": 36, "SUB": 22, "REL": 31}
+decale2 absentes: {'sources': [], 'langues': [], 'types': [], 'types_langues': []}
+  dev: {"hand": 16, "reel": 290, "synthetique": 113} {"fr": 275, "en": 144} {"GP": 71, "SUB": 46, "REL": 48}
+  test: {"hand": 4, "reel": 142, "synthetique": 47} {"fr": 127, "en": 66} {"GP": 25, "SUB": 23, "REL": 26}
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection détaillée des résultats par langue et par type
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/dev-test-v7.json'))\nfor n in (\"canonique\",\"decale1\",\"decale2\"):\n    print(\"=\"*20, n, d[\"splits\"][n][\"regle\"])\n    for moitie in (\"dev\",\"test\"):\n        m=d[\"splits\"][n][moitie]\n        a=m[\"attachement\"]\n    … [1115 caractères tronqués]`
+
+  ```
+==================== canonique crc32(id)%3==0 -> test
+ dev: 422 phr, cibles 163, labels 134, exact 133, taux 0.9925, couv 0.8221, F1 0.5512, tete 0.7132, POS 0.7547
+   langues: {'fr': (101, 92, 92, 1.0, 0.9109), 'en': (62, 42, 41, 0.9762, 0.6774)}
+   types  : {'REL': (57, 42, 42, 1.0, 0.7368, 0.6176, 0.9016, 42, 37, 15), 'SUB': (45, 33, 33, 1.0, 0.7333, 0.7727, 0.9091, 34, 8, 12), 'GP': (61, 59, 58, 0.9831, 0.9672, 0.8497, 0.8609, 65, 21, 2)}
+   type/langue: {'REL/fr': (34, 29, 29, 1.0), 'REL/en': (23, 13, 13, 1.0), 'SUB/fr': (29, 27, 27, 1.0), 'SUB/en': (16, 6, 6, 1.0), 'GP/fr': (38, 36, 36, 1.0), 'GP/en': (23, 23, 22, 0.9565)}
+   spans perdus: {'SUB': 12, 'REL': 15, 'GP': 2}
+   sources: {'hand': (10, 9, 9, 1.0), 'reel': (121, 101, 100, 0.9901), 'synthetique': (32, 24, 24, 1.0)}
+ test: 190 phr, cibles 76, labels 62, exact 62, taux 1.0, couv 0.8158, F1 0.5651, tete 0.7196, POS 0.7656
+   langues: {'fr': (50, 43, 43, 1.0, 0.86), 'en': (26, 19, 19, 1.0, 0.7308)}
+   types  : {'REL': (17, 11, 11, 1.0, 0.6471, 0.55, 0.9444, 11, 12, 6), 'SUB': (24, 19, 19, 1.0, 0.7917, 0.76, 0.9388, 19, 7, 5), 'GP': (35, 32, 32, 1.0, 0.9143, 0.8095, 0.8537, 34, 12, 4)}
+   type/langue: {'REL/fr': (12, 9, 9
+… [3849 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Identification de l'unique échec d'attachement et des 43 spans perdus
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, zlib, json, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport tools.bloc_linguistique as bl\nph=charger(); h=bl.Heuristique()\nechecs=[]; perdus=[]\nfor p in ph:\n    a=h.analyser(p[\"texte\"], p[\"langue … [1471 caractères tronqués]`
+
+  ```
+ECHECS exact: 1
+('r102', 'en', 'GP', 'since this morning', 'falls', '', 2, 'The rain falls since this morning.')
+
+PERDUS: 43 par type Counter({'REL': 21, 'SUB': 17, 'GP': 5}) par bucket Counter({2: 16, 0: 14, 1: 13}) par langue Counter({('SUB', 'en'): 13, ('REL', 'en'): 13, ('REL', 'fr'): 8, ('SUB', 'fr'): 4, ('GP', 'fr'): 4, ('GP', 'en'): 1})
+
+par type/language: Counter({('SUB', 'en'): 13, ('REL', 'en'): 13, ('REL', 'fr'): 8, ('SUB', 'fr'): 4, ('GP', 'fr'): 4, ('GP', 'en'): 1})
+bucket 0: Counter({'REL': 6, 'SUB': 5, 'GP': 3})
+bucket 1: Counter({'REL': 7, 'SUB': 5, 'GP': 1})
+bucket 2: Counter({'REL': 8, 'SUB': 7, 'GP': 1})
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, collections\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\nfor src in (\"hand\",\"reel\",\"synthetique\"):\n    ids=[p[\"id\"] for p in ph if p.get(\"source\")==src]\n    print(src, len(ids), \"exemples:\", … [143 caractères tronqués]`
+
+  ```
+hand 20 exemples: ['g001', 'g002', 'g003', 'g004', 'g005', 'g006'] ... ['g018', 'g019', 'g020']
+reel 432 exemples: ['r001', 'r002', 'r003', 'r004', 'r005', 'r006'] ... ['r420', 'r421', 'r422']
+synthetique 160 exemples: ['s001', 's002', 's003', 's004', 's005', 's006'] ... ['s158', 's159', 's160']
+  ```
+
+- **bash** `{"command": "ls -l /tmp/dev-test-v7.json; head -c 600 /tmp/dev-test-v7.json", "description": "Check size of intermediate JSON"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 47917  5 nov 19:33 /tmp/dev-test-v7.json
+{
+ "commit": "69bd865e",
+ "valide_contre_evaluer_gold": true,
+ "validation": {
+  "exact": [
+   195,
+   195
+  ],
+  "labels": [
+   196,
+   196
+  ],
+  "cibles": [
+   239,
+   239
+  ],
+  "f1": [
+   0.5555,
+   0.5555
+  ],
+  "tete_f1": [
+   0.7152,
+   0.7152
+  ],
+  "pos": [
+   0.7581,
+   0.7581
+  ],
+  "couverture": [
+   0.8201,
+   0.8201
+  ]
+ },
+ "analyses_secondes": 0.367,
+ "equilibre_global": {
+  "phrases": 612,
+  "ids_uniques": 612,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "langues": {
+   "fr": 402,
+   "en": 210
+  },
+  "types_tout": {
+   "GN": 828,
+   "GV": 712,
+  ```
+
+### 🤖 Assistant
+
+⏵ Décomposition F1 par type (GN/GV inclus) pour expliquer l'écart agrégé
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys, zlib\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nimport tools.bloc_linguistique as bl\nph=charger(); h=bl.Heuristique()\ncache={p[\"id\"]:h.analyser(p[\"texte\"],p[\"langue\"]) for p in ph}\ndef f1(tp,fp,fn):\n    p=t … [1099 caractères tronqués]`
+
+  ```
+dev segments 1748
+   ADJ (0.0, 0, 0, 30) n_gold 30 n_pred 0
+   ADV (0.0, 0, 0, 18) n_gold 18 n_pred 0
+   GN (0.4827, 230, 143, 350) n_gold 580 n_pred 373
+   GP (0.8497, 65, 21, 2) n_gold 67 n_pred 86
+   GV (0.572, 294, 243, 197) n_gold 491 n_pred 537
+   PONCT (0.0, 0, 0, 7) n_gold 7 n_pred 0
+   REL (0.6176, 42, 37, 15) n_gold 57 n_pred 79
+   SUB (0.7727, 34, 8, 12) n_gold 46 n_pred 42
+test segments 772
+   ADJ (0.0, 0, 0, 5) n_gold 5 n_pred 0
+   ADV (0.0, 0, 0, 12) n_gold 12 n_pred 0
+   GN (0.4751, 100, 73, 148) n_gold 248 n_pred 173
+   GP (0.8095, 34, 12, 4) n_gold 38 n_pred 46
+   GV (0.6061, 140, 101, 81) n_gold 221 n_pred 241
+   PONCT (0.0, 0, 0, 2) n_gold 2 n_pred 0
+   REL (0.55, 11, 12, 6) n_gold 17 n_pred 23
+   SUB (0.76, 19, 7, 5) n_gold 24 n_pred 26
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des contrôles statistiques (équilibre, hypergéométrie, Monte-Carlo)
+
+- **write** `{"content": "\"\"\"Enrichit /tmp/dev-test-v7.json de contrôles : équilibre, hypergéométrie, Monte-Carlo, Wilson.\"\"\"\nfrom __future__ import annotations\n\nimport collections\nimport json\nimport math\nimport pathlib\nimport random\nimport sys\nimport zlib\n\nRACINE = pathlib.Path(\"/home/stephane … [15075 caractères tronqués]`
+
+  ```
+<path>/tmp/enrichir.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/enrichir.py'\ns=open(p).read()\nstart=s.index('        obs = [d[\"splits\"][n][\"test\"]')\nend=s.index('        obs = []\\n', start)\ns=s[:start]+s[end:]\nopen(p,'w').write(s)\nprint(\"nettoyé\")\nPY\npython3 /tmp/enrichir.py", "description": "Run e … [55 caractères tronqués]`
+
+  ```
+nettoyé
+par phrase : 239 cibles, 196 labels, 195 exact — ok
+Monte-Carlo : {
+ "exact_taux_span": {
+  "observe_3_splits": [
+   1.0,
+   1.0,
+   0.9828
+  ],
+  "observe_etendue": 0.0172,
+  "monte_carlo_etendue": {
+   "p05": 0.0125,
+   "p50": 0.0152,
+   "p95": 0.0185
+  },
+  "monte_carlo_valeur": {
+   "p05": 0.9828,
+   "p50": 1.0,
+   "p95": 1.0
+  },
+  "dans_intervalle_95": true
+ },
+ "couverture": {
+  "observe_3_splits": [
+   0.8158,
+   0.8539,
+   0.7838
+  ],
+  "observe_etendue": 0.0701,
+  "monte_carlo_etendue": {
+   "p05": 0.0195,
+   "p50": 0.0678,
+   "p95": 0.1445
+  },
+  "monte_carlo_valeur": {
+   "p05": 0.7614,
+   "p50": 0.8202,
+   "p95": 0.878
+  },
+  "dans_intervalle_95": true
+ },
+ "f1": {
+  "observe_3_splits": [
+   0.5651,
+   0.5598,
+   0.541
+  ],
+  "observe_etendue": 0.0241,
+  "monte_carlo_etendue": {
+   "p05": 0.01,
+   "p50": 0.0361,
+   "p95": 0.0772
+  },
+  "monte_carlo_valeur": {
+   "p05": 0.5243,
+   "p50": 0.5557,
+   "p95": 0.5866
+  },
+  "dans_intervalle_95": true
+ },
+ "tete_f1": {
+  "observe_3_splits": [
+   0.7196,
+   0.718,
+   0.7076
+  ],
+  "observe_etendue": 0.012,
+  "monte_carlo_etendue": {
+   "p05": 0.0072,
+   "p50": 0.026,
+   "p95": 0.0555
+  },
+  "monte_carlo_valeur": {
+   "
+… [772 caractères tronqués]
+  ```
+

@@ -45898,3 +45898,90 @@ started subagent c27ff712-ac49-4750-90d4-76f59bedb5ca
 ⏵ Vague 5 en cours ; j'écris le récit de la soirée au journal (docs seulement)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-05/README.md'); t=p.read_text()\nnote = \"\"\"**La soirée du découpage (17 h 30 → 20 h).** La question « l'anglais d'abord » a ouvert la\nvraie frontière : le trou n'é … [1831 caractères tronqués]`
+
+  ```
+journal + plan
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+[still running after 60000ms; moved to background job bash-1728]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1728", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 journal/sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/rapport.md
+COMMIT OK 1
+4ccf06e1 JOURNAL — LA SOIRÉE DU DÉCOUPAGE : F1 0,2862 → 0,5595, COUVERTURE 196/239, ATTACHEMENT 195/196
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date && sleep 420 && ls reports/ | grep -E \"audit-v7|coherence-fiches-v7|spans-v7|dev-test-v7\"", "description": "Attendre les sous-agents", "timeoutMs": 500000}`
+
+  ```
+jeu 05 nov 2026 19:28:13 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; date; ls reports/ | grep -E \"audit-v7|coherence-fiches-v7|spans-v7|dev-test-v7\"", "description": "Attendre encore les sous-agents", "timeoutMs": 600000}`
+
+  ```
+jeu 05 nov 2026 19:43:21 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"0,9724\\|0,9893\\|0,9947\\|157/160\\|185/187\\|186/187\" docs/ | head -8", "description": "Trouver les docs aux valeurs périmées"}`
+
+  ```
+docs/archive/plan-deepseek41-complet.md
+docs/pilotage/chantiers.md
+docs/pilotage/roadmap.md
+docs/pilotage/en-cours.md
+docs/implantation/convertisseur.md
+docs/implantation/moteur-de-pensee.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"0,9724\\|0,9893\\|0,9947\\|157/160\\|185/187\\|186/187\" docs/pilotage/chantiers.md docs/pilotage/roadmap.md docs/implantation/moteur-de-pensee.md docs/implantation/convertisseur.md | cut -c1-160 | head -10", "description": … [33 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md:88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + b
+docs/pilotage/chantiers.md:90:| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta
+docs/pilotage/roadmap.md:178:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** +
+docs/implantation/moteur-de-pensee.md:349:| **T177** | les candidats S sont-ils exploitables ? | **têtes** : top-k strict **0,6069 → 0,9724** (+45) | couplé au 
+docs/implantation/convertisseur.md:210:| Qwen2.5-VL-7B | Q4_K_M | 10,9947 | 2,8 | 24 s | 4,5 Go |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '330,360p' docs/implantation/moteur-de-pensee.md | cut -c1-150", "description": "Lire le tableau des portes"}`
+
+  ```
+| **T158** | et sur les passifs ? | **5/5 faux** | le sujet est un patient, le `par` un agent |
+| **T159** | le correctif suffit-il ? | `_role_gp(par)` = agent ; le generateur S court-circuite | correctif partiel |
+| **T160** | les passifs sans `par` ? | chunker **3/3** patient, le S ignore | deux chemins |
+| **T161** | la cible par proximité paie-t-elle ? | exact **0,0042 → 0,0544** (×13), top1 0,3975 | 226/239 restent faux |
+| **T162** | les candidats verbes paient-ils ? | top-k **0,3264 → 0,4728**, tête **0,7793** | le classement n'est pas appris |
+| **T163** | où échoue l'attachement ? | **94 span, 23 cible** (32 avant les correctifs) | le POS tague le verbe en nom |
+| **T164** | le verbe du GV-phrase ? | **le POS VERB** : exact **0,0586 → 0,0962**, top1 0,4393 | 22 GP restants par le POS |
+| **T165** | le lexique verbal arbitre-t-il ? | exact **0,0962 → 0,1381**, tête 0,9034 | 13 verbes hors lexique |
+| **T166** | où sont les spans perdus ? | **48 REL, 33 SUB, 12 GP** | 81 subordonnées chez S |
+| **T167** | quel dénominateur pour l'attachement ? | **rendement** (÷239) et **exactitude spans** (÷146) : 0,7808 / 0,9041 / **0,6438** | deux lectur
+| **T168** | le classement de la c
+… [2108 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nR=[(\"| **T163** | où échoue l'attachement ? | **94 span, 23 cible** (32 avant les correctifs) | le POS tague le verbe en nom … [3382 caractères tronqués]`
+
+  ```
+NON TROUVÉ | **T167** | quel dénominateur pour l'attachement ? | **rend
+10 / 11
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"T167\" docs/implantation/moteur-de-pensee.md | head -2 | cut -c1-220", "description": "Voir la ligne T167 réelle"}`
+
+  ```
+339:| **T167** | quel dénominateur pour l'attachement ? | **rendement** (÷239) et **exactitude spans** (÷146) : 0,7808 / 0,9041 / **0,6438** | deux lectures, nommées |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"| **T167** | quel dénominateur pour l'attachement ? | **rendement** (÷239) et **exactitude spans** (÷146) : 0,7 … [891 caractères tronqués]`
