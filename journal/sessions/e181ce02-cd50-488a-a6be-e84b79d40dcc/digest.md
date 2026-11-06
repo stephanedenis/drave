@@ -48177,3 +48177,75 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-2377", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-v10.json
+ create mode 100644 reports/rapport-pensee-v10.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+no changes added to commit (use "git add" and/or "git commit -a")
+710ec7f9 B13 — LE FÉMININ -ÉE ET LA GARDE DÉTERMINANT DU GP : EXACT 220/220 (1,0000), COUVERTURE 0,9205, F1 0,5880, 19 SPANS ; 183/183
+jeu 05 nov 2026 23:23:07 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bug du gold (GP sans préposition) : j'analyse l'arithmétique du générateur pour le corriger proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def gv' tools/tests/linguistique/gold_synthetique.py | cut -d: -f1),+18p\" tools/tests/linguistique/gold_synthetique.py", "description": "Lire la génération du GV"}`
+
+  ```
+def gv(self):
+        r = self.rng.random()
+        v = self.verbe()
+        if r < 0.35:
+            return [(v, "VERB")], []
+        if r < 0.55:
+            return [(self.rng.choice(AUX), "AUX"), (v, "VERB")], []
+        if r < 0.70:
+            gn, _ = self.gn()
+            return [(v, "VERB")] + gn, []
+        if r < 0.85:
+            prep = self.rng.choice(PREP)
+            gn, _ = self.gn()
+            return [(v, "VERB"), (prep, "PREP")] + gn, [(prep, gn)]
+        if r < 0.93:
+            genre = self.rng.choice(["M", "F"])
+            return [(self.rng.choice(AUX), "AUX"), (self.adj(genre), "ADJ")], []
+        return [(self.rng.choice(ADV), "ADV"), (v, "VERB")], []
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 7 : audit indépendant de la v10 et re-mesure dev/test
+
+- **subagent** `{"description": "Audit de la v10", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer l'état v10** (commit `710ec7f9`) et vérifier que ses chiffres, ses règles et ses portes sont justes.\n\nContexte : `tools/bloc_linguis … [1602 caractères tronqués]`
+- **subagent** `{"description": "dev/test v10 et robustesse", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesurer dev/test sur l'état v10** (commit `710ec7f9`) et éprouver la robustesse du split.\n\nContexte : `tools/tests/linguistiqu … [1114 caractères tronqués]`
+
+  ```
+started subagent ea169cb1-75d7-43fa-b69d-5e2a210f6c38
+  ```
+
+
+  ```
+started subagent 3fb87dc7-7d24-42e2-a68e-e37e2734b755
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la leçon « le découpage d'abord » à la théorie (concept, sans chiffres)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/modele-natif.md'); t=p.read_text()\nbloc = \"\"\"\n### Le découpage d'abord\n\nUne erreur de mesure coûteuse : croire qu'un attachement est mauvais alors que c'est le **d … [2406 caractères tronqués]`
+
+  ```
+théorie : le découpage d abord
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+journal + plan
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **19 spans**.\", \" ; 19 spans ; leçon « le découpage d'abord » en théorie.\")\nn_md=len(list(pathlib.Path('reports' … [1169 caractères tronqués]`

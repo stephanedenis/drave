@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-05 21:30 EST
+- **Heartbeat** : 2026-11-05 23:35 EST
 - **Prochaine action** : le top-k (177/239), les 27 spans (17 inatteignables), puis la clôture de la tranche à 8 h.
   200+** ; la porte stochastique/fenêtre attend une version API (serveur local interdit).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.

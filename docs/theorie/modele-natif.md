@@ -638,6 +638,22 @@ La conséquence pratique : un attachement ne se juge jamais seul. Il se juge **p
 type de cible** (verbe ou nom) et **à couverture publiée** — sinon le chiffre global mélange la
 qualité de la règle et la réussite du segmenteur.
 
+### Le découpage d'abord
+
+Une erreur de mesure coûteuse : croire qu'un attachement est mauvais alors que c'est le **découpage**
+qui manque. Un segment mal borné n'a **pas** de cible mesurable — il n'est pas « mal attaché », il
+est **absent**. La conséquence pratique : avant de raffiner une règle d'attachement, vérifier que le
+segment existe ; avant de conclure qu'une règle ne marche pas, regarder la **couverture** (le nombre
+de segments au bon span) et l'**exactitude** (la justesse parmi ceux-là).
+
+Deux corollaires :
+
+- **le rendement est un plafond** : si la couverture est de 0,92, l'exactitude parfaite ne donne
+  jamais que 0,92 de rendement global — le reste est un problème de découpage, pas de règle ;
+- **un gold peut être en cause** : un span de gold incohérent avec sa propre convention (par
+  exemple un groupe prépositionnel dont le span exclut la préposition) fabrique des échecs qui
+  n'en sont pas. Un gold se vérifie **avant** de servir de juge.
+
 ## 13. Où lire la suite
 
 - **Le format** : [`architecture-native.md`](architecture-native.md) · [`format-flux.md`](../implantation/format-flux.md) ·
