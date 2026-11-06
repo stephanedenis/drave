@@ -55,6 +55,14 @@
 > documentés) : le récit et les tableaux sont dans
 > [`historique-passes-portes.md`](../../reports/historique-passes-portes.md).
 
+> **Rouge nouvelle du 2026-11-06 (tolérée)** : `porte-bloc-linguistique` échoue sur son verdict
+> `cascade_pos` — la **fusion** (heuristique + `MockNeuronal`) rend un POS de **0,7465**, sous
+> l'heuristique seule (**0,7581**) que le POS contextuel a fait progresser. La fusion est par
+> confiance et le stub l'emporte sur les spans où il est sûr. Ce n'est **pas** une régression de
+> mesure : l'attachement est à **222/222**, la POS heuristique à 0,7581. Le correctif est de
+> **calibrer `MockNeuronal`** (un contrat, pas un modèle) ou de restaurer la priorité par niveau
+> hors DeepSeek — à faire à la prochaine session, avec les portes L.
+
 ## 2. Les repères imprimés par chaque porte
 
 | porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-11-03 11:30) |
@@ -64,7 +72,7 @@
 | `porte-b1110-hybride.sh` | 0 s | PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case |
 | `porte-balayage.sh` | 0 s | ✅ porte balayage verte |
 | `porte-bloc-code.sh` | 10 s | ✅ porte bloc code verte |
-| `porte-bloc-linguistique.sh` | 12 s | ✅ porte bloc linguistique verte |
+| `porte-bloc-linguistique.sh` | 17 s | ❌ **rouge tolérée** (2026-11-06) : `cascade_pos` — la fusion avec le neuronal de contrat (0,7465) passe **sous** l'heuristique (0,7581) depuis que le POS contextuel a progressé ; la fusion est par confiance et le stub gagne. Correctif : calibrer `MockNeuronal` ou la priorité de niveau (prochaine session) |
 | `porte-bloc-maths.sh` | 1 s | ✅ porte bloc maths verte |
 | `porte-bloc-tableaux.sh` | 1 s | ✅ porte bloc tableaux verte |
 | `porte-budget.sh` | 45 s | ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite |

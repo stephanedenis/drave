@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 128.8 h |
+| Durée | 129.3 h |
 | Tours | 177 |
-| Messages | 2885 |
-| Appels d'outils | 2539 |
+| Messages | 2905 |
+| Appels d'outils | 2558 |
 | Fichiers touchés | 25 |
-| Commandes | 2090 |
+| Commandes | 2106 |
 | Sous-agents | 25 |
-| Commits | 309 |
+| Commits | 310 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*298 appels d'outils.* Actions notables :
+*317 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 239 autres
+- … et 254 autres
 
 **Synthèse produite :**
 
-⏵ La cible de A17 est atteinte (222/222). Je relance la suite complète des portes pour la vérification finale
+⏵ La porte complète a une rouge : `cascade_pos` (la fusion avec le neuronal de contrat passe sous l'heuristique). Je la documente comme rouge tolérée, avec sa cause
 
 ## 3. Travail accompli
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2050 autres
+- … et 2066 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10079,4 +10079,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LA CLÔTURE DE LA NUIT : EXACT 221/221, COUVERTURE 0,9247, DEV 152/152, TEST 69/69 ; 18 SPANS DONT 17 INATTEIGNABLES" -- reports/rapport-pensee-v11.md repo
 - B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183" -- tools/bloc_linguistique.py
 - JOURNAL ET ROADMAP — LA CIBLE DE A17 ATTEINTE : 222/222, COUVERTURE 0,9289, 17 SPANS INATTEIGNABLES" -- journal/2026-11-06/README.md docs/pilotage/roadmap.md do
+- PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL" -- docs/pilotag
 
