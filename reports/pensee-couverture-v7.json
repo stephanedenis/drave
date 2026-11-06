@@ -1,0 +1,48 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 187,
+  "exact": 187,
+  "couverture": 0.7824,
+  "f1": 0.513,
+  "tete": 0.6826,
+  "pos": 0.7475,
+  "spans": 52
+ },
+ "apres": {
+  "labels": 196,
+  "exact": 195,
+  "exact_span": 0.9949,
+  "couverture": 0.8201,
+  "f1": 0.5595,
+  "f1_s": 0.4741,
+  "f1_chunker": 0.5858,
+  "tete": 0.7205,
+  "pos": 0.7603,
+  "fr": "135/135",
+  "en": "60/61",
+  "topk": 166,
+  "topk_taux": 0.6946,
+  "spans": {
+   "REL": 21,
+   "SUB": 17,
+   "GP": 5,
+   "total": 43
+  }
+ },
+ "corrections": [
+  "POS contextuel (DET/PRÉP/ADJ → nom)",
+  "GV avant GP",
+  "prépositions composées",
+  "prépositions ambiguës (since/before/after/until/as)",
+  "verbe après pronom sujet + adverbe final"
+ ],
+ "limites": [
+  "43 spans",
+  "top-k incomplet",
+  "in-sample",
+  "heuristiques"
+ ]
+}

@@ -298,7 +298,7 @@ LEXIQUES = {
 POS_FERME = {
     "fr": {
         "DET": set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs quel quelle quels quelles".split()),
-        "PREP": set("à a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis pendant durant contre malgré selon près loin devant derrière après avant".split()),
+        "PREP": set("à a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis pendant durant contre malgré selon près loin devant derrière après avant au-dessus au-dessous vis-à-vis en-dehors".split()),
         "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split()),
         "CONJ": set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant qu".split()),
         "AUX": set("est sont était étaient été être ai as a avons avez ont avait avaient eu avoir suis es sommes êtes".split()),
@@ -367,6 +367,11 @@ CONNECTEURS = {
 RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "whose",
             "where", "when"}
 # les subordonnants qui n'ont pas d'antécédent : toujours SUB
+AMBIGUES_PREP = {"since", "before", "after", "until", "as", "depuis", "avant", "après", "pendant", "durant"}
+
+SUJETS = {"i", "you", "he", "she", "it", "we", "they", "who", "that", "which", "there",
+          "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "qui", "qu"}
+
 SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
                  "whether", "car", "parce", "puisque", "comme", "quand", "si", "lorsque"}
 
@@ -424,6 +429,7 @@ cry cries cried crying go goes went gone going come comes came coming
 leave leaves left leaving read reads reading sleep sleeps slept sleeping
 rain rains rained raining hang hangs hung hanging paint paints painted painting
 live lives lived living continue continues continued continuing
+speak speaks spoke spoken speaking voler vole voles volent volait
 rêver rêve rêves rêvent rêvait sauter saute sautes sautent sautait
 marcher marche marches marchent marchait
 """.split())
@@ -832,10 +838,21 @@ class Heuristique:
         mots = self._mots(texte)
         lex = POS_FERME.get(langue, POS_FERME["fr"])
         pos_verbes = pos_verbes or set()
+        par_debut = {m[0]: k for k, m in enumerate(mots)}
 
         def est_verbe(d: int, m: str) -> bool:
-            """Le verbe : le lexique **ou** le POS (le tagger voit « aboie », le lexique non)."""
-            return _est_verbe(m) or d in pos_verbes
+            """Le verbe : le lexique, le POS, ou la **position** après un pronom sujet."""
+            if _est_verbe(m) or d in pos_verbes:
+                return True
+            n2 = _normaliser(m)
+            if n2 in lex.get("DET", set()) or n2 in lex.get("PREP", set()) or n2 in lex.get("CONJ", set()):
+                return False
+            idx = par_debut.get(d)
+            if idx is not None and idx > 0:
+                avant = _normaliser(mots[idx - 1][2])
+                if avant in SUJETS:
+                    return True
+            return False
         segments: list[dict] = []
         i = 0
         while i < len(mots):
@@ -843,11 +860,15 @@ class Heuristique:
             n = _normaliser(t)
             if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS):
                 suivant = mots[i + 1] if i + 1 < len(mots) else None
+                # « since/before/after/until/as » : SUB devant une clause, PRÉP devant un GN
+                prep_ambigue = (n in AMBIGUES_PREP and (suivant is None
+                                or not (_normaliser(suivant[2]) in lex.get("PRON", set())
+                                        or est_verbe(suivant[0], suivant[2]))))
                 ambigu = n in lex.get("DET", set())
-                marqueur = (not ambigu) or (suivant is not None and (
+                marqueur = (not prep_ambigue) and ((not ambigu) or (suivant is not None and (
                     _normaliser(suivant[2]) in lex.get("PRON", set())
                     or _normaliser(suivant[2]) in lex.get("AUX", set())
-                    or est_verbe(suivant[0], suivant[2])))
+                    or est_verbe(suivant[0], suivant[2]))))
                 if marqueur:
                     precedent = segments[-1]["type"] if segments else None
                     stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV") else "REL"
@@ -863,6 +884,10 @@ class Heuristique:
                             verbes_vus += 1
                             if verbes_vus == 2:
                                 break
+                        # un adverbe **final** n'appartient pas à la clause (« … would come | yesterday »)
+                        if (verbes_vus >= 1 and _normaliser(m) in lex.get("ADV", set())
+                                and (j + 1 >= len(mots) or mots[j + 1][3] != "mot")):
+                            break
                         j += 1
                     segments.append({"type": stype,
                                      "role": "complément" if stype == "SUB" else "qualité",
@@ -891,22 +916,6 @@ class Heuristique:
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
                 continue
-            if typ == "mot" and n in lex.get("PREP", set()) and i + 1 < len(mots):
-                j = i + 1
-                # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
-                # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
-                while (j < len(mots) and mots[j][3] == "mot"
-                       and not est_verbe(mots[j][0], mots[j][2])
-                       and _normaliser(mots[j][2]) not in RELATIFS):
-                    j += 1
-                # « à manger » : un GP réduit à sa préposition prend le verbe qui suit
-                if j == i + 1 and j < len(mots) and est_verbe(mots[j][0], mots[j][2]):
-                    j += 1
-                segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
-                                 "debut": d, "fin": mots[j - 1][1],
-                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
-                i = j
-                continue
             if typ == "mot" and (n in lex.get("AUX", set()) or est_verbe(d, t)
                                  or (i + 1 < len(mots) and _normaliser(mots[i + 1][2]) in lex.get("AUX", set()))):
                 j = i + 1
@@ -923,24 +932,19 @@ class Heuristique:
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
                 continue
-            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS):
-                # REL ou SUB ? C'est le **segment précédent** qui tranche : après un GN c'est
-                # une relative (antécédent), après un GV une complétive ; un subordonnant
-                # (`because`, `although`…) est toujours une SUB.
-                precedent = segments[-1]["type"] if segments else None
-                stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV") else "REL"
+            if typ == "mot" and n in lex.get("PREP", set()) and i + 1 < len(mots):
                 j = i + 1
-                # le GV s'arrête à la préposition, au déterminant, au relatif : un prédicat
-                # par clause (« joue | au ballon », « saw | the cat »).
+                # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
+                # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
                 while (j < len(mots) and mots[j][3] == "mot"
-                       and _normaliser(mots[j][2]) not in lex.get("PREP", set())
-                       and _normaliser(mots[j][2]) not in lex.get("DET", set())
-                       and _normaliser(mots[j][2]) not in RELATIFS
-                       and _normaliser(mots[j][2]) not in SUBORDONNANTS):
+                       and not est_verbe(mots[j][0], mots[j][2])
+                       and _normaliser(mots[j][2]) not in RELATIFS):
                     j += 1
-                segments.append({"type": stype,
-                                 "role": "complément" if stype == "SUB" else "qualité",
-                                 "niveau": 1, "debut": d, "fin": mots[j - 1][1],
+                # « à manger » : un GP réduit à sa préposition prend le verbe qui suit
+                if j == i + 1 and j < len(mots) and est_verbe(mots[j][0], mots[j][2]):
+                    j += 1
+                segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
+                                 "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
                 continue
@@ -994,6 +998,19 @@ class Heuristique:
                     etiquettes.append(Etiquette("morphème", genre, aff, d + md, d + mf,
                                                 self.nom, 0.32, candidats=[genre],
                                                 langue=lg, script=script))
+
+        # 3 bis. le contexte tranche les suffixes ambigus : un mot après DET/PRÉP/ADJ est un
+        # nom (« brother », « chair » ne sont pas des verbes) — A14 : 176 VERB gold en NOUN.
+        pos_idx = [i for i, e in enumerate(etiquettes) if e.niveau == "pos"]
+        for k, i in enumerate(pos_idx):
+            e = etiquettes[i]
+            if e.type != "VERB" or e.confiance > 0.45 or k == 0:
+                continue
+            avant = etiquettes[pos_idx[k - 1]]
+            if avant.type in ("DET", "PREP", "ADJ"):
+                etiquettes[i] = Etiquette("pos", "NOUN", e.valeur, e.debut, e.fin, self.nom,
+                                          e.confiance, candidats=["noun"], langue=lg,
+                                          script=script, meta={"ouvert": True, "contexte": avant.type})
 
         # 4. phrase + pragmatique
         for d, f, p, typ in self._phrases(texte):
