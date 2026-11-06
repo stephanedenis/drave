@@ -1503,3 +1503,39 @@ x46 {'chars': 144, 'couverts': 137, 'taux': 0.9514, 'manquants': 7, 'categories'
 … [38 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json, sys, collections, re\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES, CAS_LIMITES\nh=bl.Heuristique()\n# 1) types d … [3773 caractères tronqués]`
+
+  ```
+MOTS 'https://example.com/a.pdf' [(0, 5, 'https', 'mot'), (5, 6, ':', 'ponctuation'), (6, 7, '/', 'ponctuation'), (7, 8, '/', 'ponctuation'), (8, 15, 'example', 'mot'), (15, 16, '.', 'ponctuation'), (16, 19, 'com', 'mot'), (19, 20, '/', 'ponctuation'), (20, 21, 'a', 'mot'), (21, 22, '.', 'ponctuation'), (22, 25, 'pdf', 'mot')]
+MOTS 'Merci 😊 !' [(0, 5, 'Merci', 'mot'), (6, 7, '😊', 'ponctuation'), (8, 9, '!', 'ponctuation')]
+MOTS 'contact@example.org' [(0, 7, 'contact', 'mot'), (7, 8, '@', 'ponctuation'), (8, 15, 'example', 'mot'), (15, 16, '.', 'ponctuation'), (16, 19, 'org', 'mot')]
+MOTS '12,5 %' [(0, 2, '12', 'nombre'), (2, 3, ',', 'ponctuation'), (3, 4, '5', 'nombre'), (5, 6, '%', 'ponctuation')]
+MOTS "aujourd'hui" [(0, 11, "aujourd'hui", 'mot')]
+
+attachements 265 cibles fermées 16 ouvertes 249
+cibles fermées top [('au', 3), ('was', 3), ('lui', 2), ('pas', 2), ('have', 2), ('entre', 2), ('ne', 1), ('Tu', 1)]
+cibles ouvertes par classe Counter()
+Counter()
+classes cibles ouvertes Counter({'NOUN': 197, 'VERB': 37, 'DET': 8, 'ADJ': 7})
+exemples cibles fermées ['au', 'lui', 'pas', 'ne', 'Tu', 'was', 'have', 'entre']
+
+### document titres
+x46 '# Notes de réunion' | span '# Notes de réun
+… [620 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json, sys, collections, re, os\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES, CAS_LIMITES\nh=bl.Heuristique()\n\ndef sa … [4907 caractères tronqués]`
+
+  ```
+document labels 53 tronqués 42 [('f02', 'paragraphe', 160, 60), ('f03', 'paragraphe', 87, 60), ('f04', 'paragraphe', 129, 60), ('f05', 'paragraphe', 100, 60), ('f06', 'paragraphe', 63, 60), ('f07', 'paragraphe', 70, 60), ('f08', 'paragraphe', 81, 60), ('f09', 'paragraphe', 110, 60)] titres [('x46', '# Notes de réunion'), ('x48', '今天天气很好，我们去公园散步吧。')]
+titres cas limites [('chiffres-seuls', '1234567890'), ('arabe', 'مرحبا بالعالم، كيف حالك اليوم؟'), ('hébreu', 'שלום עולם, מה שלומך היום?'), ('japonais', '今日はいい天気ですね。散歩に行きましょう。')]
+actes {'assertion': 50, 'question': 6, 'exclamation': 4} double_sens 9 | connecteurs attendus 26 émis 26 manqués []
+URL phrases [(0, 21, "'Voir https://example.'"), (21, 45, "'com/rapports/2024/final.'"), (45, 63, "'pdf pour la suite.'")]
+URL mot types Counter({'mot': 10, 'ponctuation': 9, 'nombre': 1})
+contexte label [('pragmatique', 'contexte', 'réponse à la question précédente', 'humain', 0, 13)]
+contexte annotation réponse à la question précédente
+parallele source annotation parallele sources labels ['heuristique', 'neuronal'] langue fr langues labels ['fr']
+parallele source annotation parallele sources labels ['heuristique', 'neuronal'] langue en langues l
+… [896 caractères tronqués]
+  ```
+

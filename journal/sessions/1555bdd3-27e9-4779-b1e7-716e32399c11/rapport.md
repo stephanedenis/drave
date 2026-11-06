@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 61 |
-| Appels d'outils | 76 |
+| Messages | 65 |
+| Appels d'outils | 80 |
 | Fichiers touchés | 0 |
-| Commandes | 64 |
+| Commandes | 68 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*76 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 54 autres
+- … et 58 autres
 
 **Synthèse produite :**
 
-⏵ Calcul de l'empreinte réelle pour l'exemple de rejeu.
+⏵ Recherche d'une phrase du gold avec REL correctement attachée pour l'exemple 2.
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 24 autres
+- … et 28 autres
 
 ## 4. Mesures et résultats marquants
 

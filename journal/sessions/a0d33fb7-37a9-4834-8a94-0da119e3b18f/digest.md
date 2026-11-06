@@ -1993,3 +1993,231 @@ Filesystem               Size  Used Avail Use% Mounted on
 … [3618 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Options des outils de revue (fix automatique ou non)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py --help 2>&1 | head -20; echo \"=== verifie_en_cours ===\"; python3 tools/verifie_en_cours.py --help 2>&1 | head -12; echo \"=== taille ===\"; python3 tools/taille_documents.py --help 2>&1 | head - … [45 caractères tronqués]`
+
+  ```
+revue de documentation · 678 fiche(s) · 771 JSON · 120 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== verifie_en_cours ===
+  en-cours · 1641 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== taille ===
+  budget de contexte · documents chargeables
+    mots lignes  cat budget  document
+    6960    383   T1   9000  docs/pilotage/roadmap.md
+    5999    597 DATÉ      0  docs/implantation/contexte-long.md
+    4858    515   T1   5000  docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+    4085    431 DATÉ      0  docs/implantation/numa-segregation.md
+    3131    294   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2791    183   T1   2800  reports/README.md
+    2463    162   T1   2500  docs/pilotage/references-non-regression.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --help 2>&1 | head -20; echo \"=== ressources ===\"; python3 tools/ressources.py --help 2>&1 | head -20", "description": "Check sessions and resources tool options"}`
+
+  ```
+usage: sessions.py [-h] [--racine RACINE] [--status] [--check] [--strict]
+                   [--modele] [--autotest] [--depuis-en-cours]
+
+sessions.py — plans de session : qui fait quoi, avant d'écrire `en-cours`.
+Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
+périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+sessions consultent `--status` avant de claim, et `--check --strict` refuse
+les mandats incomplets, les identifiants dupliqués, les périmètres qui se
+recouvrent et les heartbeats périmés (le `--check` seul les signale). Les
+**fichiers proches** (une réservation imbriquée dans une autre, `data/` ⊃
+`data/structures/`) restent des **avertissements**, même en strict :
+l'imbrication est le régime normal d'un territoire partagé, et une porte qui
+échoue sur toute imbrication est rouge dès qu'une session réserve un sous-
+dossier — mesuré le 02/11, le strict sortait en 1 avec **0 erreur et 4
+avertissements**. `en-cours` reste la seule source de l'état : ce plan est le
+**contrat de travail** qui le précède. Une session arrêtée (reboot, panne)
+passe à `État : en pause` : elle reste dans l'état, son heartbeat n'est plus
+exigé, et la
+… [1383 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dépôt bouge sous moi : vérification des compteurs et fichiers neufs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/ | head -15; echo \"--- en-cours compteurs ---\"; grep -n \"fichiers / JSON\\|portes |\" docs/pilotage/en-cours.md | head -5; echo \"--- date en-cours ---\"; head -3 docs/pilotage/en-cours.md", "description … [53 caractères tronqués]`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+--- en-cours compteurs ---
+107:| portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
+109:| fichiers / JSON de résultats | **678** / **771** | `reports/*.md` / `reports/*.json` |
+--- date en-cours ---
+# En ce moment
+
+**Mis à jour : 2026-11-06, 10 h 20 HNE (heure locale, EST).**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -8; echo \"--- status docs ---\"; git status --short docs/pilotage/ | head", "description": "Check recent commits and pilotage status"}`
+
+  ```
+62dad657 B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+a9907a1b B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)
+bdeca168 ÉTAT — OBJECTIF 09 H 30 → 12 H : LE PREMIER PRODUIT (CLI, SMOKE TEST, DOC D'USAGE, PORTE, FILE DES TÂCHES EN SOUS-AGENTS)
+fa1b0c6e ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+f0e3f46a DOCS — LA PASSE DU 06/11 EN UNE LIGNE
+b578f95b DOCS — LA PASSE DU 06/11 EN DEUX LIGNES (BUDGET T1)
+ea7d3275 PORTES — LA PASSE COMPLÈTE DU 06/11 CONSIGNÉE : 79 VERTES / 4 ROUGES (2 STRUCTURELLES, SESSIONS D'AUTRUI, CASCADE_POS DOCUMENTÉE)
+--- status docs ---
+M  docs/pilotage/en-cours.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du commit d'objectif 09 h 30 → 12 h du parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat bdeca168 | head -30; echo \"--- message ---\"; git log -1 --format=%B bdeca168", "description": "Inspect parent objective commit"}`
+
+  ```
+commit bdeca168b4503171ce80ca8f2c9de02d8c9fc2c1
+Author: Stéphane <stephane@localhost>
+Date:   Fri Nov 6 09:31:32 2026 -0500
+
+    ÉTAT — OBJECTIF 09 H 30 → 12 H : LE PREMIER PRODUIT (CLI, SMOKE TEST, DOC D'USAGE, PORTE, FILE DES TÂCHES EN SOUS-AGENTS)
+
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-06/README.md                       |  11 +-
+ journal/2026-11-06/distribue.md                    |   9 +-
+ journal/2026-11-06/docs.md                         |   6 +-
+ journal/2026-11-06/mesures.md                      |   6 +-
+ journal/2026-11-06/modele.md                       |   6 +-
+ journal/2026-11-06/portes.md                       |   6 +-
+ journal/README.md                                  |   6 +-
+ .../14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md | 337 +++++++++++++++++++
+ .../rapport.md                                     |  57 ++++
+ .../1555bdd3-27e9-4779-b1e7-716e32399c11/digest.md | 304 +++++++++++++++++
+ .../rapport.md                                     |  65 ++++
+ journal/sessions/MANIFEST.md                       |   8 +-
+ .../a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md | 351 ++++++++++++++++++++
+ .../rapport.md                         
+… [497 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire de ce que le parent a déjà livré (CLI, doc d'usage, porte)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat 62dad657 | head -25; echo \"--- a9907a1b ---\"; git show --stat a9907a1b | head -12; echo \"--- fichiers produit ---\"; ls -l tools/drave.py docs/utilisation* docs/*/utilisation* 2>/dev/null | head", "description": "I … [34 caractères tronqués]`
+
+  ```
+commit 62dad657a30755f3381770e86153dcf0213249d5
+Author: Stéphane <stephane@localhost>
+Date:   Fri Nov 6 09:56:30 2026 -0500
+
+    B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-06/README.md                       |  15 +-
+ journal/2026-11-06/distribue.md                    |  10 +-
+ journal/2026-11-06/docs.md                         |  10 +-
+ journal/2026-11-06/mesures.md                      |  16 +-
+ journal/2026-11-06/modele.md                       |  10 +-
+ journal/2026-11-06/portes.md                       |  10 +-
+ journal/README.md                                  |  10 +-
+ journal/THEMES.md                                  |   2 +-
+ .../14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md | 421 +++++++++++++++++++
+ .../rapport.md                                     |  19 +-
+ .../1555bdd3-27e9-4779-b1e7-716e32399c11/digest.md | 417 +++++++++++++++++++
+ .../rapport.md                                     |  16 +-
+ journal/sessions/MANIFEST.md                       |  12 +-
+ .../a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md | 44
+… [1061 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/drave.py tools/porte-produit.sh docs/ 2>/dev/null | head -20; echo \"--- untracked docs ---\"; git status --short docs/ | head; echo \"--- ls tools/tests produit ---\"; ls tools/tests/ | grep -i -E \"produit| … [68 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+--- untracked docs ---
+M  docs/pilotage/en-cours.md
+--- ls tools/tests produit ---
+test_produit.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 -- tools/porte-produit.sh tools/drave.py tools/tests/test_produit.py; echo \"--- ls-files ---\"; git ls-files tools/drave.py tools/porte-produit.sh tools/tests/test_produit.py; echo \"--- status court ---\"; git  … [160 caractères tronqués]`
+
+  ```
+62dad657 B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+--- ls-files ---
+tools/drave.py
+tools/porte-produit.sh
+tools/tests/test_produit.py
+--- status court ---
+M  docs/pilotage/en-cours.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-spans-chunker.md
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la fiche et de la doc d'usage du premier produit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i -E \"produit|cli|drave\" | head; echo \"--- docs ---\"; grep -rln \"drave --version\\|drave analyser\\|porte-produit\" docs/ reports/ README.md 2>/dev/null | head -10; echo \"--- en-cours produit ---\"; grep -n  … [118 caractères tronqués]`
+
+  ```
+pensee-produit-v0.json
+rapport-hebbien-produits.md
+rapport-modele-drave.md
+rapport-produit-v0.md
+--- docs ---
+docs/pilotage/en-cours.md
+reports/rapport-produit-v0.md
+--- en-cours produit ---
+71:- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, **F1 0,5849** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0** et sa **porte produit** (6 contrôles) ; **autotest parallèle** (×2,4).
+107:| portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-produit-v0.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-produit-v0.md</path>
+<type>file</type>
+<content>
+1: # B13 — le premier produit : `drave` v0, une CLI qui analyse, mesure et rejoue
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
+4: > **Ce que c'est** : un **point d'entrée unique** — `python3 tools/drave.py` — qui expose le bloc
+5: > linguistique en autonomie, **hors ligne**, **CPU**, **déterministe** : `analyser` (POS, syntagmes
+6: > avec rôle et **cible d'attachement**, pragmatique), `evaluer` (la mesure sur le gold), `rejouer`
+7: > (le déterminisme par sha256), `--version`. Une **porte** le vérifie (`porte-produit.sh` : 5
+8: > contrôles + le smoke test + l'autotest parallèle), et un **smoke test** de 6 cas tourne en 1,2 s.
+9: >
+10: > **Dispositif** : [`drave.py`](../tools/drave.py), [`test_produit.py`](../tools/tests/test_produit.py),
+11: > [`porte-produit.sh`](../tools/porte-produit.sh) ; JSON [`pensee-produit-v0.json`](pensee-produit-v0.json).
+12: 
+13: ## 1. Ce que la commande fait
+14: 
+15: | commande | sortie | mesure |
+16: |---|---|---|
+17: | `drave.py analyser "Le chat dort sur le toit."` | POS, syntagm
+… [2505 caractères tronqués]
+  ```
+

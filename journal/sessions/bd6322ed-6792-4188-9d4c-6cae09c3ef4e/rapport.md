@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 37 |
-| Appels d'outils | 58 |
+| Messages | 39 |
+| Appels d'outils | 62 |
 | Fichiers touchés | 2 |
-| Commandes | 43 |
+| Commandes | 47 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python, dépôt Drave). Mission … [2481 caractères tronqués]
 
-*58 appels d'outils.* Actions notables :
+*62 appels d'outils.* Actions notables :
 
 - bash — List tools and check branch status
 - read
@@ -41,7 +41,7 @@
 - bash — Check tests layout and pytest availability
 - bash — Read existing test style
 - bash — Read second test style
-- … et 40 autres
+- … et 44 autres
 
 **Synthèse produite :**
 
@@ -98,7 +98,7 @@
 - **T1** Verify only the two new files are added
 - **T1** Verify fixed-width help and exit codes
 - **T1** Check index state for new files
-- … et 3 autres
+- … et 7 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -129,4 +129,8 @@
 - **T1** `JSON annotation totale (compact): 3574776 octets = 3.575 Mo`
 - **T1** `test direct: 1.33 s, 28532 Ko`
 - **T1** `a9907a1b B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)`
+- **T1** `- **La mémoire** : ~50 Mo pour le module.`
+- **T1** `fr 13 car. ->   5563 octets JSON, 19 étiquettes, 140.9 ms`
+- **T1** `en 27 car. ->   8704 octets JSON, 32 étiquettes, 137.4 ms`
+- **T1** `fr 55 car. ->  16100 octets JSON, 59 étiquettes, 139.1 ms`
 

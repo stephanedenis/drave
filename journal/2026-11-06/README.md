@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **7 session(s)** · **5 thème(s)**
+**20 commits** · **7 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 2 | [docs.md](docs.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 5 | [portes.md](portes.md) |
+| portes | 6 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -26,7 +26,7 @@
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.5 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.5 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 137.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 137.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -52,6 +52,7 @@
 | 09:31 | `bdeca168` | ÉTAT — OBJECTIF 09 H 30 → 12 H : LE PREMIER PRODUIT (CLI, SMOKE TEST, DOC D'USAGE, PORTE, FILE DES TÂCHES EN SOUS-AGENTS) |
 | 09:50 | `a9907a1b` | B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8) |
 | 09:56 | `62dad657` | B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183 |
+| 09:59 | `be7d13b9` | ÉTAT — LE BLOC L PASSE À 222/222, 17 SPANS, DRAVE V0 ET LA PORTE PRODUIT ; 84 PORTES |
 
 ## Le récit de la journée (écrit à la main)
 

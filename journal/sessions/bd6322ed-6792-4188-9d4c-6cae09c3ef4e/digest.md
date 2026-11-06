@@ -1260,3 +1260,147 @@ COLUMNS 200 identique: True
 ['rejouer', 'Le chat dort.'] -> 0 | rejeu identique : oui
   ```
 
+- **bash** `{"command": "git diff --cached --numstat -- tools/drave.py tools/tests/test_produit.py; echo ---; git diff --numstat -- tools/drave.py tools/tests/test_produit.py; echo ---; git log -1 --format='%h %s'", "description": "Check index state for new files"}`
+
+  ```
+---
+---
+62dad657 B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport subprocess, sys\nCLI=[sys.executable,\"tools/drave.py\"]\nfor args in ([\"foo\"], [\"analyser\"], [\"evaluer\",\"--gold\",\"--inconnu\"], [\"rejouer\",\"\"]):\n    r=subprocess.run(CLI+args, capture_output=True, text=True)\n    print(args, \"->\", r.returncode,  … [110 caractères tronqués]`
+
+  ```
+['foo'] -> 2 | usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+['analyser'] -> 2 | usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE
+['evaluer', '--gold', '--inconnu'] -> 2 | usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+['rejouer', ''] -> 1 | drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+  ```
+
+### 🤖 Assistant
+
+⏵ Investigating a concurrent commit that already includes a drave v0
+
+- **bash** `{"command": "git log --oneline -5; echo ---; git show --format=fuller --stat 62dad657 | head -40; echo ---; git status --porcelain | head -40", "description": "Inspect the concurrent commit and status"}`
+
+  ```
+62dad657 B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+a9907a1b B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)
+bdeca168 ÉTAT — OBJECTIF 09 H 30 → 12 H : LE PREMIER PRODUIT (CLI, SMOKE TEST, DOC D'USAGE, PORTE, FILE DES TÂCHES EN SOUS-AGENTS)
+fa1b0c6e ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+789b1284 DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+---
+commit 62dad657a30755f3381770e86153dcf0213249d5
+Author:     Stéphane <stephane@localhost>
+AuthorDate: Fri Nov 6 09:56:30 2026 -0500
+Commit:     Stéphane <stephane@localhost>
+CommitDate: Fri Nov 6 09:56:30 2026 -0500
+
+    B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-06/README.md                       |  15 +-
+ journal/2026-11-06/distribue.md                    |  10 +-
+ journal/2026-11-06/docs.md                         |  10 +-
+ journal/2026-11-06/mesures.md                      |  1
+… [3476 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show 62dad657:tools/drave.py 2>/dev/null | head -30; echo \"=== test file ===\"; git show 62dad657:tools/tests/test_produit.py 2>/dev/null | head -30; echo \"=== diff vs working ===\"; git diff --stat HEAD -- tools/drave.py tools/tests/test_produit.py", "description": "Compare commi … [27 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""drave.py — le point d'entrée produit du bloc linguistique.
+
+Une seule commande, trois gestes, hors ligne et déterministe :
+
+    python3 tools/drave.py analyser "Le chat dort."
+    python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+    python3 tools/drave.py evaluer
+    python3 tools/drave.py evaluer --gold --json
+    python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 tools/drave.py --version
+
+Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
+Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
+(annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
+un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import pathlib
+import random
+import sys
+import textwrap
+=== test file ===
+"""t
+… [913 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' tools/porte-produit.sh", "description": "Read the product gate"}`
+
+  ```
+#!/usr/bin/env bash
+# porte-produit — le premier produit : la CLI répond, le JSON est valide, le rejeu est identique.
+#
+# Ce qu'elle vérifie : `drave --version`, `analyser` (fr et en) rend un JSON parsable avec des
+# étiquettes, `rejouer` rend le même sha256 deux fois, et le smoke test passe.
+set -uo pipefail
+cd "$(dirname "$0")/.." || exit 1
+ko=0
+dit() { printf '  %s %s\n' "$1" "$2"; }
+
+ver=$(python3 tools/drave.py --version 2>&1)
+case "$ver" in drave*) dit ✅ "version : $ver" ;; *) dit ❌ "version : $ver"; ko=1 ;; esac
+
+for langue in fr en; do
+  case "$langue" in
+    fr) texte="Le chat dort sur le toit." ;;
+    en) texte="The cat sleeps on the roof." ;;
+  esac
+  sortie=$(python3 tools/drave.py analyser "$texte" --langue "$langue" --json 2>&1)
+  if printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['langue'] == '$langue', d.get('langue')
+assert len(d['etiquettes']) > 5, len(d['etiquettes'])
+assert any(e['niveau'] == 'syntagme' for e in d['etiquettes'])
+assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
+" 2>/dev/null; then
+    dit ✅ "analyser $langue : JSON valide, étiquettes et syntagmes"
+  else
+    dit ❌ "analyser $langue : JSON invalide 
+… [1006 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' reports/rapport-produit-v0.md; echo ===JSON===; cat reports/pensee-produit-v0.json", "description": "Read the product report and JSON"}`
+
+  ```
+# B13 — le premier produit : `drave` v0, une CLI qui analyse, mesure et rejoue
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
+> **Ce que c'est** : un **point d'entrée unique** — `python3 tools/drave.py` — qui expose le bloc
+> linguistique en autonomie, **hors ligne**, **CPU**, **déterministe** : `analyser` (POS, syntagmes
+> avec rôle et **cible d'attachement**, pragmatique), `evaluer` (la mesure sur le gold), `rejouer`
+> (le déterminisme par sha256), `--version`. Une **porte** le vérifie (`porte-produit.sh` : 5
+> contrôles + le smoke test + l'autotest parallèle), et un **smoke test** de 6 cas tourne en 1,2 s.
+>
+> **Dispositif** : [`drave.py`](../tools/drave.py), [`test_produit.py`](../tools/tests/test_produit.py),
+> [`porte-produit.sh`](../tools/porte-produit.sh) ; JSON [`pensee-produit-v0.json`](pensee-produit-v0.json).
+
+## 1. Ce que la commande fait
+
+| commande | sortie | mesure |
+|---|---|---|
+| `drave.py analyser "Le chat dort sur le toit."` | POS, syntagmes (GN/GV/GP, rôle, cible), pragmatique, couverture | 32 étiquettes, 3 segments |
+| `drave.py analyser … --langue en --json` | le même en JSON complet | 4 013 octets, JSON valide
+… [2497 caractères tronqués]
+  ```
+

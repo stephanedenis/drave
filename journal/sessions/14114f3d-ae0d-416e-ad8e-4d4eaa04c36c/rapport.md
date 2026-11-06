@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 32 |
-| Appels d'outils | 43 |
+| Messages | 34 |
+| Appels d'outils | 45 |
 | Fichiers touchés | 3 |
-| Commandes | 27 |
+| Commandes | 29 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*43 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,7 +41,7 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 17 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
@@ -86,6 +86,8 @@
 - **T1** Inspecter qualitativement des sorties représentatives
 - **T1** Calculer les statistiques agrégées de robustesse
 - **T1** Quantifier attachements, titres, connecteurs, URL
+- **T1** Compléter les mesures de contrat et compositions
+- **T1** Mesurer la détection de langue avec et sans profils
 
 ## 4. Mesures et résultats marquants
 

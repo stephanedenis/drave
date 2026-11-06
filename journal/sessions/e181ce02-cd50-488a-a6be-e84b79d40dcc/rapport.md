@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 137.3 h |
+| Durée | 137.4 h |
 | Tours | 179 |
-| Messages | 2981 |
-| Appels d'outils | 2633 |
+| Messages | 2983 |
+| Appels d'outils | 2635 |
 | Fichiers touchés | 25 |
-| Commandes | 2156 |
+| Commandes | 2157 |
 | Sous-agents | 29 |
-| Commits | 322 |
+| Commits | 323 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9620,7 +9620,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 
 ### Tour 179 — push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vi … [60 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Pousser et voir les branches distantes
@@ -9636,7 +9636,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - bash — Consigner l'objectif produit
 - job_output
 - bash — Attendre la vague produit
-- … et 17 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
@@ -9748,7 +9748,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2116 autres
+- … et 2117 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10218,4 +10218,5 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)" -- tools/pensee/autotest.py reports/rapport-autotest-parallele.md rep
 - B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183" -- tools/drave.py tools/tests/tes
 - ÉTAT — LE BLOC L PASSE À 222/222, 17 SPANS, DRAVE V0 ET LA PORTE PRODUIT ; 84 PORTES" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' 
+- ÉTAT — TRIM T0 APRÈS LE BLOC L" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TRIM T0 APRÈS"; then echo "COMMIT OK $i"; b
 

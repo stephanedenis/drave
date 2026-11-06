@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 61 |
-| Appels d'outils | 77 |
+| Messages | 72 |
+| Appels d'outils | 88 |
 | Fichiers touchés | 0 |
-| Commandes | 66 |
+| Commandes | 76 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*77 appels d'outils.* Actions notables :
+*88 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,11 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 53 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Lecture du commit d'objectif 09 h 30 → 12 h du parent
+⏵ Relecture de l'état courant mis à jour (10 h 20) pour éviter les tâches périmées
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
 - **T1** Run gold evaluation with key env var set
-- … et 26 autres
+- … et 36 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -122,10 +122,22 @@
 - **T1** `/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB`
 - **T1** `/dev/md0                 938G  895G   34G  97% /home/stephane/IA`
 - **T1** `a9907a1b B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)`
+- **T1** `B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)`
+- **T1** `71:- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, **F1 0,5849** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**`
+- **T1** `- **T1** `✅ à 30 % du budget, la lecture contrôlée récupère ≥ 90 % des passages de la``
+- **T1** `- **T1** `2. ✅ la tête essayée (refusée : +10 % de PPL) ;``
+- **T1** `- **T1** `docs/pilotage/chantiers.md:114:   ils fournissent aussi les documents du banc. Sans D, N2 reste sur 5,36 Mo de prose et L n'a``
+- **T1** `- **T1** `docs/pilotage/programme-r.md:146:**+3,92 à +4,09 %** (1024), **+4,22 % / +6,59 %** en anglais. Le natif reste en **octets** ; le``
+- **T1** `- **T1** `| **R — le lecteur** | un document, une question, un budget : réponse sourcée ou refus motivé ? | ✅ R0.1–R0.3 ; R0.4/R0.5 négatifs ; R4.1–R4.4 mesurés (R4.4 : 4/5 familles ≥ 90 %) | **R1.1/R`
+- **T1** `- **T1** `| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (32`
+- **T1** `- **T1** `- **Un seul split déterministe** (`crc32 % 3`), sans validation croisée ; les valeurs``
+- **T1** `- **T1** `candidats laisse 1,17 % de réussite, le top-1 aléatoire 42,14 % ; les deux donnent p = 0.``
+- **T1** `- **T1** `0, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %``
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : tools/revue_documentation.py             0 tools/taille_documents.py                0 tools/verifie_en_cours.py                0 tools/verifie_journal.py                 0 tools/verifier_liens.py     
+- **T1** : -rw-r--r--. 1 stephane stephane  3352  6 nov 09:56 reports/rapport-produit-v0.md -rw-r--r--. 1 stephane stephane  3352  6 nov 09:56 reports/rapport-produit-v0.md -rw-r--r--. 1 stephane stephane  2624 
 

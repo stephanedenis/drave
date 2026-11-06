@@ -2318,3 +2318,51 @@ fr 136 en 86
 … [522 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Test de l'API Python documentable (import et sortie).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom tools.bloc_linguistique import Heuristique\na = Heuristique().analyser(\"Le chat dort.\", \"fr\")\nprint(a.langue, a.script, len(a.etiquettes), round(a.fraction_semantique, 4))\nfor e in a.etiquettes:\n    if e … [180 caractères tronqués]`
+
+  ```
+fr Latn 19 0.6154
+GN 'Le chat' 0 7 {'segment': 'Le chat', 'cible': 'dort'}
+GV 'dort' 8 12 {'segment': 'dort', 'cible': 'chat'}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --texte \"Le chat dort.\"; echo \"=== fichier ===\"; printf 'Le chat de la voisine qui dort sur le toit se réveille.\\n' > /tmp/doc_produit/page.txt && python3 tools/bloc_linguistique.py --fichier / … [87 caractères tronqués]`
+
+  ```
+langue=fr script=Latn source=heuristique refus=-
+  discours     paragraphe     'suite' [0:13] conf=0.50 src=heuristique
+  document     paragraphe     'Le chat dort.' [0:13] conf=0.70 src=heuristique
+  graphème     lettres        'Le' [0:2] conf=0.99 src=heuristique
+  graphème     espace         ' ' [2:3] conf=0.99 src=heuristique
+  graphème     lettres        'chat' [3:7] conf=0.99 src=heuristique
+  graphème     espace         ' ' [7:8] conf=0.99 src=heuristique
+  mot          mot            'Le' [0:2] conf=0.98 src=heuristique
+  mot          mot            'chat' [3:7] conf=0.98 src=heuristique
+  mot          mot            'dort' [8:12] conf=0.98 src=heuristique
+  mot          ponctuation    '.' [12:13] conf=0.98 src=heuristique
+  phrase       type           'déclarative' [0:13] conf=0.85 src=heuristique
+  pos          DET            'Le' [0:2] conf=0.92 src=heuristique
+  pos          NOUN           'chat' [3:7] conf=0.30 src=heuristique
+  pos          VERB           'dort' [8:12] conf=0.72 src=heuristique
+  pragmatique  acte           'assertion' [0:13] conf=0.45 src=heuristique
+  syntagme     GN             'Le chat' [0:7] conf=0.55 src=heuristique
+  syntagme     GV            
+… [1508 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Calcul de l'empreinte réelle pour l'exemple de rejeu.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --texte \"Le chat dort.\" --json | tee /tmp/doc_produit/chat.json | sha256sum; jq '.etiquettes | length' /tmp/doc_produit/chat.json; wc -c /tmp/doc_produit/chat.json", "description": "Compute replay … [27 caractères tronqués]`
+
+  ```
+7edccb3202f0ecc0ad53f5a89a4e8f4767135c5679ab5c4fcc53beb74bd68934  -
+19
+5561 /tmp/doc_produit/chat.json
+  ```
+
