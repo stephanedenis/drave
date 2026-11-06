@@ -90,12 +90,12 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `22bcae27` | Étude de Qtrinet-bootstrap.md | 2026-09-25 11:56 | 74.8 h | 54 | 1227 | 69 | 60 | [rapport](sessions/22bcae27-254b-47b2-acda-87467dab060c/rapport.md) |
 | `22e518ee` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | 1 | 171 | 16 | 0 | [rapport](sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) |
 | `235066f5` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 11:38 | 0.3 h | 1 | 39 | 0 | 0 | [rapport](sessions/235066f5-307a-4285-a882-14bc2d06cb7b/rapport.md) |
-| `24001907` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.9 h | 1 | 93 | 0 | 0 | [rapport](sessions/24001907-4f19-4ea5-87f6-98334496719f/rapport.md) |
-| `24529ced` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.9 h | 1 | 61 | 0 | 0 | [rapport](sessions/24529ced-6556-4491-9633-9401c2dffb0c/rapport.md) |
+| `24001907` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 1.1 h | 1 | 118 | 1 | 0 | [rapport](sessions/24001907-4f19-4ea5-87f6-98334496719f/rapport.md) |
+| `24529ced` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 1.1 h | 1 | 70 | 0 | 0 | [rapport](sessions/24529ced-6556-4491-9633-9401c2dffb0c/rapport.md) |
 | `27c99b10` | Tu écris un tokenizer BPE | 2026-09-25 19:40 | 0.2 h | 1 | 54 | 1 | 0 | [rapport](sessions/27c99b10-c57e-4599-a23a-f7b1a54c17a1/rapport.md) |
 | `29ad180d` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 48.3 h | 18 | 430 | 17 | 42 | [rapport](sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) |
 | `2c2a6595` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 44 | 0 | 0 | [rapport](sessions/2c2a6595-b208-446e-bbd1-d0f49eca45e8/rapport.md) |
-| `2cc1ad4a` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.9 h | 1 | 83 | 2 | 0 | [rapport](sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/rapport.md) |
+| `2cc1ad4a` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 1.1 h | 1 | 96 | 2 | 0 | [rapport](sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/rapport.md) |
 | `2f51f17f` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 17 | 0 | 0 | [rapport](sessions/2f51f17f-f47c-49d5-958f-cafecd3fe01e/rapport.md) |
 | `2fd56aa5` | Dépôt /home/stephane/GitHub/Qtrinet, f | 2026-10-27 18:48 | 0.3 h | 1 | 37 | 0 | 0 | [rapport](sessions/2fd56aa5-7b9b-40b0-9470-05c74b032d55/rapport.md) |
 | `3144cf23` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.3 h | 1 | 83 | 6 | 0 | [rapport](sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/rapport.md) |
@@ -188,7 +188,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 123.7 h | 177 | 2389 | 25 | 287 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 123.9 h | 177 | 2394 | 25 | 289 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
 | `ee19a880` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/ee19a880-cc76-4c5c-9fe0-5972bd73b533/rapport.md) |

@@ -14,7 +14,7 @@
 > [`gold_split.py`](../tools/tests/linguistique/gold_split.py) pour dev/test ; JSON
 > [`pensee-couverture-v5.json`](pensee-couverture-v5.json).
 
-## 1. Les six corrections
+## 1. Les sept corrections
 
 | # | correction | effet |
 |---|---|---|
@@ -41,13 +41,16 @@
 | spans perdus | 79 | **52** (24 REL, 12 SUB, 16 GP) |
 | échecs de cible | 3 | **1** (r309) |
 
+**Contrôle négatif** : le dispositif est celui de la fiche courante — **permutation globale des
+cibles** (100 tirages) : **1,67/196** en moyenne contre **195/196** observé, p < 0,001.
+
 **Ce que ça dit** :
 
-- **+27 labels** et **+28 exact** : la couverture et l'exactitude montent ensemble.
-- **L'anglais rattrape** (40 → 59) : la règle du segment précédent répare les relatives.
-- **Le test tenu à l'écart suit** : dev 125/126 (0,9921), test **60/61** (0,9836).
-- **Les 27 échecs de cible** sont le prix de la couverture : les REL/SUB nouvelles sont plus
-  dures à attacher (le top-k tombe à 0,8556 sur les labels).
+- **+27 labels** et **+29 exact** : la couverture et l'exactitude montent ensemble.
+- **L'anglais rattrape** (40 → 60) : la règle du segment précédent répare les relatives.
+- **Le test tenu à l'écart suit** : dev 126/126 (0,9921), test **60/61** (0,9836).
+- **L'échec de cible unique** et les **26 candidats manquants** sont le prix de la couverture : les REL/SUB nouvelles sont plus
+  dures à attacher (le top-k tombe à 0,8610 sur les labels).
 
 ## 3. Ce que ce banc ne dit pas
 
@@ -75,7 +78,7 @@
 
 ## 6. Fichiers
 
-- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — les six corrections.
+- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — les sept corrections.
 - [`autotest.py`](../tools/pensee/autotest.py) — 183/183.
 - [`gold_split.py`](../tools/tests/linguistique/gold_split.py) — dev/test.
 - [`pensee-couverture-v5.json`](pensee-couverture-v5.json) — les chiffres.

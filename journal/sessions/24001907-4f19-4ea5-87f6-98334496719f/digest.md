@@ -2419,3 +2419,317 @@ docstrings 26 messages 6
 JSON valide
   ```
 
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche d'audit v7
+
+- **write** `{"file_path": "reports/rapport-audit-v7.md", "content": "# Audit v7 — 195/196 sur les deux golds, mais cinq valeurs de qualité sont gelées\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·\n> **Commit audité** : `69bd865e` (branche `s/v7`) · **Verdict** : ✅ ch … [31593 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de la fiche pour vérifier chiffres et cohérence
+
+- **read** `{"file_path": "reports/rapport-audit-v7.md", "limit": 140}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md</path>
+<type>file</type>
+<content>
+1: # Audit v7 — 195/196 sur les deux golds, mais cinq valeurs de qualité sont gelées
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+4: > **Commit audité** : `69bd865e` (branche `s/v7`) · **Verdict** : ✅ chiffres reproduits ;
+5: > ⚠️ cinq valeurs sont mesurées sur le **gold gelé 602**, la colonne « avant » n'est pas la v6,
+6: > et deux récits de la fiche sont faux.
+7: >
+8: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`Heuristique`,
+9: > `_syntagmes_simple`, `_cible_precedent`, `_cible_hors_span`),
+10: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) (`charger`, `evaluer_bloc`),
+11: > [`gold_split.py`](../tools/tests/linguistique/gold_split.py) (`dev`, `test`),
+12: > [`autotest.py`](../tools/pensee/autotest.py) (183 portes) · **JSON** :
+13: > [`pensee-audit-v7.json`](pensee-audit-v7.json).
+14: 
+15: ## 1. Le verdict en une page
+16: 
+17: | question | réponse |
+18: |---|---|
+19: | les chiffres de la fiche sont-ils rejouables ? | **oui**, au commit `69bd865e`, sans modifier le c
+… [7718 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "reports/rapport-audit-v7.md", "limit": 180, "offset": 141}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md</path>
+<type>file</type>
+<content>
+141: F1 tête.
+142: 
+143: ## 5. L'« avant » n'est pas la v6
+144: 
+145: La colonne « avant » du tableau de la fiche (et le bloc `avant` du JSON) mélange trois états :
+146: 
+147: | valeur « avant » | fiche | v6 vivant | v6 gelé | provenance réelle |
+148: |---|---:|---:|---:|---|
+149: | POS | 0,7475 | 0,7461 | 0,7482 | **v4 gelé** (0,7475) |
+150: | F1 union | 0,5130 | **0,5130** | 0,5164 | **v6 vivant** |
+151: | F1 tête | 0,6826 | 0,6785 | 0,6834 | **v5a gelé** (0,6826) |
+152: | labels | 187 | 187 | 187 | v6 |
+153: | exact | 187 | 187 | 187 | v6 |
+154: | couverture | 0,7824 | 0,7824 | 0,7824 | v6 |
+155: | spans | 52 | 52 | 52 | v6 |
+156: 
+157: Le POS 0,7475 est l'ancienne valeur de T107, mesurée sur le **v4**. La tête 0,6826 est l'ancienne
+158: valeur de T113, mesurée sur le **v5a** (`7a9f0d6a`). Seule la F1 0,5130 est bien la v6, et elle est
+159: mesurée sur le **vivant**. La v6, elle, donne :
+160: 
+161: | mesure | v6 vivant | v6 gelé |
+162: |---|---:|---:|
+163: | POS | 0,7461 | 0,7482 |
+164: | F1 union | 0,5130 | 0,5164 |
+165: | F1 tête | 0,6785 | 0,6834 |
+166: | S | 0
+… [9805 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "reports/rapport-audit-v7.md", "limit": 230, "offset": 321}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md</path>
+<type>file</type>
+<content>
+321: 
+322: ### 8.1 Retirer la règle du segment précédent
+323: 
+324: Variante : `_cible_precedent` rend `None`, `_candidats_precedent` rend `[]`, et la branche inline
+325: de la voie S (`if s.get("type") in ("REL", "SUB")`) est désactivée. Mesure sur le gelé 602 :
+326: 
+327: | variante | labels | exact | exact/labels | couverture | top-k | fr | en | dev | test |
+328: |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+329: | témoin | 196 | 195 | 0,9949 | 0,8201 | 166 | 135/135 | 60/61 | 133/134 | 62/62 |
+330: | sans segment précédent | 196 | **160** | **0,8163** | 0,8201 | 166 | 115/135 | 45/61 | 105/134 | 55/62 |
+331: 
+332: La règle vaut **35 attachements exacts** (195 − 160), **20 en français**, **15 en anglais**,
+333: **28 en dev**, **7 en test**. Elle ne change ni les labels, ni la couverture, ni le top-k, ni la
+334: POS/F1/tête : c'est une règle d'attachement pur.
+335: 
+336: **La moitié « candidats du précédent » est redondante** : en ne retirant que
+337: `_candidats_precedent` (la cible reste), **tous les chiffres sont identiques au témoin** (195/196,
+338: top-k 
+… [13299 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des spans exacts de g017 et des valeurs citées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\np=next(p for p in charger() if p['id']=='g017')\nprint(repr(p['texte']))\nfor s in p['segmen … [306 caractères tronqués]`
+
+  ```
+'She said that she would come yesterday.'
+GN 0 3 'She' None
+GV 4 8 'said' None
+SUB 9 28 'that she would come' said
+len 39
+
+0 'S' 1 'h' 2 'e' 3 ' ' 4 's' 5 'a' 6 'i' 7 'd' 8 ' ' 9 't' 
+10 'h' 11 'a' 12 't' 13 ' ' 14 's' 15 'h' 16 'e' 17 ' ' 18 'w' 19 'o' 
+20 'u' 21 'l' 22 'd' 23 ' ' 24 'c' 25 'o' 26 'm' 27 'e' 28 ' ' 29 'y' 
+30 'e' 31 's' 32 't' 33 'e' 34 'r' 35 'd' 36 'a' 37 'y' 38 '.'
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des cellules dev/test citées (REL/en, hand)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys,collections\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nfrom tools.tests.linguistique.gold_split import test,dev\nph=charger(); t=test(p … [1782 caractères tronqués]`
+
+  ```
+test cibles Counter({('fr', 'GP'): 24, ('fr', 'SUB'): 14, ('fr', 'REL'): 12, ('en', 'GP'): 11, ('en', 'SUB'): 10, ('en', 'REL'): 5})
+dev cibles Counter({('fr', 'GP'): 38, ('fr', 'REL'): 34, ('fr', 'SUB'): 29, ('en', 'GP'): 23, ('en', 'REL'): 23, ('en', 'SUB'): 16})
+hand test phrases 5 cibles 3
+test
+  ('en', 'GP') cibles 11 labels 10 exact 10
+  ('en', 'REL') cibles 5 labels 2 exact 2
+  ('en', 'SUB') cibles 10 labels 7 exact 7
+  ('fr', 'GP') cibles 24 labels 22 exact 22
+  ('fr', 'REL') cibles 12 labels 9 exact 9
+  ('fr', 'SUB') cibles 14 labels 12 exact 12
+dev
+  ('en', 'GP') cibles 23 labels 23 exact 22
+  ('en', 'REL') cibles 23 labels 13 exact 13
+  ('en', 'SUB') cibles 16 labels 6 exact 6
+  ('fr', 'GP') cibles 38 labels 36 exact 36
+  ('fr', 'REL') cibles 34 labels 29 exact 29
+  ('fr', 'SUB') cibles 29 labels 27 exact 27
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections de précision dans la fiche (working tree, spans, flux dev/test)
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "old_string": "- **Commit** : `git rev-parse HEAD` = `69bd865ec1bae1958b6f617bde4bf685a15d7d67`. Le working tree\n  ne portait que des journaux modifiés par la session ; aucun fichier de code, de gold ou de\n  `reports/` n'a été touché.", "new_string": "- … [281 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "old_string": "| T86-T90 | `gold_reel` (sous-ensembles) | POS 0,8452 / 0,7353 / 0,7236 / 0,7327 / 0,719 | idem | ✅ |", "new_string": "| T86-T90 | `gold_reel` (sous-ensembles) | T86 0,8452 / 0,8221 ; T87 0,7353 ; T88 0,7236 ; T89 0,7327 ; T90 0,719 | idem  … [7 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "old_string": "**Aucune assertion n'est fausse.** Les portes qui portent les cinq valeurs « gelées »\n(T107, T110-T115, T119) utilisent `charger_gele()` ; celles qui portent l'attachement\n(T138, T141, T153, T156, T157, T161-T164, T166-T169, T171-T173, T1 … [659 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "old_string": "- **dev/test** : aucune porte ne mesure `gold_split.dev` / `test`. Les 133/134 et 62/62 de la\n  fiche v7 (et de la v6) reposent sur des scripts ad hoc, pas sur le registre.", "new_string": "- **dev/test** : aucune porte ne mesure `gold_spl … [153 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "old_string": "- **par langue** (gelé) : français 0,7575 → 0,7555 (**−0,0020**), anglais 0,7651 → 0,7362\n  (**+0,0289**) ; le gain est massivement anglais ;", "new_string": "- **par langue** (gelé) : français 0,7555 → 0,7575 (**+0,0020**), anglais 0,7362 … [64 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "old_string": "- gold : `SUB « that she would come »` (span 9–29), cible `said` ;", "new_string": "- gold : `SUB « that she would come »` (span 9–28), cible `said` ;"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "Le test gagne **un label** et reste parfait ; le dev gagne **8 labels** et **une erreur**. Le\nsolde est **+9 labels, +8 exacts**, mais il cache des flux : les 8 labels du POS contextuel sont\ntous dans dev, et l'erreur r102 aussi. Le test  … [882 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "- les titres de v4 et v5 sont **périmés d'un label** ; pour v4, le corps et le JSON sont corrects ;\n  pour v5, le corps et le JSON **mélangent deux commits** (F1/tête de `7a9f0d6a`, exact/S/chunker\n  de `b975011b`), c'est le même type de  … [214 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "Le total baisse de 9, mais les SUB manquantes **augmentent de 5**. La fiche ne le dit pas ; c'est\ncohérent avec les prépositions ambiguës et l'ordre GV/GP, sans que cet audit isole la cause. Le\nrésultat reste positif (le total baisse), ma … [457 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction d'une valeur de docstring T86 (0,7897 et non 0,7919)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -R \"0,7919\\|0.7919\" reports/rapport-audit-v7.md reports/pensee-audit-v7.json", "description": "Locate wrong T86 docstring value"}`
+
+  ```
+reports/rapport-audit-v7.md:| T86-T90 | POS 0,8214/0,7919, 0,6471, 0,6829, 0,7013, 0,6984 | 0,8452/0,8221, 0,7353, 0,7236, 0,7327, 0,719 |
+reports/pensee-audit-v7.json:    "docstring": "perimee (0.8214 / 0.7919)"
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "| T86-T90 | POS 0,8214/0,7897, 0,6471, 0,6829, 0,7013, 0,6984 | 0,8452/0,8221, 0,7353, 0,7236, 0,7327, 0,719 |", "old_string": "| T86-T90 | POS 0,8214/0,7919, 0,6471, 0,6829, 0,7013, 0,6984 | 0,8452/0,8221, 0,7353, 0,7236, 0,7327, 0,719 |"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-audit-v7.json'\nd=json.load(open(p,encoding='utf-8'))\nfor g in d['portes']['citees']:\n    if g['id']=='T86':\n        g['docstring']='perimee (0.8214 / 0.7897)'\nopen(p,'w',encoding= … [211 caractères tronqués]`
+
+  ```
+ok
+JSON valide
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final des fichiers écrits et de l'absence de modification existante
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"rapport-audit-v7|pensee-audit-v7\" ; echo '---'; git status --short reports/ | head -20; echo '---'; git diff --stat | tail -5", "description": "Check git status for new audit files"}`
+
+  ```
+?? reports/pensee-audit-v7.json
+?? reports/rapport-audit-v7.md
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/pensee-audit-v7.json
+?? reports/rapport-audit-v7.md
+?? reports/rapport-s-paragraphes.md
+---
+ reports/pensee-quatre-modes.json                   |  734 +-
+ reports/rapport-coherence-fiches-v7.md             |   17 +-
+ reports/rapport-spans-chunker.md                   |   13 +-
+ tools/structures                                   |    0
+ 24 files changed, 9763 insertions(+), 394 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/rapport-audit-v7.md && python3 -m json.tool reports/pensee-audit-v7.json > /dev/null && echo 'JSON valide' && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-audit-v7.json',encoding='utf-8'))\nprint('clé … [480 caractères tronqués]`
+
+  ```
+547 reports/rapport-audit-v7.md
+JSON valide
+clés ['audit', 'commit', 'branche', 'date', 'ligne', 'verdict', 'gold', 'revendications', 'avant', 'portes', 'controles_negatifs', 'ablations', 'dev_test', 'amont', 'limites']
+verdict Les chiffres de la fiche sont reproductibles, mais cinq valeurs de qualite (POS, F1 union, S, chunke ...
+portes 183 183 0
+citees 32 docstrings 26 messages 6
+dev/test 133 134 62 62
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "- **POS vivant 0,7581 et F1 vivant 0,5555** : T141 couvre la POS vivante, T112/T113 couvrent la\n  F1 gelée, mais aucune porte n'associe les deux valeurs vivantes dans un même snapshot. Celui qui\n  rejoue `evaluer_gold.py` obtient 0,5555/0 … [370 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "tous dans dev, et l'erreur r102 aussi. Le test ne montre donc **aucun** des 8 labels du POS\ncontextuel ; l'ablation du précédent en retire 7 au test, ce qui valide cette règle-là mais pas le\ngain POS. C'est un point de lecture important : … [523 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des liens relatifs de la fiche d'audit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re,pathlib\np=pathlib.Path('reports/rapport-audit-v7.md')\ntxt=p.read_text(encoding='utf-8')\nliens=re.findall(r'\\[[^\\]]+\\]\\(([^)]+)\\)',txt)\nfor l in liens:\n    if l.startswith('http') or l.startswith( … [203 caractères tronqués]`
+
+  ```
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  ../tools/tests/linguistique/evaluer_gold.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/tests/linguistique/gold_split.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py
+OK  ../tools/pensee/autotest.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py
+OK  pensee-audit-v7.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-audit-v7.json
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  ../tools/tests/linguistique/evaluer_gold.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py
+OK  ../tools/tests/linguistique/gold_split.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_split.py
+OK  ../tools/pensee/autotest.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py
+OK  rapport-pensee-couverture-v7.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-
+… [501 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout d'une note sur la différence T163 (30) vs T172 (1)
+
+- **edit** `{"file_path": "reports/rapport-audit-v7.md", "new_string": "**Aucune assertion n'est fausse.** Deux portes qui semblent se contredire ne mesurent pas la même\nchose : **T163** compte les **30 labels** (justes ou faux) dont la cible n'est pas dans\n`candidats` ; **T172** ne compte que les **échecs d' … [264 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-audit-v7.md has been updated successfully.
+  ```
+

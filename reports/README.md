@@ -19,7 +19,7 @@
 | [`rapport-coherence-fiches-v7.md`](rapport-coherence-fiches-v7.md) | **B13** — la cohérence des 7 fiches v2→v7 : **23 écarts**, 4 critiques, corrections listées |
 | [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — la couverture **0,8201** : POS contextuel 0,7603, F1 **0,5595**, exact 195/196 |
 | [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | **B13** — l'attachement **187/187 (1,0000)** sur les spans prédits, fr 1,0 / en 1,0, dev 126/126, test 61/61 ; le rendement reste 0,7824 |
-| [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — la couverture : **187 labels**, exact **186/187 (0,9947)**, F1 **0,5156**, dev/test 125/126 et 60/61 |
+| [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — la couverture : **187 labels**, exact **186/187 (0,9947)**, F1 **0,5156** (602), dev/test **126/126** et 60/61 |
 | [`rapport-gold-split.md`](rapport-gold-split.md) | **B13** — le gold dev/test : **test 0,9814**, dev 0,9811, la règle « régler sur dev, accepter si test ne baisse pas » |
 | [`rapport-pensee-segmentation-v4.md`](rapport-pensee-segmentation-v4.md) | **B13** — la segmentation d'abord : F1 **0,4539**, exact **157/160**, couverture **160/239**, 183/183 |
 | [`rapport-pensee-par-langue.md`](rapport-pensee-par-langue.md) | **B13** — l'attachement par langue : fr 0,9658, en 1,000, mais **28 labels/88 cibles en anglais**, **183/183** |

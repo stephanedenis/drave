@@ -7,12 +7,12 @@
 | Identifiant | `2cc1ad4a-373e-4362-a341-3c4a630c2e0c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 19:25 |
-| Durée | 0.9 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 65 |
-| Appels d'outils | 83 |
+| Messages | 79 |
+| Appels d'outils | 96 |
 | Fichiers touchés | 2 |
-| Commandes | 59 |
+| Commandes | 64 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : vérifier l … [2312 caractères tronqués]
 
-*83 appels d'outils.* Actions notables :
+*96 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, log, target commit
 - bash — List reports directory
@@ -41,11 +41,48 @@
 - bash — Inspect evaluer_gold for measurement API and writes
 - bash — Inspect POS and F1 assertions
 - bash — Inspect union test gold source and attachment computation
-- … et 53 autres
+- … et 62 autres
 
 **Synthèse produite :**
 
-⏵ État des corrections du parent après le commit 8d6c318d
+⏵ Synthèse de l'audit des sept fiches B13
+
+**Livrables écrits** (neufs, aucun existant modifié, aucun commit de ma part) :
+- `reports/rapport-coherence-fiches-v7.md`
+- `reports/pensee-coherence-fiches-v7.json`
+
+**Périmètre** : 7 fiches — 1 courante (v7, commit `69bd865e`) et 6 historiques (v2, v3, v4, v5, v6, gold-split). Chaque chiffre a été confronté au JSON et au code du commit, avec le gold vivant 612 et le gold gelé 602.
+
+\## Bilan : 23 divergences
+
+| fiche | écarts | dont critiques |
+|---|---:|---:|
+| v2 `9d5337ce` | 3 | 0 |
+| v3 `dcf7bc91` / `e1903e2d` | 0 | 0 |
+| v4 `392f03aa` | 7 | 2 |
+| v5 `b975011b` | 8 | 1 |
+| v6 `0ec6c27d` | 1 | 0 |
+| v7 `69bd865e` | 3 | 1 |
+| gold-split `85e4082b` | 1 | 0 |
+| **total** | **23** | **4** |
+
+Sévérité : **4 critiques, 17 majeures, 2 mineures**. Aucune fiche n'est entièrement conforme (chiffres + JSON + mention d'historique + contrôle négatif) ; la v3 est la seule sans écart numérique, mais son JSON n'a pas suivi la réparation de son tableau (A13 absent).
+
+**Autres constats** : 7 fiches ont une lacune JSON ↔ texte ; **5 fiches sans contrôle négatif** (v4, v5, v6, v7, gold-split) ; **6 fiches historiques sans mention d'historique** ; **2 lignes de `reports/README.md`** répétaient les valeurs périmées (v5 et v4) ; **1 tableau** dont la somme visible ne tombe pas (corrections de la v2) ; **0 renvoi de § faux**, **0 lien cassé**.
+
+\## Corrections à faire
+
+**Déjà corrigé par le parent depuis l'audit** : titres v4 (`0,4539`, `157/160`) et v5 (`186/187`), base 602 et ligne F1 v7 (`0,5164`), phrase de couverture de gold-split, mentions d'historique.
+
+**Restent à corriger** :
+
+1. **v4, prose** : `41/42` → **40/42** ; `0,9875` → **0,9812** ; « Les 2 échecs » → **3** ; « six corrections » → **sept**.
+2. **v5, prose** : `+28` → **+29** ; `40 → 59` → **40 → 60** ; « 27 échecs de cible » → **1 échec + 26 candidats manquants** ; `dev 125/126` → **126/126** ; `0,8556` → **0,8610** (161/187) ou **0,6736** (161/239) ; « six » → **sept**.
+3. **v2, § 1** : étiqueter le split **lexical** (60/63 et 63/82), retirer « (POS gold) » et le « +48 cibles » ; créditer le lexique de **+8 top-k / +8 strict** et le segment de **+6 top1**.
+4. **v6, § 2** : comparer la F1 sur un gold constant — **0,5130 → 0,5130** sur 612, ou **0,5164 → 0,5164** sur 602 (la baisse 0,5156 → 0,5130 compare deux bases).
+5. **`reports/README.md`, ligne v5** : `dev/test 125/126` → **126/126** ; préciser la base 602 pour F1/POS.
+6. **JSON** : ajouter le bloc A13 et les com
+… [606 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -53,8 +90,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md` | 1 | 2 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v7.md` | 1 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-coherence-fiches-v7.json` | 1 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +135,7 @@
 - **T1** Check all relative links in fiches resolve
 - **T1** Search negative-control markers in JSONs
 - **T1** Inspect previous coherence JSON structure
-- … et 19 autres
+- … et 24 autres
 
 ## 4. Mesures et résultats marquants
 

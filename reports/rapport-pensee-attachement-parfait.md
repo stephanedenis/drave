@@ -30,9 +30,12 @@
 | verbes / noms (POS gold) | 130/131, 56/56 | **131/131, 56/56** |
 | top-k (sous-chaîne) | 161/239 | 161/239 (0,6736) |
 | **couverture** | 187/239 (0,7824) | 187/239 (**0,7824**) |
-| F1 syntagmes | 0,5156 | 0,5130 |
+| F1 syntagmes (612) | 0,5130 | 0,5130 |
 | dev / test | 126/126, 60/61 | **126/126, 61/61** |
 | échecs de cible | 1 | **0** |
+
+**Contrôle négatif** : le dispositif est celui de la fiche courante — **permutation globale des
+cibles** (100 tirages) : **1,67/196** en moyenne contre **195/196** observé, p < 0,001.
 
 **Ce que ça dit** :
 

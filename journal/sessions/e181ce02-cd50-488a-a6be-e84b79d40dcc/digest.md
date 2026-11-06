@@ -46395,3 +46395,108 @@ jeu 05 nov 2026 20:19:48 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1255 caractères tronqués]`
+
+  ```
+664 758
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1976]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1976", "timeout_ms": 600000, "wait": true}`
+
+  ```
+24 files changed, 706 insertions(+), 68 deletions(-)
+COMMIT OK 1
+35a67bc7 FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README ET ÉTAT À JOUR
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; ls reports/ | grep -E \"audit-v7|spans-v7\"", "description": "Attendre A15 et A17", "timeoutMs": 600000}`
+
+  ```
+jeu 05 nov 2026 20:31:27 EST
+pensee-audit-v7.json
+rapport-audit-v7.md
+  ```
+
+### 👤 Utilisateur
+
+Agent 2cc1ad4a-373e-4362-a341-3c4a630c2e0c sent a message: 
+Audit terminé (ancré sur 69bd865e). 7 fiches : 1 courante (v7), 6 historiques. 23 écarts numériques : v2 3, v3 0, v4 7, v5 8, v6 1, v7 3, gold-split 1 ; 4 critiques, 17 majeurs, 2 mineurs. Plus : 7 fiches avec lacune JSON/texte, 5 sans contrôle négatif (v4, v5, v6, v7, gold-split), 6 historiques sans mention d'historique (à 69bd865e), 2 lignes de README à corriger (à 69bd865e), 1 tableau dont la somme visible ne tombe pas (v2 corrections), 0 renvoi § faux, 0 lien cassé. Détail : reports/rapport-coherence-fiches-v7.md et reports/pensee-coherence-fiches-v7.json (committés en 8d6c318d ; ma note de concurrence du § 11 et le champ concurrence du JSON sont ajoutés après, donc modifiés non committés par rapport à HEAD).
+
+État après tes corrections de 35a67bc7 : titres v4 (0,4539 / 157/160) et v5 (186/187), base 602 et ligne F1 v7 (0,5164), gold-split, mentions d'historique : corrigés. Restent à corriger : (1) v4 prose : 41/42, 0,9875, « Les 2 échecs », « six corrections » ; (2) v5 prose : +28, 40 → 59, « 27 échecs », dev 125/126, 0,8556, « six corrections » ; (3) v2 tableau : 63 (0,9524) et +48 cibles (le 46/57 est corrigé) ; (4) v6 ligne F1 0,5156 → 0,5130 (comparer 0,5130 → 0,5130 sur 612 ou 0,5164 → 0,5164 sur 602) ; (5) README ligne v5 : dev/test 125/126 → 126/126. La liste priorisée est au § 10 du rapport. Je n'ai committé aucun fichier et n'ai modifié aucun existant ; seuls les deux livrables sont de moi.
+
+### 👤 Utilisateur
+
+Background subagent 2cc1ad4a-373e-4362-a341-3c4a630c2e0c finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Synthèse de l'audit des sept fiches B13
+
+**Livrables écrits** (neufs, aucun existant modifié, aucun commit de ma part) :
+- `reports/rapport-coherence-fiches-v7.md`
+- `reports/pensee-coherence-fiches-v7.json`
+
+**Périmètre** : 7 fiches — 1 courante (v7, commit `69bd865e`) et 6 historiques (v2, v3, v4, v5, v6, gold-split). Chaque chiffre a été confronté au JSON et au code du commit, avec le gold vivant 612 et le gold gelé 602.
+
+## Bilan : 23 divergences
+
+| fiche | écarts | dont critiques |
+|---|---:|---:|
+| v2 `9d5337ce` | 3 | 0 |
+| v3 `dcf7bc91` / `e1903e2d` | 0 | 0 |
+| v4 `392f03aa` | 7 | 2 |
+| v5 `b975011b` | 8 | 1 |
+| v6 `0ec6c27d` | 1 | 0 |
+| v7 `69bd865e` | 3 | 1 |
+| gold-split `85e4082b` | 1 | 0 |
+| **total** | **23** | **4** |
+
+Sévérité : **4 critiques, 17 majeures, 2 mineures**. Aucune fiche n'est entièrement conforme (chiffres + JSON + mention d'historique + contrôle négatif) ; la v3 est la seule sans écart numérique, mais son JSON n'a pas suivi la réparation de son tableau (A13 absent).
+
+**Autres constats** : 7 fiches ont une lacune JSON ↔ texte ; **5 fiches sans contrôle négatif** (v4, v5, v6, v7, gold-split) ; **6 fiches historiques sans mention d'historique** ; **2 lignes de `reports/README.md`** répétaient les valeurs périmées (v5 et v4) ; **1 tableau** dont la somme visible ne tombe pas (corrections de la v2) ; **0 renvoi de § faux**, **0 lien cassé**.
+
+## Corrections à faire
+
+**Déjà corrigé par le parent depuis l'audit** : titres v4 (`0,4539`, `157/160`) et v5 (`186/187`), base 602 et ligne F1 v7 (`0,5164`), phrase de couverture de gold-split, mentions d'historique.
+
+**Restent à corriger** :
+
+1. **v4, prose** : `41/42` → **40/42** ; `0,9875` → **0,9812** ; « Les 2 échecs » → **3** ; « six corrections » → **sept**.
+2. **v5, prose** : `+28` → **+29** ; `40 → 59` → **40 → 60** ; « 27 échecs de cible » → **1 échec + 26 candidats manquants** ; `dev 125/126` → **126/126** ; `0,8556` → **0,8610** (161/187) ou **0,6736** (161/239) ; « six » → **sept**.
+3. **v2, § 1** : étiqueter le split **lexical** (60/63 et 63/82), retirer « (POS gold) » et le « +48 cibles » ; créditer le lexique de **+8 top-k / +8 strict** et le segment de **+6 top1**.
+4. **v6, § 2** : comparer la F1 sur un gold constant — **0,5130 → 0,5130** sur 612, ou **0,5164 → 0,5164** sur 602 (la baisse 0,5156 → 0,5130 compare deux bases).
+5. **`reports/README.md`, ligne v5** : `dev/test 125/126` → **126/126** ; préciser la base 602 pour F1/POS.
+6. **JSON** : ajouter le bloc A13 et les comptes à la v3, les comptes à la v2, les effets intermédiaires à la v4, les F1/couverture dev/test à la v5, le tableau du split à gold-split, et un champ `gold` (612 vivant / 602 gelé) à tous.
+7. **Dispositif** : contrôles négatifs pour v4, v5, v6, v7 et gold-split (permutation des cibles, candidat aléatoire, mélange des identifiants du split).
+
+Le détail ligne par ligne et les formulations de correction sont dans le rapport (§ 4 et § 10). Les nouvelles mesures v7 ajoutées après l'audit (dev/test 133/134 et 62/62, permutation 1,67/196) sont **postérieures à `69bd865e`** et n'ont pas été vérifiées ici.
+
+### 🤖 Assistant
+
+⏵ J'applique la liste de corrections de l'audit (proses v4/v5, v2, v6, README, contrôles)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) v4 prose\np=pathlib.Path('reports/rapport-pensee-segmentation-v4.md'); t=p.read_text()\nt=t.replace(\"41/42\",\"40/42\").replace(\"0,9875\",\"0,9812\")\nt=t.replace(\"Les **2 échecs** restants\" … [1785 caractères tronqués]`
+
+  ```
+proses corrigées
+--- (vide = ok)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# v2 § 1 : le split lexical, pas POS gold ; pas de « +48 cibles »\np=pathlib.Path('reports/rapport-pensee-attachement-v2.md'); t=p.read_text()\nt=t.replace(\"| cibles verbes (POS gold) | 63 (0,9524)  … [1930 caractères tronqués]`
+
+  ```
+v2 et contrôles
+     · compteurs : en-cours.md dit 664 fichiers, le disque en a 665
+  ✅ la page vivante date du dernier commit (2026-11-05)
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+35a67bc7 FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README ET ÉTAT À JOUR
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1055 caractères tronqués]`

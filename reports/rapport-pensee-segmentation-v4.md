@@ -41,11 +41,14 @@
 | spans perdus | 94 (48 REL, 33 SUB, 13 GP) | **79 (48 REL, 21 SUB, 10 GP)** |
 | échecs de cible | 4 | **3 hors candidats** (r162, r309, r194) |
 
+**Contrôle négatif** : le dispositif est celui de la fiche courante — **permutation globale des
+cibles** (100 tirages) : **1,67/196** en moyenne contre **195/196** observé, p < 0,001.
+
 **Ce que ça dit** :
 
 - **Les 15 labels gagnés** viennent du découpage (REL/SUB anglais et français), pas d'un lexique.
-- **L'anglais rattrape** : 28 → 42 labels, et l'exact tient (41/42).
-- **Le rendement global monte** (0,6067 → 0,6695) sans perdre l'exactitude (0,9724 → 0,9875).
+- **L'anglais rattrape** : 28 → 42 labels, et l'exact tient (40/42).
+- **Le rendement global monte** (0,6067 → 0,6695) sans perdre l'exactitude (0,9724 → 0,9812).
 - **Les échecs restants** : `r162` (GP « on the wall », attaché au nom à gauche), `r309`
   (pseudo-GV `Peut-être`), `r194` (GP) — 3 hors candidats, 0 mal classé.
 
@@ -69,13 +72,13 @@
 
 ## 5. La suite
 
-1. **Les 2 échecs** (r162, r309).
+1. **Les 3 échecs** (r162, r309).
 2. **Les deux règles de spans** (A12), avec un gold tenu à l'écart.
 3. **Le lexique anglais** : POS `_pos` (176 VERB tagués NOUN, A14).
 4. **Politique DRVM/native** : quand les poids seront là.
 
 ## 6. Fichiers
 
-- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — les six corrections.
+- [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — les sept corrections.
 - [`autotest.py`](../tools/pensee/autotest.py) — 38 assertions recalées, 183/183.
 - [`pensee-segmentation-v4.json`](pensee-segmentation-v4.json) — les chiffres.

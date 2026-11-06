@@ -26,7 +26,7 @@
 | top-k (sous-chaîne) | 134 (0,9241) | **142 (0,9793)** | +8 |
 | **exact** | **123 (0,8483)** | **137 (0,9448)** | **+14** |
 | **top-k strict** | **88 (0,6069)** | **141 (0,9724)** | **+53** |
-| cibles verbes (POS gold) | 63 (0,9524) | **111/116 (0,9569)** | +48 cibles |
+| cibles verbes (POS gold) | 63 (0,9524) | **111/116 (0,9569)** | +53 cibles |
 | cibles noms (POS gold) | 82 (0,7683) | **26/29 (0,8966)** | +… |
 | échecs de cible | 22 (11/11) | **8 (3 hors candidats, 5 mal classés)** | −14 |
 

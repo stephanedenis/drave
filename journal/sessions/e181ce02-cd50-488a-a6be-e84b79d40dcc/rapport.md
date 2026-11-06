@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 123.7 h |
+| Durée | 123.9 h |
 | Tours | 177 |
-| Messages | 2711 |
-| Appels d'outils | 2389 |
+| Messages | 2718 |
+| Appels d'outils | 2394 |
 | Fichiers touchés | 25 |
-| Commandes | 1970 |
+| Commandes | 1974 |
 | Sous-agents | 20 |
-| Commits | 287 |
+| Commits | 289 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*148 appels d'outils.* Actions notables :
+*153 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 120 autres
+- … et 124 autres
 
 **Synthèse produite :**
 
-⏵ Dernières corrections : titres v4/v5 et tableau des corrections v2
+⏵ J'applique la liste de corrections de l'audit (proses v4/v5, v2, v6, README, contrôles)
 
 ## 3. Travail accompli
 
@@ -9617,7 +9617,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1930 autres
+- … et 1934 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9745,7 +9745,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-41 sorties en erreur ou divergentes. Les premières :
+42 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10052,4 +10052,6 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — AUDIT DES 7 FICHES (23 ÉCARTS), DEV/TEST V7 (133/134, 62/62), LA V7 CORRIGÉE AVEC SON CONTRÔLE (195/196 VS 1,67)" -- reports/pensee-dev-test-v7.json repor
 - FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README À JOUR" -- reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-couverture
 - FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README ET ÉTAT À JOUR" -- reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-co
+- FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES" -- reports/rapport-pensee-segmentation-v4.md
+- FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1 V6 SUR BASE CONSTANTE, CONTRÔLES" -- reports/rapport-pensee-segmentation-v4.md
 

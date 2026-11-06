@@ -7,12 +7,12 @@
 | Identifiant | `24001907-4f19-4ea5-87f6-98334496719f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 19:25 |
-| Durée | 0.9 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 71 |
-| Appels d'outils | 93 |
-| Fichiers touchés | 0 |
-| Commandes | 71 |
+| Messages | 86 |
+| Appels d'outils | 118 |
+| Fichiers touchés | 1 |
+| Commandes | 79 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2473 caractères tronqués]
 
-*93 appels d'outils.* Actions notables :
+*118 appels d'outils.* Actions notables :
 
 - bash — Inspect git HEAD and status
 - bash — List reports and relevant tool dirs
@@ -41,11 +41,11 @@
 - bash — Run autotest gates
 - bash — Read bloc_linguistique header and classes
 - job_output
-- … et 59 autres
+- … et 81 autres
 
 **Synthèse produite :**
 
-⏵ Correction du compte de docstrings et d'une coquille dans le JSON
+⏵ Contrôle de la liste des docstrings périmées et des messages faux dans le JSON
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `reports/rapport-audit-v7.md` | 1 | 13 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +97,7 @@
 - **T1** Inspect gold split commit changes
 - **T1** Replay v4/v5/v6/v7 code on golds
 - **T1** Measure v4/v5 component F1 values
-- … et 31 autres
+- … et 39 autres
 
 ## 4. Mesures et résultats marquants
 

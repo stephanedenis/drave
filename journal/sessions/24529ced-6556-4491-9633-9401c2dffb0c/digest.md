@@ -1710,3 +1710,596 @@ NameError: name 'plat' is not defined. Did you mean: 'float'?
 … [796 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Table propre des règles (R3 incluant `fall`) avec restauration du lexique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/table_regles.py <<'EOF'\nimport sys,json\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nOLD_EN=set(bl.VERBES[\"en\"]); OLD_CON=set(bl.VERBES_CONNUS)\nFALL={\"fall\",\"fal … [1325 caractères tronqués]`
+
+  ```
+{
+ "R1": {
+  "dev": {
+   "labels": 149,
+   "exact": 148,
+   "f1": 0.5717,
+   "cibles": 163,
+   "gains": [
+    "g017",
+    "r034",
+    "r074",
+    "r114",
+    "r205",
+    "r219",
+    "r224",
+    "r240",
+    "r243",
+    "r247",
+    "r278",
+    "r285",
+    "r291",
+    "r296",
+    "r299"
+   ],
+   "pertes": [],
+   "n_gains": 15,
+   "n_pertes": 0
+  },
+  "test": {
+   "labels": 67,
+   "exact": 67,
+   "f1": 0.5823,
+   "cibles": 76,
+   "gains": [
+    "r115",
+    "r214",
+    "r216",
+    "r239",
+    "r281"
+   ],
+   "pertes": [],
+   "n_gains": 5,
+   "n_pertes": 0
+  }
+ },
+ "R2": {
+  "dev": {
+   "labels": 138,
+   "exact": 136,
+   "f1": 0.5547,
+   "cibles": 163,
+   "gains": [
+    "r215",
+    "r279",
+    "r294"
+   ],
+   "pertes": [],
+   "n_gains": 3,
+   "n_pertes": 0
+  },
+  "test": {
+   "labels": 62,
+   "exact": 62,
+   "f1": 0.5651,
+   "cibles": 76,
+   "gains": [],
+   "pertes": [],
+   "n_gains": 0,
+   "n_pertes": 0
+  }
+ },
+ "R3": {
+  "dev": {
+   "labels": 134,
+   "exact": 134,
+   "f1": 0.5576,
+   "cibles": 163,
+   "gains": [
+    "r102"
+   ],
+   "pertes": [],
+   "n_gains": 1,
+   "n_pertes": 0
+  },
+  "test": {
+   "labels": 63,
+   "exact": 63,
+   "f1": 0.5728,
+   "cibles": 76,
+   "gains": [
+    "r153"
+… [1309 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture des données par cas avant rédaction des deux livrables
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,collections\nrows=json.load(open(\"/tmp/spans/final_rows.json\"))\nfor r in sorted(rows,key=lambda x:(x[\"cause\"],x[\"id\"])):\n    print(f'{r[\"id\"]:5s} {r[\"split\"]:4s} {r[\"langue\"]} {r[\"type\"] … [400 caractères tronqués]`
+
+  ```
+r280  dev  en REL [8:21] 'that I bought'                          cible='car'        marqueur='that'                 cause=GN avalé par la collision car (SUBDORD -> exact car
+r153  test en GP  [8:19] 'for the bus'                            cible='wait'       marqueur='for'                  cause=GP tronqué par un faux verbe (bus)     -> exact wait
+s010  dev  fr REL [10:18] 'qui nage'                               cible='chemin'     marqueur='qui'                  cause=REL synthétique : 2e verbe hors lexiqu -> absent 
+s035  test fr REL [10:19] 'qui ferme'                              cible='papier'     marqueur='qui'                  cause=REL synthétique : 2e verbe hors lexiqu -> absent 
+s061  dev  fr REL [9:18] 'qui saute'                              cible='nuage'      marqueur='qui'                  cause=REL synthétique : 2e verbe hors lexiqu -> absent 
+s065  dev  fr REL [5:17] 'qui commence'                           cible='elle'       marqueur='qui'                  cause=REL synthétique : 2e verbe hors lexiqu -> absent 
+s125  dev  fr REL [11:21] 'qui compte'                             cible='renard'     marqueur='qui'                  cause=REL synthétique : 2e verbe hors
+… [7222 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du complément `call` (r245) et du contrefactuel de correction du gold synthétique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys,json,copy; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nOLD_EN=set(bl.VERBES[\"en\"]); OLD_CON=set(bl.VERBES_CONNUS)\nbase=evaluer(ph,lambda: Sim(()))\n# 1) … [1493 caractères tronqués]`
+
+  ```
+fall+call all: 222 222 0.5851 gains 27 ['g017', 'r034', 'r074', 'r102', 'r114', 'r115', 'r153', 'r205', 'r214', 'r215', 'r216', 'r219', 'r224', 'r239', 'r240', 'r243', 'r245', 'r247', 'r278', 'r279', 'r280', 'r281', 'r285', 'r291', 'r294', 'r296', 'r299'] pertes []
+gold corrigé base: 200 200 final: 226 226
+gold corrigé final gains 26 ['g017', 'r034', 'r074', 'r114', 'r115', 'r153', 'r205', 'r214', 'r215', 'r216', 'r219', 'r224', 'r239', 'r240', 'r243', 'r245', 'r247', 'r278', 'r279', 'r280', 'r281', 'r285', 'r291', 'r294', 'r296', 'r299'] pertes []
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation finale avec `fall`+`call`, intervalles bootstrap et métriques par langue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/final_v2.py <<'EOF'\nimport json,sys,collections,random\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nOLD_EN=set(bl.VERBES[\"en\"]); OLD_CON=set(bl.VERBES_CONNUS)\nLEX={ … [3568 caractères tronqués]`
+
+  ```
+{
+ "all": {
+  "base": {
+   "cibles": 239,
+   "labels": 196,
+   "exact": 195,
+   "f1": 0.5555
+  },
+  "final": {
+   "cibles": 239,
+   "labels": 222,
+   "exact": 220,
+   "f1": 0.5819
+  },
+  "gains": [
+   "g017",
+   "r034",
+   "r074",
+   "r114",
+   "r115",
+   "r153",
+   "r205",
+   "r214",
+   "r215",
+   "r216",
+   "r219",
+   "r224",
+   "r239",
+   "r240",
+   "r243",
+   "r247",
+   "r278",
+   "r279",
+   "r280",
+   "r281",
+   "r285",
+   "r291",
+   "r294",
+   "r296",
+   "r299"
+  ],
+  "pertes": []
+ },
+ "dev": {
+  "base": {
+   "cibles": 163,
+   "labels": 134,
+   "exact": 133,
+   "f1": 0.5512
+  },
+  "final": {
+   "cibles": 163,
+   "labels": 154,
+   "exact": 152,
+   "f1": 0.5782
+  },
+  "gains": [
+   "g017",
+   "r034",
+   "r074",
+   "r114",
+   "r205",
+   "r215",
+   "r219",
+   "r224",
+   "r240",
+   "r243",
+   "r247",
+   "r278",
+   "r279",
+   "r280",
+   "r285",
+   "r291",
+   "r294",
+   "r296",
+   "r299"
+  ],
+  "pertes": []
+ },
+ "test": {
+  "base": {
+   "cibles": 76,
+   "labels": 62,
+   "exact": 62,
+   "f1": 0.5651
+  },
+  "final": {
+   "cibles": 76,
+   "labels": 68,
+   "exact": 68,
+   "f1": 0.5901
+  },
+  "gains": [
+   "r115",
+   "r153",
+   "r214",
+   "r216",
+   "r239",
+   "r281"
+  ],
+  "pertes": []
+
+… [1784 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/final_all=run(ph)/final_all=run(ph,REG,True)/; s/final_d=run(d)/final_d=run(d,REG,True)/; s/final_t=run(t)/final_t=run(t,REG,True)/' /tmp/spans/final_v2.py && python3 /tmp/spans/final_v2.py | head -80", "description": "Fix  … [38 caractères tronqués]`
+
+  ```
+{
+ "all": {
+  "base": {
+   "cibles": 239,
+   "labels": 196,
+   "exact": 195,
+   "f1": 0.5555
+  },
+  "final": {
+   "cibles": 239,
+   "labels": 222,
+   "exact": 222,
+   "f1": 0.5851
+  },
+  "gains": [
+   "g017",
+   "r034",
+   "r074",
+   "r102",
+   "r114",
+   "r115",
+   "r153",
+   "r205",
+   "r214",
+   "r215",
+   "r216",
+   "r219",
+   "r224",
+   "r239",
+   "r240",
+   "r243",
+   "r245",
+   "r247",
+   "r278",
+   "r279",
+   "r280",
+   "r281",
+   "r285",
+   "r291",
+   "r294",
+   "r296",
+   "r299"
+  ],
+  "pertes": []
+ },
+ "dev": {
+  "base": {
+   "cibles": 163,
+   "labels": 134,
+   "exact": 133,
+   "f1": 0.5512
+  },
+  "final": {
+   "cibles": 163,
+   "labels": 154,
+   "exact": 154,
+   "f1": 0.5831
+  },
+  "gains": [
+   "g017",
+   "r034",
+   "r074",
+   "r102",
+   "r114",
+   "r205",
+   "r215",
+   "r219",
+   "r224",
+   "r240",
+   "r243",
+   "r245",
+   "r247",
+   "r278",
+   "r279",
+   "r280",
+   "r285",
+   "r291",
+   "r294",
+   "r296",
+   "r299"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/spans/final_v2.py | tail -70", "description": "View final metrics tail"}`
+
+  ```
+"cibles": 62,
+   "labels": 58,
+   "exact": 58
+  },
+  "fr/*": {
+   "cibles": 151,
+   "labels": 136,
+   "exact": 136
+  },
+  "*/GP": {
+   "cibles": 96,
+   "labels": 92,
+   "exact": 92
+  },
+  "*/*": {
+   "cibles": 239,
+   "labels": 222,
+   "exact": 222
+  },
+  "fr/SUB": {
+   "cibles": 43,
+   "labels": 39,
+   "exact": 39
+  },
+  "*/SUB": {
+   "cibles": 69,
+   "labels": 64,
+   "exact": 64
+  },
+  "fr/REL": {
+   "cibles": 46,
+   "labels": 39,
+   "exact": 39
+  },
+  "*/REL": {
+   "cibles": 74,
+   "labels": 66,
+   "exact": 66
+  },
+  "en/GP": {
+   "cibles": 34,
+   "labels": 34,
+   "exact": 34
+  },
+  "en/*": {
+   "cibles": 88,
+   "labels": 86,
+   "exact": 86
+  },
+  "en/SUB": {
+   "cibles": 26,
+   "labels": 25,
+   "exact": 25
+  },
+  "en/REL": {
+   "cibles": 28,
+   "labels": 27,
+   "exact": 27
+  }
+ },
+ "bootstrap": {
+  "n": 239,
+  "gain": 27,
+  "diff": 0.113,
+  "ic95": [
+   0.0753,
+   0.1548
+  ]
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/table_v2.py <<'EOF'\nimport sys,json\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); d=dev(ph); t=test(ph)\nLEX={\"fall\",\"falls\",\"fell\",\"fallen\",\"call\",\"calls\",\"called\",\"calling\"} … [1250 caractères tronqués]`
+
+  ```
+{
+ "R1": {
+  "dev": {
+   "cibles": 163,
+   "labels": 149,
+   "exact": 148,
+   "f1": 0.5717,
+   "gains": [
+    "g017",
+    "r034",
+    "r074",
+    "r114",
+    "r205",
+    "r219",
+    "r224",
+    "r240",
+    "r243",
+    "r247",
+    "r278",
+    "r285",
+    "r291",
+    "r296",
+    "r299"
+   ],
+   "pertes": [],
+   "n_gains": 15,
+   "n_pertes": 0
+  },
+  "test": {
+   "cibles": 76,
+   "labels": 67,
+   "exact": 67,
+   "f1": 0.5823,
+   "gains": [
+    "r115",
+    "r214",
+    "r216",
+    "r239",
+    "r281"
+   ],
+   "pertes": [],
+   "n_gains": 5,
+   "n_pertes": 0
+  },
+  "all": {
+   "cibles": 239,
+   "labels": 216,
+   "exact": 215,
+   "f1": 0.575,
+   "gains": [
+    "g017",
+    "r034",
+    "r074",
+    "r114",
+    "r115",
+    "r205",
+    "r214",
+    "r216",
+    "r219",
+    "r224",
+    "r239",
+    "r240",
+    "r243",
+    "r247",
+    "r278",
+    "r281",
+    "r285",
+    "r291",
+    "r296",
+    "r299"
+   ],
+   "pertes": [],
+   "n_gains": 20,
+   "n_pertes": 0
+  }
+ },
+ "R2": {
+  "dev": {
+   "cibles": 163,
+   "labels": 138,
+   "exact": 136,
+   "f1": 0.5547,
+   "gains": [
+    "r215",
+    "r279",
+    "r294"
+   ],
+   "pertes": [],
+   "n_gains": 3,
+   "n_pertes": 0
+  },
+  "test": {
+   "cibles": 76,
+   "label
+… [3003 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle négatif final (permutation) et vérification des 17 restants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys,random,json,collections; sys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger()\nLEX={\"fall\",\"falls\",\"fell\",\"fallen\",\"call\",\"calls\",\"called\",\"calling\"}\nbl.VERBES[\"en\"]|=LE … [1690 caractères tronqués]`
+
+  ```
+labels 222 exact 222
+perm 222 moy 2.011 max 9 p95 5
+statuts Counter({'exact': 222, 'absent': 17})
+43 restants: ['r035', 'r255', 'r264', 'r288', 's010', 's027', 's035', 's044', 's061', 's065', 's112', 's114', 's125', 's141', 's146', 's148', 's160']
+43 par type: Counter({'REL': 8, 'SUB': 5, 'GP': 4})
+  ```
+
+### 🤖 Assistant
+
+⏵ Régénération du jeu de données final (r245 exact) pour les livrables
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys,collections\nsys.path.insert(0,\"/tmp/spans\")\nfrom sim3 import *\nph=charger(); ids={p[\"id\"]:p for p in ph}\nLEX={\"fall\",\"falls\",\"fell\",\"fallen\",\"call\",\"calls\",\"called\",\"calling\" … [1267 caractères tronqués]`
+
+  ```
+Counter({'exact': 26, 'absent': 17})
+[('r035', 'absent', None), ('r255', 'absent', None), ('r264', 'absent', None), ('r288', 'absent', None), ('s010', 'absent', None), ('s027', 'absent', None), ('s035', 'absent', None), ('s044', 'absent', None), ('s061', 'absent', None), ('s065', 'absent', None), ('s112', 'absent', None), ('s114', 'absent', None), ('s125', 'absent', None), ('s141', 'absent', None), ('s146', 'absent', None), ('s148', 'absent', None), ('s160', 'absent', None)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification qu'aucun livrable du même nom n'existe déjà
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/rapport-spans-v7.md reports/pensee-spans-v7.json 2>&1; echo \"---\"; git status --short reports/ | head", "description": "Check target report files do not exist"}`
+
+  ```
+ls: cannot access 'reports/rapport-spans-v7.md': No such file or directory
+ls: cannot access 'reports/pensee-spans-v7.json': No such file or directory
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/pensee-audit-v7.json
+?? reports/rapport-audit-v7.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture rapide d'un rapport voisin pour aligner le style (lecture seule)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -60 reports/pensee-audit-v7.json 2>/dev/null; echo \"---MD---\"; head -40 reports/rapport-audit-v7.md 2>/dev/null", "description": "Inspect neighboring report style"}`
+
+  ```
+{
+ "audit": "v7",
+ "commit": "69bd865ec1bae1958b6f617bde4bf685a15d7d67",
+ "branche": "s/v7",
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "verdict": "Les chiffres de la fiche sont reproductibles, mais cinq valeurs de qualite (POS, F1 union, S, chunker, tete) sont mesurees sur le gold gele 602, pas sur le gold vivant 612. L'attachement (196 labels, 195 exacts, couverture, top-k, fr/en, spans) est identique sur les deux. La colonne avant n'est pas la v6 : elle melange v4, v5a et v6. Deux recits sont faux : le POS contextuel vaut +8 labels (pas +9) et +0,0118 de POS (pas +0,0132) ; l'exemple SUB « that she would come » n'est pas produit. 183/183 portes, zero echec, mais 26 docstrings et 6 messages de portes sont perimes et aucune porte ne couvre dev/test.",
+ "gold": {
+  "vivant": {
+   "phrases": 612,
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160,
+   "tokens": 3179,
+   "segments": 1863,
+   "cibles": 239
+  },
+  "gele": {
+   "phrases": 602,
+   "hand": 20,
+   "reel": 422,
+   "synthetique": 160,
+   "tokens": 3141,
+   "segments": 1831,
+   "cibles": 239
+  },
+  "difference": {
+   "phrases": 10,
+   "ids": [
+    "r423",
+    "r424",
+    "r425",
+    "r426",
+    "r427",
+    "r428",
+    "r429",
+
+… [2681 caractères tronqués]
+  ```
+
