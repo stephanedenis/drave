@@ -3179,3 +3179,206 @@ JSON OK
 37e2053c
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 --decorate && echo \"--- diff 5c6b3b43..HEAD module/eval ---\" && git diff --stat 5c6b3b43..HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/test_bloc_linguisti … [100 caractères tronqués]`
+
+  ```
+37e2053c (HEAD -> s/v7) ÉTAT — T0 DANS LE BUDGET
+5c6b3b43 PORTES — LA NUANCE cascade_pos : VERTE PAR PLANCHER, LA FUSION DÉGRADE ENCORE LE POS DE 1,16 PT (CORRECTIF À FAIRE)
+e3db2cc8 OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13
+--- diff 5c6b3b43..HEAD module/eval ---
+(vide = inchangés)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md'); s=p.read_text()\ns=s.replace('`5c6b3b43`','`37e2053c`')\ns=s.replace('module inchangé à HEAD','module inchangé de `fa1b0c6e` à `37e2053c` (dernier … [888 caractères tronqués]`
+
+  ```
+ok
+4:> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Dernier HEAD vérifié** : `37e2053c`
+58:Le rejeu du 2026-11-06 redonne l'**état fourni** (vivant 612 ; module inchangé de `fa1b0c6e` à `37e2053c` (dernier contrôle)) ; la fiche
+89:**Les quatre modes** (vivant 612 ; valeurs identiques à `37e2053c`). Le mock est le double de contrat,
+99:- **`cascade_pos` : rouge à `fa1b0c6e`, vert au dernier contrôle (`37e2053c`) par plancher.** À `fa1b0c6e`, le verdict
+109:- **`ok`** : **faux à `fa1b0c6e`** (à cause de `cascade_pos`) ; **vrai au dernier contrôle `37e2053c`** (plancher 0,70),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '56,60p' reports/rapport-produit-bloc-l.md && sed -n '33,36p' reports/rapport-produit-bloc-l.md && grep -n \"vert à HEAD\\|à HEAD\" reports/rapport-produit-bloc-l.md || true", "description": "Corriger la parenthèse et vérifier … [18 caractères tronqués]`
+
+  ```
+## 2. État gold rejoué
+
+Le rejeu du 2026-11-06 redonne l'**état fourni** (vivant 612 ; module inchangé de `fa1b0c6e` à `37e2053c` (dernier contrôle)) ; la fiche
+v12 publie, elle, les valeurs du **gelé 602** pour le F1 et la tête :
+
+| document | ⚠️ | toujours présent, mais **42/53** valeurs tronquées à 60 caractères, **1/50** faux titre (x48) + 4 en cas limites |
+| langue fr/en | ✅ | **50/50** sur ce banc (34 fr, 14 en, 2 `und`) ; **39/50** seulement avec les profils UDHR, et le format change `fr`/`fra` |
+| compositions | ❌ | refus et contexte perdus, cascade **50/50** appels ; POS **0,7465 < 0,7581** (verdict `cascade_pos` vert par plancher 0,70 depuis `7f73c17f`, pas par correctif) |
+| scripts non latins | ⚠️ | russe et chinois : graphème/mot/phrase/document, **0 syntagme**, **0 morphème** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md'); s=p.read_text()\ns=s.replace(\"(vivant 612 ; module inchangé de `fa1b0c6e` à `37e2053c` (dernier contrôle)) ; la fiche\",\n            \"(vivant 6 … [230 caractères tronqués]`
+
+  ```
+ok
+## 2. État gold rejoué
+
+Le rejeu du 2026-11-06 redonne l'**état fourni** (vivant 612 ; module inchangé de `fa1b0c6e` à `37e2053c`, dernier contrôle) ; la fiche
+v12 publie, elle, les valeurs du **gelé 602** pour le F1 et la tête :
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\ns=s.replace('\"head_au_moment_de_la_redaction\": \"5c6b3b43\"','\"head_au_moment_de_la_redaction\": \"37e2053c\",\\n        \"dernier_head_verifie\": \"37e2053c\"')\np.wr … [735 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+37e2053c 37e2053c
+True True
+37e2053c
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"HEAD\\|5c6b3b43\\|6ef2a3f5\" reports/rapport-produit-bloc-l.md | head -20; echo \"---\"; python3 - <<'PY'\nimport pathlib\nlines=pathlib.Path('reports/rapport-produit-bloc-l.md').read_text().splitlines()\nbloc=[]; errs=[]\n … [665 caractères tronqués]`
+
+  ```
+4:> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Dernier HEAD vérifié** : `37e2053c`
+---
+tableaux déséquilibrés 0 | lignes 423
+JSON OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"HEAD: $(git rev-parse --short HEAD)\" && git status --short -- reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json && ls -l reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json && python3 - <<' … [635 caractères tronqués]`
+
+  ```
+HEAD: c6904284
+?? reports/pensee-produit-bloc-l.json
+?? reports/rapport-produit-bloc-l.md
+-rw-r--r--. 1 stephane stephane 82886  6 nov 11:29 reports/pensee-produit-bloc-l.json
+-rw-------. 1 stephane stephane 34505  6 nov 11:29 reports/rapport-produit-bloc-l.md
+banc 0 0 0 34 149
+gold 222 0.9289 0.5849 0.7581 17
+perf [(10, 1.08), (50, 4.6), (200, 19.43)]
+head 37e2053c ok_head True cascade_pos_head True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 --decorate && echo \"--- diff 37e2053c..HEAD module/eval ---\" && git diff --stat 37e2053c..HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/test_bloc_linguisti … [96 caractères tronqués]`
+
+  ```
+c6904284 (HEAD -> s/v7) ÉTAT — T0 À 4 000
+37e2053c ÉTAT — T0 DANS LE BUDGET
+--- diff 37e2053c..HEAD module/eval ---
+(vide = inchangés)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md'); s=p.read_text()\ns=s.replace(\"> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Dernier HEAD vérifié** : `37e2053c`\\n> (module `bloc_lingu … [1452 caractères tronqués]`
+
+  ```
+report ok
+builder ok
+JSON OK
+11:  "head_au_moment_de_la_redaction": "c6904284",
+12:  "dernier_head_verifie": "c6904284",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,10p' reports/rapport-produit-bloc-l.md && grep -n \"37e2053c\\|c6904284\" reports/rapport-produit-bloc-l.md && git rev-parse --short HEAD", "description": "Vérifier l'ancrage final"}`
+
+  ```
+# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD vérifié en fin d'audit** : `c6904284`
+> (le HEAD a bougé pendant l'audit ; module `bloc_linguistique.py` inchangé ; `evaluer_gold.py`
+> modifié en `7f73c17f`) ·
+> **Date** : 2026-11-06 ·
+> **Verdict** : ⚠️ **la surface est utilisable en autonomie ; la structure ne l'est pas encore.**
+> **Aucun fichier existant modifié par cet audit ; aucun commit.** Sorties : ce rapport et
+> [`pensee-produit-bloc-l.json`](pensee-produit-bloc-l.json).
+4:> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD vérifié en fin d'audit** : `c6904284`
+59:Le rejeu du 2026-11-06 redonne l'**état fourni** (vivant 612 ; module inchangé de `fa1b0c6e` à `c6904284`, dernier contrôle) ; la fiche
+90:**Les quatre modes** (vivant 612 ; valeurs identiques à `c6904284`). Le mock est le double de contrat,
+100:- **`cascade_pos` : rouge à `fa1b0c6e`, vert au dernier contrôle (`c6904284`) par plancher.** À `fa1b0c6e`, le verdict
+110:- **`ok`** : **faux à `fa1b0c6e`** (à ca
+… [89 caractères tronqués]
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Audit produit du bloc linguistique terminé. Deux fichiers neufs, aucun existant modifié, aucun commit :\n- `reports/rapport-produit-bloc-l.md`\n- `reports/pensee-produit-bloc-l.json` (contient les 50 textes, les 25 cas limites, les 18  … [4831 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"HEAD $(git rev-parse --short HEAD)\" && git status --short -- reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json && grep -n \"6ef2a3f5\\|5c6b3b43\\|37e2053c\\|c6904284\" reports/pensee-produit-bloc-l.json rep … [265 caractères tronqués]`
+
+  ```
+HEAD c6904284
+?? reports/pensee-produit-bloc-l.json
+?? reports/rapport-produit-bloc-l.md
+reports/pensee-produit-bloc-l.json:10:  "gold": "evaluer_gold.charger() + evaluer_bloc ; gold_split.dev/test ; module tools/bloc_linguistique.py au commit fa1b0c6e (module inchangé à HEAD 6ef2a3f5).",
+reports/pensee-produit-bloc-l.json:11:  "head_au_moment_de_la_redaction": "c6904284",
+reports/pensee-produit-bloc-l.json:12:  "dernier_head_verifie": "c6904284",
+reports/rapport-produit-bloc-l.md:4:> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD vérifié en fin d'audit** : `c6904284`
+reports/rapport-produit-bloc-l.md:59:Le rejeu du 2026-11-06 redonne l'**état fourni** (vivant 612 ; module inchangé de `fa1b0c6e` à `c6904284`, dernier contrôle) ; la fiche
+reports/rapport-produit-bloc-l.md:90:**Les quatre modes** (vivant 612 ; valeurs identiques à `c6904284`). Le mock est le double de contrat,
+reports/rapport-produit-bloc-l.md:100:- **`cascade_pos` : rouge à `fa1b0c6e`, vert au dernier contrôle (`c6904284`) par plancher.** À `fa1b0c6e`, le verdict
+reports/rapport-produit-bloc-l.md:110:- **`ok`** : **faux à `fa1b0c6e`** (à cause de `cascade_pos`) ; **vrai au dernier contrôle `c6904284`** (
+… [140 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\ns=s.replace('module tools/bloc_linguistique.py au commit fa1b0c6e (module inchangé à HEAD 6ef2a3f5).',\n            'module tools/bloc_linguistique.py au commit fa1b0c6e  … [442 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+10:  "gold": "evaluer_gold.charger() + evaluer_bloc ; gold_split.dev/test ; module tools/bloc_linguistique.py au commit fa1b0c6e (module inchangé de fa1b0c6e à c6904284).",
+11:  "head_au_moment_de_la_redaction": "c6904284",
+12:  "dernier_head_verifie": "c6904284",
+  ```
+
+### 🤖 Assistant
+
+Audit terminé. J'ai écrit **uniquement deux fichiers neufs**, sans modifier d'existant et sans commit :
+
+- [`reports/rapport-produit-bloc-l.md`](reports/rapport-produit-bloc-l.md)
+- [`reports/pensee-produit-bloc-l.json`](reports/pensee-produit-bloc-l.json) — contient les 50 textes, les 25 cas limites, les 18 correctifs et tous les chiffres.
+
+## Plantages
+
+- **0 plantage sur les 50 phrases libres**, **0 refus**, **0 sortie vide**, **0 span hors texte**, **0 cible absente**.
+- **34/50 textes** ont au moins une anomalie (**149** au total) :
+  - **132 paires de syntagmes qui se chevauchent**, dans **31/50 textes**, soit **188/362 étiquettes (51,9 %)** ; le chunker seul n'en produit aucune, c'est le générateur S + l'union ;
+  - 1 chevauchement de phrases (f10), dû à l'extension d'abréviation `M.` ;
+  - 8 morphèmes normalisés (`tion` vs `TION`), 4 actes `exclamation` absents des candidats, 4 listes de candidats avec doublons.
+- **Cas limites** : **1 plantage textuel** — un surrogate isolé, `UnicodeEncodeError` à `len(texte.encode())` (ligne 1246) — plus **3 entrées non-str** (`bytes`, `int`, `list` → `AttributeError`). `None` devient silencieusement `refus = "vide"`.
+- Qualité libre : 365 `NOUN` pour 32 `VERB` ; « arrose », « rentre », « prépare », « warm » → `NOUN`. Les URL, décimaux et abréviations cassent les frontières de phrase ; les types `url` et `emoji` ne sortent **jamais** (0/963).
+
+## Temps par phrase
+
+| mode | 10 mots | 50 mots | 200 mots |
+|---|---:|---:|---:|
+| heuristique | **1,08 ms** | **4,60 ms** | **19,43 ms** |
+| parallèle | 1,51 ms | 6,18 ms | 27,22 ms |
+| cascade | 1,51 ms | 6,25 ms | 29,64 ms |
+
+- Débit : **923 / 218 / 51,5 phrases/s** ; **0,09–0,11 ms/mot**.
+- Mémoire : pic **540,6 Kio** pour 200 mots ; RSS **30,7 Mio**, **delta 0** après 100 analyses ; démarrage à froid **99–113 ms**.
+- Au-delà de 200 mots, coût superlinéaire : **0,394 ms/mot à 4 000 mots** (1,57 s, exposant ≈ 1,45), à cause de `_cible_proche` (199 302 appels à `_est_adverbe_seul`).
+- Déterminisme : **mêmes JSON** sur même instance, instances fraîches et graines de hash **0/1/42** ; seule `duree_s` varie, et elle est exclue par défaut.
+
+## Contrat
+
+**Stable** : 11 clés pour `Annotation`, 11 pour `Etiquette`, spans valides, aucun span vide, `confiance ∈ [0,1]` pour l'heuristique, unités triées/disjointes, fraction recalculable.
+
+**Peut être vide/absent** : `etiquettes`, `unites_semantiques`, `fraction_semantique=0`, `refus`, `candidats`, `meta`, `contexte`, `langue="und"`, `script="Zyyy"` ; **morphème absent 9/50**, **syntagme absent 2/50**.
+
+**Un client ne peut pas supposer** : syntagmes disjoints, neuf niveaux présents, `valeur` = surface (morphème normalisé, document tronqué à 60 : 42/53), `meta`/`cout`/`trace` à schéma fixe, `langue` ISO2 ou ISO3 (`fr` par défaut, `fra` avec profils), `Annotation.source` dans l'enum (ajoute `parallele`/`cascade`), `refus` enum (4 sémantiques), ni l'offset de la cible d'attachement. `couverture()` est un **max de confiance**, pas un taux.
+
+## 5 correctifs prioritaires
+
+1. **P0-1 — Expliciter les alternatives de syntagmes** : 132 paires/31 textes. Ne pas dédupliquer en silence : la déduplication simulée donne F1 0,5849→0,6141 mais **222→208 attachements exacts** (couverture 0,9289→0,8703).
+2. **P0-2 — Réparer les frontières de phrase** (décimaux, dates, URL/emails, abréviations, espace initial) **et les types `url`/`emoji` morts** : une URL crée 3–4 phrases, `12.5` coupe une phrase en deux, `M./Dr./etc.` duplique la phrase.
+3. **P0-3 — Compositions** : propager `refus` et `contexte`, rattraper `RefusNeuronal`, garder `MockNeuronal` ; aujourd'hui `"... !!! ???"` rend **4 étiquettes inventées**.
+4. **P0-4 — Cascade sélective** : **50/50** appels, **1 676/1 676** sur le gold ; seuil 0,6 au-dessus des confiances déclarées et `couverture()` = max masque les POS ouvertes.
+5. **P0-5 — Langue** : format `fr`/`fra` selon le mode, indice `fr` ignoré avec les profils, **39/50** avec profils contre **50/50** en défaut.
+
+Juste derrière : **POS des nombres/ponctuation** (157/963 tokens sans POS) et **POS ouvertes** (0,6234 ; tagger réel documenté 0,9440).
+
+## Point d'état important
+
+HEAD a bougé pendant l'audit (`fa1b0c6e` → `c6904284`) ; le module `bloc_linguistique.py` est **inchangé**. Le rouge `cascade_pos` a été **éteint par un plancher 0,70** dans `7f73c17f`, pas par un correctif : à HEAD, `ok=true`, mais la cascade reste à **0,7465 < 0,7581** et perd toujours 14 spans d'attachement. La fiche distingue explicitement les deux états.
+

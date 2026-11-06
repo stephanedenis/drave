@@ -7,12 +7,12 @@
 | Identifiant | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.2 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 18 |
-| Appels d'outils | 17 |
+| Messages | 25 |
+| Appels d'outils | 24 |
 | Fichiers touchés | 0 |
-| Commandes | 9 |
+| Commandes | 16 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2138 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Check repo state and branch
 - bash — List repo and tools directories
@@ -38,10 +38,14 @@
 - bash — Diagnose English POS errors
 - bash — Decompose EN errors by mechanism
 - bash — Compute dev/test split and conditional stats
+- bash — Audit rule risks on gold
+- bash — Run POS rule variants on dev and test
+- bash — Fix patch anchor and rerun variants
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Computing the dev/test split and conditional gold statistics
+⏵ Assembling the full metrics table (POS, F1, attachement) for dev and test
 
 ## 3. Travail accompli
 
@@ -61,6 +65,13 @@
 - **T1** Diagnose English POS errors
 - **T1** Decompose EN errors by mechanism
 - **T1** Compute dev/test split and conditional stats
+- **T1** Audit rule risks on gold
+- **T1** Run POS rule variants on dev and test
+- **T1** Fix patch anchor and rerun variants
+- **T1** Token-level fixes and breaks per rule
+- **T1** Debug R3 brother/mother breaks
+- **T1** Fix R3 lookahead and rerun
+- **T1** Print full metrics table
 
 ## 4. Mesures et résultats marquants
 
@@ -83,4 +94,10 @@
 - **T1** `NOUN    10 (3.7%)`
 - **T1** `PONCT    3 (1.1%)`
 - **T1** `AUX      1 (0.4%)`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : V0 dev 0.7547 test 0.7656 | dev_en 0.7528 test_en 0.7925 [stderr] Traceback (most recent call last):   File "/tmp/qpos/sim.py", line 125, in <module>     mod = charger('bl_' + nom.replace('+','_'), pa
 

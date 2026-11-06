@@ -595,3 +595,193 @@ VERB->NOUN n= 176
 … [11049 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Computing the dev/test split and conditional gold statistics
+
+- **bash** `{"command": "cat > /tmp/qpos/split_stats.py <<'EOF'\nimport json, pathlib, sys, collections\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RAC/'tools')); sys.path.insert(0, str(RAC/'tools/tests/linguistique'))\nimport bloc_linguistique as bl, evaluer_g … [1709 caractères tronqués]`
+
+  ```
+dev {'phrases': 422, 'cibles': 163, 'sources': {'hand': 15, 'reel': 302, 'synthetique': 105}, 'langues': {'fr': 277, 'en': 145}}
+test {'phrases': 190, 'cibles': 76, 'sources': {'hand': 5, 'reel': 130, 'synthetique': 55}, 'langues': {'fr': 125, 'en': 65}}
+dev tok 2185 test tok 994
+dev en tok 801 test en tok 347
+
+== dev en : gold POS par (prev_gold, suffixe) ==
+('DEBUT', '(nu)') {'DET': 96, 'PRON': 31, 'NOUN': 8, 'CONJ': 9, 'AUX': 1}
+('VERB', '(nu)') {'DET': 31, 'CONJ': 9, 'ADV': 16, 'PREP': 26, 'AUX': 19, 'NOUN': 9, 'PRON': 30, 'VERB': 1, 'PONCT': 1}
+('DET', '(nu)') {'NOUN': 133, 'ADJ': 2}
+('PRON', '(nu)') {'VERB': 44, 'AUX': 12, 'PRON': 14, 'ADV': 1}
+('NOUN', '(nu)') {'VERB': 16, 'PREP': 2, 'CONJ': 7, 'PRON': 28, 'AUX': 7, 'DET': 1}
+('NOUN', 's') {'VERB': 44}
+('PRON', 's') {'VERB': 39}
+('AUX', '(nu)') {'VERB': 5, 'ADV': 6, 'ADJ': 22, 'DET': 3, 'PRON': 2}
+('PREP', '(nu)') {'DET': 19, 'NOUN': 3, 'AUX': 1, 'VERB': 1, 'PRON': 4}
+('CONJ', '(nu)') {'PRON': 21, 'DET': 3, 'NOUN': 1}
+('NOUN', 'es') {'VERB': 16}
+('DET', 's') {'NOUN': 14}
+('PRON', 'es') {'VERB': 14}
+('ADJ', '(nu)') {'PREP': 1, 'NOUN': 2, 'PRON': 3}
+('VERB', 's') {'NOUN': 4, 'VERB': 1}
+('ADV', '(nu)') {'PRON': 1, 'AUX': 1, 'PO
+… [512 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Auditing risks: DET lookahead, subject-pronoun nouns, and FR control profile
+
+- **bash** `{"command": "cat > /tmp/qpos/risques.py <<'EOF'\nimport json, pathlib, sys, collections\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RAC/'tools')); sys.path.insert(0, str(RAC/'tools/tests/linguistique'))\nimport bloc_linguistique as bl, evaluer_gold  … [2166 caractères tronqués]`
+
+  ```
+== gold NOUN juste après un pronom sujet (dev en) ==
+
+== DET predits : suivant predit non nominal, statut gold (dev+test) ==
+('en', 'that', 'PRON', 'CONJ', 'PRON') 12
+('en', 'that', 'PRON', 'PRON', 'PRON') 6
+('fr', 'le', 'VERB', 'PRON', 'VERB') 4
+('en', 'the', 'VERB', 'DET', 'NOUN') 3
+('en', 'her', '-', 'PRON', '-') 2
+('fr', "l'", 'VERB', 'PRON', 'VERB') 2
+('en', 'that', 'VERB', 'PRON', 'VERB') 1
+('en', 'that', 'AUX', 'PRON', 'VERB') 1
+('fr', 'la', 'VERB', 'PRON', 'VERB') 1
+('en', 'her', 'PRON', 'PRON', 'PRON') 1
+
+== gold DET dont le suivant gold n'est pas NOUN/ADJ/NUM (fr) ==
+[(("l'homme", 'PREP'), 2)]
+
+== gold DET dont le suivant gold n'est pas NOUN/ADJ/NUM (en) ==
+[]
+  ```
+
+### 🤖 Assistant
+
+⏵ Building the in-memory variant harness (baseline reproduction first)
+
+- **bash** `{"command": "cat > /tmp/qpos/sim.py <<'EOF'\n\"\"\"Mesure de variantes de POS par copie **en mémoire** du module (aucun fichier modifié).\"\"\"\nimport json, pathlib, sys, types, collections, copy\n\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nORIG = RAC/'tools/bloc_lingui … [6570 caractères tronqués]`
+
+  ```
+V0 dev 0.7547 test 0.7656 | dev_en 0.7528 test_en 0.7925
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/qpos/sim.py", line 125, in <module>
+    mod = charger('bl_' + nom.replace('+','_'), patchs)
+  File "/tmp/qpos/sim.py", line 17, in charger
+    assert n == 1, (nom, n, old[:80])
+           ^^^^^^
+AssertionError: ('bl_R1', 0, '            if e.type != "VERB" or e.confiance > 0.45:')
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/qpos && python3 - <<'EOF'\nimport re\ns=open('sim.py').read()\ns=s.replace('''P_R1_SEUIL = ('            if e.type != \"VERB\" or e.confiance > 0.45:',\n              '            if e.type != \"VERB\" or e.confiance > 0.5:')''',\n'''P_R1_SEUIL = ('            if e.type != \"VER … [676 caractères tronqués]`
+
+  ```
+V0 dev 0.7547 test 0.7656 | dev_en 0.7528 test_en 0.7925
+R1 dev 0.8178 test 0.8179 | dev_en 0.8464 test_en 0.8674
+R1l dev 0.7533 test 0.7646 | dev_en 0.7516 test_en 0.7896
+R2 dev 0.8092 test 0.8189 | dev_en 0.8265 test_en 0.8646
+R3 dev 0.7588 test 0.7676 | dev_en 0.764 test_en 0.7983
+R1+R2 dev 0.8444 test 0.8481 | dev_en 0.8752 test_en 0.8963
+R1+R3 dev 0.8247 test 0.8209 | dev_en 0.8652 test_en 0.8761
+R2+R3 dev 0.8133 test 0.8209 | dev_en 0.8377 test_en 0.8703
+R1+R2+R3 dev 0.8513 test 0.8511 | dev_en 0.8939 test_en 0.9049
+
+== deltas vs V0 (points de %) ==
+R1 all:+5.98 dev:+6.31 test:+5.23 dev_en:+9.36 test_en:+7.49 dev_fr:+4.55 test_fr:+4.01
+R1l all:-0.13 dev:-0.14 test:-0.10 dev_en:-0.12 test_en:-0.29 dev_fr:-0.15 test_fr:+0.00
+R2 all:+5.41 dev:+5.45 test:+5.33 dev_en:+7.37 test_en:+7.21 dev_fr:+4.33 test_fr:+4.32
+R3 all:+0.35 dev:+0.41 test:+0.20 dev_en:+1.12 test_en:+0.58 dev_fr:+0.00 test_fr:+0.00
+R1+R2 all:+8.74 dev:+8.97 test:+8.25 dev_en:+12.24 test_en:+10.38 dev_fr:+7.08 test_fr:+7.11
+R1+R3 all:+6.54 dev:+7.00 test:+5.53 dev_en:+11.24 test_en:+8.36 dev_fr:+4.55 test_fr:+4.01
+R2+R3 all:+5.76 dev:+5.86 test:+5.53 dev_en:+8.49 test_en:+7.78 dev_fr:+4.33 test_fr:+4.32
+R1+R2+R3 
+… [86 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Measuring token-level fixes/breaks and the metrics table
+
+- **bash** `{"command": "cat > /tmp/qpos/diff.py <<'EOF'\nimport json, pathlib, sys, collections, random\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RAC/'tools')); sys.path.insert(0, str(RAC/'tools/tests/linguistique'))\nsys.path.insert(0, '/tmp/qpos')\nimport  … [2053 caractères tronqués]`
+
+  ```
+=== R1 : corrigés 190 | cassés 0 | net 190 ===
+  en: corrigés 101 cassés 0 net 101
+  fr: corrigés 89 cassés 0 net 89
+  top transitions corrigées: [(('VERB', 'NOUN', 'VERB'), 184), (('VERB', 'ADJ', 'VERB'), 5), (('VERB', 'ADV', 'VERB'), 1)]
+  top transitions cassées  : []
+  top formes cassées (en): []
+  top formes cassées (fr): []
+
+=== R2 : corrigés 172 | cassés 0 | net 172 ===
+  en: corrigés 84 cassés 0 net 84
+  fr: corrigés 88 cassés 0 net 88
+  top transitions corrigées: [(('VERB', 'NOUN', 'VERB'), 167), (('VERB', 'ADJ', 'VERB'), 5)]
+  top transitions cassées  : []
+  top formes cassées (en): []
+  top formes cassées (fr): []
+
+=== R3 : corrigés 15 | cassés 4 | net 11 ===
+  en: corrigés 15 cassés 4 net 11
+  fr: corrigés 0 cassés 0 net 0
+  top transitions corrigées: [(('PRON', 'DET', 'PRON'), 11), (('CONJ', 'DET', 'CONJ'), 4)]
+  top transitions cassées  : [(('DET', 'DET', 'PRON'), 2), (('NOUN', 'NOUN', 'VERB'), 2)]
+  top formes cassées (en): [('her', 2), ('brother', 1), ('mother', 1)]
+  top formes cassées (fr): []
+
+=== R1+R2+R3 : corrigés 300 | cassés 4 | net 296 ===
+  en: corrigés 156 cassés 4 net 152
+  fr: corrigés 144 cassés 0 net 144
+  top transitions corrigées: [(('VERB', 'NOUN',
+… [356 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Debugging the four R3 breaks
+
+- **bash** `{"command": "cat > /tmp/qpos/debug_r3.py <<'EOF'\nimport json, pathlib, sys\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RAC/'tools')); sys.path.insert(0, str(RAC/'tools/tests/linguistique')); sys.path.insert(0, '/tmp/qpos')\nimport sim, evaluer_gold … [724 caractères tronqués]`
+
+  ```
+--- r025 en She talks to her brother.
+ gold   [('She', 'PRON'), ('talks', 'VERB'), ('to', 'PREP'), ('her', 'DET'), ('brother', 'NOUN')]
+ V0     [('She', 'PRON', 0.92, {'ouvert': False}), ('talks', 'NOUN', 0.3, {'ouvert': True}), ('to', 'PREP', 0.92, {'ouvert': False}), ('her', 'DET', 0.92, {'ouvert': False}), ('brother', 'NOUN', 0.4, {'ouvert': True, 'contexte': 'DET'})]
+ R3     [('She', 'PRON', 0.92, {'ouvert': False}), ('talks', 'NOUN', 0.3, {'ouvert': True}), ('to', 'PREP', 0.92, {'ouvert': False}), ('her', 'PRON', 0.6, {'ouvert': False, 'contexte': 'det_sans_nom'}), ('brother', 'VERB', 0.4, {'ouvert': True})]
+--- r062 en The mother prepares the meal.
+ gold   [('The', 'DET'), ('mother', 'NOUN'), ('prepares', 'VERB'), ('the', 'DET'), ('meal', 'NOUN')]
+ V0     [('The', 'DET', 0.92, {'ouvert': False}), ('mother', 'NOUN', 0.4, {'ouvert': True, 'contexte': 'DET'}), ('prepares', 'NOUN', 0.3, {'ouvert': True}), ('the', 'DET', 0.92, {'ouvert': False}), ('meal', 'ADJ', 0.38, {'ouvert': True})]
+ R3     [('The', 'DET', 0.92, {'ouvert': False}), ('mother', 'NOUN', 0.4, {'ouvert': True, 'contexte': 'DET'}), ('prepares', 'NOUN', 0.3, {'ouvert': True}), ('the', 'DET', 0.92, {'ouvert': False}),
+… [1271 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Improving R3 lookahead and measuring each `_pos` branch precision
+
+- **bash** `{"command": "cd /tmp/qpos && python3 - <<'EOF'\ns=open('sim.py').read()\nold='''            if _suiv is not None and _suiv.type in (\"NOUN\", \"ADJ\", \"NUM\"):\n                continue'''\nnew='''            if _suiv is not None and (_suiv.type in (\"NOUN\", \"ADJ\", \"NUM\") or (\n                … [401 caractères tronqués]`
+
+  ```
+ok
+V0 dev 0.7547 test 0.7656 | dev_en 0.7528 test_en 0.7925
+R1 dev 0.8178 test 0.8179 | dev_en 0.8464 test_en 0.8674
+R1l dev 0.7533 test 0.7646 | dev_en 0.7516 test_en 0.7896
+R2 dev 0.8092 test 0.8189 | dev_en 0.8265 test_en 0.8646
+R3 dev 0.7597 test 0.7696 | dev_en 0.7665 test_en 0.804
+R1+R2 dev 0.8444 test 0.8481 | dev_en 0.8752 test_en 0.8963
+R1+R3 dev 0.8256 test 0.8229 | dev_en 0.8677 test_en 0.8818
+R2+R3 dev 0.8142 test 0.8229 | dev_en 0.8402 test_en 0.8761
+R1+R2+R3 dev 0.8522 test 0.8531 | dev_en 0.8964 test_en 0.9107
+
+== deltas vs V0 (points de %) ==
+R1 all:+5.98 dev:+6.31 test:+5.23 dev_en:+9.36 test_en:+7.49 dev_fr:+4.55 test_fr:+4.01
+R1l all:-0.13 dev:-0.14 test:-0.10 dev_en:-0.12 test_en:-0.29 dev_fr:-0.15 test_fr:+0.00
+R2 all:+5.41 dev:+5.45 test:+5.33 dev_en:+7.37 test_en:+7.21 dev_fr:+4.33 test_fr:+4.32
+R3 all:+0.47 dev:+0.50 test:+0.40 dev_en:+1.37 test_en:+1.15 dev_fr:+0.00 test_fr:+0.00
+R1+R2 all:+8.74 dev:+8.97 test:+8.25 dev_en:+12.24 test_en:+10.38 dev_fr:+7.08 test_fr:+7.11
+R1+R3 all:+6.67 dev:+7.09 test:+5.73 dev_en:+11.49 test_en:+8.93 dev_fr:+4.55 test_fr:+4.01
+R2+R3 all:+5.88 dev:+5.95 test:+5.73 dev_en:+8.74 test_en:+8.36 dev_fr:+4.33 test_fr:+4.32
+R1+R2+
+… [1372 caractères tronqués]
+  ```
+

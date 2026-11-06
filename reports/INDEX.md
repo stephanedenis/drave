@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **677 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **678 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -358,6 +358,7 @@
 | [rapport-operateur-negation.md](rapport-operateur-negation.md) | B4.1 — la négation n'est pas une opération portée par l'état |
 | [rapport-optimisations-auto.md](rapport-optimisations-auto.md) | Rapport — détection matérielle et configuration automatique |
 | [rapport-optimisations.md](rapport-optimisations.md) | Moteur d'événements Rust — les 4 optimisations, et les 3 pièges |
+| [rapport-outillage-index.md](rapport-outillage-index.md) | B13 — l'outillage repris : `index_reports` a une aide, et l'index passe de 625 à 677 fiches |
 | [rapport-p0-flux.md](rapport-p0-flux.md) | P0 — Le harnais de flux : compter ce qu'on paie, par provenance |
 | [rapport-pannes-nommees.md](rapport-pannes-nommees.md) | C11 — la panne du pair est nommée au pas et en octets |
 | [rapport-parcimonie-entrainee.md](rapport-parcimonie-entrainee.md) | La parcimonie entraînée — premier banc, et la loi du coût par événement |

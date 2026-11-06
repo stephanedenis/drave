@@ -106,5 +106,25 @@ class TestProduit(unittest.TestCase):
         )
 
 
+class TestRobustesse(unittest.TestCase):
+    """Les entrées hostiles ne font pas planter le produit (audit de fiabilité P0)."""
+
+    def test_surrogate_isole(self):
+        sys.path.insert(0, str(RACINE))
+        import tools.bloc_linguistique as bl
+        a = bl.Heuristique().analyser("Le chat \ud800 dort.", "fr")
+        self.assertEqual(a.refus, "")
+        self.assertGreater(len(a.etiquettes), 3)
+
+    def test_entrees_non_textuelles(self):
+        sys.path.insert(0, str(RACINE))
+        import tools.bloc_linguistique as bl
+        h = bl.Heuristique()
+        for valeur in (b"octets", 42, ["liste"], None):
+            a = h.analyser(valeur, "fr")
+            self.assertEqual(a.refus, "non_texte", type(valeur).__name__)
+            self.assertEqual(a.etiquettes, [])
+
+
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    unittest.main()

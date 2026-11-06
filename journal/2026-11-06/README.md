@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**34 commits** · **9 session(s)** · **6 thème(s)**
+**35 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 11 | [distribue.md](distribue.md) |
-| docs | 5 | [docs.md](docs.md) |
+| docs | 6 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -22,14 +22,14 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `082fe8ca-3e1e-4454-b91b-12586843e880` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 0.2 h | [rapport](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/rapport.md) · [digest](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/digest.md) |
-| `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 2.0 h | [rapport](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md) · [digest](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md) |
+| `082fe8ca-3e1e-4454-b91b-12586843e880` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 0.5 h | [rapport](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/rapport.md) · [digest](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/digest.md) |
+| `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 2.1 h | [rapport](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md) · [digest](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md) |
 | `1555bdd3-27e9-4779-b1e7-716e32399c11` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.5 h | [rapport](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/rapport.md) · [digest](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/digest.md) |
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
-| `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 0.2 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 138.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 0.4 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 139.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -70,6 +70,7 @@
 | 11:20 | `e3db2cc8` | OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13 |
 | 11:22 | `5c6b3b43` | PORTES — LA NUANCE cascade_pos : VERTE PAR PLANCHER, LA FUSION DÉGRADE ENCORE LE POS DE 1,16 PT (CORRECTIF À FAIRE) |
 | 11:25 | `37e2053c` | ÉTAT — T0 DANS LE BUDGET |
+| 11:27 | `c6904284` | ÉTAT — T0 À 4 000 |
 
 ## Le récit de la journée (écrit à la main)
 

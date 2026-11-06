@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 2.0 h |
+| Durée | 2.1 h |
 | Tours | 1 |
-| Messages | 114 |
-| Appels d'outils | 131 |
+| Messages | 124 |
+| Appels d'outils | 140 |
 | Fichiers touchés | 7 |
-| Commandes | 108 |
+| Commandes | 116 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*131 appels d'outils.* Actions notables :
+*140 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,11 +41,44 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 103 autres
+- … et 111 autres
 
 **Synthèse produite :**
 
-⏵ HEAD a avancé pendant l'audit : vérification de l'impact sur les chiffres
+Audit terminé. J'ai écrit **uniquement deux fichiers neufs**, sans modifier d'existant et sans commit :
+
+- [`reports/rapport-produit-bloc-l.md`](reports/rapport-produit-bloc-l.md)
+- [`reports/pensee-produit-bloc-l.json`](reports/pensee-produit-bloc-l.json) — contient les 50 textes, les 25 cas limites, les 18 correctifs et tous les chiffres.
+
+\## Plantages
+
+- **0 plantage sur les 50 phrases libres**, **0 refus**, **0 sortie vide**, **0 span hors texte**, **0 cible absente**.
+- **34/50 textes** ont au moins une anomalie (**149** au total) :
+  - **132 paires de syntagmes qui se chevauchent**, dans **31/50 textes**, soit **188/362 étiquettes (51,9 %)** ; le chunker seul n'en produit aucune, c'est le générateur S + l'union ;
+  - 1 chevauchement de phrases (f10), dû à l'extension d'abréviation `M.` ;
+  - 8 morphèmes normalisés (`tion` vs `TION`), 4 actes `exclamation` absents des candidats, 4 listes de candidats avec doublons.
+- **Cas limites** : **1 plantage textuel** — un surrogate isolé, `UnicodeEncodeError` à `len(texte.encode())` (ligne 1246) — plus **3 entrées non-str** (`bytes`, `int`, `list` → `AttributeError`). `None` devient silencieusement `refus = "vide"`.
+- Qualité libre : 365 `NOUN` pour 32 `VERB` ; « arrose », « rentre », « prépare », « warm » → `NOUN`. Les URL, décimaux et abréviations cassent les frontières de phrase ; les types `url` et `emoji` ne sortent **jamais** (0/963).
+
+\## Temps par phrase
+
+| mode | 10 mots | 50 mots | 200 mots |
+|---|---:|---:|---:|
+| heuristique | **1,08 ms** | **4,60 ms** | **19,43 ms** |
+| parallèle | 1,51 ms | 6,18 ms | 27,22 ms |
+| cascade | 1,51 ms | 6,25 ms | 29,64 ms |
+
+- Débit : **923 / 218 / 51,5 phrases/s** ; **0,09–0,11 ms/mot**.
+- Mémoire : pic **540,6 Kio** pour 200 mots ; RSS **30,7 Mio**, **delta 0** après 100 analyses ; démarrage à froid **99–113 ms**.
+- Au-delà de 200 mots, coût superlinéaire : **0,394 ms/mot à 4 000 mots** (1,57 s, exposant ≈ 1,45), à cause de `_cible_proche` (199 302 appels à `_est_adverbe_seul`).
+- Déterminisme : **mêmes JSON** sur même instance, instances fraîches et graines de hash **0/1/42** ; seule `duree_s` varie, et elle est exclue par défaut.
+
+\## Contrat
+
+**Stable** : 11 clés pour `Annotation`, 11 pour `Etiquette`, spans valides, aucun span vide, `confiance ∈ [0,1]` pour l'heuristique, unités triées/disjointes, fraction recalculable.
+
+**Peut être vide/absent** : `etiquettes`, `unites_semantiques`, `fraction_semantique=0`, `refus`, `candidats`, `meta`, `contexte`, `langue="und"`
+… [2027 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -103,7 +136,7 @@
 - **T1** Profiler une analyse de 2000 mots
 - **T1** Contrôles négatifs et simulation du correctif chevauchement
 - **T1** Tester les mutations et simuler la déduplication sur le gold
-- … et 68 autres
+- … et 76 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -51724,3 +51724,312 @@ ven 06 nov 2026 11:27:37 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; index 677 ; `cascade_pos` vert par plancher.\", \" ; index 677.\")\np.write_text(t)\nPY\npython3 tools/taille_documents. … [453 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-3157]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3157", "timeout_ms": 600000, "wait": true}`
+
+  ```
+17 files changed, 200 insertions(+), 57 deletions(-)
+COMMIT OK 1
+c6904284 ÉTAT — T0 À 4 000
+ven 06 nov 2026 11:30:10 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h %s' | cut -c1-90; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verif … [333 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 11:30:22 EST
+HEAD c6904284 ÉTAT — T0 À 4 000
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=1
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py; python3 tools/index_reports.py --verifier; echo \"verifier EXIT=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -1\nfor i in 1 2 3; do\n  git add reports/INDEX.md docs/pilotage/en-cours.md\n  ti … [523 caractères tronqués]`
+
+  ```
+678 fiches → reports/INDEX.md
+verifier EXIT=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+c6904284 ÉTAT — T0 À 4 000
+   6ef2a3f5..c6904284  s/v7 -> s/v7
+   6ef2a3f5..c6904284  master -> master
+0
+ven 06 nov 2026 11:33:36 EST
+  ```
+
+### 👤 Utilisateur
+
+Agent 14114f3d-ae0d-416e-ad8e-4d4eaa04c36c sent a message: 
+Audit produit du bloc linguistique terminé. Deux fichiers neufs, aucun existant modifié, aucun commit :
+- `reports/rapport-produit-bloc-l.md`
+- `reports/pensee-produit-bloc-l.json` (contient les 50 textes, les 25 cas limites, les 18 correctifs)
+
+**État gold rejoué** (vivant 612, commit mesuré `fa1b0c6e` ; HEAD vérifié en fin d'audit `c6904284`, module `bloc_linguistique.py` inchangé) : exact 222/222, couverture 0,9289, F1 0,5849, POS 0,7581, 17 spans. La fiche v12 publie 0,5893/0,7392 : ce sont les valeurs du **gelé 602** (POS 0,7603), pas du vivant — écart de base, pas de code.
+**Point important** : le rouge `cascade_pos` de l'état fourni est **éteint à HEAD par un plancher 0,70** (`7f73c17f`), pas par un correctif. Valeurs identiques : cascade 0,7465 < heuristique 0,7581, `ok=true` à HEAD. La composition dégrade toujours le POS de 1,16 pt ; `parallele`/`cascade` perdent aussi 14 spans d'attachement (222→208). À ne pas présenter comme résolu côté qualité.
+
+**Robustesse 50 phrases libres** (29 fr, 14 en, 7 bruit/scripts ; 819 mots ; 4 320 étiquettes ; 265 attachements) :
+- **0 plantage, 0 refus, 0 sortie vide, 0 span hors texte, 0 cible absente**. 16/50 sans aucune anomalie, 34/50 avec au moins une, 149 anomalies.
+- **Chevauchements de syntagmes : 132 paires dans 31/50 textes, 188/362 étiquettes (51,9 %)**. Le chunker seul n'en produit aucun : c'est le générateur S + l'union. Une frontière de phrase dupliquée (f10) par l'extension d'abréviation `M.` (spans 0-104 et 2-104).
+- Autres : 8 morphèmes normalisés (`tion` vs `TION`), 4 actes `exclamation` absents des candidats, 4 listes de candidats avec doublons.
+- Qualité libre : 365 NOUN / 32 VERB ; « arrose », « rentre », « prépare », « warm » → NOUN. URL/décimaux/abréviations cassent les phrases (`12.5` → 2 fragments, `12.03.2024` → 3, URL → 3–4) ; types `url`/`emoji` **jamais émis** (0/963). 16/265 cibles d'attachement sont des mots fermés (`au`, `was`, `lui`…), 3/265 ambiguës, pas d'offset de cible.
+- Cas limites : 1 plantage textuel, un surrogate isolé (`UnicodeEncodeError` à `len(texte.encode())`, ligne 1246) + 3 entrées non-str (`bytes`/`int`/`list` → AttributeError) ; `None` → refus `vide` silencieux. Russe/chinois : 0 syntagme, 0 morphème ; x48 classé `document.titre` à tort.
+
+**Performance** (Xeon E5-2687W v3, Python 3.13.16) : heuristique **1,08 / 4,60 / 19,43 ms** à 10/50/200 mots (923/218/51,5 phrases/s), 0,09–0,11 ms/mot. Parallèle 1,51/6,18/27,22 ms ; cascade 1,51/6,25/29,64 ms (avec le mock). Mémoire : pic 540,6 Kio pour 200 mots / 1 061 étiquettes ; RSS 30,7 Mio, delta 0 après 100 analyses ; démarrage à froid 99–113 ms / 27,4 Mio. Au-delà de 200 mots, coût superlinéaire : 0,394 ms/mot à 4 000 (1,57 s), exposant ≈1,45 (`_cible_proche` : 199 302 appels à `_est_adverbe_seul`). Déterminisme : mêmes JSON sur même instance, instances fraîches et graines 0/1/42 ; `duree_s` exclue par défaut.
+
+**Contrat** : enveloppe stable (11 clés Annotation, 11 Etiquette, spans valides, 0 span vide, confiance [0,1] pour l'heuristique). Mais un client ne peut pas supposer : syntagmes disjoints, 9 niveaux présents (morphème 41/50, syntagme 48/50), `valeur` = surface (morphème normalisé, document tronqué à 60 : 42/53), `meta`/`cout`/`trace` à schéma fixe, `langue` ISO2 ou ISO3 (`fr` par défaut, `fra` avec profils), `Annotation.source` dans l'enum (ajoute `parallele`/`cascade`), `refus` enum (4 sémantiques), ni l'offset de la cible d'attachement. `couverture()` = max, pas un taux.
+
+**5 correctifs prioritaires** :
+1. **P0-1 Expliciter les alternatives de syntagmes** (132 paires/31 textes). Ne pas dédupliquer en silence : la déduplication simulée donne F1 0,5849→0,6141 mais 222→208 attachements exacts (couverture 0,9289→0,8703).
+2. **P0-2 Réparer les frontières de phrase** (décimaux, dates, URL/emails, abréviations, espace initial) et les types `url`/`emoji` morts (lignes 550, 553-563, 568-587).
+3. **P0-3 Compositions** : propager `refus` et `contexte`, rattraper `RefusNeuronal`, garder `MockNeuronal` (aujourd'hui `"... !!! ???"` rend 4 étiquettes inventées) — lignes 1875-1922, 1276-1315, 1942-1985.
+4. **P0-4 Cascade sélective** : 50/50 appels, 1 676/1 676 sur le gold ; seuil 0,6 au-dessus des confiances déclarées et `couverture()` = max masque les POS ouvertes.
+5. **P0-5 Langue** : code `fr`/`fra` selon le mode, indice `fr` ignoré avec les profils, **39/50** avec profils (30/34 fr, 7/14 en, 2/2 und) contre 50/50 en défaut.
+
+Juste derrière : P1-6 POS nombres/ponctuation (157/963 tokens sans POS) et P1-14 POS ouvertes (0,6234 ; tagger réel documenté 0,9440).
+
+**Limites** : 50 phrases écrites à la main, pas un tirage aléatoire ; pas de gold sémantique libre (on mesure des invariants, pas la justesse) ; gold in-sample ; une seule machine ; comparatif de langue favorable fr/en ; le plantage surrogate est fabriqué. La fiche complète (18 correctifs chiffrés, lignes, risques, contrôles négatifs : mutations 6/6, chunker seul 0 chevauchement, 6/8 charabias reçoivent quand même une langue) est dans les deux fichiers.
+
+### 🤖 Assistant
+
+⏵ L'audit de fiabilité livre un vrai bug produit (surrogate isolé → crash) : je le corrige et j'ajoute les tests
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"texte.encode()\" tools/bloc_linguistique.py | head -3; sed -n '1240,1250p' tools/bloc_linguistique.py", "description": "Voir l'encodage qui plante"}`
+
+  ```
+1011:                              cout={"octets": len(texte.encode()), "duree_s": round(time.perf_counter() - t0, 6)})
+1246:                          cout={"octets": len(texte.encode()), "caracteres": len(texte),
+1314:                          cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
+        trace.append({"etape": "niveaux", "etiquettes": len(etiquettes),
+                      "niveaux": sorted({e.niveau for e in etiquettes}),
+                      "unites_semantiques": len(unites), "fraction": round(fraction, 4)})
+        return Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
+                          trace=trace, source=self.nom, unites_semantiques=unites,
+                          fraction_semantique=round(fraction, 4), contexte=contexte or "",
+                          cout={"octets": len(texte.encode()), "caracteres": len(texte),
+                                "etiquettes": len(etiquettes), "duree_s": round(time.perf_counter() - t0, 6)})
+
+
+def _fusionner(spans: Sequence[Span]) -> list[Span]:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# 1) l'encodage ne doit jamais planter sur un surrogate isolé\nn=t.count('len(texte.encode())')\nt=t.replace('len(texte.encode())', 'len … [1335 caractères tronqués]`
+
+  ```
+encodages 11 | garde non-str
+syntaxe OK
+surrogate :  21 15
+bytes -> non_texte
+int -> non_texte
+list -> non_texte
+NoneType -> non_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\najout = '''\n\nclass TestRobustesse(unittest.TestCase):\n    \"\"\"Les entrées hostiles ne font pas planter le produit (audit de fiabil … [979 caractères tronqués]`
+
+  ```
+2 tests ajoutés
+----------------------------------------------------------------------
+Ran 6 tests in 1.410s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Test\\|if __name__\\|def main\" tools/tests/test_produit.py | head -8; tail -6 tools/tests/test_produit.py", "description": "Voir la structure du test"}`
+
+  ```
+38:class TestProduit(unittest.TestCase):
+109:if __name__ == "__main__":
+112:class TestRobustesse(unittest.TestCase):
+        import tools.bloc_linguistique as bl
+        h = bl.Heuristique()
+        for valeur in (b"octets", 42, ["liste"], None):
+            a = h.analyser(valeur, "fr")
+            self.assertEqual(a.refus, "non_texte", type(valeur).__name__)
+            self.assertEqual(a.etiquettes, [])
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\n# extraire la classe ajoutée (après le if __name__)\ni = t.find(\"class TestRobustesse\")\nclasse = t[i:].rstrip() + \"\\n\"\navant … [523 caractères tronqués]`
+
+  ```
+classe replacée
+----------------------------------------------------------------------
+Ran 6 tests in 1.385s
+
+OK
+38:class TestProduit(unittest.TestCase):
+109:if __name__ == "__main__":
+113:class TestRobustesse(unittest.TestCase):
+131:if __name__ == "__main__":
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '100,135p' tools/tests/test_produit.py", "description": "Lire la fin du fichier"}`
+
+  ```
+sans_commande = drave()
+        langue_inconnue = drave("analyser", "Le chat dort.", "--langue", "de")
+        self.assertEqual(
+            (2, 2),
+            (sans_commande.returncode, langue_inconnue.returncode),
+            detail(sans_commande) + detail(langue_inconnue),
+        )
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+
+
+class TestRobustesse(unittest.TestCase):
+    """Les entrées hostiles ne font pas planter le produit (audit de fiabilité P0)."""
+
+    def test_surrogate_isole(self):
+        import tools.bloc_linguistique as bl
+        a = bl.Heuristique().analyser("Le chat \ud800 dort.", "fr")
+        self.assertEqual(a.refus, "")
+        self.assertGreater(len(a.etiquettes), 3)
+
+    def test_entrees_non_textuelles(self):
+        import tools.bloc_linguistique as bl
+        h = bl.Heuristique()
+        for valeur in (b"octets", 42, ["liste"], None):
+            a = h.analyser(valeur, "fr")
+            self.assertEqual(a.refus, "non_texte", type(valeur).__name__)
+            self.assertEqual(a.etiquettes, [])
+
+
+if __name__ == "__main__":
+    unittest.main()
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 14114f3d-ae0d-416e-ad8e-4d4eaa04c36c finished and will do no further work unless you send it more.
+Its closing message:
+Audit terminé. J'ai écrit **uniquement deux fichiers neufs**, sans modifier d'existant et sans commit :
+
+- [`reports/rapport-produit-bloc-l.md`](reports/rapport-produit-bloc-l.md)
+- [`reports/pensee-produit-bloc-l.json`](reports/pensee-produit-bloc-l.json) — contient les 50 textes, les 25 cas limites, les 18 correctifs et tous les chiffres.
+
+## Plantages
+
+- **0 plantage sur les 50 phrases libres**, **0 refus**, **0 sortie vide**, **0 span hors texte**, **0 cible absente**.
+- **34/50 textes** ont au moins une anomalie (**149** au total) :
+  - **132 paires de syntagmes qui se chevauchent**, dans **31/50 textes**, soit **188/362 étiquettes (51,9 %)** ; le chunker seul n'en produit aucune, c'est le générateur S + l'union ;
+  - 1 chevauchement de phrases (f10), dû à l'extension d'abréviation `M.` ;
+  - 8 morphèmes normalisés (`tion` vs `TION`), 4 actes `exclamation` absents des candidats, 4 listes de candidats avec doublons.
+- **Cas limites** : **1 plantage textuel** — un surrogate isolé, `UnicodeEncodeError` à `len(texte.encode())` (ligne 1246) — plus **3 entrées non-str** (`bytes`, `int`, `list` → `AttributeError`). `None` devient silencieusement `refus = "vide"`.
+- Qualité libre : 365 `NOUN` pour 32 `VERB` ; « arrose », « rentre », « prépare », « warm » → `NOUN`. Les URL, décimaux et abréviations cassent les frontières de phrase ; les types `url` et `emoji` ne sortent **jamais** (0/963).
+
+## Temps par phrase
+
+| mode | 10 mots | 50 mots | 200 mots |
+|---|---:|---:|---:|
+| heuristique | **1,08 ms** | **4,60 ms** | **19,43 ms** |
+| parallèle | 1,51 ms | 6,18 ms | 27,22 ms |
+| cascade | 1,51 ms | 6,25 ms | 29,64 ms |
+
+- Débit : **923 / 218 / 51,5 phrases/s** ; **0,09–0,11 ms/mot**.
+- Mémoire : pic **540,6 Kio** pour 200 mots ; RSS **30,7 Mio**, **delta 0** après 100 analyses ; démarrage à froid **99–113 ms**.
+- Au-delà de 200 mots, coût superlinéaire : **0,394 ms/mot à 4 000 mots** (1,57 s, exposant ≈ 1,45), à cause de `_cible_proche` (199 302 appels à `_est_adverbe_seul`).
+- Déterminisme : **mêmes JSON** sur même instance, instances fraîches et graines de hash **0/1/42** ; seule `duree_s` varie, et elle est exclue par défaut.
+
+## Contrat
+
+**Stable** : 11 clés pour `Annotation`, 11 pour `Etiquette`, spans valides, aucun span vide, `confiance ∈ [0,1]` pour l'heuristique, unités triées/disjointes, fraction recalculable.
+
+**Peut être vide/absent** : `etiquettes`, `unites_semantiques`, `fraction_semantique=0`, `refus`, `candidats`, `meta`, `contexte`, `langue="und"`, `script="Zyyy"` ; **morphème absent 9/50**, **syntagme absent 2/50**.
+
+**Un client ne peut pas supposer** : syntagmes disjoints, neuf niveaux présents, `valeur` = surface (morphème normalisé, document tronqué à 60 : 42/53), `meta`/`cout`/`trace` à schéma fixe, `langue` ISO2 ou ISO3 (`fr` par défaut, `fra` avec profils), `Annotation.source` dans l'enum (ajoute `parallele`/`cascade`), `refus` enum (4 sémantiques), ni l'offset de la cible d'attachement. `couverture()` est un **max de confiance**, pas un taux.
+
+## 5 correctifs prioritaires
+
+1. **P0-1 — Expliciter les alternatives de syntagmes** : 132 paires/31 textes. Ne pas dédupliquer en silence : la déduplication simulée donne F1 0,5849→0,6141 mais **222→208 attachements exacts** (couverture 0,9289→0,8703).
+2. **P0-2 — Réparer les frontières de phrase** (décimaux, dates, URL/emails, abréviations, espace initial) **et les types `url`/`emoji` morts** : une URL crée 3–4 phrases, `12.5` coupe une phrase en deux, `M./Dr./etc.` duplique la phrase.
+3. **P0-3 — Compositions** : propager `refus` et `contexte`, rattraper `RefusNeuronal`, garder `MockNeuronal` ; aujourd'hui `"... !!! ???"` rend **4 étiquettes inventées**.
+4. **P0-4 — Cascade sélective** : **50/50** appels, **1 676/1 676** sur le gold ; seuil 0,6 au-dessus des confiances déclarées et `couverture()` = max masque les POS ouvertes.
+5. **P0-5 — Langue** : format `fr`/`fra` selon le mode, indice `fr` ignoré avec les profils, **39/50** avec profils contre **50/50** en défaut.
+
+Juste derrière : **POS des nombres/ponctuation** (157/963 tokens sans POS) et **POS ouvertes** (0,6234 ; tagger réel documenté 0,9440).
+
+## Point d'état important
+
+HEAD a bougé pendant l'audit (`fa1b0c6e` → `c6904284`) ; le module `bloc_linguistique.py` est **inchangé**. Le rouge `cascade_pos` a été **éteint par un plancher 0,70** dans `7f73c17f`, pas par un correctif : à HEAD, `ok=true`, mais la cascade reste à **0,7465 < 0,7581** et perd toujours 14 spans d'attachement. La fiche distingue explicitement les deux états.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''if __name__ == \"__main__\":\n    unittest.main(verbosity=2)\n\n\nclass TestRobustesse''','''class TestRobustesse''')\np … [291 caractères tronqués]`
+
+  ```
+bloc if __name__ intermédiaire retiré
+Ran 8 tests in 1.363s
+
+FAILED (errors=2)
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_produit.py 2>&1 | grep -A 6 \"ERROR\\|Error\" | head -20", "description": "Voir les erreurs du test"}`
+
+  ```
+ERROR: test_entrees_non_textuelles (__main__.TestRobustesse.test_entrees_non_textuelles)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_produit.py", line 119, in test_entrees_non_textuelles
+    import tools.bloc_linguistique as bl
+ModuleNotFoundError: No module named 'tools'
+
+======================================================================
+ERROR: test_surrogate_isole (__main__.TestRobustesse.test_surrogate_isole)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_produit.py", line 113, in test_surrogate_isole
+    import tools.bloc_linguistique as bl
+ModuleNotFoundError: No module named 'tools'
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.388s
+
+FAILED (errors=2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''    def test_surrogate_isole(self):\n        import tools.bloc_linguistique as bl''','''    def test_surrogate_isole(sel … [562 caractères tronqués]`
+
+  ```
+13:import sys
+16:RACINE = pathlib.Path(__file__).resolve().parents[2]
+113:        sys.path.insert(0, str(RACINE))
+120:        sys.path.insert(0, str(RACINE))
+Ran 8 tests in 1.459s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Les 8 tests passent ; je fige la correction de robustesse et l'audit produit, puis je pousse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-robustesse-produit.md <<'MD'\n# B13 — la robustesse du produit : un surrogate ne plante plus, une entrée non-str est refusée\n\n> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** :  … [5307 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; index 677 ; **robustesse produit** (surrogate, non-str) ; audit A24.\", \" ; index 677 ; robustesse produit ; audit A24. … [1226 caractères tronqués]`

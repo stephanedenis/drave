@@ -1,0 +1,3644 @@
+{
+ "rapport": "produit-bloc-l",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+ "date": "2026-11-06",
+ "objet": "Audit de fiabilité produit du bloc linguistique : robustesse hors gold (50 phrases libres), performance, stabilité du contrat, cas limites, compositions et liste de correctifs chiffrés.",
+ "verdict": "⚠️ utilisable en surface (graphème, mot, POS fermées, phrase, document) sur du français/anglais propre ; fragile en structure (syntagmes qui se chevauchent, frontières de phrase, compositions, langue). 0 plantage sur 50 phrases, mais 34/50 avec au moins une anomalie de contrat et 1 plantage sur 25 cas limites.",
+ "dispositif": {
+  "gold": "evaluer_gold.charger() + evaluer_bloc ; gold_split.dev/test ; module tools/bloc_linguistique.py au commit fa1b0c6e (module inchangé de fa1b0c6e à c6904284).",
+  "head_au_moment_de_la_redaction": "c6904284",
+  "dernier_head_verifie": "c6904284",
+  "module_inchange_fa1b0c6e_head": true,
+  "evaluateur_modifie": "7f73c17f : cascade_pos >= 0,70 au lieu de cascade >= heuristique",
+  "banc_50": "50 phrases écrites à la main pour l'audit (29 fr, 14 en, 7 bruit/scripts), 819 mots ; textes dans ce JSON.",
+  "harnais": "scripts locaux non committés dans /tmp/audit_produit_bl (phrases.py, audit.py, performance_final.py, extra.py) ; aucun fichier existant modifié, aucun commit.",
+  "machine": "Intel Xeon E5-2687W v3 @ 3,10 GHz, Python 3.13.16, Linux.",
+  "porte": "bash tools/porte-bloc-linguistique.sh : verte (16 tests, autotest UDHR 0,9687, profils permutés 0,0022)."
+ },
+ "gold": {
+  "phrases": 612,
+  "cibles": 239,
+  "tokens": 3179,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "langues": {
+   "fr": 402,
+   "en": 210
+  },
+  "exact": 222,
+  "labels": 222,
+  "exact_taux": 1.0,
+  "couverture": 0.9289,
+  "spans_perdus": 17,
+  "f1": 0.5849,
+  "precision": 0.6292,
+  "rappel": 0.5464,
+  "tete": 0.7336,
+  "pos": 0.7581,
+  "pos_ferme": 0.9004,
+  "pos_ouvert": 0.6234,
+  "gele_602": {
+   "f1": 0.5893,
+   "precision": 0.6319,
+   "rappel": 0.5522,
+   "tete": 0.7392,
+   "pos": 0.7603,
+   "exact": 222,
+   "couverture": 0.9289,
+   "note": "la fiche v12 publie le gelé pour F1/tête ; l'exact et la couverture sont identiques au vivant"
+  },
+  "pragmatique": {
+   "acte": 0.9967,
+   "negation": 0.9771,
+   "modalite": 0.9886,
+   "double_sens": 0.9444
+  },
+  "fraction_semantique": 0.5537,
+  "dev": {
+   "phrases": 422,
+   "cibles": 163,
+   "exact": 153,
+   "labels": 153,
+   "couverture": 0.9387,
+   "spans": 10,
+   "pos": 0.7547,
+   "f1": 0.582
+  },
+  "test": {
+   "phrases": 190,
+   "cibles": 76,
+   "exact": 69,
+   "labels": 69,
+   "couverture": 0.9079,
+   "spans": 7,
+   "pos": 0.7656,
+   "f1": 0.5914
+  },
+  "modes": {
+   "heuristique": {
+    "pos": 0.7581,
+    "pos_ferme": 0.9004,
+    "pos_ouvert": 0.6234,
+    "f1": 0.5849,
+    "precision": 0.6292,
+    "rappel": 0.5464,
+    "tete": 0.7336,
+    "couverture": 0.9289,
+    "labels": 222,
+    "exact": 222,
+    "exact_taux_span": 1.0
+   },
+   "mock_neuronal": {
+    "pos": 0.3454,
+    "pos_ferme": 0.0757,
+    "pos_ouvert": 0.6007,
+    "f1": 0.5763,
+    "precision": 0.72,
+    "rappel": 0.4804,
+    "tete": 0.7418,
+    "couverture": 0.8326,
+    "labels": 199,
+    "exact": 0,
+    "exact_taux_span": 0.0
+   },
+   "parallele": {
+    "pos": 0.7465,
+    "pos_ferme": 0.9004,
+    "pos_ouvert": 0.6007,
+    "f1": 0.6141,
+    "precision": 0.7283,
+    "rappel": 0.5309,
+    "tete": 0.7432,
+    "couverture": 0.8703,
+    "labels": 208,
+    "exact": 208,
+    "exact_taux_span": 1.0
+   },
+   "cascade": {
+    "pos": 0.7465,
+    "pos_ferme": 0.9004,
+    "pos_ouvert": 0.6007,
+    "f1": 0.6141,
+    "precision": 0.7283,
+    "rappel": 0.5309,
+    "tete": 0.7432,
+    "couverture": 0.8703,
+    "labels": 208,
+    "exact": 208,
+    "exact_taux_span": 1.0
+   }
+  },
+  "cascade_appels": {
+   "total": 1676,
+   "evaluations": 1676,
+   "taux": 1.0,
+   "all": 612,
+   "reel": 452,
+   "hand": 20,
+   "reel_new": 432,
+   "synthetique": 160
+  },
+  "rouge_fa1b0c6e": "cascade_pos",
+  "verdict_cascade_pos_fa1b0c6e": false,
+  "ok_fa1b0c6e": false,
+  "verdict_cascade_pos_head": true,
+  "ok_head": true,
+  "note_verdict": "Depuis 7f73c17f, evaluer_gold remplace la comparaison par un plancher 0,70 : cascade_pos passe à vrai et ok à vrai, sans changement du module ni des valeurs. La baisse de POS de la composition (0,7465 contre 0,7581) reste mesurée.",
+  "lecture": "La fusion mélange le POS du mock (0,3454) : cascade/parallele ont 0,7465 de POS, 0,5849→0,6141 de F1, 208/208 exacts et 0,8703 de couverture — exactement les chiffres de la déduplication simulée. Le vert de cascade_pos à HEAD est un choix de seuil, pas un correctif."
+ },
+ "banc_50": {
+  "phrases": 50,
+  "mots": 819,
+  "etiquettes": 4320,
+  "attachements": {
+   "total": 265,
+   "cibles_fermees": 16,
+   "cibles_fermees_detail": {
+    "au": 3,
+    "was": 3,
+    "lui": 2,
+    "pas": 2,
+    "have": 2,
+    "entre": 2,
+    "ne": 1,
+    "Tu": 1
+   },
+   "cible_absente": 0,
+   "cible_non_token": 0,
+   "segment_mismatch": 0,
+   "cible_ambigue": 3,
+   "offset_cible": false
+  },
+  "categories": {
+   "fr": 29,
+   "en": 14,
+   "url+email": 1,
+   "sms": 1,
+   "sans-ponctuation-finale": 1,
+   "markdown": 1,
+   "cyrillique": 1,
+   "sinogrammes": 1,
+   "emoji": 1
+  },
+  "langues_detectees": {
+   "fr": 34,
+   "en": 14,
+   "und": 2
+  },
+  "scripts": {
+   "Latn": 48,
+   "Cyrl": 1,
+   "Hani": 1
+  },
+  "crashes": 0,
+  "refus": 0,
+  "sorties_vides": 0,
+  "sans_anomalie": 16,
+  "avec_anomalie": 34,
+  "anomalies_total": 149,
+  "anomalies": {
+   "chevauchement_syntagme": {
+    "n": 132,
+    "textes": 31,
+    "labels_impliques": 188,
+    "labels_syntagme": 362,
+    "part_labels": 0.5193,
+    "inclusions": 113,
+    "partiels": 19,
+    "exemple": "f02 : GP 29-51 et GP 29-60 ; GV 80-96 et GV 90-96"
+   },
+   "chevauchement_phrase": {
+    "n": 1,
+    "textes": [
+     "f10"
+    ],
+    "detail": "spans 0-104 et 2-104 : l'extension d'abréviation (M.) ne fait pas avancer l'itérateur"
+   },
+   "valeur_hors_span": {
+    "n": 8,
+    "textes": [
+     "f11",
+     "f14",
+     "f16",
+     "x46"
+    ],
+    "detail": "morphème normalisé : tion vs TION, pro vs PRO"
+   },
+   "acte_hors_candidats": {
+    "n": 4,
+    "textes": [
+     "f07",
+     "f26",
+     "x44",
+     "x49"
+    ],
+    "detail": "acte=exclamation absent de ['assertion','question','ordre']"
+   },
+   "candidat_doublon": {
+    "n": 4,
+    "textes": [
+     "f09",
+     "f23",
+     "e35"
+    ],
+    "detail": "savent, savent / Tu, Tu / demande, demande"
+   },
+   "zero": [
+    "span_hors_texte",
+    "span_vide",
+    "cible_absente",
+    "cible_non_token",
+    "attachement_segment_mismatch",
+    "unite_hors_texte",
+    "unite_chevauchement",
+    "fraction_incoherente",
+    "confiance_hors_bornes",
+    "source_inconnue",
+    "niveau_inconnu",
+    "type_vide",
+    "candidat_vide",
+    "doublon"
+   ]
+  },
+  "niveaux": {
+   "toujours": [
+    "graphème",
+    "mot",
+    "pos",
+    "phrase",
+    "pragmatique",
+    "discours",
+    "document"
+   ],
+   "morpheme_absent": 9,
+   "syntagme_absent": [
+    "x47",
+    "x48"
+   ]
+  },
+  "fraction": {
+   "min": 0.3529,
+   "mediane": 0.5493,
+   "max": 0.875,
+   "doc": "0,51–0,76 sur 5 échantillons : la plage ne tient pas sur 50 phrases libres"
+  },
+  "pos": {
+   "labels": 806,
+   "tokens": 963,
+   "sans_pos": 157,
+   "ponctuation": 137,
+   "nombres": 20,
+   "distribution": {
+    "NOUN": 365,
+    "VERB": 32,
+    "DET": 122,
+    "PREP": 103,
+    "PRON": 65,
+    "CONJ": 32,
+    "ADV": 40,
+    "AUX": 28,
+    "ADJ": 13,
+    "NUM": 4,
+    "MOT": 2
+   },
+   "exemples": [
+    "f02 : arrose, rentre, prépare → NOUN",
+    "e29 : warm → NOUN"
+   ]
+  },
+  "phrases_stats": {
+   "labels": 60,
+   "textes_multi": 6,
+   "commencent_par_espace": 6,
+   "chevauchements": 1,
+   "exemples": [
+    {
+     "id": "f10",
+     "a": [
+      0,
+      104
+     ],
+     "b": [
+      2,
+      104
+     ]
+    }
+   ]
+  },
+  "document": {
+   "labels": 53,
+   "tronques": 42,
+   "titres": 2,
+   "titres_faux_50": [
+    {
+     "id": "x48",
+     "valeur": "今天天气很好，我们去公园散步吧。"
+    }
+   ],
+   "titres_faux_cas_limites": [
+    {
+     "cas": "chiffres-seuls",
+     "valeur": "1234567890"
+    },
+    {
+     "cas": "arabe",
+     "valeur": "مرحبا بالعالم، كيف حالك اليوم؟"
+    },
+    {
+     "cas": "hébreu",
+     "valeur": "שלום עולם, מה שלומך היום?"
+    },
+    {
+     "cas": "japonais",
+     "valeur": "今日はいい天気ですね。散歩に行きましょう。"
+    }
+   ]
+  },
+  "graphème": {
+   "textes_a_100": 49,
+   "x46_taux": 0.9514,
+   "x46_manquants": 7,
+   "cause": "newlines (catégorie Cc) non couvertes"
+  },
+  "url_emoji": {
+   "url_tokens": [
+    [
+     0,
+     5,
+     "https",
+     "mot"
+    ],
+    [
+     5,
+     6,
+     ":",
+     "ponctuation"
+    ],
+    [
+     6,
+     7,
+     "/",
+     "ponctuation"
+    ],
+    [
+     7,
+     8,
+     "/",
+     "ponctuation"
+    ],
+    [
+     8,
+     15,
+     "example",
+     "mot"
+    ],
+    [
+     15,
+     16,
+     ".",
+     "ponctuation"
+    ],
+    [
+     16,
+     19,
+     "com",
+     "mot"
+    ],
+    [
+     19,
+     20,
+     "/",
+     "ponctuation"
+    ],
+    [
+     20,
+     21,
+     "a",
+     "mot"
+    ],
+    [
+     21,
+     22,
+     ".",
+     "ponctuation"
+    ],
+    [
+     22,
+     25,
+     "pdf",
+     "mot"
+    ]
+   ],
+   "url_types": [
+    "mot",
+    "ponctuation"
+   ],
+   "emoji_tokens": [
+    [
+     0,
+     5,
+     "Merci",
+     "mot"
+    ],
+    [
+     6,
+     7,
+     "😊",
+     "ponctuation"
+    ],
+    [
+     8,
+     9,
+     "!",
+     "ponctuation"
+    ]
+   ],
+   "emoji_types": [
+    "mot",
+    "ponctuation"
+   ]
+  },
+  "langue": {
+   "defaut": "50/50",
+   "profils_apres_mapping": "39/50",
+   "profils_egalite_stricte": "2/50",
+   "detail": [
+    {
+     "id": "f01",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "hns",
+     "avec_profils_mappe": "hns"
+    },
+    {
+     "id": "f02",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f03",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "f04",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f05",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f06",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f07",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "oci",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f08",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f09",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f10",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f11",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f12",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f13",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f14",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f15",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f16",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f17",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f18",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f19",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f20",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f21",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f22",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f23",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "f24",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f25",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f26",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f27",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "f28",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "e29",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "sco",
+     "avec_profils_mappe": "sco"
+    },
+    {
+     "id": "e30",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "eng",
+     "avec_profils_mappe": "en"
+    },
+    {
+     "id": "e31",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "eng",
+     "avec_profils_mappe": "en"
+    },
+    {
+     "id": "e32",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "e33",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "eng",
+     "avec_profils_mappe": "en"
+    },
+    {
+     "id": "e34",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "eng",
+     "avec_profils_mappe": "en"
+    },
+    {
+     "id": "e35",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "sco",
+     "avec_profils_mappe": "sco"
+    },
+    {
+     "id": "e36",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "e37",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "pcm",
+     "avec_profils_mappe": "pcm"
+    },
+    {
+     "id": "e38",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "eng",
+     "avec_profils_mappe": "en"
+    },
+    {
+     "id": "e39",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "eng",
+     "avec_profils_mappe": "en"
+    },
+    {
+     "id": "e40",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "e41",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "eng",
+     "avec_profils_mappe": "en"
+    },
+    {
+     "id": "e42",
+     "attendu": "en",
+     "sans_profils": "en",
+     "avec_profils": "sco",
+     "avec_profils_mappe": "sco"
+    },
+    {
+     "id": "x43",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "x44",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "x45",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "x46",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "x47",
+     "attendu": "und",
+     "sans_profils": "und",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "x48",
+     "attendu": "und",
+     "sans_profils": "und",
+     "avec_profils": "und",
+     "avec_profils_mappe": "und"
+    },
+    {
+     "id": "x49",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "oci",
+     "avec_profils_mappe": "fr"
+    },
+    {
+     "id": "x50",
+     "attendu": "fr",
+     "sans_profils": "fr",
+     "avec_profils": "fra",
+     "avec_profils_mappe": "fr"
+    }
+   ]
+  },
+  "double_sens": {
+   "n": 9,
+   "declencheurs": {
+    "livre": 2,
+    "temps": 2,
+    "point": 2,
+    "note": 1,
+    "ou": 1,
+    "guillemets": 1
+   }
+  },
+  "detail": [
+   {
+    "id": "f01",
+    "cat": "fr/courte",
+    "texte": "Le chat dort sur le canapé.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 6,
+    "etiquettes": 32,
+    "niveaux": {
+     "graphème": 12,
+     "mot": 7,
+     "pos": 6,
+     "syntagme": 3,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1
+    },
+    "niveaux_absents": [
+     "morphème"
+    ],
+    "fraction": 0.5185,
+    "attachements": 3,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "f02",
+    "cat": "fr/longue",
+    "texte": "La voisine arrose les fleurs du jardin chaque matin avant de partir au travail, puis elle rentre vers dix-huit heures et prépare le dîner pour ses deux enfants.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 28,
+    "etiquettes": 140,
+    "niveaux": {
+     "graphème": 59,
+     "mot": 30,
+     "pos": 28,
+     "syntagme": 14,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 4
+    },
+    "niveaux_absents": [],
+    "fraction": 0.575,
+    "attachements": 11,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 9
+   },
+   {
+    "id": "f03",
+    "cat": "fr/relative+coordination",
+    "texte": "Le livre que tu m'as prêté hier soir était passionnant, même si la fin m'a un peu déçu.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 18,
+    "etiquettes": 99,
+    "niveaux": {
+     "graphème": 41,
+     "mot": 22,
+     "pos": 20,
+     "syntagme": 10,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 2
+    },
+    "niveaux_absents": [
+     "morphème"
+    ],
+    "fraction": 0.4943,
+    "attachements": 6,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 6
+   },
+   {
+    "id": "f04",
+    "cat": "fr/temporelle",
+    "texte": "Quand la pluie tombe depuis trois jours, les rues du village se transforment en ruisseaux boueux et les enfants rentrent trempés.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 21,
+    "etiquettes": 103,
+    "niveaux": {
+     "graphème": 43,
+     "mot": 23,
+     "pos": 21,
+     "syntagme": 7,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 4
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5814,
+    "attachements": 6,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 4
+   },
+   {
+    "id": "f05",
+    "cat": "fr/discours-direct",
+    "texte": "« Je ne sais pas », répondit-elle en haussant les épaules ; son frère, lui, prétendait le contraire.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 18,
+    "etiquettes": 97,
+    "niveaux": {
+     "graphème": 40,
+     "mot": 22,
+     "discours": 2,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 2,
+     "pos": 15,
+     "syntagme": 9,
+     "morphème": 4
+    },
+    "niveaux_absents": [],
+    "fraction": 0.56,
+    "attachements": 7,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "f06",
+    "cat": "fr/question",
+    "texte": "Peut-être que nous devrions reporter la réunion à demain, non ?",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 11,
+    "etiquettes": 64,
+    "niveaux": {
+     "graphème": 24,
+     "mot": 12,
+     "pos": 10,
+     "syntagme": 8,
+     "discours": 2,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1,
+     "morphème": 4
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4127,
+    "attachements": 5,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 5
+   },
+   {
+    "id": "f07",
+    "cat": "fr/impérative+négation",
+    "texte": "Ferme la porte, s'il te plaît, et n'oublie pas d'éteindre la lumière !",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 13,
+    "etiquettes": 77,
+    "niveaux": {
+     "graphème": 33,
+     "mot": 18,
+     "pos": 15,
+     "syntagme": 6,
+     "discours": 1,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1
+    },
+    "niveaux_absents": [
+     "morphème"
+    ],
+    "fraction": 0.5429,
+    "attachements": 5,
+    "anomalies": [
+     "acte_hors_candidats",
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 2
+   },
+   {
+    "id": "f08",
+    "cat": "fr/négation-complexe",
+    "texte": "Il n'a jamais vraiment compris pourquoi elle était partie sans laisser d'adresse…",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 12,
+    "etiquettes": 72,
+    "niveaux": {
+     "graphème": 28,
+     "mot": 15,
+     "pos": 14,
+     "syntagme": 7,
+     "discours": 1,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1,
+     "morphème": 3
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5309,
+    "attachements": 3,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 5
+   },
+   {
+    "id": "f09",
+    "cat": "fr/relative-longue",
+    "texte": "Les enfants qui jouent dans la cour de l'école ne savent pas encore que la cloche va sonner dans cinq minutes.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 21,
+    "etiquettes": 104,
+    "niveaux": {
+     "graphème": 44,
+     "mot": 23,
+     "pos": 22,
+     "syntagme": 8,
+     "discours": 2,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1,
+     "morphème": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4455,
+    "attachements": 6,
+    "anomalies": [
+     "candidat_doublon",
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 7
+   },
+   {
+    "id": "f10",
+    "cat": "fr/abréviations",
+    "texte": "M. Dupont, le directeur de l'usine, a annoncé hier qu'il prendrait sa retraite à la fin de l'année, etc.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 19,
+    "etiquettes": 114,
+    "niveaux": {
+     "graphème": 48,
+     "mot": 26,
+     "pos": 21,
+     "syntagme": 11,
+     "discours": 1,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 2,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5385,
+    "attachements": 8,
+    "anomalies": [
+     "chevauchement_phrase",
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 6
+   },
+   {
+    "id": "f11",
+    "cat": "fr/majuscules",
+    "texte": "ATTENTION : CE PRODUIT CONTIENT DES ALLERGÈNES ; CONSULTEZ UN MÉDECIN EN CAS DE DOUTE.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 77,
+    "niveaux": {
+     "graphème": 30,
+     "mot": 16,
+     "pos": 13,
+     "syntagme": 8,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 5
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6744,
+    "attachements": 7,
+    "anomalies": [
+     "chevauchement_syntagme",
+     "valeur_hors_span"
+    ],
+    "anomalies_n": 8
+   },
+   {
+    "id": "f12",
+    "cat": "fr/incise-tirets",
+    "texte": "Le rapport — que personne n'avait lu — fut pourtant cité dans toutes les réunions de la semaine.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 18,
+    "etiquettes": 86,
+    "niveaux": {
+     "graphème": 38,
+     "mot": 20,
+     "pos": 17,
+     "syntagme": 4,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5521,
+    "attachements": 2,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 2
+   },
+   {
+    "id": "f13",
+    "cat": "fr/plus-que-parfait",
+    "texte": "Nous étions partis depuis une heure lorsque l'orage a éclaté au-dessus de la vallée.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 14,
+    "etiquettes": 75,
+    "niveaux": {
+     "graphème": 32,
+     "mot": 16,
+     "pos": 15,
+     "syntagme": 7,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4048,
+    "attachements": 4,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 5
+   },
+   {
+    "id": "f14",
+    "cat": "fr/question-inversion",
+    "texte": "Combien de temps faudra-t-il encore attendre avant que la situation ne se débloque ?",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 14,
+    "etiquettes": 74,
+    "niveaux": {
+     "morphème": 3,
+     "graphème": 31,
+     "mot": 14,
+     "pos": 13,
+     "syntagme": 7,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5714,
+    "attachements": 5,
+    "anomalies": [
+     "chevauchement_syntagme",
+     "valeur_hors_span"
+    ],
+    "anomalies_n": 5
+   },
+   {
+    "id": "f15",
+    "cat": "fr/nombres",
+    "texte": "Les prix ont augmenté de 12,5 % entre janvier et mars 2024, soit 3 points de plus que prévu.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 19,
+    "etiquettes": 95,
+    "niveaux": {
+     "graphème": 41,
+     "mot": 23,
+     "pos": 15,
+     "syntagme": 9,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 2,
+     "morphème": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.413,
+    "attachements": 8,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 2
+   },
+   {
+    "id": "f16",
+    "cat": "fr/impérative+heure",
+    "texte": "Rendez-vous demain à 8 h 30 devant la gare, et prenez vos billets à l'avance.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 83,
+    "niveaux": {
+     "morphème": 3,
+     "graphème": 35,
+     "mot": 18,
+     "pos": 14,
+     "syntagme": 9,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4545,
+    "attachements": 7,
+    "anomalies": [
+     "chevauchement_syntagme",
+     "valeur_hors_span"
+    ],
+    "anomalies_n": 4
+   },
+   {
+    "id": "f17",
+    "cat": "fr/jugement",
+    "texte": "Ce film est vraiment nul, mais la musique est géniale ; je le reverrais pour elle seule.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 17,
+    "etiquettes": 86,
+    "niveaux": {
+     "graphème": 35,
+     "mot": 19,
+     "pos": 16,
+     "syntagme": 9,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4886,
+    "attachements": 8,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "f18",
+    "cat": "fr/relative+apposition",
+    "texte": "L'homme qui a construit cette maison était un ami de mon grand-père, un charpentier réputé du village.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 17,
+    "etiquettes": 92,
+    "niveaux": {
+     "graphème": 39,
+     "mot": 20,
+     "pos": 18,
+     "syntagme": 8,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 3
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5588,
+    "attachements": 7,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 2
+   },
+   {
+    "id": "f19",
+    "cat": "fr/conditionnelle",
+    "texte": "Si tu veux réussir, il faut travailler régulièrement, accepter les critiques et ne jamais abandonner.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 88,
+    "niveaux": {
+     "graphème": 32,
+     "mot": 18,
+     "pos": 15,
+     "syntagme": 10,
+     "discours": 1,
+     "document": 1,
+     "phrase": 3,
+     "pragmatique": 1,
+     "morphème": 7
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6436,
+    "attachements": 6,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "f20",
+    "cat": "fr/question-pourquoi",
+    "texte": "Pourquoi les feuilles changent-elles de couleur en automne ?",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 9,
+    "etiquettes": 48,
+    "niveaux": {
+     "graphème": 19,
+     "mot": 9,
+     "pos": 8,
+     "syntagme": 5,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.7333,
+    "attachements": 4,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 2
+   },
+   {
+    "id": "f21",
+    "cat": "fr/lieu",
+    "texte": "La réunion aura lieu dans la salle 204, au deuxième étage, juste après la pause déjeuner.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 16,
+    "etiquettes": 83,
+    "niveaux": {
+     "graphème": 34,
+     "mot": 19,
+     "pos": 15,
+     "syntagme": 8,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 3
+    },
+    "niveaux_absents": [],
+    "fraction": 0.573,
+    "attachements": 6,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "f22",
+    "cat": "fr/enchâssement",
+    "texte": "Je pense qu'il pleuvra demain, mais je ne suis pas certain que cela change nos plans.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 16,
+    "etiquettes": 82,
+    "niveaux": {
+     "graphème": 35,
+     "mot": 18,
+     "pos": 16,
+     "syntagme": 7,
+     "discours": 2,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1
+    },
+    "niveaux_absents": [
+     "morphème"
+    ],
+    "fraction": 0.3529,
+    "attachements": 3,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 4
+   },
+   {
+    "id": "f23",
+    "cat": "fr/question-indirecte",
+    "texte": "Tu as vu le mail de Sophie ? Elle demande si on peut décaler la livraison de vendredi.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 18,
+    "etiquettes": 93,
+    "niveaux": {
+     "graphème": 36,
+     "mot": 19,
+     "pos": 17,
+     "syntagme": 12,
+     "phrase": 3,
+     "pragmatique": 2,
+     "discours": 1,
+     "document": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5465,
+    "attachements": 8,
+    "anomalies": [
+     "candidat_doublon",
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 11
+   },
+   {
+    "id": "f24",
+    "cat": "fr/parentheses",
+    "texte": "Le musée (ouvert tous les jours sauf le lundi) présente une collection d'objets rares et précieux.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 16,
+    "etiquettes": 90,
+    "niveaux": {
+     "graphème": 36,
+     "mot": 20,
+     "pos": 17,
+     "syntagme": 8,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 5
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6735,
+    "attachements": 8,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 2
+   },
+   {
+    "id": "f25",
+    "cat": "fr/concession",
+    "texte": "Les résultats préliminaires suggèrent une amélioration, bien que la marge d'erreur reste importante.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 13,
+    "etiquettes": 74,
+    "niveaux": {
+     "graphème": 29,
+     "mot": 16,
+     "pos": 14,
+     "syntagme": 5,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 5
+    },
+    "niveaux_absents": [],
+    "fraction": 0.69,
+    "attachements": 3,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "f26",
+    "cat": "fr/impérative-familière",
+    "texte": "Arrête de tourner autour du pot et dis-nous la vérité, une bonne fois pour toutes !",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 16,
+    "etiquettes": 82,
+    "niveaux": {
+     "graphème": 34,
+     "mot": 17,
+     "pos": 15,
+     "syntagme": 8,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 3
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6145,
+    "attachements": 7,
+    "anomalies": [
+     "acte_hors_candidats",
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "f27",
+    "cat": "fr/dès-que",
+    "texte": "Le chat de la voisine qui dort sur le toit se réveille dès que le chien aboie dans la rue.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 20,
+    "etiquettes": 95,
+    "niveaux": {
+     "graphème": 40,
+     "mot": 21,
+     "pos": 20,
+     "syntagme": 8,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4778,
+    "attachements": 7,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 5
+   },
+   {
+    "id": "f28",
+    "cat": "fr/participe-passé",
+    "texte": "Après avoir longuement hésité, elle a finalement accepté de signer le contrat.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 12,
+    "etiquettes": 67,
+    "niveaux": {
+     "graphème": 25,
+     "mot": 14,
+     "pos": 12,
+     "syntagme": 6,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 6
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5897,
+    "attachements": 3,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "e29",
+    "cat": "en/courte",
+    "texte": "The cat sleeps on the warm roof.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 7,
+    "etiquettes": 36,
+    "niveaux": {
+     "graphème": 14,
+     "mot": 8,
+     "pos": 7,
+     "syntagme": 3,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1
+    },
+    "niveaux_absents": [
+     "morphème"
+    ],
+    "fraction": 0.5312,
+    "attachements": 2,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e30",
+    "cat": "en/temporelle",
+    "texte": "When the rain finally stopped, the children ran outside to play in the muddy garden.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 77,
+    "niveaux": {
+     "graphème": 31,
+     "mot": 17,
+     "pos": 15,
+     "syntagme": 7,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5238,
+    "attachements": 4,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e31",
+    "cat": "en/relative",
+    "texte": "The report, which nobody had read, was nevertheless cited in every meeting.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 12,
+    "etiquettes": 68,
+    "niveaux": {
+     "graphème": 26,
+     "mot": 15,
+     "pos": 12,
+     "syntagme": 6,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 4
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6,
+    "attachements": 3,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e32",
+    "cat": "en/question-why",
+    "texte": "Do you know why she left without saying goodbye?",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 9,
+    "etiquettes": 44,
+    "niveaux": {
+     "graphème": 18,
+     "mot": 10,
+     "pos": 9,
+     "syntagme": 2,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5,
+    "attachements": 1,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e33",
+    "cat": "en/impérative",
+    "texte": "Please close the door and turn off the light before you leave.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 12,
+    "etiquettes": 57,
+    "niveaux": {
+     "graphème": 24,
+     "mot": 13,
+     "pos": 12,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "syntagme": 4
+    },
+    "niveaux_absents": [
+     "morphème"
+    ],
+    "fraction": 0.6129,
+    "attachements": 2,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e34",
+    "cat": "en/nombres",
+    "texte": "The prices rose by 12.5% between January and March 2024, three points more than expected.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 79,
+    "niveaux": {
+     "graphème": 34,
+     "mot": 20,
+     "pos": 13,
+     "syntagme": 4,
+     "phrase": 2,
+     "pragmatique": 3,
+     "discours": 1,
+     "document": 1,
+     "morphème": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4944,
+    "attachements": 3,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e35",
+    "cat": "en/enchâssement",
+    "texte": "I think it will rain tomorrow, but I am not sure that it changes our plans.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 16,
+    "etiquettes": 76,
+    "niveaux": {
+     "graphème": 33,
+     "mot": 18,
+     "pos": 16,
+     "discours": 2,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1,
+     "syntagme": 3
+    },
+    "niveaux_absents": [
+     "morphème"
+    ],
+    "fraction": 0.36,
+    "attachements": 1,
+    "anomalies": [
+     "candidat_doublon"
+    ],
+    "anomalies_n": 1
+   },
+   {
+    "id": "e36",
+    "cat": "en/relative+apposition",
+    "texte": "The man who built this house was a friend of my grandfather, a famous carpenter.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 76,
+    "niveaux": {
+     "graphème": 31,
+     "mot": 17,
+     "pos": 15,
+     "syntagme": 6,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 3
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5625,
+    "attachements": 5,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e37",
+    "cat": "en/conditionnelle",
+    "texte": "If you want to succeed, you must work regularly, accept criticism, and never give up.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 81,
+    "niveaux": {
+     "graphème": 33,
+     "mot": 19,
+     "pos": 15,
+     "syntagme": 3,
+     "discours": 2,
+     "document": 1,
+     "phrase": 3,
+     "pragmatique": 1,
+     "morphème": 4
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5294,
+    "attachements": 1,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e38",
+    "cat": "en/jugement",
+    "texte": "This film is really bad, but the music is great; I would watch it again just for that.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 18,
+    "etiquettes": 92,
+    "niveaux": {
+     "graphème": 38,
+     "mot": 21,
+     "pos": 18,
+     "syntagme": 7,
+     "discours": 2,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4302,
+    "attachements": 4,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e39",
+    "cat": "en/question",
+    "texte": "How long will we have to wait before the situation improves?",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 11,
+    "etiquettes": 55,
+    "niveaux": {
+     "graphème": 22,
+     "mot": 12,
+     "pos": 11,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "syntagme": 3,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5667,
+    "attachements": 2,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e40",
+    "cat": "en/apposition",
+    "texte": "The museum, open every day except Monday, shows a collection of rare objects.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 13,
+    "etiquettes": 68,
+    "niveaux": {
+     "graphème": 28,
+     "mot": 16,
+     "pos": 13,
+     "syntagme": 5,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6494,
+    "attachements": 4,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e41",
+    "cat": "en/past-perfect",
+    "texte": "She had never really understood why he left without leaving an address.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 12,
+    "etiquettes": 62,
+    "niveaux": {
+     "graphème": 24,
+     "mot": 13,
+     "pos": 12,
+     "syntagme": 3,
+     "discours": 1,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1,
+     "morphème": 5
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5211,
+    "attachements": 2,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "e42",
+    "cat": "en/impérative-négative",
+    "texte": "Never tell me that you cannot find a solution when the problem is that simple.",
+    "attendu": "en",
+    "langue": "en",
+    "script": "Latn",
+    "mots": 15,
+    "etiquettes": 74,
+    "niveaux": {
+     "graphème": 30,
+     "mot": 16,
+     "pos": 15,
+     "discours": 2,
+     "document": 1,
+     "phrase": 2,
+     "pragmatique": 1,
+     "morphème": 3,
+     "syntagme": 4
+    },
+    "niveaux_absents": [],
+    "fraction": 0.4487,
+    "attachements": 3,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "x43",
+    "cat": "url+email",
+    "texte": "Le rapport complet est disponible sur https://example.com/rapports/2024/analyse-finale.pdf ; pour toute question, écrivez à contact@example.org ou appelez le +33 1 23 45 67 89.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 23,
+    "etiquettes": 163,
+    "niveaux": {
+     "graphème": 66,
+     "mot": 44,
+     "pos": 23,
+     "syntagme": 13,
+     "phrase": 4,
+     "pragmatique": 5,
+     "discours": 2,
+     "document": 1,
+     "morphème": 5
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6136,
+    "attachements": 13,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 1
+   },
+   {
+    "id": "x44",
+    "cat": "sms",
+    "texte": "rdv demain 9h pr le budget, faut valider les chiffres avt 18h!! merci :)",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 14,
+    "etiquettes": 77,
+    "niveaux": {
+     "graphème": 31,
+     "mot": 18,
+     "pos": 11,
+     "syntagme": 9,
+     "phrase": 3,
+     "pragmatique": 2,
+     "discours": 1,
+     "document": 1,
+     "morphème": 1
+    },
+    "niveaux_absents": [],
+    "fraction": 0.5278,
+    "attachements": 4,
+    "anomalies": [
+     "acte_hors_candidats",
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 3
+   },
+   {
+    "id": "x45",
+    "cat": "sans-ponctuation-finale",
+    "texte": "Ceci est une phrase sans ponctuation finale et elle continue longtemps sans marquer de pause puis elle s'arrête",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 18,
+    "etiquettes": 95,
+    "niveaux": {
+     "graphème": 37,
+     "mot": 19,
+     "pos": 19,
+     "syntagme": 12,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 2,
+     "morphème": 3
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6126,
+    "attachements": 7,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 9
+   },
+   {
+    "id": "x46",
+    "cat": "markdown",
+    "texte": "# Notes de réunion\n\nLe budget 2025 a été validé à l'unanimité.\n\n- Priorité : réduire les coûts.\n- Échéance : fin mars.\n\nProchaine réunion jeudi.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 26,
+    "etiquettes": 141,
+    "niveaux": {
+     "graphème": 53,
+     "mot": 31,
+     "discours": 4,
+     "document": 4,
+     "phrase": 4,
+     "pragmatique": 5,
+     "pos": 21,
+     "syntagme": 10,
+     "morphème": 9
+    },
+    "niveaux_absents": [],
+    "fraction": 0.6181,
+    "attachements": 9,
+    "anomalies": [
+     "valeur_hors_span"
+    ],
+    "anomalies_n": 1
+   },
+   {
+    "id": "x47",
+    "cat": "cyrillique",
+    "texte": "Москва — столица России, и я люблю этот город больше всего на свете.",
+    "attendu": "und",
+    "langue": "und",
+    "script": "Cyrl",
+    "mots": 13,
+    "etiquettes": 58,
+    "niveaux": {
+     "graphème": 27,
+     "mot": 15,
+     "pos": 12,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1
+    },
+    "niveaux_absents": [
+     "morphème",
+     "syntagme"
+    ],
+    "fraction": 0.7794,
+    "attachements": 0,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "x48",
+    "cat": "sinogrammes",
+    "texte": "今天天气很好，我们去公园散步吧。",
+    "attendu": "und",
+    "langue": "und",
+    "script": "Hani",
+    "mots": 1,
+    "etiquettes": 14,
+    "niveaux": {
+     "graphème": 4,
+     "mot": 4,
+     "pos": 2,
+     "discours": 1,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1
+    },
+    "niveaux_absents": [
+     "morphème",
+     "syntagme"
+    ],
+    "fraction": 0.875,
+    "attachements": 0,
+    "anomalies": [],
+    "anomalies_n": 0
+   },
+   {
+    "id": "x49",
+    "cat": "emoji",
+    "texte": "Merci beaucoup pour ton aide précieuse 😊 !",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 8,
+    "etiquettes": 38,
+    "niveaux": {
+     "graphème": 15,
+     "mot": 8,
+     "pos": 6,
+     "syntagme": 2,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 1,
+     "morphème": 2
+    },
+    "niveaux_absents": [],
+    "fraction": 0.619,
+    "attachements": 1,
+    "anomalies": [
+     "acte_hors_candidats"
+    ],
+    "anomalies_n": 1
+   },
+   {
+    "id": "x50",
+    "cat": "fr/très-longue",
+    "texte": "Dans le petit village où je passais mes vacances quand j'étais enfant, il y avait une vieille librairie tenue par un homme qui connaissait par cœur des centaines de romans, et qui, chaque fois qu'un client hésitait devant un rayon, lui racontait l'histoire du livre qu'il tenait entre les mains avec une telle passion que même les gens pressés finissaient par s'asseoir sur le banc usé devant la porte pour écouter la suite, oubliant l'heure, le train à prendre et les courses à faire.",
+    "attendu": "fr",
+    "langue": "fr",
+    "script": "Latn",
+    "mots": 84,
+    "etiquettes": 417,
+    "niveaux": {
+     "graphème": 186,
+     "mot": 94,
+     "pos": 87,
+     "syntagme": 35,
+     "discours": 2,
+     "document": 1,
+     "phrase": 1,
+     "pragmatique": 2,
+     "morphème": 9
+    },
+    "niveaux_absents": [],
+    "fraction": 0.534,
+    "attachements": 31,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ],
+    "anomalies_n": 16
+   }
+  ]
+ },
+ "cas_limites": {
+  "total": 25,
+  "crashes": 1,
+  "cas": [
+   {
+    "nom": "vide",
+    "n_chars": 0,
+    "crash": false,
+    "refus": "vide",
+    "langue": "und",
+    "script": "Zyyy",
+    "etiquettes": 0,
+    "niveaux": [],
+    "unites": 0
+   },
+   {
+    "nom": "espaces",
+    "n_chars": 7,
+    "crash": false,
+    "refus": "vide",
+    "langue": "und",
+    "script": "Zyyy",
+    "etiquettes": 0,
+    "niveaux": [],
+    "unites": 0
+   },
+   {
+    "nom": "ponctuation-seule",
+    "n_chars": 11,
+    "crash": false,
+    "refus": "vide",
+    "langue": "und",
+    "script": "Zyyy",
+    "etiquettes": 0,
+    "niveaux": [],
+    "unites": 0
+   },
+   {
+    "nom": "emoji-seul",
+    "n_chars": 3,
+    "crash": false,
+    "refus": "vide",
+    "langue": "und",
+    "script": "Zyyy",
+    "etiquettes": 0,
+    "niveaux": [],
+    "unites": 0
+   },
+   {
+    "nom": "chiffres-seuls",
+    "n_chars": 10,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Zyyy",
+    "etiquettes": 6,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pragmatique"
+    ],
+    "unites": 0
+   },
+   {
+    "nom": "un-mot",
+    "n_chars": 7,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 7,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 1
+   },
+   {
+    "nom": "anglais-deux-mots",
+    "n_chars": 11,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 11,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 2
+   },
+   {
+    "nom": "mot-très-long",
+    "n_chars": 200,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 9,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "morphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 1
+   },
+   {
+    "nom": "nul",
+    "n_chars": 4,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 8,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 1
+   },
+   {
+    "nom": "espace-invisible",
+    "n_chars": 1,
+    "crash": false,
+    "refus": "vide",
+    "langue": "und",
+    "script": "Zyyy",
+    "etiquettes": 0,
+    "niveaux": [],
+    "unites": 0
+   },
+   {
+    "nom": "retour-ligne",
+    "n_chars": 2,
+    "crash": false,
+    "refus": "vide",
+    "langue": "und",
+    "script": "Zyyy",
+    "etiquettes": 0,
+    "niveaux": [],
+    "unites": 0
+   },
+   {
+    "nom": "accent-décomposé",
+    "n_chars": 7,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 18,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique",
+     "syntagme"
+    ],
+    "unites": 2
+   },
+   {
+    "nom": "arabe",
+    "n_chars": 30,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Arab",
+    "etiquettes": 27,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 5
+   },
+   {
+    "nom": "grec",
+    "n_chars": 33,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Grek",
+    "etiquettes": 27,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 5
+   },
+   {
+    "nom": "hébreu",
+    "n_chars": 25,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Hebr",
+    "etiquettes": 27,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 5
+   },
+   {
+    "nom": "japonais",
+    "n_chars": 21,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Jpan",
+    "etiquettes": 14,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 2
+   },
+   {
+    "nom": "coréen",
+    "n_chars": 21,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Hang",
+    "etiquettes": 29,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 5
+   },
+   {
+    "nom": "markdown-table",
+    "n_chars": 36,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 49,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 3
+   },
+   {
+    "nom": "code",
+    "n_chars": 41,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 42,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "morphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 6
+   },
+   {
+    "nom": "json",
+    "n_chars": 40,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 51,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 5
+   },
+   {
+    "nom": "url-seule",
+    "n_chars": 47,
+    "crash": false,
+    "refus": "",
+    "langue": "fr",
+    "script": "Latn",
+    "etiquettes": 67,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique",
+     "syntagme"
+    ],
+    "unites": 7,
+    "anomalies": [
+     "chevauchement_syntagme"
+    ]
+   },
+   {
+    "nom": "ponctuation-répétée",
+    "n_chars": 22,
+    "crash": false,
+    "refus": "",
+    "langue": "fr",
+    "script": "Latn",
+    "etiquettes": 27,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "morphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique",
+     "syntagme"
+    ],
+    "unites": 1
+   },
+   {
+    "nom": "tabs",
+    "n_chars": 13,
+    "crash": false,
+    "refus": "",
+    "langue": "fr",
+    "script": "Latn",
+    "etiquettes": 14,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique",
+     "syntagme"
+    ],
+    "unites": 0
+   },
+   {
+    "nom": "contrôle",
+    "n_chars": 11,
+    "crash": false,
+    "refus": "",
+    "langue": "und",
+    "script": "Latn",
+    "etiquettes": 15,
+    "niveaux": [
+     "discours",
+     "document",
+     "graphème",
+     "mot",
+     "phrase",
+     "pos",
+     "pragmatique"
+    ],
+    "unites": 3
+   },
+   {
+    "nom": "surrogate",
+    "n_chars": 4,
+    "crash": true,
+    "refus": null,
+    "langue": null,
+    "script": null,
+    "etiquettes": null,
+    "niveaux": null,
+    "unites": null,
+    "traceback": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\ud800' in position 0: surrogates not allowed"
+   }
+  ],
+  "hors_type": [
+   {
+    "nom": "None",
+    "crash": false,
+    "exception": "",
+    "refus": "vide"
+   },
+   {
+    "nom": "bytes",
+    "crash": true,
+    "exception": "AttributeError: 'int' object has no attribute 'isalpha'",
+    "refus": null
+   },
+   {
+    "nom": "int",
+    "crash": true,
+    "exception": "AttributeError: 'int' object has no attribute 'strip'",
+    "refus": null
+   },
+   {
+    "nom": "liste",
+    "crash": true,
+    "exception": "AttributeError: 'list' object has no attribute 'strip'",
+    "refus": null
+   }
+  ],
+  "lecture": "un seul plantage textuel : un surrogate isolé (UnicodeEncodeError à len(texte.encode()), ligne 1246) ; bytes/int/list échouent en AttributeError ; None devient refus 'vide'."
+ },
+ "performance": {
+  "machine": {
+   "cpu": "Intel Xeon E5-2687W v3 @ 3.10 GHz",
+   "python": "3.13.16"
+  },
+  "temps_ms": {
+   "heuristique": [
+    {
+     "mots": 10,
+     "caracteres": 51,
+     "median_ms": 1.08,
+     "ms_par_mot": 0.108,
+     "phrases_par_s": 922.8,
+     "p95_ms": 1.72,
+     "min_ms": 1.05,
+     "max_ms": 1.75
+    },
+    {
+     "mots": 50,
+     "caracteres": 268,
+     "median_ms": 4.6,
+     "ms_par_mot": 0.092,
+     "phrases_par_s": 217.5,
+     "p95_ms": 7.05,
+     "min_ms": 4.49,
+     "max_ms": 7.42
+    },
+    {
+     "mots": 200,
+     "caracteres": 1126,
+     "median_ms": 19.43,
+     "ms_par_mot": 0.097,
+     "phrases_par_s": 51.5,
+     "p95_ms": 32.74,
+     "min_ms": 17.75,
+     "max_ms": 32.77
+    }
+   ],
+   "mock_neuronal": [
+    {
+     "mots": 10,
+     "caracteres": 51,
+     "median_ms": 0.3,
+     "ms_par_mot": 0.03,
+     "phrases_par_s": 3319.7,
+     "p95_ms": 0.32,
+     "min_ms": 0.29,
+     "max_ms": 0.35
+    },
+    {
+     "mots": 50,
+     "caracteres": 268,
+     "median_ms": 1.08,
+     "ms_par_mot": 0.022,
+     "phrases_par_s": 928.7,
+     "p95_ms": 1.14,
+     "min_ms": 1.04,
+     "max_ms": 1.14
+    },
+    {
+     "mots": 200,
+     "caracteres": 1126,
+     "median_ms": 4.44,
+     "ms_par_mot": 0.022,
+     "phrases_par_s": 225.2,
+     "p95_ms": 6.15,
+     "min_ms": 3.85,
+     "max_ms": 7.14
+    }
+   ],
+   "parallele": [
+    {
+     "mots": 10,
+     "caracteres": 51,
+     "median_ms": 1.51,
+     "ms_par_mot": 0.151,
+     "phrases_par_s": 663.0,
+     "p95_ms": 1.79,
+     "min_ms": 1.46,
+     "max_ms": 1.83
+    },
+    {
+     "mots": 50,
+     "caracteres": 268,
+     "median_ms": 6.18,
+     "ms_par_mot": 0.124,
+     "phrases_par_s": 161.8,
+     "p95_ms": 9.59,
+     "min_ms": 5.99,
+     "max_ms": 10.26
+    },
+    {
+     "mots": 200,
+     "caracteres": 1126,
+     "median_ms": 27.22,
+     "ms_par_mot": 0.136,
+     "phrases_par_s": 36.7,
+     "p95_ms": 33.94,
+     "min_ms": 26.53,
+     "max_ms": 38.26
+    }
+   ],
+   "cascade": [
+    {
+     "mots": 10,
+     "caracteres": 51,
+     "median_ms": 1.51,
+     "ms_par_mot": 0.151,
+     "phrases_par_s": 661.1,
+     "p95_ms": 1.57,
+     "min_ms": 1.49,
+     "max_ms": 2.15
+    },
+    {
+     "mots": 50,
+     "caracteres": 268,
+     "median_ms": 6.25,
+     "ms_par_mot": 0.125,
+     "phrases_par_s": 160.0,
+     "p95_ms": 9.53,
+     "min_ms": 6.09,
+     "max_ms": 9.67
+    },
+    {
+     "mots": 200,
+     "caracteres": 1126,
+     "median_ms": 29.64,
+     "ms_par_mot": 0.148,
+     "phrases_par_s": 33.7,
+     "p95_ms": 35.53,
+     "min_ms": 27.51,
+     "max_ms": 38.27
+    }
+   ]
+  },
+  "memoire": {
+   "mots": 200,
+   "caracteres": 1126,
+   "pic_kio_median": 540.6,
+   "pic_kio_max": 549.2,
+   "rss_avant_kio": 30696,
+   "rss_apres_100_kio": 30696,
+   "rss_delta_kio": 0,
+   "etiquettes": 1061
+  },
+  "stress_2000": {
+   "mots": 2000,
+   "duree_s": 0.47,
+   "ms_par_mot": 0.23,
+   "etiquettes": 10438
+  },
+  "echelle": [
+   {
+    "mots": 200,
+    "median_ms": 19,
+    "ms_par_mot": 0.096
+   },
+   {
+    "mots": 500,
+    "median_ms": 70,
+    "ms_par_mot": 0.139
+   },
+   {
+    "mots": 1000,
+    "median_ms": 166,
+    "ms_par_mot": 0.166
+   },
+   {
+    "mots": 2000,
+    "median_ms": 482,
+    "ms_par_mot": 0.241
+   },
+   {
+    "mots": 4000,
+    "median_ms": 1574,
+    "ms_par_mot": 0.394
+   }
+  ],
+  "demarrage_froid_ms": [
+   99.2,
+   109.0,
+   113.3
+  ],
+  "rss_demarrage_kio": 27632,
+  "determinisme": {
+   "meme_instance": true,
+   "instances_fraiches": true,
+   "json_defaut_identique": true,
+   "duree_exclue_par_defaut": true,
+   "graines_hash": {
+    "0": "identique",
+    "1": "identique",
+    "42": "identique"
+   },
+   "json_avec_duree": "diffère par duree_s uniquement"
+  }
+ },
+ "contrat": {
+  "cles_annotation": [
+   "contexte",
+   "cout",
+   "etiquettes",
+   "fraction_semantique",
+   "langue",
+   "refus",
+   "script",
+   "source",
+   "texte",
+   "trace",
+   "unites_semantiques"
+  ],
+  "cles_etiquette": [
+   "candidats",
+   "confiance",
+   "debut",
+   "fin",
+   "langue",
+   "meta",
+   "niveau",
+   "script",
+   "source",
+   "type",
+   "valeur"
+  ],
+  "cles_annotation_stables": true,
+  "cles_etiquette_stables": true,
+  "niveaux": [
+   "graphème",
+   "morphème",
+   "mot",
+   "pos",
+   "syntagme",
+   "phrase",
+   "discours",
+   "pragmatique",
+   "document"
+  ],
+  "niveaux_optionnels": {
+   "morphème": 9,
+   "syntagme": 2
+  },
+  "types_par_niveau": {
+   "graphème": [
+    "chiffres",
+    "espace",
+    "lettres",
+    "ponctuation",
+    "symbole"
+   ],
+   "mot": [
+    "mot",
+    "nombre",
+    "ponctuation"
+   ],
+   "pos": [
+    "ADJ",
+    "ADV",
+    "AUX",
+    "CONJ",
+    "DET",
+    "MOT",
+    "NOUN",
+    "NUM",
+    "PREP",
+    "PRON",
+    "VERB"
+   ],
+   "syntagme": [
+    "GN",
+    "GP",
+    "GV",
+    "REL",
+    "SUB"
+   ],
+   "discours": [
+    "connecteur",
+    "paragraphe"
+   ],
+   "document": [
+    "paragraphe",
+    "titre"
+   ],
+   "phrase": [
+    "modalité",
+    "négation",
+    "type"
+   ],
+   "pragmatique": [
+    "acte",
+    "double_sens"
+   ],
+   "morphème": [
+    "préfixe",
+    "suffixe"
+   ]
+  },
+  "meta_cles": {
+   "graphème": {},
+   "mot": {},
+   "pos": {
+    "ouvert": 806,
+    "contexte": 14
+   },
+   "syntagme": {
+    "role": 362,
+    "niveau": 362,
+    "attachement": 265,
+    "union": 98
+   },
+   "discours": {},
+   "document": {},
+   "phrase": {},
+   "pragmatique": {},
+   "morphème": {}
+  },
+  "champs_vides": {
+   "graphème.candidats": 1778,
+   "graphème.meta": 1778,
+   "mot.candidats": 963,
+   "mot.meta": 963,
+   "pos.candidats": 384,
+   "discours.meta": 79,
+   "document.candidats": 53,
+   "document.meta": 53,
+   "phrase.candidats": 76,
+   "phrase.meta": 76,
+   "pragmatique.meta": 69,
+   "morphème.meta": 134
+  },
+  "valeur_egale_span": {
+   "graphème": {
+    "egales": 1778,
+    "total": 1778
+   },
+   "mot": {
+    "egales": 963,
+    "total": 963
+   },
+   "pos": {
+    "egales": 806,
+    "total": 806
+   },
+   "syntagme": {
+    "egales": 362,
+    "total": 362
+   },
+   "morphème": {
+    "egales": 126,
+    "total": 134
+   }
+  },
+  "cout_par_mode": {
+   "heuristique": {
+    "cles": [
+     "caracteres",
+     "duree_s",
+     "etiquettes",
+     "octets"
+    ],
+    "source": "heuristique",
+    "trace_etapes": [
+     "langue",
+     "niveaux"
+    ]
+   },
+   "mock": {
+    "cles": [
+     "duree_s",
+     "etiquettes",
+     "octets"
+    ],
+    "source": "neuronal",
+    "trace_etapes": [
+     "neuronal"
+    ]
+   },
+   "parallele": {
+    "cles": [
+     "duree_s",
+     "etiquettes",
+     "octets"
+    ],
+    "source": "parallele",
+    "trace_etapes": [
+     "langue",
+     "niveaux",
+     "neuronal",
+     "fusion"
+    ]
+   },
+   "cascade": {
+    "cles": [
+     "duree_s",
+     "etiquettes",
+     "octets"
+    ],
+    "source": "cascade",
+    "trace_etapes": [
+     "langue",
+     "niveaux",
+     "neuronal",
+     "fusion",
+     "cascade"
+    ]
+   },
+   "refus_vide": {
+    "cles": [
+     "duree_s",
+     "octets"
+    ],
+    "source": "heuristique",
+    "trace_etapes": [
+     "refus"
+    ]
+   }
+  },
+  "langue_formats": {
+   "defaut": {
+    "fr_en": 48,
+    "und": 2
+   },
+   "profils": {
+    "iso3_ou_und": 50
+   }
+  },
+  "source_annotation": [
+   "heuristique",
+   "neuronal",
+   "parallele",
+   "cascade"
+  ],
+  "source_etiquette": [
+   "heuristique",
+   "neuronal",
+   "humain"
+  ],
+  "refus": {
+   "heuristique": "vide (chaîne vide ou 'vide')",
+   "neuronal_llm": "exception RefusNeuronal (pas d'Annotation)",
+   "neuronal_pos_chunks_pragmatique": "Annotation(refus=..., etiquettes=[])",
+   "composition": "perdu : Parallele/Cascade rendent refus='' même si l'entrée est refusée"
+  },
+  "a_parser_sans_casser": [
+   "les onze clés d'Annotation et les onze clés d'Etiquette",
+   "debut/fin dans [0, len(texte)], debut <= fin, aucun span vide",
+   "niveau dans les neuf, type non vide, source d'étiquette dans les trois",
+   "confiance dans [0,1] pour Heuristique (NeuronalLLM ne borne pas)",
+   "unites_semantiques triées, disjointes, dans le texte ; fraction recalculable",
+   "cible d'attachement présente dans le texte (0/265 absente sur 50)",
+   "valeur = texte[debut:fin] pour graphème/mot/pos/syntagme (100 %)"
+  ],
+  "a_ne_pas_supposer": [
+   "que les syntagmes sont disjoints (132 paires / 31 textes sur 50)",
+   "que les neuf niveaux sont présents (morphème 41/50, syntagme 48/50)",
+   "que valeur est la surface (morphème normalisé, document tronqué, catégories)",
+   "que meta a des clés fixes (attachement/union/contexte optionnels)",
+   "que cout a des clés fixes (caracteres absent hors Heuristique)",
+   "que trace a un schéma fixe (étapes et clés variables)",
+   "que langue est ISO2 (fr) ou ISO3 (fra) selon le mode",
+   "que Annotation.source est dans {heuristique, neuronal, humain}",
+   "que refus est un enum (vide, 'vide', message libre, exception)",
+   "que l'attachement porte l'offset de sa cible (seulement la chaîne)"
+  ],
+  "attachement": {
+   "total": 265,
+   "cible_offset": false,
+   "cible_fermee": 16,
+   "cible_fermee_detail": {
+    "au": 3,
+    "was": 3,
+    "lui": 2,
+    "pas": 2,
+    "have": 2,
+    "entre": 2,
+    "ne": 1,
+    "Tu": 1
+   },
+   "cible_ambigue": 3
+  },
+  "couverture": "max de confiance par niveau, pas un taux de couverture",
+  "document": {
+   "labels": 53,
+   "valeur_tronquee": 42,
+   "longueur_max": 60
+  }
+ },
+ "compositions": {
+  "cascade_appels_banc": 50,
+  "cascade_appels_banc_total": 50,
+  "cascade_residu": {
+   "morphème": 50,
+   "syntagme": 50,
+   "discours": 50,
+   "pragmatique": 50,
+   "pos": 2
+  },
+  "cascade_appels_gold": 1676,
+  "refus_perdu": {
+   "entree": "... !!! ???",
+   "heuristique": "refus vide, 0 étiquette",
+   "parallele": "refus '', 4 étiquettes (mock)",
+   "cascade": "refus '', 4 étiquettes"
+  },
+  "contexte_perdu": {
+   "parallele": "Annotation.contexte='' ; label humain présent",
+   "cascade": "Annotation.contexte='' ; label humain présent"
+  },
+  "refus_neuronal": {
+   "modele_absent": "RefusNeuronal traverse Parallele et Cascade",
+   "semantique": "NeuronalLLM lève ; NeuronalLLMPOS/Chunks/Pragmatique rendent Annotation(refus=...)"
+  },
+  "env_priorite": {
+   "variable": "DEEPSEEK_KEY_FILE",
+   "sans": 55,
+   "avec": 49,
+   "effet": "syntagmes heuristique→neuronal"
+  },
+  "priorite_syntagme_defaut": "heuristique (le tagger réel documenté exige 'confiance')",
+  "cout_fusion": "pas de clé caracteres ; refus et contexte non propagés",
+  "mock_refus": "MockNeuronal n'a pas la garde vide/ponctuation de Heuristique"
+ },
+ "correctifs": [
+  {
+   "id": "P0-1",
+   "severite": "bloquant",
+   "titre": "Expliciter les alternatives de syntagmes (ou offrir une partition mesurée)",
+   "preuve": "132 paires de syntagmes qui se chevauchent dans 31/50 textes, 188/362 étiquettes ; f02 : GP 29-51 et GP 29-60, GV 80-96 et GV 90-96.",
+   "lignes": [
+    "tools/bloc_linguistique.py:1151-1156",
+    "tools/bloc_linguistique.py:1170-1176",
+    "tools/bloc_linguistique.py:1197-1203",
+    "tools/bloc_linguistique.py:1239",
+    "tools/bloc_linguistique.py:1814-1843",
+    "tools/bloc_linguistique.py:1908"
+   ],
+   "cout": "0,5–1 j",
+   "risque": "moyen : la déduplication mesurée donne F1 0,5849→0,6141 mais fait tomber l'attachement exact de 222 à 208 (couverture 0,9289→0,8703) ; préférer meta.alternative + option de partition plutôt qu'une déduplication silencieuse."
+  },
+  {
+   "id": "P0-2",
+   "severite": "bloquant",
+   "titre": "Réparer les frontières de phrase et la tokenisation des réalités numériques",
+   "preuve": "« 12.5 » coupe une phrase en deux ; « 12.03.2024 » aussi ; une URL crée 3–4 phrases ; « M./Dr./etc. » duplique la phrase (f10 : spans 0-104 et 2-104) ; 6/60 spans commencent par un espace ; types url et emoji : 0/963.",
+   "lignes": [
+    "tools/bloc_linguistique.py:550",
+    "tools/bloc_linguistique.py:553-563",
+    "tools/bloc_linguistique.py:568-587",
+    "tools/bloc_linguistique.py:579"
+   ],
+   "cout": "0,5–1 j",
+   "risque": "faible-moyen : change le nombre de phrases et les actes par phrase ; à couvrir par des tests dédiés (décimale, date, URL, email, abréviation, espace initial)."
+  },
+  {
+   "id": "P0-3",
+   "severite": "bloquant",
+   "titre": "Propager le refus et le contexte dans les compositions, rattraper RefusNeuronal",
+   "preuve": "« ... !!! ??? » : Heuristique refuse, Parallele/Cascade rendent 4 étiquettes inventées par le mock et refus='' ; texte vide : refus perdu ; contexte : champ Annotation perdu (le label humain reste) ; modèle absent : RefusNeuronal traverse Parallele et Cascade.",
+   "lignes": [
+    "tools/bloc_linguistique.py:1875-1922",
+    "tools/bloc_linguistique.py:1915-1922",
+    "tools/bloc_linguistique.py:1276-1315",
+    "tools/bloc_linguistique.py:1942-1947",
+    "tools/bloc_linguistique.py:1970-1985",
+    "tools/bloc_linguistique.py:1348-1349"
+   ],
+   "cout": "0,5 j",
+   "risque": "faible : ajoute des gardes et propage des champs ; tests de composition à compléter (refus, contexte, modèle absent)."
+  },
+  {
+   "id": "P0-4",
+   "severite": "bloquant",
+   "titre": "Rendre la cascade réellement sélective",
+   "preuve": "50/50 appels au neuronal ; résidu toujours morphème/syntagme/discours/pragmatique ; 1 676/1 676 sur le gold. Le seuil 0,6 est au-dessus des confiances déclarées (syntagme 0,55, pragmatique 0,45, discours 0,55, morphème 0,32) et couverture() = max masque les POS ouvertes à 0,3 (pos résiduel : 2/50). Le verdict cascade_pos est vert à HEAD par un plancher 0,70, pas par une correction du comportement.",
+   "lignes": [
+    "tools/bloc_linguistique.py:111-114",
+    "tools/bloc_linguistique.py:1956",
+    "tools/bloc_linguistique.py:1970-1985"
+   ],
+   "cout": "0,5–1 j",
+   "risque": "moyen : change les chiffres de la cascade et les portes ; ajouter un test « au moins une phrase sans appel » et mesurer le coût/qualité."
+  },
+  {
+   "id": "P0-5",
+   "severite": "bloquant",
+   "titre": "Unifier le code langue et ne pas activer les 398 profils sur du texte court",
+   "preuve": "Défaut : 50/50 (34 fr, 14 en, 2 und). Profils UDHR : 39/50 après conversion ISO3→ISO2 (30/34 fr, 7/14 en, 2/2 und), 2/50 en égalité stricte ; fr→hns, en→sco, es→und. Indice « fr » ignoré avec les profils. Format fr/fra selon le mode.",
+   "lignes": [
+    "tools/bloc_linguistique.py:199-224",
+    "tools/bloc_linguistique.py:540-545",
+    "tools/bloc_linguistique.py:273-296",
+    "tools/bloc_linguistique.py:158-189",
+    "tools/bloc_linguistique.py:1366-1368"
+   ],
+   "cout": "0,5–1 j",
+   "risque": "moyen : le format touche les tests, le gold et les clients ; introduire un code canonique (ISO3) et un accesseur de compatibilité, sans changer le défaut fr/en."
+  },
+  {
+   "id": "P1-6",
+   "severite": "important",
+   "titre": "Compléter POS pour les nombres et la ponctuation",
+   "preuve": "157/963 tokens sans POS (137 ponctuation, 20 nombres) ; 25 tokens PONCT du gold comptés « ? » ; POS 0,7581.",
+   "lignes": [
+    "tools/bloc_linguistique.py:1037-1041",
+    "tools/bloc_linguistique.py:601-623"
+   ],
+   "cout": "2 h",
+   "risque": "faible : +25 tokens couverts au mieux sur 3 179 (≈ +0,008 POS), mais alignement token/POS complet."
+  },
+  {
+   "id": "P1-7",
+   "severite": "important",
+   "titre": "Geler l'enveloppe : cout, Annotation.source, refus, contexte",
+   "preuve": "cout : caracteres présent seulement pour Heuristique, etiquettes absent sur refus ; Annotation.source vaut aussi parallele/cascade ; refus a quatre sémantiques ; contexte perdu en fusion.",
+   "lignes": [
+    "tools/bloc_linguistique.py:116-127",
+    "tools/bloc_linguistique.py:1011",
+    "tools/bloc_linguistique.py:1246-1247",
+    "tools/bloc_linguistique.py:1314",
+    "tools/bloc_linguistique.py:1920-1922",
+    "tools/bloc_linguistique.py:1976"
+   ],
+   "cout": "2–3 h",
+   "risque": "faible : toujours émettre les mêmes clés (octets, caracteres, etiquettes, duree_s) et documenter l'enum d'Annotation.source."
+  },
+  {
+   "id": "P1-8",
+   "severite": "important",
+   "titre": "Corriger le titre document et la valeur tronquée",
+   "preuve": "42/53 valeurs document font 60 caractères (paragraphe tronqué) ; x48 (chinois) et 4 cas limites (arabe, hébreu, japonais, chiffres) sont étiquetés titre parce que upper() == lower() sur les scripts sans casse.",
+   "lignes": [
+    "tools/bloc_linguistique.py:1224-1230"
+   ],
+   "cout": "2 h",
+   "risque": "faible : exiger au moins une lettre minuscule et une majuscule, ou une casse réelle, et exposer le texte complet."
+  },
+  {
+   "id": "P1-9",
+   "severite": "important",
+   "titre": "Rendre le repli S visible",
+   "preuve": "Sans générateur S (segmenter_s=False) : 34/50 sorties changent, 132 syntagmes et 119 attachements perdus ; l'exception est avalée sans trace.",
+   "lignes": [
+    "tools/bloc_linguistique.py:641-650",
+    "tools/bloc_linguistique.py:652-667"
+   ],
+   "cout": "2 h",
+   "risque": "faible : ajouter une trace {'etape':'repli_s','erreur':...} et un champ de mode ; ou échouer explicitement si segmenter_s=True."
+  },
+  {
+   "id": "P1-10",
+   "severite": "important",
+   "titre": "Supprimer la dépendance à DEEPSEEK_KEY_FILE",
+   "preuve": "Même texte, même code : la variable d'environnement fait passer Parallele de 55 à 49 étiquettes et change la source des syntagmes (heuristique→neuronal).",
+   "lignes": [
+    "tools/bloc_linguistique.py:1849-1855",
+    "tools/bloc_linguistique.py:1938-1940",
+    "tools/bloc_linguistique.py:1965-1967"
+   ],
+   "cout": "2 h",
+   "risque": "faible : paramètre explicite + trace de la politique ; le rejeu redevient indépendant de l'environnement."
+  },
+  {
+   "id": "P1-11",
+   "severite": "important",
+   "titre": "Petites incohérences de valeurs et de candidats",
+   "preuve": "8/134 morphèmes normalisés (tion vs TION) ; 4/50 actes « exclamation » absents des candidats ; 4/50 listes de candidats avec doublons (savent, savent).",
+   "lignes": [
+    "tools/bloc_linguistique.py:626-638",
+    "tools/bloc_linguistique.py:1045-1048",
+    "tools/bloc_linguistique.py:1078",
+    "tools/bloc_linguistique.py:1142-1150"
+   ],
+   "cout": "2 h",
+   "risque": "faible : conserver la casse d'origine, ajouter exclamation, dédupliquer en préservant l'ordre."
+  },
+  {
+   "id": "P1-12",
+   "severite": "important",
+   "titre": "Valider l'entrée et les encodages",
+   "preuve": "bytes/int/list : AttributeError ; un surrogate isolé plante en UnicodeEncodeError à la fin de l'analyse (ligne 1246) ; None est silencieusement transformé en refus 'vide'.",
+   "lignes": [
+    "tools/bloc_linguistique.py:1003-1011",
+    "tools/bloc_linguistique.py:1246"
+   ],
+   "cout": "1–2 h",
+   "risque": "faible : TypeError explicite pour les non-str, encodage tolérant (surrogatepass) ou refus propre."
+  },
+  {
+   "id": "P1-13",
+   "severite": "important",
+   "titre": "Valider la sortie du modèle neuronal",
+   "preuve": "NeuronalLLM fait float(e.get('confiance', 0.5)) sans borner : une réponse 1,7 ou -0,2 viole le contrat [0,1] ; type/valeur non validés.",
+   "lignes": [
+    "tools/bloc_linguistique.py:1371-1378"
+   ],
+   "cout": "1 h",
+   "risque": "faible : min/max + rejet des types inconnus ; ne concerne que le chemin neuronal réel."
+  },
+  {
+   "id": "P1-14",
+   "severite": "important",
+   "titre": "Qualité POS des classes ouvertes (lexique ou tagger qualifié)",
+   "preuve": "POS 0,7581 (ouvert 0,6234) ; sur 50 : 365 NOUN pour 32 VERB ; « arrose », « rentre », « prépare », « consultez », « débloque », « écrivez », « warm » tombent en NOUN.",
+   "lignes": [
+    "tools/bloc_linguistique.py:319-349",
+    "tools/bloc_linguistique.py:390-443",
+    "tools/bloc_linguistique.py:601-623"
+   ],
+   "cout": "1–3 j (données + validation)",
+   "risque": "moyen : un lexique plus large peut déplacer le gold ; le tagger réel documenté (0,9440) est la voie de production."
+  },
+  {
+   "id": "P1-15",
+   "severite": "important",
+   "titre": "Réduire le coût superlinéaire au-delà de 200 mots",
+   "preuve": "0,096 ms/mot à 200 mots, 0,394 à 4 000 (4,1×) ; 1,57 s à 4 000 mots. cProfile : _cible_proche appelle _est_adverbe_seul 199 302 fois et retrie les GV par segment.",
+   "lignes": [
+    "tools/bloc_linguistique.py:800-853",
+    "tools/bloc_linguistique.py:461-464"
+   ],
+   "cout": "2–3 h",
+   "risque": "faible : préfiltrer les GV une fois par analyse, mémoïser les adverbes, indexer les GV par position."
+  },
+  {
+   "id": "P2-16",
+   "severite": "confort",
+   "titre": "Couvrir les caractères de contrôle dans graphème",
+   "preuve": "x46 : 7 newlines non couverts, 95,14 % ; les 49 autres textes sont à 100 %.",
+   "lignes": [
+    "tools/bloc_linguistique.py:1020-1031"
+   ],
+   "cout": "15 min",
+   "risque": "faible : ajouter Cc/Cf aux classes ou un meta 'trou'."
+  },
+  {
+   "id": "P2-17",
+   "severite": "confort",
+   "titre": "Aligner la documentation sur les plages réelles de fraction et de couverture",
+   "preuve": "fraction 0,3529–0,8750 sur 50 (doc 0,51–0,76) ; couverture() = max de confiance, pas un taux.",
+   "lignes": [
+    "tools/bloc_linguistique.py:111-114",
+    "tools/bloc_linguistique.py:1237-1238"
+   ],
+   "cout": "1 h (doc)",
+   "risque": "aucun sur le code ; évite un budget sémantique faux."
+  },
+  {
+   "id": "P2-18",
+   "severite": "confort",
+   "titre": "Nettoyages sans effet produit",
+   "preuve": "_verbe_dans contient deux fois la même boucle (lignes 777-782) ; trace a un schéma variable ; priorite_syntagme='heuristique' par défaut est le mauvais choix pour le tagger réel (doc : 'confiance').",
+   "lignes": [
+    "tools/bloc_linguistique.py:777-782",
+    "tools/bloc_linguistique.py:116-127",
+    "tools/bloc_linguistique.py:1931",
+    "tools/bloc_linguistique.py:1957"
+   ],
+   "cout": "1 h",
+   "risque": "aucun ; documenter le choix de priorité et supprimer le doublon."
+  }
+ ],
+ "controle_negatif": {
+  "mutations": {
+   "detectees": 6,
+   "total": 6,
+   "detail": [
+    {
+     "mutation": "span_hors_texte",
+     "detectee": true,
+     "detectes": [
+      "chevauchement_syntagme",
+      "span_hors_texte"
+     ]
+    },
+    {
+     "mutation": "cible_absente",
+     "detectee": true,
+     "detectes": [
+      "chevauchement_syntagme",
+      "cible_absente"
+     ]
+    },
+    {
+     "mutation": "chevauchement_syntagme",
+     "detectee": true,
+     "detectes": [
+      "attachement_segment_mismatch",
+      "chevauchement_syntagme",
+      "valeur_hors_span"
+     ]
+    },
+    {
+     "mutation": "confiance_hors_bornes",
+     "detectee": true,
+     "detectes": [
+      "chevauchement_syntagme",
+      "confiance_hors_bornes"
+     ]
+    },
+    {
+     "mutation": "valeur_hors_span",
+     "detectee": true,
+     "detectes": [
+      "chevauchement_syntagme",
+      "valeur_hors_span"
+     ]
+    },
+    {
+     "mutation": "fraction_incoherente",
+     "detectee": true,
+     "detectes": [
+      "chevauchement_syntagme",
+      "fraction_incoherente"
+     ]
+    }
+   ]
+  },
+  "chunker_seul": {
+   "chevauchements_syntagme": 0,
+   "lecture": "les 132 chevauchements viennent du générateur S et de l'union, pas du chunker simple"
+  },
+  "dedupe_simulation": {
+   "banc_50": {
+    "paires_avant": 132,
+    "paires_apres": 0,
+    "textes": 31,
+    "syntagmes_avant": 362,
+    "syntagmes_apres": 292,
+    "attachements_avant": 265,
+    "attachements_apres": 215
+   },
+   "gold": {
+    "avant": {
+     "f1": 0.5849,
+     "precision": 0.6292,
+     "rappel": 0.5464,
+     "tp": 1018,
+     "fp": 600,
+     "fn": 845,
+     "tete": 0.7336,
+     "att_exact": 222,
+     "att_cibles": 239,
+     "att_labels": 222,
+     "couverture": 0.9289,
+     "labels": 17847,
+     "attachements": 946
+    },
+    "apres": {
+     "f1": 0.6141,
+     "precision": 0.7283,
+     "rappel": 0.5309,
+     "tp": 989,
+     "fp": 369,
+     "fn": 874,
+     "tete": 0.7432,
+     "att_exact": 208,
+     "att_cibles": 239,
+     "att_labels": 208,
+     "couverture": 0.8703,
+     "labels": 17587,
+     "attachements": 812
+    }
+   }
+  },
+  "langue_melangee": {
+   "non_und_detecter": 7,
+   "non_und_bloc": 6,
+   "total": 8,
+   "detail": [
+    {
+     "id": "f01",
+     "origine": "fr",
+     "melange": "fr",
+     "confiance": 0.3333,
+     "bloc": "fr"
+    },
+    {
+     "id": "f02",
+     "origine": "fr",
+     "melange": "fr",
+     "confiance": 0.0909,
+     "bloc": "und"
+    },
+    {
+     "id": "f03",
+     "origine": "fr",
+     "melange": "en",
+     "confiance": 0.2353,
+     "bloc": "en"
+    },
+    {
+     "id": "f20",
+     "origine": "fr",
+     "melange": "fr",
+     "confiance": 0.2222,
+     "bloc": "fr"
+    },
+    {
+     "id": "e29",
+     "origine": "en",
+     "melange": "de",
+     "confiance": 0.5,
+     "bloc": "de"
+    },
+    {
+     "id": "e30",
+     "origine": "en",
+     "melange": "it",
+     "confiance": 0.4286,
+     "bloc": "it"
+    },
+    {
+     "id": "e31",
+     "origine": "en",
+     "melange": "und",
+     "confiance": 0.0,
+     "bloc": "und"
+    },
+    {
+     "id": "e39",
+     "origine": "en",
+     "melange": "en",
+     "confiance": 0.25,
+     "bloc": "en"
+    }
+   ],
+   "lecture": "le détecteur par mots-outils n'est pas un rejeteur de bruit : au niveau du bloc (seuil 0,12), 6/8 textes à caractères mélangés reçoivent une langue, confiance jusqu'à 0,5"
+  },
+  "determinisme": {
+   "meme_instance": true,
+   "instances_fraiches": true,
+   "graines_hash": [
+    "0",
+    "1",
+    "42"
+   ],
+   "identiques": true,
+   "json_avec_duree": "ne diffère que par duree_s"
+  },
+  "textes_differents": "digests différents (pas de constante)"
+ },
+ "limites": [
+  "Les 50 phrases sont écrites à la main, pas un tirage aléatoire : elles ne représentent pas la distribution des utilisateurs.",
+  "L'audit vérifie des invariants structurels, pas la justesse sémantique ; la qualité POS sur texte libre n'a pas de gold (on cite le gold 0,7581 et des exemples).",
+  "Le gold est in-sample : les règles y ont été dessinées ; dev/test limitent sans exclure.",
+  "Une seule machine, un seul interpréteur ; la performance neuronale réelle (réseau/LLM) n'est pas mesurée.",
+  "Le comparatif de langue avec profils porte sur 50 phrases favorables fr/en + 2 non-latin, pas sur un échantillon multilingue.",
+  "La simulation de déduplication dépend de la politique : _supprimer_chevauchements est la politique actuelle de la fusion, pas la seule possible.",
+  "Le plantage surrogate est un cas d'encodage fabriqué ; il ne prouve pas un plantage sur du texte UTF-8 valide.",
+  "Le verdict cascade_pos a changé à HEAD (7f73c17f : plancher 0,70 au lieu de la comparaison à l'heuristique) : ok passe de faux à vrai sans changement du module ni des valeurs. Le rouge de l'état fourni est éteint par le harnais, pas par un correctif ; la baisse de POS de la composition reste mesurée (0,7465 contre 0,7581)."
+ ],
+ "fichiers": {
+  "rapport": "reports/rapport-produit-bloc-l.md",
+  "json": "reports/pensee-produit-bloc-l.json",
+  "module": "tools/bloc_linguistique.py",
+  "evaluation": "tools/tests/linguistique/evaluer_gold.py",
+  "split": "tools/tests/linguistique/gold_split.py",
+  "harnais_non_committe": "/tmp/audit_produit_bl/",
+  "note": "Aucun fichier existant modifié, aucun commit, reports/README.md non modifié (consigne)."
+ }
+}

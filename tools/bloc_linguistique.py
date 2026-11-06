@@ -1003,12 +1003,18 @@ class Heuristique:
     def analyser(self, texte: str, langue: str | None = None,
                  contexte: str | None = None) -> Annotation:
         t0 = time.perf_counter()
+        if not isinstance(texte, str):
+            # une entrée non textuelle est **refusée** proprement (le produit ne plante pas)
+            return Annotation(texte=str(texte)[:200], refus="non_texte", source=self.nom,
+                              trace=[{"etape": "refus", "raison": "non_texte",
+                                      "type": type(texte).__name__}],
+                              cout={"octets": 0, "duree_s": round(time.perf_counter() - t0, 6)})
         texte = texte or ""
         trace: list[dict] = []
         if not texte.strip() or not any(ch.isalpha() or ch.isdigit() for ch in texte):
             return Annotation(texte=texte, refus="vide", source=self.nom,
                               trace=[{"etape": "refus", "raison": "vide"}],
-                              cout={"octets": len(texte.encode()), "duree_s": round(time.perf_counter() - t0, 6)})
+                              cout={"octets": len(texte.encode("utf-8", "replace")), "duree_s": round(time.perf_counter() - t0, 6)})
 
         lg, conf_lg, script = self._langue(texte, langue)
         trace.append({"etape": "langue", "langue": lg, "script": script, "confiance": conf_lg,
@@ -1243,7 +1249,7 @@ class Heuristique:
         return Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
                           trace=trace, source=self.nom, unites_semantiques=unites,
                           fraction_semantique=round(fraction, 4), contexte=contexte or "",
-                          cout={"octets": len(texte.encode()), "caracteres": len(texte),
+                          cout={"octets": len(texte.encode("utf-8", "replace")), "caracteres": len(texte),
                                 "etiquettes": len(etiquettes), "duree_s": round(time.perf_counter() - t0, 6)})
 
 
@@ -1311,7 +1317,7 @@ class MockNeuronal:
                           source=self.nom, unites_semantiques=unites,
                           fraction_semantique=round(fraction, 4),
                           trace=[{"etape": "neuronal", "niveaux": sorted({e.niveau for e in etiquettes})}],
-                          cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
+                          cout={"octets": len(texte.encode("utf-8", "replace")), "etiquettes": len(etiquettes),
                                 "duree_s": round(time.perf_counter() - t0, 6)})
 
 
@@ -1378,7 +1384,7 @@ class NeuronalLLM:
                                         langue=lg, script=script))
         return Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
                           source=self.nom, trace=[{"etape": "neuronal-llm", "modele": self.modele}],
-                          cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
+                          cout={"octets": len(texte.encode("utf-8", "replace")), "etiquettes": len(etiquettes),
                                 "duree_s": round(time.perf_counter() - t0, 6)})
 
 
@@ -1489,13 +1495,13 @@ class NeuronalLLMPOS:
             annotation = Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
                                     source=self.nom,
                                     trace=[{"etape": "neuronal-pos", "modele": self.modele}],
-                                    cout={"octets": len(texte.encode()), "tokens": len(tokens),
+                                    cout={"octets": len(texte.encode("utf-8", "replace")), "tokens": len(tokens),
                                           "duree_s": round(time.perf_counter() - t0, 6)})
         except Exception as e:
             annotation = Annotation(texte=texte, langue=lg, script=script, source=self.nom,
                                     refus=f"neuronal-pos: {type(e).__name__}: {str(e)[:160]}",
                                     trace=[{"etape": "neuronal-pos", "erreur": str(e)[:160]}],
-                                    cout={"octets": len(texte.encode()),
+                                    cout={"octets": len(texte.encode("utf-8", "replace")),
                                           "duree_s": round(time.perf_counter() - t0, 6)})
         if self.cache:
             self._cache[cle] = annotation
@@ -1639,14 +1645,14 @@ class NeuronalLLMChunks:
             annotation = Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
                                     source=self.nom,
                                     trace=[{"etape": "neuronal-syntagmes", "modele": self.modele}],
-                                    cout={"octets": len(texte.encode()), "tokens": len(tokens),
+                                    cout={"octets": len(texte.encode("utf-8", "replace")), "tokens": len(tokens),
                                           "syntagmes": len(etiquettes),
                                           "duree_s": round(time.perf_counter() - t0, 6)})
         except Exception as e:
             annotation = Annotation(texte=texte, langue=lg, script=script, source=self.nom,
                                     refus=f"neuronal-syntagmes: {type(e).__name__}: {str(e)[:160]}",
                                     trace=[{"etape": "neuronal-syntagmes", "erreur": str(e)[:160]}],
-                                    cout={"octets": len(texte.encode()),
+                                    cout={"octets": len(texte.encode("utf-8", "replace")),
                                           "duree_s": round(time.perf_counter() - t0, 6)})
         if self.cache:
             self._cache[cle] = annotation
@@ -1693,7 +1699,7 @@ class NeuronalLLMCompose:
             trace=a.trace + b.trace + (c.trace if c else []) + [
                 {"etape": "compose",
                  "niveaux": sorted({e.niveau for e in etiquettes})}],
-            cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
+            cout={"octets": len(texte.encode("utf-8", "replace")), "etiquettes": len(etiquettes),
                   "duree_s": round(a.cout.get("duree_s", 0.0) + b.cout.get("duree_s", 0.0)
                                    + (c.cout.get("duree_s", 0.0) if c else 0.0), 6)})
 
@@ -1795,13 +1801,13 @@ class NeuronalLLMPragmatique:
             annotation = Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
                                     source=self.nom,
                                     trace=[{"etape": "neuronal-pragmatique", "modele": self.modele}],
-                                    cout={"octets": len(texte.encode()),
+                                    cout={"octets": len(texte.encode("utf-8", "replace")),
                                           "duree_s": round(time.perf_counter() - t0, 6)})
         except Exception as e:
             annotation = Annotation(texte=texte, langue=lg, script=script, source=self.nom,
                                     refus=f"neuronal-pragmatique: {type(e).__name__}: {str(e)[:160]}",
                                     trace=[{"etape": "neuronal-pragmatique", "erreur": str(e)[:160]}],
-                                    cout={"octets": len(texte.encode()),
+                                    cout={"octets": len(texte.encode("utf-8", "replace")),
                                           "duree_s": round(time.perf_counter() - t0, 6)})
         if self.cache:
             self._cache[cle] = annotation

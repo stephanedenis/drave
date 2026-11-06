@@ -754,3 +754,182 @@ tronquées à 60 caractères** et **2 titres** (x46, vrai titre markdown ; x48, 
 … [16659 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification de la ligne de roadmap et de l'environnement de mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ndate '+%Y-%m-%d %H:%M'; python3 -V; nproc; lscpu | grep -m1 'Model name'; git rev-parse HEAD; git status --short --untracked-files=no | wc -l\ngrep -n -i \"produit\" docs/pilotage/roadmap.md | head -15", "description": "Check date, env … [27 caractères tronqués]`
+
+  ```
+2026-11-06 11:33
+Python 3.13.16
+40
+Model name:                              Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+c6904284dff1ad090b67939597911d914ee34873
+96
+38:**État au 06/11 11 h 15.** B13 est à **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **le premier produit est debout et documenté** : `python3 tools/drave.py analyser|evaluer|rejouer`, **porte produit** (6 contrôles, ~2 min), **doc d'usage** (`docs/produit/`) et 5 exemples rejoués ; **autotest parallèle** (×2,4) ; **84 portes, 3 rouges** (`indice`, `melange`, `sessions` du hub) ; **17 spans** inatteignables ; **file des 29 tâches** (8 autonomes) ; `master` et `s/v7` poussés à `7f73c17f` ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nsed -n '1,80p' docs/pilotage/roadmap.md | head -80", "description": "Read roadmap header"}`
+
+  ```
+# La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+
+> **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+> L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+>
+> **Détail et histoire** : l'ancien plan [A/B](../theorie/glossaire/entrees/a-b.md) est archivé dans
+> [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+> [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+> dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+> [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+
+## Comment lire cette roadmap
+
+- **Les états** : ✅ mesuré et écrit · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+- **Le carpe diem** : pas d'échéance. Un chantier est **[fait](../theorie/glossaire/entrees
+… [13228 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 45, "offset": 455}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+455: 
+456: ADVERBES_SEULS = {"peut-être", "vite", "bien", "mal", "hier", "demain", "aujourd'hui", "ici",
+457:                   "là", "souvent", "toujours", "jamais", "déjà", "encore", "enfin", "alors",
+458:                   "puis", "donc", "aussi", "très", "trop", "plus", "moins", "maybe", "perhaps"}
+459: 
+460: 
+461: def _est_adverbe_seul(g: dict) -> bool:
+462:     """Un GV d'un seul token adverbe n'est pas un gouverneur (« Peut-être »)."""
+463:     return (len((g.get("texte") or "").split()) == 1
+464:             and _normaliser(g.get("texte") or "") in ADVERBES_SEULS)
+465: 
+466: 
+467: MODAUX = {"would", "must", "can", "could", "should", "will", "shall", "may", "might", "ought",
+468:           "could", "cannot"}
+469: 
+470: ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
+471: 
+472: 
+473: def _sans_enclitique(mot: str) -> str:
+474:     """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
+475:     for suf in ENCLITIQUES:
+476:         if mot.endswith(suf) and len(mot) > len(suf):
+477:     
+… [989 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json,subprocess,sys\ndef run(t):\n    p=subprocess.run([sys.executable,'tools/drave.py','analyser',t,'--json'],capture_output=True,text=True)\n    return p\nfor t in [\"M. Dupont, le Dr Martin et Mme Leroy sont … [610 caractères tronqués]`
+
+  ```
+TEXTE 'M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.' rc 0
+ phrase 0 59 'M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.' déclarative
+ phrase 2 59 ' Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.' déclarative
+ ligne lisible: []
+TEXTE 'Le Dr. Martin est arrivé hier. Il repart demain.' rc 0
+ phrase 0 30 'Le Dr. Martin est arrivé hier.' déclarative
+ phrase 6 30 ' Martin est arrivé hier.' déclarative
+ phrase 30 48 ' Il repart demain.' déclarative
+ ligne lisible: []
+TEXTE 'Bonjour. Salut.' rc 0
+ phrase 0 8 'Bonjour.' déclarative
+ phrase 8 15 ' Salut.' déclarative
+ ligne lisible: []
+TEXTE 'The cat sleeps.' rc 0
+ phrase 0 15 'The cat sleeps.' déclarative
+ ligne lisible: []
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du harnais d'audit CLI (50 phrases, contrat, temps)
+
+- **write** `{"file_path": "/tmp/audit_cli.py", "content": "#!/usr/bin/env python3\n\"\"\"Audit CLI de drave.py — 50 phrases libres + robustesse + contrat. Écrit /tmp/audit_cli_results.json.\"\"\"\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport os\nimport pathlib\nimport subprocess\nim … [27713 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_cli.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport re\np='/tmp/audit_cli.py'\ns=open(p).read()\ns=s.replace('''    doublons = {}\n''','''    doublons = {}\n''')\ns=s.replace('''    doublons = {k: v for k, v in vus.items() if v > 1}\n''','''    doublons = {k: v for k, v in vus.items() if v > 1}\n    do … [970 caractères tronqués]`
+
+  ```
+patched
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du banc complet (50 phrases + robustesse + timings)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/audit_cli.py 2>&1 | tee /tmp/audit_cli.log | tail -40", "description": "Run full CLI audit harness", "timeoutMs": 900000}`
+
+  ```
+f50 rc=0 wall=  226.6ms json=True labels=1990 ovl={'discours': {'paires': 7, 'etiquettes': 11, 'exemples': [['connecteur', 0, 182, 'paragraphe', 0, 716], ['paragraphe', 0, 716, 'connecteur', 182, 268], ['connecteur', 716, 974, 'paragraphe', 718, 1156]]}, 'phrase': {'paires': 5, 'etiquettes': 24, 'exemples': [['type', 454, 716, 'négation', 454, 716], ['type', 716, 974, 'négation', 716, 974], ['type', 1363, 1444, 'négation', 1363, 1444]]}, 'pragmatique': {'paires': 6, 'etiquettes': 25, 'exemples': [['acte', 0, 182, 'double_sens', 0, 182], ['acte', 1065, 1130, 'double_sens', 1065, 1130], ['acte', 1277, 1363, 'double_sens', 1277, 1363]]}, 'syntagme': {'paires': 50, 'etiquettes': 171, 'exemples': [['GP', 8, 26, 'GP', 8, 40], ['GP', 8, 40, 'GP', 27, 40], ['REL', 41, 61, 'REL', 41, 97]]}}
+== temps API ==
+== robustesse ==
+rob version: rc=0 out=12 stderr=''
+rob aide: rc=0 out=770 stderr=''
+rob sans_commande: rc=2 out=0 stderr="usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : the followin"
+rob commande_inconnue: rc=2 out=0 stderr="usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...\ndrave: erreur d'usage : argument {an"
+rob analyser_sans_texte: rc=2 out=0 stde
+… [2554 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dépouillement du banc : synthèse et anomalies
+
+- **bash** `{"command": "cd /tmp && head -55 audit_cli.log", "description": "Read benchmark per-sentence output"}`
+
+  ```
+== benchmark 50 ==
+f01 rc=0 wall=  150.8ms json=True labels=19 ovl={}
+f02 rc=0 wall=  193.9ms json=True labels=59 ovl={'syntagme': {'paires': 2, 'etiquettes': 5, 'exemples': [['REL', 22, 42, 'REL', 22, 54], ['REL', 22, 54, 'GV', 43, 54]]}}
+f03 rc=0 wall=  149.9ms json=True labels=37 ovl={}
+f04 rc=0 wall=  157.2ms json=True labels=38 ovl={}
+f05 rc=0 wall=  181.6ms json=True labels=30 ovl={'phrase': {'paires': 1, 'etiquettes': 2, 'exemples': [['type', 0, 20, 'négation', 0, 20]]}, 'syntagme': {'paires': 1, 'etiquettes': 3, 'exemples': [['GP', 14, 18, 'GN', 16, 18]]}}
+f06 rc=0 wall=  154.1ms json=True labels=62 ovl={'discours': {'paires': 1, 'etiquettes': 2, 'exemples': [['connecteur', 0, 61, 'paragraphe', 0, 61]]}, 'phrase': {'paires': 1, 'etiquettes': 2, 'exemples': [['type', 0, 61, 'négation', 0, 61]]}, 'syntagme': {'paires': 4, 'etiquettes': 6, 'exemples': [['GV', 0, 15, 'GV', 3, 36], ['GV', 3, 36, 'SUB', 16, 29], ['GV', 3, 36, 'GP', 30, 36]]}}
+f07 rc=0 wall=  149.3ms json=True labels=32 ovl={}
+f08 rc=0 wall=  149.7ms json=True labels=37 ovl={}
+f09 rc=0 wall=  145.2ms json=True labels=33 ovl={'discours': {'paires': 1, 'etiquettes': 2, 'exemples': [['connecteur', 0, 36, 'paragraphe'
+… [7191 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport json\nd=json.load(open('audit_cli_results.json'))\nb=d['banc_50']\nprint('n=',len(b))\nprint('rcs', {r['rc'] for r in b})\nprint('json ok', sum(1 for r in b if r.get('json') is True), 'refus', sum(1 for r in b if r['rc']==1))\nprint('determinisme', su … [1883 caractères tronqués]`
+
+  ```
+n= 50
+rcs {0, 1}
+json ok 46 refus 4
+determinisme 50 / 50
+stderr non vide succès []
+tracebacks []
+span_hors 0 []
+surface_ko 4 ['f03', 'f11', 'f19', 'f29']
+cles_label_ko 0
+types_inconnus 0
+cibles_absentes 0
+sans_attachement 76
+sans_pos 0
+unites_hors 0 unites_chev 0
+fraction_ecart max 5e-05
+phrase_leading 19 ['f03', 'f20', 'f25', 'f26', 'f29', 'f50']
+overlap texts 28
+syntagme overlap pairs total 107
+phrase overlap pairs total 14
+doc titles [('f18', ['1234567890']), ('f31', ['ÇA NE MARCHE PAS !!!']), ('f50', ['# Notes de terrain\nLe chat de la voisine qui dort sur le toi', '## Le protocole\nNous avons observé pendant 30 jours, de 6 h ', '## Ce que nous croyons savoir\nUne question reste ouverte : p', '## Annexes\nVisitez https://example.org/corpus/2026?page=3 po'])]
+langues {'en', 'it', 'fr', 'und'}
+temps wall ms: min/med/max 136.77 153.01 226.64
+temps med hors startup approx 153.01
+json sizes max 533611
+  ```
+

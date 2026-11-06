@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 138.8 h |
+| Durée | 139.0 h |
 | Tours | 180 |
-| Messages | 3054 |
-| Appels d'outils | 2697 |
+| Messages | 3069 |
+| Appels d'outils | 2710 |
 | Fichiers touchés | 25 |
-| Commandes | 2206 |
+| Commandes | 2219 |
 | Sous-agents | 31 |
-| Commits | 340 |
+| Commits | 342 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9688,7 +9688,7 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 
 ### Tour 180 — <goal_round> Objective: "Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les t … [1010 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Reconnaissance des tâches restantes
 - sous-agent — POS anglais diagnostic
@@ -9704,10 +9704,11 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - bash — Consigner la nuance cascade_pos
 - bash — Trim T0 et suivre les agents
 - bash — Trim final T0
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ J'ajoute la nuance honnête sur `cascade_pos` : la porte est verte par plancher, la fusion dégrade encore
+⏵ Les 8 tests passent ; je fige la correction de robustesse et l'audit produit, puis je pousse
 
 ## 3. Travail accompli
 
@@ -9817,7 +9818,7 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2166 autres
+- … et 2179 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10305,4 +10306,6 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - PORTES — LA NUANCE cascade_pos : VERTE PAR PLANCHER, LA FUSION DÉGRADE ENCORE LE POS DE 1,16 PT (CORRECTIF À FAIRE)" -- docs/pilotage/references-non-regression.
 - ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; bre
 - ÉTAT — T0 À 4 000" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 À 4 000"; then echo "COMMIT OK $i"; break; fi   sleep
+- INDEX — RÉGÉNÉRÉ (677 FICHES), --verifier SORT 0" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "RÉGÉNÉRÉ
+- PRODUIT — LA ROBUSTESSE : SURROGATE ET NON-STR FERMÉS (refus non_texte), 8 TESTS ; L'AUDIT A24 (50 PHRASES, 132 CHEVAUCHEMENTS, 18 CORRECTIFS)" -- tools/bloc_li
 
