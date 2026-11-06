@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 138.7 h |
+| Durée | 138.8 h |
 | Tours | 180 |
-| Messages | 3050 |
-| Appels d'outils | 2693 |
+| Messages | 3052 |
+| Appels d'outils | 2695 |
 | Fichiers touchés | 25 |
-| Commandes | 2204 |
+| Commandes | 2205 |
 | Sous-agents | 31 |
-| Commits | 338 |
+| Commits | 339 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9688,7 +9688,7 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 
 ### Tour 180 — <goal_round> Objective: "Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les t … [1010 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Reconnaissance des tâches restantes
 - sous-agent — POS anglais diagnostic
@@ -9702,6 +9702,7 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - bash — Committer l'outillage
 - job_output
 - bash — Consigner la nuance cascade_pos
+- bash — Trim T0 et suivre les agents
 
 **Synthèse produite :**
 
@@ -9815,7 +9816,7 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2164 autres
+- … et 2165 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10301,4 +10302,5 @@ python3 tools/drave.py rejouer "…"                      # vérifie le détermi
 - JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)" -- journal/2026-11-06/README.md docs/p
 - OUTILLAGE — index_reports A UNE AIDE (--aide N'ÉCRIT PLUS), --verifier, INDEX 625 → 677 FICHES ; PLAN-TRAVAIL § 9 → § 13" -- tools/index_reports.py reports/INDE
 - PORTES — LA NUANCE cascade_pos : VERTE PAR PLANCHER, LA FUSION DÉGRADE ENCORE LE POS DE 1,16 PT (CORRECTIF À FAIRE)" -- docs/pilotage/references-non-regression.
+- ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; bre
 

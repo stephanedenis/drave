@@ -572,3 +572,26 @@ AUX      1 (0.4%)
 … [878 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Decomposing EN errors by tagging mechanism and context
+
+- **bash** `{"command": "cat > /tmp/qpos/diag2.py <<'EOF'\nimport json, pathlib, sys, collections\nRAC = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(RAC/'tools')); sys.path.insert(0, str(RAC/'tools/tests/linguistique'))\nimport bloc_linguistique as bl, evaluer_gold as … [3993 caractères tronqués]`
+
+  ```
+EN erreurs 270 / 1148
+
+VERB->NOUN n= 176
+  par contexte 3bis (meta.contexte): Counter({None: 176})
+  par suffixe: [('s', 79), ('es', 47), ('(nu)', 37), ('e', 13)]
+  par confiance: [(0.3, 172), (0.45, 4)]
+  par mot précédent (gold): [('PRON', 85), ('NOUN', 80), ('AUX', 6), ('ADV', 2), ('VERB', 2), ('ADJ', 1)]
+  par mot précédent (texte): [('it', 20), ('she', 19), ('he', 13), ('i', 12), ('we', 10), ('children', 5), ('cat', 5), ('dog', 5), ('paul', 5), ('train', 4), ('wind', 4), ('they', 4), ('sun', 3), ('must', 3), ('teacher', 3)]
+  dans VERBES_CONNUS: 100  _est_verbe: 100
+  VERBES[en]: 0
+  formes: [('leave', 7), ('sings', 6), ('writes', 5), ('speaks', 5), ('sees', 5), ('leaves', 4), ('play', 4), ('runs', 4), ('arrives', 4), ('shines', 3), ('talks', 3), ('prepares', 3), ('barks', 3), ('falls', 3), ('works', 3), ('stay', 3), ('mention', 3), ('cries', 3), ('love', 2), ('blows', 2), ('watches', 2), ('grow', 2), ('laugh', 2), ('watch', 2), ('calls', 2), ('visit', 2), ('flows', 2), ('covers', 2), ('wait', 2), ('lights', 2), ('passes', 2), ('smiles', 2), ('think', 2), ('know', 2), ('grows', 2), ('stands', 2), ('warms', 2), ('understand', 1), ('work', 1), ('drinks', 1)]
+
+== autres erreurs e
+… [11049 caractères tronqués]
+  ```
+

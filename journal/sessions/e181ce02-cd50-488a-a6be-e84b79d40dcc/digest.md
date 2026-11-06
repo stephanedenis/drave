@@ -51686,3 +51686,22 @@ ven 06 nov 2026 11:22:24 EST
 ⏵ J'ajoute la nuance honnête sur `cascade_pos` : la porte est verte par plancher, la fusion dégrade encore
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"| `porte-bloc-linguistique.sh` | 17 s | ✅ porte bloc linguistique verte (`cascade_pos` : plancher 0,70 … [1329 caractères tronqués]`
+
+  ```
+nuance consignée
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-3135]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3135", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/2026-11-06/outils.md
+COMMIT OK 1
+5c6b3b43 PORTES — LA NUANCE cascade_pos : VERTE PAR PLANCHER, LA FUSION DÉGRADE ENCORE LE POS DE 1,16 PT (CORRECTIF À FAIRE)
+[status: completed, exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **index 677** ; `cascade_pos` vert par plancher (dégradation de 1,16 pt à corriger).\", \" ; index 677 ; `cascade_pos` v … [560 caractères tronqués]`

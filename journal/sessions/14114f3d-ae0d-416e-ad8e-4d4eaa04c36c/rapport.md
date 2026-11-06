@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 1.9 h |
 | Tours | 1 |
-| Messages | 104 |
-| Appels d'outils | 120 |
+| Messages | 108 |
+| Appels d'outils | 125 |
 | Fichiers touchés | 7 |
-| Commandes | 97 |
+| Commandes | 102 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*120 appels d'outils.* Actions notables :
+*125 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,7 +41,7 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 92 autres
+- … et 97 autres
 
 **Synthèse produite :**
 
@@ -103,7 +103,7 @@
 - **T1** Profiler une analyse de 2000 mots
 - **T1** Contrôles négatifs et simulation du correctif chevauchement
 - **T1** Tester les mutations et simuler la déduplication sur le gold
-- … et 57 autres
+- … et 62 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -127,6 +127,9 @@
 - **T1** `[(0, 22, "'The prices rose by 12.'"), (22, 89, "'5% between January and March 2024, three points more than expected.'")]`
 - **T1** `"valeur = texte[debut:fin] pour graphème/mot/pos/syntagme (100 %)"`
 - **T1** `6ef2a3f5 (HEAD -> s/v7, origin/s/v7, origin/master, origin/HEAD, master) JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)`
+- **T1** `| graphème, mot | ✅ | 0 crash, 0 span hors texte, `valeur = texte[debut:fin]` à **100 %**, couverture **49/50 à 100 %** (x46 : 95,14 %, newlines) |`
+- **T1** ``reel_new` + 160 `synthétique`), soit **100 %**. Sur `all` : **612/612**.`
+- **T1** `6ef2a3f5 (origin/s/v7, origin/master, origin/HEAD, master) JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)`
 
 ## 5. Erreurs rencontrées
 

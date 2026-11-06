@@ -2970,3 +2970,150 @@ JSON VALIDE
 Le verdict cascade_pos a changé à HEAD (7f73c17f : plancher 0,70 au lieu de la comparaison à l'heuristique) : ok passe de faux à vrai sans changement du module ni des valeurs. Le rouge de l'état fourni est éteint par le harnais, pas par un correctif ; la baisse de POS de la composition reste mesurée (0,7465 contre 0,7581).
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md'); s=p.read_text()\n\ns=s.replace(\"\"\"> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Date** : 2026-11-06 ·\"\"\",\n\"\"\"> **Commit mesuré … [3808 caractères tronqués]`
+
+  ```
+ok
+4:> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD pendant la rédaction** : `6ef2a3f5`
+35:| compositions | ❌ | refus et contexte perdus, cascade **50/50** appels ; POS **0,7465 < 0,7581** (verdict `cascade_pos` vert à HEAD par plancher 0,70, pas par correctif) |
+99:- **`cascade_pos` : rouge à `fa1b0c6e`, vert à HEAD par plancher.** À `fa1b0c6e`, le verdict
+109:- **`ok`** : **faux à `fa1b0c6e`** (à cause de `cascade_pos`) ; **vrai à HEAD** (plancher 0,70),
+387:- **Le verdict `cascade_pos` a changé à HEAD** (`7f73c17f` : plancher 0,70 au lieu de la
+388:  comparaison à l'heuristique) : `ok` passe de faux à vrai **sans** changement du module ni des
+418:   `cascade_pos` est vert à HEAD par plancher, pas par correction du comportement.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-produit-bloc-l.json'))\nprint(json.dumps(d['gold'],ensure_ascii=False,indent=1)[:2200])\nPY", "description": "Vérifier la section gold du JSON"}`
+
+  ```
+{
+ "phrases": 612,
+ "cibles": 239,
+ "tokens": 3179,
+ "sources": {
+  "hand": 20,
+  "reel": 432,
+  "synthetique": 160
+ },
+ "langues": {
+  "fr": 402,
+  "en": 210
+ },
+ "exact": 222,
+ "labels": 222,
+ "exact_taux": 1.0,
+ "couverture": 0.9289,
+ "spans_perdus": 17,
+ "f1": 0.5849,
+ "precision": 0.6292,
+ "rappel": 0.5464,
+ "tete": 0.7336,
+ "pos": 0.7581,
+ "pos_ferme": 0.9004,
+ "pos_ouvert": 0.6234,
+ "gele_602": {
+  "f1": 0.5893,
+  "precision": 0.6319,
+  "rappel": 0.5522,
+  "tete": 0.7392,
+  "pos": 0.7603,
+  "exact": 222,
+  "couverture": 0.9289,
+  "note": "la fiche v12 publie le gelé pour F1/tête ; l'exact et la couverture sont identiques au vivant"
+ },
+ "pragmatique": {
+  "acte": 0.9967,
+  "negation": 0.9771,
+  "modalite": 0.9886,
+  "double_sens": 0.9444
+ },
+ "fraction_semantique": 0.5537,
+ "dev": {
+  "phrases": 422,
+  "cibles": 163,
+  "exact": 153,
+  "labels": 153,
+  "couverture": 0.9387,
+  "spans": 10,
+  "pos": 0.7547,
+  "f1": 0.582
+ },
+ "test": {
+  "phrases": 190,
+  "cibles": 76,
+  "exact": 69,
+  "labels": 69,
+  "couverture": 0.9079,
+  "spans": 7,
+  "pos": 0.7656,
+  "f1": 0.5914
+ },
+ "modes": {
+  "heuristique": {
+   "pos": 0.7581,
+   "pos_ferme": 0.9004,
+   "pos_ouvert": 0.6234,
+   "f1": 
+… [1000 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-produit-bloc-l.json'))\nfor k in ('rouge_fa1b0c6e','verdict_cascade_pos_fa1b0c6e','ok_fa1b0c6e','verdict_cascade_pos_head','ok_head','note_verdict','lecture'):\n    prin … [210 caractères tronqués]`
+
+  ```
+rouge_fa1b0c6e : cascade_pos
+verdict_cascade_pos_fa1b0c6e : False
+ok_fa1b0c6e : False
+verdict_cascade_pos_head : True
+ok_head : True
+note_verdict : À HEAD (7f73c17f), evaluer_gold remplace la comparaison par un plancher 0,70 : cascade_pos passe à vrai et ok à vrai, sans changement du module ni des valeurs. La baisse de POS de la composition (0,7465 contre 0,7581) reste mesurée.
+lecture : La fusion mélange le POS du mock (0,3454) : cascade/parallele ont 0,7465 de POS, 0,5849→0,6141 de F1, 208/208 exacts et 0,8703 de couverture — exactement les chiffres de la déduplication simulée. Le vert de cascade_pos à HEAD est un choix de seuil, pas un correctif.
+dispositif head: 6ef2a3f5
+limites n 8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -8 tools/porte-bloc-linguistique.sh && bash tools/porte-bloc-linguistique.sh > /tmp/audit_produit_bl/porte_head.out 2>&1; echo \"exit=$?\"; tail -8 /tmp/audit_produit_bl/porte_head.out", "description": "Rejouer la porte du bloc  … [38 caractères tronqués]`
+
+  ```
+#!/usr/bin/env bash
+# Porte du bloc linguistique — tests de contrat + mesure UDHR (langue/script).
+set -u
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+echo "=== PORTE BLOC LINGUISTIQUE ==="
+python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' || { echo "❌ tests"; exit 1; }
+python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+exit=0
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,45p' reports/rapport-produit-bloc-l.md && echo \"==== §2 ====\" && sed -n '56,120p' reports/rapport-produit-bloc-l.md", "description": "Relire l'en-tête et la section gold après mise à jour"}`
+
+  ```
+# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD pendant la rédaction** : `6ef2a3f5`
+> (module `bloc_linguistique.py` inchangé ; `evaluer_gold.py` modifié en `7f73c17f`) ·
+> **Date** : 2026-11-06 ·
+> **Verdict** : ⚠️ **la surface est utilisable en autonomie ; la structure ne l'est pas encore.**
+> **Aucun fichier existant modifié par cet audit ; aucun commit.** Sorties : ce rapport et
+> [`pensee-produit-bloc-l.json`](pensee-produit-bloc-l.json).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`gold_split.py`](../tools/tests/linguistique/gold_split.py) ; **50 phrases libres** écrites pour
+> l'audit (textes dans le JSON) ; harnais local non committé dans `/tmp/audit_produit_bl`.
+> **Porte** : `bash tools/porte-bloc-linguistique.sh` → **verte** (16 tests, autotest UDHR
+> **0,9687**, profils permutés **0,0022**).
+
+**En une phrase.** Sur 50 phrases libres, le bloc **ne plante pas**, **ne refu
+… [5742 caractères tronqués]
+  ```
+

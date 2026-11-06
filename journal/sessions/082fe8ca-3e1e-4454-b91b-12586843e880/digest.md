@@ -609,3 +609,107 @@ anomalie, do
 … [7811 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification de l'antériorité d'un rapport voisin (pour ne pas le dupliquer)
+
+- **bash** `{"command": "stat -c '%y %n' reports/pensee-produit-bloc-l.json reports/rapport-produit-bloc-l.md reports/rapport-fiabilite-produit.md reports/pensee-fiabilite-produit.json 2>&1; echo ---; grep -o '\"verdict\"[^,]*' reports/pensee-produit-bloc-l.json | head -2; echo ---; grep -n \"correctif\\|priori … [118 caractères tronqués]`
+
+  ```
+2026-11-06 11:22:25.305136552 -0500 reports/pensee-produit-bloc-l.json
+2026-11-06 11:13:58.463844021 -0500 reports/rapport-produit-bloc-l.md
+stat: cannot statx 'reports/rapport-fiabilite-produit.md': No such file or directory
+stat: cannot statx 'reports/pensee-fiabilite-produit.json': No such file or directory
+---
+"verdict": "⚠️ utilisable en surface (graphème
+---
+282:- **Priorité par défaut** : `priorite_syntagme="heuristique"` garde le découpage heuristique ; le
+294:| # | correctif | preuve chiffrée | lignes | coût | risque |
+304:| # | correctif | preuve chiffrée | lignes | coût | risque |
+319:| # | correctif | preuve chiffrée | lignes | coût |
+323:| **P2-18** | Nettoyages sans effet produit | `_verbe_dans` : boucle dupliquée 777-782 ; `trace` à schéma variable ; `priorite_syntagme="heuristique"` par défaut = mauvais choix pour le tagger réel | 777-782, 116-127, 1931, 1957 | **1 h** |
+386:  limites, les 18 correctifs, tous les chiffres et les contrôles.
+394:## 11. Les 5 correctifs prioritaires
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\np='reports/pensee-produit-bloc-l.json'\nd=json.load(open(p))\nprint(list(d.keys()))\nprint(json.dumps({k:v for k,v in d.items() if k not in ('banc_50','cas_limites','compositions','performance')}, ensure_ascii=False, indent=1)[:3000])\nPY", "description":  … [34 caractères tronqués]`
+
+  ```
+['rapport', 'ligne', 'branche', 'commit', 'date', 'objet', 'verdict', 'dispositif', 'gold', 'banc_50', 'cas_limites', 'performance', 'contrat', 'compositions', 'correctifs', 'controle_negatif', 'limites', 'fichiers']
+{
+ "rapport": "produit-bloc-l",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+ "date": "2026-11-06",
+ "objet": "Audit de fiabilité produit du bloc linguistique : robustesse hors gold (50 phrases libres), performance, stabilité du contrat, cas limites, compositions et liste de correctifs chiffrés.",
+ "verdict": "⚠️ utilisable en surface (graphème, mot, POS fermées, phrase, document) sur du français/anglais propre ; fragile en structure (syntagmes qui se chevauchent, frontières de phrase, compositions, langue). 0 plantage sur 50 phrases, mais 34/50 avec au moins une anomalie de contrat et 1 plantage sur 25 cas limites.",
+ "dispositif": {
+  "gold": "evaluer_gold.charger() + evaluer_bloc ; gold_split.dev/test ; module tools/bloc_linguistique.py au commit fa1b0c6e (module inchangé à HEAD 6ef2a3f5).",
+  "head_au_moment_de_la_redaction": "6ef2a3f5",
+  "module_inchange_fa1b0c6e_head": true,
+  "evaluateur_modifie": "7f73c17f : casca
+… [2013 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Sondage rapide des cas limites avant le harnais complet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor t in \"🚀\" \"...\" \"123\" \"   \" \"a\" \"Élodie sourit.\"; do\n  out=$(python3 tools/drave.py analyser \"$t\" --json 2>/tmp/e); rc=$?\n  echo \"TEXTE=[$t] rc=$rc stdout_len=${#out} stderr=$(head -1 /tmp/e)\"\ndone", "description" … [40 caractères tronqués]`
+
+  ```
+TEXTE=[🚀] rc=1 stdout_len=0 stderr=drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+TEXTE=[...] rc=1 stdout_len=0 stderr=drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+TEXTE=[123] rc=0 stdout_len=2085 stderr=
+TEXTE=[   ] rc=1 stdout_len=0 stderr=drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+TEXTE=[a] rc=0 stdout_len=2639 stderr=
+TEXTE=[Élodie sourit.] rc=0 stdout_len=3881 stderr=
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/drave.py analyser \"Visitez https://example.com/docs?page=2 pour la documentation.\" --json > /tmp/url.json 2>/tmp/url.err; echo \"rc=$?\"; python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/url.json'))\nfor e in d['et … [196 caractères tronqués]`
+
+  ```
+rc=0
+mot mot 'Visitez' 0 7
+phrase type 'déclarative' 0 24
+mot mot 'https' 8 13
+mot ponctuation ':' 13 14
+mot ponctuation '/' 14 15
+mot ponctuation '/' 15 16
+mot mot 'example' 16 23
+mot ponctuation '.' 23 24
+mot mot 'com' 24 27
+phrase type 'interrogative' 24 33
+mot ponctuation '/' 27 28
+mot mot 'docs' 28 32
+mot ponctuation '?' 32 33
+mot mot 'page' 33 37
+phrase type 'déclarative' 33 62
+mot ponctuation '=' 37 38
+mot nombre '2' 38 39
+mot mot 'pour' 40 44
+mot mot 'la' 45 47
+mot mot 'documentation' 48 61
+mot ponctuation '.' 61 62
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\n# argument ressemblant à une option\npython3 tools/drave.py analyser \"-3 degrés\" >/tmp/a.out 2>/tmp/a.err; echo \"dash rc=$? err=$(cat /tmp/a.err)\"\npython3 tools/drave.py analyser -- \"-3 degrés\" >/tmp/a.out 2>/tmp/a.err; echo \"d … [571 caractères tronqués]`
+
+  ```
+dash rc=0 err=
+dash-- rc=0 out=langue=und script=Latn source=heuristique · 12 étiquettes · unités sémantiques=1 (66.7% du texte)
+dd rc=2 err=drave analyser: erreur d'usage : the following arguments are required: TEXTE
+ff rc=1 outlen=0 err=drave: erreur : UnicodeEncodeError : 'utf-8' codec can't encode character '\udcff' in position 0: surrogates not allowed
+affb rc=1 outlen=0 err=drave: erreur : UnicodeEncodeError : 'utf-8' codec can't encode character '\udcff' in position 1: surrogates not allowed
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\nbase = \"Le chat de la voisine qui dort sur le toit se réveille. \"\np = pathlib.Path('/tmp/t10k.txt')\ntxt = (base * 300)[:10000]\np.write_text(txt, encoding='utf-8')\nprint(len(txt), len(txt.encode() … [439 caractères tronqués]`
+
+  ```
+10000 10178
+rc=0
+wall=0.63 rss=51492kB
+etiquettes 10362 syntagmes 893 unites 894
+  ```
+

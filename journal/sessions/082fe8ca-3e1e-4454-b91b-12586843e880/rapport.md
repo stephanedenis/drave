@@ -9,10 +9,10 @@
 | Début | 2026-11-06 11:17 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 16 |
-| Appels d'outils | 19 |
+| Messages | 17 |
+| Appels d'outils | 21 |
 | Fichiers touchés | 0 |
-| Commandes | 13 |
+| Commandes | 15 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [1945 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check working directory and git status
 - bash — List repo root and reports directory
@@ -41,6 +41,7 @@
 - bash — Inspect existing JSON structure
 - bash — Probe CLI edge cases and exit codes
 - bash — Probe URL tokenization and phrase spans
+- … et 2 autres
 
 **Synthèse produite :**
 
@@ -68,9 +69,12 @@
 - **T1** Inspect existing JSON structure
 - **T1** Probe CLI edge cases and exit codes
 - **T1** Probe URL tokenization and phrase spans
+- **T1** Probe option-like and invalid-UTF-8 inputs
+- **T1** Measure 10k-character input
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `6ef2a3f5 JOURNAL ET ROADMAP — LA VAGUE PRODUIT : DRAVE V0 DOCUMENTÉ, PORTE PRODUIT VERTE, AUTOTEST ×2,4, MASTER POUSSÉ (7f73c17f)`
 - **T1** `| graphème, mot | ✅ | 0 crash, 0 span hors texte, `valeur = texte[debut:fin]` à **100 %**, couverture **49/50 à 100 %** (x46 : 95,14 %, newlines) |`
+- **T1** `dash-- rc=0 out=langue=und script=Latn source=heuristique · 12 étiquettes · unités sémantiques=1 (66.7% du texte)`
 
