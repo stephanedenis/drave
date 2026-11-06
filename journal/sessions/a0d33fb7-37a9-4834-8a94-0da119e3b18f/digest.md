@@ -3127,3 +3127,115 @@ LIENS_EXIT=0
 … [1845 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification de la durée réelle de la passe du 06/11
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '/^porte-/{s+=$3; n++} END{printf \"%d portes, %d s = %.1f min = %.2f h\\n\", n, s, s/60, s/3600}' work/portes-1106-01h28/registre.txt; awk '/^porte-/{s+=$3; n++} END{printf \"%d portes, %d s = %.1f min = %.2f h\\n\", n, s, s/60, … [95 caractères tronqués]`
+
+  ```
+83 portes, 7856 s = 130.9 min = 2.18 h
+83 portes, 8614 s = 143.6 min = 2.39 h
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du nombre d'occurrences de « gold 200+ » et de la durée de passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"gold 200+\" docs/pilotage | wc -l; grep -rn \"gold 200+\" docs/pilotage | cut -d: -f1-2", "description": "Count gold 200+ occurrences"}`
+
+  ```
+13
+docs/pilotage/chantiers.md:84
+docs/pilotage/chantiers.md:88
+docs/pilotage/chantiers.md:90
+docs/pilotage/chantiers.md:181
+docs/pilotage/plan-travail.md:39
+docs/pilotage/plan-travail.md:195
+docs/pilotage/plan-travail.md:338
+docs/pilotage/plan-travail.md:366
+docs/pilotage/roadmap.md:31
+docs/pilotage/roadmap.md:178
+docs/pilotage/en-cours.md:76
+docs/pilotage/en-cours.md:121
+docs/pilotage/en-cours.md:131
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections factuelles (13 occurrences, durée des passes) et régénération
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_file_taches.py')\ns=p.read_text(encoding='utf-8')\nrepls = [\n (\"libellé ambigu, 7 occurrences, aucune définition\",\"libellé ambigu, 13 occurrences, aucune définition\"),\n … [1050 caractères tronqués]`
+
+  ```
+patched
+OK 215 lignes MD ; 29 taches
+57:| T15 | B13 | gold 200+ : définir l'objet (gold linguistique 432 ou gold de pensée) avant d'exécuter | tools/tests/linguistique/gold_reel.* ; docs/pilotage/roadmap.md | v12 | libellé ambigu, 13 occurrences, aucune définition | grep -rn 'gold 200+' docs/pilotage | P1 |
+90:| D5 | gold 200+ | roadmap:31 et 178 ; chantiers:83 et 89 ; en-cours:131 ; plan:39 et 195 | 13 occurrences, aucune définition | Définir l'objet avant d'en faire une tâche |
+132:| H9 | La passe complète coûte 2 h 11 (06/11) à 2 h 29 (04/11) | references:5-6 | Incompatible avec la fenêtre ; ne lancer que des sous-ensembles légers |
+168:**Ce que la fenêtre ne fait pas** : pas de passe complète (2 h 11 à 2 h 29, cf. `references:5-6` et le registre du 06/11), pas d'écriture S/D/N2, pas de `git add -A`, pas de lancement de `index_reports.py` sur l'arbre partagé, pas de correction du gold synthétique (ce serait ajuster au test).
+172:Vérification par `ls` et, quand l'outil le supporte, par `--help` ou une exécution réelle. Le tableau distingue **existe** de **exécutée** : une commande peut exister et coûter 2 h 29.
+176:| bash tools/toutes-les-portes.sh | oui | non (2 h 11 à 2 h 29) |
+… [56 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_file_taches.py')\ns=p.read_text(encoding='utf-8')\ns=s.replace(\"une commande peut exister et coûter 2 h 29.\",\"une commande peut exister et coûter 2 h 11 à 2 h 29.\")\ns=s. … [514 caractères tronqués]`
+
+  ```
+patched
+OK 215 lignes MD ; 29 taches
+reports/rapport-file-taches.md:132:| H9 | La passe complète coûte 2 h 11 (06/11) à 2 h 29 (04/11) | references:5-6 | Incompatible avec la fenêtre ; ne lancer que des sous-ensembles légers |
+reports/rapport-file-taches.md:168:**Ce que la fenêtre ne fait pas** : pas de passe complète (2 h 11 à 2 h 29, cf. `references:5-6` et le registre du 06/11), pas d'écriture S/D/N2, pas de `git add -A`, pas de lancement de `index_reports.py` sur l'arbre partagé, pas de correction du gold synthétique (ce serait ajuster au test).
+reports/rapport-file-taches.md:172:Vérification par `ls` et, quand l'outil le supporte, par `--help` ou une exécution réelle. Le tableau distingue **existe** de **exécutée** : une commande peut exister et coûter 2 h 11 à 2 h 29.
+reports/rapport-file-taches.md:176:| bash tools/toutes-les-portes.sh | oui | non (2 h 11 à 2 h 29) | 84 portes ; la passe du 06/11 a 79 vertes et 4 rouges |
+reports/pensee-file-taches.json:617:   "dependance": "La passe complète coûte 2 h 11 (06/11) à 2 h 29 (04/11)",
+reports/pensee-file-taches.json:723:   "executee": "non (2 h 11 à 2 h 29)",
+reports/pensee-file-taches.json:843:  "Pas de passe complète (2 h 11 à
+… [89 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation finale : JSON, tableaux, liens, revue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-file-taches.json >/dev/null && echo \"JSON OK\"; python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-file-taches.json'))\nprint(\"comptes:\",d['comptes'])\nprint(\"vagues:\",[(v['vague … [258 caractères tronqués]`
+
+  ```
+JSON OK
+comptes: {'taches': 29, 'A': 8, 'B': 11, 'C': 10, 'doublons': 6, 'perimes': 18, 'dependances_cachees': 12, 'vagues': 3, 'sous_agents_max_par_vague': 4}
+vagues: [(1, 4), (2, 4), (3, 4)]
+ids: T01 ... T29
+files: {'A': 8, 'B': 11, 'C': 10}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 bash tools/porte-tableaux.sh >/tmp/ptf.out 2>&1; echo \"TABLES_EXIT=$?\"; tail -3 /tmp/ptf.out; timeout 120 python3 tools/verifier_liens.py >/tmp/lf.out 2>&1; echo \"LIENS_EXIT=$?\"; tail -2 /tmp/lf.out; timeout 300 pytho … [171 caractères tronqués]`
+
+  ```
+TABLES_EXIT=0
+  ✅ 1723 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+LIENS_EXIT=0
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+REVUE_EXIT=0
+  revue de documentation · 679 fiche(s) · 772 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ La revue passe : le hub a-t-il déjà mis à jour les compteurs ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\\|portes |\" docs/pilotage/en-cours.md; git log --oneline -3; git status --short docs/pilotage/en-cours.md reports/rapport-file-taches.md reports/pensee-file-taches.json", "description": "Check counters and  … [25 caractères tronqués]`
+
+  ```
+107:| portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
+109:| fichiers / JSON de résultats | **679** / **772** | `reports/*.md` / `reports/*.json` |
+266b1833 ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES)
+b2196cc7 PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES
+eab04b4d ÉTAT — LE COMPTEUR DES DOCUMENTS REVIENT À 121
+M  docs/pilotage/en-cours.md
+ M reports/pensee-file-taches.json
+ M reports/rapport-file-taches.md
+  ```
+

@@ -9,8 +9,8 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 102 |
-| Appels d'outils | 121 |
+| Messages | 103 |
+| Appels d'outils | 122 |
 | Fichiers touchés | 2 |
 | Commandes | 100 |
 | Sous-agents | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*121 appels d'outils.* Actions notables :
+*122 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,7 +41,7 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 95 autres
+- … et 96 autres
 
 **Synthèse produite :**
 
@@ -54,7 +54,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 3 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 2 | 0 |
 
 ### Commandes exécutées (échantillon)
 

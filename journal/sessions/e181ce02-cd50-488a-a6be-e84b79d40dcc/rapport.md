@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 138.0 h |
+| Durée | 138.1 h |
 | Tours | 179 |
-| Messages | 3014 |
-| Appels d'outils | 2663 |
+| Messages | 3016 |
+| Appels d'outils | 2665 |
 | Fichiers touchés | 25 |
-| Commandes | 2180 |
+| Commandes | 2181 |
 | Sous-agents | 29 |
-| Commits | 331 |
+| Commits | 332 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9620,7 +9620,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 
 ### Tour 179 — push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vi … [60 caractères tronqués]
 
-*64 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Pousser et voir les branches distantes
@@ -9636,7 +9636,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - bash — Consigner l'objectif produit
 - job_output
 - bash — Attendre la vague produit
-- … et 42 autres
+- … et 43 autres
 
 **Synthèse produite :**
 
@@ -9748,7 +9748,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2140 autres
+- … et 2141 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10227,4 +10227,5 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES" -- docs/pilotage/references-non-regression.md docs/pilotage/
 - PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES" -- docs/pilotage/references-non-regression.md docs/pilotage/
 - ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES)" -- reports/rapport-file-taches.md r
+- ÉTAT — T0 DANS LE BUDGET APRÈS LA FILE DES TÂCHES" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET APRÈS"
 

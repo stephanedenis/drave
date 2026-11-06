@@ -3664,3 +3664,75 @@ Garde **ta** version de `docs/produit/README.md` et `exemples.md` : tu as raison
 
 Termine : (1) réécris les deux fichiers pour coller au CLI réel (`analyser`/`evaluer`/`rejouer`/`--version`, texte en argument, codes 0/1/2) ; (2) n'utilise que des sorties **que tu as lançées**, avec la commande exacte au-dessus ; (3) garde le § limites (restitution/traduction/neuronal absents, 17 spans, doublon REL de l'union) ; (4) vérifie que `docs/produit/exemples.md` a un lien entrant depuis `docs/produit/README.md` (sinon la revue le signale). Ne touche pas à `en-cours`, `roadmap`, `tools/`, `reports/` ; ne commit rien. Rends la liste des liens à déclarer et le diff de tes deux fichiers.
 
+### 🤖 Assistant
+
+⏵ Réécriture de `exemples.md` avec les sorties CLI exactes, commande au-dessus.
+
+- **bash** `{"command": "cd /tmp/doc_produit && echo \"=== CLI2 ===\"; cat cli2.json; echo \"=== CLI3 ===\"; cat cli3.json; echo \"=== CLI5 ===\"; cat cli5.json", "description": "Read exact CLI JSON excerpts"}`
+
+  ```
+=== CLI2 ===
+{
+  "langue": "fr",
+  "script": "Latn",
+  "refus": "",
+  "syntagmes": [
+    {
+      "valeur": "Le livre",
+      "type": "GN",
+      "debut": 0,
+      "fin": 8,
+      "confiance": 0.55,
+      "role": "agent",
+      "cible": "intéressant",
+      "union": null,
+      "candidats": [
+        "« que j'ai lu » → Le livre",
+        "intéressant",
+        "livre"
+      ]
+    },
+    {
+      "valeur": "que j'ai lu",
+      "type": "REL",
+      "debut": 9,
+      "fin": 20,
+      "confiance": 0.55,
+      "role": "qualite",
+      "cible": "livre",
+      "union": null,
+      "candidats": [
+        "« que j'ai lu » → Le livre",
+        "intéressant",
+        "livre"
+      ]
+    },
+    {
+      "valeur": "que j'ai lu est intéressant",
+      "type": "REL",
+      "debut": 9,
+      "fin": 36,
+      "confiance": 0.3,
+      "role": "qualité",
+      "cible": "livre",
+      "union": true,
+      "candidats": [
+        "REL",
+        "livre",
+        "intéressant"
+      ]
+    },
+    {
+      "valeur": "est intéressant",
+      "type": "GV",
+      "debut": 21,
+      "fin": 36,
+      "confiance": 0.55,
+      "role": "predicat",
+      "cible": "livre",
+      "union": null,
+      "candidats": [
+       
+… [3163 caractères tronqués]
+  ```
+

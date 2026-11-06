@@ -51031,3 +51031,23 @@ README + état
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **file des 29 tâches** (A23) intégrée.\", \" ; file des 29 tâches intégrée.\")\nn_md=len(list(pathlib.Path('reports' … [1062 caractères tronqués]`
+
+  ```
+679 772
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-3015]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3015", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-file-taches.md
+COMMIT OK 1
+266b1833 ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES)
+ven 06 nov 2026 10:44:18 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Prochaine action** : les **17 spans inatteignables** (gold, lexique), la **restitution**, et la **file des tâches** (ra … [671 caractères tronqués]`

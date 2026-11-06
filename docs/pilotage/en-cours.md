@@ -71,7 +71,7 @@
 - **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**, porte produit et doc d'usage ; file des 29 tâches intégrée.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
-- **Prochaine action** : les **17 spans inatteignables** (gold, lexique), la **restitution**, et la **file des tâches** (rapport A23).
+- **Prochaine action** : les **17 spans inatteignables** (gold, lexique) et la **restitution**.
 - **Sous-agents** : 4 mandats, [plan-travail](plan-travail.md) § 9.
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+** ; `cascade_pos` (rouge documentée).
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).

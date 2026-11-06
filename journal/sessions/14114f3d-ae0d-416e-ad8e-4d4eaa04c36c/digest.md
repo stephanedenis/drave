@@ -2265,3 +2265,10 @@ non corrects:
 [('f01', 'fr', 0.333, 'fr'), ('f02', 'fr', 0.091, 'und'), ('f03', 'en', 0.235, 'en'), ('f20', 'fr', 0.222, 'fr'), ('e29', 'de', 0.5, 'de'), ('e30', 'it', 0.429, 'it'), ('e31', 'und', 0.0, 'und'), ('e39', 'en', 0.25, 'en')] non-und au niveau bloc 6 /8
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-produit-bloc-l.md reports/pensee-produit-bloc-l.json; do if [ -e \"$f\" ]; then echo \"EXISTE $f\"; else echo \"neuf $f\"; fi; done", "description": "Vérifier que les deux fichiers sont neufs"}`
+
+  ```
+neuf reports/rapport-produit-bloc-l.md
+neuf reports/pensee-produit-bloc-l.json
+  ```
+
