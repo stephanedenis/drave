@@ -7,12 +7,12 @@
 | Identifiant | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.3 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 22 |
-| Appels d'outils | 31 |
-| Fichiers touchés | 1 |
-| Commandes | 24 |
+| Messages | 34 |
+| Appels d'outils | 52 |
+| Fichiers touchés | 2 |
+| Commandes | 37 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python, dépôt Drave). Mission … [2481 caractères tronqués]
 
-*31 appels d'outils.* Actions notables :
+*52 appels d'outils.* Actions notables :
 
 - bash — List tools and check branch status
 - read
@@ -41,11 +41,11 @@
 - bash — Check tests layout and pytest availability
 - bash — Read existing test style
 - bash — Read second test style
-- … et 15 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
-⏵ Writing the new product CLI `tools/drave.py`
+⏵ Writing the end-to-end smoke test `tools/tests/test_produit.py`
 
 ## 3. Travail accompli
 
@@ -53,7 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py` | 1 | 8 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_produit.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -81,6 +82,19 @@
 - **T1** Test help, usage errors and refusal
 - **T1** Check evaluation JSON size and validity
 - **T1** Verify cross-process determinism of outputs
+- **T1** Run the smoke test directly
+- **T1** Run the smoke test with pytest
+- **T1** Use fixed-width formatter and clarify language help
+- **T1** Compile and check line lengths
+- **T1** Check deterministic help rendering
+- **T1** Test broken pipe behavior
+- **T1** Check unused import
+- **T1** Check dependencies of the S generator
+- **T1** Run CLI from outside the repo
+- **T1** Measure command runtimes and output sizes
+- **T1** Measure full gold annotation dump size
+- **T1** Run smoke tests both ways
+- **T1** Measure per-sentence JSON sizes and replay stability
 
 ## 4. Mesures et résultats marquants
 
@@ -104,4 +118,10 @@
 - **T1** `FRACTION SÉMANTIQUE 55.54 %`
 - **T1** `duree=0.48 s maxrss=30908 Ko`
 - **T1** `duree=0.45 s maxrss=30724 Ko`
+- **T1** `duree=1.32 s maxrss=28476 Ko`
+- **T1** `......                                                                   [100%]`
+- **T1** `analyses: 0.537 s (0.88 ms/phrase)`
+- **T1** `JSON annotation totale (indent=1): 4938465 octets = 4.938 Mo`
+- **T1** `JSON annotation totale (compact): 3574776 octets = 3.575 Mo`
+- **T1** `test direct: 1.33 s, 28532 Ko`
 

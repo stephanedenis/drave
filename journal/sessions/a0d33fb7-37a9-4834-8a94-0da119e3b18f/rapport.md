@@ -7,12 +7,12 @@
 | Identifiant | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 38 |
-| Appels d'outils | 48 |
+| Messages | 55 |
+| Appels d'outils | 69 |
 | Fichiers touchés | 0 |
-| Commandes | 39 |
+| Commandes | 59 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*48 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,11 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 26 autres
+- … et 46 autres
 
 **Synthèse produite :**
 
-⏵ Analyse du correctif possible de la porte `bloc-linguistique`
+⏵ Exécution de la 84ᵉ porte (stagée, non commitée)
 
 ## 3. Travail accompli
 
@@ -95,6 +95,8 @@
 - **T1** Inspect failing verdict fields
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
+- **T1** Run gold evaluation with key env var set
+- … et 19 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -103,4 +105,22 @@
 - **T1** `*4,19** contre 5,67) et en multilingue (N2.q, 21,65 M : **5,89** contre 6,68 à recette égale ; N2.t, 34,3 M : **5,58**, le rendement décroît). La note de passage [N2 → R1](../../reports/rapport-n2-fen`
 - **T1** `2. ✅ la tête essayée (refusée : +10 % de PPL) ;`
 - **T1** `docs/pilotage/roadmap.md:178:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** +`
+- **T1** `30:| **M6** | **le moteur n'apprend pas** — il applique, mesure, sauve et recharge une matrice additive, mais ne touche jamais aux poids | notre seule règle locale est **réfutée** (transfert nul, −5 à`
+- **T1** `33:| **M9** | ~~aucun instrument ne mesure le coût de la SPARSITÉ DES POIDS~~ **LIVRÉ le 11/10, les deux moitiés** | (1) `tools/occupation_poids.py` lit l'occupation d'un GGUF par genre ; (2) le **mot`
+- **T1** `72:| **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués ; le **chemin court entraîné** (dessin B) est mesuré de`
+- **T1** `73:| **N5** | **mémoire d'un signal injecté** — le modèle n'en a aucune, **et il ne l'APPREND pas** | sonde linéaire **et** non linéaire sur l'état de sortie : le signal **courant** est lisible (**R² `
+- **T1** `docs/pilotage/chantiers.md:114:   ils fournissent aussi les documents du banc. Sans D, N2 reste sur 5,36 Mo de prose et L n'a`
+- **T1** `docs/pilotage/programme-r.md:146:**+3,92 à +4,09 %** (1024), **+4,22 % / +6,59 %** en anglais. Le natif reste en **octets** ; le`
+- **T1** `| **R — le lecteur** | un document, une question, un budget : réponse sourcée ou refus motivé ? | ✅ R0.1–R0.3 ; R0.4/R0.5 négatifs ; R4.1–R4.4 mesurés (R4.4 : 4/5 familles ≥ 90 %) | **R1.1/R1.2** (con`
+- **T1** `| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160`
+- **T1** `| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **d`
+- **T1** `| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** `
+- **T1** `- **Un seul split déterministe** (`crc32 % 3`), sans validation croisée ; les valeurs`
+- **T1** `candidats laisse 1,17 % de réussite, le top-1 aléatoire 42,14 % ; les deux donnent p = 0.`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : tools/revue_documentation.py             0 tools/taille_documents.py                0 tools/verifie_en_cours.py                0 tools/verifie_journal.py                 0 tools/verifier_liens.py     
 

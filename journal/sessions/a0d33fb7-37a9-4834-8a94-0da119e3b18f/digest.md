@@ -1386,3 +1386,451 @@ heuristique all: {"pos": {"exactitude": 0.7581, "exactitude_ferme": 0.9004, "exa
 … [202 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-porte.json > /tmp/eg.out 2>/tmp/eg.err; echo \"EXIT=$?\"; tail -5 /tmp/eg.err; echo \"--- tail out ---\"; tail -3 /tmp/eg.out", "description": "Get true exit co … [44 caractères tronqués]`
+
+  ```
+EXIT=1
+--- tail out ---
+    "labels": 208,
+    "top1"
+heuristique all: {"pos": {"exactitude": 0.7581, "exactitude_ferme": 0.9004, "exactitude_ouvert": 0.6234, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 50, "NOUN": 80, "VERB": 4}, "ADV": {"ADV": 117, "NOUN": 20, "PREP": 2, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 118, "?": 3, "NOUN": 3}, "CONJ": {"CONJ": 44, "PRON": 25, "DET": 12, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 411, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 311, "NOUN": 450, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6292, "rappel": 0.5464, "f1": 0.5849, "tp": 1018, "fp": 600, "fn": 845, "tete": {"precision": 0.81, "rappel": 0.6704, "f1": 0.7336, "tp": 1249, "fp": 293, "fn": 614}}, "pragmatique": {"acte": 0.9967, "negation": 0.9771, "modalite": 0.9886, "double_sens": 0.9444}, "fraction_semantique": 0.5537}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E \"assert|exit|cascade|0\\.7465|0\\.7581|PORTE|print\" tools/tests/linguistique/evaluer_gold.py | tail -40; echo \"--- lines ---\"; wc -l tools/tests/linguistique/evaluer_gold.py", "description": "Find assertions in evaluer … [10 caractères tronqués]`
+
+  ```
+4:lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+176:        acte_ok += int(pr["acte"] == g.get("acte", "assertion"))
+232:    cascade = bl.Cascade(h, n)
+234:             "parallele": bl.Parallele([h, n]), "cascade": cascade}
+242:    resultats["cascade"]["appels_neuronal"] = cascade.appels_neuronal
+270:    c_all = resultats["cascade"]["all"]
+280:        "cascade_pos": c_all["pos"]["exactitude"] >= h_all["pos"]["exactitude"],
+281:        "cascade_syntagme": c_all["syntagme"]["f1"] >= h_all["syntagme"]["f1"],
+292:    print(json.dumps({k: v for k, v in resultats.items() if k not in ("heuristique", "mock_neuronal")},
+294:    print("heuristique all:", json.dumps({k: h_all[k] for k in ("pos", "syntagme", "pragmatique", "fraction_semantique")},
+--- lines ---
+305 tools/tests/linguistique/evaluer_gold.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '260,305p' tools/tests/linguistique/evaluer_gold.py", "description": "Read verdict section of gold evaluation"}`
+
+  ```
+resultats["gold"] = {"phrases": len(phrases),
+                         "reel": len(sources["reel"]),
+                         "hand": len(sources["hand"]),
+                         "reel_new": len(sources["reel_new"]),
+                         "synthetique": len(sources["synthetique"]),
+                         "tokens": sum(len(p["mots"]) for p in phrases)}
+    h_all = resultats["heuristique"]["all"]
+    h_hand = resultats["heuristique"]["hand"]
+    h_reel = resultats["heuristique"]["reel"]
+    h_syn = resultats["heuristique"]["synthetique"]
+    c_all = resultats["cascade"]["all"]
+    resultats["verdict"] = {
+        "pos_hand": h_hand["pos"]["exactitude"] >= 0.85,
+        "pos_reel": h_reel["pos"]["exactitude"] >= 0.70,
+        "pos_synthetique": h_syn["pos"]["exactitude"] >= 0.60,
+        "syntagme_hand": h_hand["syntagme"]["f1"] >= 0.30,
+        "syntagme_reel": h_reel["syntagme"]["f1"] >= 0.16,
+        "syntagme_synthetique": h_syn["syntagme"]["f1"] >= 0.15,
+        "tete": h_all["syntagme"]["tete"]["f1"] >= 0.35,
+        "acte": h_all["pragmatique"]["acte"] >= 0.70,
+        "cascade_pos": c_all["pos"]["exactitude"] >= h_all["pos"]["exactitude"],
+        "cascade_syntagme": c_
+… [1403 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/pensee-gold-porte.json'))\nprint(json.dumps(d.get('verdict'),indent=1,ensure_ascii=False))\nprint(\"ok\",d.get('ok'))\nprint(\"cascade pos\",d['cascade']['all']['pos']['exactitud … [227 caractères tronqués]`
+
+  ```
+{
+ "pos_hand": true,
+ "pos_reel": true,
+ "pos_synthetique": true,
+ "syntagme_hand": true,
+ "syntagme_reel": true,
+ "syntagme_synthetique": true,
+ "tete": true,
+ "acte": true,
+ "cascade_pos": false,
+ "cascade_syntagme": true,
+ "attachement_topk": true,
+ "attachement_hasard": true,
+ "attachement_tete_couverture": true,
+ "attachement_tete_topk": true,
+ "attachement_tete_hasard": true,
+ "reel_non_requis": true
+}
+ok False
+cascade pos 0.7465 heur 0.7581
+cascade syn 0.6141 heur 0.5849
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse du correctif possible de la porte `bloc-linguistique`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Cascade\\|class MockNeuronal\\|class Parallele\\|PRIORITE_NIVEAU\\|priorite_par_niveau\\|def __init__\" tools/bloc_linguistique.py | head -30", "description": "Locate Cascade, MockNeuronal and priority code"}`
+
+  ```
+530:    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+1264:class MockNeuronal:
+1273:    def __init__(self, profils: dict[str, dict] | None = None):
+1327:    def __init__(self, modele: str | pathlib.Path, llama_cli: str = "llama-cli",
+1416:    def __init__(self, modele: str | pathlib.Path, endpoint: str = "http://127.0.0.1:18081",
+1545:    def __init__(self, modele: str | pathlib.Path, endpoint: str = "http://127.0.0.1:18082",
+1675:    def __init__(self, pos: BlocLinguistique, chunks: BlocLinguistique,
+1725:    def __init__(self, modele: str | pathlib.Path, endpoint: str = "http://127.0.0.1:18082",
+1855:    return PRIORITE_NIVEAU if os.environ.get("DEEPSEEK_KEY_FILE") else None
+1858:PRIORITE_NIVEAU = {
+1877:            priorite_par_niveau: dict | None = None,
+1882:    Si `priorite_par_niveau` est donné, la fusion choisit **la source par niveau** (le
+1894:    if priorite_par_niveau:
+1899:        choisis = dict(priorite_par_niveau)
+1925:class Parallele:
+1930:    def __init__(self, blocs: Sequence[BlocLinguistique],
+1932:                 priorite_par_niveau: dict | None = None,
+1938:        self.priorite_par_niveau = (priorite_par_niveau if priori
+… [539 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1264,1326p' tools/bloc_linguistique.py; echo \"=== PRIORITE ===\"; sed -n '1855,1905p' tools/bloc_linguistique.py; echo \"=== CASCADE ===\"; sed -n '1950,1994p' tools/bloc_linguistique.py", "description": "Read MockNeuronal,  … [25 caractères tronqués]`
+
+  ```
+class MockNeuronal:
+    """Le neuronal **de contrat** : même sortie, source `neuronal`, déterministe, sans GPU.
+
+    Il ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+    que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+    """
+
+    nom = "neuronal"
+
+    def __init__(self, profils: dict[str, dict] | None = None):
+        self.profils = profils
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        lg = detecter_langue(texte, self.profils, langue)[0]
+        if lg == "und" and langue:
+            lg = langue
+        script = detecter_script(texte)
+        etiquettes: list[Etiquette] = []
+        unites: list[Span] = []
+        h = Heuristique(segmenter_s=False)
+        for d, f, t, typ in h._mots(texte):
+            if typ == "mot":
+                classe, _, _ = h._pos(lg, t)
+                if classe in {"NOUN", "VERB", "ADJ", "ADV", "MOT"}:
+                    etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, 0.82,
+                                                langue=lg, script=s
+… [6785 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de l'hypothèse « dépendance cachée à DEEPSEEK_KEY_FILE »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/tmp/faux.key python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/eg-env.json >/dev/null 2>/tmp/eg-env.err; echo \"EXIT=$?\"; python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/eg-env.json'))\nprint(\"o … [270 caractères tronqués]`
+
+  ```
+EXIT=1
+ok False cascade_pos 0.3454 heur 0.7581
+verdict cascade_pos False
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la fiche S la plus récente
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-paragraphes.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-paragraphes.md</path>
+<type>file</type>
+<content>
+1: # S — La banque de paragraphes passe à neuf : six paires d'Alice, sources anglaises et référents
+2: 
+3: > **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : la banque passe de **3 à 9
+4: > paragraphes complets**. Les six nouveaux — l'ouverture d'Alice, la table de verre, l'attente à
+5: > la petite porte, « Buvez-moi », « Je me sens toute drôle » et le gâteau oublié — portent chacun
+6: > leur **contexte**, leur **antécédent** (Alice) et leur **source anglaise** (Project Gutenberg
+7: > #11). La page `/paragraphes` en affiche neuf, avec l'arbre, les référents et la source ; les
+8: > **55 tests** passent.
+9: 
+10: ## Les six paires
+11: 
+12: | id | cible (français) | source (anglais) | réf. |
+13: |---|---|---|---:|
+14: | a004 | « ALICE, assise auprès de sa sœur… commençait à s'ennuyer… » | *Alice was beginning to get very tired…* | 1 |
+15: | a005 | « Tout à coup elle rencontra… une petite table à trois pieds, en verre massif… » | *Suddenly she came upon a little three-legged table…* | 3 |
+16: | a006 | « Comme cela n'avançait à rien… elle retourna vers
+… [2884 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Balayage complémentaire (manques, chantiers, programme R) pour ne rien perdre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/pilotage/manques.md docs/pilotage/chantiers.md docs/pilotage/programme-r.md; echo \"--- manques headings ---\"; grep -n '^#' docs/pilotage/manques.md | head -20; echo \"--- manques next ---\"; grep -n -i -E \"prochaine|res … [111 caractères tronqués]`
+
+  ```
+107 docs/pilotage/manques.md
+  246 docs/pilotage/chantiers.md
+  345 docs/pilotage/programme-r.md
+  698 total
+--- manques headings ---
+1:# Registre des manques
+21:## 1. Les manques du MOTEUR
+65:## 2. Les manques du MODÈLE (ce qu'aucun modèle d'aujourd'hui ne fait)
+77:## 3. Les manques d'ARCHITECTURE (pour porter un cerveau)
+87:## 4. Ce qui n'est PAS un manque, et qu'il ne faut pas confondre
+--- manques next ---
+6:> mesure qui l'établit et ce qu'elle bloque. **Chargement :** document daté ; **ne pas charger par
+15:> qu'elle bloque, et où c'est documenté. Rien ici n'est une feuille de route : la feuille de route
+23:| # | manque | ce qui l'établit (mesure) | ce qu'il bloque | coût |
+27:| **M3** | **chemin par lots et hyper-connexions** — non porté, et refusé explicitement | `chemin par LOTS et hyper-connexions : ce chemin n'est pas porté (le résidu y est additionné au lieu d'être remélangé par hc_post)` | le lot est **impossible** sur le seul modèle plus gros que la RAM de la machine (V4.1) ; la question « le lot amortit-il les lectures du disque » reste ouverte | 2 sem. |
+30:| **M6** | **le moteur n'apprend pas** — il applique, mesure, sauve et recharge une matrice additive, mais ne t
+… [3683 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -i -E \"prochaine action|frontière|reste|à faire\" docs/pilotage/chantiers.md docs/pilotage/programme-r.md | head -25", "description": "Grep next actions in chantiers and programme-r"}`
+
+  ```
+docs/pilotage/chantiers.md:27:| 31/10 22 h 09 | « chaque bloc […] peut utiliser la technologie et les moyens les plus appropriés […] modularité extrême […] L'interface reste Drave, où des flux de données typées transigent » | la **substituabilité des blocs** (neuronal / classique / matériel) comme principe, pas comme option |
+docs/pilotage/chantiers.md:81:| chantier | la question à laquelle il répond | état au 04/11 | prochaine action | dépend de | fournit à |
+docs/pilotage/chantiers.md:114:   ils fournissent aussi les documents du banc. Sans D, N2 reste sur 5,36 Mo de prose et L n'a
+docs/pilotage/chantiers.md:116:2. **L → R, B, N2, S.** La surface étiquetée entre dans le lecteur (frontières, régions,
+docs/pilotage/chantiers.md:124:5. **A → N, B.** Le moteur exécute les modèles et les blocs ; sans lui, N et B restent des
+docs/pilotage/chantiers.md:149:## 5. Les tensions, et ce qui reste à trancher
+docs/pilotage/chantiers.md:151:1. **La frontière heuristique/réseau.** Où s'arrête l'étiquetage CPU et où commence le réseau ?
+docs/pilotage/chantiers.md:154:   réseau ». La première mesure (langue/frontières, 71 langues) est la prochaine action de L.
+docs/pilotage/chantiers.md:160:   res
+… [1379 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la table des chantiers et de la prochaine action de R
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '78,100p' docs/pilotage/chantiers.md; echo \"=== programme-r 286 ===\"; sed -n '284,300p' docs/pilotage/programme-r.md", "description": "Read chantiers table and programme-r next action"}`
+
+  ```
+**B13** ont une fiche de session et des rapports ; **L** et **D** sont les deux chantiers que les
+48 h ont fait sortir de l'implicite.
+
+| chantier | la question à laquelle il répond | état au 04/11 | prochaine action | dépend de | fournit à |
+|---|---|---|---|---|---|
+| **A — le moteur** | un flux de blocs typés peut-il tourner, se placer, se répartir, se rejouer ? | ✅ A1–A8 ; A3.4, A5.4, A6.2 bloqués ; A2.6 partiel ; A8.3 expliqué | **A2.6** (experts, A6.2 bloqué) ; réduire le lot | — | N, B (exécution) |
+| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **183/183 portes** (6 S fixés ; T132/T133 2/5) | B10.3 (encodeur) ; **B13** : T132/T133, gold 200+ ; porte 183/183 ; pragmatique | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+| **N — le natif** | le modèle natif peut-il être petit, creux, honnête et général ? | 🔬 N0/N1 mesurés ; **N0.1 6/6** (payload corrompu refusé) ; N2.h : 3,09 en domaine, 16,70 → 3,85 hors dépôt ; N4 partiel | **N2** (français réel, capacité) ; N4 (consigne) | A (moteur), D (corpus) | R1–R3, N5 |
+| **R
+… [6988 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fin de lecture des fiches d'audit et dev/test
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-audit-v10.md reports/rapport-dev-test-v10.md reports/rapport-coherence-fiches-v8.md; do echo \"######## $f\"; tail -30 \"$f\"; done", "description": "Read endings of audit/dev-test/coherence reports"}`
+
+  ```
+######## reports/rapport-audit-v10.md
+- **In-sample** : les règles sont dessinées sur ce gold ; le test n'est pas aveugle (A17 a
+  diagnostiqué sur dev et test). L'audit mesure l'intégration, pas la généralisation.
+- **Un seul split déterministe** (`crc32 % 3`), sans validation croisée ; les valeurs
+  dev/test sont celles de ce split.
+- **Ablations par copies** : la fidélité est vérifiée par `v10 − GP − -ée = v9` (219, 0,5866,
+  20 spans, 152/152, 67/67) et par le module v8 (212, 0,5763, 27 spans, 177 top-k, 148/148,
+  64/64). Les variantes intermédiaires ne retirent qu'une règle à la fois.
+- **Le `-ée` est inerte sur ce gold** (0 différence d'annotation sur 612 phrases) ; un autre
+  corpus pourrait révéler des faux positifs (`entrée`, `portée`, `aimée`) ou des effets hors
+  gold. L'inertie mesurée ne prouve pas que la règle est bonne, seulement qu'elle ne change
+  rien ici.
+- **La garde DET du GP inclut un vrai verbe après déterminant** (« de la voir » → GP
+  « de la voir ») : risque réel, non mesuré sur ce gold.
+- **Le top-k officiel (sous-chaîne) est peu discriminant** : la permutation des listes de
+  candidats laisse 1,17 % de réussite, le top-1 aléatoire 42,14 % ; les deux don
+… [5049 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Identification exacte des 17 spans restants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-v12.json'))\ndef walk(o,p=''):\n    if isinstance(o,dict):\n        for k,v in o.items():\n            if 'span' in k.lower() or 'perdu' in k.lower() or 'echec' in k.lo … [298 caractères tronqués]`
+
+  ```
+/avant/spans 18
+/apres/exact_span 1.0
+/apres/spans {"REL": 8, "SUB": 5, "GP": 4, "total": 17}
+KEYS ['date', 'ligne', 'portes', 'avant', 'apres', 'correction', 'controle_negatif', 'limites']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/pensee-gold-porte.json'))\n# find structures with lost spans\nfor k in d:\n    if k in ('heuristique','mock_neuronal'): continue\n    pass\nprint(list(d.keys()))\nh=d['heuristiqu … [150 caractères tronqués]`
+
+  ```
+['date', 'heuristique', 'mock_neuronal', 'parallele', 'cascade', 'reel', 'attachement_hasard', 'gold', 'verdict', 'ok']
+{"cibles": 239, "labels": 222, "top1": 222, "topk": 221, "exact": 222, "top1_taux": 0.9289, "topk_taux": 0.9247, "exact_taux": 0.9289, "exact_any": 222, "exact_any_taux_span": 1.0, "top1_taux_span": 1.0, "topk_taux_span": 0.9955, "topk_exact": 221, "topk_exact_taux": 0.9247, "topk_exact_taux_span": 0.9955, "exact_taux_span": 1.0, "verbe": {"cibles": 150, "justes": 150, "taux": 1.0}, "nom": {"cibles": 72, "justes": 72, "taux": 1.0}, "couverture": 0.9289, "par_langue": {"fr": {"cibles": 151, "labels": 136, "exact": 136, "topk": 135, "exact_taux_span": 1.0}, "en": {"cibles": 88, "labels": 86, "exact": 86, "topk": 86, "exact_taux_span": 1.0}}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def .*attachement\\|spans_perdus\\|perdus\\|def evaluer_bloc\\|def charger\" tools/tests/linguistique/evaluer_gold.py | head -20", "description": "Find attachment evaluation functions"}`
+
+  ```
+24:def charger() -> list[dict]:
+38:def charger_gele() -> list[dict]:
+80:def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '80,175p' tools/tests/linguistique/evaluer_gold.py", "description": "Read evaluer_bloc internals"}`
+
+  ```
+def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+    tp = fp = fn = ttp = tfp = tfn = 0
+    pos_ok = pos_n = pos_ok_ferme = pos_n_ferme = pos_ok_ouvert = pos_n_ouvert = 0
+    conf = defaultdict(Counter)
+    acte_ok = neg_ok = mod_ok = ds_ok = 0
+    fractions = []
+    att_n = att_labels = att_top1 = att_topk = att_exact = 0
+    att_topk_exact = 0
+    att_exact_any = 0
+    par_langue = {"fr": {"cibles": 0, "labels": 0, "exact": 0, "topk": 0},
+                  "en": {"cibles": 0, "labels": 0, "exact": 0, "topk": 0}}
+    att_v_n = att_v_ok = att_n_n = att_n_ok = 0
+    att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
+    for phrase in phrases:
+        a = bloc.analyser(phrase["texte"], phrase["langue"])
+        fractions.append(a.fraction_semantique)
+        pos = _pos_map(a)
+        for mot in phrase["mots"]:
+            pred = pos.get((mot["debut"], mot["fin"]), "?")
+            pos_n += 1
+            pos_ok += int(pred == mot["pos"])
+            ferme = mot["pos"] in {"DET", "PREP", "PRON", "CONJ", "AUX", "ADV", "NUM"}
+            if ferme:
+                pos_n_ferme += 1
+                pos_ok_ferme += int(pred == mot["pos"])
+            else:
+                pos
+… [3530 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"GP\" tools/tests/linguistique/gold.py | head -15; echo \"--- synthetique ---\"; grep -n \"GP\\|preposition\\|préposition\" tools/tests/linguistique/gold_synthetique.py | head -15; echo \"--- gold_reel GP ---\"; grep -c '\"t … [111 caractères tronqués]`
+
+  ```
+19:     [("GN", "Le chat", "agent"), ("GP", "de la voisine", "possession", ["chat"]), ("GV", "dort", "prédicat")], {"acte": "assertion"}),
+24:      ("GP", "dans le parc", "lieu", ["vu", "l'homme"])], {"acte": "assertion"}),
+28:     [("GN", "Il", "agent"), ("GV", "a couru", "prédicat"), ("GP", "pour attraper le bus", "but", ["couru"])], {"acte": "assertion"}),
+35:     [("GN", "Le chien", "agent"), ("GP", "du voisin", "possession", ["chien"]), ("GV", "aboie", "prédicat"),
+39:     [("GN", "Les enfants", "agent"), ("GV", "jouent", "prédicat"), ("GP", "dans le jardin", "lieu", ["jouent", "enfants"])], {"acte": "assertion"}),
+48:     [("GV", "Viens", "prédicat"), ("GP", "ici", "lieu", ["Viens"])], {"acte": "exclamation"}),
+55:     [("GN", "Le canard", "agent"), ("GV", "est prêt", "prédicat"), ("GP", "à manger", "but", ["prêt", "canard"])], {"acte": "assertion", "double_sens": True}),
+62:      ("GP", "avec le télescope", "moyen", "vu")], {"acte": "assertion"}),
+70:      ("GP", "in the park", "lieu", ["saw", "man"])], {"acte": "assertion"}),
+84:     [("GN", "The duck", "agent"), ("GV", "is ready", "prédicat"), ("GP", "to eat", "but", ["ready", "duck"])],
+--- synthetique ---
+4:une grammaire
+… [282 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état des sessions et du heartbeat
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 tools/sessions.py --status 2>&1 | head -30", "description": "Show session status and heartbeats"}`
+
+  ```
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · terminé  · 1413 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+    0b0a6a0d-05f5-4308 · terminé  · 7280 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 9354 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+  ⏰ 1e7ef596-93e6-45f1 · actif    · 1920 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+      → **suivi docs** (N3 intégré, état au 04/11), puis la **passe** après les runs.
+    22e518ee-81b8-4081 · terminé  · 8525 min · archiv
+… [2593 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 tools/sessions.py --check --strict 2>&1 | tail -15; echo \"EXIT=$?\"", "description": "Run strict session check"}`
+
+  ```
+❌ mandat périmé (1920 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ❌ mandat périmé (370 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Test des outils documentaires (lecture seule) pour l'état de départ
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in tools/revue_documentation.py tools/taille_documents.py tools/verifie_en_cours.py tools/verifie_journal.py tools/verifier_liens.py tools/verifie_backlog.py tools/verifier_schemas.py; do printf \"%-40s \" \"$f\"; grep -c -E \" … [117 caractères tronqués]`
+
+  ```
+tools/revue_documentation.py             0
+tools/taille_documents.py                0
+tools/verifie_en_cours.py                0
+tools/verifie_journal.py                 0
+tools/verifier_liens.py                  0
+tools/verifie_backlog.py                 1
+tools/verifier_schemas.py                0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for c in \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifier_liens.py\" \"python3 tools/verifier_schemas.py\"; do echo \"===== $c\"; timeout 120 $c … [137 caractères tronqués]`
+
+  ```
+===== python3 tools/taille_documents.py
+EXIT=0
+  avertissements :
+     · 29 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 618 l. rapport-spans-v7.md, 597 l. rapport-e5-distillation.md, 561 l. rapport-cache-chunker.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+===== python3 tools/verifie_en_cours.py
+EXIT=0
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+===== python3 tools/verifie_journal.py
+EXIT=0
+  journal · 43 jour(s) · 148 session(s) · 2212 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+===== python3 tools/verifier_liens.py
+EXIT=0
+  ✅ 3487 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+===== python3 tools/verifier_schemas.py
+EXIT=0
+  schémas · 459 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py >/tmp/revue.out 2>&1; echo \"EXIT=$?\"; tail -25 /tmp/revue.out", "description": "Run documentation review", "timeoutMs": 320000}`
+
+  ```
+EXIT=1
+  revue de documentation · 677 fiche(s) · 770 JSON · 120 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+     · compteurs : en-cours.md dit 83 portes, le disque en a 84
+     · compteurs : en-cours.md dit 676 fichiers, le disque en a 677
+     · compteurs : en-cours.md dit 769 JSON, le disque en a 770
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 bash tools/porte-tableaux.sh >/tmp/pt.out 2>&1; echo \"TABLEAUX_EXIT=$?\"; tail -3 /tmp/pt.out; timeout 120 python3 tools/verifie_backlog.py >/tmp/vb.out 2>&1; echo \"BACKLOG_EXIT=$?\"; tail -8 /tmp/vb.out", "description" … [59 caractères tronqués]`
+
+  ```
+TABLEAUX_EXIT=0
+  ✅ 1719 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3487 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+BACKLOG_EXIT=0
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (3) : A2.6, N2, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+

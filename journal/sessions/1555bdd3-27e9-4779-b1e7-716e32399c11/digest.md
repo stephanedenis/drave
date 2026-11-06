@@ -1820,3 +1820,420 @@ fiches 676 json 769 portes 83
 Python 3.13.16
   ```
 
+### 🤖 Assistant
+
+⏵ Test des profils UDHR sur texte court et exécution hors racine.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --texte \"Élodie sourit.\" --profils data/udhr/articles.jsonl --json | python3 -c \"import json,sys; d=json.load(sys.stdin); print('langue',d['langue'],'script',d['script'],'refus',repr(d['refus'])) … [233 caractères tronqués]`
+
+  ```
+langue und script Latn refus ''
+=== hors racine ===
+{
+ "texte": "Le chat dort.",
+ "langue": "fr",
+ "script": "Latn",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --texte \"Élodie sourit.\" --langue fr --json | python3 -c \"\nimport json,sys; d=json.load(sys.stdin); print('langue',d['langue'],'refus',repr(d['refus']))\nprint([(e.valeur,e.type) for e in d['eti … [371 caractères tronqués]`
+
+  ```
+langue und refus ''
+=== longue phrase sans profils ===
+langue fr
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    print([(e.valeur,e.type) for e in d['etiquettes'] if e.niveau=='pos'])
+                                                         ^^^^^^^^
+AttributeError: 'dict' object has no attribute 'niveau'
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de `Heuristique.analyser` : rôle exact de `--langue`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 980,1060p tools/bloc_linguistique.py", "description": "Read Heuristique analyser language handling"}`
+
+  ```
+i = j
+                continue
+            if typ == "mot" and n in lex.get("PREP", set()) and i + 1 < len(mots):
+                j = i + 1
+                # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
+                # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and not (est_verbe(mots[j][0], mots[j][2])
+                                and not (j > i + 1 and _normaliser(mots[j - 1][2]) in lex.get("DET", set())))
+                       and _normaliser(mots[j][2]) not in RELATIFS):
+                    j += 1
+                # « à manger » : un GP réduit à sa préposition prend le verbe qui suit
+                if j == i + 1 and j < len(mots) and est_verbe(mots[j][0], mots[j][2]):
+                    j += 1
+                segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
+                                 "debut": d, "fin": mots[j - 1][1],
+                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                i = j
+                continue
+            i += 1
+        return segments
+
+    # -- analyse -----
+… [3271 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _langue\" -A 30 tools/bloc_linguistique.py", "description": "Read _langue decision logic"}`
+
+  ```
+540:    def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
+541-        langue, conf, _ = detecter_langue(texte, self.profils, indice)
+542-        script = detecter_script(texte)
+543-        if conf < self.seuil_langue:
+544-            return "und", conf, script
+545-        return langue, conf, script
+546-
+547-    # -- tokens -------------------------------------------------------------
+548-    @staticmethod
+549-    def _mots(texte: str) -> list[tuple[int, int, str, str]]:
+550-        motif = re.compile(r"\b[ldmtsnLDMTNS]['’](?=\w)|\w+(?:['’\-]\w+)*|\d+(?:[.,]\d+)*|https?://\S+|[\U0001F300-\U0001FAFF]|[^\w\s]")
+551-        sortie = []
+552-        for m in motif.finditer(texte):
+553-            t = m.group()
+554-            if t.startswith(("http://", "https://")):
+555-                typ = "url"
+556-            elif t[0].isdigit():
+557-                typ = "nombre"
+558-            elif re.fullmatch(r"[^\w\s]", t):
+559-                typ = "ponctuation"
+560-            elif len(t) == 1 and ord(t) >= 0x1F300:
+561-                typ = "emoji"
+562-            else:
+563-                typ = "mot"
+564-            sortie.append((m.start(), m.end(), t, typ))
+56
+… [283 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nprint('seuil_langue',h.seuil_langue)\nfor t in [\"Élodie sourit.\",\"Le chat dort.\",\"Élodie sourit parce que le soleil  … [193 caractères tronqués]`
+
+  ```
+seuil_langue 0.12
+Élodie sourit. ('fr', 0.04) ('und', 0.0)
+Le chat dort. ('fr', 0.7067) ('fr', 0.6667)
+Élodie sourit parce que le soleil se lève sur la ville. ('fr', 0.9491) ('fr', 0.9091)
+  ```
+
+### 🤖 Assistant
+
+⏵ Test d'un texte multi-phrases pour décrire la granularité de la sortie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --texte \"Le chat dort. Va voir le chat ! Il ne dort pas, mais il a peut-être faim.\" --json | python3 -c \"\nimport json,sys; d=json.load(sys.stdin)\nfor e in d['etiquettes']:\n    if e['niveau'] i … [282 caractères tronqués]`
+
+  ```
+phrase type 'déclarative' [ 0 : 13 ] {}
+pragmatique acte 'assertion' [ 0 : 13 ] {}
+discours paragraphe 'suite' [ 0 : 73 ] {}
+phrase type 'exclamative' [ 13 : 31 ] {}
+pragmatique acte 'exclamation' [ 13 : 31 ] {}
+discours connecteur 'mais' [ 31 : 73 ] {}
+phrase type 'déclarative' [ 31 : 73 ] {}
+phrase négation 'oui' [ 31 : 73 ] {}
+phrase modalité 'oui' [ 31 : 73 ] {}
+pragmatique acte 'assertion' [ 31 : 73 ] {}
+unites 7 frac 0.3562
+  ```
+
+### 🤖 Assistant
+
+⏵ Génération des extraits JSON réels (filtre `jq`) pour les cinq exemples.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && FILTRE='{langue, script, refus, fraction_semantique, pos: [.etiquettes[]|select(.niveau==\"pos\")|{valeur,type,debut,fin,confiance,ouvert:.meta.ouvert}], syntagmes: [.etiquettes[]|select(.niveau==\"syntagme\")|{valeur,type,debut,fin, … [533 caractères tronqués]`
+
+  ```
+##### Le chat dort.
+{
+  "langue": "fr",
+  "script": "Latn",
+  "refus": "",
+  "fraction_semantique": 0.6154,
+  "pos": [
+    {
+      "valeur": "Le",
+      "type": "DET",
+      "debut": 0,
+      "fin": 2,
+      "confiance": 0.92,
+      "ouvert": false
+    },
+    {
+      "valeur": "chat",
+      "type": "NOUN",
+      "debut": 3,
+      "fin": 7,
+      "confiance": 0.3,
+      "ouvert": true
+    },
+    {
+      "valeur": "dort",
+      "type": "VERB",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.72,
+      "ouvert": true
+    }
+  ],
+  "syntagmes": [
+    {
+      "valeur": "Le chat",
+      "type": "GN",
+      "debut": 0,
+      "fin": 7,
+      "confiance": 0.55,
+      "role": "agent",
+      "cible": "dort",
+      "candidats": [
+        "structure la plus proche",
+        "dort"
+      ]
+    },
+    {
+      "valeur": "dort",
+      "type": "GV",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.55,
+      "role": "predicat",
+      "cible": "chat",
+      "candidats": [
+        "structure la plus proche"
+      ]
+    }
+  ],
+  "phrase": [
+    {
+      "type": "type",
+      "valeur": "déclarative",
+      "debut": 0,
+      "fin": 13
+    }
+  ],
+  "pragmatique": [
+    {
+      "type": "acte",
+ 
+… [6386 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction des exemples 4 (refus) et 5 (span non prédit).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && FILTRE='{langue, script, refus, fraction_semantique, pos: [.etiquettes[]|select(.niveau==\"pos\")|{valeur,type,debut,fin,confiance,ouvert:.meta.ouvert}], syntagmes: [.etiquettes[]|select(.niveau==\"syntagme\")|{valeur,type,debut,fin, … [695 caractères tronqués]`
+
+  ```
+##### VIDE
+{
+  "langue": "und",
+  "script": "Zyyy",
+  "refus": "vide",
+  "fraction_semantique": 0.0,
+  "pos": [],
+  "syntagmes": [],
+  "phrase": [],
+  "pragmatique": [],
+  "unites_semantiques": []
+}
+##### r035
+{
+  "langue": "en",
+  "script": "Latn",
+  "refus": "",
+  "fraction_semantique": 0.375,
+  "syntagmes": [
+    {
+      "valeur": "The film she",
+      "type": "GN",
+      "debut": 0,
+      "fin": 12,
+      "confiance": 0.35,
+      "role": "groupe nominal",
+      "cible": "talks",
+      "union": null,
+      "candidats": [
+        "GN",
+        "talks",
+        "out"
+      ]
+    },
+    {
+      "valeur": "talks",
+      "type": "GV",
+      "debut": 13,
+      "fin": 18,
+      "confiance": 0.35,
+      "role": "prédicat",
+      "cible": null,
+      "union": null,
+      "candidats": [
+        "GV"
+      ]
+    },
+    {
+      "valeur": "about is out",
+      "type": "GV",
+      "debut": 19,
+      "fin": 31,
+      "confiance": 0.35,
+      "role": "prédicat",
+      "cible": null,
+      "union": null,
+      "candidats": [
+        "GV"
+      ]
+    }
+  ],
+  "phrase": [
+    {
+      "type": "type",
+      "valeur": "déclarative"
+    }
+  ],
+  "pragmatique": [
+    {
+      "type": "acte",
+      "vale
+… [559 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && FILTRE='{langue, script, refus, fraction_semantique, pos: [.etiquettes[]|select(.niveau==\"pos\")|{valeur,type,debut,fin,confiance,ouvert:.meta.ouvert}], syntagmes: [.etiquettes[]|select(.niveau==\"syntagme\")|{valeur,type,debut,fin, … [463 caractères tronqués]`
+
+  ```
+{
+  "langue": "fr",
+  "script": "Latn",
+  "refus": "",
+  "fraction_semantique": 0.4909,
+  "syntagmes": [
+    {
+      "valeur": "Le chat",
+      "type": "GN",
+      "debut": 0,
+      "fin": 7,
+      "confiance": 0.4,
+      "role": "agent",
+      "cible": "réveille",
+      "union": null,
+      "candidats": [
+        "« qui dort sur le toit » → voisine",
+        "« qui dort sur le toit » → Le chat",
+        "réveille",
+        "voisine",
+        "chat"
+      ]
+    },
+    {
+      "valeur": "de la voisine",
+      "type": "GP",
+      "debut": 8,
+      "fin": 21,
+      "confiance": 0.4,
+      "role": "possession",
+      "cible": "réveille",
+      "union": null,
+      "candidats": [
+        "« qui dort sur le toit » → voisine",
+        "« qui dort sur le toit » → Le chat",
+        "réveille",
+        "voisine",
+        "chat"
+      ]
+    },
+    {
+      "valeur": "qui dort sur le toit",
+      "type": "REL",
+      "debut": 22,
+      "fin": 42,
+      "confiance": 0.4,
+      "role": "qualite",
+      "cible": "voisine",
+      "union": null,
+      "candidats": [
+        "« qui dort sur le toit » → voisine",
+        "« qui dort sur le toit » → Le chat",
+        "réveille",
+        "voisine",
+    
+… [833 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Production du résumé d'évaluation réel depuis le JSON du banc.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/doc_produit/gold.json >/dev/null 2>&1; echo \"exit=$?\"; jq '{phrases: .gold.phrases, cibles: .heuristique.all.attachement.cibles, exact: .heuristique.all.attachement.exact … [733 caractères tronqués]`
+
+  ```
+exit=1
+{
+  "phrases": 612,
+  "cibles": 239,
+  "exact": 222,
+  "couverture": 0.9289,
+  "topk": 221,
+  "topk_taux": 0.9247,
+  "pos": 0.7581,
+  "pos_ferme": 0.9004,
+  "pos_ouvert": 0.6234,
+  "f1": 0.5849,
+  "tete": 0.7336,
+  "acte": 0.9967,
+  "negation": 0.9771,
+  "modalite": 0.9886,
+  "double_sens": 0.9444,
+  "cascade_pos": 0.7465,
+  "hasard": 0.0042,
+  "ok": false
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && jq '.verdict, (.verdict | to_entries | map(select(.value==false)))' /tmp/doc_produit/gold.json", "description": "Confirm failing verdicts"}`
+
+  ```
+{
+  "pos_hand": true,
+  "pos_reel": true,
+  "pos_synthetique": true,
+  "syntagme_hand": true,
+  "syntagme_reel": true,
+  "syntagme_synthetique": true,
+  "tete": true,
+  "acte": true,
+  "cascade_pos": false,
+  "cascade_syntagme": true,
+  "attachement_topk": true,
+  "attachement_hasard": true,
+  "attachement_tete_couverture": true,
+  "attachement_tete_topk": true,
+  "attachement_tete_hasard": true,
+  "reel_non_requis": true
+}
+[
+  {
+    "key": "cascade_pos",
+    "value": false
+  }
+]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des valeurs sur le gold gelé 602 (base du F1 publié).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.bloc_linguistique import Heuristique\nfrom tools.tests.linguistique.evaluer_gold import charger_gele, evaluer_bloc\nr=evaluer_bloc('h', Heuristique(), charger_gele())\n … [399 caractères tronqués]`
+
+  ```
+phrases 602 exact 222 labels 222 couv 0.9289
+f1 0.5893 tete 0.7392 pos 0.7603
+fr 136 en 86
+  ```
+

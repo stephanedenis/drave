@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "version": "drave 0.1.0",
+ "commandes": [
+  "analyser",
+  "evaluer",
+  "rejouer",
+  "--version"
+ ],
+ "gate": {
+  "controles": 6,
+  "temps_s": 116,
+  "autotest_parallele": "183/183 en 114 s"
+ },
+ "smoke_test": {
+  "tests": 6,
+  "temps_s": 1.2
+ },
+ "limites": [
+  "pas de restitution/traduction",
+  "neuronal non exposé",
+  "17 spans",
+  "cascade_pos"
+ ]
+}

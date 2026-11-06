@@ -50305,3 +50305,130 @@ sys	0m0,282s
 ⏵ Autotest parallèle : **183/183 en 1 min 54** (contre ~4 min 40 de CPU séquentiel, ×2,4). Je fige
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-autotest-parallele.md <<'MD'\n# B13 — la vérification parallèle : 183/183 en 1 min 54 (×2,4)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Ce que ça règle* … [4812 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 769 JSON, le disque en a 770
+[still running after 60000ms; moved to background job bash-2783]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2783", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-autotest-parallele.md
+COMMIT OK 1
+a9907a1b B13 — L'AUTOTEST PARALLÈLE : 183/183 EN 1 MIN 54 (×2,4), MÊMES VERDICTS (AUTOTEST_JOBS=8)
+tools/drave.py
+[status: completed, exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ La CLI est livrée : je la teste immédiatement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 tools/drave.py --version; echo \"---\"; timeout 60 python3 tools/drave.py analyser \"Le chat dort sur le toit.\" 2>&1 | head -12; echo \"---\"; timeout 60 python3 tools/drave.py analyser \"The cat sleeps on the roo … [258 caractères tronqués]`
+
+  ```
+drave 0.1.0
+---
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 32 étiquettes · unités sémantiques=3 (48.0% du texte)
+POS  Le/DET chat/NOUN dort/VERB sur/PREP le/DET toit/NOUN
+SYNTAGMES
+  GN   [0:7]    Le chat      rôle=agent     → dort
+  GV   [8:12]   dort         rôle=predicat  → chat
+  GP   [13:24]  sur le toit  rôle=lieu      → dort
+PRAGMATIQUE
+  phrase [0:25] déclarative · acte=assertion · négation=non · modalité=non · double_sens=non
+COUVERTURE (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.92 · syntagme=0.40 · phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+---
+{
+ "texte": "The cat sleeps on the roof.",
+ "langue": "en",
+ "script": "Latn",
+ "source": "heuristique",
+ "refus": "",
+---
+  langue     : fr
+  étiquettes : 19
+  JSON       : 4013 octets · sha256 6b6def477a493444…
+---
+test_version_et_aide (__main__.TestProduit.test_version_et_aide) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.213s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ La CLI fonctionne (6 tests OK). J'écris la **porte produit** et je la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-produit.sh <<'SH'\n#!/usr/bin/env bash\n# porte-produit — le premier produit : la CLI répond, le JSON est valide, le rejeu est identique.\n#\n# Ce qu'elle vérifie : `drave --version`, `analyser` (fr et en) rend un J … [2268 caractères tronqués]`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 6b6def477a493444 deux fois
+  ✅ smoke test : Ran 6 tests
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+[stderr]
+
+real	1m56,363s
+user	4m39,139s
+sys	0m0,637s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l tools/drave.py tools/tests/test_produit.py; head -20 tools/drave.py; echo \"=== découverte des portes :\"; grep -n \"porte-\\*\\|for p in\\|ls tools/porte\" tools/toutes-les-portes.sh | head -5", "description": "Relire la CLI e … [28 caractères tronqués]`
+
+  ```
+389 tools/drave.py
+  110 tools/tests/test_produit.py
+  499 total
+#!/usr/bin/env python3
+"""drave.py — le point d'entrée produit du bloc linguistique.
+
+Une seule commande, trois gestes, hors ligne et déterministe :
+
+    python3 tools/drave.py analyser "Le chat dort."
+    python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+    python3 tools/drave.py evaluer
+    python3 tools/drave.py evaluer --gold --json
+    python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 tools/drave.py --version
+
+Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
+Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
+(annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
+un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+"""
+=== découverte des portes :
+13:#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+35:portes=$(l
+… [26 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte produit verte. Je fige le produit v0 (CLI + porte + fiche)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-produit-v0.md <<'MD'\n# B13 — le premier produit : `drave` v0, une CLI qui analyse, mesure et rejoue\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Ce que c … [4910 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 769 JSON, le disque en a 771
+  ✅ la page vivante date du dernier commit (2026-11-06)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1056 caractères tronqués]`

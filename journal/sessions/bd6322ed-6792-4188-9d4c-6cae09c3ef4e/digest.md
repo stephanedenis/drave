@@ -870,3 +870,250 @@ drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un 
 code=1
   ```
 
+- **bash** `{"command": "python3 tools/drave.py evaluer --json > /tmp/drave_eval.json; echo \"code=$?\"; wc -c /tmp/drave_eval.json; python3 -c \"import json; d=json.load(open('/tmp/drave_eval.json')); print(sorted(d)); print(d['gold']); print(d['heuristique']['syntagme']['f1']); print(d['controle_negatif'])\"; … [176 caractères tronqués]`
+
+  ```
+code=0
+2748 /tmp/drave_eval.json
+['controle_negatif', 'gold', 'heuristique', 'version']
+{'nom': 'vivant (hand + reel + synthétique)', 'gele': False, 'phrases': 612, 'tokens': 3179, 'cibles_attachement': 239}
+0.5849
+{'nom': 'cible exacte tirée au hasard dans le gold', 'graine': 0, 'cibles': 239, 'exact_taux': 0.0167}
+===
+2740 /tmp/drave_eval_gele.json
+  ```
+
+- **bash** `{"command": "for i in 1 2 3; do python3 tools/drave.py analyser \"Le chat de la voisine qui dort sur le toit se réveille.\" --langue fr --json > /tmp/drave_json_$i.json; done; md5sum /tmp/drave_json_*.json; echo ===; for i in 1 2 3; do python3 tools/drave.py evaluer --json > /tmp/drave_eval_$i.json; … [263 caractères tronqués]`
+
+  ```
+b23f2019ee1fa0e50686534b8531cacc  /tmp/drave_json_1.json
+b23f2019ee1fa0e50686534b8531cacc  /tmp/drave_json_2.json
+b23f2019ee1fa0e50686534b8531cacc  /tmp/drave_json_3.json
+===
+7bb1d8f4b03635030a0fb73107d392dd  /tmp/drave_eval_1.json
+7bb1d8f4b03635030a0fb73107d392dd  /tmp/drave_eval_2.json
+7bb1d8f4b03635030a0fb73107d392dd  /tmp/drave_eval_3.json
+2c13989e5a13deb30d97b3fa546970e2  /tmp/drave_eval_gele.json
+===
+c849ffc565cb862c5c275feeb2aac36f  /tmp/drave_txt_1.txt
+c849ffc565cb862c5c275feeb2aac36f  /tmp/drave_txt_2.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the end-to-end smoke test `tools/tests/test_produit.py`
+
+- **write** `{"content": "\"\"\"test_produit.py — le smoke test de bout en bout du point d'entrée `tools/drave.py`.\n\nHuit assertions, deux phrases (fr/en), le déterminisme et les codes de sortie. Le test passe\naussi bien par `python3 tools/tests/test_produit.py` que par `pytest` : il n'importe rien du\ndépôt  … [4073 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_produit.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "/usr/bin/time -f \"duree=%e s maxrss=%M Ko\" python3 tools/tests/test_produit.py; echo \"code=$?\"", "description": "Run the smoke test directly"}`
+
+  ```
+code=0
+[stderr]
+test_analyser_anglais (__main__.TestProduit.test_analyser_anglais) ... ok
+test_analyser_francais (__main__.TestProduit.test_analyser_francais) ... ok
+test_codes_usage (__main__.TestProduit.test_codes_usage) ... ok
+test_json_valide_et_deterministe (__main__.TestProduit.test_json_valide_et_deterministe) ... ok
+test_rejouer_deterministe (__main__.TestProduit.test_rejouer_deterministe) ... ok
+test_version_et_aide (__main__.TestProduit.test_version_et_aide) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.224s
+
+OK
+duree=1.32 s maxrss=28476 Ko
+  ```
+
+- **bash** `{"command": "/usr/bin/time -f \"duree=%e s\" python3 -m pytest tools/tests/test_produit.py -q; echo \"code=$?\"", "description": "Run the smoke test with pytest"}`
+
+  ```
+......                                                                   [100%]
+6 passed in 1.29s
+code=0
+[stderr]
+duree=2.03 s
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "def _envelopper(prefixe: str, contenu: str, largeur: int = LARGEUR) -> list[str]:\n    \"\"\"Coupe une ligne trop longue en gardant l'alignement sous le préfixe.\"\"\"\n    lignes = textwrap.wrap(contenu,  … [947 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "            lignes.append(\n                f\"  phrase [{p.debut}:{p.fin}] {p.valeur} · acte={acte} \"\n                f\"· négation={negation} · modalité={modalite} · double sens={double_sens}\"\n       … [239 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "    couverture = a.couverture()\n    if couverture:\n        ordre = [n for n in bl.NIVEAUX if n in couverture]\n        ordre += sorted(n for n in couverture if n not in bl.NIVEAUX)\n        lignes.extend … [609 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport re, pathlib\np = pathlib.Path('tools/drave.py')\ns = p.read_text()\ns = s.replace('formatter_class=argparse.RawDescriptionHelpFormatter,', 'formatter_class=_Formateur,')\ns = s.replace('help=\"indice de langue ; sans lui, le bloc détecte (fr/en)\"',\n            … [282 caractères tronqués]`
+
+  ```
+5 2
+323:        formatter_class=_Formateur,
+335:        formatter_class=_Formateur,
+339:                          help="indice de langue (fr/en) ; sans lui, le bloc détecte")
+350:        formatter_class=_Formateur,
+364:        formatter_class=_Formateur,
+368:                         help="indice de langue (fr/en) ; sans lui, le bloc détecte")
+  ```
+
+- **bash** `{"command": "python3 -m py_compile tools/drave.py tools/tests/test_produit.py && echo \"compile ok\"; awk 'length($0)>100 {print FILENAME\":\"FNR\": \"length($0)}' tools/drave.py tools/tests/test_produit.py", "description": "Compile and check line lengths"}`
+
+  ```
+compile ok
+tools/drave.py:378: 101
+  ```
+
+- **bash** `{"command": "python3 tools/drave.py --aide; echo \"code=$?\"; echo =====; python3 tools/drave.py analyser --aide; echo \"code=$?\"", "description": "Check deterministic help rendering"}`
+
+  ```
+usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+
+Point d'entrée produit du bloc linguistique (analyse heuristique).
+
+arguments:
+  {analyser,evaluer,rejouer}
+    analyser            étiqueter un texte (POS, syntagmes, pragmatique)
+    evaluer             mesurer l'heuristique sur le gold
+    rejouer             analyser deux fois et vérifier le déterminisme
+
+options:
+  -h, --help, --aide    afficher cette aide et quitter
+  -V, --version         afficher la version et quitter
+
+Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+Limites : heuristique CPU, hors ligne, déterministe ; ni neuronal, ni restitution, ni traduction.
+Exemples :
+  python3 tools/drave.py analyser "Le chat dort."
+  python3 tools/drave.py evaluer --gold --json
+code=0
+=====
+usage: drave analyser [-h] [--langue {fr,en}] [--json] TEXTE
+
+Analyse un texte avec l'heuristique et rend la lecture compacte ou le JSON.
+
+arguments:
+  TEXTE               texte à analyser (entre guillemets)
+
+options:
+  -h, --help, --aide  afficher cette aide et quitter
+  --langue {fr,en}    indice de langue (fr/en) ; sans lui, le bloc détecte
+  --json              sortie JSON complète (annotation, sans durée)
+
+Exemple : 
+… [61 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 20, "offset": 370}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+370:     return parseur
+371: 
+372: 
+373: def main(argv: list[str] | None = None) -> int:
+374:     args = construire_parseur().parse_args(argv)
+375:     try:
+376:         return args.fonction(args)
+377:     except BrokenPipeError:
+378:         # `drave analyser ... | head` : la sortie est fermée par le lecteur, ce n'est pas une erreur.
+379:         return 0
+380:     except KeyboardInterrupt:
+381:         print(f"{NOM}: interrompu", file=sys.stderr)
+382:         return 1
+383:     except Exception as exc:  # noqa: BLE001 — le point d'entrée rend un code, pas une trace
+384:         print(f"{NOM}: erreur : {type(exc).__name__} : {exc}", file=sys.stderr)
+385:         return 1
+386: 
+387: 
+388: if __name__ == "__main__":
+389:     raise SystemExit(main())
+
+(End of file - total 389 lines)
+</content>
+  ```
+
+- **bash** `{"command": "set -o pipefail; python3 tools/drave.py analyser \"Le chat de la voisine qui dort sur le toit se réveille.\" --json | head -1; echo \"pipe codes=${PIPESTATUS[*]}\"", "description": "Test broken pipe behavior"}`
+
+  ```
+{
+pipe codes=0 0
+  ```
+
+- **bash** `{"command": "grep -n \"\\bre\\.\\|import re\" tools/drave.py; echo ---; grep -n \"^import\\|^from\" tools/drave.py", "description": "Check unused import"}`
+
+  ```
+29:import re
+---
+21:from __future__ import annotations
+23:import argparse
+24:import hashlib
+25:import importlib.util
+26:import json
+27:import pathlib
+28:import random
+29:import re
+30:import sys
+31:import textwrap
+41:import bloc_linguistique as bl  # noqa: E402  (import après l'installation des chemins)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "import pathlib\nimport random\nimport sys", "old_string": "import pathlib\nimport random\nimport re\nimport sys"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "        # `drave analyser ... | head` : le lecteur a fermé la sortie, ce n'est pas une erreur.", "old_string": "        # `drave analyser ... | head` : la sortie est fermée par le lecteur, ce n'est pas une … [10 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """drave.py — le point d'entrée produit du bloc linguistique.
+3: 
+4: Une seule commande, trois gestes, hors ligne et déterministe :
+5: 
+6:     python3 tools/drave.py analyser "Le chat dort."
+7:     python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+8:     python3 tools/drave.py evaluer
+9:     python3 tools/drave.py evaluer --gold --json
+10:     python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+11:     python3 tools/drave.py --version
+12: 
+13: Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
+14: avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
+15: Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
+16: (annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
+17: un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+18: 
+19: Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+20: """
+21: 
+… [17183 caractères tronqués]
+  ```
+

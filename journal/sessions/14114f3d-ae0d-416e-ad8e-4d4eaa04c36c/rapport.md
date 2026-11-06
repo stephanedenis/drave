@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 26 |
-| Appels d'outils | 36 |
-| Fichiers touchés | 2 |
-| Commandes | 21 |
+| Messages | 30 |
+| Appels d'outils | 41 |
+| Fichiers touchés | 3 |
+| Commandes | 25 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*36 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,7 +41,7 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 10 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -55,6 +55,7 @@
 |---|---|---|
 | `/tmp/audit_produit_bl/phrases.py` | 1 | 0 |
 | `/tmp/audit_produit_bl/audit.py` | 1 | 0 |
+| `/tmp/audit_produit_bl/performance.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -79,6 +80,10 @@
 - **T1** Corriger la collision de clé et relancer
 - **T1** Inspecter les anomalies détectées
 - **T1** Inspecter cas limites et déterminisme
+- **T1** Mesurer temps, mémoire et déterminisme
+- **T1** Inspecter la stabilité du contrat
+- **T1** Inspecter le format des codes langue
+- **T1** Inspecter qualitativement des sorties représentatives
 
 ## 4. Mesures et résultats marquants
 

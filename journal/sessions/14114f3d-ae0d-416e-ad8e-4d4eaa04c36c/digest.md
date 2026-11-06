@@ -1033,3 +1033,424 @@ Created file
 </content>
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && time python3 audit.py > audit_stdout.txt 2> audit_stderr.txt; echo \"exit=$?\"; head -80 audit_stdout.txt; echo \"--- stderr ---\"; cat audit_stderr.txt | tail -20", "description": "Exécuter le harnais de robustesse et contrat", "timeoutMs": 600000}`
+
+  ```
+exit=0
+{
+ "meta": {
+  "date": "2026-11-06T09:50:08",
+  "python": "3.13.16",
+  "module": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py",
+  "commit": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+  "phrases": 50,
+  "cas_limites": 25,
+  "duree_s": 1.51
+ },
+ "robustesse_50": {
+  "crashes": 0,
+  "refus": 0,
+  "sorties_vides": 0,
+  "phrases_avec_anomalie": 34,
+  "anomalies_total": 148,
+  "anomalies_par_type": {
+   "chevauchement_syntagme": 132,
+   "préfixe": 6,
+   "acte": 4,
+   "SUB": 4,
+   "suffixe": 2
+  },
+  "langues": {
+   "fr": 34,
+   "en": 14,
+   "und": 2
+  },
+  "scripts": {
+   "Latn": 48,
+   "Cyrl": 1,
+   "Hani": 1
+  },
+  "niveaux_absents": {
+   "morphème": 9,
+   "syntagme": 2
+  }
+ },
+ "mode_degrade": {
+  "phrases_differentes": 34,
+  "phrases": 50,
+  "syntagmes_perdus": 132,
+  "attachements_perdus": 119,
+  "exemples": [
+   {
+    "id": "f01",
+    "syntagmes_avec": 3,
+    "sans": 2,
+    "attachements_avec": 3
+   },
+   {
+    "id": "f02",
+    "syntagmes_avec": 14,
+    "sans": 3,
+    "attachements_avec": 11
+   },
+   {
+    "id": "f03",
+    "syntagmes_avec": 10,
+    "sans": 3,
+    "attachements_avec": 6
+   },
+   {
+    "id": "f04",
+    "syntagmes_avec": 7,
+    "
+… [263 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('audit.py')\ns=p.read_text()\ns=s.replace('base = {\"niveau\": e.niveau, \"type\": e.type, \"valeur\": e.valeur[:60],\\n                \"debut\": e.debut, \"fin\": e.fin}',\n            'base = {\"niveau\" … [389 caractères tronqués]`
+
+  ```
+ok
+exit=0
+{
+ "meta": {
+  "date": "2026-11-06T09:50:45",
+  "python": "3.13.16",
+  "module": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py",
+  "commit": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+  "phrases": 50,
+  "cas_limites": 25,
+  "duree_s": 1.47
+ },
+ "robustesse_50": {
+  "crashes": 0,
+  "refus": 0,
+  "sorties_vides": 0,
+  "phrases_avec_anomalie": 34,
+  "anomalies_total": 148,
+  "anomalies_par_type": {
+   "chevauchement_syntagme": 132,
+   "valeur_hors_span": 8,
+   "acte_hors_candidats": 4,
+   "candidat_doublon": 4
+  },
+  "langues": {
+   "fr": 34,
+   "en": 14,
+   "und": 2
+  },
+  "scripts": {
+   "Latn": 48,
+   "Cyrl": 1,
+   "Hani": 1
+  },
+  "niveaux_absents": {
+   "morphème": 9,
+   "syntagme": 2
+  }
+ },
+ "mode_degrade": {
+  "phrases_differentes": 34,
+  "phrases": 50,
+  "syntagmes_perdus": 132,
+  "attachements_perdus": 119,
+  "exemples": [
+   {
+    "id": "f01",
+    "syntagmes_avec": 3,
+    "sans": 2,
+    "attachements_avec": 3
+   },
+   {
+    "id": "f02",
+    "syntagmes_avec": 14,
+    "sans": 3,
+    "attachements_avec": 11
+   },
+   {
+    "id": "f03",
+    "syntagmes_avec": 10,
+    "sans": 3,
+    "attachements_avec": 6
+   },
+   {
+    "id": "f04",
+    "sy
+… [848 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('resultats.json'))\nr=d['robustesse_50']\nfor t in ('valeur_hors_span','acte_hors_candidats','candidat_doublon'):\n    print('###',t)\n    for ex in r['anomalies_par_type'][t]['exemples']:\n        print(json.du … [775 caractères tronqués]`
+
+  ```
+### valeur_hors_span
+{"id": "f11", "type": "valeur_hors_span", "attendu": "TION", "niveau": "morphème", "type_etiquette": "suffixe", "valeur": "tion", "debut": 5, "fin": 9}
+{"id": "f11", "type": "valeur_hors_span", "attendu": "PRO", "niveau": "morphème", "type_etiquette": "préfixe", "valeur": "pro", "debut": 15, "fin": 18}
+{"id": "f11", "type": "valeur_hors_span", "attendu": "CO", "niveau": "morphème", "type_etiquette": "préfixe", "valeur": "co", "debut": 23, "fin": 25}
+{"id": "f11", "type": "valeur_hors_span", "attendu": "CO", "niveau": "morphème", "type_etiquette": "préfixe", "valeur": "co", "debut": 49, "fin": 51}
+{"id": "f11", "type": "valeur_hors_span", "attendu": "EZ", "niveau": "morphème", "type_etiquette": "suffixe", "valeur": "ez", "debut": 56, "fin": 58}
+{"id": "f14", "type": "valeur_hors_span", "attendu": "Co", "niveau": "morphème", "type_etiquette": "préfixe", "valeur": "co", "debut": 0, "fin": 2}
+### acte_hors_candidats
+{"id": "f07", "type": "acte_hors_candidats", "candidats": ["assertion", "question", "ordre"], "niveau": "pragmatique", "type_etiquette": "acte", "valeur": "exclamation", "debut": 0, "fin": 70}
+{"id": "f26", "type": "acte_hors_candidats", "candidats": ["
+… [2224 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('resultats.json'))\nprint('### cas limites')\nfor c in d['cas_limites']['cas']:\n    print(c['nom'], '| crash=',c['crash'], '| refus=',repr(c.get('refus')), '| etiq=',c.get('etiquettes'), '| langue=',c.get('lang … [337 caractères tronqués]`
+
+  ```
+### cas limites
+vide | crash= False | refus= 'vide' | etiq= 0 | langue= und | script= Zyyy | anomalies= []
+espaces | crash= False | refus= 'vide' | etiq= 0 | langue= und | script= Zyyy | anomalies= []
+ponctuation-seule | crash= False | refus= 'vide' | etiq= 0 | langue= und | script= Zyyy | anomalies= []
+emoji-seul | crash= False | refus= 'vide' | etiq= 0 | langue= und | script= Zyyy | anomalies= []
+chiffres-seuls | crash= False | refus= '' | etiq= 6 | langue= und | script= Zyyy | anomalies= []
+un-mot | crash= False | refus= '' | etiq= 7 | langue= und | script= Latn | anomalies= []
+anglais-deux-mots | crash= False | refus= '' | etiq= 11 | langue= und | script= Latn | anomalies= []
+mot-très-long | crash= False | refus= '' | etiq= 9 | langue= und | script= Latn | anomalies= []
+nul | crash= False | refus= '' | etiq= 8 | langue= und | script= Latn | anomalies= []
+espace-invisible | crash= False | refus= 'vide' | etiq= 0 | langue= und | script= Zyyy | anomalies= []
+retour-ligne | crash= False | refus= 'vide' | etiq= 0 | langue= und | script= Zyyy | anomalies= []
+accent-décomposé | crash= False | refus= '' | etiq= 18 | langue= und | script= Latn | anomalies= []
+arabe | crash= False | refu
+… [2123 caractères tronqués]
+  ```
+
+- **write** `{"content": "# -*- coding: utf-8 -*-\n\"\"\"Performance, mémoire, déterminisme inter-processus du bloc linguistique.\"\"\"\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport pathlib\nimport resource\nimport statistics\nimport subprocess\nimport sys\nimport time\nimport tracem … [5402 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_produit_bl/performance.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && time python3 performance.py > performance_stdout.txt 2> performance_stderr.txt; echo \"exit=$?\"; cat performance_stdout.txt; echo \"--- stderr ---\"; tail -20 performance_stderr.txt", "description": "Mesurer temps, mémoire et déterminisme", "timeoutMs": 9000 … [3 caractères tronqués]`
+
+  ```
+exit=0
+{
+ "machine": {
+  "cpu": "Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz",
+  "python": "3.13.16"
+ },
+ "temps": [
+  {
+   "mots": 10,
+   "caracteres": 51,
+   "repetitions": 30,
+   "froid_ms": 6.24,
+   "median_ms": 1.09,
+   "moyenne_ms": 1.09,
+   "ecart_type_ms": 0.04,
+   "min_ms": 1.04,
+   "max_ms": 1.15,
+   "p95_ms": 1.13,
+   "ms_par_mot": 0.109,
+   "phrases_par_s": 914.9,
+   "etiquettes": 54,
+   "etiquettes_par_mot": 5.4,
+   "unites": 5,
+   "attachements": 4
+  },
+  {
+   "mots": 50,
+   "caracteres": 268,
+   "repetitions": 21,
+   "froid_ms": 4.64,
+   "median_ms": 4.47,
+   "moyenne_ms": 4.49,
+   "ecart_type_ms": 0.07,
+   "min_ms": 4.43,
+   "max_ms": 4.75,
+   "p95_ms": 4.54,
+   "ms_par_mot": 0.089,
+   "phrases_par_s": 223.6,
+   "etiquettes": 260,
+   "etiquettes_par_mot": 5.2,
+   "unites": 26,
+   "attachements": 19
+  },
+  {
+   "mots": 200,
+   "caracteres": 1126,
+   "repetitions": 11,
+   "froid_ms": 18.64,
+   "median_ms": 17.5,
+   "moyenne_ms": 17.67,
+   "ecart_type_ms": 0.65,
+   "min_ms": 16.97,
+   "max_ms": 18.8,
+   "p95_ms": 18.4,
+   "ms_par_mot": 0.088,
+   "phrases_par_s": 57.1,
+   "etiquettes": 1061,
+   "etiquettes_par_mot": 5.3,
+   "unites": 99,
+   "attachements": 74
+  }
+ ],
+ "m
+… [3254 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('resultats.json'))\nc=d['contrat']\nfor k in ('cles_annotation','cles_etiquette','champs_vides','langue_formats','refus_valeurs','sources_etiquettes','sources_annotation','valeur_egale_span','couts_par_mode'):\n … [350 caractères tronqués]`
+
+  ```
+### cles_annotation
+[
+ [
+  "contexte",
+  "cout",
+  "etiquettes",
+  "fraction_semantique",
+  "langue",
+  "refus",
+  "script",
+  "source",
+  "texte",
+  "trace",
+  "unites_semantiques"
+ ]
+]
+### cles_etiquette
+[
+ [
+  "candidats",
+  "confiance",
+  "debut",
+  "fin",
+  "langue",
+  "meta",
+  "niveau",
+  "script",
+  "source",
+  "type",
+  "valeur"
+ ]
+]
+### champs_vides
+{
+ "graphème.candidats": 1778,
+ "graphème.meta": 1778,
+ "mot.candidats": 963,
+ "mot.meta": 963,
+ "pos.candidats": 384,
+ "discours.meta": 79,
+ "document.candidats": 53,
+ "document.meta": 53,
+ "phrase.candidats": 76,
+ "phrase.meta": 76,
+ "pragmatique.meta": 69,
+ "morphème.meta": 134
+}
+### langue_formats
+{
+ "2": 48,
+ "3": 2
+}
+### refus_valeurs
+{
+ "": 50
+}
+### sources_etiquettes
+{
+ "heuristique": 4320
+}
+### sources_annotation
+{
+ "heuristique": 50
+}
+### valeur_egale_span
+{
+ "graphème": {
+  "egales": 1778,
+  "total": 1778
+ },
+ "mot": {
+  "egales": 963,
+  "total": 963
+ },
+ "pos": {
+  "egales": 806,
+  "total": 806
+ },
+ "syntagme": {
+  "egales": 362,
+  "total": 362
+ },
+ "morphème": {
+  "egales": 126,
+  "total": 134
+ }
+}
+### couts_par_mode
+{
+ "heuristique": {
+  "cles": [
+   "caracteres",
+   "duree_s",
+   "etiquettes",
+   "octets"
+  ],
+ 
+… [1441 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('resultats.json'))\nprint(json.dumps(d['langue_profils'],ensure_ascii=False,indent=1))\nPY", "description": "Inspecter le format des codes langue"}`
+
+  ```
+{
+ "disponible": true,
+ "langues_profil": 398,
+ "duree_chargement_s": 0.887,
+ "details": [
+  {
+   "texte": "Le chat dort sur le canapé.",
+   "sans_profils": [
+    "fr",
+    "Latn"
+   ],
+   "avec_profils": [
+    "hns",
+    "Latn"
+   ]
+  },
+  {
+   "texte": "The cat sleeps on the warm roof.",
+   "sans_profils": [
+    "en",
+    "Latn"
+   ],
+   "avec_profils": [
+    "sco",
+    "Latn"
+   ]
+  },
+  {
+   "texte": "Die Katze schläft auf dem Dach.",
+   "sans_profils": [
+    "de",
+    "Latn"
+   ],
+   "avec_profils": [
+    "deu",
+    "Latn"
+   ]
+  },
+  {
+   "texte": "El gato duerme en el tejado.",
+   "sans_profils": [
+    "es",
+    "Latn"
+   ],
+   "avec_profils": [
+    "und",
+    "Latn"
+   ]
+  }
+ ],
+ "hint_fr_sans_profils": "en",
+ "hint_fr_avec_profils": "sco"
+}
+  ```
+
