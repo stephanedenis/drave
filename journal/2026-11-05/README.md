@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**93 commits** · **19 session(s)** · **8 thème(s)**
+**94 commits** · **23 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 12 | [distribue.md](distribue.md) |
 | docs | 32 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
-| mesures | 25 | [mesures.md](mesures.md) |
+| mesures | 26 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -27,6 +27,9 @@
 | `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 69.0 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
 | `1b0cf09a-a77a-443d-82e2-68a5d6cacdf0` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.0 h | [rapport](../sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/rapport.md) · [digest](../sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/digest.md) |
 | `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` | Session status update | 2026-11-04 07:25 | 29.8 h | [rapport](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/rapport.md) · [digest](../sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/digest.md) |
+| `24001907-4f19-4ea5-87f6-98334496719f` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.0 h | [rapport](../sessions/24001907-4f19-4ea5-87f6-98334496719f/rapport.md) · [digest](../sessions/24001907-4f19-4ea5-87f6-98334496719f/digest.md) |
+| `24529ced-6556-4491-9633-9401c2dffb0c` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.0 h | [rapport](../sessions/24529ced-6556-4491-9633-9401c2dffb0c/rapport.md) · [digest](../sessions/24529ced-6556-4491-9633-9401c2dffb0c/digest.md) |
+| `2cc1ad4a-373e-4362-a341-3c4a630c2e0c` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.0 h | [rapport](../sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/rapport.md) · [digest](../sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/digest.md) |
 | `3144cf23-6004-46ef-bc3d-f05d81c0cff6` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.3 h | [rapport](../sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/rapport.md) · [digest](../sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/digest.md) |
 | `3f8f2bb8-781b-44a6-9e14-58025004b6fc` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.3 h | [rapport](../sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/rapport.md) · [digest](../sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/digest.md) |
 | `53bc3288-f2c1-4a7d-b1db-88d794074f70` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/rapport.md) · [digest](../sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/digest.md) |
@@ -37,9 +40,10 @@
 | `aeafe951-9c3d-4bb5-8af7-0246a4f3d51d` | Reprendre le plan de session et exécuter l'action | 2026-11-04 09:25 | 27.7 h | [rapport](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/rapport.md) · [digest](../sessions/aeafe951-9c3d-4bb5-8af7-0246a4f3d51d/digest.md) |
 | `b3d82ad5-bff2-49ec-9ad6-2230e68d8071` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.1 h | [rapport](../sessions/b3d82ad5-bff2-49ec-9ad6-2230e68d8071/rapport.md) · [digest](../sessions/b3d82ad5-bff2-49ec-9ad6-2230e68d8071/digest.md) |
 | `b9ea3904-889c-4497-a781-694da7d4987c` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.5 h | [rapport](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md) · [digest](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/digest.md) |
+| `c27ff712-ac49-4750-90d4-76f59bedb5ca` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.0 h | [rapport](../sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/rapport.md) · [digest](../sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/digest.md) |
 | `c4796573-e2dc-48c2-b832-96f8bfab22c3` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md) |
 | `d300542e-6e9d-47ac-875b-b44a192eec35` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.3 h | [rapport](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) · [digest](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 122.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 122.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.0 h | [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md) |
 | `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` | — | 2026-11-05 10:11 | 0.0 h | [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md) |
 | `ff7e786c-3ece-4eae-864e-19dddfead93c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md) |
@@ -141,10 +145,18 @@
 | 18:24 | `7a9f0d6a` | B13 — LA COUVERTURE : 187 LABELS, EXACT 185/187 (0,9893), F1 0,5156, DEV 125/126 ET TEST 60/61 ; 183/183 |
 | 18:43 | `b975011b` | B13 — LES CANDIDATS DU PRÉCÉDENT : EXACT 186/187 (0,9947), ANGLAIS 60/60, DEV 126/126 ; 183/183 |
 | 19:03 | `0ec6c27d` | B13 — L'ATTACHEMENT PARFAIT SUR LES SPANS PRÉDITS : 187/187 (1,0000), FR 1,0, EN 1,0, DEV 126/126, TEST 61/61 ; RENDEMENT 0,7824 ; 183/183 |
+| 19:22 | `69bd865e` | B13 — LA COUVERTURE À 0,8201 : POS CONTEXTUEL 0,7603, F1 0,5595, EXACT 195/196 (0,9949), 43 SPANS ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**La soirée du découpage (17 h 30 → 20 h).** La question « l'anglais d'abord » a ouvert la
+vraie frontière : le trou n'était pas l'attachement mais le **découpage**. Sept corrections
+générales — REL/SUB par le segment précédent, GV à tête verbale et frontières, GN qui s'arrête au
+verbe, GP préposition+infinitif, `_cible_hors_span` partout, POS contextuel, GV avant GP — font
+passer la **F1 syntagmes de 0,2862 à 0,5595**, la **couverture de 145 à 196 labels** (sur 239) et
+l'**attachement à 195/196 (0,9949)**. Le gold tenu à l'écart suit : **dev 126/126, test 61/61**.
+Les 43 spans restants (21 REL, 17 SUB, 5 GP) sont la seule frontière du rendement (0,8201).
 **La leçon de l'attachement (§ 12 bis de la théorie).** Rôle, cible et convention sont trois
 notions distinctes ; une cible se juge par langue, par type (verbe/nom) et à couverture publiée.
 La mesure par langue sépare enfin ce qui était mêlé : l'attachement est juste dans les deux

@@ -45846,3 +45846,55 @@ README + pilotage
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **F1 0,5595**, **POS 0,7603** ; 43 spans restent.\", \" ; 43 spans restent.\")\nn_md=len(list(pathlib.Path('reports' … [1135 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1717]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1717", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-couverture-v7.json
+ create mode 100644 reports/rapport-pensee-couverture-v7.md
+COMMIT OK 1
+69bd865e B13 — LA COUVERTURE À 0,8201 : POS CONTEXTUEL 0,7603, F1 0,5595, EXACT 195/196 (0,9949), 43 SPANS ; 183/183
+jeu 05 nov 2026 19:24:43 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 5 (4 sous-agents) sur l'état committé : audit v7, cohérence des fiches, 43 spans, dev/test
+
+- **subagent** `{"description": "Audit de la v7", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer l'état v7 de l'attachement** (commit `69bd865e`) et vérifier que ses chiffres et ses portes sont justes.\n\nContexte : `tools/bloc_ling … [1891 caractères tronqués]`
+- **subagent** `{"description": "Cohérence des 7 fiches", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : vérifier la **cohérence des fiches de la journée** (v2 → v7) avec leurs JSON et avec l'état committé `69bd865e`.\n\nFiches à vérifier (ch … [1742 caractères tronqués]`
+- **subagent** `{"description": "Les 43 spans restants", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnostiquer les 43 spans non prédits** de l'attachement (état v7, commit `69bd865e`) et proposer des règles chiffrées, sans modifier l … [1463 caractères tronqués]`
+- **subagent** `{"description": "dev/test et robustesse", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesurer le split dev/test** sur l'état v7 (commit `69bd865e`) et éprouver sa robustesse.\n\nContexte : `tools/tests/linguistique/gol … [1194 caractères tronqués]`
+
+  ```
+started subagent 24001907-4f19-4ea5-87f6-98334496719f
+  ```
+
+
+  ```
+started subagent 2cc1ad4a-373e-4362-a341-3c4a630c2e0c
+  ```
+
+
+  ```
+started subagent 24529ced-6556-4491-9633-9401c2dffb0c
+  ```
+
+
+  ```
+started subagent c27ff712-ac49-4750-90d4-76f59bedb5ca
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague 5 en cours ; j'écris le récit de la soirée au journal (docs seulement)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-05/README.md'); t=p.read_text()\nnote = \"\"\"**La soirée du découpage (17 h 30 → 20 h).** La question « l'anglais d'abord » a ouvert la\nvraie frontière : le trou n'é … [1831 caractères tronqués]`

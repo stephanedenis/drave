@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 122.7 h |
+| Durée | 122.8 h |
 | Tours | 177 |
-| Messages | 2672 |
-| Appels d'outils | 2351 |
+| Messages | 2675 |
+| Appels d'outils | 2357 |
 | Fichiers touchés | 25 |
-| Commandes | 1942 |
-| Sous-agents | 16 |
-| Commits | 282 |
+| Commandes | 1943 |
+| Sous-agents | 20 |
+| Commits | 283 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*110 appels d'outils.* Actions notables :
+*116 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 89 autres
+- … et 94 autres
 
 **Synthèse produite :**
 
-⏵ **183/183** : exact 195/196, F1 **0,5595**, POS 0,7603. Je fige la fiche v7 et je commite
+⏵ Vague 5 en cours ; j'écris le récit de la soirée au journal (docs seulement)
 
 ## 3. Travail accompli
 
@@ -9570,6 +9570,10 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - tour 176 — Couverture des spans sans S
 - tour 176 — Mesure multi-cibles du gold
 - tour 176 — Qualité du gold anglais
+- tour 177 — Audit de la v7
+- tour 177 — Cohérence des 7 fiches
+- tour 177 — Les 43 spans restants
+- tour 177 — dev/test et robustesse
 
 ### Commandes exécutées (échantillon)
 
@@ -9613,7 +9617,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1902 autres
+- … et 1903 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10043,4 +10047,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LES CANDIDATS DU PRÉCÉDENT : EXACT 186/187 (0,9947), ANGLAIS 60/60, DEV 126/126 ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/
 - B13 — L'ATTACHEMENT PARFAIT SUR LES SPANS PRÉDITS : 187/187 (1,0000), FR 1,0, EN 1,0, DEV 126/126, TEST 61/61 ; RENDEMENT 0,7824 ; 183/183" -- tools/bloc_lingui
 - B13 — LA COUVERTURE À 0,8201 : POS CONTEXTUEL 0,7603, F1 0,5595, EXACT 195/196 (0,9949), 43 SPANS ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest
+- JOURNAL — LA SOIRÉE DU DÉCOUPAGE : F1 0,2862 → 0,5595, COUVERTURE 196/239, ATTACHEMENT 195/196" -- journal/2026-11-05/README.md journal/sessions/e181ce02-cd50-4
 
