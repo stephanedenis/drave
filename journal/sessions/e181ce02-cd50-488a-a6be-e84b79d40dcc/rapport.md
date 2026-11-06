@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 124.5 h |
+| Durée | 124.6 h |
 | Tours | 177 |
-| Messages | 2752 |
-| Appels d'outils | 2423 |
+| Messages | 2760 |
+| Appels d'outils | 2433 |
 | Fichiers touchés | 25 |
-| Commandes | 2001 |
-| Sous-agents | 20 |
-| Commits | 293 |
+| Commandes | 2007 |
+| Sous-agents | 23 |
+| Commits | 294 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*182 appels d'outils.* Actions notables :
+*192 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 151 autres
+- … et 160 autres
 
 **Synthèse produite :**
 
-⏵ **183/183** : exact **212/212**, couverture **0,887**, F1 **0,5763**. Je fige la fiche v8
+⏵ Vague 6 lancée ; j'écris le récit du round R1/R3 au journal
 
 ## 3. Travail accompli
 
@@ -9574,6 +9574,9 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - tour 177 — Cohérence des 7 fiches
 - tour 177 — Les 43 spans restants
 - tour 177 — dev/test et robustesse
+- tour 177 — Audit du round R1/R3
+- tour 177 — Le top-k restant
+- tour 177 — Cohérence des fiches v8
 
 ### Commandes exécutées (échantillon)
 
@@ -9617,7 +9620,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1961 autres
+- … et 1967 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10058,4 +10061,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES" -- reports/rapport-pensee-couverture-v7.md reports/rapport
 - PORTES — 13 DOCSTRINGS PÉRIMÉES MISES À JOUR (ATTACHEMENT 195/196, SPANS 43, TOP-K 166) ; 183/183" -- tools/pensee/autotest.py docs/pilotage/en-cours.md 2>&1 | 
 - B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN 1,0 ; 27 SPANS DONT 17 INATTEIGNABLES ; 183/183" -- tools/bloc_linguistique.py
+- JOURNAL — LES RÈGLES DE A17 : EXACT 212/212, COUVERTURE 0,887, 27 SPANS DONT 17 INATTEIGNABLES" -- journal/2026-11-05/README.md journal/sessions/e181ce02-cd50-4
 

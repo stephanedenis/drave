@@ -34,11 +34,14 @@
 - `b9ea3904-889c-4497-a781-694da7d4987c` — Tu travailles dans le dépôt (début 2026-11-05 14:47, 1.5 h) → [rapport](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md) · [digest](../sessions/b9ea3904-889c-4497-a781-694da7d4987c/digest.md)
 - `c27ff712-ac49-4750-90d4-76f59bedb5ca` — Tu travailles dans le dépôt (début 2026-11-05 19:25, 0.9 h) → [rapport](../sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/rapport.md) · [digest](../sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/digest.md)
 - `c4796573-e2dc-48c2-b832-96f8bfab22c3` — Tu travailles dans le dépôt (début 2026-11-05 13:16, 1.0 h) → [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md)
+- `c5910cba-e10a-4e08-8ac7-449ce150899c` — Tu travailles dans le dépôt (début 2026-11-05 21:12, 0.0 h) → [rapport](../sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/rapport.md) · [digest](../sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/digest.md)
 - `d300542e-6e9d-47ac-875b-b44a192eec35` — Tu travailles dans le dépôt (début 2026-11-05 14:22, 1.3 h) → [rapport](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) · [digest](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 124.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `d3114d4c-1629-45f2-aba6-9592332507c5` — Tu travailles dans le dépôt (début 2026-11-05 21:12, 0.0 h) → [rapport](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/rapport.md) · [digest](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 124.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.0 h) → [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md)
 - `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` — — (début 2026-11-05 10:11, 0.0 h) → [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md)
 - `ff7e786c-3ece-4eae-864e-19dddfead93c` — Tu travailles dans le dépôt (début 2026-11-05 13:11, 1.5 h) → [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md)
+- `fff7ca81-5684-4c2e-b7c5-a8f3c012cc49` — Tu travailles dans le dépôt (début 2026-11-05 21:12, 0.0 h) → [rapport](../sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) · [digest](../sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/digest.md)
 
 <!-- notes -->
 
