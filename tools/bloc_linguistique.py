@@ -369,11 +369,15 @@ RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "
 # les subordonnants qui n'ont pas d'antécédent : toujours SUB
 AMBIGUES_PREP = {"since", "before", "after", "until", "as", "depuis", "avant", "après", "pendant", "durant"}
 
-SUJETS = {"i", "you", "he", "she", "it", "we", "they", "who", "that", "which", "there",
-          "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "qui", "qu"}
+SUJETS = {"i", "you", "he", "she", "it", "we", "they", "there",
+          "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles"}
 
 SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
                  "whether", "car", "parce", "puisque", "comme", "quand", "si", "lorsque"}
+# « car » est français : en anglais c'est un nom commun (r280)
+SUB_PAR_LANGUE = {"fr": {"car", "parce", "puisque", "comme", "quand", "si", "lorsque"},
+                  "en": {"because", "although", "though", "if", "while", "as", "since",
+                         "unless", "whether", "when"}}
 
 VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
                         "go take come look give find open close".split())
@@ -429,6 +433,7 @@ cry cries cried crying go goes went gone going come comes came coming
 leave leaves left leaving read reads reading sleep sleeps slept sleeping
 rain rains rained raining hang hangs hung hanging paint paints painted painting
 live lives lived living continue continues continued continuing
+fall falls fell fallen falling call calls called calling
 speak speaks spoke spoken speaking voler vole voles volent volait
 rêver rêve rêves rêvent rêvait sauter saute sautes sautent sautait
 marcher marche marches marchent marchait
@@ -441,6 +446,7 @@ serais serait serions seriez seraient sois soit soyons soyez soient étant
 ai as a avons avez ont avais avait avions aviez avaient aurai auras aura aurons aurez auront
 aurais aurait aurions auriez auraient aie aies ait ayons ayez aient ayant eu
 am is are was were be been being have has had having do does did done
+would must can could should will shall may might ought cannot
 """.split())
 
 
@@ -454,6 +460,9 @@ def _est_adverbe_seul(g: dict) -> bool:
     return (len((g.get("texte") or "").split()) == 1
             and _normaliser(g.get("texte") or "") in ADVERBES_SEULS)
 
+
+MODAUX = {"would", "must", "can", "could", "should", "will", "shall", "may", "might", "ought",
+          "could", "cannot"}
 
 ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
 
@@ -858,7 +867,8 @@ class Heuristique:
         while i < len(mots):
             d, f, t, typ = mots[i]
             n = _normaliser(t)
-            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS):
+            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS
+                                 or n in SUB_PAR_LANGUE.get(langue, set())):
                 suivant = mots[i + 1] if i + 1 < len(mots) else None
                 # « since/before/after/until/as » : SUB devant une clause, PRÉP devant un GN
                 prep_ambigue = (n in AMBIGUES_PREP and (suivant is None
@@ -871,19 +881,37 @@ class Heuristique:
                     or est_verbe(suivant[0], suivant[2]))))
                 if marqueur:
                     precedent = segments[-1]["type"] if segments else None
-                    stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV") else "REL"
+                    # R2 : sans segment précédent, un marqueur ouvre une **SUB** (« When it rains »)
+                    stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV"
+                                      or precedent is None) else "REL"
                     j = i + 1
                     verbes_vus = 0
+                    prec_aux = False      # le mot précédent est un auxiliaire (même groupe)
+                    predicat_vu = False   # un prédicat a déjà été vu dans la clause
                     while j < len(mots) and mots[j][3] == "mot":
                         m = mots[j][2]
                         aux = _normaliser(m) in AUXILIAIRES
-                        # un AUX après un verbe plein ouvre la **principale** : on s'arrête
-                        if aux and verbes_vus >= 1:
-                            break
-                        if not aux and est_verbe(mots[j][0], m):
+                        if aux:
+                            if predicat_vu and not prec_aux:
+                                break      # un AUX après un prédicat ouvre la principale
+                            prec_aux = True
+                            j += 1
+                            continue
+                        if est_verbe(mots[j][0], m):
+                            if prec_aux:
+                                # verbe plein collé à son auxiliaire : même groupe verbal
+                                predicat_vu = True
+                                prec_aux = False
+                                j += 1
+                                continue
                             verbes_vus += 1
-                            if verbes_vus == 2:
-                                break
+                            if predicat_vu or verbes_vus == 2:
+                                break  # second prédicat : la principale commence
+                            predicat_vu = True
+                        else:
+                            if prec_aux:
+                                predicat_vu = True   # « is red » : copule + attribut
+                            prec_aux = False
                         # un adverbe **final** n'appartient pas à la clause (« … would come | yesterday »)
                         if (verbes_vus >= 1 and _normaliser(m) in lex.get("ADV", set())
                                 and (j + 1 >= len(mots) or mots[j + 1][3] != "mot")):

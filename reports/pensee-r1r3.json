@@ -1,0 +1,45 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 196,
+  "exact": 195,
+  "couverture": 0.8201,
+  "f1": 0.5595,
+  "spans": 43
+ },
+ "apres": {
+  "labels": 212,
+  "exact": 212,
+  "exact_span": 1.0,
+  "couverture": 0.887,
+  "f1": 0.5763,
+  "f1_s": 0.4966,
+  "f1_chunker": 0.6057,
+  "tete": 0.7316,
+  "fr": "129/129",
+  "en": "83/83",
+  "topk": 177,
+  "topk_taux": 0.7406,
+  "spans": {
+   "REL": 16,
+   "SUB": 6,
+   "GP": 5,
+   "total": 27
+  },
+  "inevitables": 17
+ },
+ "regles": [
+  "R1 frontière de clause (pronom, modaux, second prédicat)",
+  "R2 SUB sans précédent",
+  "R3a subordonnants par langue",
+  "R3c fall/call"
+ ],
+ "limites": [
+  "27 spans",
+  "test non aveugle",
+  "in-sample",
+  "gold 612"
+ ]
+}

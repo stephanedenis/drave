@@ -2519,3 +2519,294 @@ patched
 | **Frontière de clause (arrêt précoce + 2e prédicat)** | **20** | 12 REL / 8 SUB / 0 GP | le scanner REL/SUB s'arrête au pronom pris pour un verbe, ou avale le 2e prédicat | R1 | 20 exacts |
   ```
 
+### 🤖 Assistant
+
+⏵ Génération du JSON de pensée structuré (43 cas, règles, rejets, contrôles)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/spans/rediger_json.py <<'PYEOF'\nimport json, pathlib, collections\nR = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nrows = json.load(open(\"/tmp/spans/final_rows_v2.json\"))\ntab = json.load(open(\"/ … [15169 caractères tronqués]`
+
+  ```
+json écrit 30830
+JSON valide
+37710 reports/pensee-spans-v7.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"collision\\|SUBORDONNANTS\\|SUBDORDONNANTS\" reports/rapport-spans-v7.md reports/pensee-spans-v7.json | head -20 && echo \"---\" && python3 - <<'EOF'\nimport json,collections\np=json.load(open(\"reports/pensee-spans-v7.json … [495 caractères tronqués]`
+
+  ```
+reports/rapport-spans-v7.md:96:| GN avalé par la collision `car` | **1** | 1 REL | R3a + R1/R2 | 1 exact |
+reports/rapport-spans-v7.md:241:La règle actuelle `SUB si (marqueur ∈ SUBORDONNANTS ou précédent = GV), sinon REL` classe
+reports/rapport-spans-v7.md:252:`SUBORDONNANTS` (conjonction française), donc le GN s'arrête à `The` et la REL cherchée
+reports/rapport-spans-v7.md:253:n'existe pas. R3a (conditionner `SUBORDONNANTS` par la langue) + R1/R2 récupèrent r280.
+reports/rapport-spans-v7.md:325:**Où** : `_syntagmes_simple`, branche `if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS)`
+reports/rapport-spans-v7.md:402:SUB = (SUBORDONNANTS - {"car"}) if langue == "en" else SUBORDONNANTS
+reports/rapport-spans-v7.md:403:# remplacer les trois occurrences de SUBORDONNANTS par SUB dans _syntagmes_simple
+reports/pensee-spans-v7.json:189:     "cause": "GN avalé par la collision car (SUBDORDONNANTS fr en anglais)",
+reports/pensee-spans-v7.json:812:   "cause": "GN avalé par la collision car (SUBDORDONNANTS fr en anglais)",
+reports/pensee-spans-v7.json:1390:    "R3a — `SUBORDONNANTS - {car}` quand langue == 'en' (le « car » français ne doit pas couper un GN anglais).",
+reports/pensee-spa
+… [1443 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,pathlib\np=pathlib.Path(\"/tmp/spans/final_rows_v2.json\")\nrows=json.loads(p.read_text())\nfor r in rows: r[\"cause\"]=r[\"cause\"].replace(\"SUBDORDONNANTS\",\"SUBORDONNANTS\")\np.write_text(json.dump … [354 caractères tronqués]`
+
+  ```
+fixed ['r280']
+écrit 617 lignes
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/spans/rediger_json.py", line 49, in <module>
+    assert sum(c["effectif"] for c in causes) == 43
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger_json.py\"); s=p.read_text()\ns=s.replace('\"GN avalé par la collision car (SUBDORDONNANTS fr en anglais)\"','\"GN avalé par la collision car (SUBORDONNANTS fr en  … [318 caractères tronqués]`
+
+  ```
+json écrit 30828
+JSON valide
+44
+157:#### GN avalé par la collision car (SUBORDONNANTS fr en anglais) — 1 cas
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,collections\np=json.load(open(\"reports/pensee-spans-v7.json\"))\nprint(\"causes\",[(c[\"cause\"],c[\"effectif\"],c[\"types\"]) for c in p[\"causes\"]])\nprint(\"sum\",sum(c[\"effectif\"] for c in p[\"c … [501 caractères tronqués]`
+
+  ```
+causes [('Frontière de clause', 20, {'REL': 12, 'SUB': 8, 'GP': 0}), ('Type attendu différent', 4, {'REL': 0, 'SUB': 4, 'GP': 0}), ('GN qui avale', 4, {'REL': 1, 'SUB': 3, 'GP': 0}), ('Lexique disjoint synthétique (REL sur-longues)', 6, {'REL': 6, 'SUB': 0, 'GP': 0}), ('Gold synthétique sans préposition', 4, {'REL': 0, 'SUB': 0, 'GP': 4}), ('Marqueur absent ou élidé', 2, {'REL': 1, 'SUB': 1, 'GP': 0}), ('Lexique verbal réel', 1, {'REL': 1, 'SUB': 0, 'GP': 0}), ('GP tronqué par un faux verbe', 1, {'REL': 0, 'SUB': 0, 'GP': 1}), ('Adverbe final (arbitrage dev/test)', 1, {'REL': 0, 'SUB': 1, 'GP': 0})]
+sum 43 cases 43
+statuts Counter({'exact': 26, 'absent': 17})
+r280 [{'id': 'r280', 'langue': 'en', 'source': 'reel', 'type': 'REL', 'texte': 'that I bought', 'debut': 8, 'fin': 21, 'cible': 'car', 'cibles': ['car'], 'phrase': 'The car that I bought runs.', 'marqueur': 'that', 'cause': 'GN avalé par la collision car (SUBORDONNANTS fr en anglais)', 'regle': 'R3a', 'statut_final': 'exact', 'cible_finale': 'car', 'split': 'dev'}]
+rules [('R1', 'retenue', 215), ('R2', 'retenue', 198), ('R3', 'retenue', 197)]
+final {'cibles': 239, 'labels': 222, 'exacts': 222, 'exact_taux_span': 1.0, 'couvertu
+… [2286 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re,json,collections\ntxt=open(\"reports/rapport-spans-v7.md\").read()\nids=re.findall(r'^\\| `([a-z]\\d+)` \\|', txt, re.M)\nprint(\"ids trouvés\",len(ids), \"uniques\",len(set(ids)))\nrows=json.load(open(\" … [433 caractères tronqués]`
+
+  ```
+ids trouvés 43 uniques 43
+manquants set() en trop set()
+doublons []
+nombres en gras [20, 4, 4, 6, 4, 2, 1, 1, 1, 43, 15, 5, 3, 1, 1, 3, 6, 4, 1, 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger_json.py\"); s=p.read_text()\ns=s.replace('''\"exact_taux_cibles\":0.8159,\"f1\":0.5555,\"fr_exacts\":135,\"en_exacts\":60,\n                \"manquants\":{\"REL\" … [1367 caractères tronqués]`
+
+  ```
+json écrit 32268
+JSON valide
+{
+ "etat_depart": {
+  "cibles": 239,
+  "labels": 196,
+  "exacts": 195,
+  "exact_taux_span": 0.9949,
+  "couverture": 0.8201,
+  "exact_taux_cibles": 0.8159,
+  "f1": 0.5555,
+  "fr_exacts": 135,
+  "en_exacts": 60,
+  "fr_cibles": 151,
+  "en_cibles": 88,
+  "fr_labels": 135,
+  "en_labels": 61,
+  "manquants": {
+   "REL": 21,
+   "SUB": 17,
+   "GP": 5,
+   "total": 43
+  }
+ },
+ "etat_final": {
+  "cibles": 239,
+  "labels": 222,
+  "exacts": 222,
+  "exact_taux_span": 1.0,
+  "couverture": 0.9289,
+  "exact_taux_cibles": 0.9289,
+  "f1": 0.5851,
+  "fr_exacts": 136,
+  "en_exacts": 86,
+  "fr_cibles": 151,
+  "en_cibles": 88,
+  "fr_labels": 136,
+  "en_labels": 86,
+  "reste_absent": {
+   "REL": 8,
+   "SUB": 5,
+   "GP": 4,
+   "total": 17
+  },
+  "faux": 0
+ }
+}
+clés ['rapport', 'ligne', 'branche', 'commit', 'date', 'objet', 'methode', 'etat_depart', 'etat_final', 'par_langue_type', 'dev_test', 'causes', 'cas', 'regles', 'variantes', 'regles_rejetees', 'non_recuperables', 'controle_negatif', 'limites', 'recommandation', 'journal_de_pensee', 'fichiers_ecrits', 'note']
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final : seuls les deux livrables sont neufs, JSON valide, chiffres cohérents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"--- statut des deux livrables ---\" && git status --short reports/rapport-spans-v7.md reports/pensee-spans-v7.json && echo \"--- autres changements reports (préexistants) ---\" && git status --short reports/ | grep -v \"rappor … [305 caractères tronqués]`
+
+  ```
+--- statut des deux livrables ---
+?? reports/pensee-spans-v7.json
+?? reports/rapport-spans-v7.md
+--- autres changements reports (préexistants) ---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-pensee-couverture-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+--- tailles ---
+617 reports/rapport-spans-v7.md
+39660 reports/pensee-spans-v7.json
+--- json ---
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger_json.py\"); s=p.read_text()\ns=s.replace('\"test\":\"196 labels au bon span, 195 exacts ; 43 = 196 - 239\"','\"test\":\"196 labels au bon span, 195 exacts ; 239 - … [631 caractères tronqués]`
+
+  ```
+json écrit 32268
+JSON_OK
+{'hypothese': "Les 43 sont des erreurs d'attachement", 'test': '196 labels au bon span, 195 exacts ; 239 - 196 = 43', 'verdict': 'faux : ce sont des spans non prédits (segmentation), pas des cibles fausses'}
+causes 43 cases 43
+regles [('R1', 215), ('R2', 198), ('R3', 197)]
+final 222 222 0.5851
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path(\"/tmp/spans/rediger.py\"); s=p.read_text()\ns=s.replace(\"> **Aucun fichier existant n'a été modifié** ; les mesures viennent d'une copie locale\",\n            \"> **Aucun fichier e … [873 caractères tronqués]`
+
+  ```
+écrit 617 lignes
+json écrit 32286
+OK
+> **Livrables** : ce rapport + [`pensee-spans-v7.json`](pensee-spans-v7.json).
+> **Aucun fichier existant n'a été modifié par cette session** ; les mesures viennent d'une copie locale
+> (`/tmp/spans/sim3.py`, sous-classe de `Heuristique` + copie instrumentée de
+> `_syntagmes_simple`), non commitée. Le dispositif officiel (`evaluer_bloc`) redonne
+> **exactement** la ligne de base 196/195 et F1 0,5555 sur le gold vivant 612.
+
+
+**Fichiers** : ce rapport et [`pensee-spans-v7.json`](pensee-spans-v7.json). **Aucun** autre
+fichier n'a été créé ou modifié par cette session ; aucun commit n'a été fait.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/ | head && echo \"--- diff bloc ---\" && git diff --stat tools/bloc_linguistique.py tools/tests/linguistique/evaluer_gold.py tools/tests/linguistique/gold_split.py && echo \"(vide = code inchangé)\"", "descri … [56 caractères tronqués]`
+
+  ```
+M tools/pensee/autotest.py
+ m tools/structures
+--- diff bloc ---
+(vide = code inchangé)
+  ```
+
+### 🤖 Assistant
+
+⏵ Derniers contrôles de cohérence textuelle avant livraison au parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"typos:\" && grep -c \"SUBDORDONNANTS\\|13 REL / 7 SUB\" reports/rapport-spans-v7.md reports/pensee-spans-v7.json; echo \"liens:\" && grep -n \"pensee-spans-v7.json\" reports/rapport-spans-v7.md; echo \"statuts:\" && grep -c \" … [351 caractères tronqués]`
+
+  ```
+typos:
+reports/rapport-spans-v7.md:0
+reports/pensee-spans-v7.json:0
+liens:
+8:> **Livrables** : ce rapport + [`pensee-spans-v7.json`](pensee-spans-v7.json).
+616:**Fichiers** : ce rapport et [`pensee-spans-v7.json`](pensee-spans-v7.json). **Aucun** autre
+statuts:
+26
+absents:
+17
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat consolidé à l'agent parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Mission terminée — diagnostic des 43 spans non prédits (v7, commit `69bd865e`) + règles chiffrées. Aucun fichier existant modifié, aucun commit.\n\n**Livrables neufs** : `reports/rapport-spans-v7.md` (617 lignes) et `reports/pensee-spa … [2205 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification qu'aucun artefact (pycache, etc.) n'a été créé dans le dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -Ei \"pycache|\\.pyc|rapport-spans-v7|pensee-spans-v7\" ; echo \"---\"; git status --short | wc -l", "description": "Check for pycache or unintended artifacts"}`
+
+  ```
+?? reports/pensee-spans-v7.json
+?? reports/rapport-spans-v7.md
+---
+89
+  ```
+
+### 🤖 Assistant
+
+⏵ Déclaration des deux livrables et réponse finale
+
+- **present** `{"files": [{"path": "reports/rapport-spans-v7.md", "description": "Diagnostic détaillé des 43 spans non prédits, causes, règles R1/R2/R3, mesures dev/test, rejets et recommandation."}, {"path": "reports/pensee-spans-v7.json", "description": "Données structurées : 43 cas, causes, règles, variantes, c … [43 caractères tronqués]`
+
+  ```
+Presented reports/rapport-spans-v7.md
+Presented reports/pensee-spans-v7.json
+  ```
+
+### 🤖 Assistant
+
+Mission terminée. **Deux fichiers neufs**, aucun fichier existant modifié, aucun commit.
+
+- [`reports/rapport-spans-v7.md`](reports/rapport-spans-v7.md) — diagnostic complet, 43 cas détaillés, règles, rejets, limites.
+- [`reports/pensee-spans-v7.json`](reports/pensee-spans-v7.json) — données structurées (43 cas, causes, règles, variantes, contrôles).
+
+## État
+
+**239 cibles, 196 labels au bon span, 195 exacts** ; **43 non prédits = 21 REL / 17 SUB / 5 GP** (27 anglais, 16 français, 13 synthétiques). Baseline identique à `evaluer_bloc` ; F1 gold **vivant 612 = 0,5555** (le 0,5595 du commit est le **gelé 602**).
+
+## Effectifs par cause
+
+| cause | n | dont REL/SUB/GP | sort |
+|---|---:|---|---|
+| Frontière de clause (15 arrêt précoce + 5 2e prédicat avalé) | **20** | 12/8/0 | 20 exacts (R1) |
+| Type attendu différent (`When` → SUB ; r245) | **4** | 0/4/0 | 4 exacts (R2, +R3c pour r245) |
+| GN qui avale (3 verbes synthétiques + collision `car`) | **4** | 1/3/0 | 1 exact, 3 absents |
+| Lexique disjoint synthétique — REL sur-longues | **6** | 6/0/0 | 6 absents |
+| Gold synthétique sans préposition (bug ligne 98) | **4** | 0/0/4 | 4 absents |
+| Marqueur absent / élidé (`r035`, `r264`) | **2** | 1/1/0 | 2 absents |
+| Lexique verbal réel (`achetée`/`roule`) | **1** | 1/0/0 | 1 absent |
+| GP tronqué par `bus` | **1** | 0/0/1 | 1 exact (R3b) |
+| Adverbe final (`tomorrow`, arbitrage `g017`) | **1** | 0/1/0 | 1 absent |
+
+## Règles (exacts gagnés / perdus vs baseline)
+
+| règle | dev | test | tous |
+|---|---:|---:|---:|
+| **R1** frontière de clause (pronom, modaux, 2e prédicat) | **+15 / −0** | **+5 / −0** | **+20 / −0** |
+| **R2** type REL/SUB par antécédent | **+3 / −0** (+1 label faux r245) | 0 / −0 | **+3 / −0** |
+| **R3** (a `car`, b GP/déterminant, c `fall`/`call`) | +1 / −0 seule ; **+3 en marge** de R1+R2 | +1 / −0 | +2 seule ; **+4 en marge** |
+| **R1+R2+R3** | **154/154** | **68/68** | **222/222** |
+
+**Meilleure combinaison** : **222 labels, 222 exacts / 222** (exact/span **1,0000**), **222/239 cibles = 0,9289**, F1 vivant **0,5851** ; dev **154/154**, test **68/68**.
+
+## Restent 17 absents, 0 faux
+
+4 GP gold (bug générateur, corrigeable par un commit gold : +4 exacts contrefactuels), 9 synthétiques (lexique disjoint ; les ajouter donne +8 mais **mesure invalide**), `r035` relative zéro, `r255` couverture verbale réelle, `r264` tokenisation `qu'`, `r288` adverbe final (retirer la règle perd `g017` en dev).
+
+## Rejetées
+
+R3 globale DET (**dev +11/−4, test +4/−1** : « that sleeps », « entre »), lexique synthétique (+8 mais hors protocole), NOADV (échange `g017`/`r288`), règle relative zéro (1 cas, ad hoc).
+
+## Recommandation
+
+1. **R1 seule d'abord** (+20, 0 perte) ; 2. **R2 + R3c ensemble** ; 3. **R3a + R3b** ; 4. corriger **le gold** ligne 98 dans un commit séparé ; 5. **ne pas** ajouter le lexique synthétique ; 6. rejouer `evaluer_gold.py` et les portes.
+
+**Limites** : test non aveugle (le diagnostic des 43 a porté sur dev+test), un seul split, test = 76 cibles, `fall`/`call` choisis en connaissance de deux échecs, F1 sur gold vivant.
+

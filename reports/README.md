@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-r1r3.md`](rapport-pensee-r1r3.md) | **B13** — R1/R2/R3 : exact **212/212 (1,0000)**, couverture **0,887**, F1 **0,5763** ; 27 spans |
 | [`rapport-dev-test-v7.md`](rapport-dev-test-v7.md) | **B13** — dev/test en v7 : dev **133/134**, test **62/62**, trois découpages, écart ≤ 1 cas |
 | [`rapport-coherence-fiches-v7.md`](rapport-coherence-fiches-v7.md) | **B13** — la cohérence des 7 fiches v2→v7 : **23 écarts**, 4 critiques, corrections listées |
 | [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — la couverture **0,8201** : POS contextuel 0,7603, F1 **0,5595**, exact 195/196 |
@@ -145,7 +146,6 @@
 | [`rapport-native-distillation-multi.md`](rapport-native-distillation-multi.md) | **N2.7** — distillation multi : student **9,517** vs professeur **9,571** |
 | [`rapport-native-distillation-20m.md`](rapport-native-distillation-20m.md) | **N2.5** — student 21,63 M : PPL **4,294**, pire que 11,47 M (**3,295**) ; budget de pas confondu |
 | [`rapport-native-distillation-tetes.md`](rapport-native-distillation-tetes.md) | **N2.4** — têtes dans la distillation : PPL **3,295**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |
-| [`rapport-native-distillation.md`](rapport-native-distillation.md) | **N2.3** — distillation : PPL **3,297** contre **3,465**, gap **+0,942** au professeur |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

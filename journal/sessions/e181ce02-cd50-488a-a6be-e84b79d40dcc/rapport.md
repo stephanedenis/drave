@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 124.1 h |
+| Durée | 124.5 h |
 | Tours | 177 |
-| Messages | 2733 |
-| Appels d'outils | 2407 |
+| Messages | 2752 |
+| Appels d'outils | 2423 |
 | Fichiers touchés | 25 |
-| Commandes | 1986 |
+| Commandes | 2001 |
 | Sous-agents | 20 |
-| Commits | 292 |
+| Commits | 293 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*166 appels d'outils.* Actions notables :
+*182 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 136 autres
+- … et 151 autres
 
 **Synthèse produite :**
 
-⏵ Je termine le nettoyage : les 6 points de la v7 et les docstrings/messages `/145` restants
+⏵ **183/183** : exact **212/212**, couverture **0,887**, F1 **0,5763**. Je fige la fiche v8
 
 ## 3. Travail accompli
 
@@ -9617,7 +9617,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1946 autres
+- … et 1961 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9745,7 +9745,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ## 5. Erreurs rencontrées
 
-42 sorties en erreur ou divergentes. Les premières :
+43 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10057,4 +10057,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES" -- reports/rapport-pensee-couverture-v7.md reports/rapport
 - B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204), VALEURS VÉRIFIÉES" -- reports/rapport-pensee-couverture-v7.md reports/rapport
 - PORTES — 13 DOCSTRINGS PÉRIMÉES MISES À JOUR (ATTACHEMENT 195/196, SPANS 43, TOP-K 166) ; 183/183" -- tools/pensee/autotest.py docs/pilotage/en-cours.md 2>&1 | 
+- B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN 1,0 ; 27 SPANS DONT 17 INATTEIGNABLES ; 183/183" -- tools/bloc_linguistique.py
 

@@ -3078,3 +3078,56 @@ bash-1750 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrine
 bash-1752 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 1800 python3 -m tools.pensee.autotest > /tmp/audit_v7_portes.out 2>&1; echo "exit=$?"; tail -30 /tmp/audit_v7_portes.out
   ```
 
+### 🤖 Assistant
+
+⏵ Envoi du rapport d'audit au parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Audit v7 terminé (commit `69bd865e`, branche `s/v7`). Fichiers écrits : `reports/rapport-audit-v7.md` et `reports/pensee-audit-v7.json`. **État git** : tu les as déjà committés dans `4ebeb683` ; le JSON du working tree est identique au … [6061 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final de l'état des livrables
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/rapport-audit-v7.md reports/pensee-audit-v7.json; echo '---'; git diff --stat -- reports/rapport-audit-v7.md reports/pensee-audit-v7.json; echo '---'; wc -l reports/rapport-audit-v7.md reports/pensee-audit- … [96 caractères tronqués]`
+
+  ```
+M reports/rapport-audit-v7.md
+---
+ reports/rapport-audit-v7.md | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+---
+  558 reports/rapport-audit-v7.md
+ 1199 reports/pensee-audit-v7.json
+ 1757 total
+---
+4ebeb683
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture de l'audit et récapitulatif des livrables
+
+Audit terminé. Les deux fichiers demandés sont écrits :
+
+- [`reports/rapport-audit-v7.md`](reports/rapport-audit-v7.md)
+- [`reports/pensee-audit-v7.json`](reports/pensee-audit-v7.json)
+
+**État git** : le parent les a déjà committés dans `4ebeb683`. Le JSON du working tree est identique au commit ; le `.md` ne diffère que par 4 lignes ajoutées / 2 modifiées (liste des 26 docstrings + nuance sur la fiche v5), non committées. Je n'ai fait aucun commit et n'ai modifié aucun fichier existant.
+
+**Résultat principal**
+- **Invariants justes** sur le vivant 612 et le gelé 602 : 196 labels, 195 exacts (0,9949), couverture 0,8201, top-k 166/239, fr 135/135, en 60/61, 43 spans (21/17/5).
+- **Cinq valeurs sont gelées, pas vivantes** : POS 0,7603 vs **0,7581**, F1 0,5595 vs **0,5555**, S 0,4741 vs **0,4688**, chunker 0,5858 vs **0,5822**, tête 0,7205 vs **0,7152**.
+- **L'« avant » n'est pas la v6** : POS 0,7475 = v4, tête 0,6826 = v5a, F1 0,5130 = v6 vivant. V6 mesurée : POS 0,7461/0,7482, F1 0,5130/0,5164, tête 0,6785/0,6834.
+- **POS contextuel** : +8 labels (pas 9), +0,0118 gelé / +0,0116 vivant (pas +0,0132) ; les 8 labels et r102 sont dans dev, test inchangé.
+- **Règle du précédent** : 195→**160/196** sans elle ; 28 exacts en dev, 7 en test. La moitié « candidats du précédent » est **redondante** (0 effet).
+- **Exemple faux** : `SUB « that she would come »` n'est pas produit (prédit `SUB « that she »`, span gold toujours perdu). « qui » 12 = en fait **6** ; 12 = 8 REL + 4 SUB françaises.
+- **Portes** : **183/183**, zéro échec, mais **26 docstrings périmées** et **6 messages `/145` faux** ; aucune porte dev/test.
+- **dev/test** : dev **133/134 (0,9925)**, F1 **0,5512**, couverture **0,8221** ; test **62/62 (1,0)**, F1 **0,5651**, couverture **0,8158**.
+- **Contrôles négatifs** : permutation globale 1,81/196 (0,92 %) ; par type+langue 9,40/196 (4,79 %), max 20 ; observé 195/196, p<0,001. Candidat aléatoire dans la liste 70,24/196 (35,84 %) ; candidats permutés en top-k 2,46/196 (1,26 %).
+
+Le message détaillé a été envoyé au parent.
+

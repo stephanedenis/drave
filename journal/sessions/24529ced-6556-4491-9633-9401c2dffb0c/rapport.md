@@ -7,12 +7,12 @@
 | Identifiant | `24529ced-6556-4491-9633-9401c2dffb0c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 19:25 |
-| Durée | 1.4 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 86 |
-| Appels d'outils | 85 |
+| Messages | 99 |
+| Appels d'outils | 97 |
 | Fichiers touchés | 0 |
-| Commandes | 75 |
+| Commandes | 85 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2041 caractères tronqués]
 
-*85 appels d'outils.* Actions notables :
+*97 appels d'outils.* Actions notables :
 
 - bash — Inspect git state and recent commits
 - bash — List linguistics tests and reports directories
@@ -41,11 +41,52 @@
 - bash — Check verb recognition and _est_verbe definition
 - bash — Gold stats, ADV sets, split membership, wrong attachment
 - bash — Distribution of REL/SUB head markers by type and language
-- … et 62 autres
+- … et 74 autres
 
 **Synthèse produite :**
 
-⏵ Génération du JSON de pensée structuré (43 cas, règles, rejets, contrôles)
+Mission terminée. **Deux fichiers neufs**, aucun fichier existant modifié, aucun commit.
+
+- [`reports/rapport-spans-v7.md`](reports/rapport-spans-v7.md) — diagnostic complet, 43 cas détaillés, règles, rejets, limites.
+- [`reports/pensee-spans-v7.json`](reports/pensee-spans-v7.json) — données structurées (43 cas, causes, règles, variantes, contrôles).
+
+\## État
+
+**239 cibles, 196 labels au bon span, 195 exacts** ; **43 non prédits = 21 REL / 17 SUB / 5 GP** (27 anglais, 16 français, 13 synthétiques). Baseline identique à `evaluer_bloc` ; F1 gold **vivant 612 = 0,5555** (le 0,5595 du commit est le **gelé 602**).
+
+\## Effectifs par cause
+
+| cause | n | dont REL/SUB/GP | sort |
+|---|---:|---|---|
+| Frontière de clause (15 arrêt précoce + 5 2e prédicat avalé) | **20** | 12/8/0 | 20 exacts (R1) |
+| Type attendu différent (`When` → SUB ; r245) | **4** | 0/4/0 | 4 exacts (R2, +R3c pour r245) |
+| GN qui avale (3 verbes synthétiques + collision `car`) | **4** | 1/3/0 | 1 exact, 3 absents |
+| Lexique disjoint synthétique — REL sur-longues | **6** | 6/0/0 | 6 absents |
+| Gold synthétique sans préposition (bug ligne 98) | **4** | 0/0/4 | 4 absents |
+| Marqueur absent / élidé (`r035`, `r264`) | **2** | 1/1/0 | 2 absents |
+| Lexique verbal réel (`achetée`/`roule`) | **1** | 1/0/0 | 1 absent |
+| GP tronqué par `bus` | **1** | 0/0/1 | 1 exact (R3b) |
+| Adverbe final (`tomorrow`, arbitrage `g017`) | **1** | 0/1/0 | 1 absent |
+
+\## Règles (exacts gagnés / perdus vs baseline)
+
+| règle | dev | test | tous |
+|---|---:|---:|---:|
+| **R1** frontière de clause (pronom, modaux, 2e prédicat) | **+15 / −0** | **+5 / −0** | **+20 / −0** |
+| **R2** type REL/SUB par antécédent | **+3 / −0** (+1 label faux r245) | 0 / −0 | **+3 / −0** |
+| **R3** (a `car`, b GP/déterminant, c `fall`/`call`) | +1 / −0 seule ; **+3 en marge** de R1+R2 | +1 / −0 | +2 seule ; **+4 en marge** |
+| **R1+R2+R3** | **154/154** | **68/68** | **222/222** |
+
+**Meilleure combinaison** : **222 labels, 222 exacts / 222** (exact/span **1,0000**), **222/239 cibles = 0,9289**, F1 vivant **0,5851** ; dev **154/154**, test **68/68**.
+
+\## Restent 17 absents, 0 faux
+
+4 GP gold (bug générateur, corrigeable par un commit gold : +4 exacts contrefactuels), 9 synthétiques (lexique disjoint ; les ajouter donne +8 mais **mesure invalide**), `r035` relative zéro, `r255` couverture verbale réelle, `r264` tokenisation `qu'`, `r288` adverbe final (retirer la règle perd `g017` en dev).
+
+\## Rejetées
+
+R3 globale DET (**dev +11/−4, test +4/−1**
+… [584 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -96,7 +137,7 @@
 - **T1** Patch R3 ordering and R4, measure dev and test
 - **T1** Restore exact baseline order and verify counts
 - **T1** Inspect R3 losses and the GP case
-- … et 35 autres
+- … et 45 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -104,8 +145,9 @@
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : base 196 195 | best 220 218 [stderr] Traceback (most recent call last):   File "<stdin>", line 8, in <module> ValueError: too many values to unpack (expected 2) [exit code: 1]
 - **T1** : [stderr]   File "/tmp/spans/rediger.py", line 245     w("`i = v + [t[0] for t in gv].index(prep) + 1` puis `("GP", i, i + len(g))` : le GP commence")       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- **T1** : fixed ['r280'] écrit 617 lignes [stderr] Traceback (most recent call last):   File "/tmp/spans/rediger_json.py", line 49, in <module>     assert sum(c["effectif"] for c in causes) == 43            ^^^
 
