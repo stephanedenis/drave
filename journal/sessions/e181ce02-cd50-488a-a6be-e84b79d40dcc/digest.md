@@ -49599,3 +49599,55 @@ ven 06 nov 2026 03:38:39 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=t.replace(\"\"\"- **Heartbeat** : 2026-11-06 01:15 EST\n- **Prochaine action** : les 17 spans i … [1195 caractères tronqués]`
+
+  ```
+⚠ mandat périmé (1544 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-2635]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2635", "timeout_ms": 600000, "wait": true}`
+
+  ```
+10 files changed, 218 insertions(+), 23 deletions(-)
+COMMIT OK 1
+2cfabd96 SESSION — LE MANDAT E181CE02 RAFRAÎCHI : HEARTBEAT 03 h 45, PROCHAINE ACTION NETTE, 222/222 EN NOTE
+ven 06 nov 2026 03:41:22 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -f \"toutes-les-portes\" | head -1; tail -6 /tmp/portes_final.log | cut -c1-130; grep -c \"❌\" /tmp/portes_final.log", "description": "État final de la suite"}`
+
+  ```
+3130809
+         invite qui n'en contient aucun : le mélange ne pourrait rien dire
+  --- porte-sessions ---
+    autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec clai
+      ❌ mandat périmé (1530 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+      ❌ mandat périmé (130 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+Journaux complets : work/portes-1106-01h28
+9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"portes,|vertes|rouges|EXIT\" /tmp/portes_final.log | tail -6; grep -n \"❌\" /tmp/portes_final.log | head -8 | cut -c1-140", "description": "Verdict final de la suite"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (83 portes, borne 1800 s) ===
+--- 79 vertes, 4 rouges ---
+8:  porte-bloc-linguistique ❌ code 1                   17 s  ❌ évaluation gold
+33:  porte-indice           ❌ code 1                 1130 s    ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (mêm
+39:  porte-melange          ❌ code 1                  137 s    ❌ l'état de A ne rend pas le code de A dans une
+79:  porte-sessions         ❌ code 1                    0 s    ❌ mandat périmé (130 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat 
+94:    ❌ évaluation gold
+101:      ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, question qui ne la désigne pas) à 459 : l'é
+107:      ❌ l'état de A ne rend pas le code de A dans une
+111:      ❌ mandat périmé (1530 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ```
+
+### 🤖 Assistant
+
+⏵ Suite complète : **79 vertes / 4 rouges** (2 structurelles connues, `sessions` d'une autre session, `bloc` documentée). Je consigne la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nnouvelle = \"\"\"> **Passe complète — 2026-11-06 01 h 28 → 03 h 44 :** **83 portes, 79 vertes, 4 rouges**\n> (journaux ` … [1748 caractères tronqués]`

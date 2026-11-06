@@ -1,6 +1,12 @@
 # Références de non-régression
 
-> **Dernière passe complète — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
+> **Passe complète — 2026-11-06 01 h 28 → 03 h 44 :** **83 portes, 79 vertes, 4 rouges**
+> (journaux `work/portes-1106-01h28`). Les **2 structurelles connues** restent (`porte-indice`,
+> `porte-melange`) ; **`porte-bloc-linguistique`** est rouge sur `cascade_pos` (la fusion avec le
+> contrat passe sous l'heuristique depuis le POS contextuel — correctif à faire) ; **`porte-sessions`**
+> signale le mandat de `e181ce02` (rafraîchi depuis) et celui de `1e7ef596`, périmé.
+
+> **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
 > 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
 > (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
 > (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt** : `porte-lecteur` (0 s)

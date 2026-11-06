@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**10 commits** · **3 session(s)** · **4 thème(s)**
+**11 commits** · **3 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,6 +14,7 @@
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -38,6 +39,7 @@
 | 01:57 | `17078889` | PORTES — LA ROUGE TOLÉRÉE cascade_pos DOCUMENTÉE : LA FUSION AVEC LE CONTRAT PASSE SOUS L'HEURISTIQUE (0,7465 < 0,7581) APRÈS LE POS CONTEXTUEL |
 | 01:59 | `b15daee7` | DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1 |
 | 02:02 | `2fc19487` | DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE) |
+| 03:39 | `2cfabd96` | SESSION — LE MANDAT E181CE02 RAFRAÎCHI : HEARTBEAT 03 h 45, PROCHAINE ACTION NETTE, 222/222 EN NOTE |
 
 ## Le récit de la journée (écrit à la main)
 

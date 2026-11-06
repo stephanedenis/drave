@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 131.0 h |
 | Tours | 177 |
-| Messages | 2925 |
-| Appels d'outils | 2578 |
+| Messages | 2929 |
+| Appels d'outils | 2582 |
 | Fichiers touchés | 25 |
-| Commandes | 2117 |
+| Commandes | 2120 |
 | Sous-agents | 25 |
-| Commits | 313 |
+| Commits | 314 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*337 appels d'outils.* Actions notables :
+*341 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 264 autres
+- … et 267 autres
 
 **Synthèse produite :**
 
-⏵ `porte-sessions` rouge : **mon** mandat est périmé (130 min). Je rafraîchis le plan de session
+⏵ Suite complète : **79 vertes / 4 rouges** (2 structurelles connues, `sessions` d'une autre session, `bloc` documentée). Je consigne la passe
 
 ## 3. Travail accompli
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2077 autres
+- … et 2080 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10083,4 +10083,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - DOCS — LA NOTE DE LA ROUGE TOLÉRÉE RACCOURCIE POUR TENIR LE BUDGET T1" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --format='%s
 - DOCS — LA ROUGE TOLÉRÉE RESTE DANS LA LIGNE DE LA PORTE (LE BUDGET T1 PASSE)" -- docs/pilotage/references-non-regression.md 2>&1 | tail -1   if git log -1 --for
 - SESSION — LE MANDAT E181CE02 RAFRAÎCHI : HEARTBEAT 03 h 45, PROCHAINE ACTION NETTE, 222/222 EN NOTE" -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/pl
+- PORTES — LA PASSE COMPLÈTE DU 06/11 CONSIGNÉE : 79 VERTES / 4 ROUGES (2 STRUCTURELLES, SESSIONS D'AUTRUI, CASCADE_POS DOCUMENTÉE)" -- docs/pilotage/references-n
 
